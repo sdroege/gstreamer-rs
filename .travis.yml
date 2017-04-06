@@ -12,3 +12,8 @@ addons:
 matrix:
   allow_failures:
     - rust: nightly
+
+script:
+    - rustc --version
+    - cargo build --all
+    - cargo test --all
