@@ -1,6 +1,6 @@
 [root]
 name = "gstreamer-sys"
-version = "0.2.0"
+version = "0.1.0"
 dependencies = [
  "bitflags 0.8.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
