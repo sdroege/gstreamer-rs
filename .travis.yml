@@ -9,6 +9,7 @@ addons:
   apt:
     packages:
       - libgstreamer1.0-dev
+      - libgstreamer-plugins-base1.0-dev
 matrix:
   allow_failures:
     - rust: nightly
