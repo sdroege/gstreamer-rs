@@ -1,3 +1,10 @@
 [workspace]
 
-members = ["gstreamer-sys"]
+members = [
+  "gstreamer-sys",
+  "gstreamer-base-sys",
+  "gstreamer-tag-sys",
+  "gstreamer-audio-sys",
+  "gstreamer-video-sys",
+  "gstreamer-pbutils-sys",
+]
