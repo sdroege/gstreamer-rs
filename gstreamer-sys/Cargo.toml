@@ -3,9 +3,9 @@ pkg-config = "0.3.7"
 
 [dependencies]
 bitflags = "0.8"
-glib-sys = "0.3"
-gobject-sys = "0.3"
 libc = "0.2"
+glib-sys = { git = "https://github.com/gtk-rs/sys.git" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys.git" }
 
 [features]
 v1_0_10 = []
