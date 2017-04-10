@@ -655,10 +655,10 @@ the info structure in the image's #GstSample)</doc>
               glib:nick="illustration">
         <doc xml:space="preserve">Illustration</doc>
       </member>
-      <member name="artist_logo"
+      <member name="band_artist_logo"
               value="17"
-              c:identifier="GST_TAG_IMAGE_TYPE_ARTIST_LOGO"
-              glib:nick="artist-logo">
+              c:identifier="GST_TAG_IMAGE_TYPE_BAND_ARTIST_LOGO"
+              glib:nick="band-artist-logo">
         <doc xml:space="preserve">Band/artist logotype</doc>
       </member>
       <member name="publisher_studio_logo"
@@ -708,10 +708,10 @@ the info structure in the image's #GstSample)</doc>
         <doc xml:space="preserve">copyright and license notices
     must be kept intact</doc>
       </member>
-      <member name="requires_attributions"
+      <member name="requires_attribution"
               value="512"
-              c:identifier="GST_TAG_LICENSE_REQUIRES_ATTRIBUTIONS"
-              glib:nick="requires-attributions">
+              c:identifier="GST_TAG_LICENSE_REQUIRES_ATTRIBUTION"
+              glib:nick="requires-attribution">
         <doc xml:space="preserve">credit must be given to
     copyright holder and/or author</doc>
       </member>

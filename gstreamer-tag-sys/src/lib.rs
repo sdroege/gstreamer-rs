@@ -51,7 +51,7 @@ pub enum GstTagImageType {
     VideoCapture = 14,
     Fish = 15,
     Illustration = 16,
-    ArtistLogo = 17,
+    BandArtistLogo = 17,
     PublisherStudioLogo = 18,
 }
 pub const GST_TAG_IMAGE_TYPE_NONE: GstTagImageType = GstTagImageType::None;
@@ -72,7 +72,7 @@ pub const GST_TAG_IMAGE_TYPE_DURING_PERFORMANCE: GstTagImageType = GstTagImageTy
 pub const GST_TAG_IMAGE_TYPE_VIDEO_CAPTURE: GstTagImageType = GstTagImageType::VideoCapture;
 pub const GST_TAG_IMAGE_TYPE_FISH: GstTagImageType = GstTagImageType::Fish;
 pub const GST_TAG_IMAGE_TYPE_ILLUSTRATION: GstTagImageType = GstTagImageType::Illustration;
-pub const GST_TAG_IMAGE_TYPE_ARTIST_LOGO: GstTagImageType = GstTagImageType::ArtistLogo;
+pub const GST_TAG_IMAGE_TYPE_BAND_ARTIST_LOGO: GstTagImageType = GstTagImageType::BandArtistLogo;
 pub const GST_TAG_IMAGE_TYPE_PUBLISHER_STUDIO_LOGO: GstTagImageType = GstTagImageType::PublisherStudioLogo;
 
 // Constants
@@ -121,7 +121,7 @@ bitflags! {
         const GST_TAG_LICENSE_PERMITS_DERIVATIVE_WORKS = 4,
         const GST_TAG_LICENSE_PERMITS_SHARING = 8,
         const GST_TAG_LICENSE_REQUIRES_NOTICE = 256,
-        const GST_TAG_LICENSE_REQUIRES_ATTRIBUTIONS = 512,
+        const GST_TAG_LICENSE_REQUIRES_ATTRIBUTION = 512,
         const GST_TAG_LICENSE_REQUIRES_SHARE_ALIKE = 1024,
         const GST_TAG_LICENSE_REQUIRES_SOURCE_CODE = 2048,
         const GST_TAG_LICENSE_REQUIRES_COPYLEFT = 4096,
