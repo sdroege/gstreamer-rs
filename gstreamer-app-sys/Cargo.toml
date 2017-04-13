@@ -1,0 +1,48 @@
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+bitflags = "0.8"
+glib-sys = "0.3"
+gobject-sys = "0.3"
+libc = "0.2"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+version = "0.1.0"
+
+[dependencies.gstreamer-base-sys]
+path = "../gstreamer-base-sys"
+version = "0.1.0"
+
+[features]
+v1_0_10 = []
+v1_10 = ["v1_8"]
+v1_12 = ["v1_10"]
+v1_2 = ["v1_0_10"]
+v1_2_3 = ["v1_2"]
+v1_4 = ["v1_2_3"]
+v1_6 = ["v1_4"]
+v1_8 = ["v1_6"]
+
+[lib]
+name = "gstreamer_app_sys"
+
+[package]
+build = "build.rs"
+links = "gstapp-1.0"
+name = "gstreamer-app-sys"
+version = "0.1.0"
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+description = "FFI bindings to libgstapp-1.0"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+repository = "https://github.com/sdroege/gstreamer-sys"
+license = "MIT"
+
+include = [
+    "src/*.rs",
+    "Cargo.toml",
+    "build.rs",
+    "LICENSE",
+]
