@@ -4,16 +4,16 @@ pkg-config = "0.3.7"
 [dependencies]
 bitflags = "0.8"
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/sys.git" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys.git" }
+glib-sys = "0.3.4"
+gobject-sys = "0.3.4"
 
 [dependencies.gstreamer-sys]
 path = "../gstreamer-sys"
-version = "0.1.0"
+version = "0.1.1"
 
 [dependencies.gstreamer-base-sys]
 path = "../gstreamer-base-sys"
-version = "0.1.0"
+version = "0.1.1"
 
 [features]
 v1_0_10 = []
@@ -32,7 +32,7 @@ name = "gstreamer_app_sys"
 build = "build.rs"
 links = "gstapp-1.0"
 name = "gstreamer-app-sys"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 description = "FFI bindings to libgstapp-1.0"
 homepage = "https://gstreamer.freedesktop.org"
