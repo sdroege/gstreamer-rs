@@ -35175,14 +35175,24 @@ gst_element_set_state() and checked using gst_element_get_state().</doc>
                  glib:type-name="GstStateChange"
                  glib:get-type="gst_state_change_get_type"
                  c:type="GstStateChange">
-      <doc xml:space="preserve">#GST_STATE_CHANGE_NULL_TO_READY    : state change from NULL to READY.
+      <doc xml:space="preserve">These are the different state changes an element goes through.
+%GST_STATE_NULL &amp;rArr; %GST_STATE_PLAYING is called an upwards state change
+and %GST_STATE_PLAYING &amp;rArr; %GST_STATE_NULL a downwards state change.</doc>
+      <member name="null_to_ready"
+              value="10"
+              c:identifier="GST_STATE_CHANGE_NULL_TO_READY"
+              glib:nick="null-to-ready">
+        <doc xml:space="preserve">state change from NULL to READY.
   * The element must check if the resources it needs are available. Device
     sinks and -sources typically try to probe the device to constrain their
     caps.
-  * The element opens the device (in case feature need to be probed).
-
-#GST_STATE_CHANGE_READY_TO_PAUSED  : state change from READY to PAUSED.
-
+  * The element opens the device (in case feature need to be probed).</doc>
+      </member>
+      <member name="ready_to_paused"
+              value="19"
+              c:identifier="GST_STATE_CHANGE_READY_TO_PAUSED"
+              glib:nick="ready-to-paused">
+        <doc xml:space="preserve">state change from READY to PAUSED.
   * The element pads are activated in order to receive data in PAUSED.
     Streaming threads are started.
   * Some elements might need to return %GST_STATE_CHANGE_ASYNC and complete
@@ -35191,11 +35201,13 @@ gst_element_set_state() and checked using gst_element_get_state().</doc>
     when they receive the first buffer or %GST_EVENT_EOS (preroll).
     Sinks also block the dataflow when in PAUSED.
   * A pipeline resets the running_time to 0.
-
-  * Live sources return %GST_STATE_CHANGE_NO_PREROLL and don't generate data.
-
-#GST_STATE_CHANGE_PAUSED_TO_PLAYING: state change from PAUSED to PLAYING.
-
+  * Live sources return %GST_STATE_CHANGE_NO_PREROLL and don't generate data.</doc>
+      </member>
+      <member name="paused_to_playing"
+              value="28"
+              c:identifier="GST_STATE_CHANGE_PAUSED_TO_PLAYING"
+              glib:nick="paused-to-playing">
+        <doc xml:space="preserve">state change from PAUSED to PLAYING.
   * Most elements ignore this state change.
   * The pipeline selects a #GstClock and distributes this to all the children
     before setting them to PLAYING. This means that it is only allowed to
@@ -35209,15 +35221,17 @@ gst_element_set_state() and checked using gst_element_get_state().</doc>
     to post %GST_MESSAGE_EOS when not in the PLAYING state.
   * While streaming in PAUSED or PLAYING elements can create and remove
     sometimes pads.
-  * Live sources start generating data and return %GST_STATE_CHANGE_SUCCESS.
-
-#GST_STATE_CHANGE_PLAYING_TO_PAUSED: state change from PLAYING to PAUSED.
-
+  * Live sources start generating data and return %GST_STATE_CHANGE_SUCCESS.</doc>
+      </member>
+      <member name="playing_to_paused"
+              value="35"
+              c:identifier="GST_STATE_CHANGE_PLAYING_TO_PAUSED"
+              glib:nick="playing-to-paused">
+        <doc xml:space="preserve">state change from PLAYING to PAUSED.
   * Most elements ignore this state change.
   * The pipeline calculates the running_time based on the last selected
     #GstClock and the base_time. It stores this information to continue
     playback when going back to the PLAYING state.
-
   * Sinks unblock any #GstClock wait calls.
   * When a sink does not have a pending buffer to play, it returns
     #GST_STATE_CHANGE_ASYNC from this state change and completes the state
@@ -35225,56 +35239,28 @@ gst_element_set_state() and checked using gst_element_get_state().</doc>
   * Any queued %GST_MESSAGE_EOS items are removed since they will be reposted
     when going back to the PLAYING state. The EOS messages are queued in
     #GstBin containers.
-
-  * Live sources stop generating data and return %GST_STATE_CHANGE_NO_PREROLL.
-
-#GST_STATE_CHANGE_PAUSED_TO_READY  : state change from PAUSED to READY.
-
+  * Live sources stop generating data and return %GST_STATE_CHANGE_NO_PREROLL.</doc>
+      </member>
+      <member name="paused_to_ready"
+              value="26"
+              c:identifier="GST_STATE_CHANGE_PAUSED_TO_READY"
+              glib:nick="paused-to-ready">
+        <doc xml:space="preserve">state change from PAUSED to READY.
   * Sinks unblock any waits in the preroll.
   * Elements unblock any waits on devices
   * Chain or get_range functions return %GST_FLOW_FLUSHING.
   * The element pads are deactivated so that streaming becomes impossible and
     all streaming threads are stopped.
   * The sink forgets all negotiated formats
-  * Elements remove all sometimes pads
-
-#GST_STATE_CHANGE_READY_TO_NULL    : state change from READY to NULL.
-
-  * Elements close devices
-  * Elements reset any internal state.
-
-These are the different state changes an element goes through.
-%GST_STATE_NULL &amp;rArr; %GST_STATE_PLAYING is called an upwards state change
-and %GST_STATE_PLAYING &amp;rArr; %GST_STATE_NULL a downwards state change.</doc>
-      <member name="null_to_ready"
-              value="10"
-              c:identifier="GST_STATE_CHANGE_NULL_TO_READY"
-              glib:nick="null-to-ready">
-      </member>
-      <member name="ready_to_paused"
-              value="19"
-              c:identifier="GST_STATE_CHANGE_READY_TO_PAUSED"
-              glib:nick="ready-to-paused">
-      </member>
-      <member name="paused_to_playing"
-              value="28"
-              c:identifier="GST_STATE_CHANGE_PAUSED_TO_PLAYING"
-              glib:nick="paused-to-playing">
-      </member>
-      <member name="playing_to_paused"
-              value="35"
-              c:identifier="GST_STATE_CHANGE_PLAYING_TO_PAUSED"
-              glib:nick="playing-to-paused">
-      </member>
-      <member name="paused_to_ready"
-              value="26"
-              c:identifier="GST_STATE_CHANGE_PAUSED_TO_READY"
-              glib:nick="paused-to-ready">
+  * Elements remove all sometimes pads</doc>
       </member>
       <member name="ready_to_null"
               value="17"
               c:identifier="GST_STATE_CHANGE_READY_TO_NULL"
               glib:nick="ready-to-null">
+        <doc xml:space="preserve">state change from READY to NULL.
+  * Elements close devices
+  * Elements reset any internal state.</doc>
       </member>
     </enumeration>
     <enumeration name="StateChangeReturn"
@@ -43742,15 +43728,15 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="2" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="0" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MINOR" value="11" c:type="GST_VERSION_MINOR">
+    <constant name="VERSION_MINOR" value="12" c:type="GST_VERSION_MINOR">
       <doc xml:space="preserve">The minor version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_NANO" value="1" c:type="GST_VERSION_NANO">
+    <constant name="VERSION_NANO" value="0" c:type="GST_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer at compile time:
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       <type name="gint" c:type="gint"/>

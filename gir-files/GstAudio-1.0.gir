@@ -189,6 +189,8 @@ rates.
     <constant name="AUDIO_RESAMPLER_OPT_STOP_ATTENUATION"
               value="GstAudioResampler.stop-attenutation"
               c:type="GST_AUDIO_RESAMPLER_OPT_STOP_ATTENUATION">
+      <doc xml:space="preserve">G_TYPE_DOUBLE, stopband attenuation in decibels. The attenuation
+after the stopband for the kaiser window. 85 dB is the default.</doc>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="AUDIO_RESAMPLER_OPT_TRANSITION_BANDWIDTH"
