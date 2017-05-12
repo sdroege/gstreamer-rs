@@ -1,0 +1,41 @@
+[options]
+girs_dir = "gir-files"
+library = "Gst"
+version = "1.0"
+min_cfg_version = "1.0"
+target_path = "gstreamer"
+work_mode = "normal"
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+generate = [
+    "Gst.Object",
+    "Gst.Bus",
+    "Gst.Clock",
+    "Gst.ClockTime",
+    "Gst.Element",
+    "Gst.Bin",
+    "Gst.Pipeline",
+    "Gst.State",
+    "Gst.StateChangeReturn",
+    "Gst.StateChange",
+    "Gst.SeekFlags",
+    "Gst.SeekType",
+    "Gst.Pad",
+    "Gst.FlowReturn",
+    "Gst.PadDirection",
+    "Gst.PadTemplate",
+    "Gst.URIHandler",
+    "Gst.URIType",
+    "Gst.ElementFactory",
+    "Gst.ElementFactoryListType",
+    "Gst.Format",
+]
+
+manual = [
+    "GLib.Error",
+    #"Gst.Message",
+]
