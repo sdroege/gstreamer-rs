@@ -2,7 +2,7 @@
 pkg-config = "0.3.7"
 
 [dependencies]
-bitflags = "0.8"
+bitflags = "0.9"
 libc = "0.2"
 glib-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }

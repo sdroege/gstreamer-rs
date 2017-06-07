@@ -36,7 +36,7 @@ fn find() -> Result<(), Error> {
         return Ok(())
     }
 
-    let target = env::var("TARGET").unwrap();
+    let target = env::var("TARGET").expect("TARGET environment variable doesn't exist");
     let hardcode_shared_libs = target.contains("windows");
 
     let mut config = Config::new();
@@ -51,7 +51,8 @@ fn find() -> Result<(), Error> {
                     println!("cargo:rustc-link-lib=dylib={}", lib_);
                 }
                 for path in library.link_paths.iter() {
-                    println!("cargo:rustc-link-search=native={}", path.to_str().unwrap());
+                    println!("cargo:rustc-link-search=native={}",
+                             path.to_str().expect("library path doesn't exist"));
                 }
             }
             Ok(())
