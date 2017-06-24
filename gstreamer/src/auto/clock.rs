@@ -94,7 +94,7 @@ pub trait ClockExt {
 
     fn set_calibration(&self, internal: ClockTime, external: ClockTime, rate_num: ClockTime, rate_denom: ClockTime);
 
-    fn set_master<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, master: Q) -> bool;
+    fn set_master<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, master: Q) -> Result<(), glib::error::BoolError>;
 
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime;
 
@@ -111,7 +111,7 @@ pub trait ClockExt {
     fn unadjust_with_calibration(&self, external_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime;
 
     #[cfg(feature = "v1_6")]
-    fn wait_for_sync(&self, timeout: ClockTime) -> bool;
+    fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
 
     fn get_property_window_size(&self) -> i32;
 
@@ -226,11 +226,11 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    fn set_master<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, master: Q) -> bool {
+    fn set_master<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, master: Q) -> Result<(), glib::error::BoolError> {
         let master = master.into();
         let master = master.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_clock_set_master(self.to_glib_none().0, master.0))
+            glib::error::BoolError::from_glib(ffi::gst_clock_set_master(self.to_glib_none().0, master.0), "Failed to set master clock")
         }
     }
 
@@ -271,9 +271,9 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     }
 
     #[cfg(feature = "v1_6")]
-    fn wait_for_sync(&self, timeout: ClockTime) -> bool {
+    fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout))
+            glib::error::BoolError::from_glib(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout), "Timed out waiting for sync")
         }
     }
 

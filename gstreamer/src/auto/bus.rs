@@ -53,9 +53,6 @@ pub trait BusExt {
 
     fn remove_signal_watch(&self);
 
-    #[cfg(feature = "v1_6")]
-    fn remove_watch(&self) -> bool;
-
     fn set_flushing(&self, flushing: bool);
 
     //fn set_sync_handler<'a, P: Into<Option<&'a /*Unimplemented*/BusSyncHandler>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
@@ -141,13 +138,6 @@ impl<O: IsA<Bus>> BusExt for O {
     fn remove_signal_watch(&self) {
         unsafe {
             ffi::gst_bus_remove_signal_watch(self.to_glib_none().0);
-        }
-    }
-
-    #[cfg(feature = "v1_6")]
-    fn remove_watch(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_bus_remove_watch(self.to_glib_none().0))
         }
     }
 

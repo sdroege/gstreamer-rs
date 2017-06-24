@@ -69,7 +69,7 @@ impl Element {
 pub trait ElementExt {
     fn abort_state(&self);
 
-    fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> bool;
+    fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(feature = "v1_10")]
     fn add_property_deep_notify_watch<'a, P: Into<Option<&'a str>>>(&self, property_name: P, include_value: bool) -> libc::c_ulong;
@@ -123,13 +123,13 @@ pub trait ElementExt {
 
     //fn iterate_src_pads(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn link<P: IsA<Element>>(&self, dest: &P) -> bool;
+    fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError>;
 
     //fn link_filtered<'a, P: IsA<Element>, Q: Into<Option<&'a /*Ignored*/Caps>>>(&self, dest: &P, filter: Q) -> bool;
 
     //fn link_many<P: IsA<Element>>(&self, element_2: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> bool;
 
-    fn link_pads<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R) -> bool;
+    fn link_pads<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R) -> Result<(), glib::error::BoolError>;
 
     //fn link_pads_filtered<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>, S: Into<Option<&'c /*Ignored*/Caps>>>(&self, srcpadname: P, dest: &Q, destpadname: R, filter: S) -> bool;
 
@@ -158,16 +158,16 @@ pub trait ElementExt {
 
     fn release_request_pad<P: IsA<Pad>>(&self, pad: &P);
 
-    fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> bool;
+    fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(feature = "v1_10")]
     fn remove_property_notify_watch(&self, watch_id: libc::c_ulong);
 
     //fn request_pad<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b /*Ignored*/Caps>>>(&self, templ: &PadTemplate, name: P, caps: Q) -> Option<Pad>;
 
-    fn seek(&self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: i64, stop_type: SeekType, stop: i64) -> bool;
+    fn seek(&self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: i64, stop_type: SeekType, stop: i64) -> Result<(), glib::error::BoolError>;
 
-    fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> bool;
+    fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> Result<(), glib::error::BoolError>;
 
     //fn send_event(&self, event: /*Ignored*/&mut Event) -> bool;
 
@@ -175,7 +175,7 @@ pub trait ElementExt {
 
     fn set_bus(&self, bus: &Bus);
 
-    fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> bool;
+    fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> Result<(), glib::error::BoolError>;
 
     //fn set_context(&self, context: /*Ignored*/&mut Context);
 
@@ -185,7 +185,7 @@ pub trait ElementExt {
 
     fn set_state(&self, state: State) -> StateChangeReturn;
 
-    fn sync_state_with_parent(&self) -> bool;
+    fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError>;
 
     fn unlink<P: IsA<Element>>(&self, dest: &P);
 
@@ -207,9 +207,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> bool {
+    fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_add_pad(self.to_glib_none().0, pad.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_element_add_pad(self.to_glib_none().0, pad.to_glib_none().0), "Failed to add pad")
         }
     }
 
@@ -348,9 +348,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     //    unsafe { TODO: call ffi::gst_element_iterate_src_pads() }
     //}
 
-    fn link<P: IsA<Element>>(&self, dest: &P) -> bool {
+    fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_link(self.to_glib_none().0, dest.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_element_link(self.to_glib_none().0, dest.to_glib_none().0), "Failed to link elements")
         }
     }
 
@@ -362,13 +362,13 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     //    unsafe { TODO: call ffi::gst_element_link_many() }
     //}
 
-    fn link_pads<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R) -> bool {
+    fn link_pads<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R) -> Result<(), glib::error::BoolError> {
         let srcpadname = srcpadname.into();
         let srcpadname = srcpadname.to_glib_none();
         let destpadname = destpadname.into();
         let destpadname = destpadname.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_element_link_pads(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0))
+            glib::error::BoolError::from_glib(ffi::gst_element_link_pads(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0), "Failed to link pads")
         }
     }
 
@@ -445,9 +445,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> bool {
+    fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_remove_pad(self.to_glib_none().0, pad.to_glib_full()))
+            glib::error::BoolError::from_glib(ffi::gst_element_remove_pad(self.to_glib_none().0, pad.to_glib_full()), "Failed to remove pad")
         }
     }
 
@@ -462,15 +462,15 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     //    unsafe { TODO: call ffi::gst_element_request_pad() }
     //}
 
-    fn seek(&self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: i64, stop_type: SeekType, stop: i64) -> bool {
+    fn seek(&self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: i64, stop_type: SeekType, stop: i64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_seek(self.to_glib_none().0, rate, format.to_glib(), flags.to_glib(), start_type.to_glib(), start, stop_type.to_glib(), stop))
+            glib::error::BoolError::from_glib(ffi::gst_element_seek(self.to_glib_none().0, rate, format.to_glib(), flags.to_glib(), start_type.to_glib(), start, stop_type.to_glib(), stop), "Failed to seek")
         }
     }
 
-    fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> bool {
+    fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_seek_simple(self.to_glib_none().0, format.to_glib(), seek_flags.to_glib(), seek_pos))
+            glib::error::BoolError::from_glib(ffi::gst_element_seek_simple(self.to_glib_none().0, format.to_glib(), seek_flags.to_glib(), seek_pos), "Failed to seek")
         }
     }
 
@@ -490,9 +490,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> bool {
+    fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_set_clock(self.to_glib_none().0, clock.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_element_set_clock(self.to_glib_none().0, clock.to_glib_none().0), "Failed to set clock")
         }
     }
 
@@ -518,9 +518,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn sync_state_with_parent(&self) -> bool {
+    fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_sync_state_with_parent(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_element_sync_state_with_parent(self.to_glib_none().0), "Failed to sync state with parent")
         }
     }
 

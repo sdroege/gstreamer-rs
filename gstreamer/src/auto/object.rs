@@ -4,6 +4,7 @@
 use ClockTime;
 use Error;
 use ffi;
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 
@@ -73,13 +74,13 @@ pub trait ObjectExt {
 
     fn set_control_rate(&self, control_rate: ClockTime);
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> bool;
+    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError>;
 
-    fn set_parent<P: IsA<Object>>(&self, parent: &P) -> bool;
+    fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
     fn suggest_next_sync(&self) -> ClockTime;
 
-    fn sync_values(&self, timestamp: ClockTime) -> bool;
+    fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError>;
 
     fn unparent(&self);
 
@@ -186,17 +187,17 @@ impl<O: IsA<Object>> ObjectExt for O {
         }
     }
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> bool {
+    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError> {
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_object_set_name(self.to_glib_none().0, name.0))
+            glib::error::BoolError::from_glib(ffi::gst_object_set_name(self.to_glib_none().0, name.0), "Failed to set object name")
         }
     }
 
-    fn set_parent<P: IsA<Object>>(&self, parent: &P) -> bool {
+    fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_object_set_parent(self.to_glib_none().0, parent.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_object_set_parent(self.to_glib_none().0, parent.to_glib_none().0), "Failed to set parent object")
         }
     }
 
@@ -206,9 +207,9 @@ impl<O: IsA<Object>> ObjectExt for O {
         }
     }
 
-    fn sync_values(&self, timestamp: ClockTime) -> bool {
+    fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_object_sync_values(self.to_glib_none().0, timestamp))
+            glib::error::BoolError::from_glib(ffi::gst_object_sync_values(self.to_glib_none().0, timestamp), "Failed to sync values")
         }
     }
 

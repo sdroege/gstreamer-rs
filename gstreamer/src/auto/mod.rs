@@ -70,6 +70,8 @@ mod alias;
 pub use self::alias::ClockTime;
 pub use self::alias::ElementFactoryListType;
 
+pub mod functions;
+
 #[doc(hidden)]
 pub mod traits {
     pub use super::BinExt;

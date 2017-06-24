@@ -12,19 +12,13 @@ external_libraries = [
 ]
 
 generate = [
-    "Gst.Object",
-    "Gst.Bus",
-    "Gst.Clock",
     "Gst.ClockTime",
-    "Gst.Element",
-    "Gst.Bin",
     "Gst.Pipeline",
     "Gst.State",
     "Gst.StateChangeReturn",
     "Gst.StateChange",
     "Gst.SeekFlags",
     "Gst.SeekType",
-    "Gst.Pad",
     "Gst.FlowReturn",
     "Gst.PadDirection",
     "Gst.PadTemplate",
@@ -39,3 +33,148 @@ manual = [
     "GLib.Error",
     #"Gst.Message",
 ]
+
+[[object]]
+name = "Gst.Bin"
+status = "generate"
+    [[object.function]]
+    name = "add"
+        [object.function.return]
+        bool_return_is_error = "Failed to add element"
+
+    [[object.function]]
+    name = "remove"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove element"
+
+    [[object.function]]
+    name = "recalculate_latency"
+        [object.function.return]
+        bool_return_is_error = "Failed to recalculate latency"
+
+    [[object.function]]
+    name = "sync_children_states"
+        [object.function.return]
+        bool_return_is_error = "Failed to sync children states"
+
+[[object]]
+name = "Gst.Bus"
+status = "generate"
+    [[object.function]]
+    name = "remove_watch"
+    # Needs manual bindings and GSource support in glib-rs
+    ignore = true
+
+[[object]]
+name = "Gst.Clock"
+status = "generate"
+    [[object.function]]
+    name = "set_master"
+        [object.function.return]
+        bool_return_is_error = "Failed to set master clock"
+
+    [[object.function]]
+    name = "wait_for_sync"
+        [object.function.return]
+        bool_return_is_error = "Timed out waiting for sync"
+
+[[object]]
+name = "Gst.Element"
+status = "generate"
+    [[object.function]]
+    name = "add_pad"
+        [object.function.return]
+        bool_return_is_error = "Failed to add pad"
+
+    [[object.function]]
+    name = "remove_pad"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove pad"
+
+    [[object.function]]
+    name = "link"
+        [object.function.return]
+        bool_return_is_error = "Failed to link elements"
+
+    [[object.function]]
+    name = "link_pads"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
+    name = "seek"
+        [object.function.return]
+        bool_return_is_error = "Failed to seek"
+
+    [[object.function]]
+    name = "seek_simple"
+        [object.function.return]
+        bool_return_is_error = "Failed to seek"
+
+    [[object.function]]
+    name = "set_clock"
+        [object.function.return]
+        bool_return_is_error = "Failed to set clock"
+
+    [[object.function]]
+    name = "sync_state_with_parent"
+        [object.function.return]
+        bool_return_is_error = "Failed to sync state with parent"
+
+[[object]]
+name = "Gst.Object"
+status = "generate"
+    [[object.function]]
+    name = "set_name"
+        [object.function.return]
+        bool_return_is_error = "Failed to set object name"
+
+    [[object.function]]
+    name = "set_parent"
+        [object.function.return]
+        bool_return_is_error = "Failed to set parent object"
+
+    [[object.function]]
+    name = "sync_values"
+        [object.function.return]
+        bool_return_is_error = "Failed to sync values"
+
+[[object]]
+name = "Gst.Pad"
+status = "generate"
+    [[object.function]]
+    name = "link_maybe_ghosting"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pad, possibly ghosting"
+
+    [[object.function]]
+    name = "unlink"
+        [object.function.return]
+        bool_return_is_error = "Failed to unlink pad"
+
+    [[object.function]]
+    name = "pause_task"
+        [object.function.return]
+        bool_return_is_error = "Failed to pause pad task"
+
+    [[object.function]]
+    name = "stop_task"
+        [object.function.return]
+        bool_return_is_error = "Failed to stop pad task"
+
+    [[object.function]]
+    name = "set_active"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate pad"
+
+[[object]]
+name = "Gst.*"
+status = "generate"
+    [[object.function]]
+    name = "update_registry"
+        [object.function.return]
+        bool_return_is_error = "Failed to update registry"
+
+    [[object.function]]
+    name = "util_dump_mem"
+    ignore = true

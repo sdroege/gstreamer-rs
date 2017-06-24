@@ -133,7 +133,7 @@ pub trait PadExt {
     //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> /*Ignored*/PadLinkReturn;
 
     #[cfg(feature = "v1_10")]
-    fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> bool;
+    fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(feature = "v1_10")]
     //fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: /*Ignored*/PadLinkCheck) -> bool;
@@ -142,7 +142,7 @@ pub trait PadExt {
 
     fn needs_reconfigure(&self) -> bool;
 
-    fn pause_task(&self) -> bool;
+    fn pause_task(&self) -> Result<(), glib::error::BoolError>;
 
     //fn peer_query(&self, query: /*Ignored*/&mut Query) -> bool;
 
@@ -190,7 +190,7 @@ pub trait PadExt {
 
     //fn set_activatemode_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, activatemode: /*Unknown conversion*//*Unimplemented*/PadActivateModeFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
-    fn set_active(&self, active: bool) -> bool;
+    fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
     //fn set_chain_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, chain: /*Unknown conversion*//*Unimplemented*/PadChainFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
@@ -219,12 +219,12 @@ pub trait PadExt {
 
     //fn sticky_events_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, foreach_func: /*Unknown conversion*//*Unimplemented*/PadStickyEventsForeachFunction, user_data: P);
 
-    fn stop_task(&self) -> bool;
+    fn stop_task(&self) -> Result<(), glib::error::BoolError>;
 
     //#[cfg(feature = "v1_2")]
     //fn store_sticky_event(&self, event: /*Ignored*/&mut Event) -> FlowReturn;
 
-    fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
+    fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
 
     fn use_fixed_caps(&self);
 
@@ -417,9 +417,9 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //}
 
     #[cfg(feature = "v1_10")]
-    fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> bool {
+    fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_link_maybe_ghosting(self.to_glib_none().0, sink.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_pad_link_maybe_ghosting(self.to_glib_none().0, sink.to_glib_none().0), "Failed to link pad, possibly ghosting")
         }
     }
 
@@ -440,9 +440,9 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    fn pause_task(&self) -> bool {
+    fn pause_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_pause_task(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_pad_pause_task(self.to_glib_none().0), "Failed to pause pad task")
         }
     }
 
@@ -564,9 +564,9 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_set_activatemode_function_full() }
     //}
 
-    fn set_active(&self, active: bool) -> bool {
+    fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_set_active(self.to_glib_none().0, active.to_glib()))
+            glib::error::BoolError::from_glib(ffi::gst_pad_set_active(self.to_glib_none().0, active.to_glib()), "Failed to activate pad")
         }
     }
 
@@ -625,9 +625,9 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_sticky_events_foreach() }
     //}
 
-    fn stop_task(&self) -> bool {
+    fn stop_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_stop_task(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_pad_stop_task(self.to_glib_none().0), "Failed to stop pad task")
         }
     }
 
@@ -636,9 +636,9 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_store_sticky_event() }
     //}
 
-    fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> bool {
+    fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_unlink(self.to_glib_none().0, sinkpad.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_pad_unlink(self.to_glib_none().0, sinkpad.to_glib_none().0), "Failed to unlink pad")
         }
     }
 

@@ -36,7 +36,7 @@ impl Bin {
 }
 
 pub trait BinExt {
-    fn add<P: IsA<Element>>(&self, element: &P) -> bool;
+    fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
     //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -63,9 +63,9 @@ pub trait BinExt {
 
     //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn recalculate_latency(&self) -> bool;
+    fn recalculate_latency(&self) -> Result<(), glib::error::BoolError>;
 
-    fn remove<P: IsA<Element>>(&self, element: &P) -> bool;
+    fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
     //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -73,7 +73,7 @@ pub trait BinExt {
     //fn set_suppressed_flags(&self, flags: /*Ignored*/ElementFlags);
 
     #[cfg(feature = "v1_6")]
-    fn sync_children_states(&self) -> bool;
+    fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
 
     fn get_property_async_handling(&self) -> bool;
 
@@ -97,9 +97,9 @@ pub trait BinExt {
 }
 
 impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
-    fn add<P: IsA<Element>>(&self, element: &P) -> bool {
+    fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0), "Failed to add element")
         }
     }
 
@@ -160,15 +160,15 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
     //    unsafe { TODO: call ffi::gst_bin_iterate_sources() }
     //}
 
-    fn recalculate_latency(&self) -> bool {
+    fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_bin_recalculate_latency(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_bin_recalculate_latency(self.to_glib_none().0), "Failed to recalculate latency")
         }
     }
 
-    fn remove<P: IsA<Element>>(&self, element: &P) -> bool {
+    fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_bin_remove(self.to_glib_none().0, element.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_bin_remove(self.to_glib_none().0, element.to_glib_none().0), "Failed to remove element")
         }
     }
 
@@ -182,9 +182,9 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
     //}
 
     #[cfg(feature = "v1_6")]
-    fn sync_children_states(&self) -> bool {
+    fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_bin_sync_children_states(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_bin_sync_children_states(self.to_glib_none().0), "Failed to sync children states")
         }
     }
 
