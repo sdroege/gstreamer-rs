@@ -1974,6 +1974,16 @@ then use gst_base_parse_frame_init() to initialise it.</doc>
           </parameter>
         </parameters>
       </constructor>
+      <method name="copy" c:identifier="gst_base_parse_frame_copy">
+        <return-value transfer-ownership="full">
+          <type name="BaseParseFrame" c:type="GstBaseParseFrame*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="frame" transfer-ownership="none">
+            <type name="BaseParseFrame" c:type="GstBaseParseFrame*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="free" c:identifier="gst_base_parse_frame_free">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -10211,6 +10221,16 @@ returned immediatelly from the gst_flow_combiner_update_flow() function.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="ref" c:identifier="gst_flow_combiner_ref">
+        <return-value transfer-ownership="full">
+          <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="combiner" transfer-ownership="none">
+            <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="remove_pad"
               c:identifier="gst_flow_combiner_remove_pad"
               version="1.4">
@@ -10239,6 +10259,16 @@ returned immediatelly from the gst_flow_combiner_update_flow() function.</doc>
         <parameters>
           <instance-parameter name="combiner" transfer-ownership="none">
             <doc xml:space="preserve">the #GstFlowCombiner to clear</doc>
+            <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="unref" c:identifier="gst_flow_combiner_unref">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="combiner" transfer-ownership="none">
             <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
           </instance-parameter>
         </parameters>

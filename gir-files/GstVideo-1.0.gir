@@ -601,9 +601,14 @@ associated command.</doc>
             <doc xml:space="preserve">A #GstEvent to inspect.</doc>
             <type name="Gst.Event" c:type="GstEvent*"/>
           </parameter>
-          <parameter name="command" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to GstNavigationCommand to receive the type of the
-navigation event.</doc>
+          <parameter name="command"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to GstNavigationCommand to receive the
+    type of the navigation event.</doc>
             <type name="NavigationCommand" c:type="GstNavigationCommand*"/>
           </parameter>
         </parameters>
@@ -618,10 +623,15 @@ navigation event.</doc>
             <doc xml:space="preserve">A #GstEvent to inspect.</doc>
             <type name="Gst.Event" c:type="GstEvent*"/>
           </parameter>
-          <parameter name="key" transfer-ownership="none">
-            <doc xml:space="preserve">A pointer to a location to receive the string identifying the key
-press. The returned string is owned by the event, and valid only until the
-event is unreffed.</doc>
+          <parameter name="key"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="none"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">A pointer to a location to receive
+    the string identifying the key press. The returned string is owned by the
+    event, and valid only until the event is unreffed.</doc>
             <type name="utf8" c:type="const gchar**"/>
           </parameter>
         </parameters>
@@ -641,19 +651,34 @@ gst_navigation_event_get_type() to retrieve the #GstNavigationEventType.</doc>
             <doc xml:space="preserve">A #GstEvent to inspect.</doc>
             <type name="Gst.Event" c:type="GstEvent*"/>
           </parameter>
-          <parameter name="button" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a gint that will receive the button number associated
-with the event.</doc>
+          <parameter name="button"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a gint that will receive the button
+    number associated with the event.</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
-          <parameter name="x" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the mouse button
-event.</doc>
+          <parameter name="x"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the
+    mouse button event.</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
-          <parameter name="y" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the mouse button
-event.</doc>
+          <parameter name="y"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the
+    mouse button event.</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
         </parameters>
@@ -671,12 +696,24 @@ of the event.</doc>
             <doc xml:space="preserve">A #GstEvent to inspect.</doc>
             <type name="Gst.Event" c:type="GstEvent*"/>
           </parameter>
-          <parameter name="x" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the mouse movement.</doc>
+          <parameter name="x"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the
+    mouse movement.</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
-          <parameter name="y" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the mouse movement.</doc>
+          <parameter name="y"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the
+    mouse movement.</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
         </parameters>
@@ -792,13 +829,24 @@ and extract the @cur_angle and @n_angles parameters.</doc>
             <doc xml:space="preserve">A #GstMessage to inspect.</doc>
             <type name="Gst.Message" c:type="GstMessage*"/>
           </parameter>
-          <parameter name="cur_angle" transfer-ownership="none">
-            <doc xml:space="preserve">A pointer to a #guint to receive the new current angle number,
-or NULL</doc>
+          <parameter name="cur_angle"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">A pointer to a #guint to receive the new
+    current angle number, or NULL</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
-          <parameter name="n_angles" transfer-ownership="none">
-            <doc xml:space="preserve">A pointer to a #guint to receive the new angle count, or NULL.</doc>
+          <parameter name="n_angles"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">A pointer to a #guint to receive the new angle
+    count, or NULL.</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
         </parameters>
@@ -821,9 +869,11 @@ with it.</doc>
           <parameter name="event"
                      direction="out"
                      caller-allocates="0"
-                     transfer-ownership="full">
-            <doc xml:space="preserve">a pointer to a #GstEvent to receive the
-    contained navigation event.</doc>
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">a pointer to a #GstEvent to receive
+    the contained navigation event.</doc>
             <type name="Gst.Event" c:type="GstEvent**"/>
           </parameter>
         </parameters>
@@ -842,9 +892,14 @@ active, it indicates that the mouse is over a clickable area.</doc>
             <doc xml:space="preserve">A #GstMessage to inspect.</doc>
             <type name="Gst.Message" c:type="GstMessage*"/>
           </parameter>
-          <parameter name="active" transfer-ownership="none">
-            <doc xml:space="preserve">A pointer to a gboolean to receive the active/inactive state,
-or NULL.</doc>
+          <parameter name="active"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">A pointer to a gboolean to receive the
+    active/inactive state, or NULL.</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
         </parameters>
@@ -898,14 +953,24 @@ angles into the #guint pointed to by the @n_angles variable.</doc>
             <doc xml:space="preserve">a #GstQuery</doc>
             <type name="Gst.Query" c:type="GstQuery*"/>
           </parameter>
-          <parameter name="cur_angle" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a #guint into which to store the currently selected
-angle value from the query, or NULL</doc>
+          <parameter name="cur_angle"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a #guint into which to store the
+    currently selected angle value from the query, or NULL</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
-          <parameter name="n_angles" transfer-ownership="none">
-            <doc xml:space="preserve">Pointer to a #guint into which to store the number of angles
-value from the query, or NULL</doc>
+          <parameter name="n_angles"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">Pointer to a #guint into which to store the
+    number of angles value from the query, or NULL</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
         </parameters>
@@ -925,7 +990,9 @@ value from the query, or NULL</doc>
           <parameter name="n_cmds"
                      direction="out"
                      caller-allocates="0"
-                     transfer-ownership="full">
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">the number of commands in this query.</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
@@ -952,7 +1019,9 @@ set to #GST_NAVIGATION_COMMAND_INVALID.</doc>
           <parameter name="cmd"
                      direction="out"
                      caller-allocates="0"
-                     transfer-ownership="full">
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">a pointer to store the nth command into.</doc>
             <type name="NavigationCommand" c:type="GstNavigationCommand*"/>
           </parameter>
@@ -1019,8 +1088,13 @@ of commands passed must be equal to @n_commands.</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
           <parameter name="cmds" transfer-ownership="none">
-            <doc xml:space="preserve">An array containing @n_cmds @GstNavigationCommand values.</doc>
-            <type name="NavigationCommand" c:type="GstNavigationCommand*"/>
+            <doc xml:space="preserve">An array containing @n_cmds
+    @GstNavigationCommand values.</doc>
+            <array length="1"
+                   zero-terminated="0"
+                   c:type="GstNavigationCommand*">
+              <type name="NavigationCommand" c:type="GstNavigationCommand"/>
+            </array>
           </parameter>
         </parameters>
       </function>
@@ -11562,9 +11636,14 @@ associated command.</doc>
           <doc xml:space="preserve">A #GstEvent to inspect.</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
         </parameter>
-        <parameter name="command" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to GstNavigationCommand to receive the type of the
-navigation event.</doc>
+        <parameter name="command"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to GstNavigationCommand to receive the
+    type of the navigation event.</doc>
           <type name="NavigationCommand" c:type="GstNavigationCommand*"/>
         </parameter>
       </parameters>
@@ -11580,10 +11659,15 @@ navigation event.</doc>
           <doc xml:space="preserve">A #GstEvent to inspect.</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
         </parameter>
-        <parameter name="key" transfer-ownership="none">
-          <doc xml:space="preserve">A pointer to a location to receive the string identifying the key
-press. The returned string is owned by the event, and valid only until the
-event is unreffed.</doc>
+        <parameter name="key"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="none"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">A pointer to a location to receive
+    the string identifying the key press. The returned string is owned by the
+    event, and valid only until the event is unreffed.</doc>
           <type name="utf8" c:type="const gchar**"/>
         </parameter>
       </parameters>
@@ -11604,19 +11688,34 @@ gst_navigation_event_get_type() to retrieve the #GstNavigationEventType.</doc>
           <doc xml:space="preserve">A #GstEvent to inspect.</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
         </parameter>
-        <parameter name="button" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a gint that will receive the button number associated
-with the event.</doc>
+        <parameter name="button"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a gint that will receive the button
+    number associated with the event.</doc>
           <type name="gint" c:type="gint*"/>
         </parameter>
-        <parameter name="x" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the mouse button
-event.</doc>
+        <parameter name="x"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the
+    mouse button event.</doc>
           <type name="gdouble" c:type="gdouble*"/>
         </parameter>
-        <parameter name="y" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the mouse button
-event.</doc>
+        <parameter name="y"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the
+    mouse button event.</doc>
           <type name="gdouble" c:type="gdouble*"/>
         </parameter>
       </parameters>
@@ -11635,12 +11734,24 @@ of the event.</doc>
           <doc xml:space="preserve">A #GstEvent to inspect.</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
         </parameter>
-        <parameter name="x" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the mouse movement.</doc>
+        <parameter name="x"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a gdouble to receive the x coordinate of the
+    mouse movement.</doc>
           <type name="gdouble" c:type="gdouble*"/>
         </parameter>
-        <parameter name="y" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the mouse movement.</doc>
+        <parameter name="y"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a gdouble to receive the y coordinate of the
+    mouse movement.</doc>
           <type name="gdouble" c:type="gdouble*"/>
         </parameter>
       </parameters>
@@ -11761,13 +11872,24 @@ and extract the @cur_angle and @n_angles parameters.</doc>
           <doc xml:space="preserve">A #GstMessage to inspect.</doc>
           <type name="Gst.Message" c:type="GstMessage*"/>
         </parameter>
-        <parameter name="cur_angle" transfer-ownership="none">
-          <doc xml:space="preserve">A pointer to a #guint to receive the new current angle number,
-or NULL</doc>
+        <parameter name="cur_angle"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">A pointer to a #guint to receive the new
+    current angle number, or NULL</doc>
           <type name="guint" c:type="guint*"/>
         </parameter>
-        <parameter name="n_angles" transfer-ownership="none">
-          <doc xml:space="preserve">A pointer to a #guint to receive the new angle count, or NULL.</doc>
+        <parameter name="n_angles"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">A pointer to a #guint to receive the new angle
+    count, or NULL.</doc>
           <type name="guint" c:type="guint*"/>
         </parameter>
       </parameters>
@@ -11791,9 +11913,11 @@ with it.</doc>
         <parameter name="event"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full">
-          <doc xml:space="preserve">a pointer to a #GstEvent to receive the
-    contained navigation event.</doc>
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">a pointer to a #GstEvent to receive
+    the contained navigation event.</doc>
           <type name="Gst.Event" c:type="GstEvent**"/>
         </parameter>
       </parameters>
@@ -11813,9 +11937,14 @@ active, it indicates that the mouse is over a clickable area.</doc>
           <doc xml:space="preserve">A #GstMessage to inspect.</doc>
           <type name="Gst.Message" c:type="GstMessage*"/>
         </parameter>
-        <parameter name="active" transfer-ownership="none">
-          <doc xml:space="preserve">A pointer to a gboolean to receive the active/inactive state,
-or NULL.</doc>
+        <parameter name="active"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">A pointer to a gboolean to receive the
+    active/inactive state, or NULL.</doc>
           <type name="gboolean" c:type="gboolean*"/>
         </parameter>
       </parameters>
@@ -11873,14 +12002,24 @@ angles into the #guint pointed to by the @n_angles variable.</doc>
           <doc xml:space="preserve">a #GstQuery</doc>
           <type name="Gst.Query" c:type="GstQuery*"/>
         </parameter>
-        <parameter name="cur_angle" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a #guint into which to store the currently selected
-angle value from the query, or NULL</doc>
+        <parameter name="cur_angle"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a #guint into which to store the
+    currently selected angle value from the query, or NULL</doc>
           <type name="guint" c:type="guint*"/>
         </parameter>
-        <parameter name="n_angles" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to a #guint into which to store the number of angles
-value from the query, or NULL</doc>
+        <parameter name="n_angles"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">Pointer to a #guint into which to store the
+    number of angles value from the query, or NULL</doc>
           <type name="guint" c:type="guint*"/>
         </parameter>
       </parameters>
@@ -11901,7 +12040,9 @@ value from the query, or NULL</doc>
         <parameter name="n_cmds"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full">
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
           <doc xml:space="preserve">the number of commands in this query.</doc>
           <type name="guint" c:type="guint*"/>
         </parameter>
@@ -11929,7 +12070,9 @@ set to #GST_NAVIGATION_COMMAND_INVALID.</doc>
         <parameter name="cmd"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full">
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
           <doc xml:space="preserve">a pointer to store the nth command into.</doc>
           <type name="NavigationCommand" c:type="GstNavigationCommand*"/>
         </parameter>
@@ -11975,8 +12118,11 @@ of commands passed must be equal to @n_commands.</doc>
           <type name="gint" c:type="gint"/>
         </parameter>
         <parameter name="cmds" transfer-ownership="none">
-          <doc xml:space="preserve">An array containing @n_cmds @GstNavigationCommand values.</doc>
-          <type name="NavigationCommand" c:type="GstNavigationCommand*"/>
+          <doc xml:space="preserve">An array containing @n_cmds
+    @GstNavigationCommand values.</doc>
+          <array length="1" zero-terminated="0" c:type="GstNavigationCommand*">
+            <type name="NavigationCommand" c:type="GstNavigationCommand"/>
+          </array>
         </parameter>
       </parameters>
     </function>

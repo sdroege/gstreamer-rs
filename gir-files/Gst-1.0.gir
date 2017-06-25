@@ -786,7 +786,7 @@ the bin does not want to accept the element.</doc>
             <doc xml:space="preserve">a #GstBin</doc>
             <type name="Bin" c:type="GstBin*"/>
           </instance-parameter>
-          <parameter name="element" transfer-ownership="full">
+          <parameter name="element" transfer-ownership="none">
             <doc xml:space="preserve">the #GstElement to add</doc>
             <type name="Element" c:type="GstElement*"/>
           </parameter>
@@ -806,11 +806,11 @@ value of each gst_bin_add() is ignored.</doc>
             <doc xml:space="preserve">a #GstBin</doc>
             <type name="Bin" c:type="GstBin*"/>
           </instance-parameter>
-          <parameter name="element_1" transfer-ownership="full">
+          <parameter name="element_1" transfer-ownership="none">
             <doc xml:space="preserve">the #GstElement element to add to the bin</doc>
             <type name="Element" c:type="GstElement*"/>
           </parameter>
-          <parameter name="..." transfer-ownership="full">
+          <parameter name="..." transfer-ownership="none">
             <doc xml:space="preserve">additional elements to add to the bin</doc>
             <varargs/>
           </parameter>
@@ -3380,7 +3380,7 @@ Use gst_object_unref() to release the reference to a bufferpool. If the
 refcount of the pool reaches 0, the pool will be freed.</doc>
       <constructor name="new" c:identifier="gst_buffer_pool_new">
         <doc xml:space="preserve">Creates a new #GstBufferPool instance.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstBufferPool instance</doc>
           <type name="BufferPool" c:type="GstBufferPool*"/>
         </return-value>
@@ -11271,7 +11271,7 @@ This is for use by subclasses.</doc>
             <doc xml:space="preserve">a #GstDeviceProvider</doc>
             <type name="DeviceProvider" c:type="GstDeviceProvider*"/>
           </instance-parameter>
-          <parameter name="device" transfer-ownership="full">
+          <parameter name="device" transfer-ownership="none">
             <doc xml:space="preserve">a #GstDevice that has been added</doc>
             <type name="Device" c:type="GstDevice*"/>
           </parameter>
@@ -12796,7 +12796,7 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstElement to add the pad to.</doc>
             <type name="Element" c:type="GstElement*"/>
           </instance-parameter>
-          <parameter name="pad" transfer-ownership="full">
+          <parameter name="pad" transfer-ownership="none">
             <doc xml:space="preserve">the #GstPad to add to the element.</doc>
             <type name="Pad" c:type="GstPad*"/>
           </parameter>
@@ -14919,7 +14919,7 @@ existing one is added the old one is replaced by the new one.</doc>
             <doc xml:space="preserve">the #GstElementClass to add the pad template to.</doc>
             <type name="ElementClass" c:type="GstElementClass*"/>
           </instance-parameter>
-          <parameter name="templ" transfer-ownership="full">
+          <parameter name="templ" transfer-ownership="none">
             <doc xml:space="preserve">a #GstPadTemplate to add to the element class.</doc>
             <type name="PadTemplate" c:type="GstPadTemplate*"/>
           </parameter>
@@ -17800,7 +17800,7 @@ case of an error.</doc>
 from the target pad. The template used on the ghostpad will be @template.
 
 Will ref the target.</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstPad, or %NULL in
 case of an error.</doc>
           <type name="Pad" c:type="GstPad*"/>
@@ -17830,7 +17830,7 @@ A target can be set on the ghostpad later with the
 gst_ghost_pad_set_target() function.
 
 The created ghostpad will not have a padtemplate.</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstPad, or %NULL in
 case of an error.</doc>
           <type name="Pad" c:type="GstPad*"/>
@@ -17853,7 +17853,7 @@ case of an error.</doc>
                    c:identifier="gst_ghost_pad_new_no_target_from_template">
         <doc xml:space="preserve">Create a new ghostpad based on @templ, without setting a target. The
 direction will be taken from the @templ.</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstPad, or %NULL in
 case of an error.</doc>
           <type name="Pad" c:type="GstPad*"/>
@@ -23742,7 +23742,7 @@ has been setup for a non suitable property, %TRUE otherwise.</doc>
             <doc xml:space="preserve">the controller object</doc>
             <type name="Object" c:type="GstObject*"/>
           </instance-parameter>
-          <parameter name="binding" transfer-ownership="full">
+          <parameter name="binding" transfer-ownership="none">
             <doc xml:space="preserve">the #GstControlBinding that should be used</doc>
             <type name="ControlBinding" c:type="GstControlBinding*"/>
           </parameter>
@@ -23852,7 +23852,9 @@ curve or apply a control curve sample by sample.</doc>
           </parameter>
           <parameter name="values" transfer-ownership="none">
             <doc xml:space="preserve">array to put control-values in</doc>
-            <type name="GObject.Value" c:type="GValue*"/>
+            <array length="3" zero-terminated="0" c:type="GValue*">
+              <type name="GObject.Value" c:type="GValue"/>
+            </array>
           </parameter>
         </parameters>
       </method>
@@ -23936,7 +23938,9 @@ or %NULL if the property isn't controlled.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="get_value_array" c:identifier="gst_object_get_value_array">
+      <method name="get_value_array"
+              c:identifier="gst_object_get_value_array"
+              introspectable="0">
         <doc xml:space="preserve">Gets a number of values for the given controlled property starting at the
 requested time. The array @values need to hold enough space for @n_values of
 the same type as the objects property's type.
@@ -28357,6 +28361,19 @@ Free-function: gst_parse_context_free</doc>
           <type name="ParseContext" c:type="GstParseContext*"/>
         </return-value>
       </constructor>
+      <method name="copy" c:identifier="gst_parse_context_copy">
+        <doc xml:space="preserve">Copies the @context.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A copied #GstParseContext</doc>
+          <type name="ParseContext" c:type="GstParseContext*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="context" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstParseContext</doc>
+            <type name="ParseContext" c:type="const GstParseContext*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="free" c:identifier="gst_parse_context_free">
         <doc xml:space="preserve">Frees a parse context previously allocated with gst_parse_context_new().</doc>
         <return-value transfer-ownership="none">
@@ -33498,7 +33515,7 @@ MT safe.</doc>
             <doc xml:space="preserve">the registry to add the plugin to</doc>
             <type name="Registry" c:type="GstRegistry*"/>
           </instance-parameter>
-          <parameter name="feature" transfer-ownership="full">
+          <parameter name="feature" transfer-ownership="none">
             <doc xml:space="preserve">the feature to add</doc>
             <type name="PluginFeature" c:type="GstPluginFeature*"/>
           </parameter>
@@ -33518,7 +33535,7 @@ MT safe.</doc>
             <doc xml:space="preserve">the registry to add the plugin to</doc>
             <type name="Registry" c:type="GstRegistry*"/>
           </instance-parameter>
-          <parameter name="plugin" transfer-ownership="full">
+          <parameter name="plugin" transfer-ownership="none">
             <doc xml:space="preserve">the plugin to add</doc>
             <type name="Plugin" c:type="GstPlugin*"/>
           </parameter>
@@ -35361,7 +35378,7 @@ instantiate a #GstCaps.</doc>
       </field>
       <method name="get" c:identifier="gst_static_pad_template_get">
         <doc xml:space="preserve">Converts a #GstStaticPadTemplate into a #GstPadTemplate.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="none">
           <doc xml:space="preserve">a new #GstPadTemplate.</doc>
           <type name="PadTemplate" c:type="GstPadTemplate*"/>
         </return-value>
@@ -35411,7 +35428,7 @@ pertinent to streams of data).</doc>
       <constructor name="new" c:identifier="gst_stream_new" version="1.10">
         <doc xml:space="preserve">Create a new #GstStream for the given @stream_id, @caps, @type
 and @flags</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">The new #GstStream</doc>
           <type name="Stream" c:type="GstStream*"/>
         </return-value>
@@ -35682,7 +35699,7 @@ Applications can activate streams from a collection by using the
                    c:identifier="gst_stream_collection_new"
                    version="1.10">
         <doc xml:space="preserve">Create a new #GstStreamCollection.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">The new #GstStreamCollection.</doc>
           <type name="StreamCollection" c:type="GstStreamCollection*"/>
         </return-value>
@@ -43728,7 +43745,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="0" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="1" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
