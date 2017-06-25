@@ -48,7 +48,7 @@ pub trait ObjectExt {
 
     fn get_control_rate(&self) -> ClockTime;
 
-    //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Ignored*/&mut glib::Value) -> bool;
+    //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, values: /*Ignored*/&[&glib::Value]) -> bool;
 
     fn get_name(&self) -> Option<String>;
 
@@ -113,7 +113,7 @@ impl<O: IsA<Object>> ObjectExt for O {
         }
     }
 
-    //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Ignored*/&mut glib::Value) -> bool {
+    //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, values: /*Ignored*/&[&glib::Value]) -> bool {
     //    unsafe { TODO: call ffi::gst_object_get_g_value_array() }
     //}
 
