@@ -2,8 +2,150 @@
 // DO NOT EDIT
 
 use ffi;
+use glib_ffi;
+use glib::error::ErrorDomain;
 use glib::translate::*;
 use std;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum BufferingMode {
+    Stream,
+    Download,
+    Timeshift,
+    Live,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for BufferingMode {
+    type GlibType = ffi::GstBufferingMode;
+
+    fn to_glib(&self) -> ffi::GstBufferingMode {
+        match *self {
+            BufferingMode::Stream => ffi::GST_BUFFERING_STREAM,
+            BufferingMode::Download => ffi::GST_BUFFERING_DOWNLOAD,
+            BufferingMode::Timeshift => ffi::GST_BUFFERING_TIMESHIFT,
+            BufferingMode::Live => ffi::GST_BUFFERING_LIVE,
+            BufferingMode::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
+    fn from_glib(value: ffi::GstBufferingMode) -> Self {
+        match value as i32 {
+            0 => BufferingMode::Stream,
+            1 => BufferingMode::Download,
+            2 => BufferingMode::Timeshift,
+            3 => BufferingMode::Live,
+            value => BufferingMode::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CoreError {
+    Failed,
+    TooLazy,
+    NotImplemented,
+    StateChange,
+    Pad,
+    Thread,
+    Negotiation,
+    Event,
+    Seek,
+    Caps,
+    Tag,
+    MissingPlugin,
+    Clock,
+    Disabled,
+    NumErrors,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for CoreError {
+    type GlibType = ffi::GstCoreError;
+
+    fn to_glib(&self) -> ffi::GstCoreError {
+        match *self {
+            CoreError::Failed => ffi::GST_CORE_ERROR_FAILED,
+            CoreError::TooLazy => ffi::GST_CORE_ERROR_TOO_LAZY,
+            CoreError::NotImplemented => ffi::GST_CORE_ERROR_NOT_IMPLEMENTED,
+            CoreError::StateChange => ffi::GST_CORE_ERROR_STATE_CHANGE,
+            CoreError::Pad => ffi::GST_CORE_ERROR_PAD,
+            CoreError::Thread => ffi::GST_CORE_ERROR_THREAD,
+            CoreError::Negotiation => ffi::GST_CORE_ERROR_NEGOTIATION,
+            CoreError::Event => ffi::GST_CORE_ERROR_EVENT,
+            CoreError::Seek => ffi::GST_CORE_ERROR_SEEK,
+            CoreError::Caps => ffi::GST_CORE_ERROR_CAPS,
+            CoreError::Tag => ffi::GST_CORE_ERROR_TAG,
+            CoreError::MissingPlugin => ffi::GST_CORE_ERROR_MISSING_PLUGIN,
+            CoreError::Clock => ffi::GST_CORE_ERROR_CLOCK,
+            CoreError::Disabled => ffi::GST_CORE_ERROR_DISABLED,
+            CoreError::NumErrors => ffi::GST_CORE_ERROR_NUM_ERRORS,
+            CoreError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstCoreError> for CoreError {
+    fn from_glib(value: ffi::GstCoreError) -> Self {
+        match value as i32 {
+            1 => CoreError::Failed,
+            2 => CoreError::TooLazy,
+            3 => CoreError::NotImplemented,
+            4 => CoreError::StateChange,
+            5 => CoreError::Pad,
+            6 => CoreError::Thread,
+            7 => CoreError::Negotiation,
+            8 => CoreError::Event,
+            9 => CoreError::Seek,
+            10 => CoreError::Caps,
+            11 => CoreError::Tag,
+            12 => CoreError::MissingPlugin,
+            13 => CoreError::Clock,
+            14 => CoreError::Disabled,
+            15 => CoreError::NumErrors,
+            value => CoreError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for CoreError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_core_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            1 => Some(CoreError::Failed),
+            2 => Some(CoreError::TooLazy),
+            3 => Some(CoreError::NotImplemented),
+            4 => Some(CoreError::StateChange),
+            5 => Some(CoreError::Pad),
+            6 => Some(CoreError::Thread),
+            7 => Some(CoreError::Negotiation),
+            8 => Some(CoreError::Event),
+            9 => Some(CoreError::Seek),
+            10 => Some(CoreError::Caps),
+            11 => Some(CoreError::Tag),
+            12 => Some(CoreError::MissingPlugin),
+            13 => Some(CoreError::Clock),
+            14 => Some(CoreError::Disabled),
+            15 => Some(CoreError::NumErrors),
+            _ => Some(CoreError::Failed),
+        }
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum FlowReturn {
@@ -115,6 +257,76 @@ impl FromGlib<ffi::GstFormat> for Format {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum LibraryError {
+    Failed,
+    TooLazy,
+    Init,
+    Shutdown,
+    Settings,
+    Encode,
+    NumErrors,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for LibraryError {
+    type GlibType = ffi::GstLibraryError;
+
+    fn to_glib(&self) -> ffi::GstLibraryError {
+        match *self {
+            LibraryError::Failed => ffi::GST_LIBRARY_ERROR_FAILED,
+            LibraryError::TooLazy => ffi::GST_LIBRARY_ERROR_TOO_LAZY,
+            LibraryError::Init => ffi::GST_LIBRARY_ERROR_INIT,
+            LibraryError::Shutdown => ffi::GST_LIBRARY_ERROR_SHUTDOWN,
+            LibraryError::Settings => ffi::GST_LIBRARY_ERROR_SETTINGS,
+            LibraryError::Encode => ffi::GST_LIBRARY_ERROR_ENCODE,
+            LibraryError::NumErrors => ffi::GST_LIBRARY_ERROR_NUM_ERRORS,
+            LibraryError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstLibraryError> for LibraryError {
+    fn from_glib(value: ffi::GstLibraryError) -> Self {
+        match value as i32 {
+            1 => LibraryError::Failed,
+            2 => LibraryError::TooLazy,
+            3 => LibraryError::Init,
+            4 => LibraryError::Shutdown,
+            5 => LibraryError::Settings,
+            6 => LibraryError::Encode,
+            7 => LibraryError::NumErrors,
+            value => LibraryError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for LibraryError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_library_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            1 => Some(LibraryError::Failed),
+            2 => Some(LibraryError::TooLazy),
+            3 => Some(LibraryError::Init),
+            4 => Some(LibraryError::Shutdown),
+            5 => Some(LibraryError::Settings),
+            6 => Some(LibraryError::Encode),
+            7 => Some(LibraryError::NumErrors),
+            _ => Some(LibraryError::Failed),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum PadDirection {
     Unknown,
     Src,
@@ -145,6 +357,240 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
             1 => PadDirection::Src,
             2 => PadDirection::Sink,
             value => PadDirection::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ParseError {
+    Syntax,
+    NoSuchElement,
+    NoSuchProperty,
+    Link,
+    CouldNotSetProperty,
+    EmptyBin,
+    Empty,
+    DelayedLink,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for ParseError {
+    type GlibType = ffi::GstParseError;
+
+    fn to_glib(&self) -> ffi::GstParseError {
+        match *self {
+            ParseError::Syntax => ffi::GST_PARSE_ERROR_SYNTAX,
+            ParseError::NoSuchElement => ffi::GST_PARSE_ERROR_NO_SUCH_ELEMENT,
+            ParseError::NoSuchProperty => ffi::GST_PARSE_ERROR_NO_SUCH_PROPERTY,
+            ParseError::Link => ffi::GST_PARSE_ERROR_LINK,
+            ParseError::CouldNotSetProperty => ffi::GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY,
+            ParseError::EmptyBin => ffi::GST_PARSE_ERROR_EMPTY_BIN,
+            ParseError::Empty => ffi::GST_PARSE_ERROR_EMPTY,
+            ParseError::DelayedLink => ffi::GST_PARSE_ERROR_DELAYED_LINK,
+            ParseError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstParseError> for ParseError {
+    fn from_glib(value: ffi::GstParseError) -> Self {
+        match value as i32 {
+            0 => ParseError::Syntax,
+            1 => ParseError::NoSuchElement,
+            2 => ParseError::NoSuchProperty,
+            3 => ParseError::Link,
+            4 => ParseError::CouldNotSetProperty,
+            5 => ParseError::EmptyBin,
+            6 => ParseError::Empty,
+            7 => ParseError::DelayedLink,
+            value => ParseError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for ParseError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_parse_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            0 => Some(ParseError::Syntax),
+            1 => Some(ParseError::NoSuchElement),
+            2 => Some(ParseError::NoSuchProperty),
+            3 => Some(ParseError::Link),
+            4 => Some(ParseError::CouldNotSetProperty),
+            5 => Some(ParseError::EmptyBin),
+            6 => Some(ParseError::Empty),
+            7 => Some(ParseError::DelayedLink),
+            value => Some(ParseError::__Unknown(value)),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PluginError {
+    Module,
+    Dependencies,
+    NameMismatch,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PluginError {
+    type GlibType = ffi::GstPluginError;
+
+    fn to_glib(&self) -> ffi::GstPluginError {
+        match *self {
+            PluginError::Module => ffi::GST_PLUGIN_ERROR_MODULE,
+            PluginError::Dependencies => ffi::GST_PLUGIN_ERROR_DEPENDENCIES,
+            PluginError::NameMismatch => ffi::GST_PLUGIN_ERROR_NAME_MISMATCH,
+            PluginError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPluginError> for PluginError {
+    fn from_glib(value: ffi::GstPluginError) -> Self {
+        match value as i32 {
+            0 => PluginError::Module,
+            1 => PluginError::Dependencies,
+            2 => PluginError::NameMismatch,
+            value => PluginError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for PluginError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_plugin_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            0 => Some(PluginError::Module),
+            1 => Some(PluginError::Dependencies),
+            2 => Some(PluginError::NameMismatch),
+            value => Some(PluginError::__Unknown(value)),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ResourceError {
+    Failed,
+    TooLazy,
+    NotFound,
+    Busy,
+    OpenRead,
+    OpenWrite,
+    OpenReadWrite,
+    Close,
+    Read,
+    Write,
+    Seek,
+    Sync,
+    Settings,
+    NoSpaceLeft,
+    NotAuthorized,
+    NumErrors,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for ResourceError {
+    type GlibType = ffi::GstResourceError;
+
+    fn to_glib(&self) -> ffi::GstResourceError {
+        match *self {
+            ResourceError::Failed => ffi::GST_RESOURCE_ERROR_FAILED,
+            ResourceError::TooLazy => ffi::GST_RESOURCE_ERROR_TOO_LAZY,
+            ResourceError::NotFound => ffi::GST_RESOURCE_ERROR_NOT_FOUND,
+            ResourceError::Busy => ffi::GST_RESOURCE_ERROR_BUSY,
+            ResourceError::OpenRead => ffi::GST_RESOURCE_ERROR_OPEN_READ,
+            ResourceError::OpenWrite => ffi::GST_RESOURCE_ERROR_OPEN_WRITE,
+            ResourceError::OpenReadWrite => ffi::GST_RESOURCE_ERROR_OPEN_READ_WRITE,
+            ResourceError::Close => ffi::GST_RESOURCE_ERROR_CLOSE,
+            ResourceError::Read => ffi::GST_RESOURCE_ERROR_READ,
+            ResourceError::Write => ffi::GST_RESOURCE_ERROR_WRITE,
+            ResourceError::Seek => ffi::GST_RESOURCE_ERROR_SEEK,
+            ResourceError::Sync => ffi::GST_RESOURCE_ERROR_SYNC,
+            ResourceError::Settings => ffi::GST_RESOURCE_ERROR_SETTINGS,
+            ResourceError::NoSpaceLeft => ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT,
+            ResourceError::NotAuthorized => ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED,
+            ResourceError::NumErrors => ffi::GST_RESOURCE_ERROR_NUM_ERRORS,
+            ResourceError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstResourceError> for ResourceError {
+    fn from_glib(value: ffi::GstResourceError) -> Self {
+        match value as i32 {
+            1 => ResourceError::Failed,
+            2 => ResourceError::TooLazy,
+            3 => ResourceError::NotFound,
+            4 => ResourceError::Busy,
+            5 => ResourceError::OpenRead,
+            6 => ResourceError::OpenWrite,
+            7 => ResourceError::OpenReadWrite,
+            8 => ResourceError::Close,
+            9 => ResourceError::Read,
+            10 => ResourceError::Write,
+            11 => ResourceError::Seek,
+            12 => ResourceError::Sync,
+            13 => ResourceError::Settings,
+            14 => ResourceError::NoSpaceLeft,
+            15 => ResourceError::NotAuthorized,
+            16 => ResourceError::NumErrors,
+            value => ResourceError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for ResourceError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_resource_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            1 => Some(ResourceError::Failed),
+            2 => Some(ResourceError::TooLazy),
+            3 => Some(ResourceError::NotFound),
+            4 => Some(ResourceError::Busy),
+            5 => Some(ResourceError::OpenRead),
+            6 => Some(ResourceError::OpenWrite),
+            7 => Some(ResourceError::OpenReadWrite),
+            8 => Some(ResourceError::Close),
+            9 => Some(ResourceError::Read),
+            10 => Some(ResourceError::Write),
+            11 => Some(ResourceError::Seek),
+            12 => Some(ResourceError::Sync),
+            13 => Some(ResourceError::Settings),
+            14 => Some(ResourceError::NoSpaceLeft),
+            15 => Some(ResourceError::NotAuthorized),
+            16 => Some(ResourceError::NumErrors),
+            _ => Some(ResourceError::Failed),
         }
     }
 }
@@ -303,6 +749,162 @@ impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
             2 => StateChangeReturn::Async,
             3 => StateChangeReturn::NoPreroll,
             value => StateChangeReturn::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum StreamError {
+    Failed,
+    TooLazy,
+    NotImplemented,
+    TypeNotFound,
+    WrongType,
+    CodecNotFound,
+    Decode,
+    Encode,
+    Demux,
+    Mux,
+    Format,
+    Decrypt,
+    DecryptNokey,
+    NumErrors,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for StreamError {
+    type GlibType = ffi::GstStreamError;
+
+    fn to_glib(&self) -> ffi::GstStreamError {
+        match *self {
+            StreamError::Failed => ffi::GST_STREAM_ERROR_FAILED,
+            StreamError::TooLazy => ffi::GST_STREAM_ERROR_TOO_LAZY,
+            StreamError::NotImplemented => ffi::GST_STREAM_ERROR_NOT_IMPLEMENTED,
+            StreamError::TypeNotFound => ffi::GST_STREAM_ERROR_TYPE_NOT_FOUND,
+            StreamError::WrongType => ffi::GST_STREAM_ERROR_WRONG_TYPE,
+            StreamError::CodecNotFound => ffi::GST_STREAM_ERROR_CODEC_NOT_FOUND,
+            StreamError::Decode => ffi::GST_STREAM_ERROR_DECODE,
+            StreamError::Encode => ffi::GST_STREAM_ERROR_ENCODE,
+            StreamError::Demux => ffi::GST_STREAM_ERROR_DEMUX,
+            StreamError::Mux => ffi::GST_STREAM_ERROR_MUX,
+            StreamError::Format => ffi::GST_STREAM_ERROR_FORMAT,
+            StreamError::Decrypt => ffi::GST_STREAM_ERROR_DECRYPT,
+            StreamError::DecryptNokey => ffi::GST_STREAM_ERROR_DECRYPT_NOKEY,
+            StreamError::NumErrors => ffi::GST_STREAM_ERROR_NUM_ERRORS,
+            StreamError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstStreamError> for StreamError {
+    fn from_glib(value: ffi::GstStreamError) -> Self {
+        match value as i32 {
+            1 => StreamError::Failed,
+            2 => StreamError::TooLazy,
+            3 => StreamError::NotImplemented,
+            4 => StreamError::TypeNotFound,
+            5 => StreamError::WrongType,
+            6 => StreamError::CodecNotFound,
+            7 => StreamError::Decode,
+            8 => StreamError::Encode,
+            9 => StreamError::Demux,
+            10 => StreamError::Mux,
+            11 => StreamError::Format,
+            12 => StreamError::Decrypt,
+            13 => StreamError::DecryptNokey,
+            14 => StreamError::NumErrors,
+            value => StreamError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for StreamError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_stream_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            1 => Some(StreamError::Failed),
+            2 => Some(StreamError::TooLazy),
+            3 => Some(StreamError::NotImplemented),
+            4 => Some(StreamError::TypeNotFound),
+            5 => Some(StreamError::WrongType),
+            6 => Some(StreamError::CodecNotFound),
+            7 => Some(StreamError::Decode),
+            8 => Some(StreamError::Encode),
+            9 => Some(StreamError::Demux),
+            10 => Some(StreamError::Mux),
+            11 => Some(StreamError::Format),
+            12 => Some(StreamError::Decrypt),
+            13 => Some(StreamError::DecryptNokey),
+            14 => Some(StreamError::NumErrors),
+            _ => Some(StreamError::Failed),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum URIError {
+    UnsupportedProtocol,
+    BadUri,
+    BadState,
+    BadReference,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for URIError {
+    type GlibType = ffi::GstURIError;
+
+    fn to_glib(&self) -> ffi::GstURIError {
+        match *self {
+            URIError::UnsupportedProtocol => ffi::GST_URI_ERROR_UNSUPPORTED_PROTOCOL,
+            URIError::BadUri => ffi::GST_URI_ERROR_BAD_URI,
+            URIError::BadState => ffi::GST_URI_ERROR_BAD_STATE,
+            URIError::BadReference => ffi::GST_URI_ERROR_BAD_REFERENCE,
+            URIError::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstURIError> for URIError {
+    fn from_glib(value: ffi::GstURIError) -> Self {
+        match value as i32 {
+            0 => URIError::UnsupportedProtocol,
+            1 => URIError::BadUri,
+            2 => URIError::BadState,
+            3 => URIError::BadReference,
+            value => URIError::__Unknown(value),
+        }
+    }
+}
+
+impl ErrorDomain for URIError {
+    fn domain() -> glib_ffi::GQuark {
+        unsafe { ffi::gst_uri_error_quark() }
+    }
+
+    fn code(self) -> i32 {
+        self.to_glib() as i32
+    }
+
+    fn from(code: i32) -> Option<Self> {
+        match code {
+            0 => Some(URIError::UnsupportedProtocol),
+            1 => Some(URIError::BadUri),
+            2 => Some(URIError::BadState),
+            3 => Some(URIError::BadReference),
+            value => Some(URIError::__Unknown(value)),
         }
     }
 }

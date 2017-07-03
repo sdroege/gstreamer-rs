@@ -27,7 +27,14 @@ generate = [
     "Gst.URIType",
     "Gst.ElementFactoryListType",
     "Gst.Format",
-    "Gst.MessageType",
+    "Gst.BufferingMode",
+    "Gst.CoreError",
+    "Gst.ResourceError",
+    "Gst.LibraryError",
+    "Gst.StreamError",
+    "Gst.PluginError",
+    "Gst.ParseError",
+    "Gst.URIError",
 ]
 
 manual = [
