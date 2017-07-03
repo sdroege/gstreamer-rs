@@ -157,6 +157,16 @@ status = "generate"
         bool_return_is_error = "Failed to set object name"
 
     [[object.function]]
+    name = "get_name"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_path_string"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
     name = "set_parent"
         [object.function.return]
         bool_return_is_error = "Failed to set parent object"

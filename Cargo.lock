@@ -16,6 +16,14 @@ version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "examples"
+version = "0.1.0"
+dependencies = [
+ "glib 0.1.3 (git+https://github.com/gtk-rs/glib)",
+ "gstreamer 0.1.0",
+]
+
+[[package]]
 name = "glib"
 version = "0.1.3"
 source = "git+https://github.com/gtk-rs/glib#d3aed89e92d6162f385b699ccd546ee799612c93"

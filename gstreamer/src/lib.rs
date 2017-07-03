@@ -29,14 +29,15 @@ pub use glib::{
     Value,
 };
 
-pub use auto::*;
 mod auto;
+pub use auto::*;
 pub use auto::functions::{parse_launch, parse_bin_from_description};
 
 pub mod miniobject;
 pub use miniobject::GstRc;
 pub mod message;
 pub use message::Message;
+pub use message::MessageView;
 
 use std::ptr;
 

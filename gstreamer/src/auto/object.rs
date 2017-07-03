@@ -50,11 +50,11 @@ pub trait ObjectExt {
 
     //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, values: /*Ignored*/&[&glib::Value]) -> bool;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> String;
 
     fn get_parent(&self) -> Option<Object>;
 
-    fn get_path_string(&self) -> Option<String>;
+    fn get_path_string(&self) -> String;
 
     //fn get_value(&self, property_name: &str, timestamp: ClockTime) -> /*Ignored*/Option<glib::Value>;
 
@@ -117,7 +117,7 @@ impl<O: IsA<Object>> ObjectExt for O {
     //    unsafe { TODO: call ffi::gst_object_get_g_value_array() }
     //}
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> String {
         unsafe {
             from_glib_full(ffi::gst_object_get_name(self.to_glib_none().0))
         }
@@ -129,7 +129,7 @@ impl<O: IsA<Object>> ObjectExt for O {
         }
     }
 
-    fn get_path_string(&self) -> Option<String> {
+    fn get_path_string(&self) -> String {
         unsafe {
             from_glib_full(ffi::gst_object_get_path_string(self.to_glib_none().0))
         }
