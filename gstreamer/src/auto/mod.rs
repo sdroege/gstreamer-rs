@@ -7,7 +7,6 @@ pub use self::bin::BinExt;
 
 mod bus;
 pub use self::bus::Bus;
-pub use self::bus::BusExt;
 
 mod clock;
 pub use self::clock::Clock;
@@ -19,7 +18,6 @@ pub use self::element::ElementExt;
 
 mod element_factory;
 pub use self::element_factory::ElementFactory;
-pub use self::element_factory::ElementFactoryExt;
 
 mod object;
 pub use self::object::Object;
@@ -36,6 +34,9 @@ pub use self::pad_template::PadTemplateExt;
 mod pipeline;
 pub use self::pipeline::Pipeline;
 pub use self::pipeline::PipelineExt;
+
+mod plugin;
+pub use self::plugin::Plugin;
 
 mod u_r_i_handler;
 pub use self::u_r_i_handler::URIHandler;
@@ -116,10 +117,8 @@ pub mod functions;
 #[doc(hidden)]
 pub mod traits {
     pub use super::BinExt;
-    pub use super::BusExt;
     pub use super::ClockExt;
     pub use super::ElementExt;
-    pub use super::ElementFactoryExt;
     pub use super::ObjectExt;
     pub use super::PadExt;
     pub use super::PadTemplateExt;

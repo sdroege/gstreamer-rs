@@ -6,6 +6,7 @@ use ClockTime;
 use Element;
 use Error;
 use FlowReturn;
+use Plugin;
 use ffi;
 use glib;
 use glib::translate::*;
@@ -161,9 +162,11 @@ pub fn deinit() {
     }
 }
 
-//pub fn dynamic_type_register(plugin: /*Ignored*/&Plugin, type_: glib::types::Type) -> bool {
-//    unsafe { TODO: call ffi::gst_dynamic_type_register() }
-//}
+pub fn dynamic_type_register(plugin: &Plugin, type_: glib::types::Type) -> bool {
+    unsafe {
+        from_glib(ffi::gst_dynamic_type_register(plugin.to_glib_none().0, type_.to_glib()))
+    }
+}
 
 //pub fn error_get_message(domain: /*Ignored*/glib::Quark, code: i32) -> Option<String> {
 //    unsafe { TODO: call ffi::gst_error_get_message() }

@@ -11,6 +11,7 @@ use Message;
 use Object;
 use Pad;
 use PadTemplate;
+use Plugin;
 use SeekFlags;
 use SeekType;
 use State;
@@ -50,9 +51,13 @@ impl Element {
         }
     }
 
-    //pub fn register<'a, P: Into<Option<&'a /*Ignored*/Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_register() }
-    //}
+    pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> bool {
+        let plugin = plugin.into();
+        let plugin = plugin.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_element_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()))
+        }
+    }
 
     pub fn state_change_return_get_name(state_ret: StateChangeReturn) -> Option<String> {
         unsafe {

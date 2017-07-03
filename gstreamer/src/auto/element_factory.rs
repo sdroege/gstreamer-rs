@@ -7,7 +7,6 @@ use Object;
 use URIType;
 use ffi;
 use glib;
-use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -19,6 +18,82 @@ glib_wrapper! {
 }
 
 impl ElementFactory {
+    //pub fn can_sink_all_caps(&self, caps: /*Ignored*/&Caps) -> bool {
+    //    unsafe { TODO: call ffi::gst_element_factory_can_sink_all_caps() }
+    //}
+
+    //pub fn can_sink_any_caps(&self, caps: /*Ignored*/&Caps) -> bool {
+    //    unsafe { TODO: call ffi::gst_element_factory_can_sink_any_caps() }
+    //}
+
+    //pub fn can_src_all_caps(&self, caps: /*Ignored*/&Caps) -> bool {
+    //    unsafe { TODO: call ffi::gst_element_factory_can_src_all_caps() }
+    //}
+
+    //pub fn can_src_any_caps(&self, caps: /*Ignored*/&Caps) -> bool {
+    //    unsafe { TODO: call ffi::gst_element_factory_can_src_any_caps() }
+    //}
+
+    pub fn create<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element> {
+        let name = name.into();
+        let name = name.to_glib_none();
+        unsafe {
+            from_glib_none(ffi::gst_element_factory_create(self.to_glib_none().0, name.0))
+        }
+    }
+
+    pub fn get_element_type(&self) -> glib::types::Type {
+        unsafe {
+            from_glib(ffi::gst_element_factory_get_element_type(self.to_glib_none().0))
+        }
+    }
+
+    pub fn get_metadata(&self, key: &str) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gst_element_factory_get_metadata(self.to_glib_none().0, key.to_glib_none().0))
+        }
+    }
+
+    pub fn get_metadata_keys(&self) -> Vec<String> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_get_metadata_keys(self.to_glib_none().0))
+        }
+    }
+
+    pub fn get_num_pad_templates(&self) -> u32 {
+        unsafe {
+            ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0)
+        }
+    }
+
+    //pub fn get_static_pad_templates(&self) -> /*Ignored*/Vec<StaticPadTemplate> {
+    //    unsafe { TODO: call ffi::gst_element_factory_get_static_pad_templates() }
+    //}
+
+    pub fn get_uri_protocols(&self) -> Vec<String> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_uri_protocols(self.to_glib_none().0))
+        }
+    }
+
+    pub fn get_uri_type(&self) -> URIType {
+        unsafe {
+            from_glib(ffi::gst_element_factory_get_uri_type(self.to_glib_none().0))
+        }
+    }
+
+    pub fn has_interface(&self, interfacename: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_has_interface(self.to_glib_none().0, interfacename.to_glib_none().0))
+        }
+    }
+
+    pub fn list_is_type(&self, type_: ElementFactoryListType) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_list_is_type(self.to_glib_none().0, type_))
+        }
+    }
+
     pub fn find(name: &str) -> Option<ElementFactory> {
         unsafe {
             from_glib_full(ffi::gst_element_factory_find(name.to_glib_none().0))
@@ -44,111 +119,3 @@ impl ElementFactory {
 
 unsafe impl Send for ElementFactory {}
 unsafe impl Sync for ElementFactory {}
-
-pub trait ElementFactoryExt {
-    //fn can_sink_all_caps(&self, caps: /*Ignored*/&Caps) -> bool;
-
-    //fn can_sink_any_caps(&self, caps: /*Ignored*/&Caps) -> bool;
-
-    //fn can_src_all_caps(&self, caps: /*Ignored*/&Caps) -> bool;
-
-    //fn can_src_any_caps(&self, caps: /*Ignored*/&Caps) -> bool;
-
-    fn create<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element>;
-
-    fn get_element_type(&self) -> glib::types::Type;
-
-    fn get_metadata(&self, key: &str) -> Option<String>;
-
-    fn get_metadata_keys(&self) -> Vec<String>;
-
-    fn get_num_pad_templates(&self) -> u32;
-
-    //fn get_static_pad_templates(&self) -> /*Ignored*/Vec<StaticPadTemplate>;
-
-    fn get_uri_protocols(&self) -> Vec<String>;
-
-    fn get_uri_type(&self) -> URIType;
-
-    fn has_interface(&self, interfacename: &str) -> bool;
-
-    fn list_is_type(&self, type_: ElementFactoryListType) -> bool;
-}
-
-impl<O: IsA<ElementFactory>> ElementFactoryExt for O {
-    //fn can_sink_all_caps(&self, caps: /*Ignored*/&Caps) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_factory_can_sink_all_caps() }
-    //}
-
-    //fn can_sink_any_caps(&self, caps: /*Ignored*/&Caps) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_factory_can_sink_any_caps() }
-    //}
-
-    //fn can_src_all_caps(&self, caps: /*Ignored*/&Caps) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_factory_can_src_all_caps() }
-    //}
-
-    //fn can_src_any_caps(&self, caps: /*Ignored*/&Caps) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_factory_can_src_any_caps() }
-    //}
-
-    fn create<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element> {
-        let name = name.into();
-        let name = name.to_glib_none();
-        unsafe {
-            from_glib_none(ffi::gst_element_factory_create(self.to_glib_none().0, name.0))
-        }
-    }
-
-    fn get_element_type(&self) -> glib::types::Type {
-        unsafe {
-            from_glib(ffi::gst_element_factory_get_element_type(self.to_glib_none().0))
-        }
-    }
-
-    fn get_metadata(&self, key: &str) -> Option<String> {
-        unsafe {
-            from_glib_none(ffi::gst_element_factory_get_metadata(self.to_glib_none().0, key.to_glib_none().0))
-        }
-    }
-
-    fn get_metadata_keys(&self) -> Vec<String> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_get_metadata_keys(self.to_glib_none().0))
-        }
-    }
-
-    fn get_num_pad_templates(&self) -> u32 {
-        unsafe {
-            ffi::gst_element_factory_get_num_pad_templates(self.to_glib_none().0)
-        }
-    }
-
-    //fn get_static_pad_templates(&self) -> /*Ignored*/Vec<StaticPadTemplate> {
-    //    unsafe { TODO: call ffi::gst_element_factory_get_static_pad_templates() }
-    //}
-
-    fn get_uri_protocols(&self) -> Vec<String> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_uri_protocols(self.to_glib_none().0))
-        }
-    }
-
-    fn get_uri_type(&self) -> URIType {
-        unsafe {
-            from_glib(ffi::gst_element_factory_get_uri_type(self.to_glib_none().0))
-        }
-    }
-
-    fn has_interface(&self, interfacename: &str) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_has_interface(self.to_glib_none().0, interfacename.to_glib_none().0))
-        }
-    }
-
-    fn list_is_type(&self, type_: ElementFactoryListType) -> bool {
-        unsafe {
-            from_glib(ffi::gst_element_factory_list_is_type(self.to_glib_none().0, type_))
-        }
-    }
-}

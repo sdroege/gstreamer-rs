@@ -5,9 +5,6 @@ use ClockTime;
 use Message;
 use Object;
 use ffi;
-use glib;
-use glib::object::Downcast;
-use glib::object::IsA;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
@@ -28,169 +25,125 @@ impl Bus {
             from_glib_full(ffi::gst_bus_new())
         }
     }
-}
 
-unsafe impl Send for Bus {}
-unsafe impl Sync for Bus {}
-
-pub trait BusExt {
-    fn add_signal_watch(&self);
-
-    fn add_signal_watch_full(&self, priority: i32);
-
-    //fn add_watch<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P) -> u32;
-
-    //fn add_watch_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, priority: i32, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32;
-
-    //fn async_signal_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> bool;
-
-    //fn create_watch(&self) -> /*Ignored*/Option<glib::Source>;
-
-    fn disable_sync_message_emission(&self);
-
-    fn enable_sync_message_emission(&self);
-
-    fn have_pending(&self) -> bool;
-
-    fn peek(&self) -> Option<Message>;
-
-    fn pop(&self) -> Option<Message>;
-
-    fn post(&self, message: &mut Message) -> bool;
-
-    fn remove_signal_watch(&self);
-
-    fn set_flushing(&self, flushing: bool);
-
-    //fn set_sync_handler<'a, P: Into<Option<&'a /*Unimplemented*/BusSyncHandler>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn sync_signal_handler<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> /*Ignored*/BusSyncReply;
-
-    fn timed_pop(&self, timeout: ClockTime) -> Option<Message>;
-
-    fn connect_message<F: Fn(&Self, &Message) + Send + Sync + 'static>(&self, f: F) -> u64;
-
-    fn connect_sync_message<F: Fn(&Self, &Message) + Send + Sync + 'static>(&self, f: F) -> u64;
-}
-
-impl<O: IsA<Bus> + IsA<glib::object::Object>> BusExt for O {
-    fn add_signal_watch(&self) {
+    pub fn add_signal_watch(&self) {
         unsafe {
             ffi::gst_bus_add_signal_watch(self.to_glib_none().0);
         }
     }
 
-    fn add_signal_watch_full(&self, priority: i32) {
+    pub fn add_signal_watch_full(&self, priority: i32) {
         unsafe {
             ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority);
         }
     }
 
-    //fn add_watch<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P) -> u32 {
+    //pub fn add_watch<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P) -> u32 {
     //    unsafe { TODO: call ffi::gst_bus_add_watch() }
     //}
 
-    //fn add_watch_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, priority: i32, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32 {
+    //pub fn add_watch_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, priority: i32, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32 {
     //    unsafe { TODO: call ffi::gst_bus_add_watch_full() }
     //}
 
-    //fn async_signal_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> bool {
+    //pub fn async_signal_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> bool {
     //    unsafe { TODO: call ffi::gst_bus_async_signal_func() }
     //}
 
-    //fn create_watch(&self) -> /*Ignored*/Option<glib::Source> {
+    //pub fn create_watch(&self) -> /*Ignored*/Option<glib::Source> {
     //    unsafe { TODO: call ffi::gst_bus_create_watch() }
     //}
 
-    fn disable_sync_message_emission(&self) {
+    pub fn disable_sync_message_emission(&self) {
         unsafe {
             ffi::gst_bus_disable_sync_message_emission(self.to_glib_none().0);
         }
     }
 
-    fn enable_sync_message_emission(&self) {
+    pub fn enable_sync_message_emission(&self) {
         unsafe {
             ffi::gst_bus_enable_sync_message_emission(self.to_glib_none().0);
         }
     }
 
-    fn have_pending(&self) -> bool {
+    pub fn have_pending(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_bus_have_pending(self.to_glib_none().0))
         }
     }
 
-    fn peek(&self) -> Option<Message> {
+    pub fn peek(&self) -> Option<Message> {
         unsafe {
             from_glib_full(ffi::gst_bus_peek(self.to_glib_none().0))
         }
     }
 
-    fn pop(&self) -> Option<Message> {
+    pub fn pop(&self) -> Option<Message> {
         unsafe {
             from_glib_full(ffi::gst_bus_pop(self.to_glib_none().0))
         }
     }
 
-    fn post(&self, message: &mut Message) -> bool {
+    pub fn post(&self, message: &mut Message) -> bool {
         unsafe {
             from_glib(ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()))
         }
     }
 
-    fn remove_signal_watch(&self) {
+    pub fn remove_signal_watch(&self) {
         unsafe {
             ffi::gst_bus_remove_signal_watch(self.to_glib_none().0);
         }
     }
 
-    fn set_flushing(&self, flushing: bool) {
+    pub fn set_flushing(&self, flushing: bool) {
         unsafe {
             ffi::gst_bus_set_flushing(self.to_glib_none().0, flushing.to_glib());
         }
     }
 
-    //fn set_sync_handler<'a, P: Into<Option<&'a /*Unimplemented*/BusSyncHandler>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //pub fn set_sync_handler<'a, P: Into<Option<&'a /*Unimplemented*/BusSyncHandler>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gst_bus_set_sync_handler() }
     //}
 
-    //fn sync_signal_handler<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> /*Ignored*/BusSyncReply {
+    //pub fn sync_signal_handler<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> /*Ignored*/BusSyncReply {
     //    unsafe { TODO: call ffi::gst_bus_sync_signal_handler() }
     //}
 
-    fn timed_pop(&self, timeout: ClockTime) -> Option<Message> {
+    pub fn timed_pop(&self, timeout: ClockTime) -> Option<Message> {
         unsafe {
             from_glib_full(ffi::gst_bus_timed_pop(self.to_glib_none().0, timeout))
         }
     }
 
-    fn connect_message<F: Fn(&Self, &Message) + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Message) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Bus, &Message) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "message",
-                transmute(message_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(message_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
-    fn connect_sync_message<F: Fn(&Self, &Message) + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Message) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Bus, &Message) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "sync-message",
-                transmute(sync_message_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(sync_message_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 }
 
-unsafe extern "C" fn message_trampoline<P>(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer)
-where P: IsA<Bus> {
+unsafe impl Send for Bus {}
+unsafe impl Sync for Bus {}
+
+unsafe extern "C" fn message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
     callback_guard!();
-    let f: &Box_<Fn(&P, &Message) + Send + Sync + 'static> = transmute(f);
-    f(&Bus::from_glib_none(this).downcast_unchecked(), &from_glib_none(message))
+    let f: &Box_<Fn(&Bus, &Message) + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(message))
 }
 
-unsafe extern "C" fn sync_message_trampoline<P>(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer)
-where P: IsA<Bus> {
+unsafe extern "C" fn sync_message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
     callback_guard!();
-    let f: &Box_<Fn(&P, &Message) + Send + Sync + 'static> = transmute(f);
-    f(&Bus::from_glib_none(this).downcast_unchecked(), &from_glib_none(message))
+    let f: &Box_<Fn(&Bus, &Message) + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(message))
 }

@@ -25,7 +25,6 @@ generate = [
     "Gst.PadTemplate",
     "Gst.URIHandler",
     "Gst.URIType",
-    "Gst.ElementFactory",
     "Gst.ElementFactoryListType",
     "Gst.Format",
     "Gst.MessageType",
@@ -62,6 +61,7 @@ status = "generate"
 [[object]]
 name = "Gst.Bus"
 status = "generate"
+trait = false
     [[object.function]]
     name = "remove_watch"
     # Needs manual bindings and GSource support in glib-rs
@@ -137,6 +137,11 @@ status = "generate"
         bool_return_is_error = "Failed to sync state with parent"
 
 [[object]]
+name = "Gst.ElementFactory"
+status = "generate"
+trait = false
+
+[[object]]
 name = "Gst.Object"
 status = "generate"
     [[object.function]]
@@ -181,6 +186,11 @@ status = "generate"
     name = "set_active"
         [object.function.return]
         bool_return_is_error = "Failed to activate pad"
+
+[[object]]
+name = "Gst.Plugin"
+status = "generate"
+trait = false
 
 [[object]]
 name = "Gst.*"
