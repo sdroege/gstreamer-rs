@@ -19,7 +19,7 @@ fn main() {
         };
 
         match msg.view() {
-            MessageView::Eos(_) => break,
+            MessageView::Eos => break,
             MessageView::Error(err) => {
                 println!("Error from {}: {} ({:?})", msg.get_src().get_path_string(),
                     err.get_error(), err.get_debug());

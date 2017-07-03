@@ -13,7 +13,7 @@ use miniobject::*;
 use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, from_glib_full};
 
 #[repr(C)]
 pub struct MessageImpl(ffi::GstMessage);
@@ -23,6 +23,8 @@ pub type Message = GstRc<MessageImpl>;
 unsafe impl MiniObject for MessageImpl {
     type GstType = ffi::GstMessage;
 }
+
+// TODO builder pattern for message creation
 
 impl MessageImpl {
     pub fn get_src(&self) -> Object {
@@ -37,19 +39,13 @@ impl MessageImpl {
         }
     }
 
-    pub fn set_seqnum(&mut self, seqnum: u32) {
-        unsafe {
-            ffi::gst_message_set_seqnum(self.as_mut_ptr(), seqnum)
-        }
-    }
-
     // TODO get_structure()
 
     pub fn view(&self) -> MessageView {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         if type_ == ffi::GST_MESSAGE_EOS {
-            MessageView::Eos(Eos(self))
+            MessageView::Eos
         } else if type_ == ffi::GST_MESSAGE_ERROR {
             MessageView::Error(Error(self))
         } else if type_ == ffi::GST_MESSAGE_WARNING {
@@ -63,7 +59,7 @@ impl MessageImpl {
         } else if type_ == ffi::GST_MESSAGE_STATE_CHANGED {
             MessageView::StateChanged(StateChanged(self))
         } else if type_ == ffi::GST_MESSAGE_STATE_DIRTY {
-            MessageView::StateDirty(StateDirty(self))
+            MessageView::StateDirty
         } else if type_ == ffi::GST_MESSAGE_STEP_DONE {
             MessageView::StepDone(StepDone(self))
         } else if type_ == ffi::GST_MESSAGE_CLOCK_PROVIDE {
@@ -77,19 +73,19 @@ impl MessageImpl {
         } else if type_ == ffi::GST_MESSAGE_STREAM_STATUS {
             MessageView::StreamStatus(StreamStatus(self))
         } else if type_ == ffi::GST_MESSAGE_APPLICATION {
-            MessageView::Application(Application(self))
+            MessageView::Application
         } else if type_ == ffi::GST_MESSAGE_ELEMENT {
-            MessageView::Element(Element(self))
+            MessageView::Element
         } else if type_ == ffi::GST_MESSAGE_SEGMENT_START {
             MessageView::SegmentStart(SegmentStart(self))
         } else if type_ == ffi::GST_MESSAGE_SEGMENT_DONE {
             MessageView::SegmentDone(SegmentDone(self))
         } else if type_ == ffi::GST_MESSAGE_DURATION_CHANGED {
-            MessageView::DurationChanged(DurationChanged(self))
+            MessageView::DurationChanged
         } else if type_ == ffi::GST_MESSAGE_LATENCY {
-            MessageView::Latency(Latency(self))
+            MessageView::Latency
         } else if type_ == ffi::GST_MESSAGE_ASYNC_START {
-            MessageView::AsyncStart(AsyncStart(self))
+            MessageView::AsyncStart
         } else if type_ == ffi::GST_MESSAGE_ASYNC_DONE {
             MessageView::AsyncDone(AsyncDone(self))
         } else if type_ == ffi::GST_MESSAGE_REQUEST_STATE {
@@ -121,33 +117,33 @@ impl MessageImpl {
         } else if type_ == ffi::GST_MESSAGE_STREAMS_SELECTED {
             MessageView::StreamsSelected(StreamsSelected(self))
         } else {
-            unimplemented!()
+            MessageView::Other
         }
     }
 }
 
 pub enum MessageView<'a> {
-    Eos(Eos<'a>),
+    Eos,
     Error(Error<'a>),
     Warning(Warning<'a>),
     Info(Info<'a>),
     Tag(Tag<'a>),
     Buffering(Buffering<'a>),
     StateChanged(StateChanged<'a>),
-    StateDirty(StateDirty<'a>),
+    StateDirty,
     StepDone(StepDone<'a>),
     ClockProvide(ClockProvide<'a>),
     ClockLost(ClockLost<'a>),
     NewClock(NewClock<'a>),
     StructureChange(StructureChange<'a>),
     StreamStatus(StreamStatus<'a>),
-    Application(Application<'a>),
-    Element(Element<'a>),
+    Application,
+    Element,
     SegmentStart(SegmentStart<'a>),
     SegmentDone(SegmentDone<'a>),
-    DurationChanged(DurationChanged<'a>),
-    Latency(Latency<'a>),
-    AsyncStart(AsyncStart<'a>),
+    DurationChanged,
+    Latency,
+    AsyncStart,
     AsyncDone(AsyncDone<'a>),
     RequestState(RequestState<'a>),
     StepStart(StepStart<'a>),
@@ -164,10 +160,9 @@ pub enum MessageView<'a> {
     StreamCollection(StreamCollection<'a>),
     StreamsSelected(StreamsSelected<'a>),
     Redirect(Redirect<'a>),
+    Other,
     __NonExhaustive,
 }
-
-pub struct Eos<'a>(&'a MessageImpl);
 
 pub struct Error<'a>(&'a MessageImpl);
 impl<'a> Error<'a> {
@@ -275,20 +270,14 @@ impl<'a> Buffering<'a> {
 }
 
 pub struct StateChanged<'a>(&'a MessageImpl);
-pub struct StateDirty<'a>(&'a MessageImpl);
 pub struct StepDone<'a>(&'a MessageImpl);
 pub struct ClockProvide<'a>(&'a MessageImpl);
 pub struct ClockLost<'a>(&'a MessageImpl);
 pub struct NewClock<'a>(&'a MessageImpl);
 pub struct StructureChange<'a>(&'a MessageImpl);
 pub struct StreamStatus<'a>(&'a MessageImpl);
-pub struct Application<'a>(&'a MessageImpl);
-pub struct Element<'a>(&'a MessageImpl);
 pub struct SegmentStart<'a>(&'a MessageImpl);
 pub struct SegmentDone<'a>(&'a MessageImpl);
-pub struct DurationChanged<'a>(&'a MessageImpl);
-pub struct Latency<'a>(&'a MessageImpl);
-pub struct AsyncStart<'a>(&'a MessageImpl);
 pub struct AsyncDone<'a>(&'a MessageImpl);
 pub struct RequestState<'a>(&'a MessageImpl);
 pub struct StepStart<'a>(&'a MessageImpl);
