@@ -9,6 +9,8 @@ extern crate gstreamer_sys as ffi;
 #[macro_use]
 extern crate glib;
 
+use glib::translate::{from_glib, from_glib_full};
+
 macro_rules! callback_guard {
     () => (
         let _guard = ::glib::CallbackGuard::new();
@@ -32,8 +34,13 @@ mod auto;
 
 use std::ptr;
 
-pub fn init() {
+pub fn init() -> Result<(), glib::Error> {
     unsafe {
-        ffi::gst_init(ptr::null_mut(), ptr::null_mut())
+        let mut error = ptr::null_mut();
+        if from_glib(ffi::gst_init_check(ptr::null_mut(), ptr::null_mut(), &mut error)) {
+            Ok(())
+        } else {
+            Err(from_glib_full(error))
+        }
     }
 }
