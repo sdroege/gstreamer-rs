@@ -25,12 +25,6 @@ unsafe impl MiniObject for MessageImpl {
 }
 
 impl MessageImpl {
-    pub fn new_eos(src: &Object) -> GstRc<Self> {
-        unsafe {
-            from_glib_full(ffi::gst_message_new_eos(src.to_glib_none().0))
-        }
-    }
-
     pub fn get_src(&self) -> Object {
         unsafe {
             from_glib_none((*self.as_ptr()).src)
