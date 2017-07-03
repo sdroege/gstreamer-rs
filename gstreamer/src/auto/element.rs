@@ -7,6 +7,7 @@ use ClockTime;
 use ElementFactory;
 use Error;
 use Format;
+use Message;
 use Object;
 use Pad;
 use PadTemplate;
@@ -140,14 +141,14 @@ pub trait ElementExt {
 
     fn lost_state(&self);
 
-    //fn message_full<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32);
+    //fn message_full<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32);
 
     //#[cfg(feature = "v1_10")]
-    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: /*Ignored*/&mut Structure);
+    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: /*Ignored*/&mut Structure);
 
     fn no_more_pads(&self);
 
-    //fn post_message(&self, message: /*Ignored*/&mut Message) -> bool;
+    fn post_message(&self, message: &mut Message) -> bool;
 
     fn provide_clock(&self) -> Option<Clock>;
 
@@ -389,12 +390,12 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    //fn message_full<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32) {
+    //fn message_full<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32) {
     //    unsafe { TODO: call ffi::gst_element_message_full() }
     //}
 
     //#[cfg(feature = "v1_10")]
-    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: /*Ignored*/&mut Structure) {
+    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: /*Ignored*/&mut Structure) {
     //    unsafe { TODO: call ffi::gst_element_message_full_with_details() }
     //}
 
@@ -404,9 +405,11 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    //fn post_message(&self, message: /*Ignored*/&mut Message) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_post_message() }
-    //}
+    fn post_message(&self, message: &mut Message) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_post_message(self.to_glib_none().0, message.to_glib_full()))
+        }
+    }
 
     fn provide_clock(&self) -> Option<Clock> {
         unsafe {

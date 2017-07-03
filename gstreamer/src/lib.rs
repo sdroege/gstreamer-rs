@@ -32,6 +32,11 @@ pub use glib::{
 pub use auto::*;
 mod auto;
 
+pub mod miniobject;
+pub use miniobject::GstRc;
+pub mod message;
+pub use message::Message;
+
 use std::ptr;
 
 pub fn init() -> Result<(), glib::Error> {

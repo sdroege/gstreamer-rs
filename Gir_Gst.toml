@@ -28,11 +28,12 @@ generate = [
     "Gst.ElementFactory",
     "Gst.ElementFactoryListType",
     "Gst.Format",
+    "Gst.MessageType",
 ]
 
 manual = [
     "GLib.Error",
-    #"Gst.Message",
+    "Gst.Message",
 ]
 
 [[object]]
@@ -64,6 +65,19 @@ status = "generate"
     [[object.function]]
     name = "remove_watch"
     # Needs manual bindings and GSource support in glib-rs
+    ignore = true
+
+    [[object.function]]
+    name = "timed_pop_filtered"
+    # Uses enum as flags
+    ignore = true
+    [[object.function]]
+    name = "pop_filtered"
+    # Uses enum as flags
+    ignore = true
+    [[object.function]]
+    name = "poll"
+    # Uses enum as flags
     ignore = true
 
 [[object]]

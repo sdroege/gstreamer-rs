@@ -5,6 +5,67 @@ use ffi;
 use glib::translate::*;
 
 bitflags! {
+    pub struct MessageType: u32 {
+        const MESSAGE_UNKNOWN = 0;
+        const MESSAGE_EOS = 1;
+        const MESSAGE_ERROR = 2;
+        const MESSAGE_WARNING = 4;
+        const MESSAGE_INFO = 8;
+        const MESSAGE_TAG = 16;
+        const MESSAGE_BUFFERING = 32;
+        const MESSAGE_STATE_CHANGED = 64;
+        const MESSAGE_STATE_DIRTY = 128;
+        const MESSAGE_STEP_DONE = 256;
+        const MESSAGE_CLOCK_PROVIDE = 512;
+        const MESSAGE_CLOCK_LOST = 1024;
+        const MESSAGE_NEW_CLOCK = 2048;
+        const MESSAGE_STRUCTURE_CHANGE = 4096;
+        const MESSAGE_STREAM_STATUS = 8192;
+        const MESSAGE_APPLICATION = 16384;
+        const MESSAGE_ELEMENT = 32768;
+        const MESSAGE_SEGMENT_START = 65536;
+        const MESSAGE_SEGMENT_DONE = 131072;
+        const MESSAGE_DURATION_CHANGED = 262144;
+        const MESSAGE_LATENCY = 524288;
+        const MESSAGE_ASYNC_START = 1048576;
+        const MESSAGE_ASYNC_DONE = 2097152;
+        const MESSAGE_REQUEST_STATE = 4194304;
+        const MESSAGE_STEP_START = 8388608;
+        const MESSAGE_QOS = 16777216;
+        const MESSAGE_PROGRESS = 33554432;
+        const MESSAGE_TOC = 67108864;
+        const MESSAGE_RESET_TIME = 134217728;
+        const MESSAGE_STREAM_START = 268435456;
+        const MESSAGE_NEED_CONTEXT = 536870912;
+        const MESSAGE_HAVE_CONTEXT = 1073741824;
+        const MESSAGE_EXTENDED = 2147483648;
+        const MESSAGE_DEVICE_ADDED = 2147483649;
+        const MESSAGE_DEVICE_REMOVED = 2147483650;
+        const MESSAGE_PROPERTY_NOTIFY = 2147483651;
+        const MESSAGE_STREAM_COLLECTION = 2147483652;
+        const MESSAGE_STREAMS_SELECTED = 2147483653;
+        const MESSAGE_REDIRECT = 2147483654;
+        const MESSAGE_ANY = 4294967295;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for MessageType {
+    type GlibType = ffi::GstMessageType;
+
+    fn to_glib(&self) -> ffi::GstMessageType {
+        ffi::GstMessageType::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstMessageType> for MessageType {
+    fn from_glib(value: ffi::GstMessageType) -> MessageType {
+        MessageType::from_bits_truncate(value.bits())
+    }
+}
+
+bitflags! {
     pub struct SeekFlags: u32 {
         const SEEK_FLAG_NONE = 0;
         const SEEK_FLAG_FLUSH = 1;
