@@ -2,7 +2,7 @@
 girs_dir = "gir-files"
 library = "Gst"
 version = "1.0"
-min_cfg_version = "1.0"
+min_cfg_version = "1.8"
 target_path = "gstreamer"
 work_mode = "normal"
 concurrency = "send+sync"
@@ -35,6 +35,16 @@ generate = [
     "Gst.PluginError",
     "Gst.ParseError",
     "Gst.URIError",
+    "Gst.StructureChangeType",
+    "Gst.StreamStatusType",
+    "Gst.Device",
+    "Gst.DeviceMonitor",
+    "Gst.DeviceProvider",
+    "Gst.DeviceProviderFactory",
+    "Gst.Stream",
+    "Gst.StreamCollection",
+    "Gst.StreamType",
+    "Gst.StreamFlags",
 ]
 
 manual = [
@@ -220,3 +230,9 @@ status = "generate"
     [[object.function]]
     name = "util_dump_mem"
     ignore = true
+
+    [[object.function]]
+    name = "protection_select_system"
+    # unsupported array type
+    ignore = true
+

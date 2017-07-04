@@ -66,7 +66,6 @@ pub trait ObjectExt {
 
     fn has_as_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool;
 
-    #[cfg(feature = "v1_6")]
     fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool;
 
     //fn remove_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
@@ -161,7 +160,6 @@ impl<O: IsA<Object>> ObjectExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool {
         unsafe {
             from_glib(ffi::gst_object_has_as_parent(self.to_glib_none().0, parent.to_glib_none().0))

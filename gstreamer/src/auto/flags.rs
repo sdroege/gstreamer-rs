@@ -37,3 +37,54 @@ impl FromGlib<ffi::GstSeekFlags> for SeekFlags {
     }
 }
 
+bitflags! {
+    pub struct StreamFlags: u32 {
+        const STREAM_FLAG_NONE = 0;
+        const STREAM_FLAG_SPARSE = 1;
+        const STREAM_FLAG_SELECT = 2;
+        const STREAM_FLAG_UNSELECT = 4;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for StreamFlags {
+    type GlibType = ffi::GstStreamFlags;
+
+    fn to_glib(&self) -> ffi::GstStreamFlags {
+        ffi::GstStreamFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstStreamFlags> for StreamFlags {
+    fn from_glib(value: ffi::GstStreamFlags) -> StreamFlags {
+        StreamFlags::from_bits_truncate(value.bits())
+    }
+}
+
+bitflags! {
+    pub struct StreamType: u32 {
+        const STREAM_TYPE_UNKNOWN = 1;
+        const STREAM_TYPE_AUDIO = 2;
+        const STREAM_TYPE_VIDEO = 4;
+        const STREAM_TYPE_CONTAINER = 8;
+        const STREAM_TYPE_TEXT = 16;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for StreamType {
+    type GlibType = ffi::GstStreamType;
+
+    fn to_glib(&self) -> ffi::GstStreamType {
+        ffi::GstStreamType::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstStreamType> for StreamType {
+    fn from_glib(value: ffi::GstStreamType) -> StreamType {
+        StreamType::from_bits_truncate(value.bits())
+    }
+}
+

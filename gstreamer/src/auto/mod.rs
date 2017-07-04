@@ -12,6 +12,22 @@ mod clock;
 pub use self::clock::Clock;
 pub use self::clock::ClockExt;
 
+mod device;
+pub use self::device::Device;
+pub use self::device::DeviceExt;
+
+mod device_monitor;
+pub use self::device_monitor::DeviceMonitor;
+pub use self::device_monitor::DeviceMonitorExt;
+
+mod device_provider;
+pub use self::device_provider::DeviceProvider;
+pub use self::device_provider::DeviceProviderExt;
+
+mod device_provider_factory;
+pub use self::device_provider_factory::DeviceProviderFactory;
+pub use self::device_provider_factory::DeviceProviderFactoryExt;
+
 mod element;
 pub use self::element::Element;
 pub use self::element::ElementExt;
@@ -38,6 +54,20 @@ pub use self::pipeline::PipelineExt;
 mod plugin;
 pub use self::plugin::Plugin;
 
+#[cfg(feature = "v1_10")]
+mod stream;
+#[cfg(feature = "v1_10")]
+pub use self::stream::Stream;
+#[cfg(feature = "v1_10")]
+pub use self::stream::StreamExt;
+
+#[cfg(feature = "v1_10")]
+mod stream_collection;
+#[cfg(feature = "v1_10")]
+pub use self::stream_collection::StreamCollection;
+#[cfg(feature = "v1_10")]
+pub use self::stream_collection::StreamCollectionExt;
+
 mod u_r_i_handler;
 pub use self::u_r_i_handler::URIHandler;
 pub use self::u_r_i_handler::URIHandlerExt;
@@ -57,6 +87,8 @@ pub use self::enums::State;
 pub use self::enums::StateChange;
 pub use self::enums::StateChangeReturn;
 pub use self::enums::StreamError;
+pub use self::enums::StreamStatusType;
+pub use self::enums::StructureChangeType;
 pub use self::enums::URIError;
 pub use self::enums::URIType;
 
@@ -74,6 +106,17 @@ pub use self::flags::SEEK_FLAG_SNAP_AFTER;
 pub use self::flags::SEEK_FLAG_SNAP_NEAREST;
 pub use self::flags::SEEK_FLAG_TRICKMODE_KEY_UNITS;
 pub use self::flags::SEEK_FLAG_TRICKMODE_NO_AUDIO;
+pub use self::flags::StreamFlags;
+pub use self::flags::STREAM_FLAG_NONE;
+pub use self::flags::STREAM_FLAG_SPARSE;
+pub use self::flags::STREAM_FLAG_SELECT;
+pub use self::flags::STREAM_FLAG_UNSELECT;
+pub use self::flags::StreamType;
+pub use self::flags::STREAM_TYPE_UNKNOWN;
+pub use self::flags::STREAM_TYPE_AUDIO;
+pub use self::flags::STREAM_TYPE_VIDEO;
+pub use self::flags::STREAM_TYPE_CONTAINER;
+pub use self::flags::STREAM_TYPE_TEXT;
 
 mod alias;
 pub use self::alias::ClockTime;
@@ -85,10 +128,18 @@ pub mod functions;
 pub mod traits {
     pub use super::BinExt;
     pub use super::ClockExt;
+    pub use super::DeviceExt;
+    pub use super::DeviceMonitorExt;
+    pub use super::DeviceProviderExt;
+    pub use super::DeviceProviderFactoryExt;
     pub use super::ElementExt;
     pub use super::ObjectExt;
     pub use super::PadExt;
     pub use super::PadTemplateExt;
     pub use super::PipelineExt;
+    #[cfg(feature = "v1_10")]
+    pub use super::StreamExt;
+    #[cfg(feature = "v1_10")]
+    pub use super::StreamCollectionExt;
     pub use super::URIHandlerExt;
 }

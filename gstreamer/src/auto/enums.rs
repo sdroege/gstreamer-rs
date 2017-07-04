@@ -852,6 +852,85 @@ impl ErrorDomain for StreamError {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum StreamStatusType {
+    Create,
+    Enter,
+    Leave,
+    Destroy,
+    Start,
+    Pause,
+    Stop,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for StreamStatusType {
+    type GlibType = ffi::GstStreamStatusType;
+
+    fn to_glib(&self) -> ffi::GstStreamStatusType {
+        match *self {
+            StreamStatusType::Create => ffi::GST_STREAM_STATUS_TYPE_CREATE,
+            StreamStatusType::Enter => ffi::GST_STREAM_STATUS_TYPE_ENTER,
+            StreamStatusType::Leave => ffi::GST_STREAM_STATUS_TYPE_LEAVE,
+            StreamStatusType::Destroy => ffi::GST_STREAM_STATUS_TYPE_DESTROY,
+            StreamStatusType::Start => ffi::GST_STREAM_STATUS_TYPE_START,
+            StreamStatusType::Pause => ffi::GST_STREAM_STATUS_TYPE_PAUSE,
+            StreamStatusType::Stop => ffi::GST_STREAM_STATUS_TYPE_STOP,
+            StreamStatusType::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
+    fn from_glib(value: ffi::GstStreamStatusType) -> Self {
+        match value as i32 {
+            0 => StreamStatusType::Create,
+            1 => StreamStatusType::Enter,
+            2 => StreamStatusType::Leave,
+            3 => StreamStatusType::Destroy,
+            8 => StreamStatusType::Start,
+            9 => StreamStatusType::Pause,
+            10 => StreamStatusType::Stop,
+            value => StreamStatusType::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum StructureChangeType {
+    Link,
+    Unlink,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for StructureChangeType {
+    type GlibType = ffi::GstStructureChangeType;
+
+    fn to_glib(&self) -> ffi::GstStructureChangeType {
+        match *self {
+            StructureChangeType::Link => ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_LINK,
+            StructureChangeType::Unlink => ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_UNLINK,
+            StructureChangeType::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
+    fn from_glib(value: ffi::GstStructureChangeType) -> Self {
+        match value as i32 {
+            0 => StructureChangeType::Link,
+            1 => StructureChangeType::Unlink,
+            value => StructureChangeType::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum URIError {
     UnsupportedProtocol,
     BadUri,

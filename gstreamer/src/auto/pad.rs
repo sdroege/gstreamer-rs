@@ -2,12 +2,13 @@
 // DO NOT EDIT
 
 use Element;
-#[cfg(feature = "v1_4")]
 use FlowReturn;
 use Format;
 use Object;
 use PadDirection;
 use PadTemplate;
+#[cfg(feature = "v1_10")]
+use Stream;
 use ffi;
 use glib;
 use glib::Value;
@@ -51,7 +52,6 @@ impl Pad {
         }
     }
 
-    //#[cfg(feature = "v1_4")]
     //pub fn link_get_name(ret: /*Ignored*/PadLinkReturn) -> Option<String> {
     //    unsafe { TODO: call ffi::gst_pad_link_get_name() }
     //}
@@ -91,7 +91,6 @@ pub trait PadExt {
 
     //fn get_element_private(&self) -> /*Unimplemented*/Option<Fundamental: Pointer>;
 
-    #[cfg(feature = "v1_4")]
     fn get_last_flow_return(&self) -> FlowReturn;
 
     fn get_offset(&self) -> i64;
@@ -108,10 +107,9 @@ pub trait PadExt {
 
     //fn get_sticky_event(&self, event_type: /*Ignored*/EventType, idx: u32) -> /*Ignored*/Option<Event>;
 
-    //#[cfg(feature = "v1_10")]
-    //fn get_stream(&self) -> /*Ignored*/Option<Stream>;
+    #[cfg(feature = "v1_10")]
+    fn get_stream(&self) -> Option<Stream>;
 
-    #[cfg(feature = "v1_2")]
     fn get_stream_id(&self) -> Option<String>;
 
     //#[cfg(feature = "v1_12")]
@@ -201,7 +199,6 @@ pub trait PadExt {
 
     //fn set_element_private<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, priv_: P);
 
-    //#[cfg(feature = "v1_8")]
     //fn set_event_full_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFullFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     //fn set_event_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
@@ -224,7 +221,6 @@ pub trait PadExt {
 
     fn stop_task(&self) -> Result<(), glib::error::BoolError>;
 
-    //#[cfg(feature = "v1_2")]
     //fn store_sticky_event(&self, event: /*Ignored*/&mut Event) -> FlowReturn;
 
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
@@ -313,7 +309,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_get_element_private() }
     //}
 
-    #[cfg(feature = "v1_4")]
     fn get_last_flow_return(&self) -> FlowReturn {
         unsafe {
             from_glib(ffi::gst_pad_get_last_flow_return(self.to_glib_none().0))
@@ -356,12 +351,13 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_get_sticky_event() }
     //}
 
-    //#[cfg(feature = "v1_10")]
-    //fn get_stream(&self) -> /*Ignored*/Option<Stream> {
-    //    unsafe { TODO: call ffi::gst_pad_get_stream() }
-    //}
+    #[cfg(feature = "v1_10")]
+    fn get_stream(&self) -> Option<Stream> {
+        unsafe {
+            from_glib_full(ffi::gst_pad_get_stream(self.to_glib_none().0))
+        }
+    }
 
-    #[cfg(feature = "v1_2")]
     fn get_stream_id(&self) -> Option<String> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_stream_id(self.to_glib_none().0))
@@ -585,7 +581,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_set_element_private() }
     //}
 
-    //#[cfg(feature = "v1_8")]
     //fn set_event_full_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFullFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gst_pad_set_event_full_function_full() }
     //}
@@ -634,7 +629,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_2")]
     //fn store_sticky_event(&self, event: /*Ignored*/&mut Event) -> FlowReturn {
     //    unsafe { TODO: call ffi::gst_pad_store_sticky_event() }
     //}

@@ -6,19 +6,14 @@ use Object;
 use ffi;
 use glib;
 use glib::Value;
-#[cfg(feature = "v1_6")]
 use glib::object::Downcast;
 use glib::object::IsA;
-#[cfg(feature = "v1_6")]
 use glib::signal::connect;
 use glib::translate::*;
-#[cfg(feature = "v1_6")]
 use glib_ffi;
 use gobject_ffi;
-#[cfg(feature = "v1_6")]
 use std::boxed::Box as Box_;
 use std::mem;
-#[cfg(feature = "v1_6")]
 use std::mem::transmute;
 use std::ptr;
 
@@ -66,12 +61,10 @@ unsafe impl Sync for Clock {}
 pub trait ClockExt {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64>;
 
-    #[cfg(feature = "v1_6")]
     fn add_observation_unapplied(&self, slave: ClockTime, master: ClockTime) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
 
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
 
-    #[cfg(feature = "v1_6")]
     fn adjust_with_calibration(&self, internal_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime;
 
     fn get_calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
@@ -86,7 +79,6 @@ pub trait ClockExt {
 
     fn get_timeout(&self) -> ClockTime;
 
-    #[cfg(feature = "v1_6")]
     fn is_synced(&self) -> bool;
 
     //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/Option<ClockID>;
@@ -101,7 +93,6 @@ pub trait ClockExt {
 
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime;
 
-    #[cfg(feature = "v1_6")]
     fn set_synced(&self, synced: bool);
 
     fn set_timeout(&self, timeout: ClockTime);
@@ -110,10 +101,8 @@ pub trait ClockExt {
 
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime;
 
-    #[cfg(feature = "v1_8")]
     fn unadjust_with_calibration(&self, external_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime;
 
-    #[cfg(feature = "v1_6")]
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
 
     fn get_property_window_size(&self) -> i32;
@@ -124,7 +113,6 @@ pub trait ClockExt {
 
     fn set_property_window_threshold(&self, window_threshold: i32);
 
-    #[cfg(feature = "v1_6")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> u64;
 }
 
@@ -137,7 +125,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn add_observation_unapplied(&self, slave: ClockTime, master: ClockTime) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)> {
         unsafe {
             let mut r_squared = mem::uninitialized();
@@ -156,7 +143,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn adjust_with_calibration(&self, internal_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime {
         unsafe {
             ffi::gst_clock_adjust_with_calibration(self.to_glib_none().0, internal_target, cinternal, cexternal, cnum, cdenom)
@@ -204,7 +190,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn is_synced(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_clock_is_synced(self.to_glib_none().0))
@@ -243,7 +228,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn set_synced(&self, synced: bool) {
         unsafe {
             ffi::gst_clock_set_synced(self.to_glib_none().0, synced.to_glib());
@@ -266,14 +250,12 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    #[cfg(feature = "v1_8")]
     fn unadjust_with_calibration(&self, external_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime {
         unsafe {
             ffi::gst_clock_unadjust_with_calibration(self.to_glib_none().0, external_target, cinternal, cexternal, cnum, cdenom)
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout), "Timed out waiting for sync")
@@ -308,7 +290,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -318,7 +299,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     }
 }
 
-#[cfg(feature = "v1_6")]
 unsafe extern "C" fn synced_trampoline<P>(this: *mut ffi::GstClock, synced: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<Clock> {
     callback_guard!();

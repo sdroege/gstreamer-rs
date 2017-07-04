@@ -8,12 +8,16 @@
 
 use ffi;
 use Object;
+use Element;
 use miniobject::*;
 
 use std::ptr;
+use std::mem;
+use std::ffi::CStr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_none, from_glib_full};
+use glib_ffi;
+use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
 
 #[repr(C)]
 pub struct MessageImpl(ffi::GstMessage);
@@ -247,53 +251,469 @@ impl<'a> Tag<'a> {
 pub struct Buffering<'a>(&'a MessageImpl);
 impl<'a> Buffering<'a> {
     pub fn get_percent(&self) -> i32 {
-        let mut p = 0;
         unsafe {
+            let mut p = mem::uninitialized();
             ffi::gst_message_parse_buffering(self.0.as_mut_ptr(), &mut p);
+            p
         }
-
-        p
     }
 
     pub fn get_buffering_stats(&self) -> (::BufferingMode, i32, i32, i64) {
-        let mut mode = ffi::GstBufferingMode::Stream;
-        let mut avg_in = 0;
-        let mut avg_out = 0;
-        let mut buffering_left = 0;
-
         unsafe {
-            ffi::gst_message_parse_buffering_stats(self.0.as_mut_ptr(), &mut mode, &mut avg_in, &mut avg_out, &mut buffering_left);
-        }
+            let mut mode = mem::uninitialized();
+            let mut avg_in = mem::uninitialized();
+            let mut avg_out = mem::uninitialized();
+            let mut buffering_left = mem::uninitialized();
 
-        (from_glib(mode), avg_in, avg_out, buffering_left)
+            ffi::gst_message_parse_buffering_stats(self.0.as_mut_ptr(), &mut mode, &mut avg_in, &mut avg_out, &mut buffering_left);
+
+            (from_glib(mode), avg_in, avg_out, buffering_left)
+        }
     }
 }
 
 pub struct StateChanged<'a>(&'a MessageImpl);
+impl<'a> StateChanged<'a> {
+    pub fn get_old(&self) -> ::State {
+        unsafe {
+            let mut state = mem::uninitialized();
+
+            ffi::gst_message_parse_state_changed(self.0.as_mut_ptr(), &mut state, ptr::null_mut(), ptr::null_mut());
+
+            from_glib(state)
+        }
+    }
+
+    pub fn get_current(&self) -> ::State {
+        unsafe {
+            let mut state = mem::uninitialized();
+
+            ffi::gst_message_parse_state_changed(self.0.as_mut_ptr(), ptr::null_mut(), &mut state, ptr::null_mut());
+
+            from_glib(state)
+        }
+    }
+
+    pub fn get_pending(&self) -> ::State {
+        unsafe {
+            let mut state = mem::uninitialized();
+
+            ffi::gst_message_parse_state_changed(self.0.as_mut_ptr(), ptr::null_mut(), ptr::null_mut(), &mut state);
+
+            from_glib(state)
+        }
+    }
+}
+
 pub struct StepDone<'a>(&'a MessageImpl);
+impl<'a> StepDone<'a> {
+    pub fn get(&self) -> (::Format, u64, f64, bool, bool, u64, bool) {
+        unsafe {
+            let mut format = mem::uninitialized();
+            let mut amount = mem::uninitialized();
+            let mut rate = mem::uninitialized();
+            let mut flush = mem::uninitialized();
+            let mut intermediate = mem::uninitialized();
+            let mut duration = mem::uninitialized();
+            let mut eos = mem::uninitialized();
+
+            ffi::gst_message_parse_step_done(self.0.as_mut_ptr(), &mut format, &mut amount, &mut rate, &mut flush, &mut intermediate, &mut duration, &mut eos);
+
+            (from_glib(format), amount, rate, from_glib(flush), from_glib(intermediate), duration, from_glib(eos))
+        }
+    }
+}
+
+
 pub struct ClockProvide<'a>(&'a MessageImpl);
+impl<'a> ClockProvide<'a> {
+    pub fn get_clock(&self) -> Option<::Clock> {
+        let mut clock = ptr::null_mut();
+
+        unsafe {
+            ffi::gst_message_parse_clock_provide(self.0.as_mut_ptr(), &mut clock, ptr::null_mut());
+
+            from_glib_none(clock)
+        }
+    }
+
+    pub fn get_ready(&self) -> bool {
+        unsafe {
+            let mut ready = mem::uninitialized();
+
+            ffi::gst_message_parse_clock_provide(self.0.as_mut_ptr(), ptr::null_mut(), &mut ready);
+
+            from_glib(ready)
+        }
+    }
+}
+
 pub struct ClockLost<'a>(&'a MessageImpl);
+impl<'a> ClockLost<'a> {
+    pub fn get_clock(&self) -> Option<::Clock> {
+        let mut clock = ptr::null_mut();
+
+        unsafe {
+            ffi::gst_message_parse_clock_lost(self.0.as_mut_ptr(), &mut clock);
+
+            from_glib_none(clock)
+        }
+    }
+}
+
 pub struct NewClock<'a>(&'a MessageImpl);
+impl<'a> NewClock<'a> {
+    pub fn get_clock(&self) -> Option<::Clock> {
+        let mut clock = ptr::null_mut();
+
+        unsafe {
+            ffi::gst_message_parse_new_clock(self.0.as_mut_ptr(), &mut clock);
+
+            from_glib_none(clock)
+        }
+    }
+}
+
 pub struct StructureChange<'a>(&'a MessageImpl);
+impl<'a> StructureChange<'a> {
+    pub fn get(&self) -> (::StructureChangeType, Option<Element>, bool) {
+        unsafe {
+            let mut type_ = mem::uninitialized();
+            let mut owner = ptr::null_mut();
+            let mut busy = mem::uninitialized();
+
+            ffi::gst_message_parse_structure_change(self.0.as_mut_ptr(), &mut type_, &mut owner, &mut busy);
+
+            (from_glib(type_), from_glib_none(owner), from_glib(busy))
+        }
+    }
+}
+
 pub struct StreamStatus<'a>(&'a MessageImpl);
+impl<'a> StreamStatus<'a> {
+    pub fn get(&self) -> (::StreamStatusType, Option<Element>) {
+        unsafe {
+            let mut type_ = mem::uninitialized();
+            let mut owner = ptr::null_mut();
+
+            ffi::gst_message_parse_stream_status(self.0.as_mut_ptr(), &mut type_, &mut owner);
+
+            (from_glib(type_), from_glib_none(owner))
+        }
+    }
+
+    pub fn get_stream_status_object(&self) -> Option<glib::Value> {
+        unsafe {
+            let value = ffi::gst_message_get_stream_status_object(self.0.as_mut_ptr());
+
+            from_glib_none(value)
+        }
+    }
+}
+
 pub struct SegmentStart<'a>(&'a MessageImpl);
+impl<'a> SegmentStart<'a> {
+    pub fn get(&self) -> (::Format, i64) {
+        unsafe {
+            let mut format = mem::uninitialized();
+            let mut position = mem::uninitialized();
+
+            ffi::gst_message_parse_segment_start(self.0.as_mut_ptr(), &mut format, &mut position);
+
+            (from_glib(format), position)
+        }
+    }
+}
+
 pub struct SegmentDone<'a>(&'a MessageImpl);
+impl<'a> SegmentDone<'a> {
+    pub fn get(&self) -> (::Format, i64) {
+        unsafe {
+            let mut format = mem::uninitialized();
+            let mut position = mem::uninitialized();
+
+            ffi::gst_message_parse_segment_done(self.0.as_mut_ptr(), &mut format, &mut position);
+
+            (from_glib(format), position)
+        }
+    }
+}
+
 pub struct AsyncDone<'a>(&'a MessageImpl);
+impl<'a> AsyncDone<'a> {
+    pub fn get_running_time(&self) -> u64 {
+        unsafe {
+            let mut running_time = mem::uninitialized();
+
+            ffi::gst_message_parse_async_done(self.0.as_mut_ptr(), &mut running_time);
+
+            running_time
+        }
+    }
+}
+
 pub struct RequestState<'a>(&'a MessageImpl);
+impl<'a> RequestState<'a> {
+    pub fn get_requested_state(&self) -> ::State {
+        unsafe {
+            let mut state = mem::uninitialized();
+
+            ffi::gst_message_parse_request_state(self.0.as_mut_ptr(), &mut state);
+
+            from_glib(state)
+        }
+    }
+}
+
 pub struct StepStart<'a>(&'a MessageImpl);
+impl<'a> StepStart<'a> {
+    pub fn get(&self) -> (bool, ::Format, u64, f64, bool, bool) {
+        unsafe {
+            let mut active = mem::uninitialized();
+            let mut format = mem::uninitialized();
+            let mut amount = mem::uninitialized();
+            let mut rate = mem::uninitialized();
+            let mut flush = mem::uninitialized();
+            let mut intermediate = mem::uninitialized();
+
+            ffi::gst_message_parse_step_start(self.0.as_mut_ptr(), &mut active, &mut format, &mut amount, &mut rate, &mut flush, &mut intermediate);
+
+            (from_glib(active), from_glib(format), amount, rate, from_glib(flush), from_glib(intermediate))
+        }
+    }
+}
+
 pub struct Qos<'a>(&'a MessageImpl);
+impl<'a> Qos<'a> {
+    pub fn get(&self) -> (bool, u64, u64, u64, u64) {
+        unsafe {
+            let mut live = mem::uninitialized();
+            let mut running_time = mem::uninitialized();
+            let mut stream_time = mem::uninitialized();
+            let mut timestamp = mem::uninitialized();
+            let mut duration = mem::uninitialized();
+
+            ffi::gst_message_parse_qos(self.0.as_mut_ptr(), &mut live, &mut running_time, &mut stream_time, &mut timestamp, &mut duration);
+
+            (from_glib(live), running_time, stream_time, timestamp, duration)
+        }
+    }
+
+    pub fn get_values(&self) -> (i64, f64, i32) {
+        unsafe {
+            let mut jitter = mem::uninitialized();
+            let mut proportion = mem::uninitialized();
+            let mut quality = mem::uninitialized();
+
+            ffi::gst_message_parse_qos_values(self.0.as_mut_ptr(), &mut jitter, &mut proportion, &mut quality);
+
+            (jitter, proportion, quality)
+        }
+    }
+
+    pub fn get_stats(&self) -> (::Format, u64, u64) {
+        unsafe {
+            let mut format = mem::uninitialized();
+            let mut processed = mem::uninitialized();
+            let mut dropped = mem::uninitialized();
+
+            ffi::gst_message_parse_qos_stats(self.0.as_mut_ptr(), &mut format, &mut processed, &mut dropped);
+
+            (from_glib(format), processed, dropped)
+        }
+    }
+}
+
 pub struct Progress<'a>(&'a MessageImpl);
+
 pub struct Toc<'a>(&'a MessageImpl);
+impl<'a> Toc<'a> {
+    // TODO get_toc()
+}
+
 pub struct ResetTime<'a>(&'a MessageImpl);
+impl<'a> ResetTime<'a> {
+    pub fn get_running_time(&self) -> u64 {
+        unsafe {
+            let mut running_time = mem::uninitialized();
+
+            ffi::gst_message_parse_reset_time(self.0.as_mut_ptr(), &mut running_time);
+
+            running_time
+        }
+    }
+}
+
 pub struct StreamStart<'a>(&'a MessageImpl);
+impl<'a> StreamStart<'a> {
+    pub fn get_group_id(&self) -> Option<u32> {
+        unsafe {
+            let mut group_id = mem::uninitialized();
+
+            if from_glib(ffi::gst_message_parse_group_id(self.0.as_mut_ptr(), &mut group_id)) {
+                Some(group_id)
+            } else {
+                None
+            }
+        }
+    }
+}
+
 pub struct NeedContext<'a>(&'a MessageImpl);
+impl<'a> NeedContext<'a> {
+    pub fn get_context_type(&self) -> Option<&str> {
+        unsafe {
+            let mut context_type = ptr::null();
+
+            if from_glib(ffi::gst_message_parse_context_type(self.0.as_mut_ptr(), &mut context_type)) && !context_type.is_null() {
+                Some(CStr::from_ptr(context_type).to_str().unwrap())
+            } else {
+                None
+            }
+        }
+    }
+}
+
 pub struct HaveContext<'a>(&'a MessageImpl);
+impl<'a> HaveContext<'a> {
+    // TODO: get_context()
+}
+
 pub struct DeviceAdded<'a>(&'a MessageImpl);
+impl<'a> DeviceAdded<'a> {
+    pub fn get_device(&self) -> ::Device {
+        unsafe {
+            let mut device = ptr::null_mut();
+
+            ffi::gst_message_parse_device_added(self.0.as_mut_ptr(), &mut device);
+
+            from_glib_none(device)
+        }
+    }
+}
+
 pub struct DeviceRemoved<'a>(&'a MessageImpl);
+impl<'a> DeviceRemoved<'a> {
+    pub fn get_device(&self) -> ::Device {
+        unsafe {
+            let mut device = ptr::null_mut();
+
+            ffi::gst_message_parse_device_removed(self.0.as_mut_ptr(), &mut device);
+
+            from_glib_none(device)
+        }
+    }
+}
+
 pub struct PropertyNotify<'a>(&'a MessageImpl);
+impl<'a> PropertyNotify<'a> {
+    #[cfg(feature = "v1_10")]
+    pub fn get(&self) -> (Object, &str, ::Value) {
+        unsafe {
+            let mut object = ptr::null_mut();
+            let mut property_name = ptr::null();
+            let mut value = ptr::null();
+
+            ffi::gst_message_parse_property_notify(self.0.as_mut_ptr(), &mut object, &mut property_name, &mut value);
+
+            (from_glib_none(object), CStr::from_ptr(property_name).to_str().unwrap(), from_glib_none(value))
+        }
+    }
+}
+
 pub struct StreamCollection<'a>(&'a MessageImpl);
+impl<'a> StreamCollection<'a> {
+    #[cfg(feature = "v1_10")]
+    pub fn get_stream_collection(&self) -> ::StreamCollection {
+        unsafe {
+            let mut collection = ptr::null_mut();
+
+            ffi::gst_message_parse_stream_selection(self.0.as_mut_ptr(), &mut collection);
+
+            from_glib_full(collection)
+        }
+    }
+}
 pub struct StreamsSelected<'a>(&'a MessageImpl);
+impl<'a> StreamsSelected<'a> {
+    #[cfg(feature = "v1_10")]
+    pub fn get_stream_collection(&self) -> ::StreamCollection {
+        unsafe {
+            let mut collection = ptr::null_mut();
+
+            ffi::gst_message_parse_streams_selected(self.0.as_mut_ptr(), &mut collection);
+
+            from_glib_full(collection)
+        }
+    }
+
+    #[cfg(feature = "v1_10")]
+    pub fn get_streams(&self) -> Vec<::Stream> {
+        unsafe {
+            let n = ffi::gst_message_streams_selected_get_size(self.0.as_mut_ptr());
+
+            (0..n).map(|i| from_glib_full(ffi::gst_message_streams_selected_get_stream(self.0.as_mut_ptr(), i))).collect()
+        }
+    }
+}
+
 pub struct Redirect<'a>(&'a MessageImpl);
+impl<'a> StreamsSelected<'a> {
+    // TODO: tags, structure
+    #[cfg(feature = "v1_10")]
+    pub fn get_entries(&self) -> Vec<&str> {
+        unsafe {
+            let n = ffi::gst_message_num_redirect_entries(self.0.as_mut_ptr());
+
+            (0..n).map(|i| {
+                let mut location = ptr::null();
+
+                ffi::gst_message_parse_redirect_entry(self.0.as_mut_ptr(), &mut location, ptr::null_mut(), ptr::null_mut());
+
+                CStr::from_ptr(location).to_str().unwrap()
+            }).collect()
+        }
+    }
+}
+
+pub struct EosBuilder {
+    src: Option<Object>,
+    seqnum: Option<u32>,
+}
+
+impl EosBuilder {
+    pub fn new() -> EosBuilder {
+        EosBuilder {
+            src: None,
+            seqnum: None,
+        }
+    }
+
+    pub fn src(self, src: Option<Object>) -> EosBuilder {
+        EosBuilder {
+            src: src,
+            .. self
+        }
+    }
+
+    pub fn seqnum(self, seqnum: u32) -> EosBuilder {
+        EosBuilder {
+            seqnum: Some(seqnum),
+            .. self
+        }
+    }
+
+    pub fn build(self) -> Message {
+        unsafe {
+            let msg = ffi::gst_message_new_eos(self.src.to_glib_none().0);
+            if let Some(seqnum) = self.seqnum {
+                ffi::gst_message_set_seqnum(msg, seqnum);
+            }
+
+            from_glib_full(msg)
+        }
+    }
+}
 
 impl glib::types::StaticType for GstRc<MessageImpl> {
     fn static_type() -> glib::types::Type {

@@ -39,17 +39,14 @@ pub trait PipelineExt {
 
     fn get_delay(&self) -> ClockTime;
 
-    #[cfg(feature = "v1_6")]
     fn get_latency(&self) -> ClockTime;
 
-    #[cfg(feature = "v1_6")]
     fn get_pipeline_clock(&self) -> Option<Clock>;
 
     fn set_auto_flush_bus(&self, auto_flush: bool);
 
     fn set_delay(&self, delay: ClockTime);
 
-    #[cfg(feature = "v1_6")]
     fn set_latency(&self, latency: ClockTime);
 
     fn use_clock<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, clock: Q);
@@ -74,14 +71,12 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn get_latency(&self) -> ClockTime {
         unsafe {
             ffi::gst_pipeline_get_latency(self.to_glib_none().0)
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn get_pipeline_clock(&self) -> Option<Clock> {
         unsafe {
             from_glib_full(ffi::gst_pipeline_get_pipeline_clock(self.to_glib_none().0))
@@ -100,7 +95,6 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
         }
     }
 
-    #[cfg(feature = "v1_6")]
     fn set_latency(&self, latency: ClockTime) {
         unsafe {
             ffi::gst_pipeline_set_latency(self.to_glib_none().0, latency);

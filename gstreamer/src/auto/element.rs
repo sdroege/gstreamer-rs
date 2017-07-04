@@ -105,13 +105,10 @@ pub trait ElementExt {
 
     fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
 
-    //#[cfg(feature = "v1_8")]
     //fn get_context(&self, context_type: &str) -> /*Ignored*/Option<Context>;
 
-    //#[cfg(feature = "v1_8")]
     //fn get_context_unlocked(&self, context_type: &str) -> /*Ignored*/Option<Context>;
 
-    //#[cfg(feature = "v1_8")]
     //fn get_contexts(&self) -> /*Ignored*/Vec<Context>;
 
     fn get_factory(&self) -> Option<ElementFactory>;
@@ -291,17 +288,14 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_8")]
     //fn get_context(&self, context_type: &str) -> /*Ignored*/Option<Context> {
     //    unsafe { TODO: call ffi::gst_element_get_context() }
     //}
 
-    //#[cfg(feature = "v1_8")]
     //fn get_context_unlocked(&self, context_type: &str) -> /*Ignored*/Option<Context> {
     //    unsafe { TODO: call ffi::gst_element_get_context_unlocked() }
     //}
 
-    //#[cfg(feature = "v1_8")]
     //fn get_contexts(&self) -> /*Ignored*/Vec<Context> {
     //    unsafe { TODO: call ffi::gst_element_get_contexts() }
     //}

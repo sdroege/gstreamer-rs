@@ -59,7 +59,6 @@ pub fn debug_construct_win_color(colorinfo: u32) -> i32 {
 //    unsafe { TODO: call ffi::gst_debug_get_all_categories() }
 //}
 
-//#[cfg(feature = "v1_2")]
 //pub fn debug_get_color_mode() -> /*Ignored*/DebugColorMode {
 //    unsafe { TODO: call ffi::gst_debug_get_color_mode() }
 //}
@@ -117,12 +116,10 @@ pub fn debug_set_active(active: bool) {
     }
 }
 
-//#[cfg(feature = "v1_2")]
 //pub fn debug_set_color_mode(mode: /*Ignored*/DebugColorMode) {
 //    unsafe { TODO: call ffi::gst_debug_set_color_mode() }
 //}
 
-#[cfg(feature = "v1_2")]
 pub fn debug_set_color_mode_from_string(mode: &str) {
     unsafe {
         ffi::gst_debug_set_color_mode_from_string(mode.to_glib_none().0);
@@ -143,7 +140,6 @@ pub fn debug_set_colored(colored: bool) {
 //    unsafe { TODO: call ffi::gst_debug_set_threshold_for_name() }
 //}
 
-#[cfg(feature = "v1_2")]
 pub fn debug_set_threshold_from_string(list: &str, reset: bool) {
     unsafe {
         ffi::gst_debug_set_threshold_from_string(list.to_glib_none().0, reset.to_glib());
@@ -194,17 +190,14 @@ pub fn flow_get_name(ret: FlowReturn) -> Option<String> {
 //    unsafe { TODO: call ffi::gst_formats_contains() }
 //}
 
-//#[cfg(feature = "v1_8")]
 //pub fn info_strdup_printf(format: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<String> {
 //    unsafe { TODO: call ffi::gst_info_strdup_printf() }
 //}
 
-//#[cfg(feature = "v1_8")]
 //pub fn info_strdup_vprintf(format: &str, args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<String> {
 //    unsafe { TODO: call ffi::gst_info_strdup_vprintf() }
 //}
 
-//#[cfg(feature = "v1_8")]
 //pub fn info_vasprintf(format: &str, args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> (i32, String) {
 //    unsafe { TODO: call ffi::gst_info_vasprintf() }
 //}
@@ -308,13 +301,6 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
 pub fn protection_meta_api_get_type() -> glib::types::Type {
     unsafe {
         from_glib(ffi::gst_protection_meta_api_get_type())
-    }
-}
-
-#[cfg(feature = "v1_6")]
-pub fn protection_select_system(system_identifiers: &str) -> Option<String> {
-    unsafe {
-        from_glib_none(ffi::gst_protection_select_system(system_identifiers.to_glib_none().0))
     }
 }
 
@@ -607,12 +593,10 @@ pub fn util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64 {
 //    unsafe { TODO: call ffi::gst_value_get_double_range_min() }
 //}
 
-//#[cfg(feature = "v1_6")]
 //pub fn value_get_flagset_flags(value: /*Ignored*/&glib::Value) -> u32 {
 //    unsafe { TODO: call ffi::gst_value_get_flagset_flags() }
 //}
 
-//#[cfg(feature = "v1_6")]
 //pub fn value_get_flagset_mask(value: /*Ignored*/&glib::Value) -> u32 {
 //    unsafe { TODO: call ffi::gst_value_get_flagset_mask() }
 //}
@@ -701,7 +685,6 @@ pub fn util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64 {
 //    unsafe { TODO: call ffi::gst_value_set_double_range() }
 //}
 
-//#[cfg(feature = "v1_6")]
 //pub fn value_set_flagset(value: /*Ignored*/&mut glib::Value, flags: u32, mask: u32) {
 //    unsafe { TODO: call ffi::gst_value_set_flagset() }
 //}

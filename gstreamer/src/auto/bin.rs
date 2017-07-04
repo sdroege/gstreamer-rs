@@ -75,7 +75,6 @@ pub trait BinExt {
     //#[cfg(feature = "v1_10")]
     //fn set_suppressed_flags(&self, flags: /*Ignored*/ElementFlags);
 
-    #[cfg(feature = "v1_6")]
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
 
     fn get_property_async_handling(&self) -> bool;
@@ -184,7 +183,6 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
     //    unsafe { TODO: call ffi::gst_bin_set_suppressed_flags() }
     //}
 
-    #[cfg(feature = "v1_6")]
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_bin_sync_children_states(self.to_glib_none().0), "Failed to sync children states")
