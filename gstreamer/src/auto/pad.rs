@@ -6,6 +6,7 @@ use FlowReturn;
 use Format;
 use Object;
 use PadDirection;
+use PadLinkReturn;
 use PadTemplate;
 #[cfg(feature = "v1_10")]
 use Stream;
@@ -52,9 +53,11 @@ impl Pad {
         }
     }
 
-    //pub fn link_get_name(ret: /*Ignored*/PadLinkReturn) -> Option<String> {
-    //    unsafe { TODO: call ffi::gst_pad_link_get_name() }
-    //}
+    pub fn link_get_name(ret: PadLinkReturn) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gst_pad_link_get_name(ret.to_glib()))
+        }
+    }
 }
 
 unsafe impl Send for Pad {}
@@ -129,9 +132,9 @@ pub trait PadExt {
 
     //fn iterate_internal_links_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> /*Ignored*/Option<Iterator>;
 
-    //fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> /*Ignored*/PadLinkReturn;
+    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> PadLinkReturn;
 
-    //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> /*Ignored*/PadLinkReturn;
+    //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> PadLinkReturn;
 
     #[cfg(feature = "v1_10")]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
@@ -407,11 +410,13 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_iterate_internal_links_default() }
     //}
 
-    //fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> /*Ignored*/PadLinkReturn {
-    //    unsafe { TODO: call ffi::gst_pad_link() }
-    //}
+    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> PadLinkReturn {
+        unsafe {
+            from_glib(ffi::gst_pad_link(self.to_glib_none().0, sinkpad.to_glib_none().0))
+        }
+    }
 
-    //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> /*Ignored*/PadLinkReturn {
+    //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> PadLinkReturn {
     //    unsafe { TODO: call ffi::gst_pad_link_full() }
     //}
 

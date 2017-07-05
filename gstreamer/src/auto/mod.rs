@@ -79,6 +79,7 @@ pub use self::enums::FlowReturn;
 pub use self::enums::Format;
 pub use self::enums::LibraryError;
 pub use self::enums::PadDirection;
+pub use self::enums::PadLinkReturn;
 pub use self::enums::ParseError;
 pub use self::enums::PluginError;
 pub use self::enums::ResourceError;

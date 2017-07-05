@@ -362,6 +362,53 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PadLinkReturn {
+    Ok,
+    WrongHierarchy,
+    WasLinked,
+    WrongDirection,
+    Noformat,
+    Nosched,
+    Refused,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PadLinkReturn {
+    type GlibType = ffi::GstPadLinkReturn;
+
+    fn to_glib(&self) -> ffi::GstPadLinkReturn {
+        match *self {
+            PadLinkReturn::Ok => ffi::GST_PAD_LINK_OK,
+            PadLinkReturn::WrongHierarchy => ffi::GST_PAD_LINK_WRONG_HIERARCHY,
+            PadLinkReturn::WasLinked => ffi::GST_PAD_LINK_WAS_LINKED,
+            PadLinkReturn::WrongDirection => ffi::GST_PAD_LINK_WRONG_DIRECTION,
+            PadLinkReturn::Noformat => ffi::GST_PAD_LINK_NOFORMAT,
+            PadLinkReturn::Nosched => ffi::GST_PAD_LINK_NOSCHED,
+            PadLinkReturn::Refused => ffi::GST_PAD_LINK_REFUSED,
+            PadLinkReturn::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
+    fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
+        match value as i32 {
+            0 => PadLinkReturn::Ok,
+            -1 => PadLinkReturn::WrongHierarchy,
+            -2 => PadLinkReturn::WasLinked,
+            -3 => PadLinkReturn::WrongDirection,
+            -4 => PadLinkReturn::Noformat,
+            -5 => PadLinkReturn::Nosched,
+            -6 => PadLinkReturn::Refused,
+            value => PadLinkReturn::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum ParseError {
     Syntax,
     NoSuchElement,

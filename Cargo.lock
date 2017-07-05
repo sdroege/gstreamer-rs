@@ -20,7 +20,10 @@ name = "examples"
 version = "0.1.0"
 dependencies = [
  "glib 0.1.3 (git+https://github.com/gtk-rs/glib)",
+ "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
+ "gobject-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
  "gstreamer 0.1.0",
+ "gstreamer-sys 0.1.1 (git+https://github.com/sdroege/gstreamer-sys)",
 ]
 
 [[package]]

@@ -45,6 +45,7 @@ generate = [
     "Gst.StreamCollection",
     "Gst.StreamType",
     "Gst.StreamFlags",
+    "Gst.PadLinkReturn",
 ]
 
 manual = [
