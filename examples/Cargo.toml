@@ -5,6 +5,7 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
 glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
+gtk = { version = "0.1.3", git = "https://github.com/gtk-rs/gtk" }
 gstreamer = { path = "../gstreamer" }
 glib-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
@@ -12,6 +13,9 @@ gstreamer-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer
 
 [[bin]]
 name = "launch"
+
+[[bin]]
+name = "launch_glib_main"
 
 [[bin]]
 name = "decodebin"
