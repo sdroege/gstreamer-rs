@@ -30,10 +30,8 @@ fn main() {
         gobject_ffi::g_object_set_property(src.to_glib_none().0, "location".to_glib_none().0, uri.to_glib_none().0);
     }
 
-    // TODO: Add Bin::add_many(), Element::link_many()
-    pipeline.add(&src).unwrap();
-    pipeline.add(&decodebin).unwrap();
-    src.link(&decodebin).unwrap();
+    pipeline.add_many(&[&src, &decodebin]).unwrap();
+    gst::Element::link_many(&[&src, &decodebin]).unwrap();
 
     // Need to move a new reference into the closure
     let pipeline_clone = pipeline.clone();
@@ -55,19 +53,14 @@ fn main() {
             let convert = gst::ElementFactory::make("audioconvert", None).unwrap();
             let resample = gst::ElementFactory::make("audioresample", None).unwrap();
             let sink = gst::ElementFactory::make("autoaudiosink", None).unwrap();
-            pipeline.add(&queue).unwrap();
-            pipeline.add(&convert).unwrap();
-            pipeline.add(&resample).unwrap();
-            pipeline.add(&sink).unwrap();
 
-            queue.link(&convert).unwrap();
-            convert.link(&resample).unwrap();
-            resample.link(&sink).unwrap();
+            let elements = &[&queue, &convert, &resample, &sink];
+            pipeline.add_many(elements).unwrap();
+            gst::Element::link_many(elements).unwrap();
 
-            queue.sync_state_with_parent().unwrap();
-            convert.sync_state_with_parent().unwrap();
-            resample.sync_state_with_parent().unwrap();
-            sink.sync_state_with_parent().unwrap();
+            for e in elements {
+                e.sync_state_with_parent().unwrap();
+            }
 
             let sink_pad = queue.get_static_pad("sink").unwrap();
             assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
@@ -76,19 +69,14 @@ fn main() {
             let convert = gst::ElementFactory::make("videoconvert", None).unwrap();
             let scale = gst::ElementFactory::make("videoscale", None).unwrap();
             let sink = gst::ElementFactory::make("autovideosink", None).unwrap();
-            pipeline.add(&queue).unwrap();
-            pipeline.add(&convert).unwrap();
-            pipeline.add(&scale).unwrap();
-            pipeline.add(&sink).unwrap();
 
-            queue.link(&convert).unwrap();
-            convert.link(&scale).unwrap();
-            scale.link(&sink).unwrap();
+            let elements = &[&queue, &convert, &scale, &sink];
+            pipeline.add_many(elements).unwrap();
+            gst::Element::link_many(elements).unwrap();
 
-            queue.sync_state_with_parent().unwrap();
-            convert.sync_state_with_parent().unwrap();
-            scale.sync_state_with_parent().unwrap();
-            sink.sync_state_with_parent().unwrap();
+            for e in elements {
+                e.sync_state_with_parent().unwrap();
+            }
 
             let sink_pad = queue.get_static_pad("sink").unwrap();
             assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
