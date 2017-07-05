@@ -1,7 +1,9 @@
 extern crate gstreamer as gst;
 use gst::*;
+use gst::ObjectExt as GstObjectExt;
 
 extern crate glib;
+use glib::ObjectExt;
 use glib::translate::{from_glib_none, ToGlibPtr};
 
 extern crate gstreamer_sys as gst_ffi;
@@ -24,11 +26,7 @@ fn main() {
     let src = gst::ElementFactory::make("filesrc", None).unwrap();
     let decodebin = gst::ElementFactory::make("decodebin", None).unwrap();
 
-    // FIXME: https://github.com/gtk-rs/glib/pull/189
-    unsafe {
-        let uri = Value::from(uri);
-        gobject_ffi::g_object_set_property(src.to_glib_none().0, "location".to_glib_none().0, uri.to_glib_none().0);
-    }
+    src.set_property("location", &Value::from(uri)).unwrap();
 
     pipeline.add_many(&[&src, &decodebin]).unwrap();
     gst::Element::link_many(&[&src, &decodebin]).unwrap();
