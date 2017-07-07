@@ -46,6 +46,7 @@ generate = [
     "Gst.StreamType",
     "Gst.StreamFlags",
     "Gst.PadLinkReturn",
+    "Gst.ProgressType",
 ]
 
 manual = [

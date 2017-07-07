@@ -17,7 +17,7 @@ use std::ffi::CStr;
 
 use glib;
 use glib_ffi;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, from_glib_full, mut_override, ToGlibPtr, ToGlib};
 
 #[repr(C)]
 pub struct MessageImpl(ffi::GstMessage);
@@ -27,8 +27,6 @@ pub type Message = GstRc<MessageImpl>;
 unsafe impl MiniObject for MessageImpl {
     type GstType = ffi::GstMessage;
 }
-
-// TODO builder pattern for message creation
 
 impl MessageImpl {
     pub fn get_src(&self) -> Object {
@@ -122,6 +120,14 @@ impl MessageImpl {
             MessageView::StreamsSelected(StreamsSelected(self))
         } else {
             MessageView::Other
+        }
+    }
+}
+
+impl glib::types::StaticType for GstRc<MessageImpl> {
+    fn static_type() -> glib::types::Type {
+        unsafe {
+            from_glib(ffi::gst_message_get_type())
         }
     }
 }
@@ -525,6 +531,31 @@ impl<'a> Qos<'a> {
 }
 
 pub struct Progress<'a>(&'a MessageImpl);
+impl<'a> Progress<'a> {
+    pub fn get(&self) -> (::ProgressType, Option<&'a str>, Option<&'a str>) {
+        unsafe {
+            let mut type_ = mem::uninitialized();
+            let mut code = ptr::null_mut();
+            let mut text = ptr::null_mut();
+
+            ffi::gst_message_parse_progress(self.0.as_mut_ptr(), &mut type_, &mut code, &mut text);
+
+            let code = if code.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(code).to_str().unwrap())
+            };
+
+            let text = if text.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(text).to_str().unwrap())
+            };
+
+            (from_glib(type_), code, text)
+        }
+    }
+}
 
 pub struct Toc<'a>(&'a MessageImpl);
 impl<'a> Toc<'a> {
@@ -628,7 +659,7 @@ impl<'a> StreamCollection<'a> {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            ffi::gst_message_parse_stream_selection(self.0.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_stream_collection(self.0.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
@@ -663,12 +694,12 @@ impl<'a> StreamsSelected<'a> {
     #[cfg(feature = "v1_10")]
     pub fn get_entries(&self) -> Vec<&str> {
         unsafe {
-            let n = ffi::gst_message_num_redirect_entries(self.0.as_mut_ptr());
+            let n = ffi::gst_message_get_num_redirect_entries(self.0.as_mut_ptr());
 
             (0..n).map(|i| {
                 let mut location = ptr::null();
 
-                ffi::gst_message_parse_redirect_entry(self.0.as_mut_ptr(), &mut location, ptr::null_mut(), ptr::null_mut());
+                ffi::gst_message_parse_redirect_entry(self.0.as_mut_ptr(), i, &mut location, ptr::null_mut(), ptr::null_mut());
 
                 CStr::from_ptr(location).to_str().unwrap()
             }).collect()
@@ -676,49 +707,873 @@ impl<'a> StreamsSelected<'a> {
     }
 }
 
-pub struct EosBuilder {
-    src: Option<Object>,
-    seqnum: Option<u32>,
+macro_rules! message_builder_generic_impl {
+    ($new_fn:expr) => {
+        pub fn src(self, src: Option<&'a Object>) -> Self {
+            Self {
+                src: src,
+                .. self
+            }
+        }
+
+        pub fn seqnum(self, seqnum: u32) -> Self {
+            Self {
+                seqnum: Some(seqnum),
+                .. self
+            }
+        }
+
+        pub fn build(self) -> Message {
+            unsafe {
+                let msg = $new_fn(&self, self.src.to_glib_none().0);
+                if let Some(seqnum) = self.seqnum {
+                    ffi::gst_message_set_seqnum(msg, seqnum);
+                }
+
+                from_glib_full(msg)
+            }
+        }
+    }
 }
 
-impl EosBuilder {
-    pub fn new() -> EosBuilder {
-        EosBuilder {
+pub struct EosBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+}
+impl<'a> EosBuilder<'a> {
+    pub fn new() -> Self {
+        Self {
             src: None,
             seqnum: None,
         }
     }
 
-    pub fn src(self, src: Option<Object>) -> EosBuilder {
-        EosBuilder {
-            src: src,
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_eos(src));
+}
+
+pub struct ErrorBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    error: &'a glib::Error,
+    debug: Option<&'a str>,
+}
+impl<'a> ErrorBuilder<'a> {
+    pub fn new(error: &'a glib::Error) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            error: error,
+            debug: None,
+        }
+    }
+
+    pub fn debug(self, debug: &'a str) -> Self {
+        Self {
+            debug: Some(debug),
             .. self
         }
     }
 
-    pub fn seqnum(self, seqnum: u32) -> EosBuilder {
-        EosBuilder {
-            seqnum: Some(seqnum),
+    // TODO details
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_error(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+}
+
+pub struct WarningBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    error: &'a glib::Error,
+    debug: Option<&'a str>,
+}
+impl<'a> WarningBuilder<'a> {
+    pub fn new(error: &'a glib::Error) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            error: error,
+            debug: None,
+        }
+    }
+
+    pub fn debug(self, debug: &'a str) -> Self {
+        Self {
+            debug: Some(debug),
             .. self
         }
     }
 
-    pub fn build(self) -> Message {
-        unsafe {
-            let msg = ffi::gst_message_new_eos(self.src.to_glib_none().0);
-            if let Some(seqnum) = self.seqnum {
-                ffi::gst_message_set_seqnum(msg, seqnum);
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+}
+
+pub struct InfoBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    error: &'a glib::Error,
+    debug: Option<&'a str>,
+}
+impl<'a> InfoBuilder<'a> {
+    pub fn new(error: &'a glib::Error) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            error: error,
+            debug: None,
+        }
+    }
+
+    pub fn debug(self, debug: &'a str) -> Self {
+        Self {
+            debug: Some(debug),
+            .. self
+        }
+    }
+
+    // TODO details
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+}
+
+pub struct TagBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    tags: (),
+    // TODO tags
+}
+impl<'a> TagBuilder<'a> {
+    pub fn new(tags: /*Tags*/ ()) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            tags: tags,
+        }
+    }
+
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_tag(src, /*s.tags.to_glib_full().0*/ ptr::null_mut()));
+}
+
+pub struct BufferingBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    percent: i32,
+    stats: Option<(::BufferingMode, i32, i32, i64)>,
+}
+impl<'a> BufferingBuilder<'a> {
+    pub fn new(percent: i32) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            percent: percent,
+            stats: None,
+        }
+    }
+
+    pub fn stats(self, mode: ::BufferingMode, avg_in: i32, avg_out: i32, buffering_left: i64) -> Self {
+        Self {
+            stats: Some((mode, avg_in, avg_out, buffering_left)),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| {
+        let msg = ffi::gst_message_new_buffering(src, s.percent);
+
+        if let Some((mode, avg_in, avg_out, buffering_left)) = s.stats {
+            ffi::gst_message_set_buffering_stats(msg, mode.to_glib(), avg_in, avg_out, buffering_left);
+        }
+
+        msg
+    });
+}
+
+pub struct StateChangedBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    old: ::State,
+    new: ::State,
+    pending: ::State,
+}
+impl<'a> StateChangedBuilder<'a> {
+    pub fn new(old: ::State, new: ::State, pending: ::State) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            old: old,
+            new: new,
+            pending: pending,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_state_changed(src, s.old.to_glib(), s.new.to_glib(), s.pending.to_glib()));
+}
+
+pub struct StateDirtyBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+}
+impl<'a> StateDirtyBuilder<'a> {
+    pub fn new() -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+        }
+    }
+
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_state_dirty(src));
+}
+
+pub struct StepDoneBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    format: ::Format,
+    amount: u64,
+    rate: f64,
+    flush: bool,
+    intermediate: bool,
+    duration: u64,
+    eos: bool,
+}
+impl<'a> StepDoneBuilder<'a> {
+    pub fn new(format: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool, duration: u64, eos: bool) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            format: format,
+            amount: amount,
+            rate: rate,
+            flush: flush,
+            intermediate: intermediate,
+            duration: duration,
+            eos: eos,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_step_done(src, s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib(), s.duration, s.eos.to_glib()));
+}
+
+pub struct ClockProvideBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    clock: &'a ::Clock,
+    ready: bool,
+}
+impl<'a> ClockProvideBuilder<'a> {
+    pub fn new(clock: &'a ::Clock, ready: bool) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            clock: clock,
+            ready: ready,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_clock_provide(src, s.clock.to_glib_none().0, s.ready.to_glib()));
+}
+
+pub struct ClockLostBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    clock: &'a ::Clock,
+}
+impl<'a> ClockLostBuilder<'a> {
+    pub fn new(clock: &'a ::Clock) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            clock: clock,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_clock_lost(src, s.clock.to_glib_none().0));
+}
+
+pub struct NewClockBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    clock: &'a ::Clock,
+}
+impl<'a> NewClockBuilder<'a> {
+    pub fn new(clock: &'a ::Clock) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            clock: clock,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_new_clock(src, s.clock.to_glib_none().0));
+}
+
+pub struct StructureChangeBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    type_: ::StructureChangeType,
+    owner: &'a ::Element,
+    busy: bool,
+}
+impl<'a> StructureChangeBuilder<'a> {
+    pub fn new(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            type_: type_,
+            owner: owner,
+            busy: busy,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_structure_change(src, s.type_.to_glib(), s.owner.to_glib_none().0, s.busy.to_glib()));
+}
+
+pub struct StreamStatusBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    type_: ::StreamStatusType,
+    owner: &'a ::Element,
+    status_object: Option<&'a glib::Value>,
+}
+impl<'a> StreamStatusBuilder<'a> {
+    pub fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            type_: type_,
+            owner: owner,
+            status_object: None,
+        }
+    }
+
+    pub fn status_object(self, status_object: &'a glib::Value) -> Self {
+        Self {
+            status_object: Some(status_object),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| {
+        let msg = ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
+        if let Some(status_object) = s.status_object {
+            ffi::gst_message_set_stream_status_object(msg, status_object.to_glib_none().0);
+        }
+        msg
+    });
+}
+
+// TODO Structure
+pub struct ApplicationBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    structure: (),
+}
+impl<'a> ApplicationBuilder<'a> {
+    pub fn new(structure: () /* &'a Structure */) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            structure: structure,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_application(src, ptr::null_mut() /*s.structure.to_glib_full()*/));
+}
+
+// TODO Structure
+pub struct ElementBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    structure: (),
+}
+impl<'a> ElementBuilder<'a> {
+    pub fn new(structure: () /* &'a Structure */) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            structure: structure,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_element(src, ptr::null_mut() /*s.structure.to_glib_full()*/));
+}
+
+pub struct SegmentStartBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    format: ::Format,
+    position: i64,
+}
+impl<'a> SegmentStartBuilder<'a> {
+    pub fn new(format: ::Format, position: i64) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            format: format,
+            position: position,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_segment_start(src, s.format.to_glib(), s.position));
+}
+
+pub struct SegmentDoneBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    format: ::Format,
+    position: i64,
+}
+impl<'a> SegmentDoneBuilder<'a> {
+    pub fn new(format: ::Format, position: i64) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            format: format,
+            position: position,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_segment_done(src, s.format.to_glib(), s.position));
+}
+
+pub struct DurationChangedBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+}
+impl<'a> DurationChangedBuilder<'a> {
+    pub fn new() -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+        }
+    }
+
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_duration_changed(src));
+}
+
+pub struct LatencyBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+}
+impl<'a> LatencyBuilder<'a> {
+    pub fn new() -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+        }
+    }
+
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_latency(src));
+}
+
+pub struct AsyncStartBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+}
+impl<'a> AsyncStartBuilder<'a> {
+    pub fn new() -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+        }
+    }
+
+    message_builder_generic_impl!(|_, src| ffi::gst_message_new_async_start(src));
+}
+
+pub struct AsyncDoneBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    running_time: u64,
+}
+impl<'a> AsyncDoneBuilder<'a> {
+    pub fn new(running_time: u64) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            running_time: running_time,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_async_done(src, s.running_time));
+}
+
+pub struct RequestStateBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    state: ::State,
+}
+impl<'a> RequestStateBuilder<'a> {
+    pub fn new(state: ::State) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            state: state,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_request_state(src, s.state.to_glib()));
+}
+
+pub struct StepStartBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    active: bool,
+    format: ::Format,
+    amount: u64,
+    rate: f64,
+    flush: bool,
+    intermediate: bool,
+}
+impl<'a> StepStartBuilder<'a> {
+    pub fn new(active: bool, format: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            active: active,
+            format: format,
+            amount: amount,
+            rate: rate,
+            flush: flush,
+            intermediate: intermediate,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_step_start(src, s.active.to_glib(), s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib()));
+}
+
+pub struct QosBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    live: bool,
+    running_time: u64,
+    stream_time: u64,
+    timestamp: u64,
+    duration: u64,
+    values: Option<(i64, f64, i32)>,
+    stats: Option<(::Format, u64, u64)>,
+}
+impl<'a> QosBuilder<'a> {
+    pub fn new(live: bool, running_time: u64, stream_time: u64, timestamp: u64, duration: u64) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            live: live,
+            running_time: running_time,
+            stream_time: stream_time,
+            timestamp: timestamp,
+            duration: duration,
+            values: None,
+            stats: None,
+        }
+    }
+
+    pub fn values(self, jitter: i64, proportion: f64, quality: i32) -> Self {
+        Self {
+            values: Some((jitter, proportion, quality)),
+            .. self
+        }
+    }
+
+    pub fn stats(self, format: ::Format, processed: u64, dropped: u64) -> Self {
+        Self {
+            stats: Some((format, processed, dropped)),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| {
+        let msg = ffi::gst_message_new_qos(src, s.live.to_glib(), s.running_time, s.stream_time, s.timestamp, s.duration);
+        if let Some((jitter, proportion, quality)) = s.values {
+            ffi::gst_message_set_qos_values(msg, jitter, proportion, quality);
+        }
+        if let Some((format, processed, dropped)) = s.stats {
+            ffi::gst_message_set_qos_stats(msg, format.to_glib(), processed, dropped);
+        }
+        msg
+    });
+}
+
+pub struct ProgressBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    type_: ::ProgressType,
+    code: Option<&'a str>,
+    text: Option<&'a str>,
+}
+impl<'a> ProgressBuilder<'a> {
+    pub fn new(type_: ::ProgressType) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            type_: type_,
+            code: None,
+            text: None,
+        }
+    }
+
+    pub fn code(self, code: &'a str) -> Self {
+        Self {
+            code: Some(code),
+            .. self
+        }
+    }
+
+    pub fn text(self, text: &'a str) -> Self {
+        Self {
+            text: Some(text),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_progress(src, s.type_.to_glib(), s.code.to_glib_none().0, s.text.to_glib_none().0));
+}
+
+// TODO Toc
+pub struct TocBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    toc: (),
+    updated: bool,
+}
+impl<'a> TocBuilder<'a> {
+    pub fn new(toc: () /* &'a Toc */, updated: bool) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            toc: toc,
+            updated: updated,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_toc(src, ptr::null_mut() /*s.structure.to_glib_full()*/, s.updated.to_glib()));
+}
+
+pub struct ResetTimeBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    running_time: u64,
+}
+impl<'a> ResetTimeBuilder<'a> {
+    pub fn new(running_time: u64) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            running_time: running_time,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_reset_time(src, s.running_time));
+}
+
+pub struct StreamStartBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    group_id: Option<u32>,
+}
+impl<'a> StreamStartBuilder<'a> {
+    pub fn new() -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            group_id: None,
+        }
+    }
+
+    pub fn group_id(self, group_id: u32) -> Self {
+        Self {
+            group_id: Some(group_id),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| {
+        let msg = ffi::gst_message_new_stream_start(src);
+        if let Some(group_id) = s.group_id {
+            ffi::gst_message_set_group_id(msg, group_id);
+        }
+        msg
+    });
+}
+
+pub struct NeedContextBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    context_type: &'a str,
+}
+impl<'a> NeedContextBuilder<'a> {
+    pub fn new(context_type: &'a str) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            context_type: context_type,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_need_context(src, s.context_type.to_glib_none().0));
+}
+
+// TODO Context
+pub struct HaveContextBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    context: (),
+}
+impl<'a> HaveContextBuilder<'a> {
+    pub fn new(context: () /* ::Context */) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            context: (),
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/));
+}
+
+pub struct DeviceAddedBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    device: &'a ::Device,
+}
+impl<'a> DeviceAddedBuilder<'a> {
+    pub fn new(device: &'a ::Device) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            device: device,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_device_added(src, s.device.to_glib_none().0));
+}
+
+pub struct DeviceRemovedBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    device: &'a ::Device,
+}
+impl<'a> DeviceRemovedBuilder<'a> {
+    pub fn new(device: &'a ::Device) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            device: device,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_device_removed(src, s.device.to_glib_none().0));
+}
+
+pub struct PropertyNotifyBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    property_name: &'a str,
+    value: &'a glib::Value,
+}
+#[cfg(feature = "v1_10")]
+impl<'a> PropertyNotifyBuilder<'a> {
+    pub fn new(property_name: &'a str, value: &'a glib::Value) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            property_name: property_name,
+            value: value,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_property_notify(src, s.property_name.to_glib_none().0, mut_override(s.value.to_glib_none().0)));
+}
+
+pub struct StreamCollectionBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    #[cfg(feature = "v1_10")]
+    collection: &'a ::StreamCollection,
+}
+#[cfg(feature = "v1_10")]
+impl<'a> StreamCollectionBuilder<'a> {
+    pub fn new(collection: &'a ::StreamCollection) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            collection: collection,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_stream_collection(src, s.collection.to_glib_none().0));
+}
+
+pub struct StreamsSelectedBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    #[cfg(feature = "v1_10")]
+    collection: &'a ::StreamCollection,
+    #[cfg(feature = "v1_10")]
+    streams: Option<&'a[&'a ::Stream]>,
+}
+#[cfg(feature = "v1_10")]
+impl<'a> StreamsSelectedBuilder<'a> {
+    pub fn new(collection: &'a ::StreamCollection) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            collection: collection,
+            streams: None,
+        }
+    }
+
+    pub fn streams(self, streams: &'a[&'a ::Stream]) -> Self {
+        Self {
+            streams: Some(streams),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| {
+        let msg = ffi::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
+        if let Some(streams) = s.streams {
+            for stream in streams {
+                ffi::gst_message_streams_selected_add(msg, stream.to_glib_none().0);
             }
-
-            from_glib_full(msg)
         }
-    }
+        msg
+    });
 }
 
-impl glib::types::StaticType for GstRc<MessageImpl> {
-    fn static_type() -> glib::types::Type {
-        unsafe {
-            from_glib(ffi::gst_message_get_type())
+// TODO TagList, Structure
+pub struct RedirectBuilder<'a> {
+    src: Option<&'a Object>,
+    seqnum: Option<u32>,
+    location: &'a str,
+    tag_list: Option<()>,
+    entry_struct: Option<()>,
+    entries: Option<&'a[(&'a str, (&'a ()), (&'a ()))]>,
+}
+#[cfg(feature = "v1_10")]
+impl<'a> RedirectBuilder<'a> {
+    pub fn new(location: &'a str, tag_list: Option<()>, entry_struct: Option<()>) -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            location: location,
+            tag_list: tag_list,
+            entry_struct: entry_struct,
+            entries: None,
         }
     }
+
+    pub fn entries(self, entries: &'a[(&'a str, (&'a ()), (&'a ()))]) -> Self {
+        Self {
+            entries: Some(entries),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &Self, src| {
+        let msg = ffi::gst_message_new_redirect(src, s.location.to_glib_none().0, ptr::null_mut(), ptr::null_mut());
+        if let Some(entries) = s.entries {
+            for &(location, tag_list, entry_struct) in entries {
+                ffi::gst_message_add_redirect_entry(msg, location.to_glib_none().0, ptr::null_mut(), ptr::null_mut());
+            }
+        }
+        msg
+    });
 }
+

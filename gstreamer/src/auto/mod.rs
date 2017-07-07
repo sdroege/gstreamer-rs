@@ -82,6 +82,7 @@ pub use self::enums::PadDirection;
 pub use self::enums::PadLinkReturn;
 pub use self::enums::ParseError;
 pub use self::enums::PluginError;
+pub use self::enums::ProgressType;
 pub use self::enums::ResourceError;
 pub use self::enums::SeekType;
 pub use self::enums::State;

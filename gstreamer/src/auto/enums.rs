@@ -537,6 +537,47 @@ impl ErrorDomain for PluginError {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ProgressType {
+    Start,
+    Continue,
+    Complete,
+    Canceled,
+    Error,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for ProgressType {
+    type GlibType = ffi::GstProgressType;
+
+    fn to_glib(&self) -> ffi::GstProgressType {
+        match *self {
+            ProgressType::Start => ffi::GST_PROGRESS_TYPE_START,
+            ProgressType::Continue => ffi::GST_PROGRESS_TYPE_CONTINUE,
+            ProgressType::Complete => ffi::GST_PROGRESS_TYPE_COMPLETE,
+            ProgressType::Canceled => ffi::GST_PROGRESS_TYPE_CANCELED,
+            ProgressType::Error => ffi::GST_PROGRESS_TYPE_ERROR,
+            ProgressType::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstProgressType> for ProgressType {
+    fn from_glib(value: ffi::GstProgressType) -> Self {
+        match value as i32 {
+            0 => ProgressType::Start,
+            1 => ProgressType::Continue,
+            2 => ProgressType::Complete,
+            3 => ProgressType::Canceled,
+            4 => ProgressType::Error,
+            value => ProgressType::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum ResourceError {
     Failed,
     TooLazy,
