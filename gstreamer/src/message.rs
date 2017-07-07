@@ -723,9 +723,10 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        pub fn build(self) -> Message {
+        pub fn build(mut self) -> Message {
             unsafe {
-                let msg = $new_fn(&self, self.src.to_glib_none().0);
+                let src = self.src.to_glib_none().0;
+                let msg = $new_fn(&mut self, src);
                 if let Some(seqnum) = self.seqnum {
                     ffi::gst_message_set_seqnum(msg, seqnum);
                 }
@@ -776,7 +777,7 @@ impl<'a> ErrorBuilder<'a> {
 
     // TODO details
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_error(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_error(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
 }
 
 pub struct WarningBuilder<'a> {
@@ -802,7 +803,7 @@ impl<'a> WarningBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
 }
 
 pub struct InfoBuilder<'a> {
@@ -830,7 +831,7 @@ impl<'a> InfoBuilder<'a> {
 
     // TODO details
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
 }
 
 pub struct TagBuilder<'a> {
@@ -874,7 +875,7 @@ impl<'a> BufferingBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| {
+    message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_buffering(src, s.percent);
 
         if let Some((mode, avg_in, avg_out, buffering_left)) = s.stats {
@@ -903,7 +904,7 @@ impl<'a> StateChangedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_state_changed(src, s.old.to_glib(), s.new.to_glib(), s.pending.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_state_changed(src, s.old.to_glib(), s.new.to_glib(), s.pending.to_glib()));
 }
 
 pub struct StateDirtyBuilder<'a> {
@@ -947,7 +948,7 @@ impl<'a> StepDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_step_done(src, s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib(), s.duration, s.eos.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_done(src, s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib(), s.duration, s.eos.to_glib()));
 }
 
 pub struct ClockProvideBuilder<'a> {
@@ -966,7 +967,7 @@ impl<'a> ClockProvideBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_clock_provide(src, s.clock.to_glib_none().0, s.ready.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_provide(src, s.clock.to_glib_none().0, s.ready.to_glib()));
 }
 
 pub struct ClockLostBuilder<'a> {
@@ -983,7 +984,7 @@ impl<'a> ClockLostBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_clock_lost(src, s.clock.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_lost(src, s.clock.to_glib_none().0));
 }
 
 pub struct NewClockBuilder<'a> {
@@ -1000,7 +1001,7 @@ impl<'a> NewClockBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_new_clock(src, s.clock.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_new_clock(src, s.clock.to_glib_none().0));
 }
 
 pub struct StructureChangeBuilder<'a> {
@@ -1021,7 +1022,7 @@ impl<'a> StructureChangeBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_structure_change(src, s.type_.to_glib(), s.owner.to_glib_none().0, s.busy.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_structure_change(src, s.type_.to_glib(), s.owner.to_glib_none().0, s.busy.to_glib()));
 }
 
 pub struct StreamStatusBuilder<'a> {
@@ -1049,7 +1050,7 @@ impl<'a> StreamStatusBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| {
+    message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
         if let Some(status_object) = s.status_object {
             ffi::gst_message_set_stream_status_object(msg, status_object.to_glib_none().0);
@@ -1058,40 +1059,38 @@ impl<'a> StreamStatusBuilder<'a> {
     });
 }
 
-// TODO Structure
 pub struct ApplicationBuilder<'a> {
     src: Option<&'a Object>,
     seqnum: Option<u32>,
-    structure: (),
+    structure: Option<::Structure>,
 }
 impl<'a> ApplicationBuilder<'a> {
-    pub fn new(structure: () /* &'a Structure */) -> Self {
+    pub fn new(structure: ::Structure) -> Self {
         Self {
             src: None,
             seqnum: None,
-            structure: structure,
+            structure: Some(structure),
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_application(src, ptr::null_mut() /*s.structure.to_glib_full()*/));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_application(src, s.structure.take().unwrap().into_ptr()));
 }
 
-// TODO Structure
 pub struct ElementBuilder<'a> {
     src: Option<&'a Object>,
     seqnum: Option<u32>,
-    structure: (),
+    structure: Option<::Structure>,
 }
 impl<'a> ElementBuilder<'a> {
-    pub fn new(structure: () /* &'a Structure */) -> Self {
+    pub fn new(structure: ::Structure) -> Self {
         Self {
             src: None,
             seqnum: None,
-            structure: structure,
+            structure: Some(structure),
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_element(src, ptr::null_mut() /*s.structure.to_glib_full()*/));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_element(src, s.structure.take().unwrap().into_ptr()));
 }
 
 pub struct SegmentStartBuilder<'a> {
@@ -1110,7 +1109,7 @@ impl<'a> SegmentStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_segment_start(src, s.format.to_glib(), s.position));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_start(src, s.format.to_glib(), s.position));
 }
 
 pub struct SegmentDoneBuilder<'a> {
@@ -1129,7 +1128,7 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_segment_done(src, s.format.to_glib(), s.position));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_done(src, s.format.to_glib(), s.position));
 }
 
 pub struct DurationChangedBuilder<'a> {
@@ -1191,7 +1190,7 @@ impl<'a> AsyncDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_async_done(src, s.running_time));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_async_done(src, s.running_time));
 }
 
 pub struct RequestStateBuilder<'a> {
@@ -1208,7 +1207,7 @@ impl<'a> RequestStateBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_request_state(src, s.state.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_request_state(src, s.state.to_glib()));
 }
 
 pub struct StepStartBuilder<'a> {
@@ -1235,7 +1234,7 @@ impl<'a> StepStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_step_start(src, s.active.to_glib(), s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_start(src, s.active.to_glib(), s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib()));
 }
 
 pub struct QosBuilder<'a> {
@@ -1278,7 +1277,7 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| {
+    message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_qos(src, s.live.to_glib(), s.running_time, s.stream_time, s.timestamp, s.duration);
         if let Some((jitter, proportion, quality)) = s.values {
             ffi::gst_message_set_qos_values(msg, jitter, proportion, quality);
@@ -1322,7 +1321,7 @@ impl<'a> ProgressBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_progress(src, s.type_.to_glib(), s.code.to_glib_none().0, s.text.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_progress(src, s.type_.to_glib(), s.code.to_glib_none().0, s.text.to_glib_none().0));
 }
 
 // TODO Toc
@@ -1342,7 +1341,7 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_toc(src, ptr::null_mut() /*s.structure.to_glib_full()*/, s.updated.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_toc(src, ptr::null_mut() /*s.structure.to_glib_full()*/, s.updated.to_glib()));
 }
 
 pub struct ResetTimeBuilder<'a> {
@@ -1359,7 +1358,7 @@ impl<'a> ResetTimeBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_reset_time(src, s.running_time));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_reset_time(src, s.running_time));
 }
 
 pub struct StreamStartBuilder<'a> {
@@ -1383,7 +1382,7 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| {
+    message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_stream_start(src);
         if let Some(group_id) = s.group_id {
             ffi::gst_message_set_group_id(msg, group_id);
@@ -1406,7 +1405,7 @@ impl<'a> NeedContextBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_need_context(src, s.context_type.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_need_context(src, s.context_type.to_glib_none().0));
 }
 
 // TODO Context
@@ -1424,7 +1423,7 @@ impl<'a> HaveContextBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/));
 }
 
 pub struct DeviceAddedBuilder<'a> {
@@ -1441,7 +1440,7 @@ impl<'a> DeviceAddedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_device_added(src, s.device.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_added(src, s.device.to_glib_none().0));
 }
 
 pub struct DeviceRemovedBuilder<'a> {
@@ -1458,7 +1457,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_device_removed(src, s.device.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_removed(src, s.device.to_glib_none().0));
 }
 
 pub struct PropertyNotifyBuilder<'a> {
@@ -1478,7 +1477,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_property_notify(src, s.property_name.to_glib_none().0, mut_override(s.value.to_glib_none().0)));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_property_notify(src, s.property_name.to_glib_none().0, mut_override(s.value.to_glib_none().0)));
 }
 
 pub struct StreamCollectionBuilder<'a> {
@@ -1497,7 +1496,7 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_stream_collection(src, s.collection.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_stream_collection(src, s.collection.to_glib_none().0));
 }
 
 pub struct StreamsSelectedBuilder<'a> {
@@ -1526,7 +1525,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| {
+    message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
         if let Some(streams) = s.streams {
             for stream in streams {
@@ -1566,7 +1565,7 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| {
+    message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_redirect(src, s.location.to_glib_none().0, ptr::null_mut(), ptr::null_mut());
         if let Some(entries) = s.entries {
             for &(location, tag_list, entry_struct) in entries {

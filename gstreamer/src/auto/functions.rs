@@ -224,7 +224,7 @@ pub fn is_initialized() -> bool {
     }
 }
 
-//pub fn make_element_message_details(name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> /*Ignored*/Option<Structure> {
+//pub fn make_element_message_details(name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<Structure> {
 //    unsafe { TODO: call ffi::gst_make_element_message_details() }
 //}
 
@@ -641,7 +641,7 @@ pub fn util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64 {
 //    unsafe { TODO: call ffi::gst_value_get_int_range_step() }
 //}
 
-//pub fn value_get_structure(value: /*Ignored*/&glib::Value) -> /*Ignored*/Option<Structure> {
+//pub fn value_get_structure(value: /*Ignored*/&glib::Value) -> Option<Structure> {
 //    unsafe { TODO: call ffi::gst_value_get_structure() }
 //}
 
@@ -717,7 +717,7 @@ pub fn util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64 {
 //    unsafe { TODO: call ffi::gst_value_set_int_range_step() }
 //}
 
-//pub fn value_set_structure(value: /*Ignored*/&mut glib::Value, structure: /*Ignored*/&Structure) {
+//pub fn value_set_structure(value: /*Ignored*/&mut glib::Value, structure: &Structure) {
 //    unsafe { TODO: call ffi::gst_value_set_structure() }
 //}
 

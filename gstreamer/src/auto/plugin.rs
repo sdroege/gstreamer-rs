@@ -3,6 +3,7 @@
 
 use Error;
 use Object;
+use Structure;
 use ffi;
 use glib::translate::*;
 use std::ptr;
@@ -24,9 +25,11 @@ impl Plugin {
     //    unsafe { TODO: call ffi::gst_plugin_add_dependency_simple() }
     //}
 
-    //pub fn get_cache_data(&self) -> /*Ignored*/Option<Structure> {
-    //    unsafe { TODO: call ffi::gst_plugin_get_cache_data() }
-    //}
+    pub fn get_cache_data(&self) -> Option<Structure> {
+        unsafe {
+            from_glib_none(ffi::gst_plugin_get_cache_data(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_description(&self) -> Option<String> {
         unsafe {
@@ -88,9 +91,11 @@ impl Plugin {
         }
     }
 
-    //pub fn set_cache_data(&self, cache_data: /*Ignored*/&mut Structure) {
-    //    unsafe { TODO: call ffi::gst_plugin_set_cache_data() }
-    //}
+    pub fn set_cache_data(&self, cache_data: &mut Structure) {
+        unsafe {
+            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.to_glib_full());
+        }
+    }
 
     pub fn list_free(list: &[Plugin]) {
         unsafe {

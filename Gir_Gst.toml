@@ -37,7 +37,6 @@ generate = [
     "Gst.URIError",
     "Gst.StructureChangeType",
     "Gst.StreamStatusType",
-    "Gst.Device",
     "Gst.DeviceMonitor",
     "Gst.DeviceProvider",
     "Gst.DeviceProviderFactory",
@@ -52,6 +51,7 @@ generate = [
 manual = [
     "GLib.Error",
     "Gst.Message",
+    "Gst.Structure",
 ]
 
 [[object]]
@@ -159,6 +159,20 @@ status = "generate"
 name = "Gst.ElementFactory"
 status = "generate"
 trait = false
+
+[[object]]
+name = "Gst.Device"
+status = "generate"
+    [[object.function]]
+    name = "get_properties"
+    # Structure is not a GObject
+    ignore = true
+
+    [[object.property]]
+    name = "properties"
+    # Structure is not a GObject
+    ignore = true
+
 
 [[object]]
 name = "Gst.Object"

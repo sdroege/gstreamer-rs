@@ -47,6 +47,8 @@ pub use miniobject::GstRc;
 pub mod message;
 pub use message::Message;
 pub use message::MessageView;
+pub mod structure;
+pub use structure::Structure;
 
 mod element;
 mod bin;

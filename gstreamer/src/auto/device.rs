@@ -35,8 +35,6 @@ pub trait DeviceExt {
 
     fn get_display_name(&self) -> Option<String>;
 
-    //fn get_properties(&self) -> /*Ignored*/Option<Structure>;
-
     fn has_classes(&self, classes: &str) -> bool;
 
     fn has_classesv(&self, classes: &[&str]) -> bool;
@@ -48,8 +46,6 @@ pub trait DeviceExt {
     fn get_property_device_class(&self) -> Option<String>;
 
     fn get_property_display_name(&self) -> Option<String>;
-
-    //fn get_property_properties(&self) -> /*Ignored*/Option<Structure>;
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> u64;
 }
@@ -78,10 +74,6 @@ impl<O: IsA<Device> + IsA<glib::object::Object>> DeviceExt for O {
             from_glib_full(ffi::gst_device_get_display_name(self.to_glib_none().0))
         }
     }
-
-    //fn get_properties(&self) -> /*Ignored*/Option<Structure> {
-    //    unsafe { TODO: call ffi::gst_device_get_properties() }
-    //}
 
     fn has_classes(&self, classes: &str) -> bool {
         unsafe {
@@ -124,14 +116,6 @@ impl<O: IsA<Device> + IsA<glib::object::Object>> DeviceExt for O {
         }
         value.get()
     }
-
-    //fn get_property_properties(&self) -> /*Ignored*/Option<Structure> {
-    //    let mut value = Value::from(None::<&/*Ignored*/Structure>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "properties".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {

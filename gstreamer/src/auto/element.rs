@@ -146,7 +146,7 @@ pub trait ElementExt {
     //fn message_full<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32);
 
     //#[cfg(feature = "v1_10")]
-    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: /*Ignored*/&mut Structure);
+    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: &mut Structure);
 
     fn no_more_pads(&self);
 
@@ -394,7 +394,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     //}
 
     //#[cfg(feature = "v1_10")]
-    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: /*Ignored*/&mut Structure) {
+    //fn message_full_with_details<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, type_: /*Ignored*/MessageType, domain: /*Ignored*/glib::Quark, code: i32, text: P, debug: Q, file: &str, function: &str, line: i32, structure: &mut Structure) {
     //    unsafe { TODO: call ffi::gst_element_message_full_with_details() }
     //}
 
