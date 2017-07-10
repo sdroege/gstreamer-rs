@@ -60,6 +60,8 @@ pub use message::Message;
 pub use message::MessageView;
 pub mod structure;
 pub use structure::Structure;
+pub mod caps;
+pub use caps::Caps;
 
 mod element;
 mod bin;

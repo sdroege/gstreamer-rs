@@ -24,6 +24,7 @@ generate = [
     "Gst.FlowReturn",
     "Gst.PadDirection",
     "Gst.PadTemplate",
+    "Gst.PadPresence",
     "Gst.URIHandler",
     "Gst.URIType",
     "Gst.ElementFactoryListType",
@@ -101,6 +102,11 @@ trait = false
     ignore = true
 
 [[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.Clock"
 status = "generate"
     [[object.function]]
@@ -132,7 +138,17 @@ status = "generate"
         bool_return_is_error = "Failed to link elements"
 
     [[object.function]]
+    name = "link_filtered"
+        [object.function.return]
+        bool_return_is_error = "Failed to link elements"
+
+    [[object.function]]
     name = "link_pads"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
+    name = "link_pads_filtered"
         [object.function.return]
         bool_return_is_error = "Failed to link pads"
 
@@ -164,14 +180,14 @@ trait = false
 [[object]]
 name = "Gst.Device"
 status = "generate"
-    [[object.function]]
-    name = "get_properties"
+    [[object.property]]
+    name = "properties"
     # Structure is not a GObject
     ignore = true
 
     [[object.property]]
-    name = "properties"
-    # Structure is not a GObject
+    name = "caps"
+    # Caps is not a GObject
     ignore = true
 
 
@@ -230,6 +246,11 @@ status = "generate"
     name = "set_active"
         [object.function.return]
         bool_return_is_error = "Failed to activate pad"
+
+    [[object.property]]
+    name = "caps"
+    # Caps is not a GObject
+    ignore = true
 
 [[object]]
 name = "Gst.Plugin"

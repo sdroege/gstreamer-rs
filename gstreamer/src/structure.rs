@@ -283,9 +283,7 @@ impl StructureRef {
 
     pub fn get_value<'a>(&'a self, name: &str) -> Option<&Value> {
         unsafe {
-            let name_cstr = CString::new(name).unwrap();
-
-            let value = ffi::gst_structure_get_value(&self.0, name_cstr.as_ptr());
+            let value = ffi::gst_structure_get_value(&self.0, name.to_glib_none().0);
 
             if value.is_null() {
                 return None;
@@ -302,8 +300,7 @@ impl StructureRef {
 
     pub fn set_value(&mut self, name: &str, mut value: Value) {
         unsafe {
-            let name_cstr = CString::new(name).unwrap();
-            ffi::gst_structure_take_value(&mut self.0, name_cstr.as_ptr(), value.to_glib_none_mut().0);
+            ffi::gst_structure_take_value(&mut self.0, name.to_glib_none().0, value.to_glib_none_mut().0);
             mem::forget(value);
         }
     }

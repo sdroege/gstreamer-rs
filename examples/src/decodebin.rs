@@ -4,10 +4,6 @@ use gst::ObjectExt as GstObjectExt;
 
 extern crate glib;
 use glib::ObjectExt;
-use glib::translate::{from_glib_none, ToGlibPtr};
-
-extern crate gstreamer_sys as gst_ffi;
-extern crate gobject_sys as gobject_ffi;
 
 use std::env;
 use std::u64;
@@ -36,12 +32,10 @@ fn main() {
     decodebin.connect_pad_added(move |_, src_pad| {
         let ref pipeline = pipeline_clone;
 
-        // FIXME: Needs caps/structure bindings
-        let (is_audio, is_video) = unsafe {
-            let caps = gst_ffi::gst_pad_get_current_caps(src_pad.to_glib_none().0);
-            let structure = gst_ffi::gst_caps_get_structure(caps, 0);
-
-            let name: String = from_glib_none(gst_ffi::gst_structure_get_name(structure));
+        let (is_audio, is_video) = {
+            let caps = src_pad.get_current_caps().unwrap();
+            let structure = caps.get_structure(0).unwrap();
+            let name = structure.get_name();
 
             (name.starts_with("audio/"), name.starts_with("video/"))
         };
