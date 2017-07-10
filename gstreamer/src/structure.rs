@@ -151,6 +151,14 @@ impl ToOwned for StructureRef {
     }
 }
 
+impl glib::types::StaticType for Structure {
+    fn static_type() -> glib::types::Type {
+        unsafe {
+            from_glib(ffi::gst_structure_get_type())
+        }
+    }
+}
+
 impl<'a> ToGlibPtr<'a, *const ffi::GstStructure> for Structure {
     type Storage = &'a Self;
 
