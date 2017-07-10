@@ -26,30 +26,29 @@ unsafe impl MiniObject for CapsRef {
     type GstType = ffi::GstCaps;
 }
 
-impl CapsRef {
-    pub fn new_empty() -> GstRc<Self> {
+impl GstRc<CapsRef> {
+    pub fn new_empty() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_caps_new_empty()) }
     }
 
-    pub fn new_any() -> GstRc<Self> {
+    pub fn new_any() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_caps_new_any()) }
     }
 
-    pub fn new_simple(name: &str, values: &[(&str, glib::Value)]) -> GstRc<Self> {
-        let mut caps = CapsRef::new_empty();
+    pub fn new_simple(name: &str, values: &[(&str, &glib::Value)]) -> Self {
+        assert_initialized_main_thread!();
+        let mut caps = Caps::new_empty();
 
-        let structure = unsafe { ffi::gst_structure_new_empty(name.to_glib_none().0) };
-
-        unsafe {
-            ffi::gst_caps_append_structure(caps.as_mut_ptr(), structure);
-        }
-
-        caps.get_mut().unwrap().set_simple(values);
+        let structure = Structure::new(name, values);
+        caps.get_mut().unwrap().append_structure(structure);
 
         caps
     }
 
-    pub fn from_string(value: &str) -> Option<GstRc<Self>> {
+    pub fn from_string(value: &str) -> Option<Self> {
+        assert_initialized_main_thread!();
         unsafe {
             let caps_ptr = ffi::gst_caps_from_string(value.to_glib_none().0);
 
@@ -60,8 +59,10 @@ impl CapsRef {
             }
         }
     }
+}
 
-    pub fn set_simple(&mut self, values: &[(&str, glib::Value)]) {
+impl CapsRef {
+    pub fn set_simple(&mut self, values: &[(&str, &glib::Value)]) {
         for &(name, ref value) in values {
             unsafe {
                 ffi::gst_caps_set_value(self.as_mut_ptr(), name.to_glib_none().0, value.to_glib_none().0);
@@ -98,6 +99,12 @@ impl CapsRef {
             Some(StructureRef::from_glib_borrow_mut(
                 structure as *mut ffi::GstStructure,
             ))
+        }
+    }
+
+    pub fn append_structure(&mut self, structure: Structure) {
+        unsafe {
+            ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr())
         }
     }
 
