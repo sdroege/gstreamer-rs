@@ -11,7 +11,6 @@ use std::mem;
 use std::marker::PhantomData;
 
 use ffi;
-use glib;
 use glib::translate::{from_glib, Stash, StashMut, ToGlibPtr, ToGlibPtrMut, FromGlibPtrNone,
                       FromGlibPtrFull, FromGlibPtrBorrow};
 

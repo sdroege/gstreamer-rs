@@ -17,7 +17,6 @@ use std::mem;
 use std::ffi::CStr;
 
 use glib;
-use glib_ffi;
 use glib::translate::{from_glib, from_glib_none, from_glib_full, mut_override, ToGlibPtr, ToGlib};
 
 #[repr(C)]

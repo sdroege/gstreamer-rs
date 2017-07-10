@@ -9,17 +9,16 @@
 use std::fmt;
 use std::ptr;
 use std::mem;
-use std::ffi::{CStr, CString};
+use std::ffi::CStr;
 use std::ops::{Deref, DerefMut};
 use std::borrow::{Borrow, ToOwned, BorrowMut};
 use std::marker::PhantomData;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, Stash, StashMut, ToGlibPtr,
-                      ToGlibPtrMut, FromGlibPtrNone, FromGlibPtrBorrow, FromGlibPtrFull};
+use glib::translate::{from_glib, from_glib_full, Stash, StashMut, ToGlibPtr,
+                      ToGlibPtrMut, FromGlibPtrNone, FromGlibPtrFull};
 use glib::value::{Value, ToValue, FromValueOptional};
 use ffi;
-use glib_ffi;
 
 pub struct Structure(*mut StructureRef, PhantomData<StructureRef>);
 

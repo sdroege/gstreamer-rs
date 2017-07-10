@@ -6,16 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::ffi::CString;
-use std::ffi::CStr;
 use std::fmt;
 use miniobject::*;
 use structure::*;
 
 use glib;
-use glib_ffi;
 use ffi;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, mut_override, ToGlibPtr, ToGlib};
+use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
 
 #[repr(C)]
 pub struct CapsRef(ffi::GstCaps);
