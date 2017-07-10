@@ -20,15 +20,15 @@ use glib_ffi;
 use glib::translate::{from_glib, from_glib_none, from_glib_full, mut_override, ToGlibPtr, ToGlib};
 
 #[repr(C)]
-pub struct MessageImpl(ffi::GstMessage);
+pub struct MessageRef(ffi::GstMessage);
 
-pub type Message = GstRc<MessageImpl>;
+pub type Message = GstRc<MessageRef>;
 
-unsafe impl MiniObject for MessageImpl {
+unsafe impl MiniObject for MessageRef {
     type GstType = ffi::GstMessage;
 }
 
-impl MessageImpl {
+impl MessageRef {
     pub fn get_src(&self) -> Object {
         unsafe {
             from_glib_none((*self.as_ptr()).src)
@@ -124,7 +124,7 @@ impl MessageImpl {
     }
 }
 
-impl glib::types::StaticType for GstRc<MessageImpl> {
+impl glib::types::StaticType for GstRc<MessageRef> {
     fn static_type() -> glib::types::Type {
         unsafe {
             from_glib(ffi::gst_message_get_type())
@@ -174,7 +174,7 @@ pub enum MessageView<'a> {
     __NonExhaustive,
 }
 
-pub struct Error<'a>(&'a MessageImpl);
+pub struct Error<'a>(&'a MessageRef);
 impl<'a> Error<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
@@ -199,7 +199,7 @@ impl<'a> Error<'a> {
     // TODO get_details()
 }
 
-pub struct Warning<'a>(&'a MessageImpl);
+pub struct Warning<'a>(&'a MessageRef);
 impl<'a> Warning<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
@@ -224,7 +224,7 @@ impl<'a> Warning<'a> {
     // TODO get_details()
 }
 
-pub struct Info<'a>(&'a MessageImpl);
+pub struct Info<'a>(&'a MessageRef);
 impl<'a> Info<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
@@ -249,12 +249,12 @@ impl<'a> Info<'a> {
     // TODO get_details()
 }
 
-pub struct Tag<'a>(&'a MessageImpl);
+pub struct Tag<'a>(&'a MessageRef);
 impl<'a> Tag<'a> {
     // TODO: get_tags()
 }
 
-pub struct Buffering<'a>(&'a MessageImpl);
+pub struct Buffering<'a>(&'a MessageRef);
 impl<'a> Buffering<'a> {
     pub fn get_percent(&self) -> i32 {
         unsafe {
@@ -278,7 +278,7 @@ impl<'a> Buffering<'a> {
     }
 }
 
-pub struct StateChanged<'a>(&'a MessageImpl);
+pub struct StateChanged<'a>(&'a MessageRef);
 impl<'a> StateChanged<'a> {
     pub fn get_old(&self) -> ::State {
         unsafe {
@@ -311,7 +311,7 @@ impl<'a> StateChanged<'a> {
     }
 }
 
-pub struct StepDone<'a>(&'a MessageImpl);
+pub struct StepDone<'a>(&'a MessageRef);
 impl<'a> StepDone<'a> {
     pub fn get(&self) -> (::Format, u64, f64, bool, bool, u64, bool) {
         unsafe {
@@ -331,7 +331,7 @@ impl<'a> StepDone<'a> {
 }
 
 
-pub struct ClockProvide<'a>(&'a MessageImpl);
+pub struct ClockProvide<'a>(&'a MessageRef);
 impl<'a> ClockProvide<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
@@ -354,7 +354,7 @@ impl<'a> ClockProvide<'a> {
     }
 }
 
-pub struct ClockLost<'a>(&'a MessageImpl);
+pub struct ClockLost<'a>(&'a MessageRef);
 impl<'a> ClockLost<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
@@ -367,7 +367,7 @@ impl<'a> ClockLost<'a> {
     }
 }
 
-pub struct NewClock<'a>(&'a MessageImpl);
+pub struct NewClock<'a>(&'a MessageRef);
 impl<'a> NewClock<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
@@ -380,7 +380,7 @@ impl<'a> NewClock<'a> {
     }
 }
 
-pub struct StructureChange<'a>(&'a MessageImpl);
+pub struct StructureChange<'a>(&'a MessageRef);
 impl<'a> StructureChange<'a> {
     pub fn get(&self) -> (::StructureChangeType, Option<Element>, bool) {
         unsafe {
@@ -395,7 +395,7 @@ impl<'a> StructureChange<'a> {
     }
 }
 
-pub struct StreamStatus<'a>(&'a MessageImpl);
+pub struct StreamStatus<'a>(&'a MessageRef);
 impl<'a> StreamStatus<'a> {
     pub fn get(&self) -> (::StreamStatusType, Option<Element>) {
         unsafe {
@@ -417,7 +417,7 @@ impl<'a> StreamStatus<'a> {
     }
 }
 
-pub struct SegmentStart<'a>(&'a MessageImpl);
+pub struct SegmentStart<'a>(&'a MessageRef);
 impl<'a> SegmentStart<'a> {
     pub fn get(&self) -> (::Format, i64) {
         unsafe {
@@ -431,7 +431,7 @@ impl<'a> SegmentStart<'a> {
     }
 }
 
-pub struct SegmentDone<'a>(&'a MessageImpl);
+pub struct SegmentDone<'a>(&'a MessageRef);
 impl<'a> SegmentDone<'a> {
     pub fn get(&self) -> (::Format, i64) {
         unsafe {
@@ -445,7 +445,7 @@ impl<'a> SegmentDone<'a> {
     }
 }
 
-pub struct AsyncDone<'a>(&'a MessageImpl);
+pub struct AsyncDone<'a>(&'a MessageRef);
 impl<'a> AsyncDone<'a> {
     pub fn get_running_time(&self) -> u64 {
         unsafe {
@@ -458,7 +458,7 @@ impl<'a> AsyncDone<'a> {
     }
 }
 
-pub struct RequestState<'a>(&'a MessageImpl);
+pub struct RequestState<'a>(&'a MessageRef);
 impl<'a> RequestState<'a> {
     pub fn get_requested_state(&self) -> ::State {
         unsafe {
@@ -471,7 +471,7 @@ impl<'a> RequestState<'a> {
     }
 }
 
-pub struct StepStart<'a>(&'a MessageImpl);
+pub struct StepStart<'a>(&'a MessageRef);
 impl<'a> StepStart<'a> {
     pub fn get(&self) -> (bool, ::Format, u64, f64, bool, bool) {
         unsafe {
@@ -489,7 +489,7 @@ impl<'a> StepStart<'a> {
     }
 }
 
-pub struct Qos<'a>(&'a MessageImpl);
+pub struct Qos<'a>(&'a MessageRef);
 impl<'a> Qos<'a> {
     pub fn get(&self) -> (bool, u64, u64, u64, u64) {
         unsafe {
@@ -530,7 +530,7 @@ impl<'a> Qos<'a> {
     }
 }
 
-pub struct Progress<'a>(&'a MessageImpl);
+pub struct Progress<'a>(&'a MessageRef);
 impl<'a> Progress<'a> {
     pub fn get(&self) -> (::ProgressType, Option<&'a str>, Option<&'a str>) {
         unsafe {
@@ -557,12 +557,12 @@ impl<'a> Progress<'a> {
     }
 }
 
-pub struct Toc<'a>(&'a MessageImpl);
+pub struct Toc<'a>(&'a MessageRef);
 impl<'a> Toc<'a> {
     // TODO get_toc()
 }
 
-pub struct ResetTime<'a>(&'a MessageImpl);
+pub struct ResetTime<'a>(&'a MessageRef);
 impl<'a> ResetTime<'a> {
     pub fn get_running_time(&self) -> u64 {
         unsafe {
@@ -575,7 +575,7 @@ impl<'a> ResetTime<'a> {
     }
 }
 
-pub struct StreamStart<'a>(&'a MessageImpl);
+pub struct StreamStart<'a>(&'a MessageRef);
 impl<'a> StreamStart<'a> {
     pub fn get_group_id(&self) -> Option<u32> {
         unsafe {
@@ -590,7 +590,7 @@ impl<'a> StreamStart<'a> {
     }
 }
 
-pub struct NeedContext<'a>(&'a MessageImpl);
+pub struct NeedContext<'a>(&'a MessageRef);
 impl<'a> NeedContext<'a> {
     pub fn get_context_type(&self) -> Option<&str> {
         unsafe {
@@ -605,12 +605,12 @@ impl<'a> NeedContext<'a> {
     }
 }
 
-pub struct HaveContext<'a>(&'a MessageImpl);
+pub struct HaveContext<'a>(&'a MessageRef);
 impl<'a> HaveContext<'a> {
     // TODO: get_context()
 }
 
-pub struct DeviceAdded<'a>(&'a MessageImpl);
+pub struct DeviceAdded<'a>(&'a MessageRef);
 impl<'a> DeviceAdded<'a> {
     pub fn get_device(&self) -> ::Device {
         unsafe {
@@ -623,7 +623,7 @@ impl<'a> DeviceAdded<'a> {
     }
 }
 
-pub struct DeviceRemoved<'a>(&'a MessageImpl);
+pub struct DeviceRemoved<'a>(&'a MessageRef);
 impl<'a> DeviceRemoved<'a> {
     pub fn get_device(&self) -> ::Device {
         unsafe {
@@ -636,7 +636,7 @@ impl<'a> DeviceRemoved<'a> {
     }
 }
 
-pub struct PropertyNotify<'a>(&'a MessageImpl);
+pub struct PropertyNotify<'a>(&'a MessageRef);
 impl<'a> PropertyNotify<'a> {
     #[cfg(feature = "v1_10")]
     pub fn get(&self) -> (Object, &str, ::Value) {
@@ -652,7 +652,7 @@ impl<'a> PropertyNotify<'a> {
     }
 }
 
-pub struct StreamCollection<'a>(&'a MessageImpl);
+pub struct StreamCollection<'a>(&'a MessageRef);
 impl<'a> StreamCollection<'a> {
     #[cfg(feature = "v1_10")]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
@@ -665,7 +665,7 @@ impl<'a> StreamCollection<'a> {
         }
     }
 }
-pub struct StreamsSelected<'a>(&'a MessageImpl);
+pub struct StreamsSelected<'a>(&'a MessageRef);
 impl<'a> StreamsSelected<'a> {
     #[cfg(feature = "v1_10")]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
@@ -688,7 +688,7 @@ impl<'a> StreamsSelected<'a> {
     }
 }
 
-pub struct Redirect<'a>(&'a MessageImpl);
+pub struct Redirect<'a>(&'a MessageRef);
 impl<'a> StreamsSelected<'a> {
     // TODO: tags, structure
     #[cfg(feature = "v1_10")]
