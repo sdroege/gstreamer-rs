@@ -75,7 +75,10 @@ fn main() {
         }
     });
 
-    assert_ne!(pipeline.set_state(gst::State::Playing), gst::StateChangeReturn::Failure);
+    assert_ne!(
+        pipeline.set_state(gst::State::Playing),
+        gst::StateChangeReturn::Failure
+    );
 
     let bus = pipeline.get_bus().unwrap();
 
@@ -88,17 +91,29 @@ fn main() {
         match msg.view() {
             MessageView::Eos => break,
             MessageView::Error(err) => {
-                println!("Error from {}: {} ({:?})", msg.get_src().get_path_string(),
-                    err.get_error(), err.get_debug());
+                println!(
+                    "Error from {}: {} ({:?})",
+                    msg.get_src().get_path_string(),
+                    err.get_error(),
+                    err.get_debug()
+                );
                 break;
-            },
+            }
             MessageView::StateChanged(s) => {
-                println!("State changed from {}: {:?} -> {:?} ({:?})", msg.get_src().get_path_string(),
-                    s.get_old(), s.get_current(), s.get_pending());
-            },
+                println!(
+                    "State changed from {}: {:?} -> {:?} ({:?})",
+                    msg.get_src().get_path_string(),
+                    s.get_old(),
+                    s.get_current(),
+                    s.get_pending()
+                );
+            }
             _ => (),
         }
     }
 
-    assert_ne!(pipeline.set_state(gst::State::Null), gst::StateChangeReturn::Failure);
+    assert_ne!(
+        pipeline.set_state(gst::State::Null),
+        gst::StateChangeReturn::Failure
+    );
 }

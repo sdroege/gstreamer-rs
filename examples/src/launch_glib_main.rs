@@ -19,16 +19,18 @@ fn main() {
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
     bus.add_signal_watch();
-    bus.connect_message(|_, msg| {
-        match msg.view() {
-            MessageView::Eos => gtk::main_quit(),
-            MessageView::Error(err) => {
-                println!("Error from {}: {} ({:?})", msg.get_src().get_path_string(),
-                    err.get_error(), err.get_debug());
-                gtk::main_quit();
-            },
-            _ => (),
+    bus.connect_message(|_, msg| match msg.view() {
+        MessageView::Eos => gtk::main_quit(),
+        MessageView::Error(err) => {
+            println!(
+                "Error from {}: {} ({:?})",
+                msg.get_src().get_path_string(),
+                err.get_error(),
+                err.get_debug()
+            );
+            gtk::main_quit();
         }
+        _ => (),
     });
 
     gtk::main();

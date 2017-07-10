@@ -18,7 +18,10 @@ impl Element {
     pub fn link_many<E: IsA<Element>>(elements: &[&E]) -> Result<(), glib::BoolError> {
         for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
             unsafe {
-                let ret: bool = from_glib(ffi::gst_element_link(e1.to_glib_none().0, e2.to_glib_none().0));
+                let ret: bool = from_glib(ffi::gst_element_link(
+                    e1.to_glib_none().0,
+                    e2.to_glib_none().0,
+                ));
                 if !ret {
                     return Err(glib::BoolError("Failed to link elements"));
                 }

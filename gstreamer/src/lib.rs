@@ -36,17 +36,7 @@ macro_rules! skip_assert_initialized {
     )
 }
 
-pub use glib::{
-    Cast,
-    Continue,
-    Error,
-    IsA,
-    StaticType,
-    ToValue,
-    Type,
-    TypedValue,
-    Value,
-};
+pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
 
 mod auto;
 pub use auto::*;
@@ -72,7 +62,11 @@ use std::ptr;
 pub fn init() -> Result<(), glib::Error> {
     unsafe {
         let mut error = ptr::null_mut();
-        if from_glib(ffi::gst_init_check(ptr::null_mut(), ptr::null_mut(), &mut error)) {
+        if from_glib(ffi::gst_init_check(
+            ptr::null_mut(),
+            ptr::null_mut(),
+            &mut error,
+        )) {
             Ok(())
         } else {
             Err(from_glib_full(error))

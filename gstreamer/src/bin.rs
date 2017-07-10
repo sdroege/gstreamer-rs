@@ -24,7 +24,8 @@ impl<O: IsA<Bin>> BinExtManual for O {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                let ret: bool = from_glib(ffi::gst_bin_add(self.to_glib_none().0, e.to_glib_none().0));
+                let ret: bool =
+                    from_glib(ffi::gst_bin_add(self.to_glib_none().0, e.to_glib_none().0));
                 if !ret {
                     return Err(glib::BoolError("Failed to add elements"));
                 }
@@ -37,7 +38,10 @@ impl<O: IsA<Bin>> BinExtManual for O {
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                let ret: bool = from_glib(ffi::gst_bin_remove(self.to_glib_none().0, e.to_glib_none().0));
+                let ret: bool = from_glib(ffi::gst_bin_remove(
+                    self.to_glib_none().0,
+                    e.to_glib_none().0,
+                ));
                 if !ret {
                     return Err(glib::BoolError("Failed to add elements"));
                 }

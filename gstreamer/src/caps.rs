@@ -65,15 +65,17 @@ impl CapsRef {
     pub fn set_simple(&mut self, values: &[(&str, &glib::Value)]) {
         for &(name, ref value) in values {
             unsafe {
-                ffi::gst_caps_set_value(self.as_mut_ptr(), name.to_glib_none().0, value.to_glib_none().0);
+                ffi::gst_caps_set_value(
+                    self.as_mut_ptr(),
+                    name.to_glib_none().0,
+                    value.to_glib_none().0,
+                );
             }
         }
     }
 
     pub fn to_string(&self) -> String {
-        unsafe {
-            from_glib_full(ffi::gst_caps_to_string(self.as_ptr()))
-        }
+        unsafe { from_glib_full(ffi::gst_caps_to_string(self.as_ptr())) }
     }
 
     pub fn get_structure(&self, idx: u32) -> Option<&StructureRef> {
@@ -103,9 +105,7 @@ impl CapsRef {
     }
 
     pub fn append_structure(&mut self, structure: Structure) {
-        unsafe {
-            ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr())
-        }
+        unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
     }
 
     pub fn get_size(&self) -> u32 {
@@ -125,9 +125,7 @@ impl CapsRef {
 
 impl glib::types::StaticType for GstRc<CapsRef> {
     fn static_type() -> glib::types::Type {
-        unsafe {
-            from_glib(ffi::gst_caps_get_type())
-        }
+        unsafe { from_glib(ffi::gst_caps_get_type()) }
     }
 }
 

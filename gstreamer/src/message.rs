@@ -31,15 +31,11 @@ unsafe impl MiniObject for MessageRef {
 
 impl MessageRef {
     pub fn get_src(&self) -> Object {
-        unsafe {
-            from_glib_none((*self.as_ptr()).src)
-        }
+        unsafe { from_glib_none((*self.as_ptr()).src) }
     }
 
     pub fn get_seqnum(&self) -> u32 {
-        unsafe {
-            ffi::gst_message_get_seqnum(self.as_mut_ptr())
-        }
+        unsafe { ffi::gst_message_get_seqnum(self.as_mut_ptr()) }
     }
 
     pub fn get_structure(&self) -> &StructureRef {
@@ -132,9 +128,7 @@ impl MessageRef {
 
 impl glib::types::StaticType for GstRc<MessageRef> {
     fn static_type() -> glib::types::Type {
-        unsafe {
-            from_glib(ffi::gst_message_get_type())
-        }
+        unsafe { from_glib(ffi::gst_message_get_type()) }
     }
 }
 
@@ -316,7 +310,13 @@ impl<'a> Buffering<'a> {
             let mut avg_out = mem::uninitialized();
             let mut buffering_left = mem::uninitialized();
 
-            ffi::gst_message_parse_buffering_stats(self.0.as_mut_ptr(), &mut mode, &mut avg_in, &mut avg_out, &mut buffering_left);
+            ffi::gst_message_parse_buffering_stats(
+                self.0.as_mut_ptr(),
+                &mut mode,
+                &mut avg_in,
+                &mut avg_out,
+                &mut buffering_left,
+            );
 
             (from_glib(mode), avg_in, avg_out, buffering_left)
         }
@@ -329,7 +329,12 @@ impl<'a> StateChanged<'a> {
         unsafe {
             let mut state = mem::uninitialized();
 
-            ffi::gst_message_parse_state_changed(self.0.as_mut_ptr(), &mut state, ptr::null_mut(), ptr::null_mut());
+            ffi::gst_message_parse_state_changed(
+                self.0.as_mut_ptr(),
+                &mut state,
+                ptr::null_mut(),
+                ptr::null_mut(),
+            );
 
             from_glib(state)
         }
@@ -339,7 +344,12 @@ impl<'a> StateChanged<'a> {
         unsafe {
             let mut state = mem::uninitialized();
 
-            ffi::gst_message_parse_state_changed(self.0.as_mut_ptr(), ptr::null_mut(), &mut state, ptr::null_mut());
+            ffi::gst_message_parse_state_changed(
+                self.0.as_mut_ptr(),
+                ptr::null_mut(),
+                &mut state,
+                ptr::null_mut(),
+            );
 
             from_glib(state)
         }
@@ -349,7 +359,12 @@ impl<'a> StateChanged<'a> {
         unsafe {
             let mut state = mem::uninitialized();
 
-            ffi::gst_message_parse_state_changed(self.0.as_mut_ptr(), ptr::null_mut(), ptr::null_mut(), &mut state);
+            ffi::gst_message_parse_state_changed(
+                self.0.as_mut_ptr(),
+                ptr::null_mut(),
+                ptr::null_mut(),
+                &mut state,
+            );
 
             from_glib(state)
         }
@@ -368,9 +383,26 @@ impl<'a> StepDone<'a> {
             let mut duration = mem::uninitialized();
             let mut eos = mem::uninitialized();
 
-            ffi::gst_message_parse_step_done(self.0.as_mut_ptr(), &mut format, &mut amount, &mut rate, &mut flush, &mut intermediate, &mut duration, &mut eos);
+            ffi::gst_message_parse_step_done(
+                self.0.as_mut_ptr(),
+                &mut format,
+                &mut amount,
+                &mut rate,
+                &mut flush,
+                &mut intermediate,
+                &mut duration,
+                &mut eos,
+            );
 
-            (from_glib(format), amount, rate, from_glib(flush), from_glib(intermediate), duration, from_glib(eos))
+            (
+                from_glib(format),
+                amount,
+                rate,
+                from_glib(flush),
+                from_glib(intermediate),
+                duration,
+                from_glib(eos),
+            )
         }
     }
 }
@@ -433,7 +465,12 @@ impl<'a> StructureChange<'a> {
             let mut owner = ptr::null_mut();
             let mut busy = mem::uninitialized();
 
-            ffi::gst_message_parse_structure_change(self.0.as_mut_ptr(), &mut type_, &mut owner, &mut busy);
+            ffi::gst_message_parse_structure_change(
+                self.0.as_mut_ptr(),
+                &mut type_,
+                &mut owner,
+                &mut busy,
+            );
 
             (from_glib(type_), from_glib_none(owner), from_glib(busy))
         }
@@ -527,9 +564,24 @@ impl<'a> StepStart<'a> {
             let mut flush = mem::uninitialized();
             let mut intermediate = mem::uninitialized();
 
-            ffi::gst_message_parse_step_start(self.0.as_mut_ptr(), &mut active, &mut format, &mut amount, &mut rate, &mut flush, &mut intermediate);
+            ffi::gst_message_parse_step_start(
+                self.0.as_mut_ptr(),
+                &mut active,
+                &mut format,
+                &mut amount,
+                &mut rate,
+                &mut flush,
+                &mut intermediate,
+            );
 
-            (from_glib(active), from_glib(format), amount, rate, from_glib(flush), from_glib(intermediate))
+            (
+                from_glib(active),
+                from_glib(format),
+                amount,
+                rate,
+                from_glib(flush),
+                from_glib(intermediate),
+            )
         }
     }
 }
@@ -544,9 +596,22 @@ impl<'a> Qos<'a> {
             let mut timestamp = mem::uninitialized();
             let mut duration = mem::uninitialized();
 
-            ffi::gst_message_parse_qos(self.0.as_mut_ptr(), &mut live, &mut running_time, &mut stream_time, &mut timestamp, &mut duration);
+            ffi::gst_message_parse_qos(
+                self.0.as_mut_ptr(),
+                &mut live,
+                &mut running_time,
+                &mut stream_time,
+                &mut timestamp,
+                &mut duration,
+            );
 
-            (from_glib(live), running_time, stream_time, timestamp, duration)
+            (
+                from_glib(live),
+                running_time,
+                stream_time,
+                timestamp,
+                duration,
+            )
         }
     }
 
@@ -556,7 +621,12 @@ impl<'a> Qos<'a> {
             let mut proportion = mem::uninitialized();
             let mut quality = mem::uninitialized();
 
-            ffi::gst_message_parse_qos_values(self.0.as_mut_ptr(), &mut jitter, &mut proportion, &mut quality);
+            ffi::gst_message_parse_qos_values(
+                self.0.as_mut_ptr(),
+                &mut jitter,
+                &mut proportion,
+                &mut quality,
+            );
 
             (jitter, proportion, quality)
         }
@@ -568,7 +638,12 @@ impl<'a> Qos<'a> {
             let mut processed = mem::uninitialized();
             let mut dropped = mem::uninitialized();
 
-            ffi::gst_message_parse_qos_stats(self.0.as_mut_ptr(), &mut format, &mut processed, &mut dropped);
+            ffi::gst_message_parse_qos_stats(
+                self.0.as_mut_ptr(),
+                &mut format,
+                &mut processed,
+                &mut dropped,
+            );
 
             (from_glib(format), processed, dropped)
         }
@@ -626,7 +701,10 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut group_id = mem::uninitialized();
 
-            if from_glib(ffi::gst_message_parse_group_id(self.0.as_mut_ptr(), &mut group_id)) {
+            if from_glib(ffi::gst_message_parse_group_id(
+                self.0.as_mut_ptr(),
+                &mut group_id,
+            )) {
                 Some(group_id)
             } else {
                 None
@@ -641,7 +719,11 @@ impl<'a> NeedContext<'a> {
         unsafe {
             let mut context_type = ptr::null();
 
-            if from_glib(ffi::gst_message_parse_context_type(self.0.as_mut_ptr(), &mut context_type)) && !context_type.is_null() {
+            if from_glib(ffi::gst_message_parse_context_type(
+                self.0.as_mut_ptr(),
+                &mut context_type,
+            )) && !context_type.is_null()
+            {
                 Some(CStr::from_ptr(context_type).to_str().unwrap())
             } else {
                 None
@@ -690,9 +772,18 @@ impl<'a> PropertyNotify<'a> {
             let mut property_name = ptr::null();
             let mut value = ptr::null();
 
-            ffi::gst_message_parse_property_notify(self.0.as_mut_ptr(), &mut object, &mut property_name, &mut value);
+            ffi::gst_message_parse_property_notify(
+                self.0.as_mut_ptr(),
+                &mut object,
+                &mut property_name,
+                &mut value,
+            );
 
-            (from_glib_none(object), CStr::from_ptr(property_name).to_str().unwrap(), from_glib_none(value))
+            (
+                from_glib_none(object),
+                CStr::from_ptr(property_name).to_str().unwrap(),
+                from_glib_none(value),
+            )
         }
     }
 }
@@ -728,7 +819,14 @@ impl<'a> StreamsSelected<'a> {
         unsafe {
             let n = ffi::gst_message_streams_selected_get_size(self.0.as_mut_ptr());
 
-            (0..n).map(|i| from_glib_full(ffi::gst_message_streams_selected_get_stream(self.0.as_mut_ptr(), i))).collect()
+            (0..n)
+                .map(|i| {
+                    from_glib_full(ffi::gst_message_streams_selected_get_stream(
+                        self.0.as_mut_ptr(),
+                        i,
+                    ))
+                })
+                .collect()
         }
     }
 }
@@ -741,13 +839,21 @@ impl<'a> StreamsSelected<'a> {
         unsafe {
             let n = ffi::gst_message_get_num_redirect_entries(self.0.as_mut_ptr());
 
-            (0..n).map(|i| {
-                let mut location = ptr::null();
+            (0..n)
+                .map(|i| {
+                    let mut location = ptr::null();
 
-                ffi::gst_message_parse_redirect_entry(self.0.as_mut_ptr(), i, &mut location, ptr::null_mut(), ptr::null_mut());
+                    ffi::gst_message_parse_redirect_entry(
+                        self.0.as_mut_ptr(),
+                        i,
+                        &mut location,
+                        ptr::null_mut(),
+                        ptr::null_mut(),
+                    );
 
-                CStr::from_ptr(location).to_str().unwrap()
-            }).collect()
+                    CStr::from_ptr(location).to_str().unwrap()
+                })
+                .collect()
         }
     }
 }
@@ -819,7 +925,7 @@ impl<'a> ErrorBuilder<'a> {
     pub fn debug(self, debug: &'a str) -> Self {
         Self {
             debug: Some(debug),
-            .. self
+            ..self
         }
     }
 
@@ -827,7 +933,7 @@ impl<'a> ErrorBuilder<'a> {
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
-            .. self
+            ..self
         }
     }
 
@@ -839,11 +945,20 @@ impl<'a> ErrorBuilder<'a> {
                 Some(details) => details.into_ptr(),
             };
 
-            ffi::gst_message_new_error_with_details(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0, details)
+            ffi::gst_message_new_error_with_details(
+                src,
+                mut_override(s.error.to_glib_none().0),
+                s.debug.to_glib_none().0,
+                details,
+            )
         }
         #[cfg(not(feature = "v1_10"))]
         {
-            ffi::gst_message_new_error(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0)
+            ffi::gst_message_new_error(
+                src,
+                mut_override(s.error.to_glib_none().0),
+                s.debug.to_glib_none().0,
+            )
         }
     });
 }
@@ -869,7 +984,7 @@ impl<'a> WarningBuilder<'a> {
     pub fn debug(self, debug: &'a str) -> Self {
         Self {
             debug: Some(debug),
-            .. self
+            ..self
         }
     }
 
@@ -877,7 +992,7 @@ impl<'a> WarningBuilder<'a> {
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
-            .. self
+            ..self
         }
     }
 
@@ -889,11 +1004,20 @@ impl<'a> WarningBuilder<'a> {
                 Some(details) => details.into_ptr(),
             };
 
-            ffi::gst_message_new_warning_with_details(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0, details)
+            ffi::gst_message_new_warning_with_details(
+                src,
+                mut_override(s.error.to_glib_none().0),
+                s.debug.to_glib_none().0,
+                details,
+            )
         }
         #[cfg(not(feature = "v1_10"))]
         {
-            ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0)
+            ffi::gst_message_new_warning(
+                src,
+                mut_override(s.error.to_glib_none().0),
+                s.debug.to_glib_none().0,
+            )
         }
     });
 }
@@ -919,7 +1043,7 @@ impl<'a> InfoBuilder<'a> {
     pub fn debug(self, debug: &'a str) -> Self {
         Self {
             debug: Some(debug),
-            .. self
+            ..self
         }
     }
 
@@ -927,7 +1051,7 @@ impl<'a> InfoBuilder<'a> {
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
-            .. self
+            ..self
         }
     }
 
@@ -939,11 +1063,20 @@ impl<'a> InfoBuilder<'a> {
                 Some(details) => details.into_ptr(),
             };
 
-            ffi::gst_message_new_info_with_details(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0, details)
+            ffi::gst_message_new_info_with_details(
+                src,
+                mut_override(s.error.to_glib_none().0),
+                s.debug.to_glib_none().0,
+                details,
+            )
         }
         #[cfg(not(feature = "v1_10"))]
         {
-            ffi::gst_message_new_info(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0)
+            ffi::gst_message_new_info(
+                src,
+                mut_override(s.error.to_glib_none().0),
+                s.debug.to_glib_none().0,
+            )
         }
     });
 }
@@ -955,7 +1088,7 @@ pub struct TagBuilder<'a> {
     // TODO tags
 }
 impl<'a> TagBuilder<'a> {
-    pub fn new(tags: /*Tags*/ ()) -> Self {
+    pub fn new(tags: ()) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -963,7 +1096,13 @@ impl<'a> TagBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| ffi::gst_message_new_tag(src, /*s.tags.to_glib_full().0*/ ptr::null_mut()));
+    message_builder_generic_impl!(|_, src| {
+        ffi::gst_message_new_tag(
+            src,
+            /*s.tags.to_glib_full().0*/
+            ptr::null_mut(),
+        )
+    });
 }
 
 pub struct BufferingBuilder<'a> {
@@ -982,10 +1121,16 @@ impl<'a> BufferingBuilder<'a> {
         }
     }
 
-    pub fn stats(self, mode: ::BufferingMode, avg_in: i32, avg_out: i32, buffering_left: i64) -> Self {
+    pub fn stats(
+        self,
+        mode: ::BufferingMode,
+        avg_in: i32,
+        avg_out: i32,
+        buffering_left: i64,
+    ) -> Self {
         Self {
             stats: Some((mode, avg_in, avg_out, buffering_left)),
-            .. self
+            ..self
         }
     }
 
@@ -993,7 +1138,13 @@ impl<'a> BufferingBuilder<'a> {
         let msg = ffi::gst_message_new_buffering(src, s.percent);
 
         if let Some((mode, avg_in, avg_out, buffering_left)) = s.stats {
-            ffi::gst_message_set_buffering_stats(msg, mode.to_glib(), avg_in, avg_out, buffering_left);
+            ffi::gst_message_set_buffering_stats(
+                msg,
+                mode.to_glib(),
+                avg_in,
+                avg_out,
+                buffering_left,
+            );
         }
 
         msg
@@ -1018,7 +1169,14 @@ impl<'a> StateChangedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_state_changed(src, s.old.to_glib(), s.new.to_glib(), s.pending.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_state_changed(
+            src,
+            s.old.to_glib(),
+            s.new.to_glib(),
+            s.pending.to_glib(),
+        )
+    });
 }
 
 pub struct StateDirtyBuilder<'a> {
@@ -1048,7 +1206,15 @@ pub struct StepDoneBuilder<'a> {
     eos: bool,
 }
 impl<'a> StepDoneBuilder<'a> {
-    pub fn new(format: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool, duration: u64, eos: bool) -> Self {
+    pub fn new(
+        format: ::Format,
+        amount: u64,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+        duration: u64,
+        eos: bool,
+    ) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -1062,7 +1228,18 @@ impl<'a> StepDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_done(src, s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib(), s.duration, s.eos.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_step_done(
+            src,
+            s.format.to_glib(),
+            s.amount,
+            s.rate,
+            s.flush.to_glib(),
+            s.intermediate.to_glib(),
+            s.duration,
+            s.eos.to_glib(),
+        )
+    });
 }
 
 pub struct ClockProvideBuilder<'a> {
@@ -1081,7 +1258,9 @@ impl<'a> ClockProvideBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_provide(src, s.clock.to_glib_none().0, s.ready.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_clock_provide(src, s.clock.to_glib_none().0, s.ready.to_glib())
+    });
 }
 
 pub struct ClockLostBuilder<'a> {
@@ -1098,7 +1277,9 @@ impl<'a> ClockLostBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_clock_lost(src, s.clock.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_clock_lost(src, s.clock.to_glib_none().0)
+    });
 }
 
 pub struct NewClockBuilder<'a> {
@@ -1115,7 +1296,9 @@ impl<'a> NewClockBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_new_clock(src, s.clock.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_new_clock(src, s.clock.to_glib_none().0)
+    });
 }
 
 pub struct StructureChangeBuilder<'a> {
@@ -1136,7 +1319,14 @@ impl<'a> StructureChangeBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_structure_change(src, s.type_.to_glib(), s.owner.to_glib_none().0, s.busy.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_structure_change(
+            src,
+            s.type_.to_glib(),
+            s.owner.to_glib_none().0,
+            s.busy.to_glib(),
+        )
+    });
 }
 
 pub struct StreamStatusBuilder<'a> {
@@ -1160,12 +1350,13 @@ impl<'a> StreamStatusBuilder<'a> {
     pub fn status_object(self, status_object: &'a glib::Value) -> Self {
         Self {
             status_object: Some(status_object),
-            .. self
+            ..self
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
+        let msg =
+            ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
         if let Some(status_object) = s.status_object {
             ffi::gst_message_set_stream_status_object(msg, status_object.to_glib_none().0);
         }
@@ -1187,7 +1378,9 @@ impl<'a> ApplicationBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_application(src, s.structure.take().unwrap().into_ptr()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_application(src, s.structure.take().unwrap().into_ptr())
+    });
 }
 
 pub struct ElementBuilder<'a> {
@@ -1204,7 +1397,9 @@ impl<'a> ElementBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_element(src, s.structure.take().unwrap().into_ptr()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_element(src, s.structure.take().unwrap().into_ptr())
+    });
 }
 
 pub struct SegmentStartBuilder<'a> {
@@ -1223,7 +1418,9 @@ impl<'a> SegmentStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_start(src, s.format.to_glib(), s.position));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_segment_start(src, s.format.to_glib(), s.position)
+    });
 }
 
 pub struct SegmentDoneBuilder<'a> {
@@ -1242,7 +1439,9 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_segment_done(src, s.format.to_glib(), s.position));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_segment_done(src, s.format.to_glib(), s.position)
+    });
 }
 
 pub struct DurationChangedBuilder<'a> {
@@ -1304,7 +1503,9 @@ impl<'a> AsyncDoneBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_async_done(src, s.running_time));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_async_done(src, s.running_time)
+    });
 }
 
 pub struct RequestStateBuilder<'a> {
@@ -1321,7 +1522,9 @@ impl<'a> RequestStateBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_request_state(src, s.state.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_request_state(src, s.state.to_glib())
+    });
 }
 
 pub struct StepStartBuilder<'a> {
@@ -1335,7 +1538,14 @@ pub struct StepStartBuilder<'a> {
     intermediate: bool,
 }
 impl<'a> StepStartBuilder<'a> {
-    pub fn new(active: bool, format: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool) -> Self {
+    pub fn new(
+        active: bool,
+        format: ::Format,
+        amount: u64,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+    ) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -1348,7 +1558,17 @@ impl<'a> StepStartBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_step_start(src, s.active.to_glib(), s.format.to_glib(), s.amount, s.rate, s.flush.to_glib(), s.intermediate.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_step_start(
+            src,
+            s.active.to_glib(),
+            s.format.to_glib(),
+            s.amount,
+            s.rate,
+            s.flush.to_glib(),
+            s.intermediate.to_glib(),
+        )
+    });
 }
 
 pub struct QosBuilder<'a> {
@@ -1363,7 +1583,13 @@ pub struct QosBuilder<'a> {
     stats: Option<(::Format, u64, u64)>,
 }
 impl<'a> QosBuilder<'a> {
-    pub fn new(live: bool, running_time: u64, stream_time: u64, timestamp: u64, duration: u64) -> Self {
+    pub fn new(
+        live: bool,
+        running_time: u64,
+        stream_time: u64,
+        timestamp: u64,
+        duration: u64,
+    ) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -1380,19 +1606,26 @@ impl<'a> QosBuilder<'a> {
     pub fn values(self, jitter: i64, proportion: f64, quality: i32) -> Self {
         Self {
             values: Some((jitter, proportion, quality)),
-            .. self
+            ..self
         }
     }
 
     pub fn stats(self, format: ::Format, processed: u64, dropped: u64) -> Self {
         Self {
             stats: Some((format, processed, dropped)),
-            .. self
+            ..self
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = ffi::gst_message_new_qos(src, s.live.to_glib(), s.running_time, s.stream_time, s.timestamp, s.duration);
+        let msg = ffi::gst_message_new_qos(
+            src,
+            s.live.to_glib(),
+            s.running_time,
+            s.stream_time,
+            s.timestamp,
+            s.duration,
+        );
         if let Some((jitter, proportion, quality)) = s.values {
             ffi::gst_message_set_qos_values(msg, jitter, proportion, quality);
         }
@@ -1424,18 +1657,25 @@ impl<'a> ProgressBuilder<'a> {
     pub fn code(self, code: &'a str) -> Self {
         Self {
             code: Some(code),
-            .. self
+            ..self
         }
     }
 
     pub fn text(self, text: &'a str) -> Self {
         Self {
             text: Some(text),
-            .. self
+            ..self
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_progress(src, s.type_.to_glib(), s.code.to_glib_none().0, s.text.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_progress(
+            src,
+            s.type_.to_glib(),
+            s.code.to_glib_none().0,
+            s.text.to_glib_none().0,
+        )
+    });
 }
 
 // TODO Toc
@@ -1455,7 +1695,13 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_toc(src, ptr::null_mut() /*s.structure.to_glib_full()*/, s.updated.to_glib()));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_toc(
+            src,
+            ptr::null_mut(), /*s.structure.to_glib_full()*/
+            s.updated.to_glib(),
+        )
+    });
 }
 
 pub struct ResetTimeBuilder<'a> {
@@ -1472,7 +1718,9 @@ impl<'a> ResetTimeBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_reset_time(src, s.running_time));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_reset_time(src, s.running_time)
+    });
 }
 
 pub struct StreamStartBuilder<'a> {
@@ -1492,7 +1740,7 @@ impl<'a> StreamStartBuilder<'a> {
     pub fn group_id(self, group_id: u32) -> Self {
         Self {
             group_id: Some(group_id),
-            .. self
+            ..self
         }
     }
 
@@ -1519,7 +1767,9 @@ impl<'a> NeedContextBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_need_context(src, s.context_type.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_need_context(src, s.context_type.to_glib_none().0)
+    });
 }
 
 // TODO Context
@@ -1537,7 +1787,9 @@ impl<'a> HaveContextBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/)
+    });
 }
 
 pub struct DeviceAddedBuilder<'a> {
@@ -1554,7 +1806,9 @@ impl<'a> DeviceAddedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_added(src, s.device.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_device_added(src, s.device.to_glib_none().0)
+    });
 }
 
 pub struct DeviceRemovedBuilder<'a> {
@@ -1571,7 +1825,9 @@ impl<'a> DeviceRemovedBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_device_removed(src, s.device.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_device_removed(src, s.device.to_glib_none().0)
+    });
 }
 
 pub struct PropertyNotifyBuilder<'a> {
@@ -1591,7 +1847,13 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_property_notify(src, s.property_name.to_glib_none().0, mut_override(s.value.to_glib_none().0)));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_property_notify(
+            src,
+            s.property_name.to_glib_none().0,
+            mut_override(s.value.to_glib_none().0),
+        )
+    });
 }
 
 pub struct StreamCollectionBuilder<'a> {
@@ -1610,7 +1872,9 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_stream_collection(src, s.collection.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        ffi::gst_message_new_stream_collection(src, s.collection.to_glib_none().0)
+    });
 }
 
 pub struct StreamsSelectedBuilder<'a> {
@@ -1619,7 +1883,7 @@ pub struct StreamsSelectedBuilder<'a> {
     #[cfg(feature = "v1_10")]
     collection: &'a ::StreamCollection,
     #[cfg(feature = "v1_10")]
-    streams: Option<&'a[&'a ::Stream]>,
+    streams: Option<&'a [&'a ::Stream]>,
 }
 #[cfg(feature = "v1_10")]
 impl<'a> StreamsSelectedBuilder<'a> {
@@ -1632,10 +1896,10 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams(self, streams: &'a[&'a ::Stream]) -> Self {
+    pub fn streams(self, streams: &'a [&'a ::Stream]) -> Self {
         Self {
             streams: Some(streams),
-            .. self
+            ..self
         }
     }
 
@@ -1657,7 +1921,7 @@ pub struct RedirectBuilder<'a> {
     location: &'a str,
     tag_list: Option<()>,
     entry_struct: Option<()>,
-    entries: Option<&'a[(&'a str, (&'a ()), (&'a ()))]>,
+    entries: Option<&'a [(&'a str, (&'a ()), (&'a ()))]>,
 }
 #[cfg(feature = "v1_10")]
 impl<'a> RedirectBuilder<'a> {
@@ -1672,21 +1936,30 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
-    pub fn entries(self, entries: &'a[(&'a str, (&'a ()), (&'a ()))]) -> Self {
+    pub fn entries(self, entries: &'a [(&'a str, (&'a ()), (&'a ()))]) -> Self {
         Self {
             entries: Some(entries),
-            .. self
+            ..self
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let msg = ffi::gst_message_new_redirect(src, s.location.to_glib_none().0, ptr::null_mut(), ptr::null_mut());
+        let msg = ffi::gst_message_new_redirect(
+            src,
+            s.location.to_glib_none().0,
+            ptr::null_mut(),
+            ptr::null_mut(),
+        );
         if let Some(entries) = s.entries {
             for &(location, tag_list, entry_struct) in entries {
-                ffi::gst_message_add_redirect_entry(msg, location.to_glib_none().0, ptr::null_mut(), ptr::null_mut());
+                ffi::gst_message_add_redirect_entry(
+                    msg,
+                    location.to_glib_none().0,
+                    ptr::null_mut(),
+                    ptr::null_mut(),
+                );
             }
         }
         msg
     });
 }
-
