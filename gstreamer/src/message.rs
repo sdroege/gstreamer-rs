@@ -10,6 +10,7 @@ use ffi;
 use Object;
 use Element;
 use miniobject::*;
+use structure::*;
 
 use std::ptr;
 use std::mem;
@@ -41,7 +42,12 @@ impl MessageRef {
         }
     }
 
-    // TODO get_structure()
+    pub fn get_structure(&self) -> &StructureRef {
+        unsafe {
+            let structure = ffi::gst_message_get_structure(self.as_mut_ptr());
+            StructureRef::from_glib_borrow(structure)
+        }
+    }
 
     pub fn view(&self) -> MessageView {
         let type_ = unsafe { (*self.as_ptr()).type_ };
@@ -196,7 +202,20 @@ impl<'a> Error<'a> {
         }
     }
 
-    // TODO get_details()
+    #[cfg(feature = "v1_10")]
+    pub fn get_details(&self) -> Option<&StructureRef> {
+        unsafe {
+            let mut details = ptr::null();
+
+            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+
+            if details.is_null() {
+                None
+            } else {
+                Some(StructureRef::from_glib_borrow(details))
+            }
+        }
+    }
 }
 
 pub struct Warning<'a>(&'a MessageRef);
@@ -221,7 +240,20 @@ impl<'a> Warning<'a> {
         }
     }
 
-    // TODO get_details()
+    #[cfg(feature = "v1_10")]
+    pub fn get_details(&self) -> Option<&StructureRef> {
+        unsafe {
+            let mut details = ptr::null();
+
+            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+
+            if details.is_null() {
+                None
+            } else {
+                Some(StructureRef::from_glib_borrow(details))
+            }
+        }
+    }
 }
 
 pub struct Info<'a>(&'a MessageRef);
@@ -246,7 +278,20 @@ impl<'a> Info<'a> {
         }
     }
 
-    // TODO get_details()
+    #[cfg(feature = "v1_10")]
+    pub fn get_details(&self) -> Option<&StructureRef> {
+        unsafe {
+            let mut details = ptr::null();
+
+            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+
+            if details.is_null() {
+                None
+            } else {
+                Some(StructureRef::from_glib_borrow(details))
+            }
+        }
+    }
 }
 
 pub struct Tag<'a>(&'a MessageRef);
@@ -758,6 +803,7 @@ pub struct ErrorBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
+    details: Option<Structure>,
 }
 impl<'a> ErrorBuilder<'a> {
     pub fn new(error: &'a glib::Error) -> Self {
@@ -766,6 +812,7 @@ impl<'a> ErrorBuilder<'a> {
             seqnum: None,
             error: error,
             debug: None,
+            details: None,
         }
     }
 
@@ -776,9 +823,29 @@ impl<'a> ErrorBuilder<'a> {
         }
     }
 
-    // TODO details
+    #[cfg(feature = "v1_10")]
+    pub fn details(self, details: Structure) -> Self {
+        Self {
+            details: Some(details),
+            .. self
+        }
+    }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_error(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        #[cfg(feature = "v1_10")]
+        {
+            let details = match s.details.take() {
+                None => ptr::null_mut(),
+                Some(details) => details.into_ptr(),
+            };
+
+            ffi::gst_message_new_error_with_details(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0, details)
+        }
+        #[cfg(not(feature = "v1_10"))]
+        {
+            ffi::gst_message_new_error(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0)
+        }
+    });
 }
 
 pub struct WarningBuilder<'a> {
@@ -786,6 +853,7 @@ pub struct WarningBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
+    details: Option<Structure>,
 }
 impl<'a> WarningBuilder<'a> {
     pub fn new(error: &'a glib::Error) -> Self {
@@ -794,6 +862,7 @@ impl<'a> WarningBuilder<'a> {
             seqnum: None,
             error: error,
             debug: None,
+            details: None,
         }
     }
 
@@ -804,7 +873,29 @@ impl<'a> WarningBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+    #[cfg(feature = "v1_10")]
+    pub fn details(self, details: Structure) -> Self {
+        Self {
+            details: Some(details),
+            .. self
+        }
+    }
+
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        #[cfg(feature = "v1_10")]
+        {
+            let details = match s.details.take() {
+                None => ptr::null_mut(),
+                Some(details) => details.into_ptr(),
+            };
+
+            ffi::gst_message_new_warning_with_details(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0, details)
+        }
+        #[cfg(not(feature = "v1_10"))]
+        {
+            ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0)
+        }
+    });
 }
 
 pub struct InfoBuilder<'a> {
@@ -812,6 +903,7 @@ pub struct InfoBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
+    details: Option<Structure>,
 }
 impl<'a> InfoBuilder<'a> {
     pub fn new(error: &'a glib::Error) -> Self {
@@ -820,6 +912,7 @@ impl<'a> InfoBuilder<'a> {
             seqnum: None,
             error: error,
             debug: None,
+            details: None,
         }
     }
 
@@ -830,9 +923,29 @@ impl<'a> InfoBuilder<'a> {
         }
     }
 
-    // TODO details
+    #[cfg(feature = "v1_10")]
+    pub fn details(self, details: Structure) -> Self {
+        Self {
+            details: Some(details),
+            .. self
+        }
+    }
 
-    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_warning(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0));
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        #[cfg(feature = "v1_10")]
+        {
+            let details = match s.details.take() {
+                None => ptr::null_mut(),
+                Some(details) => details.into_ptr(),
+            };
+
+            ffi::gst_message_new_info_with_details(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0, details)
+        }
+        #[cfg(not(feature = "v1_10"))]
+        {
+            ffi::gst_message_new_info(src, mut_override(s.error.to_glib_none().0), s.debug.to_glib_none().0)
+        }
+    });
 }
 
 pub struct TagBuilder<'a> {

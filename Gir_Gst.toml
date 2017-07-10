@@ -42,7 +42,6 @@ generate = [
     "Gst.DeviceMonitor",
     "Gst.DeviceProvider",
     "Gst.DeviceProviderFactory",
-    "Gst.Stream",
     "Gst.StreamCollection",
     "Gst.StreamType",
     "Gst.StreamFlags",
@@ -246,6 +245,15 @@ status = "generate"
     name = "set_active"
         [object.function.return]
         bool_return_is_error = "Failed to activate pad"
+
+    [[object.property]]
+    name = "caps"
+    # Caps is not a GObject
+    ignore = true
+
+[[object]]
+name = "Gst.Stream"
+status = "generate"
 
     [[object.property]]
     name = "caps"
