@@ -21,6 +21,7 @@ glib_wrapper! {
 
 impl Bus {
     pub fn new() -> Bus {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_bus_new())
         }

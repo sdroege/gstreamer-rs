@@ -98,18 +98,21 @@ impl Plugin {
     }
 
     pub fn list_free(list: &[Plugin]) {
+        assert_initialized_main_thread!();
         unsafe {
             ffi::gst_plugin_list_free(list.to_glib_full());
         }
     }
 
     pub fn load_by_name(name: &str) -> Option<Plugin> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_plugin_load_by_name(name.to_glib_none().0))
         }
     }
 
     pub fn load_file(filename: &str) -> Result<Plugin, Error> {
+        assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gst_plugin_load_file(filename.to_glib_none().0, &mut error);

@@ -18,6 +18,7 @@ glib_wrapper! {
 
 impl Object {
     pub fn check_uniqueness(list: &[Object], name: &str) -> bool {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib(ffi::gst_object_check_uniqueness(list.to_glib_none().0, name.to_glib_none().0))
         }

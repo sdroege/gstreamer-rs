@@ -34,6 +34,7 @@ glib_wrapper! {
 
 impl Pad {
     pub fn new<'a, P: Into<Option<&'a str>>>(name: P, direction: PadDirection) -> Pad {
+        assert_initialized_main_thread!();
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
@@ -46,6 +47,7 @@ impl Pad {
     //}
 
     pub fn new_from_template<'a, P: Into<Option<&'a str>>>(templ: &PadTemplate, name: P) -> Pad {
+        skip_assert_initialized!();
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
@@ -54,6 +56,7 @@ impl Pad {
     }
 
     pub fn link_get_name(ret: PadLinkReturn) -> Option<String> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_pad_link_get_name(ret.to_glib()))
         }

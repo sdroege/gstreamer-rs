@@ -33,6 +33,7 @@ impl ToGlib for SeekFlags {
 #[doc(hidden)]
 impl FromGlib<ffi::GstSeekFlags> for SeekFlags {
     fn from_glib(value: ffi::GstSeekFlags) -> SeekFlags {
+        skip_assert_initialized!();
         SeekFlags::from_bits_truncate(value.bits())
     }
 }
@@ -58,6 +59,7 @@ impl ToGlib for StreamFlags {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamFlags> for StreamFlags {
     fn from_glib(value: ffi::GstStreamFlags) -> StreamFlags {
+        skip_assert_initialized!();
         StreamFlags::from_bits_truncate(value.bits())
     }
 }
@@ -84,6 +86,7 @@ impl ToGlib for StreamType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamType> for StreamType {
     fn from_glib(value: ffi::GstStreamType) -> StreamType {
+        skip_assert_initialized!();
         StreamType::from_bits_truncate(value.bits())
     }
 }

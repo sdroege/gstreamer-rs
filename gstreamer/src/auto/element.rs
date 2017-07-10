@@ -42,6 +42,7 @@ glib_wrapper! {
 
 impl Element {
     pub fn make_from_uri<'a, P: Into<Option<&'a str>>>(type_: URIType, uri: &str, elementname: P) -> Result<Element, Error> {
+        assert_initialized_main_thread!();
         let elementname = elementname.into();
         let elementname = elementname.to_glib_none();
         unsafe {
@@ -52,6 +53,7 @@ impl Element {
     }
 
     pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> bool {
+        assert_initialized_main_thread!();
         let plugin = plugin.into();
         let plugin = plugin.to_glib_none();
         unsafe {
@@ -60,12 +62,14 @@ impl Element {
     }
 
     pub fn state_change_return_get_name(state_ret: StateChangeReturn) -> Option<String> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_element_state_change_return_get_name(state_ret.to_glib()))
         }
     }
 
     pub fn state_get_name(state: State) -> Option<String> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_element_state_get_name(state.to_glib()))
         }

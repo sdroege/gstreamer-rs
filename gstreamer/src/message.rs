@@ -724,6 +724,7 @@ macro_rules! message_builder_generic_impl {
         }
 
         pub fn build(mut self) -> Message {
+            assert_initialized_main_thread!();
             unsafe {
                 let src = self.src.to_glib_none().0;
                 let msg = $new_fn(&mut self, src);

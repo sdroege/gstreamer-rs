@@ -6,6 +6,7 @@ min_cfg_version = "1.8"
 target_path = "gstreamer"
 work_mode = "normal"
 concurrency = "send+sync"
+generate_safety_asserts = true
 
 external_libraries = [
     "GLib",

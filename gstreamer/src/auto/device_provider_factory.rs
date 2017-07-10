@@ -18,12 +18,14 @@ glib_wrapper! {
 
 impl DeviceProviderFactory {
     pub fn find(name: &str) -> Option<DeviceProviderFactory> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_device_provider_factory_find(name.to_glib_none().0))
         }
     }
 
     pub fn get_by_name(factoryname: &str) -> Option<DeviceProvider> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_device_provider_factory_get_by_name(factoryname.to_glib_none().0))
         }

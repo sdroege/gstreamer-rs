@@ -24,6 +24,7 @@ pub struct Structure(*mut StructureRef, PhantomData<StructureRef>, bool);
 
 impl Structure {
     pub fn new_empty(name: &str) -> Structure {
+        assert_initialized_main_thread!();
         Structure(
             unsafe { ffi::gst_structure_new_empty(name.to_glib_none().0) as *mut StructureRef },
             PhantomData,
@@ -32,6 +33,7 @@ impl Structure {
     }
 
     pub fn new(name: &str, values: &[(&str, &Value)]) -> Structure {
+        assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 
         for &(f, v) in values {
@@ -42,6 +44,7 @@ impl Structure {
     }
 
     pub fn from_string(s: &str) -> Option<Structure> {
+        assert_initialized_main_thread!();
         unsafe {
             let structure = ffi::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
             if structure.is_null() {

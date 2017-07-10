@@ -22,6 +22,7 @@ glib_wrapper! {
 impl StreamCollection {
     #[cfg(feature = "v1_10")]
     pub fn new<'a, P: Into<Option<&'a str>>>(upstream_id: P) -> StreamCollection {
+        assert_initialized_main_thread!();
         let upstream_id = upstream_id.into();
         let upstream_id = upstream_id.to_glib_none();
         unsafe {

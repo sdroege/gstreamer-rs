@@ -21,6 +21,7 @@ glib_wrapper! {
 
 impl Pipeline {
     pub fn new<'a, P: Into<Option<&'a str>>>(name: P) -> Pipeline {
+        assert_initialized_main_thread!();
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {

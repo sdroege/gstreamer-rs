@@ -21,6 +21,7 @@ glib_wrapper! {
 
 impl DeviceMonitor {
     pub fn new() -> DeviceMonitor {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_device_monitor_new())
         }

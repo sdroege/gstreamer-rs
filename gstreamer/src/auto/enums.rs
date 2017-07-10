@@ -35,6 +35,7 @@ impl ToGlib for BufferingMode {
 #[doc(hidden)]
 impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
     fn from_glib(value: ffi::GstBufferingMode) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => BufferingMode::Stream,
             1 => BufferingMode::Download,
@@ -95,6 +96,7 @@ impl ToGlib for CoreError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstCoreError> for CoreError {
     fn from_glib(value: ffi::GstCoreError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             1 => CoreError::Failed,
             2 => CoreError::TooLazy,
@@ -118,6 +120,7 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
 
 impl ErrorDomain for CoreError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_core_error_quark() }
     }
 
@@ -126,6 +129,7 @@ impl ErrorDomain for CoreError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             1 => Some(CoreError::Failed),
             2 => Some(CoreError::TooLazy),
@@ -193,6 +197,7 @@ impl ToGlib for FlowReturn {
 #[doc(hidden)]
 impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
     fn from_glib(value: ffi::GstFlowReturn) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             102 => FlowReturn::CustomSuccess2,
             101 => FlowReturn::CustomSuccess1,
@@ -244,6 +249,7 @@ impl ToGlib for Format {
 #[doc(hidden)]
 impl FromGlib<ffi::GstFormat> for Format {
     fn from_glib(value: ffi::GstFormat) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => Format::Undefined,
             1 => Format::Default,
@@ -290,6 +296,7 @@ impl ToGlib for LibraryError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstLibraryError> for LibraryError {
     fn from_glib(value: ffi::GstLibraryError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             1 => LibraryError::Failed,
             2 => LibraryError::TooLazy,
@@ -305,6 +312,7 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
 
 impl ErrorDomain for LibraryError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_library_error_quark() }
     }
 
@@ -313,6 +321,7 @@ impl ErrorDomain for LibraryError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             1 => Some(LibraryError::Failed),
             2 => Some(LibraryError::TooLazy),
@@ -352,6 +361,7 @@ impl ToGlib for PadDirection {
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadDirection> for PadDirection {
     fn from_glib(value: ffi::GstPadDirection) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => PadDirection::Unknown,
             1 => PadDirection::Src,
@@ -395,6 +405,7 @@ impl ToGlib for PadLinkReturn {
 #[doc(hidden)]
 impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
     fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => PadLinkReturn::Ok,
             -1 => PadLinkReturn::WrongHierarchy,
@@ -444,6 +455,7 @@ impl ToGlib for ParseError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstParseError> for ParseError {
     fn from_glib(value: ffi::GstParseError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => ParseError::Syntax,
             1 => ParseError::NoSuchElement,
@@ -460,6 +472,7 @@ impl FromGlib<ffi::GstParseError> for ParseError {
 
 impl ErrorDomain for ParseError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_parse_error_quark() }
     }
 
@@ -468,6 +481,7 @@ impl ErrorDomain for ParseError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             0 => Some(ParseError::Syntax),
             1 => Some(ParseError::NoSuchElement),
@@ -508,6 +522,7 @@ impl ToGlib for PluginError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstPluginError> for PluginError {
     fn from_glib(value: ffi::GstPluginError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => PluginError::Module,
             1 => PluginError::Dependencies,
@@ -519,6 +534,7 @@ impl FromGlib<ffi::GstPluginError> for PluginError {
 
 impl ErrorDomain for PluginError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_plugin_error_quark() }
     }
 
@@ -527,6 +543,7 @@ impl ErrorDomain for PluginError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             0 => Some(PluginError::Module),
             1 => Some(PluginError::Dependencies),
@@ -566,6 +583,7 @@ impl ToGlib for ProgressType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstProgressType> for ProgressType {
     fn from_glib(value: ffi::GstProgressType) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => ProgressType::Start,
             1 => ProgressType::Continue,
@@ -629,6 +647,7 @@ impl ToGlib for ResourceError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstResourceError> for ResourceError {
     fn from_glib(value: ffi::GstResourceError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             1 => ResourceError::Failed,
             2 => ResourceError::TooLazy,
@@ -653,6 +672,7 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
 
 impl ErrorDomain for ResourceError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_resource_error_quark() }
     }
 
@@ -661,6 +681,7 @@ impl ErrorDomain for ResourceError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             1 => Some(ResourceError::Failed),
             2 => Some(ResourceError::TooLazy),
@@ -709,6 +730,7 @@ impl ToGlib for SeekType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstSeekType> for SeekType {
     fn from_glib(value: ffi::GstSeekType) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => SeekType::None,
             1 => SeekType::Set,
@@ -748,6 +770,7 @@ impl ToGlib for State {
 #[doc(hidden)]
 impl FromGlib<ffi::GstState> for State {
     fn from_glib(value: ffi::GstState) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => State::VoidPending,
             1 => State::Null,
@@ -791,6 +814,7 @@ impl ToGlib for StateChange {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStateChange> for StateChange {
     fn from_glib(value: ffi::GstStateChange) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             10 => StateChange::NullToReady,
             19 => StateChange::ReadyToPaused,
@@ -831,6 +855,7 @@ impl ToGlib for StateChangeReturn {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
     fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => StateChangeReturn::Failure,
             1 => StateChangeReturn::Success,
@@ -889,6 +914,7 @@ impl ToGlib for StreamError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamError> for StreamError {
     fn from_glib(value: ffi::GstStreamError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             1 => StreamError::Failed,
             2 => StreamError::TooLazy,
@@ -911,6 +937,7 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
 
 impl ErrorDomain for StreamError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_stream_error_quark() }
     }
 
@@ -919,6 +946,7 @@ impl ErrorDomain for StreamError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             1 => Some(StreamError::Failed),
             2 => Some(StreamError::TooLazy),
@@ -973,6 +1001,7 @@ impl ToGlib for StreamStatusType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
     fn from_glib(value: ffi::GstStreamStatusType) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => StreamStatusType::Create,
             1 => StreamStatusType::Enter,
@@ -1010,6 +1039,7 @@ impl ToGlib for StructureChangeType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
     fn from_glib(value: ffi::GstStructureChangeType) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => StructureChangeType::Link,
             1 => StructureChangeType::Unlink,
@@ -1046,6 +1076,7 @@ impl ToGlib for URIError {
 #[doc(hidden)]
 impl FromGlib<ffi::GstURIError> for URIError {
     fn from_glib(value: ffi::GstURIError) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => URIError::UnsupportedProtocol,
             1 => URIError::BadUri,
@@ -1058,6 +1089,7 @@ impl FromGlib<ffi::GstURIError> for URIError {
 
 impl ErrorDomain for URIError {
     fn domain() -> glib_ffi::GQuark {
+        skip_assert_initialized!();
         unsafe { ffi::gst_uri_error_quark() }
     }
 
@@ -1066,6 +1098,7 @@ impl ErrorDomain for URIError {
     }
 
     fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
         match code {
             0 => Some(URIError::UnsupportedProtocol),
             1 => Some(URIError::BadUri),
@@ -1102,6 +1135,7 @@ impl ToGlib for URIType {
 #[doc(hidden)]
 impl FromGlib<ffi::GstURIType> for URIType {
     fn from_glib(value: ffi::GstURIType) -> Self {
+        skip_assert_initialized!();
         match value as i32 {
             0 => URIType::Unknown,
             1 => URIType::Sink,

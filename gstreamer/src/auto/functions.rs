@@ -16,6 +16,7 @@ use std::ptr;
 
 #[cfg(feature = "v1_12")]
 pub fn calculate_linear_regression(xy: ClockTime, temp: ClockTime, n: u32) -> Option<(ClockTime, ClockTime, ClockTime, ClockTime, f64)> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut m_num = mem::uninitialized();
         let mut m_denom = mem::uninitialized();
@@ -44,12 +45,14 @@ pub fn calculate_linear_regression(xy: ClockTime, temp: ClockTime, n: u32) -> Op
 //}
 
 pub fn debug_construct_term_color(colorinfo: u32) -> Option<String> {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_debug_construct_term_color(colorinfo))
     }
 }
 
 pub fn debug_construct_win_color(colorinfo: u32) -> i32 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_construct_win_color(colorinfo)
     }
@@ -73,12 +76,14 @@ pub fn debug_construct_win_color(colorinfo: u32) -> i32 {
 //}
 
 pub fn debug_is_active() -> bool {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_debug_is_active())
     }
 }
 
 pub fn debug_is_colored() -> bool {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_debug_is_colored())
     }
@@ -97,6 +102,7 @@ pub fn debug_is_colored() -> bool {
 //}
 
 pub fn debug_print_stack_trace() {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_print_stack_trace();
     }
@@ -111,6 +117,7 @@ pub fn debug_print_stack_trace() {
 //}
 
 pub fn debug_set_active(active: bool) {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_set_active(active.to_glib());
     }
@@ -121,12 +128,14 @@ pub fn debug_set_active(active: bool) {
 //}
 
 pub fn debug_set_color_mode_from_string(mode: &str) {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_set_color_mode_from_string(mode.to_glib_none().0);
     }
 }
 
 pub fn debug_set_colored(colored: bool) {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_set_colored(colored.to_glib());
     }
@@ -141,24 +150,28 @@ pub fn debug_set_colored(colored: bool) {
 //}
 
 pub fn debug_set_threshold_from_string(list: &str, reset: bool) {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_set_threshold_from_string(list.to_glib_none().0, reset.to_glib());
     }
 }
 
 pub fn debug_unset_threshold_for_name(name: &str) {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_debug_unset_threshold_for_name(name.to_glib_none().0);
     }
 }
 
 pub fn deinit() {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_deinit();
     }
 }
 
 pub fn dynamic_type_register(plugin: &Plugin, type_: glib::types::Type) -> bool {
+    skip_assert_initialized!();
     unsafe {
         from_glib(ffi::gst_dynamic_type_register(plugin.to_glib_none().0, type_.to_glib()))
     }
@@ -169,6 +182,7 @@ pub fn dynamic_type_register(plugin: &Plugin, type_: glib::types::Type) -> bool 
 //}
 
 pub fn filename_to_uri(filename: &str) -> Result<String, Error> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = ffi::gst_filename_to_uri(filename.to_glib_none().0, &mut error);
@@ -177,6 +191,7 @@ pub fn filename_to_uri(filename: &str) -> Result<String, Error> {
 }
 
 pub fn flow_get_name(ret: FlowReturn) -> Option<String> {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib_none(ffi::gst_flow_get_name(ret.to_glib()))
     }
@@ -219,6 +234,7 @@ pub fn flow_get_name(ret: FlowReturn) -> Option<String> {
 //}
 
 pub fn is_initialized() -> bool {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_is_initialized())
     }
@@ -237,12 +253,14 @@ pub fn is_initialized() -> bool {
 //}
 
 pub fn parent_buffer_meta_api_get_type() -> glib::types::Type {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_parent_buffer_meta_api_get_type())
     }
 }
 
 pub fn parse_bin_from_description(bin_description: &str, ghost_unlinked_pads: bool) -> Result<Option<Bin>, Error> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = ffi::gst_parse_bin_from_description(bin_description.to_glib_none().0, ghost_unlinked_pads.to_glib(), &mut error);
@@ -255,6 +273,7 @@ pub fn parse_bin_from_description(bin_description: &str, ghost_unlinked_pads: bo
 //}
 
 pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = ffi::gst_parse_launch(pipeline_description.to_glib_none().0, &mut error);
@@ -267,6 +286,7 @@ pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
 //}
 
 pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = ffi::gst_parse_launchv(argv.to_glib_none().0, &mut error);
@@ -299,42 +319,49 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
 //}
 
 pub fn protection_meta_api_get_type() -> glib::types::Type {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_protection_meta_api_get_type())
     }
 }
 
 pub fn segtrap_is_enabled() -> bool {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_segtrap_is_enabled())
     }
 }
 
 pub fn segtrap_set_enabled(enabled: bool) {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_segtrap_set_enabled(enabled.to_glib());
     }
 }
 
 pub fn static_caps_get_type() -> glib::types::Type {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_static_caps_get_type())
     }
 }
 
 pub fn static_pad_template_get_type() -> glib::types::Type {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_static_pad_template_get_type())
     }
 }
 
 pub fn tag_exists(tag: &str) -> bool {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_tag_exists(tag.to_glib_none().0))
     }
 }
 
 pub fn tag_get_description(tag: &str) -> Option<String> {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib_none(ffi::gst_tag_get_description(tag.to_glib_none().0))
     }
@@ -345,18 +372,21 @@ pub fn tag_get_description(tag: &str) -> Option<String> {
 //}
 
 pub fn tag_get_nick(tag: &str) -> Option<String> {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib_none(ffi::gst_tag_get_nick(tag.to_glib_none().0))
     }
 }
 
 pub fn tag_get_type(tag: &str) -> glib::types::Type {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_tag_get_type(tag.to_glib_none().0))
     }
 }
 
 pub fn tag_is_fixed(tag: &str) -> bool {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_tag_is_fixed(tag.to_glib_none().0))
     }
@@ -379,12 +409,14 @@ pub fn tag_is_fixed(tag: &str) -> bool {
 //}
 
 pub fn type_find_get_type() -> glib::types::Type {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gst_type_find_get_type())
     }
 }
 
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
+    assert_initialized_main_thread!();
     unsafe {
         glib::error::BoolError::from_glib(ffi::gst_update_registry(), "Failed to update registry")
     }
@@ -395,6 +427,7 @@ pub fn update_registry() -> Result<(), glib::error::BoolError> {
 //}
 
 pub fn util_double_to_fraction(src: f64) -> (i32, i32) {
+    assert_initialized_main_thread!();
     unsafe {
         let mut dest_n = mem::uninitialized();
         let mut dest_d = mem::uninitialized();
@@ -404,6 +437,7 @@ pub fn util_double_to_fraction(src: f64) -> (i32, i32) {
 }
 
 pub fn util_fraction_add(a_n: i32, a_d: i32, b_n: i32, b_d: i32) -> Option<(i32, i32)> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut res_n = mem::uninitialized();
         let mut res_d = mem::uninitialized();
@@ -413,12 +447,14 @@ pub fn util_fraction_add(a_n: i32, a_d: i32, b_n: i32, b_d: i32) -> Option<(i32,
 }
 
 pub fn util_fraction_compare(a_n: i32, a_d: i32, b_n: i32, b_d: i32) -> i32 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_fraction_compare(a_n, a_d, b_n, b_d)
     }
 }
 
 pub fn util_fraction_multiply(a_n: i32, a_d: i32, b_n: i32, b_d: i32) -> Option<(i32, i32)> {
+    assert_initialized_main_thread!();
     unsafe {
         let mut res_n = mem::uninitialized();
         let mut res_d = mem::uninitialized();
@@ -428,6 +464,7 @@ pub fn util_fraction_multiply(a_n: i32, a_d: i32, b_n: i32, b_d: i32) -> Option<
 }
 
 pub fn util_fraction_to_double(src_n: i32, src_d: i32) -> f64 {
+    assert_initialized_main_thread!();
     unsafe {
         let mut dest = mem::uninitialized();
         ffi::gst_util_fraction_to_double(src_n, src_d, &mut dest);
@@ -436,6 +473,7 @@ pub fn util_fraction_to_double(src_n: i32, src_d: i32) -> f64 {
 }
 
 pub fn util_gdouble_to_guint64(value: f64) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_gdouble_to_guint64(value)
     }
@@ -447,42 +485,49 @@ pub fn util_gdouble_to_guint64(value: f64) -> u64 {
 //}
 
 pub fn util_get_timestamp() -> ClockTime {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_get_timestamp()
     }
 }
 
 pub fn util_greatest_common_divisor(a: i32, b: i32) -> i32 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_greatest_common_divisor(a, b)
     }
 }
 
 pub fn util_greatest_common_divisor_int64(a: i64, b: i64) -> i64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_greatest_common_divisor_int64(a, b)
     }
 }
 
 pub fn util_group_id_next() -> u32 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_group_id_next()
     }
 }
 
 pub fn util_guint64_to_gdouble(value: u64) -> f64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_guint64_to_gdouble(value)
     }
 }
 
 pub fn util_seqnum_compare(s1: u32, s2: u32) -> i32 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_seqnum_compare(s1, s2)
     }
 }
 
 pub fn util_seqnum_next() -> u32 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_seqnum_next()
     }
@@ -502,36 +547,42 @@ pub fn util_seqnum_next() -> u32 {
 //}
 
 pub fn util_uint64_scale(val: u64, num: u64, denom: u64) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_uint64_scale(val, num, denom)
     }
 }
 
 pub fn util_uint64_scale_ceil(val: u64, num: u64, denom: u64) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_uint64_scale_ceil(val, num, denom)
     }
 }
 
 pub fn util_uint64_scale_int(val: u64, num: i32, denom: i32) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_uint64_scale_int(val, num, denom)
     }
 }
 
 pub fn util_uint64_scale_int_ceil(val: u64, num: i32, denom: i32) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_uint64_scale_int_ceil(val, num, denom)
     }
 }
 
 pub fn util_uint64_scale_int_round(val: u64, num: i32, denom: i32) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_uint64_scale_int_round(val, num, denom)
     }
 }
 
 pub fn util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64 {
+    assert_initialized_main_thread!();
     unsafe {
         ffi::gst_util_uint64_scale_round(val, num, denom)
     }
@@ -730,6 +781,7 @@ pub fn util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64 {
 //}
 
 pub fn version() -> (u32, u32, u32, u32) {
+    assert_initialized_main_thread!();
     unsafe {
         let mut major = mem::uninitialized();
         let mut minor = mem::uninitialized();
@@ -741,6 +793,7 @@ pub fn version() -> (u32, u32, u32, u32) {
 }
 
 pub fn version_string() -> Option<String> {
+    assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_version_string())
     }

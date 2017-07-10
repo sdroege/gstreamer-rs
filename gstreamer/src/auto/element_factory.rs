@@ -95,6 +95,7 @@ impl ElementFactory {
     }
 
     pub fn find(name: &str) -> Option<ElementFactory> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_element_factory_find(name.to_glib_none().0))
         }
@@ -109,6 +110,7 @@ impl ElementFactory {
     //}
 
     pub fn make<'a, P: Into<Option<&'a str>>>(factoryname: &str, name: P) -> Option<Element> {
+        assert_initialized_main_thread!();
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {

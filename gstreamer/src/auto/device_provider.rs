@@ -27,6 +27,7 @@ glib_wrapper! {
 
 impl DeviceProvider {
     pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> bool {
+        assert_initialized_main_thread!();
         let plugin = plugin.into();
         let plugin = plugin.to_glib_none();
         unsafe {
