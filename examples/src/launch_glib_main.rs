@@ -5,14 +5,16 @@ use gst::ObjectExt as GstObjectExt;
 extern crate glib;
 use glib::*;
 
-use std::u64;
+use std::env;
 
 fn main() {
+    let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
+
     gst::init().unwrap();
 
     let main_loop = MainLoop::new(None, false);
 
-    let pipeline = gst::parse_launch("audiotestsrc ! autoaudiosink").unwrap();
+    let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
     let ret = pipeline.set_state(gst::State::Playing);

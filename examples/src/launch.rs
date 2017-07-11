@@ -2,11 +2,14 @@ extern crate gstreamer as gst;
 use gst::*;
 
 use std::u64;
+use std::env;
 
 fn main() {
+    let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
+
     gst::init().unwrap();
 
-    let pipeline = gst::parse_launch("audiotestsrc ! autoaudiosink").unwrap();
+    let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
     let ret = pipeline.set_state(gst::State::Playing);
