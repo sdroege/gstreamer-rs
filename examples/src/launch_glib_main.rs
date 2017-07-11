@@ -1,16 +1,16 @@
 extern crate gstreamer as gst;
 use gst::*;
+use gst::ObjectExt as GstObjectExt;
 
-extern crate gtk;
+extern crate glib;
+use glib::*;
 
 use std::u64;
 
 fn main() {
     gst::init().unwrap();
 
-    // FIXME: Use glib crate once it has mainloop/etc bindings
-    // https://github.com/gtk-rs/glib/issues/168
-    gtk::init().unwrap();
+    let main_loop = MainLoop::new(None, false);
 
     let pipeline = gst::parse_launch("audiotestsrc ! autoaudiosink").unwrap();
     let bus = pipeline.get_bus().unwrap();
@@ -18,22 +18,30 @@ fn main() {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    bus.add_signal_watch();
-    bus.connect_message(|_, msg| match msg.view() {
-        MessageView::Eos => gtk::main_quit(),
-        MessageView::Error(err) => {
-            println!(
-                "Error from {}: {} ({:?})",
-                msg.get_src().get_path_string(),
-                err.get_error(),
-                err.get_debug()
-            );
-            gtk::main_quit();
-        }
-        _ => (),
+    let main_loop_clone = main_loop.clone();
+
+    //bus.add_signal_watch();
+    //bus.connect_message(move |_, msg| {
+    bus.add_watch(move |_, msg| {
+        let main_loop = &main_loop_clone;
+        match msg.view() {
+            MessageView::Eos => main_loop.quit(),
+            MessageView::Error(err) => {
+                println!(
+                    "Error from {}: {} ({:?})",
+                    msg.get_src().get_path_string(),
+                    err.get_error(),
+                    err.get_debug()
+                );
+                main_loop.quit();
+            }
+            _ => (),
+        };
+
+        glib::Continue(true)
     });
 
-    gtk::main();
+    main_loop.run();
 
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);

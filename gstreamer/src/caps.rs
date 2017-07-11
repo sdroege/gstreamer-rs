@@ -230,7 +230,7 @@ mod tests {
     fn test_simple() {
         gst::init();
 
-        let caps = CapsRef::new_simple(
+        let caps = Caps::new_simple(
             "foo/bar",
             &[
                 ("int", 12.into()),

@@ -55,6 +55,7 @@ pub use caps::Caps;
 
 mod element;
 mod bin;
+mod bus;
 pub use bin::BinExtManual;
 
 use std::ptr;
