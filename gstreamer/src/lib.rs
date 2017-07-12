@@ -17,6 +17,8 @@ extern crate gstreamer_sys as ffi;
 #[macro_use]
 extern crate glib;
 
+extern crate num_rational;
+
 use glib::translate::{from_glib, from_glib_full};
 
 macro_rules! callback_guard {
@@ -59,6 +61,9 @@ mod element;
 mod bin;
 mod bus;
 pub use bin::BinExtManual;
+
+mod value;
+pub use value::*;
 
 use std::ptr;
 

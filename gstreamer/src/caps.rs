@@ -225,6 +225,7 @@ unsafe impl Send for CapsRef {}
 mod tests {
     use super::*;
     use glib::ToValue;
+    use Fraction;
 
     #[test]
     fn test_simple() {
@@ -236,15 +237,15 @@ mod tests {
                 ("int", &12.to_value()),
                 ("bool", &true.to_value()),
                 ("string", &"bla".to_value()),
-                //("fraction", (1, 2).into()),
+                ("fraction", &Fraction::new(1, 2).to_value()),
                 //("array", vec![1.into(), 2.into()].into()),
             ],
         );
         assert_eq!(
             caps.to_string(),
-            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla"
+            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2"
         ); //, \
-        //            fraction=(fraction)1/2, array=(int)< 1, 2 >"
+        //            array=(int)< 1, 2 >"
         //);
 
         let s = caps.get_structure(0).unwrap();
@@ -256,7 +257,7 @@ mod tests {
                     ("int", &12.to_value()),
                     ("bool", &true.to_value()),
                     ("string", &"bla".to_value()),
-                    //("fraction", (1, 2).into()),
+                    ("fraction", &Fraction::new(1, 2).to_value()),
                     //("array", vec![1.into(), 2.into()].into()),
                 ],
             ).as_ref()

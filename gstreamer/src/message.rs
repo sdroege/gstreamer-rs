@@ -1951,7 +1951,10 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
-    pub fn entries(self, entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]) -> Self {
+    pub fn entries(
+        self,
+        entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)],
+    ) -> Self {
         Self {
             entries: Some(entries),
             ..self
