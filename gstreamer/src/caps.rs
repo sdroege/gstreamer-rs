@@ -12,6 +12,7 @@ use structure::*;
 
 use glib;
 use ffi;
+use glib::ToValue;
 use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
 
 #[repr(C)]
@@ -221,45 +222,44 @@ impl ToOwned for CapsRef {
 unsafe impl Sync for CapsRef {}
 unsafe impl Send for CapsRef {}
 
-/*
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_simple() {
-        gst::init();
+        ::init().unwrap();
 
         let caps = Caps::new_simple(
             "foo/bar",
             &[
-                ("int", 12.into()),
-                ("bool", true.into()),
-                ("string", "bla".into()),
-                ("fraction", (1, 2).into()),
-                ("array", vec![1.into(), 2.into()].into()),
+                ("int", &12.to_value()),
+                ("bool", &true.to_value()),
+                ("string", &"bla".to_value()),
+                //("fraction", (1, 2).into()),
+                //("array", vec![1.into(), 2.into()].into()),
             ],
         );
         assert_eq!(
             caps.to_string(),
-            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, \
-                    fraction=(fraction)1/2, array=(int)< 1, 2 >"
-        );
+            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla"
+        ); //, \
+        //            fraction=(fraction)1/2, array=(int)< 1, 2 >"
+        //);
 
         let s = caps.get_structure(0).unwrap();
         assert_eq!(
             s,
-            OwnedStructure::new(
+            Structure::new(
                 "foo/bar",
                 &[
-                    ("int", 12.into()),
-                    ("bool", true.into()),
-                    ("string", "bla".into()),
-                    ("fraction", (1, 2).into()),
-                    ("array", vec![1.into(), 2.into()].into()),
+                    ("int", &12.to_value()),
+                    ("bool", &true.to_value()),
+                    ("string", &"bla".to_value()),
+                    //("fraction", (1, 2).into()),
+                    //("array", vec![1.into(), 2.into()].into()),
                 ],
             ).as_ref()
         );
     }
 }
-*/

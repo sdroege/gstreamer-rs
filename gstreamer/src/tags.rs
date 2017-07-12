@@ -8,10 +8,8 @@
 
 use std::fmt;
 use std::mem;
-use std::ffi::{CStr, CString};
 use std::marker::PhantomData;
 
-use glib;
 use ffi;
 use glib::StaticType;
 use glib::value::{Value, TypedValue, FromValueOptional, SetValue, ToValue};
