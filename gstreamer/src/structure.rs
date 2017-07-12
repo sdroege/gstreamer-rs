@@ -15,8 +15,8 @@ use std::borrow::{Borrow, ToOwned, BorrowMut};
 use std::marker::PhantomData;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, Stash, StashMut, ToGlibPtr,
-                      ToGlibPtrMut, FromGlibPtrNone, FromGlibPtrFull};
+use glib::translate::{from_glib, from_glib_full, Stash, StashMut, ToGlibPtr, ToGlibPtrMut,
+                      FromGlibPtrNone, FromGlibPtrFull};
 use glib::value::{Value, ToValue, FromValueOptional};
 use ffi;
 

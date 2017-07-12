@@ -93,6 +93,7 @@ pub use self::enums::StateChangeReturn;
 pub use self::enums::StreamError;
 pub use self::enums::StreamStatusType;
 pub use self::enums::StructureChangeType;
+pub use self::enums::TagMergeMode;
 pub use self::enums::URIError;
 pub use self::enums::URIType;
 

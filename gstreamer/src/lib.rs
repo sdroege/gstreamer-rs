@@ -52,6 +52,8 @@ pub mod structure;
 pub use structure::Structure;
 pub mod caps;
 pub use caps::Caps;
+pub mod tags;
+pub use tags::*;
 
 mod element;
 mod bin;

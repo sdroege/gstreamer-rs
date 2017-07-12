@@ -1121,6 +1121,57 @@ impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TagMergeMode {
+    Undefined,
+    ReplaceAll,
+    Replace,
+    Append,
+    Prepend,
+    Keep,
+    KeepAll,
+    Count,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TagMergeMode {
+    type GlibType = ffi::GstTagMergeMode;
+
+    fn to_glib(&self) -> ffi::GstTagMergeMode {
+        match *self {
+            TagMergeMode::Undefined => ffi::GST_TAG_MERGE_UNDEFINED,
+            TagMergeMode::ReplaceAll => ffi::GST_TAG_MERGE_REPLACE_ALL,
+            TagMergeMode::Replace => ffi::GST_TAG_MERGE_REPLACE,
+            TagMergeMode::Append => ffi::GST_TAG_MERGE_APPEND,
+            TagMergeMode::Prepend => ffi::GST_TAG_MERGE_PREPEND,
+            TagMergeMode::Keep => ffi::GST_TAG_MERGE_KEEP,
+            TagMergeMode::KeepAll => ffi::GST_TAG_MERGE_KEEP_ALL,
+            TagMergeMode::Count => ffi::GST_TAG_MERGE_COUNT,
+            TagMergeMode::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
+    fn from_glib(value: ffi::GstTagMergeMode) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => TagMergeMode::Undefined,
+            1 => TagMergeMode::ReplaceAll,
+            2 => TagMergeMode::Replace,
+            3 => TagMergeMode::Append,
+            4 => TagMergeMode::Prepend,
+            5 => TagMergeMode::Keep,
+            6 => TagMergeMode::KeepAll,
+            7 => TagMergeMode::Count,
+            value => TagMergeMode::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum URIError {
     UnsupportedProtocol,
     BadUri,
