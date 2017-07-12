@@ -12,7 +12,6 @@ use structure::*;
 
 use glib;
 use ffi;
-use glib::ToValue;
 use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
 
 #[repr(C)]
@@ -225,6 +224,7 @@ unsafe impl Send for CapsRef {}
 #[cfg(test)]
 mod tests {
     use super::*;
+    use glib::ToValue;
 
     #[test]
     fn test_simple() {

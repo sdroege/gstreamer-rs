@@ -457,27 +457,24 @@ mod tests {
         assert_eq!(s.get::<i32>("f3").unwrap(), 123i32);
 
         assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3"]);
-        /*
-        assert_eq!(
-            s.iter()
-                .map(|(f, v)| (f, v.clone()))
-                .collect::<Vec<_>>(),
-            vec![
-                ("f1", "abc".into()),
-                ("f2","bcd".into()),
-                ("f3", 123i32.into()),
-            ]
-        );
+
+        let v = s.iter().map(|(f, v)| (f, v.clone())).collect::<Vec<_>>();
+        assert_eq!(v.len(), 3);
+        assert_eq!(v[0].0, "f1");
+        assert_eq!(v[0].1.get::<&str>().unwrap(), "abc");
+        assert_eq!(v[1].0, "f2");
+        assert_eq!(v[1].1.get::<&str>().unwrap(), "bcd");
+        assert_eq!(v[2].0, "f3");
+        assert_eq!(v[2].1.get::<i32>().unwrap(), 123i32);
 
         let s2 = Structure::new(
             "test",
             &[
-                ("f1", "abc".into()),
-                ("f2", "bcd".into()),
-                ("f3", 123i32.into()),
+                ("f1", &"abc".to_value()),
+                ("f2", &"bcd".to_value()),
+                ("f3", &123i32.to_value()),
             ],
         );
         assert_eq!(s, s2);
-*/
     }
 }
