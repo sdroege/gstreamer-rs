@@ -11,6 +11,7 @@ use Object;
 use Element;
 use miniobject::*;
 use structure::*;
+use TagList;
 
 use std::ptr;
 use std::mem;
@@ -289,7 +290,13 @@ impl<'a> Info<'a> {
 
 pub struct Tag<'a>(&'a MessageRef);
 impl<'a> Tag<'a> {
-    // TODO: get_tags()
+    pub fn get_tags(&self) -> TagList {
+        unsafe {
+            let mut tags = ptr::null_mut();
+            ffi::gst_message_parse_tag(self.0.as_mut_ptr(), &mut tags);
+            from_glib_full(tags)
+        }
+    }
 }
 
 pub struct Buffering<'a>(&'a MessageRef);
@@ -831,26 +838,37 @@ impl<'a> StreamsSelected<'a> {
 }
 
 pub struct Redirect<'a>(&'a MessageRef);
-impl<'a> StreamsSelected<'a> {
-    // TODO: tags, structure
+impl<'a> Redirect<'a> {
     #[cfg(feature = "v1_10")]
-    pub fn get_entries(&self) -> Vec<&str> {
+    pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
             let n = ffi::gst_message_get_num_redirect_entries(self.0.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
                     let mut location = ptr::null();
+                    let mut tags = ptr::null_mut();
+                    let mut structure = ptr::null();
 
                     ffi::gst_message_parse_redirect_entry(
                         self.0.as_mut_ptr(),
                         i,
                         &mut location,
-                        ptr::null_mut(),
-                        ptr::null_mut(),
+                        &mut tags,
+                        &mut structure,
                     );
 
-                    CStr::from_ptr(location).to_str().unwrap()
+                    let structure = if structure.is_null() {
+                        None
+                    } else {
+                        Some(StructureRef::from_glib_borrow(structure))
+                    };
+
+                    (
+                        CStr::from_ptr(location).to_str().unwrap(),
+                        from_glib_none(tags),
+                        structure,
+                    )
                 })
                 .collect()
         }
@@ -1083,11 +1101,10 @@ impl<'a> InfoBuilder<'a> {
 pub struct TagBuilder<'a> {
     src: Option<&'a Object>,
     seqnum: Option<u32>,
-    tags: (),
-    // TODO tags
+    tags: &'a TagList,
 }
 impl<'a> TagBuilder<'a> {
-    pub fn new(tags: ()) -> Self {
+    pub fn new(tags: &'a TagList) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -1095,12 +1112,8 @@ impl<'a> TagBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|_, src| {
-        ffi::gst_message_new_tag(
-            src,
-            /*s.tags.to_glib_full().0*/
-            ptr::null_mut(),
-        )
+    message_builder_generic_impl!(|s: &Self, src| {
+        ffi::gst_message_new_tag(src, s.tags.to_glib_full())
     });
 }
 
@@ -1913,18 +1926,21 @@ impl<'a> StreamsSelectedBuilder<'a> {
     });
 }
 
-// TODO TagList, Structure
 pub struct RedirectBuilder<'a> {
     src: Option<&'a Object>,
     seqnum: Option<u32>,
     location: &'a str,
-    tag_list: Option<()>,
-    entry_struct: Option<()>,
-    entries: Option<&'a [(&'a str, (&'a ()), (&'a ()))]>,
+    tag_list: Option<&'a TagList>,
+    entry_struct: Option<Structure>,
+    entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
 #[cfg(feature = "v1_10")]
 impl<'a> RedirectBuilder<'a> {
-    pub fn new(location: &'a str, tag_list: Option<()>, entry_struct: Option<()>) -> Self {
+    pub fn new(
+        location: &'a str,
+        tag_list: Option<&'a TagList>,
+        entry_struct: Option<Structure>,
+    ) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -1935,7 +1951,7 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
-    pub fn entries(self, entries: &'a [(&'a str, (&'a ()), (&'a ()))]) -> Self {
+    pub fn entries(self, entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]) -> Self {
         Self {
             entries: Some(entries),
             ..self
@@ -1943,19 +1959,32 @@ impl<'a> RedirectBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
+        let entry_struct = s.entry_struct.take();
+        let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
+            entry_struct.into_ptr()
+        } else {
+            ptr::null_mut()
+        };
+
         let msg = ffi::gst_message_new_redirect(
             src,
             s.location.to_glib_none().0,
-            ptr::null_mut(),
-            ptr::null_mut(),
+            s.tag_list.to_glib_full(),
+            entry_struct_ptr,
         );
         if let Some(entries) = s.entries {
             for &(location, tag_list, entry_struct) in entries {
+                let entry_struct = entry_struct.map(|s| s.clone());
+                let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
+                    entry_struct.into_ptr()
+                } else {
+                    ptr::null_mut()
+                };
                 ffi::gst_message_add_redirect_entry(
                     msg,
                     location.to_glib_none().0,
-                    ptr::null_mut(),
-                    ptr::null_mut(),
+                    tag_list.to_glib_full(),
+                    entry_struct_ptr,
                 );
             }
         }
