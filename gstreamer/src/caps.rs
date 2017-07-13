@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::fmt;
+use std::str;
 use miniobject::*;
 use structure::*;
 
@@ -55,6 +56,14 @@ impl GstRc<CapsRef> {
                 Some(from_glib_full(caps_ptr))
             }
         }
+    }
+}
+
+impl str::FromStr for Caps {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, ()> {
+        Caps::from_string(s).ok_or(())
     }
 }
 

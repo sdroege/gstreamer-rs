@@ -9,6 +9,7 @@
 use std::fmt;
 use std::ptr;
 use std::mem;
+use std::str;
 use std::ffi::CStr;
 use std::ops::{Deref, DerefMut};
 use std::borrow::{Borrow, ToOwned, BorrowMut};
@@ -122,6 +123,14 @@ impl PartialEq<StructureRef> for Structure {
 }
 
 impl Eq for Structure {}
+
+impl str::FromStr for Structure {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, ()> {
+        Structure::from_string(s).ok_or(())
+    }
+}
 
 impl Borrow<StructureRef> for Structure {
     fn borrow(&self) -> &StructureRef {
