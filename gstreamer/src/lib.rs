@@ -44,6 +44,7 @@ mod auto;
 pub use auto::*;
 pub use auto::traits::*;
 pub use auto::functions::{parse_launch, parse_bin_from_description};
+pub use auto::traits::ObjectExt as GstObjectExt;
 
 pub mod miniobject;
 pub use miniobject::GstRc;

@@ -1,6 +1,5 @@
 extern crate gstreamer as gst;
 use gst::*;
-use gst::ObjectExt as GstObjectExt;
 
 extern crate glib;
 use glib::*;
