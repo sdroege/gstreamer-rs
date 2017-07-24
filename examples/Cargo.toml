@@ -7,11 +7,3 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
 
-[[bin]]
-name = "launch"
-
-[[bin]]
-name = "launch_glib_main"
-
-[[bin]]
-name = "decodebin"
