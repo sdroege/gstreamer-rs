@@ -122,9 +122,9 @@ impl CapsRef {
         Iter::new(self)
     }
 
-    //pub fn iter_mut(&mut self) -> IterMut {
-    //    IterMut::new(self)
-    //}
+    pub fn iter_mut(&mut self) -> IterMut {
+        IterMut::new(self)
+    }
 
     // TODO: All kinds of caps operations
 }
@@ -136,7 +136,7 @@ impl glib::types::StaticType for GstRc<CapsRef> {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $styp:ty, $getter:ident) => {
+    ($name:ident, $typ:ty, $styp:ty) => {
 
 pub struct $name<'a> {
     caps: $typ,
@@ -164,11 +164,16 @@ impl<'a> Iterator for $name<'a> {
             return None;
         }
 
-        if let Some(s) = self.caps.$getter(self.idx) {
+        unsafe {
+            let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.idx);
+            if structure.is_null() {
+                return None;
+            }
+
             self.idx += 1;
-            Some(s)
-        } else {
-            None
+            Some(StructureRef::from_glib_borrow_mut(
+                structure as *mut ffi::GstStructure,
+            ))
         }
     }
 
@@ -190,10 +195,16 @@ impl<'a> DoubleEndedIterator for $name<'a> {
         }
 
         self.n_structures -= 1;
-        if let Some(s) = self.caps.$getter(self.n_structures) {
-            Some(s)
-        } else {
-            None
+
+        unsafe {
+            let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.n_structures);
+            if structure.is_null() {
+                return None;
+            }
+
+            Some(StructureRef::from_glib_borrow_mut(
+                structure as *mut ffi::GstStructure,
+            ))
         }
     }
 }
@@ -202,8 +213,8 @@ impl<'a> ExactSizeIterator for $name<'a> {}
 }
 );
 
-define_iter!(Iter, &'a CapsRef, &'a StructureRef, get_structure);
-//define_iter!(IterMut, &'a mut CapsRef, &'a mut Structure, get_mut_structure);
+define_iter!(Iter, &'a CapsRef, &'a StructureRef);
+define_iter!(IterMut, &'a mut CapsRef, &'a mut StructureRef);
 
 impl fmt::Debug for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
