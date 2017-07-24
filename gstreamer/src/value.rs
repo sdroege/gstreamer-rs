@@ -9,14 +9,12 @@
 use num_rational::Rational32;
 use std::fmt;
 use std::ops;
-use std::mem;
 
 use glib;
-use glib::value::{Value, FromValue, FromValueOptional, ToValue, SetValue, SetValueOptional};
+use glib::value::{Value, FromValue, FromValueOptional, SetValue};
 use glib::translate::{from_glib, ToGlibPtr, ToGlibPtrMut};
 
 use ffi;
-use gobject_ffi;
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct Fraction(pub Rational32);

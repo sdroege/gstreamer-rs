@@ -412,7 +412,9 @@ pub struct Iter<'a> {
 
 impl<'a> Iter<'a> {
     pub fn new(structure: &'a StructureRef) -> Iter<'a> {
-        Iter { iter: FieldIterator::new(structure) }
+        Iter {
+            iter: FieldIterator::new(structure),
+        }
     }
 }
 

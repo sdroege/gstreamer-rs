@@ -266,7 +266,7 @@ mod tests {
                     ("int", &12.to_value()),
                     ("bool", &true.to_value()),
                     ("string", &"bla".to_value()),
-                    ("fraction", &Fraction::new(1, 2).to_value()),
+                    ("fraction", &Fraction::new(1, 2).to_value())
                     //("array", vec![1.into(), 2.into()].into()),
                 ],
             ).as_ref()
