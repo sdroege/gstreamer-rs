@@ -14,7 +14,7 @@ use std::cell::RefCell;
 use std::mem::transmute;
 
 use glib::IsA;
-use glib::translate::{ToGlib, from_glib, from_glib_none};
+use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none};
 use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
 
@@ -22,7 +22,23 @@ use libc;
 
 use ffi;
 
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub struct PadProbeId(libc::c_ulong);
+pub const PAD_PROBE_ID_INVALID: PadProbeId = PadProbeId(0);
+
+impl ToGlib for PadProbeId {
+    type GlibType = libc::c_ulong;
+
+    fn to_glib(&self) -> libc::c_ulong {
+        self.0
+    }
+}
+
+impl FromGlib<libc::c_ulong> for PadProbeId {
+    fn from_glib(val: libc::c_ulong) -> PadProbeId {
+        PadProbeId(val)
+    }
+}
 
 pub struct PadProbeInfo {
     pub mask: PadProbeType,
@@ -61,13 +77,13 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Some(destroy_closure_pad_probe),
             );
 
-            PadProbeId(id)
+            from_glib(id)
         }
     }
 
     fn remove_probe(&self, id: PadProbeId) {
         unsafe {
-            ffi::gst_pad_remove_probe(self.to_glib_none().0, id.0 as libc::c_ulong);
+            ffi::gst_pad_remove_probe(self.to_glib_none().0, id.to_glib());
         }
     }
 }

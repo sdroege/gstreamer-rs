@@ -204,13 +204,5 @@ impl SetValue for Fraction {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_simple() {
-        let f: Fraction = (1, 2).into();
-        println!("{}", f * 2);
-    }
-}
+// TODO: Array, List, Ranges
+// GStreamer value operations

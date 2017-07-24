@@ -49,12 +49,11 @@ pub use auto::traits::ObjectExt as GstObjectExt;
 pub mod miniobject;
 pub use miniobject::GstRc;
 pub mod message;
-pub use message::Message;
-pub use message::MessageView;
+pub use message::{Message, MessageRef, MessageView};
 pub mod structure;
-pub use structure::Structure;
+pub use structure::{Structure, StructureRef};
 pub mod caps;
-pub use caps::Caps;
+pub use caps::{Caps, CapsRef};
 pub mod tags;
 pub use tags::*;
 
@@ -64,7 +63,7 @@ mod bus;
 mod pad;
 mod gobject;
 pub use bin::BinExtManual;
-pub use pad::PadExtManual;
+pub use pad::{PadExtManual, PadProbeId, PadProbeInfo, PadProbeData, PAD_PROBE_ID_INVALID};
 pub use gobject::GObjectExtManualGst;
 
 mod value;
