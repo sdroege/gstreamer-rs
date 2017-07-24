@@ -712,6 +712,72 @@ impl SetValue for PadPresence {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PadProbeReturn {
+    Drop,
+    Ok,
+    Remove,
+    Pass,
+    Handled,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PadProbeReturn {
+    type GlibType = ffi::GstPadProbeReturn;
+
+    fn to_glib(&self) -> ffi::GstPadProbeReturn {
+        match *self {
+            PadProbeReturn::Drop => ffi::GST_PAD_PROBE_DROP,
+            PadProbeReturn::Ok => ffi::GST_PAD_PROBE_OK,
+            PadProbeReturn::Remove => ffi::GST_PAD_PROBE_REMOVE,
+            PadProbeReturn::Pass => ffi::GST_PAD_PROBE_PASS,
+            PadProbeReturn::Handled => ffi::GST_PAD_PROBE_HANDLED,
+            PadProbeReturn::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
+    fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => PadProbeReturn::Drop,
+            1 => PadProbeReturn::Ok,
+            2 => PadProbeReturn::Remove,
+            3 => PadProbeReturn::Pass,
+            4 => PadProbeReturn::Handled,
+            value => PadProbeReturn::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for PadProbeReturn {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_pad_probe_return_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PadProbeReturn {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PadProbeReturn {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstPadProbeReturn>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for PadProbeReturn {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum ParseError {
     Syntax,
     NoSuchElement,

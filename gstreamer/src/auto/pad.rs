@@ -20,7 +20,6 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-use libc;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -71,7 +70,7 @@ unsafe impl Sync for Pad {}
 pub trait PadExt {
     //fn activate_mode(&self, mode: /*Ignored*/PadMode, active: bool) -> bool;
 
-    //fn add_probe<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mask: /*Ignored*/PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, user_data: P, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong;
+    //fn add_probe<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, user_data: P, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong;
 
     fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
 
@@ -191,8 +190,6 @@ pub trait PadExt {
 
     fn query_position(&self, format: Format) -> Option<i64>;
 
-    fn remove_probe(&self, id: libc::c_ulong);
-
     //fn send_event(&self, event: /*Ignored*/&mut Event) -> bool;
 
     //fn set_activate_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, activate: /*Unknown conversion*//*Unimplemented*/PadActivateFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
@@ -249,7 +246,7 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_activate_mode() }
     //}
 
-    //fn add_probe<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mask: /*Ignored*/PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, user_data: P, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong {
+    //fn add_probe<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, user_data: P, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong {
     //    unsafe { TODO: call ffi::gst_pad_add_probe() }
     //}
 
@@ -568,12 +565,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_position(self.to_glib_none().0, format.to_glib(), &mut cur));
             if ret { Some(cur) } else { None }
-        }
-    }
-
-    fn remove_probe(&self, id: libc::c_ulong) {
-        unsafe {
-            ffi::gst_pad_remove_probe(self.to_glib_none().0, id);
         }
     }
 

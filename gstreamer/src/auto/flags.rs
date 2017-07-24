@@ -9,6 +9,74 @@ use gobject_ffi;
 use glib::translate::*;
 
 bitflags! {
+    pub struct PadProbeType: u32 {
+        const PAD_PROBE_TYPE_INVALID = 0;
+        const PAD_PROBE_TYPE_IDLE = 1;
+        const PAD_PROBE_TYPE_BLOCK = 2;
+        const PAD_PROBE_TYPE_BUFFER = 16;
+        const PAD_PROBE_TYPE_BUFFER_LIST = 32;
+        const PAD_PROBE_TYPE_EVENT_DOWNSTREAM = 64;
+        const PAD_PROBE_TYPE_EVENT_UPSTREAM = 128;
+        const PAD_PROBE_TYPE_EVENT_FLUSH = 256;
+        const PAD_PROBE_TYPE_QUERY_DOWNSTREAM = 512;
+        const PAD_PROBE_TYPE_QUERY_UPSTREAM = 1024;
+        const PAD_PROBE_TYPE_PUSH = 4096;
+        const PAD_PROBE_TYPE_PULL = 8192;
+        const PAD_PROBE_TYPE_BLOCKING = 3;
+        const PAD_PROBE_TYPE_DATA_DOWNSTREAM = 112;
+        const PAD_PROBE_TYPE_DATA_UPSTREAM = 128;
+        const PAD_PROBE_TYPE_DATA_BOTH = 240;
+        const PAD_PROBE_TYPE_BLOCK_DOWNSTREAM = 114;
+        const PAD_PROBE_TYPE_BLOCK_UPSTREAM = 130;
+        const PAD_PROBE_TYPE_EVENT_BOTH = 192;
+        const PAD_PROBE_TYPE_QUERY_BOTH = 1536;
+        const PAD_PROBE_TYPE_ALL_BOTH = 1776;
+        const PAD_PROBE_TYPE_SCHEDULING = 12288;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for PadProbeType {
+    type GlibType = ffi::GstPadProbeType;
+
+    fn to_glib(&self) -> ffi::GstPadProbeType {
+        ffi::GstPadProbeType::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPadProbeType> for PadProbeType {
+    fn from_glib(value: ffi::GstPadProbeType) -> PadProbeType {
+        skip_assert_initialized!();
+        PadProbeType::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for PadProbeType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_pad_probe_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PadProbeType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PadProbeType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstPadProbeType::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for PadProbeType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct SeekFlags: u32 {
         const SEEK_FLAG_NONE = 0;
         const SEEK_FLAG_FLUSH = 1;

@@ -49,6 +49,8 @@ generate = [
     "Gst.ProgressType",
     "Gst.BusSyncReply",
     "Gst.TagMergeMode",
+    "Gst.PadProbeType",
+    "Gst.PadProbeReturn",
 ]
 
 manual = [
@@ -257,6 +259,11 @@ status = "generate"
     [[object.property]]
     name = "caps"
     # Caps is not a GObject
+    ignore = true
+
+    [[object.function]]
+    name = "remove_probe"
+    # Don't use a ulong
     ignore = true
 
 [[object]]

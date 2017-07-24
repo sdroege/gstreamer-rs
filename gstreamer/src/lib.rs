@@ -61,8 +61,10 @@ pub use tags::*;
 mod element;
 mod bin;
 mod bus;
+mod pad;
 mod gobject;
 pub use bin::BinExtManual;
+pub use pad::PadExtManual;
 pub use gobject::GObjectExtManualGst;
 
 mod value;
