@@ -11,9 +11,11 @@ use std::str;
 use miniobject::*;
 use structure::*;
 
+use CapsIntersectMode;
+
 use glib;
 use ffi;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr, ToGlib};
 
 #[repr(C)]
 pub struct CapsRef(ffi::GstCaps);
@@ -56,6 +58,39 @@ impl GstRc<CapsRef> {
                 Some(from_glib_full(caps_ptr))
             }
         }
+    }
+
+    pub fn fixate(caps: Self) -> Self {
+        unsafe { from_glib_full(ffi::gst_caps_fixate(caps.into_ptr())) }
+    }
+
+    pub fn merge(caps: Self, other: Self) -> Self {
+        unsafe { from_glib_full(ffi::gst_caps_merge(caps.into_ptr(), other.into_ptr())) }
+    }
+
+    pub fn merge_structure(caps: Self, other: Structure) -> Self {
+        unsafe {
+            from_glib_full(ffi::gst_caps_merge_structure(
+                caps.into_ptr(),
+                other.into_ptr(),
+            ))
+        }
+    }
+
+    pub fn normalize(caps: Self) -> Self {
+        unsafe { from_glib_full(ffi::gst_caps_normalize(caps.into_ptr())) }
+    }
+
+    pub fn simplify(caps: Self) -> Self {
+        unsafe { from_glib_full(ffi::gst_caps_simplify(caps.into_ptr())) }
+    }
+
+    pub fn subtract(caps: Self, other: Self) -> Self {
+        unsafe { from_glib_full(ffi::gst_caps_subtract(caps.into_ptr(), other.into_ptr())) }
+    }
+
+    pub fn truncate(caps: Self) -> Self {
+        unsafe { from_glib_full(ffi::gst_caps_truncate(caps.into_ptr())) }
     }
 }
 
@@ -110,10 +145,6 @@ impl CapsRef {
         }
     }
 
-    pub fn append_structure(&mut self, structure: Structure) {
-        unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
-    }
-
     pub fn get_size(&self) -> u32 {
         unsafe { ffi::gst_caps_get_size(self.as_ptr()) }
     }
@@ -126,7 +157,87 @@ impl CapsRef {
         IterMut::new(self)
     }
 
-    // TODO: All kinds of caps operations
+    pub fn append_structure(&mut self, structure: Structure) {
+        unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
+    }
+
+    pub fn remove_structure(&mut self, idx: u32) {
+        unsafe { ffi::gst_caps_remove_structure(self.as_mut_ptr(), idx) }
+    }
+
+    pub fn append(&mut self, other: Caps) {
+        unsafe { ffi::gst_caps_append(self.as_mut_ptr(), other.into_ptr()) }
+    }
+
+    pub fn can_intersect(&self, other: &Caps) -> bool {
+        unsafe { from_glib(ffi::gst_caps_can_intersect(self.as_ptr(), other.as_ptr())) }
+    }
+
+    pub fn intersect(&self, other: &Caps) -> Caps {
+        unsafe {
+            from_glib_full(ffi::gst_caps_intersect(
+                self.as_mut_ptr(),
+                other.as_mut_ptr(),
+            ))
+        }
+    }
+
+    pub fn intersect_with_mode(&self, other: &Caps, mode: CapsIntersectMode) -> Caps {
+        unsafe {
+            from_glib_full(ffi::gst_caps_intersect_full(
+                self.as_mut_ptr(),
+                other.as_mut_ptr(),
+                mode.to_glib(),
+            ))
+        }
+    }
+
+    pub fn is_always_compatible(&self, other: &Caps) -> bool {
+        unsafe {
+            from_glib(ffi::gst_caps_is_always_compatible(
+                self.as_ptr(),
+                other.as_ptr(),
+            ))
+        }
+    }
+
+    pub fn is_any(&self) -> bool {
+        unsafe { from_glib(ffi::gst_caps_is_any(self.as_ptr())) }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        unsafe { from_glib(ffi::gst_caps_is_empty(self.as_ptr())) }
+    }
+
+    pub fn is_fixed(&self) -> bool {
+        unsafe { from_glib(ffi::gst_caps_is_fixed(self.as_ptr())) }
+    }
+
+    pub fn is_equal_fixed(&self, other: &Caps) -> bool {
+        unsafe { from_glib(ffi::gst_caps_is_equal_fixed(self.as_ptr(), other.as_ptr())) }
+    }
+
+    pub fn is_strictly_equal(&self, other: &Caps) -> bool {
+        unsafe {
+            from_glib(ffi::gst_caps_is_strictly_equal(
+                self.as_ptr(),
+                other.as_ptr(),
+            ))
+        }
+    }
+
+    pub fn is_subset(&self, superset: &Caps) -> bool {
+        unsafe { from_glib(ffi::gst_caps_is_subset(self.as_ptr(), superset.as_ptr())) }
+    }
+
+    pub fn is_subset_structure(&self, structure: &StructureRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_caps_is_subset_structure(
+                self.as_ptr(),
+                structure.as_ptr(),
+            ))
+        }
+    }
 }
 
 impl glib::types::StaticType for GstRc<CapsRef> {

@@ -51,6 +51,7 @@ generate = [
     "Gst.TagMergeMode",
     "Gst.PadProbeType",
     "Gst.PadProbeReturn",
+    "Gst.CapsIntersectMode",
 ]
 
 manual = [

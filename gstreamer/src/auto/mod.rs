@@ -75,6 +75,7 @@ pub use self::u_r_i_handler::URIHandlerExt;
 mod enums;
 pub use self::enums::BufferingMode;
 pub use self::enums::BusSyncReply;
+pub use self::enums::CapsIntersectMode;
 pub use self::enums::CoreError;
 pub use self::enums::FlowReturn;
 pub use self::enums::Format;

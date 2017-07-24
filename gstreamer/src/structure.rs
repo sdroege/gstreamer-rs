@@ -15,8 +15,10 @@ use std::ops::{Deref, DerefMut};
 use std::borrow::{Borrow, ToOwned, BorrowMut};
 use std::marker::PhantomData;
 
+use Fraction;
+
 use glib;
-use glib::translate::{from_glib, from_glib_full, Stash, StashMut, ToGlibPtr, ToGlibPtrMut,
+use glib::translate::{from_glib, from_glib_full, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut,
                       FromGlibPtrNone, FromGlibPtrFull};
 use glib::value::{Value, ToValue, FromValueOptional};
 use ffi;
@@ -239,6 +241,14 @@ impl StructureRef {
         &mut *(ptr as *mut StructureRef)
     }
 
+    pub unsafe fn as_ptr(&self) -> *const ffi::GstStructure {
+        self as *const Self as *const ffi::GstStructure
+    }
+
+    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstStructure {
+        self as *const Self as *mut ffi::GstStructure
+    }
+
     pub fn to_string(&self) -> String {
         unsafe { from_glib_full(ffi::gst_structure_to_string(&self.0)) }
     }
@@ -283,6 +293,10 @@ impl StructureRef {
         }
     }
 
+    pub fn set_name(&mut self, name: &str) {
+        unsafe { ffi::gst_structure_set_name(&mut self.0, name.to_glib_none().0) }
+    }
+
     pub fn has_field(&self, field: &str) -> bool {
         unsafe {
             from_glib(ffi::gst_structure_has_field(
@@ -292,9 +306,25 @@ impl StructureRef {
         }
     }
 
+    pub fn has_field_with_type(&self, field: &str, type_: glib::Type) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_has_field_typed(
+                &self.0,
+                field.to_glib_none().0,
+                type_.to_glib(),
+            ))
+        }
+    }
+
     pub fn remove_field(&mut self, field: &str) {
         unsafe {
             ffi::gst_structure_remove_field(&mut self.0, field.to_glib_none().0);
+        }
+    }
+
+    pub fn remove_fields(&mut self, fields: &[&str]) {
+        for f in fields {
+            self.remove_field(f)
         }
     }
 
@@ -312,7 +342,7 @@ impl StructureRef {
         Iter::new(self)
     }
 
-    fn get_nth_field_name(&self, idx: u32) -> Option<&str> {
+    pub fn get_nth_field_name(&self, idx: u32) -> Option<&str> {
         unsafe {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
             if field_name.is_null() {
@@ -323,11 +353,90 @@ impl StructureRef {
         }
     }
 
-    fn n_fields(&self) -> u32 {
+    pub fn n_fields(&self) -> u32 {
         unsafe { ffi::gst_structure_n_fields(&self.0) as u32 }
     }
 
-    // TODO: Various operations
+    pub fn can_intersect(&self, other: &StructureRef) -> bool {
+        unsafe { from_glib(ffi::gst_structure_can_intersect(&self.0, &other.0)) }
+    }
+
+    pub fn intersect(&self, other: &StructureRef) -> Structure {
+        unsafe { from_glib_full(ffi::gst_structure_intersect(&self.0, &other.0)) }
+    }
+
+    pub fn is_subset(&self, superset: &StructureRef) -> bool {
+        unsafe { from_glib(ffi::gst_structure_is_subset(&self.0, &superset.0)) }
+    }
+
+    pub fn fixate(&mut self) {
+        unsafe { ffi::gst_structure_fixate(&mut self.0) }
+    }
+
+    pub fn fixate_field(&mut self, name: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_fixate_field(
+                &mut self.0,
+                name.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn fixate_field_bool(&mut self, name: &str, target: bool) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_fixate_field_boolean(
+                &mut self.0,
+                name.to_glib_none().0,
+                target.to_glib(),
+            ))
+        }
+    }
+
+    pub fn fixate_field_str(&mut self, name: &str, target: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_fixate_field_string(
+                &mut self.0,
+                name.to_glib_none().0,
+                target.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn fixate_field_nearest_double(&mut self, name: &str, target: f64) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_fixate_field_nearest_double(
+                &mut self.0,
+                name.to_glib_none().0,
+                target,
+            ))
+        }
+    }
+
+    pub fn fixate_field_nearest_fraction<T: Into<Fraction>>(
+        &mut self,
+        name: &str,
+        target: T,
+    ) -> bool {
+        let target = target.into();
+        unsafe {
+            from_glib(ffi::gst_structure_fixate_field_nearest_fraction(
+                &mut self.0,
+                name.to_glib_none().0,
+                *target.numer(),
+                *target.denom(),
+            ))
+        }
+    }
+
+    pub fn fixate_field_nearest_int(&mut self, name: &str, target: i32) -> bool {
+        unsafe {
+            from_glib(ffi::gst_structure_fixate_field_nearest_int(
+                &mut self.0,
+                name.to_glib_none().0,
+                target,
+            ))
+        }
+    }
 }
 
 impl fmt::Debug for StructureRef {
