@@ -13,7 +13,6 @@ use PadTemplate;
 use Stream;
 use ffi;
 use glib;
-use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::connect;
@@ -223,10 +222,6 @@ pub trait PadExt {
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
 
     fn use_fixed_caps(&self);
-
-    fn get_property_template(&self) -> Option<PadTemplate>;
-
-    fn set_property_template(&self, template: Option<&PadTemplate>);
 
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> u64;
 
@@ -635,20 +630,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn use_fixed_caps(&self) {
         unsafe {
             ffi::gst_pad_use_fixed_caps(self.to_glib_none().0);
-        }
-    }
-
-    fn get_property_template(&self) -> Option<PadTemplate> {
-        let mut value = Value::from(None::<&PadTemplate>);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "template".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get()
-    }
-
-    fn set_property_template(&self, template: Option<&PadTemplate>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "template".to_glib_none().0, Value::from(template).to_glib_none().0);
         }
     }
 

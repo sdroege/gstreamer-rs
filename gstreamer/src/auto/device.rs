@@ -7,7 +7,6 @@ use Object;
 use Structure;
 use ffi;
 use glib;
-use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::connect;
@@ -46,10 +45,6 @@ pub trait DeviceExt {
     fn has_classesv(&self, classes: &[&str]) -> bool;
 
     fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> bool;
-
-    fn get_property_device_class(&self) -> Option<String>;
-
-    fn get_property_display_name(&self) -> Option<String>;
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> u64;
 }
@@ -103,22 +98,6 @@ impl<O: IsA<Device> + IsA<glib::object::Object>> DeviceExt for O {
         unsafe {
             from_glib(ffi::gst_device_reconfigure_element(self.to_glib_none().0, element.to_glib_none().0))
         }
-    }
-
-    fn get_property_device_class(&self) -> Option<String> {
-        let mut value = Value::from(None::<&str>);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "device-class".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get()
-    }
-
-    fn get_property_display_name(&self) -> Option<String> {
-        let mut value = Value::from(None::<&str>);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "display-name".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get()
     }
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> u64 {

@@ -6,8 +6,6 @@ use Caps;
 use Device;
 use Object;
 use ffi;
-use glib;
-use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
@@ -53,13 +51,9 @@ pub trait DeviceMonitorExt {
     fn start(&self) -> bool;
 
     fn stop(&self);
-
-    fn get_property_show_all(&self) -> bool;
-
-    fn set_property_show_all(&self, show_all: bool);
 }
 
-impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
+impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
     fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, classes: P, caps: Q) -> u32 {
         let classes = classes.into();
         let classes = classes.to_glib_none();
@@ -115,20 +109,6 @@ impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
     fn stop(&self) {
         unsafe {
             ffi::gst_device_monitor_stop(self.to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_all(&self) -> bool {
-        let mut value = Value::from(&false);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "show-all".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get().unwrap()
-    }
-
-    fn set_property_show_all(&self, show_all: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "show-all".to_glib_none().0, Value::from(&show_all).to_glib_none().0);
         }
     }
 }

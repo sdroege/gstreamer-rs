@@ -39,10 +39,8 @@ generate = [
     "Gst.URIError",
     "Gst.StructureChangeType",
     "Gst.StreamStatusType",
-    "Gst.DeviceMonitor",
     "Gst.DeviceProvider",
     "Gst.DeviceProviderFactory",
-    "Gst.StreamCollection",
     "Gst.StreamType",
     "Gst.StreamFlags",
     "Gst.PadLinkReturn",
@@ -215,6 +213,24 @@ status = "generate"
     # Caps is not a GObject
     ignore = true
 
+    [[object.property]]
+    name = "device-class"
+    # Has getter/setter functions
+    ignore = true
+
+    [[object.property]]
+    name = "display-name"
+    # Has getter/setter functions
+    ignore = true
+
+[[object]]
+name = "Gst.DeviceMonitor"
+status = "generate"
+
+    [[object.property]]
+    name = "show-all"
+    # Has getter/setter functions
+    ignore = true
 
 [[object]]
 name = "Gst.Object"
@@ -302,6 +318,11 @@ status = "generate"
     # Buffer can be NULL
     ignore = true
 
+    [[object.property]]
+    name = "template"
+    # Has getter/setter functions
+    ignore = true
+
 [[object]]
 name = "Gst.Stream"
 status = "generate"
@@ -314,6 +335,30 @@ status = "generate"
     [[object.property]]
     name = "tags"
     # TagList is not a GObject
+    ignore = true
+
+    [[object.property]]
+    name = "stream-flags"
+    # Has setter/getter functions
+    ignore = true
+
+    [[object.property]]
+    name = "stream-id"
+    # Has setter/getter functions
+    ignore = true
+
+    [[object.property]]
+    name = "stream-type"
+    # Has setter/getter functions
+    ignore = true
+
+[[object]]
+name = "Gst.StreamCollection"
+status = "generate"
+
+    [[object.property]]
+    name = "upstream-id"
+    # Has setter/getter functions
     ignore = true
 
 [[object]]

@@ -4,19 +4,18 @@
 #[cfg(feature = "v1_10")]
 use Caps;
 use Object;
+#[cfg(feature = "v1_10")]
 use StreamFlags;
+#[cfg(feature = "v1_10")]
 use StreamType;
 #[cfg(feature = "v1_10")]
 use TagList;
 use ffi;
-use glib;
-use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
@@ -71,19 +70,9 @@ pub trait StreamExt {
 
     #[cfg(feature = "v1_10")]
     fn set_tags<'a, P: Into<Option<&'a TagList>>>(&self, tags: P);
-
-    fn get_property_stream_flags(&self) -> StreamFlags;
-
-    fn set_property_stream_flags(&self, stream_flags: StreamFlags);
-
-    fn get_property_stream_id(&self) -> Option<String>;
-
-    fn get_property_stream_type(&self) -> StreamType;
-
-    fn set_property_stream_type(&self, stream_type: StreamType);
 }
 
-impl<O: IsA<Stream> + IsA<glib::object::Object>> StreamExt for O {
+impl<O: IsA<Stream>> StreamExt for O {
     #[cfg(feature = "v1_10")]
     fn get_caps(&self) -> Option<Caps> {
         unsafe {
@@ -148,44 +137,6 @@ impl<O: IsA<Stream> + IsA<glib::object::Object>> StreamExt for O {
         let tags = tags.to_glib_none();
         unsafe {
             ffi::gst_stream_set_tags(self.to_glib_none().0, tags.0);
-        }
-    }
-
-    fn get_property_stream_flags(&self) -> StreamFlags {
-        let mut value = Value::from(&0u32);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stream-flags".to_glib_none().0, value.to_glib_none_mut().0);
-            from_glib(transmute(value.get::<u32>().unwrap()))
-        }
-    }
-
-    fn set_property_stream_flags(&self, stream_flags: StreamFlags) {
-        let stream_flags = stream_flags.to_glib().bits() as u32;
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stream-flags".to_glib_none().0, Value::from(&stream_flags).to_glib_none().0);
-        }
-    }
-
-    fn get_property_stream_id(&self) -> Option<String> {
-        let mut value = Value::from(None::<&str>);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stream-id".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get()
-    }
-
-    fn get_property_stream_type(&self) -> StreamType {
-        let mut value = Value::from(&0u32);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stream-type".to_glib_none().0, value.to_glib_none_mut().0);
-            from_glib(transmute(value.get::<u32>().unwrap()))
-        }
-    }
-
-    fn set_property_stream_type(&self, stream_type: StreamType) {
-        let stream_type = stream_type.to_glib().bits() as u32;
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stream-type".to_glib_none().0, Value::from(&stream_type).to_glib_none().0);
         }
     }
 }

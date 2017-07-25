@@ -5,8 +5,6 @@ use Object;
 #[cfg(feature = "v1_10")]
 use Stream;
 use ffi;
-use glib;
-use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
@@ -50,14 +48,10 @@ pub trait StreamCollectionExt {
     #[cfg(feature = "v1_10")]
     fn get_upstream_id(&self) -> Option<String>;
 
-    fn get_property_upstream_id(&self) -> Option<String>;
-
-    fn set_property_upstream_id(&self, upstream_id: Option<&str>);
-
     //fn connect_stream_notify<Unsupported or ignored types>(&self, f: F) -> u64;
 }
 
-impl<O: IsA<StreamCollection> + IsA<glib::object::Object>> StreamCollectionExt for O {
+impl<O: IsA<StreamCollection>> StreamCollectionExt for O {
     #[cfg(feature = "v1_10")]
     fn add_stream(&self, stream: &Stream) -> bool {
         unsafe {
@@ -83,20 +77,6 @@ impl<O: IsA<StreamCollection> + IsA<glib::object::Object>> StreamCollectionExt f
     fn get_upstream_id(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_upstream_id(self.to_glib_none().0))
-        }
-    }
-
-    fn get_property_upstream_id(&self) -> Option<String> {
-        let mut value = Value::from(None::<&str>);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "upstream-id".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get()
-    }
-
-    fn set_property_upstream_id(&self, upstream_id: Option<&str>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "upstream-id".to_glib_none().0, Value::from(upstream_id).to_glib_none().0);
         }
     }
 
