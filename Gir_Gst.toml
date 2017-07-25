@@ -52,6 +52,7 @@ generate = [
     "Gst.PadProbeType",
     "Gst.PadProbeReturn",
     "Gst.CapsIntersectMode",
+    "Gst.BufferFlags",
 ]
 
 manual = [

@@ -56,6 +56,8 @@ pub mod caps;
 pub use caps::{Caps, CapsRef};
 pub mod tags;
 pub use tags::*;
+pub mod buffer;
+pub use buffer::{Buffer, BufferRef, ReadBufferMap, ReadWriteBufferMap, ReadMappedBuffer, ReadWriteMappedBuffer};
 
 mod element;
 mod bin;

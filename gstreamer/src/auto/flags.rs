@@ -9,6 +9,65 @@ use gobject_ffi;
 use glib::translate::*;
 
 bitflags! {
+    pub struct BufferFlags: u32 {
+        const BUFFER_FLAG_LIVE = 16;
+        const BUFFER_FLAG_DECODE_ONLY = 32;
+        const BUFFER_FLAG_DISCONT = 64;
+        const BUFFER_FLAG_RESYNC = 128;
+        const BUFFER_FLAG_CORRUPTED = 256;
+        const BUFFER_FLAG_MARKER = 512;
+        const BUFFER_FLAG_HEADER = 1024;
+        const BUFFER_FLAG_GAP = 2048;
+        const BUFFER_FLAG_DROPPABLE = 4096;
+        const BUFFER_FLAG_DELTA_UNIT = 8192;
+        const BUFFER_FLAG_TAG_MEMORY = 16384;
+        const BUFFER_FLAG_SYNC_AFTER = 32768;
+        const BUFFER_FLAG_LAST = 1048576;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for BufferFlags {
+    type GlibType = ffi::GstBufferFlags;
+
+    fn to_glib(&self) -> ffi::GstBufferFlags {
+        ffi::GstBufferFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstBufferFlags> for BufferFlags {
+    fn from_glib(value: ffi::GstBufferFlags) -> BufferFlags {
+        skip_assert_initialized!();
+        BufferFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for BufferFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_buffer_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for BufferFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for BufferFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstBufferFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for BufferFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct PadProbeType: u32 {
         const PAD_PROBE_TYPE_INVALID = 0;
         const PAD_PROBE_TYPE_IDLE = 1;

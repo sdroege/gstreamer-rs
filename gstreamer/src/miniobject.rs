@@ -145,8 +145,8 @@ impl<T: MiniObject> Drop for GstRc<T> {
     }
 }
 
-unsafe impl<T: MiniObject + Sync> Sync for GstRc<T> {}
-unsafe impl<T: MiniObject + Send> Send for GstRc<T> {}
+unsafe impl<T: MiniObject + Sync + Send> Sync for GstRc<T> {}
+unsafe impl<T: MiniObject + Sync + Send> Send for GstRc<T> {}
 
 impl<T: MiniObject + fmt::Display> fmt::Display for GstRc<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
