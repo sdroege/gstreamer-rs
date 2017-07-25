@@ -9,12 +9,13 @@
 use Pad;
 use PadProbeType;
 use PadProbeReturn;
+use Buffer;
 
 use std::cell::RefCell;
 use std::mem::transmute;
 
-use glib::IsA;
-use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none};
+use glib::{IsA, StaticType};
+use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none, from_glib_borrow};
 use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
 
@@ -49,7 +50,7 @@ pub struct PadProbeInfo {
 }
 
 pub enum PadProbeData {
-    // Buffer(&Buffer),
+    Buffer(Buffer),
     // BufferList(&BufferList),
     // Query(&Query),
     // Event(&Event),
@@ -97,6 +98,7 @@ unsafe extern "C" fn trampoline_pad_probe(
     let func: &RefCell<
         Box<FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>,
     > = transmute(func);
+    let mut data_type = None;
 
     let mut probe_info = PadProbeInfo {
         mask: from_glib((*info).type_),
@@ -106,13 +108,27 @@ unsafe extern "C" fn trampoline_pad_probe(
         data: if (*info).data.is_null() {
             None
         } else {
-            Some(PadProbeData::Unknown)
+            let data = (*info).data as *const ffi::GstMiniObject;
+            if (*data).type_ == Buffer::static_type().to_glib() {
+                data_type = Some(Buffer::static_type());
+                Some(PadProbeData::Buffer(
+                    from_glib_borrow(data as *const ffi::GstBuffer),
+                ))
+            } else {
+                Some(PadProbeData::Unknown)
+            }
         },
     };
 
     let ret = (&mut *func.borrow_mut())(&from_glib_none(pad), &mut probe_info).to_glib();
 
-    // TODO: Possibly replace info.data
+    match probe_info.data {
+        Some(PadProbeData::Buffer(buffer)) => {
+            assert_eq!(data_type, Some(Buffer::static_type()));
+            (*info).data = buffer.into_ptr() as *mut libc::c_void;
+        }
+        _ => (),
+    }
 
     ret
 }
