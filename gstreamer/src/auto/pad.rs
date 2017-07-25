@@ -74,8 +74,6 @@ pub trait PadExt {
 
     fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
 
-    //fn chain(&self, buffer: /*Ignored*/&mut Buffer) -> FlowReturn;
-
     //fn chain_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn;
 
     fn check_reconfigure(&self) -> bool;
@@ -109,8 +107,6 @@ pub trait PadExt {
     fn get_parent_element(&self) -> Option<Element>;
 
     fn get_peer(&self) -> Option<Pad>;
-
-    //fn get_range(&self, offset: u64, size: u32, buffer: /*Ignored*/Buffer) -> FlowReturn;
 
     //fn get_sticky_event(&self, event_type: /*Ignored*/EventType, idx: u32) -> /*Ignored*/Option<Event>;
 
@@ -167,10 +163,6 @@ pub trait PadExt {
     //fn proxy_query_accept_caps(&self, query: /*Ignored*/&mut Query) -> bool;
 
     //fn proxy_query_caps(&self, query: /*Ignored*/&mut Query) -> bool;
-
-    //fn pull_range(&self, offset: u64, size: u32, buffer: /*Ignored*/Buffer) -> FlowReturn;
-
-    //fn push(&self, buffer: /*Ignored*/&mut Buffer) -> FlowReturn;
 
     //fn push_event(&self, event: /*Ignored*/&mut Event) -> bool;
 
@@ -255,10 +247,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
             from_glib(ffi::gst_pad_can_link(self.to_glib_none().0, sinkpad.to_glib_none().0))
         }
     }
-
-    //fn chain(&self, buffer: /*Ignored*/&mut Buffer) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_chain() }
-    //}
 
     //fn chain_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn {
     //    unsafe { TODO: call ffi::gst_pad_chain_list() }
@@ -351,10 +339,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
             from_glib_full(ffi::gst_pad_get_peer(self.to_glib_none().0))
         }
     }
-
-    //fn get_range(&self, offset: u64, size: u32, buffer: /*Ignored*/Buffer) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_get_range() }
-    //}
 
     //fn get_sticky_event(&self, event_type: /*Ignored*/EventType, idx: u32) -> /*Ignored*/Option<Event> {
     //    unsafe { TODO: call ffi::gst_pad_get_sticky_event() }
@@ -504,14 +488,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
 
     //fn proxy_query_caps(&self, query: /*Ignored*/&mut Query) -> bool {
     //    unsafe { TODO: call ffi::gst_pad_proxy_query_caps() }
-    //}
-
-    //fn pull_range(&self, offset: u64, size: u32, buffer: /*Ignored*/Buffer) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_pull_range() }
-    //}
-
-    //fn push(&self, buffer: /*Ignored*/&mut Buffer) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_push() }
     //}
 
     //fn push_event(&self, event: /*Ignored*/&mut Event) -> bool {

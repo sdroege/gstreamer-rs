@@ -58,7 +58,6 @@ generate = [
 manual = [
     "GLib.Error",
     "GLib.Source",
-    "Gst.Message",
     "Gst.Structure",
 ]
 
@@ -114,6 +113,21 @@ trait = false
 
 [[object]]
 name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
 status = "manual"
 ref_mode = "ref"
 
@@ -268,6 +282,26 @@ status = "generate"
     # Don't use a ulong
     ignore = true
 
+    [[object.function]]
+    name = "chain"
+    # Move buffer
+    ignore = true
+
+    [[object.function]]
+    name = "push"
+    # Move buffer
+    ignore = true
+
+    [[object.function]]
+    name = "pull_range"
+    # Buffer can be NULL
+    ignore = true
+
+    [[object.function]]
+    name = "get_range"
+    # Buffer can be NULL
+    ignore = true
+
 [[object]]
 name = "Gst.Stream"
 status = "generate"
@@ -275,6 +309,11 @@ status = "generate"
     [[object.property]]
     name = "caps"
     # Caps is not a GObject
+    ignore = true
+
+    [[object.property]]
+    name = "tags"
+    # TagList is not a GObject
     ignore = true
 
 [[object]]

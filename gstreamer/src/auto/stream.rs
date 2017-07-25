@@ -6,6 +6,8 @@ use Caps;
 use Object;
 use StreamFlags;
 use StreamType;
+#[cfg(feature = "v1_10")]
+use TagList;
 use ffi;
 use glib;
 use glib::Value;
@@ -55,8 +57,8 @@ pub trait StreamExt {
     #[cfg(feature = "v1_10")]
     fn get_stream_type(&self) -> StreamType;
 
-    //#[cfg(feature = "v1_10")]
-    //fn get_tags(&self) -> /*Ignored*/Option<TagList>;
+    #[cfg(feature = "v1_10")]
+    fn get_tags(&self) -> Option<TagList>;
 
     #[cfg(feature = "v1_10")]
     fn set_caps<'a, P: Into<Option<&'a Caps>>>(&self, caps: P);
@@ -67,8 +69,8 @@ pub trait StreamExt {
     #[cfg(feature = "v1_10")]
     fn set_stream_type(&self, stream_type: StreamType);
 
-    //#[cfg(feature = "v1_10")]
-    //fn set_tags<'a, P: Into<Option<&'a /*Ignored*/TagList>>>(&self, tags: P);
+    #[cfg(feature = "v1_10")]
+    fn set_tags<'a, P: Into<Option<&'a TagList>>>(&self, tags: P);
 
     fn get_property_stream_flags(&self) -> StreamFlags;
 
@@ -79,10 +81,6 @@ pub trait StreamExt {
     fn get_property_stream_type(&self) -> StreamType;
 
     fn set_property_stream_type(&self, stream_type: StreamType);
-
-    //fn get_property_tags(&self) -> /*Ignored*/Option<TagList>;
-
-    //fn set_property_tags(&self, tags: /*Ignored*/Option<&TagList>);
 }
 
 impl<O: IsA<Stream> + IsA<glib::object::Object>> StreamExt for O {
@@ -114,10 +112,12 @@ impl<O: IsA<Stream> + IsA<glib::object::Object>> StreamExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_10")]
-    //fn get_tags(&self) -> /*Ignored*/Option<TagList> {
-    //    unsafe { TODO: call ffi::gst_stream_get_tags() }
-    //}
+    #[cfg(feature = "v1_10")]
+    fn get_tags(&self) -> Option<TagList> {
+        unsafe {
+            from_glib_full(ffi::gst_stream_get_tags(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(feature = "v1_10")]
     fn set_caps<'a, P: Into<Option<&'a Caps>>>(&self, caps: P) {
@@ -142,10 +142,14 @@ impl<O: IsA<Stream> + IsA<glib::object::Object>> StreamExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_10")]
-    //fn set_tags<'a, P: Into<Option<&'a /*Ignored*/TagList>>>(&self, tags: P) {
-    //    unsafe { TODO: call ffi::gst_stream_set_tags() }
-    //}
+    #[cfg(feature = "v1_10")]
+    fn set_tags<'a, P: Into<Option<&'a TagList>>>(&self, tags: P) {
+        let tags = tags.into();
+        let tags = tags.to_glib_none();
+        unsafe {
+            ffi::gst_stream_set_tags(self.to_glib_none().0, tags.0);
+        }
+    }
 
     fn get_property_stream_flags(&self) -> StreamFlags {
         let mut value = Value::from(&0u32);
@@ -184,18 +188,4 @@ impl<O: IsA<Stream> + IsA<glib::object::Object>> StreamExt for O {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "stream-type".to_glib_none().0, Value::from(&stream_type).to_glib_none().0);
         }
     }
-
-    //fn get_property_tags(&self) -> /*Ignored*/Option<TagList> {
-    //    let mut value = Value::from(None::<&/*Ignored*/TagList>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "tags".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
-
-    //fn set_property_tags(&self, tags: /*Ignored*/Option<&TagList>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "tags".to_glib_none().0, Value::from(tags).to_glib_none().0);
-    //    }
-    //}
 }

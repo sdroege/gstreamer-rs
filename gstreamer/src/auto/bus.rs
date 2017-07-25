@@ -50,7 +50,7 @@ impl Bus {
     //    unsafe { TODO: call ffi::gst_bus_add_watch_full() }
     //}
 
-    //pub fn async_signal_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> bool {
+    //pub fn async_signal_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &Message, data: P) -> bool {
     //    unsafe { TODO: call ffi::gst_bus_async_signal_func() }
     //}
 
@@ -84,7 +84,7 @@ impl Bus {
         }
     }
 
-    pub fn post(&self, message: &mut Message) -> bool {
+    pub fn post(&self, message: &Message) -> bool {
         unsafe {
             from_glib(ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()))
         }
@@ -106,7 +106,7 @@ impl Bus {
     //    unsafe { TODO: call ffi::gst_bus_set_sync_handler() }
     //}
 
-    //pub fn sync_signal_handler<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &mut Message, data: P) -> BusSyncReply {
+    //pub fn sync_signal_handler<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, message: &Message, data: P) -> BusSyncReply {
     //    unsafe { TODO: call ffi::gst_bus_sync_signal_handler() }
     //}
 

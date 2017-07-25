@@ -10,12 +10,15 @@ use Pad;
 use PadProbeType;
 use PadProbeReturn;
 use Buffer;
+use FlowReturn;
 
 use std::cell::RefCell;
 use std::mem::transmute;
+use std::ptr;
 
 use glib::{IsA, StaticType};
-use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none, from_glib_borrow};
+use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none, from_glib_borrow,
+                      from_glib_full};
 use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
 
@@ -62,6 +65,12 @@ pub trait PadExtManual {
     where
         F: FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     fn remove_probe(&self, id: PadProbeId);
+
+    fn chain(&self, buffer: Buffer) -> FlowReturn;
+    fn push(&self, buffer: Buffer) -> FlowReturn;
+
+    fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
+    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -85,6 +94,48 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn remove_probe(&self, id: PadProbeId) {
         unsafe {
             ffi::gst_pad_remove_probe(self.to_glib_none().0, id.to_glib());
+        }
+    }
+
+    fn chain(&self, buffer: Buffer) -> FlowReturn {
+        unsafe { from_glib(ffi::gst_pad_chain(self.to_glib_none().0, buffer.into_ptr())) }
+    }
+
+    fn push(&self, buffer: Buffer) -> FlowReturn {
+        unsafe { from_glib(ffi::gst_pad_push(self.to_glib_none().0, buffer.into_ptr())) }
+    }
+
+    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {
+        unsafe {
+            let mut buffer = ptr::null_mut();
+            let ret = from_glib(ffi::gst_pad_get_range(
+                self.to_glib_none().0,
+                offset,
+                size,
+                &mut buffer,
+            ));
+            if ret == FlowReturn::Ok {
+                Ok(from_glib_full(buffer))
+            } else {
+                Err(ret)
+            }
+        }
+    }
+
+    fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {
+        unsafe {
+            let mut buffer = ptr::null_mut();
+            let ret = from_glib(ffi::gst_pad_pull_range(
+                self.to_glib_none().0,
+                offset,
+                size,
+                &mut buffer,
+            ));
+            if ret == FlowReturn::Ok {
+                Ok(from_glib_full(buffer))
+            } else {
+                Err(ret)
+            }
         }
     }
 }
