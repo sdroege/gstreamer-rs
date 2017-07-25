@@ -87,3 +87,6 @@ pub fn init() -> Result<(), glib::Error> {
         }
     }
 }
+
+pub const BUFFER_OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
+pub const CLOCK_TIME_NONE: u64 = ffi::GST_CLOCK_TIME_NONE;

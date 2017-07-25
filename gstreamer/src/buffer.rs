@@ -15,6 +15,7 @@ use std::usize;
 
 use miniobject::*;
 use BufferFlags;
+use ClockTime;
 
 use glib;
 use glib_ffi;
@@ -283,27 +284,27 @@ impl BufferRef {
         self.0.offset_end = offset_end;
     }
 
-    pub fn get_pts(&self) -> u64 {
+    pub fn get_pts(&self) -> ClockTime {
         self.0.pts
     }
 
-    pub fn set_pts(&mut self, pts: u64) {
+    pub fn set_pts(&mut self, pts: ClockTime) {
         self.0.pts = pts;
     }
 
-    pub fn get_dts(&self) -> u64 {
+    pub fn get_dts(&self) -> ClockTime {
         self.0.dts
     }
 
-    pub fn set_dts(&mut self, dts: u64) {
+    pub fn set_dts(&mut self, dts: ClockTime) {
         self.0.dts = dts;
     }
 
-    pub fn get_duration(&self) -> u64 {
+    pub fn get_duration(&self) -> ClockTime {
         self.0.duration
     }
 
-    pub fn set_duration(&mut self, duration: u64) {
+    pub fn set_duration(&mut self, duration: ClockTime) {
         self.0.duration = duration;
     }
 
