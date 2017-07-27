@@ -16,6 +16,7 @@ use CapsIntersectMode;
 use glib;
 use ffi;
 use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr, ToGlib};
+use glib::value::ToValue;
 
 #[repr(C)]
 pub struct CapsRef(ffi::GstCaps);
@@ -37,7 +38,7 @@ impl GstRc<CapsRef> {
         unsafe { from_glib_full(ffi::gst_caps_new_any()) }
     }
 
-    pub fn new_simple(name: &str, values: &[(&str, &glib::Value)]) -> Self {
+    pub fn new_simple(name: &str, values: &[(&str, &ToValue)]) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
 
@@ -103,8 +104,10 @@ impl str::FromStr for Caps {
 }
 
 impl CapsRef {
-    pub fn set_simple(&mut self, values: &[(&str, &glib::Value)]) {
+    pub fn set_simple(&mut self, values: &[(&str, &ToValue)]) {
         for &(name, ref value) in values {
+            let value = value.to_value();
+
             unsafe {
                 ffi::gst_caps_set_value(
                     self.as_mut_ptr(),
@@ -355,7 +358,6 @@ unsafe impl Send for CapsRef {}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use glib::ToValue;
     use Fraction;
 
     #[test]
@@ -365,10 +367,10 @@ mod tests {
         let caps = Caps::new_simple(
             "foo/bar",
             &[
-                ("int", &12.to_value()),
-                ("bool", &true.to_value()),
-                ("string", &"bla".to_value()),
-                ("fraction", &Fraction::new(1, 2).to_value()),
+                ("int", &12),
+                ("bool", &true),
+                ("string", &"bla"),
+                ("fraction", &Fraction::new(1, 2)),
                 //("array", vec![1.into(), 2.into()].into()),
             ],
         );
@@ -385,10 +387,10 @@ mod tests {
             Structure::new(
                 "foo/bar",
                 &[
-                    ("int", &12.to_value()),
-                    ("bool", &true.to_value()),
-                    ("string", &"bla".to_value()),
-                    ("fraction", &Fraction::new(1, 2).to_value())
+                    ("int", &12),
+                    ("bool", &true),
+                    ("string", &"bla"),
+                    ("fraction", &Fraction::new(1, 2))
                     //("array", vec![1.into(), 2.into()].into()),
                 ],
             ).as_ref()

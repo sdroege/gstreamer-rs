@@ -34,12 +34,12 @@ impl Structure {
         )
     }
 
-    pub fn new(name: &str, values: &[(&str, &Value)]) -> Structure {
+    pub fn new(name: &str, values: &[(&str, &ToValue)]) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 
         for &(f, v) in values {
-            structure.set_value(f, v.clone());
+            structure.set_value(f, v.to_value());
         }
 
         structure
@@ -590,9 +590,9 @@ mod tests {
         let s2 = Structure::new(
             "test",
             &[
-                ("f1", &"abc".to_value()),
-                ("f2", &"bcd".to_value()),
-                ("f3", &123i32.to_value()),
+                ("f1", &"abc"),
+                ("f2", &"bcd"),
+                ("f3", &123i32),
             ],
         );
         assert_eq!(s, s2);
