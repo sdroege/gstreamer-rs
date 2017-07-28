@@ -457,7 +457,7 @@ impl<'a> FromValueOptional<'a> for Array<'a> {
 impl<'a> SetValue for Array<'a> {
     unsafe fn set_value(v: &mut Value, a: &Self) {
         for value in a.as_slice() {
-            ffi::gst_value_array_append_and_take_value(v.to_glib_none_mut().0, value.to_glib_full() as *mut _);
+            ffi::gst_value_array_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
         }
     }
 }
@@ -517,7 +517,7 @@ impl<'a> FromValueOptional<'a> for List<'a> {
 impl<'a> SetValue for List<'a> {
     unsafe fn set_value(v: &mut Value, a: &Self) {
         for value in a.as_slice() {
-            ffi::gst_value_list_append_and_take_value(v.to_glib_none_mut().0, value.to_glib_full() as *mut _);
+            ffi::gst_value_list_append_value(v.to_glib_none_mut().0, value.to_glib_none().0);
         }
     }
 }

@@ -359,6 +359,7 @@ unsafe impl Send for CapsRef {}
 mod tests {
     use super::*;
     use Fraction;
+    use Array;
 
     #[test]
     fn test_simple() {
@@ -371,15 +372,13 @@ mod tests {
                 ("bool", &true),
                 ("string", &"bla"),
                 ("fraction", &Fraction::new(1, 2)),
-                //("array", vec![1.into(), 2.into()].into()),
+                ("array", &Array::new(&[&1, &2])),
             ],
         );
         assert_eq!(
             caps.to_string(),
-            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2"
-        ); //, \
-        //            array=(int)< 1, 2 >"
-        //);
+            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
+        );
 
         let s = caps.get_structure(0).unwrap();
         assert_eq!(
@@ -390,8 +389,8 @@ mod tests {
                     ("int", &12),
                     ("bool", &true),
                     ("string", &"bla"),
-                    ("fraction", &Fraction::new(1, 2))
-                    //("array", vec![1.into(), 2.into()].into()),
+                    ("fraction", &Fraction::new(1, 2)),
+                    ("array", &Array::new(&[&1, &2])),
                 ],
             ).as_ref()
         );
