@@ -60,6 +60,8 @@ pub mod buffer;
 pub use buffer::{Buffer, BufferRef, ReadBufferMap, ReadWriteBufferMap, ReadMappedBuffer, ReadWriteMappedBuffer};
 pub mod sample;
 pub use sample::{Sample, SampleRef};
+pub mod bufferlist;
+pub use bufferlist::{BufferList, BufferListRef};
 
 mod element;
 mod bin;
