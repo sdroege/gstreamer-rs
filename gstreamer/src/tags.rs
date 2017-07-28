@@ -11,6 +11,7 @@ use std::mem;
 use std::marker::PhantomData;
 
 use ffi;
+use glib;
 use glib::StaticType;
 use glib::value::{Value, TypedValue, FromValueOptional, SetValue, ToValue};
 use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
@@ -146,6 +147,14 @@ impl ToOwned for TagListRef {
 
     fn to_owned(&self) -> GstRc<TagListRef> {
         unsafe { from_glib_none(self.as_ptr()) }
+    }
+}
+
+impl StaticType for TagListRef {
+    fn static_type() -> glib::Type {
+        unsafe {
+            from_glib(ffi::gst_tag_list_get_type())
+        }
     }
 }
 

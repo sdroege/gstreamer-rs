@@ -12,6 +12,8 @@ use Format;
 
 use glib::translate::{from_glib, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
+// TODO: Plain struct implementation without heap allocation
+
 impl Segment {
     pub fn set_flags(&mut self, flags: SegmentFlags) {
         unsafe {

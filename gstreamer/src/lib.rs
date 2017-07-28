@@ -58,6 +58,8 @@ pub mod tags;
 pub use tags::*;
 pub mod buffer;
 pub use buffer::{Buffer, BufferRef, ReadBufferMap, ReadWriteBufferMap, ReadMappedBuffer, ReadWriteMappedBuffer};
+pub mod sample;
+pub use sample::{Sample, SampleRef};
 
 mod element;
 mod bin;
