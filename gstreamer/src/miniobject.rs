@@ -11,8 +11,11 @@ use std::mem;
 use std::marker::PhantomData;
 
 use ffi;
-use glib::translate::{from_glib, Stash, StashMut, ToGlibPtr, ToGlibPtrMut, FromGlibPtrNone,
-                      FromGlibPtrFull, FromGlibPtrBorrow};
+use glib_ffi::gpointer;
+use gobject_ffi;
+use glib::translate::{from_glib, from_glib_none, Stash, StashMut, ToGlibPtr, ToGlibPtrMut,
+                      FromGlibPtrNone, FromGlibPtrFull, FromGlibPtrBorrow};
+use glib;
 
 #[derive(Hash, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct GstRc<T: MiniObject> {
@@ -251,5 +254,24 @@ impl<T: MiniObject + 'static> FromGlibPtrBorrow<*const T::GstType> for GstRc<T> 
 impl<T: MiniObject + 'static> FromGlibPtrBorrow<*mut T::GstType> for GstRc<T> {
     unsafe fn from_glib_borrow(ptr: *mut T::GstType) -> Self {
         Self::from_glib_borrow(ptr)
+    }
+}
+
+impl<T: MiniObject + glib::StaticType> glib::StaticType for GstRc<T> {
+    fn static_type() -> glib::types::Type {
+        T::static_type()
+    }
+}
+
+impl<'a, T: MiniObject + glib::StaticType + 'static> glib::value::FromValueOptional<'a> for GstRc<T> {
+    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+        let ptr = gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
+        from_glib_none(ptr as *const T::GstType)
+    }
+}
+
+impl<T: MiniObject + glib::StaticType> glib::value::SetValue for GstRc<T> {
+    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
+        gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
     }
 }
