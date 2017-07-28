@@ -10,7 +10,9 @@ use Pad;
 use PadProbeType;
 use PadProbeReturn;
 use Buffer;
+use BufferList;
 use FlowReturn;
+use miniobject::MiniObject;
 
 use std::cell::RefCell;
 use std::mem::transmute;
@@ -54,7 +56,7 @@ pub struct PadProbeInfo {
 
 pub enum PadProbeData {
     Buffer(Buffer),
-    // BufferList(&BufferList),
+    BufferList(BufferList),
     // Query(&Query),
     // Event(&Event),
     Unknown,
@@ -165,6 +167,11 @@ unsafe extern "C" fn trampoline_pad_probe(
                 Some(PadProbeData::Buffer(
                     from_glib_borrow(data as *const ffi::GstBuffer),
                 ))
+            } else if (*data).type_ == BufferList::static_type().to_glib() {
+                data_type = Some(BufferList::static_type());
+                Some(PadProbeData::BufferList(
+                    from_glib_borrow(data as *const ffi::GstBufferList),
+                ))
             } else {
                 Some(PadProbeData::Unknown)
             }
@@ -176,7 +183,23 @@ unsafe extern "C" fn trampoline_pad_probe(
     match probe_info.data {
         Some(PadProbeData::Buffer(buffer)) => {
             assert_eq!(data_type, Some(Buffer::static_type()));
-            (*info).data = buffer.into_ptr() as *mut libc::c_void;
+            if (*info).data != buffer.as_mut_ptr() as *mut _ {
+                ffi::gst_mini_object_unref((*info).data as *mut _);
+                (*info).data = buffer.into_ptr() as *mut libc::c_void;
+            }
+        }
+        Some(PadProbeData::BufferList(bufferlist)) => {
+            assert_eq!(data_type, Some(BufferList::static_type()));
+            if (*info).data != bufferlist.as_mut_ptr() as *mut _ {
+                ffi::gst_mini_object_unref((*info).data as *mut _);
+                (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
+            }
+        }
+        None => {
+            if !(*info).data.is_null() {
+                ffi::gst_mini_object_unref((*info).data as *mut _);
+                (*info).data = ptr::null_mut();
+            }
         }
         _ => (),
     }
