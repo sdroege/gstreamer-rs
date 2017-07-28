@@ -362,6 +362,11 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gst.Segment"
+status = "generate"
+concurrency = "send"
+
+[[object]]
 name = "Gst.Plugin"
 status = "generate"
 trait = false
