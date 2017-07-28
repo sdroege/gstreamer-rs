@@ -34672,7 +34672,12 @@ has been changed but not the playback position.</doc>
             <doc xml:space="preserve">the seek stop value</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="update" transfer-ownership="none">
+          <parameter name="update"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">boolean holding whether position was updated.</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
@@ -34815,7 +34820,10 @@ to get the real negative segment position.</doc>
             <doc xml:space="preserve">the running-time</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="position" transfer-ownership="none">
+          <parameter name="position"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the resulting position in the segment</doc>
             <type name="guint64" c:type="guint64*"/>
           </parameter>
@@ -34881,7 +34889,10 @@ to get the real negative segment position.</doc>
             <doc xml:space="preserve">the stream-time</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="position" transfer-ownership="none">
+          <parameter name="position"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the resulting position in the segment</doc>
             <type name="guint64" c:type="guint64*"/>
           </parameter>
@@ -35002,7 +35013,12 @@ to get the real negative running time.</doc>
             <doc xml:space="preserve">the position in the segment</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="running_time" transfer-ownership="none">
+          <parameter name="running_time"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">result running-time</doc>
             <type name="guint64" c:type="guint64*"/>
           </parameter>
@@ -35076,7 +35092,10 @@ to get the real negative stream time.</doc>
             <doc xml:space="preserve">the position in the segment</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
-          <parameter name="stream_time" transfer-ownership="none">
+          <parameter name="stream_time"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">result stream-time</doc>
             <type name="guint64" c:type="guint64*"/>
           </parameter>
@@ -45943,7 +45962,9 @@ indicated by that system ID, or %NULL if no element has been found.</doc>
           <doc xml:space="preserve">A null terminated array of strings
 that contains the UUID values of each protection system that is to be
 checked.</doc>
-          <type name="utf8" c:type="const gchar**"/>
+          <array c:type="gchar**">
+            <type name="utf8" c:type="gchar*"/>
+          </array>
         </parameter>
       </parameters>
     </function>
