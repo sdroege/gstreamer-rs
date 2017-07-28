@@ -194,6 +194,59 @@ impl SetValue for SeekFlags {
 }
 
 bitflags! {
+    pub struct SegmentFlags: u32 {
+        const SEGMENT_FLAG_NONE = 0;
+        const SEGMENT_FLAG_RESET = 1;
+        const SEGMENT_FLAG_TRICKMODE = 16;
+        const SEGMENT_FLAG_SKIP = 16;
+        const SEGMENT_FLAG_SEGMENT = 8;
+        const SEGMENT_FLAG_TRICKMODE_KEY_UNITS = 128;
+        const SEGMENT_FLAG_TRICKMODE_NO_AUDIO = 256;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for SegmentFlags {
+    type GlibType = ffi::GstSegmentFlags;
+
+    fn to_glib(&self) -> ffi::GstSegmentFlags {
+        ffi::GstSegmentFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstSegmentFlags> for SegmentFlags {
+    fn from_glib(value: ffi::GstSegmentFlags) -> SegmentFlags {
+        skip_assert_initialized!();
+        SegmentFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for SegmentFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_segment_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for SegmentFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for SegmentFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstSegmentFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for SegmentFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct StreamFlags: u32 {
         const STREAM_FLAG_NONE = 0;
         const STREAM_FLAG_SPARSE = 1;
