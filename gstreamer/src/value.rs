@@ -14,7 +14,7 @@ use std::slice;
 
 use glib;
 use glib::value::{Value, FromValue, FromValueOptional, SetValue, ToValue};
-use glib::translate::{from_glib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_full, ToGlibPtr, ToGlibPtrMut, FromGlib, ToGlib, Uninitialized};
 
 use ffi;
 use glib_ffi;
@@ -528,4 +528,162 @@ impl<'a> glib::types::StaticType for List<'a> {
     }
 }
 
-// TODO: GStreamer value operations
+pub enum ValueOrder {
+    LessThan,
+    Equal,
+    GreaterThan,
+    Unordered,
+}
+
+impl ToGlib for ValueOrder {
+    type GlibType = i32;
+
+    fn to_glib(&self) -> Self::GlibType {
+        match *self {
+            ValueOrder::LessThan => ffi::GST_VALUE_LESS_THAN,
+            ValueOrder::Equal => ffi::GST_VALUE_EQUAL,
+            ValueOrder::GreaterThan => ffi::GST_VALUE_GREATER_THAN,
+            ValueOrder::Unordered => ffi::GST_VALUE_UNORDERED,
+        }
+    }
+}
+
+impl FromGlib<i32> for ValueOrder {
+    fn from_glib(v: i32) -> Self {
+        match v {
+            ffi::GST_VALUE_LESS_THAN => ValueOrder::LessThan,
+            ffi::GST_VALUE_EQUAL => ValueOrder::Equal,
+            ffi::GST_VALUE_GREATER_THAN => ValueOrder::GreaterThan,
+            ffi::GST_VALUE_UNORDERED => ValueOrder::Unordered,
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub trait GstValueExt: Sized {
+    fn can_compare(&self, other: &Self) -> bool;
+    fn compare(&self, other: &Self) -> ValueOrder;
+    fn can_intersect(&self, other: &Self) -> bool;
+    fn intersect(&self, other: &Self) -> Option<Self>;
+    fn can_subtract(&self, other: &Self) -> bool;
+    fn subtract(&self, other: &Self) -> Option<Self>;
+    fn can_union(&self, other: &Self) -> bool;
+    fn union(&self, other: &Self) -> Option<Self>;
+    fn fixate(&self) -> Option<Self>;
+    fn is_fixed(&self) -> bool;
+    fn is_subset(&self, superset: &Self) -> bool;
+    fn serialize(&self) -> Option<String>;
+    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Option<glib::Value>;
+}
+
+impl GstValueExt for glib::Value {
+    fn can_compare(&self, other: &Self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_value_can_compare(self.to_glib_none().0, other.to_glib_none().0))
+        }
+    }
+
+    fn compare(&self, other: &Self) -> ValueOrder {
+        unsafe {
+            from_glib(ffi::gst_value_compare(self.to_glib_none().0, other.to_glib_none().0))
+        }
+    }
+
+    fn can_intersect(&self, other: &Self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_value_can_intersect(self.to_glib_none().0, other.to_glib_none().0))
+        }
+    }
+
+    fn intersect(&self, other: &Self) -> Option<Self> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret: bool = from_glib(ffi::gst_value_intersect(value.to_glib_none_mut().0, self.to_glib_none().0, other.to_glib_none().0));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
+
+    fn can_subtract(&self, other: &Self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_value_can_subtract(self.to_glib_none().0, other.to_glib_none().0))
+        }
+    }
+
+    fn subtract(&self, other: &Self) -> Option<Self> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret: bool = from_glib(ffi::gst_value_subtract(value.to_glib_none_mut().0, self.to_glib_none().0, other.to_glib_none().0));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
+
+    fn can_union(&self, other: &Self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_value_can_union(self.to_glib_none().0, other.to_glib_none().0))
+        }
+    }
+
+    fn union(&self, other: &Self) -> Option<Self> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret: bool = from_glib(ffi::gst_value_union(value.to_glib_none_mut().0, self.to_glib_none().0, other.to_glib_none().0));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
+
+    fn fixate(&self) -> Option<Self> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret: bool = from_glib(ffi::gst_value_fixate(value.to_glib_none_mut().0, self.to_glib_none().0));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
+
+    fn is_fixed(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_value_is_fixed(self.to_glib_none().0))
+        }
+    }
+
+    fn is_subset(&self, superset: &Self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_value_is_subset(self.to_glib_none().0, superset.to_glib_none().0))
+        }
+    }
+
+    fn serialize(&self) -> Option<String> {
+        unsafe {
+            from_glib_full(ffi::gst_value_serialize(self.to_glib_none().0))
+        }
+    }
+
+    fn deserialize<'a, T: Into<&'a str>>(s: T) -> Option<glib::Value> {
+        let s = s.into();
+
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let ret: bool = from_glib(ffi::gst_value_deserialize(value.to_glib_none_mut().0, s.to_glib_none().0));
+            if ret {
+                Some(value)
+            } else {
+                None
+            }
+        }
+    }
+}
