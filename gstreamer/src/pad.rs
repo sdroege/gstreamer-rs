@@ -12,6 +12,7 @@ use PadProbeReturn;
 use Buffer;
 use BufferList;
 use FlowReturn;
+use Query;
 use QueryRef;
 use miniobject::MiniObject;
 
@@ -47,18 +48,18 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     }
 }
 
-pub struct PadProbeInfo {
+pub struct PadProbeInfo<'a> {
     pub mask: PadProbeType,
     pub id: PadProbeId,
     pub offset: u64,
     pub size: u32,
-    pub data: Option<PadProbeData>,
+    pub data: Option<PadProbeData<'a>>,
 }
 
-pub enum PadProbeData {
+pub enum PadProbeData<'a> {
     Buffer(Buffer),
     BufferList(BufferList),
-    // Query(&Query),
+    Query(&'a mut QueryRef),
     // Event(&Event),
     Unknown,
 }
@@ -211,6 +212,11 @@ unsafe extern "C" fn trampoline_pad_probe(
                 Some(PadProbeData::BufferList(
                     from_glib_none(data as *const ffi::GstBufferList),
                 ))
+            } else if (*data).type_ == Query::static_type().to_glib() {
+                data_type = Some(Query::static_type());
+                Some(PadProbeData::Query(
+                    QueryRef::from_mut_ptr(data as *mut ffi::GstQuery),
+                ))
             } else {
                 Some(PadProbeData::Unknown)
             }
@@ -235,6 +241,7 @@ unsafe extern "C" fn trampoline_pad_probe(
             }
         }
         None => {
+            assert_ne!(data_type, Some(Query::static_type()));
             if !(*info).data.is_null() {
                 ffi::gst_mini_object_unref((*info).data as *mut _);
                 (*info).data = ptr::null_mut();
