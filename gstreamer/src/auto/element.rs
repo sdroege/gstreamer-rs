@@ -160,8 +160,6 @@ pub trait ElementExt {
 
     fn provide_clock(&self) -> Option<Clock>;
 
-    //fn query(&self, query: /*Ignored*/&mut Query) -> bool;
-
     fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64>;
 
     fn query_duration(&self, format: Format) -> Option<i64>;
@@ -437,10 +435,6 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
             from_glib_full(ffi::gst_element_provide_clock(self.to_glib_none().0))
         }
     }
-
-    //fn query(&self, query: /*Ignored*/&mut Query) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_query() }
-    //}
 
     fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64> {
         unsafe {

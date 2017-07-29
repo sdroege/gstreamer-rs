@@ -148,8 +148,6 @@ pub trait PadExt {
 
     fn pause_task(&self) -> Result<(), glib::error::BoolError>;
 
-    //fn peer_query(&self, query: /*Ignored*/&mut Query) -> bool;
-
     fn peer_query_accept_caps(&self, caps: &Caps) -> bool;
 
     fn peer_query_caps<'a, P: Into<Option<&'a Caps>>>(&self, filter: P) -> Option<Caps>;
@@ -160,23 +158,15 @@ pub trait PadExt {
 
     fn peer_query_position(&self, format: Format) -> Option<i64>;
 
-    //fn proxy_query_accept_caps(&self, query: /*Ignored*/&mut Query) -> bool;
-
-    //fn proxy_query_caps(&self, query: /*Ignored*/&mut Query) -> bool;
-
     //fn push_event(&self, event: /*Ignored*/&mut Event) -> bool;
 
     //fn push_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn;
-
-    //fn query(&self, query: /*Ignored*/&mut Query) -> bool;
 
     fn query_accept_caps(&self, caps: &Caps) -> bool;
 
     fn query_caps<'a, P: Into<Option<&'a Caps>>>(&self, filter: P) -> Option<Caps>;
 
     fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64>;
-
-    //fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, query: /*Ignored*/&mut Query) -> bool;
 
     fn query_duration(&self, format: Format) -> Option<i64>;
 
@@ -438,10 +428,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn peer_query(&self, query: /*Ignored*/&mut Query) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_peer_query() }
-    //}
-
     fn peer_query_accept_caps(&self, caps: &Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_peer_query_accept_caps(self.to_glib_none().0, caps.to_glib_none().0))
@@ -480,24 +466,12 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn proxy_query_accept_caps(&self, query: /*Ignored*/&mut Query) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_proxy_query_accept_caps() }
-    //}
-
-    //fn proxy_query_caps(&self, query: /*Ignored*/&mut Query) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_proxy_query_caps() }
-    //}
-
     //fn push_event(&self, event: /*Ignored*/&mut Event) -> bool {
     //    unsafe { TODO: call ffi::gst_pad_push_event() }
     //}
 
     //fn push_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn {
     //    unsafe { TODO: call ffi::gst_pad_push_list() }
-    //}
-
-    //fn query(&self, query: /*Ignored*/&mut Query) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_query() }
     //}
 
     fn query_accept_caps(&self, caps: &Caps) -> bool {
@@ -521,10 +495,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
             if ret { Some(dest_val) } else { None }
         }
     }
-
-    //fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, query: /*Ignored*/&mut Query) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_query_default() }
-    //}
 
     fn query_duration(&self, format: Format) -> Option<i64> {
         unsafe {

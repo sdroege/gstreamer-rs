@@ -133,6 +133,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.Clock"
 status = "generate"
     [[object.function]]
@@ -197,6 +202,11 @@ status = "generate"
     name = "sync_state_with_parent"
         [object.function.return]
         bool_return_is_error = "Failed to sync state with parent"
+
+    [[object.function]]
+    name = "query"
+    # correct mutability
+    ignore = true
 
 [[object]]
 name = "Gst.ElementFactory"
@@ -329,6 +339,31 @@ status = "generate"
     [[object.property]]
     name = "template"
     # Has getter/setter functions
+    ignore = true
+
+    [[object.function]]
+    name = "query"
+    # Correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "peer_query"
+    # Correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "query_default"
+    # Correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "proxy_query_caps"
+    # Correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "proxy_query_accept_caps"
+    # Correct mutability
     ignore = true
 
 [[object]]

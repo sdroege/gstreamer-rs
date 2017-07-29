@@ -12,6 +12,7 @@ use PadProbeReturn;
 use Buffer;
 use BufferList;
 use FlowReturn;
+use QueryRef;
 use miniobject::MiniObject;
 
 use std::cell::RefCell;
@@ -19,9 +20,10 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib::{IsA, StaticType};
-use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none, from_glib_full};
+use glib::translate::{ToGlib, ToGlibPtr, FromGlib, from_glib, from_glib_none, from_glib_full};
 use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
+use glib::Object;
 
 use libc;
 
@@ -72,6 +74,12 @@ pub trait PadExtManual {
 
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
     fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
+
+    fn peer_query(&self, query: &mut QueryRef) -> bool;
+    fn query(&self, query: &mut QueryRef) -> bool;
+    fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, query: &mut QueryRef) -> bool;
+    fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
+    fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -137,6 +145,38 @@ impl<O: IsA<Pad>> PadExtManual for O {
             } else {
                 Err(ret)
             }
+        }
+    }
+
+    fn query(&self, query: &mut QueryRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_query(self.to_glib_none().0, query.as_mut_ptr()))
+        }
+    }
+
+    fn peer_query(&self, query: &mut QueryRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_peer_query(self.to_glib_none().0, query.as_mut_ptr()))
+        }
+    }
+
+    fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, query: &mut QueryRef) -> bool {
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_pad_query_default(self.to_glib_none().0, parent.0 as *mut _, query.as_mut_ptr()))
+        }
+    }
+
+    fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_proxy_query_accept_caps(self.to_glib_none().0, query.as_mut_ptr()))
+        }
+    }
+
+    fn proxy_query_caps(&self, query: &mut QueryRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_proxy_query_accept_caps(self.to_glib_none().0, query.as_mut_ptr()))
         }
     }
 }

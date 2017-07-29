@@ -11,6 +11,8 @@ use Element;
 use glib;
 use glib::IsA;
 use glib::translate::{ToGlibPtr, from_glib};
+use QueryRef;
+use miniobject::MiniObject;
 
 use ffi;
 
@@ -36,6 +38,18 @@ impl Element {
             unsafe {
                 ffi::gst_element_unlink(e1.to_glib_none().0, e2.to_glib_none().0);
             }
+        }
+    }
+}
+
+pub trait ElementExtManual {
+    fn query(&self, query: &mut QueryRef) -> bool;
+}
+
+impl<O: IsA<Element>> ElementExtManual for O {
+    fn query(&self, query: &mut QueryRef) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_query(self.to_glib_none().0, query.as_mut_ptr()))
         }
     }
 }
