@@ -71,6 +71,8 @@ mod bus;
 mod pad;
 mod gobject;
 mod segment;
+mod proxy_pad;
+mod ghost_pad;
 pub use element::ElementExtManual;
 pub use bin::BinExtManual;
 pub use pad::{PadExtManual, PadProbeId, PadProbeInfo, PadProbeData, PAD_PROBE_ID_INVALID};

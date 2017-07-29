@@ -35,6 +35,10 @@ pub use self::element::ElementExt;
 mod element_factory;
 pub use self::element_factory::ElementFactory;
 
+mod ghost_pad;
+pub use self::ghost_pad::GhostPad;
+pub use self::ghost_pad::GhostPadExt;
+
 mod object;
 pub use self::object::Object;
 pub use self::object::ObjectExt;
@@ -53,6 +57,10 @@ pub use self::pipeline::PipelineExt;
 
 mod plugin;
 pub use self::plugin::Plugin;
+
+mod proxy_pad;
+pub use self::proxy_pad::ProxyPad;
+pub use self::proxy_pad::ProxyPadExt;
 
 #[cfg(feature = "v1_10")]
 mod stream;
@@ -193,10 +201,12 @@ pub mod traits {
     pub use super::DeviceProviderExt;
     pub use super::DeviceProviderFactoryExt;
     pub use super::ElementExt;
+    pub use super::GhostPadExt;
     pub use super::ObjectExt;
     pub use super::PadExt;
     pub use super::PadTemplateExt;
     pub use super::PipelineExt;
+    pub use super::ProxyPadExt;
     #[cfg(feature = "v1_10")]
     pub use super::StreamExt;
     #[cfg(feature = "v1_10")]

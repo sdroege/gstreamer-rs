@@ -367,6 +367,40 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gst.GhostPad"
+status = "generate"
+    [[object.function]]
+    name = "set_target"
+        [object.function.return]
+        bool_return_is_error = "Failed to set target"
+
+    [[object.function]]
+    name = "new"
+    ignore = true
+
+    [[object.function]]
+    name = "new_from_template"
+    ignore = true
+
+    [[object.function]]
+    name = "construct"
+    ignore = true
+
+[[object]]
+name = "Gst.ProxyPad"
+status = "generate"
+
+    [[object.function]]
+    name = "chain_default"
+    # Buffer move
+    ignore = true
+
+    [[object.function]]
+    name = "getrange_default"
+    # Buffer move
+    ignore = true
+
+[[object]]
 name = "Gst.Stream"
 status = "generate"
 
