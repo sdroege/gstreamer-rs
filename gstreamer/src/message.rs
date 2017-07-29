@@ -128,6 +128,168 @@ impl MessageRef {
     pub fn new_eos<'a>() -> EosBuilder<'a> {
         EosBuilder::new()
     }
+
+    pub fn new_error<'a>(error: &'a glib::Error) -> ErrorBuilder<'a> {
+        ErrorBuilder::new(error)
+    }
+
+    pub fn new_warning<'a>(error: &'a glib::Error) -> WarningBuilder<'a> {
+        WarningBuilder::new(error)
+    }
+
+    pub fn new_info<'a>(error: &'a glib::Error) -> InfoBuilder<'a> {
+        InfoBuilder::new(error)
+    }
+
+    pub fn new_tag<'a>(tags: &'a TagList) -> TagBuilder<'a> {
+        TagBuilder::new(tags)
+    }
+
+    pub fn new_buffering<'a>(percent: i32) -> BufferingBuilder<'a> {
+        BufferingBuilder::new(percent)
+    }
+
+    pub fn new_state_changed<'a>(old: ::State, new: ::State, pending: ::State) -> StateChangedBuilder<'a> {
+        StateChangedBuilder::new(old, new, pending)
+    }
+
+    pub fn new_state_dirty<'a>() -> StateDirtyBuilder<'a> {
+        StateDirtyBuilder::new()
+    }
+
+    pub fn new_step_done<'a>(
+        format: ::Format,
+        amount: u64,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+        duration: u64,
+        eos: bool
+    ) -> StepDoneBuilder<'a> {
+        StepDoneBuilder::new(format, amount, rate, flush, intermediate, duration, eos)
+    }
+
+    pub fn new_clock_provide<'a>(clock: &'a ::Clock, ready: bool) -> ClockProvideBuilder<'a> {
+        ClockProvideBuilder::new(clock, ready)
+    }
+
+    pub fn new_clock_lost<'a>(clock: &'a ::Clock) -> ClockLostBuilder<'a> {
+        ClockLostBuilder::new(clock)
+    }
+
+    pub fn new_new_clock<'a>(clock: &'a ::Clock) -> NewClockBuilder<'a> {
+        NewClockBuilder::new(clock)
+    }
+
+    pub fn new_structure_change<'a>(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> StructureChangeBuilder<'a> {
+        StructureChangeBuilder::new(type_, owner, busy)
+    }
+
+    pub fn new_stream_status<'a>(type_: ::StreamStatusType, owner: &'a ::Element) -> StreamStatusBuilder<'a> {
+        StreamStatusBuilder::new(type_, owner)
+    }
+
+    pub fn new_application<'a>(structure: ::Structure) -> ApplicationBuilder<'a> {
+        ApplicationBuilder::new(structure)
+    }
+
+    pub fn new_element<'a>(structure: ::Structure) -> ElementBuilder<'a> {
+        ElementBuilder::new(structure)
+    }
+
+    pub fn new_segment_start<'a>(format: ::Format, position: i64) -> SegmentStartBuilder<'a> {
+        SegmentStartBuilder::new(format, position)
+    }
+
+    pub fn new_segment_done<'a>(format: ::Format, position: i64) -> SegmentDoneBuilder<'a> {
+        SegmentDoneBuilder::new(format, position)
+    }
+
+    pub fn new_duration_changed<'a>() -> DurationChangedBuilder<'a> {
+        DurationChangedBuilder::new()
+    }
+
+    pub fn new_latency<'a>() -> LatencyBuilder<'a> {
+        LatencyBuilder::new()
+    }
+
+    pub fn new_async_start<'a>() -> AsyncStartBuilder<'a> {
+        AsyncStartBuilder::new()
+    }
+
+    pub fn new_async_done<'a>(running_time: u64) -> AsyncDoneBuilder<'a> {
+        AsyncDoneBuilder::new(running_time)
+    }
+
+    pub fn new_step_start<'a>(active: bool,
+        format: ::Format,
+        amount: u64,
+        rate: f64,
+        flush: bool,
+        intermediate: bool,
+    ) -> StepStartBuilder<'a> {
+        StepStartBuilder::new(active, format, amount, rate, flush, intermediate)
+    }
+
+    pub fn new_qos_builder<'a>(live: bool,
+        running_time: u64,
+        stream_time: u64,
+        timestamp: u64,
+        duration: u64,
+        ) -> QosBuilder<'a> {
+        QosBuilder::new(live, running_time, stream_time, timestamp, duration)
+    }
+
+    pub fn new_toc<'a>(toc: (), updated: bool) -> TocBuilder<'a> {
+        TocBuilder::new(toc, updated)
+    }
+
+    pub fn new_reset_time<'a>(running_time: u64) -> ResetTimeBuilder<'a> {
+        ResetTimeBuilder::new(running_time)
+    }
+
+    pub fn new_stream_start<'a>() -> StreamStartBuilder<'a> {
+        StreamStartBuilder::new()
+    }
+
+    pub fn new_need_context<'a>(context_type: &'a str) -> NeedContextBuilder<'a> {
+        NeedContextBuilder::new(context_type)
+    }
+
+    pub fn new_have_context<'a>(context: ()) -> HaveContextBuilder<'a> {
+        HaveContextBuilder::new(context)
+    }
+
+    pub fn new_device_added<'a>(device: &'a ::Device) -> DeviceAddedBuilder<'a> {
+        DeviceAddedBuilder::new(device)
+    }
+
+    pub fn new_device_removed<'a>(device: &'a ::Device) -> DeviceRemovedBuilder<'a> {
+        DeviceRemovedBuilder::new(device)
+    }
+
+    #[cfg(feature = "v1_10")]
+    pub fn new_property_notify<'a>(property_name: &'a str, value: &'a glib::Value) -> PropertyNotifyBuilder<'a> {
+        PropertyNotifyBuilder::new(property_name, value)
+    }
+
+    #[cfg(feature = "v1_10")]
+    pub fn new_stream_collection<'a>(collection: &'a ::StreamCollection) -> StreamCollectionBuilder<'a> {
+        StreamCollectionBuilder::new(collection)
+    }
+
+    #[cfg(feature = "v1_10")]
+    pub fn new_streams_selected<'a>(collection: &'a ::StreamCollection) -> StreamsSelectedBuilder<'a> {
+        StreamsSelectedBuilder::new(collection)
+    }
+
+    #[cfg(feature = "v1_10")]
+    pub fn new_redirect<'a>(location: &'a str,
+        tag_list: Option<&'a TagList>,
+        entry_struct: Option<Structure>,
+    ) -> RedirectBuilder<'a> {
+        RedirectBuilder::new(location, tag_list, entry_struct)
+    }
 }
 
 impl glib::types::StaticType for GstRc<MessageRef> {
