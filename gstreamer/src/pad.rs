@@ -19,8 +19,7 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib::{IsA, StaticType};
-use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none, from_glib_borrow,
-                      from_glib_full};
+use glib::translate::{ToGlib, FromGlib, from_glib, from_glib_none, from_glib_full};
 use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
 
@@ -165,12 +164,12 @@ unsafe extern "C" fn trampoline_pad_probe(
             if (*data).type_ == Buffer::static_type().to_glib() {
                 data_type = Some(Buffer::static_type());
                 Some(PadProbeData::Buffer(
-                    from_glib_borrow(data as *const ffi::GstBuffer),
+                    from_glib_none(data as *const ffi::GstBuffer),
                 ))
             } else if (*data).type_ == BufferList::static_type().to_glib() {
                 data_type = Some(BufferList::static_type());
                 Some(PadProbeData::BufferList(
-                    from_glib_borrow(data as *const ffi::GstBufferList),
+                    from_glib_none(data as *const ffi::GstBufferList),
                 ))
             } else {
                 Some(PadProbeData::Unknown)
