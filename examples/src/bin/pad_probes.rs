@@ -3,8 +3,6 @@ use gst::*;
 
 use std::u64;
 use std::i16;
-use std::env;
-use std::mem;
 
 fn main() {
     gst::init().unwrap();
@@ -15,21 +13,19 @@ fn main() {
     let src = pipeline.clone().dynamic_cast::<Bin>().unwrap().get_by_name("src").unwrap();
     let src_pad = src.get_static_pad("src").unwrap();
     src_pad.add_probe(PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
-        if let Some(ref probe_data) = probe_info.data {
-            match *probe_data {
-                PadProbeData::Buffer(ref buffer) => {
-                    let map = buffer.map_read().unwrap();
-                    let data = map.as_slice();
-                    let sum: f64 = data.chunks(2).map(|sample| {
-                        let u: u16 = ((sample[0] as u16) << 8) | (sample[1] as u16);
-                        let f = (u as i16 as f64) / (i16::MAX as f64);
-                        f * f
-                    }).sum();
-                    let rms = (sum / ((data.len() / 2) as f64)).sqrt();
-                    println!("rms: {}", rms);
-                },
-                _ => (),
-            }
+        match probe_info.data {
+            Some(PadProbeData::Buffer(ref buffer)) => {
+                let map = buffer.map_read().unwrap();
+                let data = map.as_slice();
+                let sum: f64 = data.chunks(2).map(|sample| {
+                    let u: u16 = ((sample[0] as u16) << 8) | (sample[1] as u16);
+                    let f = (u as i16 as f64) / (i16::MAX as f64);
+                    f * f
+                }).sum();
+                let rms = (sum / ((data.len() / 2) as f64)).sqrt();
+                println!("rms: {}", rms);
+            },
+            _ => (),
         }
 
         PadProbeReturn::Ok
