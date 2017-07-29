@@ -74,12 +74,14 @@ mod segment;
 mod proxy_pad;
 mod ghost_pad;
 mod child_proxy;
+mod tag_setter;
+mod iterator;
 pub use element::ElementExtManual;
 pub use bin::BinExtManual;
 pub use pad::{PadExtManual, PadProbeId, PadProbeInfo, PadProbeData, PAD_PROBE_ID_INVALID};
 pub use gobject::GObjectExtManualGst;
 pub use child_proxy::ChildProxyExtManual;
-mod iterator;
+pub use tag_setter::TagSetterExtManual;
 pub use self::iterator::Iterator;
 
 mod value;

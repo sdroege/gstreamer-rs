@@ -62,6 +62,10 @@ pub use self::pipeline::PipelineExt;
 mod plugin;
 pub use self::plugin::Plugin;
 
+mod preset;
+pub use self::preset::Preset;
+pub use self::preset::PresetExt;
+
 mod proxy_pad;
 pub use self::proxy_pad::ProxyPad;
 pub use self::proxy_pad::ProxyPadExt;
@@ -79,6 +83,10 @@ mod stream_collection;
 pub use self::stream_collection::StreamCollection;
 #[cfg(feature = "v1_10")]
 pub use self::stream_collection::StreamCollectionExt;
+
+mod tag_setter;
+pub use self::tag_setter::TagSetter;
+pub use self::tag_setter::TagSetterExt;
 
 mod u_r_i_handler;
 pub use self::u_r_i_handler::URIHandler;
@@ -215,10 +223,12 @@ pub mod traits {
     pub use super::PadExt;
     pub use super::PadTemplateExt;
     pub use super::PipelineExt;
+    pub use super::PresetExt;
     pub use super::ProxyPadExt;
     #[cfg(feature = "v1_10")]
     pub use super::StreamExt;
     #[cfg(feature = "v1_10")]
     pub use super::StreamCollectionExt;
+    pub use super::TagSetterExt;
     pub use super::URIHandlerExt;
 }

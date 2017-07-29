@@ -56,6 +56,8 @@ generate = [
     "Gst.SchedulingFlags",
     "Gst.IteratorResult",
     "Gst.ChildProxy",
+    "Gst.Preset",
+    "Gst.TagSetter",
 ]
 
 manual = [
