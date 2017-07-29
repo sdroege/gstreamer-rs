@@ -90,6 +90,7 @@ pub use self::enums::CapsIntersectMode;
 pub use self::enums::CoreError;
 pub use self::enums::FlowReturn;
 pub use self::enums::Format;
+pub use self::enums::IteratorResult;
 pub use self::enums::LibraryError;
 pub use self::enums::PadDirection;
 pub use self::enums::PadLinkReturn;

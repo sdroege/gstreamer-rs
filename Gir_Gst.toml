@@ -54,12 +54,14 @@ generate = [
     "Gst.SegmentFlags",
     "Gst.PadMode",
     "Gst.SchedulingFlags",
+    "Gst.IteratorResult",
 ]
 
 manual = [
     "GLib.Error",
     "GLib.Source",
     "Gst.Structure",
+    "Gst.Iterator",
 ]
 
 [[object]]

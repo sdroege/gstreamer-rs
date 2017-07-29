@@ -77,6 +77,8 @@ pub use element::ElementExtManual;
 pub use bin::BinExtManual;
 pub use pad::{PadExtManual, PadProbeId, PadProbeInfo, PadProbeData, PAD_PROBE_ID_INVALID};
 pub use gobject::GObjectExtManualGst;
+mod iterator;
+pub use self::iterator::Iterator;
 
 mod value;
 pub use value::*;
