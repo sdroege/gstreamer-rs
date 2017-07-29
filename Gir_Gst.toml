@@ -55,11 +55,13 @@ generate = [
     "Gst.PadMode",
     "Gst.SchedulingFlags",
     "Gst.IteratorResult",
+    "Gst.ChildProxy",
 ]
 
 manual = [
     "GLib.Error",
     "GLib.Source",
+    "GObject.Object",
     "Gst.Structure",
     "Gst.Iterator",
 ]

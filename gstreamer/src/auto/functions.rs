@@ -9,6 +9,7 @@ use FlowReturn;
 use Plugin;
 use ffi;
 use glib;
+use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 use std::ptr;
@@ -89,15 +90,15 @@ pub fn debug_is_colored() -> bool {
     }
 }
 
-//pub fn debug_log<'a, P: IsA</*Ignored*/glib::Object> + 'a, Q: Into<Option<&'a P>>>(category: /*Ignored*/&mut DebugCategory, level: /*Ignored*/DebugLevel, file: &str, function: &str, line: i32, object: Q, format: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+//pub fn debug_log<'a, P: IsA<glib::Object> + 'a, Q: Into<Option<&'a P>>>(category: /*Ignored*/&mut DebugCategory, level: /*Ignored*/DebugLevel, file: &str, function: &str, line: i32, object: Q, format: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
 //    unsafe { TODO: call ffi::gst_debug_log() }
 //}
 
-//pub fn debug_log_default<'a, P: IsA</*Ignored*/glib::Object> + 'a, Q: Into<Option<&'a P>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(category: /*Ignored*/&mut DebugCategory, level: /*Ignored*/DebugLevel, file: &str, function: &str, line: i32, object: Q, message: /*Ignored*/&mut DebugMessage, user_data: R) {
+//pub fn debug_log_default<'a, P: IsA<glib::Object> + 'a, Q: Into<Option<&'a P>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(category: /*Ignored*/&mut DebugCategory, level: /*Ignored*/DebugLevel, file: &str, function: &str, line: i32, object: Q, message: /*Ignored*/&mut DebugMessage, user_data: R) {
 //    unsafe { TODO: call ffi::gst_debug_log_default() }
 //}
 
-//pub fn debug_log_valist<'a, P: IsA</*Ignored*/glib::Object> + 'a, Q: Into<Option<&'a P>>>(category: /*Ignored*/&mut DebugCategory, level: /*Ignored*/DebugLevel, file: &str, function: &str, line: i32, object: Q, format: &str, args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
+//pub fn debug_log_valist<'a, P: IsA<glib::Object> + 'a, Q: Into<Option<&'a P>>>(category: /*Ignored*/&mut DebugCategory, level: /*Ignored*/DebugLevel, file: &str, function: &str, line: i32, object: Q, format: &str, args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
 //    unsafe { TODO: call ffi::gst_debug_log_valist() }
 //}
 
@@ -480,7 +481,7 @@ pub fn util_gdouble_to_guint64(value: f64) -> u64 {
 }
 
 //#[cfg(feature = "v1_12")]
-//pub fn util_get_object_array<P: IsA</*Ignored*/glib::Object>>(object: &P, name: &str, array: /*Ignored*/glib::ValueArray) -> bool {
+//pub fn util_get_object_array<P: IsA<glib::Object>>(object: &P, name: &str, array: /*Ignored*/glib::ValueArray) -> bool {
 //    unsafe { TODO: call ffi::gst_util_get_object_array() }
 //}
 
@@ -533,12 +534,15 @@ pub fn util_seqnum_next() -> u32 {
     }
 }
 
-//pub fn util_set_object_arg<P: IsA</*Ignored*/glib::Object>>(object: &P, name: &str, value: &str) {
-//    unsafe { TODO: call ffi::gst_util_set_object_arg() }
-//}
+pub fn util_set_object_arg<P: IsA<glib::Object>>(object: &P, name: &str, value: &str) {
+    assert_initialized_main_thread!();
+    unsafe {
+        ffi::gst_util_set_object_arg(object.to_glib_none().0, name.to_glib_none().0, value.to_glib_none().0);
+    }
+}
 
 //#[cfg(feature = "v1_12")]
-//pub fn util_set_object_array<P: IsA</*Ignored*/glib::Object>>(object: &P, name: &str, array: /*Ignored*/&glib::ValueArray) -> bool {
+//pub fn util_set_object_array<P: IsA<glib::Object>>(object: &P, name: &str, array: /*Ignored*/&glib::ValueArray) -> bool {
 //    unsafe { TODO: call ffi::gst_util_set_object_array() }
 //}
 

@@ -28,7 +28,7 @@ impl Object {
         }
     }
 
-    //pub fn default_deep_notify<P: IsA</*Ignored*/glib::Object>, Q: IsA<Object>, R: IsA</*Ignored*/glib::ParamSpec>>(object: &P, orig: &Q, pspec: &R, excluded_props: &[&str]) {
+    //pub fn default_deep_notify<P: IsA<glib::Object>, Q: IsA<Object>, R: IsA</*Ignored*/glib::ParamSpec>>(object: &P, orig: &Q, pspec: &R, excluded_props: &[&str]) {
     //    unsafe { TODO: call ffi::gst_object_default_deep_notify() }
     //}
 

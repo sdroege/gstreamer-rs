@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use Bin;
+use ChildProxy;
 use Clock;
 use ClockTime;
 use Element;
@@ -16,7 +17,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Pipeline(Object<ffi::GstPipeline>): Bin, Element, Object;
+    pub struct Pipeline(Object<ffi::GstPipeline>): Bin, Element, Object, ChildProxy;
 
     match fn {
         get_type => || ffi::gst_pipeline_get_type(),

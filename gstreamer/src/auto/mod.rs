@@ -8,6 +8,10 @@ pub use self::bin::BinExt;
 mod bus;
 pub use self::bus::Bus;
 
+mod child_proxy;
+pub use self::child_proxy::ChildProxy;
+pub use self::child_proxy::ChildProxyExt;
+
 mod clock;
 pub use self::clock::Clock;
 pub use self::clock::ClockExt;
@@ -196,6 +200,7 @@ pub mod functions;
 #[doc(hidden)]
 pub mod traits {
     pub use super::BinExt;
+    pub use super::ChildProxyExt;
     pub use super::ClockExt;
     pub use super::DeviceExt;
     pub use super::DeviceMonitorExt;
