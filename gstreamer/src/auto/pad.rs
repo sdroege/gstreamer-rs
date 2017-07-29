@@ -8,6 +8,7 @@ use Format;
 use Object;
 use PadDirection;
 use PadLinkReturn;
+use PadMode;
 use PadTemplate;
 #[cfg(feature = "v1_10")]
 use Stream;
@@ -67,7 +68,7 @@ unsafe impl Send for Pad {}
 unsafe impl Sync for Pad {}
 
 pub trait PadExt {
-    //fn activate_mode(&self, mode: /*Ignored*/PadMode, active: bool) -> bool;
+    fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError>;
 
     //fn add_probe<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, user_data: P, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong;
 
@@ -229,9 +230,11 @@ pub trait PadExt {
 }
 
 impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
-    //fn activate_mode(&self, mode: /*Ignored*/PadMode, active: bool) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_activate_mode() }
-    //}
+    fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError> {
+        unsafe {
+            glib::error::BoolError::from_glib(ffi::gst_pad_activate_mode(self.to_glib_none().0, mode.to_glib(), active.to_glib()), "Failed to activate mode pad")
+        }
+    }
 
     //fn add_probe<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, user_data: P, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong {
     //    unsafe { TODO: call ffi::gst_pad_add_probe() }

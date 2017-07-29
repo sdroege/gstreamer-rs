@@ -62,6 +62,8 @@ pub mod sample;
 pub use sample::{Sample, SampleRef};
 pub mod bufferlist;
 pub use bufferlist::{BufferList, BufferListRef};
+pub mod query;
+pub use query::{Query, QueryRef, QueryView};
 
 mod element;
 mod bin;

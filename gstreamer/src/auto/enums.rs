@@ -709,6 +709,66 @@ impl SetValue for PadLinkReturn {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PadMode {
+    None,
+    Push,
+    Pull,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PadMode {
+    type GlibType = ffi::GstPadMode;
+
+    fn to_glib(&self) -> ffi::GstPadMode {
+        match *self {
+            PadMode::None => ffi::GST_PAD_MODE_NONE,
+            PadMode::Push => ffi::GST_PAD_MODE_PUSH,
+            PadMode::Pull => ffi::GST_PAD_MODE_PULL,
+            PadMode::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPadMode> for PadMode {
+    fn from_glib(value: ffi::GstPadMode) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => PadMode::None,
+            1 => PadMode::Push,
+            2 => PadMode::Pull,
+            value => PadMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for PadMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_pad_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PadMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PadMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstPadMode>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for PadMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum PadPresence {
     Always,
     Sometimes,

@@ -124,6 +124,10 @@ impl MessageRef {
             MessageView::Other
         }
     }
+
+    pub fn new_eos<'a>() -> EosBuilder<'a> {
+        EosBuilder::new()
+    }
 }
 
 impl glib::types::StaticType for GstRc<MessageRef> {

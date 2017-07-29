@@ -136,6 +136,55 @@ impl SetValue for PadProbeType {
 }
 
 bitflags! {
+    pub struct SchedulingFlags: u32 {
+        const SCHEDULING_FLAG_SEEKABLE = 1;
+        const SCHEDULING_FLAG_SEQUENTIAL = 2;
+        const SCHEDULING_FLAG_BANDWIDTH_LIMITED = 4;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for SchedulingFlags {
+    type GlibType = ffi::GstSchedulingFlags;
+
+    fn to_glib(&self) -> ffi::GstSchedulingFlags {
+        ffi::GstSchedulingFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstSchedulingFlags> for SchedulingFlags {
+    fn from_glib(value: ffi::GstSchedulingFlags) -> SchedulingFlags {
+        skip_assert_initialized!();
+        SchedulingFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for SchedulingFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_scheduling_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for SchedulingFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for SchedulingFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstSchedulingFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for SchedulingFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct SeekFlags: u32 {
         const SEEK_FLAG_NONE = 0;
         const SEEK_FLAG_FLUSH = 1;

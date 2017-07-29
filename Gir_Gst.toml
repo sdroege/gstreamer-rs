@@ -52,6 +52,8 @@ generate = [
     "Gst.CapsIntersectMode",
     "Gst.BufferFlags",
     "Gst.SegmentFlags",
+    "Gst.PadMode",
+    "Gst.SchedulingFlags",
 ]
 
 manual = [
@@ -288,6 +290,11 @@ status = "generate"
     name = "set_active"
         [object.function.return]
         bool_return_is_error = "Failed to activate pad"
+
+    [[object.function]]
+    name = "activate_mode"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate mode pad"
 
     [[object.property]]
     name = "caps"
