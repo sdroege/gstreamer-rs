@@ -84,6 +84,9 @@ mod u_r_i_handler;
 pub use self::u_r_i_handler::URIHandler;
 pub use self::u_r_i_handler::URIHandlerExt;
 
+mod date_time;
+pub use self::date_time::DateTime;
+
 mod segment;
 pub use self::segment::Segment;
 

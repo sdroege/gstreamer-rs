@@ -142,6 +142,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.DateTime"
+status = "generate"
+concurrency = "send"
+
+[[object]]
 name = "Gst.Clock"
 status = "generate"
     [[object.function]]
