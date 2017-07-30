@@ -19,6 +19,7 @@ use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlib, ToGlibP
 use miniobject::*;
 
 use TagMergeMode;
+use Sample;
 
 pub trait Tag<'a> {
     type TagType: FromValueOptional<'a> + SetValue;
@@ -40,6 +41,7 @@ macro_rules! impl_tag(
 impl_tag!(Title, &'a str, "title");
 impl_tag!(Album, &'a str, "album");
 impl_tag!(Artist, &'a str, "artist");
+impl_tag!(AlbumArtist, &'a str, "album-artist");
 impl_tag!(Encoder, &'a str, "encoder");
 impl_tag!(AudioCodec, &'a str, "audio-codec");
 impl_tag!(VideoCodec, &'a str, "video-codec");
@@ -49,6 +51,7 @@ impl_tag!(ContainerFormat, &'a str, "container-format");
 impl_tag!(LanguageCode, &'a str, "language-code");
 impl_tag!(Duration, u64, "duration");
 impl_tag!(NominalBitrate, u32, "nominal-bitrate");
+impl_tag!(Image, Sample, "image");
 
 pub type TagList = GstRc<TagListRef>;
 pub struct TagListRef(ffi::GstTagList);
