@@ -103,6 +103,7 @@ pub use self::enums::BufferingMode;
 pub use self::enums::BusSyncReply;
 pub use self::enums::CapsIntersectMode;
 pub use self::enums::CoreError;
+pub use self::enums::EventType;
 pub use self::enums::FlowReturn;
 pub use self::enums::Format;
 pub use self::enums::IteratorResult;

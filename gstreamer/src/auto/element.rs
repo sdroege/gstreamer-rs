@@ -7,6 +7,7 @@ use Clock;
 use ClockTime;
 use ElementFactory;
 use Error;
+use Event;
 use Format;
 use Iterator;
 use Message;
@@ -180,7 +181,7 @@ pub trait ElementExt {
 
     fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> Result<(), glib::error::BoolError>;
 
-    //fn send_event(&self, event: /*Ignored*/&mut Event) -> bool;
+    fn send_event(&self, event: &Event) -> bool;
 
     fn set_base_time(&self, time: ClockTime);
 
@@ -508,9 +509,11 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    //fn send_event(&self, event: /*Ignored*/&mut Event) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_send_event() }
-    //}
+    fn send_event(&self, event: &Event) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_send_event(self.to_glib_none().0, event.to_glib_full()))
+        }
+    }
 
     fn set_base_time(&self, time: ClockTime) {
         unsafe {

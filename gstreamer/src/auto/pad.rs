@@ -3,6 +3,8 @@
 
 use Caps;
 use Element;
+use Event;
+use EventType;
 use FlowReturn;
 use Format;
 use Iterator;
@@ -85,7 +87,7 @@ pub trait PadExt {
 
     //fn create_stream_id_printf_valist<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<String>;
 
-    //fn event_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: /*Ignored*/&mut Event) -> bool;
+    fn event_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: &Event) -> bool;
 
     //fn forward<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, forward: /*Unknown conversion*//*Unimplemented*/PadForwardFunction, user_data: P) -> bool;
 
@@ -109,7 +111,7 @@ pub trait PadExt {
 
     fn get_peer(&self) -> Option<Pad>;
 
-    //fn get_sticky_event(&self, event_type: /*Ignored*/EventType, idx: u32) -> /*Ignored*/Option<Event>;
+    fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event>;
 
     #[cfg(feature = "v1_10")]
     fn get_stream(&self) -> Option<Stream>;
@@ -159,7 +161,7 @@ pub trait PadExt {
 
     fn peer_query_position(&self, format: Format) -> Option<i64>;
 
-    //fn push_event(&self, event: /*Ignored*/&mut Event) -> bool;
+    fn push_event(&self, event: &Event) -> bool;
 
     //fn push_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn;
 
@@ -173,7 +175,7 @@ pub trait PadExt {
 
     fn query_position(&self, format: Format) -> Option<i64>;
 
-    //fn send_event(&self, event: /*Ignored*/&mut Event) -> bool;
+    fn send_event(&self, event: &Event) -> bool;
 
     //fn set_activate_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, activate: /*Unknown conversion*//*Unimplemented*/PadActivateFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
@@ -209,7 +211,7 @@ pub trait PadExt {
 
     fn stop_task(&self) -> Result<(), glib::error::BoolError>;
 
-    //fn store_sticky_event(&self, event: /*Ignored*/&mut Event) -> FlowReturn;
+    fn store_sticky_event(&self, event: &Event) -> FlowReturn;
 
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError>;
 
@@ -263,9 +265,13 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_create_stream_id_printf_valist() }
     //}
 
-    //fn event_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: /*Ignored*/&mut Event) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_event_default() }
-    //}
+    fn event_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: &Event) -> bool {
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_pad_event_default(self.to_glib_none().0, parent.0, event.to_glib_full()))
+        }
+    }
 
     //fn forward<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, forward: /*Unknown conversion*//*Unimplemented*/PadForwardFunction, user_data: P) -> bool {
     //    unsafe { TODO: call ffi::gst_pad_forward() }
@@ -329,9 +335,11 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn get_sticky_event(&self, event_type: /*Ignored*/EventType, idx: u32) -> /*Ignored*/Option<Event> {
-    //    unsafe { TODO: call ffi::gst_pad_get_sticky_event() }
-    //}
+    fn get_sticky_event(&self, event_type: EventType, idx: u32) -> Option<Event> {
+        unsafe {
+            from_glib_full(ffi::gst_pad_get_sticky_event(self.to_glib_none().0, event_type.to_glib(), idx))
+        }
+    }
 
     #[cfg(feature = "v1_10")]
     fn get_stream(&self) -> Option<Stream> {
@@ -473,9 +481,11 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn push_event(&self, event: /*Ignored*/&mut Event) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_push_event() }
-    //}
+    fn push_event(&self, event: &Event) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_push_event(self.to_glib_none().0, event.to_glib_full()))
+        }
+    }
 
     //fn push_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn {
     //    unsafe { TODO: call ffi::gst_pad_push_list() }
@@ -519,9 +529,11 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn send_event(&self, event: /*Ignored*/&mut Event) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_send_event() }
-    //}
+    fn send_event(&self, event: &Event) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_send_event(self.to_glib_none().0, event.to_glib_full()))
+        }
+    }
 
     //fn set_activate_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, activate: /*Unknown conversion*//*Unimplemented*/PadActivateFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gst_pad_set_activate_function_full() }
@@ -597,9 +609,11 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn store_sticky_event(&self, event: /*Ignored*/&mut Event) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_store_sticky_event() }
-    //}
+    fn store_sticky_event(&self, event: &Event) -> FlowReturn {
+        unsafe {
+            from_glib(ffi::gst_pad_store_sticky_event(self.to_glib_none().0, event.to_glib_none().0))
+        }
+    }
 
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {

@@ -321,6 +321,147 @@ impl SetValue for CoreError {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum EventType {
+    Unknown,
+    FlushStart,
+    FlushStop,
+    StreamStart,
+    Caps,
+    Segment,
+    StreamCollection,
+    Tag,
+    Buffersize,
+    SinkMessage,
+    StreamGroupDone,
+    Eos,
+    Toc,
+    Protection,
+    SegmentDone,
+    Gap,
+    Qos,
+    Seek,
+    Navigation,
+    Latency,
+    Step,
+    Reconfigure,
+    TocSelect,
+    SelectStreams,
+    CustomUpstream,
+    CustomDownstream,
+    CustomDownstreamOob,
+    CustomDownstreamSticky,
+    CustomBoth,
+    CustomBothOob,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for EventType {
+    type GlibType = ffi::GstEventType;
+
+    fn to_glib(&self) -> ffi::GstEventType {
+        match *self {
+            EventType::Unknown => ffi::GST_EVENT_UNKNOWN,
+            EventType::FlushStart => ffi::GST_EVENT_FLUSH_START,
+            EventType::FlushStop => ffi::GST_EVENT_FLUSH_STOP,
+            EventType::StreamStart => ffi::GST_EVENT_STREAM_START,
+            EventType::Caps => ffi::GST_EVENT_CAPS,
+            EventType::Segment => ffi::GST_EVENT_SEGMENT,
+            EventType::StreamCollection => ffi::GST_EVENT_STREAM_COLLECTION,
+            EventType::Tag => ffi::GST_EVENT_TAG,
+            EventType::Buffersize => ffi::GST_EVENT_BUFFERSIZE,
+            EventType::SinkMessage => ffi::GST_EVENT_SINK_MESSAGE,
+            EventType::StreamGroupDone => ffi::GST_EVENT_STREAM_GROUP_DONE,
+            EventType::Eos => ffi::GST_EVENT_EOS,
+            EventType::Toc => ffi::GST_EVENT_TOC,
+            EventType::Protection => ffi::GST_EVENT_PROTECTION,
+            EventType::SegmentDone => ffi::GST_EVENT_SEGMENT_DONE,
+            EventType::Gap => ffi::GST_EVENT_GAP,
+            EventType::Qos => ffi::GST_EVENT_QOS,
+            EventType::Seek => ffi::GST_EVENT_SEEK,
+            EventType::Navigation => ffi::GST_EVENT_NAVIGATION,
+            EventType::Latency => ffi::GST_EVENT_LATENCY,
+            EventType::Step => ffi::GST_EVENT_STEP,
+            EventType::Reconfigure => ffi::GST_EVENT_RECONFIGURE,
+            EventType::TocSelect => ffi::GST_EVENT_TOC_SELECT,
+            EventType::SelectStreams => ffi::GST_EVENT_SELECT_STREAMS,
+            EventType::CustomUpstream => ffi::GST_EVENT_CUSTOM_UPSTREAM,
+            EventType::CustomDownstream => ffi::GST_EVENT_CUSTOM_DOWNSTREAM,
+            EventType::CustomDownstreamOob => ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
+            EventType::CustomDownstreamSticky => ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
+            EventType::CustomBoth => ffi::GST_EVENT_CUSTOM_BOTH,
+            EventType::CustomBothOob => ffi::GST_EVENT_CUSTOM_BOTH_OOB,
+            EventType::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstEventType> for EventType {
+    fn from_glib(value: ffi::GstEventType) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => EventType::Unknown,
+            2563 => EventType::FlushStart,
+            5127 => EventType::FlushStop,
+            10254 => EventType::StreamStart,
+            12814 => EventType::Caps,
+            17934 => EventType::Segment,
+            19230 => EventType::StreamCollection,
+            20510 => EventType::Tag,
+            23054 => EventType::Buffersize,
+            25630 => EventType::SinkMessage,
+            26894 => EventType::StreamGroupDone,
+            28174 => EventType::Eos,
+            30750 => EventType::Toc,
+            33310 => EventType::Protection,
+            38406 => EventType::SegmentDone,
+            40966 => EventType::Gap,
+            48641 => EventType::Qos,
+            51201 => EventType::Seek,
+            53761 => EventType::Navigation,
+            56321 => EventType::Latency,
+            58881 => EventType::Step,
+            61441 => EventType::Reconfigure,
+            64001 => EventType::TocSelect,
+            66561 => EventType::SelectStreams,
+            69121 => EventType::CustomUpstream,
+            71686 => EventType::CustomDownstream,
+            74242 => EventType::CustomDownstreamOob,
+            76830 => EventType::CustomDownstreamSticky,
+            79367 => EventType::CustomBoth,
+            81923 => EventType::CustomBothOob,
+            value => EventType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for EventType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_event_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for EventType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for EventType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstEventType>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for EventType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum FlowReturn {
     CustomSuccess2,
     CustomSuccess1,

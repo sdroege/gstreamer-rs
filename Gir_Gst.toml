@@ -59,6 +59,7 @@ generate = [
     "Gst.Preset",
     "Gst.TagSetter",
     "Gst.QOSType",
+    "Gst.EventType",
 ]
 
 manual = [
@@ -131,6 +132,11 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Event"
 status = "manual"
 ref_mode = "ref"
 
