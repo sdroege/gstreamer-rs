@@ -41,7 +41,7 @@ fn main() {
         };
 
         match msg.view() {
-            MessageView::Eos => break,
+            MessageView::Eos(..) => break,
             MessageView::Error(err) => {
                 println!(
                     "Error from {}: {} ({:?})",

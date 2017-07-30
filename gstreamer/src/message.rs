@@ -8,7 +8,6 @@
 
 use ffi;
 use Object;
-use Element;
 use miniobject::*;
 use structure::*;
 use TagList;
@@ -18,6 +17,8 @@ use std::mem;
 use std::ffi::CStr;
 
 use glib;
+use glib::Cast;
+use glib::IsA;
 use glib::translate::{from_glib, from_glib_none, from_glib_full, mut_override, ToGlibPtr, ToGlib};
 
 #[repr(C)]
@@ -49,7 +50,7 @@ impl MessageRef {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         if type_ == ffi::GST_MESSAGE_EOS {
-            MessageView::Eos
+            MessageView::Eos(Eos(self))
         } else if type_ == ffi::GST_MESSAGE_ERROR {
             MessageView::Error(Error(self))
         } else if type_ == ffi::GST_MESSAGE_WARNING {
@@ -63,7 +64,7 @@ impl MessageRef {
         } else if type_ == ffi::GST_MESSAGE_STATE_CHANGED {
             MessageView::StateChanged(StateChanged(self))
         } else if type_ == ffi::GST_MESSAGE_STATE_DIRTY {
-            MessageView::StateDirty
+            MessageView::StateDirty(StateDirty(self))
         } else if type_ == ffi::GST_MESSAGE_STEP_DONE {
             MessageView::StepDone(StepDone(self))
         } else if type_ == ffi::GST_MESSAGE_CLOCK_PROVIDE {
@@ -77,19 +78,19 @@ impl MessageRef {
         } else if type_ == ffi::GST_MESSAGE_STREAM_STATUS {
             MessageView::StreamStatus(StreamStatus(self))
         } else if type_ == ffi::GST_MESSAGE_APPLICATION {
-            MessageView::Application
+            MessageView::Application(Application(self))
         } else if type_ == ffi::GST_MESSAGE_ELEMENT {
-            MessageView::Element
+            MessageView::Element(Element(self))
         } else if type_ == ffi::GST_MESSAGE_SEGMENT_START {
             MessageView::SegmentStart(SegmentStart(self))
         } else if type_ == ffi::GST_MESSAGE_SEGMENT_DONE {
             MessageView::SegmentDone(SegmentDone(self))
         } else if type_ == ffi::GST_MESSAGE_DURATION_CHANGED {
-            MessageView::DurationChanged
+            MessageView::DurationChanged(DurationChanged(self))
         } else if type_ == ffi::GST_MESSAGE_LATENCY {
-            MessageView::Latency
+            MessageView::Latency(Latency(self))
         } else if type_ == ffi::GST_MESSAGE_ASYNC_START {
-            MessageView::AsyncStart
+            MessageView::AsyncStart(AsyncStart(self))
         } else if type_ == ffi::GST_MESSAGE_ASYNC_DONE {
             MessageView::AsyncDone(AsyncDone(self))
         } else if type_ == ffi::GST_MESSAGE_REQUEST_STATE {
@@ -125,39 +126,39 @@ impl MessageRef {
         }
     }
 
-    pub fn new_eos<'a>() -> EosBuilder<'a> {
+    pub fn new_eos() -> EosBuilder {
         EosBuilder::new()
     }
 
-    pub fn new_error<'a>(error: &'a glib::Error) -> ErrorBuilder<'a> {
+    pub fn new_error(error: &glib::Error) -> ErrorBuilder {
         ErrorBuilder::new(error)
     }
 
-    pub fn new_warning<'a>(error: &'a glib::Error) -> WarningBuilder<'a> {
+    pub fn new_warning(error: &glib::Error) -> WarningBuilder {
         WarningBuilder::new(error)
     }
 
-    pub fn new_info<'a>(error: &'a glib::Error) -> InfoBuilder<'a> {
+    pub fn new_info(error: &glib::Error) -> InfoBuilder {
         InfoBuilder::new(error)
     }
 
-    pub fn new_tag<'a>(tags: &'a TagList) -> TagBuilder<'a> {
+    pub fn new_tag(tags: &TagList) -> TagBuilder {
         TagBuilder::new(tags)
     }
 
-    pub fn new_buffering<'a>(percent: i32) -> BufferingBuilder<'a> {
+    pub fn new_buffering(percent: i32) -> BufferingBuilder {
         BufferingBuilder::new(percent)
     }
 
-    pub fn new_state_changed<'a>(old: ::State, new: ::State, pending: ::State) -> StateChangedBuilder<'a> {
+    pub fn new_state_changed(old: ::State, new: ::State, pending: ::State) -> StateChangedBuilder {
         StateChangedBuilder::new(old, new, pending)
     }
 
-    pub fn new_state_dirty<'a>() -> StateDirtyBuilder<'a> {
+    pub fn new_state_dirty() -> StateDirtyBuilder {
         StateDirtyBuilder::new()
     }
 
-    pub fn new_step_done<'a>(
+    pub fn new_step_done(
         format: ::Format,
         amount: u64,
         rate: f64,
@@ -165,106 +166,106 @@ impl MessageRef {
         intermediate: bool,
         duration: u64,
         eos: bool
-    ) -> StepDoneBuilder<'a> {
+    ) -> StepDoneBuilder {
         StepDoneBuilder::new(format, amount, rate, flush, intermediate, duration, eos)
     }
 
-    pub fn new_clock_provide<'a>(clock: &'a ::Clock, ready: bool) -> ClockProvideBuilder<'a> {
+    pub fn new_clock_provide(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
         ClockProvideBuilder::new(clock, ready)
     }
 
-    pub fn new_clock_lost<'a>(clock: &'a ::Clock) -> ClockLostBuilder<'a> {
+    pub fn new_clock_lost(clock: &::Clock) -> ClockLostBuilder {
         ClockLostBuilder::new(clock)
     }
 
-    pub fn new_new_clock<'a>(clock: &'a ::Clock) -> NewClockBuilder<'a> {
+    pub fn new_new_clock(clock: &::Clock) -> NewClockBuilder {
         NewClockBuilder::new(clock)
     }
 
-    pub fn new_structure_change<'a>(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> StructureChangeBuilder<'a> {
+    pub fn new_structure_change(type_: ::StructureChangeType, owner: &::Element, busy: bool) -> StructureChangeBuilder {
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
-    pub fn new_stream_status<'a>(type_: ::StreamStatusType, owner: &'a ::Element) -> StreamStatusBuilder<'a> {
+    pub fn new_stream_status(type_: ::StreamStatusType, owner: &::Element) -> StreamStatusBuilder {
         StreamStatusBuilder::new(type_, owner)
     }
 
-    pub fn new_application<'a>(structure: ::Structure) -> ApplicationBuilder<'a> {
+    pub fn new_application(structure: ::Structure) -> ApplicationBuilder {
         ApplicationBuilder::new(structure)
     }
 
-    pub fn new_element<'a>(structure: ::Structure) -> ElementBuilder<'a> {
+    pub fn new_element(structure: ::Structure) -> ElementBuilder {
         ElementBuilder::new(structure)
     }
 
-    pub fn new_segment_start<'a>(format: ::Format, position: i64) -> SegmentStartBuilder<'a> {
+    pub fn new_segment_start(format: ::Format, position: i64) -> SegmentStartBuilder {
         SegmentStartBuilder::new(format, position)
     }
 
-    pub fn new_segment_done<'a>(format: ::Format, position: i64) -> SegmentDoneBuilder<'a> {
+    pub fn new_segment_done(format: ::Format, position: i64) -> SegmentDoneBuilder {
         SegmentDoneBuilder::new(format, position)
     }
 
-    pub fn new_duration_changed<'a>() -> DurationChangedBuilder<'a> {
+    pub fn new_duration_changed() -> DurationChangedBuilder {
         DurationChangedBuilder::new()
     }
 
-    pub fn new_latency<'a>() -> LatencyBuilder<'a> {
+    pub fn new_latency() -> LatencyBuilder {
         LatencyBuilder::new()
     }
 
-    pub fn new_async_start<'a>() -> AsyncStartBuilder<'a> {
+    pub fn new_async_start() -> AsyncStartBuilder {
         AsyncStartBuilder::new()
     }
 
-    pub fn new_async_done<'a>(running_time: u64) -> AsyncDoneBuilder<'a> {
+    pub fn new_async_done(running_time: u64) -> AsyncDoneBuilder {
         AsyncDoneBuilder::new(running_time)
     }
 
-    pub fn new_step_start<'a>(active: bool,
+    pub fn new_step_start(active: bool,
         format: ::Format,
         amount: u64,
         rate: f64,
         flush: bool,
         intermediate: bool,
-    ) -> StepStartBuilder<'a> {
+    ) -> StepStartBuilder {
         StepStartBuilder::new(active, format, amount, rate, flush, intermediate)
     }
 
-    pub fn new_qos_builder<'a>(live: bool,
+    pub fn new_qos_builder(live: bool,
         running_time: u64,
         stream_time: u64,
         timestamp: u64,
         duration: u64,
-        ) -> QosBuilder<'a> {
+        ) -> QosBuilder {
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
-    pub fn new_toc<'a>(toc: (), updated: bool) -> TocBuilder<'a> {
+    pub fn new_toc(toc: (), updated: bool) -> TocBuilder {
         TocBuilder::new(toc, updated)
     }
 
-    pub fn new_reset_time<'a>(running_time: u64) -> ResetTimeBuilder<'a> {
+    pub fn new_reset_time(running_time: u64) -> ResetTimeBuilder {
         ResetTimeBuilder::new(running_time)
     }
 
-    pub fn new_stream_start<'a>() -> StreamStartBuilder<'a> {
+    pub fn new_stream_start() -> StreamStartBuilder {
         StreamStartBuilder::new()
     }
 
-    pub fn new_need_context<'a>(context_type: &'a str) -> NeedContextBuilder<'a> {
+    pub fn new_need_context(context_type: &str) -> NeedContextBuilder {
         NeedContextBuilder::new(context_type)
     }
 
-    pub fn new_have_context<'a>(context: ()) -> HaveContextBuilder<'a> {
+    pub fn new_have_context(context: ()) -> HaveContextBuilder {
         HaveContextBuilder::new(context)
     }
 
-    pub fn new_device_added<'a>(device: &'a ::Device) -> DeviceAddedBuilder<'a> {
+    pub fn new_device_added(device: &::Device) -> DeviceAddedBuilder {
         DeviceAddedBuilder::new(device)
     }
 
-    pub fn new_device_removed<'a>(device: &'a ::Device) -> DeviceRemovedBuilder<'a> {
+    pub fn new_device_removed(device: &::Device) -> DeviceRemovedBuilder {
         DeviceRemovedBuilder::new(device)
     }
 
@@ -274,12 +275,12 @@ impl MessageRef {
     }
 
     #[cfg(feature = "v1_10")]
-    pub fn new_stream_collection<'a>(collection: &'a ::StreamCollection) -> StreamCollectionBuilder<'a> {
+    pub fn new_stream_collection(collection: &::StreamCollection) -> StreamCollectionBuilder {
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(feature = "v1_10")]
-    pub fn new_streams_selected<'a>(collection: &'a ::StreamCollection) -> StreamsSelectedBuilder<'a> {
+    pub fn new_streams_selected(collection: &::StreamCollection) -> StreamsSelectedBuilder {
         StreamsSelectedBuilder::new(collection)
     }
 
@@ -299,27 +300,27 @@ impl glib::types::StaticType for GstRc<MessageRef> {
 }
 
 pub enum MessageView<'a> {
-    Eos,
+    Eos(Eos<'a>),
     Error(Error<'a>),
     Warning(Warning<'a>),
     Info(Info<'a>),
     Tag(Tag<'a>),
     Buffering(Buffering<'a>),
     StateChanged(StateChanged<'a>),
-    StateDirty,
+    StateDirty(StateDirty<'a>),
     StepDone(StepDone<'a>),
     ClockProvide(ClockProvide<'a>),
     ClockLost(ClockLost<'a>),
     NewClock(NewClock<'a>),
     StructureChange(StructureChange<'a>),
     StreamStatus(StreamStatus<'a>),
-    Application,
-    Element,
+    Application(Application<'a>),
+    Element(Element<'a>),
     SegmentStart(SegmentStart<'a>),
     SegmentDone(SegmentDone<'a>),
-    DurationChanged,
-    Latency,
-    AsyncStart,
+    DurationChanged(DurationChanged<'a>),
+    Latency(Latency<'a>),
+    AsyncStart(AsyncStart<'a>),
     AsyncDone(AsyncDone<'a>),
     RequestState(RequestState<'a>),
     StepStart(StepStart<'a>),
@@ -339,6 +340,8 @@ pub enum MessageView<'a> {
     Other,
     __NonExhaustive,
 }
+
+pub struct Eos<'a>(&'a MessageRef);
 
 pub struct Error<'a>(&'a MessageRef);
 impl<'a> Error<'a> {
@@ -543,6 +546,8 @@ impl<'a> StateChanged<'a> {
     }
 }
 
+pub struct StateDirty<'a>(&'a MessageRef);
+
 pub struct StepDone<'a>(&'a MessageRef);
 impl<'a> StepDone<'a> {
     pub fn get(&self) -> (::Format, u64, f64, bool, bool, u64, bool) {
@@ -631,7 +636,7 @@ impl<'a> NewClock<'a> {
 
 pub struct StructureChange<'a>(&'a MessageRef);
 impl<'a> StructureChange<'a> {
-    pub fn get(&self) -> (::StructureChangeType, Option<Element>, bool) {
+    pub fn get(&self) -> (::StructureChangeType, Option<::Element>, bool) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut owner = ptr::null_mut();
@@ -651,7 +656,7 @@ impl<'a> StructureChange<'a> {
 
 pub struct StreamStatus<'a>(&'a MessageRef);
 impl<'a> StreamStatus<'a> {
-    pub fn get(&self) -> (::StreamStatusType, Option<Element>) {
+    pub fn get(&self) -> (::StreamStatusType, Option<::Element>) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut owner = ptr::null_mut();
@@ -670,6 +675,10 @@ impl<'a> StreamStatus<'a> {
         }
     }
 }
+
+pub struct Application<'a>(&'a MessageRef);
+
+pub struct Element<'a>(&'a MessageRef);
 
 pub struct SegmentStart<'a>(&'a MessageRef);
 impl<'a> SegmentStart<'a> {
@@ -698,6 +707,12 @@ impl<'a> SegmentDone<'a> {
         }
     }
 }
+
+pub struct DurationChanged<'a>(&'a MessageRef);
+
+pub struct Latency<'a>(&'a MessageRef);
+
+pub struct AsyncStart<'a>(&'a MessageRef);
 
 pub struct AsyncDone<'a>(&'a MessageRef);
 impl<'a> AsyncDone<'a> {
@@ -1043,9 +1058,12 @@ impl<'a> Redirect<'a> {
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
-        pub fn src(self, src: Option<&'a Object>) -> Self {
+        pub fn src<'b, T: IsA<Object> + Cast + Clone>(self, src: Option<&'b T>) -> Self {
             Self {
-                src: src,
+                src: src.map(|o| {
+                    let o = (*o).clone();
+                    o.upcast::<Object>()
+                }),
                 .. self
             }
         }
@@ -1072,11 +1090,11 @@ macro_rules! message_builder_generic_impl {
     }
 }
 
-pub struct EosBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct EosBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
 }
-impl<'a> EosBuilder<'a> {
+impl EosBuilder {
     pub fn new() -> Self {
         Self {
             src: None,
@@ -1088,7 +1106,7 @@ impl<'a> EosBuilder<'a> {
 }
 
 pub struct ErrorBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
@@ -1147,7 +1165,7 @@ impl<'a> ErrorBuilder<'a> {
 }
 
 pub struct WarningBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
@@ -1206,7 +1224,7 @@ impl<'a> WarningBuilder<'a> {
 }
 
 pub struct InfoBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
@@ -1265,7 +1283,7 @@ impl<'a> InfoBuilder<'a> {
 }
 
 pub struct TagBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     tags: &'a TagList,
 }
@@ -1283,13 +1301,13 @@ impl<'a> TagBuilder<'a> {
     });
 }
 
-pub struct BufferingBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct BufferingBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     percent: i32,
     stats: Option<(::BufferingMode, i32, i32, i64)>,
 }
-impl<'a> BufferingBuilder<'a> {
+impl BufferingBuilder {
     pub fn new(percent: i32) -> Self {
         Self {
             src: None,
@@ -1329,14 +1347,14 @@ impl<'a> BufferingBuilder<'a> {
     });
 }
 
-pub struct StateChangedBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct StateChangedBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     old: ::State,
     new: ::State,
     pending: ::State,
 }
-impl<'a> StateChangedBuilder<'a> {
+impl StateChangedBuilder {
     pub fn new(old: ::State, new: ::State, pending: ::State) -> Self {
         Self {
             src: None,
@@ -1357,11 +1375,11 @@ impl<'a> StateChangedBuilder<'a> {
     });
 }
 
-pub struct StateDirtyBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct StateDirtyBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
 }
-impl<'a> StateDirtyBuilder<'a> {
+impl StateDirtyBuilder {
     pub fn new() -> Self {
         Self {
             src: None,
@@ -1372,8 +1390,8 @@ impl<'a> StateDirtyBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_state_dirty(src));
 }
 
-pub struct StepDoneBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct StepDoneBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     format: ::Format,
     amount: u64,
@@ -1383,7 +1401,7 @@ pub struct StepDoneBuilder<'a> {
     duration: u64,
     eos: bool,
 }
-impl<'a> StepDoneBuilder<'a> {
+impl StepDoneBuilder {
     pub fn new(
         format: ::Format,
         amount: u64,
@@ -1421,7 +1439,7 @@ impl<'a> StepDoneBuilder<'a> {
 }
 
 pub struct ClockProvideBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     clock: &'a ::Clock,
     ready: bool,
@@ -1442,7 +1460,7 @@ impl<'a> ClockProvideBuilder<'a> {
 }
 
 pub struct ClockLostBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     clock: &'a ::Clock,
 }
@@ -1461,7 +1479,7 @@ impl<'a> ClockLostBuilder<'a> {
 }
 
 pub struct NewClockBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     clock: &'a ::Clock,
 }
@@ -1480,7 +1498,7 @@ impl<'a> NewClockBuilder<'a> {
 }
 
 pub struct StructureChangeBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     type_: ::StructureChangeType,
     owner: &'a ::Element,
@@ -1508,7 +1526,7 @@ impl<'a> StructureChangeBuilder<'a> {
 }
 
 pub struct StreamStatusBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     type_: ::StreamStatusType,
     owner: &'a ::Element,
@@ -1542,12 +1560,12 @@ impl<'a> StreamStatusBuilder<'a> {
     });
 }
 
-pub struct ApplicationBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct ApplicationBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     structure: Option<::Structure>,
 }
-impl<'a> ApplicationBuilder<'a> {
+impl ApplicationBuilder {
     pub fn new(structure: ::Structure) -> Self {
         Self {
             src: None,
@@ -1561,12 +1579,12 @@ impl<'a> ApplicationBuilder<'a> {
     });
 }
 
-pub struct ElementBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct ElementBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     structure: Option<::Structure>,
 }
-impl<'a> ElementBuilder<'a> {
+impl ElementBuilder {
     pub fn new(structure: ::Structure) -> Self {
         Self {
             src: None,
@@ -1580,13 +1598,13 @@ impl<'a> ElementBuilder<'a> {
     });
 }
 
-pub struct SegmentStartBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct SegmentStartBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     format: ::Format,
     position: i64,
 }
-impl<'a> SegmentStartBuilder<'a> {
+impl SegmentStartBuilder {
     pub fn new(format: ::Format, position: i64) -> Self {
         Self {
             src: None,
@@ -1601,13 +1619,13 @@ impl<'a> SegmentStartBuilder<'a> {
     });
 }
 
-pub struct SegmentDoneBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct SegmentDoneBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     format: ::Format,
     position: i64,
 }
-impl<'a> SegmentDoneBuilder<'a> {
+impl SegmentDoneBuilder {
     pub fn new(format: ::Format, position: i64) -> Self {
         Self {
             src: None,
@@ -1622,11 +1640,11 @@ impl<'a> SegmentDoneBuilder<'a> {
     });
 }
 
-pub struct DurationChangedBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct DurationChangedBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
 }
-impl<'a> DurationChangedBuilder<'a> {
+impl DurationChangedBuilder {
     pub fn new() -> Self {
         Self {
             src: None,
@@ -1637,11 +1655,11 @@ impl<'a> DurationChangedBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_duration_changed(src));
 }
 
-pub struct LatencyBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct LatencyBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
 }
-impl<'a> LatencyBuilder<'a> {
+impl LatencyBuilder {
     pub fn new() -> Self {
         Self {
             src: None,
@@ -1652,11 +1670,11 @@ impl<'a> LatencyBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_latency(src));
 }
 
-pub struct AsyncStartBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct AsyncStartBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
 }
-impl<'a> AsyncStartBuilder<'a> {
+impl AsyncStartBuilder {
     pub fn new() -> Self {
         Self {
             src: None,
@@ -1667,12 +1685,12 @@ impl<'a> AsyncStartBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_async_start(src));
 }
 
-pub struct AsyncDoneBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct AsyncDoneBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     running_time: u64,
 }
-impl<'a> AsyncDoneBuilder<'a> {
+impl AsyncDoneBuilder {
     pub fn new(running_time: u64) -> Self {
         Self {
             src: None,
@@ -1686,12 +1704,12 @@ impl<'a> AsyncDoneBuilder<'a> {
     });
 }
 
-pub struct RequestStateBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct RequestStateBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     state: ::State,
 }
-impl<'a> RequestStateBuilder<'a> {
+impl RequestStateBuilder {
     pub fn new(state: ::State) -> Self {
         Self {
             src: None,
@@ -1705,8 +1723,8 @@ impl<'a> RequestStateBuilder<'a> {
     });
 }
 
-pub struct StepStartBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct StepStartBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     active: bool,
     format: ::Format,
@@ -1715,7 +1733,7 @@ pub struct StepStartBuilder<'a> {
     flush: bool,
     intermediate: bool,
 }
-impl<'a> StepStartBuilder<'a> {
+impl StepStartBuilder {
     pub fn new(
         active: bool,
         format: ::Format,
@@ -1749,8 +1767,8 @@ impl<'a> StepStartBuilder<'a> {
     });
 }
 
-pub struct QosBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct QosBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     live: bool,
     running_time: u64,
@@ -1760,7 +1778,7 @@ pub struct QosBuilder<'a> {
     values: Option<(i64, f64, i32)>,
     stats: Option<(::Format, u64, u64)>,
 }
-impl<'a> QosBuilder<'a> {
+impl QosBuilder {
     pub fn new(
         live: bool,
         running_time: u64,
@@ -1815,7 +1833,7 @@ impl<'a> QosBuilder<'a> {
 }
 
 pub struct ProgressBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     type_: ::ProgressType,
     code: Option<&'a str>,
@@ -1857,13 +1875,13 @@ impl<'a> ProgressBuilder<'a> {
 }
 
 // TODO Toc
-pub struct TocBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct TocBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     toc: (),
     updated: bool,
 }
-impl<'a> TocBuilder<'a> {
+impl TocBuilder {
     pub fn new(toc: () /* &'a Toc */, updated: bool) -> Self {
         Self {
             src: None,
@@ -1882,12 +1900,12 @@ impl<'a> TocBuilder<'a> {
     });
 }
 
-pub struct ResetTimeBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct ResetTimeBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     running_time: u64,
 }
-impl<'a> ResetTimeBuilder<'a> {
+impl ResetTimeBuilder {
     pub fn new(running_time: u64) -> Self {
         Self {
             src: None,
@@ -1901,12 +1919,12 @@ impl<'a> ResetTimeBuilder<'a> {
     });
 }
 
-pub struct StreamStartBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct StreamStartBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     group_id: Option<u32>,
 }
-impl<'a> StreamStartBuilder<'a> {
+impl StreamStartBuilder {
     pub fn new() -> Self {
         Self {
             src: None,
@@ -1932,7 +1950,7 @@ impl<'a> StreamStartBuilder<'a> {
 }
 
 pub struct NeedContextBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     context_type: &'a str,
 }
@@ -1951,12 +1969,12 @@ impl<'a> NeedContextBuilder<'a> {
 }
 
 // TODO Context
-pub struct HaveContextBuilder<'a> {
-    src: Option<&'a Object>,
+pub struct HaveContextBuilder {
+    src: Option<Object>,
     seqnum: Option<u32>,
     context: (),
 }
-impl<'a> HaveContextBuilder<'a> {
+impl HaveContextBuilder {
     pub fn new(context: () /* ::Context */) -> Self {
         Self {
             src: None,
@@ -1971,7 +1989,7 @@ impl<'a> HaveContextBuilder<'a> {
 }
 
 pub struct DeviceAddedBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     device: &'a ::Device,
 }
@@ -1990,7 +2008,7 @@ impl<'a> DeviceAddedBuilder<'a> {
 }
 
 pub struct DeviceRemovedBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     device: &'a ::Device,
 }
@@ -2009,7 +2027,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 }
 
 pub struct PropertyNotifyBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     property_name: &'a str,
     value: &'a glib::Value,
@@ -2034,10 +2052,10 @@ impl<'a> PropertyNotifyBuilder<'a> {
     });
 }
 
+#[cfg(feature = "v1_10")]
 pub struct StreamCollectionBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
-    #[cfg(feature = "v1_10")]
     collection: &'a ::StreamCollection,
 }
 #[cfg(feature = "v1_10")]
@@ -2055,8 +2073,9 @@ impl<'a> StreamCollectionBuilder<'a> {
     });
 }
 
+#[cfg(feature = "v1_10")]
 pub struct StreamsSelectedBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     #[cfg(feature = "v1_10")]
     collection: &'a ::StreamCollection,
@@ -2093,7 +2112,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
 }
 
 pub struct RedirectBuilder<'a> {
-    src: Option<&'a Object>,
+    src: Option<Object>,
     seqnum: Option<u32>,
     location: &'a str,
     tag_list: Option<&'a TagList>,

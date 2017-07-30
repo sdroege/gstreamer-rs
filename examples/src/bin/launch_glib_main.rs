@@ -26,7 +26,7 @@ fn main() {
     bus.add_watch(move |_, msg| {
         let main_loop = &main_loop_clone;
         match msg.view() {
-            MessageView::Eos => main_loop.quit(),
+            MessageView::Eos(..) => main_loop.quit(),
             MessageView::Error(err) => {
                 println!(
                     "Error from {}: {} ({:?})",

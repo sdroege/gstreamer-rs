@@ -64,6 +64,8 @@ pub mod bufferlist;
 pub use bufferlist::{BufferList, BufferListRef};
 pub mod query;
 pub use query::{Query, QueryRef, QueryView};
+pub mod event;
+pub use event::{Event, EventRef, EventView};
 
 mod element;
 mod bin;

@@ -58,6 +58,7 @@ generate = [
     "Gst.ChildProxy",
     "Gst.Preset",
     "Gst.TagSetter",
+    "Gst.QOSType",
 ]
 
 manual = [
