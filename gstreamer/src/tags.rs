@@ -9,6 +9,7 @@
 use std::fmt;
 use std::mem;
 use std::marker::PhantomData;
+use std::ffi::CStr;
 
 use ffi;
 use glib;
@@ -38,20 +39,36 @@ macro_rules! impl_tag(
     };
 );
 
-impl_tag!(Title, &'a str, "title");
-impl_tag!(Album, &'a str, "album");
-impl_tag!(Artist, &'a str, "artist");
-impl_tag!(AlbumArtist, &'a str, "album-artist");
-impl_tag!(Encoder, &'a str, "encoder");
-impl_tag!(AudioCodec, &'a str, "audio-codec");
-impl_tag!(VideoCodec, &'a str, "video-codec");
-impl_tag!(SubtitleCodec, &'a str, "subtitle-codec");
-impl_tag!(ContainerFormat, &'a str, "container-format");
+impl_tag!(Title, &'a str, *TAG_TITLE);
+impl_tag!(Album, &'a str, *TAG_ALBUM);
+impl_tag!(Artist, &'a str, *TAG_ARTIST);
+impl_tag!(AlbumArtist, &'a str, *TAG_ALBUM_ARTIST);
+impl_tag!(Encoder, &'a str, *TAG_ENCODER);
+impl_tag!(AudioCodec, &'a str, *TAG_AUDIO_CODEC);
+impl_tag!(VideoCodec, &'a str, *TAG_VIDEO_CODEC);
+impl_tag!(SubtitleCodec, &'a str, *TAG_SUBTITLE_CODEC);
+impl_tag!(ContainerFormat, &'a str, *TAG_CONTAINER_FORMAT);
 // TODO: Should ideally enforce this to be ISO-639
-impl_tag!(LanguageCode, &'a str, "language-code");
-impl_tag!(Duration, u64, "duration");
-impl_tag!(NominalBitrate, u32, "nominal-bitrate");
-impl_tag!(Image, Sample, "image");
+impl_tag!(LanguageCode, &'a str, *TAG_LANGUAGE_CODE);
+impl_tag!(Duration, u64, *TAG_DURATION);
+impl_tag!(NominalBitrate, u32, *TAG_NOMINAL_BITRATE);
+impl_tag!(Image, Sample, *TAG_IMAGE);
+
+lazy_static!{
+    pub static ref TAG_TITLE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TITLE).to_str().unwrap() };
+    pub static ref TAG_ALBUM: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM).to_str().unwrap() };
+    pub static ref TAG_ARTIST: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ARTIST).to_str().unwrap() };
+    pub static ref TAG_ALBUM_ARTIST: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_ARTIST).to_str().unwrap() };
+    pub static ref TAG_ENCODER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ENCODER).to_str().unwrap() };
+    pub static ref TAG_AUDIO_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_AUDIO_CODEC).to_str().unwrap() };
+    pub static ref TAG_VIDEO_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_VIDEO_CODEC).to_str().unwrap() };
+    pub static ref TAG_SUBTITLE_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SUBTITLE_CODEC).to_str().unwrap() };
+    pub static ref TAG_CONTAINER_FORMAT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_CONTAINER_FORMAT).to_str().unwrap() };
+    pub static ref TAG_LANGUAGE_CODE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LANGUAGE_CODE).to_str().unwrap() };
+    pub static ref TAG_DURATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DURATION).to_str().unwrap() };
+    pub static ref TAG_NOMINAL_BITRATE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_NOMINAL_BITRATE).to_str().unwrap() };
+    pub static ref TAG_IMAGE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_IMAGE).to_str().unwrap() };
+}
 
 pub type TagList = GstRc<TagListRef>;
 pub struct TagListRef(ffi::GstTagList);

@@ -7,6 +7,7 @@ dependencies = [
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
  "gobject-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
  "gstreamer-sys 0.1.1 (git+https://github.com/sdroege/gstreamer-sys)",
+ "lazy_static 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.28 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-rational 0.1.39 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

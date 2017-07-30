@@ -9,6 +9,8 @@
 #[macro_use]
 extern crate bitflags;
 extern crate libc;
+#[macro_use]
+extern crate lazy_static;
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
