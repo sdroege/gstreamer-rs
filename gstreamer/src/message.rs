@@ -125,7 +125,9 @@ impl MessageRef {
             MessageView::Other
         }
     }
+}
 
+impl Message {
     pub fn new_eos() -> EosBuilder {
         EosBuilder::new()
     }

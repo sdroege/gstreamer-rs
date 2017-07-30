@@ -138,7 +138,9 @@ impl EventRef {
             EventView::Other
         }
     }
+}
 
+impl Event {
     pub fn new_flush_start() -> FlushStartBuilder {
         FlushStartBuilder::new()
     }
