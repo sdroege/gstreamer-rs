@@ -14,6 +14,7 @@ use BufferList;
 use FlowReturn;
 use Query;
 use QueryRef;
+use Event;
 use miniobject::MiniObject;
 
 use std::cell::RefCell;
@@ -60,7 +61,7 @@ pub enum PadProbeData<'a> {
     Buffer(Buffer),
     BufferList(BufferList),
     Query(&'a mut QueryRef),
-    // Event(&Event),
+    Event(Event),
     Unknown,
 }
 
@@ -217,6 +218,11 @@ unsafe extern "C" fn trampoline_pad_probe(
                 Some(PadProbeData::Query(
                     QueryRef::from_mut_ptr(data as *mut ffi::GstQuery),
                 ))
+            } else if (*data).type_ == Event::static_type().to_glib() {
+                data_type = Some(Event::static_type());
+                Some(PadProbeData::Event(
+                    from_glib_none(data as *const ffi::GstEvent),
+                ))
             } else {
                 Some(PadProbeData::Unknown)
             }
@@ -238,6 +244,13 @@ unsafe extern "C" fn trampoline_pad_probe(
             if (*info).data != bufferlist.as_mut_ptr() as *mut _ {
                 ffi::gst_mini_object_unref((*info).data as *mut _);
                 (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
+            }
+        }
+        Some(PadProbeData::Event(event)) => {
+            assert_eq!(data_type, Some(Event::static_type()));
+            if (*info).data != event.as_mut_ptr() as *mut _ {
+                ffi::gst_mini_object_unref((*info).data as *mut _);
+                (*info).data = event.into_ptr() as *mut libc::c_void;
             }
         }
         None => {

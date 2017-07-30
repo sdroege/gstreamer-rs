@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use ffi;
-use Object;
 use miniobject::*;
 use structure::*;
 
