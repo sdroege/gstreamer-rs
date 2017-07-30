@@ -15,7 +15,7 @@ use std::mem;
 use std::ffi::CStr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr, ToGlib};
+use glib::translate::{from_glib, from_glib_none, from_glib_full, FromGlibPtrContainer, ToGlibPtr, ToGlib};
 
 #[repr(C)]
 pub struct EventRef(ffi::GstEvent);
@@ -230,7 +230,7 @@ impl EventRef {
     }
 
     #[cfg(feature = "v1_10")]
-    pub fn new_select_streams(streams: &[&'a str]) -> SelectStreamsBuilder {
+    pub fn new_select_streams<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
         SelectStreamsBuilder::new(streams)
     }
 
@@ -381,7 +381,7 @@ impl<'a> StreamCollection<'a> {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
-            ffi::gst_event_parse_segment(self.0.as_mut_ptr(), &mut stream_collection);
+            ffi::gst_event_parse_stream_collection(self.0.as_mut_ptr(), &mut stream_collection);
             from_glib_full(stream_collection)
         }
     }
@@ -580,7 +580,7 @@ impl<'a> SelectStreams<'a> {
 
             ffi::gst_event_parse_select_streams(self.0.as_mut_ptr(), &mut streams);
 
-            from_glib_full(streams)
+            FromGlibPtrContainer::from_glib_full(streams)
         }
     }
 }
@@ -740,7 +740,7 @@ impl<'a> SegmentBuilder<'a> {
 pub struct StreamCollectionBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    stream_select: &'a ::StreamCollection,
+    stream_collection: &'a ::StreamCollection,
 }
 #[cfg(feature = "v1_10")]
 impl<'a> StreamCollectionBuilder<'a> {
@@ -833,7 +833,7 @@ impl StreamGroupDoneBuilder {
         }
     }
 
-    event_builder_generic_impl!(|s| ffi::gst_event_new_stream_group_done(s.uid));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(s.uid));
 }
 
 pub struct EosBuilder {
@@ -1094,7 +1094,7 @@ impl<'a> SelectStreamsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s| ffi::gst_event_new_select_streams(s.to_glib_full()));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_select_streams(s.streams.to_glib_full()));
 }
 
 pub struct CustomUpstreamBuilder {
