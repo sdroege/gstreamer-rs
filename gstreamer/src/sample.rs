@@ -12,7 +12,7 @@ use ffi;
 
 use glib;
 use glib::StaticType;
-use glib::translate::{mut_override, from_glib, from_glib_none, from_glib_full, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlibPtr};
 
 use miniobject::*;
 use Buffer;
@@ -28,35 +28,39 @@ unsafe impl MiniObject for SampleRef {
 }
 
 impl GstRc<SampleRef> {
-    pub fn new(buffer: Option<Buffer>, caps: Option<Caps>, segment: Option<&Segment>, info: Option<&StructureRef>) -> Self {
+    pub fn new(
+        buffer: Option<Buffer>,
+        caps: Option<Caps>,
+        segment: Option<&Segment>,
+        info: Option<&StructureRef>,
+    ) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let info = info.map(|i| i.as_ptr()).unwrap_or(ptr::null());
 
-            from_glib_full(ffi::gst_sample_new(buffer.to_glib_none().0, caps.to_glib_none().0, mut_override(segment.to_glib_none().0), mut_override(info)))
+            from_glib_full(ffi::gst_sample_new(
+                buffer.to_glib_none().0,
+                caps.to_glib_none().0,
+                mut_override(segment.to_glib_none().0),
+                mut_override(info),
+            ))
         }
     }
 }
 
 impl SampleRef {
     pub fn get_buffer(&self) -> Option<Buffer> {
-        unsafe {
-            from_glib_none(ffi::gst_sample_get_buffer(self.as_mut_ptr()))
-        }
+        unsafe { from_glib_none(ffi::gst_sample_get_buffer(self.as_mut_ptr())) }
     }
 
     // TODO: bufferlist
 
     pub fn get_caps(&self) -> Option<Caps> {
-        unsafe {
-            from_glib_none(ffi::gst_sample_get_caps(self.as_mut_ptr()))
-        }
+        unsafe { from_glib_none(ffi::gst_sample_get_caps(self.as_mut_ptr())) }
     }
 
     pub fn get_segment(&self) -> Option<Segment> {
-        unsafe {
-            from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr()))
-        }
+        unsafe { from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr())) }
     }
 
     pub fn get_structure(&self) -> Option<&StructureRef> {
@@ -73,9 +77,7 @@ impl SampleRef {
 
 impl StaticType for SampleRef {
     fn static_type() -> glib::Type {
-        unsafe {
-            from_glib(ffi::gst_sample_get_type())
-        }
+        unsafe { from_glib(ffi::gst_sample_get_type()) }
     }
 }
 
@@ -89,4 +91,3 @@ impl ToOwned for SampleRef {
 
 unsafe impl Sync for SampleRef {}
 unsafe impl Send for SampleRef {}
-

@@ -11,7 +11,7 @@ use std::mem::transmute;
 use ffi;
 use glib;
 use glib::translate::*;
-use glib::source::{Continue, CallbackGuard, SourceId, Priority};
+use glib::source::{CallbackGuard, Continue, Priority, SourceId};
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 

@@ -31,9 +31,7 @@ fn main() {
             let mut q = Query::new_position(Format::Time);
             pipeline.query(q.get_mut().unwrap());
             match q.view() {
-                QueryView::Position(ref p) => {
-                    p.get().1
-                },
+                QueryView::Position(ref p) => p.get().1,
                 _ => unreachable!(),
             }
         };
@@ -42,9 +40,7 @@ fn main() {
             let mut q = Query::new_duration(Format::Time);
             pipeline.query(q.get_mut().unwrap());
             match q.view() {
-                QueryView::Duration(ref p) => {
-                    p.get().1
-                },
+                QueryView::Duration(ref p) => p.get().1,
                 _ => unreachable!(),
             }
         };

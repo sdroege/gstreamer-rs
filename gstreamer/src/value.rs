@@ -9,12 +9,13 @@
 use num_rational::Rational32;
 use std::fmt;
 use std::ops;
-use std::borrow::{Cow, Borrow};
+use std::borrow::{Borrow, Cow};
 use std::slice;
 
 use glib;
-use glib::value::{Value, FromValue, FromValueOptional, SetValue, ToValue};
-use glib::translate::{from_glib, from_glib_full, ToGlibPtr, ToGlibPtrMut, FromGlib, ToGlib, Uninitialized};
+use glib::value::{FromValue, FromValueOptional, SetValue, ToValue, Value};
+use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut,
+                      Uninitialized};
 
 use ffi;
 use glib_ffi;
@@ -355,10 +356,7 @@ impl FractionRange {
 
         assert!(min <= max);
 
-        FractionRange {
-            min: min,
-            max: max,
-        }
+        FractionRange { min: min, max: max }
     }
 
     pub fn min(&self) -> Fraction {
@@ -404,7 +402,13 @@ impl<'a> FromValueOptional<'a> for FractionRange {
 
 impl SetValue for FractionRange {
     unsafe fn set_value(v: &mut Value, r: &Self) {
-        ffi::gst_value_set_fraction_range_full(v.to_glib_none_mut().0, *r.min().numer(), *r.min().denom(), *r.max().numer(), *r.max().denom());
+        ffi::gst_value_set_fraction_range_full(
+            v.to_glib_none_mut().0,
+            *r.min().numer(),
+            *r.min().denom(),
+            *r.max().numer(),
+            *r.max().denom(),
+        );
     }
 }
 
@@ -443,7 +447,10 @@ impl<'a> FromValue<'a> for Array<'a> {
         if arr.is_null() {
             Array(Cow::Borrowed(&[]))
         } else {
-            Array(Cow::Borrowed(slice::from_raw_parts((*arr).data as *const glib::Value, (*arr).len as usize)))
+            Array(Cow::Borrowed(slice::from_raw_parts(
+                (*arr).data as *const glib::Value,
+                (*arr).len as usize,
+            )))
         }
     }
 }
@@ -503,7 +510,10 @@ impl<'a> FromValue<'a> for List<'a> {
         if arr.is_null() {
             List(Cow::Borrowed(&[]))
         } else {
-            List(Cow::Borrowed(slice::from_raw_parts((*arr).data as *const glib::Value, (*arr).len as usize)))
+            List(Cow::Borrowed(slice::from_raw_parts(
+                (*arr).data as *const glib::Value,
+                (*arr).len as usize,
+            )))
         }
     }
 }
@@ -579,26 +589,39 @@ pub trait GstValueExt: Sized {
 impl GstValueExt for glib::Value {
     fn can_compare(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_value_can_compare(self.to_glib_none().0, other.to_glib_none().0))
+            from_glib(ffi::gst_value_can_compare(
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ))
         }
     }
 
     fn compare(&self, other: &Self) -> ValueOrder {
         unsafe {
-            from_glib(ffi::gst_value_compare(self.to_glib_none().0, other.to_glib_none().0))
+            from_glib(ffi::gst_value_compare(
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ))
         }
     }
 
     fn can_intersect(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_value_can_intersect(self.to_glib_none().0, other.to_glib_none().0))
+            from_glib(ffi::gst_value_can_intersect(
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ))
         }
     }
 
     fn intersect(&self, other: &Self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(ffi::gst_value_intersect(value.to_glib_none_mut().0, self.to_glib_none().0, other.to_glib_none().0));
+            let ret: bool = from_glib(ffi::gst_value_intersect(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ));
             if ret {
                 Some(value)
             } else {
@@ -609,14 +632,21 @@ impl GstValueExt for glib::Value {
 
     fn can_subtract(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_value_can_subtract(self.to_glib_none().0, other.to_glib_none().0))
+            from_glib(ffi::gst_value_can_subtract(
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ))
         }
     }
 
     fn subtract(&self, other: &Self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(ffi::gst_value_subtract(value.to_glib_none_mut().0, self.to_glib_none().0, other.to_glib_none().0));
+            let ret: bool = from_glib(ffi::gst_value_subtract(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ));
             if ret {
                 Some(value)
             } else {
@@ -627,14 +657,21 @@ impl GstValueExt for glib::Value {
 
     fn can_union(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_value_can_union(self.to_glib_none().0, other.to_glib_none().0))
+            from_glib(ffi::gst_value_can_union(
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ))
         }
     }
 
     fn union(&self, other: &Self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(ffi::gst_value_union(value.to_glib_none_mut().0, self.to_glib_none().0, other.to_glib_none().0));
+            let ret: bool = from_glib(ffi::gst_value_union(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0,
+                other.to_glib_none().0,
+            ));
             if ret {
                 Some(value)
             } else {
@@ -646,7 +683,10 @@ impl GstValueExt for glib::Value {
     fn fixate(&self) -> Option<Self> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(ffi::gst_value_fixate(value.to_glib_none_mut().0, self.to_glib_none().0));
+            let ret: bool = from_glib(ffi::gst_value_fixate(
+                value.to_glib_none_mut().0,
+                self.to_glib_none().0,
+            ));
             if ret {
                 Some(value)
             } else {
@@ -656,21 +696,20 @@ impl GstValueExt for glib::Value {
     }
 
     fn is_fixed(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_value_is_fixed(self.to_glib_none().0))
-        }
+        unsafe { from_glib(ffi::gst_value_is_fixed(self.to_glib_none().0)) }
     }
 
     fn is_subset(&self, superset: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_value_is_subset(self.to_glib_none().0, superset.to_glib_none().0))
+            from_glib(ffi::gst_value_is_subset(
+                self.to_glib_none().0,
+                superset.to_glib_none().0,
+            ))
         }
     }
 
     fn serialize(&self) -> Option<String> {
-        unsafe {
-            from_glib_full(ffi::gst_value_serialize(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_value_serialize(self.to_glib_none().0)) }
     }
 
     fn deserialize<'a, T: Into<&'a str>>(s: T) -> Option<glib::Value> {
@@ -678,7 +717,10 @@ impl GstValueExt for glib::Value {
 
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret: bool = from_glib(ffi::gst_value_deserialize(value.to_glib_none_mut().0, s.to_glib_none().0));
+            let ret: bool = from_glib(ffi::gst_value_deserialize(
+                value.to_glib_none_mut().0,
+                s.to_glib_none().0,
+            ));
             if ret {
                 Some(value)
             } else {

@@ -11,14 +11,13 @@ use TagSetter;
 use TagMergeMode;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::value::{ToValue};
+use glib::value::ToValue;
 use tags::*;
 
 pub trait TagSetterExtManual {
     fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
     where
         T::TagType: ToValue;
-
 }
 
 impl<O: IsA<TagSetter>> TagSetterExtManual for O {

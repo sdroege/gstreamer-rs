@@ -9,7 +9,7 @@
 use ffi;
 use glib;
 use glib::StaticType;
-use glib::translate::{from_glib, from_glib_none, from_glib_full};
+use glib::translate::{from_glib, from_glib_full, from_glib_none};
 
 use miniobject::*;
 use Buffer;
@@ -46,15 +46,11 @@ impl BufferListRef {
     }
 
     pub fn copy_deep(&self) -> BufferList {
-        unsafe {
-            from_glib_full(ffi::gst_buffer_list_copy_deep(self.as_ptr()))
-        }
+        unsafe { from_glib_full(ffi::gst_buffer_list_copy_deep(self.as_ptr())) }
     }
 
     pub fn remove(&mut self, idx: u32, len: u32) {
-        unsafe {
-            ffi::gst_buffer_list_remove(self.as_mut_ptr(), idx, len)
-        }
+        unsafe { ffi::gst_buffer_list_remove(self.as_mut_ptr(), idx, len) }
     }
 
     pub fn get(&self, idx: u32) -> Option<&BufferRef> {
@@ -69,9 +65,7 @@ impl BufferListRef {
     }
 
     pub fn len(&self) -> usize {
-        unsafe {
-            ffi::gst_buffer_list_length(self.as_mut_ptr()) as usize
-        }
+        unsafe { ffi::gst_buffer_list_length(self.as_mut_ptr()) as usize }
     }
 
     pub fn iter<'a>(&'a self) -> Iter<'a> {
@@ -89,9 +83,7 @@ impl ToOwned for BufferListRef {
 
 impl StaticType for BufferListRef {
     fn static_type() -> glib::Type {
-        unsafe {
-            from_glib(ffi::gst_buffer_list_get_type())
-        }
+        unsafe { from_glib(ffi::gst_buffer_list_get_type()) }
     }
 }
 
@@ -114,8 +106,7 @@ impl<'a> Iter<'a> {
     }
 }
 
-impl<'a> Iterator for Iter<'a>
-{
+impl<'a> Iterator for Iter<'a> {
     type Item = &'a BufferRef;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -140,8 +131,7 @@ impl<'a> Iterator for Iter<'a>
     }
 }
 
-impl<'a> DoubleEndedIterator for Iter<'a>
-{
+impl<'a> DoubleEndedIterator for Iter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -152,6 +142,4 @@ impl<'a> DoubleEndedIterator for Iter<'a>
     }
 }
 
-impl<'a> ExactSizeIterator for Iter<'a>
-{
-}
+impl<'a> ExactSizeIterator for Iter<'a> {}

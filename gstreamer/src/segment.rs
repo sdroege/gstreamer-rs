@@ -22,17 +22,26 @@ pub struct Segment(ffi::GstSegment);
 impl Segment {
     pub fn new() -> Segment {
         assert_initialized_main_thread!();
-        unsafe {
-            Self::uninitialized()
-        }
+        unsafe { Self::uninitialized() }
     }
 
     pub fn clip(&self, format: Format, start: u64, stop: u64) -> Option<(u64, u64)> {
         unsafe {
             let mut clip_start = mem::uninitialized();
             let mut clip_stop = mem::uninitialized();
-            let ret = from_glib(ffi::gst_segment_clip(self.to_glib_none().0, format.to_glib(), start, stop, &mut clip_start, &mut clip_stop));
-            if ret { Some((clip_start, clip_stop)) } else { None }
+            let ret = from_glib(ffi::gst_segment_clip(
+                self.to_glib_none().0,
+                format.to_glib(),
+                start,
+                stop,
+                &mut clip_start,
+                &mut clip_stop,
+            ));
+            if ret {
+                Some((clip_start, clip_stop))
+            } else {
+                None
+            }
         }
     }
 
@@ -42,11 +51,34 @@ impl Segment {
         }
     }
 
-    pub fn do_seek(&mut self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: u64, stop_type: SeekType, stop: u64) -> Option<bool> {
+    pub fn do_seek(
+        &mut self,
+        rate: f64,
+        format: Format,
+        flags: SeekFlags,
+        start_type: SeekType,
+        start: u64,
+        stop_type: SeekType,
+        stop: u64,
+    ) -> Option<bool> {
         unsafe {
             let mut update = mem::uninitialized();
-            let ret = from_glib(ffi::gst_segment_do_seek(self.to_glib_none_mut().0, rate, format.to_glib(), flags.to_glib(), start_type.to_glib(), start, stop_type.to_glib(), stop, &mut update));
-            if ret { Some(from_glib(update)) } else { None }
+            let ret = from_glib(ffi::gst_segment_do_seek(
+                self.to_glib_none_mut().0,
+                rate,
+                format.to_glib(),
+                flags.to_glib(),
+                start_type.to_glib(),
+                start,
+                stop_type.to_glib(),
+                stop,
+                &mut update,
+            ));
+            if ret {
+                Some(from_glib(update))
+            } else {
+                None
+            }
         }
     }
 
@@ -58,47 +90,76 @@ impl Segment {
 
     fn is_equal(&self, s1: &Segment) -> bool {
         unsafe {
-            from_glib(ffi::gst_segment_is_equal(self.to_glib_none().0, s1.to_glib_none().0))
+            from_glib(ffi::gst_segment_is_equal(
+                self.to_glib_none().0,
+                s1.to_glib_none().0,
+            ))
         }
     }
 
     pub fn offset_running_time(&mut self, format: Format, offset: i64) -> bool {
         unsafe {
-            from_glib(ffi::gst_segment_offset_running_time(self.to_glib_none_mut().0, format.to_glib(), offset))
+            from_glib(ffi::gst_segment_offset_running_time(
+                self.to_glib_none_mut().0,
+                format.to_glib(),
+                offset,
+            ))
         }
     }
 
     pub fn position_from_running_time(&self, format: Format, running_time: u64) -> u64 {
         unsafe {
-            ffi::gst_segment_position_from_running_time(self.to_glib_none().0, format.to_glib(), running_time)
+            ffi::gst_segment_position_from_running_time(
+                self.to_glib_none().0,
+                format.to_glib(),
+                running_time,
+            )
         }
     }
 
     pub fn position_from_running_time_full(&self, format: Format, running_time: u64) -> (i32, u64) {
         unsafe {
             let mut position = mem::uninitialized();
-            let ret = ffi::gst_segment_position_from_running_time_full(self.to_glib_none().0, format.to_glib(), running_time, &mut position);
+            let ret = ffi::gst_segment_position_from_running_time_full(
+                self.to_glib_none().0,
+                format.to_glib(),
+                running_time,
+                &mut position,
+            );
             (ret, position)
         }
     }
 
     pub fn position_from_stream_time(&self, format: Format, stream_time: u64) -> u64 {
         unsafe {
-            ffi::gst_segment_position_from_stream_time(self.to_glib_none().0, format.to_glib(), stream_time)
+            ffi::gst_segment_position_from_stream_time(
+                self.to_glib_none().0,
+                format.to_glib(),
+                stream_time,
+            )
         }
     }
 
     pub fn position_from_stream_time_full(&self, format: Format, stream_time: u64) -> (i32, u64) {
         unsafe {
             let mut position = mem::uninitialized();
-            let ret = ffi::gst_segment_position_from_stream_time_full(self.to_glib_none().0, format.to_glib(), stream_time, &mut position);
+            let ret = ffi::gst_segment_position_from_stream_time_full(
+                self.to_glib_none().0,
+                format.to_glib(),
+                stream_time,
+                &mut position,
+            );
             (ret, position)
         }
     }
 
     pub fn set_running_time(&mut self, format: Format, running_time: u64) -> bool {
         unsafe {
-            from_glib(ffi::gst_segment_set_running_time(self.to_glib_none_mut().0, format.to_glib(), running_time))
+            from_glib(ffi::gst_segment_set_running_time(
+                self.to_glib_none_mut().0,
+                format.to_glib(),
+                running_time,
+            ))
         }
     }
 
@@ -117,7 +178,12 @@ impl Segment {
     pub fn to_running_time_full(&self, format: Format, position: u64) -> (i32, u64) {
         unsafe {
             let mut running_time = mem::uninitialized();
-            let ret = ffi::gst_segment_to_running_time_full(self.to_glib_none().0, format.to_glib(), position, &mut running_time);
+            let ret = ffi::gst_segment_to_running_time_full(
+                self.to_glib_none().0,
+                format.to_glib(),
+                position,
+                &mut running_time,
+            );
             (ret, running_time)
         }
     }
@@ -131,7 +197,12 @@ impl Segment {
     pub fn to_stream_time_full(&self, format: Format, position: u64) -> (i32, u64) {
         unsafe {
             let mut stream_time = mem::uninitialized();
-            let ret = ffi::gst_segment_to_stream_time_full(self.to_glib_none().0, format.to_glib(), position, &mut stream_time);
+            let ret = ffi::gst_segment_to_stream_time_full(
+                self.to_glib_none().0,
+                format.to_glib(),
+                position,
+                &mut stream_time,
+            );
             (ret, stream_time)
         }
     }
@@ -150,9 +221,7 @@ unsafe impl Send for Segment {}
 
 impl Clone for Segment {
     fn clone(&self) -> Self {
-        unsafe {
-            Segment(ptr::read(&self.0))
-        }
+        unsafe { Segment(ptr::read(&self.0)) }
     }
 }
 
@@ -165,21 +234,30 @@ impl glib::types::StaticType for Segment {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for Segment {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_full(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment)
+        Option::<Segment>::from_glib_full(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as
+            *mut ffi::GstSegment)
     }
 }
 
 #[doc(hidden)]
 impl glib::value::SetValue for Segment {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_ffi::g_value_set_boxed(value.to_glib_none_mut().0, glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(this).0 as glib_ffi::gpointer)
+        gobject_ffi::g_value_set_boxed(
+            value.to_glib_none_mut().0,
+            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(this).0 as
+                glib_ffi::gpointer,
+        )
     }
 }
 
 #[doc(hidden)]
 impl glib::value::SetValueOptional for Segment {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_ffi::g_value_set_boxed(value.to_glib_none_mut().0, glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(&this).0 as glib_ffi::gpointer)
+        gobject_ffi::g_value_set_boxed(
+            value.to_glib_none_mut().0,
+            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(&this).0 as
+                glib_ffi::gpointer,
+        )
     }
 }
 

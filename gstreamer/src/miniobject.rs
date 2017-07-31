@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::{fmt, ops, borrow};
+use std::{borrow, fmt, ops};
 use std::mem;
 use std::marker::PhantomData;
 
 use ffi;
 use glib_ffi::gpointer;
 use gobject_ffi;
-use glib::translate::{from_glib, from_glib_none, Stash, StashMut, ToGlibPtr, ToGlibPtrMut,
-                      FromGlibPtrNone, FromGlibPtrFull, FromGlibPtrBorrow};
+use glib::translate::{from_glib, from_glib_none, FromGlibPtrBorrow, FromGlibPtrFull,
+                      FromGlibPtrNone, Stash, StashMut, ToGlibPtr, ToGlibPtrMut};
 use glib;
 
 #[derive(Hash, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -63,9 +63,10 @@ impl<T: MiniObject> GstRc<T> {
                 return &mut *self.obj;
             }
 
-            self.obj = T::from_mut_ptr(ffi::gst_mini_object_make_writable(
-                self.as_mut_ptr() as *mut ffi::GstMiniObject,
-            ) as *mut T::GstType);
+            self.obj = T::from_mut_ptr(
+                ffi::gst_mini_object_make_writable(self.as_mut_ptr() as *mut ffi::GstMiniObject) as
+                    *mut T::GstType,
+            );
             assert!(self.is_writable());
 
             &mut *self.obj
@@ -82,9 +83,10 @@ impl<T: MiniObject> GstRc<T> {
 
     pub fn copy(&self) -> Self {
         unsafe {
-            GstRc::from_glib_full(ffi::gst_mini_object_copy(
-                self.as_ptr() as *const ffi::GstMiniObject,
-            ) as *const T::GstType)
+            GstRc::from_glib_full(
+                ffi::gst_mini_object_copy(self.as_ptr() as *const ffi::GstMiniObject) as
+                    *const T::GstType,
+            )
         }
     }
 
@@ -263,7 +265,8 @@ impl<T: MiniObject + glib::StaticType> glib::StaticType for GstRc<T> {
     }
 }
 
-impl<'a, T: MiniObject + glib::StaticType + 'static> glib::value::FromValueOptional<'a> for GstRc<T> {
+impl<'a, T: MiniObject + glib::StaticType + 'static> glib::value::FromValueOptional<'a>
+    for GstRc<T> {
     unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
         let ptr = gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
         from_glib_none(ptr as *const T::GstType)

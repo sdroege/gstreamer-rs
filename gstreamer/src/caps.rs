@@ -15,7 +15,7 @@ use CapsIntersectMode;
 
 use glib;
 use ffi;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlibPtr, ToGlib};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib::value::ToValue;
 
 #[repr(C)]
@@ -390,7 +390,7 @@ mod tests {
                     ("bool", &true),
                     ("string", &"bla"),
                     ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2])),
+                    ("array", &Array::new(&[&1, &2]))
                 ],
             ).as_ref()
         );

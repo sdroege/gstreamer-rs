@@ -10,7 +10,7 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{ToGlibPtr, from_glib};
+use glib::translate::{from_glib, ToGlibPtr};
 use QueryRef;
 use miniobject::MiniObject;
 
@@ -49,7 +49,10 @@ pub trait ElementExtManual {
 impl<O: IsA<Element>> ElementExtManual for O {
     fn query(&self, query: &mut QueryRef) -> bool {
         unsafe {
-            from_glib(ffi::gst_element_query(self.to_glib_none().0, query.as_mut_ptr()))
+            from_glib(ffi::gst_element_query(
+                self.to_glib_none().0,
+                query.as_mut_ptr(),
+            ))
         }
     }
 }

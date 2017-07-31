@@ -12,15 +12,15 @@ use std::mem;
 use std::str;
 use std::ffi::CStr;
 use std::ops::{Deref, DerefMut};
-use std::borrow::{Borrow, ToOwned, BorrowMut};
+use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::marker::PhantomData;
 
 use Fraction;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut,
-                      FromGlibPtrNone, FromGlibPtrFull};
-use glib::value::{Value, ToValue, FromValueOptional};
+use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, FromGlibPtrNone, Stash,
+                      StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::value::{FromValueOptional, ToValue, Value};
 use ffi;
 
 pub struct Structure(*mut StructureRef, PhantomData<StructureRef>);
@@ -587,14 +587,7 @@ mod tests {
         assert_eq!(v[2].0, "f3");
         assert_eq!(v[2].1.get::<i32>().unwrap(), 123i32);
 
-        let s2 = Structure::new(
-            "test",
-            &[
-                ("f1", &"abc"),
-                ("f2", &"bcd"),
-                ("f3", &123i32),
-            ],
-        );
+        let s2 = Structure::new("test", &[("f1", &"abc"), ("f2", &"bcd"), ("f3", &123i32)]);
         assert_eq!(s, s2);
     }
 }

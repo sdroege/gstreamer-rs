@@ -24,7 +24,10 @@ impl Iterator {
     pub fn next(&mut self) -> Result<Value, IteratorResult> {
         unsafe {
             let mut value = Value::uninitialized();
-            let res = from_glib(ffi::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0));
+            let res = from_glib(ffi::gst_iterator_next(
+                self.to_glib_none_mut().0,
+                value.to_glib_none_mut().0,
+            ));
             if res == IteratorResult::Ok {
                 Ok(value)
             } else {

@@ -241,9 +241,7 @@ impl BufferRef {
     }
 
     pub fn copy_deep(&self) -> Buffer {
-        unsafe {
-            from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr()))
-        }
+        unsafe { from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr())) }
     }
 
     pub fn get_size(&self) -> usize {

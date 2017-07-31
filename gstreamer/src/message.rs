@@ -19,7 +19,7 @@ use std::ffi::CStr;
 use glib;
 use glib::Cast;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, mut_override, ToGlibPtr, ToGlib};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
 
 #[repr(C)]
 pub struct MessageRef(ffi::GstMessage);
@@ -167,7 +167,7 @@ impl Message {
         flush: bool,
         intermediate: bool,
         duration: u64,
-        eos: bool
+        eos: bool,
     ) -> StepDoneBuilder {
         StepDoneBuilder::new(format, amount, rate, flush, intermediate, duration, eos)
     }
@@ -184,7 +184,11 @@ impl Message {
         NewClockBuilder::new(clock)
     }
 
-    pub fn new_structure_change(type_: ::StructureChangeType, owner: &::Element, busy: bool) -> StructureChangeBuilder {
+    pub fn new_structure_change(
+        type_: ::StructureChangeType,
+        owner: &::Element,
+        busy: bool,
+    ) -> StructureChangeBuilder {
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
@@ -224,7 +228,8 @@ impl Message {
         AsyncDoneBuilder::new(running_time)
     }
 
-    pub fn new_step_start(active: bool,
+    pub fn new_step_start(
+        active: bool,
         format: ::Format,
         amount: u64,
         rate: f64,
@@ -234,12 +239,13 @@ impl Message {
         StepStartBuilder::new(active, format, amount, rate, flush, intermediate)
     }
 
-    pub fn new_qos_builder(live: bool,
+    pub fn new_qos_builder(
+        live: bool,
         running_time: u64,
         stream_time: u64,
         timestamp: u64,
         duration: u64,
-        ) -> QosBuilder {
+    ) -> QosBuilder {
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
@@ -272,7 +278,10 @@ impl Message {
     }
 
     #[cfg(feature = "v1_10")]
-    pub fn new_property_notify<'a>(property_name: &'a str, value: &'a glib::Value) -> PropertyNotifyBuilder<'a> {
+    pub fn new_property_notify<'a>(
+        property_name: &'a str,
+        value: &'a glib::Value,
+    ) -> PropertyNotifyBuilder<'a> {
         PropertyNotifyBuilder::new(property_name, value)
     }
 
@@ -287,7 +296,8 @@ impl Message {
     }
 
     #[cfg(feature = "v1_10")]
-    pub fn new_redirect<'a>(location: &'a str,
+    pub fn new_redirect<'a>(
+        location: &'a str,
         tag_list: Option<&'a TagList>,
         entry_struct: Option<Structure>,
     ) -> RedirectBuilder<'a> {

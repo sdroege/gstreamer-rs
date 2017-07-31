@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
 #[macro_use]
 extern crate bitflags;
 extern crate libc;
@@ -46,7 +46,7 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 pub use auto::traits::*;
-pub use auto::functions::{parse_launch, parse_bin_from_description};
+pub use auto::functions::{parse_bin_from_description, parse_launch};
 pub use auto::traits::ObjectExt as GstObjectExt;
 
 pub mod miniobject;
@@ -60,7 +60,8 @@ pub use caps::{Caps, CapsRef};
 pub mod tags;
 pub use tags::*;
 pub mod buffer;
-pub use buffer::{Buffer, BufferRef, ReadBufferMap, ReadWriteBufferMap, ReadMappedBuffer, ReadWriteMappedBuffer};
+pub use buffer::{Buffer, BufferRef, ReadBufferMap, ReadMappedBuffer, ReadWriteBufferMap,
+                 ReadWriteMappedBuffer};
 pub mod sample;
 pub use sample::{Sample, SampleRef};
 pub mod bufferlist;
@@ -82,7 +83,7 @@ mod tag_setter;
 mod iterator;
 pub use element::ElementExtManual;
 pub use bin::BinExtManual;
-pub use pad::{PadExtManual, PadProbeId, PadProbeInfo, PadProbeData, PAD_PROBE_ID_INVALID};
+pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo, PAD_PROBE_ID_INVALID};
 pub use gobject::GObjectExtManualGst;
 pub use child_proxy::ChildProxyExtManual;
 pub use tag_setter::TagSetterExtManual;

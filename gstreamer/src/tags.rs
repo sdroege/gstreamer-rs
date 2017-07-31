@@ -14,8 +14,8 @@ use std::ffi::CStr;
 use ffi;
 use glib;
 use glib::StaticType;
-use glib::value::{Value, TypedValue, FromValueOptional, SetValue, ToValue};
-use glib::translate::{from_glib, from_glib_none, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::value::{FromValueOptional, SetValue, ToValue, TypedValue, Value};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
 use miniobject::*;
 
@@ -105,10 +105,26 @@ impl_tag!(GeoLocationElevation, f64, *TAG_GEO_LOCATION_ELEVATION);
 impl_tag!(GeoLocationCity, &'a str, *TAG_GEO_LOCATION_CITY);
 impl_tag!(GeoLocationCountry, &'a str, *TAG_GEO_LOCATION_COUNTRY);
 impl_tag!(GeoLocationSublocation, &'a str, *TAG_GEO_LOCATION_SUBLOCATION);
-impl_tag!(GeoLocationHorizontalError, f64, *TAG_GEO_LOCATION_HORIZONTAL_ERROR);
-impl_tag!(GeoLocationMovementDirection, f64, *TAG_GEO_LOCATION_MOVEMENT_DIRECTION);
-impl_tag!(GeoLocationMovementSpeed, f64, *TAG_GEO_LOCATION_MOVEMENT_SPEED);
-impl_tag!(GeoLocationCaptureDirection, f64, *TAG_GEO_LOCATION_CAPTURE_DIRECTION);
+impl_tag!(
+    GeoLocationHorizontalError,
+    f64,
+    *TAG_GEO_LOCATION_HORIZONTAL_ERROR
+);
+impl_tag!(
+    GeoLocationMovementDirection,
+    f64,
+    *TAG_GEO_LOCATION_MOVEMENT_DIRECTION
+);
+impl_tag!(
+    GeoLocationMovementSpeed,
+    f64,
+    *TAG_GEO_LOCATION_MOVEMENT_SPEED
+);
+impl_tag!(
+    GeoLocationCaptureDirection,
+    f64,
+    *TAG_GEO_LOCATION_CAPTURE_DIRECTION
+);
 impl_tag!(ShowName, &'a str, *TAG_SHOW_NAME);
 impl_tag!(ShowSortname, &'a str, *TAG_SHOW_SORTNAME);
 impl_tag!(ShowEpisodeNumber, u32, *TAG_SHOW_EPISODE_NUMBER);
@@ -317,9 +333,7 @@ impl ToOwned for TagListRef {
 
 impl StaticType for TagListRef {
     fn static_type() -> glib::Type {
-        unsafe {
-            from_glib(ffi::gst_tag_list_get_type())
-        }
+        unsafe { from_glib(ffi::gst_tag_list_get_type()) }
     }
 }
 

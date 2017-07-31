@@ -14,25 +14,44 @@ use FlowReturn;
 use Buffer;
 
 use glib::IsA;
-use glib::translate::{ToGlibPtr, from_glib, from_glib_full};
+use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
 
 use ffi;
 
 impl ProxyPad {
-    pub fn chain_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R, buffer: Buffer) -> FlowReturn {
+    pub fn chain_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
+        pad: &P,
+        parent: R,
+        buffer: Buffer,
+    ) -> FlowReturn {
         skip_assert_initialized!();
         let parent = parent.into();
         let parent = parent.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_proxy_pad_chain_default(pad.to_glib_none().0, parent.0, buffer.into_ptr()))
+            from_glib(ffi::gst_proxy_pad_chain_default(
+                pad.to_glib_none().0,
+                parent.0,
+                buffer.into_ptr(),
+            ))
         }
     }
 
-    pub fn getrange_default<P: IsA<Pad>, Q: IsA<Object>>(pad: &P, parent: &Q, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {
+    pub fn getrange_default<P: IsA<Pad>, Q: IsA<Object>>(
+        pad: &P,
+        parent: &Q,
+        offset: u64,
+        size: u32,
+    ) -> Result<Buffer, FlowReturn> {
         skip_assert_initialized!();
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret = from_glib(ffi::gst_proxy_pad_getrange_default(pad.to_glib_none().0, parent.to_glib_none().0, offset, size, &mut buffer));
+            let ret = from_glib(ffi::gst_proxy_pad_getrange_default(
+                pad.to_glib_none().0,
+                parent.to_glib_none().0,
+                offset,
+                size,
+                &mut buffer,
+            ));
             if ret == FlowReturn::Ok {
                 Ok(from_glib_full(buffer))
             } else {

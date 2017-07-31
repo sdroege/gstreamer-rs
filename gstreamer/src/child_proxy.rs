@@ -21,25 +21,43 @@ pub trait ChildProxyExtManual {
 impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
     fn get_property(&self, name: &str) -> Option<glib::Value> {
         unsafe {
-            let found: bool = from_glib(ffi::gst_child_proxy_lookup(self.to_glib_none().0, name.to_glib_none().0, ptr::null_mut(), ptr::null_mut()));
+            let found: bool = from_glib(ffi::gst_child_proxy_lookup(
+                self.to_glib_none().0,
+                name.to_glib_none().0,
+                ptr::null_mut(),
+                ptr::null_mut(),
+            ));
             if !found {
                 return None;
             }
 
             let mut value = glib::Value::uninitialized();
-            ffi::gst_child_proxy_get_property(self.to_glib_none().0, name.to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gst_child_proxy_get_property(
+                self.to_glib_none().0,
+                name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
             Some(value)
         }
     }
 
     fn set_property(&self, name: &str, value: &glib::Value) -> Result<(), glib::BoolError> {
         unsafe {
-            let found: bool = from_glib(ffi::gst_child_proxy_lookup(self.to_glib_none().0, name.to_glib_none().0, ptr::null_mut(), ptr::null_mut()));
+            let found: bool = from_glib(ffi::gst_child_proxy_lookup(
+                self.to_glib_none().0,
+                name.to_glib_none().0,
+                ptr::null_mut(),
+                ptr::null_mut(),
+            ));
             if !found {
                 return Err(glib::BoolError("Child property not found"));
             }
 
-            ffi::gst_child_proxy_set_property(self.to_glib_none().0, name.to_glib_none().0, value.to_glib_none().0);
+            ffi::gst_child_proxy_set_property(
+                self.to_glib_none().0,
+                name.to_glib_none().0,
+                value.to_glib_none().0,
+            );
 
             Ok(())
         }

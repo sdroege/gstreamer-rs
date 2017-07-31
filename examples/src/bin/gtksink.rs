@@ -17,7 +17,9 @@ fn main() {
     let src = ElementFactory::make("videotestsrc", None).unwrap();
     let (sink, widget) = if let Some(gtkglsink) = ElementFactory::make("gtkglsink", None) {
         let glsinkbin = ElementFactory::make("glsinkbin", None).unwrap();
-        glsinkbin.set_property("sink", &gtkglsink.to_value()).unwrap();
+        glsinkbin
+            .set_property("sink", &gtkglsink.to_value())
+            .unwrap();
 
         let widget = gtkglsink.get_property("widget").unwrap();
         (glsinkbin, widget.get::<gtk::Widget>().unwrap())
@@ -52,7 +54,12 @@ fn main() {
             seconds -= hours * 60 * 60 + minutes * 60;
             minutes -= hours * 60;
 
-            label.set_text(&format!("Position: {:02}:{:02}:{:02}", hours, minutes, seconds));
+            label.set_text(&format!(
+                "Position: {:02}:{:02}:{:02}",
+                hours,
+                minutes,
+                seconds
+            ));
         } else {
             label.set_text("Position: 00:00:00");
         }
