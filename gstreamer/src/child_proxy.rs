@@ -14,12 +14,12 @@ use std::ptr;
 use ChildProxy;
 
 pub trait ChildProxyExtManual {
-    fn get_property(&self, name: &str) -> Option<glib::Value>;
-    fn set_property(&self, name: &str, value: &glib::Value) -> Result<(), glib::BoolError>;
+    fn get_child_property(&self, name: &str) -> Option<glib::Value>;
+    fn set_child_property(&self, name: &str, value: &glib::Value) -> Result<(), glib::BoolError>;
 }
 
 impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
-    fn get_property(&self, name: &str) -> Option<glib::Value> {
+    fn get_child_property(&self, name: &str) -> Option<glib::Value> {
         unsafe {
             let found: bool = from_glib(ffi::gst_child_proxy_lookup(
                 self.to_glib_none().0,
@@ -41,7 +41,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
         }
     }
 
-    fn set_property(&self, name: &str, value: &glib::Value) -> Result<(), glib::BoolError> {
+    fn set_child_property(&self, name: &str, value: &glib::Value) -> Result<(), glib::BoolError> {
         unsafe {
             let found: bool = from_glib(ffi::gst_child_proxy_lookup(
                 self.to_glib_none().0,
