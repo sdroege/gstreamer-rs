@@ -6,4 +6,5 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 [dependencies]
 glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
+gtk = { version = "0.1.3", git = "https://github.com/gtk-rs/gtk" }
 
