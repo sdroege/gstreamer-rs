@@ -95,9 +95,6 @@ pub use self::u_r_i_handler::URIHandlerExt;
 mod date_time;
 pub use self::date_time::DateTime;
 
-mod segment;
-pub use self::segment::Segment;
-
 mod enums;
 pub use self::enums::BufferingMode;
 pub use self::enums::BusSyncReply;

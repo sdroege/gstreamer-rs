@@ -68,6 +68,7 @@ manual = [
     "GObject.Object",
     "Gst.Structure",
     "Gst.Iterator",
+    "Gst.Segment",
 ]
 
 [[object]]
@@ -455,11 +456,6 @@ status = "generate"
     name = "upstream-id"
     # Has setter/getter functions
     ignore = true
-
-[[object]]
-name = "Gst.Segment"
-status = "generate"
-concurrency = "send"
 
 [[object]]
 name = "Gst.Plugin"

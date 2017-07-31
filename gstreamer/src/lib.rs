@@ -74,7 +74,6 @@ mod bin;
 mod bus;
 mod pad;
 mod gobject;
-mod segment;
 mod proxy_pad;
 mod ghost_pad;
 mod child_proxy;
@@ -90,6 +89,9 @@ pub use self::iterator::Iterator;
 
 mod value;
 pub use value::*;
+
+mod segment;
+pub use segment::*;
 
 use std::ptr;
 
