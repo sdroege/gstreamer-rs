@@ -32,6 +32,12 @@ impl BusStream {
     }
 }
 
+impl Drop for BusStream {
+    fn drop(&mut self) {
+        self.0.unset_sync_handler();
+    }
+}
+
 impl Stream for BusStream {
     type Item = Message;
     type Error = ();

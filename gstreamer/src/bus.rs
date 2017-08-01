@@ -14,6 +14,7 @@ use glib::translate::*;
 use glib::source::{CallbackGuard, Continue, Priority, SourceId};
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
+use std::ptr;
 
 use Bus;
 use BusSyncReply;
@@ -116,6 +117,17 @@ impl Bus {
                 Some(trampoline_sync),
                 into_raw_sync(func),
                 Some(destroy_closure_sync),
+            )
+        }
+    }
+
+    pub fn unset_sync_handler(&self) {
+        unsafe {
+            ffi::gst_bus_set_sync_handler(
+                self.to_glib_none().0,
+                None,
+                ptr::null_mut(),
+                None,
             )
         }
     }
