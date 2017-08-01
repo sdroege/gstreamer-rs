@@ -8,6 +8,7 @@ repository = "https://github.com/sdroege/gstreamer-rs"
 license = "MIT"
 documentation = "https://gstreamer.freedesktop.org"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+build = "build.rs"
 
 [dependencies]
 bitflags = "0.9"
@@ -19,8 +20,13 @@ glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
 num-rational = { version = "0.1.38", default-features = false, features = [] }
 lazy_static = "0.2"
 
-[features]
-v1_10 = ["gstreamer-sys/v1_10", "v1_8"]
-v1_12 = ["gstreamer-sys/v1_12", "v1_10"]
-v1_8 = ["gstreamer-sys/v1_8"]
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
 
+[features]
+v1_10 = ["gstreamer-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "v1_10"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
+default-features = []
