@@ -37,6 +37,52 @@ name = "GstApp.AppSrc"
 status = "generate"
 trait = false
 
+    [[object.function]]
+    name = "push_buffer"
+    # Pass by value
+    ignore = true
+
+    [[object.signal]]
+    name = "end-of-stream"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "push-buffer"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "push-sample"
+    # Action signal
+    ignore = true
+
+    [[object.property]]
+    name = "current-level-bytes"
+    # Has getter function
+    ignore = true
+
+    [[object.property]]
+    name = "duration"
+    # Has getter function
+    ignore = true
+
+    [[object.property]]
+    name = "max-latency"
+    # Has getter function
+    ignore = true
+
+    [[object.property]]
+    name = "min-latency"
+    # Has getter function
+    ignore = true
+
+    [[object.property]]
+    name = "stream-type"
+    # Has getter function
+    ignore = true
+
+
 [[object]]
 name = "Gst.Caps"
 status = "manual"
