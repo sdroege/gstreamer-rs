@@ -2,6 +2,12 @@
 name = "gstreamer"
 version = "0.1.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT"
+documentation = "https://gstreamer.freedesktop.org"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 
 [dependencies]
 bitflags = "0.9"
