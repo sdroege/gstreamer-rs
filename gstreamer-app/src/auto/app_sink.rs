@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use ffi;
-use glib::Value;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
@@ -134,28 +133,6 @@ impl AppSink {
         unsafe {
             from_glib_full(ffi::gst_app_sink_try_pull_sample(self.to_glib_none().0, timeout))
         }
-    }
-
-    pub fn get_property_buffer_list(&self) -> bool {
-        let mut value = Value::from(&false);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "buffer-list".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get().unwrap()
-    }
-
-    pub fn set_property_buffer_list(&self, buffer_list: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "buffer-list".to_glib_none().0, Value::from(&buffer_list).to_glib_none().0);
-        }
-    }
-
-    pub fn get_property_eos(&self) -> bool {
-        let mut value = Value::from(&false);
-        unsafe {
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "eos".to_glib_none().0, value.to_glib_none_mut().0);
-        }
-        value.get().unwrap()
     }
 
     pub fn connect_eos<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> u64 {

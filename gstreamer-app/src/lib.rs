@@ -35,3 +35,4 @@ pub use auto::*;
 pub use auto::traits::*;
 
 mod app_src;
+mod app_sink;

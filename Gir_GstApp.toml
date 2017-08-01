@@ -32,6 +32,16 @@ name = "GstApp.AppSink"
 status = "generate"
 trait = false
 
+    [[object.property]]
+    name = "buffer-list"
+    # Has getter function
+    ignore = true
+
+    [[object.property]]
+    name = "eos"
+    # Has getter function
+    ignore = true
+
 [[object]]
 name = "GstApp.AppSrc"
 status = "generate"
@@ -81,7 +91,6 @@ trait = false
     name = "stream-type"
     # Has getter function
     ignore = true
-
 
 [[object]]
 name = "Gst.Caps"
