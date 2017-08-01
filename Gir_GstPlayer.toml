@@ -1,0 +1,56 @@
+[options]
+girs_dir = "gir-files"
+library = "GstPlayer"
+version = "1.0"
+min_cfg_version = "1.10"
+target_path = "gstreamer-player"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+generate = [
+    "GstPlayer.Player",
+    "GstPlayer.PlayerAudioInfo",
+    "GstPlayer.PlayerColorBalanceType",
+    "GstPlayer.PlayerError",
+    "GstPlayer.PlayerGMainContextSignalDispatcher",
+    "GstPlayer.PlayerMediaInfo",
+    "GstPlayer.PlayerSignalDispatcher",
+    "GstPlayer.PlayerSnapshotFormat",
+    "GstPlayer.PlayerState",
+    "GstPlayer.PlayerStreamInfo",
+    "GstPlayer.PlayerSubtitleInfo",
+    "GstPlayer.PlayerVideoInfo",
+    "GstPlayer.PlayerVideoOverlayVideoRenderer",
+    "GstPlayer.PlayerVideoRenderer",
+    "GstPlayer.PlayerVisualization",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.MainContext",
+    "GObject.Object",
+    "Gst.ClockTime",
+    "Gst.Structure",
+    "Gst.Element",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
