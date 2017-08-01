@@ -1,0 +1,42 @@
+[options]
+girs_dir = "gir-files"
+library = "GstApp"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-app"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+generate = [
+    "GstApp.AppSink",
+    "GstApp.AppSrc",
+    "GstApp.AppStreamType",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.ClockTime",
+    "Gst.FlowReturn",
+    "Gst.Format",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
