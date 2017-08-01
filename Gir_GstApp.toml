@@ -11,20 +11,31 @@ generate_safety_asserts = true
 external_libraries = [
     "GLib",
     "GObject",
+    "Gst",
 ]
 
 generate = [
-    "GstApp.AppSink",
-    "GstApp.AppSrc",
     "GstApp.AppStreamType",
 ]
 
 manual = [
     "GObject.Object",
+    "Gst.Object",
+    "Gst.Element",
     "Gst.ClockTime",
     "Gst.FlowReturn",
     "Gst.Format",
 ]
+
+[[object]]
+name = "GstApp.AppSink"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstApp.AppSrc"
+status = "generate"
+trait = false
 
 [[object]]
 name = "Gst.Caps"

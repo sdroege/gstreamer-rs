@@ -3,17 +3,13 @@
 
 mod app_sink;
 pub use self::app_sink::AppSink;
-pub use self::app_sink::AppSinkExt;
 
 mod app_src;
 pub use self::app_src::AppSrc;
-pub use self::app_src::AppSrcExt;
 
 mod enums;
 pub use self::enums::AppStreamType;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::AppSinkExt;
-    pub use super::AppSrcExt;
 }

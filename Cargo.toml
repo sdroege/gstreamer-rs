@@ -2,5 +2,6 @@
 
 members = [
   "gstreamer",
+  "gstreamer-app",
   "examples",
 ]

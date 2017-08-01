@@ -3,10 +3,7 @@
 
 use AppStreamType;
 use ffi;
-use glib;
 use glib::Value;
-use glib::object::Downcast;
-use glib::object::IsA;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
@@ -20,216 +17,135 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct AppSrc(Object<ffi::GstAppSrc>);
+    pub struct AppSrc(Object<ffi::GstAppSrc>): [
+        gst::Element => gst_ffi::GstElement,
+        gst::Object => gst_ffi::GstObject,
+    ];
 
     match fn {
         get_type => || ffi::gst_app_src_get_type(),
     }
 }
 
-unsafe impl Send for AppSrc {}
-unsafe impl Sync for AppSrc {}
-
-pub trait AppSrcExt {
-    fn end_of_stream(&self) -> gst::FlowReturn;
-
-    fn get_caps(&self) -> Option<gst::Caps>;
-
-    fn get_current_level_bytes(&self) -> u64;
-
-    #[cfg(feature = "v1_10")]
-    fn get_duration(&self) -> gst::ClockTime;
-
-    fn get_emit_signals(&self) -> bool;
-
-    fn get_latency(&self, min: u64, max: u64);
-
-    fn get_max_bytes(&self) -> u64;
-
-    fn get_size(&self) -> i64;
-
-    fn get_stream_type(&self) -> AppStreamType;
-
-    fn push_buffer(&self, buffer: &gst::Buffer) -> gst::FlowReturn;
-
-    fn push_sample(&self, sample: &gst::Sample) -> gst::FlowReturn;
-
-    //fn set_callbacks<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callbacks: /*Ignored*/&mut AppSrcCallbacks, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    fn set_caps(&self, caps: &gst::Caps);
-
-    #[cfg(feature = "v1_10")]
-    fn set_duration(&self, duration: gst::ClockTime);
-
-    fn set_emit_signals(&self, emit: bool);
-
-    fn set_latency(&self, min: u64, max: u64);
-
-    fn set_max_bytes(&self, max: u64);
-
-    fn set_size(&self, size: i64);
-
-    fn set_stream_type(&self, type_: AppStreamType);
-
-    fn get_property_block(&self) -> bool;
-
-    fn set_property_block(&self, block: bool);
-
-    fn get_property_current_level_bytes(&self) -> u64;
-
-    fn get_property_duration(&self) -> u64;
-
-    fn set_property_duration(&self, duration: u64);
-
-    fn get_property_format(&self) -> gst::Format;
-
-    fn set_property_format(&self, format: gst::Format);
-
-    fn get_property_is_live(&self) -> bool;
-
-    fn set_property_is_live(&self, is_live: bool);
-
-    fn get_property_max_latency(&self) -> i64;
-
-    fn set_property_max_latency(&self, max_latency: i64);
-
-    fn get_property_min_latency(&self) -> i64;
-
-    fn set_property_min_latency(&self, min_latency: i64);
-
-    fn get_property_min_percent(&self) -> u32;
-
-    fn set_property_min_percent(&self, min_percent: u32);
-
-    fn connect_end_of_stream<F: Fn(&Self) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64;
-
-    fn connect_enough_data<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> u64;
-
-    fn connect_need_data<F: Fn(&Self, u32) + Send + Sync + 'static>(&self, f: F) -> u64;
-
-    fn connect_push_buffer<F: Fn(&Self, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64;
-
-    fn connect_push_sample<F: Fn(&Self, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64;
-
-    fn connect_seek_data<F: Fn(&Self, u64) -> bool + Send + Sync + 'static>(&self, f: F) -> u64;
-}
-
-impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
-    fn end_of_stream(&self) -> gst::FlowReturn {
+impl AppSrc {
+    pub fn end_of_stream(&self) -> gst::FlowReturn {
         unsafe {
             from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0))
         }
     }
 
-    fn get_caps(&self) -> Option<gst::Caps> {
+    pub fn get_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0))
         }
     }
 
-    fn get_current_level_bytes(&self) -> u64 {
+    pub fn get_current_level_bytes(&self) -> u64 {
         unsafe {
             ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0)
         }
     }
 
     #[cfg(feature = "v1_10")]
-    fn get_duration(&self) -> gst::ClockTime {
+    pub fn get_duration(&self) -> gst::ClockTime {
         unsafe {
             ffi::gst_app_src_get_duration(self.to_glib_none().0)
         }
     }
 
-    fn get_emit_signals(&self) -> bool {
+    pub fn get_emit_signals(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_app_src_get_emit_signals(self.to_glib_none().0))
         }
     }
 
-    fn get_latency(&self, min: u64, max: u64) {
+    pub fn get_latency(&self) -> (u64, u64) {
         unsafe {
-            ffi::gst_app_src_get_latency(self.to_glib_none().0, min, max);
+            let mut min = mem::uninitialized();
+            let mut max = mem::uninitialized();
+            ffi::gst_app_src_get_latency(self.to_glib_none().0, &mut min, &mut max);
+            (min, max)
         }
     }
 
-    fn get_max_bytes(&self) -> u64 {
+    pub fn get_max_bytes(&self) -> u64 {
         unsafe {
             ffi::gst_app_src_get_max_bytes(self.to_glib_none().0)
         }
     }
 
-    fn get_size(&self) -> i64 {
+    pub fn get_size(&self) -> i64 {
         unsafe {
             ffi::gst_app_src_get_size(self.to_glib_none().0)
         }
     }
 
-    fn get_stream_type(&self) -> AppStreamType {
+    pub fn get_stream_type(&self) -> AppStreamType {
         unsafe {
             from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0))
         }
     }
 
-    fn push_buffer(&self, buffer: &gst::Buffer) -> gst::FlowReturn {
+    pub fn push_buffer(&self, buffer: &gst::Buffer) -> gst::FlowReturn {
         unsafe {
             from_glib(ffi::gst_app_src_push_buffer(self.to_glib_none().0, buffer.to_glib_full()))
         }
     }
 
-    fn push_sample(&self, sample: &gst::Sample) -> gst::FlowReturn {
+    pub fn push_sample(&self, sample: &gst::Sample) -> gst::FlowReturn {
         unsafe {
             from_glib(ffi::gst_app_src_push_sample(self.to_glib_none().0, sample.to_glib_none().0))
         }
     }
 
-    //fn set_callbacks<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callbacks: /*Ignored*/&mut AppSrcCallbacks, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //pub fn set_callbacks<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callbacks: /*Ignored*/&mut AppSrcCallbacks, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gst_app_src_set_callbacks() }
     //}
 
-    fn set_caps(&self, caps: &gst::Caps) {
+    pub fn set_caps(&self, caps: &gst::Caps) {
         unsafe {
             ffi::gst_app_src_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
         }
     }
 
     #[cfg(feature = "v1_10")]
-    fn set_duration(&self, duration: gst::ClockTime) {
+    pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
             ffi::gst_app_src_set_duration(self.to_glib_none().0, duration);
         }
     }
 
-    fn set_emit_signals(&self, emit: bool) {
+    pub fn set_emit_signals(&self, emit: bool) {
         unsafe {
             ffi::gst_app_src_set_emit_signals(self.to_glib_none().0, emit.to_glib());
         }
     }
 
-    fn set_latency(&self, min: u64, max: u64) {
+    pub fn set_latency(&self, min: u64, max: u64) {
         unsafe {
             ffi::gst_app_src_set_latency(self.to_glib_none().0, min, max);
         }
     }
 
-    fn set_max_bytes(&self, max: u64) {
+    pub fn set_max_bytes(&self, max: u64) {
         unsafe {
             ffi::gst_app_src_set_max_bytes(self.to_glib_none().0, max);
         }
     }
 
-    fn set_size(&self, size: i64) {
+    pub fn set_size(&self, size: i64) {
         unsafe {
             ffi::gst_app_src_set_size(self.to_glib_none().0, size);
         }
     }
 
-    fn set_stream_type(&self, type_: AppStreamType) {
+    pub fn set_stream_type(&self, type_: AppStreamType) {
         unsafe {
             ffi::gst_app_src_set_stream_type(self.to_glib_none().0, type_.to_glib());
         }
     }
 
-    fn get_property_block(&self) -> bool {
+    pub fn get_property_block(&self) -> bool {
         let mut value = Value::from(&false);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "block".to_glib_none().0, value.to_glib_none_mut().0);
@@ -237,13 +153,13 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn set_property_block(&self, block: bool) {
+    pub fn set_property_block(&self, block: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "block".to_glib_none().0, Value::from(&block).to_glib_none().0);
         }
     }
 
-    fn get_property_current_level_bytes(&self) -> u64 {
+    pub fn get_property_current_level_bytes(&self) -> u64 {
         let mut value = Value::from(&0u64);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "current-level-bytes".to_glib_none().0, value.to_glib_none_mut().0);
@@ -251,7 +167,7 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn get_property_duration(&self) -> u64 {
+    pub fn get_property_duration(&self) -> u64 {
         let mut value = Value::from(&0u64);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "duration".to_glib_none().0, value.to_glib_none_mut().0);
@@ -259,13 +175,13 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn set_property_duration(&self, duration: u64) {
+    pub fn set_property_duration(&self, duration: u64) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "duration".to_glib_none().0, Value::from(&duration).to_glib_none().0);
         }
     }
 
-    fn get_property_format(&self) -> gst::Format {
+    pub fn get_property_format(&self) -> gst::Format {
         let mut value = Value::from(&0);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "format".to_glib_none().0, value.to_glib_none_mut().0);
@@ -273,14 +189,14 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         }
     }
 
-    fn set_property_format(&self, format: gst::Format) {
+    pub fn set_property_format(&self, format: gst::Format) {
         let format = format.to_glib() as i32;
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "format".to_glib_none().0, Value::from(&format).to_glib_none().0);
         }
     }
 
-    fn get_property_is_live(&self) -> bool {
+    pub fn get_property_is_live(&self) -> bool {
         let mut value = Value::from(&false);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-live".to_glib_none().0, value.to_glib_none_mut().0);
@@ -288,13 +204,13 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn set_property_is_live(&self, is_live: bool) {
+    pub fn set_property_is_live(&self, is_live: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "is-live".to_glib_none().0, Value::from(&is_live).to_glib_none().0);
         }
     }
 
-    fn get_property_max_latency(&self) -> i64 {
+    pub fn get_property_max_latency(&self) -> i64 {
         let mut value = Value::from(&0i64);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "max-latency".to_glib_none().0, value.to_glib_none_mut().0);
@@ -302,13 +218,13 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn set_property_max_latency(&self, max_latency: i64) {
+    pub fn set_property_max_latency(&self, max_latency: i64) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "max-latency".to_glib_none().0, Value::from(&max_latency).to_glib_none().0);
         }
     }
 
-    fn get_property_min_latency(&self) -> i64 {
+    pub fn get_property_min_latency(&self) -> i64 {
         let mut value = Value::from(&0i64);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "min-latency".to_glib_none().0, value.to_glib_none_mut().0);
@@ -316,13 +232,13 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn set_property_min_latency(&self, min_latency: i64) {
+    pub fn set_property_min_latency(&self, min_latency: i64) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "min-latency".to_glib_none().0, Value::from(&min_latency).to_glib_none().0);
         }
     }
 
-    fn get_property_min_percent(&self) -> u32 {
+    pub fn get_property_min_percent(&self) -> u32 {
         let mut value = Value::from(&0u32);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "min-percent".to_glib_none().0, value.to_glib_none_mut().0);
@@ -330,99 +246,96 @@ impl<O: IsA<AppSrc> + IsA<glib::object::Object>> AppSrcExt for O {
         value.get().unwrap()
     }
 
-    fn set_property_min_percent(&self, min_percent: u32) {
+    pub fn set_property_min_percent(&self, min_percent: u32) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "min-percent".to_glib_none().0, Value::from(&min_percent).to_glib_none().0);
         }
     }
 
-    fn connect_end_of_stream<F: Fn(&Self) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_end_of_stream<F: Fn(&AppSrc) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&AppSrc) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "end-of-stream",
-                transmute(end_of_stream_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(end_of_stream_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
-    fn connect_enough_data<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_enough_data<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "enough-data",
-                transmute(enough_data_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(enough_data_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
-    fn connect_need_data<F: Fn(&Self, u32) + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, u32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&AppSrc, u32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "need-data",
-                transmute(need_data_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(need_data_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
-    fn connect_push_buffer<F: Fn(&Self, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_push_buffer<F: Fn(&AppSrc, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&AppSrc, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "push-buffer",
-                transmute(push_buffer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(push_buffer_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
-    fn connect_push_sample<F: Fn(&Self, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_push_sample<F: Fn(&AppSrc, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&AppSrc, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "push-sample",
-                transmute(push_sample_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(push_sample_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
-    fn connect_seek_data<F: Fn(&Self, u64) -> bool + Send + Sync + 'static>(&self, f: F) -> u64 {
+    pub fn connect_seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, u64) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "seek-data",
-                transmute(seek_data_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                transmute(seek_data_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 }
 
-unsafe extern "C" fn end_of_stream_trampoline<P>(this: *mut ffi::GstAppSrc, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn
-where P: IsA<AppSrc> {
+unsafe impl Send for AppSrc {}
+unsafe impl Sync for AppSrc {}
+
+unsafe extern "C" fn end_of_stream_trampoline(this: *mut ffi::GstAppSrc, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
     callback_guard!();
-    let f: &Box_<Fn(&P) -> gst::FlowReturn + Send + Sync + 'static> = transmute(f);
-    f(&AppSrc::from_glib_none(this).downcast_unchecked()).to_glib()
+    let f: &Box_<Fn(&AppSrc) -> gst::FlowReturn + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this)).to_glib()
 }
 
-unsafe extern "C" fn enough_data_trampoline<P>(this: *mut ffi::GstAppSrc, f: glib_ffi::gpointer)
-where P: IsA<AppSrc> {
+unsafe extern "C" fn enough_data_trampoline(this: *mut ffi::GstAppSrc, f: glib_ffi::gpointer) {
     callback_guard!();
-    let f: &Box_<Fn(&P) + Send + Sync + 'static> = transmute(f);
-    f(&AppSrc::from_glib_none(this).downcast_unchecked())
+    let f: &Box_<Fn(&AppSrc) + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this))
 }
 
-unsafe extern "C" fn need_data_trampoline<P>(this: *mut ffi::GstAppSrc, length: libc::c_uint, f: glib_ffi::gpointer)
-where P: IsA<AppSrc> {
+unsafe extern "C" fn need_data_trampoline(this: *mut ffi::GstAppSrc, length: libc::c_uint, f: glib_ffi::gpointer) {
     callback_guard!();
-    let f: &Box_<Fn(&P, u32) + Send + Sync + 'static> = transmute(f);
-    f(&AppSrc::from_glib_none(this).downcast_unchecked(), length)
+    let f: &Box_<Fn(&AppSrc, u32) + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this), length)
 }
 
-unsafe extern "C" fn push_buffer_trampoline<P>(this: *mut ffi::GstAppSrc, buffer: *mut gst_ffi::GstBuffer, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn
-where P: IsA<AppSrc> {
+unsafe extern "C" fn push_buffer_trampoline(this: *mut ffi::GstAppSrc, buffer: *mut gst_ffi::GstBuffer, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
     callback_guard!();
-    let f: &Box_<Fn(&P, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static> = transmute(f);
-    f(&AppSrc::from_glib_none(this).downcast_unchecked(), &from_glib_none(buffer)).to_glib()
+    let f: &Box_<Fn(&AppSrc, &gst::Buffer) -> gst::FlowReturn + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(buffer)).to_glib()
 }
 
-unsafe extern "C" fn push_sample_trampoline<P>(this: *mut ffi::GstAppSrc, sample: *mut gst_ffi::GstSample, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn
-where P: IsA<AppSrc> {
+unsafe extern "C" fn push_sample_trampoline(this: *mut ffi::GstAppSrc, sample: *mut gst_ffi::GstSample, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
     callback_guard!();
-    let f: &Box_<Fn(&P, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static> = transmute(f);
-    f(&AppSrc::from_glib_none(this).downcast_unchecked(), &from_glib_none(sample)).to_glib()
+    let f: &Box_<Fn(&AppSrc, &gst::Sample) -> gst::FlowReturn + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this), &from_glib_none(sample)).to_glib()
 }
 
-unsafe extern "C" fn seek_data_trampoline<P>(this: *mut ffi::GstAppSrc, offset: u64, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<AppSrc> {
+unsafe extern "C" fn seek_data_trampoline(this: *mut ffi::GstAppSrc, offset: u64, f: glib_ffi::gpointer) -> glib_ffi::gboolean {
     callback_guard!();
-    let f: &Box_<Fn(&P, u64) -> bool + Send + Sync + 'static> = transmute(f);
-    f(&AppSrc::from_glib_none(this).downcast_unchecked(), offset).to_glib()
+    let f: &Box_<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static> = transmute(f);
+    f(&from_glib_none(this), offset).to_glib()
 }
