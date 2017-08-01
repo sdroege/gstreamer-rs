@@ -43,10 +43,6 @@ mod ghost_pad;
 pub use self::ghost_pad::GhostPad;
 pub use self::ghost_pad::GhostPadExt;
 
-mod object;
-pub use self::object::Object;
-pub use self::object::ObjectExt;
-
 mod pad;
 pub use self::pad::Pad;
 pub use self::pad::PadExt;
@@ -218,7 +214,6 @@ pub mod traits {
     pub use super::DeviceProviderFactoryExt;
     pub use super::ElementExt;
     pub use super::GhostPadExt;
-    pub use super::ObjectExt;
     pub use super::PadExt;
     pub use super::PadTemplateExt;
     pub use super::PipelineExt;

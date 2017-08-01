@@ -44,7 +44,7 @@ impl Object {
 unsafe impl Send for Object {}
 unsafe impl Sync for Object {}
 
-pub trait ObjectExt {
+pub trait GstObjectExt {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
 
     fn default_error<'a, P: Into<Option<&'a str>>>(&self, error: &Error, debug: P);
@@ -94,7 +94,7 @@ pub trait ObjectExt {
     //fn connect_deep_notify<Unsupported or ignored types>(&self, f: F) -> u64;
 }
 
-impl<O: IsA<Object>> ObjectExt for O {
+impl<O: IsA<Object>> GstObjectExt for O {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool {
     //    unsafe { TODO: call ffi::gst_object_add_control_binding() }
     //}

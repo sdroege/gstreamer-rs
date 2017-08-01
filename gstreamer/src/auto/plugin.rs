@@ -52,6 +52,12 @@ impl Plugin {
         }
     }
 
+    pub fn get_name(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gst_plugin_get_name(self.to_glib_none().0))
+        }
+    }
+
     pub fn get_origin(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_origin(self.to_glib_none().0))

@@ -3,7 +3,6 @@ use gst::*;
 
 extern crate glib;
 use glib::*;
-use glib::ObjectExt;
 
 extern crate gtk;
 use gtk::prelude::*;

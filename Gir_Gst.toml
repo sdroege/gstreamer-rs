@@ -271,7 +271,8 @@ status = "generate"
 
 [[object]]
 name = "Gst.Object"
-status = "generate"
+# For renaming the trait...
+status = "manual"
     [[object.function]]
     name = "set_name"
         [object.function.return]

@@ -47,7 +47,6 @@ mod auto;
 pub use auto::*;
 pub use auto::traits::*;
 pub use auto::functions::{parse_bin_from_description, parse_launch};
-pub use auto::traits::ObjectExt as GstObjectExt;
 
 pub mod miniobject;
 pub use miniobject::GstRc;
@@ -71,6 +70,7 @@ pub use query::{Query, QueryRef, QueryView};
 pub mod event;
 pub use event::{Event, EventRef, EventView};
 
+mod object;
 mod element;
 mod bin;
 mod bus;
@@ -81,6 +81,7 @@ mod ghost_pad;
 mod child_proxy;
 mod tag_setter;
 mod iterator;
+pub use object::{Object, GstObjectExt};
 pub use element::ElementExtManual;
 pub use bin::BinExtManual;
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo, PAD_PROBE_ID_INVALID};

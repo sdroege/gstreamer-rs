@@ -2,7 +2,7 @@ extern crate gstreamer as gst;
 use gst::*;
 
 extern crate glib;
-use glib::ObjectExt;
+use glib::*;
 
 use std::env;
 use std::u64;
