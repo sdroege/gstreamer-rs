@@ -46,18 +46,18 @@ unsafe extern "C" fn trampoline_sync(
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     let _guard = CallbackGuard::new();
-    let func: &RefCell<Box<FnMut(&Bus, &Message) -> BusSyncReply + 'static>> = transmute(func);
-    (&mut *func.borrow_mut())(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
+    let f: &Box<Fn(&Bus, &Message) -> BusSyncReply + 'static> = transmute(func);
+    f(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_sync(ptr: gpointer) {
     let _guard = CallbackGuard::new();
-    Box::<RefCell<Box<FnMut(&Bus, &Message) -> BusSyncReply + 'static>>>::from_raw(ptr as *mut _);
+    Box::<Box<Fn(&Bus, &Message) -> BusSyncReply + 'static>>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_sync<F: FnMut(&Bus, &Message) -> BusSyncReply + Send + 'static>(func: F) -> gpointer {
-    let func: Box<RefCell<Box<FnMut(&Bus, &Message) -> BusSyncReply + Send + 'static>>> =
-        Box::new(RefCell::new(Box::new(func)));
+fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + 'static>(func: F) -> gpointer {
+    let func: Box<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + 'static>> =
+        Box::new(Box::new(func));
     Box::into_raw(func) as gpointer
 }
 
@@ -108,7 +108,7 @@ impl Bus {
 
     pub fn set_sync_handler<F>(&self, func: F)
     where
-        F: FnMut(&Bus, &Message) -> BusSyncReply + Send + 'static,
+        F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
     {
         unsafe {
             ffi::gst_bus_set_sync_handler(

@@ -17,7 +17,6 @@ use QueryRef;
 use Event;
 use miniobject::MiniObject;
 
-use std::cell::RefCell;
 use std::mem::transmute;
 use std::ptr;
 
@@ -68,7 +67,7 @@ pub enum PadProbeData<'a> {
 pub trait PadExtManual {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
     where
-        F: FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
+        F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     fn remove_probe(&self, id: PadProbeId);
 
     fn chain(&self, buffer: Buffer) -> FlowReturn;
@@ -87,7 +86,11 @@ pub trait PadExtManual {
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
 
-    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: Event) -> bool;
+    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
+        &self,
+        parent: Q,
+        event: Event,
+    ) -> bool;
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 }
@@ -95,7 +98,7 @@ pub trait PadExtManual {
 impl<O: IsA<Pad>> PadExtManual for O {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
     where
-        F: FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
+        F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
     {
         unsafe {
             let id = ffi::gst_pad_add_probe(
@@ -210,23 +213,37 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: Event) -> bool {
+    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
+        &self,
+        parent: Q,
+        event: Event,
+    ) -> bool {
         let parent = parent.into();
         let parent = parent.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_pad_event_default(self.to_glib_none().0, parent.0, event.into_ptr()))
+            from_glib(ffi::gst_pad_event_default(
+                self.to_glib_none().0,
+                parent.0,
+                event.into_ptr(),
+            ))
         }
     }
 
     fn push_event(&self, event: Event) -> bool {
         unsafe {
-            from_glib(ffi::gst_pad_push_event(self.to_glib_none().0, event.into_ptr()))
+            from_glib(ffi::gst_pad_push_event(
+                self.to_glib_none().0,
+                event.into_ptr(),
+            ))
         }
     }
 
     fn send_event(&self, event: Event) -> bool {
         unsafe {
-            from_glib(ffi::gst_pad_send_event(self.to_glib_none().0, event.into_ptr()))
+            from_glib(ffi::gst_pad_send_event(
+                self.to_glib_none().0,
+                event.into_ptr(),
+            ))
         }
     }
 }
@@ -237,9 +254,8 @@ unsafe extern "C" fn trampoline_pad_probe(
     func: gpointer,
 ) -> ffi::GstPadProbeReturn {
     let _guard = CallbackGuard::new();
-    let func: &RefCell<
-        Box<FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>,
-    > = transmute(func);
+    let func: &Box<Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static> =
+        transmute(func);
     let mut data_type = None;
 
     let mut probe_info = PadProbeInfo {
@@ -277,7 +293,7 @@ unsafe extern "C" fn trampoline_pad_probe(
         },
     };
 
-    let ret = (&mut *func.borrow_mut())(&from_glib_none(pad), &mut probe_info).to_glib();
+    let ret = func(&from_glib_none(pad), &mut probe_info).to_glib();
 
     match probe_info.data {
         Some(PadProbeData::Buffer(buffer)) => {
@@ -316,16 +332,15 @@ unsafe extern "C" fn trampoline_pad_probe(
 
 unsafe extern "C" fn destroy_closure_pad_probe(ptr: gpointer) {
     let _guard = CallbackGuard::new();
-    Box::<RefCell<Box<FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>>>::from_raw(ptr as *mut _);
+    Box::<Box<Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>>::from_raw(
+        ptr as *mut _,
+    );
 }
 
-fn into_raw_pad_probe<
-    F: FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
->(
+fn into_raw_pad_probe<F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>(
     func: F,
 ) -> gpointer {
-    let func: Box<
-        RefCell<Box<FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>>,
-    > = Box::new(RefCell::new(Box::new(func)));
+    let func: Box<Box<Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static>> =
+        Box::new(Box::new(func));
     Box::into_raw(func) as gpointer
 }
