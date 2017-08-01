@@ -227,6 +227,11 @@ status = "generate"
     # correct mutability
     ignore = true
 
+    [[object.function]]
+    name = "send_event"
+    # Pass by value
+    ignore = true
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
@@ -383,6 +388,21 @@ status = "generate"
     [[object.function]]
     name = "proxy_query_accept_caps"
     # Correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "event_default"
+    # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "push_event"
+    # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "send_event"
+    # Pass by value
     ignore = true
 
 [[object]]

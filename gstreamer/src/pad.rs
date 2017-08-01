@@ -86,6 +86,10 @@ pub trait PadExtManual {
     ) -> bool;
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
+
+    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: Event) -> bool;
+    fn push_event(&self, event: Event) -> bool;
+    fn send_event(&self, event: Event) -> bool;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -203,6 +207,26 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 self.to_glib_none().0,
                 query.as_mut_ptr(),
             ))
+        }
+    }
+
+    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q, event: Event) -> bool {
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_pad_event_default(self.to_glib_none().0, parent.0, event.into_ptr()))
+        }
+    }
+
+    fn push_event(&self, event: Event) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_push_event(self.to_glib_none().0, event.into_ptr()))
+        }
+    }
+
+    fn send_event(&self, event: Event) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_send_event(self.to_glib_none().0, event.into_ptr()))
         }
     }
 }

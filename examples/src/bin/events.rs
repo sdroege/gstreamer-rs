@@ -24,7 +24,7 @@ fn main() {
         println!("sending eos");
 
         let ev = Event::new_eos().build();
-        pipeline.send_event(&ev);
+        pipeline.send_event(ev);
 
         glib::Continue(false)
     });

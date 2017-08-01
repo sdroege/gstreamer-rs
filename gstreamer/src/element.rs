@@ -12,6 +12,7 @@ use glib;
 use glib::IsA;
 use glib::translate::{from_glib, ToGlibPtr};
 use QueryRef;
+use Event;
 use miniobject::MiniObject;
 
 use ffi;
@@ -44,6 +45,8 @@ impl Element {
 
 pub trait ElementExtManual {
     fn query(&self, query: &mut QueryRef) -> bool;
+
+    fn send_event(&self, event: Event) -> bool;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -53,6 +56,12 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 self.to_glib_none().0,
                 query.as_mut_ptr(),
             ))
+        }
+    }
+
+    fn send_event(&self, event: Event) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_send_event(self.to_glib_none().0, event.into_ptr()))
         }
     }
 }
