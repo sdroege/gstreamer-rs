@@ -27,5 +27,5 @@ https://www.gnu.org/licenses/lgpl-2.1.html
 Any kinds of contributions are welcome as a pull request.
 
 Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in gst-plugin-rs by you shall be licensed under the MIT license as above,
+for inclusion in gstreamer-rs by you shall be licensed under the MIT license as above,
 without any additional terms or conditions.
