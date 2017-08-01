@@ -1,0 +1,42 @@
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+bitflags = "0.9"
+libc = "0.2"
+glib-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+version = "0.1.1"
+
+[dependencies.gstreamer-video-sys]
+path = "../gstreamer-video-sys"
+version = "0.1.1"
+
+[features]
+v1_10 = []
+v1_12 = ["v1_10"]
+
+[lib]
+name = "gstreamer_player_sys"
+
+[package]
+build = "build.rs"
+links = "gstplayer-1.0"
+name = "gstreamer-player-sys"
+version = "0.1.1"
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+description = "FFI bindings to libgstplayer-1.0"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+repository = "https://github.com/sdroege/gstreamer-sys"
+license = "MIT"
+
+include = [
+    "src/*.rs",
+    "Cargo.toml",
+    "build.rs",
+    "LICENSE",
+]
