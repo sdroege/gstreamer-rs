@@ -84,6 +84,7 @@ dependencies = [
  "futures 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.1.3 (git+https://github.com/gtk-rs/glib)",
  "gstreamer 0.1.0",
+ "gstreamer-app 0.1.0",
  "gtk 0.1.3 (git+https://github.com/gtk-rs/gtk)",
  "tokio-core 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
