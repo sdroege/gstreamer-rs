@@ -36,3 +36,5 @@ pub use auto::traits::*;
 
 mod app_src;
 mod app_sink;
+pub use app_src::AppSrcCallbacks;
+pub use app_sink::AppSinkCallbacks;
