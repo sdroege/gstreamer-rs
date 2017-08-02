@@ -11,7 +11,6 @@ use ffi;
 use gst_ffi;
 use glib::translate::*;
 use gst;
-use std::mem::transmute;
 use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
 use std::ptr;
@@ -51,7 +50,7 @@ impl AppSinkCallbacks {
 
 unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
     let _guard = CallbackGuard::new();
-    let callbacks: &AppSinkCallbacks = transmute(callbacks);
+    let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     (callbacks.eos)(&from_glib_none(appsink));
 }
@@ -61,7 +60,7 @@ unsafe extern "C" fn trampoline_new_preroll(
     callbacks: gpointer,
 ) -> gst_ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
-    let callbacks: &AppSinkCallbacks = transmute(callbacks);
+    let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     (callbacks.new_preroll)(&from_glib_none(appsink)).to_glib()
 }
@@ -71,7 +70,7 @@ unsafe extern "C" fn trampoline_new_sample(
     callbacks: gpointer,
 ) -> gst_ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
-    let callbacks: &AppSinkCallbacks = transmute(callbacks);
+    let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     (callbacks.new_sample)(&from_glib_none(appsink)).to_glib()
 }

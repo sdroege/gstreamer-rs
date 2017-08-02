@@ -15,8 +15,10 @@ use std::mem;
 use std::ffi::CStr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib,
-                      ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+
+#[cfg(feature = "v1_10")]
+use glib::translate::FromGlibPtrContainer;
 
 #[repr(C)]
 pub struct EventRef(ffi::GstEvent);
@@ -930,9 +932,11 @@ impl EosBuilder {
     event_builder_generic_impl!(|_| ffi::gst_event_new_eos());
 }
 
+// TODO Toc
 pub struct TocBuilder {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
+    #[allow(unused)]
     toc: (),
     updated: bool,
 }

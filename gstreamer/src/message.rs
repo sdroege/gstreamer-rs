@@ -1122,6 +1122,7 @@ pub struct ErrorBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
+    #[allow(unused)]
     details: Option<Structure>,
 }
 impl<'a> ErrorBuilder<'a> {
@@ -1181,6 +1182,7 @@ pub struct WarningBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
+    #[allow(unused)]
     details: Option<Structure>,
 }
 impl<'a> WarningBuilder<'a> {
@@ -1240,6 +1242,7 @@ pub struct InfoBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
+    #[allow(unused)]
     details: Option<Structure>,
 }
 impl<'a> InfoBuilder<'a> {
@@ -1890,6 +1893,7 @@ impl<'a> ProgressBuilder<'a> {
 pub struct TocBuilder {
     src: Option<Object>,
     seqnum: Option<u32>,
+    #[allow(unused)]
     toc: (),
     updated: bool,
 }
@@ -1984,6 +1988,7 @@ impl<'a> NeedContextBuilder<'a> {
 pub struct HaveContextBuilder {
     src: Option<Object>,
     seqnum: Option<u32>,
+    #[allow(unused)]
     context: (),
 }
 impl HaveContextBuilder {
@@ -1991,11 +1996,11 @@ impl HaveContextBuilder {
         Self {
             src: None,
             seqnum: None,
-            context: (),
+            context: context,
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| {
+    message_builder_generic_impl!(|_, src| {
         ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/)
     });
 }
@@ -2038,6 +2043,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
     });
 }
 
+#[cfg(feature = "v1_10")]
 pub struct PropertyNotifyBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
@@ -2123,6 +2129,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
     });
 }
 
+#[cfg(feature = "v1_10")]
 pub struct RedirectBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
