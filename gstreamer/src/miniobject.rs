@@ -8,13 +8,17 @@
 
 use std::{borrow, fmt, ops};
 use std::mem;
+use std::ptr;
 use std::marker::PhantomData;
 
 use ffi;
 use glib_ffi::gpointer;
+use glib_ffi;
 use gobject_ffi;
-use glib::translate::{from_glib, from_glib_none, FromGlibPtrBorrow, FromGlibPtrFull,
-                      FromGlibPtrNone, Stash, StashMut, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{c_ptr_array_len, from_glib, from_glib_full, from_glib_none,
+                      FromGlibContainerAsVec, FromGlibPtrArrayContainerAsVec, FromGlibPtrBorrow,
+                      FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
+                      ToGlibContainerFromSlice, ToGlibPtr, ToGlibPtrMut};
 use glib;
 
 #[derive(Hash, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -223,6 +227,65 @@ impl<'a, T: MiniObject + 'static> ToGlibPtrMut<'a, *mut T::GstType> for GstRc<T>
     }
 }
 
+impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstType> for GstRc<T> {
+    type Storage = (Vec<Stash<'a, *mut T::GstType, GstRc<T>>>, Option<Vec<*mut T::GstType>>);
+
+    fn to_glib_none_from_slice(t: &'a [GstRc<T>]) -> (*mut *mut T::GstType, Self::Storage) {
+        let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
+        let mut v_ptr: Vec<_> = v.iter().map(|s| s.0).collect();
+        v_ptr.push(ptr::null_mut() as *mut T::GstType);
+
+        (v_ptr.as_ptr() as *mut *mut T::GstType, (v, Some(v_ptr)))
+    }
+
+    fn to_glib_container_from_slice(t: &'a [GstRc<T>]) -> (*mut *mut T::GstType, Self::Storage) {
+        let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
+
+        let v_ptr = unsafe {
+            let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1) as *mut *mut T::GstType;
+
+            for (i, s) in v.iter().enumerate() {
+                ptr::write(v_ptr.offset(i as isize), s.0);
+            }
+
+            v_ptr
+        };
+
+        (v_ptr, (v, None))
+    }
+
+    fn to_glib_full_from_slice(t: &[GstRc<T>]) -> *mut *mut T::GstType {
+        unsafe {
+            let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1) as *mut *mut T::GstType;
+
+            for (i, s) in t.iter().enumerate() {
+                ptr::write(v_ptr.offset(i as isize), s.to_glib_full());
+            }
+
+            v_ptr
+        }
+    }
+}
+
+impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *const *mut T::GstType> for GstRc<T> {
+    type Storage = (Vec<Stash<'a, *mut T::GstType, GstRc<T>>>, Option<Vec<*mut T::GstType>>);
+
+    fn to_glib_none_from_slice(t: &'a [GstRc<T>]) -> (*const *mut T::GstType, Self::Storage) {
+        let (ptr, stash) = ToGlibContainerFromSlice::<'a, *mut *mut T::GstType>::to_glib_none_from_slice(t);
+        (ptr as *const *mut T::GstType, stash)
+    }
+
+    fn to_glib_container_from_slice(_: &'a [GstRc<T>]) -> (*const *mut T::GstType, Self::Storage) {
+        // Can't have consumer free a *const pointer
+        unimplemented!()
+    }
+
+    fn to_glib_full_from_slice(_: &[GstRc<T>]) -> *const *mut T::GstType {
+        // Can't have consumer free a *const pointer
+        unimplemented!()
+    }
+}
+
 impl<T: MiniObject + 'static> FromGlibPtrNone<*const T::GstType> for GstRc<T> {
     unsafe fn from_glib_none(ptr: *const T::GstType) -> Self {
         Self::from_glib_none(ptr)
@@ -259,6 +322,85 @@ impl<T: MiniObject + 'static> FromGlibPtrBorrow<*mut T::GstType> for GstRc<T> {
     }
 }
 
+impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *mut *mut T::GstType> for GstRc<T> {
+    unsafe fn from_glib_none_num_as_vec(ptr: *mut *mut T::GstType, num: usize) -> Vec<Self> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new();
+        }
+
+        let mut res = Vec::with_capacity(num);
+        for i in 0..num {
+            res.push(from_glib_none(ptr::read(ptr.offset(i as isize))));
+        }
+        res
+    }
+
+    unsafe fn from_glib_container_num_as_vec(ptr: *mut *mut T::GstType, num: usize) -> Vec<Self> {
+        let res = FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, num);
+        glib_ffi::g_free(ptr as *mut _);
+        res
+    }
+
+    unsafe fn from_glib_full_num_as_vec(ptr: *mut *mut T::GstType, num: usize) -> Vec<Self> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new();
+        }
+
+        let mut res = Vec::with_capacity(num);
+        for i in 0..num {
+            res.push(from_glib_full(ptr::read(ptr.offset(i as isize))));
+        }
+        glib_ffi::g_free(ptr as *mut _);
+        res
+    }
+}
+
+impl<T: MiniObject + 'static> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *mut *mut T::GstType> for GstRc<T> {
+    unsafe fn from_glib_none_as_vec(ptr: *mut *mut T::GstType) -> Vec<Self> {
+        FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, c_ptr_array_len(ptr))
+    }
+
+    unsafe fn from_glib_container_as_vec(ptr: *mut *mut T::GstType) -> Vec<Self> {
+        FromGlibContainerAsVec::from_glib_container_num_as_vec(ptr, c_ptr_array_len(ptr))
+    }
+
+    unsafe fn from_glib_full_as_vec(ptr: *mut *mut T::GstType) -> Vec<Self> {
+        FromGlibContainerAsVec::from_glib_full_num_as_vec(ptr, c_ptr_array_len(ptr))
+    }
+}
+
+impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *const *mut T::GstType> for GstRc<T> {
+    unsafe fn from_glib_none_num_as_vec(ptr: *const *mut T::GstType, num: usize) -> Vec<Self> {
+        FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr as *mut *mut _, num)
+    }
+
+    unsafe fn from_glib_container_num_as_vec(_: *const *mut T::GstType, _: usize) -> Vec<Self> {
+        // Can't free a *const
+        unimplemented!()
+    }
+
+    unsafe fn from_glib_full_num_as_vec(_: *const *mut T::GstType, _: usize) -> Vec<Self> {
+        // Can't free a *const
+        unimplemented!()
+    }
+}
+
+impl<T: MiniObject + 'static> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *const *mut T::GstType> for GstRc<T> {
+    unsafe fn from_glib_none_as_vec(ptr: *const *mut T::GstType) -> Vec<Self> {
+        FromGlibPtrArrayContainerAsVec::from_glib_none_as_vec(ptr as *mut *mut _)
+    }
+
+    unsafe fn from_glib_container_as_vec(_: *const *mut T::GstType) -> Vec<Self> {
+        // Can't free a *const
+        unimplemented!()
+    }
+
+    unsafe fn from_glib_full_as_vec(_: *const *mut T::GstType) -> Vec<Self> {
+        // Can't free a *const
+        unimplemented!()
+    }
+}
+
 impl<T: MiniObject + glib::StaticType> glib::StaticType for GstRc<T> {
     fn static_type() -> glib::types::Type {
         T::static_type()
@@ -277,4 +419,8 @@ impl<T: MiniObject + glib::StaticType> glib::value::SetValue for GstRc<T> {
     unsafe fn set_value(v: &mut glib::Value, s: &Self) {
         gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
     }
+}
+
+impl<T: MiniObject + 'static> GlibPtrDefault for GstRc<T> {
+    type GlibType = *mut T::GstType;
 }
