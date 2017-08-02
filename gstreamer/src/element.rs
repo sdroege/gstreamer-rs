@@ -61,7 +61,10 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn send_event(&self, event: Event) -> bool {
         unsafe {
-            from_glib(ffi::gst_element_send_event(self.to_glib_none().0, event.into_ptr()))
+            from_glib(ffi::gst_element_send_event(
+                self.to_glib_none().0,
+                event.into_ptr(),
+            ))
         }
     }
 }
