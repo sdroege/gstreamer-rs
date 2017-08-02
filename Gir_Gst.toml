@@ -153,6 +153,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.Context"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.DateTime"
 status = "generate"
 concurrency = "send"
@@ -231,6 +236,11 @@ status = "generate"
     [[object.function]]
     name = "send_event"
     # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "get_context_unlocked"
+    # Unsafe
     ignore = true
 
 [[object]]

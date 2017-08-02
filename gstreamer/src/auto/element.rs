@@ -5,6 +5,7 @@ use Bus;
 use Caps;
 use Clock;
 use ClockTime;
+use Context;
 use ElementFactory;
 use Error;
 use Format;
@@ -112,11 +113,9 @@ pub trait ElementExt {
 
     fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
 
-    //fn get_context(&self, context_type: &str) -> /*Ignored*/Option<Context>;
+    fn get_context(&self, context_type: &str) -> Option<Context>;
 
-    //fn get_context_unlocked(&self, context_type: &str) -> /*Ignored*/Option<Context>;
-
-    //fn get_contexts(&self) -> /*Ignored*/Vec<Context>;
+    fn get_contexts(&self) -> Vec<Context>;
 
     fn get_factory(&self) -> Option<ElementFactory>;
 
@@ -186,7 +185,7 @@ pub trait ElementExt {
 
     fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> Result<(), glib::error::BoolError>;
 
-    //fn set_context(&self, context: /*Ignored*/&mut Context);
+    fn set_context(&self, context: &Context);
 
     fn set_locked_state(&self, locked_state: bool) -> bool;
 
@@ -295,17 +294,17 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    //fn get_context(&self, context_type: &str) -> /*Ignored*/Option<Context> {
-    //    unsafe { TODO: call ffi::gst_element_get_context() }
-    //}
+    fn get_context(&self, context_type: &str) -> Option<Context> {
+        unsafe {
+            from_glib_full(ffi::gst_element_get_context(self.to_glib_none().0, context_type.to_glib_none().0))
+        }
+    }
 
-    //fn get_context_unlocked(&self, context_type: &str) -> /*Ignored*/Option<Context> {
-    //    unsafe { TODO: call ffi::gst_element_get_context_unlocked() }
-    //}
-
-    //fn get_contexts(&self) -> /*Ignored*/Vec<Context> {
-    //    unsafe { TODO: call ffi::gst_element_get_contexts() }
-    //}
+    fn get_contexts(&self) -> Vec<Context> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_get_contexts(self.to_glib_none().0))
+        }
+    }
 
     fn get_factory(&self) -> Option<ElementFactory> {
         unsafe {
@@ -524,9 +523,11 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    //fn set_context(&self, context: /*Ignored*/&mut Context) {
-    //    unsafe { TODO: call ffi::gst_element_set_context() }
-    //}
+    fn set_context(&self, context: &Context) {
+        unsafe {
+            ffi::gst_element_set_context(self.to_glib_none().0, context.to_glib_none().0);
+        }
+    }
 
     fn set_locked_state(&self, locked_state: bool) -> bool {
         unsafe {
