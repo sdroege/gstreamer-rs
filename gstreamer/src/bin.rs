@@ -32,7 +32,7 @@ impl<O: IsA<Bin>> BinExtManual for O {
             }
         }
 
-        return Ok(());
+        Ok(())
     }
 
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
@@ -48,6 +48,6 @@ impl<O: IsA<Bin>> BinExtManual for O {
             }
         }
 
-        return Ok(());
+        Ok(())
     }
 }

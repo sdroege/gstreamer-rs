@@ -47,7 +47,7 @@ unsafe extern "C" fn trampoline_sync(
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     let _guard = CallbackGuard::new();
-    let f: &Box<Fn(&Bus, &Message) -> BusSyncReply + 'static> = transmute(func);
+    let f: &&(Fn(&Bus, &Message) -> BusSyncReply + 'static) = transmute(func);
     f(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
 }
 

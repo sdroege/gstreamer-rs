@@ -1070,7 +1070,7 @@ impl<'a> Redirect<'a> {
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
-        pub fn src<'b, T: IsA<Object> + Cast + Clone>(self, src: Option<&'b T>) -> Self {
+        pub fn src<T: IsA<Object> + Cast + Clone>(self, src: Option<&T>) -> Self {
             Self {
                 src: src.map(|o| {
                     let o = (*o).clone();

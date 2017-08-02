@@ -108,41 +108,41 @@ impl GstRc<BufferRef> {
         }
     }
 
-    pub fn into_read_mapped_buffer(buffer: Self) -> Result<ReadMappedBuffer, Self> {
+    pub fn into_read_mapped_buffer(self) -> Result<ReadMappedBuffer, Self> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
         let res: bool = unsafe {
             from_glib(ffi::gst_buffer_map(
-                buffer.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut map_info,
                 ffi::GST_MAP_READ,
             ))
         };
         if res {
             Ok(ReadMappedBuffer {
-                buffer: buffer,
+                buffer: self,
                 map_info: map_info,
             })
         } else {
-            Err(buffer)
+            Err(self)
         }
     }
 
-    pub fn into_readwrite_mapped_buffer(buffer: Self) -> Result<ReadWriteMappedBuffer, Self> {
+    pub fn into_readwrite_mapped_buffer(self) -> Result<ReadWriteMappedBuffer, Self> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
         let res: bool = unsafe {
             from_glib(ffi::gst_buffer_map(
-                buffer.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut map_info,
                 ffi::GST_MAP_READWRITE,
             ))
         };
         if res {
             Ok(ReadWriteMappedBuffer {
-                buffer: buffer,
+                buffer: self,
                 map_info: map_info,
             })
         } else {
-            Err(buffer)
+            Err(self)
         }
     }
 

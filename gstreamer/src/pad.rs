@@ -254,7 +254,7 @@ unsafe extern "C" fn trampoline_pad_probe(
     func: gpointer,
 ) -> ffi::GstPadProbeReturn {
     let _guard = CallbackGuard::new();
-    let func: &Box<Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static> =
+    let func: &&(Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static) =
         transmute(func);
     let mut data_type = None;
 

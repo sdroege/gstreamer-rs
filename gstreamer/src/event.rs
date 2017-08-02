@@ -342,7 +342,7 @@ impl<'a> StreamStart<'a> {
             if stream_id.is_null() {
                 None
             } else {
-                Some((CStr::from_ptr(stream_id).to_str().unwrap()))
+                Some(CStr::from_ptr(stream_id).to_str().unwrap())
             }
         }
     }

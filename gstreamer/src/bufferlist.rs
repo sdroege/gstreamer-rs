@@ -68,7 +68,7 @@ impl BufferListRef {
         unsafe { ffi::gst_buffer_list_length(self.as_mut_ptr()) as usize }
     }
 
-    pub fn iter<'a>(&'a self) -> Iter<'a> {
+    pub fn iter(&self) -> Iter {
         Iter::new(self)
     }
 }

@@ -31,7 +31,7 @@ impl Element {
             }
         }
 
-        return Ok(());
+        Ok(())
     }
 
     pub fn unlink_many<E: IsA<Element>>(elements: &[&E]) {

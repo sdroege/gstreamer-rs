@@ -105,7 +105,7 @@ impl str::FromStr for Caps {
 
 impl CapsRef {
     pub fn set_simple(&mut self, values: &[(&str, &ToValue)]) {
-        for &(name, ref value) in values {
+        for &(name, value) in values {
             let value = value.to_value();
 
             unsafe {
@@ -135,7 +135,7 @@ impl CapsRef {
         }
     }
 
-    pub fn get_mut_structure<'a>(&'a mut self, idx: u32) -> Option<&'a mut StructureRef> {
+    pub fn get_mut_structure(&mut self, idx: u32) -> Option<&mut StructureRef> {
         unsafe {
             let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
             if structure.is_null() {
