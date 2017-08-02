@@ -69,6 +69,8 @@ pub mod query;
 pub use query::{Query, QueryRef, QueryView};
 pub mod event;
 pub use event::{Event, EventRef, EventView};
+pub mod context;
+pub use context::{Context, ContextRef};
 
 mod object;
 mod element;
