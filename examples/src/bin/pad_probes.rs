@@ -20,21 +20,18 @@ fn main() {
         .unwrap();
     let src_pad = src.get_static_pad("src").unwrap();
     src_pad.add_probe(PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
-        match probe_info.data {
-            Some(PadProbeData::Buffer(ref buffer)) => {
-                let map = buffer.map_read().unwrap();
-                let data = map.as_slice();
-                let sum: f64 = data.chunks(2)
-                    .map(|sample| {
-                        let u: u16 = ((sample[0] as u16) << 8) | (sample[1] as u16);
-                        let f = (u as i16 as f64) / (i16::MAX as f64);
-                        f * f
-                    })
-                    .sum();
-                let rms = (sum / ((data.len() / 2) as f64)).sqrt();
-                println!("rms: {}", rms);
-            }
-            _ => (),
+        if let Some(PadProbeData::Buffer(ref buffer)) = probe_info.data {
+            let map = buffer.map_read().unwrap();
+            let data = map.as_slice();
+            let sum: f64 = data.chunks(2)
+                .map(|sample| {
+                    let u: u16 = ((sample[0] as u16) << 8) | (sample[1] as u16);
+                    let f = (u as i16 as f64) / (i16::MAX as f64);
+                    f * f
+                })
+                .sum();
+            let rms = (sum / ((data.len() / 2) as f64)).sqrt();
+            println!("rms: {}", rms);
         }
 
         PadProbeReturn::Ok

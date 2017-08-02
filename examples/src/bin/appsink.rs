@@ -3,9 +3,6 @@ use gst::*;
 extern crate gstreamer_app as gst_app;
 use gst_app::*;
 
-extern crate glib;
-use glib::*;
-
 use std::u64;
 use std::i16;
 use std::i32;
@@ -24,10 +21,10 @@ fn main() {
     appsink.set_caps(&Caps::new_simple(
         "audio/x-raw",
         &[
-            (&"format", &"S16BE"),
-            (&"layout", &"interleaved"),
-            (&"channels", &(1i32)),
-            (&"rate", &IntRange::<i32>::new(1, i32::MAX)),
+            ("format", &"S16BE"),
+            ("layout", &"interleaved"),
+            ("channels", &(1i32)),
+            ("rate", &IntRange::<i32>::new(1, i32::MAX)),
         ],
     ));
 

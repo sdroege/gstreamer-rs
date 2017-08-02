@@ -3,9 +3,6 @@ use gst::*;
 extern crate gstreamer_app as gst_app;
 use gst_app::*;
 
-extern crate glib;
-use glib::*;
-
 use std::u64;
 use std::thread;
 
@@ -27,10 +24,10 @@ fn main() {
     appsrc.set_caps(&Caps::new_simple(
         "video/x-raw",
         &[
-            (&"format", &"BGRx"),
-            (&"width", &(WIDTH as i32)),
-            (&"height", &(HEIGHT as i32)),
-            (&"framerate", &Fraction::new(2, 1)),
+            ("format", &"BGRx"),
+            ("width", &(WIDTH as i32)),
+            ("height", &(HEIGHT as i32)),
+            ("framerate", &Fraction::new(2, 1)),
         ],
     ));
     appsrc.set_property_format(Format::Time);

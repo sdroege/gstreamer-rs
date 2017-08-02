@@ -29,7 +29,7 @@ fn main() {
     // Need to move a new reference into the closure
     let pipeline_clone = pipeline.clone();
     decodebin.connect_pad_added(move |_, src_pad| {
-        let ref pipeline = pipeline_clone;
+        let pipeline = &pipeline_clone;
 
         let (is_audio, is_video) = {
             let caps = src_pad.get_current_caps().unwrap();
