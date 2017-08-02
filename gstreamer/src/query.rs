@@ -12,6 +12,7 @@ use structure::*;
 
 use std::ptr;
 use std::mem;
+use std::ffi::CStr;
 use std::ops::Deref;
 
 use glib;
@@ -92,6 +93,10 @@ impl Query {
 
     pub fn new_drain() -> Self {
         unsafe { from_glib_full(ffi::gst_query_new_drain()) }
+    }
+
+    pub fn new_context(context_type: &str) -> Self {
+        unsafe { from_glib_full(ffi::gst_query_new_context(context_type.to_glib_none().0)) }
     }
 }
 
@@ -850,15 +855,40 @@ impl<'a> Drain<&'a mut QueryRef> {
     }
 }
 
-// TODO
 pub struct Context<T>(T);
 impl<'a> Context<&'a QueryRef> {
+    pub fn get_context(&self) -> Option<&::ContextRef> {
+        unsafe {
+            let mut context = ptr::null_mut();
+            ffi::gst_query_parse_context(self.0.as_mut_ptr(), &mut context);
+            if context.is_null() {
+                None
+            } else {
+                Some(::ContextRef::from_ptr(context))
+            }
+        }
+    }
+
+    pub fn get_context_type(&self) -> &str {
+        unsafe {
+            let mut context_type = ptr::null();
+            ffi::gst_query_parse_context_type(self.0.as_mut_ptr(), &mut context_type);
+            CStr::from_ptr(context_type).to_str().unwrap()
+        }
+    }
+
     pub fn get_query(&self) -> &QueryRef {
         self.0
     }
 }
 
 impl<'a> Context<&'a mut QueryRef> {
+    pub fn set_context(&mut self, context: &::Context) {
+        unsafe {
+            ffi::gst_query_set_context(self.0.as_mut_ptr(), context.as_mut_ptr());
+        }
+    }
+
     pub fn get_mut_query(&mut self) -> &mut QueryRef {
         self.0
     }

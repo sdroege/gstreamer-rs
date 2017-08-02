@@ -265,7 +265,7 @@ impl Message {
         NeedContextBuilder::new(context_type)
     }
 
-    pub fn new_have_context(context: ()) -> HaveContextBuilder {
+    pub fn new_have_context(context: ::Context) -> HaveContextBuilder {
         HaveContextBuilder::new(context)
     }
 
@@ -933,7 +933,13 @@ impl<'a> NeedContext<'a> {
 
 pub struct HaveContext<'a>(&'a MessageRef);
 impl<'a> HaveContext<'a> {
-    // TODO: get_context()
+    pub fn get_context(&self) -> ::Context {
+        unsafe {
+            let mut context = ptr::null_mut();
+            ffi::gst_message_parse_have_context(self.0.as_mut_ptr(), &mut context);
+            from_glib_full(context)
+        }
+    }
 }
 
 pub struct DeviceAdded<'a>(&'a MessageRef);
@@ -1984,24 +1990,23 @@ impl<'a> NeedContextBuilder<'a> {
     });
 }
 
-// TODO Context
 pub struct HaveContextBuilder {
     src: Option<Object>,
     seqnum: Option<u32>,
-    #[allow(unused)]
-    context: (),
+    context: Option<::Context>,
 }
 impl HaveContextBuilder {
-    pub fn new(context: () /* ::Context */) -> Self {
+    pub fn new(context: ::Context) -> Self {
         Self {
             src: None,
             seqnum: None,
-            context: context,
+            context: Some(context),
         }
     }
 
-    message_builder_generic_impl!(|_, src| {
-        ffi::gst_message_new_have_context(src, ptr::null_mut() /*s.context.to_glib_full().0*/)
+    message_builder_generic_impl!(|s: &mut Self, src| {
+        let context = s.context.take().unwrap();
+        ffi::gst_message_new_have_context(src, context.into_ptr())
     });
 }
 
