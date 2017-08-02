@@ -65,6 +65,7 @@ generate = [
 manual = [
     "GLib.Error",
     "GLib.Source",
+    "GLib.DateTime",
     "GObject.Object",
     "Gst.Structure",
     "Gst.Iterator",

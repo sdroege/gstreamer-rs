@@ -47,8 +47,7 @@ impl_tag!(Album, &'a str, *TAG_ALBUM);
 impl_tag!(AlbumSortname, &'a str, *TAG_ALBUM_SORTNAME);
 impl_tag!(AlbumArtist, &'a str, *TAG_ALBUM_ARTIST);
 impl_tag!(AlbumArtistSortname, &'a str, *TAG_ALBUM_ARTIST_SORTNAME);
-// https://github.com/gtk-rs/glib/pull/208
-//impl_tag!(Date, glib::Date, *TAG_DATE);
+impl_tag!(Date, glib::Date, *TAG_DATE);
 impl_tag!(DateTime, ::auto::DateTime, *TAG_DATE_TIME);
 impl_tag!(Genre, &'a str, *TAG_GENRE);
 impl_tag!(Comment, &'a str, *TAG_COMMENT);
