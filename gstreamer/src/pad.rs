@@ -23,6 +23,7 @@ use std::ptr;
 use glib::{IsA, StaticType};
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 use glib::source::CallbackGuard;
+use glib_ffi;
 use glib_ffi::gpointer;
 use glib::Object;
 
@@ -64,6 +65,16 @@ pub enum PadProbeData<'a> {
     Unknown,
 }
 
+pub struct StreamLock(Pad);
+impl Drop for StreamLock {
+    fn drop(&mut self) {
+        unsafe {
+            let pad: *mut ffi::GstPad = self.0.to_glib_none().0;
+            glib_ffi::g_rec_mutex_unlock(&mut (*pad).stream_rec_lock);
+        }
+    }
+}
+
 pub trait PadExtManual {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
     where
@@ -93,6 +104,8 @@ pub trait PadExtManual {
     ) -> bool;
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
+
+    fn stream_lock(&self) -> StreamLock;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -244,6 +257,14 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 self.to_glib_none().0,
                 event.into_ptr(),
             ))
+        }
+    }
+
+    fn stream_lock(&self) -> StreamLock {
+        unsafe {
+            let pad = self.to_glib_none().0;
+            glib_ffi::g_rec_mutex_lock(&mut (*pad).stream_rec_lock);
+            StreamLock(from_glib_none(pad))
         }
     }
 }
