@@ -16,6 +16,7 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, T
 
 use miniobject::*;
 use Buffer;
+use BufferList;
 use Caps;
 use Segment;
 use StructureRef;
@@ -53,7 +54,9 @@ impl SampleRef {
         unsafe { from_glib_none(ffi::gst_sample_get_buffer(self.as_mut_ptr())) }
     }
 
-    // TODO: bufferlist
+    pub fn get_buffer_list(&self) -> Option<BufferList> {
+        unsafe { from_glib_none(ffi::gst_sample_get_buffer_list(self.as_mut_ptr())) }
+    }
 
     pub fn get_caps(&self) -> Option<Caps> {
         unsafe { from_glib_none(ffi::gst_sample_get_caps(self.as_mut_ptr())) }
