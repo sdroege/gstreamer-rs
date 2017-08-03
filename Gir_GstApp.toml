@@ -42,6 +42,26 @@ trait = false
     # Has getter function
     ignore = true
 
+    [[object.signal]]
+    name = "pull-sample"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "pull-preroll"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "try-pull-sample"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "try-pull-preroll"
+    # Action signal
+    ignore = true
+
 [[object]]
 name = "GstApp.AppSrc"
 status = "generate"
