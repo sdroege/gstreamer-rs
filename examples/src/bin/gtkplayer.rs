@@ -8,7 +8,6 @@ extern crate gtk;
 use gtk::prelude::*;
 use gtk::{Window, WindowType};
 
-#[allow(unused_variables, unused_mut)]
 fn main() {
     gst::init().unwrap();
     gtk::init().unwrap();
@@ -53,7 +52,7 @@ fn main() {
             let filesuffix = "file://";
             let filename = filesuffix.to_string() + path.to_str().unwrap();
             println!("filename {:?}", filename);
-            let (state_return, current_state, next_state) = playbin_clone.get_state(1);
+            let (_, current_state, _) = playbin_clone.get_state(1);
             
             if current_state != gst::State::Null {
                 let ret = playbin_clone.set_state(gst::State::Null);
@@ -69,7 +68,7 @@ fn main() {
 
     let playbin_clone = playbin.clone();    
     play_pause_button.connect_clicked(move |play_pause_button| {
-        let (state_return, current_state, next_state) = playbin_clone.get_state(1);
+        let (_, current_state, _) = playbin_clone.get_state(1);
         
         if current_state == gst::State::Paused {
             playbin_clone.set_state(gst::State::Playing);
