@@ -156,6 +156,6 @@ fn main_loop() -> Result<(), utils::ExampleError> {
 fn main() {
     match main_loop() {
         Ok(r) => r,
-        Err(e) => println!("Error! {}", e),
+        Err(e) => eprintln!("Error! {}", e),
     }
 }
