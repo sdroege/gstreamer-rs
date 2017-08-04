@@ -122,6 +122,10 @@ trait = false
     # More convenient manual implementation
     ignore = true
 
+    [[object.signal]]
+    name = "message"
+    concurrency = "send"
+
 [[object]]
 name = "Gst.Caps"
 status = "manual"
