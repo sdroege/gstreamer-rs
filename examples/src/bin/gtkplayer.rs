@@ -8,12 +8,14 @@ extern crate gtk;
 use gtk::prelude::*;
 use gtk::{Window, WindowType};
 
-fn main() {
-    gst::init().unwrap();
-    gtk::init().unwrap();
+pub mod utils;
+
+fn main_loop() -> Result<(), utils::ExampleError> {
+    gst::init().map_err(utils::ExampleError::InitFailed)?;
+    gtk::init().map_err(utils::ExampleError::GtkInitFailed)?;
 
     let (sink, widget) = if let Some(gtkglsink) = ElementFactory::make("gtkglsink", None) {
-        let glsinkbin = ElementFactory::make("glsinkbin", None).unwrap();
+        let glsinkbin = utils::create_element("glsinkbin")?;
         glsinkbin
             .set_property("sink", &gtkglsink.to_value())
             .unwrap();
@@ -21,12 +23,12 @@ fn main() {
         let widget = gtkglsink.get_property("widget").unwrap();
         (glsinkbin, widget.get::<gtk::Widget>().unwrap())
     } else {
-        let sink = ElementFactory::make("gtksink", None).unwrap();
+        let sink = utils::create_element("gtksink")?;
         let widget = sink.get_property("widget").unwrap();
         (sink, widget.get::<gtk::Widget>().unwrap())
     };
 
-    let playbin = gst::ElementFactory::make("playbin", None).unwrap();
+    let playbin = utils::create_element("playbin")?;
     playbin.set_property("video_sink", &sink.to_value()).unwrap();
 
     let window = Window::new(WindowType::Toplevel);
@@ -144,8 +146,16 @@ fn main() {
     
     gtk::main();
 
-
-
     let ret = playbin.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+
+    Ok(())
+}
+
+
+fn main() {
+    match main_loop() {
+        Ok(r) => r,
+        Err(e) => println!("Error! {}", e),
+    }
 }

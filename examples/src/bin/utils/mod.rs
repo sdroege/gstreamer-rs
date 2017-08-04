@@ -3,11 +3,13 @@ extern crate gstreamer as gst;
 use gst::*;
 
 extern crate glib;
+
 use std::fmt;
 
 #[derive(Debug, Clone)]
 pub enum ExampleError {
     InitFailed(glib::Error),
+    GtkInitFailed(glib::BoolError),
     ElementNotFound(&'static str),
     ElementLinkFailed(::std::string::String, ::std::string::String),
     SetStateError(::std::string::String),
@@ -20,6 +22,9 @@ impl fmt::Display for ExampleError {
         match *self {
             ExampleError::InitFailed(ref e) => {
                 write!(f, "GStreamer initialization failed: {:?}", e)
+            }
+            ExampleError::GtkInitFailed(ref e) => {
+                write!(f, "GTK+ initialization failed: {:?}", e)
             }
             ExampleError::ElementNotFound(e) => write!(f, "Element {} not found", e),
             ExampleError::ElementLinkFailed(ref e1, ref e2) => {
