@@ -85,7 +85,7 @@ fn create_ui(app: &gtk::Application) {
 
     let app_clone = SendCell::new(app.clone());
     bus.add_watch(move |_, msg| {
-        let app = &app_clone;
+        let app = app_clone.borrow();
         match msg.view() {
             MessageView::Eos(..) => gtk::main_quit(),
             MessageView::Error(err) => {
@@ -95,7 +95,7 @@ fn create_ui(app: &gtk::Application) {
                     err.get_error(),
                     err.get_debug()
                 );
-                app.get().quit();
+                app.quit();
             }
             _ => (),
         };
@@ -127,6 +127,7 @@ fn main() {
 // but us having to use them in a closure that requires Send
 use std::thread;
 use std::cmp;
+use std::ops;
 
 #[derive(Clone, Debug)]
 pub struct SendCell<T> {
@@ -153,6 +154,27 @@ impl<T> SendCell<T> {
         } else {
             None
         }
+    }
+
+    pub fn borrow(&self) -> Ref<T> {
+        Ref { data: self.get() }
+    }
+
+    pub fn try_borrow(&self) -> Option<Ref<T>> {
+        self.try_get().map(|data| Ref { data: data })
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Ref<'a, T: 'a> {
+    data: &'a T,
+}
+
+impl<'a, T: 'a> ops::Deref for Ref<'a, T> {
+    type Target = T;
+
+    fn deref(&self) -> &T {
+        self.data
     }
 }
 
