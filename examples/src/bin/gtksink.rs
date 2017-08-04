@@ -4,14 +4,48 @@ use gst::*;
 extern crate glib;
 use glib::*;
 
+extern crate gio;
+use gio::ApplicationExt;
+
 extern crate gtk;
 use gtk::prelude::*;
 use gtk::{Window, WindowType};
+use gtk::ApplicationExt as GtkApplicationExt;
 
-fn main() {
-    gst::init().unwrap();
-    gtk::init().unwrap();
+use std::env;
 
+// Workaround for GTK objects not implementing Send (nor Sync)
+// but us having to use them in a closure that requires Send
+use std::thread;
+use std::ops::Deref;
+
+#[derive(Clone, Debug)]
+pub struct SendCell<T> {
+    data: T,
+    thread_id: thread::ThreadId,
+}
+
+impl<T> SendCell<T> {
+    pub fn new(data: T) -> Self {
+        SendCell {
+            data: data,
+            thread_id: thread::current().id(),
+        }
+    }
+}
+
+impl<T> Deref for SendCell<T> {
+    type Target = T;
+
+    fn deref(&self) -> &T {
+        assert_eq!(thread::current().id(), self.thread_id);
+        &self.data
+    }
+}
+
+unsafe impl<T> Send for SendCell<T> {}
+
+fn create_ui(app: &gtk::Application) {
     let pipeline = Pipeline::new(None);
     let src = ElementFactory::make("videotestsrc", None).unwrap();
     let (sink, widget) = if let Some(gtkglsink) = ElementFactory::make("gtkglsink", None) {
@@ -40,6 +74,8 @@ fn main() {
     window.add(&vbox);
     window.show_all();
 
+    app.add_window(&window);
+
     let pipeline_clone = pipeline.clone();
     gtk::timeout_add(500, move || {
         let pipeline = &pipeline_clone;
@@ -66,8 +102,10 @@ fn main() {
         glib::Continue(true)
     });
 
-    window.connect_delete_event(|_, _| {
-        gtk::main_quit();
+    let app_clone = app.clone();
+    window.connect_delete_event(move |_, _| {
+        let app = &app_clone;
+        app.quit();
         Inhibit(false)
     });
 
@@ -76,7 +114,9 @@ fn main() {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
+    let app_clone = SendCell::new(app.clone());
     bus.add_watch(move |_, msg| {
+        let app = &app_clone;
         match msg.view() {
             MessageView::Eos(..) => gtk::main_quit(),
             MessageView::Error(err) => {
@@ -86,7 +126,7 @@ fn main() {
                     err.get_error(),
                     err.get_debug()
                 );
-                gtk::main_quit();
+                app.quit();
             }
             _ => (),
         };
@@ -94,8 +134,22 @@ fn main() {
         glib::Continue(true)
     });
 
-    gtk::main();
+    let pipeline_clone = pipeline.clone();
+    app.connect_shutdown(move |_| {
+        let pipeline = &pipeline_clone;
+        let ret = pipeline.set_state(gst::State::Null);
+        assert_ne!(ret, gst::StateChangeReturn::Failure);
+    });
+}
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+fn main() {
+    gst::init().unwrap();
+    gtk::init().unwrap();
+
+    let app = gtk::Application::new(None, gio::APPLICATION_FLAGS_NONE).unwrap();
+
+    app.connect_activate(create_ui);
+    let args = env::args().collect::<Vec<_>>();
+    let args_ref = args.iter().map(|a| a.as_str()).collect::<Vec<_>>();
+    app.run(&args_ref);
 }

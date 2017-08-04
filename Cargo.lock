@@ -100,6 +100,7 @@ name = "examples"
 version = "0.1.0"
 dependencies = [
  "futures 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gio 0.1.3 (git+https://github.com/gtk-rs/gio)",
  "glib 0.1.3 (git+https://github.com/gtk-rs/glib)",
  "gstreamer 0.1.0",
  "gstreamer-app 0.1.0",
