@@ -14,37 +14,6 @@ use gtk::ApplicationExt as GtkApplicationExt;
 
 use std::env;
 
-// Workaround for GTK objects not implementing Send (nor Sync)
-// but us having to use them in a closure that requires Send
-use std::thread;
-use std::ops::Deref;
-
-#[derive(Clone, Debug)]
-pub struct SendCell<T> {
-    data: T,
-    thread_id: thread::ThreadId,
-}
-
-impl<T> SendCell<T> {
-    pub fn new(data: T) -> Self {
-        SendCell {
-            data: data,
-            thread_id: thread::current().id(),
-        }
-    }
-}
-
-impl<T> Deref for SendCell<T> {
-    type Target = T;
-
-    fn deref(&self) -> &T {
-        assert_eq!(thread::current().id(), self.thread_id);
-        &self.data
-    }
-}
-
-unsafe impl<T> Send for SendCell<T> {}
-
 fn create_ui(app: &gtk::Application) {
     let pipeline = Pipeline::new(None);
     let src = ElementFactory::make("videotestsrc", None).unwrap();
@@ -126,7 +95,7 @@ fn create_ui(app: &gtk::Application) {
                     err.get_error(),
                     err.get_debug()
                 );
-                app.quit();
+                app.get().quit();
             }
             _ => (),
         };
@@ -153,3 +122,68 @@ fn main() {
     let args_ref = args.iter().map(|a| a.as_str()).collect::<Vec<_>>();
     app.run(&args_ref);
 }
+
+// Workaround for GTK objects not implementing Send (nor Sync)
+// but us having to use them in a closure that requires Send
+use std::thread;
+use std::cmp;
+
+#[derive(Clone, Debug)]
+pub struct SendCell<T> {
+    data: T,
+    thread_id: thread::ThreadId,
+}
+
+impl<T> SendCell<T> {
+    pub fn new(data: T) -> Self {
+        SendCell {
+            data: data,
+            thread_id: thread::current().id(),
+        }
+    }
+
+    pub fn get(&self) -> &T {
+        assert_eq!(thread::current().id(), self.thread_id);
+        &self.data
+    }
+
+    pub fn try_get(&self) -> Option<&T> {
+        if thread::current().id() == self.thread_id {
+            Some(&self.data)
+        } else {
+            None
+        }
+    }
+}
+
+impl<T> From<T> for SendCell<T> {
+    fn from(t: T) -> SendCell<T> {
+        SendCell::new(t)
+    }
+}
+
+impl<T: Default> Default for SendCell<T> {
+    fn default() -> SendCell<T> {
+        SendCell::new(T::default())
+    }
+}
+
+impl<T: PartialEq> PartialEq<SendCell<T>> for SendCell<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.data.eq(&other.data)
+    }
+}
+impl<T: Eq> Eq for SendCell<T> {}
+
+impl<T: PartialOrd> PartialOrd<SendCell<T>> for SendCell<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        self.data.partial_cmp(&other.data)
+    }
+}
+impl<T: Ord> Ord for SendCell<T> {
+    fn cmp(&self, other: &Self) -> cmp::Ordering {
+        self.data.cmp(&other.data)
+    }
+}
+
+unsafe impl<T> Send for SendCell<T> {}
