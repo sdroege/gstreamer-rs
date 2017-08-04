@@ -8,6 +8,7 @@ extern crate gtk;
 use gtk::prelude::*;
 use gtk::{Window, WindowType};
 
+#[allow(unused_variables, unused_mut)]
 fn main() {
     gst::init().unwrap();
     gtk::init().unwrap();
@@ -26,6 +27,9 @@ fn main() {
         (sink, widget.get::<gtk::Widget>().unwrap())
     };
 
+    let playbin = gst::ElementFactory::make("playbin", None).unwrap();
+    playbin.set_property("video_sink", &sink.to_value()).unwrap();
+
     let window = Window::new(WindowType::Toplevel);
     window.set_default_size(640, 480);
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
@@ -36,8 +40,6 @@ fn main() {
 
     let filechooserbutton = gtk::FileChooserButton::new("Open media file",
                                                         gtk::FileChooserAction::Open);
-    let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-    playbin.set_property("video_sink", &sink.to_value()).unwrap();
     
     let play_pause_button = gtk::Button::new_with_label("Pause");
     play_pause_button.set_sensitive(false);
