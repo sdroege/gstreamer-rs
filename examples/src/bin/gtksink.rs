@@ -143,6 +143,19 @@ impl<T> SendCell<T> {
         }
     }
 
+    pub fn into_inner(self) -> T {
+        assert_eq!(thread::current().id(), self.thread_id);
+        self.data
+    }
+
+    pub fn try_into_inner(self) -> Result<T, Self> {
+        if thread::current().id() == self.thread_id {
+            Ok(self.data)
+        } else {
+            Err(self)
+        }
+    }
+
     pub fn get(&self) -> &T {
         assert_eq!(thread::current().id(), self.thread_id);
         &self.data
