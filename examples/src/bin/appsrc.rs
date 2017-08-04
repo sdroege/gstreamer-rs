@@ -5,61 +5,27 @@ use gst_app::*;
 
 extern crate glib;
 
-use std::fmt;
 use std::u64;
 use std::thread;
+
+pub mod utils;
 
 const WIDTH: usize = 320;
 const HEIGHT: usize = 240;
 
-#[derive(Debug)]
-enum AppSrcExError {
-    InitFailed(glib::Error),
-    ElementNotFound(&'static str),
-    ElementLinkFailed(&'static str, &'static str),
-    SetStateError(&'static str),
-    ElementError(std::string::String, glib::Error, std::string::String),
-}
-
-impl fmt::Display for AppSrcExError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            AppSrcExError::InitFailed(ref e) => {
-                write!(f, "GStreamer initialization failed: {:?}", e)
-            }
-            AppSrcExError::ElementNotFound(ref e) => write!(f, "Element {} not found", e),
-            AppSrcExError::ElementLinkFailed(ref e1, ref e2) => {
-                write!(f, "Link failed between {} and {}", e1, e2)
-            }
-            AppSrcExError::SetStateError(ref state) => {
-                write!(f, "Pipeline failed to switch to state {}", state)
-            }
-            AppSrcExError::ElementError(ref element, ref err, ref debug) => {
-                write!(f, "Error from {}: {} ({:?})", element, err, debug)
-            }
-        }
-    }
-}
-
-fn create_pipeline() -> Result<(Pipeline, AppSrc), AppSrcExError> {
-    gst::init().map_err(|e| AppSrcExError::InitFailed(e))?;
+fn create_pipeline() -> Result<(Pipeline, AppSrc), utils::ExampleError> {
+    gst::init().map_err(|e| utils::ExampleError::InitFailed(e))?;
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("appsrc", None)
-        .ok_or(AppSrcExError::ElementNotFound("appsrc"))?;
-
-    let videoconvert = gst::ElementFactory::make("videoconvert", None)
-        .ok_or(AppSrcExError::ElementNotFound("videoconvert"))?;
-    let sink = gst::ElementFactory::make("autovideosink", None)
-        .ok_or(AppSrcExError::ElementNotFound("autovideosink"))?;
+    let src = utils::create_element("appsrc")?;
+    let videoconvert = utils::create_element("videoconvert")?;
+    let sink = utils::create_element("autovideosink")?;
 
     pipeline
         .add_many(&[&src, &videoconvert, &sink])
         .expect("Unable to add elements in the pipeline");
-    gst::Element::link(&src, &videoconvert)
-        .map_err(|_| AppSrcExError::ElementLinkFailed("src", "videoconvert"))?;
-    gst::Element::link(&videoconvert, &sink)
-        .map_err(|_| AppSrcExError::ElementLinkFailed("videoconvert", "sink"))?;
+    utils::link_elements(&src, &videoconvert)?;
+    utils::link_elements(&videoconvert, &sink)?;
 
     let appsrc = src.clone()
         .dynamic_cast::<AppSrc>()
@@ -80,7 +46,7 @@ fn create_pipeline() -> Result<(Pipeline, AppSrc), AppSrcExError> {
     Ok((pipeline, appsrc))
 }
 
-fn main_loop() -> Result<(), AppSrcExError> {
+fn main_loop() -> Result<(), utils::ExampleError> {
     let (pipeline, appsrc) = create_pipeline()?;
 
     thread::spawn(move || {
@@ -111,9 +77,7 @@ fn main_loop() -> Result<(), AppSrcExError> {
         appsrc.end_of_stream();
     });
 
-    if let gst::StateChangeReturn::Failure = pipeline.set_state(gst::State::Playing) {
-        return Err(AppSrcExError::SetStateError("playing"));
-    }
+    utils::set_state(&pipeline, gst::State::Playing)?;
 
     let bus = pipeline
         .get_bus()
@@ -128,8 +92,8 @@ fn main_loop() -> Result<(), AppSrcExError> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                pipeline.set_state(gst::State::Null);
-                return Err(AppSrcExError::ElementError(
+                utils::set_state(&pipeline, gst::State::Null)?;
+                return Err(utils::ExampleError::ElementError(
                     msg.get_src().get_path_string(),
                     err.get_error(),
                     err.get_debug().unwrap(),
@@ -139,9 +103,7 @@ fn main_loop() -> Result<(), AppSrcExError> {
         }
     }
 
-    if let gst::StateChangeReturn::Failure = pipeline.set_state(gst::State::Null) {
-        return Err(AppSrcExError::SetStateError("null"));
-    }
+    utils::set_state(&pipeline, gst::State::Null)?;
 
     Ok(())
 }

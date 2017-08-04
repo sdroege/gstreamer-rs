@@ -5,56 +5,23 @@ use gst_app::*;
 
 extern crate glib;
 
-use std::fmt;
 use std::u64;
 use std::i16;
 use std::i32;
 
-#[derive(Debug)]
-enum AppSinkExError {
-    InitFailed(glib::Error),
-    ElementNotFound(&'static str),
-    ElementLinkFailed(&'static str, &'static str),
-    SetStateError(&'static str),
-    ElementError(std::string::String, glib::Error, std::string::String),
-}
+pub mod utils;
 
-impl fmt::Display for AppSinkExError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            AppSinkExError::InitFailed(ref e) => {
-                write!(f, "GStreamer initialization failed: {:?}", e)
-            }
-            AppSinkExError::ElementNotFound(ref e) => write!(f, "Element {} not found", e),
-            AppSinkExError::ElementLinkFailed(ref e1, ref e2) => {
-                write!(f, "Link failed between {} and {}", e1, e2)
-            }
-            AppSinkExError::SetStateError(ref state) => {
-                write!(f, "Pipeline failed to switch to state {}", state)
-            }
-            AppSinkExError::ElementError(ref element, ref err, ref debug) => {
-                write!(f, "Error from {}: {} ({:?})", element, err, debug)
-            }
-        }
-    }
-}
-
-fn create_pipeline() -> Result<Pipeline, AppSinkExError> {
-    gst::init().map_err(|e| AppSinkExError::InitFailed(e))?;
+fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
+    gst::init().map_err(|e| utils::ExampleError::InitFailed(e))?;
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("audiotestsrc", None)
-        .ok_or(AppSinkExError::ElementNotFound("audiotestsrc"))?;
-    let sink = gst::ElementFactory::make("appsink", None)
-        .ok_or(AppSinkExError::ElementNotFound("appsink"))?;
+    let src = utils::create_element("audiotestsrc")?;
+    let sink = utils::create_element("appsink")?;
 
     pipeline
         .add_many(&[&src, &sink])
         .expect("Unable to add elements in the pipeline");
 
-    gst::Element::link(&src, &sink)
-        .map_err(|_| {
-            AppSinkExError::ElementLinkFailed("audiotestsrc", "appsink")
-        })?;
+    utils::link_elements(&src, &sink)?;
 
     let appsink = sink.clone()
         .dynamic_cast::<AppSink>()
@@ -105,12 +72,10 @@ fn create_pipeline() -> Result<Pipeline, AppSinkExError> {
     Ok(pipeline)
 }
 
-fn main_loop() -> Result<(), AppSinkExError> {
+fn main_loop() -> Result<(), utils::ExampleError> {
     let pipeline = create_pipeline()?;
 
-    if let gst::StateChangeReturn::Failure = pipeline.set_state(gst::State::Playing) {
-        return Err(AppSinkExError::SetStateError("playing"));
-    }
+    utils::set_state(&pipeline, gst::State::Playing)?;
 
     let bus = pipeline
         .get_bus()
@@ -125,10 +90,8 @@ fn main_loop() -> Result<(), AppSinkExError> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                if let gst::StateChangeReturn::Failure = pipeline.set_state(gst::State::Null) {
-                    return Err(AppSinkExError::SetStateError("null"));
-                }
-                return Err(AppSinkExError::ElementError(
+                utils::set_state(&pipeline, gst::State::Null)?;
+                return Err(utils::ExampleError::ElementError(
                     msg.get_src().get_path_string(),
                     err.get_error(),
                     err.get_debug().unwrap(),
@@ -138,9 +101,7 @@ fn main_loop() -> Result<(), AppSinkExError> {
         }
     }
 
-    if let gst::StateChangeReturn::Failure = pipeline.set_state(gst::State::Null) {
-        return Err(AppSinkExError::SetStateError("null"));
-    }
+    utils::set_state(&pipeline, gst::State::Null)?;
 
     Ok(())
 }
