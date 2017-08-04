@@ -9,7 +9,7 @@
 use ffi;
 use glib;
 use glib::StaticType;
-use glib::translate::{from_glib, from_glib_full, from_glib_none};
+use glib::translate::{from_glib, from_glib_full};
 
 use miniobject::*;
 use Buffer;
@@ -77,7 +77,10 @@ impl ToOwned for BufferListRef {
     type Owned = GstRc<BufferListRef>;
 
     fn to_owned(&self) -> GstRc<BufferListRef> {
-        unsafe { from_glib_none(self.as_ptr()) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
+                *mut _)
+        }
     }
 }
 

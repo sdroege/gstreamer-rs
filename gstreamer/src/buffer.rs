@@ -330,6 +330,17 @@ impl glib::types::StaticType for Buffer {
     }
 }
 
+impl ToOwned for BufferRef {
+    type Owned = GstRc<BufferRef>;
+
+    fn to_owned(&self) -> GstRc<BufferRef> {
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
+                *mut _)
+        }
+    }
+}
+
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", unsafe { self.as_ptr() })

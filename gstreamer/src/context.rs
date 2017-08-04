@@ -12,7 +12,7 @@ use ffi;
 
 use glib;
 use glib::StaticType;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 
 use miniobject::*;
 use StructureRef;
@@ -80,7 +80,10 @@ impl ToOwned for ContextRef {
     type Owned = GstRc<ContextRef>;
 
     fn to_owned(&self) -> GstRc<ContextRef> {
-        unsafe { from_glib_none(self.as_ptr()) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
+                *mut _)
+        }
     }
 }
 

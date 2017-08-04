@@ -15,7 +15,7 @@ use CapsIntersectMode;
 
 use glib;
 use ffi;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use glib::value::ToValue;
 
 #[repr(C)]
@@ -348,7 +348,10 @@ impl ToOwned for CapsRef {
     type Owned = GstRc<CapsRef>;
 
     fn to_owned(&self) -> GstRc<CapsRef> {
-        unsafe { from_glib_none(self.as_ptr()) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
+                *mut _)
+        }
     }
 }
 

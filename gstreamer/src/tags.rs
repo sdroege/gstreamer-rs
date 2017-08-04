@@ -15,7 +15,7 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::value::{FromValueOptional, SetValue, ToValue, TypedValue, Value};
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
 use miniobject::*;
 
@@ -326,7 +326,10 @@ impl ToOwned for TagListRef {
     type Owned = GstRc<TagListRef>;
 
     fn to_owned(&self) -> GstRc<TagListRef> {
-        unsafe { from_glib_none(self.as_ptr()) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
+                *mut _)
+        }
     }
 }
 
