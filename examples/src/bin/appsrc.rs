@@ -14,7 +14,7 @@ const WIDTH: usize = 320;
 const HEIGHT: usize = 240;
 
 fn create_pipeline() -> Result<(Pipeline, AppSrc), utils::ExampleError> {
-    gst::init().map_err(|e| utils::ExampleError::InitFailed(e))?;
+    gst::init().map_err(utils::ExampleError::InitFailed)?;
 
     let pipeline = gst::Pipeline::new(None);
     let src = utils::create_element("appsrc")?;

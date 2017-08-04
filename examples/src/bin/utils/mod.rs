@@ -20,7 +20,7 @@ impl fmt::Display for ExampleError {
             ExampleError::InitFailed(ref e) => {
                 write!(f, "GStreamer initialization failed: {:?}", e)
             }
-            ExampleError::ElementNotFound(ref e) => write!(f, "Element {} not found", e),
+            ExampleError::ElementNotFound(e) => write!(f, "Element {} not found", e),
             ExampleError::ElementLinkFailed(ref e1, ref e2) => {
                 write!(f, "Link failed between {} and {}", e1, e2)
             }
@@ -35,7 +35,7 @@ impl fmt::Display for ExampleError {
 }
 
 pub fn create_element(name: &'static str) -> Result<gst::Element, ExampleError> {
-    gst::ElementFactory::make(name, None).ok_or(ExampleError::ElementNotFound(name))
+    gst::ElementFactory::make(name, None).ok_or_else(|| ExampleError::ElementNotFound(name))
 }
 
 pub fn link_elements(e1: &gst::Element, e2: &gst::Element) -> Result<(), ExampleError> {

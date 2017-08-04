@@ -12,7 +12,7 @@ use std::i32;
 pub mod utils;
 
 fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
-    gst::init().map_err(|e| utils::ExampleError::InitFailed(e))?;
+    gst::init().map_err(utils::ExampleError::InitFailed)?;
     let pipeline = gst::Pipeline::new(None);
     let src = utils::create_element("audiotestsrc")?;
     let sink = utils::create_element("appsink")?;
