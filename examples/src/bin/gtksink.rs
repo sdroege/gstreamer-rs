@@ -14,6 +14,9 @@ use gtk::ApplicationExt as GtkApplicationExt;
 
 use std::env;
 
+extern crate send_cell;
+use send_cell::SendCell;
+
 fn create_ui(app: &gtk::Application) {
     let pipeline = Pipeline::new(None);
     let src = ElementFactory::make("videotestsrc", None).unwrap();
@@ -123,102 +126,3 @@ fn main() {
     app.run(&args_ref);
 }
 
-// Workaround for GTK objects not implementing Send (nor Sync)
-// but us having to use them in a closure that requires Send
-use std::thread;
-use std::cmp;
-use std::ops;
-
-#[derive(Clone, Debug)]
-pub struct SendCell<T> {
-    data: T,
-    thread_id: thread::ThreadId,
-}
-
-impl<T> SendCell<T> {
-    pub fn new(data: T) -> Self {
-        SendCell {
-            data: data,
-            thread_id: thread::current().id(),
-        }
-    }
-
-    pub fn into_inner(self) -> T {
-        assert_eq!(thread::current().id(), self.thread_id);
-        self.data
-    }
-
-    pub fn try_into_inner(self) -> Result<T, Self> {
-        if thread::current().id() == self.thread_id {
-            Ok(self.data)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn get(&self) -> &T {
-        assert_eq!(thread::current().id(), self.thread_id);
-        &self.data
-    }
-
-    pub fn try_get(&self) -> Option<&T> {
-        if thread::current().id() == self.thread_id {
-            Some(&self.data)
-        } else {
-            None
-        }
-    }
-
-    pub fn borrow(&self) -> Ref<T> {
-        Ref { data: self.get() }
-    }
-
-    pub fn try_borrow(&self) -> Option<Ref<T>> {
-        self.try_get().map(|data| Ref { data: data })
-    }
-}
-
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Ref<'a, T: 'a> {
-    data: &'a T,
-}
-
-impl<'a, T: 'a> ops::Deref for Ref<'a, T> {
-    type Target = T;
-
-    fn deref(&self) -> &T {
-        self.data
-    }
-}
-
-impl<T> From<T> for SendCell<T> {
-    fn from(t: T) -> SendCell<T> {
-        SendCell::new(t)
-    }
-}
-
-impl<T: Default> Default for SendCell<T> {
-    fn default() -> SendCell<T> {
-        SendCell::new(T::default())
-    }
-}
-
-impl<T: PartialEq> PartialEq<SendCell<T>> for SendCell<T> {
-    fn eq(&self, other: &Self) -> bool {
-        self.data.eq(&other.data)
-    }
-}
-impl<T: Eq> Eq for SendCell<T> {}
-
-impl<T: PartialOrd> PartialOrd<SendCell<T>> for SendCell<T> {
-    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        self.data.partial_cmp(&other.data)
-    }
-}
-impl<T: Ord> Ord for SendCell<T> {
-    fn cmp(&self, other: &Self) -> cmp::Ordering {
-        self.data.cmp(&other.data)
-    }
-}
-
-unsafe impl<T> Send for SendCell<T> {}
