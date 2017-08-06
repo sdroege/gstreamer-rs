@@ -10,6 +10,11 @@ use gtk::{Window, WindowType};
 
 pub mod utils;
 
+fn create_playbin() -> Result<gst::Pipeline, utils::ExampleError> {
+    let playbin = utils::create_element("playbin")?;
+    Ok(playbin.downcast::<gst::Pipeline>().unwrap())
+}
+
 fn main_loop() -> Result<(), utils::ExampleError> {
     gst::init().map_err(utils::ExampleError::InitFailed)?;
     gtk::init().map_err(utils::ExampleError::GtkInitFailed)?;
@@ -28,7 +33,8 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         (sink, widget.get::<gtk::Widget>().unwrap())
     };
 
-    let playbin = utils::create_element("playbin")?;
+    let playbin = create_playbin()?;
+
     playbin.set_property("video_sink", &sink.to_value()).unwrap();
 
     let window = Window::new(WindowType::Toplevel);
@@ -61,9 +67,9 @@ fn main_loop() -> Result<(), utils::ExampleError> {
                 assert_ne!(ret, gst::StateChangeReturn::Failure);
             }
             playbin_clone.set_property("uri", &Value::from(&filename)).unwrap();
+            utils::set_state(&playbin_clone, gst::State::Playing)?;
             let ret = playbin_clone.set_state(gst::State::Playing);
             play_pause_button_clone.set_sensitive(true);
-            println!("ret {:?}", ret);
             assert_ne!(ret, gst::StateChangeReturn::Failure);
         }
     });
@@ -124,31 +130,29 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         glib::Continue(true)
     });
 
-    let bus = playbin.get_bus().unwrap();
-
-    bus.add_watch(move |_, msg| {
-        match msg.view() {
-            MessageView::Eos(..) => gtk::main_quit(),
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {}: {} ({:?})",
-                    msg.get_src().get_path_string(),
-                    err.get_error(),
-                    err.get_debug()
-                );
-                gtk::main_quit();
-            }
-            _ => (),
-        };
-
-        glib::Continue(true)
-    });
+    if let Some(bus) = playbin.get_bus() {
+        bus.add_watch(move |_, msg| {
+            match msg.view() {
+                MessageView::Eos(..) => gtk::main_quit(),
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {}: {} ({:?})",
+                        msg.get_src().get_path_string(),
+                        err.get_error(),
+                        err.get_debug()
+                    );
+                    gtk::main_quit();
+                }
+                _ => (),
+            };
+            
+            glib::Continue(true)
+        });
+    }
     
     gtk::main();
 
-    let ret = playbin.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
-
+    utils::set_state(&playbin, gst::State::Null)?;
     Ok(())
 }
 
