@@ -5,12 +5,10 @@ extern crate glib;
 use glib::*;
 
 extern crate gio;
-use gio::ApplicationExt;
+use gio::*;
 
 extern crate gtk;
 use gtk::prelude::*;
-use gtk::{Window, WindowType};
-use gtk::ApplicationExt as GtkApplicationExt;
 
 use std::env;
 
@@ -37,7 +35,7 @@ fn create_ui(app: &gtk::Application) {
     pipeline.add_many(&[&src, &sink]).unwrap();
     src.link(&sink).unwrap();
 
-    let window = Window::new(WindowType::Toplevel);
+    let window = gtk::Window::new(gtk::WindowType::Toplevel);
     window.set_default_size(320, 240);
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
     vbox.pack_start(&widget, true, true, 0);
