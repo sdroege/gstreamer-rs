@@ -14,7 +14,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstPlayer.Player",
     "GstPlayer.PlayerAudioInfo",
     "GstPlayer.PlayerColorBalanceType",
     "GstPlayer.PlayerError",
@@ -36,7 +35,6 @@ manual = [
     "GLib.MainContext",
     "GObject.Object",
     "Gst.ClockTime",
-    "Gst.Structure",
     "Gst.Element",
 ]
 
@@ -54,3 +52,31 @@ ref_mode = "ref"
 name = "Gst.Sample"
 status = "manual"
 ref_mode = "ref"
+
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+
+[[object]]
+name = "GstPlayer.Player"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "visualizations_free"
+    # correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "set_config"
+    # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "new"
+    ignore = true
+    version = 1.12
+    
