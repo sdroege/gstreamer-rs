@@ -22,7 +22,7 @@ An iterator of elements in a bin can be retrieved with
 `BinExt::iterate_elements`. Various other iterators exist to retrieve the
 elements in a bin.
 
-`ObjectExt::unref` is used to drop your reference to the bin.
+`GstObjectExt::unref` is used to drop your reference to the bin.
 
 The `Bin::element-added` signal is fired whenever a new element is added to
 the bin. Likewise the `Bin::element-removed` signal is fired whenever an
@@ -145,7 +145,7 @@ the `Element` element to add to the bin
 Recursively looks for elements with an unlinked pad of the given
 direction within the specified bin and returns an unlinked pad
 if one is found, or `None` otherwise. If a pad is found, the caller
-owns a reference to it and should use `ObjectExt::unref` on the
+owns a reference to it and should use `GstObjectExt::unref` on the
 pad when it is not needed any longer.
 ## `direction`
 whether to look for an unlinked source or sink pad
@@ -295,7 +295,7 @@ Unparenting the element means that the element will be dereferenced,
 so if the bin holds the only reference to the element, the element
 will be freed in the process of removing it from the bin. If you
 want the element to still exist after removing, you need to call
-`ObjectExt::ref` before removing it from the bin.
+`GstObjectExt::ref` before removing it from the bin.
 
 If the element's pads are linked to other pads, the pads will be unlinked
 before the element is removed from the bin.
@@ -1232,7 +1232,7 @@ In the event that multiple pieces of code have called
 `Bus::enable_sync_message_emission`, the sync-message emissions will only
 be stopped after all calls to `Bus::enable_sync_message_emission` were
 "cancelled" by calling this function. In this way the semantics are exactly
-the same as `ObjectExt::ref` that which calls enable should also call
+the same as `GstObjectExt::ref` that which calls enable should also call
 disable.
 
 MT safe.
@@ -2015,7 +2015,7 @@ MT safe.
 Looks up a child element by the given name.
 
 This virtual method has a default implementation that uses `Object`
-together with `ObjectExt::get_name`. If the interface is to be used with
+together with `GstObjectExt::get_name`. If the interface is to be used with
 `GObjects`, this methods needs to be overridden.
 ## `name`
 the child's name
@@ -2605,6 +2605,82 @@ timeout for waiting or `GST_CLOCK_TIME_NONE`
 # Returns
 
 `true` if waiting was successful, or `false` on timeout
+<!-- struct Context -->
+`Context` is a container object used to store contexts like a device
+context, a display server connection and similar concepts that should
+be shared between multiple elements.
+
+Applications can set a context on a complete pipeline by using
+`ElementExt::set_context`, which will then be propagated to all
+child elements. Elements can handle these in `ElementClass.set_context`()
+and merge them with the context information they already have.
+
+When an element needs a context it will do the following actions in this
+order until one step succeeds:
+1. Check if the element already has a context
+2. Query downstream with GST_QUERY_CONTEXT for the context
+3. Query upstream with GST_QUERY_CONTEXT for the context
+4. Post a GST_MESSAGE_NEED_CONTEXT message on the bus with the required
+ context types and afterwards check if a usable context was set now
+5. Create a context by itself and post a GST_MESSAGE_HAVE_CONTEXT message
+ on the bus.
+
+Bins will catch GST_MESSAGE_NEED_CONTEXT messages and will set any previously
+known context on the element that asks for it if possible. Otherwise the
+application should provide one if it can.
+
+`Context`<!-- -->s can be persistent.
+A persistent `Context` is kept in elements when they reach
+`State::Null`, non-persistent ones will be removed.
+Also, a non-persistent context won't override a previous persistent
+context set to an element.
+<!-- impl Context::fn new -->
+Create a new context.
+## `context_type`
+Context type
+## `persistent`
+Persistent context
+
+# Returns
+
+The new context.
+<!-- impl Context::fn get_context_type -->
+Get the type of `self`.
+
+# Returns
+
+The type of the context.
+<!-- impl Context::fn get_structure -->
+Access the structure of the context.
+
+# Returns
+
+The structure of the context. The structure is
+still owned by the context, which means that you should not modify it,
+free it and that the pointer becomes invalid when you free the context.
+<!-- impl Context::fn has_context_type -->
+Checks if `self` has `context_type`.
+## `context_type`
+Context type to check.
+
+# Returns
+
+`true` if `self` has `context_type`.
+<!-- impl Context::fn is_persistent -->
+Check if `self` is persistent.
+
+# Returns
+
+`true` if the context is persistent.
+<!-- impl Context::fn writable_structure -->
+Get a writable version of the structure.
+
+# Returns
+
+The structure of the context. The structure is still
+owned by the context, which means that you should not free it and
+that the pointer becomes invalid when you free the context.
+This function checks if `self` is writable.
 <!-- enum CoreError -->
 Core errors are errors inside the core GStreamer library.
 <!-- enum CoreError::variant Failed -->
@@ -3530,7 +3606,7 @@ This function should be called with the STATE_LOCK held.
 MT safe.
 <!-- trait ElementExt::fn add_pad -->
 Adds a pad (link point) to `self`. `pad`'s parent will be set to `self`;
-see `ObjectExt::set_parent` for refcounting information.
+see `GstObjectExt::set_parent` for refcounting information.
 
 Pads are not automatically activated so elements should perform the needed
 steps to activate the pad in case this pad is added in the PAUSED or PLAYING
@@ -3680,7 +3756,7 @@ the `Caps` to use as a filter.
 # Returns
 
 the `Pad` to which a link
- can be made, or `None` if one cannot be found. `ObjectExt::unref`
+ can be made, or `None` if one cannot be found. `GstObjectExt::unref`
  after usage.
 <!-- trait ElementExt::fn get_compatible_pad_template -->
 Retrieves a pad template from `self` that is compatible with `compattempl`.
@@ -4136,14 +4212,14 @@ with `ElementExt::request_pad`.
 
 This does not unref the pad. If the pad was created by using
 `ElementExt::request_pad`, `ElementExt::release_request_pad` needs to be
-followed by `ObjectExt::unref` to free the `pad`.
+followed by `GstObjectExt::unref` to free the `pad`.
 
 MT safe.
 ## `pad`
 the `Pad` to release.
 <!-- trait ElementExt::fn remove_pad -->
 Removes `pad` from `self`. `pad` will be destroyed if it has not been
-referenced elsewhere using `ObjectExt::unparent`.
+referenced elsewhere using `GstObjectExt::unparent`.
 
 This function is used by plugin developers and should not be used
 by applications. Pads that were dynamically requested from elements
@@ -4195,7 +4271,7 @@ requested `Pad` if found,
 <!-- trait ElementExt::fn seek -->
 Sends a seek event to an element. See `Event::new_seek` for the details of
 the parameters. The seek event is sent to the element using
-`ElementExt::send_event`.
+`Element::send_event`.
 
 MT safe.
 ## `rate`
@@ -4589,8 +4665,8 @@ and functions to query (parse) received events.
 
 Events are usually created with gst_event_new_*() which takes event-type
 specific parameters as arguments.
-To send an event application will usually use `ElementExt::send_event` and
-elements will use `PadExt::send_event` or `PadExt::push_event`.
+To send an event application will usually use `Element::send_event` and
+elements will use `Pad::send_event` or `Pad::push_event`.
 The event should be unreffed with `gst_event_unref` if it has not been sent.
 
 Events that have been received can be parsed with their respective
@@ -7297,14 +7373,14 @@ GStreamer library. It is currently a thin wrapper on top of
 `Object` gives us basic refcounting, parenting functionality and locking.
 Most of the functions are just extended for special GStreamer needs and can be
 found under the same name in the base class of `Object` which is `gobject::Object`
-(e.g. `gobject::ObjectExt::ref` becomes `ObjectExt::ref`).
+(e.g. `gobject::ObjectExt::ref` becomes `GstObjectExt::ref`).
 
 Since `Object` derives from `gobject::InitiallyUnowned`, it also inherits the
 floating reference. Be aware that functions such as `BinExt::add` and
 `ElementExt::add_pad` take ownership of the floating reference.
 
 In contrast to `gobject::Object` instances, `Object` adds a name property. The functions
-`ObjectExt::set_name` and `ObjectExt::get_name` are used to set/get the name
+`GstObjectExt::set_name` and `GstObjectExt::get_name` are used to set/get the name
 of the object.
 
 ## controlled properties
@@ -7343,7 +7419,7 @@ What needs to be done in applications? Again it's not a lot to change.
 # Implements
 
 [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait ObjectExt -->
+<!-- trait GstObjectExt -->
 Trait containing all `Object` methods.
 
 # Implementors
@@ -7411,7 +7487,7 @@ a new `Object`
 # Returns
 
 `true` if `newobj` was different from `oldobj`
-<!-- trait ObjectExt::fn add_control_binding -->
+<!-- trait GstObjectExt::fn add_control_binding -->
 Attach the `ControlBinding` to the object. If there already was a
 `ControlBinding` for this property it will be replaced.
 
@@ -7423,7 +7499,7 @@ the `ControlBinding` that should be used
 
 `false` if the given `binding` has not been setup for this object or
 has been setup for a non suitable property, `true` otherwise.
-<!-- trait ObjectExt::fn default_error -->
+<!-- trait GstObjectExt::fn default_error -->
 A default error function that uses `g_printerr` to display the error message
 and the optional debug sting..
 
@@ -7432,7 +7508,7 @@ The default handler will simply print the error string using g_print.
 the GError.
 ## `debug`
 an additional debug information string, or `None`
-<!-- trait ObjectExt::fn get_control_binding -->
+<!-- trait GstObjectExt::fn get_control_binding -->
 Gets the corresponding `ControlBinding` for the property. This should be
 unreferenced again after use.
 ## `property_name`
@@ -7442,10 +7518,10 @@ name of the property
 
 the `ControlBinding` for
 `property_name` or `None` if the property is not controlled.
-<!-- trait ObjectExt::fn get_control_rate -->
+<!-- trait GstObjectExt::fn get_control_rate -->
 Obtain the control-rate for this `self`. Audio processing `Element`
 objects will use this rate to sub-divide their processing loop and call
-`ObjectExt::sync_values` inbetween. The length of the processing segment
+`GstObjectExt::sync_values` inbetween. The length of the processing segment
 should be up to `control`-rate nanoseconds.
 
 If the `self` is not under property control, this will return
@@ -7457,7 +7533,7 @@ The control-rate is not expected to change if the element is in
 # Returns
 
 the control rate in nanoseconds
-<!-- trait ObjectExt::fn get_g_value_array -->
+<!-- trait GstObjectExt::fn get_g_value_array -->
 Gets a number of `GValues` for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
 `gobject::Value`.
@@ -7478,7 +7554,7 @@ array to put control-values in
 # Returns
 
 `true` if the given array could be filled, `false` otherwise
-<!-- trait ObjectExt::fn get_name -->
+<!-- trait GstObjectExt::fn get_name -->
 Returns a copy of the name of `self`.
 Caller should `g_free` the return value after usage.
 For a nameless object, this returns `None`, which you can safely `g_free`
@@ -7492,9 +7568,9 @@ the name of `self`. `g_free`
 after usage.
 
 MT safe. This function grabs and releases `self`'s LOCK.
-<!-- trait ObjectExt::fn get_parent -->
+<!-- trait GstObjectExt::fn get_parent -->
 Returns the parent of `self`. This function increases the refcount
-of the parent object so you should `ObjectExt::unref` it after usage.
+of the parent object so you should `GstObjectExt::unref` it after usage.
 
 # Returns
 
@@ -7502,7 +7578,7 @@ parent of `self`, this can be
  `None` if `self` has no parent. unref after usage.
 
 MT safe. Grabs and releases `self`'s LOCK.
-<!-- trait ObjectExt::fn get_path_string -->
+<!-- trait GstObjectExt::fn get_path_string -->
 Generates a string describing the path of `self` in
 the object hierarchy. Only useful (or used) for debugging.
 
@@ -7515,7 +7591,7 @@ a string describing the path of `self`. You must
 
 MT safe. Grabs and releases the `Object`'s LOCK for all objects
  in the hierarchy.
-<!-- trait ObjectExt::fn get_value -->
+<!-- trait GstObjectExt::fn get_value -->
 Gets the value for the given controlled property at the requested time.
 ## `property_name`
 the name of the property to get
@@ -7526,7 +7602,7 @@ the time the control-change should be read from
 
 the GValue of the property at the given time,
 or `None` if the property isn't controlled.
-<!-- trait ObjectExt::fn get_value_array -->
+<!-- trait GstObjectExt::fn get_value_array -->
 Gets a number of values for the given controlled property starting at the
 requested time. The array `values` need to hold enough space for `n_values` of
 the same type as the objects property's type.
@@ -7535,7 +7611,7 @@ This function is useful if one wants to e.g. draw a graph of the control
 curve or apply a control curve sample by sample.
 
 The values are unboxed and ready to be used. The similar function
-`ObjectExt::get_g_value_array` returns the array as `GValues` and is
+`GstObjectExt::get_g_value_array` returns the array as `GValues` and is
 better suites for bindings.
 ## `property_name`
 the name of the property to get
@@ -7551,19 +7627,19 @@ array to put control-values in
 # Returns
 
 `true` if the given array could be filled, `false` otherwise
-<!-- trait ObjectExt::fn has_active_control_bindings -->
+<!-- trait GstObjectExt::fn has_active_control_bindings -->
 Check if the `self` has active controlled properties.
 
 # Returns
 
 `true` if the object has active controlled properties
-<!-- trait ObjectExt::fn has_ancestor -->
+<!-- trait GstObjectExt::fn has_ancestor -->
 Check if `self` has an ancestor `ancestor` somewhere up in
 the hierarchy. One can e.g. check if a `Element` is inside a `Pipeline`.
 
 # Deprecated
 
-Use `ObjectExt::has_as_ancestor` instead.
+Use `GstObjectExt::has_as_ancestor` instead.
 
 MT safe. Grabs and releases `self`'s locks.
 ## `ancestor`
@@ -7572,7 +7648,7 @@ a `Object` to check as ancestor
 # Returns
 
 `true` if `ancestor` is an ancestor of `self`.
-<!-- trait ObjectExt::fn has_as_ancestor -->
+<!-- trait GstObjectExt::fn has_as_ancestor -->
 Check if `self` has an ancestor `ancestor` somewhere up in
 the hierarchy. One can e.g. check if a `Element` is inside a `Pipeline`.
 ## `ancestor`
@@ -7583,7 +7659,7 @@ a `Object` to check as ancestor
 `true` if `ancestor` is an ancestor of `self`.
 
 MT safe. Grabs and releases `self`'s locks.
-<!-- trait ObjectExt::fn has_as_parent -->
+<!-- trait GstObjectExt::fn has_as_parent -->
 Check if `parent` is the parent of `self`.
 E.g. a `Element` can check if it owns a given `Pad`.
 ## `parent`
@@ -7595,7 +7671,7 @@ a `Object` to check as parent
  the parent of `self`. Otherwise `false`.
 
 MT safe. Grabs and releases `self`'s locks.
-<!-- trait ObjectExt::fn ref -->
+<!-- trait GstObjectExt::fn ref -->
 Increments the reference count on `self`. This function
 does not take the lock on `self` because it relies on
 atomic refcounting.
@@ -7607,7 +7683,7 @@ constructs like :
 # Returns
 
 A pointer to `self`
-<!-- trait ObjectExt::fn remove_control_binding -->
+<!-- trait GstObjectExt::fn remove_control_binding -->
 Removes the corresponding `ControlBinding`. If it was the
 last ref of the binding, it will be disposed.
 ## `binding`
@@ -7616,32 +7692,32 @@ the binding
 # Returns
 
 `true` if the binding could be removed.
-<!-- trait ObjectExt::fn set_control_binding_disabled -->
+<!-- trait GstObjectExt::fn set_control_binding_disabled -->
 This function is used to disable the control bindings on a property for
-some time, i.e. `ObjectExt::sync_values` will do nothing for the
+some time, i.e. `GstObjectExt::sync_values` will do nothing for the
 property.
 ## `property_name`
 property to disable
 ## `disabled`
 boolean that specifies whether to disable the controller
 or not.
-<!-- trait ObjectExt::fn set_control_bindings_disabled -->
+<!-- trait GstObjectExt::fn set_control_bindings_disabled -->
 This function is used to disable all controlled properties of the `self` for
-some time, i.e. `ObjectExt::sync_values` will do nothing.
+some time, i.e. `GstObjectExt::sync_values` will do nothing.
 ## `disabled`
 boolean that specifies whether to disable the controller
 or not.
-<!-- trait ObjectExt::fn set_control_rate -->
+<!-- trait GstObjectExt::fn set_control_rate -->
 Change the control-rate for this `self`. Audio processing `Element`
 objects will use this rate to sub-divide their processing loop and call
-`ObjectExt::sync_values` inbetween. The length of the processing segment
+`GstObjectExt::sync_values` inbetween. The length of the processing segment
 should be up to `control`-rate nanoseconds.
 
 The control-rate should not change if the element is in `State::Paused` or
 `State::Playing`.
 ## `control_rate`
 the new control-rate in nanoseconds.
-<!-- trait ObjectExt::fn set_name -->
+<!-- trait GstObjectExt::fn set_name -->
 Sets the name of `self`, or gives `self` a guaranteed unique
 name (if `name` is `None`).
 This function makes a copy of the provided name, so the caller
@@ -7656,7 +7732,7 @@ a parent cannot be renamed, this function returns `false` in those
 cases.
 
 MT safe. This function grabs and releases `self`'s LOCK.
-<!-- trait ObjectExt::fn set_parent -->
+<!-- trait GstObjectExt::fn set_parent -->
 Sets the parent of `self` to `parent`. The object's reference count will
 be incremented, and any floating reference will be removed (see `Object::ref_sink`).
 ## `parent`
@@ -7668,7 +7744,7 @@ new parent of object
 already had a parent or `self` and `parent` are the same.
 
 MT safe. Grabs and releases `self`'s LOCK.
-<!-- trait ObjectExt::fn suggest_next_sync -->
+<!-- trait GstObjectExt::fn suggest_next_sync -->
 Returns a suggestion for timestamps where buffers should be split
 to get best controller results.
 
@@ -7676,7 +7752,7 @@ to get best controller results.
 
 Returns the suggested timestamp or `GST_CLOCK_TIME_NONE`
 if no control-rate was set.
-<!-- trait ObjectExt::fn sync_values -->
+<!-- trait GstObjectExt::fn sync_values -->
 Sets the properties of the object, according to the `GstControlSources` that
 (maybe) handle them and for the given timestamp.
 
@@ -7689,12 +7765,12 @@ the time that should be processed
 
 `true` if the controller values could be applied to the object
 properties, `false` otherwise
-<!-- trait ObjectExt::fn unparent -->
+<!-- trait GstObjectExt::fn unparent -->
 Clear the parent of `self`, removing the associated reference.
 This function decreases the refcount of `self`.
 
 MT safe. Grabs and releases `self`'s lock.
-<!-- trait ObjectExt::fn unref -->
+<!-- trait GstObjectExt::fn unref -->
 Decrements the reference count on `self`. If reference count hits
 zero, destroy `self`. This function does not take the lock
 on `self` as it relies on atomic refcounting.
@@ -7737,8 +7813,8 @@ Before dataflow is possible on the pads, they need to be activated with
 `Pad::query` and `Pad::peer_query` can be used to query various
 properties of the pad and the stream.
 
-To send a `Event` on a pad, use `PadExt::send_event` and
-`PadExt::push_event`. Some events will be sticky on the pad, meaning that
+To send a `Event` on a pad, use `Pad::send_event` and
+`Pad::push_event`. Some events will be sticky on the pad, meaning that
 after they pass on the pad they can be queried later with
 `PadExt::get_sticky_event` and `PadExt::sticky_events_foreach`.
 `PadExt::get_current_caps` and `PadExt::has_current_caps` are convenience
@@ -8277,7 +8353,7 @@ the parent of `self` or `None`
 # Returns
 
 a `Iterator` of `Pad`, or `None` if `self`
-has no parent. Unref each returned pad with `ObjectExt::unref`.
+has no parent. Unref each returned pad with `GstObjectExt::unref`.
 <!-- trait PadExt::fn link -->
 Links the source pad and the sink pad.
 ## `sinkpad`
@@ -9093,7 +9169,7 @@ distribution of a global `Clock` as well as provide a `Bus` to the
 application.
 
 `Pipeline::new` is used to create a pipeline. when you are done with
-the pipeline, use `ObjectExt::unref` to free its resources including all
+the pipeline, use `GstObjectExt::unref` to free its resources including all
 added `Element` objects (if not otherwise referenced).
 
 Elements are added and removed from the pipeline using the `Bin`
@@ -9777,7 +9853,7 @@ the parent of `pad` or `None`
 # Returns
 
 a `Iterator` of `Pad`, or `None` if `pad`
-has no parent. Unref each returned pad with `ObjectExt::unref`.
+has no parent. Unref each returned pad with `GstObjectExt::unref`.
 <!-- trait ProxyPadExt::fn get_internal -->
 Get the internal pad of `self`. Unref target pad after usage.
 
@@ -10275,7 +10351,7 @@ parameters for the allocator
 <!-- impl Query::fn parse_nth_allocation_pool -->
 Get the pool parameters in `self`.
 
-Unref `pool` with `ObjectExt::unref` when it's not needed any more.
+Unref `pool` with `GstObjectExt::unref` when it's not needed any more.
 ## `index`
 index to parse
 ## `pool`

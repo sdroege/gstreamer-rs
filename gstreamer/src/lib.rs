@@ -76,7 +76,6 @@ pub use event::{Event, EventRef, EventView};
 pub mod context;
 pub use context::{Context, ContextRef};
 
-mod object;
 mod element;
 mod bin;
 mod bus;
@@ -87,7 +86,6 @@ mod ghost_pad;
 mod child_proxy;
 mod tag_setter;
 mod iterator;
-pub use object::{GstObjectExt, Object};
 pub use element::ElementExtManual;
 pub use bin::BinExtManual;
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo, PAD_PROBE_ID_INVALID};
