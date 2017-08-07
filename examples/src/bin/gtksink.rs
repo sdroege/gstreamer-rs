@@ -56,8 +56,8 @@ fn create_ui(app: &gtk::Application) {
             let mut minutes = seconds / 60;
             let hours = minutes / 60;
 
-            seconds -= hours * 60 * 60 + minutes * 60;
-            minutes -= hours * 60;
+            seconds %= 60;
+            minutes %= 60;
 
             label.set_text(&format!(
                 "Position: {:02}:{:02}:{:02}",
@@ -123,4 +123,3 @@ fn main() {
     let args_ref = args.iter().map(|a| a.as_str()).collect::<Vec<_>>();
     app.run(&args_ref);
 }
-
