@@ -5,13 +5,14 @@ use gst::*;
 extern crate glib;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExampleError {
     InitFailed(glib::Error),
     ElementNotFound(&'static str),
     ElementLinkFailed(::std::string::String, ::std::string::String),
     SetStateError(::std::string::String),
     ElementError(::std::string::String, glib::Error, ::std::string::String),
+    MissingFeature(&'static str),
 }
 
 impl fmt::Display for ExampleError {
@@ -30,6 +31,12 @@ impl fmt::Display for ExampleError {
             ExampleError::ElementError(ref element, ref err, ref debug) => {
                 write!(f, "Error from {}: {} ({:?})", element, err, debug)
             }
+            ExampleError::MissingFeature(ref feature) => write!(
+                f,
+                "Feature {} is required. Please rebuild with --features {}",
+                feature,
+                feature
+            ),
         }
     }
 }
