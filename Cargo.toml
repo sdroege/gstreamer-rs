@@ -4,6 +4,7 @@ members = [
   "gstreamer",
   "gstreamer-app",
   "gstreamer-audio",
+  "gstreamer-player",
   "gstreamer-video",
   "examples",
 ]

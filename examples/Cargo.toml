@@ -7,8 +7,13 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
 gstreamer-app = { path = "../gstreamer-app" }
+gstreamer-player = { path = "../gstreamer-player", optional = true }
 gtk = { version = "0.1.3", git = "https://github.com/gtk-rs/gtk", features = ["v3_6"] }
 gio = { version = "0.1.3", git = "https://github.com/gtk-rs/gio" }
 futures = "0.1"
 tokio-core = "0.1"
 send-cell = "0.1"
+
+[features]
+gst-player = ["gstreamer-player"]
+default-features = []

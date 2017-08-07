@@ -1,9 +1,9 @@
 [package]
-name = "gstreamer-app"
+name = "gstreamer-player"
 version = "0.1.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
-description = "Rust bindings for GStreamer App library"
+description = "Rust bindings for GStreamer Player library"
 repository = "https://github.com/sdroege/gstreamer-rs"
 license = "MIT/Apache-2.0"
 documentation = "https://gstreamer.freedesktop.org"
@@ -15,18 +15,16 @@ bitflags = "0.9"
 libc = "0.2"
 glib-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gstreamer-app-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_12"] }
+gstreamer-player-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_12"] }
 glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
-gstreamer = { version = "0.1.0", path = "../gstreamer" }
+gstreamer = { version = "0.1.0", path = "../gstreamer", features = ["v1_12"] }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
 optional = true
 
 [features]
-v1_10 = ["gstreamer-sys/v1_10", "gstreamer-app-sys/v1_10"]
-v1_12 = ["gstreamer-sys/v1_12", "gstreamer-app-sys/v1_12", "v1_10"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 default-features = []
