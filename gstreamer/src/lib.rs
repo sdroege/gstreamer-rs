@@ -100,6 +100,9 @@ pub use value::*;
 mod segment;
 pub use segment::*;
 
+pub mod toc;
+pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
+
 use std::ptr;
 
 pub fn init() -> Result<(), glib::Error> {
