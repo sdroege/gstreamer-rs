@@ -206,6 +206,8 @@ impl Segment {
             (ret, stream_time)
         }
     }
+
+    // TODO getter/setter
 }
 
 impl PartialEq for Segment {

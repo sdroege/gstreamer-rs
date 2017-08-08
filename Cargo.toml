@@ -3,5 +3,6 @@
 members = [
   "gstreamer",
   "gstreamer-app",
+  "gstreamer-audio",
   "examples",
 ]

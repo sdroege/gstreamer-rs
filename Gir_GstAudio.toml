@@ -1,0 +1,37 @@
+[options]
+girs_dir = "gir-files"
+library = "GstAudio"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-audio"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstAudio.AudioFlags",
+    "GstAudio.AudioFormat",
+    "GstAudio.AudioFormatFlags",
+    "GstAudio.AudioLayout",
+    "GstAudio.AudioPackFlags",
+    "GstAudio.AudioChannelPosition",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Object",
+    "GstAudio.AudioInfo",
+    "GstAudio.AudioFormatInfo",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
