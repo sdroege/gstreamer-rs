@@ -71,7 +71,6 @@ manual = [
     "GLib.Source",
     "GLib.DateTime",
     "GObject.Object",
-    "Gst.Structure",
     "Gst.Iterator",
     "Gst.Segment",
 ]
@@ -129,6 +128,12 @@ trait = false
     [[object.signal]]
     name = "message"
     concurrency = "send"
+
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
 
 [[object]]
 name = "Gst.Caps"
