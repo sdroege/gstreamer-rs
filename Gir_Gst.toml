@@ -60,6 +60,10 @@ generate = [
     "Gst.TagSetter",
     "Gst.QOSType",
     "Gst.EventType",
+    "Gst.TocScope",
+    "Gst.TocEntryType",
+    "Gst.TocLoopType",
+    "Gst.TocSetter",
 ]
 
 manual = [
@@ -158,6 +162,11 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.Context"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Toc"
 status = "manual"
 ref_mode = "ref"
 

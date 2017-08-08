@@ -249,7 +249,7 @@ impl Message {
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
-    pub fn new_toc(toc: (), updated: bool) -> TocBuilder {
+    pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
         TocBuilder::new(toc, updated)
     }
 
@@ -878,7 +878,14 @@ impl<'a> Progress<'a> {
 
 pub struct Toc<'a>(&'a MessageRef);
 impl<'a> Toc<'a> {
-    // TODO get_toc()
+    pub fn get_toc(&self) -> (::Toc, bool) {
+        unsafe {
+            let mut toc = ptr::null_mut();
+            let mut updated = mem::uninitialized();
+            ffi::gst_message_parse_toc(self.0.as_mut_ptr(), &mut toc, &mut updated);
+            (from_glib_full(toc), updated != 0)
+        }
+    }
 }
 
 pub struct ResetTime<'a>(&'a MessageRef);
@@ -1895,16 +1902,14 @@ impl<'a> ProgressBuilder<'a> {
     });
 }
 
-// TODO Toc
-pub struct TocBuilder {
+pub struct TocBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    #[allow(unused)]
-    toc: (),
+    toc: &'a ::Toc,
     updated: bool,
 }
-impl TocBuilder {
-    pub fn new(toc: () /* &'a Toc */, updated: bool) -> Self {
+impl<'a> TocBuilder<'a> {
+    pub fn new(toc: &'a ::Toc, updated: bool) -> Self {
         Self {
             src: None,
             seqnum: None,
@@ -1916,7 +1921,7 @@ impl TocBuilder {
     message_builder_generic_impl!(|s: &mut Self, src| {
         ffi::gst_message_new_toc(
             src,
-            ptr::null_mut(), /*s.structure.to_glib_full()*/
+            s.toc.to_glib_none().0,
             s.updated.to_glib(),
         )
     });
