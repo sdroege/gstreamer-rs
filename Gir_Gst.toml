@@ -530,3 +530,7 @@ status = "generate"
     # unsupported array type
     ignore = true
 
+    [[object.function]]
+    name = "calculate_linear_regression"
+    ignore = true
+
