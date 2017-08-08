@@ -16,8 +16,7 @@ path = "../gstreamer-video-sys"
 version = "0.1.1"
 
 [features]
-v1_10 = []
-v1_12 = ["v1_10"]
+v1_12 = []
 
 [lib]
 name = "gstreamer_player_sys"

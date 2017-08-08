@@ -30,7 +30,7 @@ passed. See gst_player_g_main_context_signal_dispatcher_new().
 Video is going to be rendered by @video_renderer, or if %NULL is provided
 no special video set up will be done and some default handling will be
 performed.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstPlayer instance</doc>
           <type name="Player" c:type="GstPlayer*"/>
         </return-value>
@@ -522,7 +522,7 @@ Since 1.12</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve">Additional configuration</doc>
-            <type name="Gst.Structure" c:type="GstStructure*"/>
+            <type name="Gst.Structure" c:type="const GstStructure*"/>
           </parameter>
         </parameters>
       </method>

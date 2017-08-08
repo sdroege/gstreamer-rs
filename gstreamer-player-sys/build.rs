@@ -16,10 +16,8 @@ fn main() {
 fn find() -> Result<(), Error> {
     let package_name = "gstreamer-player-1.0";
     let shared_libs = ["gstplayer-1.0"];
-    let version = if cfg!(feature = "v1_12") {
+    let version = {
         "1.12"
-    } else {
-        "1.0"
     };
 
     if let Ok(lib_dir) = env::var("GTK_LIB_DIR") {
