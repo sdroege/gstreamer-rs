@@ -7,12 +7,15 @@
 // except according to those terms.
 
 use ffi;
+use glib_ffi;
+use gobject_ffi;
 
 use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
+use glib;
+use glib::translate::{from_glib, FromGlib, FromGlibPtrNone, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
 #[derive(PartialEq, Eq, Debug)]
 pub enum AudioEndianness {
@@ -323,6 +326,69 @@ impl str::FromStr for ::AudioFormatInfo {
                 Ok(AudioFormatInfo::from_format(from_glib(format)))
             }
         }
+    }
+}
+
+impl glib::types::StaticType for AudioFormatInfo {
+    fn static_type() -> glib::types::Type {
+        unsafe { glib::translate::from_glib(ffi::gst_audio_format_info_get_type()) }
+    }
+}
+
+#[doc(hidden)]
+impl<'a> glib::value::FromValueOptional<'a> for AudioFormatInfo {
+    unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
+        Option::<AudioFormatInfo>::from_glib_none(
+            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstAudioFormatInfo,
+        )
+    }
+}
+
+#[doc(hidden)]
+impl glib::value::SetValue for AudioFormatInfo {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        gobject_ffi::g_value_set_boxed(
+            value.to_glib_none_mut().0,
+            glib::translate::ToGlibPtr::<*const ffi::GstAudioFormatInfo>::to_glib_none(this).0 as
+                glib_ffi::gpointer,
+        )
+    }
+}
+
+#[doc(hidden)]
+impl glib::value::SetValueOptional for AudioFormatInfo {
+    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
+        gobject_ffi::g_value_set_boxed(
+            value.to_glib_none_mut().0,
+            glib::translate::ToGlibPtr::<*const ffi::GstAudioFormatInfo>::to_glib_none(&this).0 as
+                glib_ffi::gpointer,
+        )
+    }
+}
+
+#[doc(hidden)]
+impl glib::translate::GlibPtrDefault for AudioFormatInfo {
+    type GlibType = *mut ffi::GstAudioFormatInfo;
+}
+
+#[doc(hidden)]
+impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioFormatInfo> for AudioFormatInfo {
+    type Storage = &'a AudioFormatInfo;
+
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstAudioFormatInfo, Self> {
+        glib::translate::Stash(self.0, self)
+    }
+
+    fn to_glib_full(&self) -> *const ffi::GstAudioFormatInfo {
+        unimplemented!()
+    }
+}
+
+#[doc(hidden)]
+impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFormatInfo {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *mut ffi::GstAudioFormatInfo) -> Self {
+        AudioFormatInfo(&*ptr)
     }
 }
 
