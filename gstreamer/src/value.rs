@@ -412,6 +412,92 @@ impl SetValue for FractionRange {
     }
 }
 
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
+pub struct Bitmask(u64);
+
+impl Bitmask {
+    pub fn new(v: u64) -> Self {
+        Bitmask(v)
+    }
+}
+
+impl ops::Deref for Bitmask {
+    type Target = u64;
+
+    fn deref(&self) -> &u64 {
+        &self.0
+    }
+}
+
+impl ops::DerefMut for Bitmask {
+    fn deref_mut(&mut self) -> &mut u64 {
+        &mut self.0
+    }
+}
+
+impl ops::BitAnd for Bitmask {
+    type Output = Self;
+
+    fn bitand(self, rhs: Self) -> Self {
+        Bitmask(self.0.bitand(rhs.0))
+    }
+}
+
+impl ops::BitOr for Bitmask {
+    type Output = Self;
+
+    fn bitor(self, rhs: Self) -> Self {
+        Bitmask(self.0.bitor(rhs.0))
+    }
+}
+
+impl ops::BitXor for Bitmask {
+    type Output = Self;
+
+    fn bitxor(self, rhs: Self) -> Self {
+        Bitmask(self.0.bitxor(rhs.0))
+    }
+}
+
+impl ops::Not for Bitmask {
+    type Output = Self;
+
+    fn not(self) -> Self {
+        Bitmask(self.0.not())
+    }
+}
+
+impl From<u64> for Bitmask {
+    fn from(v: u64) -> Self {
+        Self::new(v)
+    }
+}
+
+impl glib::types::StaticType for Bitmask {
+    fn static_type() -> glib::types::Type {
+        unsafe { from_glib(ffi::gst_bitmask_get_type()) }
+    }
+}
+
+impl<'a> FromValue<'a> for Bitmask {
+    unsafe fn from_value(v: &'a Value) -> Self {
+        let v = ffi::gst_value_get_bitmask(v.to_glib_none().0);
+        Self::new(v)
+    }
+}
+
+impl<'a> FromValueOptional<'a> for Bitmask {
+    unsafe fn from_value_optional(v: &'a Value) -> Option<Self> {
+        Some(Self::from_value(v))
+    }
+}
+
+impl SetValue for Bitmask {
+    unsafe fn set_value(v: &mut Value, r: &Self) {
+        ffi::gst_value_set_bitmask(v.to_glib_none_mut().0, r.0);
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct Array<'a>(Cow<'a, [glib::Value]>);
 
