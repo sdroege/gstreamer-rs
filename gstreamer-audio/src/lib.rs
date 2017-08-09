@@ -9,8 +9,6 @@
 #[macro_use]
 extern crate bitflags;
 extern crate libc;
-#[macro_use]
-extern crate lazy_static;
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
@@ -18,14 +16,7 @@ extern crate gstreamer_sys as gst_ffi;
 extern crate gstreamer_audio_sys as ffi;
 extern crate gstreamer as gst;
 
-#[macro_use]
 extern crate glib;
-
-macro_rules! callback_guard {
-    () => (
-        let _guard = ::glib::CallbackGuard::new();
-    )
-}
 
 macro_rules! skip_assert_initialized {
     () => (

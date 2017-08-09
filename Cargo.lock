@@ -9,7 +9,6 @@ dependencies = [
  "gstreamer 0.1.0",
  "gstreamer-audio-sys 0.1.1 (git+https://github.com/sdroege/gstreamer-sys)",
  "gstreamer-sys 0.1.1 (git+https://github.com/sdroege/gstreamer-sys)",
- "lazy_static 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.29 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustdoc-stripper 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
