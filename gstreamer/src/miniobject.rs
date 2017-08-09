@@ -21,7 +21,6 @@ use glib::translate::{c_ptr_array_len, from_glib, from_glib_full, from_glib_none
                       ToGlibContainerFromSlice, ToGlibPtr, ToGlibPtrMut};
 use glib;
 
-#[derive(Hash, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct GstRc<T: MiniObject> {
     obj: *mut T,
     borrowed: bool,
@@ -156,6 +155,20 @@ impl<T: MiniObject> Drop for GstRc<T> {
 
 unsafe impl<T: MiniObject + Sync + Send> Sync for GstRc<T> {}
 unsafe impl<T: MiniObject + Sync + Send> Send for GstRc<T> {}
+
+impl<T: MiniObject + PartialEq> PartialEq for GstRc<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.as_ref().eq(other.as_ref())
+    }
+}
+
+impl<T: MiniObject + Eq> Eq for GstRc<T> { }
+
+impl<T: MiniObject + fmt::Debug> fmt::Debug for GstRc<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        (unsafe { &*self.obj }).fmt(f)
+    }
+}
 
 impl<T: MiniObject + fmt::Display> fmt::Display for GstRc<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
