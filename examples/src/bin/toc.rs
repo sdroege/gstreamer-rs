@@ -30,44 +30,19 @@ fn main() {
     let pipeline_clone = pipeline.clone();
     decodebin.connect_pad_added(move |_, src_pad| {
         let pipeline = &pipeline_clone;
+        let queue = gst::ElementFactory::make("queue", None).unwrap();
+        let sink = gst::ElementFactory::make("fakesink", None).unwrap();
 
-        let (is_audio, is_video) = {
-            let caps = src_pad.get_current_caps().unwrap();
-            let structure = caps.get_structure(0).unwrap();
-            let name = structure.get_name();
+        let elements = &[&queue, &sink];
+        pipeline.add_many(elements).unwrap();
+        gst::Element::link_many(elements).unwrap();
 
-            (name.starts_with("audio/"), name.starts_with("video/"))
-        };
-
-        if is_audio {
-            let queue = gst::ElementFactory::make("queue", None).unwrap();
-            let sink = gst::ElementFactory::make("fakesink", None).unwrap();
-
-            let elements = &[&queue, &sink];
-            pipeline.add_many(elements).unwrap();
-            gst::Element::link_many(elements).unwrap();
-
-            for e in elements {
-                e.sync_state_with_parent().unwrap();
-            }
-
-            let sink_pad = queue.get_static_pad("sink").unwrap();
-            assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
-        } else if is_video {
-            let queue = gst::ElementFactory::make("queue", None).unwrap();
-            let sink = gst::ElementFactory::make("fakesink", None).unwrap();
-
-            let elements = &[&queue, &sink];
-            pipeline.add_many(elements).unwrap();
-            gst::Element::link_many(elements).unwrap();
-
-            for e in elements {
-                e.sync_state_with_parent().unwrap();
-            }
-
-            let sink_pad = queue.get_static_pad("sink").unwrap();
-            assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
+        for e in elements {
+            e.sync_state_with_parent().unwrap();
         }
+
+        let sink_pad = queue.get_static_pad("sink").unwrap();
+        assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
     });
 
     assert_ne!(
