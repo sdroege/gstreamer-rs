@@ -207,7 +207,93 @@ impl Segment {
         }
     }
 
-    // TODO getter/setter
+    pub fn get_flags(&self) -> ::SegmentFlags {
+        from_glib(self.0.flags)
+    }
+
+    pub fn set_flags(&mut self, flags: ::SegmentFlags) {
+        self.0.flags = flags.to_glib();
+    }
+
+    pub fn get_rate(&self) -> f64 {
+        self.0.rate
+    }
+
+    pub fn set_rate(&mut self, rate: f64) {
+        self.0.rate = rate;
+    }
+
+    pub fn get_applied_rate(&self) -> f64 {
+        self.0.applied_rate
+    }
+
+    pub fn set_applied_rate(&mut self, applied_rate: f64) {
+        self.0.applied_rate = applied_rate;
+    }
+
+    pub fn get_format(&self) -> ::Format {
+        from_glib(self.0.format)
+    }
+
+    pub fn set_format(&mut self, format: ::Format) {
+        self.0.format = format.to_glib();
+    }
+
+    pub fn get_base(&self) -> u64 {
+        self.0.base
+    }
+
+    pub fn set_base(&mut self, base: u64) {
+        self.0.base = base;
+    }
+
+    pub fn get_offset(&self) -> u64 {
+        self.0.offset
+    }
+
+    pub fn set_offset(&mut self, offset: u64) {
+        self.0.offset = offset;
+    }
+
+    pub fn get_start(&self) -> u64 {
+        self.0.start
+    }
+
+    pub fn set_start(&mut self, start: u64) {
+        self.0.start = start;
+    }
+
+    pub fn get_stop(&self) -> u64 {
+        self.0.stop
+    }
+
+    pub fn set_stop(&mut self, stop: u64) {
+        self.0.stop = stop;
+    }
+
+    pub fn get_time(&self) -> u64 {
+        self.0.time
+    }
+
+    pub fn set_time(&mut self, time: u64) {
+        self.0.time = time;
+    }
+
+    pub fn get_position(&self) -> u64 {
+        self.0.position
+    }
+
+    pub fn set_position(&mut self, position: u64) {
+        self.0.position = position;
+    }
+
+    pub fn get_duration(&self) -> u64 {
+        self.0.duration
+    }
+
+    pub fn set_duration(&mut self, duration: u64) {
+        self.0.duration = duration;
+    }
 }
 
 impl PartialEq for Segment {
