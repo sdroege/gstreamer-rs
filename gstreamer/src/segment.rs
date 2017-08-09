@@ -236,7 +236,7 @@ impl glib::types::StaticType for Segment {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for Segment {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_full(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as
+        Option::<Segment>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as
             *mut ffi::GstSegment)
     }
 }
