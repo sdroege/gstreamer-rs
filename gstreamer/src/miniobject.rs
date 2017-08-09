@@ -166,13 +166,13 @@ impl<T: MiniObject + Eq> Eq for GstRc<T> { }
 
 impl<T: MiniObject + fmt::Debug> fmt::Debug for GstRc<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        (unsafe { &*self.obj }).fmt(f)
+        self.as_ref().fmt(f)
     }
 }
 
 impl<T: MiniObject + fmt::Display> fmt::Display for GstRc<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        (unsafe { &*self.obj }).fmt(f)
+        self.as_ref().fmt(f)
     }
 }
 
