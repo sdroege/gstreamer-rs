@@ -1918,7 +1918,7 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    message_builder_generic_impl!(|s: &mut Self, src| {
+    message_builder_generic_impl!(|s: &Self, src| {
         ffi::gst_message_new_toc(
             src,
             s.toc.to_glib_none().0,

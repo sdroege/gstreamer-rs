@@ -958,7 +958,7 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &mut Self| {
+    event_builder_generic_impl!(|s: &Self| {
         ffi::gst_event_new_toc(s.toc.to_glib_none().0, s.updated.to_glib())
     });
 }
