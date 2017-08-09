@@ -1,3 +1,11 @@
+// Copyright (C) 2016-2017 Sebastian Dröge <sebastian@centricular.com>
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
+
 use std::ffi::CStr;
 use std::mem;
 
@@ -43,7 +51,7 @@ impl TocRef {
                 return None;
             }
 
-            Some(TocEntry::from_glib_borrow(
+            Some(TocEntry::from_glib_none(
                 toc_entry as *const ffi::GstTocEntry,
             ))
         }
@@ -70,7 +78,7 @@ impl TocRef {
                 return None;
             }
 
-            Some(TagList::from_glib_borrow(tags as *const ffi::GstTagList))
+            Some(TagList::from_glib_none(tags as *const ffi::GstTagList))
         }
     }
 
@@ -114,7 +122,6 @@ impl ToOwned for TocRef {
 
 unsafe impl Sync for TocRef {}
 unsafe impl Send for TocRef {}
-
 
 pub type TocEntry = GstRc<TocEntryRef>;
 pub struct TocEntryRef(ffi::GstTocEntry);
@@ -172,7 +179,7 @@ impl TocEntryRef {
                 return None;
             }
 
-            Some(TocEntry::from_glib_borrow(
+            Some(TocEntry::from_glib_none(
                 parent as *const ffi::GstTocEntry
             ))
         }
@@ -183,11 +190,11 @@ impl TocEntryRef {
             let mut start = mem::uninitialized();
             let mut stop = mem::uninitialized();
 
-            if ffi::gst_toc_entry_get_start_stop_times(
+            if from_glib(ffi::gst_toc_entry_get_start_stop_times(
                 self.as_ptr(),
                 &mut start,
                 &mut stop
-            ) != 0
+            ))
             {
                 Some((start, stop))
             }
@@ -214,7 +221,7 @@ impl TocEntryRef {
                 return None;
             }
 
-            Some(TagList::from_glib_borrow(tags as *const ffi::GstTagList))
+            Some(TagList::from_glib_none(tags as *const ffi::GstTagList))
         }
     }
 
@@ -253,11 +260,11 @@ impl TocEntryRef {
         unsafe {
             let mut loop_type = mem::uninitialized();
             let mut repeat_count = mem::uninitialized();
-            if ffi::gst_toc_entry_get_loop(
+            if from_glib(ffi::gst_toc_entry_get_loop(
                 self.as_ptr(),
                 &mut loop_type,
                 &mut repeat_count
-            ) != 0
+            ))
             {
                 Some((from_glib(loop_type), repeat_count))
             }
@@ -297,7 +304,6 @@ impl ToOwned for TocEntryRef {
 
 unsafe impl Sync for TocEntryRef {}
 unsafe impl Send for TocEntryRef {}
-
 
 #[cfg(test)]
 mod tests {

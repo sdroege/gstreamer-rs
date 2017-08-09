@@ -883,7 +883,7 @@ impl<'a> Toc<'a> {
             let mut toc = ptr::null_mut();
             let mut updated = mem::uninitialized();
             ffi::gst_message_parse_toc(self.0.as_mut_ptr(), &mut toc, &mut updated);
-            (from_glib_full(toc), updated != 0)
+            (from_glib_full(toc), from_glib(updated))
         }
     }
 }

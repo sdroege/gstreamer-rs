@@ -101,7 +101,7 @@ mod segment;
 pub use segment::*;
 
 pub mod toc;
-pub use toc::*;
+pub use toc::{Toc, TocRef, TocEntry, TocEntryRef};
 
 use std::ptr;
 

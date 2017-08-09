@@ -187,7 +187,7 @@ impl Event {
         EosBuilder::new()
     }
 
-    pub fn new_toc(toc: ::Toc, updated: bool) -> TocBuilder {
+    pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
         TocBuilder::new(toc, updated)
     }
 
@@ -476,7 +476,7 @@ impl<'a> Toc<'a> {
             let mut updated = mem::uninitialized();
 
             ffi::gst_event_parse_toc(self.0.as_mut_ptr(), &mut toc, &mut updated);
-            (::TocRef::from_ptr(toc), updated != 0)
+            (::TocRef::from_ptr(toc), from_glib(updated))
         }
     }
 }
@@ -942,25 +942,24 @@ impl EosBuilder {
     event_builder_generic_impl!(|_| ffi::gst_event_new_eos());
 }
 
-pub struct TocBuilder {
+pub struct TocBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    toc: Option<::Toc>,
+    toc: &'a ::Toc,
     updated: bool,
 }
-impl TocBuilder {
-    pub fn new(toc: ::Toc, updated: bool) -> Self {
+impl<'a> TocBuilder<'a> {
+    pub fn new(toc: &'a ::Toc, updated: bool) -> Self {
         Self {
             seqnum: None,
             running_time_offset: None,
-            toc: Some(toc),
+            toc: toc,
             updated: updated,
         }
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
-        let toc = s.toc.take();
-        ffi::gst_event_new_toc(toc.to_glib_none().0, s.updated.to_glib())
+        ffi::gst_event_new_toc(s.toc.to_glib_none().0, s.updated.to_glib())
     });
 }
 
