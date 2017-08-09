@@ -18,10 +18,12 @@ use std::marker::PhantomData;
 use Fraction;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, FromGlibPtrNone, Stash,
-                      StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone,
+                      GlibPtrDefault, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::value::{FromValueOptional, ToValue, Value};
 use ffi;
+use glib_ffi::gpointer;
+use gobject_ffi;
 
 pub struct Structure(*mut StructureRef, PhantomData<StructureRef>);
 
@@ -223,6 +225,23 @@ impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
     unsafe fn from_glib_full(ptr: *mut ffi::GstStructure) -> Self {
         Structure(ptr as *mut StructureRef, PhantomData)
     }
+}
+
+impl<'a> glib::value::FromValueOptional<'a> for Structure {
+    unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
+        let ptr = gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
+        from_glib_none(ptr as *const ffi::GstStructure)
+    }
+}
+
+impl glib::value::SetValue for Structure {
+    unsafe fn set_value(v: &mut glib::Value, s: &Self) {
+        gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.0 as gpointer);
+    }
+}
+
+impl GlibPtrDefault for Structure {
+    type GlibType = *mut ffi::GstStructure;
 }
 
 #[repr(C)]
