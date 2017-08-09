@@ -20,6 +20,7 @@ use TocEntryType;
 use TocScope;
 use TocLoopType;
 use TagList;
+use TagListRef;
 use TagMergeMode;
 
 pub type Toc = GstRc<TocRef>;
@@ -71,14 +72,14 @@ impl TocRef {
         }
     }
 
-    pub fn get_tags(&self) -> Option<TagList> {
+    pub fn get_tags(&self) -> Option<&TagListRef> {
         unsafe {
             let tags = ffi::gst_toc_get_tags(self.as_ptr());
             if tags.is_null() {
                 return None;
             }
 
-            Some(TagList::from_glib_none(tags as *const ffi::GstTagList))
+            Some(TagListRef::from_ptr(tags))
         }
     }
 
@@ -214,14 +215,14 @@ impl TocEntryRef {
         }
     }
 
-    pub fn get_tags(&self) -> Option<TagList> {
+    pub fn get_tags(&self) -> Option<&TagListRef> {
         unsafe {
             let tags = ffi::gst_toc_entry_get_tags(self.as_ptr());
             if tags.is_null() {
                 return None;
             }
 
-            Some(TagList::from_glib_none(tags as *const ffi::GstTagList))
+            Some(TagListRef::from_ptr(tags))
         }
     }
 
