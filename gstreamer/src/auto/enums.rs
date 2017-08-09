@@ -2127,6 +2127,198 @@ impl SetValue for TagMergeMode {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TocEntryType {
+    Angle,
+    Version,
+    Edition,
+    Invalid,
+    Title,
+    Track,
+    Chapter,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TocEntryType {
+    type GlibType = ffi::GstTocEntryType;
+
+    fn to_glib(&self) -> ffi::GstTocEntryType {
+        match *self {
+            TocEntryType::Angle => ffi::GST_TOC_ENTRY_TYPE_ANGLE,
+            TocEntryType::Version => ffi::GST_TOC_ENTRY_TYPE_VERSION,
+            TocEntryType::Edition => ffi::GST_TOC_ENTRY_TYPE_EDITION,
+            TocEntryType::Invalid => ffi::GST_TOC_ENTRY_TYPE_INVALID,
+            TocEntryType::Title => ffi::GST_TOC_ENTRY_TYPE_TITLE,
+            TocEntryType::Track => ffi::GST_TOC_ENTRY_TYPE_TRACK,
+            TocEntryType::Chapter => ffi::GST_TOC_ENTRY_TYPE_CHAPTER,
+            TocEntryType::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
+    fn from_glib(value: ffi::GstTocEntryType) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            -3 => TocEntryType::Angle,
+            -2 => TocEntryType::Version,
+            -1 => TocEntryType::Edition,
+            0 => TocEntryType::Invalid,
+            1 => TocEntryType::Title,
+            2 => TocEntryType::Track,
+            3 => TocEntryType::Chapter,
+            value => TocEntryType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TocEntryType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_toc_entry_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TocEntryType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TocEntryType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstTocEntryType>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for TocEntryType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TocLoopType {
+    None,
+    Forward,
+    Reverse,
+    PingPong,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TocLoopType {
+    type GlibType = ffi::GstTocLoopType;
+
+    fn to_glib(&self) -> ffi::GstTocLoopType {
+        match *self {
+            TocLoopType::None => ffi::GST_TOC_LOOP_NONE,
+            TocLoopType::Forward => ffi::GST_TOC_LOOP_FORWARD,
+            TocLoopType::Reverse => ffi::GST_TOC_LOOP_REVERSE,
+            TocLoopType::PingPong => ffi::GST_TOC_LOOP_PING_PONG,
+            TocLoopType::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
+    fn from_glib(value: ffi::GstTocLoopType) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => TocLoopType::None,
+            1 => TocLoopType::Forward,
+            2 => TocLoopType::Reverse,
+            3 => TocLoopType::PingPong,
+            value => TocLoopType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TocLoopType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_toc_loop_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TocLoopType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TocLoopType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstTocLoopType>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for TocLoopType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TocScope {
+    Global,
+    Current,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TocScope {
+    type GlibType = ffi::GstTocScope;
+
+    fn to_glib(&self) -> ffi::GstTocScope {
+        match *self {
+            TocScope::Global => ffi::GST_TOC_SCOPE_GLOBAL,
+            TocScope::Current => ffi::GST_TOC_SCOPE_CURRENT,
+            TocScope::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTocScope> for TocScope {
+    fn from_glib(value: ffi::GstTocScope) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            1 => TocScope::Global,
+            2 => TocScope::Current,
+            value => TocScope::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TocScope {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_toc_scope_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TocScope {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TocScope {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstTocScope>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for TocScope {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum URIError {
     UnsupportedProtocol,
     BadUri,

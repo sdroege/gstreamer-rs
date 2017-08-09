@@ -88,6 +88,10 @@ mod tag_setter;
 pub use self::tag_setter::TagSetter;
 pub use self::tag_setter::TagSetterExt;
 
+mod toc_setter;
+pub use self::toc_setter::TocSetter;
+pub use self::toc_setter::TocSetterExt;
+
 mod u_r_i_handler;
 pub use self::u_r_i_handler::URIHandler;
 pub use self::u_r_i_handler::URIHandlerExt;
@@ -123,6 +127,9 @@ pub use self::enums::StreamError;
 pub use self::enums::StreamStatusType;
 pub use self::enums::StructureChangeType;
 pub use self::enums::TagMergeMode;
+pub use self::enums::TocEntryType;
+pub use self::enums::TocLoopType;
+pub use self::enums::TocScope;
 pub use self::enums::URIError;
 pub use self::enums::URIType;
 
@@ -229,5 +236,6 @@ pub mod traits {
     #[cfg(feature = "v1_10")]
     pub use super::StreamCollectionExt;
     pub use super::TagSetterExt;
+    pub use super::TocSetterExt;
     pub use super::URIHandlerExt;
 }
