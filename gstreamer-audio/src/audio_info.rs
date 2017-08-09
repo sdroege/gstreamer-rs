@@ -176,6 +176,10 @@ impl AudioInfo {
         from_glib(self.0.layout)
     }
 
+    pub fn flags(&self) -> ::AudioFlags {
+        from_glib(self.0.flags)
+    }
+
     pub fn rate(&self) -> u32 {
         self.0.rate as u32
     }
@@ -188,6 +192,42 @@ impl AudioInfo {
         self.0.bpf as u32
     }
 
+    pub fn bps(&self) -> u32 {
+        (self.format_info().depth() as u32) >> 3
+    }
+
+    pub fn depth(&self) -> i32 {
+        self.format_info().depth()
+    }
+
+    pub fn width(&self) -> i32 {
+        self.format_info().width()
+    }
+
+    pub fn endianness(&self) -> ::AudioEndianness {
+        self.format_info().endianness()
+    }
+
+    pub fn is_big_endian(&self) -> bool {
+        self.format_info().is_big_endian()
+    }
+
+    pub fn is_little_endian(&self) -> bool {
+        self.format_info().is_little_endian()
+    }
+
+    pub fn is_float(&self) -> bool {
+        self.format_info().is_float()
+    }
+
+    pub fn is_integer(&self) -> bool {
+        self.format_info().is_integer()
+    }
+
+    pub fn is_signed(&self) -> bool {
+        self.format_info().is_signed()
+    }
+
     pub fn positions(&self) -> Vec<::AudioChannelPosition> {
         let mut v = Vec::with_capacity(self.0.channels as usize);
         for i in 0..(self.0.channels as usize) {
@@ -195,6 +235,10 @@ impl AudioInfo {
         }
 
         v
+    }
+
+    pub fn is_unpositioned(&self) -> bool {
+        self.flags().contains(::AUDIO_FLAG_UNPOSITIONED)
     }
 }
 
