@@ -21,6 +21,8 @@ generate = [
     "GstAudio.AudioLayout",
     "GstAudio.AudioPackFlags",
     "GstAudio.AudioChannelPosition",
+    "GstAudio.StreamVolume",
+    "GstAudio.StreamVolumeFormat",
 ]
 
 manual = [
