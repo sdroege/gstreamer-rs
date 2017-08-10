@@ -62,20 +62,36 @@ impl ::AudioFormat {
             ))
         }
     }
+
+    pub fn from_string(s: &str) -> ::AudioFormat {
+        unsafe { from_glib(ffi::gst_audio_format_from_string(s.to_glib_none().0)) }
+    }
+
+    pub fn to_string(&self) -> &'static str {
+        unsafe {
+            CStr::from_ptr(ffi::gst_audio_format_to_string(self.to_glib()))
+                .to_str()
+                .unwrap()
+        }
+    }
 }
 
 impl str::FromStr for ::AudioFormat {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        unsafe {
-            let format = ffi::gst_audio_format_from_string(s.to_glib_none().0);
-            if format == ffi::GST_AUDIO_FORMAT_UNKNOWN {
-                Err(())
-            } else {
-                Ok(from_glib(format))
-            }
+        let format = Self::from_string(s);
+        if format == ::AudioFormat::Unknown {
+            Err(())
+        } else {
+            Ok(format)
         }
+    }
+}
+
+impl fmt::Display for ::AudioFormat {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.write_str(self.to_string())
     }
 }
 
@@ -308,9 +324,9 @@ impl fmt::Debug for AudioFormatInfo {
     }
 }
 
-impl From<::AudioFormat> for AudioFormatInfo {
-    fn from(f: ::AudioFormat) -> Self {
-        Self::from_format(f)
+impl fmt::Display for AudioFormatInfo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.write_str(self.name())
     }
 }
 
@@ -318,14 +334,14 @@ impl str::FromStr for ::AudioFormatInfo {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        unsafe {
-            let format = ffi::gst_audio_format_from_string(s.to_glib_none().0);
-            if format == ffi::GST_AUDIO_FORMAT_UNKNOWN {
-                Err(())
-            } else {
-                Ok(AudioFormatInfo::from_format(from_glib(format)))
-            }
-        }
+        let format = s.parse()?;
+        Ok(AudioFormatInfo::from_format(format))
+    }
+}
+
+impl From<::AudioFormat> for AudioFormatInfo {
+    fn from(f: ::AudioFormat) -> Self {
+        Self::from_format(f)
     }
 }
 
