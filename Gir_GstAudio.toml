@@ -16,7 +16,6 @@ external_libraries = [
 
 generate = [
     "GstAudio.AudioFlags",
-    "GstAudio.AudioFormat",
     "GstAudio.AudioFormatFlags",
     "GstAudio.AudioLayout",
     "GstAudio.AudioPackFlags",
@@ -37,3 +36,76 @@ name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
 
+[[object]]
+name = "GstAudio.AudioFormat"
+status = "generate"
+
+    [[object.member]]
+    name = "s16"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "u16"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "s24_32"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "u24_32"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "s32"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "u32"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "s24"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "u24"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "s20"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "u20"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "s18"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "u18"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "f32"
+    # Platform dependant
+    ignore = true
+
+    [[object.member]]
+    name = "f64"
+    # Platform dependant
+    ignore = true
