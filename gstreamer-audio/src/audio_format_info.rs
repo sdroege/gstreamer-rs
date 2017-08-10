@@ -78,12 +78,12 @@ impl AudioFormatInfo {
         from_glib(self.0.endianness)
     }
 
-    pub fn width(&self) -> i32 {
-        self.0.width
+    pub fn width(&self) -> u32 {
+        self.0.width as u32
     }
 
-    pub fn depth(&self) -> i32 {
-        self.0.depth
+    pub fn depth(&self) -> u32 {
+        self.0.depth as u32
     }
 
     pub fn unpack_format(&self) -> ::AudioFormat {

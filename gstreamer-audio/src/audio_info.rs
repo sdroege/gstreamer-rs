@@ -204,11 +204,11 @@ impl AudioInfo {
         (self.format_info().depth() as u32) >> 3
     }
 
-    pub fn depth(&self) -> i32 {
+    pub fn depth(&self) -> u32 {
         self.format_info().depth()
     }
 
-    pub fn width(&self) -> i32 {
+    pub fn width(&self) -> u32 {
         self.format_info().width()
     }
 
