@@ -1,0 +1,38 @@
+[options]
+girs_dir = "gir-files"
+library = "GstVideo"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-video"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstVideo.VideoFormat",
+    "GstVideo.VideoFormatFlags",
+    "GstVideo.VideoTileMode",
+    "GstVideo.VideoInterlaceMode",
+    "GstVideo.VideoFlags",
+    "GstVideo.VideoChromaSite",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Object",
+    "GstVideo.VideoInfo",
+    "GstVideo.VideoFormatInfo",
+    "GstVideo.VideoColorimetry",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
