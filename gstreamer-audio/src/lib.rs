@@ -40,6 +40,8 @@ mod auto;
 pub use auto::*;
 pub use auto::traits::*;
 
+mod audio_format;
+pub use audio_format::*;
 mod audio_format_info;
 pub use audio_format_info::*;
 mod audio_info;
