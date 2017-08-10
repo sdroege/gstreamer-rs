@@ -53,7 +53,7 @@ pub use auto::traits::*;
 pub use auto::functions::{parse_bin_from_description, parse_launch};
 
 pub mod miniobject;
-pub use miniobject::GstRc;
+pub use miniobject::{GstRc, MiniObject};
 pub mod message;
 pub use message::{Message, MessageRef, MessageView};
 pub mod structure;

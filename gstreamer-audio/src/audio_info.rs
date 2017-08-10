@@ -19,7 +19,9 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrNone
 use std::mem;
 use std::ptr;
 
-pub struct AudioInfo(ffi::GstAudioInfo);
+use array_init;
+
+pub struct AudioInfo(ffi::GstAudioInfo, [::AudioChannelPosition; 64]);
 
 pub struct AudioInfoBuilder<'a> {
     format: ::AudioFormat,
@@ -34,33 +36,37 @@ impl<'a> AudioInfoBuilder<'a> {
     pub fn build(self) -> Option<AudioInfo> {
         unsafe {
             let mut info = mem::uninitialized();
-            let mut positions_raw = Vec::new();
 
-            let positions_ptr = match self.positions {
-                Some(p) => {
-                    if p.len() != self.channels as usize {
-                        return None;
-                    }
-
-                    positions_raw.reserve(self.channels as usize);
-                    for i in p {
-                        positions_raw.push(i.to_glib());
-                    }
-
-                    let valid: bool = from_glib(ffi::gst_audio_check_valid_channel_positions(
-                        positions_raw.as_mut_ptr(),
-                        self.channels as i32,
-                        true.to_glib(),
-                    ));
-                    if !valid {
-                        return None;
-                    }
-
-                    positions_raw.as_ptr()
+            let positions = if let Some(p) = self.positions {
+                if p.len() != self.channels as usize || p.len() > 64 {
+                    return None;
                 }
-                None => ptr::null(),
+
+                let positions: [ffi::GstAudioChannelPosition; 64] =
+                    array_init::array_init_copy(|i| if i >= self.channels as usize {
+                        ffi::GstAudioChannelPosition::Invalid
+                    } else {
+                        p[i].to_glib()
+                    });
+
+                let valid: bool = from_glib(ffi::gst_audio_check_valid_channel_positions(
+                    positions.as_ptr() as *mut _,
+                    self.channels as i32,
+                    true.to_glib(),
+                ));
+                if !valid {
+                    return None;
+                }
+
+                Some(positions)
+            } else {
+                None
             };
 
+            let positions_ptr = positions
+                .as_ref()
+                .map(|p| p.as_ptr())
+                .unwrap_or(ptr::null());
 
             ffi::gst_audio_info_set_format(
                 &mut info,
@@ -82,7 +88,8 @@ impl<'a> AudioInfoBuilder<'a> {
                 info.layout = layout.to_glib();
             }
 
-            Some(AudioInfo(info))
+            let positions = array_init::array_init_copy(|i| from_glib(info.position[i]));
+            Some(AudioInfo(info, positions))
         }
     }
 
@@ -124,7 +131,8 @@ impl AudioInfo {
         unsafe {
             let mut info = mem::uninitialized();
             if from_glib(ffi::gst_audio_info_from_caps(&mut info, caps.as_ptr())) {
-                Some(AudioInfo(info))
+                let positions = array_init::array_init_copy(|i| from_glib(info.position[i]));
+                Some(AudioInfo(info, positions))
             } else {
                 None
             }
@@ -228,13 +236,12 @@ impl AudioInfo {
         self.format_info().is_signed()
     }
 
-    pub fn positions(&self) -> Vec<::AudioChannelPosition> {
-        let mut v = Vec::with_capacity(self.0.channels as usize);
-        for i in 0..(self.0.channels as usize) {
-            v.push(from_glib(self.0.position[i]));
+    pub fn positions(&self) -> Option<&[::AudioChannelPosition]> {
+        if self.0.channels > 64 || self.is_unpositioned() {
+            return None;
         }
 
-        v
+        Some(&self.1[0..(self.0.channels as usize)])
     }
 
     pub fn is_unpositioned(&self) -> bool {
@@ -244,7 +251,7 @@ impl AudioInfo {
 
 impl Clone for AudioInfo {
     fn clone(&self) -> Self {
-        unsafe { AudioInfo(ptr::read(&self.0)) }
+        unsafe { AudioInfo(ptr::read(&self.0), self.1) }
     }
 }
 
@@ -322,7 +329,10 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioInfo) -> Self {
-        AudioInfo(ptr::read(ptr))
+        AudioInfo(
+            ptr::read(ptr),
+            array_init::array_init_copy(|i| from_glib((*ptr).position[i])),
+        )
     }
 }
 
@@ -352,7 +362,7 @@ mod tests {
         assert_eq!(info.rate(), 48000);
         assert_eq!(info.channels(), 2);
         assert_eq!(
-            &info.positions(),
+            &info.positions().unwrap(),
             &[
                 ::AudioChannelPosition::FrontLeft,
                 ::AudioChannelPosition::FrontRight
@@ -371,7 +381,7 @@ mod tests {
         assert_eq!(info.rate(), 48000);
         assert_eq!(info.channels(), 2);
         assert_eq!(
-            &info.positions(),
+            &info.positions().unwrap(),
             &[
                 ::AudioChannelPosition::RearLeft,
                 ::AudioChannelPosition::RearRight
@@ -398,7 +408,7 @@ mod tests {
         assert_eq!(info.rate(), 48000);
         assert_eq!(info.channels(), 2);
         assert_eq!(
-            &info.positions(),
+            &info.positions().unwrap(),
             &[
                 ::AudioChannelPosition::FrontLeft,
                 ::AudioChannelPosition::FrontRight

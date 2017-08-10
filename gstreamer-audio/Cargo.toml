@@ -19,6 +19,7 @@ gstreamer-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer
 gstreamer-audio-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
 glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
 gstreamer = { version = "0.1.0", path = "../gstreamer" }
+array-init = "0.0"
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"

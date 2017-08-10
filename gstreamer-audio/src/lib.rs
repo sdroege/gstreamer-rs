@@ -9,6 +9,7 @@
 #[macro_use]
 extern crate bitflags;
 extern crate libc;
+extern crate array_init;
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
@@ -46,3 +47,5 @@ mod audio_format_info;
 pub use audio_format_info::*;
 mod audio_info;
 pub use audio_info::*;
+mod audio_channel_position;
+pub use audio_channel_position::*;
