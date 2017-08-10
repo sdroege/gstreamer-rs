@@ -49,3 +49,20 @@ mod audio_info;
 pub use audio_info::*;
 mod audio_channel_position;
 pub use audio_channel_position::*;
+
+use glib::translate::{from_glib_full, ToGlibPtr};
+pub fn audio_buffer_clip(
+    buffer: gst::Buffer,
+    segment: &gst::Segment,
+    rate: u32,
+    channels: u32,
+) -> gst::Buffer {
+    unsafe {
+        from_glib_full(ffi::gst_audio_buffer_clip(
+            buffer.into_ptr(),
+            segment.to_glib_none().0,
+            rate as i32,
+            channels as i32,
+        ))
+    }
+}
