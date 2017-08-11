@@ -4,11 +4,8 @@ extern crate gstreamer as gst;
 extern crate gstreamer_player as gst_player;
 
 extern crate glib;
-
-#[allow(unused_imports)]
+#[cfg(feature = "gst-player")]
 use glib::ObjectExt;
-
-extern crate send_cell;
 
 use std::env;
 
@@ -27,9 +24,7 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
         .set_property("uri", &glib::Value::from(uri))
         .expect("Can't set uri property");
 
-    let result = std::cell::RefCell::new(Some(Ok(())));
-    let error = std::sync::Arc::new(std::sync::Mutex::new(send_cell::SendCell::new(result)));
-    let error_clone = error.clone();
+    let error = std::sync::Arc::new(std::sync::Mutex::new(Ok(())));
 
     let player_clone = player.clone();
     let main_loop_clone = main_loop.clone();
@@ -42,19 +37,18 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
 
     let player_clone = player.clone();
     let main_loop_clone = main_loop.clone();
+    let error_clone = error.clone();
     player.connect_error(move |_, err| {
         let main_loop = &main_loop_clone;
         let player = &player_clone;
 
         let error = std::sync::Arc::clone(&error_clone);
-        let guard = error.lock().unwrap();
-        let cell = &*guard;
-        let refcell = cell.get();
-        *refcell.borrow_mut() = Some(Err(utils::ExampleError::ElementError(
+        let mut guard = error.lock().unwrap();
+        *guard = Err(utils::ExampleError::ElementError(
             "player".to_owned(),
             err.clone(),
             "".to_owned(),
-        )));
+        ));
 
         player.stop();
         main_loop.quit();
@@ -64,15 +58,8 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
     main_loop.run();
 
     let guard = error.as_ref().lock().unwrap();
-    let cell = &*guard;
-    let refcell = cell.get();
-    let result = refcell.borrow();
 
-    if let Some(ref e) = *result {
-        return e.clone();
-    } else {
-        Ok(())
-    }
+    guard.clone()
 }
 
 #[cfg(not(feature = "gst-player"))]
