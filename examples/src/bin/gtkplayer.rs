@@ -44,7 +44,7 @@ fn main_loop() -> Result<(), utils::ExampleError> {
     let scale = gtk::Scale::new_with_range(gtk::Orientation::Horizontal,
                                            0.0, 1.0, 0.0001);
     let playbin_clone = playbin.clone();
-    let print_value_changed = move |scale: &gtk::Scale| {
+    let scaler_moved_id = scale.connect_value_changed(move |scale: &gtk::Scale| {
         let value = scale.get_value();
         println!("value: {}", value);
         if let Some(duration) = playbin_clone.query_duration(Format::Time) {
@@ -54,9 +54,8 @@ fn main_loop() -> Result<(), utils::ExampleError> {
             playbin_clone.seek_simple(Format::Time, gst::SEEK_FLAG_FLUSH,
                                       position as i64);
         }
-    };
+    });
     
-    let print_value_changed_id = scale.connect_value_changed(print_value_changed);
     let draw_value = false.to_value();
     scale.set_property("draw-value", &draw_value).unwrap();
     vbox.pack_start(&scale, false, false, 0);
@@ -130,9 +129,9 @@ fn main_loop() -> Result<(), utils::ExampleError> {
 
         if let Some(position) = position {
             if let Some(duration) = playbin.query_duration(Format::Time) {
-                glib::signal::signal_handler_block(&scale_clone, print_value_changed_id);
+                glib::signal::signal_handler_block(&scale_clone, scaler_moved_id);
                 scale_clone.set_value(position as f64/duration as f64);
-                glib::signal::signal_handler_unblock(&scale_clone, print_value_changed_id);
+                glib::signal::signal_handler_unblock(&scale_clone, scaler_moved_id);
             }
             
             let mut seconds = position / 1_000_000_000;
