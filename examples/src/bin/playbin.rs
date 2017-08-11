@@ -30,6 +30,35 @@ fn main() {
     //     .unwrap();
     // playbin.set_property("flags", &flags).unwrap();
 
+    playbin
+        .connect("audio-tags-changed", false, |values| {
+            let playbin = values[0].get::<glib::Object>().unwrap();
+            let idx = values[1].get::<i32>().unwrap();
+
+            println!("audio tags of audio stream {} changed:", idx);
+
+            let tags = playbin
+                .emit("get-audio-tags", &[&idx.to_value()])
+                .unwrap()
+                .unwrap();
+            let tags = tags.get::<TagList>().unwrap();
+
+            if let Some(artist) = tags.get::<tags::Artist>() {
+                println!("  Artist: {}", artist.get().unwrap());
+            }
+
+            if let Some(title) = tags.get::<tags::Title>() {
+                println!("  Title: {}", title.get().unwrap());
+            }
+
+            if let Some(album) = tags.get::<tags::Album>() {
+                println!("  Album: {}", album.get().unwrap());
+            }
+
+            None
+        })
+        .unwrap();
+
     let bus = playbin.get_bus().unwrap();
 
     let ret = playbin.set_state(gst::State::Playing);
