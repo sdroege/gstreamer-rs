@@ -512,6 +512,34 @@ impl VideoInfo {
             from_glib(mem::transmute(ptr::read(ptr.offset(2))))
         }
     }
+
+    pub fn has_alpha(&self) -> bool {
+        self.format_info().has_alpha()
+    }
+
+    pub fn is_gray(&self) -> bool {
+        self.format_info().is_gray()
+    }
+
+    pub fn is_rgb(&self) -> bool {
+        self.format_info().is_rgb()
+    }
+
+    pub fn is_yuv(&self) -> bool {
+        self.format_info().is_yuv()
+    }
+
+    pub fn is_interlaced(&self) -> bool {
+        self.interlace_mode() != ::VideoInterlaceMode::Progressive
+    }
+
+    pub fn n_planes(&self) -> u32 {
+        self.format_info().n_planes()
+    }
+
+    pub fn n_components(&self) -> u32 {
+        self.format_info().n_components()
+    }
 }
 
 impl Clone for VideoInfo {
