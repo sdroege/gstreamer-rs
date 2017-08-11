@@ -61,7 +61,7 @@ pub use structure::{Structure, StructureRef};
 pub mod caps;
 pub use caps::{Caps, CapsRef};
 pub mod tags;
-pub use tags::*;
+pub use tags::{Tag, TagList, TagListRef};
 pub mod buffer;
 pub use buffer::{Buffer, BufferMap, BufferRef, MappedBuffer};
 pub mod sample;
