@@ -71,7 +71,6 @@ manual = [
     "GLib.Source",
     "GLib.DateTime",
     "GObject.Object",
-    "Gst.Structure",
     "Gst.Iterator",
     "Gst.Segment",
 ]
@@ -129,6 +128,12 @@ trait = false
     [[object.signal]]
     name = "message"
     concurrency = "send"
+
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
 
 [[object]]
 name = "Gst.Caps"
@@ -523,5 +528,9 @@ status = "generate"
     [[object.function]]
     name = "protection_select_system"
     # unsupported array type
+    ignore = true
+
+    [[object.function]]
+    name = "calculate_linear_regression"
     ignore = true
 

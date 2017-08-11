@@ -112,6 +112,12 @@ trait = false
     # Has getter function
     ignore = true
 
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
 [[object]]
 name = "Gst.Caps"
 status = "manual"

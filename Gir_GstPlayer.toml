@@ -1,0 +1,133 @@
+[options]
+girs_dir = "gir-files"
+library = "GstPlayer"
+version = "1.0"
+min_cfg_version = "1.12"
+target_path = "gstreamer-player"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+generate = [
+    "GstPlayer.PlayerAudioInfo",
+    "GstPlayer.PlayerColorBalanceType",
+    "GstPlayer.PlayerError",
+    "GstPlayer.PlayerGMainContextSignalDispatcher",
+    "GstPlayer.PlayerMediaInfo",
+    "GstPlayer.PlayerSignalDispatcher",
+    "GstPlayer.PlayerSnapshotFormat",
+    "GstPlayer.PlayerState",
+    "GstPlayer.PlayerStreamInfo",
+    "GstPlayer.PlayerSubtitleInfo",
+    "GstPlayer.PlayerVideoInfo",
+    "GstPlayer.PlayerVideoOverlayVideoRenderer",
+    "GstPlayer.PlayerVideoRenderer",
+    "GstPlayer.PlayerVisualization",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.MainContext",
+    "GObject.Object",
+    "Gst.ClockTime",
+    "Gst.Element",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+
+[[object]]
+name = "GstPlayer.Player"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "visualizations_free"
+    # correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "set_config"
+    # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "new"
+    ignore = true
+    version = 1.12
+
+    [[object.signal]]
+    name = "buffering"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "duration-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "end-of-stream"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "error"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "media-info-updated"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "mute-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "position-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "seek-done"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "state-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "uri-loaded"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "video-dimensions-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "volume-changed"
+    concurrency = "send"
+
+    [[object.signal]]
+    name = "warning"
+    concurrency = "send"

@@ -15,20 +15,6 @@ use std::mem;
 use std::ptr;
 
 
-#[cfg(feature = "v1_12")]
-pub fn calculate_linear_regression(xy: ClockTime, temp: ClockTime, n: u32) -> Option<(ClockTime, ClockTime, ClockTime, ClockTime, f64)> {
-    assert_initialized_main_thread!();
-    unsafe {
-        let mut m_num = mem::uninitialized();
-        let mut m_denom = mem::uninitialized();
-        let mut b = mem::uninitialized();
-        let mut xbase = mem::uninitialized();
-        let mut r_squared = mem::uninitialized();
-        let ret = from_glib(ffi::gst_calculate_linear_regression(xy, temp, n, &mut m_num, &mut m_denom, &mut b, &mut xbase, &mut r_squared));
-        if ret { Some((m_num, m_denom, b, xbase, r_squared)) } else { None }
-    }
-}
-
 //pub fn debug_add_log_function<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(func: /*Unknown conversion*//*Unimplemented*/LogFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
 //    unsafe { TODO: call ffi::gst_debug_add_log_function() }
 //}
