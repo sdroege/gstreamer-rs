@@ -4,7 +4,7 @@
 use ffi;
 use glib::Type;
 use glib::StaticType;
-use glib::value::{FromValue, FromValueOptional, SetValue, Value};
+use glib::value::{Value, SetValue, FromValue, FromValueOptional};
 use gobject_ffi;
 use glib::translate::*;
 
@@ -53,9 +53,7 @@ impl<'a> FromValueOptional<'a> for VideoChromaSite {
 
 impl<'a> FromValue<'a> for VideoChromaSite {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(ffi::GstVideoChromaSite::from_bits_truncate(
-            gobject_ffi::g_value_get_flags(value.to_glib_none().0),
-        ))
+        from_glib(ffi::GstVideoChromaSite::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
     }
 }
 
@@ -104,9 +102,7 @@ impl<'a> FromValueOptional<'a> for VideoFlags {
 
 impl<'a> FromValue<'a> for VideoFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(ffi::GstVideoFlags::from_bits_truncate(
-            gobject_ffi::g_value_get_flags(value.to_glib_none().0),
-        ))
+        from_glib(ffi::GstVideoFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
     }
 }
 
@@ -161,9 +157,7 @@ impl<'a> FromValueOptional<'a> for VideoFormatFlags {
 
 impl<'a> FromValue<'a> for VideoFormatFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(ffi::GstVideoFormatFlags::from_bits_truncate(
-            gobject_ffi::g_value_get_flags(value.to_glib_none().0),
-        ))
+        from_glib(ffi::GstVideoFormatFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
     }
 }
 
@@ -172,3 +166,58 @@ impl SetValue for VideoFormatFlags {
         gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
     }
 }
+
+bitflags! {
+    pub struct VideoMultiviewFlags: u32 {
+        const VIDEO_MULTIVIEW_FLAGS_NONE = 0;
+        const VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST = 1;
+        const VIDEO_MULTIVIEW_FLAGS_LEFT_FLIPPED = 2;
+        const VIDEO_MULTIVIEW_FLAGS_LEFT_FLOPPED = 4;
+        const VIDEO_MULTIVIEW_FLAGS_RIGHT_FLIPPED = 8;
+        const VIDEO_MULTIVIEW_FLAGS_RIGHT_FLOPPED = 16;
+        const VIDEO_MULTIVIEW_FLAGS_HALF_ASPECT = 16384;
+        const VIDEO_MULTIVIEW_FLAGS_MIXED_MONO = 32768;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoMultiviewFlags {
+    type GlibType = ffi::GstVideoMultiviewFlags;
+
+    fn to_glib(&self) -> ffi::GstVideoMultiviewFlags {
+        ffi::GstVideoMultiviewFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
+    fn from_glib(value: ffi::GstVideoMultiviewFlags) -> VideoMultiviewFlags {
+        skip_assert_initialized!();
+        VideoMultiviewFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for VideoMultiviewFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_multiview_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoMultiviewFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoMultiviewFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstVideoMultiviewFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for VideoMultiviewFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+

@@ -15,15 +15,7 @@ extern crate gobject_sys as gobject_ffi;
 extern crate gstreamer_sys as gst_ffi;
 extern crate gstreamer_video_sys as ffi;
 extern crate gstreamer as gst;
-#[macro_use]
 extern crate glib;
-
-macro_rules! assert_initialized_main_thread {
-    () => (
-        use gst_ffi;
-        assert_eq!(unsafe {gst_ffi::gst_is_initialized()}, ::glib_ffi::GTRUE)
-    )
-}
 
 macro_rules! skip_assert_initialized {
     () => (
@@ -44,3 +36,5 @@ mod video_format;
 pub use video_format::*;
 mod video_format_info;
 pub use video_format_info::*;
+mod video_info;
+pub use video_info::*;

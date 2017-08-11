@@ -2,9 +2,15 @@
 // DO NOT EDIT
 
 mod enums;
+pub use self::enums::VideoColorMatrix;
+pub use self::enums::VideoColorPrimaries;
+#[cfg(feature = "v1_12")]
+pub use self::enums::VideoFieldOrder;
 pub use self::enums::VideoFormat;
 pub use self::enums::VideoInterlaceMode;
+pub use self::enums::VideoMultiviewMode;
 pub use self::enums::VideoTileMode;
+pub use self::enums::VideoTransferFunction;
 
 mod flags;
 pub use self::flags::VideoChromaSite;
@@ -31,6 +37,16 @@ pub use self::flags::VIDEO_FORMAT_FLAG_PALETTE;
 pub use self::flags::VIDEO_FORMAT_FLAG_COMPLEX;
 pub use self::flags::VIDEO_FORMAT_FLAG_UNPACK;
 pub use self::flags::VIDEO_FORMAT_FLAG_TILED;
+pub use self::flags::VideoMultiviewFlags;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_NONE;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_LEFT_FLIPPED;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_LEFT_FLOPPED;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_RIGHT_FLIPPED;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_RIGHT_FLOPPED;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_HALF_ASPECT;
+pub use self::flags::VIDEO_MULTIVIEW_FLAGS_MIXED_MONO;
 
 #[doc(hidden)]
-pub mod traits {}
+pub mod traits {
+}

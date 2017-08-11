@@ -4,10 +4,227 @@
 use ffi;
 use glib::Type;
 use glib::StaticType;
-use glib::value::{FromValue, FromValueOptional, SetValue, Value};
+use glib::value::{Value, SetValue, FromValue, FromValueOptional};
 use gobject_ffi;
 use glib::translate::*;
 use std;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum VideoColorMatrix {
+    Unknown,
+    Rgb,
+    Fcc,
+    Bt709,
+    Bt601,
+    Smpte240m,
+    Bt2020,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoColorMatrix {
+    type GlibType = ffi::GstVideoColorMatrix;
+
+    fn to_glib(&self) -> ffi::GstVideoColorMatrix {
+        match *self {
+            VideoColorMatrix::Unknown => ffi::GST_VIDEO_COLOR_MATRIX_UNKNOWN,
+            VideoColorMatrix::Rgb => ffi::GST_VIDEO_COLOR_MATRIX_RGB,
+            VideoColorMatrix::Fcc => ffi::GST_VIDEO_COLOR_MATRIX_FCC,
+            VideoColorMatrix::Bt709 => ffi::GST_VIDEO_COLOR_MATRIX_BT709,
+            VideoColorMatrix::Bt601 => ffi::GST_VIDEO_COLOR_MATRIX_BT601,
+            VideoColorMatrix::Smpte240m => ffi::GST_VIDEO_COLOR_MATRIX_SMPTE240M,
+            VideoColorMatrix::Bt2020 => ffi::GST_VIDEO_COLOR_MATRIX_BT2020,
+            VideoColorMatrix::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
+    fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => VideoColorMatrix::Unknown,
+            1 => VideoColorMatrix::Rgb,
+            2 => VideoColorMatrix::Fcc,
+            3 => VideoColorMatrix::Bt709,
+            4 => VideoColorMatrix::Bt601,
+            5 => VideoColorMatrix::Smpte240m,
+            6 => VideoColorMatrix::Bt2020,
+            value => VideoColorMatrix::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoColorMatrix {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_color_matrix_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoColorMatrix {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoColorMatrix {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoColorMatrix>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for VideoColorMatrix {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum VideoColorPrimaries {
+    Unknown,
+    Bt709,
+    Bt470m,
+    Bt470bg,
+    Smpte170m,
+    Smpte240m,
+    Film,
+    Bt2020,
+    Adobergb,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoColorPrimaries {
+    type GlibType = ffi::GstVideoColorPrimaries;
+
+    fn to_glib(&self) -> ffi::GstVideoColorPrimaries {
+        match *self {
+            VideoColorPrimaries::Unknown => ffi::GST_VIDEO_COLOR_PRIMARIES_UNKNOWN,
+            VideoColorPrimaries::Bt709 => ffi::GST_VIDEO_COLOR_PRIMARIES_BT709,
+            VideoColorPrimaries::Bt470m => ffi::GST_VIDEO_COLOR_PRIMARIES_BT470M,
+            VideoColorPrimaries::Bt470bg => ffi::GST_VIDEO_COLOR_PRIMARIES_BT470BG,
+            VideoColorPrimaries::Smpte170m => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTE170M,
+            VideoColorPrimaries::Smpte240m => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTE240M,
+            VideoColorPrimaries::Film => ffi::GST_VIDEO_COLOR_PRIMARIES_FILM,
+            VideoColorPrimaries::Bt2020 => ffi::GST_VIDEO_COLOR_PRIMARIES_BT2020,
+            VideoColorPrimaries::Adobergb => ffi::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB,
+            VideoColorPrimaries::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
+    fn from_glib(value: ffi::GstVideoColorPrimaries) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => VideoColorPrimaries::Unknown,
+            1 => VideoColorPrimaries::Bt709,
+            2 => VideoColorPrimaries::Bt470m,
+            3 => VideoColorPrimaries::Bt470bg,
+            4 => VideoColorPrimaries::Smpte170m,
+            5 => VideoColorPrimaries::Smpte240m,
+            6 => VideoColorPrimaries::Film,
+            7 => VideoColorPrimaries::Bt2020,
+            8 => VideoColorPrimaries::Adobergb,
+            value => VideoColorPrimaries::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoColorPrimaries {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_color_primaries_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoColorPrimaries {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoColorPrimaries {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoColorPrimaries>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for VideoColorPrimaries {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[cfg(feature = "v1_12")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum VideoFieldOrder {
+    Unknown,
+    TopFieldFirst,
+    BottomFieldFirst,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_12")]
+#[doc(hidden)]
+impl ToGlib for VideoFieldOrder {
+    type GlibType = ffi::GstVideoFieldOrder;
+
+    fn to_glib(&self) -> ffi::GstVideoFieldOrder {
+        match *self {
+            VideoFieldOrder::Unknown => ffi::GST_VIDEO_FIELD_ORDER_UNKNOWN,
+            VideoFieldOrder::TopFieldFirst => ffi::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST,
+            VideoFieldOrder::BottomFieldFirst => ffi::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST,
+            VideoFieldOrder::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[cfg(feature = "v1_12")]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
+    fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => VideoFieldOrder::Unknown,
+            1 => VideoFieldOrder::TopFieldFirst,
+            2 => VideoFieldOrder::BottomFieldFirst,
+            value => VideoFieldOrder::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl StaticType for VideoFieldOrder {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_field_order_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl<'a> FromValueOptional<'a> for VideoFieldOrder {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl<'a> FromValue<'a> for VideoFieldOrder {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoFieldOrder>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl SetValue for VideoFieldOrder {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum VideoFormat {
@@ -177,7 +394,7 @@ impl ToGlib for VideoFormat {
             VideoFormat::I42212le => ffi::GST_VIDEO_FORMAT_I422_12LE,
             VideoFormat::Y44412be => ffi::GST_VIDEO_FORMAT_Y444_12BE,
             VideoFormat::Y44412le => ffi::GST_VIDEO_FORMAT_Y444_12LE,
-            VideoFormat::__Unknown(value) => unsafe { std::mem::transmute(value) },
+            VideoFormat::__Unknown(value) => unsafe{std::mem::transmute(value)}
         }
     }
 }
@@ -284,9 +501,7 @@ impl<'a> FromValueOptional<'a> for VideoFormat {
 
 impl<'a> FromValue<'a> for VideoFormat {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(std::mem::transmute::<i32, ffi::GstVideoFormat>(
-            gobject_ffi::g_value_get_enum(value.to_glib_none().0),
-        ))
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoFormat>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
     }
 }
 
@@ -316,7 +531,7 @@ impl ToGlib for VideoInterlaceMode {
             VideoInterlaceMode::Interleaved => ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
             VideoInterlaceMode::Mixed => ffi::GST_VIDEO_INTERLACE_MODE_MIXED,
             VideoInterlaceMode::Fields => ffi::GST_VIDEO_INTERLACE_MODE_FIELDS,
-            VideoInterlaceMode::__Unknown(value) => unsafe { std::mem::transmute(value) },
+            VideoInterlaceMode::__Unknown(value) => unsafe{std::mem::transmute(value)}
         }
     }
 }
@@ -349,13 +564,101 @@ impl<'a> FromValueOptional<'a> for VideoInterlaceMode {
 
 impl<'a> FromValue<'a> for VideoInterlaceMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(std::mem::transmute::<i32, ffi::GstVideoInterlaceMode>(
-            gobject_ffi::g_value_get_enum(value.to_glib_none().0),
-        ))
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoInterlaceMode>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
     }
 }
 
 impl SetValue for VideoInterlaceMode {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum VideoMultiviewMode {
+    None,
+    Mono,
+    Left,
+    Right,
+    SideBySide,
+    SideBySideQuincunx,
+    ColumnInterleaved,
+    RowInterleaved,
+    TopBottom,
+    Checkerboard,
+    FrameByFrame,
+    MultiviewFrameByFrame,
+    Separated,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoMultiviewMode {
+    type GlibType = ffi::GstVideoMultiviewMode;
+
+    fn to_glib(&self) -> ffi::GstVideoMultiviewMode {
+        match *self {
+            VideoMultiviewMode::None => ffi::GST_VIDEO_MULTIVIEW_MODE_NONE,
+            VideoMultiviewMode::Mono => ffi::GST_VIDEO_MULTIVIEW_MODE_MONO,
+            VideoMultiviewMode::Left => ffi::GST_VIDEO_MULTIVIEW_MODE_LEFT,
+            VideoMultiviewMode::Right => ffi::GST_VIDEO_MULTIVIEW_MODE_RIGHT,
+            VideoMultiviewMode::SideBySide => ffi::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE,
+            VideoMultiviewMode::SideBySideQuincunx => ffi::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX,
+            VideoMultiviewMode::ColumnInterleaved => ffi::GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED,
+            VideoMultiviewMode::RowInterleaved => ffi::GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED,
+            VideoMultiviewMode::TopBottom => ffi::GST_VIDEO_MULTIVIEW_MODE_TOP_BOTTOM,
+            VideoMultiviewMode::Checkerboard => ffi::GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD,
+            VideoMultiviewMode::FrameByFrame => ffi::GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME,
+            VideoMultiviewMode::MultiviewFrameByFrame => ffi::GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME,
+            VideoMultiviewMode::Separated => ffi::GST_VIDEO_MULTIVIEW_MODE_SEPARATED,
+            VideoMultiviewMode::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
+    fn from_glib(value: ffi::GstVideoMultiviewMode) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            -1 => VideoMultiviewMode::None,
+            0 => VideoMultiviewMode::Mono,
+            1 => VideoMultiviewMode::Left,
+            2 => VideoMultiviewMode::Right,
+            3 => VideoMultiviewMode::SideBySide,
+            4 => VideoMultiviewMode::SideBySideQuincunx,
+            5 => VideoMultiviewMode::ColumnInterleaved,
+            6 => VideoMultiviewMode::RowInterleaved,
+            7 => VideoMultiviewMode::TopBottom,
+            8 => VideoMultiviewMode::Checkerboard,
+            32 => VideoMultiviewMode::FrameByFrame,
+            33 => VideoMultiviewMode::MultiviewFrameByFrame,
+            34 => VideoMultiviewMode::Separated,
+            value => VideoMultiviewMode::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoMultiviewMode {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_multiview_mode_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoMultiviewMode {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoMultiviewMode {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoMultiviewMode>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for VideoMultiviewMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
     }
@@ -377,7 +680,7 @@ impl ToGlib for VideoTileMode {
         match *self {
             VideoTileMode::Unknown => ffi::GST_VIDEO_TILE_MODE_UNKNOWN,
             VideoTileMode::Zflipz2x2 => ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
-            VideoTileMode::__Unknown(value) => unsafe { std::mem::transmute(value) },
+            VideoTileMode::__Unknown(value) => unsafe{std::mem::transmute(value)}
         }
     }
 }
@@ -408,9 +711,7 @@ impl<'a> FromValueOptional<'a> for VideoTileMode {
 
 impl<'a> FromValue<'a> for VideoTileMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(std::mem::transmute::<i32, ffi::GstVideoTileMode>(
-            gobject_ffi::g_value_get_enum(value.to_glib_none().0),
-        ))
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoTileMode>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
     }
 }
 
@@ -419,3 +720,94 @@ impl SetValue for VideoTileMode {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
     }
 }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum VideoTransferFunction {
+    Unknown,
+    Gamma10,
+    Gamma18,
+    Gamma20,
+    Gamma22,
+    Bt709,
+    Smpte240m,
+    Srgb,
+    Gamma28,
+    Log100,
+    Log316,
+    Bt202012,
+    Adobergb,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoTransferFunction {
+    type GlibType = ffi::GstVideoTransferFunction;
+
+    fn to_glib(&self) -> ffi::GstVideoTransferFunction {
+        match *self {
+            VideoTransferFunction::Unknown => ffi::GST_VIDEO_TRANSFER_UNKNOWN,
+            VideoTransferFunction::Gamma10 => ffi::GST_VIDEO_TRANSFER_GAMMA10,
+            VideoTransferFunction::Gamma18 => ffi::GST_VIDEO_TRANSFER_GAMMA18,
+            VideoTransferFunction::Gamma20 => ffi::GST_VIDEO_TRANSFER_GAMMA20,
+            VideoTransferFunction::Gamma22 => ffi::GST_VIDEO_TRANSFER_GAMMA22,
+            VideoTransferFunction::Bt709 => ffi::GST_VIDEO_TRANSFER_BT709,
+            VideoTransferFunction::Smpte240m => ffi::GST_VIDEO_TRANSFER_SMPTE240M,
+            VideoTransferFunction::Srgb => ffi::GST_VIDEO_TRANSFER_SRGB,
+            VideoTransferFunction::Gamma28 => ffi::GST_VIDEO_TRANSFER_GAMMA28,
+            VideoTransferFunction::Log100 => ffi::GST_VIDEO_TRANSFER_LOG100,
+            VideoTransferFunction::Log316 => ffi::GST_VIDEO_TRANSFER_LOG316,
+            VideoTransferFunction::Bt202012 => ffi::GST_VIDEO_TRANSFER_BT2020_12,
+            VideoTransferFunction::Adobergb => ffi::GST_VIDEO_TRANSFER_ADOBERGB,
+            VideoTransferFunction::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
+    fn from_glib(value: ffi::GstVideoTransferFunction) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => VideoTransferFunction::Unknown,
+            1 => VideoTransferFunction::Gamma10,
+            2 => VideoTransferFunction::Gamma18,
+            3 => VideoTransferFunction::Gamma20,
+            4 => VideoTransferFunction::Gamma22,
+            5 => VideoTransferFunction::Bt709,
+            6 => VideoTransferFunction::Smpte240m,
+            7 => VideoTransferFunction::Srgb,
+            8 => VideoTransferFunction::Gamma28,
+            9 => VideoTransferFunction::Log100,
+            10 => VideoTransferFunction::Log316,
+            11 => VideoTransferFunction::Bt202012,
+            12 => VideoTransferFunction::Adobergb,
+            value => VideoTransferFunction::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoTransferFunction {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_transfer_function_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoTransferFunction {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoTransferFunction {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstVideoTransferFunction>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for VideoTransferFunction {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+

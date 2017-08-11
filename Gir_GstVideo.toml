@@ -21,6 +21,12 @@ generate = [
     "GstVideo.VideoInterlaceMode",
     "GstVideo.VideoFlags",
     "GstVideo.VideoChromaSite",
+    "GstVideo.VideoColorMatrix",
+    "GstVideo.VideoTransferFunction",
+    "GstVideo.VideoColorPrimaries",
+    "GstVideo.VideoMultiviewMode",
+    "GstVideo.VideoMultiviewFlags",
+    "GstVideo.VideoFieldOrder",
 ]
 
 manual = [
@@ -29,6 +35,7 @@ manual = [
     "GstVideo.VideoInfo",
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoColorimetry",
+    "GstVideo.VideoColorRange",
 ]
 
 [[object]]
