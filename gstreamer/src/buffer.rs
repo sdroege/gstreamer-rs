@@ -12,6 +12,7 @@ use std::fmt;
 use std::slice;
 use std::u64;
 use std::usize;
+use std::marker::PhantomData;
 
 use miniobject::*;
 use BufferFlags;
@@ -22,6 +23,9 @@ use glib_ffi;
 use ffi;
 use glib::translate::{from_glib, from_glib_full};
 
+pub struct Readable;
+pub struct Writable;
+
 #[repr(C)]
 pub struct BufferRef(ffi::GstBuffer);
 pub type Buffer = GstRc<BufferRef>;
@@ -30,36 +34,16 @@ unsafe impl MiniObject for BufferRef {
     type GstType = ffi::GstBuffer;
 }
 
-//#[derive(Derivative)]
-//#[derivative(Debug)]
-pub struct ReadBufferMap<'a> {
+pub struct BufferMap<'a, T> {
     buffer: &'a BufferRef,
-    //#[derivative(Debug = "ignore")]
     map_info: ffi::GstMapInfo,
+    phantom: PhantomData<T>,
 }
 
-//#[derive(Derivative)]
-//#[derivative(Debug)]
-pub struct ReadWriteBufferMap<'a> {
-    buffer: &'a BufferRef,
-    //#[derivative(Debug = "ignore")]
+pub struct MappedBuffer<T> {
+    buffer: Option<Buffer>,
     map_info: ffi::GstMapInfo,
-}
-
-//#[derive(Derivative)]
-//#[derivative(Debug)]
-pub struct ReadMappedBuffer {
-    buffer: Buffer,
-    //#[derivative(Debug = "ignore")]
-    map_info: ffi::GstMapInfo,
-}
-
-//#[derive(Derivative)]
-//#[derivative(Debug)]
-pub struct ReadWriteMappedBuffer {
-    buffer: Buffer,
-    //#[derivative(Debug = "ignore")]
-    map_info: ffi::GstMapInfo,
+    phantom: PhantomData<T>,
 }
 
 impl GstRc<BufferRef> {
@@ -69,7 +53,7 @@ impl GstRc<BufferRef> {
         unsafe { from_glib_full(ffi::gst_buffer_new()) }
     }
 
-    pub fn new_with_size(size: usize) -> Option<Self> {
+    pub fn with_size(size: usize) -> Option<Self> {
         let raw = unsafe { ffi::gst_buffer_new_allocate(ptr::null_mut(), size, ptr::null_mut()) };
         if raw.is_null() {
             None
@@ -108,7 +92,7 @@ impl GstRc<BufferRef> {
         }
     }
 
-    pub fn into_read_mapped_buffer(self) -> Result<ReadMappedBuffer, Self> {
+    pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
         let res: bool = unsafe {
             from_glib(ffi::gst_buffer_map(
@@ -118,16 +102,17 @@ impl GstRc<BufferRef> {
             ))
         };
         if res {
-            Ok(ReadMappedBuffer {
-                buffer: self,
+            Ok(MappedBuffer {
+                buffer: Some(self),
                 map_info: map_info,
+                phantom: PhantomData,
             })
         } else {
             Err(self)
         }
     }
 
-    pub fn into_readwrite_mapped_buffer(self) -> Result<ReadWriteMappedBuffer, Self> {
+    pub fn into_mapped_buffer_writable(self) -> Result<MappedBuffer<Writable>, Self> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
         let res: bool = unsafe {
             from_glib(ffi::gst_buffer_map(
@@ -137,9 +122,10 @@ impl GstRc<BufferRef> {
             ))
         };
         if res {
-            Ok(ReadWriteMappedBuffer {
-                buffer: self,
+            Ok(MappedBuffer {
+                buffer: Some(self),
                 map_info: map_info,
+                phantom: PhantomData,
             })
         } else {
             Err(self)
@@ -152,29 +138,31 @@ impl GstRc<BufferRef> {
 }
 
 impl BufferRef {
-    pub fn map_read(&self) -> Option<ReadBufferMap> {
+    pub fn map_readable(&self) -> Option<BufferMap<Readable>> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
         let res =
             unsafe { ffi::gst_buffer_map(self.as_mut_ptr(), &mut map_info, ffi::GST_MAP_READ) };
         if res == glib_ffi::GTRUE {
-            Some(ReadBufferMap {
+            Some(BufferMap {
                 buffer: self,
                 map_info: map_info,
+                phantom: PhantomData,
             })
         } else {
             None
         }
     }
 
-    pub fn map_readwrite(&mut self) -> Option<ReadWriteBufferMap> {
+    pub fn map_writable(&mut self) -> Option<BufferMap<Writable>> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
         let res = unsafe {
             ffi::gst_buffer_map(self.as_mut_ptr(), &mut map_info, ffi::GST_MAP_READWRITE)
         };
         if res == glib_ffi::GTRUE {
-            Some(ReadWriteBufferMap {
+            Some(BufferMap {
                 buffer: self,
                 map_info: map_info,
+                phantom: PhantomData,
             })
         } else {
             None
@@ -353,8 +341,8 @@ impl PartialEq for BufferRef {
             return false;
         }
 
-        let self_map = self.map_read();
-        let other_map = other.map_read();
+        let self_map = self.map_readable();
+        let other_map = other.map_readable();
 
         match (self_map, other_map) {
             (Some(self_map), Some(other_map)) => self_map.as_slice().eq(other_map.as_slice()),
@@ -365,11 +353,7 @@ impl PartialEq for BufferRef {
 
 impl Eq for BufferRef {}
 
-impl<'a> ReadBufferMap<'a> {
-    pub fn as_slice(&self) -> &[u8] {
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
-    }
-
+impl<'a, T> BufferMap<'a, T> {
     pub fn get_size(&self) -> usize {
         self.map_info.size
     }
@@ -377,21 +361,27 @@ impl<'a> ReadBufferMap<'a> {
     pub fn get_buffer(&self) -> &BufferRef {
         self.buffer
     }
-}
 
-impl<'a> Drop for ReadBufferMap<'a> {
-    fn drop(&mut self) {
-        unsafe {
-            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
-        }
+    pub fn as_slice(&self) -> &[u8] {
+        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
 }
 
-impl<'a> ReadWriteBufferMap<'a> {
+impl<'a> BufferMap<'a, Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
     }
+}
 
+impl<'a, T> Drop for BufferMap<'a, T> {
+    fn drop(&mut self) {
+        unsafe {
+            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
+        }
+    }
+}
+
+impl<T> MappedBuffer<T> {
     pub fn as_slice(&self) -> &[u8] {
         unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
     }
@@ -401,70 +391,36 @@ impl<'a> ReadWriteBufferMap<'a> {
     }
 
     pub fn get_buffer(&self) -> &BufferRef {
-        self.buffer
+        self.buffer.as_ref().unwrap().as_ref()
     }
-}
 
-impl<'a> Drop for ReadWriteBufferMap<'a> {
-    fn drop(&mut self) {
+    pub fn into_buffer(mut self) -> Buffer {
+        let buffer = self.buffer.take().unwrap();
         unsafe {
-            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
         }
+
+        buffer
     }
 }
 
-impl ReadMappedBuffer {
-    pub fn as_slice(&self) -> &[u8] {
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
-    }
-
-    pub fn get_size(&self) -> usize {
-        self.map_info.size
-    }
-
-    pub fn get_buffer(&self) -> &BufferRef {
-        self.buffer.as_ref()
-    }
-}
-
-impl Drop for ReadMappedBuffer {
-    fn drop(&mut self) {
-        unsafe {
-            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
-        }
-    }
-}
-
-unsafe impl Sync for ReadMappedBuffer {}
-unsafe impl Send for ReadMappedBuffer {}
-
-impl ReadWriteMappedBuffer {
+impl MappedBuffer<Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
     }
-
-    pub fn as_slice(&self) -> &[u8] {
-        unsafe { slice::from_raw_parts(self.map_info.data as *const u8, self.map_info.size) }
-    }
-
-    pub fn get_size(&self) -> usize {
-        self.map_info.size
-    }
-
-    pub fn get_buffer(&self) -> &BufferRef {
-        self.buffer.as_ref()
-    }
 }
 
-impl Drop for ReadWriteMappedBuffer {
+impl<T> Drop for MappedBuffer<T> {
     fn drop(&mut self) {
-        unsafe {
-            ffi::gst_buffer_unmap(self.buffer.as_mut_ptr(), &mut self.map_info);
+        if let Some(ref buffer) = self.buffer {
+            unsafe {
+                ffi::gst_buffer_unmap(buffer.as_mut_ptr(), &mut self.map_info);
+            }
         }
     }
 }
 
-unsafe impl Send for ReadWriteMappedBuffer {}
+unsafe impl<T> Send for MappedBuffer<T> {}
 
 #[cfg(test)]
 mod tests {
@@ -497,7 +453,7 @@ mod tests {
 
         let mut buffer = Buffer::from_vec(vec![1, 2, 3, 4]).unwrap();
         {
-            let data = buffer.map_read().unwrap();
+            let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
         assert_ne!(buffer.get_mut(), None);
@@ -521,7 +477,7 @@ mod tests {
 
             buffer2.set_pts(2);
 
-            let mut data = buffer2.map_readwrite().unwrap();
+            let mut data = buffer2.map_writable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
             data.as_mut_slice()[0] = 0;
         }
@@ -530,10 +486,10 @@ mod tests {
         assert_eq!(buffer2.get_pts(), 2);
 
         {
-            let data = buffer.map_read().unwrap();
+            let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
 
-            let data = buffer2.map_read().unwrap();
+            let data = buffer2.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![0, 2, 3, 4].as_slice());
         }
     }

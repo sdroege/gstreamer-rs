@@ -53,7 +53,9 @@ fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
                 .get_buffer()
                 .expect("Unable to extract buffer from the sample");
             assert_eq!(buffer.get_size() % 2, 0);
-            let map = buffer.map_read().expect("Unable to map buffer for reading");
+            let map = buffer
+                .map_readable()
+                .expect("Unable to map buffer for reading");
             let data = map.as_slice();
             let sum: f64 = data.chunks(2)
                 .map(|sample| {

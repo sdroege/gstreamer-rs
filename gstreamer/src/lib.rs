@@ -63,8 +63,7 @@ pub use caps::{Caps, CapsRef};
 pub mod tags;
 pub use tags::*;
 pub mod buffer;
-pub use buffer::{Buffer, BufferRef, ReadBufferMap, ReadMappedBuffer, ReadWriteBufferMap,
-                 ReadWriteMappedBuffer};
+pub use buffer::{Buffer, BufferMap, BufferRef, MappedBuffer};
 pub mod sample;
 pub use sample::{Sample, SampleRef};
 pub mod bufferlist;

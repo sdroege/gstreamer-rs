@@ -21,7 +21,7 @@ fn main() {
     let src_pad = src.get_static_pad("src").unwrap();
     src_pad.add_probe(PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
         if let Some(PadProbeData::Buffer(ref buffer)) = probe_info.data {
-            let map = buffer.map_read().unwrap();
+            let map = buffer.map_readable().unwrap();
             let data = map.as_slice();
             let sum: f64 = data.chunks(2)
                 .map(|sample| {
