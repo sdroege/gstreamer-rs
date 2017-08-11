@@ -161,7 +161,7 @@ impl fmt::Display for ::VideoColorimetry {
     }
 }
 
-pub struct VideoInfo(ffi::GstVideoInfo);
+pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 pub struct VideoInfoBuilder<'a> {
     format: ::VideoFormat,
@@ -655,6 +655,61 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
         let info = from_glib_none(ptr);
         glib_ffi::g_free(ptr as *mut _);
         info
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl ::VideoFieldOrder {
+    pub fn to_string(&self) -> String {
+        unsafe { from_glib_full(ffi::gst_video_field_order_to_string(self.to_glib())) }
+    }
+
+    pub fn from_string(s: &str) -> Option<Self> {
+        unsafe { from_glib(ffi::gst_video_field_order_from_string(s.to_glib_none().0)) }
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl str::FromStr for ::VideoFieldOrder {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, ()> {
+        Self::from_string(s).ok_or(())
+    }
+}
+
+#[cfg(feature = "v1_12")]
+impl fmt::Display for ::VideoFieldOrder {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.write_str(&self.to_string())
+    }
+}
+
+impl ::VideoInterlaceMode {
+    pub fn to_string(&self) -> String {
+        unsafe { from_glib_full(ffi::gst_video_interlace_mode_to_string(self.to_glib())) }
+    }
+
+    pub fn from_string(s: &str) -> Self {
+        unsafe {
+            from_glib(ffi::gst_video_interlace_mode_from_string(
+                s.to_glib_none().0,
+            ))
+        }
+    }
+}
+
+impl str::FromStr for ::VideoInterlaceMode {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, ()> {
+        Ok(Self::from_string(s))
+    }
+}
+
+impl fmt::Display for ::VideoInterlaceMode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.write_str(&self.to_string())
     }
 }
 

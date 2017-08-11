@@ -168,6 +168,59 @@ impl SetValue for VideoFormatFlags {
 }
 
 bitflags! {
+    pub struct VideoFrameFlags: u32 {
+        const VIDEO_FRAME_FLAG_NONE = 0;
+        const VIDEO_FRAME_FLAG_INTERLACED = 1;
+        const VIDEO_FRAME_FLAG_TFF = 2;
+        const VIDEO_FRAME_FLAG_RFF = 4;
+        const VIDEO_FRAME_FLAG_ONEFIELD = 8;
+        const VIDEO_FRAME_FLAG_MULTIPLE_VIEW = 16;
+        const VIDEO_FRAME_FLAG_FIRST_IN_BUNDLE = 32;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoFrameFlags {
+    type GlibType = ffi::GstVideoFrameFlags;
+
+    fn to_glib(&self) -> ffi::GstVideoFrameFlags {
+        ffi::GstVideoFrameFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
+    fn from_glib(value: ffi::GstVideoFrameFlags) -> VideoFrameFlags {
+        skip_assert_initialized!();
+        VideoFrameFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for VideoFrameFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_frame_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoFrameFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoFrameFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstVideoFrameFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for VideoFrameFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct VideoMultiviewFlags: u32 {
         const VIDEO_MULTIVIEW_FLAGS_NONE = 0;
         const VIDEO_MULTIVIEW_FLAGS_RIGHT_VIEW_FIRST = 1;

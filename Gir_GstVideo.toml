@@ -27,6 +27,7 @@ generate = [
     "GstVideo.VideoMultiviewMode",
     "GstVideo.VideoMultiviewFlags",
     "GstVideo.VideoFieldOrder",
+    "GstVideo.VideoFrameFlags",
 ]
 
 manual = [
@@ -36,6 +37,7 @@ manual = [
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoColorimetry",
     "GstVideo.VideoColorRange",
+    "GstVideo.VideoFrame",
 ]
 
 [[object]]

@@ -38,3 +38,5 @@ mod video_format_info;
 pub use video_format_info::*;
 mod video_info;
 pub use video_info::*;
+mod video_frame;
+pub use video_frame::VideoFrame;
