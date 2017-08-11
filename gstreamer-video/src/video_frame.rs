@@ -135,6 +135,33 @@ impl<T> VideoFrame<T> {
     pub fn plane_offset(&self) -> &[usize] {
         self.info().offset()
     }
+
+    pub fn plane_data(&self, plane: u32) -> Option<&[u8]> {
+        if plane >= self.n_planes() {
+            return None;
+        }
+
+        let format_info = self.format_info();
+
+        // Just get the palette
+        if format_info.has_palette() && plane == 1 {
+            unsafe {
+                return Some(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
+            }
+        }
+
+        let w = self.plane_stride()[plane as usize] as u32;
+        // FIXME: This assumes that the horizontal subsampling of all
+        // components in the plane is the same, which is probably safe
+        let h = format_info.scale_height(plane as u8, self.height());
+
+        unsafe {
+            Some(slice::from_raw_parts(
+                self.0.data[plane as usize] as *const u8,
+                (w * h) as usize,
+            ))
+        }
+    }
 }
 
 impl<T> Drop for VideoFrame<T> {
@@ -199,34 +226,6 @@ impl VideoFrame<Readable> {
     pub fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
     }
-
-
-    pub fn plane_data(&self, plane: u32) -> Option<&[u8]> {
-        if plane >= self.n_planes() {
-            return None;
-        }
-
-        let format_info = self.format_info();
-
-        // Just get the palette
-        if format_info.has_palette() && plane == 1 {
-            unsafe {
-                return Some(slice::from_raw_parts(self.0.data[1] as *const u8, 256 * 4));
-            }
-        }
-
-        let w = self.plane_stride()[plane as usize] as u32;
-        // FIXME: This assumes that the horizontal subsampling of all
-        // components in the plane is the same, which is probably safe
-        let h = format_info.scale_height(plane as u8, self.height());
-
-        unsafe {
-            Some(slice::from_raw_parts(
-                self.0.data[plane as usize] as *const u8,
-                (w * h) as usize,
-            ))
-        }
-    }
 }
 
 impl VideoFrame<Writable> {
@@ -286,7 +285,7 @@ impl VideoFrame<Writable> {
         unsafe { gst::BufferRef::from_mut_ptr(self.0.buffer) }
     }
 
-    pub fn plane_data(&mut self, plane: u32) -> Option<&mut [u8]> {
+    pub fn plane_data_mut(&mut self, plane: u32) -> Option<&mut [u8]> {
         if plane >= self.n_planes() {
             return None;
         }
@@ -329,7 +328,7 @@ mod tests {
         let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
-        let buffer = gst::Buffer::new_with_size(info.size()).unwrap();
+        let buffer = gst::Buffer::with_size(info.size()).unwrap();
         let frame = VideoFrame::from_buffer_readable(buffer, &info).unwrap();
 
         assert_ne!(frame.plane_data(0), None);
@@ -346,12 +345,12 @@ mod tests {
         let info = ::VideoInfo::new(::VideoFormat::Gray8, 320, 240)
             .build()
             .unwrap();
-        let buffer = gst::Buffer::new_with_size(info.size()).unwrap();
+        let buffer = gst::Buffer::with_size(info.size()).unwrap();
         let mut frame = VideoFrame::from_buffer_writable(buffer, &info).unwrap();
 
-        assert_ne!(frame.plane_data(0), None);
-        assert_eq!(frame.plane_data(0).unwrap().len(), 320 * 240);
-        assert_eq!(frame.plane_data(1), None);
+        assert_ne!(frame.plane_data_mut(0), None);
+        assert_eq!(frame.plane_data_mut(0).unwrap().len(), 320 * 240);
+        assert_eq!(frame.plane_data_mut(1), None);
         assert!(frame.info() == &info);
     }
 }
