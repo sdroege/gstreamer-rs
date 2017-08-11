@@ -34,7 +34,6 @@ fn main_loop() -> Result<(), utils::ExampleError> {
     };
 
     let playbin = create_playbin()?;
-
     playbin.set_property("video_sink", &sink.to_value()).unwrap();
 
     let window = Window::new(WindowType::Toplevel);
@@ -42,6 +41,26 @@ fn main_loop() -> Result<(), utils::ExampleError> {
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
     vbox.pack_start(&widget, true, true, 0);
 
+    let scale = gtk::Scale::new_with_range(gtk::Orientation::Horizontal,
+                                           0.0, 1.0, 0.0001);
+    let playbin_clone = playbin.clone();
+    let print_value_changed = move |scale: &gtk::Scale| {
+        let value = scale.get_value();
+        println!("value: {}", value);
+        if let Some(duration) = playbin_clone.query_duration(Format::Time) {
+            println!("duration: {}", duration);
+            let position = duration as f64 * value;
+            println!("position: {}", position);
+            playbin_clone.seek_simple(Format::Time, gst::SEEK_FLAG_FLUSH,
+                                      position as i64);
+        }
+    };
+    
+    let print_value_changed_id = scale.connect_value_changed(print_value_changed);
+    let draw_value = false.to_value();
+    scale.set_property("draw-value", &draw_value).unwrap();
+    vbox.pack_start(&scale, false, false, 0);
+    
     let hbox = gtk::Box::new(gtk::Orientation::Horizontal, 0);
     let label = gtk::Label::new("Position: 00:00:00");
 
@@ -51,7 +70,7 @@ fn main_loop() -> Result<(), utils::ExampleError> {
     let play_pause_button = gtk::Button::new_with_label("Pause");
     play_pause_button.set_sensitive(false);
     let playbin_clone = playbin.clone();
-    
+
     let play_pause_button_clone = play_pause_button.clone();
     filechooserbutton.connect_file_set(move |button| {
         println!("button {:?}", button);
@@ -67,7 +86,7 @@ fn main_loop() -> Result<(), utils::ExampleError> {
                 assert_ne!(ret, gst::StateChangeReturn::Failure);
             }
             playbin_clone.set_property("uri", &Value::from(&filename)).unwrap();
-            utils::set_state(&playbin_clone, gst::State::Playing)?;
+//            utils::set_state(&playbin_clone, gst::State::Playing)?;
             let ret = playbin_clone.set_state(gst::State::Playing);
             play_pause_button_clone.set_sensitive(true);
             assert_ne!(ret, gst::StateChangeReturn::Failure);
@@ -104,12 +123,18 @@ fn main_loop() -> Result<(), utils::ExampleError> {
     });
 
     let playbin_clone = playbin.clone();
-
-    gtk::timeout_add(500, move || {
+    let scale_clone = scale.clone();
+    gtk::timeout_add(250, move || {
         let playbin = &playbin_clone;
         let position = playbin.query_position(Format::Time);
 
         if let Some(position) = position {
+            if let Some(duration) = playbin.query_duration(Format::Time) {
+                glib::signal::signal_handler_block(&scale_clone, print_value_changed_id);
+                scale_clone.set_value(position as f64/duration as f64);
+                glib::signal::signal_handler_unblock(&scale_clone, print_value_changed_id);
+            }
+            
             let mut seconds = position / 1_000_000_000;
             let mut minutes = seconds / 60;
             let hours = minutes / 60;
