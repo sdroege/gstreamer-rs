@@ -112,6 +112,7 @@ dependencies = [
  "glib 0.1.3 (git+https://github.com/gtk-rs/glib)",
  "gstreamer 0.1.0",
  "gstreamer-app 0.1.0",
+ "gstreamer-audio 0.1.0",
  "gstreamer-player 0.1.0",
  "gtk 0.1.3 (git+https://github.com/gtk-rs/gtk)",
  "send-cell 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",

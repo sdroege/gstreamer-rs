@@ -2,6 +2,7 @@ extern crate gstreamer as gst;
 use gst::*;
 extern crate gstreamer_app as gst_app;
 use gst_app::*;
+extern crate gstreamer_audio as gst_audio;
 
 extern crate glib;
 
@@ -30,7 +31,7 @@ fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
     appsink.set_caps(&Caps::new_simple(
         "audio/x-raw",
         &[
-            ("format", &"S16BE"),
+            ("format", &gst_audio::AUDIO_FORMAT_S16.to_string()),
             ("layout", &"interleaved"),
             ("channels", &(1i32)),
             ("rate", &IntRange::<i32>::new(1, i32::MAX)),
@@ -52,19 +53,27 @@ fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
             let buffer = sample
                 .get_buffer()
                 .expect("Unable to extract buffer from the sample");
-            assert_eq!(buffer.get_size() % 2, 0);
+
             let map = buffer
                 .map_readable()
                 .expect("Unable to map buffer for reading");
-            let data = map.as_slice();
-            let sum: f64 = data.chunks(2)
+
+            let data =
+                gst_audio::AudioData::new(map.as_slice(), gst_audio::AUDIO_FORMAT_S16).unwrap();
+            let samples = if let gst_audio::AudioData::S16(samples) = data {
+                samples
+            } else {
+                return FlowReturn::NotNegotiated;
+            };
+
+            let sum: f64 = samples
+                .iter()
                 .map(|sample| {
-                    let u: u16 = ((sample[0] as u16) << 8) | (sample[1] as u16);
-                    let f = (u as i16 as f64) / (i16::MAX as f64);
+                    let f = (*sample as f64) / (i16::MAX as f64);
                     f * f
                 })
                 .sum();
-            let rms = (sum / ((data.len() / 2) as f64)).sqrt();
+            let rms = (sum / (samples.len() as f64)).sqrt();
             println!("rms: {}", rms);
 
             FlowReturn::Ok

@@ -1,15 +1,18 @@
 extern crate gstreamer as gst;
 use gst::*;
 
+extern crate gstreamer_audio as gst_audio;
+
 use std::u64;
 use std::i16;
 
 fn main() {
     gst::init().unwrap();
 
-    let pipeline = gst::parse_launch(
-        "audiotestsrc name=src ! audio/x-raw,format=S16BE,channels=1 ! fakesink",
-    ).unwrap();
+    let pipeline = gst::parse_launch(&format!(
+        "audiotestsrc name=src ! audio/x-raw,format={},channels=1 ! fakesink",
+        gst_audio::AUDIO_FORMAT_S16.to_string()
+    )).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
     let src = pipeline
@@ -22,15 +25,23 @@ fn main() {
     src_pad.add_probe(PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
         if let Some(PadProbeData::Buffer(ref buffer)) = probe_info.data {
             let map = buffer.map_readable().unwrap();
-            let data = map.as_slice();
-            let sum: f64 = data.chunks(2)
+
+            let data =
+                gst_audio::AudioData::new(map.as_slice(), gst_audio::AUDIO_FORMAT_S16).unwrap();
+            let samples = if let gst_audio::AudioData::S16(samples) = data {
+                samples
+            } else {
+                return PadProbeReturn::Ok;
+            };
+
+            let sum: f64 = samples
+                .iter()
                 .map(|sample| {
-                    let u: u16 = ((sample[0] as u16) << 8) | (sample[1] as u16);
-                    let f = (u as i16 as f64) / (i16::MAX as f64);
+                    let f = (*sample as f64) / (i16::MAX as f64);
                     f * f
                 })
                 .sum();
-            let rms = (sum / ((data.len() / 2) as f64)).sqrt();
+            let rms = (sum / (samples.len() as f64)).sqrt();
             println!("rms: {}", rms);
         }
 
