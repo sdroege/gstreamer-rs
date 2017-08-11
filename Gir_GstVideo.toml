@@ -45,3 +45,16 @@ name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
 
+[[object]]
+name = "GstVideo.VideoOverlay"
+status = "generate"
+
+    [[object.function]]
+    name = "set_render_rectangle"
+        [object.function.return]
+        bool_return_is_error = "Failed to set render rectangle"
+
+    [[object.function]]
+    name = "prepare_window_handle"
+    # to be called by subclasses
+    ignore = true

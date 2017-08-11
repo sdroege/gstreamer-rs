@@ -15,6 +15,7 @@ extern crate gobject_sys as gobject_ffi;
 extern crate gstreamer_sys as gst_ffi;
 extern crate gstreamer_video_sys as ffi;
 extern crate gstreamer as gst;
+#[macro_use]
 extern crate glib;
 
 macro_rules! skip_assert_initialized {
@@ -40,3 +41,5 @@ mod video_info;
 pub use video_info::*;
 mod video_frame;
 pub use video_frame::VideoFrame;
+mod video_overlay;
+pub use video_overlay::VideoOverlayExtManual;
