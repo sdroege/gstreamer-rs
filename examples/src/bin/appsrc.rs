@@ -2,6 +2,7 @@ extern crate gstreamer as gst;
 use gst::*;
 extern crate gstreamer_app as gst_app;
 use gst_app::*;
+extern crate gstreamer_video as gst_video;
 
 extern crate glib;
 
@@ -30,15 +31,13 @@ fn create_pipeline() -> Result<(Pipeline, AppSrc), utils::ExampleError> {
     let appsrc = src.clone()
         .dynamic_cast::<AppSrc>()
         .expect("Source element is expected to be an appsrc!");
-    appsrc.set_caps(&Caps::new_simple(
-        "video/x-raw",
-        &[
-            ("format", &"BGRx"),
-            ("width", &(WIDTH as i32)),
-            ("height", &(HEIGHT as i32)),
-            ("framerate", &Fraction::new(2, 1)),
-        ],
-    ));
+
+    let info = gst_video::VideoInfo::new(gst_video::VideoFormat::Bgrx, WIDTH as u32, HEIGHT as u32)
+        .fps(Fraction::new(2, 1))
+        .build()
+        .unwrap();
+
+    appsrc.set_caps(&info.to_caps().unwrap());
     appsrc.set_property_format(Format::Time);
     appsrc.set_max_bytes(1);
     appsrc.set_property_block(true);
@@ -53,21 +52,25 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         for i in 0..100 {
             println!("Producing frame {}", i);
 
-            // TODO: This is not very efficient
-            let mut vec = Vec::with_capacity(WIDTH * HEIGHT * 4);
             let r = if i % 2 == 0 { 0 } else { 255 };
             let g = if i % 3 == 0 { 0 } else { 255 };
             let b = if i % 5 == 0 { 0 } else { 255 };
 
-            for _ in 0..(WIDTH * HEIGHT) {
-                vec.push(b);
-                vec.push(g);
-                vec.push(r);
-                vec.push(0);
-            }
+            let mut buffer = gst::Buffer::with_size(WIDTH * HEIGHT * 4).unwrap();
+            {
+                let buffer = buffer.get_mut().unwrap();
+                buffer.set_pts(i * 500_000_000);
 
-            let mut buffer = Buffer::from_vec(vec).expect("Unable to create a Buffer");
-            buffer.get_mut().unwrap().set_pts(i * 500_000_000);
+                let mut data = buffer.map_writable().unwrap();
+
+                for p in data.as_mut_slice().chunks_mut(4) {
+                    assert_eq!(p.len(), 4);
+                    p[0] = b;
+                    p[1] = g;
+                    p[2] = r;
+                    p[3] = 0;
+                }
+            }
 
             if appsrc.push_buffer(buffer) != FlowReturn::Ok {
                 break;
