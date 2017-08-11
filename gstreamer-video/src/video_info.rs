@@ -540,6 +540,28 @@ impl VideoInfo {
     pub fn n_components(&self) -> u32 {
         self.format_info().n_components()
     }
+
+    pub fn convert(
+        &self,
+        src_fmt: gst::Format,
+        src_val: i64,
+        dest_fmt: gst::Format,
+    ) -> Option<i64> {
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            if from_glib(ffi::gst_video_info_convert(
+                &self.0 as *const _ as *mut _,
+                src_fmt.to_glib(),
+                src_val,
+                dest_fmt.to_glib(),
+                &mut dest_val,
+            )) {
+                Some(dest_val)
+            } else {
+                None
+            }
+        }
+    }
 }
 
 impl Clone for VideoInfo {
