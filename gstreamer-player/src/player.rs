@@ -34,7 +34,6 @@ impl Player {
 
     }
 
-    #[allow(dead_code)]
     pub fn set_config(&self, config: gst::Structure) -> bool {
         unsafe {
             from_glib(ffi::gst_player_set_config(

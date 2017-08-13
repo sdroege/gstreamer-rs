@@ -44,3 +44,6 @@ pub use auto::*;
 pub use auto::traits::*;
 
 mod player;
+
+mod player_video_overlay_video_renderer;
+pub use player_video_overlay_video_renderer::PlayerVideoOverlayVideoRendererExtManual;
