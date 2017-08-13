@@ -26,13 +26,15 @@ unsafe extern "C" fn trampoline_watch(
     func: gpointer,
 ) -> gboolean {
     let _guard = CallbackGuard::new();
-    let func: &RefCell<Box<FnMut(&Bus, &Message) -> Continue + 'static>> = transmute(func);
+    let func: &RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>> = transmute(func);
     (&mut *func.borrow_mut())(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch(ptr: gpointer) {
     let _guard = CallbackGuard::new();
-    Box::<RefCell<Box<FnMut(&Bus, &Message) -> Continue + 'static>>>::from_raw(ptr as *mut _);
+    Box::<RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>>>::from_raw(
+        ptr as *mut _,
+    );
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
@@ -47,17 +49,19 @@ unsafe extern "C" fn trampoline_sync(
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     let _guard = CallbackGuard::new();
-    let f: &&(Fn(&Bus, &Message) -> BusSyncReply + 'static) = transmute(func);
+    let f: &&(Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static) = transmute(func);
     f(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_sync(ptr: gpointer) {
     let _guard = CallbackGuard::new();
-    Box::<Box<Fn(&Bus, &Message) -> BusSyncReply + 'static>>::from_raw(ptr as *mut _);
+    Box::<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + 'static>(func: F) -> gpointer {
-    let func: Box<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + 'static>> =
+fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
+    func: F,
+) -> gpointer {
+    let func: Box<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>> =
         Box::new(Box::new(func));
     Box::into_raw(func) as gpointer
 }

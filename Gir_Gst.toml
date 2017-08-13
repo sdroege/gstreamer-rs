@@ -15,6 +15,7 @@ external_libraries = [
 
 generate = [
     "Gst.ClockTime",
+    "Gst.ClockTimeDiff",
     "Gst.Pipeline",
     "Gst.State",
     "Gst.StateChangeReturn",
@@ -64,6 +65,8 @@ generate = [
     "Gst.TocEntryType",
     "Gst.TocLoopType",
     "Gst.TocSetter",
+    "Gst.ClockType",
+    "Gst.ClockReturn",
 ]
 
 manual = [
@@ -192,6 +195,14 @@ status = "generate"
     name = "wait_for_sync"
         [object.function.return]
         bool_return_is_error = "Timed out waiting for sync"
+
+[[object]]
+name = "Gst.SystemClock"
+status = "generate"
+    [[object.function]]
+    name = "obtain"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gst.Element"

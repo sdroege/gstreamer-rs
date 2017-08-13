@@ -102,6 +102,9 @@ pub use segment::*;
 pub mod toc;
 pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
 
+mod clock;
+pub use clock::{ClockId, ClockExtManual};
+
 use std::ptr;
 
 pub fn init() -> Result<(), glib::Error> {
