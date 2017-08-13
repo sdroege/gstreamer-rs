@@ -17,7 +17,7 @@ fn create_playbin() -> Result<gst::Pipeline, utils::ExampleError> {
 
 fn main_loop() -> Result<(), utils::ExampleError> {
     gst::init().map_err(utils::ExampleError::InitFailed)?;
-    gtk::init().map_err(utils::ExampleError::GtkInitFailed)?;
+    gtk::init().unwrap();
 
     let (sink, widget) = if let Some(gtkglsink) = ElementFactory::make("gtkglsink", None) {
         let glsinkbin = utils::create_element("glsinkbin")?;
