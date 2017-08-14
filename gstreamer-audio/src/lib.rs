@@ -49,8 +49,6 @@ mod audio_info;
 pub use audio_info::*;
 mod audio_channel_position;
 pub use audio_channel_position::*;
-mod audio_data;
-pub use audio_data::{AudioData, AudioDataMut};
 
 use glib::translate::{from_glib_full, ToGlibPtr};
 pub fn audio_buffer_clip(

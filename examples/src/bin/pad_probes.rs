@@ -1,7 +1,9 @@
 extern crate gstreamer as gst;
 use gst::*;
-
 extern crate gstreamer_audio as gst_audio;
+
+extern crate byte_slice_cast;
+use byte_slice_cast::*;
 
 use std::u64;
 use std::i16;
@@ -26,9 +28,7 @@ fn main() {
         if let Some(PadProbeData::Buffer(ref buffer)) = probe_info.data {
             let map = buffer.map_readable().unwrap();
 
-            let data =
-                gst_audio::AudioData::new(map.as_slice(), gst_audio::AUDIO_FORMAT_S16).unwrap();
-            let samples = if let gst_audio::AudioData::S16(samples) = data {
+            let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
                 samples
             } else {
                 return PadProbeReturn::Ok;

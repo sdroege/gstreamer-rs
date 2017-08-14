@@ -15,6 +15,7 @@ gio = { version = "0.1.3", git = "https://github.com/gtk-rs/gio" }
 futures = "0.1"
 tokio-core = "0.1"
 send-cell = "0.1"
+byte-slice-cast = "0.1"
 
 [features]
 gst-player = ["gstreamer-player"]
