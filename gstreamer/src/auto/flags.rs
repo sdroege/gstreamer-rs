@@ -68,6 +68,59 @@ impl SetValue for BufferFlags {
 }
 
 bitflags! {
+    pub struct ElementFlags: u32 {
+        const ELEMENT_FLAG_LOCKED_STATE = 16;
+        const ELEMENT_FLAG_SINK = 32;
+        const ELEMENT_FLAG_SOURCE = 64;
+        const ELEMENT_FLAG_PROVIDE_CLOCK = 128;
+        const ELEMENT_FLAG_REQUIRE_CLOCK = 256;
+        const ELEMENT_FLAG_INDEXABLE = 512;
+        const ELEMENT_FLAG_LAST = 16384;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for ElementFlags {
+    type GlibType = ffi::GstElementFlags;
+
+    fn to_glib(&self) -> ffi::GstElementFlags {
+        ffi::GstElementFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstElementFlags> for ElementFlags {
+    fn from_glib(value: ffi::GstElementFlags) -> ElementFlags {
+        skip_assert_initialized!();
+        ElementFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for ElementFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_element_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for ElementFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for ElementFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstElementFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for ElementFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct PadProbeType: u32 {
         const PAD_PROBE_TYPE_INVALID = 0;
         const PAD_PROBE_TYPE_IDLE = 1;

@@ -3,6 +3,8 @@
 
 use ChildProxy;
 use Element;
+#[cfg(feature = "v1_10")]
+use ElementFlags;
 use Iterator;
 use Object;
 use Pad;
@@ -56,8 +58,8 @@ pub trait BinExt {
 
     fn get_by_name_recurse_up(&self, name: &str) -> Option<Element>;
 
-    //#[cfg(feature = "v1_10")]
-    //fn get_suppressed_flags(&self) -> /*Ignored*/ElementFlags;
+    #[cfg(feature = "v1_10")]
+    fn get_suppressed_flags(&self) -> ElementFlags;
 
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> Option<Iterator>;
 
@@ -77,8 +79,8 @@ pub trait BinExt {
 
     //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    //#[cfg(feature = "v1_10")]
-    //fn set_suppressed_flags(&self, flags: /*Ignored*/ElementFlags);
+    #[cfg(feature = "v1_10")]
+    fn set_suppressed_flags(&self, flags: ElementFlags);
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError>;
 
@@ -138,10 +140,12 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_10")]
-    //fn get_suppressed_flags(&self) -> /*Ignored*/ElementFlags {
-    //    unsafe { TODO: call ffi::gst_bin_get_suppressed_flags() }
-    //}
+    #[cfg(feature = "v1_10")]
+    fn get_suppressed_flags(&self) -> ElementFlags {
+        unsafe {
+            from_glib(ffi::gst_bin_get_suppressed_flags(self.to_glib_none().0))
+        }
+    }
 
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> Option<Iterator> {
         unsafe {
@@ -195,10 +199,12 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
     //    unsafe { TODO: call ffi::gst_bin_remove_many() }
     //}
 
-    //#[cfg(feature = "v1_10")]
-    //fn set_suppressed_flags(&self, flags: /*Ignored*/ElementFlags) {
-    //    unsafe { TODO: call ffi::gst_bin_set_suppressed_flags() }
-    //}
+    #[cfg(feature = "v1_10")]
+    fn set_suppressed_flags(&self, flags: ElementFlags) {
+        unsafe {
+            ffi::gst_bin_set_suppressed_flags(self.to_glib_none().0, flags.to_glib());
+        }
+    }
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
