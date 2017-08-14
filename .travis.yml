@@ -5,11 +5,14 @@ rust:
   - stable
   - beta
   - nightly
+
 addons:
   apt:
     packages:
-      - libgstreamer1.0-dev
-      - libgstreamer-plugins-base1.0-dev
+      - liborc-0.4-dev
+      - libglib2.0-dev
+      - libxml2-dev
+
 matrix:
   allow_failures:
     - rust: nightly
@@ -18,3 +21,10 @@ script:
     - rustc --version
     - cargo build --all
     - cargo test --all
+
+before_install:
+- curl -L https://people.freedesktop.org/~slomo/gstreamer.tar.gz | tar xz
+- export PKG_CONFIG_PATH=$PWD/gstreamer/lib/pkgconfig
+- export GST_PLUGIN_SYSTEM_PATH=$PWD/gstreamer/lib/gstreamer-1.0
+- export PATH=$PATH:$PWD/gstreamer/bin
+- export RUSTFLAGS=-L$PWD/gstreamer/lib
