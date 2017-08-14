@@ -317,16 +317,16 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    pub fn par(self, par: gst::Fraction) -> Self {
+    pub fn par<T: Into<gst::Fraction>>(self, par: T) -> Self {
         Self {
-            par: Some(par),
+            par: Some(par.into()),
             ..self
         }
     }
 
-    pub fn fps(self, fps: gst::Fraction) -> Self {
+    pub fn fps<T: Into<gst::Fraction>>(self, fps: T) -> Self {
         Self {
-            fps: Some(fps),
+            fps: Some(fps.into()),
             ..self
         }
     }
