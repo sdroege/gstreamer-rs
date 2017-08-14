@@ -6,6 +6,7 @@ use Element;
 use ElementFactoryListType;
 use Object;
 use PadDirection;
+use Rank;
 use URIType;
 use ffi;
 use glib;
@@ -122,9 +123,12 @@ impl ElementFactory {
         }
     }
 
-    //pub fn list_get_elements(type_: ElementFactoryListType, minrank: /*Ignored*/Rank) -> Vec<ElementFactory> {
-    //    unsafe { TODO: call ffi::gst_element_factory_list_get_elements() }
-    //}
+    pub fn list_get_elements(type_: ElementFactoryListType, minrank: Rank) -> Vec<ElementFactory> {
+        assert_initialized_main_thread!();
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_element_factory_list_get_elements(type_, minrank.to_glib()))
+        }
+    }
 
     pub fn make<'a, P: Into<Option<&'a str>>>(factoryname: &str, name: P) -> Option<Element> {
         assert_initialized_main_thread!();

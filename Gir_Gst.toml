@@ -68,6 +68,7 @@ generate = [
     "Gst.ClockType",
     "Gst.ClockReturn",
     "Gst.ElementFlags",
+    "Gst.Rank",
 ]
 
 manual = [

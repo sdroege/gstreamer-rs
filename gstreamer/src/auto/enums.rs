@@ -1542,6 +1542,69 @@ impl SetValue for QOSType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum Rank {
+    None,
+    Marginal,
+    Secondary,
+    Primary,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for Rank {
+    type GlibType = ffi::GstRank;
+
+    fn to_glib(&self) -> ffi::GstRank {
+        match *self {
+            Rank::None => ffi::GST_RANK_NONE,
+            Rank::Marginal => ffi::GST_RANK_MARGINAL,
+            Rank::Secondary => ffi::GST_RANK_SECONDARY,
+            Rank::Primary => ffi::GST_RANK_PRIMARY,
+            Rank::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstRank> for Rank {
+    fn from_glib(value: ffi::GstRank) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => Rank::None,
+            64 => Rank::Marginal,
+            128 => Rank::Secondary,
+            256 => Rank::Primary,
+            value => Rank::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for Rank {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_rank_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for Rank {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for Rank {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstRank>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for Rank {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum ResourceError {
     Failed,
     TooLazy,

@@ -3,6 +3,7 @@
 
 use DeviceProvider;
 use Object;
+use Rank;
 use ffi;
 use glib;
 use glib::object::IsA;
@@ -35,9 +36,12 @@ impl DeviceProviderFactory {
         }
     }
 
-    //pub fn list_get_device_providers(minrank: /*Ignored*/Rank) -> Vec<DeviceProviderFactory> {
-    //    unsafe { TODO: call ffi::gst_device_provider_factory_list_get_device_providers() }
-    //}
+    pub fn list_get_device_providers(minrank: Rank) -> Vec<DeviceProviderFactory> {
+        assert_initialized_main_thread!();
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_factory_list_get_device_providers(minrank.to_glib()))
+        }
+    }
 }
 
 unsafe impl Send for DeviceProviderFactory {}
