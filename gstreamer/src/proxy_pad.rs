@@ -12,6 +12,7 @@ use ProxyPad;
 use Object;
 use FlowReturn;
 use Buffer;
+use BufferList;
 
 use glib::IsA;
 use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
@@ -32,6 +33,23 @@ impl ProxyPad {
                 pad.to_glib_none().0,
                 parent.0,
                 buffer.into_ptr(),
+            ))
+        }
+    }
+
+    pub fn chain_list_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
+        pad: &P,
+        parent: R,
+        list: BufferList,
+    ) -> FlowReturn {
+        skip_assert_initialized!();
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_proxy_pad_chain_list_default(
+                pad.to_glib_none().0,
+                parent.0,
+                list.into_ptr(),
             ))
         }
     }
