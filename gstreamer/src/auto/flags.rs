@@ -121,6 +121,58 @@ impl SetValue for ElementFlags {
 }
 
 bitflags! {
+    pub struct PadLinkCheck: u32 {
+        const PAD_LINK_CHECK_NOTHING = 0;
+        const PAD_LINK_CHECK_HIERARCHY = 1;
+        const PAD_LINK_CHECK_TEMPLATE_CAPS = 2;
+        const PAD_LINK_CHECK_CAPS = 4;
+        const PAD_LINK_CHECK_NO_RECONFIGURE = 8;
+        const PAD_LINK_CHECK_DEFAULT = 5;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for PadLinkCheck {
+    type GlibType = ffi::GstPadLinkCheck;
+
+    fn to_glib(&self) -> ffi::GstPadLinkCheck {
+        ffi::GstPadLinkCheck::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPadLinkCheck> for PadLinkCheck {
+    fn from_glib(value: ffi::GstPadLinkCheck) -> PadLinkCheck {
+        skip_assert_initialized!();
+        PadLinkCheck::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for PadLinkCheck {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_pad_link_check_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PadLinkCheck {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PadLinkCheck {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstPadLinkCheck::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for PadLinkCheck {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct PadProbeType: u32 {
         const PAD_PROBE_TYPE_INVALID = 0;
         const PAD_PROBE_TYPE_IDLE = 1;

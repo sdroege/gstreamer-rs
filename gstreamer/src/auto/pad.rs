@@ -10,6 +10,7 @@ use Format;
 use Iterator;
 use Object;
 use PadDirection;
+use PadLinkCheck;
 use PadLinkReturn;
 use PadMode;
 use PadTemplate;
@@ -135,13 +136,13 @@ pub trait PadExt {
 
     fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> PadLinkReturn;
 
-    //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> PadLinkReturn;
+    fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: PadLinkCheck) -> PadLinkReturn;
 
     #[cfg(feature = "v1_10")]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
 
-    //#[cfg(feature = "v1_10")]
-    //fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: /*Ignored*/PadLinkCheck) -> bool;
+    #[cfg(feature = "v1_10")]
+    fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: PadLinkCheck) -> bool;
 
     fn mark_reconfigure(&self);
 
@@ -395,9 +396,11 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: /*Ignored*/PadLinkCheck) -> PadLinkReturn {
-    //    unsafe { TODO: call ffi::gst_pad_link_full() }
-    //}
+    fn link_full<P: IsA<Pad>>(&self, sinkpad: &P, flags: PadLinkCheck) -> PadLinkReturn {
+        unsafe {
+            from_glib(ffi::gst_pad_link_full(self.to_glib_none().0, sinkpad.to_glib_none().0, flags.to_glib()))
+        }
+    }
 
     #[cfg(feature = "v1_10")]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
@@ -406,10 +409,12 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_10")]
-    //fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: /*Ignored*/PadLinkCheck) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_link_maybe_ghosting_full() }
-    //}
+    #[cfg(feature = "v1_10")]
+    fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: PadLinkCheck) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_link_maybe_ghosting_full(self.to_glib_none().0, sink.to_glib_none().0, flags.to_glib()))
+        }
+    }
 
     fn mark_reconfigure(&self) {
         unsafe {

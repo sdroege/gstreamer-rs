@@ -69,6 +69,7 @@ generate = [
     "Gst.ClockReturn",
     "Gst.ElementFlags",
     "Gst.Rank",
+    "Gst.PadLinkCheck",
 ]
 
 manual = [
