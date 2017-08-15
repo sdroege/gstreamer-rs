@@ -664,7 +664,7 @@ impl ::VideoFieldOrder {
         unsafe { from_glib_full(ffi::gst_video_field_order_to_string(self.to_glib())) }
     }
 
-    pub fn from_string(s: &str) -> Option<Self> {
+    pub fn from_string(s: &str) -> Self {
         unsafe { from_glib(ffi::gst_video_field_order_from_string(s.to_glib_none().0)) }
     }
 }
@@ -674,7 +674,7 @@ impl str::FromStr for ::VideoFieldOrder {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        Self::from_string(s).ok_or(())
+        Ok(Self::from_string(s))
     }
 }
 

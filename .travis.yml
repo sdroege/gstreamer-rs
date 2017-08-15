@@ -22,7 +22,8 @@ script:
     - rustc --version
     - cargo build --all
     - cargo test --all
-    - cd examples && cargo build --features=gst-player
+    - cargo build --all --all-features
+    - cargo test --all --all-features
 
 before_install:
 - curl -L https://people.freedesktop.org/~slomo/gstreamer.tar.gz | tar xz

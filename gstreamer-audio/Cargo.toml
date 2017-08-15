@@ -26,8 +26,8 @@ version = "0.1"
 optional = true
 
 [features]
-v1_10 = ["gstreamer-sys/v1_10"]
-v1_12 = ["gstreamer-sys/v1_12", "v1_10"]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-audio-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-audio-sys/v1_12", "v1_10"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 default-features = []
