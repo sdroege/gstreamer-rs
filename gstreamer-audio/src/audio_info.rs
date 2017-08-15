@@ -263,6 +263,9 @@ impl PartialEq for AudioInfo {
 
 impl Eq for AudioInfo {}
 
+unsafe impl Sync for AudioInfo {}
+unsafe impl Send for AudioInfo {}
+
 impl glib::types::StaticType for AudioInfo {
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_audio_info_get_type()) }
