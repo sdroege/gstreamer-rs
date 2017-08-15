@@ -28,3 +28,6 @@ optional = true
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }

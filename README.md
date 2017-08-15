@@ -1,4 +1,4 @@
-# gstreamer-rs
+# gstreamer-rs [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
 
 [GStreamer](https://gstreamer.freedesktop.org/) bindings for Rust.
 

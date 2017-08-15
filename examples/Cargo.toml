@@ -20,3 +20,6 @@ byte-slice-cast = "0.1"
 [features]
 gst-player = ["gstreamer-player"]
 default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
