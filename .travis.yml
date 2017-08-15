@@ -20,7 +20,7 @@ matrix:
 script:
     - rustc --version
     - cargo build --all
-    - cargo test --all
+    - cargo build --all --all-features
 
 before_install:
 - curl -L https://people.freedesktop.org/~slomo/gstreamer.tar.gz | tar xz
