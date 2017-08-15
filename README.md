@@ -1,4 +1,4 @@
-# gstreamer-sys
+# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-sys.svg)](https://crates.io/crates/gstreamer-sys) [![Build Status](https://travis-ci.org/sdroege/gstreamer-sys.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-sys)
 
 [GStreamer](https://gstreamer.freedesktop.org/) FFI bindings for Rust.
 

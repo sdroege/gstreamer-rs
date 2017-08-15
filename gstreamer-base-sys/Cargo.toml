@@ -42,3 +42,6 @@ include = [
     "build.rs",
     "LICENSE",
 ]
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-sys", branch = "master" }
