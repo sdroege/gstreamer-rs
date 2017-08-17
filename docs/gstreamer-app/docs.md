@@ -8,10 +8,10 @@ appsink can be used by linking to the gstappsink.h header file to access the
 methods or by using the appsink action signals and properties.
 
 The normal way of retrieving samples from appsink is by using the
-`AppSinkExt::pull_sample` and `AppSinkExt::pull_preroll` methods.
+`AppSink::pull_sample` and `AppSink::pull_preroll` methods.
 These methods block until a sample becomes available in the sink or when the
 sink is shut down or reaches EOS. There are also timed variants of these
-methods, `AppSinkExt::try_pull_sample` and `AppSinkExt::try_pull_preroll`,
+methods, `AppSink::try_pull_sample` and `AppSink::try_pull_preroll`,
 which accept a timeout parameter to limit the amount of time to wait.
 
 Appsink will internally use a queue to collect buffers from the streaming
@@ -32,21 +32,15 @@ the pulled samples can be obtained by getting the sample caps.
 
 If one of the pull-preroll or pull-sample methods return `None`, the appsink
 is stopped or in the EOS state. You can check for the EOS state with the
-"eos" property or with the `AppSinkExt::is_eos` method.
+"eos" property or with the `AppSink::is_eos` method.
 
 The eos signal can also be used to be informed when the EOS state is reached
 to avoid polling.
 
 # Implements
 
-[`AppSinkExt`](trait.AppSinkExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait AppSinkExt -->
-Trait containing all `AppSink` methods.
-
-# Implementors
-
-[`AppSink`](struct.AppSink.html)
-<!-- trait AppSinkExt::fn get_buffer_list_support -->
+[`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- impl AppSink::fn get_buffer_list_support -->
 Check if `self` supports buffer lists.
 
 Feature: `v1_12`
@@ -55,13 +49,13 @@ Feature: `v1_12`
 # Returns
 
 `true` if `self` supports buffer lists.
-<!-- trait AppSinkExt::fn get_caps -->
+<!-- impl AppSink::fn get_caps -->
 Get the configured caps on `self`.
 
 # Returns
 
 the `gst::Caps` accepted by the sink. `gst_caps_unref` after usage.
-<!-- trait AppSinkExt::fn get_drop -->
+<!-- impl AppSink::fn get_drop -->
 Check if `self` will drop old buffers when the maximum amount of queued
 buffers is reached.
 
@@ -69,20 +63,20 @@ buffers is reached.
 
 `true` if `self` is dropping old buffers when the queue is
 filled.
-<!-- trait AppSinkExt::fn get_emit_signals -->
+<!-- impl AppSink::fn get_emit_signals -->
 Check if appsink will emit the "new-preroll" and "new-sample" signals.
 
 # Returns
 
 `true` if `self` is emiting the "new-preroll" and "new-sample"
 signals.
-<!-- trait AppSinkExt::fn get_max_buffers -->
+<!-- impl AppSink::fn get_max_buffers -->
 Get the maximum amount of buffers that can be queued in `self`.
 
 # Returns
 
 The maximum amount of buffers that can be queued.
-<!-- trait AppSinkExt::fn get_wait_on_eos -->
+<!-- impl AppSink::fn get_wait_on_eos -->
 Check if `self` will wait for all buffers to be consumed when an EOS is
 received.
 
@@ -90,7 +84,7 @@ received.
 
 `true` if `self` will wait for all buffers to be consumed when an
 EOS is received.
-<!-- trait AppSinkExt::fn is_eos -->
+<!-- impl AppSink::fn is_eos -->
 Check if `self` is EOS, which is when no more samples can be pulled because
 an EOS event was received.
 
@@ -100,7 +94,7 @@ PLAYING state.
 # Returns
 
 `true` if no more samples can be pulled and the appsink is EOS.
-<!-- trait AppSinkExt::fn pull_preroll -->
+<!-- impl AppSink::fn pull_preroll -->
 Get the last preroll sample in `self`. This was the sample that caused the
 appsink to preroll in the PAUSED state. This sample can be pulled many times
 and remains available to the application even after EOS.
@@ -110,7 +104,7 @@ state. Calling this function after doing a seek will give the sample right
 after the seek position.
 
 Note that the preroll sample will also be returned as the first sample
-when calling `AppSinkExt::pull_sample`.
+when calling `AppSink::pull_sample`.
 
 If an EOS event was received before any buffers, this function returns
 `None`. Use gst_app_sink_is_eos () to check for the EOS condition.
@@ -122,7 +116,7 @@ element is set to the READY/NULL state.
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
  Call `gst_sample_unref` after usage.
-<!-- trait AppSinkExt::fn pull_sample -->
+<!-- impl AppSink::fn pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state.
 
@@ -139,7 +133,7 @@ If an EOS event was received before any buffers, this function returns
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
  Call `gst_sample_unref` after usage.
-<!-- trait AppSinkExt::fn set_buffer_list_support -->
+<!-- impl AppSink::fn set_buffer_list_support -->
 Instruct `self` to enable or disable buffer list support.
 
 For backwards-compatibility reasons applications need to opt in
@@ -149,7 +143,7 @@ Feature: `v1_12`
 
 ## `enable_lists`
 enable or disable buffer list support
-<!-- trait AppSinkExt::fn set_callbacks -->
+<!-- impl AppSink::fn set_callbacks -->
 Set callbacks which will be executed for each new preroll, new sample and eos.
 This is an alternative to using the signals, it has lower overhead and is thus
 less expensive, but also less flexible.
@@ -162,35 +156,35 @@ the callbacks
 a user_data argument for the callbacks
 ## `notify`
 a destroy notify function
-<!-- trait AppSinkExt::fn set_caps -->
+<!-- impl AppSink::fn set_caps -->
 Set the capabilities on the appsink element. This function takes
 a copy of the caps structure. After calling this method, the sink will only
 accept caps that match `caps`. If `caps` is non-fixed, or incomplete,
 you must check the caps on the samples to get the actual used caps.
 ## `caps`
 caps to set
-<!-- trait AppSinkExt::fn set_drop -->
+<!-- impl AppSink::fn set_drop -->
 Instruct `self` to drop old buffers when the maximum amount of queued
 buffers is reached.
 ## `drop`
 the new state
-<!-- trait AppSinkExt::fn set_emit_signals -->
+<!-- impl AppSink::fn set_emit_signals -->
 Make appsink emit the "new-preroll" and "new-sample" signals. This option is
 by default disabled because signal emission is expensive and unneeded when
 the application prefers to operate in pull mode.
 ## `emit`
 the new state
-<!-- trait AppSinkExt::fn set_max_buffers -->
+<!-- impl AppSink::fn set_max_buffers -->
 Set the maximum amount of buffers that can be queued in `self`. After this
 amount of buffers are queued in appsink, any more buffers will block upstream
 elements until a sample is pulled from `self`.
 ## `max`
 the maximum number of buffers to queue
-<!-- trait AppSinkExt::fn set_wait_on_eos -->
+<!-- impl AppSink::fn set_wait_on_eos -->
 Instruct `self` to wait for all buffers to be consumed when an EOS is received.
 ## `wait`
 the new state
-<!-- trait AppSinkExt::fn try_pull_preroll -->
+<!-- impl AppSink::fn try_pull_preroll -->
 Get the last preroll sample in `self`. This was the sample that caused the
 appsink to preroll in the PAUSED state. This sample can be pulled many times
 and remains available to the application even after EOS.
@@ -200,7 +194,7 @@ state. Calling this function after doing a seek will give the sample right
 after the seek position.
 
 Note that the preroll sample will also be returned as the first sample
-when calling `AppSinkExt::pull_sample`.
+when calling `AppSink::pull_sample`.
 
 If an EOS event was received before any buffers or the timeout expires,
 this function returns `None`. Use gst_app_sink_is_eos () to check for the EOS
@@ -218,7 +212,7 @@ the maximum amount of time to wait for the preroll sample
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
  Call `gst_sample_unref` after usage.
-<!-- trait AppSinkExt::fn try_pull_sample -->
+<!-- impl AppSink::fn try_pull_sample -->
 This function blocks until a sample or EOS becomes available or the appsink
 element is set to the READY/NULL state or the timeout expires.
 
@@ -259,7 +253,7 @@ sample and sets them on the appsrc replacing any previously set caps (if
 different from sample's caps).
 
 The main way of handing data to the appsrc element is by calling the
-`AppSrcExt::push_buffer` method or by emitting the push-buffer action signal.
+`AppSrc::push_buffer` method or by emitting the push-buffer action signal.
 This will put the buffer onto a queue from which appsrc will read from in its
 streaming thread. It is important to note that data transport will not happen
 from the thread that performed the push-buffer call.
@@ -303,20 +297,14 @@ For the stream and seekable modes, setting this property is optional but
 recommended.
 
 When the application has finished pushing data into appsrc, it should call
-`AppSrcExt::end_of_stream` or emit the end-of-stream action signal. After
+`AppSrc::end_of_stream` or emit the end-of-stream action signal. After
 this call, no more buffers can be pushed into appsrc until a flushing seek
 occurs or the state of the appsrc has gone through READY.
 
 # Implements
 
-[`AppSrcExt`](trait.AppSrcExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait AppSrcExt -->
-Trait containing all `AppSrc` methods.
-
-# Implementors
-
-[`AppSrc`](struct.AppSrc.html)
-<!-- trait AppSrcExt::fn end_of_stream -->
+[`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- impl AppSrc::fn end_of_stream -->
 Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.
 
@@ -324,19 +312,19 @@ element is the last buffer of the stream.
 
 `gst::FlowReturn::Ok` when the EOS was successfuly queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
-<!-- trait AppSrcExt::fn get_caps -->
+<!-- impl AppSrc::fn get_caps -->
 Get the configured caps on `self`.
 
 # Returns
 
 the `gst::Caps` produced by the source. `gst_caps_unref` after usage.
-<!-- trait AppSrcExt::fn get_current_level_bytes -->
+<!-- impl AppSrc::fn get_current_level_bytes -->
 Get the number of currently queued bytes inside `self`.
 
 # Returns
 
 The number of currently queued bytes.
-<!-- trait AppSrcExt::fn get_duration -->
+<!-- impl AppSrc::fn get_duration -->
 Get the duration of the stream in nanoseconds. A value of GST_CLOCK_TIME_NONE means that the duration is
 not known.
 
@@ -345,41 +333,41 @@ Feature: `v1_10`
 
 # Returns
 
-the duration of the stream previously set with `AppSrcExt::set_duration`;
-<!-- trait AppSrcExt::fn get_emit_signals -->
+the duration of the stream previously set with `AppSrc::set_duration`;
+<!-- impl AppSrc::fn get_emit_signals -->
 Check if appsrc will emit the "new-preroll" and "new-buffer" signals.
 
 # Returns
 
 `true` if `self` is emitting the "new-preroll" and "new-buffer"
 signals.
-<!-- trait AppSrcExt::fn get_latency -->
+<!-- impl AppSrc::fn get_latency -->
 Retrieve the min and max latencies in `min` and `max` respectively.
 ## `min`
 the min latency
 ## `max`
 the min latency
-<!-- trait AppSrcExt::fn get_max_bytes -->
+<!-- impl AppSrc::fn get_max_bytes -->
 Get the maximum amount of bytes that can be queued in `self`.
 
 # Returns
 
 The maximum amount of bytes that can be queued.
-<!-- trait AppSrcExt::fn get_size -->
+<!-- impl AppSrc::fn get_size -->
 Get the size of the stream in bytes. A value of -1 means that the size is
 not known.
 
 # Returns
 
-the size of the stream previously set with `AppSrcExt::set_size`;
-<!-- trait AppSrcExt::fn get_stream_type -->
+the size of the stream previously set with `AppSrc::set_size`;
+<!-- impl AppSrc::fn get_stream_type -->
 Get the stream type. Control the stream type of `self`
-with `AppSrcExt::set_stream_type`.
+with `AppSrc::set_stream_type`.
 
 # Returns
 
 the stream type.
-<!-- trait AppSrcExt::fn push_buffer -->
+<!-- impl AppSrc::fn push_buffer -->
 Adds a buffer to the queue of buffers that the appsrc element will
 push to its source pad. This function takes ownership of the buffer.
 
@@ -393,7 +381,7 @@ a `gst::Buffer` to push
 `gst::FlowReturn::Ok` when the buffer was successfuly queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
 `gst::FlowReturn::Eos` when EOS occured.
-<!-- trait AppSrcExt::fn push_sample -->
+<!-- impl AppSrc::fn push_sample -->
 Extract a buffer from the provided sample and adds it to the queue of
 buffers that the appsrc element will push to its source pad. Any
 previous caps that were set on appsrc will be replaced by the caps
@@ -410,7 +398,7 @@ extracted
 `gst::FlowReturn::Ok` when the buffer was successfuly queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
 `gst::FlowReturn::Eos` when EOS occured.
-<!-- trait AppSrcExt::fn set_callbacks -->
+<!-- impl AppSrc::fn set_callbacks -->
 Set callbacks which will be executed when data is needed, enough data has
 been collected or when a seek should be performed.
 This is an alternative to using the signals, it has lower overhead and is thus
@@ -424,14 +412,14 @@ the callbacks
 a user_data argument for the callbacks
 ## `notify`
 a destroy notify function
-<!-- trait AppSrcExt::fn set_caps -->
+<!-- impl AppSrc::fn set_caps -->
 Set the capabilities on the appsrc element. This function takes
 a copy of the caps structure. After calling this method, the source will
 only produce caps that match `caps`. `caps` must be fixed and the caps on the
 buffers must match the caps or left NULL.
 ## `caps`
 caps to set
-<!-- trait AppSrcExt::fn set_duration -->
+<!-- impl AppSrc::fn set_duration -->
 Set the duration of the stream in nanoseconds. A value of GST_CLOCK_TIME_NONE means that the duration is
 not known.
 
@@ -439,31 +427,31 @@ Feature: `v1_10`
 
 ## `duration`
 the duration to set
-<!-- trait AppSrcExt::fn set_emit_signals -->
+<!-- impl AppSrc::fn set_emit_signals -->
 Make appsrc emit the "new-preroll" and "new-buffer" signals. This option is
 by default disabled because signal emission is expensive and unneeded when
 the application prefers to operate in pull mode.
 ## `emit`
 the new state
-<!-- trait AppSrcExt::fn set_latency -->
+<!-- impl AppSrc::fn set_latency -->
 Configure the `min` and `max` latency in `src`. If `min` is set to -1, the
 default latency calculations for pseudo-live sources will be used.
 ## `min`
 the min latency
 ## `max`
 the min latency
-<!-- trait AppSrcExt::fn set_max_bytes -->
+<!-- impl AppSrc::fn set_max_bytes -->
 Set the maximum amount of bytes that can be queued in `self`.
 After the maximum amount of bytes are queued, `self` will emit the
 "enough-data" signal.
 ## `max`
 the maximum number of bytes to queue
-<!-- trait AppSrcExt::fn set_size -->
+<!-- impl AppSrc::fn set_size -->
 Set the size of the stream in bytes. A value of -1 means that the size is
 not known.
 ## `size`
 the size to set
-<!-- trait AppSrcExt::fn set_stream_type -->
+<!-- impl AppSrc::fn set_stream_type -->
 Set the stream type on `self`. For seekable streams, the "seek" signal must
 be connected to.
 

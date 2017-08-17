@@ -266,3 +266,73 @@ Layout of the audio samples for the different channels.
 interleaved audio
 <!-- enum AudioLayout::variant NonInterleaved -->
 non-interleaved audio
+<!-- struct StreamVolume -->
+This interface is implemented by elements that provide a stream volume. Examples for
+such elements are `volume` and `playbin`.
+
+Applications can use this interface to get or set the current stream volume. For this
+the "volume" `gobject::Object` property can be used or the helper functions `StreamVolume::set_volume`
+and `StreamVolume::get_volume`. This volume is always a linear factor, i.e. 0.0 is muted
+1.0 is 100%. For showing the volume in a GUI it might make sense to convert it to
+a different format by using `StreamVolume::convert_volume`. Volume sliders should usually
+use a cubic volume.
+
+Separate from the volume the stream can also be muted by the "mute" `gobject::Object` property or
+`StreamVolume::set_mute` and `StreamVolume::get_mute`.
+
+Elements that provide some kind of stream volume should implement the "volume" and
+"mute" `gobject::Object` properties and handle setting and getting of them properly.
+The volume property is defined to be a linear volume factor.
+
+# Implements
+
+[`StreamVolumeExt`](trait.StreamVolumeExt.html)
+<!-- trait StreamVolumeExt -->
+Trait containing all `StreamVolume` methods.
+
+# Implementors
+
+[`StreamVolume`](struct.StreamVolume.html)
+<!-- impl StreamVolume::fn convert_volume -->
+## `from`
+`StreamVolumeFormat` to convert from
+## `to`
+`StreamVolumeFormat` to convert to
+## `val`
+Volume in `from` format that should be converted
+
+# Returns
+
+the converted volume
+<!-- trait StreamVolumeExt::fn get_mute -->
+
+# Returns
+
+Returns `true` if the stream is muted
+<!-- trait StreamVolumeExt::fn get_volume -->
+## `format`
+`StreamVolumeFormat` which should be returned
+
+# Returns
+
+The current stream volume as linear factor
+<!-- trait StreamVolumeExt::fn set_mute -->
+## `mute`
+Mute state that should be set
+<!-- trait StreamVolumeExt::fn set_volume -->
+## `format`
+`StreamVolumeFormat` of `val`
+## `val`
+Linear volume factor that should be set
+<!-- enum StreamVolumeFormat -->
+Different representations of a stream volume. `StreamVolume::convert_volume`
+allows to convert between the different representations.
+
+Formulas to convert from a linear to a cubic or dB volume are
+cbrt(val) and 20 * log10 (val).
+<!-- enum StreamVolumeFormat::variant Linear -->
+Linear scale factor, 1.0 = 100%
+<!-- enum StreamVolumeFormat::variant Cubic -->
+Cubic volume scale
+<!-- enum StreamVolumeFormat::variant Db -->
+Logarithmic volume scale (dB, amplitude not power)

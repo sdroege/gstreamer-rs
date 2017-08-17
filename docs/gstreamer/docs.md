@@ -2163,7 +2163,7 @@ Trait containing all `Clock` methods.
 
 # Implementors
 
-[`Clock`](struct.Clock.html)
+[`Clock`](struct.Clock.html), [`SystemClock`](struct.SystemClock.html)
 <!-- impl Clock::fn id_compare_func -->
 Compares the two `ClockID` instances. This function can be used
 as a GCompareFunc when sorting ids.
@@ -2605,6 +2605,33 @@ timeout for waiting or `GST_CLOCK_TIME_NONE`
 # Returns
 
 `true` if waiting was successful, or `false` on timeout
+<!-- enum ClockReturn -->
+The return value of a clock operation.
+<!-- enum ClockReturn::variant Ok -->
+The operation succeeded.
+<!-- enum ClockReturn::variant Early -->
+The operation was scheduled too late.
+<!-- enum ClockReturn::variant Unscheduled -->
+The clockID was unscheduled
+<!-- enum ClockReturn::variant Busy -->
+The ClockID is busy
+<!-- enum ClockReturn::variant Badtime -->
+A bad time was provided to a function.
+<!-- enum ClockReturn::variant Error -->
+An error occurred
+<!-- enum ClockReturn::variant Unsupported -->
+Operation is not supported
+<!-- enum ClockReturn::variant Done -->
+The ClockID is done waiting
+<!-- enum ClockType -->
+The different kind of clocks.
+<!-- enum ClockType::variant Realtime -->
+time since Epoch
+<!-- enum ClockType::variant Monotonic -->
+monotonic time since some unspecified starting
+ point
+<!-- enum ClockType::variant Other -->
+some other time source is used (Since 1.0.5)
 <!-- struct Context -->
 `Context` is a container object used to store contexts like a device
 context, a display server connection and similar concepts that should
@@ -3550,7 +3577,7 @@ Trait containing all `Element` methods.
 
 # Implementors
 
-[`Bin`](struct.Bin.html), [`Element`](struct.Element.html), [`TagSetter`](struct.TagSetter.html)
+[`Bin`](struct.Bin.html), [`Element`](struct.Element.html), [`TagSetter`](struct.TagSetter.html), [`TocSetter`](struct.TocSetter.html)
 <!-- impl Element::fn make_from_uri -->
 Creates an element for handling the given URI.
 ## `type_`
@@ -10637,6 +10664,22 @@ Get the structure of a query. This method should be called with a writable
 the `Structure` of the query. The structure is
  still owned by the query and will therefore be freed when the query
  is unreffed.
+<!-- enum Rank -->
+Element priority ranks. Defines the order in which the autoplugger (or
+similar rank-picking mechanisms, such as e.g. `Element::make_from_uri`)
+will choose this element over an alternative one with the same function.
+
+These constants serve as a rough guidance for defining the rank of a
+`PluginFeature`. Any value is valid, including values bigger than
+`Rank::Primary`.
+<!-- enum Rank::variant None -->
+will be chosen last or not at all
+<!-- enum Rank::variant Marginal -->
+unlikely to be chosen
+<!-- enum Rank::variant Secondary -->
+likely to be chosen
+<!-- enum Rank::variant Primary -->
+will be chosen first
 <!-- enum ResourceError -->
 Resource errors are for any resource used by an element:
 memory, files, network connections, process space, ...
@@ -12236,6 +12279,47 @@ The type of a `MessageType::StructureChange`.
 Pad linking is starting or done.
 <!-- enum StructureChangeType::variant Unlink -->
 Pad unlinking is starting or done.
+<!-- struct SystemClock -->
+The GStreamer core provides a GstSystemClock based on the system time.
+Asynchronous callbacks are scheduled from an internal thread.
+
+Clock implementors are encouraged to subclass this systemclock as it
+implements the async notification.
+
+Subclasses can however override all of the important methods for sync and
+async notifications to implement their own callback methods or blocking
+wait operations.
+
+# Implements
+
+[`SystemClockExt`](trait.SystemClockExt.html), [`ClockExt`](trait.ClockExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- trait SystemClockExt -->
+Trait containing all `SystemClock` methods.
+
+# Implementors
+
+[`SystemClock`](struct.SystemClock.html)
+<!-- impl SystemClock::fn obtain -->
+Get a handle to the default system clock. The refcount of the
+clock will be increased so you need to unref the clock after
+usage.
+
+# Returns
+
+the default clock.
+
+MT safe.
+<!-- impl SystemClock::fn set_default -->
+Sets the default system clock that can be obtained with
+`SystemClock::obtain`.
+
+This is mostly used for testing and debugging purposes when you
+want to have control over the time reported by the default system
+clock.
+
+MT safe.
+## `new_clock`
+a `Clock`
 <!-- struct TagList -->
 List of tags and values used to describe media metadata.
 
@@ -13007,6 +13091,183 @@ specified by this interface. The default is `TagMergeMode::Keep`, which keeps
 the tags set with this interface and discards tags from events.
 ## `mode`
 The mode with which tags are added
+<!-- struct Toc -->
+`Toc` functions are used to create/free `Toc` and `TocEntry` structures.
+Also they are used to convert `Toc` into `Structure` and vice versa.
+
+`Toc` lets you to inform other elements in pipeline or application that playing
+source has some kind of table of contents (TOC). These may be chapters, editions,
+angles or other types. For example: DVD chapters, Matroska chapters or cue sheet
+TOC. Such TOC will be useful for applications to display instead of just a
+playlist.
+
+Using TOC is very easy. Firstly, create `Toc` structure which represents root
+contents of the source. You can also attach TOC-specific tags to it. Then fill
+it with `TocEntry` entries by appending them to the `Toc` using
+`Toc::append_entry`, and appending subentries to a `TocEntry` using
+`TocEntry::append_sub_entry`.
+
+Note that root level of the TOC can contain only either editions or chapters. You
+should not mix them together at the same level. Otherwise you will get serialization
+/deserialization errors. Make sure that no one of the entries has negative start and
+ stop values.
+
+Use `Event::new_toc` to create a new TOC `Event`, and `Event::parse_toc` to
+parse received TOC event. Use `Event::new_toc_select` to create a new TOC select `Event`,
+and `Event::parse_toc_select` to parse received TOC select event. The same rule for
+the `Message`: `Message::new_toc` to create new TOC `Message`, and
+`Message::parse_toc` to parse received TOC message.
+
+TOCs can have global scope or current scope. Global scope TOCs contain
+all entries that can possibly be selected using a toc select event, and
+are what an application is usually interested in. TOCs with current scope
+only contain the parts of the TOC relevant to the currently selected/playing
+stream; the current scope TOC is used by downstream elements such as muxers
+to write correct TOC entries when transcoding files, for example. When
+playing a DVD, the global TOC would contain a hierarchy of all titles,
+chapters and angles, for example, while the current TOC would only contain
+the chapters for the currently playing title if playback of a specific
+title was requested.
+
+Applications and plugins should not rely on TOCs having a certain kind of
+structure, but should allow for different alternatives. For example, a
+simple CUE sheet embedded in a file may be presented as a flat list of
+track entries, or could have a top-level edition node (or some other
+alternative type entry) with track entries underneath that node; or even
+multiple top-level edition nodes (or some other alternative type entries)
+each with track entries underneath, in case the source file has extracted
+a track listing from different sources).
+<!-- impl Toc::fn new -->
+Create a new `Toc` structure.
+## `scope`
+scope of this TOC
+
+# Returns
+
+newly allocated `Toc` structure, free it
+ with `gst_toc_unref`.
+<!-- impl Toc::fn append_entry -->
+Appends the `TocEntry` `entry` to `self`.
+## `entry`
+A `TocEntry`
+<!-- impl Toc::fn find_entry -->
+Find `TocEntry` with given `uid` in the `self`.
+## `uid`
+UID to find `TocEntry` with.
+
+# Returns
+
+`TocEntry` with specified
+`uid` from the `self`, or `None` if not found.
+<!-- impl Toc::fn get_entries -->
+Gets the list of `TocEntry` of `self`.
+
+# Returns
+
+A `glib::List` of `TocEntry` for `entry`
+<!-- impl Toc::fn get_scope -->
+
+# Returns
+
+scope of `self`
+<!-- impl Toc::fn get_tags -->
+Gets the tags for `self`.
+
+# Returns
+
+A `TagList` for `entry`
+<!-- impl Toc::fn merge_tags -->
+Merge `tags` into the existing tags of `self` using `mode`.
+## `tags`
+A `TagList` or `None`
+## `mode`
+A `TagMergeMode`
+<!-- impl Toc::fn set_tags -->
+Set a `TagList` with tags for the complete `self`.
+## `tags`
+A `TagList` or `None`
+<!-- enum TocEntryType -->
+The different types of TOC entries (see `TocEntry`).
+
+There are two types of TOC entries: alternatives or parts in a sequence.
+<!-- enum TocEntryType::variant Angle -->
+entry is an angle (i.e. an alternative)
+<!-- enum TocEntryType::variant Version -->
+entry is a version (i.e. alternative)
+<!-- enum TocEntryType::variant Edition -->
+entry is an edition (i.e. alternative)
+<!-- enum TocEntryType::variant Invalid -->
+invalid entry type value
+<!-- enum TocEntryType::variant Title -->
+entry is a title (i.e. a part of a sequence)
+<!-- enum TocEntryType::variant Track -->
+entry is a track (i.e. a part of a sequence)
+<!-- enum TocEntryType::variant Chapter -->
+entry is a chapter (i.e. a part of a sequence)
+<!-- enum TocLoopType -->
+How a `TocEntry` should be repeated. By default, entries are played a
+single time.
+<!-- enum TocLoopType::variant None -->
+single forward playback
+<!-- enum TocLoopType::variant Forward -->
+repeat forward
+<!-- enum TocLoopType::variant Reverse -->
+repeat backward
+<!-- enum TocLoopType::variant PingPong -->
+repeat forward and backward
+<!-- enum TocScope -->
+The scope of a TOC.
+<!-- enum TocScope::variant Global -->
+global TOC representing all selectable options
+ (this is what applications are usually interested in)
+<!-- enum TocScope::variant Current -->
+TOC for the currently active/selected stream
+ (this is a TOC representing the current stream from start to EOS,
+ and is what a TOC writer / muxer is usually interested in; it will
+ usually be a subset of the global TOC, e.g. just the chapters of
+ the current title, or the chapters selected for playback from the
+ current title)
+<!-- struct TocSetter -->
+Element interface that allows setting of the TOC.
+
+Elements that support some kind of chapters or editions (or tracks like in
+the FLAC cue sheet) will implement this interface.
+
+If you just want to retrieve the TOC in your application then all you
+need to do is watch for TOC messages on your pipeline's bus (or you can
+perform TOC query). This interface is only for setting TOC data, not for
+extracting it. To set TOC from the application, find proper tocsetter element
+and set TOC using `TocSetter::set_toc`.
+
+Elements implementing the `TocSetter` interface can extend existing TOC
+by getting extend UID for that (you can use `Toc::find_entry` to retrieve it)
+with any TOC entries received from downstream.
+
+# Implements
+
+[`TocSetterExt`](trait.TocSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- trait TocSetterExt -->
+Trait containing all `TocSetter` methods.
+
+# Implementors
+
+[`TocSetter`](struct.TocSetter.html)
+<!-- trait TocSetterExt::fn get_toc -->
+Return current TOC the setter uses. The TOC should not be
+modified without making it writable first.
+
+# Returns
+
+TOC set, or `None`. Unref with
+ `gst_toc_unref` when no longer needed
+<!-- trait TocSetterExt::fn reset -->
+Reset the internal TOC. Elements should call this from within the
+state-change handler.
+<!-- trait TocSetterExt::fn set_toc -->
+Set the given TOC on the setter. Previously set TOC will be
+unreffed before setting a new one.
+## `toc`
+a `Toc` to set.
 <!-- enum URIError -->
 Different URI-related errors that can occur.
 <!-- enum URIError::variant UnsupportedProtocol -->

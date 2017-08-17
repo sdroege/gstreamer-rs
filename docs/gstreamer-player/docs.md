@@ -113,9 +113,6 @@ If accurate seeking is disabled, elements will seek as close as the request
 position without slowing down seeking too much.
 
 Accurate seeking is disabled by default.
-
-Feature: `v1_12`
-
 ## `accurate`
 accurate seek or not
 <!-- impl Player::fn get_audio_video_offset -->
@@ -500,32 +497,20 @@ Application can use gst_sample_*`_` API's to get caps, buffer etc.
 GstSample or NULL.
 <!-- trait PlayerMediaInfoExt::fn get_number_of_audio_streams -->
 
-Feature: `v1_12`
-
-
 # Returns
 
 number of audio streams.
 <!-- trait PlayerMediaInfoExt::fn get_number_of_streams -->
-
-Feature: `v1_12`
-
 
 # Returns
 
 number of total streams.
 <!-- trait PlayerMediaInfoExt::fn get_number_of_subtitle_streams -->
 
-Feature: `v1_12`
-
-
 # Returns
 
 number of subtitle streams.
 <!-- trait PlayerMediaInfoExt::fn get_number_of_video_streams -->
-
-Feature: `v1_12`
-
 
 # Returns
 
