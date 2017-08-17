@@ -14,18 +14,12 @@ external_libraries = [
 ]
 
 generate = [
-    "GstPlayer.PlayerAudioInfo",
     "GstPlayer.PlayerColorBalanceType",
     "GstPlayer.PlayerError",
-    "GstPlayer.PlayerGMainContextSignalDispatcher",
-    "GstPlayer.PlayerMediaInfo",
     "GstPlayer.PlayerSignalDispatcher",
     "GstPlayer.PlayerSnapshotFormat",
     "GstPlayer.PlayerState",
     "GstPlayer.PlayerStreamInfo",
-    "GstPlayer.PlayerSubtitleInfo",
-    "GstPlayer.PlayerVideoInfo",
-    "GstPlayer.PlayerVideoOverlayVideoRenderer",
     "GstPlayer.PlayerVideoRenderer",
     "GstPlayer.PlayerVisualization",
 ]
@@ -58,7 +52,6 @@ ref_mode = "ref"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref-mut"
-
 
 [[object]]
 name = "GstPlayer.Player"
@@ -130,3 +123,33 @@ trait = false
     [[object.signal]]
     name = "warning"
     concurrency = "send"
+
+[[object]]
+name = "GstPlayer.PlayerAudioInfo"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPlayer.PlayerVideoInfo"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPlayer.PlayerSubtitleInfo"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPlayer.PlayerMediaInfo"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPlayer.PlayerVideoOverlayVideoRenderer"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPlayer.PlayerGMainContextSignalDispatcher"
+status = "generate"
+trait = false
