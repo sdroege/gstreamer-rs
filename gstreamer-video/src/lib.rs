@@ -31,7 +31,6 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
 mod auto;
 pub use auto::*;
-pub use auto::traits::*;
 
 mod video_format;
 pub use video_format::*;
