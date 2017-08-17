@@ -4,8 +4,6 @@ use gst::prelude::*;
 
 #[cfg(feature = "gst-player")]
 extern crate gstreamer_player as gst_player;
-#[cfg(feature = "gst-player")]
-use gst_player::prelude::*;
 
 extern crate glib;
 

@@ -28,7 +28,9 @@ fn main() {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    let messages = BusStream::new(&bus).for_each(|msg| {
+    let messages = gst::BusStream::new(&bus).for_each(|msg| {
+        use gst::MessageView;
+
         let quit = match msg.view() {
             MessageView::Eos(..) => true,
             MessageView::Error(err) => {
