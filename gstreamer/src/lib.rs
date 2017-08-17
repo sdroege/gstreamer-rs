@@ -22,6 +22,9 @@ extern crate glib;
 
 extern crate num_rational;
 
+#[cfg(feature = "futures")]
+extern crate futures;
+
 use glib::translate::{from_glib, from_glib_full};
 
 macro_rules! callback_guard {
@@ -102,6 +105,8 @@ pub use child_proxy::ChildProxyExtManual;
 pub use tag_setter::TagSetterExtManual;
 pub use self::iterator::Iterator;
 pub use device_provider::DeviceProviderExtManual;
+#[cfg(feature = "futures")]
+pub use bus::BusStream;
 
 mod value;
 pub use value::*;

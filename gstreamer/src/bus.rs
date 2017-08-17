@@ -16,6 +16,17 @@ use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
 
+#[cfg(feature = "futures")]
+use std::sync::{Arc, Mutex};
+#[cfg(feature = "futures")]
+use futures;
+#[cfg(feature = "futures")]
+use futures::{Async, Poll};
+#[cfg(feature = "futures")]
+use futures::task::Task;
+#[cfg(feature = "futures")]
+use futures::stream::Stream;
+
 use Bus;
 use BusSyncReply;
 use Message;
@@ -127,5 +138,54 @@ impl Bus {
 
     pub fn unset_sync_handler(&self) {
         unsafe { ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None) }
+    }
+}
+
+#[cfg(feature = "futures")]
+pub struct BusStream(Bus, Arc<Mutex<Option<Task>>>);
+
+#[cfg(feature = "futures")]
+impl BusStream {
+    pub fn new(bus: &Bus) -> Self {
+        let task = Arc::new(Mutex::new(None));
+        let task_clone = task.clone();
+
+        bus.set_sync_handler(move |_, _| {
+            let mut task = task_clone.lock().unwrap();
+            if let Some(task) = task.take() {
+                // FIXME: Force type...
+                let task: Task = task;
+                task.notify();
+            }
+
+            BusSyncReply::Pass
+        });
+
+        BusStream(bus.clone(), task)
+    }
+}
+
+#[cfg(feature = "futures")]
+impl Drop for BusStream {
+    fn drop(&mut self) {
+        self.0.unset_sync_handler();
+    }
+}
+
+#[cfg(feature = "futures")]
+impl Stream for BusStream {
+    type Item = Message;
+    type Error = ();
+
+    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
+        let mut task = self.1.lock().unwrap();
+
+        let msg = self.0.pop();
+        if let Some(msg) = msg {
+            Ok(Async::Ready(Some(msg)))
+        } else {
+            *task = Some(futures::task::current());
+            Ok(Async::NotReady)
+        }
     }
 }
