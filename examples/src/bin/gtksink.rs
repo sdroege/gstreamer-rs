@@ -1,19 +1,30 @@
+#[cfg(feature = "gtksink")]
 extern crate gstreamer as gst;
+#[cfg(feature = "gtksink")]
 use gst::prelude::*;
 
+#[cfg(feature = "gtksink")]
 extern crate glib;
 
+#[cfg(feature = "gtksink")]
 extern crate gio;
+#[cfg(feature = "gtksink")]
 use gio::prelude::*;
 
+#[cfg(feature = "gtksink")]
 extern crate gtk;
+#[cfg(feature = "gtksink")]
 use gtk::prelude::*;
 
+#[cfg(feature = "gtksink")]
 use std::env;
 
+#[cfg(feature = "gtksink")]
 extern crate send_cell;
+#[cfg(feature = "gtksink")]
 use send_cell::SendCell;
 
+#[cfg(feature = "gtksink")]
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
     let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
@@ -113,6 +124,7 @@ fn create_ui(app: &gtk::Application) {
     });
 }
 
+#[cfg(feature = "gtksink")]
 fn main() {
     gst::init().unwrap();
     gtk::init().unwrap();
@@ -123,4 +135,9 @@ fn main() {
     let args = env::args().collect::<Vec<_>>();
     let args_ref = args.iter().map(|a| a.as_str()).collect::<Vec<_>>();
     app.run(&args_ref);
+}
+
+#[cfg(not(feature = "gtksink"))]
+fn main() {
+    println!("Please compile with --feature gtksink");
 }

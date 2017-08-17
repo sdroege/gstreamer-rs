@@ -55,7 +55,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "bytes"
-version = "0.4.4"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "byteorder 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -70,7 +70,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "cairo-rs"
 version = "0.1.3"
-source = "git+https://github.com/gtk-rs/cairo#532c3a86bdc027a8a1b27353c011e3481954aa77"
+source = "git+https://github.com/gtk-rs/cairo#7ab279c6393f87d86019671dda5206622e68fb7d"
 dependencies = [
  "c_vec 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "cairo-sys-rs 0.3.4 (git+https://github.com/gtk-rs/cairo)",
@@ -83,7 +83,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.3.4"
-source = "git+https://github.com/gtk-rs/cairo#532c3a86bdc027a8a1b27353c011e3481954aa77"
+source = "git+https://github.com/gtk-rs/cairo#7ab279c6393f87d86019671dda5206622e68fb7d"
 dependencies = [
  "libc 0.2.29 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -282,7 +282,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-app-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#252abbaeda64a3fdd8ccab291297500e3cdf6499"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -312,7 +312,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-audio-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#252abbaeda64a3fdd8ccab291297500e3cdf6499"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -327,7 +327,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-base-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#252abbaeda64a3fdd8ccab291297500e3cdf6499"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -355,7 +355,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-player-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#669b24f66122067891bb5548e3ef85bc63493c19"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -369,7 +369,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#252abbaeda64a3fdd8ccab291297500e3cdf6499"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -381,7 +381,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-tag-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#252abbaeda64a3fdd8ccab291297500e3cdf6499"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -395,7 +395,7 @@ dependencies = [
 [[package]]
 name = "gstreamer-video-sys"
 version = "0.1.1"
-source = "git+https://github.com/sdroege/gstreamer-sys#252abbaeda64a3fdd8ccab291297500e3cdf6499"
+source = "git+https://github.com/sdroege/gstreamer-sys#9f9307360ce179fcc88e95922092f57d513d207d"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.3.4 (git+https://github.com/gtk-rs/sys)",
@@ -514,7 +514,7 @@ dependencies = [
  "magenta 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "magenta-sys 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "miow 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "net2 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
+ "net2 0.2.31 (registry+https://github.com/rust-lang/crates.io-index)",
  "slab 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -525,14 +525,14 @@ version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "kernel32-sys 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "net2 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
+ "net2 0.2.31 (registry+https://github.com/rust-lang/crates.io-index)",
  "winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "ws2_32-sys 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "net2"
-version = "0.2.30"
+version = "0.2.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cfg-if 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -632,22 +632,22 @@ name = "tokio-core"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "bytes 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bytes 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "iovec 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "mio 0.6.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "scoped-tls 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "slab 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "tokio-io 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio-io 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "tokio-io"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "bytes 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bytes 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -678,7 +678,7 @@ dependencies = [
 "checksum bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)" = "4efd02e230a02e18f92fc2735f44597385ed02ad8f831e7c1c1156ee5e1ab3a5"
 "checksum byte-slice-cast 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5a865e7bfa6c3b79216ccba767d4dc66e4f9f65f1ed4639e73faff3c4a2485d7"
 "checksum byteorder 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "ff81738b726f5d099632ceaffe7fb65b90212e8dce59d518729e7e8634032d3d"
-"checksum bytes 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)" = "8b24f16593f445422331a5eed46b72f7f171f910fead4f2ea8f17e727e9c5c14"
+"checksum bytes 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)" = "d828f97b58cc5de3e40c421d0cf2132d6b2da4ee0e11b8632fa838f0f9333ad6"
 "checksum c_vec 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "6237ac5a4b1e81c213c24c6437964c61e646df910a914b4ab1487b46df20bd13"
 "checksum cairo-rs 0.1.3 (git+https://github.com/gtk-rs/cairo)" = "<none>"
 "checksum cairo-sys-rs 0.3.4 (git+https://github.com/gtk-rs/cairo)" = "<none>"
@@ -714,7 +714,7 @@ dependencies = [
 "checksum magenta-sys 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "40d014c7011ac470ae28e2f76a02bfea4a8480f73e701353b49ad7a8d75f4699"
 "checksum mio 0.6.10 (registry+https://github.com/rust-lang/crates.io-index)" = "dbd91d3bfbceb13897065e97b2ef177a09a438cb33612b2d371bf568819a9313"
 "checksum miow 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "8c1f2f3b1cf331de6896aabf6e9d55dca90356cc9960cca7eaaf408a355ae919"
-"checksum net2 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)" = "94101fd932816f97eb9a5116f6c1a11511a1fed7db21c5ccd823b2dc11abf566"
+"checksum net2 0.2.31 (registry+https://github.com/rust-lang/crates.io-index)" = "3a80f842784ef6c9a958b68b7516bc7e35883c614004dd94959a4dca1b716c09"
 "checksum nodrop 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)" = "52cd74cd09beba596430cc6e3091b74007169a56246e1262f0ba451ea95117b2"
 "checksum num-integer 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)" = "d1452e8b06e448a07f0e6ebb0bb1d92b8890eea63288c0b627331d53514d0fba"
 "checksum num-rational 0.1.39 (registry+https://github.com/rust-lang/crates.io-index)" = "288629c76fac4b33556f4b7ab57ba21ae202da65ba8b77466e6d598e31990790"
@@ -728,7 +728,7 @@ dependencies = [
 "checksum send-cell 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "1c620dd7e056b468b9d374a9f51cfa6bb4bf17a8ca4ee62e5efa0d99aaff2c41"
 "checksum slab 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "17b4fcaed89ab08ef143da37bc52adbcc04d4a69014f4c1208d6b51f0c47bc23"
 "checksum tokio-core 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)" = "e85d419699ec4b71bfe35bbc25bb8771e52eff0471a7f75c853ad06e200b4f86"
-"checksum tokio-io 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "c2c3ce9739f7387a0fa65b5421e81feae92e04d603f008898f4257790ce8c2db"
+"checksum tokio-io 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)" = "b4ab83e7adb5677e42e405fa4ceff75659d93c4d7d7dd22f52fcec59ee9f02af"
 "checksum winapi 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "167dc9d6949a9b857f3451275e911c3f44255842c1f7a76f33c55103a909087a"
 "checksum winapi-build 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
 "checksum ws2_32-sys 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d59cefebd0c892fa2dd6de581e937301d8552cb44489cdff035c6187cb63fa5e"
