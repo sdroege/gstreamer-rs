@@ -294,6 +294,56 @@ impl SetValue for PadProbeType {
 }
 
 bitflags! {
+    pub struct ParseFlags: u32 {
+        const PARSE_FLAG_NONE = 0;
+        const PARSE_FLAG_FATAL_ERRORS = 1;
+        const PARSE_FLAG_NO_SINGLE_ELEMENT_BINS = 2;
+        const PARSE_FLAG_PLACE_IN_BIN = 4;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for ParseFlags {
+    type GlibType = ffi::GstParseFlags;
+
+    fn to_glib(&self) -> ffi::GstParseFlags {
+        ffi::GstParseFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstParseFlags> for ParseFlags {
+    fn from_glib(value: ffi::GstParseFlags) -> ParseFlags {
+        skip_assert_initialized!();
+        ParseFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for ParseFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_parse_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for ParseFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for ParseFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstParseFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for ParseFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct SchedulingFlags: u32 {
         const SCHEDULING_FLAG_SEEKABLE = 1;
         const SCHEDULING_FLAG_SEQUENTIAL = 2;

@@ -125,10 +125,6 @@ pub fn parse_bin_from_description(bin_description: &str, ghost_unlinked_pads: bo
     }
 }
 
-//pub fn parse_bin_from_description_full<'a, P: Into<Option<&'a /*Ignored*/ParseContext>>>(bin_description: &str, ghost_unlinked_pads: bool, context: P, flags: /*Ignored*/ParseFlags) -> Result<Element, Error> {
-//    unsafe { TODO: call ffi::gst_parse_bin_from_description_full() }
-//}
-
 pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
     assert_initialized_main_thread!();
     unsafe {
@@ -138,10 +134,6 @@ pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
     }
 }
 
-//pub fn parse_launch_full<'a, P: Into<Option<&'a /*Ignored*/ParseContext>>>(pipeline_description: &str, context: P, flags: /*Ignored*/ParseFlags) -> Result<Element, Error> {
-//    unsafe { TODO: call ffi::gst_parse_launch_full() }
-//}
-
 pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
     assert_initialized_main_thread!();
     unsafe {
@@ -150,10 +142,6 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
         if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
     }
 }
-
-//pub fn parse_launchv_full<'a, P: Into<Option<&'a /*Ignored*/ParseContext>>>(argv: &[&str], context: P, flags: /*Ignored*/ParseFlags) -> Result<Element, Error> {
-//    unsafe { TODO: call ffi::gst_parse_launchv_full() }
-//}
 
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();

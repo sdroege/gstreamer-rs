@@ -71,6 +71,7 @@ generate = [
     "Gst.DebugLevel",
     "Gst.StackTraceFlags",
     "Gst.DebugGraphDetails",
+    "Gst.ParseFlags",
 ]
 
 manual = [
@@ -139,6 +140,11 @@ trait = false
 
 [[object]]
 name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.ParseContext"
 status = "manual"
 ref_mode = "ref-mut"
 
@@ -711,4 +717,9 @@ status = "generate"
 
     [[object.function]]
     name = "util_set_value_from_string"
+    ignore = true
+
+    [[object.function]]
+    pattern = "parse.*full"
+    # wrong mutable for context parameter
     ignore = true

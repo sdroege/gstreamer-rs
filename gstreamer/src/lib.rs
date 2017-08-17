@@ -89,6 +89,7 @@ mod child_proxy;
 mod tag_setter;
 mod iterator;
 mod device_provider;
+mod parse_context;
 pub use element::ElementExtManual;
 pub use element::{
     ELEMENT_METADATA_AUTHOR,
@@ -105,6 +106,7 @@ pub use child_proxy::ChildProxyExtManual;
 pub use tag_setter::TagSetterExtManual;
 pub use self::iterator::Iterator;
 pub use device_provider::DeviceProviderExtManual;
+pub use parse_context::ParseContext;
 #[cfg(feature = "futures")]
 pub use bus::BusStream;
 
@@ -119,6 +121,9 @@ pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
 
 mod clock;
 pub use clock::{ClockId, ClockExtManual};
+
+pub mod functions;
+pub use functions::*;
 
 use std::ptr;
 

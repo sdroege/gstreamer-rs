@@ -3,13 +3,27 @@ use gst::*;
 
 use std::u64;
 use std::env;
+use std::process;
 
 fn main() {
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
     gst::init().unwrap();
 
-    let pipeline = gst::parse_launch(&pipeline_str).unwrap();
+    let mut context = ParseContext::new();
+    let pipeline =
+        match gst::parse_launch_full(&pipeline_str, Some(&mut context), PARSE_FLAG_NONE) {
+            Ok(pipeline) => pipeline,
+            Err(err) => {
+                if let Some(ParseError::NoSuchElement) = err.kind::<ParseError>() {
+                    println!("Missing element(s): {:?}", context.get_missing_elements());
+                } else {
+                    println!("Failed to parse pipeline: {}", err);
+                }
+
+                process::exit(-1);
+            }
+        };
     let bus = pipeline.get_bus().unwrap();
 
     let ret = pipeline.set_state(gst::State::Playing);
