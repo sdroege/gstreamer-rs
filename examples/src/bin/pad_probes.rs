@@ -1,5 +1,5 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 extern crate gstreamer_audio as gst_audio;
 
 extern crate byte_slice_cast;
@@ -19,19 +19,19 @@ fn main() {
 
     let src = pipeline
         .clone()
-        .dynamic_cast::<Bin>()
+        .dynamic_cast::<gst::Bin>()
         .unwrap()
         .get_by_name("src")
         .unwrap();
     let src_pad = src.get_static_pad("src").unwrap();
-    src_pad.add_probe(PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
-        if let Some(PadProbeData::Buffer(ref buffer)) = probe_info.data {
+    src_pad.add_probe(gst::PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
+        if let Some(gst::PadProbeData::Buffer(ref buffer)) = probe_info.data {
             let map = buffer.map_readable().unwrap();
 
             let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
                 samples
             } else {
-                return PadProbeReturn::Ok;
+                return gst::PadProbeReturn::Ok;
             };
 
             let sum: f64 = samples
@@ -45,13 +45,15 @@ fn main() {
             println!("rms: {}", rms);
         }
 
-        PadProbeReturn::Ok
+        gst::PadProbeReturn::Ok
     });
 
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
     loop {
+        use gst::MessageView;
+
         let msg = match bus.timed_pop(u64::MAX) {
             None => break,
             Some(msg) => msg,

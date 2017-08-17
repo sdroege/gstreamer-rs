@@ -1,6 +1,6 @@
 extern crate gstreamer as gst;
 #[cfg(feature = "tokio")]
-use gst::*;
+use gst::prelude::*;
 
 #[cfg(feature = "tokio")]
 extern crate futures;

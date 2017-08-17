@@ -143,3 +143,24 @@ pub fn init() -> Result<(), glib::Error> {
 
 pub const BUFFER_OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
 pub const CLOCK_TIME_NONE: u64 = ffi::GST_CLOCK_TIME_NONE;
+
+// Re-export all the traits in a prelude module, so that applications
+// can always "use gst::prelude::*" without getting conflicts
+pub mod prelude {
+    pub use glib::prelude::*;
+
+    pub use auto::traits::*;
+
+    pub use element::ElementExtManual;
+    pub use bin::BinExtManual;
+    pub use pad::PadExtManual;
+    pub use gobject::GObjectExtManualGst;
+    pub use child_proxy::ChildProxyExtManual;
+    pub use tag_setter::TagSetterExtManual;
+    pub use device_provider::DeviceProviderExtManual;
+    pub use clock::ClockExtManual;
+    pub use value::GstValueExt;
+
+    pub use tags::Tag;
+    pub use miniobject::MiniObject;
+}

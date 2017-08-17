@@ -1,11 +1,10 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 extern crate glib;
-use glib::*;
 
 extern crate gio;
-use gio::*;
+use gio::prelude::*;
 
 extern crate gtk;
 use gtk::prelude::*;
@@ -16,10 +15,10 @@ extern crate send_cell;
 use send_cell::SendCell;
 
 fn create_ui(app: &gtk::Application) {
-    let pipeline = Pipeline::new(None);
-    let src = ElementFactory::make("videotestsrc", None).unwrap();
-    let (sink, widget) = if let Some(gtkglsink) = ElementFactory::make("gtkglsink", None) {
-        let glsinkbin = ElementFactory::make("glsinkbin", None).unwrap();
+    let pipeline = gst::Pipeline::new(None);
+    let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
+    let (sink, widget) = if let Some(gtkglsink) = gst::ElementFactory::make("gtkglsink", None) {
+        let glsinkbin = gst::ElementFactory::make("glsinkbin", None).unwrap();
         glsinkbin
             .set_property("sink", &gtkglsink.to_value())
             .unwrap();
@@ -27,7 +26,7 @@ fn create_ui(app: &gtk::Application) {
         let widget = gtkglsink.get_property("widget").unwrap();
         (glsinkbin, widget.get::<gtk::Widget>().unwrap())
     } else {
-        let sink = ElementFactory::make("gtksink", None).unwrap();
+        let sink = gst::ElementFactory::make("gtksink", None).unwrap();
         let widget = sink.get_property("widget").unwrap();
         (sink, widget.get::<gtk::Widget>().unwrap())
     };
@@ -49,7 +48,7 @@ fn create_ui(app: &gtk::Application) {
     let pipeline_clone = pipeline.clone();
     gtk::timeout_add(500, move || {
         let pipeline = &pipeline_clone;
-        let position = pipeline.query_position(Format::Time);
+        let position = pipeline.query_position(gst::Format::Time);
 
         if let Some(position) = position {
             let mut seconds = position / 1_000_000_000;
@@ -86,6 +85,8 @@ fn create_ui(app: &gtk::Application) {
 
     let app_clone = SendCell::new(app.clone());
     bus.add_watch(move |_, msg| {
+        use gst::MessageView;
+
         let app = app_clone.borrow();
         match msg.view() {
             MessageView::Eos(..) => gtk::main_quit(),

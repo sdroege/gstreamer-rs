@@ -1,13 +1,12 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 extern crate glib;
-use glib::*;
 
 fn main() {
     gst::init().unwrap();
 
-    let main_loop = MainLoop::new(None, false);
+    let main_loop = glib::MainLoop::new(None, false);
 
     let pipeline = gst::parse_launch("audiotestsrc ! fakesink").unwrap();
     let bus = pipeline.get_bus().unwrap();
@@ -23,7 +22,7 @@ fn main() {
 
         println!("sending eos");
 
-        let ev = Event::new_eos().build();
+        let ev = gst::Event::new_eos().build();
         pipeline.send_event(ev);
 
         glib::Continue(false)
@@ -32,6 +31,8 @@ fn main() {
     //bus.add_signal_watch();
     //bus.connect_message(move |_, msg| {
     bus.add_watch(move |_, msg| {
+        use gst::MessageView;
+
         let main_loop = &main_loop_clone;
         match msg.view() {
             MessageView::Eos(..) => {

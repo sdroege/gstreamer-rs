@@ -1,5 +1,5 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 use std::u64;
 use std::env;
@@ -10,12 +10,12 @@ fn main() {
 
     gst::init().unwrap();
 
-    let mut context = ParseContext::new();
+    let mut context = gst::ParseContext::new();
     let pipeline =
-        match gst::parse_launch_full(&pipeline_str, Some(&mut context), PARSE_FLAG_NONE) {
+        match gst::parse_launch_full(&pipeline_str, Some(&mut context), gst::PARSE_FLAG_NONE) {
             Ok(pipeline) => pipeline,
             Err(err) => {
-                if let Some(ParseError::NoSuchElement) = err.kind::<ParseError>() {
+                if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
                     println!("Missing element(s): {:?}", context.get_missing_elements());
                 } else {
                     println!("Failed to parse pipeline: {}", err);
@@ -30,6 +30,8 @@ fn main() {
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
     loop {
+        use gst::MessageView;
+
         let msg = match bus.timed_pop(u64::MAX) {
             None => break,
             Some(msg) => msg,

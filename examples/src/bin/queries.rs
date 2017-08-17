@@ -1,8 +1,7 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 extern crate glib;
-use glib::*;
 
 use std::env;
 
@@ -11,7 +10,7 @@ fn main() {
 
     gst::init().unwrap();
 
-    let main_loop = MainLoop::new(None, false);
+    let main_loop = glib::MainLoop::new(None, false);
 
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
@@ -23,12 +22,14 @@ fn main() {
 
     let pipeline_clone = pipeline.clone();
     glib::timeout_add_seconds(1, move || {
+        use gst::QueryView;
+
         let pipeline = &pipeline_clone;
 
-        //let pos = pipeline.query_position(Format::Time).unwrap_or(-1);
-        //let dur = pipeline.query_duration(Format::Time).unwrap_or(-1);
+        //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
+        //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
         let pos = {
-            let mut q = Query::new_position(Format::Time);
+            let mut q = gst::Query::new_position(gst::Format::Time);
             pipeline.query(q.get_mut().unwrap());
             match q.view() {
                 QueryView::Position(ref p) => p.get().1,
@@ -37,7 +38,7 @@ fn main() {
         };
 
         let dur = {
-            let mut q = Query::new_duration(Format::Time);
+            let mut q = gst::Query::new_duration(gst::Format::Time);
             pipeline.query(q.get_mut().unwrap());
             match q.view() {
                 QueryView::Duration(ref p) => p.get().1,
@@ -53,6 +54,8 @@ fn main() {
     //bus.add_signal_watch();
     //bus.connect_message(move |_, msg| {
     bus.add_watch(move |_, msg| {
+        use gst::MessageView;
+
         let main_loop = &main_loop_clone;
         match msg.view() {
             MessageView::Eos(..) => main_loop.quit(),

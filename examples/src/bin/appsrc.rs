@@ -1,7 +1,6 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
-use gst_app::*;
 extern crate gstreamer_video as gst_video;
 
 extern crate glib;
@@ -14,7 +13,7 @@ pub mod utils;
 const WIDTH: usize = 320;
 const HEIGHT: usize = 240;
 
-fn create_pipeline() -> Result<(Pipeline, AppSrc), utils::ExampleError> {
+fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSrc), utils::ExampleError> {
     gst::init().map_err(utils::ExampleError::InitFailed)?;
 
     let pipeline = gst::Pipeline::new(None);
@@ -29,16 +28,16 @@ fn create_pipeline() -> Result<(Pipeline, AppSrc), utils::ExampleError> {
     utils::link_elements(&videoconvert, &sink)?;
 
     let appsrc = src.clone()
-        .dynamic_cast::<AppSrc>()
+        .dynamic_cast::<gst_app::AppSrc>()
         .expect("Source element is expected to be an appsrc!");
 
     let info = gst_video::VideoInfo::new(gst_video::VideoFormat::Bgrx, WIDTH as u32, HEIGHT as u32)
-        .fps(Fraction::new(2, 1))
+        .fps(gst::Fraction::new(2, 1))
         .build()
         .unwrap();
 
     appsrc.set_caps(&info.to_caps().unwrap());
-    appsrc.set_property_format(Format::Time);
+    appsrc.set_property_format(gst::Format::Time);
     appsrc.set_max_bytes(1);
     appsrc.set_property_block(true);
 
@@ -72,7 +71,7 @@ fn main_loop() -> Result<(), utils::ExampleError> {
                 }
             }
 
-            if appsrc.push_buffer(buffer) != FlowReturn::Ok {
+            if appsrc.push_buffer(buffer) != gst::FlowReturn::Ok {
                 break;
             }
         }
@@ -87,6 +86,8 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         .expect("Pipeline without bus. Shouldn't happen!");
 
     loop {
+        use gst::MessageView;
+
         let msg = match bus.timed_pop(u64::MAX) {
             None => break,
             Some(msg) => msg,

@@ -1,8 +1,7 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 extern crate glib;
-use glib::*;
 
 use std::env;
 use std::u64;
@@ -21,7 +20,8 @@ fn main() {
     let src = gst::ElementFactory::make("filesrc", None).unwrap();
     let decodebin = gst::ElementFactory::make("decodebin", None).unwrap();
 
-    src.set_property("location", &Value::from(uri)).unwrap();
+    src.set_property("location", &glib::Value::from(uri))
+        .unwrap();
 
     pipeline.add_many(&[&src, &decodebin]).unwrap();
     gst::Element::link_many(&[&src, &decodebin]).unwrap();
@@ -82,6 +82,8 @@ fn main() {
     let bus = pipeline.get_bus().unwrap();
 
     loop {
+        use gst::MessageView;
+
         let msg = match bus.timed_pop(u64::MAX) {
             None => break,
             Some(msg) => msg,

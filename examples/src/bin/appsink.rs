@@ -1,7 +1,6 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
-use gst_app::*;
 extern crate gstreamer_audio as gst_audio;
 
 extern crate glib;
@@ -15,7 +14,7 @@ use std::i32;
 
 pub mod utils;
 
-fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
+fn create_pipeline() -> Result<gst::Pipeline, utils::ExampleError> {
     gst::init().map_err(utils::ExampleError::InitFailed)?;
     let pipeline = gst::Pipeline::new(None);
     let src = utils::create_element("audiotestsrc")?;
@@ -28,28 +27,28 @@ fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
     utils::link_elements(&src, &sink)?;
 
     let appsink = sink.clone()
-        .dynamic_cast::<AppSink>()
+        .dynamic_cast::<gst_app::AppSink>()
         .expect("Sink element is expected to be an appsink!");
 
-    appsink.set_caps(&Caps::new_simple(
+    appsink.set_caps(&gst::Caps::new_simple(
         "audio/x-raw",
         &[
             ("format", &gst_audio::AUDIO_FORMAT_S16.to_string()),
             ("layout", &"interleaved"),
             ("channels", &(1i32)),
-            ("rate", &IntRange::<i32>::new(1, i32::MAX)),
+            ("rate", &gst::IntRange::<i32>::new(1, i32::MAX)),
         ],
     ));
 
-    appsink.set_callbacks(AppSinkCallbacks::new(
+    appsink.set_callbacks(gst_app::AppSinkCallbacks::new(
         /* eos */
         |_| {},
         /* new_preroll */
-        |_| FlowReturn::Ok,
+        |_| gst::FlowReturn::Ok,
         /* new_samples */
         |appsink| {
             let sample = match appsink.pull_sample() {
-                None => return FlowReturn::Eos,
+                None => return gst::FlowReturn::Eos,
                 Some(sample) => sample,
             };
 
@@ -64,7 +63,7 @@ fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
             let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
                 samples
             } else {
-                return FlowReturn::Error;
+                return gst::FlowReturn::Error;
             };
 
             let sum: f64 = samples
@@ -77,7 +76,7 @@ fn create_pipeline() -> Result<Pipeline, utils::ExampleError> {
             let rms = (sum / (samples.len() as f64)).sqrt();
             println!("rms: {}", rms);
 
-            FlowReturn::Ok
+            gst::FlowReturn::Ok
         },
     ));
 
@@ -94,6 +93,8 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         .expect("Pipeline without bus. Shouldn't happen!");
 
     loop {
+        use gst::MessageView;
+
         let msg = match bus.timed_pop(u64::MAX) {
             None => break,
             Some(msg) => msg,

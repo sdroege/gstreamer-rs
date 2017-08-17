@@ -1,16 +1,17 @@
 extern crate gstreamer as gst;
+#[cfg(feature = "gst-player")]
+use gst::prelude::*;
 
 #[cfg(feature = "gst-player")]
 extern crate gstreamer_player as gst_player;
+#[cfg(feature = "gst-player")]
+use gst_player::prelude::*;
 
 extern crate glib;
-#[cfg(feature = "gst-player")]
-use glib::ObjectExt;
 
 use std::env;
 
 pub mod utils;
-
 
 #[cfg(feature = "gst-player")]
 fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {

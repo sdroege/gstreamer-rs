@@ -1,8 +1,7 @@
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 extern crate glib;
-use glib::*;
 
 use std::env;
 use std::u64;
@@ -18,7 +17,9 @@ fn main() {
     };
 
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-    playbin.set_property("uri", &Value::from(uri)).unwrap();
+    playbin
+        .set_property("uri", &glib::Value::from(uri))
+        .unwrap();
 
     // For flags handling
     // let flags = playbin.get_property("flags").unwrap();
@@ -41,17 +42,17 @@ fn main() {
                 .emit("get-audio-tags", &[&idx.to_value()])
                 .unwrap()
                 .unwrap();
-            let tags = tags.get::<TagList>().unwrap();
+            let tags = tags.get::<gst::TagList>().unwrap();
 
-            if let Some(artist) = tags.get::<tags::Artist>() {
+            if let Some(artist) = tags.get::<gst::tags::Artist>() {
                 println!("  Artist: {}", artist.get().unwrap());
             }
 
-            if let Some(title) = tags.get::<tags::Title>() {
+            if let Some(title) = tags.get::<gst::tags::Title>() {
                 println!("  Title: {}", title.get().unwrap());
             }
 
-            if let Some(album) = tags.get::<tags::Album>() {
+            if let Some(album) = tags.get::<gst::tags::Album>() {
                 println!("  Album: {}", album.get().unwrap());
             }
 
@@ -65,6 +66,8 @@ fn main() {
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
     loop {
+        use gst::MessageView;
+
         let msg = match bus.timed_pop(u64::MAX) {
             None => break,
             Some(msg) => msg,

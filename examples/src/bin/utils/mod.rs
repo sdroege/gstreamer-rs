@@ -1,6 +1,5 @@
-
 extern crate gstreamer as gst;
-use gst::*;
+use gst::prelude::*;
 
 extern crate glib;
 use std::fmt;

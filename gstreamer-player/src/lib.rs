@@ -46,3 +46,13 @@ mod player;
 
 mod player_video_overlay_video_renderer;
 pub use player_video_overlay_video_renderer::PlayerVideoOverlayVideoRendererExtManual;
+
+// Re-export all the traits in a prelude module, so that applications
+// can always "use gst::prelude::*" without getting conflicts
+pub mod prelude {
+    pub use glib::prelude::*;
+    pub use gst::prelude::*;
+
+    pub use auto::traits::*;
+    pub use player_video_overlay_video_renderer::PlayerVideoOverlayVideoRendererExtManual;
+}
