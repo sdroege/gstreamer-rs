@@ -68,6 +68,9 @@ generate = [
     "Gst.ElementFlags",
     "Gst.Rank",
     "Gst.PadLinkCheck",
+    "Gst.DebugLevel",
+    "Gst.StackTraceFlags",
+    "Gst.DebugGraphDetails",
 ]
 
 manual = [
@@ -558,3 +561,154 @@ status = "generate"
     name = "calculate_linear_regression"
     ignore = true
 
+    [[object.function]]
+    pattern = "value_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = ".*_get_type"
+    ignore = true
+
+    [[object.function]]
+    pattern = "tag_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "segtrap_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "util_[g]?double_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "util_fraction_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "util_greatest_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "util_[g]?uint64.*"
+    ignore = true
+
+    [[object.function]]
+    name = "deinit"
+    ignore = true
+
+    [[object.function]]
+    name = "util_set_object_arg"
+    ignore = true
+
+    [[object.function]]
+    name = "util_seqnum_compare"
+    ignore = true
+
+    [[object.function]]
+    name = "dynamic_type_register"
+    ignore = true
+
+    [[object.function]]
+    name = "flow_get_name"
+    ignore = true
+
+    [[object.function]]
+    name = "filename_to_uri"
+    ignore = true
+
+    [[object.function]]
+    name = "is_initialized"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_add_log_function"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_remove_log_function"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_remove_log_function_by_data"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_construct_term_color"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_construct_win_color"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_get_all_categories"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_get_color_mode"
+    ignore = true
+
+    [[object.function]]
+    pattern = "debug_log.*"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_set_color_mode"
+    ignore = true
+
+    [[object.function]]
+    name = "debug_set_color_mode_from_string"
+    ignore = true
+
+    [[object.function]]
+    name = "error_get_message"
+    ignore = true
+
+    [[object.function]]
+    name = "flow_to_quark"
+    ignore = true
+
+    [[object.function]]
+    name = "formats_contains"
+    ignore = true
+
+    [[object.function]]
+    pattern = "info_.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "print.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "init.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "param_spec_.*"
+    ignore = true
+
+    [[object.function]]
+    name = "is_caps_features"
+    ignore = true
+
+    [[object.function]]
+    name = "make_element_message_details"
+    ignore = true
+
+    [[object.function]]
+    name = "util_array_binary_search"
+    ignore = true
+
+    [[object.function]]
+    name = "util_get_object_array"
+    ignore = true
+
+    [[object.function]]
+    name = "util_set_object_array"
+    ignore = true
+
+    [[object.function]]
+    name = "util_set_value_from_string"
+    ignore = true

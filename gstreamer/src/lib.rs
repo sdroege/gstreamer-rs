@@ -53,7 +53,7 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 pub use auto::traits::*;
-pub use auto::functions::{parse_bin_from_description, parse_launch, version, version_string};
+pub use auto::functions::*;
 
 pub mod miniobject;
 pub use miniobject::{GstRc, MiniObject};

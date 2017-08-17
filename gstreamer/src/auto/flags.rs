@@ -68,6 +68,59 @@ impl SetValue for BufferFlags {
 }
 
 bitflags! {
+    pub struct DebugGraphDetails: u32 {
+        const DEBUG_GRAPH_SHOW_MEDIA_TYPE = 1;
+        const DEBUG_GRAPH_SHOW_CAPS_DETAILS = 2;
+        const DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS = 4;
+        const DEBUG_GRAPH_SHOW_STATES = 8;
+        const DEBUG_GRAPH_SHOW_FULL_PARAMS = 16;
+        const DEBUG_GRAPH_SHOW_ALL = 15;
+        const DEBUG_GRAPH_SHOW_VERBOSE = 4294967295;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for DebugGraphDetails {
+    type GlibType = ffi::GstDebugGraphDetails;
+
+    fn to_glib(&self) -> ffi::GstDebugGraphDetails {
+        ffi::GstDebugGraphDetails::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstDebugGraphDetails> for DebugGraphDetails {
+    fn from_glib(value: ffi::GstDebugGraphDetails) -> DebugGraphDetails {
+        skip_assert_initialized!();
+        DebugGraphDetails::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for DebugGraphDetails {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_debug_graph_details_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for DebugGraphDetails {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for DebugGraphDetails {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstDebugGraphDetails::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for DebugGraphDetails {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct ElementFlags: u32 {
         const ELEMENT_FLAG_LOCKED_STATE = 16;
         const ELEMENT_FLAG_SINK = 32;
@@ -395,6 +448,53 @@ impl<'a> FromValue<'a> for SegmentFlags {
 }
 
 impl SetValue for SegmentFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
+    pub struct StackTraceFlags: u32 {
+        const STACK_TRACE_SHOW_FULL = 1;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for StackTraceFlags {
+    type GlibType = ffi::GstStackTraceFlags;
+
+    fn to_glib(&self) -> ffi::GstStackTraceFlags {
+        ffi::GstStackTraceFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
+    fn from_glib(value: ffi::GstStackTraceFlags) -> StackTraceFlags {
+        skip_assert_initialized!();
+        StackTraceFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for StackTraceFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_stack_trace_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for StackTraceFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for StackTraceFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstStackTraceFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for StackTraceFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
     }

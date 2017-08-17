@@ -456,6 +456,87 @@ impl SetValue for CoreError {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum DebugLevel {
+    None,
+    Error,
+    Warning,
+    Fixme,
+    Info,
+    Debug,
+    Log,
+    Trace,
+    Memdump,
+    Count,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for DebugLevel {
+    type GlibType = ffi::GstDebugLevel;
+
+    fn to_glib(&self) -> ffi::GstDebugLevel {
+        match *self {
+            DebugLevel::None => ffi::GST_LEVEL_NONE,
+            DebugLevel::Error => ffi::GST_LEVEL_ERROR,
+            DebugLevel::Warning => ffi::GST_LEVEL_WARNING,
+            DebugLevel::Fixme => ffi::GST_LEVEL_FIXME,
+            DebugLevel::Info => ffi::GST_LEVEL_INFO,
+            DebugLevel::Debug => ffi::GST_LEVEL_DEBUG,
+            DebugLevel::Log => ffi::GST_LEVEL_LOG,
+            DebugLevel::Trace => ffi::GST_LEVEL_TRACE,
+            DebugLevel::Memdump => ffi::GST_LEVEL_MEMDUMP,
+            DebugLevel::Count => ffi::GST_LEVEL_COUNT,
+            DebugLevel::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
+    fn from_glib(value: ffi::GstDebugLevel) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => DebugLevel::None,
+            1 => DebugLevel::Error,
+            2 => DebugLevel::Warning,
+            3 => DebugLevel::Fixme,
+            4 => DebugLevel::Info,
+            5 => DebugLevel::Debug,
+            6 => DebugLevel::Log,
+            7 => DebugLevel::Trace,
+            9 => DebugLevel::Memdump,
+            10 => DebugLevel::Count,
+            value => DebugLevel::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for DebugLevel {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_debug_level_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for DebugLevel {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for DebugLevel {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstDebugLevel>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for DebugLevel {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum EventType {
     Unknown,
     FlushStart,
