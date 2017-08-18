@@ -305,7 +305,7 @@ impl Message {
     }
 }
 
-impl glib::types::StaticType for GstRc<MessageRef> {
+impl glib::types::StaticType for MessageRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_message_get_type()) }
     }

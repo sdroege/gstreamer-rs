@@ -176,7 +176,7 @@ impl QueryRef {
     }
 }
 
-impl glib::types::StaticType for GstRc<QueryRef> {
+impl glib::types::StaticType for QueryRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_query_get_type()) }
     }

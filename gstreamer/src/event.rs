@@ -279,7 +279,7 @@ impl Event {
     }
 }
 
-impl glib::types::StaticType for GstRc<EventRef> {
+impl glib::types::StaticType for EventRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_event_get_type()) }
     }

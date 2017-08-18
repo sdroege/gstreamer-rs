@@ -243,7 +243,7 @@ impl CapsRef {
     }
 }
 
-impl glib::types::StaticType for GstRc<CapsRef> {
+impl glib::types::StaticType for CapsRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_caps_get_type()) }
     }

@@ -93,7 +93,7 @@ impl TocRef {
     }
 }
 
-impl glib::types::StaticType for GstRc<TocRef> {
+impl glib::types::StaticType for TocRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_toc_get_type()) }
     }
@@ -245,7 +245,7 @@ impl TocEntryRef {
     }
 }
 
-impl glib::types::StaticType for GstRc<TocEntryRef> {
+impl glib::types::StaticType for TocEntryRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_toc_entry_get_type()) }
     }
