@@ -240,6 +240,16 @@ impl glib::value::SetValue for Structure {
     }
 }
 
+impl glib::value::SetValueOptional for Structure {
+    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
+        if let Some(s) = s {
+            gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+        } else {
+            gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+        }
+    }
+}
+
 impl GlibPtrDefault for Structure {
     type GlibType = *mut ffi::GstStructure;
 }
