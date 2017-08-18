@@ -434,6 +434,16 @@ impl<T: MiniObject + glib::StaticType> glib::value::SetValue for GstRc<T> {
     }
 }
 
+impl<T: MiniObject + glib::StaticType> glib::value::SetValueOptional for GstRc<T> {
+    unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
+        if let Some(s) = s {
+            gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+        } else {
+            gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+        }
+    }
+}
+
 impl<T: MiniObject + 'static> GlibPtrDefault for GstRc<T> {
     type GlibType = *mut T::GstType;
 }
