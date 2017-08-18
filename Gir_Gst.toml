@@ -40,6 +40,8 @@ generate = [
     "Gst.StructureChangeType",
     "Gst.StreamStatusType",
     "Gst.DeviceProvider",
+    "Gst.Device",
+    "Gst.DeviceMonitor",
     "Gst.StreamType",
     "Gst.StreamFlags",
     "Gst.PadLinkReturn",
@@ -293,38 +295,6 @@ status = "generate"
 trait = false
 
 [[object]]
-name = "Gst.Device"
-status = "generate"
-    [[object.property]]
-    name = "properties"
-    # Structure is not a GObject
-    ignore = true
-
-    [[object.property]]
-    name = "caps"
-    # Caps is not a GObject
-    ignore = true
-
-    [[object.property]]
-    name = "device-class"
-    # Has getter/setter functions
-    ignore = true
-
-    [[object.property]]
-    name = "display-name"
-    # Has getter/setter functions
-    ignore = true
-
-[[object]]
-name = "Gst.DeviceMonitor"
-status = "generate"
-
-    [[object.property]]
-    name = "show-all"
-    # Has getter/setter functions
-    ignore = true
-
-[[object]]
 name = "Gst.Object"
 # For renaming the trait...
 status = "generate"
@@ -387,11 +357,6 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to activate mode pad"
 
-    [[object.property]]
-    name = "caps"
-    # Caps is not a GObject
-    ignore = true
-
     [[object.function]]
     name = "remove_probe"
     # Don't use a ulong
@@ -415,11 +380,6 @@ status = "generate"
     [[object.function]]
     name = "get_range"
     # Buffer can be NULL
-    ignore = true
-
-    [[object.property]]
-    name = "template"
-    # Has getter/setter functions
     ignore = true
 
     [[object.function]]
@@ -506,40 +466,10 @@ name = "Gst.Stream"
 status = "generate"
 trait = false
 
-    [[object.property]]
-    name = "caps"
-    # Caps is not a GObject
-    ignore = true
-
-    [[object.property]]
-    name = "tags"
-    # TagList is not a GObject
-    ignore = true
-
-    [[object.property]]
-    name = "stream-flags"
-    # Has setter/getter functions
-    ignore = true
-
-    [[object.property]]
-    name = "stream-id"
-    # Has setter/getter functions
-    ignore = true
-
-    [[object.property]]
-    name = "stream-type"
-    # Has setter/getter functions
-    ignore = true
-
 [[object]]
 name = "Gst.StreamCollection"
 status = "generate"
 trait = false
-
-    [[object.property]]
-    name = "upstream-id"
-    # Has setter/getter functions
-    ignore = true
 
 [[object]]
 name = "Gst.Plugin"

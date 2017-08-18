@@ -32,16 +32,6 @@ name = "GstApp.AppSink"
 status = "generate"
 trait = false
 
-    [[object.property]]
-    name = "buffer-list"
-    # Has getter function
-    ignore = true
-
-    [[object.property]]
-    name = "eos"
-    # Has getter function
-    ignore = true
-
     [[object.signal]]
     name = "pull-sample"
     # Action signal
@@ -86,32 +76,6 @@ trait = false
     name = "push-sample"
     # Action signal
     ignore = true
-
-    [[object.property]]
-    name = "current-level-bytes"
-    # Has getter function
-    ignore = true
-
-    [[object.property]]
-    name = "duration"
-    # Has getter function
-    ignore = true
-
-    [[object.property]]
-    name = "max-latency"
-    # Has getter function
-    ignore = true
-
-    [[object.property]]
-    name = "min-latency"
-    # Has getter function
-    ignore = true
-
-    [[object.property]]
-    name = "stream-type"
-    # Has getter function
-    ignore = true
-
 
 [[object]]
 name = "Gst.Structure"
