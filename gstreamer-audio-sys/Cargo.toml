@@ -4,20 +4,17 @@ pkg-config = "0.3.7"
 [dependencies]
 bitflags = "0.9"
 libc = "0.2"
-glib-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 
 [dependencies.gstreamer-sys]
 path = "../gstreamer-sys"
-version = "0.1.1"
 
 [dependencies.gstreamer-base-sys]
 path = "../gstreamer-base-sys"
-version = "0.1.1"
 
 [dependencies.gstreamer-tag-sys]
 path = "../gstreamer-tag-sys"
-version = "0.1.1"
 
 [features]
 v1_0_10 = []
