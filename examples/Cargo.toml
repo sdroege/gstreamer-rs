@@ -11,6 +11,7 @@ gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
 gtk = { version = "0.2", git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
+gdk = { version = "0.6", git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { version = "0.2", git = "https://github.com/gtk-rs/gio", optional = true }
 futures = { version = "0.1", optional = true }
 tokio-core = { version = "0.1", optional = true }
@@ -20,6 +21,7 @@ byte-slice-cast = "0.1"
 [features]
 gst-player = ["gstreamer-player"]
 gtksink = ["gtk", "gio"]
+gtkvideooverlay = ["gtk", "gdk", "gio"]
 tokio = ["gstreamer/futures", "futures", "tokio-core"]
 default-features = []
 

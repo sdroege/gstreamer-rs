@@ -114,6 +114,7 @@ version = "0.1.0"
 dependencies = [
  "byte-slice-cast 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gdk 0.6.0 (git+https://github.com/gtk-rs/gdk)",
  "gio 0.2.0 (git+https://github.com/gtk-rs/gio)",
  "glib 0.3.0 (git+https://github.com/gtk-rs/glib)",
  "gstreamer 0.1.0",
