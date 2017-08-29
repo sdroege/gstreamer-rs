@@ -4,14 +4,14 @@ version = "0.1.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
-glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
+glib = { version = "0.3", git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
 gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
-gtk = { version = "0.1.3", git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
-gio = { version = "0.1.3", git = "https://github.com/gtk-rs/gio", optional = true }
+gtk = { version = "0.2", git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
+gio = { version = "0.2", git = "https://github.com/gtk-rs/gio", optional = true }
 futures = { version = "0.1", optional = true }
 tokio-core = { version = "0.1", optional = true }
 send-cell = "0.1"

@@ -13,11 +13,11 @@ build = "build.rs"
 [dependencies]
 bitflags = "0.9"
 libc = "0.2"
-glib-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { version = "0.3.4", git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gstreamer-audio-sys = { version = "0.1.1", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-glib = { version = "0.1.3", git = "https://github.com/gtk-rs/glib" }
+glib-sys = { version = "0.4", git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { version = "0.4", git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { version = "0.2", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-audio-sys = { version = "0.2", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+glib = { version = "0.3", git = "https://github.com/gtk-rs/glib" }
 gstreamer = { version = "0.1.0", path = "../gstreamer" }
 array-init = "0.0"
 
