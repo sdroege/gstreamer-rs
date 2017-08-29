@@ -142,7 +142,12 @@ pub fn init() -> Result<(), glib::Error> {
 }
 
 pub const BUFFER_OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
-pub const CLOCK_TIME_NONE: u64 = ffi::GST_CLOCK_TIME_NONE;
+pub const CLOCK_TIME_NONE: ClockTime = ffi::GST_CLOCK_TIME_NONE;
+
+pub const SECOND: ClockTime = 1_000_000_000;
+pub const MSECOND: ClockTime = 1_000_000;
+pub const USECOND: ClockTime = 1_000;
+pub const NSECOND: ClockTime = 1;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

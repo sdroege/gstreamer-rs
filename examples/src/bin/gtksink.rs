@@ -62,7 +62,7 @@ fn create_ui(app: &gtk::Application) {
         let position = pipeline.query_position(gst::Format::Time);
 
         if let Some(position) = position {
-            let mut seconds = position / 1_000_000_000;
+            let mut seconds = position / gst::SECOND;
             let mut minutes = seconds / 60;
             let hours = minutes / 60;
 

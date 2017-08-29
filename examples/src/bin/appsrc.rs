@@ -58,7 +58,7 @@ fn main_loop() -> Result<(), utils::ExampleError> {
             let mut buffer = gst::Buffer::with_size(WIDTH * HEIGHT * 4).unwrap();
             {
                 let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(i * 500_000_000);
+                buffer.set_pts(i * 500 * gst::MSECOND);
 
                 let mut data = buffer.map_writable().unwrap();
 
