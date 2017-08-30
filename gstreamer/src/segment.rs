@@ -61,6 +61,7 @@ impl Segment {
         stop_type: SeekType,
         stop: u64,
     ) -> Option<bool> {
+        skip_assert_initialized!();
         unsafe {
             let mut update = mem::uninitialized();
             let ret = from_glib(ffi::gst_segment_do_seek(

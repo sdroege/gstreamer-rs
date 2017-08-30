@@ -62,14 +62,17 @@ impl GstRc<CapsRef> {
     }
 
     pub fn fixate(caps: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_fixate(caps.into_ptr())) }
     }
 
     pub fn merge(caps: Self, other: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_merge(caps.into_ptr(), other.into_ptr())) }
     }
 
     pub fn merge_structure(caps: Self, other: Structure) -> Self {
+        skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_caps_merge_structure(
                 caps.into_ptr(),
@@ -79,18 +82,22 @@ impl GstRc<CapsRef> {
     }
 
     pub fn normalize(caps: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_normalize(caps.into_ptr())) }
     }
 
     pub fn simplify(caps: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_simplify(caps.into_ptr())) }
     }
 
     pub fn subtract(caps: Self, other: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_subtract(caps.into_ptr(), other.into_ptr())) }
     }
 
     pub fn truncate(caps: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_truncate(caps.into_ptr())) }
     }
 }
@@ -99,6 +106,7 @@ impl str::FromStr for Caps {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         Caps::from_string(s).ok_or(())
     }
 }
@@ -251,80 +259,80 @@ impl glib::types::StaticType for CapsRef {
 
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $styp:ty) => {
+    pub struct $name<'a> {
+        caps: $typ,
+        idx: u32,
+        n_structures: u32,
+    }
 
-pub struct $name<'a> {
-    caps: $typ,
-    idx: u32,
-    n_structures: u32,
-}
+    impl<'a> $name<'a> {
+        fn new(caps: $typ) -> $name<'a> {
+            skip_assert_initialized!();
+            let n_structures = caps.get_size();
 
-impl<'a> $name<'a> {
-    pub fn new(caps: $typ) -> $name<'a> {
-        let n_structures = caps.get_size();
-
-        $name {
-            caps: caps,
-            idx: 0,
-            n_structures: n_structures,
+            $name {
+                caps: caps,
+                idx: 0,
+                n_structures: n_structures,
+            }
         }
     }
-}
 
-impl<'a> Iterator for $name<'a> {
-    type Item = $styp;
+    impl<'a> Iterator for $name<'a> {
+        type Item = $styp;
 
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.idx >= self.n_structures {
-            return None;
-        }
-
-        unsafe {
-            let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.idx);
-            if structure.is_null() {
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.idx >= self.n_structures {
                 return None;
             }
 
-            self.idx += 1;
-            Some(StructureRef::from_glib_borrow_mut(
-                structure as *mut ffi::GstStructure,
-            ))
+            unsafe {
+                let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.idx);
+                if structure.is_null() {
+                    return None;
+                }
+
+                self.idx += 1;
+                Some(StructureRef::from_glib_borrow_mut(
+                    structure as *mut ffi::GstStructure,
+                ))
+            }
+        }
+
+        fn size_hint(&self) -> (usize, Option<usize>) {
+            if self.idx == self.n_structures {
+                return (0, Some(0));
+            }
+
+            let remaining = (self.n_structures - self.idx) as usize;
+
+            (remaining, Some(remaining))
         }
     }
 
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.n_structures {
-            return (0, Some(0));
-        }
-
-        let remaining = (self.n_structures - self.idx) as usize;
-
-        (remaining, Some(remaining))
-    }
-}
-
-impl<'a> DoubleEndedIterator for $name<'a> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        if self.idx == self.n_structures {
-            return None;
-        }
-
-        self.n_structures -= 1;
-
-        unsafe {
-            let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.n_structures);
-            if structure.is_null() {
+    impl<'a> DoubleEndedIterator for $name<'a> {
+        fn next_back(&mut self) -> Option<Self::Item> {
+            if self.idx == self.n_structures {
                 return None;
             }
 
-            Some(StructureRef::from_glib_borrow_mut(
-                structure as *mut ffi::GstStructure,
-            ))
+            self.n_structures -= 1;
+
+            unsafe {
+                let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.n_structures);
+                if structure.is_null() {
+                    return None;
+                }
+
+                Some(StructureRef::from_glib_borrow_mut(
+                    structure as *mut ffi::GstStructure,
+                ))
+            }
         }
     }
-}
 
-impl<'a> ExactSizeIterator for $name<'a> {}
-}
+    impl<'a> ExactSizeIterator for $name<'a> {}
+    }
 );
 
 define_iter!(Iter, &'a CapsRef, &'a StructureRef);

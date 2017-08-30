@@ -351,6 +351,7 @@ pub struct TagIterator<'a, T: Tag<'a>> {
 
 impl<'a, T: Tag<'a>> TagIterator<'a, T> {
     fn new(taglist: &'a TagListRef) -> TagIterator<'a, T> {
+        skip_assert_initialized!();
         TagIterator {
             taglist: taglist,
             idx: 0,

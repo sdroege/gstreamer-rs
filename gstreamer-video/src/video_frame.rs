@@ -179,7 +179,7 @@ impl VideoFrame<Readable> {
         buffer: gst::Buffer,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut frame = mem::zeroed();
@@ -206,7 +206,7 @@ impl VideoFrame<Readable> {
         id: i32,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut frame = mem::zeroed();
@@ -239,7 +239,7 @@ impl VideoFrame<Writable> {
         buffer: gst::Buffer,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut frame = mem::zeroed();
@@ -267,7 +267,7 @@ impl VideoFrame<Writable> {
         id: i32,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut frame = mem::zeroed();

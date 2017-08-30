@@ -23,6 +23,7 @@ use gobject_ffi;
 
 impl Element {
     pub fn link_many<E: IsA<Element>>(elements: &[&E]) -> Result<(), glib::BoolError> {
+        skip_assert_initialized!();
         for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
             unsafe {
                 let ret: bool = from_glib(ffi::gst_element_link(
@@ -39,6 +40,7 @@ impl Element {
     }
 
     pub fn unlink_many<E: IsA<Element>>(elements: &[&E]) {
+        skip_assert_initialized!();
         for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
             unsafe {
                 ffi::gst_element_unlink(e1.to_glib_none().0, e2.to_glib_none().0);

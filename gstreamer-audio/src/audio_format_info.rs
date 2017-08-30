@@ -26,6 +26,8 @@ pub enum AudioEndianness {
 
 impl FromGlib<i32> for AudioEndianness {
     fn from_glib(value: i32) -> Self {
+        assert_initialized_main_thread!();
+
         match value {
             1234 => AudioEndianness::LittleEndian,
             4321 => AudioEndianness::BigEndian,
@@ -50,6 +52,8 @@ pub struct AudioFormatInfo(&'static ffi::GstAudioFormatInfo);
 
 impl AudioFormatInfo {
     pub fn from_format(format: ::AudioFormat) -> AudioFormatInfo {
+        assert_initialized_main_thread!();
+
         unsafe {
             let info = ffi::gst_audio_format_get_info(format.to_glib());
             assert!(!info.is_null());
@@ -227,6 +231,7 @@ impl str::FromStr for ::AudioFormatInfo {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         let format = s.parse()?;
         Ok(AudioFormatInfo::from_format(format))
     }
@@ -234,6 +239,7 @@ impl str::FromStr for ::AudioFormatInfo {
 
 impl From<::AudioFormat> for AudioFormatInfo {
     fn from(f: ::AudioFormat) -> Self {
+        skip_assert_initialized!();
         Self::from_format(f)
     }
 }

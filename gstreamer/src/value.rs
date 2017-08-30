@@ -25,14 +25,17 @@ pub struct Fraction(pub Rational32);
 
 impl Fraction {
     pub fn new(num: i32, den: i32) -> Fraction {
+        assert_initialized_main_thread!();
         (num, den).into()
     }
 
     pub fn approximate_f32(x: f32) -> Option<Fraction> {
+        assert_initialized_main_thread!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
 
     pub fn approximate_f64(x: f64) -> Option<Fraction> {
+        assert_initialized_main_thread!();
         Rational32::approximate_float(x).map(|r| r.into())
     }
 }
@@ -153,12 +156,14 @@ impl ops::Neg for Fraction {
 
 impl From<i32> for Fraction {
     fn from(x: i32) -> Fraction {
+        assert_initialized_main_thread!();
         Fraction(x.into())
     }
 }
 
 impl From<(i32, i32)> for Fraction {
     fn from(x: (i32, i32)) -> Fraction {
+        assert_initialized_main_thread!();
         Fraction(x.into())
     }
 }
@@ -171,12 +176,14 @@ impl Into<(i32, i32)> for Fraction {
 
 impl From<Rational32> for Fraction {
     fn from(x: Rational32) -> Fraction {
+        assert_initialized_main_thread!();
         Fraction(x)
     }
 }
 
 impl From<Fraction> for Rational32 {
     fn from(x: Fraction) -> Rational32 {
+        skip_assert_initialized!();
         x.0
     }
 }
@@ -231,10 +238,13 @@ impl<T: Copy> IntRange<T> {
 
 impl IntRange<i32> {
     pub fn new(min: i32, max: i32) -> Self {
+        skip_assert_initialized!();
         Self::new_with_step(min, max, 1)
     }
 
     pub fn new_with_step(min: i32, max: i32, step: i32) -> Self {
+        assert_initialized_main_thread!();
+
         assert!(min <= max);
         assert!(step > 0);
 
@@ -248,10 +258,13 @@ impl IntRange<i32> {
 
 impl IntRange<i64> {
     pub fn new(min: i64, max: i64) -> Self {
+        skip_assert_initialized!();
         Self::new_with_step(min, max, 1)
     }
 
     pub fn new_with_step(min: i64, max: i64, step: i64) -> Self {
+        assert_initialized_main_thread!();
+
         assert!(min <= max);
         assert!(step > 0);
 
@@ -265,24 +278,28 @@ impl IntRange<i64> {
 
 impl From<(i32, i32)> for IntRange<i32> {
     fn from((min, max): (i32, i32)) -> Self {
+        skip_assert_initialized!();
         Self::new(min, max)
     }
 }
 
 impl From<(i32, i32, i32)> for IntRange<i32> {
     fn from((min, max, step): (i32, i32, i32)) -> Self {
+        skip_assert_initialized!();
         Self::new_with_step(min, max, step)
     }
 }
 
 impl From<(i64, i64)> for IntRange<i64> {
     fn from((min, max): (i64, i64)) -> Self {
+        skip_assert_initialized!();
         Self::new(min, max)
     }
 }
 
 impl From<(i64, i64, i64)> for IntRange<i64> {
     fn from((min, max, step): (i64, i64, i64)) -> Self {
+        skip_assert_initialized!();
         Self::new_with_step(min, max, step)
     }
 }
@@ -351,6 +368,8 @@ pub struct FractionRange {
 
 impl FractionRange {
     pub fn new<T: Into<Fraction>, U: Into<Fraction>>(min: T, max: U) -> Self {
+        assert_initialized_main_thread!();
+
         let min = min.into();
         let max = max.into();
 
@@ -370,6 +389,8 @@ impl FractionRange {
 
 impl From<(Fraction, Fraction)> for FractionRange {
     fn from((min, max): (Fraction, Fraction)) -> Self {
+        skip_assert_initialized!();
+
         Self::new(min, max)
     }
 }
@@ -417,6 +438,7 @@ pub struct Bitmask(u64);
 
 impl Bitmask {
     pub fn new(v: u64) -> Self {
+        assert_initialized_main_thread!();
         Bitmask(v)
     }
 }
@@ -469,6 +491,7 @@ impl ops::Not for Bitmask {
 
 impl From<u64> for Bitmask {
     fn from(v: u64) -> Self {
+        skip_assert_initialized!();
         Self::new(v)
     }
 }
@@ -503,6 +526,8 @@ pub struct Array<'a>(Cow<'a, [glib::Value]>);
 
 impl<'a> Array<'a> {
     pub fn new(values: &[&ToValue]) -> Self {
+        assert_initialized_main_thread!();
+
         Array(values.iter().map(|v| v.to_value()).collect())
     }
 
@@ -517,12 +542,16 @@ impl<'a> Array<'a> {
 
 impl<'a> From<&'a [&'a ToValue]> for Array<'a> {
     fn from(values: &'a [&'a ToValue]) -> Self {
+        skip_assert_initialized!();
+
         Self::new(values)
     }
 }
 
 impl<'a> From<&'a [glib::Value]> for Array<'a> {
     fn from(values: &'a [glib::Value]) -> Self {
+        assert_initialized_main_thread!();
+
         Array(Cow::Borrowed(values))
     }
 }
@@ -566,6 +595,8 @@ pub struct List<'a>(Cow<'a, [glib::Value]>);
 
 impl<'a> List<'a> {
     pub fn new(values: &[&ToValue]) -> Self {
+        assert_initialized_main_thread!();
+
         List(values.iter().map(|v| v.to_value()).collect())
     }
 
@@ -580,12 +611,16 @@ impl<'a> List<'a> {
 
 impl<'a> From<&'a [&'a ToValue]> for List<'a> {
     fn from(values: &'a [&'a ToValue]) -> Self {
+        skip_assert_initialized!();
+
         Self::new(values)
     }
 }
 
 impl<'a> From<&'a [glib::Value]> for List<'a> {
     fn from(values: &'a [glib::Value]) -> Self {
+        assert_initialized_main_thread!();
+
         List(Cow::Borrowed(values))
     }
 }
@@ -646,6 +681,8 @@ impl ToGlib for ValueOrder {
 
 impl FromGlib<i32> for ValueOrder {
     fn from_glib(v: i32) -> Self {
+        skip_assert_initialized!();
+
         match v {
             ffi::GST_VALUE_LESS_THAN => ValueOrder::LessThan,
             ffi::GST_VALUE_EQUAL => ValueOrder::Equal,
@@ -799,6 +836,8 @@ impl GstValueExt for glib::Value {
     }
 
     fn deserialize<'a, T: Into<&'a str>>(s: T) -> Option<glib::Value> {
+        assert_initialized_main_thread!();
+
         let s = s.into();
 
         unsafe {

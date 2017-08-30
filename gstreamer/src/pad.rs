@@ -45,6 +45,7 @@ impl ToGlib for PadProbeId {
 
 impl FromGlib<libc::c_ulong> for PadProbeId {
     fn from_glib(val: libc::c_ulong) -> PadProbeId {
+        skip_assert_initialized!();
         PadProbeId(val)
     }
 }
@@ -208,6 +209,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         parent: Q,
         query: &mut QueryRef,
     ) -> bool {
+        skip_assert_initialized!();
         let parent = parent.into();
         let parent = parent.to_glib_none();
         unsafe {
@@ -242,6 +244,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         parent: Q,
         event: Event,
     ) -> bool {
+        skip_assert_initialized!();
         let parent = parent.into();
         let parent = parent.to_glib_none();
         unsafe {

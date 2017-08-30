@@ -27,6 +27,8 @@ impl AudioChannelPosition {
     }
 
     pub fn positions_to_mask(positions: &[AudioChannelPosition], force_order: bool) -> Option<u64> {
+        assert_initialized_main_thread!();
+
         let len = positions.len();
         if len > 64 {
             return None;
@@ -59,6 +61,8 @@ impl AudioChannelPosition {
         mask: u64,
         positions: &mut [AudioChannelPosition],
     ) -> Result<(), glib::BoolError> {
+        assert_initialized_main_thread!();
+
         if positions.len() > 64 {
             return Err(glib::BoolError("Invalid number of channels"));
         }
@@ -89,6 +93,8 @@ impl AudioChannelPosition {
     pub fn positions_to_valid_order(
         positions: &mut [AudioChannelPosition],
     ) -> Result<(), glib::BoolError> {
+        assert_initialized_main_thread!();
+
         if positions.len() > 64 {
             return Err(glib::BoolError("Invalid number of channels"));
         }
@@ -121,6 +127,8 @@ impl AudioChannelPosition {
     }
 
     pub fn get_fallback_mask(channels: u32) -> u64 {
+        assert_initialized_main_thread!();
+
         unsafe { ffi::gst_audio_channel_get_fallback_mask(channels as i32) }
     }
 
@@ -128,6 +136,8 @@ impl AudioChannelPosition {
         positions: &[::AudioChannelPosition],
         force_order: bool,
     ) -> bool {
+        assert_initialized_main_thread!();
+
         if positions.len() > 64 {
             return false;
         }
@@ -157,6 +167,8 @@ pub fn buffer_reorder_channels(
     from: &[AudioChannelPosition],
     to: &[AudioChannelPosition],
 ) -> Result<(), glib::BoolError> {
+    assert_initialized_main_thread!();
+
     if from.len() != to.len() || from.len() > 64 {
         return Err(glib::BoolError("Invalid number of channels"));
     }
@@ -202,6 +214,8 @@ pub fn reorder_channels(
     from: &[AudioChannelPosition],
     to: &[AudioChannelPosition],
 ) -> Result<(), glib::BoolError> {
+    assert_initialized_main_thread!();
+
     if from.len() != to.len() || from.len() > 64 {
         return Err(glib::BoolError("Invalid number of channels"));
     }
@@ -246,6 +260,8 @@ pub fn get_channel_reorder_map(
     to: &[AudioChannelPosition],
     reorder_map: &mut [usize],
 ) -> Result<(), glib::BoolError> {
+    assert_initialized_main_thread!();
+
     if from.len() != to.len() || from.len() != reorder_map.len() || from.len() > 64 {
         return Err(glib::BoolError("Invalid number of channels"));
     }

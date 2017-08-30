@@ -132,6 +132,7 @@ impl str::FromStr for Structure {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         Structure::from_string(s).ok_or(())
     }
 }
@@ -446,6 +447,8 @@ impl StructureRef {
         name: &str,
         target: T,
     ) -> bool {
+        skip_assert_initialized!();
+
         let target = target.into();
         unsafe {
             from_glib(ffi::gst_structure_fixate_field_nearest_fraction(
@@ -489,7 +492,8 @@ pub struct FieldIterator<'a> {
 }
 
 impl<'a> FieldIterator<'a> {
-    pub fn new(structure: &'a StructureRef) -> FieldIterator<'a> {
+    fn new(structure: &'a StructureRef) -> FieldIterator<'a> {
+        skip_assert_initialized!();
         let n_fields = structure.n_fields();
 
         FieldIterator {
@@ -549,7 +553,8 @@ pub struct Iter<'a> {
 }
 
 impl<'a> Iter<'a> {
-    pub fn new(structure: &'a StructureRef) -> Iter<'a> {
+    fn new(structure: &'a StructureRef) -> Iter<'a> {
+        skip_assert_initialized!();
         Iter {
             iter: FieldIterator::new(structure),
         }

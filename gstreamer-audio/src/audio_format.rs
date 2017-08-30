@@ -21,6 +21,8 @@ impl ::AudioFormat {
         width: i32,
         depth: i32,
     ) -> ::AudioFormat {
+        assert_initialized_main_thread!();
+
         unsafe {
             from_glib(ffi::gst_audio_format_build_integer(
                 sign.to_glib(),
@@ -32,6 +34,8 @@ impl ::AudioFormat {
     }
 
     pub fn from_string(s: &str) -> ::AudioFormat {
+        assert_initialized_main_thread!();
+
         unsafe { from_glib(ffi::gst_audio_format_from_string(s.to_glib_none().0)) }
     }
 
@@ -48,6 +52,8 @@ impl str::FromStr for ::AudioFormat {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
+
         let format = Self::from_string(s);
         if format == ::AudioFormat::Unknown {
             Err(())

@@ -54,6 +54,8 @@ impl GstRc<BufferRef> {
     }
 
     pub fn with_size(size: usize) -> Option<Self> {
+        assert_initialized_main_thread!();
+
         let raw = unsafe { ffi::gst_buffer_new_allocate(ptr::null_mut(), size, ptr::null_mut()) };
         if raw.is_null() {
             None
@@ -68,6 +70,8 @@ impl GstRc<BufferRef> {
     }
 
     pub fn from_vec(vec: Vec<u8>) -> Option<Self> {
+        assert_initialized_main_thread!();
+
         let raw = unsafe {
             let mut vec = Box::new(vec);
             let maxsize = vec.capacity();
@@ -133,6 +137,7 @@ impl GstRc<BufferRef> {
     }
 
     pub fn append(buffer: Self, other: Self) -> Self {
+        skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_buffer_append(buffer.into_ptr(), other.into_ptr())) }
     }
 }

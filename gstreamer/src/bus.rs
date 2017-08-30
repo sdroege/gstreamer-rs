@@ -87,6 +87,7 @@ impl Bus {
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
+        skip_assert_initialized!();
         unsafe {
             let source = ffi::gst_bus_create_watch(self.to_glib_none().0);
             let trampoline = trampoline_watch as gpointer;
@@ -147,6 +148,7 @@ pub struct BusStream(Bus, Arc<Mutex<Option<Task>>>);
 #[cfg(feature = "futures")]
 impl BusStream {
     pub fn new(bus: &Bus) -> Self {
+        skip_assert_initialized!();
         let task = Arc::new(Mutex::new(None));
         let task_clone = task.clone();
 

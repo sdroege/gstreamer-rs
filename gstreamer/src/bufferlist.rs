@@ -101,6 +101,7 @@ pub struct Iter<'a> {
 
 impl<'a> Iter<'a> {
     fn new(list: &'a BufferListRef) -> Iter<'a> {
+        skip_assert_initialized!();
         Iter {
             list: list,
             idx: 0,

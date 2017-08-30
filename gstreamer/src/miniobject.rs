@@ -244,6 +244,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
     type Storage = (Vec<Stash<'a, *mut T::GstType, GstRc<T>>>, Option<Vec<*mut T::GstType>>);
 
     fn to_glib_none_from_slice(t: &'a [GstRc<T>]) -> (*mut *mut T::GstType, Self::Storage) {
+        skip_assert_initialized!();
         let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
         let mut v_ptr: Vec<_> = v.iter().map(|s| s.0).collect();
         v_ptr.push(ptr::null_mut() as *mut T::GstType);
@@ -252,6 +253,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
     }
 
     fn to_glib_container_from_slice(t: &'a [GstRc<T>]) -> (*mut *mut T::GstType, Self::Storage) {
+        skip_assert_initialized!();
         let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
 
         let v_ptr = unsafe {
@@ -268,6 +270,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
     }
 
     fn to_glib_full_from_slice(t: &[GstRc<T>]) -> *mut *mut T::GstType {
+        skip_assert_initialized!();
         unsafe {
             let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1) as *mut *mut T::GstType;
 
@@ -284,16 +287,19 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *const *mut T::Gs
     type Storage = (Vec<Stash<'a, *mut T::GstType, GstRc<T>>>, Option<Vec<*mut T::GstType>>);
 
     fn to_glib_none_from_slice(t: &'a [GstRc<T>]) -> (*const *mut T::GstType, Self::Storage) {
+        skip_assert_initialized!();
         let (ptr, stash) = ToGlibContainerFromSlice::<'a, *mut *mut T::GstType>::to_glib_none_from_slice(t);
         (ptr as *const *mut T::GstType, stash)
     }
 
     fn to_glib_container_from_slice(_: &'a [GstRc<T>]) -> (*const *mut T::GstType, Self::Storage) {
+        skip_assert_initialized!();
         // Can't have consumer free a *const pointer
         unimplemented!()
     }
 
     fn to_glib_full_from_slice(_: &[GstRc<T>]) -> *const *mut T::GstType {
+        skip_assert_initialized!();
         // Can't have consumer free a *const pointer
         unimplemented!()
     }

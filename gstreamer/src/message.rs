@@ -129,34 +129,42 @@ impl MessageRef {
 
 impl Message {
     pub fn new_eos() -> EosBuilder {
+        assert_initialized_main_thread!();
         EosBuilder::new()
     }
 
     pub fn new_error(error: &glib::Error) -> ErrorBuilder {
+        assert_initialized_main_thread!();
         ErrorBuilder::new(error)
     }
 
     pub fn new_warning(error: &glib::Error) -> WarningBuilder {
+        assert_initialized_main_thread!();
         WarningBuilder::new(error)
     }
 
     pub fn new_info(error: &glib::Error) -> InfoBuilder {
+        assert_initialized_main_thread!();
         InfoBuilder::new(error)
     }
 
     pub fn new_tag(tags: &TagList) -> TagBuilder {
+        assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
 
     pub fn new_buffering(percent: i32) -> BufferingBuilder {
+        assert_initialized_main_thread!();
         BufferingBuilder::new(percent)
     }
 
     pub fn new_state_changed(old: ::State, new: ::State, pending: ::State) -> StateChangedBuilder {
+        assert_initialized_main_thread!();
         StateChangedBuilder::new(old, new, pending)
     }
 
     pub fn new_state_dirty() -> StateDirtyBuilder {
+        assert_initialized_main_thread!();
         StateDirtyBuilder::new()
     }
 
@@ -169,18 +177,22 @@ impl Message {
         duration: u64,
         eos: bool,
     ) -> StepDoneBuilder {
+        assert_initialized_main_thread!();
         StepDoneBuilder::new(format, amount, rate, flush, intermediate, duration, eos)
     }
 
     pub fn new_clock_provide(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
+        assert_initialized_main_thread!();
         ClockProvideBuilder::new(clock, ready)
     }
 
     pub fn new_clock_lost(clock: &::Clock) -> ClockLostBuilder {
+        assert_initialized_main_thread!();
         ClockLostBuilder::new(clock)
     }
 
     pub fn new_new_clock(clock: &::Clock) -> NewClockBuilder {
+        assert_initialized_main_thread!();
         NewClockBuilder::new(clock)
     }
 
@@ -189,43 +201,58 @@ impl Message {
         owner: &::Element,
         busy: bool,
     ) -> StructureChangeBuilder {
+        assert_initialized_main_thread!();
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
     pub fn new_stream_status(type_: ::StreamStatusType, owner: &::Element) -> StreamStatusBuilder {
+        assert_initialized_main_thread!();
         StreamStatusBuilder::new(type_, owner)
     }
 
     pub fn new_application(structure: ::Structure) -> ApplicationBuilder {
+        assert_initialized_main_thread!();
         ApplicationBuilder::new(structure)
     }
 
     pub fn new_element(structure: ::Structure) -> ElementBuilder {
+        assert_initialized_main_thread!();
         ElementBuilder::new(structure)
     }
 
     pub fn new_segment_start(format: ::Format, position: i64) -> SegmentStartBuilder {
+        assert_initialized_main_thread!();
         SegmentStartBuilder::new(format, position)
     }
 
     pub fn new_segment_done(format: ::Format, position: i64) -> SegmentDoneBuilder {
+        assert_initialized_main_thread!();
         SegmentDoneBuilder::new(format, position)
     }
 
     pub fn new_duration_changed() -> DurationChangedBuilder {
+        assert_initialized_main_thread!();
         DurationChangedBuilder::new()
     }
 
     pub fn new_latency() -> LatencyBuilder {
+        assert_initialized_main_thread!();
         LatencyBuilder::new()
     }
 
     pub fn new_async_start() -> AsyncStartBuilder {
+        assert_initialized_main_thread!();
         AsyncStartBuilder::new()
     }
 
     pub fn new_async_done(running_time: u64) -> AsyncDoneBuilder {
+        assert_initialized_main_thread!();
         AsyncDoneBuilder::new(running_time)
+    }
+
+    pub fn new_request_state(state: ::State) -> RequestStateBuilder {
+        assert_initialized_main_thread!();
+        RequestStateBuilder::new(state)
     }
 
     pub fn new_step_start(
@@ -236,6 +263,7 @@ impl Message {
         flush: bool,
         intermediate: bool,
     ) -> StepStartBuilder {
+        assert_initialized_main_thread!();
         StepStartBuilder::new(active, format, amount, rate, flush, intermediate)
     }
 
@@ -246,34 +274,47 @@ impl Message {
         timestamp: u64,
         duration: u64,
     ) -> QosBuilder {
+        assert_initialized_main_thread!();
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
+    pub fn new_progress<'a>(type_: ::ProgressType) -> ProgressBuilder<'a> {
+        assert_initialized_main_thread!();
+        ProgressBuilder::new(type_)
+    }
+
     pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
+        assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
 
     pub fn new_reset_time(running_time: u64) -> ResetTimeBuilder {
+        assert_initialized_main_thread!();
         ResetTimeBuilder::new(running_time)
     }
 
     pub fn new_stream_start() -> StreamStartBuilder {
+        assert_initialized_main_thread!();
         StreamStartBuilder::new()
     }
 
     pub fn new_need_context(context_type: &str) -> NeedContextBuilder {
+        assert_initialized_main_thread!();
         NeedContextBuilder::new(context_type)
     }
 
     pub fn new_have_context(context: ::Context) -> HaveContextBuilder {
+        assert_initialized_main_thread!();
         HaveContextBuilder::new(context)
     }
 
     pub fn new_device_added(device: &::Device) -> DeviceAddedBuilder {
+        assert_initialized_main_thread!();
         DeviceAddedBuilder::new(device)
     }
 
     pub fn new_device_removed(device: &::Device) -> DeviceRemovedBuilder {
+        assert_initialized_main_thread!();
         DeviceRemovedBuilder::new(device)
     }
 
@@ -282,16 +323,19 @@ impl Message {
         property_name: &'a str,
         value: &'a glib::Value,
     ) -> PropertyNotifyBuilder<'a> {
+        assert_initialized_main_thread!();
         PropertyNotifyBuilder::new(property_name, value)
     }
 
     #[cfg(feature = "v1_10")]
     pub fn new_stream_collection(collection: &::StreamCollection) -> StreamCollectionBuilder {
+        assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(feature = "v1_10")]
     pub fn new_streams_selected(collection: &::StreamCollection) -> StreamsSelectedBuilder {
+        assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
 
@@ -301,6 +345,7 @@ impl Message {
         tag_list: Option<&'a TagList>,
         entry_struct: Option<Structure>,
     ) -> RedirectBuilder<'a> {
+        assert_initialized_main_thread!();
         RedirectBuilder::new(location, tag_list, entry_struct)
     }
 }
@@ -1120,7 +1165,8 @@ pub struct EosBuilder {
     seqnum: Option<u32>,
 }
 impl EosBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1139,7 +1185,8 @@ pub struct ErrorBuilder<'a> {
     details: Option<Structure>,
 }
 impl<'a> ErrorBuilder<'a> {
-    pub fn new(error: &'a glib::Error) -> Self {
+    fn new(error: &'a glib::Error) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1199,7 +1246,8 @@ pub struct WarningBuilder<'a> {
     details: Option<Structure>,
 }
 impl<'a> WarningBuilder<'a> {
-    pub fn new(error: &'a glib::Error) -> Self {
+    fn new(error: &'a glib::Error) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1259,7 +1307,8 @@ pub struct InfoBuilder<'a> {
     details: Option<Structure>,
 }
 impl<'a> InfoBuilder<'a> {
-    pub fn new(error: &'a glib::Error) -> Self {
+    fn new(error: &'a glib::Error) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1316,7 +1365,8 @@ pub struct TagBuilder<'a> {
     tags: &'a TagList,
 }
 impl<'a> TagBuilder<'a> {
-    pub fn new(tags: &'a TagList) -> Self {
+    fn new(tags: &'a TagList) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1336,7 +1386,8 @@ pub struct BufferingBuilder {
     stats: Option<(::BufferingMode, i32, i32, i64)>,
 }
 impl BufferingBuilder {
-    pub fn new(percent: i32) -> Self {
+    fn new(percent: i32) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1352,6 +1403,7 @@ impl BufferingBuilder {
         avg_out: i32,
         buffering_left: i64,
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             stats: Some((mode, avg_in, avg_out, buffering_left)),
             ..self
@@ -1383,7 +1435,8 @@ pub struct StateChangedBuilder {
     pending: ::State,
 }
 impl StateChangedBuilder {
-    pub fn new(old: ::State, new: ::State, pending: ::State) -> Self {
+    fn new(old: ::State, new: ::State, pending: ::State) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1408,7 +1461,8 @@ pub struct StateDirtyBuilder {
     seqnum: Option<u32>,
 }
 impl StateDirtyBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1430,7 +1484,7 @@ pub struct StepDoneBuilder {
     eos: bool,
 }
 impl StepDoneBuilder {
-    pub fn new(
+    fn new(
         format: ::Format,
         amount: u64,
         rate: f64,
@@ -1439,6 +1493,7 @@ impl StepDoneBuilder {
         duration: u64,
         eos: bool,
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1473,7 +1528,8 @@ pub struct ClockProvideBuilder<'a> {
     ready: bool,
 }
 impl<'a> ClockProvideBuilder<'a> {
-    pub fn new(clock: &'a ::Clock, ready: bool) -> Self {
+    fn new(clock: &'a ::Clock, ready: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1493,7 +1549,8 @@ pub struct ClockLostBuilder<'a> {
     clock: &'a ::Clock,
 }
 impl<'a> ClockLostBuilder<'a> {
-    pub fn new(clock: &'a ::Clock) -> Self {
+    fn new(clock: &'a ::Clock) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1512,7 +1569,8 @@ pub struct NewClockBuilder<'a> {
     clock: &'a ::Clock,
 }
 impl<'a> NewClockBuilder<'a> {
-    pub fn new(clock: &'a ::Clock) -> Self {
+    fn new(clock: &'a ::Clock) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1533,7 +1591,8 @@ pub struct StructureChangeBuilder<'a> {
     busy: bool,
 }
 impl<'a> StructureChangeBuilder<'a> {
-    pub fn new(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> Self {
+    fn new(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1561,7 +1620,8 @@ pub struct StreamStatusBuilder<'a> {
     status_object: Option<&'a glib::Value>,
 }
 impl<'a> StreamStatusBuilder<'a> {
-    pub fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
+    fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1594,7 +1654,8 @@ pub struct ApplicationBuilder {
     structure: Option<::Structure>,
 }
 impl ApplicationBuilder {
-    pub fn new(structure: ::Structure) -> Self {
+    fn new(structure: ::Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1613,7 +1674,8 @@ pub struct ElementBuilder {
     structure: Option<::Structure>,
 }
 impl ElementBuilder {
-    pub fn new(structure: ::Structure) -> Self {
+    fn new(structure: ::Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1633,7 +1695,8 @@ pub struct SegmentStartBuilder {
     position: i64,
 }
 impl SegmentStartBuilder {
-    pub fn new(format: ::Format, position: i64) -> Self {
+    fn new(format: ::Format, position: i64) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1654,7 +1717,8 @@ pub struct SegmentDoneBuilder {
     position: i64,
 }
 impl SegmentDoneBuilder {
-    pub fn new(format: ::Format, position: i64) -> Self {
+    fn new(format: ::Format, position: i64) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1673,7 +1737,8 @@ pub struct DurationChangedBuilder {
     seqnum: Option<u32>,
 }
 impl DurationChangedBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1688,7 +1753,8 @@ pub struct LatencyBuilder {
     seqnum: Option<u32>,
 }
 impl LatencyBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1703,7 +1769,8 @@ pub struct AsyncStartBuilder {
     seqnum: Option<u32>,
 }
 impl AsyncStartBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1719,7 +1786,8 @@ pub struct AsyncDoneBuilder {
     running_time: u64,
 }
 impl AsyncDoneBuilder {
-    pub fn new(running_time: u64) -> Self {
+    fn new(running_time: u64) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1738,7 +1806,8 @@ pub struct RequestStateBuilder {
     state: ::State,
 }
 impl RequestStateBuilder {
-    pub fn new(state: ::State) -> Self {
+    fn new(state: ::State) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1762,7 +1831,7 @@ pub struct StepStartBuilder {
     intermediate: bool,
 }
 impl StepStartBuilder {
-    pub fn new(
+    fn new(
         active: bool,
         format: ::Format,
         amount: u64,
@@ -1770,6 +1839,7 @@ impl StepStartBuilder {
         flush: bool,
         intermediate: bool,
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1807,13 +1877,14 @@ pub struct QosBuilder {
     stats: Option<(::Format, u64, u64)>,
 }
 impl QosBuilder {
-    pub fn new(
+    fn new(
         live: bool,
         running_time: u64,
         stream_time: u64,
         timestamp: u64,
         duration: u64,
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1868,7 +1939,8 @@ pub struct ProgressBuilder<'a> {
     text: Option<&'a str>,
 }
 impl<'a> ProgressBuilder<'a> {
-    pub fn new(type_: ::ProgressType) -> Self {
+    fn new(type_: ::ProgressType) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1909,7 +1981,8 @@ pub struct TocBuilder<'a> {
     updated: bool,
 }
 impl<'a> TocBuilder<'a> {
-    pub fn new(toc: &'a ::Toc, updated: bool) -> Self {
+    fn new(toc: &'a ::Toc, updated: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1929,7 +2002,8 @@ pub struct ResetTimeBuilder {
     running_time: u64,
 }
 impl ResetTimeBuilder {
-    pub fn new(running_time: u64) -> Self {
+    fn new(running_time: u64) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1948,7 +2022,8 @@ pub struct StreamStartBuilder {
     group_id: Option<u32>,
 }
 impl StreamStartBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1978,7 +2053,8 @@ pub struct NeedContextBuilder<'a> {
     context_type: &'a str,
 }
 impl<'a> NeedContextBuilder<'a> {
-    pub fn new(context_type: &'a str) -> Self {
+    fn new(context_type: &'a str) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -1997,7 +2073,8 @@ pub struct HaveContextBuilder {
     context: Option<::Context>,
 }
 impl HaveContextBuilder {
-    pub fn new(context: ::Context) -> Self {
+    fn new(context: ::Context) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2017,7 +2094,8 @@ pub struct DeviceAddedBuilder<'a> {
     device: &'a ::Device,
 }
 impl<'a> DeviceAddedBuilder<'a> {
-    pub fn new(device: &'a ::Device) -> Self {
+    fn new(device: &'a ::Device) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2036,7 +2114,8 @@ pub struct DeviceRemovedBuilder<'a> {
     device: &'a ::Device,
 }
 impl<'a> DeviceRemovedBuilder<'a> {
-    pub fn new(device: &'a ::Device) -> Self {
+    fn new(device: &'a ::Device) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2058,7 +2137,8 @@ pub struct PropertyNotifyBuilder<'a> {
 }
 #[cfg(feature = "v1_10")]
 impl<'a> PropertyNotifyBuilder<'a> {
-    pub fn new(property_name: &'a str, value: &'a glib::Value) -> Self {
+    fn new(property_name: &'a str, value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2084,7 +2164,8 @@ pub struct StreamCollectionBuilder<'a> {
 }
 #[cfg(feature = "v1_10")]
 impl<'a> StreamCollectionBuilder<'a> {
-    pub fn new(collection: &'a ::StreamCollection) -> Self {
+    fn new(collection: &'a ::StreamCollection) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2108,7 +2189,8 @@ pub struct StreamsSelectedBuilder<'a> {
 }
 #[cfg(feature = "v1_10")]
 impl<'a> StreamsSelectedBuilder<'a> {
-    pub fn new(collection: &'a ::StreamCollection) -> Self {
+    fn new(collection: &'a ::StreamCollection) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2146,11 +2228,12 @@ pub struct RedirectBuilder<'a> {
 }
 #[cfg(feature = "v1_10")]
 impl<'a> RedirectBuilder<'a> {
-    pub fn new(
+    fn new(
         location: &'a str,
         tag_list: Option<&'a TagList>,
         entry_struct: Option<Structure>,
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
@@ -2165,6 +2248,7 @@ impl<'a> RedirectBuilder<'a> {
         self,
         entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)],
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             entries: Some(entries),
             ..self

@@ -152,6 +152,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
         start_time: ClockTime,
         interval: ClockTime,
     ) -> Result<(), glib::BoolError> {
+        skip_assert_initialized!();
         unsafe {
             let res: bool = from_glib(ffi::gst_clock_periodic_id_reinit(
                 self.to_glib_none().0,

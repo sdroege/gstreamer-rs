@@ -135,22 +135,27 @@ impl EventRef {
 
 impl Event {
     pub fn new_flush_start() -> FlushStartBuilder {
+        assert_initialized_main_thread!();
         FlushStartBuilder::new()
     }
 
     pub fn new_flush_stop(reset_time: bool) -> FlushStopBuilder {
+        assert_initialized_main_thread!();
         FlushStopBuilder::new(reset_time)
     }
 
     pub fn new_stream_start(stream_id: &str) -> StreamStartBuilder {
+        assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
 
     pub fn new_caps(caps: &::Caps) -> CapsBuilder {
+        assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
 
     pub fn new_segment(segment: &::Segment) -> SegmentBuilder {
+        assert_initialized_main_thread!();
         SegmentBuilder::new(segment)
     }
 
@@ -158,10 +163,12 @@ impl Event {
     pub fn new_stream_collection(
         stream_collection: &::StreamCollection,
     ) -> StreamCollectionBuilder {
+        assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
     }
 
     pub fn new_tag(tags: ::TagList) -> TagBuilder {
+        assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
 
@@ -171,23 +178,28 @@ impl Event {
         maxsize: i64,
         async: bool,
     ) -> BufferSizeBuilder {
+        assert_initialized_main_thread!();
         BufferSizeBuilder::new(format, minsize, maxsize, async)
     }
 
     pub fn new_sink_message<'a>(name: &'a str, msg: &'a ::Message) -> SinkMessageBuilder<'a> {
+        assert_initialized_main_thread!();
         SinkMessageBuilder::new(name, msg)
     }
 
     #[cfg(feature = "v1_10")]
     pub fn new_stream_group_done(group_id: u32) -> StreamGroupDoneBuilder {
+        assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
     }
 
     pub fn new_eos() -> EosBuilder {
+        assert_initialized_main_thread!();
         EosBuilder::new()
     }
 
     pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
+        assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
 
@@ -196,18 +208,22 @@ impl Event {
         data: &'a ::Buffer,
         origin: &'a str,
     ) -> ProtectionBuilder<'a> {
+        assert_initialized_main_thread!();
         ProtectionBuilder::new(system_id, data, origin)
     }
 
     pub fn new_segment_done(format: ::Format, position: i64) -> SegmentDoneBuilder {
+        assert_initialized_main_thread!();
         SegmentDoneBuilder::new(format, position)
     }
 
     pub fn new_gap(timestamp: u64, duration: u64) -> GapBuilder {
+        assert_initialized_main_thread!();
         GapBuilder::new(timestamp, duration)
     }
 
     pub fn new_qos(type_: ::QOSType, proportion: f64, diff: i64, timestamp: u64) -> QosBuilder {
+        assert_initialized_main_thread!();
         QosBuilder::new(type_, proportion, diff, timestamp)
     }
 
@@ -220,14 +236,17 @@ impl Event {
         stop_type: ::SeekType,
         stop: i64,
     ) -> SeekBuilder {
+        assert_initialized_main_thread!();
         SeekBuilder::new(rate, format, flags, start_type, start, stop_type, stop)
     }
 
     pub fn new_navigation(structure: ::Structure) -> NavigationBuilder {
+        assert_initialized_main_thread!();
         NavigationBuilder::new(structure)
     }
 
     pub fn new_latency(latency: u64) -> LatencyBuilder {
+        assert_initialized_main_thread!();
         LatencyBuilder::new(latency)
     }
 
@@ -238,43 +257,53 @@ impl Event {
         flush: bool,
         intermediate: bool,
     ) -> StepBuilder {
+        assert_initialized_main_thread!();
         StepBuilder::new(format, amount, rate, flush, intermediate)
     }
 
     pub fn new_reconfigure() -> ReconfigureBuilder {
+        assert_initialized_main_thread!();
         ReconfigureBuilder::new()
     }
 
     pub fn new_toc_select(uid: &str) -> TocSelectBuilder {
+        assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }
 
     #[cfg(feature = "v1_10")]
     pub fn new_select_streams<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
+        assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
     }
 
     pub fn new_custom_upstream(structure: ::Structure) -> CustomUpstreamBuilder {
+        assert_initialized_main_thread!();
         CustomUpstreamBuilder::new(structure)
     }
 
     pub fn new_custom_downstream(structure: ::Structure) -> CustomDownstreamBuilder {
+        assert_initialized_main_thread!();
         CustomDownstreamBuilder::new(structure)
     }
 
     pub fn new_custom_downstream_oob(structure: ::Structure) -> CustomDownstreamOobBuilder {
+        assert_initialized_main_thread!();
         CustomDownstreamOobBuilder::new(structure)
     }
 
     pub fn new_custom_downstream_sticky(structure: ::Structure) -> CustomDownstreamStickyBuilder {
+        assert_initialized_main_thread!();
         CustomDownstreamStickyBuilder::new(structure)
     }
 
     pub fn new_custom_both(structure: ::Structure) -> CustomBothBuilder {
+        assert_initialized_main_thread!();
         CustomBothBuilder::new(structure)
     }
 
     pub fn new_custom_both_oob(structure: ::Structure) -> CustomBothOobBuilder {
+        assert_initialized_main_thread!();
         CustomBothOobBuilder::new(structure)
     }
 }
@@ -712,7 +741,8 @@ pub struct FlushStartBuilder {
     running_time_offset: Option<i64>,
 }
 impl FlushStartBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -728,7 +758,8 @@ pub struct FlushStopBuilder {
     reset_time: bool,
 }
 impl FlushStopBuilder {
-    pub fn new(reset_time: bool) -> Self {
+    fn new(reset_time: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -749,7 +780,8 @@ pub struct StreamStartBuilder<'a> {
     group_id: Option<u32>,
 }
 impl<'a> StreamStartBuilder<'a> {
-    pub fn new(stream_id: &'a str) -> Self {
+    fn new(stream_id: &'a str) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -791,7 +823,8 @@ pub struct CapsBuilder<'a> {
     caps: &'a ::Caps,
 }
 impl<'a> CapsBuilder<'a> {
-    pub fn new(caps: &'a ::Caps) -> Self {
+    fn new(caps: &'a ::Caps) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -808,7 +841,8 @@ pub struct SegmentBuilder<'a> {
     segment: &'a ::Segment,
 }
 impl<'a> SegmentBuilder<'a> {
-    pub fn new(segment: &'a ::Segment) -> Self {
+    fn new(segment: &'a ::Segment) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -829,7 +863,8 @@ pub struct StreamCollectionBuilder<'a> {
 }
 #[cfg(feature = "v1_10")]
 impl<'a> StreamCollectionBuilder<'a> {
-    pub fn new(stream_collection: &'a ::StreamCollection) -> Self {
+    fn new(stream_collection: &'a ::StreamCollection) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -848,7 +883,8 @@ pub struct TagBuilder {
     tags: Option<::TagList>,
 }
 impl TagBuilder {
-    pub fn new(tags: ::TagList) -> Self {
+    fn new(tags: ::TagList) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -871,7 +907,8 @@ pub struct BufferSizeBuilder {
     async: bool,
 }
 impl BufferSizeBuilder {
-    pub fn new(fmt: ::Format, minsize: i64, maxsize: i64, async: bool) -> Self {
+    fn new(fmt: ::Format, minsize: i64, maxsize: i64, async: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -894,7 +931,8 @@ pub struct SinkMessageBuilder<'a> {
     msg: &'a ::Message,
 }
 impl<'a> SinkMessageBuilder<'a> {
-    pub fn new(name: &'a str, msg: &'a ::Message) -> Self {
+    fn new(name: &'a str, msg: &'a ::Message) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -916,7 +954,8 @@ pub struct StreamGroupDoneBuilder {
 }
 #[cfg(feature = "v1_10")]
 impl StreamGroupDoneBuilder {
-    pub fn new(uid: u32) -> Self {
+    fn new(uid: u32) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -932,7 +971,8 @@ pub struct EosBuilder {
     running_time_offset: Option<i64>,
 }
 impl EosBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -949,7 +989,8 @@ pub struct TocBuilder<'a> {
     updated: bool,
 }
 impl<'a> TocBuilder<'a> {
-    pub fn new(toc: &'a ::Toc, updated: bool) -> Self {
+    fn new(toc: &'a ::Toc, updated: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -971,7 +1012,8 @@ pub struct ProtectionBuilder<'a> {
     origin: &'a str,
 }
 impl<'a> ProtectionBuilder<'a> {
-    pub fn new(system_id: &'a str, data: &'a ::Buffer, origin: &'a str) -> Self {
+    fn new(system_id: &'a str, data: &'a ::Buffer, origin: &'a str) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -997,7 +1039,8 @@ pub struct SegmentDoneBuilder {
     position: i64,
 }
 impl SegmentDoneBuilder {
-    pub fn new(fmt: ::Format, position: i64) -> Self {
+    fn new(fmt: ::Format, position: i64) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1018,7 +1061,8 @@ pub struct GapBuilder {
     duration: u64,
 }
 impl GapBuilder {
-    pub fn new(timestamp: u64, duration: u64) -> Self {
+    fn new(timestamp: u64, duration: u64) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1039,7 +1083,8 @@ pub struct QosBuilder {
     timestamp: u64,
 }
 impl QosBuilder {
-    pub fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: u64) -> Self {
+    fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: u64) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1067,7 +1112,7 @@ pub struct SeekBuilder {
     stop: i64,
 }
 impl SeekBuilder {
-    pub fn new(
+    fn new(
         rate: f64,
         fmt: ::Format,
         flags: ::SeekFlags,
@@ -1076,6 +1121,7 @@ impl SeekBuilder {
         stop_type: ::SeekType,
         stop: i64,
     ) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1108,7 +1154,8 @@ pub struct NavigationBuilder {
     structure: Option<Structure>,
 }
 impl NavigationBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1131,7 +1178,8 @@ pub struct LatencyBuilder {
     latency: u64,
 }
 impl LatencyBuilder {
-    pub fn new(latency: u64) -> Self {
+    fn new(latency: u64) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1152,7 +1200,8 @@ pub struct StepBuilder {
     intermediate: bool,
 }
 impl StepBuilder {
-    pub fn new(fmt: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool) -> Self {
+    fn new(fmt: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1180,7 +1229,8 @@ pub struct ReconfigureBuilder {
     running_time_offset: Option<i64>,
 }
 impl ReconfigureBuilder {
-    pub fn new() -> Self {
+    fn new() -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1196,7 +1246,8 @@ pub struct TocSelectBuilder<'a> {
     uid: &'a str,
 }
 impl<'a> TocSelectBuilder<'a> {
-    pub fn new(uid: &'a str) -> Self {
+    fn new(uid: &'a str) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1217,7 +1268,8 @@ pub struct SelectStreamsBuilder<'a> {
 }
 #[cfg(feature = "v1_10")]
 impl<'a> SelectStreamsBuilder<'a> {
-    pub fn new(streams: &'a [&'a str]) -> Self {
+    fn new(streams: &'a [&'a str]) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1236,7 +1288,8 @@ pub struct CustomUpstreamBuilder {
     structure: Option<Structure>,
 }
 impl CustomUpstreamBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1260,7 +1313,8 @@ pub struct CustomDownstreamBuilder {
     structure: Option<Structure>,
 }
 impl CustomDownstreamBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1284,7 +1338,8 @@ pub struct CustomDownstreamOobBuilder {
     structure: Option<Structure>,
 }
 impl CustomDownstreamOobBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1310,7 +1365,8 @@ pub struct CustomDownstreamStickyBuilder {
     structure: Option<Structure>,
 }
 impl CustomDownstreamStickyBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1336,7 +1392,8 @@ pub struct CustomBothBuilder {
     structure: Option<Structure>,
 }
 impl CustomBothBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
@@ -1359,7 +1416,8 @@ pub struct CustomBothOobBuilder {
     structure: Option<Structure>,
 }
 impl CustomBothOobBuilder {
-    pub fn new(structure: Structure) -> Self {
+    fn new(structure: Structure) -> Self {
+        skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,

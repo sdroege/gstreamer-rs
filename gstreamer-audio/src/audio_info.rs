@@ -117,6 +117,8 @@ impl<'a> AudioInfoBuilder<'a> {
 
 impl AudioInfo {
     pub fn new<'a>(format: ::AudioFormat, rate: u32, channels: u32) -> AudioInfoBuilder<'a> {
+        assert_initialized_main_thread!();
+
         AudioInfoBuilder {
             format: format,
             rate: rate,
@@ -128,6 +130,8 @@ impl AudioInfo {
     }
 
     pub fn from_caps(caps: &gst::Caps) -> Option<Self> {
+        skip_assert_initialized!();
+
         unsafe {
             let mut info = mem::uninitialized();
             if from_glib(ffi::gst_audio_info_from_caps(&mut info, caps.as_ptr())) {
@@ -156,6 +160,8 @@ impl AudioInfo {
         src_val: i64,
         dest_fmt: gst::Format,
     ) -> Option<i64> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut dest_val = mem::uninitialized();
             if from_glib(ffi::gst_audio_info_convert(

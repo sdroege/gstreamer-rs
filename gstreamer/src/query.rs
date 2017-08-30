@@ -29,26 +29,32 @@ unsafe impl MiniObject for QueryRef {
 
 impl Query {
     pub fn new_position(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_position(fmt.to_glib())) }
     }
 
     pub fn new_duration(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_duration(fmt.to_glib())) }
     }
 
     pub fn new_latency() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_latency()) }
     }
 
     pub fn new_seeking(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_seeking(fmt.to_glib())) }
     }
 
     pub fn new_segment(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_segment(fmt.to_glib())) }
     }
 
     pub fn new_convert(src_fmt: ::Format, value: i64, dest_fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_query_new_convert(
                 src_fmt.to_glib(),
@@ -59,14 +65,17 @@ impl Query {
     }
 
     pub fn new_formats() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_formats()) }
     }
 
     pub fn new_buffering(fmt: ::Format) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_buffering(fmt.to_glib())) }
     }
 
     pub fn new_custom(structure: ::Structure) -> Self {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_query_new_custom(
                 ffi::GST_QUERY_CUSTOM,
@@ -76,26 +85,32 @@ impl Query {
     }
 
     pub fn new_uri() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_uri()) }
     }
 
     pub fn new_scheduling() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_scheduling()) }
     }
 
     pub fn new_accept_caps(caps: &::Caps) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_accept_caps(caps.as_mut_ptr())) }
     }
 
     pub fn new_caps(filter: &::Caps) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_caps(filter.as_mut_ptr())) }
     }
 
     pub fn new_drain() -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_drain()) }
     }
 
     pub fn new_context(context_type: &str) -> Self {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_context(context_type.to_glib_none().0)) }
     }
 }
@@ -584,6 +599,7 @@ impl<'a> Buffering<&'a mut QueryRef> {
         avg_out: i32,
         buffering_left: i64,
     ) {
+        skip_assert_initialized!();
         unsafe {
             ffi::gst_query_set_buffering_stats(
                 self.0.as_mut_ptr(),
@@ -698,6 +714,7 @@ impl<'a> Scheduling<&'a QueryRef> {
         mode: ::PadMode,
         flags: ::SchedulingFlags,
     ) -> bool {
+        skip_assert_initialized!();
         unsafe {
             from_glib(ffi::gst_query_has_scheduling_mode_with_flags(
                 self.0.as_mut_ptr(),

@@ -420,7 +420,7 @@ impl VideoInfo {
     }
 
     pub fn from_caps(caps: &gst::Caps) -> Option<Self> {
-        assert_initialized_main_thread!();
+        skip_assert_initialized!();
 
         unsafe {
             let mut info = mem::uninitialized();

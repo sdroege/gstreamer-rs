@@ -21,8 +21,9 @@ extern crate glib;
 
 macro_rules! assert_initialized_main_thread {
     () => (
-        use gst_ffi;
-        assert_eq!(unsafe {gst_ffi::gst_is_initialized()}, ::glib_ffi::GTRUE)
+        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+            panic!("GStreamer has not been initialized. Call `gst::init` first.");
+        }
     )
 }
 
@@ -56,6 +57,8 @@ pub fn audio_buffer_clip(
     rate: u32,
     channels: u32,
 ) -> gst::Buffer {
+    skip_assert_initialized!();
+
     unsafe {
         from_glib_full(ffi::gst_audio_buffer_clip(
             buffer.into_ptr(),
