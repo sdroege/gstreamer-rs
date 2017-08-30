@@ -127,7 +127,7 @@ impl MessageRef {
     }
 }
 
-impl Message {
+impl GstRc<MessageRef> {
     pub fn new_eos() -> EosBuilder {
         assert_initialized_main_thread!();
         EosBuilder::new()

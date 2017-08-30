@@ -27,7 +27,7 @@ unsafe impl MiniObject for QueryRef {
     type GstType = ffi::GstQuery;
 }
 
-impl Query {
+impl GstRc<QueryRef> {
     pub fn new_position(fmt: ::Format) -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_query_new_position(fmt.to_glib())) }

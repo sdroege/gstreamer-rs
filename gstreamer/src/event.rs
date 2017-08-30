@@ -133,7 +133,7 @@ impl EventRef {
     }
 }
 
-impl Event {
+impl GstRc<EventRef> {
     pub fn new_flush_start() -> FlushStartBuilder {
         assert_initialized_main_thread!();
         FlushStartBuilder::new()
