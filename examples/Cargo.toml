@@ -22,6 +22,8 @@ byte-slice-cast = "0.1"
 gst-player = ["gstreamer-player"]
 gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
+gtkvideooverlay-x11 = ["gtkvideooverlay"]
+gtkvideooverlay-quartz = ["gtkvideooverlay"]
 tokio = ["gstreamer/futures", "futures", "tokio-core"]
 default-features = []
 
