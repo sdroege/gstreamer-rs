@@ -19,6 +19,12 @@ extern crate gstreamer as gst;
 #[macro_use]
 extern crate glib;
 
+macro_rules! callback_guard {
+    () => (
+        let _guard = ::glib::CallbackGuard::new();
+    )
+}
+
 macro_rules! assert_initialized_main_thread {
     () => (
         if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {

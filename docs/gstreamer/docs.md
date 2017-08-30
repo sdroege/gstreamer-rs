@@ -3061,6 +3061,56 @@ a newly allocated string formatted according
 <!-- impl DateTime::fn unref -->
 Atomically decrements the reference count of `self` by one. When the
 reference count reaches zero, the structure is freed.
+<!-- enum DebugLevel -->
+The level defines the importance of a debugging message. The more important a
+message is, the greater the probability that the debugging system outputs it.
+<!-- enum DebugLevel::variant None -->
+No debugging level specified or desired. Used to deactivate
+ debugging output.
+<!-- enum DebugLevel::variant Error -->
+Error messages are to be used only when an error occurred
+ that stops the application from keeping working correctly.
+ An examples is gst_element_error, which outputs a message with this priority.
+ It does not mean that the application is terminating as with g_error.
+<!-- enum DebugLevel::variant Warning -->
+Warning messages are to inform about abnormal behaviour
+ that could lead to problems or weird behaviour later on. An example of this
+ would be clocking issues ("your computer is pretty slow") or broken input
+ data ("Can't synchronize to stream.")
+<!-- enum DebugLevel::variant Fixme -->
+Fixme messages are messages that indicate that something
+ in the executed code path is not fully implemented or handled yet. Note
+ that this does not replace proper error handling in any way, the purpose
+ of this message is to make it easier to spot incomplete/unfinished pieces
+ of code when reading the debug log.
+<!-- enum DebugLevel::variant Info -->
+Informational messages should be used to keep the developer
+ updated about what is happening.
+ Examples where this should be used are when a typefind function has
+ successfully determined the type of the stream or when an mp3 plugin detects
+ the format to be used. ("This file has mono sound.")
+<!-- enum DebugLevel::variant Debug -->
+Debugging messages should be used when something common
+ happens that is not the expected default behavior, or something that's
+ useful to know but doesn't happen all the time (ie. per loop iteration or
+ buffer processed or event handled).
+ An example would be notifications about state changes or receiving/sending
+ of events.
+<!-- enum DebugLevel::variant Log -->
+Log messages are messages that are very common but might be
+ useful to know. As a rule of thumb a pipeline that is running as expected
+ should never output anything else but LOG messages whilst processing data.
+ Use this log level to log recurring information in chain functions and
+ loop functions, for example.
+<!-- enum DebugLevel::variant Trace -->
+Tracing-related messages.
+ Examples for this are referencing/dereferencing of objects.
+<!-- enum DebugLevel::variant Memdump -->
+memory dump messages are used to log (small) chunks of
+ data as memory dumps in the log. They will be displayed as hexdump with
+ ASCII characters.
+<!-- enum DebugLevel::variant Count -->
+The number of defined debugging levels.
 <!-- struct Device -->
 `Device` are objects representing a device, they contain
 relevant metadata about the device, such as its class and the `Caps`
@@ -3423,19 +3473,13 @@ GstDeviceProviderfactory can be added to a `Plugin` as it is also a
 `PluginFeature`.
 
 Use the `DeviceProviderFactory::find` and
-`DeviceProviderFactoryExt::get` functions to create device
+`DeviceProviderFactory::get` functions to create device
 provider instances or use `DeviceProviderFactory::get_by_name` as a
 convenient shortcut.
 
 # Implements
 
-[`DeviceProviderFactoryExt`](trait.DeviceProviderFactoryExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait DeviceProviderFactoryExt -->
-Trait containing all `DeviceProviderFactory` methods.
-
-# Implementors
-
-[`DeviceProviderFactory`](struct.DeviceProviderFactory.html)
+[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
 <!-- impl DeviceProviderFactory::fn find -->
 Search for an device provider factory of the given name. Refs the returned
 device provider factory; caller is responsible for unreffing.
@@ -3467,7 +3511,7 @@ Minimum rank
 
 a `glib::List` of `DeviceProviderFactory` device providers. Use
 `PluginFeature::list_free` after usage.
-<!-- trait DeviceProviderFactoryExt::fn get -->
+<!-- impl DeviceProviderFactory::fn get -->
 Returns the device provider of the type defined by the given device
 providerfactory.
 
@@ -3475,7 +3519,7 @@ providerfactory.
 
 the `DeviceProvider` or `None`
 if the device provider couldn't be created
-<!-- trait DeviceProviderFactoryExt::fn get_device_provider_type -->
+<!-- impl DeviceProviderFactory::fn get_device_provider_type -->
 Get the `glib::Type` for device providers managed by this factory. The type can
 only be retrieved if the device provider factory is loaded, which can be
 assured with `PluginFeature::load`.
@@ -3483,7 +3527,7 @@ assured with `PluginFeature::load`.
 # Returns
 
 the `glib::Type` for device providers managed by this factory.
-<!-- trait DeviceProviderFactoryExt::fn get_metadata -->
+<!-- impl DeviceProviderFactory::fn get_metadata -->
 Get the metadata on `self` with `key`.
 ## `key`
 a key
@@ -3492,7 +3536,7 @@ a key
 
 the metadata with `key` on `self` or `None`
 when there was no metadata with the given `key`.
-<!-- trait DeviceProviderFactoryExt::fn get_metadata_keys -->
+<!-- impl DeviceProviderFactory::fn get_metadata_keys -->
 Get the available keys for the metadata on `self`.
 
 # Returns
@@ -3500,7 +3544,7 @@ Get the available keys for the metadata on `self`.
 
 a `None`-terminated array of key strings, or `None` when there is no
 metadata. Free with `g_strfreev` when no longer needed.
-<!-- trait DeviceProviderFactoryExt::fn has_classes -->
+<!-- impl DeviceProviderFactory::fn has_classes -->
 Check if `self` matches all of the given `classes`
 ## `classes`
 a "/" separate list of classes to match, only match
@@ -3509,7 +3553,7 @@ a "/" separate list of classes to match, only match
 # Returns
 
 `true` if `self` matches or if `classes` is `None`.
-<!-- trait DeviceProviderFactoryExt::fn has_classesv -->
+<!-- impl DeviceProviderFactory::fn has_classesv -->
 Check if `self` matches all of the given classes
 ## `classes`
 a `None` terminated array
@@ -9079,7 +9123,7 @@ element plugin as well as identifying pads on elements that are not yet
 created (request or sometimes pads).
 
 Pad and PadTemplates have `Caps` attached to it to describe the media type
-they are capable of dealing with. `PadTemplateExt::get_caps` or
+they are capable of dealing with. `PadTemplate::get_caps` or
 GST_PAD_TEMPLATE_CAPS() are used to get the caps of a padtemplate. It's not
 possible to modify the caps of a padtemplate after creation.
 
@@ -9138,13 +9182,7 @@ element class, this is usually done in the class_init of the class:
 
 # Implements
 
-[`PadTemplateExt`](trait.PadTemplateExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait PadTemplateExt -->
-Trait containing all `PadTemplate` methods.
-
-# Implementors
-
-[`PadTemplate`](struct.PadTemplate.html)
+[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
 <!-- impl PadTemplate::fn new -->
 Creates a new pad template with a name according to the given template
 and with the given arguments.
@@ -9160,17 +9198,47 @@ a `Caps` set for the template.
 # Returns
 
 a new `PadTemplate`.
-<!-- trait PadTemplateExt::fn get_caps -->
+<!-- impl PadTemplate::fn get_caps -->
 Gets the capabilities of the pad template.
 
 # Returns
 
 the `Caps` of the pad template.
 Unref after usage.
-<!-- trait PadTemplateExt::fn pad_created -->
+<!-- impl PadTemplate::fn pad_created -->
 Emit the pad-created signal for this template when created by this pad.
 ## `pad`
 the `Pad` that created it
+<!-- struct ParseContext -->
+Opaque structure.
+<!-- impl ParseContext::fn new -->
+Allocates a parse context for use with `gst_parse_launch_full` or
+`gst_parse_launchv_full`.
+
+Free-function: gst_parse_context_free
+
+# Returns
+
+a newly-allocated parse context. Free with
+ `ParseContext::free` when no longer needed.
+<!-- impl ParseContext::fn copy -->
+Copies the `self`.
+
+# Returns
+
+A copied `ParseContext`
+<!-- impl ParseContext::fn free -->
+Frees a parse context previously allocated with `ParseContext::new`.
+<!-- impl ParseContext::fn get_missing_elements -->
+Retrieve missing elements from a previous run of `gst_parse_launch_full`
+or `gst_parse_launchv_full`. Will only return results if an error code
+of `ParseError::NoSuchElement` was returned.
+
+# Returns
+
+a
+ `None`-terminated array of element factory name strings of missing
+ elements. Free with `g_strfreev` when no longer needed.
 <!-- enum ParseError -->
 The different parsing errors that can occur.
 <!-- enum ParseError::variant Syntax -->
@@ -11211,15 +11279,7 @@ Feature: `v1_10`
 
 # Implements
 
-[`StreamExt`](trait.StreamExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait StreamExt -->
-Trait containing all `Stream` methods.
-
-Feature: `v1_10`
-
-# Implementors
-
-[`Stream`](struct.Stream.html)
+[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
 <!-- impl Stream::fn new -->
 Create a new `Stream` for the given `stream_id`, `caps`, `type_`
 and `flags`
@@ -11239,7 +11299,7 @@ the `StreamFlags` of the stream
 # Returns
 
 The new `Stream`
-<!-- trait StreamExt::fn get_caps -->
+<!-- impl Stream::fn get_caps -->
 Retrieve the caps for `self`, if any
 
 Feature: `v1_10`
@@ -11248,7 +11308,7 @@ Feature: `v1_10`
 # Returns
 
 The `Caps` for `self`
-<!-- trait StreamExt::fn get_stream_flags -->
+<!-- impl Stream::fn get_stream_flags -->
 Retrieve the current stream flags for `self`
 
 Feature: `v1_10`
@@ -11257,7 +11317,7 @@ Feature: `v1_10`
 # Returns
 
 The `StreamFlags` for `self`
-<!-- trait StreamExt::fn get_stream_id -->
+<!-- impl Stream::fn get_stream_id -->
 Returns the stream ID of `self`.
 
 Feature: `v1_10`
@@ -11267,7 +11327,7 @@ Feature: `v1_10`
 
 the stream ID of `self`. Only valid
 during the lifetime of `self`.
-<!-- trait StreamExt::fn get_stream_type -->
+<!-- impl Stream::fn get_stream_type -->
 Retrieve the stream type for `self`
 
 Feature: `v1_10`
@@ -11276,7 +11336,7 @@ Feature: `v1_10`
 # Returns
 
 The `StreamType` for `self`
-<!-- trait StreamExt::fn get_tags -->
+<!-- impl Stream::fn get_tags -->
 Retrieve the tags for `self`, if any
 
 Feature: `v1_10`
@@ -11285,28 +11345,28 @@ Feature: `v1_10`
 # Returns
 
 The `TagList` for `self`
-<!-- trait StreamExt::fn set_caps -->
+<!-- impl Stream::fn set_caps -->
 Set the caps for the `Stream`
 
 Feature: `v1_10`
 
 ## `caps`
 a `Caps`
-<!-- trait StreamExt::fn set_stream_flags -->
+<!-- impl Stream::fn set_stream_flags -->
 Set the `flags` for the `self`.
 
 Feature: `v1_10`
 
 ## `flags`
 the flags to set on `self`
-<!-- trait StreamExt::fn set_stream_type -->
+<!-- impl Stream::fn set_stream_type -->
 Set the stream type of `self`
 
 Feature: `v1_10`
 
 ## `stream_type`
 the type to set on `self`
-<!-- trait StreamExt::fn set_tags -->
+<!-- impl Stream::fn set_tags -->
 Set the tags for the `Stream`
 
 Feature: `v1_10`
@@ -11318,7 +11378,7 @@ A collection of `Stream` that are available.
 
 A `StreamCollection` will be provided by elements that can make those
 streams available. Applications can use the collection to show the user
-what streams are available by using `StreamCollectionExt::get_stream`()
+what streams are available by using `StreamCollection::get_stream`()
 
 Once posted, a `StreamCollection` is immutable. Updates are made by sending
 a new `StreamCollection` message, which may or may not share some of
@@ -11335,15 +11395,7 @@ Feature: `v1_10`
 
 # Implements
 
-[`StreamCollectionExt`](trait.StreamCollectionExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait StreamCollectionExt -->
-Trait containing all `StreamCollection` methods.
-
-Feature: `v1_10`
-
-# Implementors
-
-[`StreamCollection`](struct.StreamCollection.html)
+[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
 <!-- impl StreamCollection::fn new -->
 Create a new `StreamCollection`.
 
@@ -11355,7 +11407,7 @@ The stream id of the parent stream
 # Returns
 
 The new `StreamCollection`.
-<!-- trait StreamCollectionExt::fn add_stream -->
+<!-- impl StreamCollection::fn add_stream -->
 Add the given `stream` to the `self`.
 
 Feature: `v1_10`
@@ -11366,7 +11418,7 @@ the `Stream` to add
 # Returns
 
 `true` if the `stream` was properly added, else `false`
-<!-- trait StreamCollectionExt::fn get_size -->
+<!-- impl StreamCollection::fn get_size -->
 Get the number of streams this collection contains
 
 Feature: `v1_10`
@@ -11375,7 +11427,7 @@ Feature: `v1_10`
 # Returns
 
 The number of streams that `self` contains
-<!-- trait StreamCollectionExt::fn get_stream -->
+<!-- impl StreamCollection::fn get_stream -->
 Retrieve the `Stream` with index `index` from the collection.
 
 The caller should not modify the returned `Stream`
@@ -11388,7 +11440,7 @@ Index of the stream to retrieve
 # Returns
 
 A `Stream`
-<!-- trait StreamCollectionExt::fn get_upstream_id -->
+<!-- impl StreamCollection::fn get_upstream_id -->
 Returns the upstream id of the `self`.
 
 Feature: `v1_10`

@@ -394,34 +394,28 @@ in the stream.
 
 # Implements
 
-[`PlayerAudioInfoExt`](trait.PlayerAudioInfoExt.html), [`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait PlayerAudioInfoExt -->
-Trait containing all `PlayerAudioInfo` methods.
-
-# Implementors
-
-[`PlayerAudioInfo`](struct.PlayerAudioInfo.html)
-<!-- trait PlayerAudioInfoExt::fn get_bitrate -->
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- impl PlayerAudioInfo::fn get_bitrate -->
 
 # Returns
 
 the audio bitrate in `PlayerAudioInfo`.
-<!-- trait PlayerAudioInfoExt::fn get_channels -->
+<!-- impl PlayerAudioInfo::fn get_channels -->
 
 # Returns
 
 the number of audio channels in `PlayerAudioInfo`.
-<!-- trait PlayerAudioInfoExt::fn get_language -->
+<!-- impl PlayerAudioInfo::fn get_language -->
 
 # Returns
 
 the language of the stream, or NULL if unknown.
-<!-- trait PlayerAudioInfoExt::fn get_max_bitrate -->
+<!-- impl PlayerAudioInfo::fn get_max_bitrate -->
 
 # Returns
 
 the audio maximum bitrate in `PlayerAudioInfo`.
-<!-- trait PlayerAudioInfoExt::fn get_sample_rate -->
+<!-- impl PlayerAudioInfo::fn get_sample_rate -->
 
 # Returns
 
@@ -444,13 +438,7 @@ generic error.
 
 # Implements
 
-[`PlayerGMainContextSignalDispatcherExt`](trait.PlayerGMainContextSignalDispatcherExt.html), [`ObjectExt`](trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
-<!-- trait PlayerGMainContextSignalDispatcherExt -->
-Trait containing all `PlayerGMainContextSignalDispatcher` methods.
-
-# Implementors
-
-[`PlayerGMainContextSignalDispatcher`](struct.PlayerGMainContextSignalDispatcher.html)
+[`ObjectExt`](trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
 <!-- impl PlayerGMainContextSignalDispatcher::fn new -->
 Creates a new GstPlayerSignalDispatcher that uses `application_context`,
 or the thread default one if `None` is used. See `gst_player_new_full`.
@@ -465,95 +453,89 @@ Structure containing the media information of a URI.
 
 # Implements
 
-[`PlayerMediaInfoExt`](trait.PlayerMediaInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait PlayerMediaInfoExt -->
-Trait containing all `PlayerMediaInfo` methods.
-
-# Implementors
-
-[`PlayerMediaInfo`](struct.PlayerMediaInfo.html)
-<!-- trait PlayerMediaInfoExt::fn get_audio_streams -->
+[`ObjectExt`](trait.ObjectExt.html)
+<!-- impl PlayerMediaInfo::fn get_audio_streams -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerAudioInfo`.
-<!-- trait PlayerMediaInfoExt::fn get_container_format -->
+<!-- impl PlayerMediaInfo::fn get_container_format -->
 
 # Returns
 
 the container format.
-<!-- trait PlayerMediaInfoExt::fn get_duration -->
+<!-- impl PlayerMediaInfo::fn get_duration -->
 
 # Returns
 
 duration of the media.
-<!-- trait PlayerMediaInfoExt::fn get_image_sample -->
+<!-- impl PlayerMediaInfo::fn get_image_sample -->
 Function to get the image (or preview-image) stored in taglist.
 Application can use gst_sample_*`_` API's to get caps, buffer etc.
 
 # Returns
 
 GstSample or NULL.
-<!-- trait PlayerMediaInfoExt::fn get_number_of_audio_streams -->
+<!-- impl PlayerMediaInfo::fn get_number_of_audio_streams -->
 
 # Returns
 
 number of audio streams.
-<!-- trait PlayerMediaInfoExt::fn get_number_of_streams -->
+<!-- impl PlayerMediaInfo::fn get_number_of_streams -->
 
 # Returns
 
 number of total streams.
-<!-- trait PlayerMediaInfoExt::fn get_number_of_subtitle_streams -->
+<!-- impl PlayerMediaInfo::fn get_number_of_subtitle_streams -->
 
 # Returns
 
 number of subtitle streams.
-<!-- trait PlayerMediaInfoExt::fn get_number_of_video_streams -->
+<!-- impl PlayerMediaInfo::fn get_number_of_video_streams -->
 
 # Returns
 
 number of video streams.
-<!-- trait PlayerMediaInfoExt::fn get_stream_list -->
+<!-- impl PlayerMediaInfo::fn get_stream_list -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerStreamInfo`.
-<!-- trait PlayerMediaInfoExt::fn get_subtitle_streams -->
+<!-- impl PlayerMediaInfo::fn get_subtitle_streams -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerSubtitleInfo`.
-<!-- trait PlayerMediaInfoExt::fn get_tags -->
+<!-- impl PlayerMediaInfo::fn get_tags -->
 
 # Returns
 
 the tags contained in media info.
-<!-- trait PlayerMediaInfoExt::fn get_title -->
+<!-- impl PlayerMediaInfo::fn get_title -->
 
 # Returns
 
 the media title.
-<!-- trait PlayerMediaInfoExt::fn get_uri -->
+<!-- impl PlayerMediaInfo::fn get_uri -->
 
 # Returns
 
 the URI associated with `PlayerMediaInfo`.
-<!-- trait PlayerMediaInfoExt::fn get_video_streams -->
+<!-- impl PlayerMediaInfo::fn get_video_streams -->
 
 # Returns
 
 A `glib::List` of
 matching `PlayerVideoInfo`.
-<!-- trait PlayerMediaInfoExt::fn is_live -->
+<!-- impl PlayerMediaInfo::fn is_live -->
 
 # Returns
 
 `true` if the media is live.
-<!-- trait PlayerMediaInfoExt::fn is_seekable -->
+<!-- impl PlayerMediaInfo::fn is_seekable -->
 
 # Returns
 
@@ -629,14 +611,8 @@ the tags contained in this stream.
 
 # Implements
 
-[`PlayerSubtitleInfoExt`](trait.PlayerSubtitleInfoExt.html), [`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait PlayerSubtitleInfoExt -->
-Trait containing all `PlayerSubtitleInfo` methods.
-
-# Implementors
-
-[`PlayerSubtitleInfo`](struct.PlayerSubtitleInfo.html)
-<!-- trait PlayerSubtitleInfoExt::fn get_language -->
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- impl PlayerSubtitleInfo::fn get_language -->
 
 # Returns
 
@@ -646,40 +622,34 @@ the language of the stream, or NULL if unknown.
 
 # Implements
 
-[`PlayerVideoInfoExt`](trait.PlayerVideoInfoExt.html), [`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
-<!-- trait PlayerVideoInfoExt -->
-Trait containing all `PlayerVideoInfo` methods.
-
-# Implementors
-
-[`PlayerVideoInfo`](struct.PlayerVideoInfo.html)
-<!-- trait PlayerVideoInfoExt::fn get_bitrate -->
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+<!-- impl PlayerVideoInfo::fn get_bitrate -->
 
 # Returns
 
 the current bitrate of video in `PlayerVideoInfo`.
-<!-- trait PlayerVideoInfoExt::fn get_framerate -->
+<!-- impl PlayerVideoInfo::fn get_framerate -->
 ## `fps_n`
 Numerator of frame rate
 ## `fps_d`
 Denominator of frame rate
-<!-- trait PlayerVideoInfoExt::fn get_height -->
+<!-- impl PlayerVideoInfo::fn get_height -->
 
 # Returns
 
 the height of video in `PlayerVideoInfo`.
-<!-- trait PlayerVideoInfoExt::fn get_max_bitrate -->
+<!-- impl PlayerVideoInfo::fn get_max_bitrate -->
 
 # Returns
 
 the maximum bitrate of video in `PlayerVideoInfo`.
-<!-- trait PlayerVideoInfoExt::fn get_pixel_aspect_ratio -->
+<!-- impl PlayerVideoInfo::fn get_pixel_aspect_ratio -->
 Returns the pixel aspect ratio in `par_n` and `par_d`
 ## `par_n`
 numerator
 ## `par_d`
 denominator
-<!-- trait PlayerVideoInfoExt::fn get_width -->
+<!-- impl PlayerVideoInfo::fn get_width -->
 
 # Returns
 
@@ -689,13 +659,7 @@ the width of video in `PlayerVideoInfo`.
 
 # Implements
 
-[`PlayerVideoOverlayVideoRendererExt`](trait.PlayerVideoOverlayVideoRendererExt.html), [`ObjectExt`](trait.ObjectExt.html), [`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
-<!-- trait PlayerVideoOverlayVideoRendererExt -->
-Trait containing all `PlayerVideoOverlayVideoRenderer` methods.
-
-# Implementors
-
-[`PlayerVideoOverlayVideoRenderer`](struct.PlayerVideoOverlayVideoRenderer.html)
+[`ObjectExt`](trait.ObjectExt.html), [`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
 <!-- impl PlayerVideoOverlayVideoRenderer::fn new -->
 ## `window_handle`
 Window handle to use or `None`
@@ -710,11 +674,11 @@ the custom video_sink element to be set for the video renderer
 
 
 Since 1.12
-<!-- trait PlayerVideoOverlayVideoRendererExt::fn expose -->
+<!-- impl PlayerVideoOverlayVideoRenderer::fn expose -->
 Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.
-<!-- trait PlayerVideoOverlayVideoRendererExt::fn get_render_rectangle -->
-Return the currently configured render rectangle. See `PlayerVideoOverlayVideoRendererExt::set_render_rectangle`
+<!-- impl PlayerVideoOverlayVideoRenderer::fn get_render_rectangle -->
+Return the currently configured render rectangle. See `PlayerVideoOverlayVideoRenderer::set_render_rectangle`
 for details.
 ## `x`
 the horizontal offset of the render area inside the window
@@ -724,19 +688,19 @@ the vertical offset of the render area inside the window
 the width of the render area inside the window
 ## `height`
 the height of the render area inside the window
-<!-- trait PlayerVideoOverlayVideoRendererExt::fn get_window_handle -->
+<!-- impl PlayerVideoOverlayVideoRenderer::fn get_window_handle -->
 
 # Returns
 
 The currently set, platform specific window
 handle
-<!-- trait PlayerVideoOverlayVideoRendererExt::fn set_render_rectangle -->
+<!-- impl PlayerVideoOverlayVideoRenderer::fn set_render_rectangle -->
 Configure a subregion as a video target within the window set by
-`PlayerVideoOverlayVideoRendererExt::set_window_handle`. If this is not
+`PlayerVideoOverlayVideoRenderer::set_window_handle`. If this is not
 used or not supported the video will fill the area of the window set as the
 overlay to 100%. By specifying the rectangle, the video can be overlaid to
 a specific region of that window only. After setting the new rectangle one
-should call `PlayerVideoOverlayVideoRendererExt::expose` to force a
+should call `PlayerVideoOverlayVideoRenderer::expose` to force a
 redraw. To unset the region pass -1 for the `width` and `height` parameters.
 
 This method is needed for non fullscreen video overlay in UI toolkits that
@@ -749,7 +713,7 @@ the vertical offset of the render area inside the window
 the width of the render area inside the window
 ## `height`
 the height of the render area inside the window
-<!-- trait PlayerVideoOverlayVideoRendererExt::fn set_window_handle -->
+<!-- impl PlayerVideoOverlayVideoRenderer::fn set_window_handle -->
 Sets the platform specific window handle into which the video
 should be rendered
 ## `window_handle`
