@@ -47,8 +47,10 @@ fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
     let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
 
-    let sink = if cfg!(unix) {
+    let sink = if cfg!(feature = "gtkvideooverlay-x11") {
         gst::ElementFactory::make("xvimagesink", None).unwrap()
+    } else if cfg!(feature = "gtkvideooverlay-quartz") {
+        gst::ElementFactory::make("glimagesink", None).unwrap()
     } else {
         unreachable!()
     };
@@ -76,10 +78,9 @@ fn create_ui(app: &gtk::Application) {
             process::exit(-1);
         }
 
-        #[cfg(unix)]
-        {
-            let display_type_name = gdk_window.get_display().get_type().name();
+        let display_type_name = gdk_window.get_display().get_type().name();
 
+        if cfg!(feature = "gtkvideooverlay-x11") {
             // Check if we're using X11 or ...
             if display_type_name == "GdkX11Display" {
                 extern "C" {
@@ -96,7 +97,24 @@ fn create_ui(app: &gtk::Application) {
                 println!("Add support for display type '{}'", display_type_name);
                 process::exit(-1);
             }
+        } else if cfg!(feature = "gtkvideooverlay-quartz") {
+            if display_type_name == "GdkQuartzDisplay" {
+                extern "C" {
+                    pub fn gdk_quartz_window_get_nsview(
+                        window: *mut glib::object::GObject,
+                    ) -> *mut c_void;
+                }
+
+                unsafe {
+                    let window = gdk_quartz_window_get_nsview(gdk_window.to_glib_none().0);
+                    video_overlay.set_window_handle(window as usize);
+                }
+            } else {
+                println!("Unsupported display type '{}", display_type_name);
+                process::exit(-1);
+            }
         }
+
     });
 
     vbox.pack_start(&video_window, true, true, 0);
