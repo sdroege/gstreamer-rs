@@ -18,6 +18,14 @@ extern crate gstreamer as gst;
 #[macro_use]
 extern crate glib;
 
+macro_rules! assert_initialized_main_thread {
+    () => (
+        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+            panic!("GStreamer has not been initialized. Call `gst::init` first.");
+        }
+    )
+}
+
 macro_rules! skip_assert_initialized {
     () => (
     )

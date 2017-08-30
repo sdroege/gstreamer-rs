@@ -29,6 +29,8 @@ impl AppSinkCallbacks {
         G: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static,
         H: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static,
     {
+        skip_assert_initialized!();
+
         AppSinkCallbacks {
             eos: Box::new(eos),
             new_preroll: Box::new(new_preroll),

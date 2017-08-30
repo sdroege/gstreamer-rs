@@ -19,6 +19,8 @@ pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 
 impl VideoFormatInfo {
     pub fn from_format(format: ::VideoFormat) -> VideoFormatInfo {
+        assert_initialized_main_thread!();
+
         unsafe {
             let info = ffi::gst_video_format_get_info(format.to_glib());
             assert!(!info.is_null());
@@ -173,6 +175,7 @@ impl str::FromStr for ::VideoFormatInfo {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         let format = s.parse()?;
         Ok(VideoFormatInfo::from_format(format))
     }
@@ -180,6 +183,7 @@ impl str::FromStr for ::VideoFormatInfo {
 
 impl From<::VideoFormat> for VideoFormatInfo {
     fn from(f: ::VideoFormat) -> Self {
+        skip_assert_initialized!();
         Self::from_format(f)
     }
 }

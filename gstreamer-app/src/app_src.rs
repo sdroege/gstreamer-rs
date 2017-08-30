@@ -28,6 +28,8 @@ impl AppSrcCallbacks {
         G: Fn(&AppSrc) + Send + Sync + 'static,
         H: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static,
     {
+        skip_assert_initialized!();
+
         AppSrcCallbacks {
             need_data: Box::new(need_data),
             enough_data: Box::new(enough_data),

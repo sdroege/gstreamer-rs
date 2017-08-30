@@ -23,6 +23,8 @@ pub enum VideoEndianness {
 
 impl FromGlib<i32> for VideoEndianness {
     fn from_glib(value: i32) -> Self {
+        skip_assert_initialized!();
+
         match value {
             1234 => VideoEndianness::LittleEndian,
             4321 => VideoEndianness::BigEndian,
@@ -45,10 +47,14 @@ impl ToGlib for VideoEndianness {
 
 impl ::VideoFormat {
     pub fn from_string(s: &str) -> ::VideoFormat {
+        assert_initialized_main_thread!();
+
         unsafe { from_glib(ffi::gst_video_format_from_string(s.to_glib_none().0)) }
     }
 
     pub fn from_fourcc(fourcc: u32) -> ::VideoFormat {
+        assert_initialized_main_thread!();
+
         unsafe { from_glib(ffi::gst_video_format_from_fourcc(fourcc)) }
     }
 
@@ -61,6 +67,8 @@ impl ::VideoFormat {
         green_mask: u32,
         alpha_mask: u32,
     ) -> ::VideoFormat {
+        assert_initialized_main_thread!();
+
         unsafe {
             from_glib(ffi::gst_video_format_from_masks(
                 depth as i32,
@@ -87,6 +95,8 @@ impl str::FromStr for ::VideoFormat {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
+
         let format = Self::from_string(s);
         if format == ::VideoFormat::Unknown {
             Err(())

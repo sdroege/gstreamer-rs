@@ -35,7 +35,9 @@ macro_rules! callback_guard {
 
 macro_rules! assert_initialized_main_thread {
     () => (
-        assert_eq!(unsafe {ffi::gst_is_initialized()}, ::glib_ffi::GTRUE)
+        if unsafe {::ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+            panic!("GStreamer has not been initialized. Call `gst::init` first.");
+        }
     )
 }
 

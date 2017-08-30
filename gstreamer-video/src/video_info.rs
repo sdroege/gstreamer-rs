@@ -92,6 +92,7 @@ impl VideoColorimetry {
         transfer: ::VideoTransferFunction,
         primaries: ::VideoColorPrimaries,
     ) -> Self {
+        assert_initialized_main_thread!();
 
         let colorimetry = unsafe {
             let mut colorimetry: ffi::GstVideoColorimetry = mem::zeroed();
@@ -112,6 +113,8 @@ impl VideoColorimetry {
     }
 
     pub fn from_string(s: &str) -> Option<Self> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut colorimetry = mem::zeroed();
             let valid: bool = from_glib(ffi::gst_video_colorimetry_from_string(
@@ -145,6 +148,7 @@ impl str::FromStr for ::VideoColorimetry {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         Self::from_string(s).ok_or(())
     }
 }
@@ -370,6 +374,8 @@ impl<'a> VideoInfoBuilder<'a> {
 
 impl VideoInfo {
     pub fn new<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
+        assert_initialized_main_thread!();
+
         #[cfg(not(feature = "v1_12"))]
         {
             VideoInfoBuilder {
@@ -414,6 +420,8 @@ impl VideoInfo {
     }
 
     pub fn from_caps(caps: &gst::Caps) -> Option<Self> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut info = mem::uninitialized();
             if from_glib(ffi::gst_video_info_from_caps(&mut info, caps.as_ptr())) {
@@ -547,6 +555,8 @@ impl VideoInfo {
         src_val: i64,
         dest_fmt: gst::Format,
     ) -> Option<i64> {
+        skip_assert_initialized!();
+
         unsafe {
             let mut dest_val = mem::uninitialized();
             if from_glib(ffi::gst_video_info_convert(
@@ -668,6 +678,8 @@ impl ::VideoFieldOrder {
     }
 
     pub fn from_string(s: &str) -> Self {
+        assert_initialized_main_thread!();
+
         unsafe { from_glib(ffi::gst_video_field_order_from_string(s.to_glib_none().0)) }
     }
 }
@@ -677,6 +689,7 @@ impl str::FromStr for ::VideoFieldOrder {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         Ok(Self::from_string(s))
     }
 }
@@ -694,6 +707,8 @@ impl ::VideoInterlaceMode {
     }
 
     pub fn from_string(s: &str) -> Self {
+        assert_initialized_main_thread!();
+
         unsafe {
             from_glib(ffi::gst_video_interlace_mode_from_string(
                 s.to_glib_none().0,
@@ -706,6 +721,7 @@ impl str::FromStr for ::VideoInterlaceMode {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
+        skip_assert_initialized!();
         Ok(Self::from_string(s))
     }
 }

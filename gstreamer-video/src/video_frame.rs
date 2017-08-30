@@ -74,6 +74,8 @@ impl<T> VideoFrame<T> {
         dest: &mut VideoFrame<Writable>,
         plane: u32,
     ) -> Result<(), glib::BoolError> {
+        skip_assert_initialized!();
+
         unsafe {
             let res: bool = from_glib(ffi::gst_video_frame_copy_plane(&mut dest.0, &self.0, plane));
             if res {
@@ -177,6 +179,8 @@ impl VideoFrame<Readable> {
         buffer: gst::Buffer,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut frame = mem::zeroed();
             let res: bool = from_glib(ffi::gst_video_frame_map(
@@ -202,6 +206,8 @@ impl VideoFrame<Readable> {
         id: i32,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Readable>, gst::Buffer> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut frame = mem::zeroed();
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
@@ -233,6 +239,8 @@ impl VideoFrame<Writable> {
         buffer: gst::Buffer,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut frame = mem::zeroed();
             let res: bool = from_glib(ffi::gst_video_frame_map(
@@ -259,6 +267,8 @@ impl VideoFrame<Writable> {
         id: i32,
         info: &::VideoInfo,
     ) -> Result<VideoFrame<Writable>, gst::Buffer> {
+        assert_initialized_main_thread!();
+
         unsafe {
             let mut frame = mem::zeroed();
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
