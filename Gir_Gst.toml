@@ -161,6 +161,16 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.Message"
 status = "manual"
 ref_mode = "ref"
@@ -187,6 +197,11 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.Toc"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TocEntry"
 status = "manual"
 ref_mode = "ref"
 
