@@ -1,6 +1,7 @@
 # gstreamer-rs [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
 
 [GStreamer](https://gstreamer.freedesktop.org/) bindings for Rust.
+Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications.
