@@ -21,10 +21,6 @@ glib_wrapper! {
 }
 
 impl ProxyPad {
-    //pub fn chain_list_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R, list: /*Ignored*/&mut BufferList) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_proxy_pad_chain_list_default() }
-    //}
-
     pub fn iterate_internal_links_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R) -> Option<Iterator> {
         skip_assert_initialized!();
         let parent = parent.into();

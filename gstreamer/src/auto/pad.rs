@@ -79,8 +79,6 @@ pub trait PadExt {
 
     fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
 
-    //fn chain_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn;
-
     fn check_reconfigure(&self) -> bool;
 
     fn create_stream_id<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q) -> Option<String>;
@@ -160,8 +158,6 @@ pub trait PadExt {
     fn peer_query_duration(&self, format: Format) -> Option<i64>;
 
     fn peer_query_position(&self, format: Format) -> Option<i64>;
-
-    //fn push_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn;
 
     fn query_accept_caps(&self, caps: &Caps) -> bool;
 
@@ -248,10 +244,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
             from_glib(ffi::gst_pad_can_link(self.to_glib_none().0, sinkpad.to_glib_none().0))
         }
     }
-
-    //fn chain_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_chain_list() }
-    //}
 
     fn check_reconfigure(&self) -> bool {
         unsafe {
@@ -486,10 +478,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
             if ret { Some(cur) } else { None }
         }
     }
-
-    //fn push_list(&self, list: /*Ignored*/&mut BufferList) -> FlowReturn {
-    //    unsafe { TODO: call ffi::gst_pad_push_list() }
-    //}
 
     fn query_accept_caps(&self, caps: &Caps) -> bool {
         unsafe {

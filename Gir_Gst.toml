@@ -388,6 +388,16 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "chain_list"
+    # Move buffer
+    ignore = true
+
+    [[object.function]]
+    name = "push_list"
+    # Move buffer
+    ignore = true
+
+    [[object.function]]
     name = "pull_range"
     # Buffer can be NULL
     ignore = true
@@ -468,6 +478,11 @@ status = "generate"
 
     [[object.function]]
     name = "chain_default"
+    # Buffer move
+    ignore = true
+
+    [[object.function]]
+    name = "chain_list_default"
     # Buffer move
     ignore = true
 
