@@ -22,11 +22,15 @@ use gio::prelude::*;
 extern crate gtk;
 #[cfg(feature = "gtkvideooverlay")]
 use gtk::prelude::*;
+#[cfg(feature = "gtkvideooverlay")]
+use gtk::prelude::WindowExt as GtkWindowExt;
 
 #[cfg(feature = "gtkvideooverlay")]
 extern crate gdk;
 #[cfg(feature = "gtkvideooverlay")]
 use gdk::prelude::*;
+#[cfg(feature = "gtkvideooverlay")]
+use gdk::prelude::WindowExt as GdkWindowExt;
 
 #[cfg(feature = "gtkvideooverlay")]
 use std::env;
