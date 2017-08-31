@@ -1,12 +1,12 @@
 [root]
 name = "gstreamer-video"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.3.0 (git+https://github.com/gtk-rs/glib)",
  "glib-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
  "gobject-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
- "gstreamer 0.1.0",
+ "gstreamer 0.8.0",
  "gstreamer-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "gstreamer-video-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -110,18 +110,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "examples"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "byte-slice-cast 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "gdk 0.6.0 (git+https://github.com/gtk-rs/gdk)",
  "gio 0.2.0 (git+https://github.com/gtk-rs/gio)",
  "glib 0.3.0 (git+https://github.com/gtk-rs/glib)",
- "gstreamer 0.1.0",
- "gstreamer-app 0.1.0",
- "gstreamer-audio 0.1.0",
- "gstreamer-player 0.1.0",
- "gstreamer-video 0.1.0",
+ "gstreamer 0.8.0",
+ "gstreamer-app 0.8.0",
+ "gstreamer-audio 0.8.0",
+ "gstreamer-player 0.8.0",
+ "gstreamer-video 0.8.0",
  "gtk 0.2.0 (git+https://github.com/gtk-rs/gtk)",
  "send-cell 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio-core 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -219,7 +219,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.3.0"
-source = "git+https://github.com/gtk-rs/glib#e46aa7f27cc74f3cdcb54d94feb4a8861df21c7f"
+source = "git+https://github.com/gtk-rs/glib#91b9c2b76310c84c4b904e0f627dc0bc24bfdacb"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
@@ -251,7 +251,7 @@ dependencies = [
 
 [[package]]
 name = "gstreamer"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -267,13 +267,13 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-app"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.3.0 (git+https://github.com/gtk-rs/glib)",
  "glib-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
  "gobject-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
- "gstreamer 0.1.0",
+ "gstreamer 0.8.0",
  "gstreamer-app-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "gstreamer-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -296,14 +296,14 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-audio"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "array-init 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.3.0 (git+https://github.com/gtk-rs/glib)",
  "glib-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
  "gobject-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
- "gstreamer 0.1.0",
+ "gstreamer 0.8.0",
  "gstreamer-audio-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "gstreamer-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -340,13 +340,13 @@ dependencies = [
 
 [[package]]
 name = "gstreamer-player"
-version = "0.1.0"
+version = "0.8.0"
 dependencies = [
  "bitflags 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glib 0.3.0 (git+https://github.com/gtk-rs/glib)",
  "glib-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
  "gobject-sys 0.4.0 (git+https://github.com/gtk-rs/sys)",
- "gstreamer 0.1.0",
+ "gstreamer 0.8.0",
  "gstreamer-player-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "gstreamer-sys 0.2.0 (git+https://github.com/sdroege/gstreamer-sys)",
  "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",

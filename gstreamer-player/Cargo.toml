@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-player"
-version = "0.1.0"
+version = "0.8.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Player library"
@@ -18,7 +18,7 @@ gobject-sys = { version = "0.4", git = "https://github.com/gtk-rs/sys" }
 gstreamer-sys = { version = "0.2", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_12"] }
 gstreamer-player-sys = { version = "0.2", git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_12"] }
 glib = { version = "0.3", git = "https://github.com/gtk-rs/glib" }
-gstreamer = { version = "0.1.0", path = "../gstreamer", features = ["v1_12"] }
+gstreamer = { version = "0.8", path = "../gstreamer", features = ["v1_12"] }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
