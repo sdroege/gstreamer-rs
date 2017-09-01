@@ -306,7 +306,6 @@ dependencies = [
  "gstreamer 0.8.0",
  "gstreamer-audio-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gstreamer-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustdoc-stripper 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -348,7 +347,6 @@ dependencies = [
  "gobject-sys 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gstreamer 0.8.0",
  "gstreamer-player-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "gstreamer-sys 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.30 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustdoc-stripper 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

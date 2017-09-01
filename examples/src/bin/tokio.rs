@@ -1,3 +1,4 @@
+#[cfg(feature = "tokio")]
 extern crate gstreamer as gst;
 #[cfg(feature = "tokio")]
 use gst::prelude::*;
