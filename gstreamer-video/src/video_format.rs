@@ -82,7 +82,7 @@ impl ::VideoFormat {
         }
     }
 
-    pub fn to_string(&self) -> &'static str {
+    pub fn to_string<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_video_format_to_string(self.to_glib()))
                 .to_str()

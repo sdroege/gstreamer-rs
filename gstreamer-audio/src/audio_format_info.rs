@@ -66,11 +66,11 @@ impl AudioFormatInfo {
         from_glib(self.0.format)
     }
 
-    pub fn name(&self) -> &'static str {
+    pub fn name<'a>(&self) -> &'a str {
         unsafe { CStr::from_ptr(self.0.name).to_str().unwrap() }
     }
 
-    pub fn description(&self) -> &'static str {
+    pub fn description<'a>(&self) -> &'a str {
         unsafe { CStr::from_ptr(self.0.description).to_str().unwrap() }
     }
 
@@ -94,7 +94,7 @@ impl AudioFormatInfo {
         from_glib(self.0.unpack_format)
     }
 
-    pub fn silence(&self) -> &'static [u8] {
+    pub fn silence<'a>(&self) -> &'a [u8] {
         &self.0.silence
     }
 

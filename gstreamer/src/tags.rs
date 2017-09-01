@@ -24,7 +24,7 @@ use Sample;
 
 pub trait Tag<'a> {
     type TagType: FromValueOptional<'a> + SetValue;
-    fn tag_name() -> &'static str;
+    fn tag_name<'b>() -> &'b str;
 }
 
 macro_rules! impl_tag(
@@ -32,7 +32,7 @@ macro_rules! impl_tag(
         pub struct $name;
         impl<'a> Tag<'a> for $name {
             type TagType = $t;
-            fn tag_name() -> &'static str {
+            fn tag_name<'b>() -> &'b str {
                 $tag
             }
         }

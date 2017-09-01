@@ -17,11 +17,11 @@ use ffi;
 use gobject_ffi;
 
 pub trait DeviceProviderExtManual {
-    fn get_metadata(&self, key: &str) -> Option<&'static str>;
+    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
 }
 
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
-    fn get_metadata(&self, key: &str) -> Option<&'static str> {
+    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class as
                 *mut ffi::GstDeviceProviderClass;
