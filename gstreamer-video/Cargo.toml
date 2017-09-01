@@ -6,6 +6,7 @@ categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Video library"
 repository = "https://github.com/sdroege/gstreamer-rs"
 license = "MIT/Apache-2.0"
+readme = "README.md"
 homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer-video"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
