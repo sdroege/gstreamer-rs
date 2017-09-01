@@ -1,6 +1,6 @@
 [package]
 name = "examples"
-version = "0.8.0"
+version = "0.9.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
