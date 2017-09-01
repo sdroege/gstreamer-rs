@@ -5,8 +5,6 @@ use gst::prelude::*;
 #[cfg(feature = "gst-player")]
 extern crate gstreamer_player as gst_player;
 
-extern crate glib;
-
 use std::env;
 
 pub mod utils;

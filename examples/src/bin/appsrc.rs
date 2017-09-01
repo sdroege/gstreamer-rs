@@ -3,8 +3,6 @@ use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
 extern crate gstreamer_video as gst_video;
 
-extern crate glib;
-
 use std::u64;
 use std::thread;
 

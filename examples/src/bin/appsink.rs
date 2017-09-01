@@ -3,8 +3,6 @@ use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
 extern crate gstreamer_audio as gst_audio;
 
-extern crate glib;
-
 extern crate byte_slice_cast;
 use byte_slice_cast::*;
 

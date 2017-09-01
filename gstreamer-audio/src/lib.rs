@@ -8,7 +8,6 @@
 
 #[macro_use]
 extern crate bitflags;
-extern crate libc;
 extern crate array_init;
 
 extern crate glib_sys as glib_ffi;
