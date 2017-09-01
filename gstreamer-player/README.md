@@ -1,6 +1,6 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer.svg)](https://crates.io/crates/gstreamer) [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-player.svg)](https://crates.io/crates/gstreamer-player) [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
 
-[GStreamer](https://gstreamer.freedesktop.org/) bindings for Rust.
+[GStreamer](https://gstreamer.freedesktop.org/) (Player library) bindings for Rust.
 Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
 
 These bindings are providing a safe API that can be used to interface with
