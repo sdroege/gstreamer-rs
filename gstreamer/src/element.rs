@@ -54,7 +54,7 @@ pub trait ElementExtManual {
 
     fn send_event(&self, event: Event) -> bool;
 
-    fn get_metadata(&self, key: &str) -> Option<&'static str>;
+    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
 
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate>;
     fn get_pad_template_list(&self) -> Vec<PadTemplate>;
@@ -79,7 +79,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn get_metadata(&self, key: &str) -> Option<&'static str> {
+    fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
             let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class as
                 *mut ffi::GstElementClass;

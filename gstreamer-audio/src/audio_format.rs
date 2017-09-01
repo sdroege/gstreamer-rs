@@ -39,7 +39,7 @@ impl ::AudioFormat {
         unsafe { from_glib(ffi::gst_audio_format_from_string(s.to_glib_none().0)) }
     }
 
-    pub fn to_string(&self) -> &'static str {
+    pub fn to_string<'a>(&self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_audio_format_to_string(self.to_glib()))
                 .to_str()
