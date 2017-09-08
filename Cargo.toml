@@ -7,4 +7,5 @@ members = [
   "gstreamer-player",
   "gstreamer-video",
   "examples",
+  "tutorials",
 ]

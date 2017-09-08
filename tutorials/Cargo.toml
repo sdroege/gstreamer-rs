@@ -1,0 +1,11 @@
+[package]
+name = "tutorials"
+version = "0.9.0"
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+
+[dependencies]
+glib = { version = "0.3", git = "https://github.com/gtk-rs/glib" }
+gstreamer = { path = "../gstreamer" }
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
