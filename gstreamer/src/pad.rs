@@ -31,7 +31,7 @@ use libc;
 
 use ffi;
 
-#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Debug, Default, PartialEq, Eq)]
 pub struct PadProbeId(libc::c_ulong);
 pub const PAD_PROBE_ID_INVALID: PadProbeId = PadProbeId(0);
 
