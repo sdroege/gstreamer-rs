@@ -68,6 +68,70 @@ impl SetValue for BufferFlags {
 }
 
 bitflags! {
+    pub struct DebugColorFlags: u32 {
+        const DEBUG_FG_BLACK = 0;
+        const DEBUG_FG_RED = 1;
+        const DEBUG_FG_GREEN = 2;
+        const DEBUG_FG_YELLOW = 3;
+        const DEBUG_FG_BLUE = 4;
+        const DEBUG_FG_MAGENTA = 5;
+        const DEBUG_FG_CYAN = 6;
+        const DEBUG_FG_WHITE = 7;
+        const DEBUG_BG_BLACK = 0;
+        const DEBUG_BG_RED = 16;
+        const DEBUG_BG_GREEN = 32;
+        const DEBUG_BG_YELLOW = 48;
+        const DEBUG_BG_BLUE = 64;
+        const DEBUG_BG_MAGENTA = 80;
+        const DEBUG_BG_CYAN = 96;
+        const DEBUG_BG_WHITE = 112;
+        const DEBUG_BOLD = 256;
+        const DEBUG_UNDERLINE = 512;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for DebugColorFlags {
+    type GlibType = ffi::GstDebugColorFlags;
+
+    fn to_glib(&self) -> ffi::GstDebugColorFlags {
+        ffi::GstDebugColorFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstDebugColorFlags> for DebugColorFlags {
+    fn from_glib(value: ffi::GstDebugColorFlags) -> DebugColorFlags {
+        skip_assert_initialized!();
+        DebugColorFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for DebugColorFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_debug_color_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for DebugColorFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for DebugColorFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstDebugColorFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for DebugColorFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct DebugGraphDetails: u32 {
         const DEBUG_GRAPH_SHOW_MEDIA_TYPE = 1;
         const DEBUG_GRAPH_SHOW_CAPS_DETAILS = 2;

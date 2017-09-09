@@ -71,6 +71,7 @@ generate = [
     "Gst.Rank",
     "Gst.PadLinkCheck",
     "Gst.DebugLevel",
+    "Gst.DebugColorFlags",
     "Gst.StackTraceFlags",
     "Gst.DebugGraphDetails",
     "Gst.ParseFlags",

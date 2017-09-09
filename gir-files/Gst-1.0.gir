@@ -10221,10 +10221,10 @@ debugging message.
         </parameters>
       </method>
     </record>
-    <enumeration name="DebugColorFlags"
-                 glib:type-name="GstDebugColorFlags"
-                 glib:get-type="gst_debug_color_flags_get_type"
-                 c:type="GstDebugColorFlags">
+    <bitfield name="DebugColorFlags"
+              glib:type-name="GstDebugColorFlags"
+              glib:get-type="gst_debug_color_flags_get_type"
+              c:type="GstDebugColorFlags">
       <doc xml:space="preserve">These are some terminal style flags you can use when creating your
 debugging categories to make them stand out in debugging output.</doc>
       <member name="fg_black"
@@ -10335,7 +10335,7 @@ debugging categories to make them stand out in debugging output.</doc>
               glib:nick="underline">
         <doc xml:space="preserve">Underline the output.</doc>
       </member>
-    </enumeration>
+    </bitfield>
     <enumeration name="DebugColorMode"
                  glib:type-name="GstDebugColorMode"
                  glib:get-type="gst_debug_color_mode_get_type"
