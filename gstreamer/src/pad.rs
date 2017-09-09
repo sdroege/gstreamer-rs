@@ -21,7 +21,7 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib::{IsA, StaticType};
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_borrow, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 use glib::source::CallbackGuard;
 use glib_ffi;
 use glib_ffi::gpointer;
@@ -328,7 +328,7 @@ unsafe extern "C" fn trampoline_pad_probe(
         },
     };
 
-    let ret = func(&from_glib_none(pad), &mut probe_info).to_glib();
+    let ret = func(&from_glib_borrow(pad), &mut probe_info).to_glib();
 
     match probe_info.data {
         Some(PadProbeData::Buffer(buffer)) => {

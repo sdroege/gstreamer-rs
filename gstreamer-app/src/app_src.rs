@@ -57,14 +57,14 @@ unsafe extern "C" fn trampoline_need_data(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    (callbacks.need_data)(&from_glib_none(appsrc), length);
+    (callbacks.need_data)(&from_glib_borrow(appsrc), length);
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    (callbacks.enough_data)(&from_glib_none(appsrc));
+    (callbacks.enough_data)(&from_glib_borrow(appsrc));
 }
 
 unsafe extern "C" fn trampoline_seek_data(
@@ -75,7 +75,7 @@ unsafe extern "C" fn trampoline_seek_data(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    (callbacks.seek_data)(&from_glib_none(appsrc), offset).to_glib()
+    (callbacks.seek_data)(&from_glib_borrow(appsrc), offset).to_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {

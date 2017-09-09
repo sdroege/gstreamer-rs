@@ -38,7 +38,7 @@ unsafe extern "C" fn trampoline_watch(
 ) -> gboolean {
     let _guard = CallbackGuard::new();
     let func: &RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>> = transmute(func);
-    (&mut *func.borrow_mut())(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
+    (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch(ptr: gpointer) {
@@ -61,7 +61,7 @@ unsafe extern "C" fn trampoline_sync(
 ) -> ffi::GstBusSyncReply {
     let _guard = CallbackGuard::new();
     let f: &&(Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static) = transmute(func);
-    f(&from_glib_none(bus), &Message::from_glib_none(msg)).to_glib()
+    f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_sync(ptr: gpointer) {

@@ -40,7 +40,7 @@ unsafe extern "C" fn trampoline_wait_async(
 ) -> gboolean {
     let _guard = CallbackGuard::new();
     let f: &&(Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static) = transmute(func);
-    f(&from_glib_none(clock), time, &from_glib_none(id)).to_glib()
+    f(&from_glib_borrow(clock), time, &from_glib_borrow(id)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_wait_async(ptr: gpointer) {

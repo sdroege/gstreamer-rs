@@ -54,7 +54,7 @@ unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gp
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
-    (callbacks.eos)(&from_glib_none(appsink));
+    (callbacks.eos)(&from_glib_borrow(appsink));
 }
 
 unsafe extern "C" fn trampoline_new_preroll(
@@ -64,7 +64,7 @@ unsafe extern "C" fn trampoline_new_preroll(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
-    (callbacks.new_preroll)(&from_glib_none(appsink)).to_glib()
+    (callbacks.new_preroll)(&from_glib_borrow(appsink)).to_glib()
 }
 
 unsafe extern "C" fn trampoline_new_sample(
@@ -74,7 +74,7 @@ unsafe extern "C" fn trampoline_new_sample(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
-    (callbacks.new_sample)(&from_glib_none(appsink)).to_glib()
+    (callbacks.new_sample)(&from_glib_borrow(appsink)).to_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
