@@ -1,0 +1,37 @@
+[package]
+name = "gstreamer-base"
+version = "0.9.0"
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer Base library"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+homepage = "https://gstreamer.freedesktop.org"
+documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer-base"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+build = "build.rs"
+
+[dependencies]
+bitflags = "0.9"
+libc = "0.2"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-base-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gstreamer = { path = "../gstreamer" }
+
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
+
+[features]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-base-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-base-sys/v1_12", "v1_10"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
+default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
