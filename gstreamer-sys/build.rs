@@ -30,6 +30,8 @@ fn find() -> Result<(), Error> {
         "1.2.3"
     } else if cfg!(feature = "v1_2") {
         "1.2"
+    } else if cfg!(feature = "v1_0_10") {
+        "1.0.10"
     } else {
         "1.0"
     };

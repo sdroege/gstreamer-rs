@@ -16,10 +16,16 @@ fn main() {
 fn find() -> Result<(), Error> {
     let package_name = "gstreamer-pbutils-1.0";
     let shared_libs = ["gstpbutils-1.0"];
-    let version = if cfg!(feature = "v1_8") {
+    let version = if cfg!(feature = "v1_12") {
+        "1.12"
+    } else if cfg!(feature = "v1_10") {
+        "1.10"
+    } else if cfg!(feature = "v1_8") {
         "1.8"
-    } else if cfg!(feature = "v1_6") {
-        "1.6"
+    } else if cfg!(feature = "v1_4") {
+        "1.4"
+    } else if cfg!(feature = "v1_2") {
+        "1.2"
     } else {
         "1.0"
     };

@@ -20,12 +20,16 @@ fn find() -> Result<(), Error> {
         "1.12"
     } else if cfg!(feature = "v1_10") {
         "1.10"
+    } else if cfg!(feature = "v1_8") {
+        "1.8"
     } else if cfg!(feature = "v1_6") {
         "1.6"
     } else if cfg!(feature = "v1_4") {
         "1.4"
     } else if cfg!(feature = "v1_2") {
         "1.2"
+    } else if cfg!(feature = "v1_0_1") {
+        "1.0.1"
     } else {
         "1.0"
     };
