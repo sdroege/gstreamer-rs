@@ -68,8 +68,18 @@ impl BufferListRef {
         unsafe { ffi::gst_buffer_list_length(self.as_mut_ptr()) as usize }
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     pub fn iter(&self) -> Iter {
         Iter::new(self)
+    }
+}
+
+impl Default for GstRc<BufferListRef> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

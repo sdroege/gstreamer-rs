@@ -21,6 +21,7 @@ glib_wrapper! {
 }
 
 impl Iterator {
+    #[cfg_attr(feature = "cargo-clippy", allow(should_implement_trait))]
     pub fn next(&mut self) -> Result<Value, IteratorResult> {
         unsafe {
             let mut value = Value::uninitialized();

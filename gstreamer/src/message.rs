@@ -49,80 +49,52 @@ impl MessageRef {
     pub fn view(&self) -> MessageView {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
-        if type_ == ffi::GST_MESSAGE_EOS {
-            MessageView::Eos(Eos(self))
-        } else if type_ == ffi::GST_MESSAGE_ERROR {
-            MessageView::Error(Error(self))
-        } else if type_ == ffi::GST_MESSAGE_WARNING {
-            MessageView::Warning(Warning(self))
-        } else if type_ == ffi::GST_MESSAGE_INFO {
-            MessageView::Info(Info(self))
-        } else if type_ == ffi::GST_MESSAGE_TAG {
-            MessageView::Tag(Tag(self))
-        } else if type_ == ffi::GST_MESSAGE_BUFFERING {
-            MessageView::Buffering(Buffering(self))
-        } else if type_ == ffi::GST_MESSAGE_STATE_CHANGED {
-            MessageView::StateChanged(StateChanged(self))
-        } else if type_ == ffi::GST_MESSAGE_STATE_DIRTY {
-            MessageView::StateDirty(StateDirty(self))
-        } else if type_ == ffi::GST_MESSAGE_STEP_DONE {
-            MessageView::StepDone(StepDone(self))
-        } else if type_ == ffi::GST_MESSAGE_CLOCK_PROVIDE {
-            MessageView::ClockProvide(ClockProvide(self))
-        } else if type_ == ffi::GST_MESSAGE_CLOCK_LOST {
-            MessageView::ClockLost(ClockLost(self))
-        } else if type_ == ffi::GST_MESSAGE_NEW_CLOCK {
-            MessageView::NewClock(NewClock(self))
-        } else if type_ == ffi::GST_MESSAGE_STRUCTURE_CHANGE {
-            MessageView::StructureChange(StructureChange(self))
-        } else if type_ == ffi::GST_MESSAGE_STREAM_STATUS {
-            MessageView::StreamStatus(StreamStatus(self))
-        } else if type_ == ffi::GST_MESSAGE_APPLICATION {
-            MessageView::Application(Application(self))
-        } else if type_ == ffi::GST_MESSAGE_ELEMENT {
-            MessageView::Element(Element(self))
-        } else if type_ == ffi::GST_MESSAGE_SEGMENT_START {
-            MessageView::SegmentStart(SegmentStart(self))
-        } else if type_ == ffi::GST_MESSAGE_SEGMENT_DONE {
-            MessageView::SegmentDone(SegmentDone(self))
-        } else if type_ == ffi::GST_MESSAGE_DURATION_CHANGED {
-            MessageView::DurationChanged(DurationChanged(self))
-        } else if type_ == ffi::GST_MESSAGE_LATENCY {
-            MessageView::Latency(Latency(self))
-        } else if type_ == ffi::GST_MESSAGE_ASYNC_START {
-            MessageView::AsyncStart(AsyncStart(self))
-        } else if type_ == ffi::GST_MESSAGE_ASYNC_DONE {
-            MessageView::AsyncDone(AsyncDone(self))
-        } else if type_ == ffi::GST_MESSAGE_REQUEST_STATE {
-            MessageView::RequestState(RequestState(self))
-        } else if type_ == ffi::GST_MESSAGE_STEP_START {
-            MessageView::StepStart(StepStart(self))
-        } else if type_ == ffi::GST_MESSAGE_QOS {
-            MessageView::Qos(Qos(self))
-        } else if type_ == ffi::GST_MESSAGE_PROGRESS {
-            MessageView::Progress(Progress(self))
-        } else if type_ == ffi::GST_MESSAGE_TOC {
-            MessageView::Toc(Toc(self))
-        } else if type_ == ffi::GST_MESSAGE_RESET_TIME {
-            MessageView::ResetTime(ResetTime(self))
-        } else if type_ == ffi::GST_MESSAGE_STREAM_START {
-            MessageView::StreamStart(StreamStart(self))
-        } else if type_ == ffi::GST_MESSAGE_NEED_CONTEXT {
-            MessageView::NeedContext(NeedContext(self))
-        } else if type_ == ffi::GST_MESSAGE_HAVE_CONTEXT {
-            MessageView::HaveContext(HaveContext(self))
-        } else if type_ == ffi::GST_MESSAGE_DEVICE_ADDED {
-            MessageView::DeviceAdded(DeviceAdded(self))
-        } else if type_ == ffi::GST_MESSAGE_DEVICE_REMOVED {
-            MessageView::DeviceRemoved(DeviceRemoved(self))
-        } else if type_ == ffi::GST_MESSAGE_PROPERTY_NOTIFY {
-            MessageView::PropertyNotify(PropertyNotify(self))
-        } else if type_ == ffi::GST_MESSAGE_STREAM_COLLECTION {
-            MessageView::StreamCollection(StreamCollection(self))
-        } else if type_ == ffi::GST_MESSAGE_STREAMS_SELECTED {
-            MessageView::StreamsSelected(StreamsSelected(self))
-        } else {
-            MessageView::Other
+        match type_ {
+            ffi::GST_MESSAGE_EOS => MessageView::Eos(Eos(self)),
+            ffi::GST_MESSAGE_ERROR => MessageView::Error(Error(self)),
+            ffi::GST_MESSAGE_WARNING => MessageView::Warning(Warning(self)),
+            ffi::GST_MESSAGE_INFO => MessageView::Info(Info(self)),
+            ffi::GST_MESSAGE_TAG => MessageView::Tag(Tag(self)),
+            ffi::GST_MESSAGE_BUFFERING => MessageView::Buffering(Buffering(self)),
+            ffi::GST_MESSAGE_STATE_CHANGED => MessageView::StateChanged(StateChanged(self)),
+            ffi::GST_MESSAGE_STATE_DIRTY => MessageView::StateDirty(StateDirty(self)),
+            ffi::GST_MESSAGE_STEP_DONE => MessageView::StepDone(StepDone(self)),
+            ffi::GST_MESSAGE_CLOCK_PROVIDE => MessageView::ClockProvide(ClockProvide(self)),
+            ffi::GST_MESSAGE_CLOCK_LOST => MessageView::ClockLost(ClockLost(self)),
+            ffi::GST_MESSAGE_NEW_CLOCK => MessageView::NewClock(NewClock(self)),
+            ffi::GST_MESSAGE_STRUCTURE_CHANGE => {
+                MessageView::StructureChange(StructureChange(self))
+            }
+            ffi::GST_MESSAGE_STREAM_STATUS => MessageView::StreamStatus(StreamStatus(self)),
+            ffi::GST_MESSAGE_APPLICATION => MessageView::Application(Application(self)),
+            ffi::GST_MESSAGE_ELEMENT => MessageView::Element(Element(self)),
+            ffi::GST_MESSAGE_SEGMENT_START => MessageView::SegmentStart(SegmentStart(self)),
+            ffi::GST_MESSAGE_SEGMENT_DONE => MessageView::SegmentDone(SegmentDone(self)),
+            ffi::GST_MESSAGE_DURATION_CHANGED => {
+                MessageView::DurationChanged(DurationChanged(self))
+            }
+            ffi::GST_MESSAGE_LATENCY => MessageView::Latency(Latency(self)),
+            ffi::GST_MESSAGE_ASYNC_START => MessageView::AsyncStart(AsyncStart(self)),
+            ffi::GST_MESSAGE_ASYNC_DONE => MessageView::AsyncDone(AsyncDone(self)),
+            ffi::GST_MESSAGE_REQUEST_STATE => MessageView::RequestState(RequestState(self)),
+            ffi::GST_MESSAGE_STEP_START => MessageView::StepStart(StepStart(self)),
+            ffi::GST_MESSAGE_QOS => MessageView::Qos(Qos(self)),
+            ffi::GST_MESSAGE_PROGRESS => MessageView::Progress(Progress(self)),
+            ffi::GST_MESSAGE_TOC => MessageView::Toc(Toc(self)),
+            ffi::GST_MESSAGE_RESET_TIME => MessageView::ResetTime(ResetTime(self)),
+            ffi::GST_MESSAGE_STREAM_START => MessageView::StreamStart(StreamStart(self)),
+            ffi::GST_MESSAGE_NEED_CONTEXT => MessageView::NeedContext(NeedContext(self)),
+            ffi::GST_MESSAGE_HAVE_CONTEXT => MessageView::HaveContext(HaveContext(self)),
+            ffi::GST_MESSAGE_DEVICE_ADDED => MessageView::DeviceAdded(DeviceAdded(self)),
+            ffi::GST_MESSAGE_DEVICE_REMOVED => MessageView::DeviceRemoved(DeviceRemoved(self)),
+            ffi::GST_MESSAGE_PROPERTY_NOTIFY => MessageView::PropertyNotify(PropertyNotify(self)),
+            ffi::GST_MESSAGE_STREAM_COLLECTION => {
+                MessageView::StreamCollection(StreamCollection(self))
+            }
+            ffi::GST_MESSAGE_STREAMS_SELECTED => {
+                MessageView::StreamsSelected(StreamsSelected(self))
+            }
+            _ => MessageView::Other,
         }
     }
 }
@@ -1181,8 +1153,7 @@ pub struct ErrorBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
-    #[allow(unused)]
-    details: Option<Structure>,
+    #[allow(unused)] details: Option<Structure>,
 }
 impl<'a> ErrorBuilder<'a> {
     fn new(error: &'a glib::Error) -> Self {
@@ -1242,8 +1213,7 @@ pub struct WarningBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
-    #[allow(unused)]
-    details: Option<Structure>,
+    #[allow(unused)] details: Option<Structure>,
 }
 impl<'a> WarningBuilder<'a> {
     fn new(error: &'a glib::Error) -> Self {
@@ -1303,8 +1273,7 @@ pub struct InfoBuilder<'a> {
     seqnum: Option<u32>,
     error: &'a glib::Error,
     debug: Option<&'a str>,
-    #[allow(unused)]
-    details: Option<Structure>,
+    #[allow(unused)] details: Option<Structure>,
 }
 impl<'a> InfoBuilder<'a> {
     fn new(error: &'a glib::Error) -> Self {
@@ -1877,13 +1846,7 @@ pub struct QosBuilder {
     stats: Option<(::Format, u64, u64)>,
 }
 impl QosBuilder {
-    fn new(
-        live: bool,
-        running_time: u64,
-        stream_time: u64,
-        timestamp: u64,
-        duration: u64,
-    ) -> Self {
+    fn new(live: bool, running_time: u64, stream_time: u64, timestamp: u64, duration: u64) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -2182,10 +2145,8 @@ impl<'a> StreamCollectionBuilder<'a> {
 pub struct StreamsSelectedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    #[cfg(feature = "v1_10")]
-    collection: &'a ::StreamCollection,
-    #[cfg(feature = "v1_10")]
-    streams: Option<&'a [&'a ::Stream]>,
+    #[cfg(feature = "v1_10")] collection: &'a ::StreamCollection,
+    #[cfg(feature = "v1_10")] streams: Option<&'a [&'a ::Stream]>,
 }
 #[cfg(feature = "v1_10")]
 impl<'a> StreamsSelectedBuilder<'a> {
@@ -2224,6 +2185,7 @@ pub struct RedirectBuilder<'a> {
     location: &'a str,
     tag_list: Option<&'a TagList>,
     entry_struct: Option<Structure>,
+    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
 #[cfg(feature = "v1_10")]
@@ -2271,7 +2233,7 @@ impl<'a> RedirectBuilder<'a> {
         );
         if let Some(entries) = s.entries {
             for &(location, tag_list, entry_struct) in entries {
-                let entry_struct = entry_struct.map(|s| s.clone());
+                let entry_struct = entry_struct.cloned();
                 let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
                     entry_struct.into_ptr()
                 } else {

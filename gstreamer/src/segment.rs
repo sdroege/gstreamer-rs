@@ -51,6 +51,7 @@ impl Segment {
         }
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     pub fn do_seek(
         &mut self,
         rate: f64,
@@ -317,6 +318,12 @@ impl Clone for Segment {
 impl glib::types::StaticType for Segment {
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_segment_get_type()) }
+    }
+}
+
+impl Default for Segment {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

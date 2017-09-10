@@ -69,66 +69,41 @@ impl EventRef {
     pub fn view(&self) -> EventView {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
-        if type_ == ffi::GST_EVENT_FLUSH_START {
-            EventView::FlushStart(FlushStart(self))
-        } else if type_ == ffi::GST_EVENT_FLUSH_STOP {
-            EventView::FlushStop(FlushStop(self))
-        } else if type_ == ffi::GST_EVENT_STREAM_START {
-            EventView::StreamStart(StreamStart(self))
-        } else if type_ == ffi::GST_EVENT_CAPS {
-            EventView::Caps(Caps(self))
-        } else if type_ == ffi::GST_EVENT_SEGMENT {
-            EventView::Segment(Segment(self))
-        } else if type_ == ffi::GST_EVENT_STREAM_COLLECTION {
-            EventView::StreamCollection(StreamCollection(self))
-        } else if type_ == ffi::GST_EVENT_TAG {
-            EventView::Tag(Tag(self))
-        } else if type_ == ffi::GST_EVENT_BUFFERSIZE {
-            EventView::BufferSize(BufferSize(self))
-        } else if type_ == ffi::GST_EVENT_SINK_MESSAGE {
-            EventView::SinkMessage(SinkMessage(self))
-        } else if type_ == ffi::GST_EVENT_STREAM_GROUP_DONE {
-            EventView::StreamGroupDone(StreamGroupDone(self))
-        } else if type_ == ffi::GST_EVENT_EOS {
-            EventView::Eos(Eos(self))
-        } else if type_ == ffi::GST_EVENT_TOC {
-            EventView::Toc(Toc(self))
-        } else if type_ == ffi::GST_EVENT_PROTECTION {
-            EventView::Protection(Protection(self))
-        } else if type_ == ffi::GST_EVENT_SEGMENT_DONE {
-            EventView::SegmentDone(SegmentDone(self))
-        } else if type_ == ffi::GST_EVENT_GAP {
-            EventView::Gap(Gap(self))
-        } else if type_ == ffi::GST_EVENT_QOS {
-            EventView::Qos(Qos(self))
-        } else if type_ == ffi::GST_EVENT_SEEK {
-            EventView::Seek(Seek(self))
-        } else if type_ == ffi::GST_EVENT_NAVIGATION {
-            EventView::Navigation(Navigation(self))
-        } else if type_ == ffi::GST_EVENT_LATENCY {
-            EventView::Latency(Latency(self))
-        } else if type_ == ffi::GST_EVENT_STEP {
-            EventView::Step(Step(self))
-        } else if type_ == ffi::GST_EVENT_RECONFIGURE {
-            EventView::Reconfigure(Reconfigure(self))
-        } else if type_ == ffi::GST_EVENT_TOC_SELECT {
-            EventView::TocSelect(TocSelect(self))
-        } else if type_ == ffi::GST_EVENT_SELECT_STREAMS {
-            EventView::SelectStreams(SelectStreams(self))
-        } else if type_ == ffi::GST_EVENT_CUSTOM_UPSTREAM {
-            EventView::CustomUpstream(CustomUpstream(self))
-        } else if type_ == ffi::GST_EVENT_CUSTOM_DOWNSTREAM {
-            EventView::CustomDownstream(CustomDownstream(self))
-        } else if type_ == ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB {
-            EventView::CustomDownstreamOob(CustomDownstreamOob(self))
-        } else if type_ == ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY {
-            EventView::CustomDownstreamSticky(CustomDownstreamSticky(self))
-        } else if type_ == ffi::GST_EVENT_CUSTOM_BOTH {
-            EventView::CustomBoth(CustomBoth(self))
-        } else if type_ == ffi::GST_EVENT_CUSTOM_BOTH_OOB {
-            EventView::CustomBothOob(CustomBothOob(self))
-        } else {
-            EventView::Other
+        match type_ {
+            ffi::GST_EVENT_FLUSH_START => EventView::FlushStart(FlushStart(self)),
+            ffi::GST_EVENT_FLUSH_STOP => EventView::FlushStop(FlushStop(self)),
+            ffi::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
+            ffi::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
+            ffi::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
+            ffi::GST_EVENT_STREAM_COLLECTION => EventView::StreamCollection(StreamCollection(self)),
+            ffi::GST_EVENT_TAG => EventView::Tag(Tag(self)),
+            ffi::GST_EVENT_BUFFERSIZE => EventView::BufferSize(BufferSize(self)),
+            ffi::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
+            ffi::GST_EVENT_STREAM_GROUP_DONE => EventView::StreamGroupDone(StreamGroupDone(self)),
+            ffi::GST_EVENT_EOS => EventView::Eos(Eos(self)),
+            ffi::GST_EVENT_TOC => EventView::Toc(Toc(self)),
+            ffi::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
+            ffi::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
+            ffi::GST_EVENT_GAP => EventView::Gap(Gap(self)),
+            ffi::GST_EVENT_QOS => EventView::Qos(Qos(self)),
+            ffi::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
+            ffi::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
+            ffi::GST_EVENT_LATENCY => EventView::Latency(Latency(self)),
+            ffi::GST_EVENT_STEP => EventView::Step(Step(self)),
+            ffi::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
+            ffi::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
+            ffi::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
+            ffi::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM => EventView::CustomDownstream(CustomDownstream(self)),
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
+                EventView::CustomDownstreamOob(CustomDownstreamOob(self))
+            }
+            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => {
+                EventView::CustomDownstreamSticky(CustomDownstreamSticky(self))
+            }
+            ffi::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
+            ffi::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
+            _ => EventView::Other,
         }
     }
 }

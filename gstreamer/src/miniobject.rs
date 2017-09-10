@@ -241,6 +241,7 @@ impl<'a, T: MiniObject + 'static> ToGlibPtrMut<'a, *mut T::GstType> for GstRc<T>
 }
 
 impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstType> for GstRc<T> {
+    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     type Storage = (Vec<Stash<'a, *mut T::GstType, GstRc<T>>>, Option<Vec<*mut T::GstType>>);
 
     fn to_glib_none_from_slice(t: &'a [GstRc<T>]) -> (*mut *mut T::GstType, Self::Storage) {
@@ -284,6 +285,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
 }
 
 impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *const *mut T::GstType> for GstRc<T> {
+    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     type Storage = (Vec<Stash<'a, *mut T::GstType, GstRc<T>>>, Option<Vec<*mut T::GstType>>);
 
     fn to_glib_none_from_slice(t: &'a [GstRc<T>]) -> (*const *mut T::GstType, Self::Storage) {

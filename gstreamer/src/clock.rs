@@ -39,6 +39,7 @@ unsafe extern "C" fn trampoline_wait_async(
     func: gpointer,
 ) -> gboolean {
     let _guard = CallbackGuard::new();
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static) = transmute(func);
     f(&from_glib_none(clock), time, &from_glib_none(id)).to_glib()
 }
@@ -51,6 +52,7 @@ unsafe extern "C" fn destroy_closure_wait_async(ptr: gpointer) {
 fn into_raw_wait_async<F: Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static>(
     func: F,
 ) -> gpointer {
+    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     let func: Box<Box<Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static>> =
         Box::new(Box::new(func));
     Box::into_raw(func) as gpointer

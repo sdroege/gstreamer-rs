@@ -43,3 +43,9 @@ impl ParseContext {
         }
     }
 }
+
+impl Default for ParseContext {
+    fn default() -> Self {
+        Self::new()
+    }
+}

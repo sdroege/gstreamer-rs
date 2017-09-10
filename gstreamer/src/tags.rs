@@ -244,6 +244,12 @@ impl GstRc<TagListRef> {
     }
 }
 
+impl Default for GstRc<TagListRef> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TagListRef {
     pub fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
     where

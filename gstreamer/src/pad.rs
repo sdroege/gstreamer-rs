@@ -289,6 +289,7 @@ unsafe extern "C" fn trampoline_pad_probe(
     func: gpointer,
 ) -> ffi::GstPadProbeReturn {
     let _guard = CallbackGuard::new();
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static) =
         transmute(func);
     let mut data_type = None;
