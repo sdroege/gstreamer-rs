@@ -31,7 +31,6 @@ impl Player {
             let signal_dispatcher = signal_dispatcher.to_glib_none();
             unsafe { from_glib_none(ffi::gst_player_new(video_renderer.0, signal_dispatcher.0)) }
         }
-
     }
 
     pub fn set_config(&self, config: gst::Structure) -> bool {

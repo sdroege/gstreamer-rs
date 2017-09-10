@@ -8,9 +8,9 @@
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
-extern crate gstreamer_sys as gst_ffi;
-extern crate gstreamer_base_sys as ffi;
 extern crate gstreamer as gst;
+extern crate gstreamer_base_sys as ffi;
+extern crate gstreamer_sys as gst_ffi;
 
 #[macro_use]
 extern crate glib;

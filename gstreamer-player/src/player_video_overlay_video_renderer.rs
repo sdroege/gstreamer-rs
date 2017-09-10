@@ -21,9 +21,9 @@ impl PlayerVideoOverlayVideoRenderer {
     pub unsafe fn new(window_handle: uintptr_t) -> PlayerVideoOverlayVideoRenderer {
         assert_initialized_main_thread!();
 
-        from_glib_full(ffi::gst_player_video_overlay_video_renderer_new(
-            window_handle as *mut _,
-        ) as *mut _)
+        from_glib_full(
+            ffi::gst_player_video_overlay_video_renderer_new(window_handle as *mut _) as *mut _,
+        )
     }
 
     pub unsafe fn new_with_handle_and_sink<P: IsA<gst::Element>>(
@@ -35,8 +35,7 @@ impl PlayerVideoOverlayVideoRenderer {
         from_glib_full(ffi::gst_player_video_overlay_video_renderer_new_with_sink(
             window_handle as *mut _,
             video_sink.to_glib_none().0,
-        ) as
-            *mut _)
+        ) as *mut _)
     }
 
     pub fn new_with_sink<P: IsA<gst::Element>>(video_sink: &P) -> PlayerVideoOverlayVideoRenderer {
@@ -46,8 +45,7 @@ impl PlayerVideoOverlayVideoRenderer {
             from_glib_full(ffi::gst_player_video_overlay_video_renderer_new_with_sink(
                 ptr::null_mut(),
                 video_sink.to_glib_none().0,
-            ) as
-                *mut _)
+            ) as *mut _)
         }
     }
 }

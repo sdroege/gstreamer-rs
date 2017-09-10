@@ -21,7 +21,8 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib::{IsA, StaticType};
-use glib::translate::{from_glib, from_glib_full, from_glib_borrow, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, FromGlib,
+                      ToGlib, ToGlibPtr};
 use glib::source::CallbackGuard;
 use glib_ffi;
 use glib_ffi::gpointer;
@@ -145,11 +146,21 @@ impl<O: IsA<Pad>> PadExtManual for O {
     }
 
     fn chain_list(&self, list: BufferList) -> FlowReturn {
-        unsafe { from_glib(ffi::gst_pad_chain_list(self.to_glib_none().0, list.into_ptr())) }
+        unsafe {
+            from_glib(ffi::gst_pad_chain_list(
+                self.to_glib_none().0,
+                list.into_ptr(),
+            ))
+        }
     }
 
     fn push_list(&self, list: BufferList) -> FlowReturn {
-        unsafe { from_glib(ffi::gst_pad_push_list(self.to_glib_none().0, list.into_ptr())) }
+        unsafe {
+            from_glib(ffi::gst_pad_push_list(
+                self.to_glib_none().0,
+                list.into_ptr(),
+            ))
+        }
     }
 
     fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {

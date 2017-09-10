@@ -26,8 +26,7 @@ pub enum VideoColorRange {
     Unknown,
     Range0255,
     Range16235,
-    #[doc(hidden)]
-    __Unknown(i32),
+    #[doc(hidden)] __Unknown(i32),
 }
 
 #[doc(hidden)]
@@ -183,8 +182,7 @@ pub struct VideoInfoBuilder<'a> {
     stride: Option<&'a [i32]>,
     multiview_mode: Option<::VideoMultiviewMode>,
     multiview_flags: Option<::VideoMultiviewFlags>,
-    #[cfg(feature = "v1_12")]
-    field_order: Option<::VideoFieldOrder>,
+    #[cfg(feature = "v1_12")] field_order: Option<::VideoFieldOrder>,
 }
 
 impl<'a> VideoInfoBuilder<'a> {

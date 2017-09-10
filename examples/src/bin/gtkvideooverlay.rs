@@ -114,7 +114,6 @@ fn create_ui(app: &gtk::Application) {
                 process::exit(-1);
             }
         }
-
     });
 
     vbox.pack_start(&video_window, true, true, 0);

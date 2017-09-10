@@ -10,13 +10,13 @@
 extern crate bitflags;
 extern crate libc;
 
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
-extern crate gstreamer_sys as gst_ffi;
-extern crate gstreamer_video_sys as ffi;
-extern crate gstreamer as gst;
 #[macro_use]
 extern crate glib;
+extern crate glib_sys as glib_ffi;
+extern crate gobject_sys as gobject_ffi;
+extern crate gstreamer as gst;
+extern crate gstreamer_sys as gst_ffi;
+extern crate gstreamer_video_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => (
