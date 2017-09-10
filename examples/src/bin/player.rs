@@ -18,8 +18,11 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
 
     let main_loop = glib::MainLoop::new(None, false);
 
-    let dispatcher = gst_player::PlayerGMainContextSignalDispatcher::new(None).unwrap();
-    let player = gst_player::Player::new(None, Some(&dispatcher));
+    let dispatcher = gst_player::PlayerGMainContextSignalDispatcher::new(None);
+    let player = gst_player::Player::new(
+        None,
+        Some(&dispatcher.upcast::<gst_player::PlayerSignalDispatcher>()),
+    );
     player
         .set_property("uri", &glib::Value::from(uri))
         .expect("Can't set uri property");

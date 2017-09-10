@@ -32,15 +32,6 @@ impl PlayerGMainContextSignalDispatcher {
         value.get()
     }
 
-    pub fn new<'a, P: Into<Option<&'a glib::MainContext>>>(application_context: P) -> Option<PlayerSignalDispatcher> {
-        assert_initialized_main_thread!();
-        let application_context = application_context.into();
-        let application_context = application_context.to_glib_none();
-        unsafe {
-            from_glib_full(ffi::gst_player_g_main_context_signal_dispatcher_new(application_context.0))
-        }
-    }
-
     pub fn connect_property_application_context_notify<F: Fn(&PlayerGMainContextSignalDispatcher) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PlayerGMainContextSignalDispatcher) + Send + Sync + 'static>> = Box_::new(Box_::new(f));

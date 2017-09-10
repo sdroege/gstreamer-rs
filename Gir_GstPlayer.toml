@@ -153,3 +153,8 @@ trait = false
 name = "GstPlayer.PlayerGMainContextSignalDispatcher"
 status = "generate"
 trait = false
+
+    [[object.function]]
+    name = "new"
+    # Wrong return value
+    ignore = true
