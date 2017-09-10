@@ -38,6 +38,8 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
 #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
+#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[cfg_attr(feature = "cargo-clippy", allow(useless_transmute))]
 mod auto;
 pub use auto::*;
 
