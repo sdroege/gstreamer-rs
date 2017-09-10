@@ -4,7 +4,6 @@
 #![allow(non_camel_case_types, non_upper_case_globals)]
 
 extern crate libc;
-extern crate bitflags;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
 extern crate gstreamer_sys as gst;

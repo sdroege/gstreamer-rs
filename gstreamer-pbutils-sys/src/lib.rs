@@ -8,7 +8,6 @@ extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
 extern crate gstreamer_sys as gst;
-extern crate gstreamer_tag_sys as gst_tag;
 extern crate gstreamer_audio_sys as gst_audio;
 extern crate gstreamer_video_sys as gst_video;
 

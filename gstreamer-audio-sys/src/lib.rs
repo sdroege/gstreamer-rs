@@ -9,7 +9,6 @@ extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
 extern crate gstreamer_sys as gst;
 extern crate gstreamer_base_sys as gst_base;
-extern crate gstreamer_tag_sys as gst_tag;
 
 #[allow(unused_imports)]
 use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
