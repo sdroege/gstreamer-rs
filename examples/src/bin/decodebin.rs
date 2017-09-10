@@ -13,7 +13,7 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: decodebin file_path");
+        panic!("Usage: decodebin file_path")
     };
 
     let pipeline = gst::Pipeline::new(None);

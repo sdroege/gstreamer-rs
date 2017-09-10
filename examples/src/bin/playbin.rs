@@ -13,7 +13,7 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: playbin uri");
+        panic!("Usage: playbin uri")
     };
 
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();

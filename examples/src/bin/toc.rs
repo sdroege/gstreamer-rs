@@ -13,7 +13,7 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: toc file_path");
+        panic!("Usage: toc file_path")
     };
 
     let pipeline = gst::Pipeline::new(None);
@@ -61,7 +61,7 @@ fn main() {
         };
 
         match msg.view() {
-            MessageView::Eos(..) => break,
+            MessageView::Eos(_) | MessageView::AsyncDone(_) => break,
             MessageView::Error(err) => {
                 println!(
                     "Error from {}: {} ({:?})",
@@ -71,7 +71,6 @@ fn main() {
                 );
                 break;
             }
-            MessageView::AsyncDone(_) => break,
             MessageView::Toc(msg_toc) => {
                 let (toc, updated) = msg_toc.get_toc();
                 println!(

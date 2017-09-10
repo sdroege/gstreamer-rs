@@ -76,7 +76,7 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: player uri");
+        panic!("Usage: player uri")
     };
 
     match main_loop(uri) {

@@ -67,7 +67,7 @@ fn create_pipeline() -> Result<gst::Pipeline, utils::ExampleError> {
             let sum: f64 = samples
                 .iter()
                 .map(|sample| {
-                    let f = (*sample as f64) / (i16::MAX as f64);
+                    let f = f64::from(*sample) / f64::from(i16::MAX);
                     f * f
                 })
                 .sum();

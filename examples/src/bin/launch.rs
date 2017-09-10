@@ -21,7 +21,7 @@ fn main() {
                     println!("Failed to parse pipeline: {}", err);
                 }
 
-                process::exit(-1);
+                process::exit(-1)
             }
         };
     let bus = pipeline.get_bus().unwrap();
