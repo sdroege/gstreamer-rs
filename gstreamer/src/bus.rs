@@ -37,6 +37,7 @@ unsafe extern "C" fn trampoline_watch(
     func: gpointer,
 ) -> gboolean {
     let _guard = CallbackGuard::new();
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>> = transmute(func);
     (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
@@ -49,6 +50,7 @@ unsafe extern "C" fn destroy_closure_watch(ptr: gpointer) {
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
+    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     let func: Box<RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>>> =
         Box::new(RefCell::new(Box::new(func)));
     Box::into_raw(func) as gpointer
@@ -60,6 +62,7 @@ unsafe extern "C" fn trampoline_sync(
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     let _guard = CallbackGuard::new();
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static) = transmute(func);
     f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }

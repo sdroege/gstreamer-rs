@@ -145,44 +145,26 @@ impl QueryRef {
     pub fn view(&self) -> QueryView<&Self> {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
-        if type_ == ffi::GST_QUERY_POSITION {
-            QueryView::Position(Position(self))
-        } else if type_ == ffi::GST_QUERY_DURATION {
-            QueryView::Duration(Duration(self))
-        } else if type_ == ffi::GST_QUERY_LATENCY {
-            QueryView::Latency(Latency(self))
-        } else if type_ == ffi::GST_QUERY_JITTER {
-            QueryView::Jitter(Jitter(self))
-        } else if type_ == ffi::GST_QUERY_RATE {
-            QueryView::Rate(Rate(self))
-        } else if type_ == ffi::GST_QUERY_SEEKING {
-            QueryView::Seeking(Seeking(self))
-        } else if type_ == ffi::GST_QUERY_SEGMENT {
-            QueryView::Segment(Segment(self))
-        } else if type_ == ffi::GST_QUERY_CONVERT {
-            QueryView::Convert(Convert(self))
-        } else if type_ == ffi::GST_QUERY_FORMATS {
-            QueryView::Formats(Formats(self))
-        } else if type_ == ffi::GST_QUERY_BUFFERING {
-            QueryView::Buffering(Buffering(self))
-        } else if type_ == ffi::GST_QUERY_CUSTOM {
-            QueryView::Custom(Custom(self))
-        } else if type_ == ffi::GST_QUERY_URI {
-            QueryView::Uri(Uri(self))
-        } else if type_ == ffi::GST_QUERY_ALLOCATION {
-            QueryView::Allocation(Allocation(self))
-        } else if type_ == ffi::GST_QUERY_SCHEDULING {
-            QueryView::Scheduling(Scheduling(self))
-        } else if type_ == ffi::GST_QUERY_ACCEPT_CAPS {
-            QueryView::AcceptCaps(AcceptCaps(self))
-        } else if type_ == ffi::GST_QUERY_CAPS {
-            QueryView::Caps(Caps(self))
-        } else if type_ == ffi::GST_QUERY_DRAIN {
-            QueryView::Drain(Drain(self))
-        } else if type_ == ffi::GST_QUERY_CONTEXT {
-            QueryView::Context(Context(self))
-        } else {
-            QueryView::Other(Other(self))
+        match type_ {
+            ffi::GST_QUERY_POSITION => QueryView::Position(Position(self)),
+            ffi::GST_QUERY_DURATION => QueryView::Duration(Duration(self)),
+            ffi::GST_QUERY_LATENCY => QueryView::Latency(Latency(self)),
+            ffi::GST_QUERY_JITTER => QueryView::Jitter(Jitter(self)),
+            ffi::GST_QUERY_RATE => QueryView::Rate(Rate(self)),
+            ffi::GST_QUERY_SEEKING => QueryView::Seeking(Seeking(self)),
+            ffi::GST_QUERY_SEGMENT => QueryView::Segment(Segment(self)),
+            ffi::GST_QUERY_CONVERT => QueryView::Convert(Convert(self)),
+            ffi::GST_QUERY_FORMATS => QueryView::Formats(Formats(self)),
+            ffi::GST_QUERY_BUFFERING => QueryView::Buffering(Buffering(self)),
+            ffi::GST_QUERY_CUSTOM => QueryView::Custom(Custom(self)),
+            ffi::GST_QUERY_URI => QueryView::Uri(Uri(self)),
+            ffi::GST_QUERY_ALLOCATION => QueryView::Allocation(Allocation(self)),
+            ffi::GST_QUERY_SCHEDULING => QueryView::Scheduling(Scheduling(self)),
+            ffi::GST_QUERY_ACCEPT_CAPS => QueryView::AcceptCaps(AcceptCaps(self)),
+            ffi::GST_QUERY_CAPS => QueryView::Caps(Caps(self)),
+            ffi::GST_QUERY_DRAIN => QueryView::Drain(Drain(self)),
+            ffi::GST_QUERY_CONTEXT => QueryView::Context(Context(self)),
+            _ => QueryView::Other(Other(self)),
         }
     }
 

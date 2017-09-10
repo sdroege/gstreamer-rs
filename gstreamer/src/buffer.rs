@@ -142,6 +142,12 @@ impl GstRc<BufferRef> {
     }
 }
 
+impl Default for GstRc<BufferRef> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BufferRef {
     pub fn map_readable(&self) -> Option<BufferMap<Readable>> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
