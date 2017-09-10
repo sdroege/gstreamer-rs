@@ -242,9 +242,8 @@ impl<'a> VideoInfoBuilder<'a> {
                     return None;
                 }
 
-                for i in 0..((*info.finfo).n_planes as usize) {
-                    info.offset[i] = offset[i];
-                }
+                let n_planes = (*info.finfo).n_planes as usize;
+                info.offset[..n_planes].copy_from_slice(&offset[..n_planes]);
             }
 
             if let Some(stride) = self.stride {
@@ -252,9 +251,8 @@ impl<'a> VideoInfoBuilder<'a> {
                     return None;
                 }
 
-                for i in 0..((*info.finfo).n_planes as usize) {
-                    info.stride[i] = stride[i];
-                }
+                let n_planes = (*info.finfo).n_planes as usize;
+                info.stride[..n_planes].copy_from_slice(&stride[..n_planes]);
             }
 
             if let Some(multiview_mode) = self.multiview_mode {

@@ -138,11 +138,11 @@ impl VideoFormatInfo {
     }
 
     pub fn scale_width(&self, component: u8, width: u32) -> u32 {
-        (-((-(width as i64)) >> self.w_sub()[component as usize])) as u32
+        (-((-(i64::from(width))) >> self.w_sub()[component as usize])) as u32
     }
 
     pub fn scale_height(&self, component: u8, height: u32) -> u32 {
-        (-((-(height as i64)) >> self.h_sub()[component as usize])) as u32
+        (-((-(i64::from(height))) >> self.h_sub()[component as usize])) as u32
     }
 
     // TODO: pack/unpack
