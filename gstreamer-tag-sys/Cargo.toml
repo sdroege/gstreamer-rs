@@ -34,13 +34,5 @@ repository = "https://github.com/sdroege/gstreamer-sys"
 license = "MIT"
 readme = "README.md"
 
-include = [
-    "src/*.rs",
-    "Cargo.toml",
-    "build.rs",
-    "LICENSE",
-    "README.md",
-]
-
 [badges]
 travis-ci = { repository = "sdroege/gstreamer-sys", branch = "master" }
