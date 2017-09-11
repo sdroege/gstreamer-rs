@@ -208,7 +208,7 @@ macro_rules! gst_memdump(
 #[macro_export]
 macro_rules! gst_log_with_level(
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::DebugCategory::log(&$cat, Some(&$obj), $level, file!(),
+        $crate::DebugCategory::log(&$cat, Some($obj), $level, file!(),
             module_path!(), line!(), format_args!($($args)*))
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
@@ -248,13 +248,13 @@ mod tests {
         gst_memdump!(cat, "meh");
 
         let obj = ::Bin::new("meh");
-        gst_error!(cat, obj: obj, "meh");
-        gst_warning!(cat, obj: obj, "meh");
-        gst_fixme!(cat, obj: obj, "meh");
-        gst_info!(cat, obj: obj, "meh");
-        gst_debug!(cat, obj: obj, "meh");
-        gst_log!(cat, obj: obj, "meh");
-        gst_trace!(cat, obj: obj, "meh");
-        gst_memdump!(cat, obj: obj, "meh");
+        gst_error!(cat, obj: &obj, "meh");
+        gst_warning!(cat, obj: &obj, "meh");
+        gst_fixme!(cat, obj: &obj, "meh");
+        gst_info!(cat, obj: &obj, "meh");
+        gst_debug!(cat, obj: &obj, "meh");
+        gst_log!(cat, obj: &obj, "meh");
+        gst_trace!(cat, obj: &obj, "meh");
+        gst_memdump!(cat, obj: &obj, "meh");
     }
 }
