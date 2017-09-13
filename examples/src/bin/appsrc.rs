@@ -3,7 +3,6 @@ use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
 extern crate gstreamer_video as gst_video;
 
-use std::u64;
 use std::thread;
 
 pub mod utils;
@@ -83,13 +82,8 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         .get_bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
-    loop {
+    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
-
-        let msg = match bus.timed_pop(u64::MAX) {
-            None => break,
-            Some(msg) => msg,
-        };
 
         match msg.view() {
             MessageView::Eos(..) => break,
