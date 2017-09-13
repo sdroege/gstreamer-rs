@@ -106,22 +106,22 @@ impl GstRc<MessageRef> {
         EosBuilder::new()
     }
 
-    pub fn new_error<'a>(error: &'a glib::Error) -> ErrorBuilder<'a> {
+    pub fn new_error(error: &glib::Error) -> ErrorBuilder {
         assert_initialized_main_thread!();
         ErrorBuilder::new(error)
     }
 
-    pub fn new_warning<'a>(error: &'a glib::Error) -> WarningBuilder<'a> {
+    pub fn new_warning(error: &glib::Error) -> WarningBuilder {
         assert_initialized_main_thread!();
         WarningBuilder::new(error)
     }
 
-    pub fn new_info<'a>(error: &'a glib::Error) -> InfoBuilder<'a> {
+    pub fn new_info(error: &glib::Error) -> InfoBuilder {
         assert_initialized_main_thread!();
         InfoBuilder::new(error)
     }
 
-    pub fn new_tag<'a>(tags: &'a TagList) -> TagBuilder<'a> {
+    pub fn new_tag(tags: &TagList) -> TagBuilder {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
@@ -158,34 +158,31 @@ impl GstRc<MessageRef> {
         StepDoneBuilder::new(format, amount, rate, flush, intermediate, duration, eos)
     }
 
-    pub fn new_clock_provide<'a>(clock: &'a ::Clock, ready: bool) -> ClockProvideBuilder<'a> {
+    pub fn new_clock_provide(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
         assert_initialized_main_thread!();
         ClockProvideBuilder::new(clock, ready)
     }
 
-    pub fn new_clock_lost<'a>(clock: &'a ::Clock) -> ClockLostBuilder<'a> {
+    pub fn new_clock_lost(clock: &::Clock) -> ClockLostBuilder {
         assert_initialized_main_thread!();
         ClockLostBuilder::new(clock)
     }
 
-    pub fn new_new_clock<'a>(clock: &'a ::Clock) -> NewClockBuilder<'a> {
+    pub fn new_new_clock(clock: &::Clock) -> NewClockBuilder {
         assert_initialized_main_thread!();
         NewClockBuilder::new(clock)
     }
 
-    pub fn new_structure_change<'a>(
+    pub fn new_structure_change(
         type_: ::StructureChangeType,
-        owner: &'a ::Element,
+        owner: &::Element,
         busy: bool,
-    ) -> StructureChangeBuilder<'a> {
+    ) -> StructureChangeBuilder {
         assert_initialized_main_thread!();
         StructureChangeBuilder::new(type_, owner, busy)
     }
 
-    pub fn new_stream_status<'a>(
-        type_: ::StreamStatusType,
-        owner: &'a ::Element,
-    ) -> StreamStatusBuilder<'a> {
+    pub fn new_stream_status(type_: ::StreamStatusType, owner: &::Element) -> StreamStatusBuilder {
         assert_initialized_main_thread!();
         StreamStatusBuilder::new(type_, owner)
     }
@@ -263,7 +260,7 @@ impl GstRc<MessageRef> {
         ProgressBuilder::new(type_)
     }
 
-    pub fn new_toc<'a>(toc: &'a ::Toc, updated: bool) -> TocBuilder<'a> {
+    pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
@@ -278,7 +275,7 @@ impl GstRc<MessageRef> {
         StreamStartBuilder::new()
     }
 
-    pub fn new_need_context<'a>(context_type: &'a str) -> NeedContextBuilder<'a> {
+    pub fn new_need_context(context_type: &str) -> NeedContextBuilder {
         assert_initialized_main_thread!();
         NeedContextBuilder::new(context_type)
     }
@@ -288,12 +285,12 @@ impl GstRc<MessageRef> {
         HaveContextBuilder::new(context)
     }
 
-    pub fn new_device_added<'a>(device: &'a ::Device) -> DeviceAddedBuilder<'a> {
+    pub fn new_device_added(device: &::Device) -> DeviceAddedBuilder {
         assert_initialized_main_thread!();
         DeviceAddedBuilder::new(device)
     }
 
-    pub fn new_device_removed<'a>(device: &'a ::Device) -> DeviceRemovedBuilder<'a> {
+    pub fn new_device_removed(device: &::Device) -> DeviceRemovedBuilder {
         assert_initialized_main_thread!();
         DeviceRemovedBuilder::new(device)
     }

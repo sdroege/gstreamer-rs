@@ -120,17 +120,17 @@ impl GstRc<EventRef> {
         FlushStopBuilder::new(reset_time)
     }
 
-    pub fn new_stream_start<'a>(stream_id: &'a str) -> StreamStartBuilder<'a> {
+    pub fn new_stream_start(stream_id: &str) -> StreamStartBuilder {
         assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
 
-    pub fn new_caps<'a>(caps: &'a ::Caps) -> CapsBuilder<'a> {
+    pub fn new_caps(caps: &::Caps) -> CapsBuilder {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
 
-    pub fn new_segment<'a>(segment: &'a ::Segment) -> SegmentBuilder<'a> {
+    pub fn new_segment(segment: &::Segment) -> SegmentBuilder {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment)
     }
@@ -174,7 +174,7 @@ impl GstRc<EventRef> {
         EosBuilder::new()
     }
 
-    pub fn new_toc<'a>(toc: &'a ::Toc, updated: bool) -> TocBuilder<'a> {
+    pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
@@ -247,7 +247,7 @@ impl GstRc<EventRef> {
         ReconfigureBuilder::new()
     }
 
-    pub fn new_toc_select<'a>(uid: &'a str) -> TocSelectBuilder<'a> {
+    pub fn new_toc_select(uid: &str) -> TocSelectBuilder {
         assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }
