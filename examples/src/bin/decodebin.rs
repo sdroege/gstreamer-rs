@@ -4,7 +4,6 @@ use gst::prelude::*;
 extern crate glib;
 
 use std::env;
-use std::u64;
 
 fn main() {
     gst::init().unwrap();
@@ -81,13 +80,8 @@ fn main() {
 
     let bus = pipeline.get_bus().unwrap();
 
-    loop {
+    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
-
-        let msg = match bus.timed_pop(u64::MAX) {
-            None => break,
-            Some(msg) => msg,
-        };
 
         match msg.view() {
             MessageView::Eos(..) => break,

@@ -5,7 +5,6 @@ extern crate gstreamer_audio as gst_audio;
 extern crate byte_slice_cast;
 use byte_slice_cast::*;
 
-use std::u64;
 use std::i16;
 
 fn main() {
@@ -51,13 +50,8 @@ fn main() {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    loop {
+    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
-
-        let msg = match bus.timed_pop(u64::MAX) {
-            None => break,
-            Some(msg) => msg,
-        };
 
         match msg.view() {
             MessageView::Eos(..) => break,
