@@ -29,7 +29,7 @@ fn main() {
 
     // Wait until error or EOS
     let bus = pipeline.get_bus().unwrap();
-    if let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
         match msg.view() {
             MessageView::Error(err) => {
@@ -37,8 +37,7 @@ fn main() {
                          msg.get_src().get_path_string(), err.get_error());
                 eprintln!("Debugging information: {:?}", err.get_debug());
             },
-            MessageView::Eos(..) => println!("End-Of-Stream reached."),
-            // We should not reach here because we only asked for ERRORs and EOS
+            MessageView::Eos(..) => break,
             _ => (),
         }
     }
