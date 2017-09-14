@@ -30,9 +30,7 @@ glib_wrapper! {
 
 impl ParseContext {
     pub fn new() -> Self {
-        unsafe {
-            from_glib_full(ffi::gst_parse_context_new())
-        }
+        unsafe { from_glib_full(ffi::gst_parse_context_new()) }
     }
 
     pub fn get_missing_elements(&self) -> Vec<String> {

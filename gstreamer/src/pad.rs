@@ -145,11 +145,21 @@ impl<O: IsA<Pad>> PadExtManual for O {
     }
 
     fn chain_list(&self, list: BufferList) -> FlowReturn {
-        unsafe { from_glib(ffi::gst_pad_chain_list(self.to_glib_none().0, list.into_ptr())) }
+        unsafe {
+            from_glib(ffi::gst_pad_chain_list(
+                self.to_glib_none().0,
+                list.into_ptr(),
+            ))
+        }
     }
 
     fn push_list(&self, list: BufferList) -> FlowReturn {
-        unsafe { from_glib(ffi::gst_pad_push_list(self.to_glib_none().0, list.into_ptr())) }
+        unsafe {
+            from_glib(ffi::gst_pad_push_list(
+                self.to_glib_none().0,
+                list.into_ptr(),
+            ))
+        }
     }
 
     fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {

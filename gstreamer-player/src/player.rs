@@ -30,7 +30,6 @@ impl Player {
             // https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/gst-libs/gst/player/gstplayer.c?id=634cd87c76f58b5e1383715bafd5614db825c7d1
             unsafe { from_glib_none(ffi::gst_player_new(video_renderer, signal_dispatcher)) }
         }
-
     }
 
     pub fn set_config(&self, config: gst::Structure) -> bool {

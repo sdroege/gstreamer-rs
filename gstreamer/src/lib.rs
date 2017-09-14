@@ -9,9 +9,9 @@
 #![recursion_limit = "256"]
 #[macro_use]
 extern crate bitflags;
-extern crate libc;
 #[macro_use]
 extern crate lazy_static;
+extern crate libc;
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
@@ -93,14 +93,8 @@ mod iterator;
 mod device_provider;
 mod parse_context;
 pub use element::ElementExtManual;
-pub use element::{
-    ELEMENT_METADATA_AUTHOR,
-    ELEMENT_METADATA_DESCRIPTION,
-    ELEMENT_METADATA_DOC_URI,
-    ELEMENT_METADATA_ICON_NAME,
-    ELEMENT_METADATA_KLASS,
-    ELEMENT_METADATA_LONGNAME,
-};
+pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
+                  ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME};
 pub use bin::BinExtManual;
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo, PAD_PROBE_ID_INVALID};
 pub use gobject::GObjectExtManualGst;
@@ -122,7 +116,7 @@ pub mod toc;
 pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
 
 mod clock;
-pub use clock::{ClockId, ClockExtManual};
+pub use clock::{ClockExtManual, ClockId};
 
 pub mod functions;
 pub use functions::*;
