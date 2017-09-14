@@ -26,6 +26,9 @@ pub struct EventRef(ffi::GstEvent);
 
 pub type Event = GstRc<EventRef>;
 
+unsafe impl Sync for EventRef {}
+unsafe impl Send for EventRef {}
+
 unsafe impl MiniObject for EventRef {
     type GstType = ffi::GstEvent;
 }
