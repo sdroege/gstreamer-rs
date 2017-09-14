@@ -21,6 +21,9 @@ use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 #[repr(C)]
 pub struct QueryRef(ffi::GstQuery);
 
+unsafe impl Send for QueryRef {}
+unsafe impl Sync for QueryRef {}
+
 pub type Query = GstRc<QueryRef>;
 
 unsafe impl MiniObject for QueryRef {
