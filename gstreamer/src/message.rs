@@ -26,6 +26,9 @@ pub struct MessageRef(ffi::GstMessage);
 
 pub type Message = GstRc<MessageRef>;
 
+unsafe impl Sync for MessageRef {}
+unsafe impl Send for MessageRef {}
+
 unsafe impl MiniObject for MessageRef {
     type GstType = ffi::GstMessage;
 }
