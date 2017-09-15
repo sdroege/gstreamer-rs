@@ -109,19 +109,19 @@ impl GstRc<MessageRef> {
         EosBuilder::new()
     }
 
-    pub fn new_error(error: &glib::Error) -> ErrorBuilder {
+    pub fn new_error<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder<T> {
         assert_initialized_main_thread!();
-        ErrorBuilder::new(error)
+        ErrorBuilder::new(error, message)
     }
 
-    pub fn new_warning(error: &glib::Error) -> WarningBuilder {
+    pub fn new_warning<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder<T> {
         assert_initialized_main_thread!();
-        WarningBuilder::new(error)
+        WarningBuilder::new(error, message)
     }
 
-    pub fn new_info(error: &glib::Error) -> InfoBuilder {
+    pub fn new_info<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder<T> {
         assert_initialized_main_thread!();
-        InfoBuilder::new(error)
+        InfoBuilder::new(error, message)
     }
 
     pub fn new_tag(tags: &TagList) -> TagBuilder {
@@ -1112,7 +1112,7 @@ impl<'a> Redirect<'a> {
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
-        pub fn src<T: IsA<Object> + Cast + Clone>(self, src: Option<&T>) -> Self {
+        pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             Self {
                 src: src.map(|o| {
                     let o = (*o).clone();
@@ -1181,22 +1181,31 @@ impl<'a> EosBuilder<'a> {
     message_builder_generic_impl!(|_, src| ffi::gst_message_new_eos(src));
 }
 
-pub struct ErrorBuilder<'a> {
+pub trait MessageErrorDomain: glib::error::ErrorDomain {}
+
+impl MessageErrorDomain for ::CoreError {}
+impl MessageErrorDomain for ::ResourceError {}
+impl MessageErrorDomain for ::StreamError {}
+impl MessageErrorDomain for ::LibraryError {}
+
+pub struct ErrorBuilder<'a, T> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    error: &'a glib::Error,
+    error: T,
+    message: &'a str,
     debug: Option<&'a str>,
     #[allow(unused)] details: Option<Structure>,
 }
-impl<'a> ErrorBuilder<'a> {
-    fn new(error: &'a glib::Error) -> Self {
+impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
+    fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
             error: error,
+            message: message,
             debug: None,
             details: None,
         }
@@ -1224,41 +1233,47 @@ impl<'a> ErrorBuilder<'a> {
                 None => ptr::null_mut(),
                 Some(details) => details.into_ptr(),
             };
+
+            let error = glib::Error::new(s.error, s.message);
 
             ffi::gst_message_new_error_with_details(
                 src,
-                mut_override(s.error.to_glib_none().0),
+                mut_override(error.to_glib_none().0),
                 s.debug.to_glib_none().0,
                 details,
             )
         }
         #[cfg(not(feature = "v1_10"))]
         {
+            let error = glib::Error::new(s.error, s.message);
+
             ffi::gst_message_new_error(
                 src,
-                mut_override(s.error.to_glib_none().0),
+                mut_override(error.to_glib_none().0),
                 s.debug.to_glib_none().0,
             )
         }
     });
 }
 
-pub struct WarningBuilder<'a> {
+pub struct WarningBuilder<'a, T> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    error: &'a glib::Error,
+    error: T,
+    message: &'a str,
     debug: Option<&'a str>,
     #[allow(unused)] details: Option<Structure>,
 }
-impl<'a> WarningBuilder<'a> {
-    fn new(error: &'a glib::Error) -> Self {
+impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
+    fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
             error: error,
+            message: message,
             debug: None,
             details: None,
         }
@@ -1286,41 +1301,47 @@ impl<'a> WarningBuilder<'a> {
                 None => ptr::null_mut(),
                 Some(details) => details.into_ptr(),
             };
+
+            let error = glib::Error::new(s.error, s.message);
 
             ffi::gst_message_new_warning_with_details(
                 src,
-                mut_override(s.error.to_glib_none().0),
+                mut_override(error.to_glib_none().0),
                 s.debug.to_glib_none().0,
                 details,
             )
         }
         #[cfg(not(feature = "v1_10"))]
         {
+            let error = glib::Error::new(s.error, s.message);
+
             ffi::gst_message_new_warning(
                 src,
-                mut_override(s.error.to_glib_none().0),
+                mut_override(error.to_glib_none().0),
                 s.debug.to_glib_none().0,
             )
         }
     });
 }
 
-pub struct InfoBuilder<'a> {
+pub struct InfoBuilder<'a, T> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    error: &'a glib::Error,
+    error: T,
+    message: &'a str,
     debug: Option<&'a str>,
     #[allow(unused)] details: Option<Structure>,
 }
-impl<'a> InfoBuilder<'a> {
-    fn new(error: &'a glib::Error) -> Self {
+impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
+    fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
             error: error,
+            message: message,
             debug: None,
             details: None,
         }
@@ -1349,18 +1370,22 @@ impl<'a> InfoBuilder<'a> {
                 Some(details) => details.into_ptr(),
             };
 
+            let error = glib::Error::new(s.error, s.message);
+
             ffi::gst_message_new_info_with_details(
                 src,
-                mut_override(s.error.to_glib_none().0),
+                mut_override(error.to_glib_none().0),
                 s.debug.to_glib_none().0,
                 details,
             )
         }
         #[cfg(not(feature = "v1_10"))]
         {
+            let error = glib::Error::new(s.error, s.message);
+
             ffi::gst_message_new_info(
                 src,
-                mut_override(s.error.to_glib_none().0),
+                mut_override(error.to_glib_none().0),
                 s.debug.to_glib_none().0,
             )
         }

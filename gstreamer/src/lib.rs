@@ -64,7 +64,7 @@ pub use log::*;
 pub mod miniobject;
 pub use miniobject::{GstRc, MiniObject};
 pub mod message;
-pub use message::{Message, MessageRef, MessageView};
+pub use message::{Message, MessageErrorDomain, MessageRef, MessageView};
 pub mod structure;
 pub use structure::{Structure, StructureRef};
 pub mod caps;
