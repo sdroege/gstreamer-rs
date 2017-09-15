@@ -12,6 +12,7 @@ external_libraries = [
     "GLib",
     "GObject",
     "Gst",
+    "GstBase",
 ]
 
 generate = [
@@ -22,9 +23,12 @@ manual = [
     "GObject.Object",
     "Gst.Object",
     "Gst.Element",
+    "Gst.URIHandler",
     "Gst.ClockTime",
     "Gst.FlowReturn",
     "Gst.Format",
+    "GstBase.BaseSrc",
+    "GstBase.BaseSink",
 ]
 
 [[object]]

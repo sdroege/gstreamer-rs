@@ -10,6 +10,8 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
+use gst_base;
+use gst_base_ffi;
 use gst_ffi;
 use libc;
 use std::boxed::Box as Box_;
@@ -19,8 +21,10 @@ use std::ptr;
 
 glib_wrapper! {
     pub struct AppSrc(Object<ffi::GstAppSrc>): [
+        gst_base::BaseSrc => gst_base_ffi::GstBaseSrc,
         gst::Element => gst_ffi::GstElement,
         gst::Object => gst_ffi::GstObject,
+        gst::URIHandler => gst_ffi::GstURIHandler,
     ];
 
     match fn {

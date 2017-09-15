@@ -18,17 +18,19 @@ libc = "0.2"
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-base-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
 gstreamer-app-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
+gstreamer-base = { path = "../gstreamer-base" }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
 optional = true
 
 [features]
-v1_10 = ["gstreamer-sys/v1_10", "gstreamer-app-sys/v1_10"]
-v1_12 = ["gstreamer-sys/v1_12", "gstreamer-app-sys/v1_12", "v1_10"]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-base/v1_10", "gstreamer-app-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-base/v1_12", "gstreamer-app-sys/v1_12", "v1_10"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 default-features = []
