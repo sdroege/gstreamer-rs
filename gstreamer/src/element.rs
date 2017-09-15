@@ -49,6 +49,12 @@ impl Element {
     }
 }
 
+pub enum ElementMessageType {
+    Error,
+    Warning,
+    Info,
+}
+
 pub trait ElementExtManual {
     fn query(&self, query: &mut QueryRef) -> bool;
 
@@ -58,6 +64,29 @@ pub trait ElementExtManual {
 
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate>;
     fn get_pad_template_list(&self) -> Vec<PadTemplate>;
+
+    fn message_full<T: ::MessageErrorDomain>(
+        &self,
+        type_: ElementMessageType,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: i32,
+    );
+    #[cfg(feature = "v1_10")]
+    fn message_full_with_details<T: ::MessageErrorDomain>(
+        &self,
+        type_: ElementMessageType,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: i32,
+        structure: ::Structure,
+    );
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -114,6 +143,71 @@ impl<O: IsA<Element>> ElementExtManual for O {
             FromGlibPtrContainer::from_glib_none(
                 ffi::gst_element_class_get_pad_template_list(klass),
             )
+        }
+    }
+
+    fn message_full<T: ::MessageErrorDomain>(
+        &self,
+        type_: ElementMessageType,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: i32,
+    ) {
+        unsafe {
+            let type_ = match type_ {
+                ElementMessageType::Error => ffi::GST_MESSAGE_ERROR,
+                ElementMessageType::Warning => ffi::GST_MESSAGE_WARNING,
+                ElementMessageType::Info => ffi::GST_MESSAGE_INFO,
+            };
+
+            ffi::gst_element_message_full(
+                self.to_glib_none().0,
+                type_,
+                T::domain(),
+                code.code(),
+                message.to_glib_full(),
+                debug.to_glib_full(),
+                file.to_glib_none().0,
+                function.to_glib_none().0,
+                line,
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_10")]
+    fn message_full_with_details<T: ::MessageErrorDomain>(
+        &self,
+        type_: ElementMessageType,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: i32,
+        structure: ::Structure,
+    ) {
+        unsafe {
+            let type_ = match type_ {
+                ElementMessageType::Error => ffi::GST_MESSAGE_ERROR,
+                ElementMessageType::Warning => ffi::GST_MESSAGE_WARNING,
+                ElementMessageType::Info => ffi::GST_MESSAGE_INFO,
+            };
+
+            ffi::gst_element_message_full_with_details(
+                self.to_glib_none().0,
+                type_,
+                T::domain(),
+                code.code(),
+                message.to_glib_full(),
+                debug.to_glib_full(),
+                file.to_glib_none().0,
+                function.to_glib_none().0,
+                line,
+                structure.into_ptr(),
+            );
         }
     }
 }
