@@ -323,7 +323,7 @@ impl BufferRef {
 unsafe impl Sync for BufferRef {}
 unsafe impl Send for BufferRef {}
 
-impl glib::types::StaticType for Buffer {
+impl glib::types::StaticType for BufferRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_buffer_get_type()) }
     }
