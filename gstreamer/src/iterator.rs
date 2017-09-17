@@ -430,6 +430,17 @@ mod tests {
         assert_eq!(vals, [1, 2, 3]);
 
         let vec = vec![1i32, 2, 3];
+        let mut it = Iterator::from_vec(vec);
+        let mut vals = Vec::new();
+        while let Some(res) = it.next() {
+            match res {
+                Ok(v) => vals.push(v.get::<i32>().unwrap()),
+                _ => unreachable!(),
+            }
+        }
+        assert_eq!(vals, [1, 2, 3]);
+
+        let vec = vec![1i32, 2, 3];
         let it = Iterator::from_vec(vec);
         let mut vals = Vec::new();
         for v in it {
