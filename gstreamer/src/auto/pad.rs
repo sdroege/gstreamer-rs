@@ -15,6 +15,8 @@ use PadMode;
 use PadTemplate;
 #[cfg(feature = "v1_10")]
 use Stream;
+#[cfg(feature = "v1_12")]
+use TaskState;
 use ffi;
 use glib;
 use glib::Value;
@@ -116,8 +118,8 @@ pub trait PadExt {
 
     fn get_stream_id(&self) -> Option<String>;
 
-    //#[cfg(feature = "v1_12")]
-    //fn get_task_state(&self) -> /*Ignored*/TaskState;
+    #[cfg(feature = "v1_12")]
+    fn get_task_state(&self) -> TaskState;
 
     fn has_current_caps(&self) -> bool;
 
@@ -348,10 +350,12 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    //#[cfg(feature = "v1_12")]
-    //fn get_task_state(&self) -> /*Ignored*/TaskState {
-    //    unsafe { TODO: call ffi::gst_pad_get_task_state() }
-    //}
+    #[cfg(feature = "v1_12")]
+    fn get_task_state(&self) -> TaskState {
+        unsafe {
+            from_glib(ffi::gst_pad_get_task_state(self.to_glib_none().0))
+        }
+    }
 
     fn has_current_caps(&self) -> bool {
         unsafe {

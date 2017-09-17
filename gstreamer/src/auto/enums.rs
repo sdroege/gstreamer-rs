@@ -2343,6 +2343,66 @@ impl SetValue for TagMergeMode {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TaskState {
+    Started,
+    Stopped,
+    Paused,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TaskState {
+    type GlibType = ffi::GstTaskState;
+
+    fn to_glib(&self) -> ffi::GstTaskState {
+        match *self {
+            TaskState::Started => ffi::GST_TASK_STARTED,
+            TaskState::Stopped => ffi::GST_TASK_STOPPED,
+            TaskState::Paused => ffi::GST_TASK_PAUSED,
+            TaskState::__Unknown(value) => unsafe{std::mem::transmute(value)}
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTaskState> for TaskState {
+    fn from_glib(value: ffi::GstTaskState) -> Self {
+        skip_assert_initialized!();
+        match value as i32 {
+            0 => TaskState::Started,
+            1 => TaskState::Stopped,
+            2 => TaskState::Paused,
+            value => TaskState::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TaskState {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_task_state_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TaskState {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TaskState {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(std::mem::transmute::<i32, ffi::GstTaskState>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for TaskState {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum TocEntryType {
     Angle,
     Version,

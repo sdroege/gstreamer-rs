@@ -74,6 +74,7 @@ generate = [
     "Gst.StackTraceFlags",
     "Gst.DebugGraphDetails",
     "Gst.ParseFlags",
+    "Gst.TaskState",
 ]
 
 manual = [

@@ -20,6 +20,7 @@ use miniobject::MiniObject;
 use std::mem::transmute;
 use std::ptr;
 use std::mem;
+use std::cell::RefCell;
 
 use glib::{IsA, StaticType};
 use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, FromGlib,
@@ -166,6 +167,8 @@ pub trait PadExtManual {
     fn set_unlink_function<F>(&self, func: F)
     where
         F: Fn(&Pad, &::Object) + Send + Sync + 'static;
+
+    fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> bool;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -560,6 +563,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
             );
         }
     }
+
+    fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> bool {
+        unsafe {
+            from_glib(ffi::gst_pad_start_task(
+                self.to_glib_none().0,
+                Some(trampoline_pad_task),
+                into_raw_pad_task(func),
+                Some(destroy_closure_pad_task),
+            ))
+        }
+    }
 }
 
 unsafe extern "C" fn trampoline_pad_probe(
@@ -838,4 +852,22 @@ unsafe extern "C" fn trampoline_unlink_function(
 unsafe extern "C" fn destroy_closure(ptr: gpointer) {
     let _guard = CallbackGuard::new();
     Box::<Box<Fn()>>::from_raw(ptr as *mut _);
+}
+
+unsafe extern "C" fn trampoline_pad_task(func: gpointer) {
+    let _guard = CallbackGuard::new();
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+    let func: &RefCell<Box<FnMut() + Send + 'static>> = transmute(func);
+    (&mut *func.borrow_mut())()
+}
+
+unsafe extern "C" fn destroy_closure_pad_task(ptr: gpointer) {
+    let _guard = CallbackGuard::new();
+    Box::<RefCell<Box<FnMut() + Send + 'static>>>::from_raw(ptr as *mut _);
+}
+
+fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
+    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    let func: Box<RefCell<Box<FnMut() + Send + 'static>>> = Box::new(RefCell::new(Box::new(func)));
+    Box::into_raw(func) as gpointer
 }
