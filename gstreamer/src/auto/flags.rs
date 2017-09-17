@@ -567,12 +567,14 @@ impl SetValue for SegmentFlags {
     }
 }
 
+#[cfg(feature = "v1_12")]
 bitflags! {
     pub struct StackTraceFlags: u32 {
         const STACK_TRACE_SHOW_FULL = 1;
     }
 }
 
+#[cfg(feature = "v1_12")]
 #[doc(hidden)]
 impl ToGlib for StackTraceFlags {
     type GlibType = ffi::GstStackTraceFlags;
@@ -582,6 +584,7 @@ impl ToGlib for StackTraceFlags {
     }
 }
 
+#[cfg(feature = "v1_12")]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
     fn from_glib(value: ffi::GstStackTraceFlags) -> StackTraceFlags {
@@ -590,24 +593,28 @@ impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
     }
 }
 
+#[cfg(feature = "v1_12")]
 impl StaticType for StackTraceFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stack_trace_flags_get_type()) }
     }
 }
 
+#[cfg(feature = "v1_12")]
 impl<'a> FromValueOptional<'a> for StackTraceFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(feature = "v1_12")]
 impl<'a> FromValue<'a> for StackTraceFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(ffi::GstStackTraceFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
     }
 }
 
+#[cfg(feature = "v1_12")]
 impl SetValue for StackTraceFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
