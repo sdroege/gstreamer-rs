@@ -10,9 +10,10 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_none, FromGlibPtrContainer, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, from_glib_full, FromGlibPtrContainer, ToGlibPtr};
 use QueryRef;
 use Event;
+use Pad;
 use PadTemplate;
 use miniobject::MiniObject;
 
@@ -87,6 +88,10 @@ pub trait ElementExtManual {
         line: i32,
         structure: ::Structure,
     );
+
+    fn iterate_pads(&self) -> ::Iterator<Pad>;
+    fn iterate_sink_pads(&self) -> ::Iterator<Pad>;
+    fn iterate_src_pads(&self) -> ::Iterator<Pad>;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -208,6 +213,24 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 line,
                 structure.into_ptr(),
             );
+        }
+    }
+
+    fn iterate_pads(&self) -> ::Iterator<Pad> {
+        unsafe {
+            from_glib_full(ffi::gst_element_iterate_pads(self.to_glib_none().0))
+        }
+    }
+
+    fn iterate_sink_pads(&self) -> ::Iterator<Pad> {
+        unsafe {
+            from_glib_full(ffi::gst_element_iterate_sink_pads(self.to_glib_none().0))
+        }
+    }
+
+    fn iterate_src_pads(&self) -> ::Iterator<Pad> {
+        unsafe {
+            from_glib_full(ffi::gst_element_iterate_src_pads(self.to_glib_none().0))
         }
     }
 }

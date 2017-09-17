@@ -7,7 +7,6 @@ use Event;
 use EventType;
 use FlowReturn;
 use Format;
-use Iterator;
 use Object;
 use PadDirection;
 use PadLinkCheck;
@@ -130,9 +129,9 @@ pub trait PadExt {
 
     fn is_linked(&self) -> bool;
 
-    fn iterate_internal_links(&self) -> Option<Iterator>;
+    //fn iterate_internal_links(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn iterate_internal_links_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> Option<Iterator>;
+    //fn iterate_internal_links_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> /*Ignored*/Option<Iterator>;
 
     fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> PadLinkReturn;
 
@@ -384,19 +383,13 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    fn iterate_internal_links(&self) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_pad_iterate_internal_links(self.to_glib_none().0))
-        }
-    }
+    //fn iterate_internal_links(&self) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_pad_iterate_internal_links() }
+    //}
 
-    fn iterate_internal_links_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> Option<Iterator> {
-        let parent = parent.into();
-        let parent = parent.to_glib_none();
-        unsafe {
-            from_glib_full(ffi::gst_pad_iterate_internal_links_default(self.to_glib_none().0, parent.0))
-        }
-    }
+    //fn iterate_internal_links_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_pad_iterate_internal_links_default() }
+    //}
 
     fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> PadLinkReturn {
         unsafe {

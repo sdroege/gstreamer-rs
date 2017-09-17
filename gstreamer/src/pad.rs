@@ -147,7 +147,7 @@ pub trait PadExtManual {
 
     fn set_iterate_internal_links_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &::Object) -> ::Iterator + Send + Sync + 'static;
+        F: Fn(&Pad, &::Object) -> ::Iterator<Pad> + Send + Sync + 'static;
 
     fn set_link_function<F>(&self, func: F)
     where
@@ -473,11 +473,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_iterate_internal_links_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &::Object) -> ::Iterator + Send + Sync + 'static,
+        F: Fn(&Pad, &::Object) -> ::Iterator<Pad> + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &::Object) -> ::Iterator + Send + Sync + 'static,
+                Fn(&Pad, &::Object) -> ::Iterator<Pad> + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_iterate_internal_links_function_full(
                 self.to_glib_none().0,
@@ -755,7 +755,7 @@ unsafe extern "C" fn trampoline_iterate_internal_links_function(
 ) -> *mut ffi::GstIterator {
     let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &::Object) -> ::Iterator + Send + Sync + 'static) =
+    let func: &&(Fn(&Pad, &::Object) -> ::Iterator<Pad> + Send + Sync + 'static) =
         transmute((*pad).iterintlinkdata);
 
     // Steal the iterator and return it

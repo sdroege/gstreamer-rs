@@ -5,7 +5,6 @@ use ChildProxy;
 use Element;
 #[cfg(feature = "v1_10")]
 use ElementFlags;
-use Iterator;
 use Object;
 use Pad;
 use PadDirection;
@@ -62,17 +61,17 @@ pub trait BinExt {
     #[cfg(feature = "v1_10")]
     fn get_suppressed_flags(&self) -> ElementFlags;
 
-    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> Option<Iterator>;
+    //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator>;
 
-    fn iterate_elements(&self) -> Option<Iterator>;
+    //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn iterate_recurse(&self) -> Option<Iterator>;
+    //fn iterate_recurse(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn iterate_sinks(&self) -> Option<Iterator>;
+    //fn iterate_sinks(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn iterate_sorted(&self) -> Option<Iterator>;
+    //fn iterate_sorted(&self) -> /*Ignored*/Option<Iterator>;
 
-    fn iterate_sources(&self) -> Option<Iterator>;
+    //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator>;
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError>;
 
@@ -152,41 +151,29 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
         }
     }
 
-    fn iterate_all_by_interface(&self, iface: glib::types::Type) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_all_by_interface(self.to_glib_none().0, iface.to_glib()))
-        }
-    }
+    //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_bin_iterate_all_by_interface() }
+    //}
 
-    fn iterate_elements(&self) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_elements(self.to_glib_none().0))
-        }
-    }
+    //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_bin_iterate_elements() }
+    //}
 
-    fn iterate_recurse(&self) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_recurse(self.to_glib_none().0))
-        }
-    }
+    //fn iterate_recurse(&self) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_bin_iterate_recurse() }
+    //}
 
-    fn iterate_sinks(&self) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_sinks(self.to_glib_none().0))
-        }
-    }
+    //fn iterate_sinks(&self) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_bin_iterate_sinks() }
+    //}
 
-    fn iterate_sorted(&self) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_sorted(self.to_glib_none().0))
-        }
-    }
+    //fn iterate_sorted(&self) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_bin_iterate_sorted() }
+    //}
 
-    fn iterate_sources(&self) -> Option<Iterator> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_sources(self.to_glib_none().0))
-        }
-    }
+    //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call ffi::gst_bin_iterate_sources() }
+    //}
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {

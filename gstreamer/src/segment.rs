@@ -393,9 +393,25 @@ impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstSegment> for Segment {
 }
 
 #[doc(hidden)]
+impl glib::translate::FromGlibPtrNone<*const ffi::GstSegment> for Segment {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *const ffi::GstSegment) -> Self {
+        Segment(ptr::read(ptr))
+    }
+}
+
+#[doc(hidden)]
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstSegment> for Segment {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstSegment) -> Self {
+        Segment(ptr::read(ptr))
+    }
+}
+
+#[doc(hidden)]
+impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstSegment> for Segment {
+    #[inline]
+    unsafe fn from_glib_borrow(ptr: *mut ffi::GstSegment) -> Self {
         Segment(ptr::read(ptr))
     }
 }
