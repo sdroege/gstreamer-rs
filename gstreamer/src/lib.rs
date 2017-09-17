@@ -104,7 +104,7 @@ pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo, PAD_PROBE_ID
 pub use gobject::GObjectExtManualGst;
 pub use child_proxy::ChildProxyExtManual;
 pub use tag_setter::TagSetterExtManual;
-pub use self::iterator::{Iterator, IteratorError};
+pub use self::iterator::{Iterator, IteratorError, IteratorImpl};
 pub use device_provider::DeviceProviderExtManual;
 pub use parse_context::ParseContext;
 #[cfg(feature = "futures")]
