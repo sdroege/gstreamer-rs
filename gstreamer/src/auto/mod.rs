@@ -108,7 +108,6 @@ pub use self::enums::DebugLevel;
 pub use self::enums::EventType;
 pub use self::enums::FlowReturn;
 pub use self::enums::Format;
-pub use self::enums::IteratorResult;
 pub use self::enums::LibraryError;
 pub use self::enums::PadDirection;
 pub use self::enums::PadLinkReturn;

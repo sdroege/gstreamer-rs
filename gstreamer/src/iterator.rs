@@ -10,9 +10,15 @@ use std::mem;
 use std::ptr;
 use glib;
 use glib::Value;
-use IteratorResult;
 use std::sync::Arc;
 use std::ffi::CString;
+use std::iter::Iterator as StdIterator;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum IteratorError {
+    Resync,
+    Error,
+}
 
 glib_wrapper! {
     pub struct Iterator(Boxed<ffi::GstIterator>);
@@ -25,22 +31,6 @@ glib_wrapper! {
 }
 
 impl Iterator {
-    #[cfg_attr(feature = "cargo-clippy", allow(should_implement_trait))]
-    pub fn next(&mut self) -> Result<Value, IteratorResult> {
-        unsafe {
-            let mut value = Value::uninitialized();
-            let res = from_glib(ffi::gst_iterator_next(
-                self.to_glib_none_mut().0,
-                value.to_glib_none_mut().0,
-            ));
-            if res == IteratorResult::Ok {
-                Ok(value)
-            } else {
-                Err(res)
-            }
-        }
-    }
-
     pub fn resync(&mut self) {
         unsafe {
             ffi::gst_iterator_resync(self.to_glib_none_mut().0);
@@ -74,7 +64,7 @@ impl Iterator {
         }
     }
 
-    pub fn find<F>(&mut self, func: F) -> Option<glib::Value>
+    pub fn find_simple<F>(&mut self, func: F) -> Option<glib::Value>
     where
         F: FnMut(&glib::Value) -> bool,
     {
@@ -99,7 +89,7 @@ impl Iterator {
         }
     }
 
-    pub fn foreach<F>(&mut self, func: F) -> IteratorResult
+    pub fn foreach<F>(&mut self, func: F) -> Result<(), IteratorError>
     where
         F: FnMut(&glib::Value),
     {
@@ -108,15 +98,21 @@ impl Iterator {
             let func_obj: &mut (FnMut(&glib::Value)) = &mut func;
             let func_ptr = &func_obj as *const &mut (FnMut(&glib::Value)) as gpointer;
 
-            from_glib(ffi::gst_iterator_foreach(
+            let res = ffi::gst_iterator_foreach(
                 self.to_glib_none_mut().0,
                 Some(foreach_trampoline),
                 func_ptr,
-            ))
+            );
+
+            match res {
+                ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(()),
+                ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
+                ffi::GST_ITERATOR_ERROR => Err(IteratorError::Error),
+            }
         }
     }
 
-    pub fn fold<F, T>(&mut self, init: T, func: F) -> Result<T, IteratorResult>
+    pub fn fold_with_early_exit<F, T>(&mut self, init: T, func: F) -> Result<T, IteratorError>
     where
         F: FnMut(T, &glib::Value) -> Result<T, T>,
     {
@@ -134,18 +130,19 @@ impl Iterator {
                 &mut accum as *mut _ as gpointer,
             );
 
-            let res = from_glib(ffi::gst_iterator_fold(
+            let res = ffi::gst_iterator_fold(
                 self.to_glib_none_mut().0,
                 Some(fold_trampoline::<T>),
                 ret.to_glib_none_mut().0,
                 func_ptr,
-            ));
+            );
 
             gobject_ffi::g_value_unset(ret.to_glib_none_mut().0);
 
             match res {
-                IteratorResult::Ok | IteratorResult::Done => Ok(accum.unwrap()),
-                _ => Err(res),
+                ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(accum.unwrap()),
+                ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
+                ffi::GST_ITERATOR_ERROR => Err(IteratorError::Error),
             }
         }
     }
@@ -182,6 +179,23 @@ impl Iterator {
     }
 }
 
+impl StdIterator for Iterator {
+    type Item = Result<Value, IteratorError>;
+
+    fn next(&mut self) -> Option<Result<Value, IteratorError>> {
+        unsafe {
+            let mut value = Value::uninitialized();
+            let res = ffi::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
+            match res {
+                ffi::GST_ITERATOR_OK => Some(Ok(value)),
+                ffi::GST_ITERATOR_DONE => None,
+                ffi::GST_ITERATOR_RESYNC => Some(Err(IteratorError::Resync)),
+                ffi::GST_ITERATOR_ERROR => Some(Err(IteratorError::Error)),
+            }
+        }
+    }
+}
+
 #[repr(C)]
 struct RsIterator<I: IteratorImpl> {
     iter: ffi::GstIterator,
@@ -190,7 +204,7 @@ struct RsIterator<I: IteratorImpl> {
 
 pub trait IteratorImpl: Clone + Send + 'static {
     fn item_type() -> glib::Type;
-    fn next(&mut self) -> Result<glib::Value, IteratorResult>;
+    fn next(&mut self) -> Option<Result<glib::Value, IteratorError>>;
     fn resync(&mut self);
 }
 
@@ -218,15 +232,16 @@ unsafe extern "C" fn rs_iterator_next<I: IteratorImpl>(
     callback_guard!();
     let it = it as *mut RsIterator<I>;
     match (*it).imp.as_mut().map(|imp| imp.next()).unwrap() {
-        Ok(value) => {
+        Some(Ok(value)) => {
             ptr::write(result, ptr::read(value.to_glib_none().0));
             mem::forget(value);
             ffi::GST_ITERATOR_OK
         }
-        Err(res) => {
-            assert_ne!(res, IteratorResult::Ok);
-            res.to_glib()
-        }
+        None => ffi::GST_ITERATOR_DONE,
+        Some(Err(res)) => match res {
+            IteratorError::Resync => ffi::GST_ITERATOR_RESYNC,
+            IteratorError::Error => ffi::GST_ITERATOR_ERROR,
+        },
     }
 }
 
@@ -257,14 +272,14 @@ impl<T: glib::StaticType + glib::value::ToValue + Clone + Send + 'static> Iterat
         T::static_type()
     }
 
-    fn next(&mut self) -> Result<glib::Value, IteratorResult> {
+    fn next(&mut self) -> Option<Result<glib::Value, IteratorError>> {
         if self.pos < self.items.len() {
             let res = Ok(self.items[self.pos].clone().to_value());
             self.pos += 1;
-            return res;
+            return Some(res);
         }
 
-        Err(IteratorResult::Done)
+        None
     }
 
     fn resync(&mut self) {
@@ -401,14 +416,26 @@ mod tests {
 
         let vec = vec![1i32, 2, 3];
         let mut it = Iterator::from_vec(vec);
+        let val = it.next().unwrap();
+        assert_eq!(val.unwrap().get::<i32>().unwrap(), 1);
+        let val = it.next().unwrap();
+        assert_eq!(val.unwrap().get::<i32>().unwrap(), 2);
+        let val = it.next().unwrap();
+        assert_eq!(val.unwrap().get::<i32>().unwrap(), 3);
+        assert!(it.next().is_none());
 
-        let val = it.next().unwrap();
-        assert_eq!(val.get::<i32>().unwrap(), 1);
-        let val = it.next().unwrap();
-        assert_eq!(val.get::<i32>().unwrap(), 2);
-        let val = it.next().unwrap();
-        assert_eq!(val.get::<i32>().unwrap(), 3);
-        assert_eq!(it.next().unwrap_err(), IteratorResult::Done);
+        let vec = vec![1i32, 2, 3];
+        let it = Iterator::from_vec(vec);
+        let vals: Vec<_> = it.map(|v| v.unwrap().get::<i32>().unwrap()).collect();
+        assert_eq!(vals, [1, 2, 3]);
+
+        let vec = vec![1i32, 2, 3];
+        let it = Iterator::from_vec(vec);
+        let mut vals = Vec::new();
+        for v in it {
+            vals.push(v.unwrap().get::<i32>().unwrap());
+        }
+        assert_eq!(vals, [1, 2, 3]);
     }
 
     #[test]
@@ -416,22 +443,25 @@ mod tests {
         ::init().unwrap();
 
         let vec = vec![1i32, 2, 3];
-        let mut it = Iterator::from_vec(vec).filter(|val| val.get::<i32>().unwrap() % 2 == 1);
-
-        let val = it.next().unwrap();
-        assert_eq!(val.get::<i32>().unwrap(), 1);
-        let val = it.next().unwrap();
-        assert_eq!(val.get::<i32>().unwrap(), 3);
-        assert_eq!(it.next().unwrap_err(), IteratorResult::Done);
+        let it = Iterator::from_vec(vec).filter(|val| val.get::<i32>().unwrap() % 2 == 1);
+        let vals: Vec<_> = it.map(|v| v.unwrap().get::<i32>().unwrap()).collect();
+        assert_eq!(vals, [1, 3]);
     }
 
     #[test]
     fn test_find() {
         ::init().unwrap();
 
+        // Our find
         let vec = vec![1i32, 2, 3];
-        let val = Iterator::from_vec(vec).find(|val| val.get::<i32>().unwrap() == 2);
+        let val = Iterator::from_vec(vec).find_simple(|val| val.get::<i32>().unwrap() == 2);
         assert_eq!(val.unwrap().get::<i32>().unwrap(), 2);
+
+        // Find from std::iter::Iterator
+        let vec = vec![1i32, 2, 3];
+        let val =
+            Iterator::from_vec(vec).find(|val| val.as_ref().unwrap().get::<i32>().unwrap() == 2);
+        assert_eq!(val.unwrap().unwrap().get::<i32>().unwrap(), 2);
     }
 
     #[test]
@@ -441,7 +471,7 @@ mod tests {
         let vec = vec![1i32, 2, 3];
         let mut sum = 0;
         let res = Iterator::from_vec(vec).foreach(|val| sum += val.get::<i32>().unwrap());
-        assert_eq!(res, IteratorResult::Done);
+        assert_eq!(res, Ok(()));
         assert_eq!(sum, 6);
     }
 
@@ -449,11 +479,20 @@ mod tests {
     fn test_fold() {
         ::init().unwrap();
 
+        // Our fold
         let vec = vec![1i32, 2, 3];
-        let res = Iterator::from_vec(vec).fold(0, |mut sum, val| {
+        let res = Iterator::from_vec(vec).fold_with_early_exit(0, |mut sum, val| {
             sum += val.get::<i32>().unwrap();
             Ok(sum)
         });
         assert_eq!(res.unwrap(), 6);
+
+        // Fold from std::iter::Iterator
+        let vec = vec![1i32, 2, 3];
+        let res = Iterator::from_vec(vec).fold(0, |mut sum, val| {
+            sum += val.unwrap().get::<i32>().unwrap();
+            sum
+        });
+        assert_eq!(res, 6);
     }
 }

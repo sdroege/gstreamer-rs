@@ -837,69 +837,6 @@ impl SetValue for Format {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub enum IteratorResult {
-    Done,
-    Ok,
-    Resync,
-    Error,
-    #[doc(hidden)]
-    __Unknown(i32),
-}
-
-#[doc(hidden)]
-impl ToGlib for IteratorResult {
-    type GlibType = ffi::GstIteratorResult;
-
-    fn to_glib(&self) -> ffi::GstIteratorResult {
-        match *self {
-            IteratorResult::Done => ffi::GST_ITERATOR_DONE,
-            IteratorResult::Ok => ffi::GST_ITERATOR_OK,
-            IteratorResult::Resync => ffi::GST_ITERATOR_RESYNC,
-            IteratorResult::Error => ffi::GST_ITERATOR_ERROR,
-            IteratorResult::__Unknown(value) => unsafe{std::mem::transmute(value)}
-        }
-    }
-}
-
-#[doc(hidden)]
-impl FromGlib<ffi::GstIteratorResult> for IteratorResult {
-    fn from_glib(value: ffi::GstIteratorResult) -> Self {
-        skip_assert_initialized!();
-        match value as i32 {
-            0 => IteratorResult::Done,
-            1 => IteratorResult::Ok,
-            2 => IteratorResult::Resync,
-            3 => IteratorResult::Error,
-            value => IteratorResult::__Unknown(value),
-        }
-    }
-}
-
-impl StaticType for IteratorResult {
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_iterator_result_get_type()) }
-    }
-}
-
-impl<'a> FromValueOptional<'a> for IteratorResult {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
-    }
-}
-
-impl<'a> FromValue<'a> for IteratorResult {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(std::mem::transmute::<i32, ffi::GstIteratorResult>(gobject_ffi::g_value_get_enum(value.to_glib_none().0)))
-    }
-}
-
-impl SetValue for IteratorResult {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum LibraryError {
     Failed,
     TooLazy,

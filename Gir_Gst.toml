@@ -55,7 +55,6 @@ generate = [
     "Gst.SegmentFlags",
     "Gst.PadMode",
     "Gst.SchedulingFlags",
-    "Gst.IteratorResult",
     "Gst.ChildProxy",
     "Gst.Preset",
     "Gst.TagSetter",
