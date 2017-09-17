@@ -35158,7 +35158,8 @@ values of the seek flags.</doc>
     <bitfield name="StackTraceFlags"
               glib:type-name="GstStackTraceFlags"
               glib:get-type="gst_stack_trace_flags_get_type"
-              c:type="GstStackTraceFlags">
+              c:type="GstStackTraceFlags"
+              version="1.12">
       <member name="full"
               value="1"
               c:identifier="GST_STACK_TRACE_SHOW_FULL"
