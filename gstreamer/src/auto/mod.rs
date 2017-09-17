@@ -244,7 +244,9 @@ pub use self::flags::SEGMENT_FLAG_SKIP;
 pub use self::flags::SEGMENT_FLAG_SEGMENT;
 pub use self::flags::SEGMENT_FLAG_TRICKMODE_KEY_UNITS;
 pub use self::flags::SEGMENT_FLAG_TRICKMODE_NO_AUDIO;
+#[cfg(feature = "v1_12")]
 pub use self::flags::StackTraceFlags;
+#[cfg(feature = "v1_12")]
 pub use self::flags::STACK_TRACE_SHOW_FULL;
 pub use self::flags::StreamFlags;
 pub use self::flags::STREAM_FLAG_NONE;
