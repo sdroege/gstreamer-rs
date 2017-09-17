@@ -4,11 +4,15 @@
 use ffi;
 use glib::translate::*;
 use glib_ffi;
+use glib_ffi::{gconstpointer, gpointer};
 use gobject_ffi;
 use std::mem;
 use std::ptr;
+use glib;
 use glib::Value;
 use IteratorResult;
+use std::sync::Arc;
+use std::ffi::CString;
 
 glib_wrapper! {
     pub struct Iterator(Boxed<ffi::GstIterator>);
@@ -42,6 +46,414 @@ impl Iterator {
             ffi::gst_iterator_resync(self.to_glib_none_mut().0);
         }
     }
+
+    pub fn filter<F>(self, func: F) -> Self
+    where
+        F: Fn(&glib::Value) -> bool + Send + Sync + 'static,
+    {
+        unsafe {
+            let it = self.to_glib_none().0;
+            mem::forget(self);
+
+            let mut closure_value: gobject_ffi::GValue = mem::zeroed();
+            let func_box: Box<Fn(&glib::Value) -> bool + Send + Sync + 'static> = Box::new(func);
+            gobject_ffi::g_value_init(&mut closure_value, filter_boxed_get_type());
+            gobject_ffi::g_value_take_boxed(
+                &mut closure_value,
+                Arc::into_raw(Arc::new(func_box)) as gpointer,
+            );
+
+            let it = from_glib_full(ffi::gst_iterator_filter(
+                it as *mut _,
+                Some(filter_trampoline),
+                &closure_value,
+            ));
+            gobject_ffi::g_value_unset(&mut closure_value);
+
+            it
+        }
+    }
+
+    pub fn find<F>(&mut self, func: F) -> Option<glib::Value>
+    where
+        F: FnMut(&glib::Value) -> bool,
+    {
+        unsafe {
+            let mut elem = glib::Value::uninitialized();
+
+            let mut func = func;
+            let func_obj: &mut (FnMut(&glib::Value) -> bool) = &mut func;
+            let func_ptr = &func_obj as *const &mut (FnMut(&glib::Value) -> bool) as gpointer;
+
+            let res = from_glib(ffi::gst_iterator_find_custom(
+                self.to_glib_none_mut().0,
+                Some(find_trampoline),
+                elem.to_glib_none_mut().0,
+                func_ptr,
+            ));
+            if res {
+                Some(elem)
+            } else {
+                None
+            }
+        }
+    }
+
+    pub fn foreach<F>(&mut self, func: F) -> IteratorResult
+    where
+        F: FnMut(&glib::Value),
+    {
+        unsafe {
+            let mut func = func;
+            let func_obj: &mut (FnMut(&glib::Value)) = &mut func;
+            let func_ptr = &func_obj as *const &mut (FnMut(&glib::Value)) as gpointer;
+
+            from_glib(ffi::gst_iterator_foreach(
+                self.to_glib_none_mut().0,
+                Some(foreach_trampoline),
+                func_ptr,
+            ))
+        }
+    }
+
+    pub fn fold<F, T>(&mut self, init: T, func: F) -> Result<T, IteratorResult>
+    where
+        F: FnMut(T, &glib::Value) -> Result<T, T>,
+    {
+        unsafe {
+            let mut func = func;
+            let func_obj: &mut (FnMut(T, &glib::Value) -> Result<T, T>) = &mut func;
+            let func_ptr =
+                &func_obj as *const &mut (FnMut(T, &glib::Value) -> Result<T, T>) as gpointer;
+
+            let mut ret = glib::Value::uninitialized();
+            let mut accum = Some(init);
+            gobject_ffi::g_value_init(ret.to_glib_none_mut().0, gobject_ffi::G_TYPE_POINTER);
+            gobject_ffi::g_value_set_pointer(
+                ret.to_glib_none_mut().0,
+                &mut accum as *mut _ as gpointer,
+            );
+
+            let res = from_glib(ffi::gst_iterator_fold(
+                self.to_glib_none_mut().0,
+                Some(fold_trampoline::<T>),
+                ret.to_glib_none_mut().0,
+                func_ptr,
+            ));
+
+            gobject_ffi::g_value_unset(ret.to_glib_none_mut().0);
+
+            match res {
+                IteratorResult::Ok | IteratorResult::Done => Ok(accum.unwrap()),
+                _ => Err(res),
+            }
+        }
+    }
+
+    pub fn new<I: IteratorImpl>(imp: I) -> Self {
+        static DUMMY_COOKIE: u32 = 0;
+
+        unsafe {
+            let it = ffi::gst_iterator_new(
+                mem::size_of::<RsIterator<I>>() as u32,
+                I::item_type().to_glib(),
+                ptr::null_mut(),
+                &DUMMY_COOKIE as *const _ as *mut _,
+                Some(rs_iterator_copy::<I>),
+                Some(rs_iterator_next::<I>),
+                None,
+                Some(rs_iterator_resync::<I>),
+                Some(rs_iterator_free::<I>),
+            );
+
+            {
+                let it = it as *mut RsIterator<I>;
+                (*it).imp = Some(imp);
+            }
+
+            from_glib_full(it)
+        }
+    }
+
+    pub fn from_vec<T: glib::StaticType + glib::value::ToValue + Clone + Send + 'static>(
+        items: Vec<T>,
+    ) -> Self {
+        Self::new(VecIteratorImpl::new(items))
+    }
+}
+
+#[repr(C)]
+struct RsIterator<I: IteratorImpl> {
+    iter: ffi::GstIterator,
+    imp: Option<I>,
+}
+
+pub trait IteratorImpl: Clone + Send + 'static {
+    fn item_type() -> glib::Type;
+    fn next(&mut self) -> Result<glib::Value, IteratorResult>;
+    fn resync(&mut self);
+}
+
+unsafe extern "C" fn rs_iterator_copy<I: IteratorImpl>(
+    it: *const ffi::GstIterator,
+    copy: *mut ffi::GstIterator,
+) {
+    callback_guard!();
+    let it = it as *const RsIterator<I>;
+    let copy = copy as *mut RsIterator<I>;
+
+    ptr::write(&mut (*copy).imp, (*it).imp.clone());
+}
+
+unsafe extern "C" fn rs_iterator_free<I: IteratorImpl>(it: *mut ffi::GstIterator) {
+    callback_guard!();
+    let it = it as *mut RsIterator<I>;
+    let _ = (*it).imp.take();
+}
+
+unsafe extern "C" fn rs_iterator_next<I: IteratorImpl>(
+    it: *mut ffi::GstIterator,
+    result: *mut gobject_ffi::GValue,
+) -> ffi::GstIteratorResult {
+    callback_guard!();
+    let it = it as *mut RsIterator<I>;
+    match (*it).imp.as_mut().map(|imp| imp.next()).unwrap() {
+        Ok(value) => {
+            ptr::write(result, ptr::read(value.to_glib_none().0));
+            mem::forget(value);
+            ffi::GST_ITERATOR_OK
+        }
+        Err(res) => {
+            assert_ne!(res, IteratorResult::Ok);
+            res.to_glib()
+        }
+    }
+}
+
+unsafe extern "C" fn rs_iterator_resync<I: IteratorImpl>(it: *mut ffi::GstIterator) {
+    callback_guard!();
+    let it = it as *mut RsIterator<I>;
+    (*it).imp.as_mut().map(|imp| imp.resync()).unwrap();
+}
+
+#[derive(Clone)]
+struct VecIteratorImpl<T: glib::StaticType + glib::value::ToValue + Clone + Send + 'static> {
+    pos: usize,
+    items: Vec<T>,
+}
+
+impl<T: glib::StaticType + glib::value::ToValue + Clone + Send + 'static> VecIteratorImpl<T> {
+    fn new(items: Vec<T>) -> Self {
+        Self {
+            pos: 0,
+            items: items,
+        }
+    }
+}
+
+impl<T: glib::StaticType + glib::value::ToValue + Clone + Send + 'static> IteratorImpl
+    for VecIteratorImpl<T> {
+    fn item_type() -> glib::Type {
+        T::static_type()
+    }
+
+    fn next(&mut self) -> Result<glib::Value, IteratorResult> {
+        if self.pos < self.items.len() {
+            let res = Ok(self.items[self.pos].clone().to_value());
+            self.pos += 1;
+            return res;
+        }
+
+        Err(IteratorResult::Done)
+    }
+
+    fn resync(&mut self) {
+        self.pos = 0;
+    }
 }
 
 unsafe impl Send for Iterator {}
+
+unsafe extern "C" fn filter_trampoline(value: gconstpointer, func: gconstpointer) -> i32 {
+    callback_guard!();
+    let value = value as *const gobject_ffi::GValue;
+
+    let func = func as *const gobject_ffi::GValue;
+    let func = gobject_ffi::g_value_get_boxed(func);
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+    let func: &&(Fn(&glib::Value) -> bool + Send + Sync + 'static) = mem::transmute(func);
+
+    let value = &*(value as *const glib::Value);
+
+    if func(value) {
+        0
+    } else {
+        -1
+    }
+}
+
+unsafe extern "C" fn filter_boxed_ref(boxed: gpointer) -> gpointer {
+    callback_guard!();
+
+    let boxed = Arc::from_raw(
+        boxed as *const (Box<Fn(&glib::Value) -> bool + Send + Sync + 'static>),
+    );
+    let copy = boxed.clone();
+
+    // Forget it and keep it alive, we will still need it later
+    let _ = Arc::into_raw(boxed);
+
+    Arc::into_raw(copy) as gpointer
+}
+
+unsafe extern "C" fn filter_boxed_unref(boxed: gpointer) {
+    callback_guard!();
+
+    let _ = Arc::from_raw(
+        boxed as *const (Box<Fn(&glib::Value) -> bool + Send + Sync + 'static>),
+    );
+}
+
+unsafe extern "C" fn filter_boxed_get_type() -> glib_ffi::GType {
+    use std::sync::{Once, ONCE_INIT};
+
+    callback_guard!();
+
+    static mut TYPE: glib_ffi::GType = gobject_ffi::G_TYPE_INVALID;
+    static ONCE: Once = ONCE_INIT;
+
+    ONCE.call_once(|| {
+        let type_name = {
+            let mut idx = 0;
+
+            loop {
+                let type_name = CString::new(format!("GstRsIteratorFilterBoxed-{}", idx)).unwrap();
+                if gobject_ffi::g_type_from_name(type_name.as_ptr()) == gobject_ffi::G_TYPE_INVALID
+                {
+                    break type_name;
+                }
+                idx += 1;
+            }
+        };
+
+        TYPE = gobject_ffi::g_boxed_type_register_static(
+            type_name.as_ptr(),
+            Some(filter_boxed_ref),
+            Some(filter_boxed_unref),
+        );
+    });
+
+    TYPE
+}
+
+unsafe extern "C" fn find_trampoline(value: gconstpointer, func: gconstpointer) -> i32 {
+    callback_guard!();
+    let value = value as *const gobject_ffi::GValue;
+
+    let func = func as *const &mut (FnMut(&glib::Value) -> bool);
+    let value = &*(value as *const glib::Value);
+
+    if (*func)(value) {
+        0
+    } else {
+        -1
+    }
+}
+
+unsafe extern "C" fn foreach_trampoline(value: *const gobject_ffi::GValue, func: gpointer) {
+    callback_guard!();
+    let func = func as *const &mut (FnMut(&glib::Value));
+    let value = &*(value as *const glib::Value);
+
+    (*func)(value);
+}
+
+unsafe extern "C" fn fold_trampoline<T>(
+    value: *const gobject_ffi::GValue,
+    ret: *mut gobject_ffi::GValue,
+    func: gpointer,
+) -> glib_ffi::gboolean {
+    callback_guard!();
+    let func = func as *const &mut (FnMut(T, &glib::Value) -> Result<T, T>);
+    let value = &*(value as *const glib::Value);
+
+    let accum = &mut *(gobject_ffi::g_value_get_pointer(ret) as *mut Option<T>);
+
+    match (*func)(accum.take().unwrap(), value) {
+        Ok(next_accum) => {
+            *accum = Some(next_accum);
+            glib_ffi::GTRUE
+        }
+        Err(next_accum) => {
+            *accum = Some(next_accum);
+            glib_ffi::GFALSE
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_vec() {
+        ::init().unwrap();
+
+        let vec = vec![1i32, 2, 3];
+        let mut it = Iterator::from_vec(vec);
+
+        let val = it.next().unwrap();
+        assert_eq!(val.get::<i32>().unwrap(), 1);
+        let val = it.next().unwrap();
+        assert_eq!(val.get::<i32>().unwrap(), 2);
+        let val = it.next().unwrap();
+        assert_eq!(val.get::<i32>().unwrap(), 3);
+        assert_eq!(it.next().unwrap_err(), IteratorResult::Done);
+    }
+
+    #[test]
+    fn test_filter() {
+        ::init().unwrap();
+
+        let vec = vec![1i32, 2, 3];
+        let mut it = Iterator::from_vec(vec).filter(|val| val.get::<i32>().unwrap() % 2 == 1);
+
+        let val = it.next().unwrap();
+        assert_eq!(val.get::<i32>().unwrap(), 1);
+        let val = it.next().unwrap();
+        assert_eq!(val.get::<i32>().unwrap(), 3);
+        assert_eq!(it.next().unwrap_err(), IteratorResult::Done);
+    }
+
+    #[test]
+    fn test_find() {
+        ::init().unwrap();
+
+        let vec = vec![1i32, 2, 3];
+        let val = Iterator::from_vec(vec).find(|val| val.get::<i32>().unwrap() == 2);
+        assert_eq!(val.unwrap().get::<i32>().unwrap(), 2);
+    }
+
+    #[test]
+    fn test_foreach() {
+        ::init().unwrap();
+
+        let vec = vec![1i32, 2, 3];
+        let mut sum = 0;
+        let res = Iterator::from_vec(vec).foreach(|val| sum += val.get::<i32>().unwrap());
+        assert_eq!(res, IteratorResult::Done);
+        assert_eq!(sum, 6);
+    }
+
+    #[test]
+    fn test_fold() {
+        ::init().unwrap();
+
+        let vec = vec![1i32, 2, 3];
+        let res = Iterator::from_vec(vec).fold(0, |mut sum, val| {
+            sum += val.get::<i32>().unwrap();
+            Ok(sum)
+        });
+        assert_eq!(res.unwrap(), 6);
+    }
+}
