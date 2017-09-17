@@ -111,6 +111,12 @@ pub trait PadExtManual {
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
+    fn iterate_internal_links(&self) -> ::Iterator<Pad>;
+    fn iterate_internal_links_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
+        &self,
+        parent: Q,
+    ) -> ::Iterator<Pad>;
+
     fn stream_lock(&self) -> StreamLock;
 
     fn set_activate_function<F>(&self, func: F)
@@ -333,6 +339,24 @@ impl<O: IsA<Pad>> PadExtManual for O {
             from_glib(ffi::gst_pad_send_event(
                 self.to_glib_none().0,
                 event.into_ptr(),
+            ))
+        }
+    }
+
+    fn iterate_internal_links(&self) -> ::Iterator<Pad> {
+        unsafe { from_glib_full(ffi::gst_pad_iterate_internal_links(self.to_glib_none().0)) }
+    }
+
+    fn iterate_internal_links_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
+        &self,
+        parent: Q,
+    ) -> ::Iterator<Pad> {
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib_full(ffi::gst_pad_iterate_internal_links_default(
+                self.to_glib_none().0,
+                parent.0,
             ))
         }
     }
