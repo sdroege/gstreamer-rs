@@ -22,6 +22,7 @@ use std::ptr;
 use std::mem;
 use std::cell::RefCell;
 
+use glib;
 use glib::{IsA, StaticType};
 use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, FromGlib,
                       ToGlib, ToGlibPtr};
@@ -168,7 +169,7 @@ pub trait PadExtManual {
     where
         F: Fn(&Pad, &Option<::Object>) + Send + Sync + 'static;
 
-    fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> bool;
+    fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -570,14 +571,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> bool {
+    fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_start_task(
-                self.to_glib_none().0,
-                Some(trampoline_pad_task),
-                into_raw_pad_task(func),
-                Some(destroy_closure_pad_task),
-            ))
+            glib::error::BoolError::from_glib(
+                ffi::gst_pad_start_task(
+                    self.to_glib_none().0,
+                    Some(trampoline_pad_task),
+                    into_raw_pad_task(func),
+                    Some(destroy_closure_pad_task),
+                ),
+                "Failed to start pad task",
+            )
         }
     }
 }
@@ -921,6 +925,7 @@ mod tests {
     use super::*;
     use prelude::*;
     use std::sync::{Arc, Mutex};
+    use std::sync::mpsc::channel;
 
     #[test]
     fn test_event_chain_functions() {
@@ -969,5 +974,25 @@ mod tests {
             ::EventView::Segment(..) => (),
             _ => unreachable!(),
         }
+    }
+
+    #[test]
+    fn test_task() {
+        ::init().unwrap();
+
+        let pad = ::Pad::new("sink", ::PadDirection::Sink);
+        let (sender, receiver) = channel();
+
+        let mut i = 0;
+        let pad_clone = pad.clone();
+        pad.start_task(move || {
+            i += 1;
+            if i == 3 {
+                sender.send(i).unwrap();
+                pad_clone.pause_task().unwrap();
+            }
+        }).unwrap();
+
+        assert_eq!(receiver.recv().unwrap(), 3);
     }
 }
