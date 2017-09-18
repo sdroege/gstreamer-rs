@@ -669,30 +669,14 @@ unsafe extern "C" fn trampoline_pad_probe(
     ret
 }
 
-// FIXME: Workaround for GHookList being truncated in the -sys bindings
-macro_rules! pad_member_offset(
-    ($pad:ident, $member:ident) => {{
-        let probes_addr = &(*$pad).probes as *const _ as usize;
-        let mode_addr = &(*$pad).mode as *const _ as usize;
-        let member_addr = &(*$pad).$member as *const _ as usize;
-        let hooklist_size = mem::size_of::<libc::c_ulong>()
-            // 16+1 bits, next is pointer => pointer alignment padding
-            + mem::size_of::<*const libc::c_void>()
-            + 5 * mem::size_of::<*const libc::c_void>();
-        let real_member_addr = member_addr - (mode_addr - probes_addr) + hooklist_size;
-
-        *(real_member_addr as *const *const libc::c_void)
-    }}
-);
-
 unsafe extern "C" fn trampoline_activate_function(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
 ) -> glib_ffi::gboolean {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, activatedata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static) = transmute(func);
+    let func: &&(Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static) =
+        transmute((*pad).activatedata);
 
     func(&from_glib_borrow(pad), &from_glib_borrow(parent)).to_glib()
 }
@@ -704,12 +688,11 @@ unsafe extern "C" fn trampoline_activatemode_function(
     active: glib_ffi::gboolean,
 ) -> glib_ffi::gboolean {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, activatemodedata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).activatemodedata);
 
     func(
         &from_glib_borrow(pad),
@@ -725,12 +708,11 @@ unsafe extern "C" fn trampoline_chain_function(
     buffer: *mut ffi::GstBuffer,
 ) -> ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, chaindata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::Buffer) -> ::FlowReturn
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).chaindata);
 
     func(
         &from_glib_borrow(pad),
@@ -745,12 +727,11 @@ unsafe extern "C" fn trampoline_chain_list_function(
     list: *mut ffi::GstBufferList,
 ) -> ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, chainlistdata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::BufferList) -> ::FlowReturn
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).chainlistdata);
 
     func(
         &from_glib_borrow(pad),
@@ -765,10 +746,9 @@ unsafe extern "C" fn trampoline_event_function(
     event: *mut ffi::GstEvent,
 ) -> glib_ffi::gboolean {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, eventdata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static) =
-        transmute(func);
+        transmute((*pad).eventdata);
 
     func(
         &from_glib_borrow(pad),
@@ -783,12 +763,11 @@ unsafe extern "C" fn trampoline_event_full_function(
     event: *mut ffi::GstEvent,
 ) -> ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, eventdata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).eventdata);
 
     func(
         &from_glib_borrow(pad),
@@ -805,13 +784,12 @@ unsafe extern "C" fn trampoline_getrange_function(
     buffer: *mut *mut ffi::GstBuffer,
 ) -> ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, getrangedata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, u64, u32)
         -> Result<::Buffer, ::FlowReturn>
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).getrangedata);
 
     match func(
         &from_glib_borrow(pad),
@@ -832,10 +810,9 @@ unsafe extern "C" fn trampoline_iterate_internal_links_function(
     parent: *mut ffi::GstObject,
 ) -> *mut ffi::GstIterator {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, iterintlinkdata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static) =
-        transmute(func);
+        transmute((*pad).iterintlinkdata);
 
     // Steal the iterator and return it
     let ret = func(&from_glib_borrow(pad), &from_glib_borrow(parent));
@@ -851,12 +828,11 @@ unsafe extern "C" fn trampoline_link_function(
     peer: *mut ffi::GstPad,
 ) -> ffi::GstPadLinkReturn {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, linkdata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, &::Pad) -> ::PadLinkReturn
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).linkdata);
 
     func(
         &from_glib_borrow(pad),
@@ -871,12 +847,11 @@ unsafe extern "C" fn trampoline_query_function(
     query: *mut ffi::GstQuery,
 ) -> glib_ffi::gboolean {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, querydata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool
                          + Send
                          + Sync
-                         + 'static) = transmute(func);
+                         + 'static) = transmute((*pad).querydata);
 
     func(
         &from_glib_borrow(pad),
@@ -890,9 +865,9 @@ unsafe extern "C" fn trampoline_unlink_function(
     parent: *mut ffi::GstObject,
 ) {
     let _guard = CallbackGuard::new();
-    let func = pad_member_offset!(pad, unlinkdata);
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>) + Send + Sync + 'static) = transmute(func);
+    let func: &&(Fn(&Pad, &Option<::Object>) + Send + Sync + 'static) =
+        transmute((*pad).unlinkdata);
 
     func(&from_glib_borrow(pad), &from_glib_borrow(parent))
 }
