@@ -449,14 +449,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let func_box: Box<
                 Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
             > = Box::new(func);
-            let func_ptr = Box::into_raw(Box::new(func_box)) as gpointer;
-
-            println!("before {:?}", func_ptr);
-
             ffi::gst_pad_set_event_function_full(
                 self.to_glib_none().0,
                 Some(trampoline_event_function),
-                func_ptr,
+                Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
             );
         }
