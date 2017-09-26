@@ -133,8 +133,7 @@ fn main() {
 
     app.connect_activate(create_ui);
     let args = env::args().collect::<Vec<_>>();
-    let args_ref = args.iter().map(|a| a.as_str()).collect::<Vec<_>>();
-    app.run(&args_ref);
+    app.run(&args);
 }
 
 #[cfg(not(feature = "gtksink"))]
