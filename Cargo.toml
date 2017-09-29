@@ -9,4 +9,5 @@ members = [
   "gstreamer-pbutils-sys",
   "gstreamer-app-sys",
   "gstreamer-player-sys",
+  "gstreamer-mpegts-sys",
 ]

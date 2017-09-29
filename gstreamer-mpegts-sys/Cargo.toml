@@ -1,0 +1,37 @@
+[badges.travis-ci]
+branch = "master"
+repository = "sdroege/gstreamer-sys"
+
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gstreamer-base-sys]
+path = "../gstreamer-base-sys"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+
+[lib]
+name = "gstreamer_mpegts_sys"
+
+[package]
+authors = ["Russel Winder <russel@winder.org.uk>", "Sebastian Dröge <sebastian@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgstmpegts-1.0"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+links = "gstmpegts-1.0"
+name = "gstreamer-mpegts-sys"
+readme = "README.md"
+repository = "https://github.com/sdroege/gstreamer-sys"
+version = "0.3.0"
