@@ -20,6 +20,9 @@ path = "../gstreamer-base-sys"
 [dependencies.gstreamer-sys]
 path = "../gstreamer-sys"
 
+[features]
+dox = []
+
 [lib]
 name = "gstreamer_mpegts_sys"
 
