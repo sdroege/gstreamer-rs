@@ -251,7 +251,7 @@ impl AudioInfo {
     }
 
     pub fn is_unpositioned(&self) -> bool {
-        self.flags().contains(::AUDIO_FLAG_UNPOSITIONED)
+        self.flags().contains(::AudioFlags::UNPOSITIONED)
     }
 }
 

@@ -13,7 +13,7 @@ keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
 
 [dependencies]
-bitflags = "0.9"
+bitflags = "1.0"
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
@@ -30,6 +30,7 @@ v1_10 = ["gstreamer-sys/v1_10", "gstreamer-base-sys/v1_10"]
 v1_12 = ["gstreamer-sys/v1_12", "gstreamer-base-sys/v1_12", "v1_10"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
+dox = ["gstreamer-base-sys/dox"]
 default-features = []
 
 [badges]

@@ -183,15 +183,15 @@ impl AudioFormatInfo {
     }
 
     pub fn is_float(&self) -> bool {
-        self.flags().contains(::AUDIO_FORMAT_FLAG_FLOAT)
+        self.flags().contains(::AudioFormatFlags::FLOAT)
     }
 
     pub fn is_integer(&self) -> bool {
-        self.flags().contains(::AUDIO_FORMAT_FLAG_INTEGER)
+        self.flags().contains(::AudioFormatFlags::INTEGER)
     }
 
     pub fn is_signed(&self) -> bool {
-        self.flags().contains(::AUDIO_FORMAT_FLAG_SIGNED)
+        self.flags().contains(::AudioFormatFlags::SIGNED)
     }
 
 

@@ -107,19 +107,19 @@ impl<T> VideoFrame<T> {
     }
 
     pub fn is_interlaced(&self) -> bool {
-        self.flags().contains(::VIDEO_FRAME_FLAG_INTERLACED)
+        self.flags().contains(::VideoFrameFlags::INTERLACED)
     }
 
     pub fn is_tff(&self) -> bool {
-        self.flags().contains(::VIDEO_FRAME_FLAG_TFF)
+        self.flags().contains(::VideoFrameFlags::TFF)
     }
 
     pub fn is_rff(&self) -> bool {
-        self.flags().contains(::VIDEO_FRAME_FLAG_RFF)
+        self.flags().contains(::VideoFrameFlags::RFF)
     }
 
     pub fn is_onefield(&self) -> bool {
-        self.flags().contains(::VIDEO_FRAME_FLAG_ONEFIELD)
+        self.flags().contains(::VideoFrameFlags::ONEFIELD)
     }
 
     pub fn n_planes(&self) -> u32 {

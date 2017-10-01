@@ -11,7 +11,7 @@ fn main() {
 
     let mut context = gst::ParseContext::new();
     let pipeline =
-        match gst::parse_launch_full(&pipeline_str, Some(&mut context), gst::PARSE_FLAG_NONE) {
+        match gst::parse_launch_full(&pipeline_str, Some(&mut context), gst::ParseFlags::NONE) {
             Ok(pipeline) => pipeline,
             Err(err) => {
                 if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {

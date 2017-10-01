@@ -23,7 +23,7 @@ fn main() {
         .get_by_name("src")
         .unwrap();
     let src_pad = src.get_static_pad("src").unwrap();
-    src_pad.add_probe(gst::PAD_PROBE_TYPE_BUFFER, |_, probe_info| {
+    src_pad.add_probe(gst::PadProbeType::BUFFER, |_, probe_info| {
         if let Some(gst::PadProbeData::Buffer(ref buffer)) = probe_info.data {
             let map = buffer.map_readable().unwrap();
 
