@@ -205,7 +205,7 @@ fn main() {
     gst::init().unwrap();
     gtk::init().unwrap();
 
-    let app = gtk::Application::new(None, gio::APPLICATION_FLAGS_NONE).unwrap();
+    let app = gtk::Application::new(None, gio::ApplicationFlags::FLAGS_NONE).unwrap();
 
     app.connect_activate(create_ui);
     let args = env::args().collect::<Vec<_>>();
