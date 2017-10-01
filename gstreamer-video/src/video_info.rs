@@ -795,7 +795,7 @@ mod tests {
         assert_eq!(info.height(), 240);
         assert_eq!(info.fps(), gst::Fraction::new(30, 1));
         assert_eq!(info.interlace_mode(), ::VideoInterlaceMode::Progressive);
-        assert_eq!(info.chroma_site(), ::VIDEO_CHROMA_SITE_MPEG2);
+        assert_eq!(info.chroma_site(), ::VideoChromaSite::MPEG2);
         assert_eq!(info.colorimetry(), "bt709".parse().unwrap());
 
         let caps2 = info.to_caps().unwrap();
