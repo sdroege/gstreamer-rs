@@ -40,7 +40,7 @@ impl GstRc<CapsRef> {
 
     pub fn new_simple(name: &str, values: &[(&str, &ToValue)]) -> Self {
         assert_initialized_main_thread!();
-        let mut caps = Caps::new_empty();
+        let caps = Caps::new_empty();
 
         let structure = Structure::new(name, values);
         caps.get_mut().unwrap().append_structure(structure);
