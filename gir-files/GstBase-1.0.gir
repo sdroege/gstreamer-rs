@@ -10221,7 +10221,8 @@ returned immediatelly from the gst_flow_combiner_update_flow() function.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_flow_combiner_ref">
+      <method name="ref" c:identifier="gst_flow_combiner_ref"
+              version="1.12.1">
         <return-value transfer-ownership="full">
           <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
         </return-value>
@@ -10263,7 +10264,8 @@ returned immediatelly from the gst_flow_combiner_update_flow() function.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="unref" c:identifier="gst_flow_combiner_unref">
+      <method name="unref" c:identifier="gst_flow_combiner_unref"
+              version="1.12.1">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>

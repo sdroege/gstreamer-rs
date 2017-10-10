@@ -564,13 +564,13 @@ extern "C" {
     pub fn gst_flow_combiner_clear(combiner: *mut GstFlowCombiner);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_flow_combiner_free(combiner: *mut GstFlowCombiner);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
+    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
     pub fn gst_flow_combiner_ref(combiner: *mut GstFlowCombiner) -> *mut GstFlowCombiner;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_flow_combiner_remove_pad(combiner: *mut GstFlowCombiner, pad: *mut gst::GstPad);
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_flow_combiner_reset(combiner: *mut GstFlowCombiner);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
+    #[cfg(any(feature = "v1_12_1", feature = "dox"))]
     pub fn gst_flow_combiner_unref(combiner: *mut GstFlowCombiner);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_flow_combiner_update_flow(combiner: *mut GstFlowCombiner, fret: gst::GstFlowReturn) -> gst::GstFlowReturn;
