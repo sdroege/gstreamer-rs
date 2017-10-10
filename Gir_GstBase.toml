@@ -67,7 +67,7 @@ concurrency = "none"
 
 [[object]]
 name = "GstBase.FlowCombiner"
-status = "generate"
+status = "manual"
 trait = false
 concurrency = "none"
 

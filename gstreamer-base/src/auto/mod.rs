@@ -19,9 +19,6 @@ pub use self::base_transform::BaseTransformExt;
 mod push_src;
 pub use self::push_src::PushSrc;
 
-mod flow_combiner;
-pub use self::flow_combiner::FlowCombiner;
-
 #[doc(hidden)]
 pub mod traits {
     pub use super::BaseSinkExt;
