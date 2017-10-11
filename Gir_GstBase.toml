@@ -67,6 +67,7 @@ concurrency = "none"
 
 [[object]]
 name = "GstBase.FlowCombiner"
+# Manual because ref/unref functions were added much later
 status = "manual"
 trait = false
 concurrency = "none"
