@@ -125,7 +125,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
 
             custom_data.playing = new_state == gst::State::Playing;
             if custom_data.playing {
-                let query = gst::Query::new_seeking(gst::Format::Time);
+                let mut query = gst::Query::new_seeking(gst::Format::Time);
                 if custom_data.playbin.query(query.get_mut().unwrap()) {
                     match query.view() {
                         gst::QueryView::Seeking(seek) => {
