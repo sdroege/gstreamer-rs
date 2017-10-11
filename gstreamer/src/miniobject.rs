@@ -76,7 +76,7 @@ impl<T: MiniObject> GstRc<T> {
         }
     }
 
-    pub fn get_mut(&self) -> Option<&mut T> {
+    pub fn get_mut(&mut self) -> Option<&mut T> {
         if self.is_writable() {
             Some(unsafe { &mut *self.obj })
         } else {
