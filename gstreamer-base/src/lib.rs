@@ -39,6 +39,8 @@ mod auto;
 pub use auto::*;
 
 mod adapter;
+mod flow_combiner;
+pub use flow_combiner::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
