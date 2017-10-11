@@ -5,7 +5,16 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
 glib = { version = "0.3", git = "https://github.com/gtk-rs/glib" }
+gdk = { version = "0.6", git = "https://github.com/gtk-rs/gdk", optional = true }
+gtk = { version = "0.2", git = "https://github.com/gtk-rs/gtk", features = ["v3_10"], optional = true }
 gstreamer = { path = "../gstreamer" }
+gstreamer-video = { path = "../gstreamer-video" }
+send-cell = "0.1"
 
 [badges]
 travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+
+[features]
+tutorial5 = ["gtk", "gdk"]
+tutorial5-x11 = ["tutorial5"]
+tutorial5-quartz = ["tutorial5"]
