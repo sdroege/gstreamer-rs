@@ -2,12 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+mod video_decoder;
+pub use self::video_decoder::VideoDecoder;
+pub use self::video_decoder::VideoDecoderExt;
+
 mod video_filter;
 pub use self::video_filter::VideoFilter;
 
 mod video_overlay;
 pub use self::video_overlay::VideoOverlay;
 pub use self::video_overlay::VideoOverlayExt;
+
+mod video_codec_state;
+pub use self::video_codec_state::VideoCodecState;
 
 mod enums;
 pub use self::enums::VideoColorMatrix;
@@ -30,5 +37,6 @@ pub use self::flags::VideoMultiviewFlags;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::VideoDecoderExt;
     pub use super::VideoOverlayExt;
 }

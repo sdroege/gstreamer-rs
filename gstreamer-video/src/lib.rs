@@ -63,6 +63,10 @@ mod functions;
 pub use functions::*;
 mod video_rectangle;
 pub use video_rectangle::*;
+mod video_codec_frame;
+pub use video_codec_frame::*;
+mod video_codec_state;
+pub use self::video_codec_state::VideoCodecState;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

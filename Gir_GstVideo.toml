@@ -17,6 +17,7 @@ external_libraries = [
 ]
 
 generate = [
+    "GstVideo.VideoDecoder",
     "GstVideo.VideoFormat",
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoTileMode",
@@ -32,6 +33,7 @@ generate = [
     "GstVideo.VideoFrameFlags",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
+    "GstVideo.VideoCodecState",
 ]
 
 manual = [
@@ -39,12 +41,23 @@ manual = [
     "Gst.Object",
     "Gst.Element",
     "GstBase.BaseTransform",
+    "Gst.FlowReturn",
+    "Gst.ClockTimeDiff",
+    "Gst.Buffer",
+    "Gst.TagMergeMode",
+    "Gst.TagList",
+    "GstVideo.VideoCodecFrame",
     "GstVideo.VideoInfo",
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoColorimetry",
     "GstVideo.VideoColorRange",
     "GstVideo.VideoFrame",
 ]
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
 
 [[object]]
 name = "Gst.Caps"
