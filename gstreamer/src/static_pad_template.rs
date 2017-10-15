@@ -14,33 +14,31 @@ use glib_ffi;
 use gobject_ffi;
 
 use std::ffi::CStr;
-use std::ptr;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, FromGlibPtrNone,
-                      ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
 
 #[repr(C)]
-pub struct StaticPadTemplate(ffi::GstStaticPadTemplate);
+pub struct StaticPadTemplate(*mut ffi::GstStaticPadTemplate);
 
 impl StaticPadTemplate {
     pub fn get(&self) -> PadTemplate {
-        unsafe { from_glib_full(ffi::gst_static_pad_template_get(mut_override(&self.0))) }
+        unsafe { from_glib_full(ffi::gst_static_pad_template_get(self.0)) }
     }
 
     pub fn get_caps(&self) -> Caps {
-        unsafe { from_glib_full(ffi::gst_static_pad_template_get_caps(mut_override(&self.0))) }
+        unsafe { from_glib_full(ffi::gst_static_pad_template_get_caps(self.0)) }
     }
 
     pub fn name_template<'a>(&self) -> &'a str {
-        unsafe { CStr::from_ptr(self.0.name_template).to_str().unwrap() }
+        unsafe { CStr::from_ptr((*self.0).name_template).to_str().unwrap() }
     }
 
     pub fn direction(&self) -> ::PadDirection {
-        from_glib(self.0.direction)
+        unsafe { from_glib((*self.0).direction) }
     }
 
     pub fn presence(&self) -> ::PadPresence {
-        from_glib(self.0.presence)
+        unsafe { from_glib((*self.0).presence) }
     }
 }
 
@@ -97,7 +95,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticPadTemplate> for St
     fn to_glib_none(
         &'a self,
     ) -> glib::translate::Stash<'a, *const ffi::GstStaticPadTemplate, Self> {
-        glib::translate::Stash(&self.0, self)
+        glib::translate::Stash(self.0, self)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStaticPadTemplate {
@@ -109,7 +107,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticPadTemplate> for St
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticPadTemplate) -> Self {
-        StaticPadTemplate(ptr::read(ptr))
+        StaticPadTemplate(ptr as *mut _)
     }
 }
 
@@ -117,7 +115,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticPadTemplate> for Stat
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticPadTemplate) -> Self {
-        StaticPadTemplate(ptr::read(ptr))
+        StaticPadTemplate(ptr)
     }
 }
 
@@ -125,16 +123,14 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticPadTemplate> for Static
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticPadTemplate) -> Self {
-        StaticPadTemplate(ptr::read(ptr))
+        StaticPadTemplate(ptr)
     }
 }
 
 #[doc(hidden)]
 impl glib::translate::FromGlibPtrFull<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GstStaticPadTemplate) -> Self {
-        let templ = from_glib_none(ptr);
-        glib_ffi::g_free(ptr as *mut _);
-        templ
+    unsafe fn from_glib_full(_ptr: *mut ffi::GstStaticPadTemplate) -> Self {
+        unimplemented!();
     }
 }

@@ -12,17 +12,15 @@ use ffi;
 use glib_ffi;
 use gobject_ffi;
 
-use std::ptr;
 use glib;
-use glib::translate::{from_glib_full, from_glib_none, mut_override, FromGlibPtrNone, ToGlibPtr,
-                      ToGlibPtrMut};
+use glib::translate::{from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
 
 #[repr(C)]
-pub struct StaticCaps(ffi::GstStaticCaps);
+pub struct StaticCaps(*mut ffi::GstStaticCaps);
 
 impl StaticCaps {
     pub fn get(&self) -> Caps {
-        unsafe { from_glib_full(ffi::gst_static_caps_get(mut_override(&self.0))) }
+        unsafe { from_glib_full(ffi::gst_static_caps_get(self.0)) }
     }
 }
 
@@ -76,7 +74,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCap
     type Storage = &'a StaticCaps;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstStaticCaps, Self> {
-        glib::translate::Stash(&self.0, self)
+        glib::translate::Stash(self.0, self)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStaticCaps {
@@ -88,7 +86,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCap
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticCaps) -> Self {
-        StaticCaps(ptr::read(ptr))
+        StaticCaps(ptr as *mut _)
     }
 }
 
@@ -96,7 +94,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticCaps) -> Self {
-        StaticCaps(ptr::read(ptr))
+        StaticCaps(ptr)
     }
 }
 
@@ -104,16 +102,14 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticCaps) -> Self {
-        StaticCaps(ptr::read(ptr))
+        StaticCaps(ptr)
     }
 }
 
 #[doc(hidden)]
 impl glib::translate::FromGlibPtrFull<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GstStaticCaps) -> Self {
-        let caps = from_glib_none(ptr);
-        glib_ffi::g_free(ptr as *mut _);
-        caps
+    unsafe fn from_glib_full(_ptr: *mut ffi::GstStaticCaps) -> Self {
+        unimplemented!();
     }
 }
