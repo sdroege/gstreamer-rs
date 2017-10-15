@@ -83,6 +83,8 @@ manual = [
     "GLib.DateTime",
     "GObject.Object",
     "Gst.Segment",
+    "Gst.StaticCaps",
+    "Gst.StaticPadTemplate",
 ]
 
 [[object]]
@@ -445,6 +447,11 @@ status = "generate"
     [[object.function]]
     name = "send_event"
     # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "new_from_static_template"
+    # Correct mutability
     ignore = true
 
 [[object]]

@@ -7,6 +7,7 @@ use ElementFactoryListType;
 use Object;
 use PadDirection;
 use Rank;
+use StaticPadTemplate;
 use URIType;
 use ffi;
 use glib;
@@ -81,9 +82,11 @@ impl ElementFactory {
         }
     }
 
-    //pub fn get_static_pad_templates(&self) -> /*Ignored*/Vec<StaticPadTemplate> {
-    //    unsafe { TODO: call ffi::gst_element_factory_get_static_pad_templates() }
-    //}
+    pub fn get_static_pad_templates(&self) -> Vec<StaticPadTemplate> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_none(ffi::gst_element_factory_get_static_pad_templates(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_uri_protocols(&self) -> Vec<String> {
         unsafe {

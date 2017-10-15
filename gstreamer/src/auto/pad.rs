@@ -50,10 +50,6 @@ impl Pad {
         }
     }
 
-    //pub fn new_from_static_template(templ: /*Ignored*/&mut StaticPadTemplate, name: &str) -> Pad {
-    //    unsafe { TODO: call ffi::gst_pad_new_from_static_template() }
-    //}
-
     pub fn new_from_template<'a, P: Into<Option<&'a str>>>(templ: &PadTemplate, name: P) -> Pad {
         skip_assert_initialized!();
         let name = name.into();

@@ -83,6 +83,10 @@ pub mod event;
 pub use event::{Event, EventRef, EventView};
 pub mod context;
 pub use context::{Context, ContextRef};
+mod static_caps;
+pub use static_caps::*;
+mod static_pad_template;
+pub use static_pad_template::*;
 
 mod element;
 mod bin;

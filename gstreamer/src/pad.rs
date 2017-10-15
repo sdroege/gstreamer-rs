@@ -15,6 +15,7 @@ use FlowReturn;
 use Query;
 use QueryRef;
 use Event;
+use StaticPadTemplate;
 use miniobject::MiniObject;
 
 use std::mem::transmute;
@@ -24,8 +25,8 @@ use std::cell::RefCell;
 
 use glib;
 use glib::{IsA, StaticType};
-use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, FromGlib,
-                      ToGlib, ToGlibPtr};
+use glib::translate::{mut_override, from_glib, from_glib_borrow, from_glib_full, from_glib_none,
+                      FromGlib, ToGlib, ToGlibPtr};
 use glib::source::CallbackGuard;
 use glib_ffi;
 use glib_ffi::gpointer;
@@ -34,6 +35,15 @@ use glib::Object;
 use libc;
 
 use ffi;
+
+impl Pad {
+    pub fn new_from_static_template(templ: &StaticPadTemplate, name: &str) -> Pad {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_pad_new_from_static_template(mut_override(templ.to_glib_none().0), name.to_glib_none().0))
+        }
+    }
+}
 
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct PadProbeId(libc::c_ulong);
