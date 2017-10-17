@@ -2315,8 +2315,7 @@ pub struct RedirectBuilder<'a> {
     tag_list: Option<&'a TagList>,
     entry_struct: Option<Structure>,
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-    entries:
-        Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
+    entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
 #[cfg(feature = "v1_10")]
 impl<'a> RedirectBuilder<'a> {

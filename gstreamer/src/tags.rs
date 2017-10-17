@@ -103,7 +103,11 @@ impl_tag!(GeoLocationLongitute, f64, *TAG_GEO_LOCATION_LONGITUDE);
 impl_tag!(GeoLocationElevation, f64, *TAG_GEO_LOCATION_ELEVATION);
 impl_tag!(GeoLocationCity, &'a str, *TAG_GEO_LOCATION_CITY);
 impl_tag!(GeoLocationCountry, &'a str, *TAG_GEO_LOCATION_COUNTRY);
-impl_tag!(GeoLocationSublocation, &'a str, *TAG_GEO_LOCATION_SUBLOCATION);
+impl_tag!(
+    GeoLocationSublocation,
+    &'a str,
+    *TAG_GEO_LOCATION_SUBLOCATION
+);
 impl_tag!(
     GeoLocationHorizontalError,
     f64,
@@ -333,8 +337,8 @@ impl ToOwned for TagListRef {
 
     fn to_owned(&self) -> GstRc<TagListRef> {
         unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
-                *mut _)
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
         }
     }
 }

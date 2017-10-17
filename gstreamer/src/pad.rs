@@ -25,7 +25,7 @@ use std::cell::RefCell;
 
 use glib;
 use glib::{IsA, StaticType};
-use glib::translate::{mut_override, from_glib, from_glib_borrow, from_glib_full, from_glib_none,
+use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override,
                       FromGlib, ToGlib, ToGlibPtr};
 use glib::source::CallbackGuard;
 use glib_ffi;
@@ -40,7 +40,10 @@ impl Pad {
     pub fn new_from_static_template(templ: &StaticPadTemplate, name: &str) -> Pad {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::gst_pad_new_from_static_template(mut_override(templ.to_glib_none().0), name.to_glib_none().0))
+            from_glib_none(ffi::gst_pad_new_from_static_template(
+                mut_override(templ.to_glib_none().0),
+                name.to_glib_none().0,
+            ))
         }
     }
 }

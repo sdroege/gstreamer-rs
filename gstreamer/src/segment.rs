@@ -330,8 +330,8 @@ impl Default for Segment {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for Segment {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as
-            *mut ffi::GstSegment)
+        Option::<Segment>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+            as *mut ffi::GstSegment)
     }
 }
 
@@ -340,8 +340,8 @@ impl glib::value::SetValue for Segment {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(this).0 as
-                glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(this).0
+                as glib_ffi::gpointer,
         )
     }
 }
@@ -351,8 +351,8 @@ impl glib::value::SetValueOptional for Segment {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
         gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(&this).0 as
-                glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstSegment>::to_glib_none(&this).0
+                as glib_ffi::gpointer,
         )
     }
 }

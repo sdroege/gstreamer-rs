@@ -67,8 +67,8 @@ impl<T: MiniObject> GstRc<T> {
             }
 
             self.obj = T::from_mut_ptr(
-                ffi::gst_mini_object_make_writable(self.as_mut_ptr() as *mut ffi::GstMiniObject) as
-                    *mut T::GstType,
+                ffi::gst_mini_object_make_writable(self.as_mut_ptr() as *mut ffi::GstMiniObject)
+                    as *mut T::GstType,
             );
             assert!(self.is_writable());
 
@@ -194,8 +194,8 @@ where
     fn copy(&self) -> GstRc<Self> {
         unsafe {
             GstRc::from_glib_full(
-                ffi::gst_mini_object_copy(self.as_ptr() as *const ffi::GstMiniObject) as
-                    *const Self::GstType,
+                ffi::gst_mini_object_copy(self.as_ptr() as *const ffi::GstMiniObject)
+                    as *const Self::GstType,
             )
         }
     }
@@ -261,8 +261,8 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
         let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
 
         let v_ptr = unsafe {
-            let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1) as
-                *mut *mut T::GstType;
+            let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1)
+                as *mut *mut T::GstType;
 
             for (i, s) in v.iter().enumerate() {
                 ptr::write(v_ptr.offset(i as isize), s.0);
@@ -277,8 +277,8 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
     fn to_glib_full_from_slice(t: &[GstRc<T>]) -> *mut *mut T::GstType {
         skip_assert_initialized!();
         unsafe {
-            let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1) as
-                *mut *mut T::GstType;
+            let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut T::GstType>() * t.len() + 1)
+                as *mut *mut T::GstType;
 
             for (i, s) in t.iter().enumerate() {
                 ptr::write(v_ptr.offset(i as isize), s.to_glib_full());

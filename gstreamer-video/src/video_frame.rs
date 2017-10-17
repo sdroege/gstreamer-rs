@@ -248,8 +248,8 @@ impl VideoFrame<Writable> {
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits() |
-                        gst_ffi::GST_MAP_WRITE.bits(),
+                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits()
+                        | gst_ffi::GST_MAP_WRITE.bits(),
                 ),
             ));
 
@@ -277,8 +277,8 @@ impl VideoFrame<Writable> {
                 buffer.to_glib_none().0,
                 id,
                 mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits() |
-                        gst_ffi::GST_MAP_WRITE.bits(),
+                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits()
+                        | gst_ffi::GST_MAP_WRITE.bits(),
                 ),
             ));
 

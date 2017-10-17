@@ -498,8 +498,8 @@ impl<T: 'static> glib::value::SetValue for Iterator<T> {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
         gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstIterator>::to_glib_none(this).0 as
-                glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstIterator>::to_glib_none(this).0
+                as glib_ffi::gpointer,
         )
     }
 }
@@ -509,8 +509,8 @@ impl<T: 'static> glib::value::SetValueOptional for Iterator<T> {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
         gobject_ffi::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstIterator>::to_glib_none(&this).0 as
-                glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const ffi::GstIterator>::to_glib_none(&this).0
+                as glib_ffi::gpointer,
         )
     }
 }

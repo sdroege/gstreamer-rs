@@ -122,18 +122,17 @@ mod tutorial5 {
             1.0 as f64,
         );
         let pipeline = playbin.clone();
-        let slider_update_signal_id = slider
-            .connect_value_changed(move |slider| {
-                let pipeline = &pipeline;
-                let value = slider.get_value() as u64;
-                if let Err(_) = pipeline.seek_simple(
-                    gst::Format::Time,
-                    gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
-                    ((value * gst::SECOND) as i64),
-                ) {
-                    eprintln!("Seeking to {} failed", value);
-                }
-            });
+        let slider_update_signal_id = slider.connect_value_changed(move |slider| {
+            let pipeline = &pipeline;
+            let value = slider.get_value() as u64;
+            if let Err(_) = pipeline.seek_simple(
+                gst::Format::Time,
+                gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
+                ((value * gst::SECOND) as i64),
+            ) {
+                eprintln!("Seeking to {} failed", value);
+            }
+        });
 
         slider.set_draw_value(false);
         let pipeline = playbin.clone();

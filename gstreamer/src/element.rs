@@ -10,7 +10,7 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_none, from_glib_full, FromGlibPtrContainer, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlibPtr};
 use QueryRef;
 use Event;
 use Pad;
@@ -115,8 +115,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class as
-                *mut ffi::GstElementClass;
+            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+                as *mut ffi::GstElementClass;
 
             let ptr = ffi::gst_element_class_get_metadata(klass, key.to_glib_none().0);
 
@@ -130,8 +130,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
         unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class as
-                *mut ffi::GstElementClass;
+            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+                as *mut ffi::GstElementClass;
 
             from_glib_none(ffi::gst_element_class_get_pad_template(
                 klass,
@@ -142,8 +142,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_pad_template_list(&self) -> Vec<PadTemplate> {
         unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class as
-                *mut ffi::GstElementClass;
+            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+                as *mut ffi::GstElementClass;
 
             FromGlibPtrContainer::from_glib_none(
                 ffi::gst_element_class_get_pad_template_list(klass),
@@ -217,21 +217,15 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn iterate_pads(&self) -> ::Iterator<Pad> {
-        unsafe {
-            from_glib_full(ffi::gst_element_iterate_pads(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_element_iterate_pads(self.to_glib_none().0)) }
     }
 
     fn iterate_sink_pads(&self) -> ::Iterator<Pad> {
-        unsafe {
-            from_glib_full(ffi::gst_element_iterate_sink_pads(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_element_iterate_sink_pads(self.to_glib_none().0)) }
     }
 
     fn iterate_src_pads(&self) -> ::Iterator<Pad> {
-        unsafe {
-            from_glib_full(ffi::gst_element_iterate_src_pads(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_element_iterate_src_pads(self.to_glib_none().0)) }
     }
 }
 

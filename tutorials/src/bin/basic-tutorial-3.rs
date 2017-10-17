@@ -23,7 +23,8 @@ fn main() {
     convert.link(&sink).expect("Elements could not be linked.");
 
     // Set the URI to play
-    let uri = "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
+    let uri =
+        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
     source
         .set_property("uri", &uri)
         .expect("Can't set uri property on uridecodebin");

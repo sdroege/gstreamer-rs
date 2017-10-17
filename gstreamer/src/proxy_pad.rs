@@ -78,12 +78,23 @@ impl ProxyPad {
         }
     }
 
-    pub fn iterate_internal_links_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R) -> Option<::Iterator<Pad>> {
+    pub fn iterate_internal_links_default<
+        'a,
+        P: IsA<Pad>,
+        Q: IsA<Object> + 'a,
+        R: Into<Option<&'a Q>>,
+    >(
+        pad: &P,
+        parent: R,
+    ) -> Option<::Iterator<Pad>> {
         skip_assert_initialized!();
         let parent = parent.into();
         let parent = parent.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_proxy_pad_iterate_internal_links_default(pad.to_glib_none().0, parent.0))
+            from_glib_full(ffi::gst_proxy_pad_iterate_internal_links_default(
+                pad.to_glib_none().0,
+                parent.0,
+            ))
         }
     }
 }

@@ -23,8 +23,8 @@ pub trait DeviceProviderExtManual {
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class as
-                *mut ffi::GstDeviceProviderClass;
+            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+                as *mut ffi::GstDeviceProviderClass;
 
             let ptr = ffi::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);
 

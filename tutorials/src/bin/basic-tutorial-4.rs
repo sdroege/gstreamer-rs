@@ -22,7 +22,8 @@ fn main() {
         gst::ElementFactory::make("playbin", "playbin").expect("Failed to create playbin element");
 
     // Set the URI to play
-    let uri = "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
+    let uri =
+        "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
     playbin
         .set_property("uri", &uri)
         .expect("Can't set uri property on playbin");
@@ -62,16 +63,16 @@ fn main() {
                         custom_data.duration = custom_data
                             .playbin
                             .query_duration(gst::Format::Time)
-                            .expect("Could not query current duration.") as
-                            gst::ClockTime;
+                            .expect("Could not query current duration.")
+                            as gst::ClockTime;
                     }
 
                     // Print current position and total duration
                     print!("\rPosition {} / {}", position, custom_data.duration);
                     io::stdout().flush().unwrap();
 
-                    if custom_data.seek_enabled && !custom_data.seek_done &&
-                        position > 10 * gst::SECOND
+                    if custom_data.seek_enabled && !custom_data.seek_done
+                        && position > 10 * gst::SECOND
                     {
                         println!("\nReached 10s, performing seek...");
                         custom_data

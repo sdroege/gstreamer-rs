@@ -357,8 +357,8 @@ impl ToOwned for CapsRef {
 
     fn to_owned(&self) -> GstRc<CapsRef> {
         unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
-                *mut _)
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
         }
     }
 }

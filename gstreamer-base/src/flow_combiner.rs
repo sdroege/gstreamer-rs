@@ -32,9 +32,7 @@ glib_wrapper! {
 impl FlowCombiner {
     pub fn new() -> FlowCombiner {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gst_flow_combiner_new())
-        }
+        unsafe { from_glib_full(ffi::gst_flow_combiner_new()) }
     }
 
     pub fn add_pad<P: IsA<gst::Pad>>(&self, pad: &P) {
@@ -63,13 +61,24 @@ impl FlowCombiner {
 
     pub fn update_flow(&self, fret: gst::FlowReturn) -> gst::FlowReturn {
         unsafe {
-            from_glib(ffi::gst_flow_combiner_update_flow(self.to_glib_none().0, fret.to_glib()))
+            from_glib(ffi::gst_flow_combiner_update_flow(
+                self.to_glib_none().0,
+                fret.to_glib(),
+            ))
         }
     }
 
-    pub fn update_pad_flow<P: IsA<gst::Pad>>(&self, pad: &P, fret: gst::FlowReturn) -> gst::FlowReturn {
+    pub fn update_pad_flow<P: IsA<gst::Pad>>(
+        &self,
+        pad: &P,
+        fret: gst::FlowReturn,
+    ) -> gst::FlowReturn {
         unsafe {
-            from_glib(ffi::gst_flow_combiner_update_pad_flow(self.to_glib_none().0, pad.to_glib_none().0, fret.to_glib()))
+            from_glib(ffi::gst_flow_combiner_update_pad_flow(
+                self.to_glib_none().0,
+                pad.to_glib_none().0,
+                fret.to_glib(),
+            ))
         }
     }
 }

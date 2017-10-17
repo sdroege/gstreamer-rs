@@ -104,8 +104,8 @@ impl ToOwned for TocRef {
 
     fn to_owned(&self) -> GstRc<TocRef> {
         unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
-                *mut _)
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
         }
     }
 }
@@ -256,8 +256,8 @@ impl ToOwned for TocEntryRef {
 
     fn to_owned(&self) -> GstRc<TocEntryRef> {
         unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as
-                *mut _)
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
         }
     }
 }

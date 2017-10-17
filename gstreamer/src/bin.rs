@@ -11,7 +11,7 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_full, ToGlibPtr, ToGlib};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 
 use ffi;
 
@@ -60,37 +60,30 @@ impl<O: IsA<Bin>> BinExtManual for O {
 
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_iterate_all_by_interface(self.to_glib_none().0, iface.to_glib()))
+            from_glib_full(ffi::gst_bin_iterate_all_by_interface(
+                self.to_glib_none().0,
+                iface.to_glib(),
+            ))
         }
     }
 
     fn iterate_elements(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_elements(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_elements(self.to_glib_none().0)) }
     }
 
     fn iterate_recurse(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_recurse(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_recurse(self.to_glib_none().0)) }
     }
 
     fn iterate_sinks(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_sinks(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sinks(self.to_glib_none().0)) }
     }
 
     fn iterate_sorted(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_sorted(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sorted(self.to_glib_none().0)) }
     }
 
     fn iterate_sources(&self) -> ::Iterator<Element> {
-        unsafe {
-            from_glib_full(ffi::gst_bin_iterate_sources(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.to_glib_none().0)) }
     }
 }
