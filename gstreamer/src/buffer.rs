@@ -64,28 +64,57 @@ impl GstRc<BufferRef> {
         }
     }
 
-    unsafe extern "C" fn vec_drop(vec: glib_ffi::gpointer) {
-        let vec: Box<Vec<u8>> = Box::from_raw(vec as *mut Vec<u8>);
-        drop(vec);
+    unsafe extern "C" fn drop_box<T>(vec: glib_ffi::gpointer) {
+        let slice: Box<T> = Box::from_raw(vec as *mut T);
+        drop(slice);
     }
 
-    pub fn from_vec(vec: Vec<u8>) -> Option<Self> {
+    pub fn from_mut_slice<T: AsMut<[u8]>>(slice: T) -> Option<Self> {
         assert_initialized_main_thread!();
 
         let raw = unsafe {
-            let mut vec = Box::new(vec);
-            let maxsize = vec.capacity();
-            let size = vec.len();
-            let data = vec.as_mut_ptr();
-            let user_data = Box::into_raw(vec);
+            let mut b = Box::new(slice);
+            let (size, data) = {
+                let slice = (*b).as_mut();
+                (slice.len(), slice.as_mut_ptr())
+            };
+            let user_data = Box::into_raw(b);
             ffi::gst_buffer_new_wrapped_full(
                 ffi::GstMemoryFlags::empty(),
                 data as glib_ffi::gpointer,
-                maxsize,
+                size,
                 0,
                 size,
                 user_data as glib_ffi::gpointer,
-                Some(Buffer::vec_drop),
+                Some(Self::drop_box::<T>),
+            )
+        };
+
+        if raw.is_null() {
+            None
+        } else {
+            Some(unsafe { from_glib_full(raw) })
+        }
+    }
+
+    pub fn from_slice<T: AsRef<[u8]>>(slice: T) -> Option<Self> {
+        assert_initialized_main_thread!();
+
+        let raw = unsafe {
+            let b = Box::new(slice);
+            let (size, data) = {
+                let slice = (*b).as_ref();
+                (slice.len(), slice.as_ptr())
+            };
+            let user_data = Box::into_raw(b);
+            ffi::gst_buffer_new_wrapped_full(
+                ffi::GST_MEMORY_FLAG_READONLY,
+                data as glib_ffi::gpointer,
+                size,
+                0,
+                size,
+                user_data as glib_ffi::gpointer,
+                Some(Self::drop_box::<T>),
             )
         };
 
@@ -462,7 +491,7 @@ mod tests {
     fn test_writability() {
         ::init().unwrap();
 
-        let mut buffer = Buffer::from_vec(vec![1, 2, 3, 4]).unwrap();
+        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
