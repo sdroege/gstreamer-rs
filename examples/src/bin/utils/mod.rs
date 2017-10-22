@@ -30,7 +30,7 @@ impl fmt::Display for ExampleError {
             ExampleError::ElementError(ref element, ref err, ref debug) => {
                 write!(f, "Error from {}: {} ({:?})", element, err, debug)
             }
-            ExampleError::MissingFeature(ref feature) => write!(
+            ExampleError::MissingFeature(feature) => write!(
                 f,
                 "Feature {} is required. Please rebuild with --features {}",
                 feature,
