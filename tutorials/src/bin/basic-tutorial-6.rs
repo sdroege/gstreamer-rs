@@ -119,42 +119,35 @@ fn main() {
     // Wait until error, EOS or State Change
     let bus = pipeline.get_bus().unwrap();
 
-    loop {
-        let msg = bus.timed_pop(gst::CLOCK_TIME_NONE);
-
-        match msg {
-            Some(msg) => {
-                match msg.view() {
-                    MessageView::Error(err) => {
-                        println!(
-                            "Error received from element {}: {} ({:?})",
-                            msg.get_src().get_path_string(),
-                            err.get_error(),
-                            err.get_debug()
-                        );
-                        break;
-                    }
-                    MessageView::Eos(..) => {
-                        println!("End-Of-Stream reached.");
-                        break;
-                    }
-                    MessageView::StateChanged(state) =>
-                        // We are only interested in state-changed messages from the pipeline
-                        if msg.get_src() == pipeline {
-                            let new_state = state.get_current();
-                            let old_state = state.get_old();
-
-                            println!(
-                                "Pipeline state changed from {:?} to {:?}",
-                                old_state,
-                                new_state
-                            );
-                            print_pad_capabilities(&sink, "sink");
-                        },
-                    _ => (),
-                }
+    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+        match msg.view() {
+            MessageView::Error(err) => {
+                println!(
+                    "Error received from element {}: {} ({:?})",
+                    msg.get_src().get_path_string(),
+                    err.get_error(),
+                    err.get_debug()
+                );
+                break;
             }
-            None => (),
+            MessageView::Eos(..) => {
+                println!("End-Of-Stream reached.");
+                break;
+            }
+            MessageView::StateChanged(state) =>
+                // We are only interested in state-changed messages from the pipeline
+                if msg.get_src() == pipeline {
+                    let new_state = state.get_current();
+                    let old_state = state.get_old();
+
+                    println!(
+                        "Pipeline state changed from {:?} to {:?}",
+                        old_state,
+                        new_state
+                    );
+                    print_pad_capabilities(&sink, "sink");
+                },
+            _ => (),
         }
     }
 
