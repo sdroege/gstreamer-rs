@@ -3,7 +3,7 @@ use gst::prelude::*;
 use gst::MessageView;
 
 
-fn print_caps(caps: gst::Caps, prefix: &str) {
+fn print_caps(caps: &gst::Caps, prefix: &str) {
     if caps.is_any() {
         println!("{}ANY", prefix);
         return;
@@ -55,7 +55,7 @@ fn print_pad_template_information(factory: &gst::ElementFactory) {
 
         let caps = pad_template.get_caps();
         println!("  Capabilities:");
-        print_caps(caps, "    ");
+        print_caps(&caps, "    ");
     }
 }
 
@@ -67,11 +67,11 @@ fn print_pad_capabilities(element: &gst::Element, pad_name: &str) {
     println!("Caps for the {} pad:", pad_name);
     match pad.get_current_caps() {
         Some(caps) => {
-            print_caps(caps, "      ");
+            print_caps(&caps, "      ");
         }
         None => {
             let caps = pad.query_caps(None).expect("Failed to query caps on pad");
-            print_caps(caps, "      ");
+            print_caps(&caps, "      ");
         }
     }
 }
@@ -119,42 +119,35 @@ fn main() {
     // Wait until error, EOS or State Change
     let bus = pipeline.get_bus().unwrap();
 
-    loop {
-        let msg = bus.timed_pop(gst::CLOCK_TIME_NONE);
-
-        match msg {
-            Some(msg) => {
-                match msg.view() {
-                    MessageView::Error(err) => {
-                        println!(
-                            "Error received from element {}: {} ({:?})",
-                            msg.get_src().get_path_string(),
-                            err.get_error(),
-                            err.get_debug()
-                        );
-                        break;
-                    }
-                    MessageView::Eos(..) => {
-                        println!("End-Of-Stream reached.");
-                        break;
-                    }
-                    MessageView::StateChanged(state) =>
-                        // We are only interested in state-changed messages from the pipeline
-                        if msg.get_src() == pipeline {
-                            let new_state = state.get_current();
-                            let old_state = state.get_old();
-
-                            println!(
-                                "Pipeline state changed from {:?} to {:?}",
-                                old_state,
-                                new_state
-                            );
-                            print_pad_capabilities(&sink, "sink");
-                        },
-                    _ => (),
-                }
+    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+        match msg.view() {
+            MessageView::Error(err) => {
+                println!(
+                    "Error received from element {}: {} ({:?})",
+                    msg.get_src().get_path_string(),
+                    err.get_error(),
+                    err.get_debug()
+                );
+                break;
             }
-            None => (),
+            MessageView::Eos(..) => {
+                println!("End-Of-Stream reached.");
+                break;
+            }
+            MessageView::StateChanged(state) =>
+                // We are only interested in state-changed messages from the pipeline
+                if msg.get_src() == pipeline {
+                    let new_state = state.get_current();
+                    let old_state = state.get_old();
+
+                    println!(
+                        "Pipeline state changed from {:?} to {:?}",
+                        old_state,
+                        new_state
+                    );
+                    print_pad_capabilities(&sink, "sink");
+                },
+            _ => (),
         }
     }
 
