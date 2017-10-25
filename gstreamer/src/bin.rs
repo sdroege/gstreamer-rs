@@ -11,7 +11,7 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
 
 use ffi;
 
@@ -25,6 +25,7 @@ pub trait BinExtManual {
     fn iterate_sinks(&self) -> ::Iterator<Element>;
     fn iterate_sorted(&self) -> ::Iterator<Element>;
     fn iterate_sources(&self) -> ::Iterator<Element>;
+    fn get_children(&self) -> Vec<Element>;
 }
 
 impl<O: IsA<Bin>> BinExtManual for O {
@@ -85,5 +86,14 @@ impl<O: IsA<Bin>> BinExtManual for O {
 
     fn iterate_sources(&self) -> ::Iterator<Element> {
         unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.to_glib_none().0)) }
+    }
+
+    fn get_children(&self) -> Vec<Element> {
+        unsafe {
+            let stash = self.to_glib_none();
+            let bin: &ffi::GstBin = &*stash.0;
+            ::utils::MutexGuard::lock(&bin.element.object.lock);
+            FromGlibPtrContainer::from_glib_none(bin.children)
+        }
     }
 }
