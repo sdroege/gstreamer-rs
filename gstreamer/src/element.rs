@@ -92,6 +92,10 @@ pub trait ElementExtManual {
     fn iterate_pads(&self) -> ::Iterator<Pad>;
     fn iterate_sink_pads(&self) -> ::Iterator<Pad>;
     fn iterate_src_pads(&self) -> ::Iterator<Pad>;
+
+    fn get_pads(&self) -> Vec<Pad>;
+    fn get_sink_pads(&self) -> Vec<Pad>;
+    fn get_src_pads(&self) -> Vec<Pad>;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -226,6 +230,33 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn iterate_src_pads(&self) -> ::Iterator<Pad> {
         unsafe { from_glib_full(ffi::gst_element_iterate_src_pads(self.to_glib_none().0)) }
+    }
+
+    fn get_pads(&self) -> Vec<Pad> {
+        unsafe {
+            let stash = self.to_glib_none();
+            let elt: &ffi::GstElement = &*stash.0;
+            ::utils::MutexGuard::lock(&elt.object.lock);
+            FromGlibPtrContainer::from_glib_none(elt.pads)
+        }
+    }
+
+    fn get_sink_pads(&self) -> Vec<Pad> {
+        unsafe {
+            let stash = self.to_glib_none();
+            let elt: &ffi::GstElement = &*stash.0;
+            ::utils::MutexGuard::lock(&elt.object.lock);
+            FromGlibPtrContainer::from_glib_none(elt.sinkpads)
+        }
+    }
+
+    fn get_src_pads(&self) -> Vec<Pad> {
+        unsafe {
+            let stash = self.to_glib_none();
+            let elt: &ffi::GstElement = &*stash.0;
+            ::utils::MutexGuard::lock(&elt.object.lock);
+            FromGlibPtrContainer::from_glib_none(elt.srcpads)
+        }
     }
 }
 
