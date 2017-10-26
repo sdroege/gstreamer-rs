@@ -9,6 +9,7 @@ extern crate gstreamer_player as gst_player;
 extern crate glib;
 
 use std::env;
+use std::sync::{Arc, Mutex};
 
 pub mod utils;
 
@@ -27,7 +28,7 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
         .set_property("uri", &glib::Value::from(uri))
         .expect("Can't set uri property");
 
-    let error = std::sync::Arc::new(std::sync::Mutex::new(Ok(())));
+    let error = Arc::new(Mutex::new(Ok(())));
 
     let player_clone = player.clone();
     let main_loop_clone = main_loop.clone();
@@ -40,14 +41,13 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
 
     let player_clone = player.clone();
     let main_loop_clone = main_loop.clone();
-    let error_clone = error.clone();
+    let error_clone = Arc::clone(&error);
     player.connect_error(move |_, err| {
         let main_loop = &main_loop_clone;
         let player = &player_clone;
+        let error = &error_clone;
 
-        let error = std::sync::Arc::clone(&error_clone);
-        let mut guard = error.lock().unwrap();
-        *guard = Err(utils::ExampleError::ElementError(
+        *error.lock().unwrap() = Err(utils::ExampleError::ElementError(
             "player".to_owned(),
             err.clone(),
             "".to_owned(),
