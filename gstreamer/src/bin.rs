@@ -97,3 +97,30 @@ impl<O: IsA<Bin>> BinExtManual for O {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use prelude::*;
+
+    #[test]
+    fn test_get_children() {
+        ::init().unwrap();
+
+        let bin = ::Bin::new(None);
+        bin.add(&::ElementFactory::make("identity", "identity0").unwrap())
+            .unwrap();
+        bin.add(&::ElementFactory::make("identity", "identity1").unwrap())
+            .unwrap();
+
+        let mut child_names = bin.get_children()
+            .iter()
+            .map(|c| c.get_name())
+            .collect::<Vec<String>>();
+        child_names.sort();
+        assert_eq!(
+            child_names,
+            vec![String::from("identity0"), String::from("identity1")]
+        );
+    }
+}

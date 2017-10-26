@@ -268,3 +268,40 @@ lazy_static!{
     pub static ref ELEMENT_METADATA_KLASS: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_KLASS).to_str().unwrap() };
     pub static ref ELEMENT_METADATA_LONGNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_LONGNAME).to_str().unwrap() };
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use prelude::*;
+
+    #[test]
+    fn test_get_pads() {
+        ::init().unwrap();
+
+        let identity = ::ElementFactory::make("identity", None).unwrap();
+
+        let mut pad_names = identity
+            .get_pads()
+            .iter()
+            .map(|p| p.get_name())
+            .collect::<Vec<String>>();
+        pad_names.sort();
+        assert_eq!(pad_names, vec![String::from("sink"), String::from("src")]);
+
+        let mut pad_names = identity
+            .get_sink_pads()
+            .iter()
+            .map(|p| p.get_name())
+            .collect::<Vec<String>>();
+        pad_names.sort();
+        assert_eq!(pad_names, vec![String::from("sink")]);
+
+        let mut pad_names = identity
+            .get_src_pads()
+            .iter()
+            .map(|p| p.get_name())
+            .collect::<Vec<String>>();
+        pad_names.sort();
+        assert_eq!(pad_names, vec![String::from("src")]);
+    }
+}
