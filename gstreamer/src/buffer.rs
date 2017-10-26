@@ -69,7 +69,7 @@ impl GstRc<BufferRef> {
         drop(slice);
     }
 
-    pub fn from_mut_slice<T: AsMut<[u8]>>(slice: T) -> Option<Self> {
+    pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Option<Self> {
         assert_initialized_main_thread!();
 
         let raw = unsafe {
@@ -97,7 +97,7 @@ impl GstRc<BufferRef> {
         }
     }
 
-    pub fn from_slice<T: AsRef<[u8]>>(slice: T) -> Option<Self> {
+    pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Option<Self> {
         assert_initialized_main_thread!();
 
         let raw = unsafe {
