@@ -69,7 +69,7 @@ mod tutorial5 {
     fn analyze_streams(playbin: &gst::Element, textbufcell: &SendCell<gtk::TextBuffer>) {
         {
             let textbuf = textbufcell.borrow();
-            textbuf.set_text(&"");
+            textbuf.set_text("");
         }
 
         add_streams_info(playbin, textbufcell, "video");
