@@ -92,6 +92,7 @@ mod element;
 mod bin;
 mod bus;
 mod pad;
+mod object;
 mod gobject;
 mod proxy_pad;
 mod ghost_pad;
@@ -100,6 +101,7 @@ mod tag_setter;
 mod iterator;
 mod device_provider;
 mod parse_context;
+pub use object::GstObjectExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
 pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
                   ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME};
@@ -164,6 +166,7 @@ pub mod prelude {
     pub use element::ElementExtManual;
     pub use bin::BinExtManual;
     pub use pad::PadExtManual;
+    pub use object::GstObjectExtManual;
     pub use gobject::GObjectExtManualGst;
     pub use child_proxy::ChildProxyExtManual;
     pub use tag_setter::TagSetterExtManual;
