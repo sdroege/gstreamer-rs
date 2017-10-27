@@ -10,7 +10,8 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
+                      ToGlib, ToGlibPtr};
 use QueryRef;
 use Event;
 use Pad;
@@ -18,6 +19,8 @@ use PadTemplate;
 use miniobject::MiniObject;
 
 use std::ffi::CStr;
+
+use libc;
 
 use ffi;
 use gobject_ffi;
@@ -54,6 +57,24 @@ pub enum ElementMessageType {
     Error,
     Warning,
     Info,
+}
+
+#[derive(Debug, Default, PartialEq, Eq)]
+pub struct NotifyWatchId(libc::c_ulong);
+
+impl ToGlib for NotifyWatchId {
+    type GlibType = libc::c_ulong;
+
+    fn to_glib(&self) -> libc::c_ulong {
+        self.0
+    }
+}
+
+impl FromGlib<libc::c_ulong> for NotifyWatchId {
+    fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
+        skip_assert_initialized!();
+        NotifyWatchId(val)
+    }
 }
 
 pub trait ElementExtManual {
@@ -96,6 +117,23 @@ pub trait ElementExtManual {
     fn get_pads(&self) -> Vec<Pad>;
     fn get_sink_pads(&self) -> Vec<Pad>;
     fn get_src_pads(&self) -> Vec<Pad>;
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn add_property_deep_notify_watch<'a, P: Into<Option<&'a str>>>(
+        &self,
+        property_name: P,
+        include_value: bool,
+    ) -> NotifyWatchId;
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn add_property_notify_watch<'a, P: Into<Option<&'a str>>>(
+        &self,
+        property_name: P,
+        include_value: bool,
+    ) -> NotifyWatchId;
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -256,6 +294,47 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let elt: &ffi::GstElement = &*stash.0;
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
+        }
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn add_property_deep_notify_watch<'a, P: Into<Option<&'a str>>>(
+        &self,
+        property_name: P,
+        include_value: bool,
+    ) -> NotifyWatchId {
+        let property_name = property_name.into();
+        let property_name = property_name.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_element_add_property_deep_notify_watch(
+                self.to_glib_none().0,
+                property_name.0,
+                include_value.to_glib(),
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn add_property_notify_watch<'a, P: Into<Option<&'a str>>>(
+        &self,
+        property_name: P,
+        include_value: bool,
+    ) -> NotifyWatchId {
+        let property_name = property_name.into();
+        let property_name = property_name.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_element_add_property_notify_watch(
+                self.to_glib_none().0,
+                property_name.0,
+                include_value.to_glib(),
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
+        unsafe {
+            ffi::gst_element_remove_property_notify_watch(self.to_glib_none().0, watch_id.0);
         }
     }
 }
