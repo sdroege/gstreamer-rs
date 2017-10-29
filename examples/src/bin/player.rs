@@ -9,6 +9,7 @@ extern crate gstreamer_player as gst_player;
 extern crate glib;
 
 use std::env;
+#[cfg(feature = "gst-player")]
 use std::sync::{Arc, Mutex};
 
 pub mod utils;
