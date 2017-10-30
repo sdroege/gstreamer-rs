@@ -16,6 +16,113 @@ The API of the two is incompatible.
 
 A crate for writing GStreamer plugins in Rust can be found here: https://github.com/sdroege/gst-plugin-rs
 
+## Installation
+
+To build the GStreamer bindings or anything depending on them, you need to
+have at least GStreamer 1.8 and gst-plugins-base 1.8 installed. In addition,
+some of the examples/tutorials require various GStreamer plugins to be
+available, which can be found in gst-plugins-base, gst-plugins-good,
+gst-plugins-bad, gst-plugins-ugly and/or gst-libav.
+
+### Linux/BSDs
+
+You need to install the above mentioned packages with your distributions
+package manager, or build them from source.
+
+On Debian/Ubuntu they can be installed with
+
+```
+$ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+      gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+      gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+      gstreamer1.0-libav
+```
+
+Package names on other distributions should be similar.
+Please submit a pull request with instructions for yours.
+
+### macOS
+
+You can install GStreamer and the plugins via [Homebrew](https://brew.sh/) or
+by installing the [binaries](https://gstreamer.freedesktop.org/data/pkg/osx/)
+provided by the GStreamer project.
+
+#### Homebrew
+
+```
+$ brew install gstreamer gst-plugins-base gst-plugins-good \
+      gst-plugins-bad gst-plugins-ugly gst-libav
+```
+
+#### GStreamer Binaries
+
+You need to download the *two* `.pkg` files from the GStreamer website and
+install them, e.g. `gstreamer-1.0-1.12.3-x86_64.pkg` and
+`gstreamer-1.0-devel-1.12.3-x86_64.pkg`.
+
+After installation, you also need to install `pkg-config` (e.g. via Homebrew)
+and set the `PKG_CONFIG_PATH` environment variable
+
+```
+$ export PKG_CONFIG_PATH="/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+```
+
+### Windows
+
+You can install GStreamer and the plugins via [MSYS2](http://www.msys2.org/)
+with `pacman` or by installing the
+[binaries](https://gstreamer.freedesktop.org/data/pkg/windows/) provided by
+the GStreamer project.
+
+#### MSYS2 / pacman
+
+```
+$ pacman -S pkg-config mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
+      mingw-w64-x86_64-gst-plugins-good mingw-w64-x86_64-gst-plugins-bad \
+      mingw-w64-x86_64-gst-plugins-ugly mingw-w64-x86_64-gst-libav
+```
+
+#### GStreamer Binaries
+
+You need to download the *two* `.msi` files for your platform from the
+GStreamer website and install them, e.g. `gstreamer-1.0-x86_64-1.12.3.msi` and
+`gstreamer-1.0-devel-x86_64-1.12.3.msi`.
+
+After installation, you also need to install `pkg-config` (e.g. via MSYS2 or
+from [here](https://sourceforge.net/projects/pkgconfiglite/))
+and set the `PKG_CONFIG_PATH` environment variable
+
+```
+$ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+```
+
+## Getting Started
+
+The API reference can be found
+[here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/), however it is
+only the Rust API reference and does not explain any of the concepts.
+
+For getting started with GStreamer development, the best would be to follow
+the [documentation](https://gstreamer.freedesktop.org/documentation/) on the
+GStreamer website, especially the [Application Development
+Manual](https://gstreamer.freedesktop.org/documentation/application-development/).
+While being C-centric, it explains all the fundamental concepts of GStreamer
+and the code examples should be relatively easily translatable to Rust. The
+API is basically the same, function/struct names are the same and everything
+is only more convenient (hopefully) and safer.
+
+In addition there are
+[tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
+GStreamer website. Many of them were ported to Rust already and the code can
+be found in the
+[tutorials](https://github.com/sdroege/gstreamer-rs/tree/master/tutorials)
+directory.
+
+Some further examples for various aspects of GStreamer and how to use it from
+Rust can be found in the
+[examples](https://github.com/sdroege/gstreamer-rs/tree/master/examples)
+directory.
+
 ## LICENSE
 
 gstreamer-rs and all crates contained in here are licensed under either of
