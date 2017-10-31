@@ -16,6 +16,17 @@ The API of the two is incompatible.
 
 A crate for writing GStreamer plugins in Rust can be found here: https://github.com/sdroege/gst-plugin-rs
 
+## Table of Contents
+1. [Installation](#installation)
+   1. [Linux/BSDs](#installation-linux)
+   1. [macOS](#installation-macos)
+   1. [Windows](#installation-windows)
+1. [Getting Started](#getting-started)
+1. [License](#license)
+1. [Contribution](#contribution)
+
+<a name="installation"/>
+
 ## Installation
 
 To build the GStreamer bindings or anything depending on them, you need to
@@ -23,6 +34,8 @@ have at least GStreamer 1.8 and gst-plugins-base 1.8 installed. In addition,
 some of the examples/tutorials require various GStreamer plugins to be
 available, which can be found in gst-plugins-base, gst-plugins-good,
 gst-plugins-bad, gst-plugins-ugly and/or gst-libav.
+
+<a name="installation-linux"/>
 
 ### Linux/BSDs
 
@@ -40,6 +53,8 @@ $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
 
 Package names on other distributions should be similar.
 Please submit a pull request with instructions for yours.
+
+<a name="installation-macos"/>
 
 ### macOS
 
@@ -66,6 +81,8 @@ and set the `PKG_CONFIG_PATH` environment variable
 ```
 $ export PKG_CONFIG_PATH="/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
+
+<a name="installation-windows"/>
 
 ### Windows
 
@@ -96,6 +113,8 @@ and set the `PKG_CONFIG_PATH` environment variable
 $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
 
+<a name="getting-started"/>
+
 ## Getting Started
 
 The API reference can be found
@@ -123,6 +142,8 @@ Rust can be found in the
 [examples](https://github.com/sdroege/gstreamer-rs/tree/master/examples)
 directory.
 
+<a name="license"/>
+
 ## LICENSE
 
 gstreamer-rs and all crates contained in here are licensed under either of
@@ -137,6 +158,8 @@ at your option.
 GStreamer itself is licensed under the Lesser General Public License version
 2.1 or (at your option) any later version:
 https://www.gnu.org/licenses/lgpl-2.1.html
+
+<a name="contribution"/>
 
 ## Contribution
 
