@@ -1,0 +1,38 @@
+[options]
+girs_dir = "gir-files"
+library = "GstPbutils"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-pbutils"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstPbutils.EncodingAudioProfile",
+    "GstPbutils.EncodingVideoProfile",
+    "GstPbutils.EncodingContainerProfile",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Object",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstPbutils.EncodingProfile"
+status = "generate"
+    [[object.function]]
+    name = "is_equal"
+    ignore = true

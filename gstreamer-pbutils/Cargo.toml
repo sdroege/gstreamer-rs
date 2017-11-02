@@ -1,0 +1,38 @@
+[package]
+name = "gstreamer-pbutils"
+version = "0.9.0"
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer Base Utils library"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+homepage = "https://gstreamer.freedesktop.org"
+documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer_pbutils"
+keywords = ["gstreamer", "multimedia", "audio", "pbutils", "gnome"]
+build = "build.rs"
+
+[dependencies]
+bitflags = "1.0"
+libc = "0.2"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-pbutils-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gstreamer = { path = "../gstreamer" }
+
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
+
+[features]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-pbutils-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-pbutils-sys/v1_12", "v1_10"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
+dox = ["gstreamer-pbutils-sys/dox"]
+default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
