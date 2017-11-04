@@ -301,6 +301,21 @@ status = "generate"
     # Unsafe
     ignore = true
 
+    [[object.function]]
+    name = "add_property_deep_notify_watch"
+    # ulong
+    ignore = true
+
+    [[object.function]]
+    name = "add_property_notify_watch"
+    # ulong
+    ignore = true
+
+    [[object.function]]
+    name = "remove_property_notify_watch"
+    # ulong
+    ignore = true
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
