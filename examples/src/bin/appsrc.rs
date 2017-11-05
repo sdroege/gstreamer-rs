@@ -73,7 +73,7 @@ fn main_loop() -> Result<(), utils::ExampleError> {
             }
         }
 
-        appsrc.end_of_stream();
+        let _ = appsrc.end_of_stream();
     });
 
     utils::set_state(&pipeline, gst::State::Playing)?;

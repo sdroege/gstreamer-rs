@@ -101,6 +101,7 @@ mod tag_setter;
 mod iterator;
 mod device_provider;
 mod parse_context;
+mod enums;
 pub use object::GstObjectExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
 pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
@@ -115,6 +116,7 @@ pub use device_provider::DeviceProviderExtManual;
 pub use parse_context::ParseContext;
 #[cfg(feature = "futures")]
 pub use bus::BusStream;
+pub use enums::{StateChangeSuccess, StateChangeError};
 
 mod value;
 pub use value::*;

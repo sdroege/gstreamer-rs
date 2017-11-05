@@ -92,7 +92,10 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         play_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
-            pipeline.set_state(gst::State::Playing);
+            pipeline
+                .set_state(gst::State::Playing)
+                .into_result()
+                .unwrap();
         });
 
         let pause_button = gtk::Button::new_from_icon_name(
@@ -102,7 +105,10 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         pause_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
-            pipeline.set_state(gst::State::Paused);
+            pipeline
+                .set_state(gst::State::Paused)
+                .into_result()
+                .unwrap();
         });
 
         let stop_button = gtk::Button::new_from_icon_name(
@@ -112,7 +118,7 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         stop_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
-            pipeline.set_state(gst::State::Ready);
+            pipeline.set_state(gst::State::Ready).into_result().unwrap();
         });
 
         let slider = gtk::Scale::new_with_range(
@@ -313,7 +319,10 @@ mod tutorial5 {
             .unwrap();
 
         create_ui(&playbin);
-        playbin.set_state(gst::State::Playing);
+        playbin
+            .set_state(gst::State::Playing)
+            .into_result()
+            .unwrap();
 
         let bus = playbin.get_bus().unwrap();
         let pipeline = playbin.clone();
@@ -324,7 +333,7 @@ mod tutorial5 {
                 // We just set the pipeline to READY (which stops playback).
                 gst::MessageView::Eos(..) => {
                     println!("End-Of-Stream reached.");
-                    pipeline.set_state(gst::State::Ready);
+                    pipeline.set_state(gst::State::Ready).into_result().unwrap();
                 }
 
                 // This is called when an error message is posted on the bus
@@ -346,7 +355,7 @@ mod tutorial5 {
         });
 
         gtk::main();
-        playbin.set_state(gst::State::Null);
+        playbin.set_state(gst::State::Null).into_result().unwrap();
     }
 }
 
