@@ -191,6 +191,7 @@ impl SetValue for CapsIntersectMode {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[must_use]
 pub enum ClockReturn {
     Ok,
     Early,
@@ -677,6 +678,7 @@ impl SetValue for EventType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[must_use]
 pub enum FlowReturn {
     CustomSuccess2,
     CustomSuccess1,
@@ -993,6 +995,7 @@ impl SetValue for PadDirection {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[must_use]
 pub enum PadLinkReturn {
     Ok,
     WrongHierarchy,
@@ -1950,6 +1953,7 @@ impl SetValue for StateChange {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[must_use]
 pub enum StateChangeReturn {
     Failure,
     Success,

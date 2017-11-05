@@ -18,11 +18,9 @@ generate = [
     "Gst.ClockTimeDiff",
     "Gst.Pipeline",
     "Gst.State",
-    "Gst.StateChangeReturn",
     "Gst.StateChange",
     "Gst.SeekFlags",
     "Gst.SeekType",
-    "Gst.FlowReturn",
     "Gst.PadDirection",
     "Gst.PadPresence",
     "Gst.URIHandler",
@@ -44,7 +42,6 @@ generate = [
     "Gst.DeviceMonitor",
     "Gst.StreamType",
     "Gst.StreamFlags",
-    "Gst.PadLinkReturn",
     "Gst.ProgressType",
     "Gst.BusSyncReply",
     "Gst.TagMergeMode",
@@ -65,7 +62,6 @@ generate = [
     "Gst.TocLoopType",
     "Gst.TocSetter",
     "Gst.ClockType",
-    "Gst.ClockReturn",
     "Gst.ElementFlags",
     "Gst.Rank",
     "Gst.PadLinkCheck",
@@ -705,3 +701,23 @@ status = "generate"
     pattern = "parse.*full"
     # wrong mutable for context parameter
     ignore = true
+
+[[object]]
+name = "Gst.StateChangeReturn"
+status = "generate"
+must_use = true
+
+[[object]]
+name = "Gst.FlowReturn"
+status = "generate"
+must_use = true
+
+[[object]]
+name = "Gst.PadLinkReturn"
+status = "generate"
+must_use = true
+
+[[object]]
+name = "Gst.ClockReturn"
+status = "generate"
+must_use = true
