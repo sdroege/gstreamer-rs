@@ -115,7 +115,7 @@ where
             match res {
                 ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(()),
                 ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
-                ffi::GST_ITERATOR_ERROR => Err(IteratorError::Error),
+                ffi::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
             }
         }
     }
@@ -149,7 +149,7 @@ where
             match res {
                 ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(accum.unwrap()),
                 ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
-                ffi::GST_ITERATOR_ERROR => Err(IteratorError::Error),
+                ffi::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
             }
         }
     }
@@ -211,7 +211,7 @@ where
                 },
                 ffi::GST_ITERATOR_DONE => None,
                 ffi::GST_ITERATOR_RESYNC => Some(Err(IteratorError::Resync)),
-                ffi::GST_ITERATOR_ERROR => Some(Err(IteratorError::Error)),
+                ffi::GST_ITERATOR_ERROR | _ => Some(Err(IteratorError::Error)),
             }
         }
     }

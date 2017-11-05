@@ -44,7 +44,7 @@ impl<'a> AudioInfoBuilder<'a> {
 
                 let positions: [ffi::GstAudioChannelPosition; 64] =
                     array_init::array_init_copy(|i| if i >= self.channels as usize {
-                        ffi::GstAudioChannelPosition::Invalid
+                        ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
                     } else {
                         p[i].to_glib()
                     });
