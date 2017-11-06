@@ -190,6 +190,18 @@ impl ::VideoMultiviewFramePacking {
 
 pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
+impl fmt::Debug for VideoInfo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.debug_struct("VideoInfo")
+            .field("format", &self.format())
+            .field("width", &self.width())
+            .field("height", &self.height())
+            .field("size", &self.size())
+            .finish()
+    }
+}
+
+
 pub struct VideoInfoBuilder<'a> {
     format: ::VideoFormat,
     width: u32,
