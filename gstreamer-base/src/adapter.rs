@@ -10,6 +10,7 @@ use ffi;
 use glib::translate::*;
 use gst;
 use Adapter;
+use std::io;
 
 impl Adapter {
     pub fn copy(&self, offset: usize, dest: &mut [u8]) {
@@ -28,5 +29,30 @@ impl Adapter {
         unsafe {
             ffi::gst_adapter_push(self.to_glib_none().0, buf.into_ptr());
         }
+    }
+}
+
+impl io::Read for Adapter {
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
+        let mut len = self.available();
+
+        if len == 0 {
+            return Err(io::Error::new(
+                io::ErrorKind::WouldBlock,
+                format!(
+                    "Missing data: requesting {} but only got {}.",
+                    buf.len(),
+                    len
+                ),
+            ));
+        }
+
+        if buf.len() < len {
+            len = buf.len();
+        }
+
+        self.copy(0, &mut buf[0..len]);
+        self.flush(len);
+        Ok(len)
     }
 }
