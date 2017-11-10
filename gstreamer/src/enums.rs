@@ -139,11 +139,15 @@ impl Error for FlowError {
             FlowError::Flushing => "Pad is flushing",
             FlowError::Eos => "Pad is EOS",
             FlowError::NotNegotiated => "Pad is not negotiated",
-            FlowError::Error => "Some (fatal) error occurred. Element generating this error should post an error message with more details",
+            FlowError::Error => {
+                "Some (fatal) error occurred. Element generating this error should post an error message with more details"
+            }
             FlowError::NotSupported => "This operation is not supported",
-            FlowError::CustomError => "Elements can use values starting from this (and lower) to define custom error codes",
+            FlowError::CustomError => {
+                "Elements can use values starting from this (and lower) to define custom error codes"
+            }
             FlowError::CustomError1 => "Pre-defined custom error code",
-            FlowError::CustomError2 => "Pre-defined custom error code"
+            FlowError::CustomError2 => "Pre-defined custom error code",
         }
     }
 }
@@ -206,7 +210,7 @@ impl Error for PadLinkError {
             PadLinkError::WrongDirection => "Pads have wrong direction",
             PadLinkError::Noformat => "Pads do not have common format",
             PadLinkError::Nosched => "Pads cannot cooperate in scheduling",
-            PadLinkError::Refused => "Refused for some other reason"
+            PadLinkError::Refused => "Refused for some other reason",
         }
     }
 }
@@ -277,7 +281,7 @@ impl Error for ClockError {
             ClockError::Busy => "The ClockID is busy",
             ClockError::Badtime => "A bad time was provided to a function",
             ClockError::Error => "An error occurred",
-            ClockError::Unsupported => "Operation is not supported"
+            ClockError::Unsupported => "Operation is not supported",
         }
     }
 }
