@@ -77,7 +77,8 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: player uri")
+        println!("Usage: player uri");
+        std::process::exit(-1);
     };
 
     match main_loop(uri) {

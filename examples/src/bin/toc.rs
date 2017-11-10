@@ -12,7 +12,8 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: toc file_path")
+        println!("Usage: toc file_path");
+        std::process::exit(-1);
     };
 
     let pipeline = gst::Pipeline::new(None);
