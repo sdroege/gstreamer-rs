@@ -12,7 +12,8 @@ fn main() {
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
     } else {
-        panic!("Usage: playbin uri")
+        println!("Usage: playbin uri");
+        std::process::exit(-1);
     };
 
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();
