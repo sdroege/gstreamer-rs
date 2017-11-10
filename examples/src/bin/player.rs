@@ -12,11 +12,14 @@ use std::env;
 #[cfg(feature = "gst-player")]
 use std::sync::{Arc, Mutex};
 
-pub mod utils;
+extern crate failure;
+
+#[allow(unused_imports)]
+use failure::Error;
 
 #[cfg(feature = "gst-player")]
-fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
-    gst::init().map_err(utils::ExampleError::InitFailed)?;
+fn main_loop(uri: &str) -> Result<(), Error> {
+    gst::init()?;
 
     let main_loop = glib::MainLoop::new(None, false);
 
@@ -25,9 +28,8 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
         None,
         Some(&dispatcher.upcast::<gst_player::PlayerSignalDispatcher>()),
     );
-    player
-        .set_property("uri", &glib::Value::from(uri))
-        .expect("Can't set uri property");
+
+    player.set_property("uri", &glib::Value::from(uri))?;
 
     let error = Arc::new(Mutex::new(Ok(())));
 
@@ -48,11 +50,7 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
         let player = &player_clone;
         let error = &error_clone;
 
-        *error.lock().unwrap() = Err(utils::ExampleError::ElementError(
-            "player".to_owned(),
-            err.clone(),
-            "".to_owned(),
-        ));
+        *error.lock().unwrap() = Err(err.clone());
 
         player.stop();
         main_loop.quit();
@@ -63,15 +61,10 @@ fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
 
     let guard = error.as_ref().lock().unwrap();
 
-    guard.clone()
+    guard.clone().map_err(|e|e.into())
 }
 
-#[cfg(not(feature = "gst-player"))]
 #[allow(unused_variables)]
-fn main_loop(uri: &str) -> Result<(), utils::ExampleError> {
-    Err(utils::ExampleError::MissingFeature("gst-player"))
-}
-
 fn main() {
     let args: Vec<_> = env::args().collect();
     let uri: &str = if args.len() == 2 {
@@ -80,6 +73,12 @@ fn main() {
         panic!("Usage: player uri")
     };
 
+    #[cfg(not(feature = "gst-player"))] {
+        eprintln!("Feature gst-player is required. Please rebuild with --features gst-player");
+        std::process::exit(-1);
+    }
+
+    #[cfg(feature = "gst-player")]
     match main_loop(uri) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
