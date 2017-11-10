@@ -10,6 +10,8 @@ use StateChangeReturn;
 use FlowReturn;
 use PadLinkReturn;
 use ClockReturn;
+use std::error::Error;
+use std::fmt;
 
 impl StateChangeReturn {
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
@@ -45,6 +47,18 @@ pub enum StateChangeSuccess {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
 pub struct StateChangeError;
+
+impl fmt::Display for StateChangeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "State-change error")
+    }
+}
+
+impl Error for StateChangeError {
+    fn description(&self) -> &str {
+        "Element failed to change its state"
+    }
+}
 
 impl FlowReturn {
     pub fn into_result(self) -> Result<FlowSuccess, FlowError> {
@@ -112,6 +126,28 @@ pub enum FlowError {
     CustomError2,
 }
 
+impl fmt::Display for FlowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Flow error: {}", self.description())
+    }
+}
+
+impl Error for FlowError {
+    fn description(&self) -> &str {
+        match *self {
+            FlowError::NotLinked => "Pad is not linked",
+            FlowError::Flushing => "Pad is flushing",
+            FlowError::Eos => "Pad is EOS",
+            FlowError::NotNegotiated => "Pad is not negotiated",
+            FlowError::Error => "Some (fatal) error occurred. Element generating this error should post an error message with more details",
+            FlowError::NotSupported => "This operation is not supported",
+            FlowError::CustomError => "Elements can use values starting from this (and lower) to define custom error codes",
+            FlowError::CustomError1 => "Pre-defined custom error code",
+            FlowError::CustomError2 => "Pre-defined custom error code"
+        }
+    }
+}
+
 impl PadLinkReturn {
     pub fn into_result(self) -> Result<PadLinkSuccess, PadLinkError> {
         match self {
@@ -155,6 +191,26 @@ pub enum PadLinkError {
     Nosched,
     Refused,
 }
+
+impl fmt::Display for PadLinkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Pad failed to link: {}", self.description())
+    }
+}
+
+impl Error for PadLinkError {
+    fn description(&self) -> &str {
+        match *self {
+            PadLinkError::WrongHierarchy => "Pads have no common grandparent",
+            PadLinkError::WasLinked => "Pad was already linked",
+            PadLinkError::WrongDirection => "Pads have wrong direction",
+            PadLinkError::Noformat => "Pads do not have common format",
+            PadLinkError::Nosched => "Pads cannot cooperate in scheduling",
+            PadLinkError::Refused => "Refused for some other reason"
+        }
+    }
+}
+
 
 impl ClockReturn {
     pub fn into_result(self) -> Result<ClockSuccess, ClockError> {
@@ -205,4 +261,23 @@ pub enum ClockError {
     Badtime,
     Error,
     Unsupported,
+}
+
+impl fmt::Display for ClockError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Clock error: {}", self.description())
+    }
+}
+
+impl Error for ClockError {
+    fn description(&self) -> &str {
+        match *self {
+            ClockError::Early => "The operation was scheduled too late",
+            ClockError::Unscheduled => "The clockID was unscheduled",
+            ClockError::Busy => "The ClockID is busy",
+            ClockError::Badtime => "A bad time was provided to a function",
+            ClockError::Error => "An error occurred",
+            ClockError::Unsupported => "Operation is not supported"
+        }
+    }
 }
