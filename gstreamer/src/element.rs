@@ -96,7 +96,7 @@ pub trait ElementExtManual {
         debug: Option<&str>,
         file: &str,
         function: &str,
-        line: i32,
+        line: u32,
     );
     #[cfg(feature = "v1_10")]
     fn message_full_with_details<T: ::MessageErrorDomain>(
@@ -107,7 +107,7 @@ pub trait ElementExtManual {
         debug: Option<&str>,
         file: &str,
         function: &str,
-        line: i32,
+        line: u32,
         structure: ::Structure,
     );
 
@@ -225,7 +225,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         debug: Option<&str>,
         file: &str,
         function: &str,
-        line: i32,
+        line: u32,
     ) {
         unsafe {
             let type_ = match type_ {
@@ -243,7 +243,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 debug.to_glib_full(),
                 file.to_glib_none().0,
                 function.to_glib_none().0,
-                line,
+                line as i32,
             );
         }
     }
@@ -257,7 +257,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         debug: Option<&str>,
         file: &str,
         function: &str,
-        line: i32,
+        line: u32,
         structure: ::Structure,
     ) {
         unsafe {
@@ -276,7 +276,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 debug.to_glib_full(),
                 file.to_glib_none().0,
                 function.to_glib_none().0,
-                line,
+                line as i32,
                 structure.into_ptr(),
             );
         }
