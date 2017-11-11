@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.8.2] - 2017-11-11
+
+### Fixed
+- Implement StaticType of BufferRef instead of Buffer. Buffer aka
+  GstRc<BufferRef> already implements StaticType if BufferRef does, and
+  without this it was not possible to use Buffers in GValues.
+- Free memory of the appsink/appsrc callbacks with the correct type. It was
+  crashing because of using the wrong type before.
+- Fix documentation URLs in Cargo.toml.
+
+### Added
+- Installation instructions and links to documentation for getting started to
+  README.md.
+
 ## [0.8.1] - 2017-09-15
 ### Added
 - Implement Send+Sync for Query, Message and Event, and their corresponding
