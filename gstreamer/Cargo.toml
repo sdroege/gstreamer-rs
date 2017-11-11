@@ -22,6 +22,7 @@ glib = { git = "https://github.com/gtk-rs/glib" }
 num-rational = { version = "0.1.38", default-features = false, features = [] }
 lazy_static = "0.2"
 futures = { version = "0.1", optional = true }
+muldiv = "0.1.1"
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"

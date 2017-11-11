@@ -56,12 +56,12 @@ impl GstRc<QueryRef> {
         unsafe { from_glib_full(ffi::gst_query_new_segment(fmt.to_glib())) }
     }
 
-    pub fn new_convert(src_fmt: ::Format, value: i64, dest_fmt: ::Format) -> Self {
+    pub fn new_convert(value: ::FormatValue, dest_fmt: ::Format) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_query_new_convert(
-                src_fmt.to_glib(),
-                value,
+                value.to_format().to_glib(),
+                value.to_value(),
                 dest_fmt.to_glib(),
             ))
         }
@@ -207,14 +207,14 @@ pub enum QueryView<T> {
 
 pub struct Position<T>(T);
 impl<'a> Position<&'a QueryRef> {
-    pub fn get(&self) -> (::Format, i64) {
+    pub fn get(&self) -> ::FormatValue {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut pos = mem::uninitialized();
 
             ffi::gst_query_parse_position(self.0.as_mut_ptr(), &mut fmt, &mut pos);
 
-            (from_glib(fmt), pos)
+            ::FormatValue::new(from_glib(fmt), pos)
         }
     }
 
@@ -224,9 +224,14 @@ impl<'a> Position<&'a QueryRef> {
 }
 
 impl<'a> Position<&'a mut QueryRef> {
-    pub fn set(&mut self, fmt: ::Format, pos: i64) {
+    pub fn set<V: Into<::FormatValue>>(&mut self, pos: V) {
+        let pos = pos.into();
         unsafe {
-            ffi::gst_query_set_position(self.0.as_mut_ptr(), fmt.to_glib(), pos);
+            ffi::gst_query_set_position(
+                self.0.as_mut_ptr(),
+                pos.to_format().to_glib(),
+                pos.to_value(),
+            );
         }
     }
 
@@ -237,14 +242,14 @@ impl<'a> Position<&'a mut QueryRef> {
 
 pub struct Duration<T>(T);
 impl<'a> Duration<&'a QueryRef> {
-    pub fn get(&self) -> (::Format, i64) {
+    pub fn get(&self) -> ::FormatValue {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut pos = mem::uninitialized();
 
             ffi::gst_query_parse_duration(self.0.as_mut_ptr(), &mut fmt, &mut pos);
 
-            (from_glib(fmt), pos)
+            ::FormatValue::new(from_glib(fmt), pos)
         }
     }
 
@@ -254,9 +259,14 @@ impl<'a> Duration<&'a QueryRef> {
 }
 
 impl<'a> Duration<&'a mut QueryRef> {
-    pub fn set(&mut self, fmt: ::Format, pos: i64) {
+    pub fn set<V: Into<::FormatValue>>(&mut self, dur: V) {
+        let dur = dur.into();
         unsafe {
-            ffi::gst_query_set_duration(self.0.as_mut_ptr(), fmt.to_glib(), pos);
+            ffi::gst_query_set_duration(
+                self.0.as_mut_ptr(),
+                dur.to_format().to_glib(),
+                dur.to_value(),
+            );
         }
     }
 
@@ -324,7 +334,7 @@ impl<'a> Rate<&'a mut QueryRef> {
 
 pub struct Seeking<T>(T);
 impl<'a> Seeking<&'a QueryRef> {
-    pub fn get(&self) -> (::Format, bool, i64, i64) {
+    pub fn get(&self) -> (bool, ::FormatValue, ::FormatValue) {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut seekable = mem::uninitialized();
@@ -338,7 +348,11 @@ impl<'a> Seeking<&'a QueryRef> {
                 &mut end,
             );
 
-            (from_glib(fmt), from_glib(seekable), start, end)
+            (
+                from_glib(seekable),
+                ::FormatValue::new(from_glib(fmt), start),
+                ::FormatValue::new(from_glib(fmt), end),
+            )
         }
     }
 
@@ -348,14 +362,19 @@ impl<'a> Seeking<&'a QueryRef> {
 }
 
 impl<'a> Seeking<&'a mut QueryRef> {
-    pub fn set(&mut self, fmt: ::Format, seekable: bool, start: i64, end: i64) {
+    pub fn set<V: Into<::FormatValue>>(&mut self, seekable: bool, start: V, end: V) {
+        let start = start.into();
+        let end = end.into();
+
+        assert_eq!(start.to_format(), end.to_format());
+
         unsafe {
             ffi::gst_query_set_seeking(
                 self.0.as_mut_ptr(),
-                fmt.to_glib(),
+                start.to_format().to_glib(),
                 seekable.to_glib(),
-                start,
-                end,
+                start.to_value(),
+                end.to_value(),
             );
         }
     }
@@ -367,7 +386,7 @@ impl<'a> Seeking<&'a mut QueryRef> {
 
 pub struct Segment<T>(T);
 impl<'a> Segment<&'a QueryRef> {
-    pub fn get(&self) -> (f64, ::Format, i64, i64) {
+    pub fn get(&self) -> (f64, ::FormatValue, ::FormatValue) {
         unsafe {
             let mut rate = mem::uninitialized();
             let mut fmt = mem::uninitialized();
@@ -381,7 +400,11 @@ impl<'a> Segment<&'a QueryRef> {
                 &mut start,
                 &mut stop,
             );
-            (rate, from_glib(fmt), start, stop)
+            (
+                rate,
+                ::FormatValue::new(from_glib(fmt), start),
+                ::FormatValue::new(from_glib(fmt), stop),
+            )
         }
     }
 
@@ -391,9 +414,20 @@ impl<'a> Segment<&'a QueryRef> {
 }
 
 impl<'a> Segment<&'a mut QueryRef> {
-    pub fn set(&mut self, rate: f64, fmt: ::Format, start: i64, stop: i64) {
+    pub fn set<V: Into<::FormatValue>>(&mut self, rate: f64, start: V, stop: V) {
+        let start = start.into();
+        let stop = stop.into();
+
+        assert_eq!(start.to_format(), stop.to_format());
+
         unsafe {
-            ffi::gst_query_set_segment(self.0.as_mut_ptr(), rate, fmt.to_glib(), start, stop);
+            ffi::gst_query_set_segment(
+                self.0.as_mut_ptr(),
+                rate,
+                start.to_format().to_glib(),
+                start.to_value(),
+                stop.to_value(),
+            );
         }
     }
 
@@ -404,7 +438,7 @@ impl<'a> Segment<&'a mut QueryRef> {
 
 pub struct Convert<T>(T);
 impl<'a> Convert<&'a QueryRef> {
-    pub fn get(&self) -> (::Format, i64, ::Format, i64) {
+    pub fn get(&self) -> (::FormatValue, ::FormatValue) {
         unsafe {
             let mut src_fmt = mem::uninitialized();
             let mut src = mem::uninitialized();
@@ -418,7 +452,10 @@ impl<'a> Convert<&'a QueryRef> {
                 &mut dest_fmt,
                 &mut dest,
             );
-            (from_glib(src_fmt), src, from_glib(dest_fmt), dest)
+            (
+                ::FormatValue::new(from_glib(src_fmt), src),
+                ::FormatValue::new(from_glib(dest_fmt), dest),
+            )
         }
     }
 
@@ -428,14 +465,17 @@ impl<'a> Convert<&'a QueryRef> {
 }
 
 impl<'a> Convert<&'a mut QueryRef> {
-    pub fn set(&mut self, src_fmt: ::Format, src: i64, dest_fmt: ::Format, dest: i64) {
+    pub fn set<V: Into<::FormatValue>>(&mut self, src: V, dest: V) {
+        let src = src.into();
+        let dest = dest.into();
+
         unsafe {
             ffi::gst_query_set_convert(
                 self.0.as_mut_ptr(),
-                src_fmt.to_glib(),
-                src,
-                dest_fmt.to_glib(),
-                dest,
+                src.to_format().to_glib(),
+                src.to_value(),
+                dest.to_format().to_glib(),
+                dest.to_value(),
             );
         }
     }
@@ -494,7 +534,7 @@ impl<'a> Buffering<&'a QueryRef> {
         }
     }
 
-    pub fn get_range(&self) -> (::Format, i64, i64, i64) {
+    pub fn get_range(&self) -> (::FormatValue, ::FormatValue, i64) {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut start = mem::uninitialized();
@@ -508,7 +548,11 @@ impl<'a> Buffering<&'a QueryRef> {
                 &mut stop,
                 &mut estimated_total,
             );
-            (from_glib(fmt), start, stop, estimated_total)
+            (
+                ::FormatValue::new(from_glib(fmt), start),
+                ::FormatValue::new(from_glib(fmt), stop),
+                estimated_total,
+            )
         }
     }
 
@@ -531,8 +575,18 @@ impl<'a> Buffering<&'a QueryRef> {
         }
     }
 
-    pub fn get_ranges(&self) -> Vec<(i64, i64)> {
+    pub fn get_ranges(&self) -> Vec<(::FormatValue, ::FormatValue)> {
         unsafe {
+            let mut fmt = mem::uninitialized();
+            ffi::gst_query_parse_buffering_range(
+                self.0.as_mut_ptr(),
+                &mut fmt,
+                ptr::null_mut(),
+                ptr::null_mut(),
+                ptr::null_mut(),
+            );
+            let fmt = from_glib(fmt);
+
             let n = ffi::gst_query_get_n_buffering_ranges(self.0.as_mut_ptr());
             let mut res = Vec::with_capacity(n as usize);
             for i in 0..n {
@@ -545,7 +599,10 @@ impl<'a> Buffering<&'a QueryRef> {
                     &mut stop,
                 ));
                 if s {
-                    res.push((start, stop));
+                    res.push((
+                        ::FormatValue::new(fmt, start),
+                        ::FormatValue::new(fmt, stop),
+                    ));
                 }
             }
 
@@ -565,13 +622,18 @@ impl<'a> Buffering<&'a mut QueryRef> {
         }
     }
 
-    pub fn set_range(&mut self, fmt: ::Format, start: i64, stop: i64, estimated_total: i64) {
+    pub fn set_range<V: Into<::FormatValue>>(&mut self, start: V, stop: V, estimated_total: i64) {
+        let start = start.into();
+        let stop = stop.into();
+
+        assert_eq!(start.to_format(), stop.to_format());
+
         unsafe {
             ffi::gst_query_set_buffering_range(
                 self.0.as_mut_ptr(),
-                fmt.to_glib(),
-                start,
-                stop,
+                start.to_format().to_glib(),
+                start.to_value(),
+                stop.to_value(),
                 estimated_total,
             );
         }
@@ -596,10 +658,28 @@ impl<'a> Buffering<&'a mut QueryRef> {
         }
     }
 
-    pub fn add_buffering_ranges(&mut self, ranges: &[(i64, i64)]) {
+    pub fn add_buffering_ranges<V: Into<::FormatValue> + Copy>(&mut self, ranges: &[(V, V)]) {
         unsafe {
+            let mut fmt = mem::uninitialized();
+            ffi::gst_query_parse_buffering_range(
+                self.0.as_mut_ptr(),
+                &mut fmt,
+                ptr::null_mut(),
+                ptr::null_mut(),
+                ptr::null_mut(),
+            );
+            let fmt = from_glib(fmt);
+
             for &(start, stop) in ranges {
-                ffi::gst_query_add_buffering_range(self.0.as_mut_ptr(), start, stop);
+                let start = start.into();
+                let stop = stop.into();
+                assert_eq!(start.to_format(), fmt);
+                assert_eq!(stop.to_format(), fmt);
+                ffi::gst_query_add_buffering_range(
+                    self.0.as_mut_ptr(),
+                    start.to_value(),
+                    stop.to_value(),
+                );
             }
         }
     }
@@ -955,28 +1035,25 @@ mod tests {
 
         match q.view() {
             QueryView::Position(ref p) => {
-                let (fmt, pos) = p.get();
-                assert_eq!(fmt, ::Format::Time);
-                assert_eq!(pos, -1);
+                let pos = p.get();
+                assert_eq!(pos.try_to_time(), Some(::CLOCK_TIME_NONE));
             }
             _ => (),
         }
 
         match q.get_mut().unwrap().view_mut() {
             QueryView::Position(ref mut p) => {
-                let (fmt, pos) = p.get();
-                assert_eq!(fmt, ::Format::Time);
-                assert_eq!(pos, -1);
-                p.set(::Format::Time, 2);
+                let pos = p.get();
+                assert_eq!(pos.try_to_time(), Some(::CLOCK_TIME_NONE));
+                p.set(2 * ::SECOND);
             }
             _ => (),
         }
 
         match q.view() {
             QueryView::Position(ref p) => {
-                let (fmt, pos) = p.get();
-                assert_eq!(fmt, ::Format::Time);
-                assert_eq!(pos, 2);
+                let pos = p.get();
+                assert_eq!(pos.try_to_time(), Some(2 * ::SECOND));
             }
             _ => (),
         }

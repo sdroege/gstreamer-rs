@@ -8,15 +8,12 @@ use ClockTime;
 use Context;
 use ElementFactory;
 use Error;
-use Format;
 use Message;
 use Object;
 use Pad;
 use PadLinkCheck;
 use PadTemplate;
 use Plugin;
-use SeekFlags;
-use SeekType;
 use State;
 use StateChange;
 use StateChangeReturn;
@@ -153,21 +150,11 @@ pub trait ElementExt {
 
     fn provide_clock(&self) -> Option<Clock>;
 
-    fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64>;
-
-    fn query_duration(&self, format: Format) -> Option<i64>;
-
-    fn query_position(&self, format: Format) -> Option<i64>;
-
     fn release_request_pad<P: IsA<Pad>>(&self, pad: &P);
 
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
     fn request_pad<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, templ: &PadTemplate, name: P, caps: Q) -> Option<Pad>;
-
-    fn seek(&self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: i64, stop_type: SeekType, stop: i64) -> Result<(), glib::error::BoolError>;
-
-    fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> Result<(), glib::error::BoolError>;
 
     fn set_base_time(&self, time: ClockTime);
 
@@ -236,7 +223,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
 
     fn get_base_time(&self) -> ClockTime {
         unsafe {
-            ffi::gst_element_get_base_time(self.to_glib_none().0)
+            from_glib(ffi::gst_element_get_base_time(self.to_glib_none().0))
         }
     }
 
@@ -292,7 +279,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
 
     fn get_start_time(&self) -> ClockTime {
         unsafe {
-            ffi::gst_element_get_start_time(self.to_glib_none().0)
+            from_glib(ffi::gst_element_get_start_time(self.to_glib_none().0))
         }
     }
 
@@ -300,7 +287,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         unsafe {
             let mut state = mem::uninitialized();
             let mut pending = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_get_state(self.to_glib_none().0, &mut state, &mut pending, timeout));
+            let ret = from_glib(ffi::gst_element_get_state(self.to_glib_none().0, &mut state, &mut pending, timeout.to_glib()));
             (ret, from_glib(state), from_glib(pending))
         }
     }
@@ -412,30 +399,6 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64> {
-        unsafe {
-            let mut dest_val = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_convert(self.to_glib_none().0, src_format.to_glib(), src_val, dest_format.to_glib(), &mut dest_val));
-            if ret { Some(dest_val) } else { None }
-        }
-    }
-
-    fn query_duration(&self, format: Format) -> Option<i64> {
-        unsafe {
-            let mut duration = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_duration(self.to_glib_none().0, format.to_glib(), &mut duration));
-            if ret { Some(duration) } else { None }
-        }
-    }
-
-    fn query_position(&self, format: Format) -> Option<i64> {
-        unsafe {
-            let mut cur = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_position(self.to_glib_none().0, format.to_glib(), &mut cur));
-            if ret { Some(cur) } else { None }
-        }
-    }
-
     fn release_request_pad<P: IsA<Pad>>(&self, pad: &P) {
         unsafe {
             ffi::gst_element_release_request_pad(self.to_glib_none().0, pad.to_glib_none().0);
@@ -458,21 +421,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn seek(&self, rate: f64, format: Format, flags: SeekFlags, start_type: SeekType, start: i64, stop_type: SeekType, stop: i64) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_seek(self.to_glib_none().0, rate, format.to_glib(), flags.to_glib(), start_type.to_glib(), start, stop_type.to_glib(), stop), "Failed to seek")
-        }
-    }
-
-    fn seek_simple(&self, format: Format, seek_flags: SeekFlags, seek_pos: i64) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_seek_simple(self.to_glib_none().0, format.to_glib(), seek_flags.to_glib(), seek_pos), "Failed to seek")
-        }
-    }
-
     fn set_base_time(&self, time: ClockTime) {
         unsafe {
-            ffi::gst_element_set_base_time(self.to_glib_none().0, time);
+            ffi::gst_element_set_base_time(self.to_glib_none().0, time.to_glib());
         }
     }
 
@@ -502,7 +453,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
 
     fn set_start_time(&self, time: ClockTime) {
         unsafe {
-            ffi::gst_element_set_start_time(self.to_glib_none().0, time);
+            ffi::gst_element_set_start_time(self.to_glib_none().0, time.to_glib());
         }
     }
 

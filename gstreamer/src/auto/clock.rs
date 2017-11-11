@@ -127,7 +127,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {
             let mut r_squared = mem::uninitialized();
-            let ret = from_glib(ffi::gst_clock_add_observation(self.to_glib_none().0, slave, master, &mut r_squared));
+            let ret = from_glib(ffi::gst_clock_add_observation(self.to_glib_none().0, slave.to_glib(), master.to_glib(), &mut r_squared));
             if ret { Some(r_squared) } else { None }
         }
     }
@@ -139,20 +139,20 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
             let mut external = mem::uninitialized();
             let mut rate_num = mem::uninitialized();
             let mut rate_denom = mem::uninitialized();
-            let ret = from_glib(ffi::gst_clock_add_observation_unapplied(self.to_glib_none().0, slave, master, &mut r_squared, &mut internal, &mut external, &mut rate_num, &mut rate_denom));
-            if ret { Some((r_squared, internal, external, rate_num, rate_denom)) } else { None }
+            let ret = from_glib(ffi::gst_clock_add_observation_unapplied(self.to_glib_none().0, slave.to_glib(), master.to_glib(), &mut r_squared, &mut internal, &mut external, &mut rate_num, &mut rate_denom));
+            if ret { Some((r_squared, from_glib(internal), from_glib(external), from_glib(rate_num), from_glib(rate_denom))) } else { None }
         }
     }
 
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime {
         unsafe {
-            ffi::gst_clock_adjust_unlocked(self.to_glib_none().0, internal)
+            from_glib(ffi::gst_clock_adjust_unlocked(self.to_glib_none().0, internal.to_glib()))
         }
     }
 
     fn adjust_with_calibration(&self, internal_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime {
         unsafe {
-            ffi::gst_clock_adjust_with_calibration(self.to_glib_none().0, internal_target, cinternal, cexternal, cnum, cdenom)
+            from_glib(ffi::gst_clock_adjust_with_calibration(self.to_glib_none().0, internal_target.to_glib(), cinternal.to_glib(), cexternal.to_glib(), cnum.to_glib(), cdenom.to_glib()))
         }
     }
 
@@ -163,13 +163,13 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
             let mut rate_num = mem::uninitialized();
             let mut rate_denom = mem::uninitialized();
             ffi::gst_clock_get_calibration(self.to_glib_none().0, &mut internal, &mut external, &mut rate_num, &mut rate_denom);
-            (internal, external, rate_num, rate_denom)
+            (from_glib(internal), from_glib(external), from_glib(rate_num), from_glib(rate_denom))
         }
     }
 
     fn get_internal_time(&self) -> ClockTime {
         unsafe {
-            ffi::gst_clock_get_internal_time(self.to_glib_none().0)
+            from_glib(ffi::gst_clock_get_internal_time(self.to_glib_none().0))
         }
     }
 
@@ -181,19 +181,19 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
 
     fn get_resolution(&self) -> ClockTime {
         unsafe {
-            ffi::gst_clock_get_resolution(self.to_glib_none().0)
+            from_glib(ffi::gst_clock_get_resolution(self.to_glib_none().0))
         }
     }
 
     fn get_time(&self) -> ClockTime {
         unsafe {
-            ffi::gst_clock_get_time(self.to_glib_none().0)
+            from_glib(ffi::gst_clock_get_time(self.to_glib_none().0))
         }
     }
 
     fn get_timeout(&self) -> ClockTime {
         unsafe {
-            ffi::gst_clock_get_timeout(self.to_glib_none().0)
+            from_glib(ffi::gst_clock_get_timeout(self.to_glib_none().0))
         }
     }
 
@@ -217,7 +217,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
 
     fn set_calibration(&self, internal: ClockTime, external: ClockTime, rate_num: ClockTime, rate_denom: ClockTime) {
         unsafe {
-            ffi::gst_clock_set_calibration(self.to_glib_none().0, internal, external, rate_num, rate_denom);
+            ffi::gst_clock_set_calibration(self.to_glib_none().0, internal.to_glib(), external.to_glib(), rate_num.to_glib(), rate_denom.to_glib());
         }
     }
 
@@ -231,7 +231,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
 
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime {
         unsafe {
-            ffi::gst_clock_set_resolution(self.to_glib_none().0, resolution)
+            from_glib(ffi::gst_clock_set_resolution(self.to_glib_none().0, resolution.to_glib()))
         }
     }
 
@@ -243,7 +243,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
 
     fn set_timeout(&self, timeout: ClockTime) {
         unsafe {
-            ffi::gst_clock_set_timeout(self.to_glib_none().0, timeout);
+            ffi::gst_clock_set_timeout(self.to_glib_none().0, timeout.to_glib());
         }
     }
 
@@ -253,19 +253,19 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
 
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime {
         unsafe {
-            ffi::gst_clock_unadjust_unlocked(self.to_glib_none().0, external)
+            from_glib(ffi::gst_clock_unadjust_unlocked(self.to_glib_none().0, external.to_glib()))
         }
     }
 
     fn unadjust_with_calibration(&self, external_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime {
         unsafe {
-            ffi::gst_clock_unadjust_with_calibration(self.to_glib_none().0, external_target, cinternal, cexternal, cnum, cdenom)
+            from_glib(ffi::gst_clock_unadjust_with_calibration(self.to_glib_none().0, external_target.to_glib(), cinternal.to_glib(), cexternal.to_glib(), cnum.to_glib(), cdenom.to_glib()))
         }
     }
 
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout), "Timed out waiting for sync")
+            glib::error::BoolError::from_glib(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout.to_glib()), "Timed out waiting for sync")
         }
     }
 

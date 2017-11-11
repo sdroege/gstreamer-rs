@@ -59,25 +59,14 @@ fn create_ui(app: &gtk::Application) {
     let pipeline_clone = pipeline.clone();
     gtk::timeout_add(500, move || {
         let pipeline = &pipeline_clone;
-        let position = pipeline.query_position(gst::Format::Time);
-
-        if let Some(position) = position {
-            let mut seconds = (position as gst::ClockTime) / gst::SECOND;
-            let mut minutes = seconds / 60;
-            let hours = minutes / 60;
-
-            seconds %= 60;
-            minutes %= 60;
-
-            label.set_text(&format!(
-                "Position: {:02}:{:02}:{:02}",
-                hours,
-                minutes,
-                seconds
-            ));
+        let position = if let Some(gst::FormatValue::Time(position)) =
+            pipeline.query_position(gst::Format::Time)
+        {
+            position
         } else {
-            label.set_text("Position: 00:00:00");
-        }
+            0.into()
+        };
+        label.set_text(&format!("Position: {:.0}", position));
 
         glib::Continue(true)
     });

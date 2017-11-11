@@ -14,7 +14,6 @@ external_libraries = [
 ]
 
 generate = [
-    "Gst.ClockTime",
     "Gst.ClockTimeDiff",
     "Gst.Pipeline",
     "Gst.State",
@@ -82,6 +81,11 @@ manual = [
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
 ]
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
 
 [[object]]
 name = "Gst.Bin"
@@ -310,6 +314,31 @@ status = "generate"
     [[object.function]]
     name = "remove_property_notify_watch"
     # ulong
+    ignore = true
+
+    [[object.function]]
+    name = "query_duration"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "query_position"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "query_convert"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "seek"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "seek_simple"
+    # formatted value
     ignore = true
 
 [[object]]

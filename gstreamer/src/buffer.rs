@@ -21,7 +21,7 @@ use ClockTime;
 use glib;
 use glib_ffi;
 use ffi;
-use glib::translate::{from_glib, from_glib_full};
+use glib::translate::{from_glib, from_glib_full, ToGlib};
 
 pub struct Readable;
 pub struct Writable;
@@ -317,27 +317,27 @@ impl BufferRef {
     }
 
     pub fn get_pts(&self) -> ClockTime {
-        self.0.pts
+        from_glib(self.0.pts)
     }
 
     pub fn set_pts(&mut self, pts: ClockTime) {
-        self.0.pts = pts;
+        self.0.pts = pts.to_glib();
     }
 
     pub fn get_dts(&self) -> ClockTime {
-        self.0.dts
+        from_glib(self.0.dts)
     }
 
     pub fn set_dts(&mut self, dts: ClockTime) {
-        self.0.dts = dts;
+        self.0.dts = dts.to_glib();
     }
 
     pub fn get_duration(&self) -> ClockTime {
-        self.0.duration
+        from_glib(self.0.duration)
     }
 
     pub fn set_duration(&mut self, duration: ClockTime) {
-        self.0.duration = duration;
+        self.0.duration = duration.to_glib();
     }
 
     pub fn get_flags(&self) -> BufferFlags {
@@ -474,17 +474,17 @@ mod tests {
 
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.set_pts(1);
-            buffer.set_dts(2);
+            buffer.set_pts(1.into());
+            buffer.set_dts(2.into());
             buffer.set_offset(3);
             buffer.set_offset_end(4);
-            buffer.set_duration(5);
+            buffer.set_duration(5.into());
         }
-        assert_eq!(buffer.get_pts(), 1);
-        assert_eq!(buffer.get_dts(), 2);
+        assert_eq!(buffer.get_pts(), 1.into());
+        assert_eq!(buffer.get_dts(), 2.into());
         assert_eq!(buffer.get_offset(), 3);
         assert_eq!(buffer.get_offset_end(), 4);
-        assert_eq!(buffer.get_duration(), 5);
+        assert_eq!(buffer.get_duration(), 5.into());
     }
 
     #[test]
@@ -499,7 +499,7 @@ mod tests {
         assert_ne!(buffer.get_mut(), None);
         {
             let buffer = buffer.get_mut().unwrap();
-            buffer.set_pts(1);
+            buffer.set_pts(1.into());
         }
 
         let mut buffer2 = buffer.clone();
@@ -515,15 +515,15 @@ mod tests {
                 assert_ne!(buffer2.as_ptr(), buffer.as_ptr());
             }
 
-            buffer2.set_pts(2);
+            buffer2.set_pts(2.into());
 
             let mut data = buffer2.map_writable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
             data.as_mut_slice()[0] = 0;
         }
 
-        assert_eq!(buffer.get_pts(), 1);
-        assert_eq!(buffer2.get_pts(), 2);
+        assert_eq!(buffer.get_pts(), 1.into());
+        assert_eq!(buffer2.get_pts(), 2.into());
 
         {
             let data = buffer.map_readable().unwrap();

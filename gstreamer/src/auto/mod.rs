@@ -152,7 +152,6 @@ pub use self::flags::StreamFlags;
 pub use self::flags::StreamType;
 
 mod alias;
-pub use self::alias::ClockTime;
 pub use self::alias::ClockTimeDiff;
 pub use self::alias::ElementFactoryListType;
 

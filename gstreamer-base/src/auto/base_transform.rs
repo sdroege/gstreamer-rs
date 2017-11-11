@@ -139,7 +139,7 @@ impl<O: IsA<BaseTransform> + IsA<glib::object::Object>> BaseTransformExt for O {
 
     fn update_qos(&self, proportion: f64, diff: gst::ClockTimeDiff, timestamp: gst::ClockTime) {
         unsafe {
-            ffi::gst_base_transform_update_qos(self.to_glib_none().0, proportion, diff, timestamp);
+            ffi::gst_base_transform_update_qos(self.to_glib_none().0, proportion, diff, timestamp.to_glib());
         }
     }
 

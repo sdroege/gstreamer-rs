@@ -19,6 +19,7 @@ use PadTemplate;
 use miniobject::MiniObject;
 
 use std::ffi::CStr;
+use std::mem;
 
 use libc;
 
@@ -134,6 +135,29 @@ pub trait ElementExtManual {
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
+
+    fn query_convert<V: Into<::FormatValue>>(
+        &self,
+        src_val: V,
+        dest_format: ::Format,
+    ) -> Option<::FormatValue>;
+    fn query_duration(&self, format: ::Format) -> Option<::FormatValue>;
+    fn query_position(&self, format: ::Format) -> Option<::FormatValue>;
+
+    fn seek<V: Into<::FormatValue>>(
+        &self,
+        rate: f64,
+        flags: ::SeekFlags,
+        start_type: ::SeekType,
+        start: V,
+        stop_type: ::SeekType,
+        stop: V,
+    ) -> Result<(), glib::error::BoolError>;
+    fn seek_simple<V: Into<::FormatValue>>(
+        &self,
+        seek_flags: ::SeekFlags,
+        seek_pos: V,
+    ) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -335,6 +359,111 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
         unsafe {
             ffi::gst_element_remove_property_notify_watch(self.to_glib_none().0, watch_id.0);
+        }
+    }
+
+    fn query_convert<V: Into<::FormatValue>>(
+        &self,
+        src_val: V,
+        dest_format: ::Format,
+    ) -> Option<::FormatValue> {
+        let src_val = src_val.into();
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            let ret = from_glib(ffi::gst_element_query_convert(
+                self.to_glib_none().0,
+                src_val.to_format().to_glib(),
+                src_val.to_value(),
+                dest_format.to_glib(),
+                &mut dest_val,
+            ));
+            if ret {
+                Some(::FormatValue::new(dest_format, dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_duration(&self, format: ::Format) -> Option<::FormatValue> {
+        unsafe {
+            let mut duration = mem::uninitialized();
+            let ret = from_glib(ffi::gst_element_query_duration(
+                self.to_glib_none().0,
+                format.to_glib(),
+                &mut duration,
+            ));
+            if ret {
+                Some(::FormatValue::new(format, duration))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_position(&self, format: ::Format) -> Option<::FormatValue> {
+        unsafe {
+            let mut cur = mem::uninitialized();
+            let ret = from_glib(ffi::gst_element_query_position(
+                self.to_glib_none().0,
+                format.to_glib(),
+                &mut cur,
+            ));
+            if ret {
+                Some(::FormatValue::new(format, cur))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn seek<V: Into<::FormatValue>>(
+        &self,
+        rate: f64,
+        flags: ::SeekFlags,
+        start_type: ::SeekType,
+        start: V,
+        stop_type: ::SeekType,
+        stop: V,
+    ) -> Result<(), glib::error::BoolError> {
+        let start = start.into();
+        let stop = stop.into();
+
+        assert_eq!(stop.to_format(), start.to_format());
+
+        unsafe {
+            glib::error::BoolError::from_glib(
+                ffi::gst_element_seek(
+                    self.to_glib_none().0,
+                    rate,
+                    start.to_format().to_glib(),
+                    flags.to_glib(),
+                    start_type.to_glib(),
+                    start.to_value(),
+                    stop_type.to_glib(),
+                    stop.to_value(),
+                ),
+                "Failed to seek",
+            )
+        }
+    }
+
+    fn seek_simple<V: Into<::FormatValue>>(
+        &self,
+        seek_flags: ::SeekFlags,
+        seek_pos: V,
+    ) -> Result<(), glib::error::BoolError> {
+        let seek_pos = seek_pos.into();
+        unsafe {
+            glib::error::BoolError::from_glib(
+                ffi::gst_element_seek_simple(
+                    self.to_glib_none().0,
+                    seek_pos.to_format().to_glib(),
+                    seek_flags.to_glib(),
+                    seek_pos.to_value(),
+                ),
+                "Failed to seek",
+            )
         }
     }
 }

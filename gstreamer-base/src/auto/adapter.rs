@@ -59,7 +59,7 @@ impl Adapter {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn dts_at_discont(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_adapter_dts_at_discont(self.to_glib_none().0)
+            from_glib(ffi::gst_adapter_dts_at_discont(self.to_glib_none().0))
         }
     }
 
@@ -117,7 +117,7 @@ impl Adapter {
     pub fn prev_dts(&self) -> (gst::ClockTime, u64) {
         unsafe {
             let mut distance = mem::uninitialized();
-            let ret = ffi::gst_adapter_prev_dts(self.to_glib_none().0, &mut distance);
+            let ret = from_glib(ffi::gst_adapter_prev_dts(self.to_glib_none().0, &mut distance));
             (ret, distance)
         }
     }
@@ -125,7 +125,7 @@ impl Adapter {
     pub fn prev_dts_at_offset(&self, offset: usize) -> (gst::ClockTime, u64) {
         unsafe {
             let mut distance = mem::uninitialized();
-            let ret = ffi::gst_adapter_prev_dts_at_offset(self.to_glib_none().0, offset, &mut distance);
+            let ret = from_glib(ffi::gst_adapter_prev_dts_at_offset(self.to_glib_none().0, offset, &mut distance));
             (ret, distance)
         }
     }
@@ -142,7 +142,7 @@ impl Adapter {
     pub fn prev_pts(&self) -> (gst::ClockTime, u64) {
         unsafe {
             let mut distance = mem::uninitialized();
-            let ret = ffi::gst_adapter_prev_pts(self.to_glib_none().0, &mut distance);
+            let ret = from_glib(ffi::gst_adapter_prev_pts(self.to_glib_none().0, &mut distance));
             (ret, distance)
         }
     }
@@ -150,7 +150,7 @@ impl Adapter {
     pub fn prev_pts_at_offset(&self, offset: usize) -> (gst::ClockTime, u64) {
         unsafe {
             let mut distance = mem::uninitialized();
-            let ret = ffi::gst_adapter_prev_pts_at_offset(self.to_glib_none().0, offset, &mut distance);
+            let ret = from_glib(ffi::gst_adapter_prev_pts_at_offset(self.to_glib_none().0, offset, &mut distance));
             (ret, distance)
         }
     }
@@ -158,7 +158,7 @@ impl Adapter {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn pts_at_discont(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_adapter_pts_at_discont(self.to_glib_none().0)
+            from_glib(ffi::gst_adapter_pts_at_discont(self.to_glib_none().0))
         }
     }
 

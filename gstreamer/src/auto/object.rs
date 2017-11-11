@@ -122,7 +122,7 @@ impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
 
     fn get_control_rate(&self) -> ClockTime {
         unsafe {
-            ffi::gst_object_get_control_rate(self.to_glib_none().0)
+            from_glib(ffi::gst_object_get_control_rate(self.to_glib_none().0))
         }
     }
 
@@ -198,7 +198,7 @@ impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
 
     fn set_control_rate(&self, control_rate: ClockTime) {
         unsafe {
-            ffi::gst_object_set_control_rate(self.to_glib_none().0, control_rate);
+            ffi::gst_object_set_control_rate(self.to_glib_none().0, control_rate.to_glib());
         }
     }
 
@@ -218,13 +218,13 @@ impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
 
     fn suggest_next_sync(&self) -> ClockTime {
         unsafe {
-            ffi::gst_object_suggest_next_sync(self.to_glib_none().0)
+            from_glib(ffi::gst_object_suggest_next_sync(self.to_glib_none().0))
         }
     }
 
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_object_sync_values(self.to_glib_none().0, timestamp), "Failed to sync values")
+            glib::error::BoolError::from_glib(ffi::gst_object_sync_values(self.to_glib_none().0, timestamp.to_glib()), "Failed to sync values")
         }
     }
 

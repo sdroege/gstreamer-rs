@@ -132,9 +132,8 @@ mod tutorial5 {
             let pipeline = &pipeline;
             let value = slider.get_value() as u64;
             if let Err(_) = pipeline.seek_simple(
-                gst::Format::Time,
                 gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
-                ((value * gst::SECOND) as i64),
+                value * gst::SECOND,
             ) {
                 eprintln!("Seeking to {} failed", value);
             }
@@ -148,16 +147,15 @@ mod tutorial5 {
             let pipeline = &pipeline;
             let lslider = &lslider;
 
-            if let Some(dur) = pipeline.query_duration(gst::Format::Time) {
-                let seconds = (dur as u64) / gst::SECOND;
-                lslider.set_range(0.0, seconds as f64);
+            if let Some(gst::FormatValue::Time(dur)) = pipeline.query_duration(gst::Format::Time) {
+                let seconds = dur / gst::SECOND;
+                lslider.set_range(0.0, seconds.map(|v| v as f64).unwrap_or(0.0));
             }
 
-            let position = pipeline.query_position(gst::Format::Time);
-            if let Some(position) = position {
-                let seconds = (position as u64) / gst::SECOND;
+            if let Some(gst::FormatValue::Time(pos)) = pipeline.query_position(gst::Format::Time) {
+                let seconds = pos / gst::SECOND;
                 lslider.block_signal(&slider_update_signal_id);
-                lslider.set_value(seconds as f64);
+                lslider.set_value(seconds.map(|v| v as f64).unwrap_or(0.0));
                 lslider.unblock_signal(&slider_update_signal_id);
             }
 

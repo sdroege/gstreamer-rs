@@ -30,21 +30,29 @@ fn main() {
         //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
         let pos = {
             let mut q = gst::Query::new_position(gst::Format::Time);
-            pipeline.query(q.get_mut().unwrap());
-            match q.view() {
-                QueryView::Position(ref p) => p.get().1,
-                _ => unreachable!(),
+            if pipeline.query(q.get_mut().unwrap()) {
+                match q.view() {
+                    QueryView::Position(ref p) => Some(p.get()),
+                    _ => None,
+                }
+            } else {
+                None
             }
-        };
+        }.and_then(|pos| pos.try_to_time())
+            .unwrap();
 
         let dur = {
             let mut q = gst::Query::new_duration(gst::Format::Time);
-            pipeline.query(q.get_mut().unwrap());
-            match q.view() {
-                QueryView::Duration(ref p) => p.get().1,
-                _ => unreachable!(),
+            if pipeline.query(q.get_mut().unwrap()) {
+                match q.view() {
+                    QueryView::Duration(ref p) => Some(p.get()),
+                    _ => None,
+                }
+            } else {
+                None
             }
-        };
+        }.and_then(|dur| dur.try_to_time())
+            .unwrap();
 
         println!("{} / {}", pos, dur);
 

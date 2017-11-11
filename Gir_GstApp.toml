@@ -24,7 +24,6 @@ manual = [
     "Gst.Object",
     "Gst.Element",
     "Gst.URIHandler",
-    "Gst.ClockTime",
     "Gst.FlowReturn",
     "Gst.Format",
     "GstBase.BaseSrc",
@@ -100,3 +99,8 @@ ref_mode = "ref"
 name = "Gst.Sample"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"

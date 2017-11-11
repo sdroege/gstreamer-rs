@@ -55,16 +55,16 @@ fn main() {
                     let position = custom_data
                         .playbin
                         .query_position(gst::Format::Time)
+                        .and_then(|v| v.try_to_time())
                         .expect("Could not query current position.");
-                    let position = position as gst::ClockTime;
 
                     // If we didn't know it yet, query the stream duration
                     if custom_data.duration == gst::CLOCK_TIME_NONE {
                         custom_data.duration = custom_data
                             .playbin
                             .query_duration(gst::Format::Time)
+                            .and_then(|v| v.try_to_time())
                             .expect("Could not query current duration.")
-                            as gst::ClockTime;
                     }
 
                     // Print current position and total duration
@@ -78,9 +78,8 @@ fn main() {
                         custom_data
                             .playbin
                             .seek_simple(
-                                gst::Format::Time,
                                 gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
-                                (30 * gst::SECOND) as i64,
+                                30 * gst::SECOND,
                             )
                             .expect("Failed to seek.");
                         custom_data.seek_done = true;
@@ -130,10 +129,10 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
                 if custom_data.playbin.query(query.get_mut().unwrap()) {
                     match query.view() {
                         gst::QueryView::Seeking(seek) => {
-                            let (_fmt, seekable, start, end) = seek.get();
+                            let (seekable, start, end) = seek.get();
                             custom_data.seek_enabled = seekable;
                             if seekable {
-                                println!("Seeking is ENABLED from {} to {}", start, end)
+                                println!("Seeking is ENABLED from {:?} to {:?}", start, end)
                             } else {
                                 println!("Seeking is DISABLED for this stream.")
                             }

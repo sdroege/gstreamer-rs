@@ -153,7 +153,7 @@ pub fn update_registry() -> Result<(), glib::error::BoolError> {
 pub fn util_get_timestamp() -> ClockTime {
     assert_initialized_main_thread!();
     unsafe {
-        ffi::gst_util_get_timestamp()
+        from_glib(ffi::gst_util_get_timestamp())
     }
 }
 

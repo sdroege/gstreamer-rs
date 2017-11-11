@@ -83,7 +83,7 @@ impl Player {
 
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_player_get_duration(self.to_glib_none().0)
+            from_glib(ffi::gst_player_get_duration(self.to_glib_none().0))
         }
     }
 
@@ -115,7 +115,7 @@ impl Player {
 
     pub fn get_position(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_player_get_position(self.to_glib_none().0)
+            from_glib(ffi::gst_player_get_position(self.to_glib_none().0))
         }
     }
 
@@ -171,7 +171,7 @@ impl Player {
 
     pub fn seek(&self, position: gst::ClockTime) {
         unsafe {
-            ffi::gst_player_seek(self.to_glib_none().0, position);
+            ffi::gst_player_seek(self.to_glib_none().0, position.to_glib());
         }
     }
 

@@ -4,6 +4,5 @@
 #[allow(unused_imports)]
 use auto::*;
 
-pub type ClockTime = u64;
 pub type ClockTimeDiff = i64;
 pub type ElementFactoryListType = u64;

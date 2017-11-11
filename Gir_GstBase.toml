@@ -26,7 +26,6 @@ manual = [
     "GLib.Bytes",
     "Gst.Object",
     "Gst.Element",
-    "Gst.ClockTime",
     "Gst.ClockTimeDiff",
     "Gst.ClockReturn",
     "Gst.FlowReturn",
@@ -96,3 +95,8 @@ ref_mode = "ref"
 name = "Gst.Sample"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"

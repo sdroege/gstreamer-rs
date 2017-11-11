@@ -42,12 +42,13 @@ impl<'a> AudioInfoBuilder<'a> {
                     return None;
                 }
 
-                let positions: [ffi::GstAudioChannelPosition; 64] =
-                    array_init::array_init_copy(|i| if i >= self.channels as usize {
+                let positions: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(
+                    |i| if i >= self.channels as usize {
                         ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
                     } else {
                         p[i].to_glib()
-                    });
+                    },
+                );
 
                 let valid: bool = from_glib(ffi::gst_audio_check_valid_channel_positions(
                     positions.as_ptr() as *mut _,
@@ -156,22 +157,21 @@ impl AudioInfo {
 
     pub fn convert(
         &self,
-        src_fmt: gst::Format,
-        src_val: i64,
+        src_val: gst::FormatValue,
         dest_fmt: gst::Format,
-    ) -> Option<i64> {
+    ) -> Option<gst::FormatValue> {
         assert_initialized_main_thread!();
 
         unsafe {
             let mut dest_val = mem::uninitialized();
             if from_glib(ffi::gst_audio_info_convert(
                 &self.0,
-                src_fmt.to_glib(),
-                src_val,
+                src_val.to_format().to_glib(),
+                src_val.to_value(),
                 dest_fmt.to_glib(),
                 &mut dest_val,
             )) {
-                Some(dest_val)
+                Some(gst::FormatValue::new(dest_fmt, dest_val))
             } else {
                 None
             }

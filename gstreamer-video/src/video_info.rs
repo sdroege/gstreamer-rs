@@ -545,24 +545,25 @@ impl VideoInfo {
         self.format_info().n_components()
     }
 
-    pub fn convert(
+    pub fn convert<V: Into<gst::FormatValue>>(
         &self,
-        src_fmt: gst::Format,
-        src_val: i64,
+        src_val: V,
         dest_fmt: gst::Format,
-    ) -> Option<i64> {
+    ) -> Option<gst::FormatValue> {
         skip_assert_initialized!();
+
+        let src_val = src_val.into();
 
         unsafe {
             let mut dest_val = mem::uninitialized();
             if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
-                src_fmt.to_glib(),
-                src_val,
+                src_val.to_format().to_glib(),
+                src_val.to_value(),
                 dest_fmt.to_glib(),
                 &mut dest_val,
             )) {
-                Some(dest_val)
+                Some(gst::FormatValue::new(dest_fmt, dest_val))
             } else {
                 None
             }

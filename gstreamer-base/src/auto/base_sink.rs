@@ -154,7 +154,7 @@ impl<O: IsA<BaseSink> + IsA<glib::object::Object>> BaseSinkExt for O {
 
     fn get_latency(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_base_sink_get_latency(self.to_glib_none().0)
+            from_glib(ffi::gst_base_sink_get_latency(self.to_glib_none().0))
         }
     }
 
@@ -172,7 +172,7 @@ impl<O: IsA<BaseSink> + IsA<glib::object::Object>> BaseSinkExt for O {
 
     fn get_render_delay(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_base_sink_get_render_delay(self.to_glib_none().0)
+            from_glib(ffi::gst_base_sink_get_render_delay(self.to_glib_none().0))
         }
     }
 
@@ -219,7 +219,7 @@ impl<O: IsA<BaseSink> + IsA<glib::object::Object>> BaseSinkExt for O {
             let mut min_latency = mem::uninitialized();
             let mut max_latency = mem::uninitialized();
             let ret = from_glib(ffi::gst_base_sink_query_latency(self.to_glib_none().0, &mut live, &mut upstream_live, &mut min_latency, &mut max_latency));
-            if ret { Some((from_glib(live), from_glib(upstream_live), min_latency, max_latency)) } else { None }
+            if ret { Some((from_glib(live), from_glib(upstream_live), from_glib(min_latency), from_glib(max_latency))) } else { None }
         }
     }
 
@@ -268,7 +268,7 @@ impl<O: IsA<BaseSink> + IsA<glib::object::Object>> BaseSinkExt for O {
 
     fn set_render_delay(&self, delay: gst::ClockTime) {
         unsafe {
-            ffi::gst_base_sink_set_render_delay(self.to_glib_none().0, delay);
+            ffi::gst_base_sink_set_render_delay(self.to_glib_none().0, delay.to_glib());
         }
     }
 
@@ -293,7 +293,7 @@ impl<O: IsA<BaseSink> + IsA<glib::object::Object>> BaseSinkExt for O {
     fn wait(&self, time: gst::ClockTime) -> (gst::FlowReturn, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::uninitialized();
-            let ret = from_glib(ffi::gst_base_sink_wait(self.to_glib_none().0, time, &mut jitter));
+            let ret = from_glib(ffi::gst_base_sink_wait(self.to_glib_none().0, time.to_glib(), &mut jitter));
             (ret, jitter)
         }
     }
@@ -301,7 +301,7 @@ impl<O: IsA<BaseSink> + IsA<glib::object::Object>> BaseSinkExt for O {
     fn wait_clock(&self, time: gst::ClockTime) -> (gst::ClockReturn, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::uninitialized();
-            let ret = from_glib(ffi::gst_base_sink_wait_clock(self.to_glib_none().0, time, &mut jitter));
+            let ret = from_glib(ffi::gst_base_sink_wait_clock(self.to_glib_none().0, time.to_glib(), &mut jitter));
             (ret, jitter)
         }
     }

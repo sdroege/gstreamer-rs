@@ -200,14 +200,16 @@ impl GstRc<MessageRef> {
         ElementBuilder::new(structure)
     }
 
-    pub fn new_segment_start<'a>(format: ::Format, position: i64) -> SegmentStartBuilder<'a> {
+    pub fn new_segment_start<'a, V: Into<::FormatValue>>(position: V) -> SegmentStartBuilder<'a> {
         assert_initialized_main_thread!();
-        SegmentStartBuilder::new(format, position)
+        let position = position.into();
+        SegmentStartBuilder::new(position)
     }
 
-    pub fn new_segment_done<'a>(format: ::Format, position: i64) -> SegmentDoneBuilder<'a> {
+    pub fn new_segment_done<'a, V: Into<::FormatValue>>(position: V) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
-        SegmentDoneBuilder::new(format, position)
+        let position = position.into();
+        SegmentDoneBuilder::new(position)
     }
 
     pub fn new_duration_changed<'a>() -> DurationChangedBuilder<'a> {
@@ -723,28 +725,28 @@ pub struct Element<'a>(&'a MessageRef);
 
 pub struct SegmentStart<'a>(&'a MessageRef);
 impl<'a> SegmentStart<'a> {
-    pub fn get(&self) -> (::Format, i64) {
+    pub fn get(&self) -> ::FormatValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
             ffi::gst_message_parse_segment_start(self.0.as_mut_ptr(), &mut format, &mut position);
 
-            (from_glib(format), position)
+            ::FormatValue::new(from_glib(format), position)
         }
     }
 }
 
 pub struct SegmentDone<'a>(&'a MessageRef);
 impl<'a> SegmentDone<'a> {
-    pub fn get(&self) -> (::Format, i64) {
+    pub fn get(&self) -> ::FormatValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
             ffi::gst_message_parse_segment_done(self.0.as_mut_ptr(), &mut format, &mut position);
 
-            (from_glib(format), position)
+            ::FormatValue::new(from_glib(format), position)
         }
     }
 }
@@ -1749,23 +1751,25 @@ pub struct SegmentStartBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    format: ::Format,
-    position: i64,
+    position: ::FormatValue,
 }
 impl<'a> SegmentStartBuilder<'a> {
-    fn new(format: ::Format, position: i64) -> Self {
+    fn new(position: ::FormatValue) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
-            format: format,
             position: position,
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        ffi::gst_message_new_segment_start(src, s.format.to_glib(), s.position)
+        ffi::gst_message_new_segment_start(
+            src,
+            s.position.to_format().to_glib(),
+            s.position.to_value(),
+        )
     });
 }
 
@@ -1773,23 +1777,25 @@ pub struct SegmentDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    format: ::Format,
-    position: i64,
+    position: ::FormatValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
-    fn new(format: ::Format, position: i64) -> Self {
+    fn new(position: ::FormatValue) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
-            format: format,
             position: position,
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        ffi::gst_message_new_segment_done(src, s.format.to_glib(), s.position)
+        ffi::gst_message_new_segment_done(
+            src,
+            s.position.to_format().to_glib(),
+            s.position.to_value(),
+        )
     });
 }
 

@@ -151,14 +151,17 @@ impl GstRc<EventRef> {
         TagBuilder::new(tags)
     }
 
-    pub fn new_buffer_size<'a>(
-        format: ::Format,
-        minsize: i64,
-        maxsize: i64,
+    pub fn new_buffer_size<'a, V: Into<::FormatValue>>(
+        minsize: V,
+        maxsize: V,
         async: bool,
     ) -> BufferSizeBuilder<'a> {
         assert_initialized_main_thread!();
-        BufferSizeBuilder::new(format, minsize, maxsize, async)
+        let minsize = minsize.into();
+        let maxsize = maxsize.into();
+        assert_eq!(minsize.to_format(), maxsize.to_format());
+
+        BufferSizeBuilder::new(minsize, maxsize, async)
     }
 
     pub fn new_sink_message<'a>(name: &'a str, msg: &'a ::Message) -> SinkMessageBuilder<'a> {
@@ -191,9 +194,10 @@ impl GstRc<EventRef> {
         ProtectionBuilder::new(system_id, data, origin)
     }
 
-    pub fn new_segment_done<'a>(format: ::Format, position: i64) -> SegmentDoneBuilder<'a> {
+    pub fn new_segment_done<'a, V: Into<::FormatValue>>(position: V) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
-        SegmentDoneBuilder::new(format, position)
+        let position = position.into();
+        SegmentDoneBuilder::new(position)
     }
 
     pub fn new_gap<'a>(timestamp: u64, duration: u64) -> GapBuilder<'a> {
@@ -211,17 +215,20 @@ impl GstRc<EventRef> {
         QosBuilder::new(type_, proportion, diff, timestamp)
     }
 
-    pub fn new_seek<'a>(
+    pub fn new_seek<'a, V: Into<::FormatValue>>(
         rate: f64,
-        format: ::Format,
         flags: ::SeekFlags,
         start_type: ::SeekType,
-        start: i64,
+        start: V,
         stop_type: ::SeekType,
-        stop: i64,
+        stop: V,
     ) -> SeekBuilder<'a> {
         assert_initialized_main_thread!();
-        SeekBuilder::new(rate, format, flags, start_type, start, stop_type, stop)
+        let start = start.into();
+        let stop = stop.into();
+        assert_eq!(start.to_format(), stop.to_format());
+
+        SeekBuilder::new(rate, flags, start_type, start, stop_type, stop)
     }
 
     pub fn new_navigation<'a>(structure: ::Structure) -> NavigationBuilder<'a> {
@@ -436,7 +443,7 @@ impl<'a> Tag<'a> {
 
 pub struct BufferSize<'a>(&'a EventRef);
 impl<'a> BufferSize<'a> {
-    pub fn get(&self) -> (::Format, i64, i64, bool) {
+    pub fn get(&self) -> (::FormatValue, ::FormatValue, bool) {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut minsize = mem::uninitialized();
@@ -450,7 +457,11 @@ impl<'a> BufferSize<'a> {
                 &mut maxsize,
                 &mut async,
             );
-            (from_glib(fmt), minsize, maxsize, from_glib(async))
+            (
+                ::FormatValue::new(from_glib(fmt), minsize),
+                ::FormatValue::new(from_glib(fmt), maxsize),
+                from_glib(async),
+            )
         }
     }
 }
@@ -522,14 +533,14 @@ impl<'a> Protection<'a> {
 
 pub struct SegmentDone<'a>(&'a EventRef);
 impl<'a> SegmentDone<'a> {
-    pub fn get(&self) -> (::Format, i64) {
+    pub fn get(&self) -> ::FormatValue {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut position = mem::uninitialized();
 
             ffi::gst_event_parse_segment_done(self.0.as_mut_ptr(), &mut fmt, &mut position);
 
-            (from_glib(fmt), position)
+            ::FormatValue::new(from_glib(fmt), position)
         }
     }
 }
@@ -573,7 +584,16 @@ impl<'a> Qos<'a> {
 
 pub struct Seek<'a>(&'a EventRef);
 impl<'a> Seek<'a> {
-    pub fn get(&self) -> (f64, ::Format, ::SeekFlags, ::SeekType, i64, ::SeekType, i64) {
+    pub fn get(
+        &self,
+    ) -> (
+        f64,
+        ::SeekFlags,
+        ::SeekType,
+        ::FormatValue,
+        ::SeekType,
+        ::FormatValue,
+    ) {
         unsafe {
             let mut rate = mem::uninitialized();
             let mut fmt = mem::uninitialized();
@@ -596,12 +616,11 @@ impl<'a> Seek<'a> {
 
             (
                 rate,
-                from_glib(fmt),
                 from_glib(flags),
                 from_glib(start_type),
-                start,
+                ::FormatValue::new(from_glib(fmt), start),
                 from_glib(stop_type),
-                stop,
+                ::FormatValue::new(from_glib(fmt), stop),
             )
         }
     }
@@ -921,19 +940,17 @@ pub struct BufferSizeBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    fmt: ::Format,
-    minsize: i64,
-    maxsize: i64,
+    minsize: ::FormatValue,
+    maxsize: ::FormatValue,
     async: bool,
 }
 impl<'a> BufferSizeBuilder<'a> {
-    fn new(fmt: ::Format, minsize: i64, maxsize: i64, async: bool) -> Self {
+    fn new(minsize: ::FormatValue, maxsize: ::FormatValue, async: bool) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            fmt: fmt,
             minsize: minsize,
             maxsize: maxsize,
             async: async,
@@ -941,7 +958,12 @@ impl<'a> BufferSizeBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_buffer_size(s.fmt.to_glib(), s.minsize, s.maxsize, s.async.to_glib())
+        ffi::gst_event_new_buffer_size(
+            s.minsize.to_format().to_glib(),
+            s.minsize.to_value(),
+            s.maxsize.to_value(),
+            s.async.to_glib(),
+        )
     });
 }
 
@@ -1067,23 +1089,21 @@ pub struct SegmentDoneBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    fmt: ::Format,
-    position: i64,
+    position: ::FormatValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
-    fn new(fmt: ::Format, position: i64) -> Self {
+    fn new(position: ::FormatValue) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            fmt: fmt,
             position: position,
         }
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_segment_done(s.fmt.to_glib(), s.position)
+        ffi::gst_event_new_segment_done(s.position.to_format().to_glib(), s.position.to_value())
     });
 }
 
@@ -1142,22 +1162,20 @@ pub struct SeekBuilder<'a> {
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
     rate: f64,
-    fmt: ::Format,
     flags: ::SeekFlags,
     start_type: ::SeekType,
-    start: i64,
+    start: ::FormatValue,
     stop_type: ::SeekType,
-    stop: i64,
+    stop: ::FormatValue,
 }
 impl<'a> SeekBuilder<'a> {
     fn new(
         rate: f64,
-        fmt: ::Format,
         flags: ::SeekFlags,
         start_type: ::SeekType,
-        start: i64,
+        start: ::FormatValue,
         stop_type: ::SeekType,
-        stop: i64,
+        stop: ::FormatValue,
     ) -> Self {
         skip_assert_initialized!();
         Self {
@@ -1165,7 +1183,6 @@ impl<'a> SeekBuilder<'a> {
             running_time_offset: None,
             other_fields: Vec::new(),
             rate: rate,
-            fmt: fmt,
             flags: flags,
             start_type,
             start,
@@ -1177,12 +1194,12 @@ impl<'a> SeekBuilder<'a> {
     event_builder_generic_impl!(|s: &Self| {
         ffi::gst_event_new_seek(
             s.rate,
-            s.fmt.to_glib(),
+            s.start.to_format().to_glib(),
             s.flags.to_glib(),
             s.start_type.to_glib(),
-            s.start,
+            s.start.to_value(),
             s.stop_type.to_glib(),
-            s.stop,
+            s.stop.to_value(),
         )
     });
 }

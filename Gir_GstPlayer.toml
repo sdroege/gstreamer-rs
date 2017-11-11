@@ -28,7 +28,6 @@ manual = [
     "GLib.Error",
     "GLib.MainContext",
     "GObject.Object",
-    "Gst.ClockTime",
     "Gst.Element",
 ]
 
@@ -158,3 +157,8 @@ trait = false
     name = "new"
     # Wrong return value
     ignore = true
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"

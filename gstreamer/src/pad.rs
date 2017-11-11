@@ -11,6 +11,7 @@ use PadProbeType;
 use PadProbeReturn;
 use Buffer;
 use BufferList;
+use Format;
 use FlowReturn;
 use Query;
 use QueryRef;
@@ -183,6 +184,21 @@ pub trait PadExtManual {
         F: Fn(&Pad, &Option<::Object>) + Send + Sync + 'static;
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
+
+    fn peer_query_convert<V: Into<::FormatValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<::FormatValue>;
+    fn peer_query_duration(&self, format: Format) -> Option<::FormatValue>;
+    fn peer_query_position(&self, format: Format) -> Option<::FormatValue>;
+    fn query_convert<V: Into<::FormatValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<::FormatValue>;
+    fn query_duration(&self, format: Format) -> Option<::FormatValue>;
+    fn query_position(&self, format: Format) -> Option<::FormatValue>;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -591,6 +607,117 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 ),
                 "Failed to start pad task",
             )
+        }
+    }
+
+    fn peer_query_convert<V: Into<::FormatValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<::FormatValue> {
+        let src_val = src_val.into();
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_peer_query_convert(
+                self.to_glib_none().0,
+                src_val.to_format().to_glib(),
+                src_val.to_value(),
+                dest_format.to_glib(),
+                &mut dest_val,
+            ));
+            if ret {
+                Some(::FormatValue::new(dest_format, dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn peer_query_duration(&self, format: Format) -> Option<::FormatValue> {
+        unsafe {
+            let mut duration = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_peer_query_duration(
+                self.to_glib_none().0,
+                format.to_glib(),
+                &mut duration,
+            ));
+            if ret {
+                Some(::FormatValue::new(format, duration))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn peer_query_position(&self, format: Format) -> Option<::FormatValue> {
+        unsafe {
+            let mut cur = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_peer_query_position(
+                self.to_glib_none().0,
+                format.to_glib(),
+                &mut cur,
+            ));
+            if ret {
+                Some(::FormatValue::new(format, cur))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_convert<V: Into<::FormatValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<::FormatValue> {
+        let src_val = src_val.into();
+
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_query_convert(
+                self.to_glib_none().0,
+                src_val.to_format().to_glib(),
+                src_val.to_value(),
+                dest_format.to_glib(),
+                &mut dest_val,
+            ));
+            if ret {
+                Some(::FormatValue::new(dest_format, dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_duration(&self, format: Format) -> Option<::FormatValue> {
+        unsafe {
+            let mut duration = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_query_duration(
+                self.to_glib_none().0,
+                format.to_glib(),
+                &mut duration,
+            ));
+            if ret {
+                Some(::FormatValue::new(format, duration))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_position(&self, format: Format) -> Option<::FormatValue> {
+        unsafe {
+            let mut cur = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_query_position(
+                self.to_glib_none().0,
+                format.to_glib(),
+                &mut cur,
+            ));
+            if ret {
+                Some(::FormatValue::new(format, cur))
+            } else {
+                None
+            }
         }
     }
 }

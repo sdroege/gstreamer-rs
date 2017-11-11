@@ -6,7 +6,6 @@ use Element;
 use Event;
 use EventType;
 use FlowReturn;
-use Format;
 use Object;
 use PadDirection;
 use PadLinkCheck;
@@ -151,21 +150,9 @@ pub trait PadExt {
 
     fn peer_query_caps<'a, P: Into<Option<&'a Caps>>>(&self, filter: P) -> Option<Caps>;
 
-    fn peer_query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64>;
-
-    fn peer_query_duration(&self, format: Format) -> Option<i64>;
-
-    fn peer_query_position(&self, format: Format) -> Option<i64>;
-
     fn query_accept_caps(&self, caps: &Caps) -> bool;
 
     fn query_caps<'a, P: Into<Option<&'a Caps>>>(&self, filter: P) -> Option<Caps>;
-
-    fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64>;
-
-    fn query_duration(&self, format: Format) -> Option<i64>;
-
-    fn query_position(&self, format: Format) -> Option<i64>;
 
     //fn set_activate_function_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, activate: /*Unknown conversion*//*Unimplemented*/PadActivateFunction, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
@@ -449,30 +436,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         }
     }
 
-    fn peer_query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64> {
-        unsafe {
-            let mut dest_val = mem::uninitialized();
-            let ret = from_glib(ffi::gst_pad_peer_query_convert(self.to_glib_none().0, src_format.to_glib(), src_val, dest_format.to_glib(), &mut dest_val));
-            if ret { Some(dest_val) } else { None }
-        }
-    }
-
-    fn peer_query_duration(&self, format: Format) -> Option<i64> {
-        unsafe {
-            let mut duration = mem::uninitialized();
-            let ret = from_glib(ffi::gst_pad_peer_query_duration(self.to_glib_none().0, format.to_glib(), &mut duration));
-            if ret { Some(duration) } else { None }
-        }
-    }
-
-    fn peer_query_position(&self, format: Format) -> Option<i64> {
-        unsafe {
-            let mut cur = mem::uninitialized();
-            let ret = from_glib(ffi::gst_pad_peer_query_position(self.to_glib_none().0, format.to_glib(), &mut cur));
-            if ret { Some(cur) } else { None }
-        }
-    }
-
     fn query_accept_caps(&self, caps: &Caps) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_query_accept_caps(self.to_glib_none().0, caps.to_glib_none().0))
@@ -484,30 +447,6 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
         let filter = filter.to_glib_none();
         unsafe {
             from_glib_full(ffi::gst_pad_query_caps(self.to_glib_none().0, filter.0))
-        }
-    }
-
-    fn query_convert(&self, src_format: Format, src_val: i64, dest_format: Format) -> Option<i64> {
-        unsafe {
-            let mut dest_val = mem::uninitialized();
-            let ret = from_glib(ffi::gst_pad_query_convert(self.to_glib_none().0, src_format.to_glib(), src_val, dest_format.to_glib(), &mut dest_val));
-            if ret { Some(dest_val) } else { None }
-        }
-    }
-
-    fn query_duration(&self, format: Format) -> Option<i64> {
-        unsafe {
-            let mut duration = mem::uninitialized();
-            let ret = from_glib(ffi::gst_pad_query_duration(self.to_glib_none().0, format.to_glib(), &mut duration));
-            if ret { Some(duration) } else { None }
-        }
-    }
-
-    fn query_position(&self, format: Format) -> Option<i64> {
-        unsafe {
-            let mut cur = mem::uninitialized();
-            let ret = from_glib(ffi::gst_pad_query_position(self.to_glib_none().0, format.to_glib(), &mut cur));
-            if ret { Some(cur) } else { None }
         }
     }
 

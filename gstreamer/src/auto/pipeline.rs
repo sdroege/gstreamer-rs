@@ -84,13 +84,13 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
 
     fn get_delay(&self) -> ClockTime {
         unsafe {
-            ffi::gst_pipeline_get_delay(self.to_glib_none().0)
+            from_glib(ffi::gst_pipeline_get_delay(self.to_glib_none().0))
         }
     }
 
     fn get_latency(&self) -> ClockTime {
         unsafe {
-            ffi::gst_pipeline_get_latency(self.to_glib_none().0)
+            from_glib(ffi::gst_pipeline_get_latency(self.to_glib_none().0))
         }
     }
 
@@ -108,13 +108,13 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
 
     fn set_delay(&self, delay: ClockTime) {
         unsafe {
-            ffi::gst_pipeline_set_delay(self.to_glib_none().0, delay);
+            ffi::gst_pipeline_set_delay(self.to_glib_none().0, delay.to_glib());
         }
     }
 
     fn set_latency(&self, latency: ClockTime) {
         unsafe {
-            ffi::gst_pipeline_set_latency(self.to_glib_none().0, latency);
+            ffi::gst_pipeline_set_latency(self.to_glib_none().0, latency.to_glib());
         }
     }
 

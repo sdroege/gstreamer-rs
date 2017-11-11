@@ -54,7 +54,7 @@ impl AppSrc {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_app_src_get_duration(self.to_glib_none().0)
+            from_glib(ffi::gst_app_src_get_duration(self.to_glib_none().0))
         }
     }
 
@@ -110,7 +110,7 @@ impl AppSrc {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn set_duration(&self, duration: gst::ClockTime) {
         unsafe {
-            ffi::gst_app_src_set_duration(self.to_glib_none().0, duration);
+            ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.to_glib());
         }
     }
 

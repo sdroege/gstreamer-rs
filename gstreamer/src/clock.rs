@@ -34,14 +34,18 @@ glib_wrapper! {
 
 unsafe extern "C" fn trampoline_wait_async(
     clock: *mut ffi::GstClock,
-    time: ClockTime,
+    time: ffi::GstClockTime,
     id: gpointer,
     func: gpointer,
 ) -> gboolean {
     let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static) = transmute(func);
-    f(&from_glib_borrow(clock), time, &from_glib_borrow(id)).to_glib()
+    f(
+        &from_glib_borrow(clock),
+        from_glib(time),
+        &from_glib_borrow(id),
+    ).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_wait_async(ptr: gpointer) {
@@ -60,7 +64,7 @@ fn into_raw_wait_async<F: Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'stat
 
 impl ClockId {
     pub fn get_time(&self) -> ClockTime {
-        unsafe { ffi::gst_clock_id_get_time(self.to_glib_none().0) }
+        unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
     }
 
     pub fn unschedule(&self) {
@@ -142,8 +146,8 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
         unsafe {
             from_glib_full(ffi::gst_clock_new_periodic_id(
                 self.to_glib_none().0,
-                start_time,
-                interval,
+                start_time.to_glib(),
+                interval.to_glib(),
             ))
         }
     }
@@ -159,8 +163,8 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
             let res: bool = from_glib(ffi::gst_clock_periodic_id_reinit(
                 self.to_glib_none().0,
                 id.to_glib_none().0,
-                start_time,
-                interval,
+                start_time.to_glib(),
+                interval.to_glib(),
             ));
             if res {
                 Ok(())
@@ -174,7 +178,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
         unsafe {
             from_glib_full(ffi::gst_clock_new_single_shot_id(
                 self.to_glib_none().0,
-                time,
+                time.to_glib(),
             ))
         }
     }
@@ -184,7 +188,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
             let res: bool = from_glib(ffi::gst_clock_single_shot_id_reinit(
                 self.to_glib_none().0,
                 id.to_glib_none().0,
-                time,
+                time.to_glib(),
             ));
             if res {
                 Ok(())
@@ -207,7 +211,7 @@ mod tests {
 
         let clock = SystemClock::obtain();
         let now = clock.get_time();
-        let id = clock.new_single_shot_id(now + 20_000_000).unwrap();
+        let id = clock.new_single_shot_id(now + 20 * ::MSECOND).unwrap();
         let (res, _) = id.wait();
 
         assert!(res == ClockReturn::Ok || res == ClockReturn::Early);
@@ -221,7 +225,7 @@ mod tests {
 
         let clock = SystemClock::obtain();
         let now = clock.get_time();
-        let id = clock.new_single_shot_id(now + 20_000_000).unwrap();
+        let id = clock.new_single_shot_id(now + 20 * ::MSECOND).unwrap();
         let res = id.wait_async(move |_, _, _| {
             sender.send(()).unwrap();
 

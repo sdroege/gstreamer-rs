@@ -133,7 +133,7 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
             let mut min_latency = mem::uninitialized();
             let mut max_latency = mem::uninitialized();
             let ret = from_glib(ffi::gst_base_src_query_latency(self.to_glib_none().0, &mut live, &mut min_latency, &mut max_latency));
-            if ret { Some((from_glib(live), min_latency, max_latency)) } else { None }
+            if ret { Some((from_glib(live), from_glib(min_latency), from_glib(max_latency))) } else { None }
         }
     }
 

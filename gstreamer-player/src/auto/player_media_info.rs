@@ -36,7 +36,7 @@ impl PlayerMediaInfo {
 
     pub fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            ffi::gst_player_media_info_get_duration(self.to_glib_none().0)
+            from_glib(ffi::gst_player_media_info_get_duration(self.to_glib_none().0))
         }
     }
 
