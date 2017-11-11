@@ -61,7 +61,7 @@ fn main_loop(uri: &str) -> Result<(), Error> {
 
     let guard = error.as_ref().lock().unwrap();
 
-    guard.clone().map_err(|e|e.into())
+    guard.clone().map_err(|e| e.into())
 }
 
 #[allow(unused_variables)]
@@ -74,7 +74,8 @@ fn main() {
         std::process::exit(-1);
     };
 
-    #[cfg(not(feature = "gst-player"))] {
+    #[cfg(not(feature = "gst-player"))]
+    {
         eprintln!("Feature gst-player is required. Please rebuild with --features gst-player");
         std::process::exit(-1);
     }

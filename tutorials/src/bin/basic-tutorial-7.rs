@@ -65,7 +65,10 @@ fn main() {
     let queue_video_pad = video_queue.get_static_pad("sink").unwrap();
     tee_video_pad.link(&queue_video_pad).into_result().unwrap();
 
-    pipeline.set_state(gst::State::Playing).into_result().expect("Unable to set the pipeline to the Playing state.");
+    pipeline
+        .set_state(gst::State::Playing)
+        .into_result()
+        .expect("Unable to set the pipeline to the Playing state.");
     let bus = pipeline.get_bus().unwrap();
     while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -84,5 +87,8 @@ fn main() {
         }
     }
 
-    pipeline.set_state(gst::State::Null).into_result().expect("Unable to set the pipeline to the Null state.");
+    pipeline
+        .set_state(gst::State::Null)
+        .into_result()
+        .expect("Unable to set the pipeline to the Null state.");
 }

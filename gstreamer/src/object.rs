@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use glib;
-use glib::{IsA, Cast};
+use glib::{Cast, IsA};
 use glib::translate::ToGlibPtr;
 use glib::signal::SignalHandlerId;
 use glib::object::ObjectExt;
@@ -29,11 +29,7 @@ impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtM
         f: F,
     ) -> SignalHandlerId {
         self.connect("deep-notify", false, move |values| {
-            let obj: O = values[0]
-                .get::<glib::Object>()
-                .unwrap()
-                .downcast()
-                .unwrap();
+            let obj: O = values[0].get::<glib::Object>().unwrap().downcast().unwrap();
             let prop_obj: ::Object = values[1].get().unwrap();
 
             let prop_name = unsafe {
