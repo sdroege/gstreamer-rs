@@ -164,6 +164,11 @@ pub const MSECOND: ClockTime = ClockTime(Some(1_000_000));
 pub const USECOND: ClockTime = ClockTime(Some(1_000));
 pub const NSECOND: ClockTime = ClockTime(Some(1));
 
+pub const SECOND_VAL: u64 = 1_000_000_000;
+pub const MSECOND_VAL: u64 = 1_000_000;
+pub const USECOND_VAL: u64 = 1_000;
+pub const NSECOND_VAL: u64 = 1;
+
 pub const FORMAT_PERCENT_MAX: u32 = ffi::GST_FORMAT_PERCENT_MAX as u32;
 pub const FORMAT_PERCENT_SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
 
