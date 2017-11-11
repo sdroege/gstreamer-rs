@@ -80,7 +80,7 @@ unsafe extern "C" fn trampoline_seek_data(
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
     let _guard = CallbackGuard::new();
-    Box::<Box<AppSrcCallbacks>>::from_raw(ptr as *mut _);
+    Box::<AppSrcCallbacks>::from_raw(ptr as *mut _);
 }
 
 impl AppSrc {
