@@ -124,9 +124,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     Ok(pipeline)
 }
 
-fn main_loop() -> Result<(), Error> {
-    let pipeline = create_pipeline()?;
-
+fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing).into_result()?;
 
     let bus = pipeline
@@ -157,7 +155,7 @@ fn main_loop() -> Result<(), Error> {
 }
 
 fn main() {
-    match main_loop() {
+    match create_pipeline().and_then(main_loop) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
