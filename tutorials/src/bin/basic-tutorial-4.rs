@@ -129,7 +129,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
                 if custom_data.playbin.query(query.get_mut().unwrap()) {
                     match query.view() {
                         gst::QueryView::Seeking(seek) => {
-                            let (seekable, start, end) = seek.get();
+                            let (seekable, start, end) = seek.get_result();
                             custom_data.seek_enabled = seekable;
                             if seekable {
                                 println!("Seeking is ENABLED from {:?} to {:?}", start, end)

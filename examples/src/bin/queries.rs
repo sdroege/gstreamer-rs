@@ -32,7 +32,7 @@ fn main() {
             let mut q = gst::Query::new_position(gst::Format::Time);
             if pipeline.query(q.get_mut().unwrap()) {
                 match q.view() {
-                    QueryView::Position(ref p) => Some(p.get()),
+                    QueryView::Position(ref p) => Some(p.get_result()),
                     _ => None,
                 }
             } else {
@@ -45,7 +45,7 @@ fn main() {
             let mut q = gst::Query::new_duration(gst::Format::Time);
             if pipeline.query(q.get_mut().unwrap()) {
                 match q.view() {
-                    QueryView::Duration(ref p) => Some(p.get()),
+                    QueryView::Duration(ref p) => Some(p.get_result()),
                     _ => None,
                 }
             } else {
