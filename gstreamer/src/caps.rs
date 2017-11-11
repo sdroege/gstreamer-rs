@@ -28,6 +28,11 @@ unsafe impl MiniObject for CapsRef {
 }
 
 impl GstRc<CapsRef> {
+    pub fn builder(name: &str) -> Builder {
+        assert_initialized_main_thread!();
+        Builder::new(name)
+    }
+
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_caps_new_empty()) }
@@ -366,6 +371,29 @@ impl ToOwned for CapsRef {
 unsafe impl Sync for CapsRef {}
 unsafe impl Send for CapsRef {}
 
+pub struct Builder {
+    s: ::Structure,
+}
+
+impl Builder {
+    fn new(name: &str) -> Self {
+        Builder {
+            s: ::Structure::new_empty(name),
+        }
+    }
+
+    pub fn field<V: ToValue>(mut self, name: &str, value: V) -> Self {
+        self.s.set(name, value);
+        self
+    }
+
+    pub fn build(self) -> Caps {
+        let mut caps = Caps::new_empty();
+        caps.get_mut().unwrap().append_structure(self.s);
+        caps
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -404,6 +432,23 @@ mod tests {
                     ("array", &Array::new(&[&1, &2]))
                 ],
             ).as_ref()
+        );
+    }
+
+    #[test]
+    fn test_builder() {
+        ::init().unwrap();
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new(&[&1, &2]))
+            .build();
+        assert_eq!(
+            caps.to_string(),
+            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
         );
     }
 }

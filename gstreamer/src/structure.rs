@@ -28,6 +28,11 @@ use gobject_ffi;
 pub struct Structure(*mut StructureRef, PhantomData<StructureRef>);
 
 impl Structure {
+    pub fn builder(name: &str) -> Builder {
+        assert_initialized_main_thread!();
+        Builder::new(name)
+    }
+
     pub fn new_empty(name: &str) -> Structure {
         assert_initialized_main_thread!();
         Structure(
@@ -591,6 +596,27 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+pub struct Builder {
+    s: Structure,
+}
+
+impl Builder {
+    fn new(name: &str) -> Self {
+        Builder {
+            s: Structure::new_empty(name),
+        }
+    }
+
+    pub fn field<V: ToValue>(mut self, name: &str, value: V) -> Self {
+        self.s.set(name, value);
+        self
+    }
+
+    pub fn build(self) -> Structure {
+        self.s
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -623,5 +649,21 @@ mod tests {
 
         let s2 = Structure::new("test", &[("f1", &"abc"), ("f2", &"bcd"), ("f3", &123i32)]);
         assert_eq!(s, s2);
+    }
+
+    #[test]
+    fn test_builder() {
+        ::init().unwrap();
+
+        let s = Structure::builder("test")
+            .field("f1", "abc")
+            .field("f2", String::from("bcd"))
+            .field("f3", 123i32)
+            .build();
+
+        assert_eq!(s.get_name(), "test");
+        assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
+        assert_eq!(s.get::<&str>("f2").unwrap(), "bcd");
+        assert_eq!(s.get::<i32>("f3").unwrap(), 123i32);
     }
 }
