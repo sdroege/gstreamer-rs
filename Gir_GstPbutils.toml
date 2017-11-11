@@ -15,12 +15,17 @@ external_libraries = [
 ]
 
 generate = [
+    "GstPbutils.Discoverer",
+    "GstPbutils.DiscovererInfo",
     "GstPbutils.EncodingAudioProfile",
     "GstPbutils.EncodingVideoProfile",
     "GstPbutils.EncodingContainerProfile",
 ]
 
 manual = [
+    "GLib.Error",
+    "GLib.Source",
+    "GLib.DateTime",
     "GObject.Object",
     "Gst.Object",
 ]
