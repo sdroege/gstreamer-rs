@@ -28,6 +28,18 @@ impl ClockTime {
         (*self / ::SECOND).0
     }
 
+    pub fn mseconds(&self) -> Option<u64> {
+        (*self / ::MSECOND).0
+    }
+
+    pub fn useconds(&self) -> Option<u64> {
+        (*self / ::USECOND).0
+    }
+
+    pub fn nseconds(&self) -> Option<u64> {
+        (*self / ::NSECOND).0
+    }
+
     pub fn nanoseconds(&self) -> Option<u64> {
         self.0
     }
@@ -36,8 +48,16 @@ impl ClockTime {
         seconds * ::SECOND
     }
 
-    pub fn new(nanoseconds: u64) -> ClockTime {
-        ClockTime(Some(nanoseconds))
+    pub fn from_mseconds(mseconds: u64) -> ClockTime {
+        mseconds * ::MSECOND
+    }
+
+    pub fn from_useconds(useconds: u64) -> ClockTime {
+        useconds * ::USECOND
+    }
+
+    pub fn from_nseconds(nseconds: u64) -> ClockTime {
+        nseconds * ::NSECOND
     }
 
     pub fn none() -> ClockTime {
@@ -265,21 +285,21 @@ impl MulDiv<ClockTime> for ClockTime {
 
     fn mul_div_floor(self, num: ClockTime, denom: ClockTime) -> Option<Self::Output> {
         match (self.0, num.0, denom.0) {
-            (Some(s), Some(n), Some(d)) => s.mul_div_floor(n, d).map(ClockTime::new),
+            (Some(s), Some(n), Some(d)) => s.mul_div_floor(n, d).map(ClockTime::from_nseconds),
             _ => Some(ClockTime(None)),
         }
     }
 
     fn mul_div_round(self, num: ClockTime, denom: ClockTime) -> Option<Self::Output> {
         match (self.0, num.0, denom.0) {
-            (Some(s), Some(n), Some(d)) => s.mul_div_round(n, d).map(ClockTime::new),
+            (Some(s), Some(n), Some(d)) => s.mul_div_round(n, d).map(ClockTime::from_nseconds),
             _ => Some(ClockTime(None)),
         }
     }
 
     fn mul_div_ceil(self, num: ClockTime, denom: ClockTime) -> Option<Self::Output> {
         match (self.0, num.0, denom.0) {
-            (Some(s), Some(n), Some(d)) => s.mul_div_ceil(n, d).map(ClockTime::new),
+            (Some(s), Some(n), Some(d)) => s.mul_div_ceil(n, d).map(ClockTime::from_nseconds),
             _ => Some(ClockTime(None)),
         }
     }
