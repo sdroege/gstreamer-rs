@@ -1,27 +1,49 @@
+#[macro_use]
 extern crate gstreamer as gst;
 use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
 extern crate gstreamer_audio as gst_audio;
+
+extern crate glib;
 
 extern crate byte_slice_cast;
 use byte_slice_cast::*;
 
 use std::i16;
 use std::i32;
+use std::error::Error as StdError;
 
-pub mod utils;
+extern crate failure;
 
-fn create_pipeline() -> Result<gst::Pipeline, utils::ExampleError> {
-    gst::init().map_err(utils::ExampleError::InitFailed)?;
+#[macro_use]
+extern crate failure_derive;
+
+#[allow(unused_imports)]
+use failure::{Error, Fail};
+
+#[derive(Debug, Fail)]
+#[fail(display = "Missing element {}", _0)]
+struct MissingElement(&'static str);
+
+#[derive(Debug, Fail)]
+#[fail(display = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+struct ErrorMessage {
+    src: String,
+    error: String,
+    debug: Option<String>,
+    #[cause] cause: glib::Error,
+}
+
+fn create_pipeline() -> Result<gst::Pipeline, Error> {
+    gst::init()?;
+
     let pipeline = gst::Pipeline::new(None);
-    let src = utils::create_element("audiotestsrc")?;
-    let sink = utils::create_element("appsink")?;
+    let src =
+        gst::ElementFactory::make("audiotestsrc", None).ok_or(MissingElement("audiotestsrc"))?;
+    let sink = gst::ElementFactory::make("appsink", None).ok_or(MissingElement("appsink"))?;
 
-    pipeline
-        .add_many(&[&src, &sink])
-        .expect("Unable to add elements in the pipeline");
-
-    utils::link_elements(&src, &sink)?;
+    pipeline.add_many(&[&src, &sink])?;
+    src.link(&sink)?;
 
     let appsink = sink.clone()
         .dynamic_cast::<gst_app::AppSink>()
@@ -49,17 +71,39 @@ fn create_pipeline() -> Result<gst::Pipeline, utils::ExampleError> {
                 Some(sample) => sample,
             };
 
-            let buffer = sample
-                .get_buffer()
-                .expect("Unable to extract buffer from the sample");
+            let buffer = if let Some(buffer) = sample.get_buffer() {
+                buffer
+            } else {
+                gst_element_error!(
+                    appsink,
+                    gst::ResourceError::Failed,
+                    ("Failed to get buffer from appsink")
+                );
 
-            let map = buffer
-                .map_readable()
-                .expect("Unable to map buffer for reading");
+                return gst::FlowReturn::Error;
+            };
+
+            let map = if let Some(map) = buffer.map_readable() {
+                map
+            } else {
+                gst_element_error!(
+                    appsink,
+                    gst::ResourceError::Failed,
+                    ("Failed to map buffer readable")
+                );
+
+                return gst::FlowReturn::Error;
+            };
 
             let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
                 samples
             } else {
+                gst_element_error!(
+                    appsink,
+                    gst::ResourceError::Failed,
+                    ("Failed to interprete buffer as S16 PCM")
+                );
+
                 return gst::FlowReturn::Error;
             };
 
@@ -80,10 +124,10 @@ fn create_pipeline() -> Result<gst::Pipeline, utils::ExampleError> {
     Ok(pipeline)
 }
 
-fn main_loop() -> Result<(), utils::ExampleError> {
+fn main_loop() -> Result<(), Error> {
     let pipeline = create_pipeline()?;
 
-    utils::set_state(&pipeline, gst::State::Playing)?;
+    pipeline.set_state(gst::State::Playing).into_result()?;
 
     let bus = pipeline
         .get_bus()
@@ -95,18 +139,19 @@ fn main_loop() -> Result<(), utils::ExampleError> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                utils::set_state(&pipeline, gst::State::Null)?;
-                return Err(utils::ExampleError::ElementError(
-                    msg.get_src().get_path_string(),
-                    err.get_error(),
-                    err.get_debug().unwrap(),
-                ));
+                pipeline.set_state(gst::State::Null).into_result()?;
+                Err(ErrorMessage {
+                    src: msg.get_src().get_path_string(),
+                    error: err.get_error().description().into(),
+                    debug: err.get_debug(),
+                    cause: err.get_error(),
+                })?;
             }
             _ => (),
         }
     }
 
-    utils::set_state(&pipeline, gst::State::Null)?;
+    pipeline.set_state(gst::State::Null).into_result()?;
 
     Ok(())
 }
