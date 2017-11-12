@@ -4,6 +4,9 @@ use std::io::Write;
 use gst::prelude::*;
 use gst::MessageView;
 
+#[path = "../tutorials-common.rs"]
+mod tutorials_common;
+
 struct CustomData {
     playbin: gst::Element,    // Our one and only element
     playing: bool,            // Are we in the PLAYING state?
@@ -13,7 +16,7 @@ struct CustomData {
     duration: gst::ClockTime, // How long does this media last, in nanoseconds
 }
 
-fn main() {
+fn tutorial_main() {
     // Initialize GStreamer
     gst::init().unwrap();
 
@@ -146,4 +149,10 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
         },
         _ => (),
     }
+}
+
+fn main() {
+    // tutorials_common::run is only required to set up the application environment on macOS
+    // (but not necessary in normal Cocoa applications where this is set up automatically)
+    tutorials_common::run(tutorial_main);
 }
