@@ -98,7 +98,7 @@ pub trait ElementExtManual {
         function: &str,
         line: u32,
     );
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn message_full_with_details<T: ::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -248,7 +248,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn message_full_with_details<T: ::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,

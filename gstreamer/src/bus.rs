@@ -16,17 +16,6 @@ use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
 
-#[cfg(feature = "futures")]
-use std::sync::{Arc, Mutex};
-#[cfg(feature = "futures")]
-use futures;
-#[cfg(feature = "futures")]
-use futures::{Async, Poll};
-#[cfg(feature = "futures")]
-use futures::task::Task;
-#[cfg(feature = "futures")]
-use futures::stream::Stream;
-
 use Bus;
 use BusSyncReply;
 use Message;
@@ -145,52 +134,61 @@ impl Bus {
     }
 }
 
-#[cfg(feature = "futures")]
-pub struct BusStream(Bus, Arc<Mutex<Option<Task>>>);
+#[cfg(any(feature = "futures", feature = "dox"))]
+mod futures {
+    use std::sync::{Arc, Mutex};
+    use futures;
+    use futures::{Async, Poll};
+    use futures::task::Task;
+    use futures::stream::Stream;
+    use super::*;
 
-#[cfg(feature = "futures")]
-impl BusStream {
-    pub fn new(bus: &Bus) -> Self {
-        skip_assert_initialized!();
-        let task = Arc::new(Mutex::new(None));
-        let task_clone = task.clone();
+    pub struct BusStream(Bus, Arc<Mutex<Option<Task>>>);
 
-        bus.set_sync_handler(move |_, _| {
-            let mut task = task_clone.lock().unwrap();
-            if let Some(task) = task.take() {
-                // FIXME: Force type...
-                let task: Task = task;
-                task.notify();
+    impl BusStream {
+        pub fn new(bus: &Bus) -> Self {
+            skip_assert_initialized!();
+            let task = Arc::new(Mutex::new(None));
+            let task_clone = task.clone();
+
+            bus.set_sync_handler(move |_, _| {
+                let mut task = task_clone.lock().unwrap();
+                if let Some(task) = task.take() {
+                    // FIXME: Force type...
+                    let task: Task = task;
+                    task.notify();
+                }
+
+                BusSyncReply::Pass
+            });
+
+            BusStream(bus.clone(), task)
+        }
+    }
+
+    impl Drop for BusStream {
+        fn drop(&mut self) {
+            self.0.unset_sync_handler();
+        }
+    }
+
+    impl Stream for BusStream {
+        type Item = Message;
+        type Error = ();
+
+        fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
+            let mut task = self.1.lock().unwrap();
+
+            let msg = self.0.pop();
+            if let Some(msg) = msg {
+                Ok(Async::Ready(Some(msg)))
+            } else {
+                *task = Some(futures::task::current());
+                Ok(Async::NotReady)
             }
-
-            BusSyncReply::Pass
-        });
-
-        BusStream(bus.clone(), task)
-    }
-}
-
-#[cfg(feature = "futures")]
-impl Drop for BusStream {
-    fn drop(&mut self) {
-        self.0.unset_sync_handler();
-    }
-}
-
-#[cfg(feature = "futures")]
-impl Stream for BusStream {
-    type Item = Message;
-    type Error = ();
-
-    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
-        let mut task = self.1.lock().unwrap();
-
-        let msg = self.0.pop();
-        if let Some(msg) = msg {
-            Ok(Async::Ready(Some(msg)))
-        } else {
-            *task = Some(futures::task::current());
-            Ok(Async::NotReady)
         }
     }
 }
+
+#[cfg(any(feature = "futures", feature = "dox"))]
+pub use bus::futures::BusStream;

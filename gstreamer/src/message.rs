@@ -300,7 +300,7 @@ impl GstRc<MessageRef> {
         DeviceRemovedBuilder::new(device)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_property_notify<'a>(
         property_name: &'a str,
         value: &'a glib::Value,
@@ -309,7 +309,7 @@ impl GstRc<MessageRef> {
         PropertyNotifyBuilder::new(property_name, value)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_stream_collection<'a>(
         collection: &'a ::StreamCollection,
     ) -> StreamCollectionBuilder<'a> {
@@ -317,7 +317,7 @@ impl GstRc<MessageRef> {
         StreamCollectionBuilder::new(collection)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_streams_selected<'a>(
         collection: &'a ::StreamCollection,
     ) -> StreamsSelectedBuilder<'a> {
@@ -325,7 +325,7 @@ impl GstRc<MessageRef> {
         StreamsSelectedBuilder::new(collection)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_redirect<'a>(
         location: &'a str,
         tag_list: Option<&'a TagList>,
@@ -408,7 +408,7 @@ impl<'a> Error<'a> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -446,7 +446,7 @@ impl<'a> Warning<'a> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -484,7 +484,7 @@ impl<'a> Info<'a> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_details(&self) -> Option<&StructureRef> {
         unsafe {
             let mut details = ptr::null();
@@ -1008,7 +1008,7 @@ impl<'a> DeviceRemoved<'a> {
 
 pub struct PropertyNotify<'a>(&'a MessageRef);
 impl<'a> PropertyNotify<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get(&self) -> (Object, &str, ::Value) {
         unsafe {
             let mut object = ptr::null_mut();
@@ -1033,7 +1033,7 @@ impl<'a> PropertyNotify<'a> {
 
 pub struct StreamCollection<'a>(&'a MessageRef);
 impl<'a> StreamCollection<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1046,7 +1046,7 @@ impl<'a> StreamCollection<'a> {
 }
 pub struct StreamsSelected<'a>(&'a MessageRef);
 impl<'a> StreamsSelected<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
@@ -1057,7 +1057,7 @@ impl<'a> StreamsSelected<'a> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_streams(&self) -> Vec<::Stream> {
         unsafe {
             let n = ffi::gst_message_streams_selected_get_size(self.0.as_mut_ptr());
@@ -1076,7 +1076,7 @@ impl<'a> StreamsSelected<'a> {
 
 pub struct Redirect<'a>(&'a MessageRef);
 impl<'a> Redirect<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
             let n = ffi::gst_message_get_num_redirect_entries(self.0.as_mut_ptr());
@@ -1220,7 +1220,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1229,7 +1229,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        #[cfg(feature = "v1_10")]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1245,7 +1245,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
                 details,
             )
         }
-        #[cfg(not(feature = "v1_10"))]
+        #[cfg(not(any(feature = "v1_10", feature = "dox")))]
         {
             let error = glib::Error::new(s.error, s.message);
 
@@ -1288,7 +1288,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1297,7 +1297,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        #[cfg(feature = "v1_10")]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1313,7 +1313,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
                 details,
             )
         }
-        #[cfg(not(feature = "v1_10"))]
+        #[cfg(not(any(feature = "v1_10", feature = "dox")))]
         {
             let error = glib::Error::new(s.error, s.message);
 
@@ -1356,7 +1356,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
         }
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -1365,7 +1365,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        #[cfg(feature = "v1_10")]
+        #[cfg(any(feature = "v1_10", feature = "dox"))]
         {
             let details = match s.details.take() {
                 None => ptr::null_mut(),
@@ -1381,7 +1381,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
                 details,
             )
         }
-        #[cfg(not(feature = "v1_10"))]
+        #[cfg(not(any(feature = "v1_10", feature = "dox")))]
         {
             let error = glib::Error::new(s.error, s.message);
 
@@ -2219,7 +2219,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct PropertyNotifyBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
@@ -2227,7 +2227,7 @@ pub struct PropertyNotifyBuilder<'a> {
     property_name: &'a str,
     value: &'a glib::Value,
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> PropertyNotifyBuilder<'a> {
     fn new(property_name: &'a str, value: &'a glib::Value) -> Self {
         skip_assert_initialized!();
@@ -2249,14 +2249,14 @@ impl<'a> PropertyNotifyBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamCollectionBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
     collection: &'a ::StreamCollection,
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -2273,15 +2273,17 @@ impl<'a> StreamCollectionBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamsSelectedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
-    #[cfg(feature = "v1_10")] collection: &'a ::StreamCollection,
-    #[cfg(feature = "v1_10")] streams: Option<&'a [&'a ::Stream]>,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    collection: &'a ::StreamCollection,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    streams: Option<&'a [&'a ::Stream]>,
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamsSelectedBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -2312,7 +2314,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct RedirectBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
@@ -2323,7 +2325,7 @@ pub struct RedirectBuilder<'a> {
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> RedirectBuilder<'a> {
     fn new(
         location: &'a str,

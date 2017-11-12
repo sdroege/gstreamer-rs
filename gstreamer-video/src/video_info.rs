@@ -182,7 +182,8 @@ pub struct VideoInfoBuilder<'a> {
     stride: Option<&'a [i32]>,
     multiview_mode: Option<::VideoMultiviewMode>,
     multiview_flags: Option<::VideoMultiviewFlags>,
-    #[cfg(feature = "v1_12")] field_order: Option<::VideoFieldOrder>,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    field_order: Option<::VideoFieldOrder>,
 }
 
 impl<'a> VideoInfoBuilder<'a> {
@@ -263,7 +264,7 @@ impl<'a> VideoInfoBuilder<'a> {
                 ptr::write(ptr.offset(1), multiview_flags.to_glib().bits());
             }
 
-            #[cfg(feature = "v1_12")]
+            #[cfg(any(feature = "v1_12", feature = "dox"))]
             {
                 if let Some(field_order) = self.field_order {
                     let ptr = &mut info._gst_reserved as *mut _ as *mut i32;
@@ -359,7 +360,7 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    #[cfg(feature = "v1_12")]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn field_order(self, field_order: ::VideoFieldOrder) -> Self {
         Self {
             field_order: Some(field_order),
@@ -372,7 +373,7 @@ impl VideoInfo {
     pub fn new<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
-        #[cfg(not(feature = "v1_12"))]
+        #[cfg(not(any(feature = "v1_12", feature = "dox")))]
         {
             VideoInfoBuilder {
                 format: format,
@@ -392,7 +393,7 @@ impl VideoInfo {
                 multiview_flags: None,
             }
         }
-        #[cfg(feature = "v1_12")]
+        #[cfg(any(feature = "v1_12", feature = "dox"))]
         {
             VideoInfoBuilder {
                 format: format,
@@ -509,7 +510,7 @@ impl VideoInfo {
         }
     }
 
-    #[cfg(feature = "v1_12")]
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn field_order(&self) -> ::VideoFieldOrder {
         unsafe {
             let ptr = &self.0._gst_reserved as *const _ as *const i32;
@@ -667,7 +668,7 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
     }
 }
 
-#[cfg(feature = "v1_12")]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 impl ::VideoFieldOrder {
     pub fn to_string(&self) -> String {
         unsafe { from_glib_full(ffi::gst_video_field_order_to_string(self.to_glib())) }
@@ -680,7 +681,7 @@ impl ::VideoFieldOrder {
     }
 }
 
-#[cfg(feature = "v1_12")]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 impl str::FromStr for ::VideoFieldOrder {
     type Err = ();
 
@@ -690,7 +691,7 @@ impl str::FromStr for ::VideoFieldOrder {
     }
 }
 
-#[cfg(feature = "v1_12")]
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 impl fmt::Display for ::VideoFieldOrder {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.write_str(&self.to_string())

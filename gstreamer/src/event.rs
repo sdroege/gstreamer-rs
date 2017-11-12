@@ -18,7 +18,7 @@ use glib;
 use glib::value::ToValue;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;
 
 #[repr(C)]
@@ -138,7 +138,7 @@ impl GstRc<EventRef> {
         SegmentBuilder::new(segment)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_stream_collection<'a>(
         stream_collection: &'a ::StreamCollection,
     ) -> StreamCollectionBuilder<'a> {
@@ -169,7 +169,7 @@ impl GstRc<EventRef> {
         SinkMessageBuilder::new(name, msg)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_stream_group_done<'a>(group_id: u32) -> StreamGroupDoneBuilder<'a> {
         assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
@@ -262,7 +262,7 @@ impl GstRc<EventRef> {
         TocSelectBuilder::new(uid)
     }
 
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn new_select_streams<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
         assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
@@ -418,7 +418,7 @@ impl<'a> Segment<'a> {
 
 pub struct StreamCollection<'a>(&'a EventRef);
 impl<'a> StreamCollection<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
@@ -480,7 +480,7 @@ impl<'a> SinkMessage<'a> {
 
 pub struct StreamGroupDone<'a>(&'a EventRef);
 impl<'a> StreamGroupDone<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_group_id(&self) -> u32 {
         unsafe {
             let mut group_id = mem::uninitialized();
@@ -688,7 +688,7 @@ impl<'a> TocSelect<'a> {
 
 pub struct SelectStreams<'a>(&'a EventRef);
 impl<'a> SelectStreams<'a> {
-    #[cfg(feature = "v1_10")]
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();
@@ -889,14 +889,14 @@ impl<'a> SegmentBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamCollectionBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
     stream_collection: &'a ::StreamCollection,
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamCollectionBuilder<'a> {
     fn new(stream_collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
@@ -991,14 +991,14 @@ impl<'a> SinkMessageBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamGroupDoneBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
     uid: u32,
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamGroupDoneBuilder<'a> {
     fn new(uid: u32) -> Self {
         skip_assert_initialized!();
@@ -1326,14 +1326,14 @@ impl<'a> TocSelectBuilder<'a> {
     });
 }
 
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct SelectStreamsBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToValue)>,
     streams: &'a [&'a str],
 }
-#[cfg(feature = "v1_10")]
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> SelectStreamsBuilder<'a> {
     fn new(streams: &'a [&'a str]) -> Self {
         skip_assert_initialized!();

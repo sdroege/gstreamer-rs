@@ -22,7 +22,7 @@ extern crate glib;
 
 extern crate num_rational;
 
-#[cfg(feature = "futures")]
+#[cfg(any(feature = "futures", feature = "dox"))]
 extern crate futures;
 
 extern crate muldiv;
@@ -118,7 +118,7 @@ pub use tag_setter::TagSetterExtManual;
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl};
 pub use device_provider::DeviceProviderExtManual;
 pub use parse_context::ParseContext;
-#[cfg(feature = "futures")]
+#[cfg(any(feature = "futures", feature = "dox"))]
 pub use bus::BusStream;
 pub use enums::{StateChangeError, StateChangeSuccess};
 pub use clock_time::ClockTime;
