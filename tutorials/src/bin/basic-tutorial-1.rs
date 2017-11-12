@@ -1,7 +1,11 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-fn main() {
+#[path="../tutorials-common.rs"]
+mod tutorials_common;
+
+fn tutorial_main() {
+
     // Initialize GStreamer
     gst::init().unwrap();
 
@@ -37,4 +41,10 @@ fn main() {
     // Shutdown pipeline
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+}
+
+fn main() {
+    // tutorials_common::run is only required to set up the application environment on macOS
+    // (but not necessary in normal Cocoa applications where this is set up automatically)
+    tutorials_common::run(tutorial_main);
 }

@@ -13,7 +13,11 @@ struct CustomData {
     duration: gst::ClockTime, // How long does this media last, in nanoseconds
 }
 
-fn main() {
+#[path="../tutorials-common.rs"]
+mod tutorials_common;
+
+fn tutorial_main() {
+
     // Initialize GStreamer
     gst::init().unwrap();
 
@@ -146,4 +150,10 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
         },
         _ => (),
     }
+}
+
+fn main() {
+    // tutorials_common::run is only required to set up the application environment on macOS
+    // (but not necessary in normal Cocoa applications where this is set up automatically)
+    tutorials_common::run(tutorial_main);
 }
