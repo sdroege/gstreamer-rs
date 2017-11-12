@@ -14,12 +14,10 @@ use std::i32;
 use std::error::Error as StdError;
 
 extern crate failure;
+use failure::Error;
 
 #[macro_use]
 extern crate failure_derive;
-
-#[allow(unused_imports)]
-use failure::{Error, Fail};
 
 #[derive(Debug, Fail)]
 #[fail(display = "Missing element {}", _0)]
