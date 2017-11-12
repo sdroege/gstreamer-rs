@@ -5,7 +5,10 @@ extern crate glib;
 
 use std::env;
 
-fn main() {
+#[path = "../examples-common.rs"]
+mod examples_common;
+
+fn example_main() {
     gst::init().unwrap();
 
     let args: Vec<_> = env::args().collect();
@@ -85,4 +88,10 @@ fn main() {
 
     let ret = playbin.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+}
+
+fn main() {
+    // tutorials_common::run is only required to set up the application environent on macOS
+    // (but not necessary in normal Cocoa applications where this is set up autmatically)
+    examples_common::run(example_main);
 }

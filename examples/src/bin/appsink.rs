@@ -19,6 +19,9 @@ use failure::Error;
 #[macro_use]
 extern crate failure_derive;
 
+#[path = "../examples-common.rs"]
+mod examples_common;
+
 #[derive(Debug, Fail)]
 #[fail(display = "Missing element {}", _0)]
 struct MissingElement(&'static str);
@@ -152,9 +155,15 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     Ok(())
 }
 
-fn main() {
+fn example_main() {
     match create_pipeline().and_then(main_loop) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
+}
+
+fn main() {
+    // tutorials_common::run is only required to set up the application environent on macOS
+    // (but not necessary in normal Cocoa applications where this is set up autmatically)
+    examples_common::run(example_main);
 }

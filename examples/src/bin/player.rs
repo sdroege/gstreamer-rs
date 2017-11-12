@@ -17,6 +17,10 @@ extern crate failure;
 #[allow(unused_imports)]
 use failure::Error;
 
+#[allow(unused_imports)]
+#[path = "../examples-common.rs"]
+mod examples_common;
+
 #[cfg(feature = "gst-player")]
 fn main_loop(uri: &str) -> Result<(), Error> {
     gst::init()?;
@@ -65,7 +69,7 @@ fn main_loop(uri: &str) -> Result<(), Error> {
 }
 
 #[allow(unused_variables)]
-fn main() {
+fn example_main() {
     let args: Vec<_> = env::args().collect();
     let uri: &str = if args.len() == 2 {
         args[1].as_ref()
@@ -85,4 +89,10 @@ fn main() {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
+}
+
+fn main() {
+    // tutorials_common::run is only required to set up the application environent on macOS
+    // (but not necessary in normal Cocoa applications where this is set up autmatically)
+    examples_common::run(example_main);
 }

@@ -15,8 +15,12 @@ use tokio_core::reactor::Core;
 #[cfg(feature = "tokio")]
 use std::env;
 
+#[allow(unused_imports)]
+#[path = "../examples-common.rs"]
+mod examples_common;
+
 #[cfg(feature = "tokio")]
-fn main() {
+fn example_main() {
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
     gst::init().unwrap();
@@ -57,6 +61,13 @@ fn main() {
 
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+}
+
+#[cfg(feature = "tokio")]
+fn main() {
+    // tutorials_common::run is only required to set up the application environent on macOS
+    // (but not necessary in normal Cocoa applications where this is set up autmatically)
+    examples_common::run(example_main);
 }
 
 #[cfg(not(feature = "tokio"))]
