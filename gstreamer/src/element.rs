@@ -551,6 +551,85 @@ macro_rules! gst_element_error(
             line!(),
         );
     }};
+
+    ($obj:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Error,
+            $err,
+            Some($msg),
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Error,
+            $err,
+            Some($msg),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Error,
+            $err,
+            None,
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Error,
+            $err,
+            Some(format!($($msg)*)),
+            Some(format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Error,
+            $err,
+            Some(format!($($msg)*)),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Error,
+            $err,
+            None,
+            Some(format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
 );
 
 #[macro_export]
@@ -627,6 +706,85 @@ macro_rules! gst_element_warning(
             line!(),
         );
     }};
+
+    ($obj:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Warning,
+            $err,
+            Some($msg),
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Warning,
+            $err,
+            Some($msg),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Warning,
+            $err,
+            None,
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Warning,
+            $err,
+            Some(format!($($msg)*)),
+            Some(format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Warning,
+            $err,
+            Some(format!($($msg)*)),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Warning,
+            $err,
+            None,
+            Some(format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
 );
 
 #[macro_export]
@@ -701,6 +859,85 @@ macro_rules! gst_element_info(
             file!(),
             module_path!(),
             line!(),
+        );
+    }};
+
+    ($obj:expr, $err:expr, ($msg:expr), [$debug:expr], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Info,
+            $err,
+            Some($msg),
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($msg:expr), details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Info,
+            $err,
+            Some($msg),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, [$debug:expr], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Info,
+            $err,
+            None,
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Info,
+            $err,
+            Some(format!($($msg)*)),
+            Some(format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Info,
+            $err,
+            Some(format!($($msg)*)),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
+        );
+    }};
+    ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
+        use $crate::ElementExtManual;
+        $obj.message_full_with_details(
+            $crate::ElementMessageType::Info,
+            $err,
+            None,
+            Some(format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+            $details,
         );
     }};
 );
