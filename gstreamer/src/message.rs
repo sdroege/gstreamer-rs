@@ -19,7 +19,7 @@ use std::ffi::CStr;
 use glib;
 use glib::Cast;
 use glib::IsA;
-use glib::value::ToValue;
+use glib::value::ToSendValue;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
 
 #[repr(C)]
@@ -1131,7 +1131,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToValue)]) -> Self {
+        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 other_fields: self.other_fields.iter().cloned()
                     .chain(other_fields.iter().cloned())
@@ -1155,7 +1155,7 @@ macro_rules! message_builder_generic_impl {
                     );
 
                     for (k, v) in self.other_fields {
-                        s.set_value(k, v.to_value());
+                        s.set_value(k, v.to_send_value());
                     }
                 }
 
@@ -1168,7 +1168,7 @@ macro_rules! message_builder_generic_impl {
 pub struct EosBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> EosBuilder<'a> {
     fn new() -> Self {
@@ -1193,7 +1193,7 @@ impl MessageErrorDomain for ::LibraryError {}
 pub struct ErrorBuilder<'a, T> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
@@ -1261,7 +1261,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
 pub struct WarningBuilder<'a, T> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
@@ -1329,7 +1329,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
 pub struct InfoBuilder<'a, T> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
@@ -1397,7 +1397,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
 pub struct TagBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     tags: &'a TagList,
 }
 impl<'a> TagBuilder<'a> {
@@ -1419,7 +1419,7 @@ impl<'a> TagBuilder<'a> {
 pub struct BufferingBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     percent: i32,
     stats: Option<(::BufferingMode, i32, i32, i64)>,
 }
@@ -1469,7 +1469,7 @@ impl<'a> BufferingBuilder<'a> {
 pub struct StateChangedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     old: ::State,
     new: ::State,
     pending: ::State,
@@ -1500,7 +1500,7 @@ impl<'a> StateChangedBuilder<'a> {
 pub struct StateDirtyBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> StateDirtyBuilder<'a> {
     fn new() -> Self {
@@ -1518,7 +1518,7 @@ impl<'a> StateDirtyBuilder<'a> {
 pub struct StepDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     format: ::Format,
     amount: u64,
     rate: f64,
@@ -1569,7 +1569,7 @@ impl<'a> StepDoneBuilder<'a> {
 pub struct ClockProvideBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     clock: &'a ::Clock,
     ready: bool,
 }
@@ -1593,7 +1593,7 @@ impl<'a> ClockProvideBuilder<'a> {
 pub struct ClockLostBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     clock: &'a ::Clock,
 }
 impl<'a> ClockLostBuilder<'a> {
@@ -1615,7 +1615,7 @@ impl<'a> ClockLostBuilder<'a> {
 pub struct NewClockBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     clock: &'a ::Clock,
 }
 impl<'a> NewClockBuilder<'a> {
@@ -1637,7 +1637,7 @@ impl<'a> NewClockBuilder<'a> {
 pub struct StructureChangeBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::StructureChangeType,
     owner: &'a ::Element,
     busy: bool,
@@ -1668,7 +1668,7 @@ impl<'a> StructureChangeBuilder<'a> {
 pub struct StreamStatusBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::StreamStatusType,
     owner: &'a ::Element,
     status_object: Option<&'a glib::Value>,
@@ -1706,7 +1706,7 @@ impl<'a> StreamStatusBuilder<'a> {
 pub struct ApplicationBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<::Structure>,
 }
 impl<'a> ApplicationBuilder<'a> {
@@ -1728,7 +1728,7 @@ impl<'a> ApplicationBuilder<'a> {
 pub struct ElementBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<::Structure>,
 }
 impl<'a> ElementBuilder<'a> {
@@ -1750,7 +1750,7 @@ impl<'a> ElementBuilder<'a> {
 pub struct SegmentStartBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     position: ::FormatValue,
 }
 impl<'a> SegmentStartBuilder<'a> {
@@ -1776,7 +1776,7 @@ impl<'a> SegmentStartBuilder<'a> {
 pub struct SegmentDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     position: ::FormatValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
@@ -1802,7 +1802,7 @@ impl<'a> SegmentDoneBuilder<'a> {
 pub struct DurationChangedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> DurationChangedBuilder<'a> {
     fn new() -> Self {
@@ -1820,7 +1820,7 @@ impl<'a> DurationChangedBuilder<'a> {
 pub struct LatencyBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> LatencyBuilder<'a> {
     fn new() -> Self {
@@ -1838,7 +1838,7 @@ impl<'a> LatencyBuilder<'a> {
 pub struct AsyncStartBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> AsyncStartBuilder<'a> {
     fn new() -> Self {
@@ -1856,7 +1856,7 @@ impl<'a> AsyncStartBuilder<'a> {
 pub struct AsyncDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     running_time: u64,
 }
 impl<'a> AsyncDoneBuilder<'a> {
@@ -1878,7 +1878,7 @@ impl<'a> AsyncDoneBuilder<'a> {
 pub struct RequestStateBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     state: ::State,
 }
 impl<'a> RequestStateBuilder<'a> {
@@ -1900,7 +1900,7 @@ impl<'a> RequestStateBuilder<'a> {
 pub struct StepStartBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     active: bool,
     format: ::Format,
     amount: u64,
@@ -1947,7 +1947,7 @@ impl<'a> StepStartBuilder<'a> {
 pub struct QosBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     live: bool,
     running_time: u64,
     stream_time: u64,
@@ -2009,7 +2009,7 @@ impl<'a> QosBuilder<'a> {
 pub struct ProgressBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::ProgressType,
     code: Option<&'a str>,
     text: Option<&'a str>,
@@ -2054,7 +2054,7 @@ impl<'a> ProgressBuilder<'a> {
 pub struct TocBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     toc: &'a ::Toc,
     updated: bool,
 }
@@ -2078,7 +2078,7 @@ impl<'a> TocBuilder<'a> {
 pub struct ResetTimeBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     running_time: u64,
 }
 impl<'a> ResetTimeBuilder<'a> {
@@ -2100,7 +2100,7 @@ impl<'a> ResetTimeBuilder<'a> {
 pub struct StreamStartBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     group_id: Option<u32>,
 }
 impl<'a> StreamStartBuilder<'a> {
@@ -2133,7 +2133,7 @@ impl<'a> StreamStartBuilder<'a> {
 pub struct NeedContextBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     context_type: &'a str,
 }
 impl<'a> NeedContextBuilder<'a> {
@@ -2155,7 +2155,7 @@ impl<'a> NeedContextBuilder<'a> {
 pub struct HaveContextBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     context: Option<::Context>,
 }
 impl<'a> HaveContextBuilder<'a> {
@@ -2178,7 +2178,7 @@ impl<'a> HaveContextBuilder<'a> {
 pub struct DeviceAddedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     device: &'a ::Device,
 }
 impl<'a> DeviceAddedBuilder<'a> {
@@ -2200,7 +2200,7 @@ impl<'a> DeviceAddedBuilder<'a> {
 pub struct DeviceRemovedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     device: &'a ::Device,
 }
 impl<'a> DeviceRemovedBuilder<'a> {
@@ -2223,7 +2223,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 pub struct PropertyNotifyBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     property_name: &'a str,
     value: &'a glib::Value,
 }
@@ -2253,7 +2253,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
 pub struct StreamCollectionBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     collection: &'a ::StreamCollection,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2277,7 +2277,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 pub struct StreamsSelectedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     collection: &'a ::StreamCollection,
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2318,7 +2318,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
 pub struct RedirectBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     location: &'a str,
     tag_list: Option<&'a TagList>,
     entry_struct: Option<Structure>,

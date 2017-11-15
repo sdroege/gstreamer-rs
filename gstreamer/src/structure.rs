@@ -20,12 +20,13 @@ use Fraction;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone,
                       GlibPtrDefault, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::value::{FromValueOptional, ToValue, Value};
+use glib::value::{FromValueOptional, ToSendValue, SendValue};
 use ffi;
 use glib_ffi::gpointer;
 use gobject_ffi;
 
 pub struct Structure(*mut StructureRef, PhantomData<StructureRef>);
+unsafe impl Send for Structure { }
 
 impl Structure {
     pub fn builder(name: &str) -> Builder {
@@ -41,12 +42,12 @@ impl Structure {
         )
     }
 
-    pub fn new(name: &str, values: &[(&str, &ToValue)]) -> Structure {
+    pub fn new(name: &str, values: &[(&str, &ToSendValue)]) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 
         for &(f, v) in values {
-            structure.set_value(f, v.to_value());
+            structure.set_value(f, v.to_send_value());
         }
 
         structure
@@ -288,11 +289,11 @@ impl StructureRef {
         unsafe { from_glib_full(ffi::gst_structure_to_string(&self.0)) }
     }
 
-    pub fn get<'a, T: FromValueOptional<'a>>(&'a self, name: &str) -> Option<T> {
+    pub fn get<'a, T: FromValueOptional<'a> + Send>(&'a self, name: &str) -> Option<T> {
         self.get_value(name).and_then(|v| v.get())
     }
 
-    pub fn get_value<'a>(&'a self, name: &str) -> Option<&Value> {
+    pub fn get_value<'a>(&'a self, name: &str) -> Option<&SendValue> {
         unsafe {
             let value = ffi::gst_structure_get_value(&self.0, name.to_glib_none().0);
 
@@ -300,16 +301,16 @@ impl StructureRef {
                 return None;
             }
 
-            Some(&*(value as *const Value))
+            Some(&*(value as *const SendValue))
         }
     }
 
-    pub fn set<T: ToValue>(&mut self, name: &str, value: T) {
-        let value = value.to_value();
+    pub fn set<T: ToSendValue>(&mut self, name: &str, value: T) {
+        let value = value.to_send_value();
         self.set_value(name, value);
     }
 
-    pub fn set_value(&mut self, name: &str, mut value: Value) {
+    pub fn set_value(&mut self, name: &str, mut value: SendValue) {
         unsafe {
             ffi::gst_structure_take_value(
                 &mut self.0,
@@ -567,9 +568,9 @@ impl<'a> Iter<'a> {
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = (&'a str, &'a Value);
+    type Item = (&'a str, &'a SendValue);
 
-    fn next(&mut self) -> Option<(&'a str, &'a Value)> {
+    fn next(&mut self) -> Option<(&'a str, &'a SendValue)> {
         if let Some(f) = self.iter.next() {
             let v = self.iter.structure.get_value(f);
             Some((f, v.unwrap()))
@@ -607,7 +608,7 @@ impl Builder {
         }
     }
 
-    pub fn field<V: ToValue>(mut self, name: &str, value: V) -> Self {
+    pub fn field<V: ToSendValue>(mut self, name: &str, value: V) -> Self {
         self.s.set(name, value);
         self
     }

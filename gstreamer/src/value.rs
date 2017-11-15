@@ -524,6 +524,8 @@ impl SetValue for Bitmask {
 #[derive(Clone, Debug)]
 pub struct Array<'a>(Cow<'a, [glib::Value]>);
 
+unsafe impl<'a> Send for Array<'a> {}
+
 impl<'a> Array<'a> {
     pub fn new(values: &[&ToValue]) -> Self {
         assert_initialized_main_thread!();
@@ -592,6 +594,8 @@ impl<'a> glib::types::StaticType for Array<'a> {
 
 #[derive(Clone, Debug)]
 pub struct List<'a>(Cow<'a, [glib::Value]>);
+
+unsafe impl<'a> Send for List<'a> {}
 
 impl<'a> List<'a> {
     pub fn new(values: &[&ToValue]) -> Self {

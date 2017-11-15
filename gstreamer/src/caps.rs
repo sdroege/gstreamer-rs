@@ -16,7 +16,7 @@ use CapsIntersectMode;
 use glib;
 use ffi;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
-use glib::value::ToValue;
+use glib::value::ToSendValue;
 
 #[repr(C)]
 pub struct CapsRef(ffi::GstCaps);
@@ -43,7 +43,7 @@ impl GstRc<CapsRef> {
         unsafe { from_glib_full(ffi::gst_caps_new_any()) }
     }
 
-    pub fn new_simple(name: &str, values: &[(&str, &ToValue)]) -> Self {
+    pub fn new_simple(name: &str, values: &[(&str, &ToSendValue)]) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
 
@@ -117,7 +117,7 @@ impl str::FromStr for Caps {
 }
 
 impl CapsRef {
-    pub fn set_simple(&mut self, values: &[(&str, &ToValue)]) {
+    pub fn set_simple(&mut self, values: &[(&str, &ToSendValue)]) {
         for &(name, value) in values {
             let value = value.to_value();
 
@@ -382,7 +382,7 @@ impl Builder {
         }
     }
 
-    pub fn field<V: ToValue>(mut self, name: &str, value: V) -> Self {
+    pub fn field<V: ToSendValue>(mut self, name: &str, value: V) -> Self {
         self.s.set(name, value);
         self
     }

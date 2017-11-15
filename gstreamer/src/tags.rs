@@ -14,7 +14,7 @@ use std::ffi::CStr;
 use ffi;
 use glib;
 use glib::StaticType;
-use glib::value::{FromValueOptional, SetValue, ToValue, TypedValue, Value};
+use glib::value::{FromValueOptional, SetValue, ToSendValue, TypedValue, Value};
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
 use miniobject::*;
@@ -23,7 +23,7 @@ use TagMergeMode;
 use Sample;
 
 pub trait Tag<'a> {
-    type TagType: FromValueOptional<'a> + SetValue;
+    type TagType: FromValueOptional<'a> + SetValue + Send;
     fn tag_name<'b>() -> &'b str;
 }
 
@@ -257,10 +257,10 @@ impl Default for GstRc<TagListRef> {
 impl TagListRef {
     pub fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
     where
-        T::TagType: ToValue,
+        T::TagType: ToSendValue,
     {
         unsafe {
-            let v = value.to_value();
+            let v = value.to_send_value();
 
             ffi::gst_tag_list_add_value(
                 self.as_mut_ptr(),

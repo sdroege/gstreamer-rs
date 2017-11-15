@@ -15,7 +15,7 @@ use std::mem;
 use std::ffi::CStr;
 
 use glib;
-use glib::value::ToValue;
+use glib::value::ToSendValue;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -723,7 +723,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToValue)]) -> Self {
+        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 other_fields: self.other_fields.iter().cloned()
                     .chain(other_fields.iter().cloned())
@@ -750,7 +750,7 @@ macro_rules! event_builder_generic_impl {
                     );
 
                     for (k, v) in self.other_fields {
-                        s.set_value(k, v.to_value());
+                        s.set_value(k, v.to_send_value());
                     }
                 }
 
@@ -763,7 +763,7 @@ macro_rules! event_builder_generic_impl {
 pub struct FlushStartBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> FlushStartBuilder<'a> {
     fn new() -> Self {
@@ -781,7 +781,7 @@ impl<'a> FlushStartBuilder<'a> {
 pub struct FlushStopBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     reset_time: bool,
 }
 impl<'a> FlushStopBuilder<'a> {
@@ -803,7 +803,7 @@ impl<'a> FlushStopBuilder<'a> {
 pub struct StreamStartBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     stream_id: &'a str,
     flags: Option<::StreamFlags>,
     group_id: Option<u32>,
@@ -850,7 +850,7 @@ impl<'a> StreamStartBuilder<'a> {
 pub struct CapsBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     caps: &'a ::Caps,
 }
 impl<'a> CapsBuilder<'a> {
@@ -870,7 +870,7 @@ impl<'a> CapsBuilder<'a> {
 pub struct SegmentBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     segment: &'a ::Segment,
 }
 impl<'a> SegmentBuilder<'a> {
@@ -893,7 +893,7 @@ impl<'a> SegmentBuilder<'a> {
 pub struct StreamCollectionBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     stream_collection: &'a ::StreamCollection,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -916,7 +916,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 pub struct TagBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     tags: Option<::TagList>,
 }
 impl<'a> TagBuilder<'a> {
@@ -939,7 +939,7 @@ impl<'a> TagBuilder<'a> {
 pub struct BufferSizeBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     minsize: ::FormatValue,
     maxsize: ::FormatValue,
     async: bool,
@@ -970,7 +970,7 @@ impl<'a> BufferSizeBuilder<'a> {
 pub struct SinkMessageBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     name: &'a str,
     msg: &'a ::Message,
 }
@@ -995,7 +995,7 @@ impl<'a> SinkMessageBuilder<'a> {
 pub struct StreamGroupDoneBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     uid: u32,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1016,7 +1016,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
 pub struct EosBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> EosBuilder<'a> {
     fn new() -> Self {
@@ -1034,7 +1034,7 @@ impl<'a> EosBuilder<'a> {
 pub struct TocBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     toc: &'a ::Toc,
     updated: bool,
 }
@@ -1058,7 +1058,7 @@ impl<'a> TocBuilder<'a> {
 pub struct ProtectionBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     system_id: &'a str,
     data: &'a ::Buffer,
     origin: &'a str,
@@ -1088,7 +1088,7 @@ impl<'a> ProtectionBuilder<'a> {
 pub struct SegmentDoneBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     position: ::FormatValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
@@ -1110,7 +1110,7 @@ impl<'a> SegmentDoneBuilder<'a> {
 pub struct GapBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     timestamp: u64,
     duration: u64,
 }
@@ -1132,7 +1132,7 @@ impl<'a> GapBuilder<'a> {
 pub struct QosBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::QOSType,
     proportion: f64,
     diff: i64,
@@ -1160,7 +1160,7 @@ impl<'a> QosBuilder<'a> {
 pub struct SeekBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     rate: f64,
     flags: ::SeekFlags,
     start_type: ::SeekType,
@@ -1207,7 +1207,7 @@ impl<'a> SeekBuilder<'a> {
 pub struct NavigationBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> NavigationBuilder<'a> {
@@ -1233,7 +1233,7 @@ impl<'a> NavigationBuilder<'a> {
 pub struct LatencyBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     latency: u64,
 }
 impl<'a> LatencyBuilder<'a> {
@@ -1253,7 +1253,7 @@ impl<'a> LatencyBuilder<'a> {
 pub struct StepBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     fmt: ::Format,
     amount: u64,
     rate: f64,
@@ -1289,7 +1289,7 @@ impl<'a> StepBuilder<'a> {
 pub struct ReconfigureBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 impl<'a> ReconfigureBuilder<'a> {
     fn new() -> Self {
@@ -1307,7 +1307,7 @@ impl<'a> ReconfigureBuilder<'a> {
 pub struct TocSelectBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     uid: &'a str,
 }
 impl<'a> TocSelectBuilder<'a> {
@@ -1330,7 +1330,7 @@ impl<'a> TocSelectBuilder<'a> {
 pub struct SelectStreamsBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     streams: &'a [&'a str],
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1353,7 +1353,7 @@ impl<'a> SelectStreamsBuilder<'a> {
 pub struct CustomUpstreamBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> CustomUpstreamBuilder<'a> {
@@ -1380,7 +1380,7 @@ impl<'a> CustomUpstreamBuilder<'a> {
 pub struct CustomDownstreamBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> CustomDownstreamBuilder<'a> {
@@ -1407,7 +1407,7 @@ impl<'a> CustomDownstreamBuilder<'a> {
 pub struct CustomDownstreamOobBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> CustomDownstreamOobBuilder<'a> {
@@ -1436,7 +1436,7 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
 pub struct CustomDownstreamStickyBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> CustomDownstreamStickyBuilder<'a> {
@@ -1465,7 +1465,7 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
 pub struct CustomBothBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> CustomBothBuilder<'a> {
@@ -1491,7 +1491,7 @@ impl<'a> CustomBothBuilder<'a> {
 pub struct CustomBothOobBuilder<'a> {
     seqnum: Option<u32>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToValue)>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
 }
 impl<'a> CustomBothOobBuilder<'a> {

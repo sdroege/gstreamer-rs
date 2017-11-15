@@ -11,22 +11,22 @@ use TagSetter;
 use TagMergeMode;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::value::ToValue;
+use glib::value::ToSendValue;
 use tags::*;
 
 pub trait TagSetterExtManual {
     fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
     where
-        T::TagType: ToValue;
+        T::TagType: ToSendValue;
 }
 
 impl<O: IsA<TagSetter>> TagSetterExtManual for O {
     fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
     where
-        T::TagType: ToValue,
+        T::TagType: ToSendValue,
     {
         unsafe {
-            let v = value.to_value();
+            let v = value.to_send_value();
 
             ffi::gst_tag_setter_add_tag_value(
                 self.to_glib_none().0,
