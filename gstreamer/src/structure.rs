@@ -20,13 +20,13 @@ use Fraction;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone,
                       GlibPtrDefault, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::value::{FromValueOptional, ToSendValue, SendValue};
+use glib::value::{FromValueOptional, SendValue, ToSendValue};
 use ffi;
 use glib_ffi::gpointer;
 use gobject_ffi;
 
 pub struct Structure(*mut StructureRef, PhantomData<StructureRef>);
-unsafe impl Send for Structure { }
+unsafe impl Send for Structure {}
 
 impl Structure {
     pub fn builder(name: &str) -> Builder {

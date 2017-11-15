@@ -182,8 +182,7 @@ pub struct VideoInfoBuilder<'a> {
     stride: Option<&'a [i32]>,
     multiview_mode: Option<::VideoMultiviewMode>,
     multiview_flags: Option<::VideoMultiviewFlags>,
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    field_order: Option<::VideoFieldOrder>,
+    #[cfg(any(feature = "v1_12", feature = "dox"))] field_order: Option<::VideoFieldOrder>,
 }
 
 impl<'a> VideoInfoBuilder<'a> {

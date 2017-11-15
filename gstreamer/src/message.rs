@@ -2278,10 +2278,8 @@ pub struct StreamsSelectedBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<u32>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    collection: &'a ::StreamCollection,
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    streams: Option<&'a [&'a ::Stream]>,
+    #[cfg(any(feature = "v1_10", feature = "dox"))] collection: &'a ::StreamCollection,
+    #[cfg(any(feature = "v1_10", feature = "dox"))] streams: Option<&'a [&'a ::Stream]>,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamsSelectedBuilder<'a> {
