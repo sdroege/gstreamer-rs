@@ -35,7 +35,7 @@ unsafe impl MiniObject for MessageRef {
 }
 
 impl MessageRef {
-    pub fn get_src(&self) -> Object {
+    pub fn get_src(&self) -> Option<Object> {
         unsafe { from_glib_none((*self.as_ptr()).src) }
     }
 
