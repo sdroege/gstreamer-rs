@@ -1,15 +1,37 @@
+#[macro_use]
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
 extern crate glib;
 
 use std::env;
+use std::error::Error as StdError;
+use std::sync::{Arc, Mutex};
+
+extern crate failure;
+use failure::Error;
+
+#[macro_use]
+extern crate failure_derive;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-fn example_main() {
-    gst::init().unwrap();
+#[derive(Debug, Fail)]
+#[fail(display = "Missing element {}", _0)]
+struct MissingElement(&'static str);
+
+#[derive(Debug, Fail)]
+#[fail(display = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+struct ErrorMessage {
+    src: String,
+    error: String,
+    debug: Option<String>,
+    #[cause] cause: glib::Error,
+}
+
+fn example_main() -> Result<(), Error> {
+    gst::init()?;
 
     let args: Vec<_> = env::args().collect();
     let uri: &str = if args.len() == 2 {
@@ -20,69 +42,110 @@ fn example_main() {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("filesrc", None).unwrap();
-    let decodebin = gst::ElementFactory::make("decodebin", None).unwrap();
+    let src = gst::ElementFactory::make("filesrc", None).ok_or(MissingElement("filesrc"))?;
+    let decodebin =
+        gst::ElementFactory::make("decodebin", None).ok_or(MissingElement("decodebin"))?;
 
-    src.set_property("location", &glib::Value::from(uri))
-        .unwrap();
+    src.set_property("location", &uri)?;
 
-    pipeline.add_many(&[&src, &decodebin]).unwrap();
-    gst::Element::link_many(&[&src, &decodebin]).unwrap();
+    pipeline.add_many(&[&src, &decodebin])?;
+    gst::Element::link_many(&[&src, &decodebin])?;
 
     // Need to move a new reference into the closure
     let pipeline_clone = pipeline.clone();
-    decodebin.connect_pad_added(move |_, src_pad| {
+    decodebin.connect_pad_added(move |dbin, src_pad| {
         let pipeline = &pipeline_clone;
 
         let (is_audio, is_video) = {
-            let caps = src_pad.get_current_caps().unwrap();
-            let structure = caps.get_structure(0).unwrap();
-            let name = structure.get_name();
+            let media_type = src_pad.get_current_caps().and_then(|caps| {
+                caps.get_structure(0).map(|s| {
+                    let name = s.get_name();
+                    (name.starts_with("audio/"), name.starts_with("video/"))
+                })
+            });
 
-            (name.starts_with("audio/"), name.starts_with("video/"))
+            match media_type {
+                None => {
+                    gst_element_warning!(
+                        dbin,
+                        gst::CoreError::Negotiation,
+                        ("Failed to get media type from pad {}", src_pad.get_name())
+                    );
+
+                    return;
+                }
+                Some(media_type) => media_type,
+            }
         };
 
-        if is_audio {
-            let queue = gst::ElementFactory::make("queue", None).unwrap();
-            let convert = gst::ElementFactory::make("audioconvert", None).unwrap();
-            let resample = gst::ElementFactory::make("audioresample", None).unwrap();
-            let sink = gst::ElementFactory::make("autoaudiosink", None).unwrap();
+        let insert_sink = |is_audio, is_video| -> Result<(), Error> {
+            if is_audio {
+                let queue =
+                    gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
+                let convert = gst::ElementFactory::make("audioconvert", None)
+                    .ok_or(MissingElement("audioconvert"))?;
+                let resample = gst::ElementFactory::make("audioresample", None)
+                    .ok_or(MissingElement("audioresample"))?;
+                let sink = gst::ElementFactory::make("autoaudiosink", None)
+                    .ok_or(MissingElement("autoaudiosink"))?;
 
-            let elements = &[&queue, &convert, &resample, &sink];
-            pipeline.add_many(elements).unwrap();
-            gst::Element::link_many(elements).unwrap();
+                let elements = &[&queue, &convert, &resample, &sink];
+                pipeline.add_many(elements)?;
+                gst::Element::link_many(elements)?;
 
-            for e in elements {
-                e.sync_state_with_parent().unwrap();
+                for e in elements {
+                    e.sync_state_with_parent()?;
+                }
+
+                let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
+                src_pad.link(&sink_pad).into_result()?;
+            } else if is_video {
+                let queue =
+                    gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
+                let convert = gst::ElementFactory::make("videoconvert", None)
+                    .ok_or(MissingElement("videoconvert"))?;
+                let scale = gst::ElementFactory::make("videoscale", None)
+                    .ok_or(MissingElement("videoscale"))?;
+                let sink = gst::ElementFactory::make("autovideosink", None)
+                    .ok_or(MissingElement("autovideosink"))?;
+
+                let elements = &[&queue, &convert, &scale, &sink];
+                pipeline.add_many(elements)?;
+                gst::Element::link_many(elements)?;
+
+                for e in elements {
+                    e.sync_state_with_parent()?
+                }
+
+                let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
+                src_pad.link(&sink_pad).into_result()?;
             }
 
-            let sink_pad = queue.get_static_pad("sink").unwrap();
-            assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
-        } else if is_video {
-            let queue = gst::ElementFactory::make("queue", None).unwrap();
-            let convert = gst::ElementFactory::make("videoconvert", None).unwrap();
-            let scale = gst::ElementFactory::make("videoscale", None).unwrap();
-            let sink = gst::ElementFactory::make("autovideosink", None).unwrap();
+            Ok(())
+        };
 
-            let elements = &[&queue, &convert, &scale, &sink];
-            pipeline.add_many(elements).unwrap();
-            gst::Element::link_many(elements).unwrap();
+        if let Err(err) = insert_sink(is_audio, is_video) {
+            #[cfg(feature = "v1_10")]
+            gst_element_error!(
+                dbin,
+                gst::LibraryError::Failed,
+                ("Failed to insert sink"),
+                details: gst::Structure::builder("error-details")
+                            .field("error",
+                                   glib::AnySendValue::new(Arc::new(Mutex::new(Some(err)))))
+                            .build()
+            );
 
-            for e in elements {
-                e.sync_state_with_parent().unwrap();
-            }
-
-            let sink_pad = queue.get_static_pad("sink").unwrap();
-            assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
+            #[cfg(not(feature = "v1_10"))]
+            gst_element_error!(dbin, gst::LibraryError::Failed, ("Failed to insert sink"));
         }
     });
 
-    assert_ne!(
-        pipeline.set_state(gst::State::Playing),
-        gst::StateChangeReturn::Failure
-    );
+    pipeline.set_state(gst::State::Playing).into_result()?;
 
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline
+        .get_bus()
+        .expect("Pipeline without bus. Shouldn't happen!");
 
     while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -90,12 +153,39 @@ fn example_main() {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                println!(
-                    "Error from {}: {} ({:?})",
-                    msg.get_src().get_path_string(),
-                    err.get_error(),
-                    err.get_debug()
-                );
+                pipeline.set_state(gst::State::Null).into_result()?;
+
+                #[cfg(feature = "v1_10")]
+                {
+                    match err.get_details() {
+                        Some(details) if details.get_name() == "error-details" => details
+                            .get::<&glib::AnySendValue>("error")
+                            .cloned()
+                            .and_then(|v| {
+                                v.downcast_ref::<Arc<Mutex<Option<Error>>>>()
+                                    .and_then(|v| v.lock().unwrap().take())
+                            })
+                            .map(Result::Err)
+                            .expect("error-details message without actual error"),
+                        _ => Err(
+                            ErrorMessage {
+                                src: msg.get_src().get_path_string(),
+                                error: err.get_error().description().into(),
+                                debug: err.get_debug(),
+                                cause: err.get_error(),
+                            }.into(),
+                        ),
+                    }?;
+                }
+                #[cfg(not(feature = "v1_10"))]
+                {
+                    Err(ErrorMessage {
+                        src: msg.get_src().get_path_string(),
+                        error: err.get_error().description().into(),
+                        debug: err.get_debug(),
+                        cause: err.get_error(),
+                    })?;
+                }
                 break;
             }
             MessageView::StateChanged(s) => {
@@ -111,14 +201,16 @@ fn example_main() {
         }
     }
 
-    assert_ne!(
-        pipeline.set_state(gst::State::Null),
-        gst::StateChangeReturn::Failure
-    );
+    pipeline.set_state(gst::State::Null).into_result()?;
+
+    Ok(())
 }
 
 fn main() {
     // tutorials_common::run is only required to set up the application environent on macOS
     // (but not necessary in normal Cocoa applications where this is set up autmatically)
-    examples_common::run(example_main);
+    match examples_common::run(example_main) {
+        Ok(r) => r,
+        Err(e) => eprintln!("Error! {}", e),
+    }
 }

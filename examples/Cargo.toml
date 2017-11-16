@@ -28,6 +28,7 @@ gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
 tokio = ["gstreamer/futures", "futures", "tokio-core"]
 default-features = []
+v1_10 = ["gstreamer/v1_10"]
 
 [badges]
 travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
