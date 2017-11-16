@@ -289,7 +289,7 @@ impl StructureRef {
         unsafe { from_glib_full(ffi::gst_structure_to_string(&self.0)) }
     }
 
-    pub fn get<'a, T: FromValueOptional<'a> + Send>(&'a self, name: &str) -> Option<T> {
+    pub fn get<'a, T: FromValueOptional<'a>>(&'a self, name: &str) -> Option<T> {
         self.get_value(name).and_then(|v| v.get())
     }
 
