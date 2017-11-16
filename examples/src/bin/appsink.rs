@@ -140,7 +140,9 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
             MessageView::Error(err) => {
                 pipeline.set_state(gst::State::Null).into_result()?;
                 Err(ErrorMessage {
-                    src: msg.get_src().get_path_string(),
+                    src: msg.get_src()
+                        .map(|s| s.get_path_string())
+                        .unwrap_or(String::from("None")),
                     error: err.get_error().description().into(),
                     debug: err.get_debug(),
                     cause: err.get_error(),

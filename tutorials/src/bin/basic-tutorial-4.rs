@@ -101,8 +101,8 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
     match msg.view() {
         MessageView::Error(err) => {
             println!(
-                "Error received from element {}: {} ({:?})",
-                msg.get_src().get_path_string(),
+                "Error received from element {:?}: {} ({:?})",
+                msg.get_src().map(|s| s.get_path_string()),
                 err.get_error(),
                 err.get_debug()
             );
@@ -116,7 +116,10 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
             // The duration has changed, mark the current one as invalid
             custom_data.duration = gst::CLOCK_TIME_NONE;
         }
-        MessageView::StateChanged(state) => if msg.get_src() == custom_data.playbin {
+        MessageView::StateChanged(state) => if msg.get_src()
+            .map(|s| s == custom_data.playbin)
+            .unwrap_or(false)
+        {
             let new_state = state.get_current();
             let old_state = state.get_old();
 

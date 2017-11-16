@@ -125,8 +125,8 @@ fn tutorial_main() {
         match msg.view() {
             MessageView::Error(err) => {
                 println!(
-                    "Error received from element {}: {} ({:?})",
-                    msg.get_src().get_path_string(),
+                    "Error received from element {:?}: {} ({:?})",
+                    msg.get_src().map(|s| s.get_path_string()),
                     err.get_error(),
                     err.get_debug()
                 );
@@ -138,7 +138,7 @@ fn tutorial_main() {
             }
             MessageView::StateChanged(state) =>
                 // We are only interested in state-changed messages from the pipeline
-                if msg.get_src() == pipeline {
+                if msg.get_src().map(|s| s == pipeline).unwrap_or(false) {
                     let new_state = state.get_current();
                     let old_state = state.get_old();
 

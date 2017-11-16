@@ -6,6 +6,7 @@ extern crate glib;
 
 use std::env;
 use std::error::Error as StdError;
+#[cfg(feature = "v1_10")]
 use std::sync::{Arc, Mutex};
 
 extern crate failure;
@@ -137,7 +138,12 @@ fn example_main() -> Result<(), Error> {
             );
 
             #[cfg(not(feature = "v1_10"))]
-            gst_element_error!(dbin, gst::LibraryError::Failed, ("Failed to insert sink"));
+            gst_element_error!(
+                dbin,
+                gst::LibraryError::Failed,
+                ("Failed to insert sink"),
+                ["{}", err]
+            );
         }
     });
 
@@ -169,7 +175,9 @@ fn example_main() -> Result<(), Error> {
                             .expect("error-details message without actual error"),
                         _ => Err(
                             ErrorMessage {
-                                src: msg.get_src().get_path_string(),
+                                src: msg.get_src()
+                                    .map(|s| s.get_path_string())
+                                    .unwrap_or(String::from("None")),
                                 error: err.get_error().description().into(),
                                 debug: err.get_debug(),
                                 cause: err.get_error(),
@@ -180,7 +188,9 @@ fn example_main() -> Result<(), Error> {
                 #[cfg(not(feature = "v1_10"))]
                 {
                     Err(ErrorMessage {
-                        src: msg.get_src().get_path_string(),
+                        src: msg.get_src()
+                            .map(|s| s.get_path_string())
+                            .unwrap_or(String::from("None")),
                         error: err.get_error().description().into(),
                         debug: err.get_debug(),
                         cause: err.get_error(),
@@ -190,8 +200,8 @@ fn example_main() -> Result<(), Error> {
             }
             MessageView::StateChanged(s) => {
                 println!(
-                    "State changed from {}: {:?} -> {:?} ({:?})",
-                    msg.get_src().get_path_string(),
+                    "State changed from {:?}: {:?} -> {:?} ({:?})",
+                    msg.get_src().map(|s| s.get_path_string()),
                     s.get_old(),
                     s.get_current(),
                     s.get_pending()

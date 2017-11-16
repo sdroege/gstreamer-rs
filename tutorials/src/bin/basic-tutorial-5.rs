@@ -337,17 +337,19 @@ mod tutorial5 {
                 // This is called when an error message is posted on the bus
                 gst::MessageView::Error(err) => {
                     println!(
-                        "Error from {}: {} ({:?})",
-                        msg.get_src().get_path_string(),
+                        "Error from {:?}: {} ({:?})",
+                        msg.get_src().map(|s| s.get_path_string()),
                         err.get_error(),
                         err.get_debug()
                     );
                 }
                 // This is called when the pipeline changes states. We use it to
                 // keep track of the current state.
-                gst::MessageView::StateChanged(view) => if msg.get_src() == pipeline {
-                    println!("State set to {:?}", view.get_current());
-                },
+                gst::MessageView::StateChanged(view) => {
+                    if msg.get_src().map(|s| s == pipeline).unwrap_or(false) {
+                        println!("State set to {:?}", view.get_current());
+                    }
+                }
                 _ => (),
             }
         });

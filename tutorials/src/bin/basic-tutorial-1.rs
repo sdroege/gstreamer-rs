@@ -26,8 +26,8 @@ fn tutorial_main() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
                 println!(
-                    "Error from {}: {} ({:?})",
-                    msg.get_src().get_path_string(),
+                    "Error from {:?}: {} ({:?})",
+                    msg.get_src().map(|s| s.get_path_string()),
                     err.get_error(),
                     err.get_debug()
                 );
