@@ -225,8 +225,10 @@ fn main() {
         };
 
         if let Some(_sample) = appsink.pull_sample() {
+            use std::io::{self, Write};
             // The only thing we do in this example is print a * to indicate a received buffer
             print!("*");
+            let _ = io::stdout().flush();
         }
 
         gst::FlowReturn::Ok
