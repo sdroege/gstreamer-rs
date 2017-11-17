@@ -55,6 +55,12 @@ trait = false
     # Action signal
     ignore = true
 
+    [[object.function]]
+    name = "set_caps"
+        [[object.function.parameter]]
+            name = "caps"
+            nullable = true
+
 [[object]]
 name = "GstApp.AppSrc"
 status = "generate"
@@ -79,6 +85,12 @@ trait = false
     name = "push-sample"
     # Action signal
     ignore = true
+
+    [[object.function]]
+    name = "set_caps"
+        [[object.function.parameter]]
+            name = "caps"
+            nullable = true
 
 [[object]]
 name = "Gst.Structure"

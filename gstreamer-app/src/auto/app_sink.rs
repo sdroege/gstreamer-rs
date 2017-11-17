@@ -97,9 +97,11 @@ impl AppSink {
     //    unsafe { TODO: call ffi::gst_app_sink_set_callbacks() }
     //}
 
-    pub fn set_caps(&self, caps: &gst::Caps) {
+    pub fn set_caps<'a, P: Into<Option<&'a gst::Caps>>>(&self, caps: P) {
+        let caps = caps.into();
+        let caps = caps.to_glib_none();
         unsafe {
-            ffi::gst_app_sink_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
+            ffi::gst_app_sink_set_caps(self.to_glib_none().0, caps.0);
         }
     }
 
