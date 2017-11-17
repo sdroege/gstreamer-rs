@@ -17,8 +17,8 @@ futures = { version = "0.1", optional = true }
 tokio-core = { version = "0.1", optional = true }
 send-cell = "0.1"
 byte-slice-cast = "0.1"
-failure = { git = "https://github.com/withoutboats/failure.git" }
-failure_derive = { git = "https://github.com/withoutboats/failure_derive.git" }
+failure = "0.1"
+failure_derive = "0.1"
 
 [features]
 gst-player = ["gstreamer-player"]
