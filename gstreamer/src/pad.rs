@@ -38,8 +38,12 @@ use libc;
 use ffi;
 
 impl Pad {
-    pub fn new_from_static_template(templ: &StaticPadTemplate, name: &str) -> Pad {
+    pub fn new_from_static_template<'a, P: Into<Option<&'a str>>>(
+        templ: &StaticPadTemplate,
+        name: P,
+    ) -> Pad {
         assert_initialized_main_thread!();
+        let name = name.into();
         unsafe {
             from_glib_none(ffi::gst_pad_new_from_static_template(
                 mut_override(templ.to_glib_none().0),
