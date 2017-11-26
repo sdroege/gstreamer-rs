@@ -355,7 +355,7 @@ unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
     callback_guard!();
 
     let boxed = Arc::from_raw(boxed as *const (Box<Fn(T) -> bool + Send + Sync + 'static>));
-    let copy = boxed.clone();
+    let copy = Arc::clone(&boxed);
 
     // Forget it and keep it alive, we will still need it later
     let _ = Arc::into_raw(boxed);
