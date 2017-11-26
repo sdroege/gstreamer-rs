@@ -38,7 +38,7 @@ impl ToGlib for VideoColorRange {
             VideoColorRange::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
             VideoColorRange::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
             VideoColorRange::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
-            VideoColorRange::__Unknown(value) => unsafe { mem::transmute(value) },
+            VideoColorRange::__Unknown(value) => value,
         }
     }
 }
@@ -70,9 +70,7 @@ impl<'a> glib::value::FromValueOptional<'a> for VideoColorRange {
 
 impl<'a> glib::value::FromValue<'a> for VideoColorRange {
     unsafe fn from_value(value: &glib::value::Value) -> Self {
-        from_glib(mem::transmute::<i32, ffi::GstVideoColorRange>(
-            gobject_ffi::g_value_get_enum(value.to_glib_none().0),
-        ))
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
@@ -255,7 +253,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(multiview_mode) = self.multiview_mode {
                 let ptr = &mut info._gst_reserved as *mut _ as *mut i32;
-                ptr::write(ptr.offset(0), mem::transmute(multiview_mode.to_glib()));
+                ptr::write(ptr.offset(0), multiview_mode.to_glib());
             }
 
             if let Some(multiview_flags) = self.multiview_flags {
@@ -267,7 +265,7 @@ impl<'a> VideoInfoBuilder<'a> {
             {
                 if let Some(field_order) = self.field_order {
                     let ptr = &mut info._gst_reserved as *mut _ as *mut i32;
-                    ptr::write(ptr.offset(2), mem::transmute(field_order.to_glib()));
+                    ptr::write(ptr.offset(2), field_order.to_glib());
                 }
             }
 
@@ -498,14 +496,14 @@ impl VideoInfo {
     pub fn multiview_mode(&self) -> ::VideoMultiviewMode {
         unsafe {
             let ptr = &self.0._gst_reserved as *const _ as *const i32;
-            from_glib(mem::transmute(ptr::read(ptr.offset(0))))
+            from_glib(ptr::read(ptr.offset(0)))
         }
     }
 
     pub fn multiview_flags(&self) -> ::VideoMultiviewFlags {
         unsafe {
             let ptr = &self.0._gst_reserved as *const _ as *const u32;
-            from_glib(mem::transmute(ptr::read(ptr.offset(1))))
+            from_glib(ffi::GstVideoMultiviewFlags::from_bits_truncate(ptr::read(ptr.offset(1))))
         }
     }
 
@@ -513,7 +511,7 @@ impl VideoInfo {
     pub fn field_order(&self) -> ::VideoFieldOrder {
         unsafe {
             let ptr = &self.0._gst_reserved as *const _ as *const i32;
-            from_glib(mem::transmute(ptr::read(ptr.offset(2))))
+            from_glib(ptr::read(ptr.offset(2)))
         }
     }
 
