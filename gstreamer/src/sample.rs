@@ -30,8 +30,8 @@ unsafe impl MiniObject for SampleRef {
 
 impl GstRc<SampleRef> {
     pub fn new(
-        buffer: Option<Buffer>,
-        caps: Option<Caps>,
+        buffer: Option<&Buffer>,
+        caps: Option<&Caps>,
         segment: Option<&Segment>,
         info: Option<&StructureRef>,
     ) -> Self {

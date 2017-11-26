@@ -255,7 +255,7 @@ impl Default for GstRc<TagListRef> {
 }
 
 impl TagListRef {
-    pub fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
+    pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode)
     where
         T::TagType: ToSendValue,
     {
@@ -442,8 +442,8 @@ mod tests {
         assert_eq!(tags.to_string(), "taglist;");
         {
             let tags = tags.get_mut().unwrap();
-            tags.add::<Title>("some title".into(), TagMergeMode::Append);
-            tags.add::<Duration>((1000u64 * 1000 * 1000 * 120).into(), TagMergeMode::Append);
+            tags.add::<Title>(&"some title", TagMergeMode::Append);
+            tags.add::<Duration>(&(1000u64 * 1000 * 1000 * 120).into(), TagMergeMode::Append);
         }
         assert_eq!(
             tags.to_string(),
@@ -459,8 +459,8 @@ mod tests {
         assert_eq!(tags.to_string(), "taglist;");
         {
             let tags = tags.get_mut().unwrap();
-            tags.add::<Title>("some title".into(), TagMergeMode::Append);
-            tags.add::<Duration>((1000u64 * 1000 * 1000 * 120).into(), TagMergeMode::Append);
+            tags.add::<Title>(&"some title", TagMergeMode::Append);
+            tags.add::<Duration>(&(1000u64 * 1000 * 1000 * 120).into(), TagMergeMode::Append);
         }
 
         assert_eq!(tags.get::<Title>().unwrap().get(), Some("some title"));

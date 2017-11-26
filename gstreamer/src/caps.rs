@@ -382,7 +382,7 @@ impl Builder {
         }
     }
 
-    pub fn field<V: ToSendValue>(mut self, name: &str, value: V) -> Self {
+    pub fn field<V: ToSendValue>(mut self, name: &str, value: &V) -> Self {
         self.s.set(name, value);
         self
     }
@@ -440,11 +440,11 @@ mod tests {
         ::init().unwrap();
 
         let caps = Caps::builder("foo/bar")
-            .field("int", 12)
-            .field("bool", true)
-            .field("string", "bla")
-            .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new(&[&1, &2]))
+            .field("int", &12)
+            .field("bool", &true)
+            .field("string", &"bla")
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
             .build();
         assert_eq!(
             caps.to_string(),

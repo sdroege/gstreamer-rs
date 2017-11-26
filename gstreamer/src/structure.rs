@@ -305,7 +305,7 @@ impl StructureRef {
         }
     }
 
-    pub fn set<T: ToSendValue>(&mut self, name: &str, value: T) {
+    pub fn set<T: ToSendValue>(&mut self, name: &str, value: &T) {
         let value = value.to_send_value();
         self.set_value(name, value);
     }
@@ -608,7 +608,7 @@ impl Builder {
         }
     }
 
-    pub fn field<V: ToSendValue>(mut self, name: &str, value: V) -> Self {
+    pub fn field<V: ToSendValue>(mut self, name: &str, value: &V) -> Self {
         self.s.set(name, value);
         self
     }
@@ -629,9 +629,9 @@ mod tests {
         let mut s = Structure::new_empty("test");
         assert_eq!(s.get_name(), "test");
 
-        s.set("f1", "abc");
-        s.set("f2", String::from("bcd"));
-        s.set("f3", 123i32);
+        s.set("f1", &"abc");
+        s.set("f2", &String::from("bcd"));
+        s.set("f3", &123i32);
 
         assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
         assert_eq!(s.get::<&str>("f2").unwrap(), "bcd");
@@ -657,9 +657,9 @@ mod tests {
         ::init().unwrap();
 
         let s = Structure::builder("test")
-            .field("f1", "abc")
-            .field("f2", String::from("bcd"))
-            .field("f3", 123i32)
+            .field("f1", &"abc")
+            .field("f2", &String::from("bcd"))
+            .field("f3", &123i32)
             .build();
 
         assert_eq!(s.get_name(), "test");
