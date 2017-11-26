@@ -949,6 +949,66 @@ render function.
 
 `gst::FlowReturn::Ok` if the preroll completed and processing can
 continue. Any other return value should be returned from the render vmethod.
+<!-- trait BaseSinkExt::fn get_property_async -->
+If set to `true`, the basesink will perform asynchronous state changes.
+When set to `false`, the sink will not signal the parent when it prerolls.
+Use this option when dealing with sparse streams or when synchronisation is
+not required.
+<!-- trait BaseSinkExt::fn set_property_async -->
+If set to `true`, the basesink will perform asynchronous state changes.
+When set to `false`, the sink will not signal the parent when it prerolls.
+Use this option when dealing with sparse streams or when synchronisation is
+not required.
+<!-- trait BaseSinkExt::fn get_property_blocksize -->
+The amount of bytes to pull when operating in pull mode.
+<!-- trait BaseSinkExt::fn set_property_blocksize -->
+The amount of bytes to pull when operating in pull mode.
+<!-- trait BaseSinkExt::fn get_property_enable-last-sample -->
+Enable the last-sample property. If `false`, basesink doesn't keep a
+reference to the last buffer arrived and the last-sample property is always
+set to `None`. This can be useful if you need buffers to be released as soon
+as possible, eg. if you're using a buffer pool.
+<!-- trait BaseSinkExt::fn set_property_enable-last-sample -->
+Enable the last-sample property. If `false`, basesink doesn't keep a
+reference to the last buffer arrived and the last-sample property is always
+set to `None`. This can be useful if you need buffers to be released as soon
+as possible, eg. if you're using a buffer pool.
+<!-- trait BaseSinkExt::fn get_property_last-sample -->
+The last buffer that arrived in the sink and was used for preroll or for
+rendering. This property can be used to generate thumbnails. This property
+can be `None` when the sink has not yet received a buffer.
+<!-- trait BaseSinkExt::fn get_property_max-bitrate -->
+Control the maximum amount of bits that will be rendered per second.
+Setting this property to a value bigger than 0 will make the sink delay
+rendering of the buffers when it would exceed to max-bitrate.
+<!-- trait BaseSinkExt::fn set_property_max-bitrate -->
+Control the maximum amount of bits that will be rendered per second.
+Setting this property to a value bigger than 0 will make the sink delay
+rendering of the buffers when it would exceed to max-bitrate.
+<!-- trait BaseSinkExt::fn get_property_render-delay -->
+The additional delay between synchronisation and actual rendering of the
+media. This property will add additional latency to the device in order to
+make other sinks compensate for the delay.
+<!-- trait BaseSinkExt::fn set_property_render-delay -->
+The additional delay between synchronisation and actual rendering of the
+media. This property will add additional latency to the device in order to
+make other sinks compensate for the delay.
+<!-- trait BaseSinkExt::fn get_property_throttle-time -->
+The time to insert between buffers. This property can be used to control
+the maximum amount of buffers per second to render. Setting this property
+to a value bigger than 0 will make the sink create THROTTLE QoS events.
+<!-- trait BaseSinkExt::fn set_property_throttle-time -->
+The time to insert between buffers. This property can be used to control
+the maximum amount of buffers per second to render. Setting this property
+to a value bigger than 0 will make the sink create THROTTLE QoS events.
+<!-- trait BaseSinkExt::fn get_property_ts-offset -->
+Controls the final synchronisation, a negative value will render the buffer
+earlier while a positive value delays playback. This property can be
+used to fix synchronisation in bad files.
+<!-- trait BaseSinkExt::fn set_property_ts-offset -->
+Controls the final synchronisation, a negative value will render the buffer
+earlier while a positive value delays playback. This property can be
+used to fix synchronisation in bad files.
 <!-- struct BaseSrc -->
 This is a generic base class for source elements. The following
 types of sources are supported:

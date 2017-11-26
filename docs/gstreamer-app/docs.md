@@ -39,7 +39,7 @@ to avoid polling.
 
 # Implements
 
-[`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`BaseSinkExt`](trait.BaseSinkExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html), [`URIHandlerExt`](trait.URIHandlerExt.html)
 <!-- impl AppSink::fn get_buffer_list_support -->
 Check if `self` supports buffer lists.
 
@@ -235,6 +235,125 @@ the maximum amount of time to wait for a sample
 
 a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
 Call `gst_sample_unref` after usage.
+<!-- trait AppSinkExt::fn connect_eos -->
+Signal that the end-of-stream has been reached. This signal is emitted from
+the streaming thread.
+<!-- trait AppSinkExt::fn connect_new_preroll -->
+Signal that a new preroll sample is available.
+
+This signal is emitted from the streaming thread and only when the
+"emit-signals" property is `true`.
+
+The new preroll sample can be retrieved with the "pull-preroll" action
+signal or `AppSink::pull_preroll` either from this signal callback
+or from any other thread.
+
+Note that this signal is only emitted when the "emit-signals" property is
+set to `true`, which it is not by default for performance reasons.
+<!-- trait AppSinkExt::fn connect_new_sample -->
+Signal that a new sample is available.
+
+This signal is emitted from the streaming thread and only when the
+"emit-signals" property is `true`.
+
+The new sample can be retrieved with the "pull-sample" action
+signal or `AppSink::pull_sample` either from this signal callback
+or from any other thread.
+
+Note that this signal is only emitted when the "emit-signals" property is
+set to `true`, which it is not by default for performance reasons.
+<!-- trait AppSinkExt::fn connect_pull_preroll -->
+Get the last preroll sample in `appsink`. This was the sample that caused the
+appsink to preroll in the PAUSED state. This sample can be pulled many times
+and remains available to the application even after EOS.
+
+This function is typically used when dealing with a pipeline in the PAUSED
+state. Calling this function after doing a seek will give the sample right
+after the seek position.
+
+Note that the preroll sample will also be returned as the first sample
+when calling `AppSink::pull_sample` or the "pull-sample" action signal.
+
+If an EOS event was received before any buffers, this function returns
+`None`. Use gst_app_sink_is_eos () to check for the EOS condition.
+
+This function blocks until a preroll sample or EOS is received or the appsink
+element is set to the READY/NULL state.
+
+# Returns
+
+a `gst::Sample` or NULL when the appsink is stopped or EOS.
+<!-- trait AppSinkExt::fn connect_pull_sample -->
+This function blocks until a sample or EOS becomes available or the appsink
+element is set to the READY/NULL state.
+
+This function will only return samples when the appsink is in the PLAYING
+state. All rendered samples will be put in a queue so that the application
+can pull samples at its own rate.
+
+Note that when the application does not pull samples fast enough, the
+queued samples could consume a lot of memory, especially when dealing with
+raw video frames. It's possible to control the behaviour of the queue with
+the "drop" and "max-buffers" properties.
+
+If an EOS event was received before any buffers, this function returns
+`None`. Use gst_app_sink_is_eos () to check for the EOS condition.
+
+# Returns
+
+a `gst::Sample` or NULL when the appsink is stopped or EOS.
+<!-- trait AppSinkExt::fn connect_try_pull_preroll -->
+Get the last preroll sample in `appsink`. This was the sample that caused the
+appsink to preroll in the PAUSED state. This sample can be pulled many times
+and remains available to the application even after EOS.
+
+This function is typically used when dealing with a pipeline in the PAUSED
+state. Calling this function after doing a seek will give the sample right
+after the seek position.
+
+Note that the preroll sample will also be returned as the first sample
+when calling `AppSink::pull_sample` or the "pull-sample" action signal.
+
+If an EOS event was received before any buffers or the timeout expires,
+this function returns `None`. Use gst_app_sink_is_eos () to check for the EOS
+condition.
+
+This function blocks until a preroll sample or EOS is received, the appsink
+element is set to the READY/NULL state, or the timeout expires.
+
+Feature: `v1_10`
+
+## `timeout`
+the maximum amount of time to wait for the preroll sample
+
+# Returns
+
+a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
+<!-- trait AppSinkExt::fn connect_try_pull_sample -->
+This function blocks until a sample or EOS becomes available or the appsink
+element is set to the READY/NULL state or the timeout expires.
+
+This function will only return samples when the appsink is in the PLAYING
+state. All rendered samples will be put in a queue so that the application
+can pull samples at its own rate.
+
+Note that when the application does not pull samples fast enough, the
+queued samples could consume a lot of memory, especially when dealing with
+raw video frames. It's possible to control the behaviour of the queue with
+the "drop" and "max-buffers" properties.
+
+If an EOS event was received before any buffers or the timeout expires,
+this function returns `None`. Use gst_app_sink_is_eos () to check
+for the EOS condition.
+
+Feature: `v1_10`
+
+## `timeout`
+the maximum amount of time to wait for a sample
+
+# Returns
+
+a `gst::Sample` or NULL when the appsink is stopped or EOS or the timeout expires.
 <!-- struct AppSrc -->
 The appsrc element can be used by applications to insert data into a
 GStreamer pipeline. Unlike most GStreamer elements, appsrc provides
@@ -303,7 +422,7 @@ occurs or the state of the appsrc has gone through READY.
 
 # Implements
 
-[`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`BaseSrcExt`](trait.BaseSrcExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html), [`URIHandlerExt`](trait.URIHandlerExt.html)
 <!-- impl AppSrc::fn end_of_stream -->
 Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.
@@ -458,6 +577,56 @@ be connected to.
 A stream_type stream
 ## `type_`
 the new state
+<!-- trait AppSrcExt::fn connect_end_of_stream -->
+Notify `appsrc` that no more buffer are available.
+<!-- trait AppSrcExt::fn connect_enough_data -->
+Signal that the source has enough data. It is recommended that the
+application stops calling push-buffer until the need-data signal is
+emitted again to avoid excessive buffer queueing.
+<!-- trait AppSrcExt::fn connect_need_data -->
+Signal that the source needs more data. In the callback or from another
+thread you should call push-buffer or end-of-stream.
+
+`length` is just a hint and when it is set to -1, any number of bytes can be
+pushed into `appsrc`.
+
+You can call push-buffer multiple times until the enough-data signal is
+fired.
+## `length`
+the amount of bytes needed.
+<!-- trait AppSrcExt::fn connect_push_buffer -->
+Adds a buffer to the queue of buffers that the appsrc element will
+push to its source pad. This function does not take ownership of the
+buffer so the buffer needs to be unreffed after calling this function.
+
+When the block property is TRUE, this function can block until free space
+becomes available in the queue.
+## `buffer`
+a buffer to push
+<!-- trait AppSrcExt::fn connect_push_sample -->
+Extract a buffer from the provided sample and adds the extracted buffer
+to the queue of buffers that the appsrc element will
+push to its source pad. This function set the appsrc caps based on the caps
+in the sample and reset the caps if they change.
+Only the caps and the buffer of the provided sample are used and not
+for example the segment in the sample.
+This function does not take ownership of the
+sample so the sample needs to be unreffed after calling this function.
+
+When the block property is TRUE, this function can block until free space
+becomes available in the queue.
+## `sample`
+a sample from which extract buffer to push
+<!-- trait AppSrcExt::fn connect_seek_data -->
+Seek to the given offset. The next push-buffer should produce buffers from
+the new `offset`.
+This callback is only called for seekable stream types.
+## `offset`
+the offset to seek to
+
+# Returns
+
+`true` if the seek succeeded.
 <!-- enum AppStreamType -->
 The stream type.
 <!-- enum AppStreamType::variant Stream -->
