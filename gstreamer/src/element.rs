@@ -54,6 +54,7 @@ impl Element {
     }
 }
 
+#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum ElementMessageType {
     Error,
     Warning,
