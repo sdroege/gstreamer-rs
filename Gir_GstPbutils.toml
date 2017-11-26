@@ -17,6 +17,13 @@ external_libraries = [
 generate = [
     "GstPbutils.Discoverer",
     "GstPbutils.DiscovererInfo",
+    "GstPbutils.DiscovererResult",
+    "GstPbutils.DiscovererSerializeFlags",
+    "GstPbutils.DiscovererStreamInfo",
+    "GstPbutils.DiscovererSubtitleInfo",
+    "GstPbutils.DiscovererAudioInfo",
+    "GstPbutils.DiscovererContainerInfo",
+    "GstPbutils.DiscovererVideoInfo",
     "GstPbutils.EncodingAudioProfile",
     "GstPbutils.EncodingVideoProfile",
     "GstPbutils.EncodingContainerProfile",
@@ -27,8 +34,11 @@ manual = [
     "GLib.Error",
     "GLib.Source",
     "GLib.DateTime",
+    "GLib.Variant",
     "GObject.Object",
     "Gst.Object",
+    "Gst.Element",
+    "Gst.Toc",
 ]
 
 [[object]]
@@ -37,8 +47,56 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Event"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
 name = "GstPbutils.EncodingProfile"
 status = "generate"
     [[object.function]]
     name = "is_equal"
+    ignore = true
+
+[[object]]
+name = "GstPbutils.*"
+status = "generate"
+    # Need to wrap callback functions and an extra opaque struct
+    [[object.function]]
+    name = "install_plugins_sync"
+    ignore = true
+    [[object.function]]
+    name = "install_plugins_async"
+    ignore = true
+
+    [[object.function]]
+    name = "codec_utils_opus_parse_header"
+    ignore = true
+    [[object.function]]
+    name = "codec_utils_opus_parse_caps"
     ignore = true
