@@ -149,7 +149,7 @@ mod futures {
         pub fn new(bus: &Bus) -> Self {
             skip_assert_initialized!();
             let task = Arc::new(Mutex::new(None));
-            let task_clone = task.clone();
+            let task_clone = Arc::clone(&task);
 
             bus.set_sync_handler(move |_, _| {
                 let mut task = task_clone.lock().unwrap();
