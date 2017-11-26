@@ -494,6 +494,36 @@ status = "generate"
     # Correct mutability
     ignore = true
 
+    [[object.function]]
+    name = "query_duration"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "query_position"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "query_convert"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "peer_query_duration"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "peer_query_position"
+    # formatted value
+    ignore = true
+
+    [[object.function]]
+    name = "peer_query_convert"
+    # formatted value
+    ignore = true
+
 [[object]]
 name = "Gst.PadTemplate"
 status = "generate"
