@@ -333,6 +333,70 @@ of `self`. See also `ElementExt::sync_state_with_parent`.
 
 `true` if syncing the state was successful for all children,
  otherwise `false`.
+<!-- trait BinExt::fn connect_deep_element_added -->
+Will be emitted after the element was added to sub_bin.
+
+Feature: `v1_10`
+
+## `sub_bin`
+the `Bin` the element was added to
+## `element`
+the `Element` that was added to `sub_bin`
+<!-- trait BinExt::fn connect_deep_element_removed -->
+Will be emitted after the element was removed from sub_bin.
+
+Feature: `v1_10`
+
+## `sub_bin`
+the `Bin` the element was removed from
+## `element`
+the `Element` that was removed from `sub_bin`
+<!-- trait BinExt::fn connect_do_latency -->
+Will be emitted when the bin needs to perform latency calculations. This
+signal is only emitted for toplevel bins or when async-handling is
+enabled.
+
+Only one signal handler is invoked. If no signals are connected, the
+default handler is invoked, which will query and distribute the lowest
+possible latency to all sinks.
+
+Connect to this signal if the default latency calculations are not
+sufficient, like when you need different latencies for different sinks in
+the same pipeline.
+<!-- trait BinExt::fn connect_element_added -->
+Will be emitted after the element was added to the bin.
+## `element`
+the `Element` that was added to the bin
+<!-- trait BinExt::fn connect_element_removed -->
+Will be emitted after the element was removed from the bin.
+## `element`
+the `Element` that was removed from the bin
+<!-- trait BinExt::fn get_property_async-handling -->
+If set to `true`, the bin will handle asynchronous state changes.
+This should be used only if the bin subclass is modifying the state
+of its children on its own.
+<!-- trait BinExt::fn set_property_async-handling -->
+If set to `true`, the bin will handle asynchronous state changes.
+This should be used only if the bin subclass is modifying the state
+of its children on its own.
+<!-- trait BinExt::fn get_property_message-forward -->
+Forward all children messages, even those that would normally be filtered by
+the bin. This can be interesting when one wants to be notified of the EOS
+state of individual elements, for example.
+
+The messages are converted to an ELEMENT message with the bin as the
+source. The structure of the message is named 'GstBinForwarded' and contains
+a field named 'message' of type GST_TYPE_MESSAGE that contains the original
+forwarded message.
+<!-- trait BinExt::fn set_property_message-forward -->
+Forward all children messages, even those that would normally be filtered by
+the bin. This can be interesting when one wants to be notified of the EOS
+state of individual elements, for example.
+
+The messages are converted to an ELEMENT message with the bin as the
+source. The structure of the message is named 'GstBinForwarded' and contains
+a field named 'message' of type GST_TYPE_MESSAGE that contains the original
+forwarded message.
 <!-- struct Buffer -->
 Buffers are the basic unit of data transfer in GStreamer. They contain the
 timing and offset along with other arbitrary metadata that is associated
@@ -423,7 +487,7 @@ Typically, `ParentBufferMeta` is used when the child buffer is directly
 using the `Memory` of the parent buffer, and wants to prevent the parent
 buffer from being returned to a buffer pool until the `Memory` is available
 for re-use. (Since 1.6)
-<!-- impl GstRc<BufferRef>::fn new -->
+<!-- impl Buffer::fn new -->
 Creates a newly allocated buffer without any data.
 
 MT safe.
@@ -431,7 +495,7 @@ MT safe.
 # Returns
 
 the new `Buffer`.
-<!-- impl GstRc<BufferRef>::fn new_allocate -->
+<!-- impl Buffer::fn new_allocate -->
 Tries to create a newly allocated buffer with data of the given size and
 extra parameters from `allocator`. If the requested amount of memory can't be
 allocated, `None` will be returned. The allocated buffer memory is not cleared.
@@ -453,7 +517,7 @@ optional parameters
 
 a new `Buffer`, or `None` if
  the memory couldn't be allocated.
-<!-- impl GstRc<BufferRef>::fn new_wrapped -->
+<!-- impl Buffer::fn new_wrapped -->
 Creates a new buffer that wraps the given `data`. The memory will be freed
 with g_free and will be marked writable.
 
@@ -466,7 +530,7 @@ allocated size of `data`
 # Returns
 
 a new `Buffer`
-<!-- impl GstRc<BufferRef>::fn new_wrapped_full -->
+<!-- impl Buffer::fn new_wrapped_full -->
 Allocate a new buffer that wraps the given memory. `data` must point to
 `maxsize` of memory, the wrapped buffer will have the region from `offset` and
 `size` visible.
@@ -493,7 +557,7 @@ called with `user_data` when the memory is freed
 # Returns
 
 a new `Buffer`
-<!-- impl GstRc<BufferRef>::fn add_meta -->
+<!-- impl Buffer::fn add_meta -->
 Add metadata for `info` to `self` using the parameters in `params`.
 ## `info`
 a `MetaInfo`
@@ -503,7 +567,7 @@ params for `info`
 # Returns
 
 the metadata for the api in `info` on `self`.
-<!-- impl GstRc<BufferRef>::fn add_parent_buffer_meta -->
+<!-- impl Buffer::fn add_parent_buffer_meta -->
 Add a `ParentBufferMeta` to `self` that holds a reference on
 `ref_` until the buffer is freed.
 ## `ref_`
@@ -512,7 +576,7 @@ a `Buffer` to ref
 # Returns
 
 The `ParentBufferMeta` that was added to the buffer
-<!-- impl GstRc<BufferRef>::fn add_protection_meta -->
+<!-- impl Buffer::fn add_protection_meta -->
 Attaches protection metadata to a `Buffer`.
 ## `info`
 a `Structure` holding cryptographic
@@ -523,7 +587,7 @@ a `Structure` holding cryptographic
 
 a pointer to the added `ProtectionMeta` if successful; `None` if
 unsuccessful.
-<!-- impl GstRc<BufferRef>::fn append -->
+<!-- impl Buffer::fn append -->
 Append all the memory from `buf2` to `self`. The result buffer will contain a
 concatenation of the memory of `self` and `buf2`.
 ## `buf2`
@@ -533,7 +597,7 @@ the second source `Buffer` to append.
 
 the new `Buffer` that contains the memory
  of the two source buffers.
-<!-- impl GstRc<BufferRef>::fn append_memory -->
+<!-- impl Buffer::fn append_memory -->
 Append the memory block `mem` to `self`. This function takes
 ownership of `mem` and thus doesn't increase its refcount.
 
@@ -541,7 +605,7 @@ This function is identical to `Buffer::insert_memory` with an index of -1.
 See `Buffer::insert_memory` for more details.
 ## `mem`
 a `Memory`.
-<!-- impl GstRc<BufferRef>::fn append_region -->
+<!-- impl Buffer::fn append_region -->
 Append `size` bytes at `offset` from `buf2` to `self`. The result buffer will
 contain a concatenation of the memory of `self` and the requested region of
 `buf2`.
@@ -556,14 +620,14 @@ the size or -1 of `buf2`
 
 the new `Buffer` that contains the memory
  of the two source buffers.
-<!-- impl GstRc<BufferRef>::fn copy_deep -->
+<!-- impl Buffer::fn copy_deep -->
 Create a copy of the given buffer. This will make a newly allocated
 copy of the data the source buffer contains.
 
 # Returns
 
 a new copy of `self`.
-<!-- impl GstRc<BufferRef>::fn copy_into -->
+<!-- impl Buffer::fn copy_into -->
 Copies the information from `src` into `self`.
 
 If `self` already contains memory and `flags` contains GST_BUFFER_COPY_MEMORY,
@@ -582,7 +646,7 @@ total size to copy. If -1, all data is copied.
 # Returns
 
 `true` if the copying succeeded, `false` otherwise.
-<!-- impl GstRc<BufferRef>::fn copy_region -->
+<!-- impl Buffer::fn copy_region -->
 Creates a sub-buffer from `self` at `offset` and `size`.
 This sub-buffer uses the actual memory space of the parent buffer.
 This function will copy the offset and timestamp fields when the
@@ -606,7 +670,7 @@ the size of the new `Buffer` sub-buffer, in bytes. If -1, all
 
 the new `Buffer` or `None` if the arguments were
  invalid.
-<!-- impl GstRc<BufferRef>::fn extract -->
+<!-- impl Buffer::fn extract -->
 Copy `size` bytes starting from `offset` in `self` to `dest`.
 ## `offset`
 the offset to extract
@@ -619,7 +683,7 @@ the size to extract
 
 The amount of bytes extracted. This value can be lower than `size`
  when `self` did not contain enough data.
-<!-- impl GstRc<BufferRef>::fn extract_dup -->
+<!-- impl Buffer::fn extract_dup -->
 Extracts a copy of at most `size` bytes the data at `offset` into
 newly-allocated memory. `dest` must be freed using `g_free` when done.
 ## `offset`
@@ -631,7 +695,7 @@ A pointer where
  the destination array will be written.
 ## `dest_size`
 A location where the size of `dest` can be written
-<!-- impl GstRc<BufferRef>::fn fill -->
+<!-- impl Buffer::fn fill -->
 Copy `size` bytes from `src` to `self` at `offset`.
 ## `offset`
 the offset to fill
@@ -644,7 +708,7 @@ the size to fill
 
 The amount of bytes copied. This value can be lower than `size`
  when `self` did not contain enough data.
-<!-- impl GstRc<BufferRef>::fn find_memory -->
+<!-- impl Buffer::fn find_memory -->
 Find the memory blocks that span `size` bytes starting from `offset`
 in `self`.
 
@@ -670,7 +734,7 @@ pointer to skip
 
 `true` when `size` bytes starting from `offset` could be found in
 `self` and `idx`, `length` and `skip` will be filled.
-<!-- impl GstRc<BufferRef>::fn foreach_meta -->
+<!-- impl Buffer::fn foreach_meta -->
 Call `func` with `user_data` for each meta in `self`.
 
 `func` can modify the passed meta pointer or its contents. The return value
@@ -684,7 +748,7 @@ user data passed to `func`
 # Returns
 
 `false` when `func` returned `false` for one of the metadata.
-<!-- impl GstRc<BufferRef>::fn get_all_memory -->
+<!-- impl Buffer::fn get_all_memory -->
 Get all the memory block in `self`. The memory blocks will be merged
 into one large `Memory`.
 
@@ -692,7 +756,7 @@ into one large `Memory`.
 
 a `Memory` that contains the merged memory.
 Use gst_memory_unref () after usage.
-<!-- impl GstRc<BufferRef>::fn get_flags -->
+<!-- impl Buffer::fn get_flags -->
 Get the `BufferFlags` flags set on this buffer.
 
 Feature: `v1_10`
@@ -701,7 +765,7 @@ Feature: `v1_10`
 # Returns
 
 the flags set on this buffer.
-<!-- impl GstRc<BufferRef>::fn get_memory -->
+<!-- impl Buffer::fn get_memory -->
 Get the memory block at index `idx` in `self`.
 ## `idx`
 an index
@@ -710,7 +774,7 @@ an index
 
 a `Memory` that contains the data of the
 memory block at `idx`. Use gst_memory_unref () after usage.
-<!-- impl GstRc<BufferRef>::fn get_memory_range -->
+<!-- impl Buffer::fn get_memory_range -->
 Get `length` memory blocks in `self` starting at `idx`. The memory blocks will
 be merged into one large `Memory`.
 
@@ -724,7 +788,7 @@ a length
 
 a `Memory` that contains the merged data of `length`
  blocks starting at `idx`. Use gst_memory_unref () after usage.
-<!-- impl GstRc<BufferRef>::fn get_meta -->
+<!-- impl Buffer::fn get_meta -->
 Get the metadata for `api` on buffer. When there is no such metadata, `None` is
 returned. If multiple metadata with the given `api` are attached to this
 buffer only the first one is returned. To handle multiple metadata with a
@@ -737,13 +801,13 @@ the `glib::Type` of an API
 
 the metadata for `api` on
 `self`.
-<!-- impl GstRc<BufferRef>::fn get_size -->
+<!-- impl Buffer::fn get_size -->
 Get the total size of the memory blocks in `self`.
 
 # Returns
 
 total size of the memory blocks in `self`.
-<!-- impl GstRc<BufferRef>::fn get_sizes -->
+<!-- impl Buffer::fn get_sizes -->
 Get the total size of the memory blocks in `b`.
 
 When not `None`, `offset` will contain the offset of the data in the
@@ -759,7 +823,7 @@ a pointer to the maxsize
 # Returns
 
 total size of the memory blocks in `self`.
-<!-- impl GstRc<BufferRef>::fn get_sizes_range -->
+<!-- impl Buffer::fn get_sizes_range -->
 Get the total size of `length` memory blocks stating from `idx` in `self`.
 
 When not `None`, `offset` will contain the offset of the data in the
@@ -780,7 +844,7 @@ a pointer to the maxsize
 # Returns
 
 total size of `length` memory blocks starting at `idx` in `self`.
-<!-- impl GstRc<BufferRef>::fn insert_memory -->
+<!-- impl Buffer::fn insert_memory -->
 Insert the memory block `mem` to `self` at `idx`. This function takes ownership
 of `mem` and thus doesn't increase its refcount.
 
@@ -791,7 +855,7 @@ the new memory.
 the index to add the memory at, or -1 to append it to the end
 ## `mem`
 a `Memory`.
-<!-- impl GstRc<BufferRef>::fn is_all_memory_writable -->
+<!-- impl Buffer::fn is_all_memory_writable -->
 Check if all memory blocks in `self` are writable.
 
 Note that this function does not check if `self` is writable, use
@@ -800,7 +864,7 @@ Note that this function does not check if `self` is writable, use
 # Returns
 
 `true` if all memory blocks in `self` are writable
-<!-- impl GstRc<BufferRef>::fn is_memory_range_writable -->
+<!-- impl Buffer::fn is_memory_range_writable -->
 Check if `length` memory blocks in `self` starting from `idx` are writable.
 
 `length` can be -1 to check all the memory blocks after `idx`.
@@ -815,7 +879,7 @@ a length should not be 0
 # Returns
 
 `true` if the memory range is writable
-<!-- impl GstRc<BufferRef>::fn iterate_meta -->
+<!-- impl Buffer::fn iterate_meta -->
 Retrieve the next `Meta` after `current`. If `state` points
 to `None`, the first metadata is returned.
 
@@ -827,7 +891,7 @@ an opaque state pointer
 
 The next `Meta` or `None`
 when there are no more items.
-<!-- impl GstRc<BufferRef>::fn iterate_meta_filtered -->
+<!-- impl Buffer::fn iterate_meta_filtered -->
 Retrieve the next `Meta` of type `meta_api_type` after the current one
 according to `state`. If `state` points to `None`, the first metadata of
 type `meta_api_type` is returned.
@@ -845,7 +909,7 @@ only return `Meta` of this type
 
 The next `Meta` of type
 `meta_api_type` or `None` when there are no more items.
-<!-- impl GstRc<BufferRef>::fn map -->
+<!-- impl Buffer::fn map -->
 This function fills `info` with the `MapInfo` of all merged memory
 blocks in `self`.
 
@@ -867,7 +931,7 @@ flags for the mapping
 # Returns
 
 `true` if the map succeeded and `info` contains valid data.
-<!-- impl GstRc<BufferRef>::fn map_range -->
+<!-- impl Buffer::fn map_range -->
 This function fills `info` with the `MapInfo` of `length` merged memory blocks
 starting at `idx` in `self`. When `length` is -1, all memory blocks starting
 from `idx` are merged and mapped.
@@ -894,7 +958,7 @@ flags for the mapping
 
 `true` if the map succeeded and `info` contains valid
 data.
-<!-- impl GstRc<BufferRef>::fn memcmp -->
+<!-- impl Buffer::fn memcmp -->
 Compare `size` bytes starting from `offset` in `self` with the memory in `mem`.
 ## `offset`
 the offset in `self`
@@ -906,7 +970,7 @@ the size to compare
 # Returns
 
 0 if the memory is equal.
-<!-- impl GstRc<BufferRef>::fn memset -->
+<!-- impl Buffer::fn memset -->
 Fill `buf` with `size` bytes with `val` starting from `offset`.
 ## `offset`
 the offset in `self`
@@ -919,14 +983,14 @@ the size to set
 
 The amount of bytes filled. This value can be lower than `size`
  when `self` did not contain enough data.
-<!-- impl GstRc<BufferRef>::fn n_memory -->
+<!-- impl Buffer::fn n_memory -->
 Get the amount of memory blocks that this buffer has. This amount is never
 larger than what `Buffer::get_max_memory` returns.
 
 # Returns
 
 the number of memory blocks this buffer is made of.
-<!-- impl GstRc<BufferRef>::fn peek_memory -->
+<!-- impl Buffer::fn peek_memory -->
 Get the memory block at `idx` in `self`. The memory block stays valid until
 the memory block in `self` is removed, replaced or merged, typically with
 any call that modifies the memory in `self`.
@@ -936,7 +1000,7 @@ an index
 # Returns
 
 the `Memory` at `idx`.
-<!-- impl GstRc<BufferRef>::fn prepend_memory -->
+<!-- impl Buffer::fn prepend_memory -->
 Prepend the memory block `mem` to `self`. This function takes
 ownership of `mem` and thus doesn't increase its refcount.
 
@@ -944,13 +1008,13 @@ This function is identical to `Buffer::insert_memory` with an index of 0.
 See `Buffer::insert_memory` for more details.
 ## `mem`
 a `Memory`.
-<!-- impl GstRc<BufferRef>::fn remove_all_memory -->
+<!-- impl Buffer::fn remove_all_memory -->
 Remove all the memory blocks in `self`.
-<!-- impl GstRc<BufferRef>::fn remove_memory -->
+<!-- impl Buffer::fn remove_memory -->
 Remove the memory block in `b` at index `i`.
 ## `idx`
 an index
-<!-- impl GstRc<BufferRef>::fn remove_memory_range -->
+<!-- impl Buffer::fn remove_memory_range -->
 Remove `length` memory blocks in `self` starting from `idx`.
 
 `length` can be -1, in which case all memory starting from `idx` is removed.
@@ -958,7 +1022,7 @@ Remove `length` memory blocks in `self` starting from `idx`.
 an index
 ## `length`
 a length
-<!-- impl GstRc<BufferRef>::fn remove_meta -->
+<!-- impl Buffer::fn remove_meta -->
 Remove the metadata for `meta` on `self`.
 ## `meta`
 a `Meta`
@@ -967,17 +1031,17 @@ a `Meta`
 
 `true` if the metadata existed and was removed, `false` if no such
 metadata was on `self`.
-<!-- impl GstRc<BufferRef>::fn replace_all_memory -->
+<!-- impl Buffer::fn replace_all_memory -->
 Replaces all memory in `self` with `mem`.
 ## `mem`
 a `Memory`
-<!-- impl GstRc<BufferRef>::fn replace_memory -->
+<!-- impl Buffer::fn replace_memory -->
 Replaces the memory block at index `idx` in `self` with `mem`.
 ## `idx`
 an index
 ## `mem`
 a `Memory`
-<!-- impl GstRc<BufferRef>::fn replace_memory_range -->
+<!-- impl Buffer::fn replace_memory_range -->
 Replaces `length` memory blocks in `self` starting at `idx` with `mem`.
 
 If `length` is -1, all memory starting from `idx` will be removed and
@@ -990,13 +1054,13 @@ an index
 a length should not be 0
 ## `mem`
 a `Memory`
-<!-- impl GstRc<BufferRef>::fn resize -->
+<!-- impl Buffer::fn resize -->
 Set the offset and total size of the memory blocks in `self`.
 ## `offset`
 the offset adjustment
 ## `size`
 the new size or -1 to just adjust the offset
-<!-- impl GstRc<BufferRef>::fn resize_range -->
+<!-- impl Buffer::fn resize_range -->
 Set the total size of the `length` memory blocks starting at `idx` in
 `self`
 ## `idx`
@@ -1011,7 +1075,7 @@ the new size or -1 to just adjust the offset
 # Returns
 
 `true` if resizing succeeded, `false` otherwise.
-<!-- impl GstRc<BufferRef>::fn set_flags -->
+<!-- impl Buffer::fn set_flags -->
 Sets one or more buffer flags on a buffer.
 
 Feature: `v1_10`
@@ -1022,15 +1086,15 @@ the `BufferFlags` to set.
 # Returns
 
 `true` if `flags` were successfully set on buffer.
-<!-- impl GstRc<BufferRef>::fn set_size -->
+<!-- impl Buffer::fn set_size -->
 Set the total size of the memory blocks in `self`.
 ## `size`
 the new size
-<!-- impl GstRc<BufferRef>::fn unmap -->
+<!-- impl Buffer::fn unmap -->
 Release the memory previously mapped with `Buffer::map`.
 ## `info`
 a `MapInfo`
-<!-- impl GstRc<BufferRef>::fn unset_flags -->
+<!-- impl Buffer::fn unset_flags -->
 Clears one or more buffer flags.
 
 Feature: `v1_10`
@@ -1041,7 +1105,7 @@ the `BufferFlags` to clear
 # Returns
 
 true if `flags` is successfully cleared from buffer.
-<!-- impl GstRc<BufferRef>::fn get_max_memory -->
+<!-- impl Buffer::fn get_max_memory -->
 Get the maximum amount of memory blocks that a buffer can hold. This is a
 compile time constant that can be queried with the function.
 
@@ -1057,10 +1121,10 @@ Buffer lists are an object containing a list of buffers.
 Buffer lists are created with `BufferList::new` and filled with data
 using a `BufferList::insert`.
 
-Buffer lists can be pushed on a srcpad with `PadExt::push_list`. This is
+Buffer lists can be pushed on a srcpad with `Pad::push_list`. This is
 interesting when multiple buffers need to be pushed in one go because it
 can reduce the amount of overhead for pushing each buffer individually.
-<!-- impl GstRc<BufferListRef>::fn new -->
+<!-- impl BufferList::fn new -->
 Creates a new, empty `BufferList`. The caller is responsible for unreffing
 the returned `BufferList`.
 
@@ -1070,7 +1134,7 @@ Free-function: gst_buffer_list_unref
 
 the new `BufferList`. `gst_buffer_list_unref`
  after usage.
-<!-- impl GstRc<BufferListRef>::fn new_sized -->
+<!-- impl BufferList::fn new_sized -->
 Creates a new, empty `BufferList`. The caller is responsible for unreffing
 the returned `BufferList`. The list will have `size` space preallocated so
 that memory reallocations can be avoided.
@@ -1083,14 +1147,14 @@ an initial reserved size
 
 the new `BufferList`. `gst_buffer_list_unref`
  after usage.
-<!-- impl GstRc<BufferListRef>::fn copy_deep -->
+<!-- impl BufferList::fn copy_deep -->
 Create a copy of the given buffer list. This will make a newly allocated
 copy of the buffer that the source buffer list contains.
 
 # Returns
 
 a new copy of `self`.
-<!-- impl GstRc<BufferListRef>::fn foreach -->
+<!-- impl BufferList::fn foreach -->
 Call `func` with `data` for each buffer in `self`.
 
 `func` can modify the passed buffer pointer or its contents. The return value
@@ -1105,7 +1169,7 @@ user data passed to `func`
 
 `true` when `func` returned `true` for each buffer in `self` or when
 `self` is empty.
-<!-- impl GstRc<BufferListRef>::fn get -->
+<!-- impl BufferList::fn get -->
 Get the buffer at `idx`.
 ## `idx`
 the index
@@ -1115,7 +1179,7 @@ the index
 the buffer at `idx` in `group`
  or `None` when there is no buffer. The buffer remains valid as
  long as `self` is valid and buffer is not removed from the list.
-<!-- impl GstRc<BufferListRef>::fn insert -->
+<!-- impl BufferList::fn insert -->
 Insert `buffer` at `idx` in `self`. Other buffers are moved to make room for
 this new buffer.
 
@@ -1124,13 +1188,13 @@ A -1 value for `idx` will append the buffer at the end.
 the index
 ## `buffer`
 a `Buffer`
-<!-- impl GstRc<BufferListRef>::fn length -->
+<!-- impl BufferList::fn length -->
 Returns the number of buffers in `self`.
 
 # Returns
 
 the number of buffers in the buffer list
-<!-- impl GstRc<BufferListRef>::fn remove -->
+<!-- impl BufferList::fn remove -->
 Remove `length` buffers starting from `idx` in `self`. The following buffers
 are moved to close the gap.
 ## `idx`
@@ -1531,6 +1595,20 @@ a `Message` matching the
  usage.
 
 MT safe.
+<!-- trait BusExt::fn connect_message -->
+A message has been posted on the bus. This signal is emitted from a
+GSource added to the mainloop. this signal will only be emitted when
+there is a mainloop running.
+## `message`
+the message that has been posted asynchronously
+<!-- trait BusExt::fn connect_sync_message -->
+A message has been posted on the bus. This signal is emitted from the
+thread that posted the message so one has to be careful with locking.
+
+This signal will not be emitted by default, you have to call
+`Bus::enable_sync_message_emission` before.
+## `message`
+the message that has been posted synchronously
 <!-- enum BusSyncReply -->
 The result values for a GstBusSyncHandler.
 <!-- enum BusSyncReply::variant Drop -->
@@ -1575,14 +1653,14 @@ has limited support for nested `Caps` / `Structure` fields. It can only
 support one level of nesting. Using more levels will lead to unexpected
 behavior when using serialization features, such as `Caps::to_string` or
 `gst_value_serialize` and their counterparts.
-<!-- impl GstRc<CapsRef>::fn new_any -->
+<!-- impl Caps::fn new_any -->
 Creates a new `Caps` that indicates that it is compatible with
 any media format.
 
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn new_empty -->
+<!-- impl Caps::fn new_empty -->
 Creates a new `Caps` that is empty. That is, the returned
 `Caps` contains no media formats.
 The `Caps` is guaranteed to be writable.
@@ -1591,7 +1669,7 @@ Caller is responsible for unreffing the returned caps.
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn new_empty_simple -->
+<!-- impl Caps::fn new_empty_simple -->
 Creates a new `Caps` that contains one `Structure` with name
 `media_type`.
 Caller is responsible for unreffing the returned caps.
@@ -1601,7 +1679,7 @@ the media type of the structure
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn new_full -->
+<!-- impl Caps::fn new_full -->
 Creates a new `Caps` and adds all the structures listed as
 arguments. The list must be `None`-terminated. The structures
 are not copied; the returned `Caps` owns the structures.
@@ -1611,7 +1689,7 @@ the first structure to add
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn new_full_valist -->
+<!-- impl Caps::fn new_full_valist -->
 Creates a new `Caps` and adds all the structures listed as
 arguments. The list must be `None`-terminated. The structures
 are not copied; the returned `Caps` owns the structures.
@@ -1623,7 +1701,7 @@ additional structures to add
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn new_simple -->
+<!-- impl Caps::fn new_simple -->
 Creates a new `Caps` that contains one `Structure`. The
 structure is defined by the arguments, which have the same format
 as `Structure::new`.
@@ -1636,25 +1714,25 @@ first field to set
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn append -->
+<!-- impl Caps::fn append -->
 Appends the structures contained in `caps2` to `self`. The structures in
 `caps2` are not copied -- they are transferred to `self`, and then `caps2` is
 freed. If either caps is ANY, the resulting caps will be ANY.
 ## `caps2`
 the `Caps` to append
-<!-- impl GstRc<CapsRef>::fn append_structure -->
+<!-- impl Caps::fn append_structure -->
 Appends `structure` to `self`. The structure is not copied; `self`
 becomes the owner of `structure`.
 ## `structure`
 the `Structure` to append
-<!-- impl GstRc<CapsRef>::fn append_structure_full -->
+<!-- impl Caps::fn append_structure_full -->
 Appends `structure` with `features` to `self`. The structure is not copied; `self`
 becomes the owner of `structure`.
 ## `structure`
 the `Structure` to append
 ## `features`
 the `CapsFeatures` to append
-<!-- impl GstRc<CapsRef>::fn can_intersect -->
+<!-- impl Caps::fn can_intersect -->
 Tries intersecting `self` and `caps2` and reports whether the result would not
 be empty
 ## `caps2`
@@ -1663,7 +1741,7 @@ a `Caps` to intersect
 # Returns
 
 `true` if intersection would be not empty
-<!-- impl GstRc<CapsRef>::fn copy_nth -->
+<!-- impl Caps::fn copy_nth -->
 Creates a new `Caps` and appends a copy of the nth structure
 contained in `self`.
 ## `nth`
@@ -1672,7 +1750,7 @@ the nth structure to copy
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn filter_and_map_in_place -->
+<!-- impl Caps::fn filter_and_map_in_place -->
 Calls the provided function once for each structure and caps feature in the
 `Caps`. In contrast to `Caps::foreach`, the function may modify the
 structure and features. In contrast to `Caps::filter_and_map_in_place`,
@@ -1683,7 +1761,7 @@ The caps must be mutable.
 a function to call for each field
 ## `user_data`
 private data
-<!-- impl GstRc<CapsRef>::fn fixate -->
+<!-- impl Caps::fn fixate -->
 Modifies the given `self` into a representation with only fixed
 values. First the caps will be truncated and then the first structure will be
 fixated with `Structure::fixate`.
@@ -1695,7 +1773,7 @@ reference to it with `gst_caps_ref`.
 # Returns
 
 the fixated caps
-<!-- impl GstRc<CapsRef>::fn foreach -->
+<!-- impl Caps::fn foreach -->
 Calls the provided function once for each structure and caps feature in the
 `Caps`. The function must not modify the fields.
 Also see `Caps::map_in_place` and `Caps::filter_and_map_in_place`.
@@ -1708,7 +1786,7 @@ private data
 
 `true` if the supplied function returns `true` for each call,
 `false` otherwise.
-<!-- impl GstRc<CapsRef>::fn get_features -->
+<!-- impl Caps::fn get_features -->
 Finds the features in `self` that has the index `index`, and
 returns it.
 
@@ -1730,13 +1808,13 @@ the index of the structure
 
 a pointer to the `CapsFeatures` corresponding
  to `index`
-<!-- impl GstRc<CapsRef>::fn get_size -->
+<!-- impl Caps::fn get_size -->
 Gets the number of structures contained in `self`.
 
 # Returns
 
 the number of structures that `self` contains
-<!-- impl GstRc<CapsRef>::fn get_structure -->
+<!-- impl Caps::fn get_structure -->
 Finds the structure in `self` that has the index `index`, and
 returns it.
 
@@ -1758,7 +1836,7 @@ the index of the structure
 
 a pointer to the `Structure` corresponding
  to `index`
-<!-- impl GstRc<CapsRef>::fn intersect -->
+<!-- impl Caps::fn intersect -->
 Creates a new `Caps` that contains all the formats that are common
 to both `self` and `caps2`. Defaults to `CapsIntersectMode::ZigZag` mode.
 ## `caps2`
@@ -1767,7 +1845,7 @@ a `Caps` to intersect
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn intersect_full -->
+<!-- impl Caps::fn intersect_full -->
 Creates a new `Caps` that contains all the formats that are common
 to both `self` and `caps2`, the order is defined by the `CapsIntersectMode`
 used.
@@ -1779,7 +1857,7 @@ The intersection algorithm/mode to use
 # Returns
 
 the new `Caps`
-<!-- impl GstRc<CapsRef>::fn is_always_compatible -->
+<!-- impl Caps::fn is_always_compatible -->
 A given `Caps` structure is always compatible with another if
 every media format that is in the first is also contained in the
 second. That is, `self` is a subset of `caps2`.
@@ -1789,19 +1867,19 @@ the `Caps` to test
 # Returns
 
 `true` if `self` is a subset of `caps2`.
-<!-- impl GstRc<CapsRef>::fn is_any -->
+<!-- impl Caps::fn is_any -->
 Determines if `self` represents any media format.
 
 # Returns
 
 `true` if `self` represents any format.
-<!-- impl GstRc<CapsRef>::fn is_empty -->
+<!-- impl Caps::fn is_empty -->
 Determines if `self` represents no media formats.
 
 # Returns
 
 `true` if `self` represents no formats.
-<!-- impl GstRc<CapsRef>::fn is_equal -->
+<!-- impl Caps::fn is_equal -->
 Checks if the given caps represent the same set of caps.
 ## `caps2`
 another `Caps`
@@ -1809,7 +1887,7 @@ another `Caps`
 # Returns
 
 `true` if both caps are equal.
-<!-- impl GstRc<CapsRef>::fn is_equal_fixed -->
+<!-- impl Caps::fn is_equal_fixed -->
 Tests if two `Caps` are equal. This function only works on fixed
 `Caps`.
 ## `caps2`
@@ -1818,7 +1896,7 @@ the `Caps` to test
 # Returns
 
 `true` if the arguments represent the same format
-<!-- impl GstRc<CapsRef>::fn is_fixed -->
+<!-- impl Caps::fn is_fixed -->
 Fixed `Caps` describe exactly one format, that is, they have exactly
 one structure, and each field in the structure describes a fixed type.
 Examples of non-fixed types are GST_TYPE_INT_RANGE and GST_TYPE_LIST.
@@ -1826,7 +1904,7 @@ Examples of non-fixed types are GST_TYPE_INT_RANGE and GST_TYPE_LIST.
 # Returns
 
 `true` if `self` is fixed
-<!-- impl GstRc<CapsRef>::fn is_strictly_equal -->
+<!-- impl Caps::fn is_strictly_equal -->
 Checks if the given caps are exactly the same set of caps.
 ## `caps2`
 another `Caps`
@@ -1834,7 +1912,7 @@ another `Caps`
 # Returns
 
 `true` if both caps are strictly equal.
-<!-- impl GstRc<CapsRef>::fn is_subset -->
+<!-- impl Caps::fn is_subset -->
 Checks if all caps represented by `self` are also represented by `superset`.
 ## `superset`
 a potentially greater `Caps`
@@ -1842,7 +1920,7 @@ a potentially greater `Caps`
 # Returns
 
 `true` if `self` is a subset of `superset`
-<!-- impl GstRc<CapsRef>::fn is_subset_structure -->
+<!-- impl Caps::fn is_subset_structure -->
 Checks if `structure` is a subset of `self`. See `Caps::is_subset`
 for more information.
 ## `structure`
@@ -1851,7 +1929,7 @@ a potential `Structure` subset of `self`
 # Returns
 
 `true` if `structure` is a subset of `self`
-<!-- impl GstRc<CapsRef>::fn is_subset_structure_full -->
+<!-- impl Caps::fn is_subset_structure_full -->
 Checks if `structure` is a subset of `self`. See `Caps::is_subset`
 for more information.
 ## `structure`
@@ -1862,7 +1940,7 @@ a `CapsFeatures` for `structure`
 # Returns
 
 `true` if `structure` is a subset of `self`
-<!-- impl GstRc<CapsRef>::fn map_in_place -->
+<!-- impl Caps::fn map_in_place -->
 Calls the provided function once for each structure and caps feature in the
 `Caps`. In contrast to `Caps::foreach`, the function may modify but not
 delete the structures and features. The caps must be mutable.
@@ -1875,7 +1953,7 @@ private data
 
 `true` if the supplied function returns `true` for each call,
 `false` otherwise.
-<!-- impl GstRc<CapsRef>::fn merge -->
+<!-- impl Caps::fn merge -->
 Appends the structures contained in `caps2` to `self` if they are not yet
 expressed by `self`. The structures in `caps2` are not copied -- they are
 transferred to a writable copy of `self`, and then `caps2` is freed.
@@ -1886,7 +1964,7 @@ the `Caps` to merge in
 # Returns
 
 the merged caps.
-<!-- impl GstRc<CapsRef>::fn merge_structure -->
+<!-- impl Caps::fn merge_structure -->
 Appends `structure` to `self` if its not already expressed by `self`.
 ## `structure`
 the `Structure` to merge
@@ -1894,7 +1972,7 @@ the `Structure` to merge
 # Returns
 
 the merged caps.
-<!-- impl GstRc<CapsRef>::fn merge_structure_full -->
+<!-- impl Caps::fn merge_structure_full -->
 Appends `structure` with `features` to `self` if its not already expressed by `self`.
 ## `structure`
 the `Structure` to merge
@@ -1904,7 +1982,7 @@ the `CapsFeatures` to merge
 # Returns
 
 the merged caps.
-<!-- impl GstRc<CapsRef>::fn normalize -->
+<!-- impl Caps::fn normalize -->
 Returns a `Caps` that represents the same set of formats as
 `self`, but contains no lists. Each list is expanded into separate
 `GstStructures`.
@@ -1916,30 +1994,30 @@ reference to it with `gst_caps_ref`.
 # Returns
 
 the normalized `Caps`
-<!-- impl GstRc<CapsRef>::fn remove_structure -->
+<!-- impl Caps::fn remove_structure -->
 removes the structure with the given index from the list of structures
 contained in `self`.
 ## `idx`
 Index of the structure to remove
-<!-- impl GstRc<CapsRef>::fn set_features -->
+<!-- impl Caps::fn set_features -->
 Sets the `CapsFeatures` `features` for the structure at `index`.
 ## `index`
 the index of the structure
 ## `features`
 the `CapsFeatures` to set
-<!-- impl GstRc<CapsRef>::fn set_simple -->
+<!-- impl Caps::fn set_simple -->
 Sets fields in a `Caps`. The arguments must be passed in the same
 manner as `Structure::set`, and be `None`-terminated.
 ## `field`
 first field to set
-<!-- impl GstRc<CapsRef>::fn set_simple_valist -->
+<!-- impl Caps::fn set_simple_valist -->
 Sets fields in a `Caps`. The arguments must be passed in the same
 manner as `Structure::set`, and be `None`-terminated.
 ## `field`
 first field to set
 ## `varargs`
 additional parameters
-<!-- impl GstRc<CapsRef>::fn set_value -->
+<!-- impl Caps::fn set_value -->
 Sets the given `field` on all structures of `self` to the given `value`.
 This is a convenience function for calling `Structure::set_value` on
 all structures of `self`.
@@ -1947,7 +2025,7 @@ all structures of `self`.
 name of the field to set
 ## `value`
 value to set the field to
-<!-- impl GstRc<CapsRef>::fn simplify -->
+<!-- impl Caps::fn simplify -->
 Converts the given `self` into a representation that represents the
 same set of formats, but in a simpler form. Component structures that are
 identical are merged. Component structures that have values that can be
@@ -1962,7 +2040,7 @@ This method does not preserve the original order of `self`.
 # Returns
 
 The simplified caps.
-<!-- impl GstRc<CapsRef>::fn steal_structure -->
+<!-- impl Caps::fn steal_structure -->
 Retrieves the structure with the given index from the list of structures
 contained in `self`. The caller becomes the owner of the returned structure.
 ## `index`
@@ -1972,7 +2050,7 @@ Index of the structure to retrieve
 
 a pointer to the `Structure` corresponding
  to `index`.
-<!-- impl GstRc<CapsRef>::fn subtract -->
+<!-- impl Caps::fn subtract -->
 Subtracts the `subtrahend` from the `self`.
 > This function does not work reliably if optional properties for caps
 > are included on one caps and omitted on the other.
@@ -1982,7 +2060,7 @@ Subtracts the `subtrahend` from the `self`.
 # Returns
 
 the resulting caps
-<!-- impl GstRc<CapsRef>::fn to_string -->
+<!-- impl Caps::fn to_string -->
 Converts `self` to a string representation. This string representation
 can be converted back to a `Caps` by `Caps::from_string`.
 
@@ -1999,7 +2077,7 @@ when there are nested `Caps` / `Structure` deeper than one level.
 # Returns
 
 a newly allocated string representing `self`.
-<!-- impl GstRc<CapsRef>::fn truncate -->
+<!-- impl Caps::fn truncate -->
 Discard all but the first structure from `self`. Useful when
 fixating.
 
@@ -2010,7 +2088,7 @@ additional reference to it with `gst_caps_ref`.
 # Returns
 
 truncated caps
-<!-- impl GstRc<CapsRef>::fn from_string -->
+<!-- impl Caps::fn from_string -->
 Converts `caps` from a string representation.
 
 The current implementation of serialization will lead to unexpected results
@@ -2167,6 +2245,18 @@ Sets properties of the parent object and its children.
 name of the first property to set
 ## `var_args`
 value for the first property, followed optionally by more name/value pairs, followed by `None`
+<!-- trait ChildProxyExt::fn connect_child_added -->
+Will be emitted after the `object` was added to the `child_proxy`.
+## `object`
+the `gobject::Object` that was added
+## `name`
+the name of the new child
+<!-- trait ChildProxyExt::fn connect_child_removed -->
+Will be emitted after the `object` was removed from the `child_proxy`.
+## `object`
+the `gobject::Object` that was removed
+## `name`
+the name of the old child
 <!-- struct Clock -->
 GStreamer uses a global clock to synchronize the plugins in a pipeline.
 Different clock implementations are possible by implementing this abstract
@@ -2691,6 +2781,15 @@ timeout for waiting or `GST_CLOCK_TIME_NONE`
 # Returns
 
 `true` if waiting was successful, or `false` on timeout
+<!-- trait ClockExt::fn connect_synced -->
+Signaled on clocks with GST_CLOCK_FLAG_NEEDS_STARTUP_SYNC set once
+the clock is synchronized, or when it completely lost synchronization.
+This signal will not be emitted on clocks without the flag.
+
+This signal will be emitted from an arbitrary thread, most likely not
+the application's main thread.
+## `synced`
+if the clock is synced now
 <!-- enum ClockReturn -->
 The return value of a clock operation.
 <!-- enum ClockReturn::variant Ok -->
@@ -2747,7 +2846,7 @@ A persistent `Context` is kept in elements when they reach
 `State::Null`, non-persistent ones will be removed.
 Also, a non-persistent context won't override a previous persistent
 context set to an element.
-<!-- impl GstRc<ContextRef>::fn new -->
+<!-- impl Context::fn new -->
 Create a new context.
 ## `context_type`
 Context type
@@ -2757,13 +2856,13 @@ Persistent context
 # Returns
 
 The new context.
-<!-- impl GstRc<ContextRef>::fn get_context_type -->
+<!-- impl Context::fn get_context_type -->
 Get the type of `self`.
 
 # Returns
 
 The type of the context.
-<!-- impl GstRc<ContextRef>::fn get_structure -->
+<!-- impl Context::fn get_structure -->
 Access the structure of the context.
 
 # Returns
@@ -2771,7 +2870,7 @@ Access the structure of the context.
 The structure of the context. The structure is
 still owned by the context, which means that you should not modify it,
 free it and that the pointer becomes invalid when you free the context.
-<!-- impl GstRc<ContextRef>::fn has_context_type -->
+<!-- impl Context::fn has_context_type -->
 Checks if `self` has `context_type`.
 ## `context_type`
 Context type to check.
@@ -2779,13 +2878,13 @@ Context type to check.
 # Returns
 
 `true` if `self` has `context_type`.
-<!-- impl GstRc<ContextRef>::fn is_persistent -->
+<!-- impl Context::fn is_persistent -->
 Check if `self` is persistent.
 
 # Returns
 
 `true` if the context is persistent.
-<!-- impl GstRc<ContextRef>::fn writable_structure -->
+<!-- impl Context::fn writable_structure -->
 Get a writable version of the structure.
 
 # Returns
@@ -3795,7 +3894,7 @@ whether to include the new property value in the message
 # Returns
 
 a watch id, which can be used in connection with
- `ElementExt::remove_property_notify_watch` to remove the watch again.
+ `Element::remove_property_notify_watch` to remove the watch again.
 <!-- trait ElementExt::fn add_property_notify_watch -->
 
 Feature: `v1_10`
@@ -3809,7 +3908,7 @@ whether to include the new property value in the message
 # Returns
 
 a watch id, which can be used in connection with
- `ElementExt::remove_property_notify_watch` to remove the watch again.
+ `Element::remove_property_notify_watch` to remove the watch again.
 <!-- trait ElementExt::fn call_async -->
 Calls `func` from another thread and passes `user_data` to it. This is to be
 used for cases when a state change has to be performed from a streaming
@@ -4455,7 +4554,7 @@ Simple API to perform a seek on the given element, meaning it just seeks
 to the given position relative to the start of the stream. For more complex
 operations like segment seeks (e.g. for looping) or changing the playback
 rate or seeking relative to the last configured playback segment you should
-use `ElementExt::seek`.
+use `Element::seek`.
 
 In a completely prerolled PAUSED or PLAYING pipeline, seeking is always
 guaranteed to return `true` on a seekable media type or `false` when the media
@@ -4609,6 +4708,22 @@ the name of the `Pad` in source element.
 a `Element` containing the destination pad.
 ## `destpadname`
 the name of the `Pad` in destination element.
+<!-- trait ElementExt::fn connect_no_more_pads -->
+This signals that the element will not generate more dynamic pads.
+Note that this signal will usually be emitted from the context of
+the streaming thread.
+<!-- trait ElementExt::fn connect_pad_added -->
+a new `Pad` has been added to the element. Note that this signal will
+usually be emitted from the context of the streaming thread. Also keep in
+mind that if you add new elements to the pipeline in the signal handler
+you will need to set them to the desired target state with
+`ElementExt::set_state` or `ElementExt::sync_state_with_parent`.
+## `new_pad`
+the pad that has been added
+<!-- trait ElementExt::fn connect_pad_removed -->
+a `Pad` has been removed from the element
+## `old_pad`
+the pad that has been removed
 <!-- struct ElementFactory -->
 `ElementFactory` is used to create instances of elements. A
 GstElementFactory can be added to a `Plugin` as it is also a
@@ -4859,7 +4974,7 @@ the needed parameters to specify seeking time and mode.
     g_warning ("seek failed");
   ...
 ```
-<!-- impl GstRc<EventRef>::fn new_buffer_size -->
+<!-- impl Event::fn new_buffer_size -->
 Create a new buffersize event. The event is sent downstream and notifies
 elements that they should provide a buffer of the specified dimensions.
 
@@ -4876,7 +4991,7 @@ thread behavior
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_caps -->
+<!-- impl Event::fn new_caps -->
 Create a new CAPS event for `caps`. The caps event can only travel downstream
 synchronized with the buffer flow and contains the format of the buffers
 that will follow after the event.
@@ -4886,7 +5001,7 @@ a `Caps`
 # Returns
 
 the new CAPS event.
-<!-- impl GstRc<EventRef>::fn new_custom -->
+<!-- impl Event::fn new_custom -->
 Create a new custom-typed event. This can be used for anything not
 handled by other event-specific functions to pass an event to another
 element.
@@ -4906,7 +5021,7 @@ the structure for the event. The event will
 # Returns
 
 the new custom event.
-<!-- impl GstRc<EventRef>::fn new_eos -->
+<!-- impl Event::fn new_eos -->
 Create a new EOS event. The eos event can only travel downstream
 synchronized with the buffer flow. Elements that receive the EOS
 event on a pad can return `FlowReturn::Eos` as a `FlowReturn`
@@ -4924,7 +5039,7 @@ The EOS event itself will not cause any state transitions of the pipeline.
 # Returns
 
 the new EOS event.
-<!-- impl GstRc<EventRef>::fn new_flush_start -->
+<!-- impl Event::fn new_flush_start -->
 Allocate a new flush start event. The flush start event can be sent
 upstream and downstream and travels out-of-bounds with the dataflow.
 
@@ -4943,7 +5058,7 @@ in the pipeline so that the new media is played as soon as possible.
 # Returns
 
 a new flush start event.
-<!-- impl GstRc<EventRef>::fn new_flush_stop -->
+<!-- impl Event::fn new_flush_stop -->
 Allocate a new flush stop event. The flush stop event can be sent
 upstream and downstream and travels serialized with the dataflow.
 It is typically sent after sending a FLUSH_START event to make the
@@ -4960,7 +5075,7 @@ if time should be reset
 # Returns
 
 a new flush stop event.
-<!-- impl GstRc<EventRef>::fn new_gap -->
+<!-- impl Event::fn new_gap -->
 Create a new GAP event. A gap event can be thought of as conceptually
 equivalent to a buffer to signal that there is no data for a certain
 amount of time. This is useful to signal a gap to downstream elements
@@ -4974,7 +5089,7 @@ the duration of the gap
 # Returns
 
 the new GAP event.
-<!-- impl GstRc<EventRef>::fn new_latency -->
+<!-- impl Event::fn new_latency -->
 Create a new latency event. The event is sent upstream from the sinks and
 notifies elements that they should add an additional `latency` to the
 running time before synchronising against the clock.
@@ -4987,7 +5102,7 @@ the new latency value
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_navigation -->
+<!-- impl Event::fn new_navigation -->
 Create a new navigation event from the given description.
 ## `structure`
 description of the event. The event will take
@@ -4996,7 +5111,7 @@ description of the event. The event will take
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_protection -->
+<!-- impl Event::fn new_protection -->
 Creates a new event containing information specific to a particular
 protection system (uniquely identified by `system_id`), by which that
 protection system can acquire key(s) to decrypt a protected stream.
@@ -5041,7 +5156,7 @@ of this string will depend upon the protection scheme.
 
 a `EventType::Protection` event, if successful; `None`
 if unsuccessful.
-<!-- impl GstRc<EventRef>::fn new_qos -->
+<!-- impl Event::fn new_qos -->
 Allocate a new qos event with the given values.
 The QOS event is generated in an element that wants an upstream
 element to either reduce or increase its rate because of
@@ -5096,7 +5211,7 @@ The timestamp of the buffer
 # Returns
 
 a new QOS event.
-<!-- impl GstRc<EventRef>::fn new_reconfigure -->
+<!-- impl Event::fn new_reconfigure -->
 Create a new reconfigure event. The purpose of the reconfigure event is
 to travel upstream and make elements renegotiate their caps or reconfigure
 their buffer pools. This is useful when changing properties on elements
@@ -5105,7 +5220,7 @@ or changing the topology of the pipeline.
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_seek -->
+<!-- impl Event::fn new_seek -->
 Allocate a new seek event with the given parameters.
 
 The seek event configures playback of the pipeline between `start` to `stop`
@@ -5155,7 +5270,7 @@ The value of the new stop position
 # Returns
 
 a new seek event.
-<!-- impl GstRc<EventRef>::fn new_segment -->
+<!-- impl Event::fn new_segment -->
 Create a new SEGMENT event for `segment`. The segment event can only travel
 downstream synchronized with the buffer flow and contains timing information
 and playback properties for the buffers that will follow.
@@ -5193,7 +5308,7 @@ a `Segment`
 # Returns
 
 the new SEGMENT event.
-<!-- impl GstRc<EventRef>::fn new_segment_done -->
+<!-- impl Event::fn new_segment_done -->
 Create a new segment-done event. This event is sent by elements that
 finish playback of a segment as a result of a segment seek.
 ## `format`
@@ -5204,7 +5319,7 @@ The position of the segment being done
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_select_streams -->
+<!-- impl Event::fn new_select_streams -->
 Allocate a new select-streams event.
 
 The select-streams event requests the specified `streams` to be activated.
@@ -5223,7 +5338,7 @@ activate
 # Returns
 
 a new select-streams event.
-<!-- impl GstRc<EventRef>::fn new_sink_message -->
+<!-- impl Event::fn new_sink_message -->
 Create a new sink-message event. The purpose of the sink-message event is
 to instruct a sink to post the message contained in the event synchronized
 with the stream.
@@ -5237,7 +5352,7 @@ the `Message` to be posted
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_step -->
+<!-- impl Event::fn new_step -->
 Create a new step event. The purpose of the step event is to instruct a sink
 to skip `amount` (expressed in `format`) of media. It can be used to implement
 stepping through the video frame by frame or for doing fast trick modes.
@@ -5265,7 +5380,7 @@ intermediate steps
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_stream_collection -->
+<!-- impl Event::fn new_stream_collection -->
 Create a new STREAM_COLLECTION event. The stream collection event can only
 travel downstream synchronized with the buffer flow.
 
@@ -5283,7 +5398,7 @@ Active collection for this data flow
 # Returns
 
 the new STREAM_COLLECTION event.
-<!-- impl GstRc<EventRef>::fn new_stream_group_done -->
+<!-- impl Event::fn new_stream_group_done -->
 Create a new Stream Group Done event. The stream-group-done event can
 only travel downstream synchronized with the buffer flow. Elements
 that receive the event on a pad should handle it mostly like EOS,
@@ -5302,7 +5417,7 @@ the group id of the stream group which is ending
 # Returns
 
 the new stream-group-done event.
-<!-- impl GstRc<EventRef>::fn new_stream_start -->
+<!-- impl Event::fn new_stream_start -->
 Create a new STREAM_START event. The stream start event can only
 travel downstream synchronized with the buffer flow. It is expected
 to be the first event that is sent for a new stream.
@@ -5330,7 +5445,7 @@ Identifier for this stream
 # Returns
 
 the new STREAM_START event.
-<!-- impl GstRc<EventRef>::fn new_tag -->
+<!-- impl Event::fn new_tag -->
 Generates a metadata tag event from the given `taglist`.
 
 The scope of the taglist specifies if the taglist applies to the
@@ -5345,7 +5460,7 @@ metadata list. The event will take ownership
 # Returns
 
 a new `Event`
-<!-- impl GstRc<EventRef>::fn new_toc -->
+<!-- impl Event::fn new_toc -->
 Generate a TOC event from the given `toc`. The purpose of the TOC event is to
 inform elements that some kind of the TOC was found.
 ## `toc`
@@ -5356,7 +5471,7 @@ whether `toc` was updated or not.
 # Returns
 
 a new `Event`.
-<!-- impl GstRc<EventRef>::fn new_toc_select -->
+<!-- impl Event::fn new_toc_select -->
 Generate a TOC select event with the given `uid`. The purpose of the
 TOC select event is to start playback based on the TOC's entry with the
 given `uid`.
@@ -5366,12 +5481,12 @@ UID in the TOC to start playback from.
 # Returns
 
 a new `Event`.
-<!-- impl GstRc<EventRef>::fn copy_segment -->
+<!-- impl Event::fn copy_segment -->
 Parses a segment `self` and copies the `Segment` into the location
 given by `segment`.
 ## `segment`
 a pointer to a `Segment`
-<!-- impl GstRc<EventRef>::fn get_running_time_offset -->
+<!-- impl Event::fn get_running_time_offset -->
 Retrieve the accumulated running time offset of the event.
 
 Events passing through `GstPads` that have a running time
@@ -5387,7 +5502,7 @@ before usage with this offset.
 The event's running time offset
 
 MT safe.
-<!-- impl GstRc<EventRef>::fn get_seqnum -->
+<!-- impl Event::fn get_seqnum -->
 Retrieve the sequence number of a event.
 
 Events have ever-incrementing sequence numbers, which may also be set
@@ -5406,7 +5521,7 @@ that correspondence was made explicitly.
 The event's sequence number.
 
 MT safe.
-<!-- impl GstRc<EventRef>::fn get_structure -->
+<!-- impl Event::fn get_structure -->
 Access the structure of the event.
 
 # Returns
@@ -5416,7 +5531,7 @@ owned by the event, which means that you should not free it and
 that the pointer becomes invalid when you free the event.
 
 MT safe.
-<!-- impl GstRc<EventRef>::fn has_name -->
+<!-- impl Event::fn has_name -->
 Checks if `self` has the given `name`. This function is usually used to
 check the name of a custom event.
 ## `name`
@@ -5425,7 +5540,7 @@ name to check
 # Returns
 
 `true` if `name` matches the name of the event structure.
-<!-- impl GstRc<EventRef>::fn parse_buffer_size -->
+<!-- impl Event::fn parse_buffer_size -->
 Get the format, minsize, maxsize and async-flag in the buffersize event.
 ## `format`
 A pointer to store the format in
@@ -5435,16 +5550,16 @@ A pointer to store the minsize in
 A pointer to store the maxsize in
 ## `async`
 A pointer to store the async-flag in
-<!-- impl GstRc<EventRef>::fn parse_caps -->
+<!-- impl Event::fn parse_caps -->
 Get the caps from `self`. The caps remains valid as long as `self` remains
 valid.
 ## `caps`
 A pointer to the caps
-<!-- impl GstRc<EventRef>::fn parse_flush_stop -->
+<!-- impl Event::fn parse_flush_stop -->
 Parse the FLUSH_STOP event and retrieve the `reset_time` member.
 ## `reset_time`
 if time should be reset
-<!-- impl GstRc<EventRef>::fn parse_gap -->
+<!-- impl Event::fn parse_gap -->
 Extract timestamp and duration from a new GAP event.
 ## `timestamp`
 location where to store the
@@ -5452,7 +5567,7 @@ location where to store the
 ## `duration`
 location where to store the duration of
  the gap, or `None`
-<!-- impl GstRc<EventRef>::fn parse_group_id -->
+<!-- impl Event::fn parse_group_id -->
 ## `group_id`
 address of variable where to store the group id
 
@@ -5460,11 +5575,11 @@ address of variable where to store the group id
 
 `true` if a group id was set on the event and could be parsed,
  `false` otherwise.
-<!-- impl GstRc<EventRef>::fn parse_latency -->
+<!-- impl Event::fn parse_latency -->
 Get the latency in the latency event.
 ## `latency`
 A pointer to store the latency in.
-<!-- impl GstRc<EventRef>::fn parse_protection -->
+<!-- impl Event::fn parse_protection -->
 Parses an event containing protection system specific information and stores
 the results in `system_id`, `data` and `origin`. The data stored in `system_id`,
 `origin` and `data` are valid until `self` is released.
@@ -5478,7 +5593,7 @@ holding protection system specific information.
 pointer to store a value that
 indicates where the protection information carried by `self` was extracted
 from.
-<!-- impl GstRc<EventRef>::fn parse_qos -->
+<!-- impl Event::fn parse_qos -->
 Get the type, proportion, diff and timestamp in the qos event. See
 `Event::new_qos` for more information about the different QoS values.
 
@@ -5491,7 +5606,7 @@ A pointer to store the proportion in
 A pointer to store the diff in
 ## `timestamp`
 A pointer to store the timestamp in
-<!-- impl GstRc<EventRef>::fn parse_seek -->
+<!-- impl Event::fn parse_seek -->
 Parses a seek `self` and stores the results in the given result locations.
 ## `rate`
 result location for the rate
@@ -5507,30 +5622,30 @@ result location for the start position expressed in `format`
 result location for the `SeekType` of the stop position
 ## `stop`
 result location for the stop position expressed in `format`
-<!-- impl GstRc<EventRef>::fn parse_segment -->
+<!-- impl Event::fn parse_segment -->
 Parses a segment `self` and stores the result in the given `segment` location.
 `segment` remains valid only until the `self` is freed. Don't modify the segment
 and make a copy if you want to modify it or store it for later use.
 ## `segment`
 a pointer to a `Segment`
-<!-- impl GstRc<EventRef>::fn parse_segment_done -->
+<!-- impl Event::fn parse_segment_done -->
 Extracts the position and format from the segment done message.
 ## `format`
 Result location for the format, or `None`
 ## `position`
 Result location for the position, or `None`
-<!-- impl GstRc<EventRef>::fn parse_select_streams -->
+<!-- impl Event::fn parse_select_streams -->
 Parse the SELECT_STREAMS event and retrieve the contained streams.
 
 Feature: `v1_10`
 
 ## `streams`
 the streams
-<!-- impl GstRc<EventRef>::fn parse_sink_message -->
+<!-- impl Event::fn parse_sink_message -->
 Parse the sink-message event. Unref `msg` after usage.
 ## `msg`
 a pointer to store the `Message` in.
-<!-- impl GstRc<EventRef>::fn parse_step -->
+<!-- impl Event::fn parse_step -->
 Parse the step event.
 ## `format`
 a pointer to store the format in
@@ -5543,24 +5658,24 @@ a pointer to store the flush boolean in
 ## `intermediate`
 a pointer to store the intermediate
  boolean in
-<!-- impl GstRc<EventRef>::fn parse_stream -->
+<!-- impl Event::fn parse_stream -->
 Parse a stream-start `self` and extract the `Stream` from it.
 
 Feature: `v1_10`
 
 ## `stream`
 adress of variable to store the stream
-<!-- impl GstRc<EventRef>::fn parse_stream_collection -->
+<!-- impl Event::fn parse_stream_collection -->
 Retrieve new `StreamCollection` from STREAM_COLLECTION event `self`.
 
 Feature: `v1_10`
 
 ## `collection`
 pointer to store the collection
-<!-- impl GstRc<EventRef>::fn parse_stream_flags -->
+<!-- impl Event::fn parse_stream_flags -->
 ## `flags`
 address of variable where to store the stream flags
-<!-- impl GstRc<EventRef>::fn parse_stream_group_done -->
+<!-- impl Event::fn parse_stream_group_done -->
 Parse a stream-group-done `self` and store the result in the given
 `group_id` location.
 
@@ -5568,31 +5683,31 @@ Feature: `v1_10`
 
 ## `group_id`
 address of variable to store the group id into
-<!-- impl GstRc<EventRef>::fn parse_stream_start -->
+<!-- impl Event::fn parse_stream_start -->
 Parse a stream-id `self` and store the result in the given `stream_id`
 location. The string stored in `stream_id` must not be modified and will
 remain valid only until `self` gets freed. Make a copy if you want to
 modify it or store it for later use.
 ## `stream_id`
 pointer to store the stream-id
-<!-- impl GstRc<EventRef>::fn parse_tag -->
+<!-- impl Event::fn parse_tag -->
 Parses a tag `self` and stores the results in the given `taglist` location.
 No reference to the taglist will be returned, it remains valid only until
 the `self` is freed. Don't modify or free the taglist, make a copy if you
 want to modify it or store it for later use.
 ## `taglist`
 pointer to metadata list
-<!-- impl GstRc<EventRef>::fn parse_toc -->
+<!-- impl Event::fn parse_toc -->
 Parse a TOC `self` and store the results in the given `toc` and `updated` locations.
 ## `toc`
 pointer to `Toc` structure.
 ## `updated`
 pointer to store TOC updated flag.
-<!-- impl GstRc<EventRef>::fn parse_toc_select -->
+<!-- impl Event::fn parse_toc_select -->
 Parse a TOC select `self` and store the results in the given `uid` location.
 ## `uid`
 storage for the selection UID.
-<!-- impl GstRc<EventRef>::fn set_group_id -->
+<!-- impl Event::fn set_group_id -->
 All streams that have the same group id are supposed to be played
 together, i.e. all streams inside a container file should have the
 same group id but different stream ids. The group id should change
@@ -5602,14 +5717,14 @@ each time a file is played for example.
 Use `gst_util_group_id_next` to get a new group id.
 ## `group_id`
 the group id to set
-<!-- impl GstRc<EventRef>::fn set_running_time_offset -->
+<!-- impl Event::fn set_running_time_offset -->
 Set the running time offset of a event. See
 `Event::get_running_time_offset` for more information.
 
 MT safe.
 ## `offset`
 A the new running time offset
-<!-- impl GstRc<EventRef>::fn set_seqnum -->
+<!-- impl Event::fn set_seqnum -->
 Set the sequence number of a event.
 
 This function might be called by the creator of a event to indicate that the
@@ -5619,17 +5734,17 @@ more information.
 MT safe.
 ## `seqnum`
 A sequence number.
-<!-- impl GstRc<EventRef>::fn set_stream -->
+<!-- impl Event::fn set_stream -->
 Set the `stream` on the stream-start `self`
 
 Feature: `v1_10`
 
 ## `stream`
 the stream object to set
-<!-- impl GstRc<EventRef>::fn set_stream_flags -->
+<!-- impl Event::fn set_stream_flags -->
 ## `flags`
 the stream flags to set
-<!-- impl GstRc<EventRef>::fn writable_structure -->
+<!-- impl Event::fn writable_structure -->
 Get a writable version of the structure.
 
 # Returns
@@ -5933,272 +6048,6 @@ the new pad target
 
 `true` if the new target could be set. This function
  can return `false` when the internal pads could not be linked.
-<!-- struct Iterator -->
-A GstIterator is used to retrieve multiple objects from another object in
-a threadsafe way.
-
-Various GStreamer objects provide access to their internal structures using
-an iterator.
-
-Note that if calling a GstIterator function results in your code receiving
-a refcounted object (with, say, `gobject::Value::get_object`), the refcount for that
-object will not be increased. Your code is responsible for taking a reference
-if it wants to continue using it later.
-
-The basic use pattern of an iterator is as follows:
-
-```C
-  GstIterator *it = _get_iterator(object);
-  GValue item = G_VALUE_INIT;
-  done = FALSE;
-  while (!done) {
-    switch (gst_iterator_next (it, &amp;item)) {
-      case GST_ITERATOR_OK:
-        ...get/use/change item here...
-        g_value_reset (&amp;item);
-        break;
-      case GST_ITERATOR_RESYNC:
-        ...rollback changes to items...
-        gst_iterator_resync (it);
-        break;
-      case GST_ITERATOR_ERROR:
-        ...wrong parameters were given...
-        done = TRUE;
-        break;
-      case GST_ITERATOR_DONE:
-        done = TRUE;
-        break;
-    }
-  }
-  g_value_unset (&amp;item);
-  gst_iterator_free (it);
-```
-<!-- impl Iterator::fn new -->
-Create a new iterator. This function is mainly used for objects
-implementing the next/resync/free function to iterate a data structure.
-
-For each item retrieved, the `item` function is called with the lock
-held. The `free` function is called when the iterator is freed.
-## `size`
-the size of the iterator structure
-## `type_`
-`glib::Type` of children
-## `lock`
-pointer to a `GMutex`.
-## `master_cookie`
-pointer to a guint32 that is changed when the items in the
- iterator changed.
-## `copy`
-copy function
-## `next`
-function to get next item
-## `item`
-function to call on each item retrieved
-## `resync`
-function to resync the iterator
-## `free`
-function to free the iterator
-
-# Returns
-
-the new `Iterator`.
-
-MT safe.
-<!-- impl Iterator::fn new_list -->
-Create a new iterator designed for iterating `list`.
-
-The list you iterate is usually part of a data structure `owner` and is
-protected with `lock`.
-
-The iterator will use `lock` to retrieve the next item of the list and it
-will then call the `item` function before releasing `lock` again.
-
-When a concurrent update to the list is performed, usually by `owner` while
-holding `lock`, `master_cookie` will be updated. The iterator implementation
-will notice the update of the cookie and will return `IteratorResult::Resync` to
-the user of the iterator in the next call to `Iterator::next`.
-## `type_`
-`glib::Type` of elements
-## `lock`
-pointer to a `GMutex` protecting the list.
-## `master_cookie`
-pointer to a guint32 that is incremented when the list
- is changed.
-## `list`
-pointer to the list
-## `owner`
-object owning the list
-## `item`
-function to call on each item retrieved
-
-# Returns
-
-the new `Iterator` for `list`.
-
-MT safe.
-<!-- impl Iterator::fn new_single -->
-This `Iterator` is a convenient iterator for the common
-case where a `Iterator` needs to be returned but only
-a single object has to be considered. This happens often
-for the `GstPadIterIntLinkFunction`.
-## `type_`
-`glib::Type` of the passed object
-## `object`
-object that this iterator should return
-
-# Returns
-
-the new `Iterator` for `object`.
-<!-- impl Iterator::fn copy -->
-Copy the iterator and its state.
-
-# Returns
-
-a new copy of `self`.
-<!-- impl Iterator::fn filter -->
-Create a new iterator from an existing iterator. The new iterator
-will only return those elements that match the given compare function `func`.
-The first parameter that is passed to `func` is the `gobject::Value` of the current
-iterator element and the second parameter is `user_data`. `func` should
-return 0 for elements that should be included in the filtered iterator.
-
-When this iterator is freed, `self` will also be freed.
-## `func`
-the compare function to select elements
-## `user_data`
-user data passed to the compare function
-
-# Returns
-
-a new `Iterator`.
-
-MT safe.
-<!-- impl Iterator::fn find_custom -->
-Find the first element in `self` that matches the compare function `func`.
-`func` should return 0 when the element is found. The first parameter
-to `func` will be the current element of the iterator and the
-second parameter will be `user_data`.
-The result will be stored in `elem` if a result is found.
-
-The iterator will not be freed.
-
-This function will return `false` if an error happened to the iterator
-or if the element wasn't found.
-## `func`
-the compare function to use
-## `elem`
-pointer to a `gobject::Value` where to store the result
-## `user_data`
-user data passed to the compare function
-
-# Returns
-
-Returns `true` if the element was found, else `false`.
-
-MT safe.
-<!-- impl Iterator::fn fold -->
-Folds `func` over the elements of `iter`. That is to say, `func` will be called
-as `func` (object, `ret`, `user_data`) for each object in `self`. The normal use
-of this procedure is to accumulate the results of operating on the objects in
-`ret`.
-
-This procedure can be used (and is used internally) to implement the
-`Iterator::foreach` and `Iterator::find_custom` operations.
-
-The fold will proceed as long as `func` returns `true`. When the iterator has no
-more arguments, `IteratorResult::Done` will be returned. If `func` returns `false`,
-the fold will stop, and `IteratorResult::Ok` will be returned. Errors or resyncs
-will cause fold to return `IteratorResult::Error` or `IteratorResult::Resync` as
-appropriate.
-
-The iterator will not be freed.
-## `func`
-the fold function
-## `ret`
-the seed value passed to the fold function
-## `user_data`
-user data passed to the fold function
-
-# Returns
-
-A `IteratorResult`, as described above.
-
-MT safe.
-<!-- impl Iterator::fn foreach -->
-Iterate over all element of `self` and call the given function `func` for
-each element.
-## `func`
-the function to call for each element.
-## `user_data`
-user data passed to the function
-
-# Returns
-
-the result call to `Iterator::fold`. The iterator will not be
-freed.
-
-MT safe.
-<!-- impl Iterator::fn free -->
-Free the iterator.
-
-MT safe.
-<!-- impl Iterator::fn next -->
-Get the next item from the iterator in `elem`.
-
-Only when this function returns `IteratorResult::Ok`, `elem` will contain a valid
-value. `elem` must have been initialized to the type of the iterator or
-initialized to zeroes with `gobject::Value::unset`. The caller is responsible for
-unsetting or resetting `elem` with `gobject::Value::unset` or `gobject::Value::reset`
-after usage.
-
-When this function returns `IteratorResult::Done`, no more elements can be
-retrieved from `self`.
-
-A return value of `IteratorResult::Resync` indicates that the element list was
-concurrently updated. The user of `self` should call `Iterator::resync` to
-get the newly updated list.
-
-A return value of `IteratorResult::Error` indicates an unrecoverable fatal error.
-## `elem`
-pointer to hold next element
-
-# Returns
-
-The result of the iteration. Unset `elem` after usage.
-
-MT safe.
-<!-- impl Iterator::fn push -->
-Pushes `other` iterator onto `self`. All calls performed on `self` are
-forwarded to `other`. If `other` returns `IteratorResult::Done`, it is
-popped again and calls are handled by `self` again.
-
-This function is mainly used by objects implementing the iterator
-next function to recurse into substructures.
-
-When `Iterator::resync` is called on `self`, `other` will automatically be
-popped.
-
-MT safe.
-## `other`
-The `Iterator` to push
-<!-- impl Iterator::fn resync -->
-Resync the iterator. this function is mostly called
-after `Iterator::next` returned `IteratorResult::Resync`.
-
-When an iterator was pushed on `self`, it will automatically be popped again
-with this function.
-
-MT safe.
-<!-- enum IteratorResult -->
-The result of `Iterator::next`.
-<!-- enum IteratorResult::variant Done -->
-No more items in the iterator
-<!-- enum IteratorResult::variant Ok -->
-An item was retrieved
-<!-- enum IteratorResult::variant Resync -->
-Datastructure changed while iterating
-<!-- enum IteratorResult::variant Error -->
-An error happened
 <!-- enum LibraryError -->
 Library errors are for errors from the library being used by elements
 (initializing, finalizing, settings, ...)
@@ -6235,7 +6084,7 @@ The basic use pattern of posting a message on a `Bus` is as follows:
 
 A `Element` usually posts messages on the bus provided by the parent
 container using `ElementExt::post_message`.
-<!-- impl GstRc<MessageRef>::fn new_application -->
+<!-- impl Message::fn new_application -->
 Create a new application-typed message. GStreamer will never create these
 messages; they are a gift from us to you. Enjoy.
 ## `src`
@@ -6249,7 +6098,7 @@ the structure for the message. The message
 The new application message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_async_done -->
+<!-- impl Message::fn new_async_done -->
 The message is posted when elements completed an ASYNC state change.
 `running_time` contains the time of the desired running_time when this
 elements goes to PLAYING. A value of `GST_CLOCK_TIME_NONE` for `running_time`
@@ -6265,7 +6114,7 @@ the desired running_time
 The new async_done message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_async_start -->
+<!-- impl Message::fn new_async_start -->
 This message is posted by elements when they start an ASYNC state change.
 ## `src`
 The object originating the message.
@@ -6275,7 +6124,7 @@ The object originating the message.
 The new async_start message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_buffering -->
+<!-- impl Message::fn new_buffering -->
 Create a new buffering message. This message can be posted by an element that
 needs to buffer data before it can continue processing. `percent` should be a
 value between 0 and 100. A value of 100 means that the buffering completed.
@@ -6296,7 +6145,7 @@ The buffering percent
 # Returns
 
 The new buffering message.
-<!-- impl GstRc<MessageRef>::fn new_clock_lost -->
+<!-- impl Message::fn new_clock_lost -->
 Create a clock lost message. This message is posted whenever the
 clock is not valid anymore.
 
@@ -6313,7 +6162,7 @@ the clock that was lost
 The new clock lost message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_clock_provide -->
+<!-- impl Message::fn new_clock_provide -->
 Create a clock provide message. This message is posted whenever an
 element is ready to provide a clock or lost its ability to provide
 a clock (maybe because it paused or became EOS).
@@ -6332,7 +6181,7 @@ the clock it provides
 the new provide clock message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_custom -->
+<!-- impl Message::fn new_custom -->
 Create a new custom-typed message. This can be used for anything not
 handled by other message-specific functions to pass a message to the
 app. The structure field can be `None`.
@@ -6349,7 +6198,7 @@ the structure for the
 The new message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_device_added -->
+<!-- impl Message::fn new_device_added -->
 Creates a new device-added message. The device-added message is produced by
 `DeviceProvider` or a `DeviceMonitor`. They announce the appearance
 of monitored devices.
@@ -6361,7 +6210,7 @@ The new `Device`
 # Returns
 
 a newly allocated `Message`
-<!-- impl GstRc<MessageRef>::fn new_device_removed -->
+<!-- impl Message::fn new_device_removed -->
 Creates a new device-removed message. The device-removed message is produced
 by `DeviceProvider` or a `DeviceMonitor`. They announce the
 disappearance of monitored devices.
@@ -6373,7 +6222,7 @@ The removed `Device`
 # Returns
 
 a newly allocated `Message`
-<!-- impl GstRc<MessageRef>::fn new_duration_changed -->
+<!-- impl Message::fn new_duration_changed -->
 Create a new duration changed message. This message is posted by elements
 that know the duration of a stream when the duration changes. This message
 is received by bins and is used to calculate the total duration of a
@@ -6386,7 +6235,7 @@ The object originating the message.
 The new duration-changed message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_element -->
+<!-- impl Message::fn new_element -->
 Create a new element-specific message. This is meant as a generic way of
 allowing one-way communication from an element to an application, for example
 "the firewire cable was unplugged". The format of the message should be
@@ -6402,7 +6251,7 @@ The structure for the
 The new element message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_eos -->
+<!-- impl Message::fn new_eos -->
 Create a new eos message. This message is generated and posted in
 the sink elements of a GstBin. The bin will only forward the EOS
 message to the application if all sinks have posted an EOS message.
@@ -6414,7 +6263,7 @@ The object originating the message.
 The new eos message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_error -->
+<!-- impl Message::fn new_error -->
 Create a new error message. The message will copy `error` and
 `debug`. This message is posted by element when a fatal event
 occurred. The pipeline will probably (partially) stop. The application
@@ -6431,7 +6280,7 @@ A debugging string.
 the new error message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_error_with_details -->
+<!-- impl Message::fn new_error_with_details -->
 Create a new error message. The message will copy `error` and
 `debug`. This message is posted by element when a fatal event
 occurred. The pipeline will probably (partially) stop. The application
@@ -6451,7 +6300,7 @@ A debugging string.
 # Returns
 
 the new error message.
-<!-- impl GstRc<MessageRef>::fn new_have_context -->
+<!-- impl Message::fn new_have_context -->
 This message is posted when an element has a new local `Context`.
 ## `src`
 The object originating the message.
@@ -6463,7 +6312,7 @@ the context
 The new have-context message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_info -->
+<!-- impl Message::fn new_info -->
 Create a new info message. The message will make copies of `error` and
 `debug`.
 ## `src`
@@ -6478,7 +6327,7 @@ A debugging string.
 the new info message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_info_with_details -->
+<!-- impl Message::fn new_info_with_details -->
 Create a new info message. The message will make copies of `error` and
 `debug`.
 
@@ -6496,7 +6345,7 @@ A debugging string.
 # Returns
 
 the new warning message.
-<!-- impl GstRc<MessageRef>::fn new_latency -->
+<!-- impl Message::fn new_latency -->
 This message can be posted by elements when their latency requirements have
 changed.
 ## `src`
@@ -6507,7 +6356,7 @@ The object originating the message.
 The new latency message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_need_context -->
+<!-- impl Message::fn new_need_context -->
 This message is posted when an element needs a specific `Context`.
 ## `src`
 The object originating the message.
@@ -6519,7 +6368,7 @@ The context type that is needed
 The new need-context message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_new_clock -->
+<!-- impl Message::fn new_new_clock -->
 Create a new clock message. This message is posted whenever the
 pipeline selects a new clock for the pipeline.
 ## `src`
@@ -6532,7 +6381,7 @@ the new selected clock
 The new new clock message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_progress -->
+<!-- impl Message::fn new_progress -->
 Progress messages are posted by elements when they use an asynchronous task
 to perform actions triggered by a state change.
 
@@ -6550,7 +6399,7 @@ free, user visible text describing the progress
 # Returns
 
 The new qos message.
-<!-- impl GstRc<MessageRef>::fn new_property_notify -->
+<!-- impl Message::fn new_property_notify -->
 
 Feature: `v1_10`
 
@@ -6564,7 +6413,7 @@ new property value, or `None`
 # Returns
 
 a newly allocated `Message`
-<!-- impl GstRc<MessageRef>::fn new_qos -->
+<!-- impl Message::fn new_qos -->
 A QOS message is posted on the bus whenever an element decides to drop a
 buffer because of QoS reasons or whenever it changes its processing strategy
 because of QoS reasons (quality adjustments such as processing at lower
@@ -6596,7 +6445,7 @@ the duration of the buffer that generated the message
 The new qos message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_redirect -->
+<!-- impl Message::fn new_redirect -->
 Creates a new redirect message and adds a new entry to it. Redirect messages
 are posted when an element detects that the actual data has to be retrieved
 from a different location. This is useful if such a redirection cannot be
@@ -6637,7 +6486,7 @@ structure for the new entry
 # Returns
 
 a newly allocated `Message`
-<!-- impl GstRc<MessageRef>::fn new_request_state -->
+<!-- impl Message::fn new_request_state -->
 This message can be posted by elements when they want to have their state
 changed. A typical use case would be an audio server that wants to pause the
 pipeline because a higher priority stream is being played.
@@ -6651,7 +6500,7 @@ The new requested state
 the new request state message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_reset_time -->
+<!-- impl Message::fn new_reset_time -->
 This message is posted when the pipeline running-time should be reset to
 `running_time`, like after a flushing seek.
 ## `src`
@@ -6664,7 +6513,7 @@ the requested running-time
 The new reset_time message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_segment_done -->
+<!-- impl Message::fn new_segment_done -->
 Create a new segment done message. This message is posted by elements that
 finish playback of a segment as a result of a segment seek. This message
 is received by the application after all elements that posted a segment_start
@@ -6681,7 +6530,7 @@ The position of the segment being done
 the new segment done message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_segment_start -->
+<!-- impl Message::fn new_segment_start -->
 Create a new segment message. This message is posted by elements that
 start playback of a segment as a result of a segment seek. This message
 is not received by the application but is used for maintenance reasons in
@@ -6698,7 +6547,7 @@ The position of the segment being played
 the new segment start message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_state_changed -->
+<!-- impl Message::fn new_state_changed -->
 Create a state change message. This message is posted whenever an element
 changed its state.
 ## `src`
@@ -6715,7 +6564,7 @@ the pending (target) state
 the new state change message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_state_dirty -->
+<!-- impl Message::fn new_state_dirty -->
 Create a state dirty message. This message is posted whenever an element
 changed its state asynchronously and is used internally to update the
 states of container objects.
@@ -6727,7 +6576,7 @@ The object originating the message
 the new state dirty message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_step_done -->
+<!-- impl Message::fn new_step_done -->
 This message is posted by elements when they complete a part, when `intermediate` set
 to `true`, or a complete step operation.
 
@@ -6755,7 +6604,7 @@ the step caused EOS
 the new step_done message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_step_start -->
+<!-- impl Message::fn new_step_start -->
 This message is posted by elements when they accept or activate a new step
 event for `amount` in `format`.
 
@@ -6786,7 +6635,7 @@ is this an intermediate step
 The new step_start message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_stream_collection -->
+<!-- impl Message::fn new_stream_collection -->
 Creates a new stream-collection message. The message is used to announce new
 `StreamCollection`
 
@@ -6800,7 +6649,7 @@ The `StreamCollection`
 # Returns
 
 a newly allocated `Message`
-<!-- impl GstRc<MessageRef>::fn new_stream_start -->
+<!-- impl Message::fn new_stream_start -->
 Create a new stream_start message. This message is generated and posted in
 the sink elements of a GstBin. The bin will only forward the STREAM_START
 message to the application if all sinks have posted an STREAM_START message.
@@ -6812,7 +6661,7 @@ The object originating the message.
 The new stream_start message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_stream_status -->
+<!-- impl Message::fn new_stream_status -->
 Create a new stream status message. This message is posted when a streaming
 thread is created/destroyed or when the state changed.
 ## `src`
@@ -6827,7 +6676,7 @@ the owner element of `src`.
 the new stream status message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_streams_selected -->
+<!-- impl Message::fn new_streams_selected -->
 Creates a new steams-selected message. The message is used to announce
 that an array of streams has been selected. This is generally in response
 to a `EventType::SelectStreams` event, or when an element (such as decodebin3)
@@ -6849,7 +6698,7 @@ The `StreamCollection`
 # Returns
 
 a newly allocated `Message`
-<!-- impl GstRc<MessageRef>::fn new_structure_change -->
+<!-- impl Message::fn new_structure_change -->
 Create a new structure change message. This message is posted when the
 structure of a pipeline is in the process of being changed, for example
 when pads are linked or unlinked.
@@ -6869,7 +6718,7 @@ Whether the structure change is busy.
 the new structure change message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_tag -->
+<!-- impl Message::fn new_tag -->
 Create a new tag message. The message will take ownership of the tag list.
 The message is posted by elements that discovered a new taglist.
 ## `src`
@@ -6882,7 +6731,7 @@ the tag list for the message.
 the new tag message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_toc -->
+<!-- impl Message::fn new_toc -->
 Create a new TOC message. The message is posted by elements
 that discovered or updated a TOC.
 ## `src`
@@ -6897,7 +6746,7 @@ whether TOC was updated or not.
 a new TOC message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_warning -->
+<!-- impl Message::fn new_warning -->
 Create a new warning message. The message will make copies of `error` and
 `debug`.
 ## `src`
@@ -6912,7 +6761,7 @@ A debugging string.
 the new warning message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn new_warning_with_details -->
+<!-- impl Message::fn new_warning_with_details -->
 Create a new warning message. The message will make copies of `error` and
 `debug`.
 
@@ -6930,7 +6779,7 @@ A debugging string.
 # Returns
 
 the new warning message.
-<!-- impl GstRc<MessageRef>::fn add_redirect_entry -->
+<!-- impl Message::fn add_redirect_entry -->
 Creates and appends a new entry.
 
 The specified location string is copied. However, ownership over the tag
@@ -6944,7 +6793,7 @@ location string for the new entry
 tag list for the new entry
 ## `entry_struct`
 structure for the new entry
-<!-- impl GstRc<MessageRef>::fn get_num_redirect_entries -->
+<!-- impl Message::fn get_num_redirect_entries -->
 
 Feature: `v1_10`
 
@@ -6952,7 +6801,7 @@ Feature: `v1_10`
 # Returns
 
 the number of entries stored in the message
-<!-- impl GstRc<MessageRef>::fn get_seqnum -->
+<!-- impl Message::fn get_seqnum -->
 Retrieve the sequence number of a message.
 
 Messages have ever-incrementing sequence numbers, which may also be set
@@ -6971,7 +6820,7 @@ that correspondence was made explicitly.
 The message's sequence number.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn get_stream_status_object -->
+<!-- impl Message::fn get_stream_status_object -->
 Extracts the object managing the streaming thread from `self`.
 
 # Returns
@@ -6979,7 +6828,7 @@ Extracts the object managing the streaming thread from `self`.
 a GValue containing the object that manages the streaming thread.
 This object is usually of type GstTask but other types can be added in the
 future. The object remains valid as long as `self` is valid.
-<!-- impl GstRc<MessageRef>::fn get_structure -->
+<!-- impl Message::fn get_structure -->
 Access the structure of the message.
 
 # Returns
@@ -6989,7 +6838,7 @@ still owned by the message, which means that you should not free it and
 that the pointer becomes invalid when you free the message.
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn has_name -->
+<!-- impl Message::fn has_name -->
 Checks if `self` has the given `name`. This function is usually used to
 check the name of a custom message.
 ## `name`
@@ -6998,20 +6847,20 @@ name to check
 # Returns
 
 `true` if `name` matches the name of the message structure.
-<!-- impl GstRc<MessageRef>::fn parse_async_done -->
+<!-- impl Message::fn parse_async_done -->
 Extract the running_time from the async_done message.
 
 MT safe.
 ## `running_time`
 Result location for the running_time or `None`
-<!-- impl GstRc<MessageRef>::fn parse_buffering -->
+<!-- impl Message::fn parse_buffering -->
 Extracts the buffering percent from the GstMessage. see also
 `Message::new_buffering`.
 
 MT safe.
 ## `percent`
 Return location for the percent.
-<!-- impl GstRc<MessageRef>::fn parse_buffering_stats -->
+<!-- impl Message::fn parse_buffering_stats -->
 Extracts the buffering stats values from `self`.
 ## `mode`
 a buffering mode, or `None`
@@ -7022,14 +6871,14 @@ the average output rate, or `None`
 ## `buffering_left`
 amount of buffering time left in
  milliseconds, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_clock_lost -->
+<!-- impl Message::fn parse_clock_lost -->
 Extracts the lost clock from the GstMessage.
 The clock object returned remains valid until the message is freed.
 
 MT safe.
 ## `clock`
 a pointer to hold the lost clock
-<!-- impl GstRc<MessageRef>::fn parse_clock_provide -->
+<!-- impl Message::fn parse_clock_provide -->
 Extracts the clock and ready flag from the GstMessage.
 The clock object returned remains valid until the message is freed.
 
@@ -7039,7 +6888,7 @@ a pointer to hold a clock
  object, or `None`
 ## `ready`
 a pointer to hold the ready flag, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_context_type -->
+<!-- impl Message::fn parse_context_type -->
 Parse a context type from an existing GST_MESSAGE_NEED_CONTEXT message.
 ## `context_type`
 the context type, or `None`
@@ -7047,21 +6896,21 @@ the context type, or `None`
 # Returns
 
 a `gboolean` indicating if the parsing succeeded.
-<!-- impl GstRc<MessageRef>::fn parse_device_added -->
+<!-- impl Message::fn parse_device_added -->
 Parses a device-added message. The device-added message is produced by
 `DeviceProvider` or a `DeviceMonitor`. It announces the appearance
 of monitored devices.
 ## `device`
 A location where to store a
  pointer to the new `Device`, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_device_removed -->
+<!-- impl Message::fn parse_device_removed -->
 Parses a device-removed message. The device-removed message is produced by
 `DeviceProvider` or a `DeviceMonitor`. It announces the
 disappearance of monitored devices.
 ## `device`
 A location where to store a
  pointer to the removed `Device`, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_error -->
+<!-- impl Message::fn parse_error -->
 Extracts the GError and debug string from the GstMessage. The values returned
 in the output arguments are copies; the caller must free them when done.
 
@@ -7093,7 +6942,7 @@ location for the GError
 ## `debug`
 location for the debug message,
  or `None`
-<!-- impl GstRc<MessageRef>::fn parse_error_details -->
+<!-- impl Message::fn parse_error_details -->
 Returns the optional details structure, may be NULL if none.
 The returned structure must not be freed.
 
@@ -7101,7 +6950,7 @@ Feature: `v1_10`
 
 ## `structure`
 A pointer to the returned details
-<!-- impl GstRc<MessageRef>::fn parse_group_id -->
+<!-- impl Message::fn parse_group_id -->
 Extract the group from the STREAM_START message.
 ## `group_id`
 Result location for the group id or
@@ -7112,14 +6961,14 @@ Result location for the group id or
 `true` if the message had a group id set, `false` otherwise
 
 MT safe.
-<!-- impl GstRc<MessageRef>::fn parse_have_context -->
+<!-- impl Message::fn parse_have_context -->
 Extract the context from the HAVE_CONTEXT message.
 
 MT safe.
 ## `context`
 Result location for the
  context or `None`
-<!-- impl GstRc<MessageRef>::fn parse_info -->
+<!-- impl Message::fn parse_info -->
 Extracts the GError and debug string from the GstMessage. The values returned
 in the output arguments are copies; the caller must free them when done.
 
@@ -7129,7 +6978,7 @@ location for the GError
 ## `debug`
 location for the debug message,
  or `None`
-<!-- impl GstRc<MessageRef>::fn parse_info_details -->
+<!-- impl Message::fn parse_info_details -->
 Returns the optional details structure, may be NULL if none
 The returned structure must not be freed.
 
@@ -7137,7 +6986,7 @@ Feature: `v1_10`
 
 ## `structure`
 A pointer to the returned details structure
-<!-- impl GstRc<MessageRef>::fn parse_new_clock -->
+<!-- impl Message::fn parse_new_clock -->
 Extracts the new clock from the GstMessage.
 The clock object returned remains valid until the message is freed.
 
@@ -7145,7 +6994,7 @@ MT safe.
 ## `clock`
 a pointer to hold the selected
  new clock
-<!-- impl GstRc<MessageRef>::fn parse_progress -->
+<!-- impl Message::fn parse_progress -->
 Parses the progress `type_`, `code` and `text`.
 ## `type_`
 location for the type
@@ -7153,10 +7002,10 @@ location for the type
 location for the code
 ## `text`
 location for the text
-<!-- impl GstRc<MessageRef>::fn parse_property_notify -->
+<!-- impl Message::fn parse_property_notify -->
 Parses a property-notify message. These will be posted on the bus only
-when set up with `ElementExt::add_property_notify_watch` or
-`ElementExt::add_property_deep_notify_watch`.
+when set up with `Element::add_property_notify_watch` or
+`Element::add_property_deep_notify_watch`.
 
 Feature: `v1_10`
 
@@ -7170,7 +7019,7 @@ return location for the name of the
 return location for the new value of
  the property that got changed, or `None`. This will only be set if the
  property notify watch was told to include the value when it was set up
-<!-- impl GstRc<MessageRef>::fn parse_qos -->
+<!-- impl Message::fn parse_qos -->
 Extract the timestamps and live status from the QoS message.
 
 The returned values give the running_time, stream_time, timestamp and
@@ -7192,7 +7041,7 @@ the timestamps of the buffer that
 ## `duration`
 the duration of the buffer that
  generated the message
-<!-- impl GstRc<MessageRef>::fn parse_qos_stats -->
+<!-- impl Message::fn parse_qos_stats -->
 Extract the QoS stats representing the history of the current continuous
 pipeline playback period.
 
@@ -7211,7 +7060,7 @@ Total number of units correctly processed
 ## `dropped`
 Total number of units dropped since the last
  state change to READY or a flushing operation.
-<!-- impl GstRc<MessageRef>::fn parse_qos_values -->
+<!-- impl Message::fn parse_qos_values -->
 Extract the QoS values that have been calculated/analysed from the QoS data
 
 MT safe.
@@ -7225,7 +7074,7 @@ Long term prediction of the ideal rate
 An element dependent integer value that
  specifies the current quality level of the element. The default
  maximum quality is 1000000.
-<!-- impl GstRc<MessageRef>::fn parse_redirect_entry -->
+<!-- impl Message::fn parse_redirect_entry -->
 Parses the location and/or structure from the entry with the given index.
 The index must be between 0 and `Message::get_num_redirect_entries` - 1.
 Returned pointers are valid for as long as this message exists.
@@ -7243,20 +7092,20 @@ return location for
 ## `entry_struct`
 return location
  for the pointer to the entry's structure, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_request_state -->
+<!-- impl Message::fn parse_request_state -->
 Extract the requested state from the request_state message.
 
 MT safe.
 ## `state`
 Result location for the requested state or `None`
-<!-- impl GstRc<MessageRef>::fn parse_reset_time -->
+<!-- impl Message::fn parse_reset_time -->
 Extract the running-time from the RESET_TIME message.
 
 MT safe.
 ## `running_time`
 Result location for the running_time or
  `None`
-<!-- impl GstRc<MessageRef>::fn parse_segment_done -->
+<!-- impl Message::fn parse_segment_done -->
 Extracts the position and format from the segment done message.
 
 MT safe.
@@ -7264,7 +7113,7 @@ MT safe.
 Result location for the format, or `None`
 ## `position`
 Result location for the position, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_segment_start -->
+<!-- impl Message::fn parse_segment_start -->
 Extracts the position and format from the segment start message.
 
 MT safe.
@@ -7272,7 +7121,7 @@ MT safe.
 Result location for the format, or `None`
 ## `position`
 Result location for the position, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_state_changed -->
+<!-- impl Message::fn parse_state_changed -->
 Extracts the old and new states from the GstMessage.
 
 Typical usage of this function might be:
@@ -7302,7 +7151,7 @@ the previous state, or `None`
 the new (current) state, or `None`
 ## `pending`
 the pending (target) state, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_step_done -->
+<!-- impl Message::fn parse_step_done -->
 Extract the values the step_done message.
 
 MT safe.
@@ -7320,7 +7169,7 @@ result location for the intermediate flag
 result location for the duration
 ## `eos`
 result location for the EOS flag
-<!-- impl GstRc<MessageRef>::fn parse_step_start -->
+<!-- impl Message::fn parse_step_start -->
 Extract the values from step_start message.
 
 MT safe.
@@ -7336,7 +7185,7 @@ result location for the rate
 result location for the flush flag
 ## `intermediate`
 result location for the intermediate flag
-<!-- impl GstRc<MessageRef>::fn parse_stream_collection -->
+<!-- impl Message::fn parse_stream_collection -->
 Parses a stream-collection message.
 
 Feature: `v1_10`
@@ -7344,7 +7193,7 @@ Feature: `v1_10`
 ## `collection`
 A location where to store a
  pointer to the `StreamCollection`, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_stream_status -->
+<!-- impl Message::fn parse_stream_status -->
 Extracts the stream status type and owner the GstMessage. The returned
 owner remains valid for as long as the reference to `self` is valid and
 should thus not be unreffed.
@@ -7354,7 +7203,7 @@ MT safe.
 A pointer to hold the status type
 ## `owner`
 The owner element of the message source
-<!-- impl GstRc<MessageRef>::fn parse_streams_selected -->
+<!-- impl Message::fn parse_streams_selected -->
 Parses a streams-selected message.
 
 Feature: `v1_10`
@@ -7362,7 +7211,7 @@ Feature: `v1_10`
 ## `collection`
 A location where to store a
  pointer to the `StreamCollection`, or `None`
-<!-- impl GstRc<MessageRef>::fn parse_structure_change -->
+<!-- impl Message::fn parse_structure_change -->
 Extracts the change type and completion status from the GstMessage.
 
 MT safe.
@@ -7374,7 +7223,7 @@ The owner element of the
 ## `busy`
 a pointer to hold whether the change is in
  progress or has been completed
-<!-- impl GstRc<MessageRef>::fn parse_tag -->
+<!-- impl Message::fn parse_tag -->
 Extracts the tag list from the GstMessage. The tag list returned in the
 output argument is a copy; the caller must free it when done.
 
@@ -7400,7 +7249,7 @@ Typical usage of this function might be:
 MT safe.
 ## `tag_list`
 return location for the tag-list.
-<!-- impl GstRc<MessageRef>::fn parse_toc -->
+<!-- impl Message::fn parse_toc -->
 Extract the TOC from the `Message`. The TOC returned in the
 output argument is a copy; the caller must free it with
 `gst_toc_unref` when done.
@@ -7410,7 +7259,7 @@ MT safe.
 return location for the TOC.
 ## `updated`
 return location for the updated flag.
-<!-- impl GstRc<MessageRef>::fn parse_warning -->
+<!-- impl Message::fn parse_warning -->
 Extracts the GError and debug string from the GstMessage. The values returned
 in the output arguments are copies; the caller must free them when done.
 
@@ -7420,7 +7269,7 @@ location for the GError
 ## `debug`
 location for the debug message,
  or `None`
-<!-- impl GstRc<MessageRef>::fn parse_warning_details -->
+<!-- impl Message::fn parse_warning_details -->
 Returns the optional details structure, may be NULL if none
 The returned structure must not be freed.
 
@@ -7428,7 +7277,7 @@ Feature: `v1_10`
 
 ## `structure`
 A pointer to the returned details structure
-<!-- impl GstRc<MessageRef>::fn set_buffering_stats -->
+<!-- impl Message::fn set_buffering_stats -->
 Configures the buffering stats values in `self`.
 ## `mode`
 a buffering mode
@@ -7438,7 +7287,7 @@ the average input rate
 the average output rate
 ## `buffering_left`
 amount of buffering time left in milliseconds
-<!-- impl GstRc<MessageRef>::fn set_group_id -->
+<!-- impl Message::fn set_group_id -->
 Sets the group id on the stream-start message.
 
 All streams that have the same group id are supposed to be played
@@ -7450,7 +7299,7 @@ each time a file is played for example.
 MT safe.
 ## `group_id`
 the group id
-<!-- impl GstRc<MessageRef>::fn set_qos_stats -->
+<!-- impl Message::fn set_qos_stats -->
 Set the QoS stats representing the history of the current continuous pipeline
 playback period.
 
@@ -7468,7 +7317,7 @@ change to READY or a flushing operation.
 ## `dropped`
 Total number of units dropped since the last state change to READY
 or a flushing operation.
-<!-- impl GstRc<MessageRef>::fn set_qos_values -->
+<!-- impl Message::fn set_qos_values -->
 Set the QoS values that have been calculated/analysed from the QoS data
 
 MT safe.
@@ -7480,7 +7329,7 @@ to get optimal quality.
 ## `quality`
 An element dependent integer value that specifies the current
 quality level of the element. The default maximum quality is 1000000.
-<!-- impl GstRc<MessageRef>::fn set_seqnum -->
+<!-- impl Message::fn set_seqnum -->
 Set the sequence number of a message.
 
 This function might be called by the creator of a message to indicate that
@@ -7490,19 +7339,19 @@ for more information.
 MT safe.
 ## `seqnum`
 A sequence number.
-<!-- impl GstRc<MessageRef>::fn set_stream_status_object -->
+<!-- impl Message::fn set_stream_status_object -->
 Configures the object handling the streaming thread. This is usually a
 GstTask object but other objects might be added in the future.
 ## `object`
 the object controlling the streaming
-<!-- impl GstRc<MessageRef>::fn streams_selected_add -->
+<!-- impl Message::fn streams_selected_add -->
 Adds the `stream` to the `self`.
 
 Feature: `v1_10`
 
 ## `stream`
 a `Stream` to add to `self`
-<!-- impl GstRc<MessageRef>::fn streams_selected_get_size -->
+<!-- impl Message::fn streams_selected_get_size -->
 Returns the number of streams contained in the `self`.
 
 Feature: `v1_10`
@@ -7511,7 +7360,7 @@ Feature: `v1_10`
 # Returns
 
 The number of streams contained within.
-<!-- impl GstRc<MessageRef>::fn streams_selected_get_stream -->
+<!-- impl Message::fn streams_selected_get_stream -->
 Retrieves the `Stream` with index `index` from the `self`.
 
 Feature: `v1_10`
@@ -7934,6 +7783,26 @@ on `self` as it relies on atomic refcounting.
 
 The unref method should never be called with the LOCK held since
 this might deadlock the dispose function.
+<!-- trait GstObjectExt::fn connect_deep_notify -->
+The deep notify signal is used to be notified of property changes. It is
+typically attached to the toplevel bin to receive notifications from all
+the elements contained in that bin.
+## `prop_object`
+the object that originated the signal
+## `prop`
+the property that changed
+<!-- trait GstObjectExt::fn get_property_parent -->
+The parent of the object. Please note, that when changing the 'parent'
+property, we don't emit `gobject::Object::notify` and `Object::deep-notify`
+signals due to locking issues. In some cases one can use
+`Bin::element-added` or `Bin::element-removed` signals on the parent to
+achieve a similar effect.
+<!-- trait GstObjectExt::fn set_property_parent -->
+The parent of the object. Please note, that when changing the 'parent'
+property, we don't emit `gobject::Object::notify` and `Object::deep-notify`
+signals due to locking issues. In some cases one can use
+`Bin::element-added` or `Bin::element-removed` signals on the parent to
+achieve a similar effect.
 <!-- struct Pad -->
 A `Element` is linked to other elements via "pads", which are extremely
 light-weight generic link points.
@@ -9131,6 +9000,18 @@ or in case the pad is not negotiated, the padtemplate caps.
 The negotiated caps are the caps of the last CAPS event that passed on the
 pad. Use this function on a pad that, once it negotiated to a CAPS, cannot
 be renegotiated to something else.
+<!-- trait PadExt::fn connect_linked -->
+Signals that a pad has been linked to the peer pad.
+## `peer`
+the peer pad that has been connected
+<!-- trait PadExt::fn connect_unlinked -->
+Signals that a pad has been unlinked from the peer pad.
+## `peer`
+the peer pad that has been disconnected
+<!-- trait PadExt::fn get_property_offset -->
+The offset that will be applied to the running time of the pad.
+<!-- trait PadExt::fn set_property_offset -->
+The offset that will be applied to the running time of the pad.
 <!-- enum PadDirection -->
 The direction of a pad.
 <!-- enum PadDirection::variant Unknown -->
@@ -9295,6 +9176,26 @@ Unref after usage.
 Emit the pad-created signal for this template when created by this pad.
 ## `pad`
 the `Pad` that created it
+<!-- trait PadTemplateExt::fn connect_pad_created -->
+This signal is fired when an element creates a pad from this template.
+## `pad`
+the pad that was created.
+<!-- trait PadTemplateExt::fn get_property_caps -->
+The capabilities of the pad described by the pad template.
+<!-- trait PadTemplateExt::fn set_property_caps -->
+The capabilities of the pad described by the pad template.
+<!-- trait PadTemplateExt::fn get_property_direction -->
+The direction of the pad described by the pad template.
+<!-- trait PadTemplateExt::fn set_property_direction -->
+The direction of the pad described by the pad template.
+<!-- trait PadTemplateExt::fn get_property_name-template -->
+The name template of the pad template.
+<!-- trait PadTemplateExt::fn set_property_name-template -->
+The name template of the pad template.
+<!-- trait PadTemplateExt::fn get_property_presence -->
+When the pad described by the pad template will become available.
+<!-- trait PadTemplateExt::fn set_property_presence -->
+When the pad described by the pad template will become available.
 <!-- struct ParseContext -->
 Opaque structure.
 <!-- impl ParseContext::fn new -->
@@ -9536,6 +9437,26 @@ the pipeline run as fast as possible.
 MT safe.
 ## `clock`
 the clock to use
+<!-- trait PipelineExt::fn get_property_auto-flush-bus -->
+Whether or not to automatically flush all messages on the
+pipeline's bus when going from READY to NULL state. Please see
+`PipelineExt::set_auto_flush_bus` for more information on this option.
+<!-- trait PipelineExt::fn set_property_auto-flush-bus -->
+Whether or not to automatically flush all messages on the
+pipeline's bus when going from READY to NULL state. Please see
+`PipelineExt::set_auto_flush_bus` for more information on this option.
+<!-- trait PipelineExt::fn get_property_delay -->
+The expected delay needed for elements to spin up to the
+PLAYING state expressed in nanoseconds.
+see `PipelineExt::set_delay` for more information on this option.
+<!-- trait PipelineExt::fn set_property_delay -->
+The expected delay needed for elements to spin up to the
+PLAYING state expressed in nanoseconds.
+see `PipelineExt::set_delay` for more information on this option.
+<!-- trait PipelineExt::fn get_property_latency -->
+Latency to configure on the pipeline. See `PipelineExt::set_latency`.
+<!-- trait PipelineExt::fn set_property_latency -->
+Latency to configure on the pipeline. See `PipelineExt::set_latency`.
 <!-- struct Plugin -->
 GStreamer is extensible, so `Element` instances can be loaded at runtime.
 A plugin system can provide one or more of the basic
@@ -10085,7 +10006,7 @@ The following example shows how to query the duration of a pipeline:
   }
   gst_query_unref (query);
 ```
-<!-- impl GstRc<QueryRef>::fn new_accept_caps -->
+<!-- impl Query::fn new_accept_caps -->
 Constructs a new query object for querying if `caps` are accepted.
 
 Free-function: `gst_query_unref`
@@ -10095,7 +10016,7 @@ a fixed `Caps`
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_allocation -->
+<!-- impl Query::fn new_allocation -->
 Constructs a new query object for querying the allocation properties.
 
 Free-function: `gst_query_unref`
@@ -10107,7 +10028,7 @@ return a pool
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_buffering -->
+<!-- impl Query::fn new_buffering -->
 Constructs a new query object for querying the buffering status of
 a stream.
 
@@ -10118,7 +10039,7 @@ the default `Format` for the new query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_caps -->
+<!-- impl Query::fn new_caps -->
 Constructs a new query object for querying the caps.
 
 The CAPS query should return the allowable caps for a pad in the context
@@ -10145,7 +10066,7 @@ a filter
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_context -->
+<!-- impl Query::fn new_context -->
 Constructs a new query object for querying the pipeline-local context.
 
 Free-function: `gst_query_unref`
@@ -10155,7 +10076,7 @@ Context type to query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_convert -->
+<!-- impl Query::fn new_convert -->
 Constructs a new convert query object. Use `gst_query_unref`
 when done with it. A convert query is used to ask for a conversion between
 one format and another.
@@ -10171,7 +10092,7 @@ the target `Format`
 # Returns
 
 a `Query`
-<!-- impl GstRc<QueryRef>::fn new_custom -->
+<!-- impl Query::fn new_custom -->
 Constructs a new custom query object. Use `gst_query_unref`
 when done with it.
 
@@ -10184,7 +10105,7 @@ a structure for the query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_drain -->
+<!-- impl Query::fn new_drain -->
 Constructs a new query object for querying the drain state.
 
 Free-function: `gst_query_unref`
@@ -10192,7 +10113,7 @@ Free-function: `gst_query_unref`
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_duration -->
+<!-- impl Query::fn new_duration -->
 Constructs a new stream duration query object to query in the given format.
 Use `gst_query_unref` when done with it. A duration query will give the
 total length of the stream.
@@ -10204,7 +10125,7 @@ the `Format` for this duration query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_formats -->
+<!-- impl Query::fn new_formats -->
 Constructs a new query object for querying formats of
 the stream.
 
@@ -10213,7 +10134,7 @@ Free-function: `gst_query_unref`
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_latency -->
+<!-- impl Query::fn new_latency -->
 Constructs a new latency query object.
 Use `gst_query_unref` when done with it. A latency query is usually performed
 by sinks to compensate for additional latency introduced by elements in the
@@ -10224,7 +10145,7 @@ Free-function: `gst_query_unref`
 # Returns
 
 a `Query`
-<!-- impl GstRc<QueryRef>::fn new_position -->
+<!-- impl Query::fn new_position -->
 Constructs a new query stream position query object. Use `gst_query_unref`
 when done with it. A position query is used to query the current position
 of playback in the streams, in some format.
@@ -10236,7 +10157,7 @@ the default `Format` for the new query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_scheduling -->
+<!-- impl Query::fn new_scheduling -->
 Constructs a new query object for querying the scheduling properties.
 
 Free-function: `gst_query_unref`
@@ -10244,7 +10165,7 @@ Free-function: `gst_query_unref`
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_seeking -->
+<!-- impl Query::fn new_seeking -->
 Constructs a new query object for querying seeking properties of
 the stream.
 
@@ -10255,7 +10176,7 @@ the default `Format` for the new query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_segment -->
+<!-- impl Query::fn new_segment -->
 Constructs a new segment query object. Use `gst_query_unref`
 when done with it. A segment query is used to discover information about the
 currently configured segment for playback.
@@ -10267,7 +10188,7 @@ the `Format` for the new query
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn new_uri -->
+<!-- impl Query::fn new_uri -->
 Constructs a new query URI query object. Use `gst_query_unref`
 when done with it. An URI query is used to query the current URI
 that is used by the source or sink.
@@ -10277,19 +10198,19 @@ Free-function: `gst_query_unref`
 # Returns
 
 a new `Query`
-<!-- impl GstRc<QueryRef>::fn add_allocation_meta -->
+<!-- impl Query::fn add_allocation_meta -->
 Add `api` with `params` as one of the supported metadata API to `self`.
 ## `api`
 the metadata API
 ## `params`
 API specific parameters
-<!-- impl GstRc<QueryRef>::fn add_allocation_param -->
+<!-- impl Query::fn add_allocation_param -->
 Add `allocator` and its `params` as a supported memory allocator.
 ## `allocator`
 the memory allocator
 ## `params`
 a `AllocationParams`
-<!-- impl GstRc<QueryRef>::fn add_allocation_pool -->
+<!-- impl Query::fn add_allocation_pool -->
 Set the pool parameters in `self`.
 ## `pool`
 the `BufferPool`
@@ -10299,7 +10220,7 @@ the buffer size
 the min buffers
 ## `max_buffers`
 the max buffers
-<!-- impl GstRc<QueryRef>::fn add_buffering_range -->
+<!-- impl Query::fn add_buffering_range -->
 Set the buffering-ranges array field in `self`. The current last
 start position of the array should be inferior to `start`.
 ## `start`
@@ -10310,11 +10231,11 @@ stop position of the range
 # Returns
 
 a `gboolean` indicating if the range was added or not.
-<!-- impl GstRc<QueryRef>::fn add_scheduling_mode -->
+<!-- impl Query::fn add_scheduling_mode -->
 Add `mode` as one of the supported scheduling modes to `self`.
 ## `mode`
 a `PadMode`
-<!-- impl GstRc<QueryRef>::fn find_allocation_meta -->
+<!-- impl Query::fn find_allocation_meta -->
 Check if `self` has metadata `api` set. When this function returns `true`,
 `index` will contain the index where the requested API and the parameters
 can be found.
@@ -10326,14 +10247,14 @@ the index
 # Returns
 
 `true` when `api` is in the list of metadata.
-<!-- impl GstRc<QueryRef>::fn get_n_allocation_metas -->
+<!-- impl Query::fn get_n_allocation_metas -->
 Retrieve the number of values currently stored in the
 meta API array of the query's structure.
 
 # Returns
 
 the metadata API array size as a `guint`.
-<!-- impl GstRc<QueryRef>::fn get_n_allocation_params -->
+<!-- impl Query::fn get_n_allocation_params -->
 Retrieve the number of values currently stored in the
 allocator params array of the query's structure.
 
@@ -10345,28 +10266,28 @@ allocators should be ordered by preference with the preferred one first.
 # Returns
 
 the allocator array size as a `guint`.
-<!-- impl GstRc<QueryRef>::fn get_n_allocation_pools -->
+<!-- impl Query::fn get_n_allocation_pools -->
 Retrieve the number of values currently stored in the
 pool array of the query's structure.
 
 # Returns
 
 the pool array size as a `guint`.
-<!-- impl GstRc<QueryRef>::fn get_n_buffering_ranges -->
+<!-- impl Query::fn get_n_buffering_ranges -->
 Retrieve the number of values currently stored in the
 buffered-ranges array of the query's structure.
 
 # Returns
 
 the range array size as a `guint`.
-<!-- impl GstRc<QueryRef>::fn get_n_scheduling_modes -->
+<!-- impl Query::fn get_n_scheduling_modes -->
 Retrieve the number of values currently stored in the
 scheduling mode array of the query's structure.
 
 # Returns
 
 the scheduling mode array size as a `guint`.
-<!-- impl GstRc<QueryRef>::fn get_structure -->
+<!-- impl Query::fn get_structure -->
 Get the structure of a query.
 
 # Returns
@@ -10374,7 +10295,7 @@ Get the structure of a query.
 the `Structure` of the query. The structure is
  still owned by the query and will therefore be freed when the query
  is unreffed.
-<!-- impl GstRc<QueryRef>::fn has_scheduling_mode -->
+<!-- impl Query::fn has_scheduling_mode -->
 Check if `self` has scheduling mode set.
 
 > When checking if upstream supports pull mode, it is usually not
@@ -10388,7 +10309,7 @@ the scheduling mode
 # Returns
 
 `true` when `mode` is in the list of scheduling modes.
-<!-- impl GstRc<QueryRef>::fn has_scheduling_mode_with_flags -->
+<!-- impl Query::fn has_scheduling_mode_with_flags -->
 Check if `self` has scheduling mode set and `flags` is set in
 query scheduling flags.
 ## `mode`
@@ -10400,16 +10321,16 @@ the scheduling mode
 
 `true` when `mode` is in the list of scheduling modes
  and `flags` are compatible with query flags.
-<!-- impl GstRc<QueryRef>::fn parse_accept_caps -->
+<!-- impl Query::fn parse_accept_caps -->
 Get the caps from `self`. The caps remains valid as long as `self` remains
 valid.
 ## `caps`
 A pointer to the caps
-<!-- impl GstRc<QueryRef>::fn parse_accept_caps_result -->
+<!-- impl Query::fn parse_accept_caps_result -->
 Parse the result from `self` and store in `result`.
 ## `result`
 location for the result
-<!-- impl GstRc<QueryRef>::fn parse_allocation -->
+<!-- impl Query::fn parse_allocation -->
 Parse an allocation query, writing the requested caps in `caps` and
 whether a pool is needed in `need_pool`, if the respective parameters
 are non-`None`.
@@ -10420,14 +10341,14 @@ Pool details can be retrieved using `Query::get_n_allocation_pools` and
 The `Caps`
 ## `need_pool`
 Whether a `BufferPool` is needed
-<!-- impl GstRc<QueryRef>::fn parse_buffering_percent -->
+<!-- impl Query::fn parse_buffering_percent -->
 Get the percentage of buffered data. This is a value between 0 and 100.
 The `busy` indicator is `true` when the buffering is in progress.
 ## `busy`
 if buffering is busy, or `None`
 ## `percent`
 a buffering percent, or `None`
-<!-- impl GstRc<QueryRef>::fn parse_buffering_range -->
+<!-- impl Query::fn parse_buffering_range -->
 Parse an available query, writing the format into `format`, and
 other results into the passed parameters, if the respective parameters
 are non-`None`
@@ -10441,7 +10362,7 @@ the stop to set, or `None`
 ## `estimated_total`
 estimated total amount of download
  time remaining in milliseconds, or `None`
-<!-- impl GstRc<QueryRef>::fn parse_buffering_stats -->
+<!-- impl Query::fn parse_buffering_stats -->
 Extracts the buffering stats values from `self`.
 ## `mode`
 a buffering mode, or `None`
@@ -10452,22 +10373,22 @@ the average output rat, or `None`
 ## `buffering_left`
 amount of buffering time left in
  milliseconds, or `None`
-<!-- impl GstRc<QueryRef>::fn parse_caps -->
+<!-- impl Query::fn parse_caps -->
 Get the filter from the caps `self`. The caps remains valid as long as
 `self` remains valid.
 ## `filter`
 A pointer to the caps filter
-<!-- impl GstRc<QueryRef>::fn parse_caps_result -->
+<!-- impl Query::fn parse_caps_result -->
 Get the caps result from `self`. The caps remains valid as long as
 `self` remains valid.
 ## `caps`
 A pointer to the caps
-<!-- impl GstRc<QueryRef>::fn parse_context -->
+<!-- impl Query::fn parse_context -->
 Get the context from the context `self`. The context remains valid as long as
 `self` remains valid.
 ## `context`
 A pointer to store the `Context`
-<!-- impl GstRc<QueryRef>::fn parse_context_type -->
+<!-- impl Query::fn parse_context_type -->
 Parse a context type from an existing GST_QUERY_CONTEXT query.
 ## `context_type`
 the context type, or `None`
@@ -10475,7 +10396,7 @@ the context type, or `None`
 # Returns
 
 a `gboolean` indicating if the parsing succeeded.
-<!-- impl GstRc<QueryRef>::fn parse_convert -->
+<!-- impl Query::fn parse_convert -->
 Parse a convert query answer. Any of `src_format`, `src_value`, `dest_format`,
 and `dest_value` may be `None`, in which case that value is omitted.
 ## `src_format`
@@ -10489,7 +10410,7 @@ the storage for the `Format` of the
 ## `dest_value`
 the storage for the destination value,
  or `None`
-<!-- impl GstRc<QueryRef>::fn parse_duration -->
+<!-- impl Query::fn parse_duration -->
 Parse a duration query answer. Write the format of the duration into `format`,
 and the value into `duration`, if the respective variables are non-`None`.
 ## `format`
@@ -10497,7 +10418,7 @@ the storage for the `Format` of the duration
  value, or `None`.
 ## `duration`
 the storage for the total duration, or `None`.
-<!-- impl GstRc<QueryRef>::fn parse_latency -->
+<!-- impl Query::fn parse_latency -->
 Parse a latency query answer.
 ## `live`
 storage for live or `None`
@@ -10505,11 +10426,11 @@ storage for live or `None`
 the storage for the min latency or `None`
 ## `max_latency`
 the storage for the max latency or `None`
-<!-- impl GstRc<QueryRef>::fn parse_n_formats -->
+<!-- impl Query::fn parse_n_formats -->
 Parse the number of formats in the formats `self`.
 ## `n_formats`
 the number of formats in this query.
-<!-- impl GstRc<QueryRef>::fn parse_nth_allocation_meta -->
+<!-- impl Query::fn parse_nth_allocation_meta -->
 Parse an available query and get the metadata API
 at `index` of the metadata API array.
 ## `index`
@@ -10520,7 +10441,7 @@ API specific parameters
 # Returns
 
 a `glib::Type` of the metadata API at `index`.
-<!-- impl GstRc<QueryRef>::fn parse_nth_allocation_param -->
+<!-- impl Query::fn parse_nth_allocation_param -->
 Parse an available query and get the allocator and its params
 at `index` of the allocator array.
 ## `index`
@@ -10529,7 +10450,7 @@ position in the allocator array to read
 variable to hold the result
 ## `params`
 parameters for the allocator
-<!-- impl GstRc<QueryRef>::fn parse_nth_allocation_pool -->
+<!-- impl Query::fn parse_nth_allocation_pool -->
 Get the pool parameters in `self`.
 
 Unref `pool` with `GstObjectExt::unref` when it's not needed any more.
@@ -10543,7 +10464,7 @@ the buffer size
 the min buffers
 ## `max_buffers`
 the max buffers
-<!-- impl GstRc<QueryRef>::fn parse_nth_buffering_range -->
+<!-- impl Query::fn parse_nth_buffering_range -->
 Parse an available query and get the start and stop values stored
 at the `index` of the buffered ranges array.
 ## `index`
@@ -10556,7 +10477,7 @@ the stop position to set, or `None`
 # Returns
 
 a `gboolean` indicating if the parsing succeeded.
-<!-- impl GstRc<QueryRef>::fn parse_nth_format -->
+<!-- impl Query::fn parse_nth_format -->
 Parse the format query and retrieve the `nth` format from it into
 `format`. If the list contains less elements than `nth`, `format` will be
 set to GST_FORMAT_UNDEFINED.
@@ -10564,7 +10485,7 @@ set to GST_FORMAT_UNDEFINED.
 the nth format to retrieve.
 ## `format`
 a pointer to store the nth format
-<!-- impl GstRc<QueryRef>::fn parse_nth_scheduling_mode -->
+<!-- impl Query::fn parse_nth_scheduling_mode -->
 Parse an available query and get the scheduling mode
 at `index` of the scheduling modes array.
 ## `index`
@@ -10573,7 +10494,7 @@ position in the scheduling modes array to read
 # Returns
 
 a `PadMode` of the scheduling mode at `index`.
-<!-- impl GstRc<QueryRef>::fn parse_position -->
+<!-- impl Query::fn parse_position -->
 Parse a position query, writing the format into `format`, and the position
 into `cur`, if the respective parameters are non-`None`.
 ## `format`
@@ -10581,7 +10502,7 @@ the storage for the `Format` of the
  position values (may be `None`)
 ## `cur`
 the storage for the current position (may be `None`)
-<!-- impl GstRc<QueryRef>::fn parse_scheduling -->
+<!-- impl Query::fn parse_scheduling -->
 Set the scheduling properties.
 ## `flags`
 `SchedulingFlags`
@@ -10591,7 +10512,7 @@ the suggested minimum size of pull requests
 the suggested maximum size of pull requests:
 ## `align`
 the suggested alignment of pull requests
-<!-- impl GstRc<QueryRef>::fn parse_seeking -->
+<!-- impl Query::fn parse_seeking -->
 Parse a seeking query, writing the format into `format`, and
 other results into the passed parameters, if the respective parameters
 are non-`None`
@@ -10604,7 +10525,7 @@ the seekable flag to set, or `None`
 the segment_start to set, or `None`
 ## `segment_end`
 the segment_end to set, or `None`
-<!-- impl GstRc<QueryRef>::fn parse_segment -->
+<!-- impl Query::fn parse_segment -->
 Parse a segment query answer. Any of `rate`, `format`, `start_value`, and
 `stop_value` may be `None`, which will cause this value to be omitted.
 
@@ -10618,21 +10539,21 @@ the storage for the `Format` of the values,
 the storage for the start value, or `None`
 ## `stop_value`
 the storage for the stop value, or `None`
-<!-- impl GstRc<QueryRef>::fn parse_uri -->
+<!-- impl Query::fn parse_uri -->
 Parse an URI query, writing the URI into `uri` as a newly
 allocated string, if the respective parameters are non-`None`.
 Free the string with `g_free` after usage.
 ## `uri`
 the storage for the current URI
  (may be `None`)
-<!-- impl GstRc<QueryRef>::fn parse_uri_redirection -->
+<!-- impl Query::fn parse_uri_redirection -->
 Parse an URI query, writing the URI into `uri` as a newly
 allocated string, if the respective parameters are non-`None`.
 Free the string with `g_free` after usage.
 ## `uri`
 the storage for the redirect URI
  (may be `None`)
-<!-- impl GstRc<QueryRef>::fn parse_uri_redirection_permanent -->
+<!-- impl Query::fn parse_uri_redirection_permanent -->
 Parse an URI query, and set `permanent` to `true` if there is a redirection
 and it should be considered permanent. If a redirection is permanent,
 applications should update their internal storage of the URI, otherwise
@@ -10640,30 +10561,30 @@ they should make all future requests to the original URI.
 ## `permanent`
 if the URI redirection is permanent
  (may be `None`)
-<!-- impl GstRc<QueryRef>::fn remove_nth_allocation_meta -->
+<!-- impl Query::fn remove_nth_allocation_meta -->
 Remove the metadata API at `index` of the metadata API array.
 ## `index`
 position in the metadata API array to remove
-<!-- impl GstRc<QueryRef>::fn remove_nth_allocation_param -->
+<!-- impl Query::fn remove_nth_allocation_param -->
 Remove the allocation param at `index` of the allocation param array.
 ## `index`
 position in the allocation param array to remove
-<!-- impl GstRc<QueryRef>::fn remove_nth_allocation_pool -->
+<!-- impl Query::fn remove_nth_allocation_pool -->
 Remove the allocation pool at `index` of the allocation pool array.
 ## `index`
 position in the allocation pool array to remove
-<!-- impl GstRc<QueryRef>::fn set_accept_caps_result -->
+<!-- impl Query::fn set_accept_caps_result -->
 Set `result` as the result for the `self`.
 ## `result`
 the result to set
-<!-- impl GstRc<QueryRef>::fn set_buffering_percent -->
+<!-- impl Query::fn set_buffering_percent -->
 Set the percentage of buffered data. This is a value between 0 and 100.
 The `busy` indicator is `true` when the buffering is in progress.
 ## `busy`
 if buffering is busy
 ## `percent`
 a buffering percent
-<!-- impl GstRc<QueryRef>::fn set_buffering_range -->
+<!-- impl Query::fn set_buffering_range -->
 Set the available query result fields in `self`.
 ## `format`
 the format to set for the `start` and `stop` values
@@ -10674,7 +10595,7 @@ the stop to set
 ## `estimated_total`
 estimated total amount of download time remaining in
  milliseconds
-<!-- impl GstRc<QueryRef>::fn set_buffering_stats -->
+<!-- impl Query::fn set_buffering_stats -->
 Configures the buffering stats values in `self`.
 ## `mode`
 a buffering mode
@@ -10684,15 +10605,15 @@ the average input rate
 the average output rate
 ## `buffering_left`
 amount of buffering time left in milliseconds
-<!-- impl GstRc<QueryRef>::fn set_caps_result -->
+<!-- impl Query::fn set_caps_result -->
 Set the `caps` result in `self`.
 ## `caps`
 A pointer to the caps
-<!-- impl GstRc<QueryRef>::fn set_context -->
+<!-- impl Query::fn set_context -->
 Answer a context query by setting the requested context.
 ## `context`
 the requested `Context`
-<!-- impl GstRc<QueryRef>::fn set_convert -->
+<!-- impl Query::fn set_convert -->
 Answer a convert query by setting the requested values.
 ## `src_format`
 the source `Format`
@@ -10702,18 +10623,18 @@ the source value
 the destination `Format`
 ## `dest_value`
 the destination value
-<!-- impl GstRc<QueryRef>::fn set_duration -->
+<!-- impl Query::fn set_duration -->
 Answer a duration query by setting the requested value in the given format.
 ## `format`
 the `Format` for the duration
 ## `duration`
 the duration of the stream
-<!-- impl GstRc<QueryRef>::fn set_formats -->
+<!-- impl Query::fn set_formats -->
 Set the formats query result fields in `self`. The number of formats passed
 must be equal to `n_formats`.
 ## `n_formats`
 the number of formats to set.
-<!-- impl GstRc<QueryRef>::fn set_formatsv -->
+<!-- impl Query::fn set_formatsv -->
 Set the formats query result fields in `self`. The number of formats passed
 in the `formats` array must be equal to `n_formats`.
 ## `n_formats`
@@ -10721,7 +10642,7 @@ the number of formats to set.
 ## `formats`
 an array containing `n_formats`
  `Format` values.
-<!-- impl GstRc<QueryRef>::fn set_latency -->
+<!-- impl Query::fn set_latency -->
 Answer a latency query by setting the requested values in the given format.
 ## `live`
 if there is a live element upstream
@@ -10729,7 +10650,7 @@ if there is a live element upstream
 the minimal latency of the upstream elements
 ## `max_latency`
 the maximal latency of the upstream elements
-<!-- impl GstRc<QueryRef>::fn set_nth_allocation_param -->
+<!-- impl Query::fn set_nth_allocation_param -->
 Parse an available query and get the allocator and its params
 at `index` of the allocator array.
 ## `index`
@@ -10738,7 +10659,7 @@ position in the allocator array to set
 new allocator to set
 ## `params`
 parameters for the allocator
-<!-- impl GstRc<QueryRef>::fn set_nth_allocation_pool -->
+<!-- impl Query::fn set_nth_allocation_pool -->
 Set the pool parameters in `self`.
 ## `index`
 index to modify
@@ -10750,13 +10671,13 @@ the size
 the min buffers
 ## `max_buffers`
 the max buffers
-<!-- impl GstRc<QueryRef>::fn set_position -->
+<!-- impl Query::fn set_position -->
 Answer a position query by setting the requested value in the given format.
 ## `format`
 the requested `Format`
 ## `cur`
 the position to set
-<!-- impl GstRc<QueryRef>::fn set_scheduling -->
+<!-- impl Query::fn set_scheduling -->
 Set the scheduling properties.
 ## `flags`
 `SchedulingFlags`
@@ -10766,7 +10687,7 @@ the suggested minimum size of pull requests
 the suggested maximum size of pull requests
 ## `align`
 the suggested alignment of pull requests
-<!-- impl GstRc<QueryRef>::fn set_seeking -->
+<!-- impl Query::fn set_seeking -->
 Set the seeking query result fields in `self`.
 ## `format`
 the format to set for the `segment_start` and `segment_end` values
@@ -10776,7 +10697,7 @@ the seekable flag to set
 the segment_start to set
 ## `segment_end`
 the segment_end to set
-<!-- impl GstRc<QueryRef>::fn set_segment -->
+<!-- impl Query::fn set_segment -->
 Answer a segment query by setting the requested values. The normal
 playback segment of a pipeline is 0 to duration at the default rate of
 1.0. If a seek was performed on the pipeline to play a different
@@ -10796,20 +10717,20 @@ the `Format` of the segment values (`start_value` and `stop_value`)
 the start value
 ## `stop_value`
 the stop value
-<!-- impl GstRc<QueryRef>::fn set_uri -->
+<!-- impl Query::fn set_uri -->
 Answer a URI query by setting the requested URI.
 ## `uri`
 the URI to set
-<!-- impl GstRc<QueryRef>::fn set_uri_redirection -->
+<!-- impl Query::fn set_uri_redirection -->
 Answer a URI query by setting the requested URI redirection.
 ## `uri`
 the URI to set
-<!-- impl GstRc<QueryRef>::fn set_uri_redirection_permanent -->
+<!-- impl Query::fn set_uri_redirection_permanent -->
 Answer a URI query by setting the requested URI redirection
 to permanent or not.
 ## `permanent`
 whether the redirect is permanent or not
-<!-- impl GstRc<QueryRef>::fn writable_structure -->
+<!-- impl Query::fn writable_structure -->
 Get the structure of a query. This method should be called with a writable
 `self` so that the returned structure is guaranteed to be writable.
 
@@ -10878,7 +10799,7 @@ the number of resource error types.
 <!-- struct Sample -->
 A `Sample` is a small object containing data, a type, timing and
 extra arbitrary information.
-<!-- impl GstRc<SampleRef>::fn new -->
+<!-- impl Sample::fn new -->
 Create a new `Sample` with the provided details.
 
 Free-function: gst_sample_unref
@@ -10895,7 +10816,7 @@ a `Structure`, or `None`
 
 the new `Sample`. `gst_sample_unref`
  after usage.
-<!-- impl GstRc<SampleRef>::fn get_buffer -->
+<!-- impl Sample::fn get_buffer -->
 Get the buffer associated with `self`
 
 # Returns
@@ -10904,7 +10825,7 @@ the buffer of `self` or `None`
  when there is no buffer. The buffer remains valid as long as
  `self` is valid. If you need to hold on to it for longer than
  that, take a ref to the buffer with `gst_buffer_ref`.
-<!-- impl GstRc<SampleRef>::fn get_buffer_list -->
+<!-- impl Sample::fn get_buffer_list -->
 Get the buffer list associated with `self`
 
 # Returns
@@ -10913,7 +10834,7 @@ the buffer list of `self` or `None`
  when there is no buffer list. The buffer list remains valid as long as
  `self` is valid. If you need to hold on to it for longer than
  that, take a ref to the buffer list with gst_mini_object_ref ().
-<!-- impl GstRc<SampleRef>::fn get_caps -->
+<!-- impl Sample::fn get_caps -->
 Get the caps associated with `self`
 
 # Returns
@@ -10922,21 +10843,21 @@ the caps of `self` or `None`
  when there is no caps. The caps remain valid as long as `self` is
  valid. If you need to hold on to the caps for longer than that,
  take a ref to the caps with `gst_caps_ref`.
-<!-- impl GstRc<SampleRef>::fn get_info -->
+<!-- impl Sample::fn get_info -->
 Get extra information associated with `self`.
 
 # Returns
 
 the extra info of `self`.
  The info remains valid as long as `self` is valid.
-<!-- impl GstRc<SampleRef>::fn get_segment -->
+<!-- impl Sample::fn get_segment -->
 Get the segment associated with `self`
 
 # Returns
 
 the segment of `self`.
  The segment remains valid as long as `self` is valid.
-<!-- impl GstRc<SampleRef>::fn set_buffer_list -->
+<!-- impl Sample::fn set_buffer_list -->
 Set the buffer list associated with `self`
 ## `buffer_list`
 a `BufferList`
@@ -11412,6 +11333,37 @@ the state change will happen asynchronously
 the state change succeeded but the element
  cannot produce data in `State::Paused`.
  This typically happens with live sources.
+<!-- struct StaticCaps -->
+Datastructure to initialize `Caps` from a string description usually
+used in conjunction with GST_STATIC_CAPS() and `StaticCaps::get` to
+instantiate a `Caps`.
+<!-- impl StaticCaps::fn cleanup -->
+Clean up the cached caps contained in `self`.
+<!-- impl StaticCaps::fn get -->
+Converts a `StaticCaps` to a `Caps`.
+
+# Returns
+
+a pointer to the `Caps`. Unref after usage.
+ Since the core holds an additional ref to the returned caps,
+ use `gst_caps_make_writable` on the returned caps to modify it.
+<!-- struct StaticPadTemplate -->
+Structure describing the `StaticPadTemplate`.
+<!-- impl StaticPadTemplate::fn get -->
+Converts a `StaticPadTemplate` into a `PadTemplate`.
+
+# Returns
+
+a new `PadTemplate`.
+<!-- impl StaticPadTemplate::fn get_caps -->
+Gets the capabilities of the static pad template.
+
+# Returns
+
+the `Caps` of the static pad template.
+Unref after usage. Since the core holds an additional
+ref to the returned caps, use `gst_caps_make_writable`
+on the returned caps to modify it.
 <!-- struct Stream -->
 A high-level object representing a single stream. It might be backed, or
 not, by an actual flow of data in a pipeline (`Pad`).
@@ -11524,6 +11476,24 @@ Feature: `v1_10`
 
 ## `tags`
 a `TagList`
+<!-- trait StreamExt::fn get_property_caps -->
+The `Caps` of the `Stream`.
+<!-- trait StreamExt::fn set_property_caps -->
+The `Caps` of the `Stream`.
+<!-- trait StreamExt::fn get_property_stream-id -->
+The unique identifier of the `Stream`. Can only be set at construction
+time.
+<!-- trait StreamExt::fn set_property_stream-id -->
+The unique identifier of the `Stream`. Can only be set at construction
+time.
+<!-- trait StreamExt::fn get_property_stream-type -->
+The `StreamType` of the `Stream`. Can only be set at construction time.
+<!-- trait StreamExt::fn set_property_stream-type -->
+The `StreamType` of the `Stream`. Can only be set at construction time.
+<!-- trait StreamExt::fn get_property_tags -->
+The `TagList` of the `Stream`.
+<!-- trait StreamExt::fn set_property_tags -->
+The `TagList` of the `Stream`.
 <!-- struct StreamCollection -->
 A collection of `Stream` that are available.
 
@@ -12528,7 +12498,7 @@ List of tags and values used to describe media metadata.
 
 Strings in structures must be ASCII or UTF-8 encoded. Other encodings are
 not allowed. Strings must not be empty or `None`.
-<!-- impl GstRc<TagListRef>::fn new -->
+<!-- impl TagList::fn new -->
 Creates a new taglist and appends the values for the given tags. It expects
 tag-value pairs like `TagList::add`, and a `None` terminator after the
 last pair. The type of the values is implicit and is documented in the API
@@ -12549,7 +12519,7 @@ tag
 
 a new `TagList`. Free with `gst_tag_list_unref`
  when no longer needed.
-<!-- impl GstRc<TagListRef>::fn new_empty -->
+<!-- impl TagList::fn new_empty -->
 Creates a new empty GstTagList.
 
 Free-function: gst_tag_list_unref
@@ -12557,7 +12527,7 @@ Free-function: gst_tag_list_unref
 # Returns
 
 An empty tag list
-<!-- impl GstRc<TagListRef>::fn new_from_string -->
+<!-- impl TagList::fn new_from_string -->
 Deserializes a tag list.
 ## `str`
 a string created with `TagList::to_string`
@@ -12566,7 +12536,7 @@ a string created with `TagList::to_string`
 
 a new `TagList`, or `None` in case of an
 error.
-<!-- impl GstRc<TagListRef>::fn new_valist -->
+<!-- impl TagList::fn new_valist -->
 Just like `TagList::new`, only that it takes a va_list argument.
 Useful mostly for language bindings.
 
@@ -12578,13 +12548,13 @@ tag / value pairs to set
 
 a new `TagList`. Free with `gst_tag_list_unref`
  when no longer needed.
-<!-- impl GstRc<TagListRef>::fn add -->
+<!-- impl TagList::fn add -->
 Sets the values for the given tags using the specified mode.
 ## `mode`
 the mode to use
 ## `tag`
 tag
-<!-- impl GstRc<TagListRef>::fn add_valist -->
+<!-- impl TagList::fn add_valist -->
 Sets the values for the given tags using the specified mode.
 ## `mode`
 the mode to use
@@ -12592,7 +12562,7 @@ the mode to use
 tag
 ## `var_args`
 tag / value pairs to set
-<!-- impl GstRc<TagListRef>::fn add_valist_values -->
+<!-- impl TagList::fn add_valist_values -->
 Sets the GValues for the given tags using the specified mode.
 ## `mode`
 the mode to use
@@ -12600,7 +12570,7 @@ the mode to use
 tag
 ## `var_args`
 tag / GValue pairs to set
-<!-- impl GstRc<TagListRef>::fn add_value -->
+<!-- impl TagList::fn add_value -->
 Sets the GValue for a given tag using the specified mode.
 ## `mode`
 the mode to use
@@ -12608,20 +12578,20 @@ the mode to use
 tag
 ## `value`
 GValue for this tag
-<!-- impl GstRc<TagListRef>::fn add_values -->
+<!-- impl TagList::fn add_values -->
 Sets the GValues for the given tags using the specified mode.
 ## `mode`
 the mode to use
 ## `tag`
 tag
-<!-- impl GstRc<TagListRef>::fn foreach -->
+<!-- impl TagList::fn foreach -->
 Calls the given function for each tag inside the tag list. Note that if there
 is no tag, the function won't be called at all.
 ## `func`
 function to be called for each tag
 ## `user_data`
 user specified data
-<!-- impl GstRc<TagListRef>::fn get_boolean -->
+<!-- impl TagList::fn get_boolean -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12633,7 +12603,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_boolean_index -->
+<!-- impl TagList::fn get_boolean_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12647,7 +12617,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_date -->
+<!-- impl TagList::fn get_date -->
 Copies the first date for the given tag in the taglist into the variable
 pointed to by `value`. Free the date with `glib::Date::free` when it is no longer
 needed.
@@ -12663,7 +12633,7 @@ address of a GDate pointer
 
 `true`, if a date was copied, `false` if the tag didn't exist in the
  given list or if it was `None`.
-<!-- impl GstRc<TagListRef>::fn get_date_index -->
+<!-- impl TagList::fn get_date_index -->
 Gets the date that is at the given index for the given tag in the given
 list and copies it into the variable pointed to by `value`. Free the date
 with `glib::Date::free` when it is no longer needed.
@@ -12680,7 +12650,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list or if it was `None`.
-<!-- impl GstRc<TagListRef>::fn get_date_time -->
+<!-- impl TagList::fn get_date_time -->
 Copies the first datetime for the given tag in the taglist into the variable
 pointed to by `value`. Unref the date with `DateTime::unref` when
 it is no longer needed.
@@ -12696,7 +12666,7 @@ address of a `DateTime`
 
 `true`, if a datetime was copied, `false` if the tag didn't exist in
  the given list or if it was `None`.
-<!-- impl GstRc<TagListRef>::fn get_date_time_index -->
+<!-- impl TagList::fn get_date_time_index -->
 Gets the datetime that is at the given index for the given tag in the given
 list and copies it into the variable pointed to by `value`. Unref the datetime
 with `DateTime::unref` when it is no longer needed.
@@ -12713,7 +12683,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list or if it was `None`.
-<!-- impl GstRc<TagListRef>::fn get_double -->
+<!-- impl TagList::fn get_double -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12725,7 +12695,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_double_index -->
+<!-- impl TagList::fn get_double_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12739,7 +12709,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_float -->
+<!-- impl TagList::fn get_float -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12751,7 +12721,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_float_index -->
+<!-- impl TagList::fn get_float_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12765,7 +12735,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_int -->
+<!-- impl TagList::fn get_int -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12777,7 +12747,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_int64_index -->
+<!-- impl TagList::fn get_int64_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12791,7 +12761,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_int_index -->
+<!-- impl TagList::fn get_int_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12805,7 +12775,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_pointer -->
+<!-- impl TagList::fn get_pointer -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12817,7 +12787,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_pointer_index -->
+<!-- impl TagList::fn get_pointer_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12831,7 +12801,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_sample -->
+<!-- impl TagList::fn get_sample -->
 Copies the first sample for the given tag in the taglist into the variable
 pointed to by `sample`. Free the sample with `gst_sample_unref` when it is
 no longer needed. You can retrieve the buffer from the sample using
@@ -12849,7 +12819,7 @@ address of a GstSample
 
 `true`, if a sample was returned, `false` if the tag didn't exist in
  the given list or if it was `None`.
-<!-- impl GstRc<TagListRef>::fn get_sample_index -->
+<!-- impl TagList::fn get_sample_index -->
 Gets the sample that is at the given index for the given tag in the given
 list and copies it into the variable pointed to by `sample`. Free the sample
 with `gst_sample_unref` when it is no longer needed. You can retrieve the
@@ -12869,13 +12839,13 @@ address of a GstSample
 
 `true`, if a sample was copied, `false` if the tag didn't exist in the
  given list or if it was `None`.
-<!-- impl GstRc<TagListRef>::fn get_scope -->
+<!-- impl TagList::fn get_scope -->
 Gets the scope of `self`.
 
 # Returns
 
 The scope of `self`
-<!-- impl GstRc<TagListRef>::fn get_string -->
+<!-- impl TagList::fn get_string -->
 Copies the contents for the given tag into the value, possibly merging
 multiple values into one if multiple values are associated with the tag.
 
@@ -12896,7 +12866,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_string_index -->
+<!-- impl TagList::fn get_string_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 
@@ -12916,7 +12886,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_tag_size -->
+<!-- impl TagList::fn get_tag_size -->
 Checks how many value are stored in this tag list for the given tag.
 ## `tag`
 the tag to query
@@ -12924,7 +12894,7 @@ the tag to query
 # Returns
 
 The number of tags stored
-<!-- impl GstRc<TagListRef>::fn get_uint -->
+<!-- impl TagList::fn get_uint -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12936,7 +12906,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_uint64 -->
+<!-- impl TagList::fn get_uint64 -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
@@ -12948,7 +12918,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_uint64_index -->
+<!-- impl TagList::fn get_uint64_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12962,7 +12932,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_uint_index -->
+<!-- impl TagList::fn get_uint_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12976,7 +12946,7 @@ location for the result
 
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn get_value_index -->
+<!-- impl TagList::fn get_value_index -->
 Gets the value that is at the given index for the given tag in the given
 list.
 ## `tag`
@@ -12989,19 +12959,19 @@ number of entry to read out
 The GValue for the specified
  entry or `None` if the tag wasn't available or the tag
  doesn't have as many entries
-<!-- impl GstRc<TagListRef>::fn insert -->
+<!-- impl TagList::fn insert -->
 Inserts the tags of the `from` list into the first list using the given mode.
 ## `from`
 list to merge from
 ## `mode`
 the mode to use
-<!-- impl GstRc<TagListRef>::fn is_empty -->
+<!-- impl TagList::fn is_empty -->
 Checks if the given taglist is empty.
 
 # Returns
 
 `true` if the taglist is empty, otherwise `false`.
-<!-- impl GstRc<TagListRef>::fn is_equal -->
+<!-- impl TagList::fn is_equal -->
 Checks if the two given taglists are equal.
 ## `list2`
 a `TagList`.
@@ -13009,7 +12979,7 @@ a `TagList`.
 # Returns
 
 `true` if the taglists are equal, otherwise `false`
-<!-- impl GstRc<TagListRef>::fn merge -->
+<!-- impl TagList::fn merge -->
 Merges the two given lists into a new list. If one of the lists is `None`, a
 copy of the other is returned. If both lists are `None`, `None` is returned.
 
@@ -13022,13 +12992,13 @@ the mode to use
 # Returns
 
 the new list
-<!-- impl GstRc<TagListRef>::fn n_tags -->
+<!-- impl TagList::fn n_tags -->
 Get the number of tags in `self`.
 
 # Returns
 
 The number of tags in `self`.
-<!-- impl GstRc<TagListRef>::fn nth_tag_name -->
+<!-- impl TagList::fn nth_tag_name -->
 Get the name of the tag in `self` at `index`.
 ## `index`
 the index
@@ -13036,7 +13006,7 @@ the index
 # Returns
 
 The name of the tag at `index`.
-<!-- impl GstRc<TagListRef>::fn peek_string_index -->
+<!-- impl TagList::fn peek_string_index -->
 Peeks at the value that is at the given index for the given tag in the given
 list.
 
@@ -13054,16 +13024,16 @@ location for the result
 
 `true`, if a value was set, `false` if the tag didn't exist in the
  given list.
-<!-- impl GstRc<TagListRef>::fn remove_tag -->
+<!-- impl TagList::fn remove_tag -->
 Removes the given tag from the taglist.
 ## `tag`
 tag to remove
-<!-- impl GstRc<TagListRef>::fn set_scope -->
+<!-- impl TagList::fn set_scope -->
 Sets the scope of `self` to `scope`. By default the scope
 of a taglist is stream scope.
 ## `scope`
 new scope for `self`
-<!-- impl GstRc<TagListRef>::fn to_string -->
+<!-- impl TagList::fn to_string -->
 Serializes a tag list to a string.
 
 # Returns
@@ -13071,7 +13041,7 @@ Serializes a tag list to a string.
 a newly-allocated string, or `None` in case of
  an error. The string must be freed with `g_free` when no longer
  needed.
-<!-- impl GstRc<TagListRef>::fn copy_value -->
+<!-- impl TagList::fn copy_value -->
 Copies the contents for the given tag into the value,
 merging multiple values into one if multiple values are associated
 with the tag.
@@ -13294,6 +13264,14 @@ specified by this interface. The default is `TagMergeMode::Keep`, which keeps
 the tags set with this interface and discards tags from events.
 ## `mode`
 The mode with which tags are added
+<!-- enum TaskState -->
+The different states a task can be in
+<!-- enum TaskState::variant Started -->
+the task is started and running
+<!-- enum TaskState::variant Stopped -->
+the task is stopped
+<!-- enum TaskState::variant Paused -->
+the task is paused
 <!-- struct Toc -->
 `Toc` functions are used to create/free `Toc` and `TocEntry` structures.
 Also they are used to convert `Toc` into `Structure` and vice versa.
@@ -13340,7 +13318,7 @@ alternative type entry) with track entries underneath that node; or even
 multiple top-level edition nodes (or some other alternative type entries)
 each with track entries underneath, in case the source file has extracted
 a track listing from different sources).
-<!-- impl GstRc<TocRef>::fn new -->
+<!-- impl Toc::fn new -->
 Create a new `Toc` structure.
 ## `scope`
 scope of this TOC
@@ -13349,11 +13327,11 @@ scope of this TOC
 
 newly allocated `Toc` structure, free it
  with `gst_toc_unref`.
-<!-- impl GstRc<TocRef>::fn append_entry -->
+<!-- impl Toc::fn append_entry -->
 Appends the `TocEntry` `entry` to `self`.
 ## `entry`
 A `TocEntry`
-<!-- impl GstRc<TocRef>::fn find_entry -->
+<!-- impl Toc::fn find_entry -->
 Find `TocEntry` with given `uid` in the `self`.
 ## `uid`
 UID to find `TocEntry` with.
@@ -13362,35 +13340,35 @@ UID to find `TocEntry` with.
 
 `TocEntry` with specified
 `uid` from the `self`, or `None` if not found.
-<!-- impl GstRc<TocRef>::fn get_entries -->
+<!-- impl Toc::fn get_entries -->
 Gets the list of `TocEntry` of `self`.
 
 # Returns
 
 A `glib::List` of `TocEntry` for `entry`
-<!-- impl GstRc<TocRef>::fn get_scope -->
+<!-- impl Toc::fn get_scope -->
 
 # Returns
 
 scope of `self`
-<!-- impl GstRc<TocRef>::fn get_tags -->
+<!-- impl Toc::fn get_tags -->
 Gets the tags for `self`.
 
 # Returns
 
 A `TagList` for `entry`
-<!-- impl GstRc<TocRef>::fn merge_tags -->
+<!-- impl Toc::fn merge_tags -->
 Merge `tags` into the existing tags of `self` using `mode`.
 ## `tags`
 A `TagList` or `None`
 ## `mode`
 A `TagMergeMode`
-<!-- impl GstRc<TocRef>::fn set_tags -->
+<!-- impl Toc::fn set_tags -->
 Set a `TagList` with tags for the complete `self`.
 ## `tags`
 A `TagList` or `None`
 <!-- struct TocEntry -->
-<!-- impl GstRc<TocEntryRef>::fn new -->
+<!-- impl TocEntry::fn new -->
 Create new `TocEntry` structure.
 ## `type_`
 entry type.
@@ -13400,16 +13378,16 @@ unique ID (UID) in the whole TOC.
 # Returns
 
 newly allocated `TocEntry` structure, free it with `gst_toc_entry_unref`.
-<!-- impl GstRc<TocEntryRef>::fn append_sub_entry -->
+<!-- impl TocEntry::fn append_sub_entry -->
 Appends the `TocEntry` `subentry` to `self`.
 ## `subentry`
 A `TocEntry`
-<!-- impl GstRc<TocEntryRef>::fn get_entry_type -->
+<!-- impl TocEntry::fn get_entry_type -->
 
 # Returns
 
 `self`'s entry type
-<!-- impl GstRc<TocEntryRef>::fn get_loop -->
+<!-- impl TocEntry::fn get_loop -->
 Get `loop_type` and `repeat_count` values from the `self` and write them into
 appropriate storages. Loops are e.g. used by sampled instruments. GStreamer
 is not automatically applying the loop. The application can process this
@@ -13425,13 +13403,13 @@ the storage for the repeat_count
 
 `true` if all non-`None` storage pointers were filled with appropriate
 values, `false` otherwise.
-<!-- impl GstRc<TocEntryRef>::fn get_parent -->
+<!-- impl TocEntry::fn get_parent -->
 Gets the parent `TocEntry` of `self`.
 
 # Returns
 
 The parent `TocEntry` of `self`
-<!-- impl GstRc<TocEntryRef>::fn get_start_stop_times -->
+<!-- impl TocEntry::fn get_start_stop_times -->
 Get `start` and `stop` values from the `self` and write them into appropriate
 storages.
 ## `start`
@@ -13445,59 +13423,59 @@ the storage for the stop value, leave
 
 `true` if all non-`None` storage pointers were filled with appropriate
 values, `false` otherwise.
-<!-- impl GstRc<TocEntryRef>::fn get_sub_entries -->
+<!-- impl TocEntry::fn get_sub_entries -->
 Gets the sub-entries of `self`.
 
 # Returns
 
 A `glib::List` of `TocEntry` of `self`
-<!-- impl GstRc<TocEntryRef>::fn get_tags -->
+<!-- impl TocEntry::fn get_tags -->
 Gets the tags for `self`.
 
 # Returns
 
 A `TagList` for `self`
-<!-- impl GstRc<TocEntryRef>::fn get_toc -->
+<!-- impl TocEntry::fn get_toc -->
 Gets the parent `Toc` of `self`.
 
 # Returns
 
 The parent `Toc` of `self`
-<!-- impl GstRc<TocEntryRef>::fn get_uid -->
+<!-- impl TocEntry::fn get_uid -->
 Gets the UID of `self`.
 
 # Returns
 
 The UID of `self`
-<!-- impl GstRc<TocEntryRef>::fn is_alternative -->
+<!-- impl TocEntry::fn is_alternative -->
 
 # Returns
 
 `true` if `self`'s type is an alternative type, otherwise `false`
-<!-- impl GstRc<TocEntryRef>::fn is_sequence -->
+<!-- impl TocEntry::fn is_sequence -->
 
 # Returns
 
 `true` if `self`'s type is a sequence type, otherwise `false`
-<!-- impl GstRc<TocEntryRef>::fn merge_tags -->
+<!-- impl TocEntry::fn merge_tags -->
 Merge `tags` into the existing tags of `self` using `mode`.
 ## `tags`
 A `TagList` or `None`
 ## `mode`
 A `TagMergeMode`
-<!-- impl GstRc<TocEntryRef>::fn set_loop -->
+<!-- impl TocEntry::fn set_loop -->
 Set `loop_type` and `repeat_count` values for the `self`.
 ## `loop_type`
 loop_type value to set.
 ## `repeat_count`
 repeat_count value to set.
-<!-- impl GstRc<TocEntryRef>::fn set_start_stop_times -->
+<!-- impl TocEntry::fn set_start_stop_times -->
 Set `start` and `stop` values for the `self`.
 ## `start`
 start value to set.
 ## `stop`
 stop value to set.
-<!-- impl GstRc<TocEntryRef>::fn set_tags -->
+<!-- impl TocEntry::fn set_tags -->
 Set a `TagList` with tags for the complete `self`.
 ## `tags`
 A `TagList` or `None`
