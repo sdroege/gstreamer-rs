@@ -20,6 +20,7 @@ generate = [
     "GstPbutils.EncodingAudioProfile",
     "GstPbutils.EncodingVideoProfile",
     "GstPbutils.EncodingContainerProfile",
+    "GstPbutils.EncodingTarget",
 ]
 
 manual = [
