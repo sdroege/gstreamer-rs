@@ -14,12 +14,12 @@ build = "build.rs"
 
 [dependencies]
 bitflags = "1.0"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gstreamer-audio-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
+glib-sys = "0.5"
+gobject-sys = "0.5"
+gstreamer-sys = { version = "0.3", features = ["v1_8"] }
+gstreamer-audio-sys = { version = "0.3", features = ["v1_8"] }
+glib = "0.4"
+gstreamer = { version = "0.9", path = "../gstreamer" }
 array-init = "0.0"
 
 [build-dependencies.rustdoc-stripper]

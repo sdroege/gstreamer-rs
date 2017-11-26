@@ -15,11 +15,11 @@ build = "build.rs"
 [dependencies]
 bitflags = "1.0"
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-player-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_12"] }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer", features = ["v1_12"] }
+glib-sys = "0.5"
+gobject-sys = "0.5"
+gstreamer-player-sys = { version = "0.3", features = ["v1_12"] }
+glib = "0.4"
+gstreamer = { version = "0.9", path = "../gstreamer", features = ["v1_12"] }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"

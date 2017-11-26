@@ -4,13 +4,13 @@ version = "0.9.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
-glib = { version = "0.3", git = "https://github.com/gtk-rs/glib" }
-gdk = { version = "0.6", git = "https://github.com/gtk-rs/gdk", optional = true }
-gtk = { version = "0.2", git = "https://github.com/gtk-rs/gtk", features = ["v3_10"], optional = true }
-gstreamer = { path = "../gstreamer" }
-gstreamer-audio = { path = "../gstreamer-audio" }
-gstreamer-video = { path = "../gstreamer-video" }
-gstreamer-app = { path = "../gstreamer-app" }
+glib = "0.4"
+gdk = { version = "0.7", optional = true }
+gtk = { version = "0.3", features = ["v3_10"], optional = true }
+gstreamer = { version = "0.9", path = "../gstreamer" }
+gstreamer-audio = { version = "0.9", path = "../gstreamer-audio" }
+gstreamer-video = { version = "0.9", path = "../gstreamer-video" }
+gstreamer-app = { version = "0.9", path = "../gstreamer-app" }
 send-cell = "0.1"
 byte-slice-cast = "0.1"
 
