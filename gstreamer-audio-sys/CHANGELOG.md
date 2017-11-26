@@ -5,6 +5,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.3.0] - 2017-11-26
+### Added
+- GstMpegTs bindings
+
+### Changed
+- GstDebugColorFlags from an enum to a bitfield
+- Updated to bitflags 1.0
+- Added support for the "dox" feature to generate documentation for all
+  possible versions
+- Depend on glib-sys/gobject-sys 0.5
+
+### Fixes
+- GstStackTraceFlags, gst_flow_combiner_ref/unref are only available since
+  1.12 and 1.12.1 respectively
+- All C enums are represented as integers + constants now to prevent undefined
+  behaviour when out-of-range values are received
+
 ## [0.2.1] - 2017-09-10
 ### Changed
 - Add README.md to all crates directly
