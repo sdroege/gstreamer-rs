@@ -316,6 +316,14 @@ impl TagListRef {
     pub fn to_string(&self) -> String {
         unsafe { from_glib_full(ffi::gst_tag_list_to_string(self.as_ptr())) }
     }
+
+    pub fn insert(&mut self, other: &TagListRef, mode: TagMergeMode) {
+        unsafe { ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib()) }
+    }
+
+    pub fn merge(&self, other: &TagListRef, mode: TagMergeMode) -> TagList {
+        unsafe { from_glib_full(ffi::gst_tag_list_merge(self.as_ptr(), other.as_ptr(), mode.to_glib())) }
+    }
 }
 
 impl fmt::Debug for TagListRef {
