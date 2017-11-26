@@ -17,7 +17,7 @@ use std::str;
 use glib;
 use glib::translate::{from_glib, FromGlib, FromGlibPtrNone, ToGlib, ToGlibPtr, ToGlibPtrMut};
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum AudioEndianness {
     Unknown,
     LittleEndian = 1234,

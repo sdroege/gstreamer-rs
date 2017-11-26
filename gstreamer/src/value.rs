@@ -663,6 +663,7 @@ impl<'a> glib::types::StaticType for List<'a> {
     }
 }
 
+#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum ValueOrder {
     LessThan,
     Equal,

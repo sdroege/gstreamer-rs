@@ -14,7 +14,7 @@ use std::str;
 
 use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum VideoEndianness {
     Unknown,
     LittleEndian = 1234,
