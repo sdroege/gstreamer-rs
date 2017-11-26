@@ -120,7 +120,8 @@ pub use device_provider::DeviceProviderExtManual;
 pub use parse_context::ParseContext;
 #[cfg(any(feature = "futures", feature = "dox"))]
 pub use bus::BusStream;
-pub use enums::{StateChangeError, StateChangeSuccess};
+pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
+                StateChangeError, StateChangeSuccess};
 pub use clock_time::ClockTime;
 pub use format::FormatValue;
 
