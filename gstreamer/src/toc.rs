@@ -82,7 +82,7 @@ impl TocRef {
 
     pub fn merge_tags(&mut self, tag_list: TagList, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.into_ptr(), mode.to_glib());
+            ffi::gst_toc_merge_tags(self.as_mut_ptr(), tag_list.as_mut_ptr(), mode.to_glib());
         }
     }
 
