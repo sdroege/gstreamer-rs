@@ -144,7 +144,7 @@ fn main() {
 
     let data: Arc<Mutex<CustomData>> = Arc::new(Mutex::new(CustomData::new(&appsrc, &appsink)));
 
-    let data_clone = data.clone();
+    let data_clone = Arc::clone(&data);
     appsrc.connect_need_data(move |_, _size| {
         let data = &data_clone;
         let mut d = data.lock().unwrap();
@@ -152,7 +152,7 @@ fn main() {
         if d.source_id.is_none() {
             println!("start feeding");
 
-            let data_clone = data.clone();
+            let data_clone = Arc::clone(data);
             d.source_id = Some(glib::source::idle_add(move || {
                 let data = &data_clone;
 
@@ -202,7 +202,7 @@ fn main() {
         }
     });
 
-    let data_clone = data.clone();
+    let data_clone = Arc::clone(&data);
     appsrc.connect_enough_data(move |_| {
         let data = &data_clone;
 
@@ -217,7 +217,7 @@ fn main() {
     appsink.set_emit_signals(true);
     appsink.set_caps(&audio_caps);
 
-    let data_clone = data.clone();
+    let data_clone = Arc::clone(&data);
     appsink.connect_new_sample(move |_| {
         let appsink = {
             let data = &data_clone.lock().unwrap();

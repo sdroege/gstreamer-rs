@@ -142,7 +142,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                 Err(ErrorMessage {
                     src: msg.get_src()
                         .map(|s| s.get_path_string())
-                        .unwrap_or(String::from("None")),
+                        .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
                     debug: err.get_debug(),
                     cause: err.get_error(),

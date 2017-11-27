@@ -16,7 +16,7 @@ fn example_main() {
         args[1].as_ref()
     } else {
         println!("Usage: toc file_path");
-        std::process::exit(-1);
+        std::process::exit(-1)
     };
 
     let pipeline = gst::Pipeline::new(None);
