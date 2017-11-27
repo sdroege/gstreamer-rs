@@ -75,13 +75,13 @@ fn example_main() {
         args[1].as_ref()
     } else {
         println!("Usage: player uri");
-        std::process::exit(-1);
+        std::process::exit(-1)
     };
 
     #[cfg(not(feature = "gst-player"))]
     {
         eprintln!("Feature gst-player is required. Please rebuild with --features gst-player");
-        std::process::exit(-1);
+        std::process::exit(-1)
     }
 
     #[cfg(feature = "gst-player")]

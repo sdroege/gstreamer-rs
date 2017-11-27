@@ -16,7 +16,7 @@ fn example_main() {
         args[1].as_ref()
     } else {
         println!("Usage: playbin uri");
-        std::process::exit(-1);
+        std::process::exit(-1)
     };
 
     let playbin = gst::ElementFactory::make("playbin", None).unwrap();

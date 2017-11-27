@@ -39,7 +39,7 @@ fn example_main() -> Result<(), Error> {
         args[1].as_ref()
     } else {
         println!("Usage: decodebin file_path");
-        std::process::exit(-1);
+        std::process::exit(-1)
     };
 
     let pipeline = gst::Pipeline::new(None);
@@ -177,7 +177,7 @@ fn example_main() -> Result<(), Error> {
                             ErrorMessage {
                                 src: msg.get_src()
                                     .map(|s| s.get_path_string())
-                                    .unwrap_or(String::from("None")),
+                                    .unwrap_or_else(|| String::from("None")),
                                 error: err.get_error().description().into(),
                                 debug: err.get_debug(),
                                 cause: err.get_error(),
@@ -190,7 +190,7 @@ fn example_main() -> Result<(), Error> {
                     Err(ErrorMessage {
                         src: msg.get_src()
                             .map(|s| s.get_path_string())
-                            .unwrap_or(String::from("None")),
+                            .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().description().into(),
                         debug: err.get_debug(),
                         cause: err.get_error(),
