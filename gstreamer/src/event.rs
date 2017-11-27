@@ -139,9 +139,9 @@ impl GstRc<EventRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_stream_collection<'a>(
-        stream_collection: &'a ::StreamCollection,
-    ) -> StreamCollectionBuilder<'a> {
+    pub fn new_stream_collection(
+        stream_collection: &::StreamCollection,
+    ) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
     }
