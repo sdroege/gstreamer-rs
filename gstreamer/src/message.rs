@@ -310,17 +310,17 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_stream_collection<'a>(
-        collection: &'a ::StreamCollection,
-    ) -> StreamCollectionBuilder<'a> {
+    pub fn new_stream_collection(
+        collection: &::StreamCollection,
+    ) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_streams_selected<'a>(
-        collection: &'a ::StreamCollection,
-    ) -> StreamsSelectedBuilder<'a> {
+    pub fn new_streams_selected(
+        collection: &::StreamCollection,
+    ) -> StreamsSelectedBuilder {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
