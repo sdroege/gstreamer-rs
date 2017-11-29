@@ -12,6 +12,7 @@ use structure::*;
 
 use std::ptr;
 use std::mem;
+use std::cmp;
 use std::ffi::CStr;
 
 use glib;
@@ -20,6 +21,8 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibP
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;
+
+use EventType;
 
 #[repr(C)]
 pub struct EventRef(ffi::GstEvent);
@@ -31,6 +34,60 @@ unsafe impl Send for EventRef {}
 
 unsafe impl MiniObject for EventRef {
     type GstType = ffi::GstEvent;
+}
+
+impl EventType {
+    pub fn is_upstream(&self) -> bool {
+        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_UPSTREAM.bits()) != 0
+    }
+
+    pub fn is_downstream(&self) -> bool {
+        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_DOWNSTREAM.bits()) != 0
+    }
+
+    pub fn is_serialized(&self) -> bool {
+        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_SERIALIZED.bits()) != 0
+    }
+
+    pub fn is_sticky(&self) -> bool {
+        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_STICKY.bits()) != 0
+    }
+
+    pub fn is_sticky_multi(&self) -> bool {
+        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_STICKY_MULTI.bits()) != 0
+    }
+}
+
+impl PartialOrd for EventType {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        if !self.is_serialized() || !other.is_serialized() {
+            return None;
+        }
+
+        let v1 = self.to_glib() as u32;
+        let v2 = other.to_glib() as u32;
+
+        let stream_start = ffi::GST_EVENT_STREAM_START as u32;
+        let segment = ffi::GST_EVENT_SEGMENT as u32;
+        let eos = ffi::GST_EVENT_EOS as u32;
+
+        // Strictly ordered range between stream_start and segment,
+        // and EOS is bigger than everything else
+        if v1 >= stream_start && v1 <= segment || v2 >= stream_start && v2 <= segment {
+            Some(v1.cmp(&v2))
+        // If one is EOS, the other is definitely less or equal
+        } else if v1 == eos || v2 == eos {
+            if v1 == v2 {
+                Some(cmp::Ordering::Equal)
+            } else if v1 == eos {
+                Some(cmp::Ordering::Greater)
+            } else {
+                Some(cmp::Ordering::Less)
+            }
+        } else {
+            None
+        }
+    }
 }
 
 impl EventRef {
@@ -51,23 +108,27 @@ impl EventRef {
     }
 
     pub fn is_upstream(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_EVENT_TYPE_UPSTREAM.bits()) != 0 }
+        self.get_type().is_upstream()
     }
 
     pub fn is_downstream(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_EVENT_TYPE_DOWNSTREAM.bits()) != 0 }
+        self.get_type().is_downstream()
     }
 
     pub fn is_serialized(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_EVENT_TYPE_SERIALIZED.bits()) != 0 }
+        self.get_type().is_serialized()
     }
 
     pub fn is_sticky(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_EVENT_TYPE_STICKY.bits()) != 0 }
+        self.get_type().is_sticky()
     }
 
     pub fn is_sticky_multi(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_EVENT_TYPE_STICKY_MULTI.bits()) != 0 }
+        self.get_type().is_sticky_multi()
+    }
+
+    pub fn get_type(&self) -> EventType {
+        unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
     pub fn view(&self) -> EventView {
