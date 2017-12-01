@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use std::fmt;
 use std::ffi::CStr;
 
 use ffi;
@@ -73,6 +74,15 @@ impl ContextRef {
 impl StaticType for ContextRef {
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_context_get_type()) }
+    }
+}
+
+impl fmt::Debug for ContextRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Context")
+            .field("type", &self.get_context_type())
+            .field("structure", &self.get_structure())
+            .finish()
     }
 }
 

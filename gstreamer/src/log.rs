@@ -121,7 +121,9 @@ unsafe impl Send for DebugCategory {}
 
 impl fmt::Debug for DebugCategory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(self.get_name())
+        f.debug_tuple("DebugCategory")
+            .field(&self.get_name())
+            .finish()
     }
 }
 

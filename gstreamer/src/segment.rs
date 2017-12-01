@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use Format;
+use ClockTime;
 use SeekFlags;
 use SeekType;
 use ffi;
@@ -16,6 +17,7 @@ use gobject_ffi;
 use glib;
 use std::mem;
 use std::ptr;
+use std::fmt;
 
 pub struct Segment(ffi::GstSegment);
 
@@ -233,11 +235,11 @@ impl Segment {
         self.0.applied_rate = applied_rate;
     }
 
-    pub fn get_format(&self) -> ::Format {
+    pub fn get_format(&self) -> Format {
         from_glib(self.0.format)
     }
 
-    pub fn set_format(&mut self, format: ::Format) {
+    pub fn set_format(&mut self, format: Format) {
         self.0.format = format.to_glib();
     }
 
@@ -312,6 +314,49 @@ unsafe impl Send for Segment {}
 impl Clone for Segment {
     fn clone(&self) -> Self {
         unsafe { Segment(ptr::read(&self.0)) }
+    }
+}
+
+impl fmt::Debug for Segment {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.get_format() {
+            Format::Undefined => {
+                f.debug_struct("Segment")
+                    .field("format", &Format::Undefined)
+                    .finish()
+            },
+            Format::Time => {
+                f.debug_struct("Segment")
+                    .field("format", &Format::Time)
+                    .field("start", &ClockTime::from(self.get_start()))
+                    .field("offset", &ClockTime::from(self.get_offset()))
+                    .field("stop", &ClockTime::from(self.get_stop()))
+                    .field("rate", &self.get_rate())
+                    .field("applied_rate", &self.get_applied_rate())
+                    .field("flags", &self.get_flags())
+                    .field("time", &ClockTime::from(self.get_time()))
+                    .field("base", &ClockTime::from(self.get_base()))
+                    .field("position", &ClockTime::from(self.get_position()))
+                    .field("duration", &ClockTime::from(self.get_duration()))
+                    .finish()
+            },
+            _ => {
+                f.debug_struct("Segment")
+                    .field("format", &self.get_format())
+                    .field("start", &self.get_start())
+                    .field("offset", &self.get_offset())
+                    .field("stop", &self.get_stop())
+                    .field("rate", &self.get_rate())
+                    .field("applied_rate", &self.get_applied_rate())
+                    .field("flags", &self.get_flags())
+                    .field("time", &self.get_time())
+                    .field("base", &self.get_base())
+                    .field("position", &self.get_position())
+                    .field("duration", &self.get_duration())
+                    .finish()
+            }
+
+        }
     }
 }
 

@@ -10,6 +10,7 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full};
+use std::fmt;
 
 use miniobject::*;
 use Buffer;
@@ -91,6 +92,20 @@ impl ToOwned for BufferListRef {
             from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
                 as *mut _)
         }
+    }
+}
+
+impl fmt::Debug for BufferListRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let size = self.iter().map(|b| b.get_size()).sum::<usize>();
+        let (pts, dts) = self.get(0).map(|b| (b.get_pts(), b.get_dts())).unwrap_or((::ClockTime::none(), ::ClockTime::none()));
+
+        f.debug_struct("BufferList")
+            .field("buffers", &self.len())
+            .field("pts", &pts)
+            .field("dts", &dts)
+            .field("size", &size)
+            .finish()
     }
 }
 
