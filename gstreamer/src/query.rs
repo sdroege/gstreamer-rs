@@ -186,7 +186,7 @@ impl glib::types::StaticType for QueryRef {
 impl fmt::Debug for QueryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Query")
-            .field("type", & unsafe {
+            .field("type", &unsafe {
                 let type_ = ffi::gst_query_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })

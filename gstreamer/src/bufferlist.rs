@@ -98,7 +98,9 @@ impl ToOwned for BufferListRef {
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let size = self.iter().map(|b| b.get_size()).sum::<usize>();
-        let (pts, dts) = self.get(0).map(|b| (b.get_pts(), b.get_dts())).unwrap_or((::ClockTime::none(), ::ClockTime::none()));
+        let (pts, dts) = self.get(0)
+            .map(|b| (b.get_pts(), b.get_dts()))
+            .unwrap_or((::ClockTime::none(), ::ClockTime::none()));
 
         f.debug_struct("BufferList")
             .field("buffers", &self.len())

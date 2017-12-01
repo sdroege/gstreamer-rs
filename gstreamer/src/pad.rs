@@ -165,8 +165,7 @@ pub trait PadExtManual {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32)
-            -> Result<::Buffer, ::FlowReturn>
+        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
             + Send
             + Sync
             + 'static;
@@ -510,8 +509,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32)
-            -> Result<::Buffer, ::FlowReturn>
+        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
             + Send
             + Sync
             + 'static,
@@ -519,8 +517,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, u64, u32)
-                    -> Result<::Buffer, ::FlowReturn>
+                Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
                     + Send
                     + Sync
                     + 'static,
@@ -925,8 +922,7 @@ unsafe extern "C" fn trampoline_getrange_function(
 ) -> ffi::GstFlowReturn {
     let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32)
-        -> Result<::Buffer, ::FlowReturn>
+    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
                          + Send
                          + Sync
                          + 'static) = transmute((*pad).getrangedata);

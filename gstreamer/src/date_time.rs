@@ -11,6 +11,10 @@ use std::fmt;
 
 impl fmt::Display for DateTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(self.to_iso8601_string().unwrap_or(String::from("None")).as_str())
+        f.write_str(
+            self.to_iso8601_string()
+                .unwrap_or(String::from("None"))
+                .as_str(),
+        )
     }
 }

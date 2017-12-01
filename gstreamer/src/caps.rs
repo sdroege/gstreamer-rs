@@ -345,9 +345,7 @@ define_iter!(IterMut, &'a mut CapsRef, &'a mut StructureRef);
 
 impl fmt::Debug for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Caps")
-            .field(&self.to_string())
-            .finish()
+        f.debug_tuple("Caps").field(&self.to_string()).finish()
     }
 }
 

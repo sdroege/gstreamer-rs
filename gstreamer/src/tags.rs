@@ -322,15 +322,19 @@ impl TagListRef {
     }
 
     pub fn merge(&self, other: &TagListRef, mode: TagMergeMode) -> TagList {
-        unsafe { from_glib_full(ffi::gst_tag_list_merge(self.as_ptr(), other.as_ptr(), mode.to_glib())) }
+        unsafe {
+            from_glib_full(ffi::gst_tag_list_merge(
+                self.as_ptr(),
+                other.as_ptr(),
+                mode.to_glib(),
+            ))
+        }
     }
 }
 
 impl fmt::Debug for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("TagList")
-            .field(&self.to_string())
-            .finish()
+        f.debug_tuple("TagList").field(&self.to_string()).finish()
     }
 }
 

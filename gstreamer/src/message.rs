@@ -316,17 +316,13 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_stream_collection(
-        collection: &::StreamCollection,
-    ) -> StreamCollectionBuilder {
+    pub fn new_stream_collection(collection: &::StreamCollection) -> StreamCollectionBuilder {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_streams_selected(
-        collection: &::StreamCollection,
-    ) -> StreamsSelectedBuilder {
+    pub fn new_streams_selected(collection: &::StreamCollection) -> StreamsSelectedBuilder {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
@@ -351,7 +347,7 @@ impl glib::types::StaticType for MessageRef {
 impl fmt::Debug for MessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Message")
-            .field("type", & unsafe {
+            .field("type", &unsafe {
                 let type_ = ffi::gst_message_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })

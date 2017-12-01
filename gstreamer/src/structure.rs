@@ -116,9 +116,7 @@ impl Drop for Structure {
 
 impl fmt::Debug for Structure {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Structure")
-            .field(&self.to_string())
-            .finish()
+        f.debug_tuple("Structure").field(&self.to_string()).finish()
     }
 }
 
