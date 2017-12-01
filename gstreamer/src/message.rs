@@ -11,9 +11,11 @@ use Object;
 use miniobject::*;
 use structure::*;
 use TagList;
+use GstObjectExt;
 
 use std::ptr;
 use std::mem;
+use std::fmt;
 use std::ffi::CStr;
 
 use glib;
@@ -343,6 +345,20 @@ impl GstRc<MessageRef> {
 impl glib::types::StaticType for MessageRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_message_get_type()) }
+    }
+}
+
+impl fmt::Debug for MessageRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Message")
+            .field("type", & unsafe {
+                let type_ = ffi::gst_message_type_get_name((*self.as_ptr()).type_);
+                CStr::from_ptr(type_).to_str().unwrap()
+            })
+            .field("seqnum", &self.get_seqnum())
+            .field("src", &self.get_src().map(|s| s.get_name()))
+            .field("structure", &self.get_structure())
+            .finish()
     }
 }
 

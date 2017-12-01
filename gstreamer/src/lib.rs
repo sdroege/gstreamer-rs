@@ -106,6 +106,7 @@ mod parse_context;
 mod enums;
 mod clock_time;
 mod format;
+mod date_time;
 pub use object::GstObjectExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
 pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,

@@ -328,6 +328,14 @@ impl TagListRef {
 
 impl fmt::Debug for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_tuple("TagList")
+            .field(&self.to_string())
+            .finish()
+    }
+}
+
+impl fmt::Display for TagListRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(&self.to_string())
     }
 }

@@ -13,6 +13,7 @@ use structure::*;
 use std::ptr;
 use std::mem;
 use std::cmp;
+use std::fmt;
 use std::ffi::CStr;
 
 use glib;
@@ -369,6 +370,19 @@ impl GstRc<EventRef> {
 impl glib::types::StaticType for EventRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_event_get_type()) }
+    }
+}
+
+impl fmt::Debug for EventRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Event")
+            .field("type", & unsafe {
+                let type_ = ffi::gst_event_type_get_name((*self.as_ptr()).type_);
+                CStr::from_ptr(type_).to_str().unwrap()
+            })
+            .field("seqnum", &self.get_seqnum())
+            .field("structure", &self.get_structure())
+            .finish()
     }
 }
 

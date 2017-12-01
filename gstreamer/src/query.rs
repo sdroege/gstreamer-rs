@@ -12,6 +12,7 @@ use structure::*;
 
 use std::ptr;
 use std::mem;
+use std::fmt;
 use std::ffi::CStr;
 use std::ops::Deref;
 
@@ -179,6 +180,18 @@ impl QueryRef {
 impl glib::types::StaticType for QueryRef {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_query_get_type()) }
+    }
+}
+
+impl fmt::Debug for QueryRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Query")
+            .field("type", & unsafe {
+                let type_ = ffi::gst_query_type_get_name((*self.as_ptr()).type_);
+                CStr::from_ptr(type_).to_str().unwrap()
+            })
+            .field("structure", &self.get_structure())
+            .finish()
     }
 }
 
