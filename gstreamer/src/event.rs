@@ -101,14 +101,10 @@ impl EventRef {
     }
 
 
-    pub fn get_structure(&self) -> Option<&StructureRef> {
+    pub fn get_structure(&self) -> &StructureRef {
         unsafe {
             let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
-            if structure.is_null() {
-                None
-            } else {
-                Some(StructureRef::from_glib_borrow(structure))
-            }
+            StructureRef::from_glib_borrow(structure)
         }
     }
 

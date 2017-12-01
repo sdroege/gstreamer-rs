@@ -45,14 +45,10 @@ impl MessageRef {
         unsafe { ffi::gst_message_get_seqnum(self.as_mut_ptr()) }
     }
 
-    pub fn get_structure(&self) -> Option<&StructureRef> {
+    pub fn get_structure(&self) -> &StructureRef {
         unsafe {
             let structure = ffi::gst_message_get_structure(self.as_mut_ptr());
-            if structure.is_null() {
-                None
-            } else {
-                Some(StructureRef::from_glib_borrow(structure))
-            }
+            StructureRef::from_glib_borrow(structure)
         }
     }
 
