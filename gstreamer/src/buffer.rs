@@ -372,9 +372,9 @@ impl ToOwned for BufferRef {
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Buffer")
-            .field("pts", &self.get_pts())
-            .field("dts", &self.get_dts())
-            .field("duration", &self.get_duration())
+            .field("pts", &self.get_pts().to_string())
+            .field("dts", &self.get_dts().to_string())
+            .field("duration", &self.get_duration().to_string())
             .field("size", &self.get_size())
             .field("offset", &self.get_offset())
             .field("offset_end", &self.get_offset_end())

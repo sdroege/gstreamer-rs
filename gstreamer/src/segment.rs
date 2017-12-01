@@ -328,16 +328,16 @@ impl fmt::Debug for Segment {
             Format::Time => {
                 f.debug_struct("Segment")
                     .field("format", &Format::Time)
-                    .field("start", &ClockTime::from(self.get_start()))
-                    .field("offset", &ClockTime::from(self.get_offset()))
-                    .field("stop", &ClockTime::from(self.get_stop()))
+                    .field("start", &ClockTime::from(self.get_start()).to_string())
+                    .field("offset", &ClockTime::from(self.get_offset()).to_string())
+                    .field("stop", &ClockTime::from(self.get_stop()).to_string())
                     .field("rate", &self.get_rate())
                     .field("applied_rate", &self.get_applied_rate())
                     .field("flags", &self.get_flags())
-                    .field("time", &ClockTime::from(self.get_time()))
-                    .field("base", &ClockTime::from(self.get_base()))
-                    .field("position", &ClockTime::from(self.get_position()))
-                    .field("duration", &ClockTime::from(self.get_duration()))
+                    .field("time", &ClockTime::from(self.get_time()).to_string())
+                    .field("base", &ClockTime::from(self.get_base()).to_string())
+                    .field("position", &ClockTime::from(self.get_position()).to_string())
+                    .field("duration", &ClockTime::from(self.get_duration()).to_string())
                     .finish()
             },
             _ => {
