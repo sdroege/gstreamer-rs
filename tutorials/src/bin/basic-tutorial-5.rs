@@ -238,7 +238,7 @@ mod tutorial5 {
             .unwrap()
             .connect_message(move |_, msg| match msg.view() {
                 gst::MessageView::Application(_) => {
-                    if msg.get_structure().get_name() == "tags-changed" {
+                    if msg.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
                         analyze_streams(&pipeline, &textbuf);
                     }
                 }
