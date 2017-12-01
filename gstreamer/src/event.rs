@@ -372,6 +372,17 @@ impl glib::types::StaticType for EventRef {
     }
 }
 
+impl ToOwned for EventRef {
+    type Owned = GstRc<EventRef>;
+
+    fn to_owned(&self) -> GstRc<EventRef> {
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
+        }
+    }
+}
+
 pub enum EventView<'a> {
     FlushStart(FlushStart<'a>),
     FlushStop(FlushStop<'a>),

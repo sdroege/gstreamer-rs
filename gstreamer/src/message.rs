@@ -346,6 +346,17 @@ impl glib::types::StaticType for MessageRef {
     }
 }
 
+impl ToOwned for MessageRef {
+    type Owned = GstRc<MessageRef>;
+
+    fn to_owned(&self) -> GstRc<MessageRef> {
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
+        }
+    }
+}
+
 pub enum MessageView<'a> {
     Eos(Eos<'a>),
     Error(Error<'a>),
