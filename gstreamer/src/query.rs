@@ -182,6 +182,17 @@ impl glib::types::StaticType for QueryRef {
     }
 }
 
+impl ToOwned for QueryRef {
+    type Owned = GstRc<QueryRef>;
+
+    fn to_owned(&self) -> GstRc<QueryRef> {
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
+                as *mut _)
+        }
+    }
+}
+
 pub enum QueryView<T> {
     Position(Position<T>),
     Duration(Duration<T>),
