@@ -102,8 +102,8 @@ impl fmt::Debug for BufferListRef {
 
         f.debug_struct("BufferList")
             .field("buffers", &self.len())
-            .field("pts", &pts)
-            .field("dts", &dts)
+            .field("pts", &pts.to_string())
+            .field("dts", &dts.to_string())
             .field("size", &size)
             .finish()
     }
