@@ -332,6 +332,15 @@ impl BufferRef {
         self.0.dts = dts.to_glib();
     }
 
+    pub fn get_dts_or_pts(&self) -> ClockTime {
+        let val = self.get_dts();
+        if val.is_none() {
+            self.get_pts()
+        } else {
+            val
+        }
+    }
+
     pub fn get_duration(&self) -> ClockTime {
         from_glib(self.0.duration)
     }
