@@ -618,11 +618,6 @@ trait = false
         [object.function.return]
         bool_return_is_error = "Failed to add plugin"
 
-    [[object.function]]
-    name = "scan_path"
-        [object.function.return]
-        bool_return_is_error = "Failed to scan path"
-
 [[object]]
 name = "Gst.*"
 status = "generate"

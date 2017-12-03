@@ -113,9 +113,9 @@ impl Registry {
         }
     }
 
-    pub fn scan_path<P: AsRef<std::path::Path>>(&self, path: P) -> Result<(), glib::error::BoolError> {
+    pub fn scan_path<P: AsRef<std::path::Path>>(&self, path: P) -> bool {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_registry_scan_path(self.to_glib_none().0, path.as_ref().to_glib_none().0), "Failed to scan path")
+            from_glib(ffi::gst_registry_scan_path(self.to_glib_none().0, path.as_ref().to_glib_none().0))
         }
     }
 
