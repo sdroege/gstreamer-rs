@@ -100,6 +100,9 @@ impl EventRef {
         unsafe { ffi::gst_event_get_running_time_offset(self.as_mut_ptr()) }
     }
 
+    pub fn set_running_time_offset(&mut self, offset: i64) {
+        unsafe { ffi::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
+    }
 
     pub fn get_structure(&self) -> Option<&StructureRef> {
         unsafe {
