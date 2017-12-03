@@ -8,6 +8,7 @@ use ffi;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std;
 use std::mem;
 use std::ptr;
 
@@ -40,7 +41,7 @@ impl Plugin {
         }
     }
 
-    pub fn get_filename(&self) -> Option<String> {
+    pub fn get_filename(&self) -> Option<std::path::PathBuf> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_filename(self.to_glib_none().0))
         }
@@ -114,11 +115,11 @@ impl Plugin {
         }
     }
 
-    pub fn load_file(filename: &str) -> Result<Plugin, Error> {
+    pub fn load_file<P: AsRef<std::path::Path>>(filename: P) -> Result<Plugin, Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gst_plugin_load_file(filename.to_glib_none().0, &mut error);
+            let ret = ffi::gst_plugin_load_file(filename.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }

@@ -13,6 +13,7 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
+use std;
 use std::mem;
 use std::ptr;
 
@@ -24,17 +25,17 @@ pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -
     }
 }
 
-pub fn debug_bin_to_dot_file<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails, file_name: &str) {
+pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(bin: &P, details: DebugGraphDetails, file_name: Q) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_bin_to_dot_file(bin.to_glib_none().0, details.to_glib(), file_name.to_glib_none().0);
+        ffi::gst_debug_bin_to_dot_file(bin.to_glib_none().0, details.to_glib(), file_name.as_ref().to_glib_none().0);
     }
 }
 
-pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails, file_name: &str) {
+pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(bin: &P, details: DebugGraphDetails, file_name: Q) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gst_debug_bin_to_dot_file_with_ts(bin.to_glib_none().0, details.to_glib(), file_name.to_glib_none().0);
+        ffi::gst_debug_bin_to_dot_file_with_ts(bin.to_glib_none().0, details.to_glib(), file_name.as_ref().to_glib_none().0);
     }
 }
 

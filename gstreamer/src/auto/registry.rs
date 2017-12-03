@@ -12,6 +12,7 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -112,9 +113,9 @@ impl Registry {
         }
     }
 
-    pub fn scan_path(&self, path: &str) -> Result<(), glib::error::BoolError> {
+    pub fn scan_path<P: AsRef<std::path::Path>>(&self, path: P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_registry_scan_path(self.to_glib_none().0, path.to_glib_none().0), "Failed to scan path")
+            glib::error::BoolError::from_glib(ffi::gst_registry_scan_path(self.to_glib_none().0, path.as_ref().to_glib_none().0), "Failed to scan path")
         }
     }
 
