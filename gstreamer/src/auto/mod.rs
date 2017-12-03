@@ -60,6 +60,10 @@ pub use self::pipeline::PipelineExt;
 mod plugin;
 pub use self::plugin::Plugin;
 
+mod plugin_feature;
+pub use self::plugin_feature::PluginFeature;
+pub use self::plugin_feature::PluginFeatureExt;
+
 mod preset;
 pub use self::preset::Preset;
 pub use self::preset::PresetExt;
@@ -67,6 +71,9 @@ pub use self::preset::PresetExt;
 mod proxy_pad;
 pub use self::proxy_pad::ProxyPad;
 pub use self::proxy_pad::ProxyPadExt;
+
+mod registry;
+pub use self::registry::Registry;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 mod stream;
@@ -170,6 +177,7 @@ pub mod traits {
     pub use super::GstObjectExt;
     pub use super::PadExt;
     pub use super::PipelineExt;
+    pub use super::PluginFeatureExt;
     pub use super::PresetExt;
     pub use super::ProxyPadExt;
     pub use super::SystemClockExt;

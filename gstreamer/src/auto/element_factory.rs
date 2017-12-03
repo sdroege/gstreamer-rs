@@ -6,6 +6,7 @@ use Element;
 use ElementFactoryListType;
 use Object;
 use PadDirection;
+use PluginFeature;
 use Rank;
 use StaticPadTemplate;
 use URIType;
@@ -18,7 +19,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>): Object;
+    pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>): PluginFeature, Object;
 
     match fn {
         get_type => || ffi::gst_element_factory_get_type(),

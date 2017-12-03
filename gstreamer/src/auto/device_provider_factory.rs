@@ -3,6 +3,7 @@
 
 use DeviceProvider;
 use Object;
+use PluginFeature;
 use Rank;
 use ffi;
 use glib;
@@ -13,7 +14,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass>): Object;
+    pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass>): PluginFeature, Object;
 
     match fn {
         get_type => || ffi::gst_device_provider_factory_get_type(),

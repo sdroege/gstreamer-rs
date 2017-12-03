@@ -584,6 +584,46 @@ status = "generate"
 trait = false
 
 [[object]]
+name = "Gst.PluginFeature"
+status = "generate"
+    [[object.function]]
+    pattern = "list_.*"
+    ignore = true
+
+    [[object.function]]
+    name = "rank_compare_func"
+    ignore = true
+
+[[object]]
+name = "Gst.Registry"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    pattern = "fork_.*"
+    ignore = true
+
+    [[object.function]]
+    name = "get"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "add_feature"
+        [object.function.return]
+        bool_return_is_error = "Failed to add feature"
+
+    [[object.function]]
+    name = "add_plugin"
+        [object.function.return]
+        bool_return_is_error = "Failed to add plugin"
+
+    [[object.function]]
+    name = "scan_path"
+        [object.function.return]
+        bool_return_is_error = "Failed to scan path"
+
+[[object]]
 name = "Gst.*"
 status = "generate"
     [[object.function]]
