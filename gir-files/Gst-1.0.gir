@@ -13945,7 +13945,7 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstElement to remove pad from.</doc>
             <type name="Element" c:type="GstElement*"/>
           </instance-parameter>
-          <parameter name="pad" transfer-ownership="full">
+          <parameter name="pad" transfer-ownership="none">
             <doc xml:space="preserve">the #GstPad to remove from the element.</doc>
             <type name="Pad" c:type="GstPad*"/>
           </parameter>
