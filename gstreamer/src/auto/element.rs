@@ -407,7 +407,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
 
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_remove_pad(self.to_glib_none().0, pad.to_glib_full()), "Failed to remove pad")
+            glib::error::BoolError::from_glib(ffi::gst_element_remove_pad(self.to_glib_none().0, pad.to_glib_none().0), "Failed to remove pad")
         }
     }
 
