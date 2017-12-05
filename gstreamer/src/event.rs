@@ -331,7 +331,7 @@ impl GstRc<EventRef> {
         SegmentDoneBuilder::new(position)
     }
 
-    pub fn new_gap<'a>(timestamp: u64, duration: u64) -> GapBuilder<'a> {
+    pub fn new_gap<'a>(timestamp: ::ClockTime, duration: ::ClockTime) -> GapBuilder<'a> {
         assert_initialized_main_thread!();
         GapBuilder::new(timestamp, duration)
     }
@@ -702,14 +702,14 @@ impl<'a> SegmentDone<'a> {
 
 pub struct Gap<'a>(&'a EventRef);
 impl<'a> Gap<'a> {
-    pub fn get(&self) -> (u64, u64) {
+    pub fn get(&self) -> (::ClockTime, ::ClockTime) {
         unsafe {
             let mut timestamp = mem::uninitialized();
             let mut duration = mem::uninitialized();
 
             ffi::gst_event_parse_gap(self.0.as_mut_ptr(), &mut timestamp, &mut duration);
 
-            (timestamp, duration)
+            (from_glib(timestamp), from_glib(duration))
         }
     }
 }
@@ -1165,7 +1165,9 @@ impl<'a> StreamGroupDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(s.group_id.to_glib()));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_stream_group_done(s.group_id.to_glib())
+    });
 }
 
 pub struct EosBuilder<'a> {
@@ -1266,11 +1268,11 @@ pub struct GapBuilder<'a> {
     seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    timestamp: u64,
-    duration: u64,
+    timestamp: ::ClockTime,
+    duration: ::ClockTime,
 }
 impl<'a> GapBuilder<'a> {
-    fn new(timestamp: u64, duration: u64) -> Self {
+    fn new(timestamp: ::ClockTime, duration: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
@@ -1281,7 +1283,9 @@ impl<'a> GapBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(s.timestamp, s.duration));
+    event_builder_generic_impl!(|s: &Self| {
+        ffi::gst_event_new_gap(s.timestamp.to_glib(), s.duration.to_glib())
+    });
 }
 
 pub struct QosBuilder<'a> {
