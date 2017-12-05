@@ -8,6 +8,7 @@
 
 use std::ops;
 use ffi;
+use glib;
 use glib::translate::*;
 use std::{cmp, fmt};
 use muldiv::MulDiv;
@@ -277,6 +278,35 @@ impl FromGlib<ffi::GstClockTime> for ClockTime {
             ffi::GST_CLOCK_TIME_NONE => ClockTime(None),
             value => ClockTime(Some(value)),
         }
+    }
+}
+
+#[doc(hidden)]
+impl<'a> glib::value::FromValueOptional<'a> for ClockTime {
+    unsafe fn from_value_optional(value: &'a glib::Value) -> Option<Self> {
+        <u64 as glib::value::FromValueOptional>::from_value_optional(value)
+            .map(ClockTime::from_glib)
+    }
+}
+
+#[doc(hidden)]
+impl<'a> glib::value::FromValue<'a> for ClockTime {
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        ClockTime::from_glib(<u64 as glib::value::FromValue>::from_value(value))
+    }
+}
+
+#[doc(hidden)]
+impl glib::value::SetValue for ClockTime {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        <u64 as glib::value::SetValue>::set_value(value, &this.to_glib());
+    }
+}
+
+#[doc(hidden)]
+impl glib::StaticType for ClockTime {
+    fn static_type() -> glib::Type {
+        <u64 as glib::StaticType>::static_type()
     }
 }
 

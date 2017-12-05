@@ -71,7 +71,7 @@ impl_tag!(Contact, &'a str, *TAG_CONTACT);
 impl_tag!(License, &'a str, *TAG_LICENSE);
 impl_tag!(LicenseUri, &'a str, *TAG_LICENSE_URI);
 impl_tag!(Performer, &'a str, *TAG_PERFORMER);
-impl_tag!(Duration, u64, *TAG_DURATION);
+impl_tag!(Duration, ::ClockTime, *TAG_DURATION);
 impl_tag!(Codec, &'a str, *TAG_CODEC);
 impl_tag!(VideoCodec, &'a str, *TAG_VIDEO_CODEC);
 impl_tag!(AudioCodec, &'a str, *TAG_AUDIO_CODEC);
@@ -455,7 +455,7 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(1000u64 * 1000 * 1000 * 120).into(), TagMergeMode::Append);
+            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append);
         }
         assert_eq!(
             tags.to_string(),
@@ -472,21 +472,18 @@ mod tests {
         {
             let tags = tags.get_mut().unwrap();
             tags.add::<Title>(&"some title", TagMergeMode::Append);
-            tags.add::<Duration>(&(1000u64 * 1000 * 1000 * 120).into(), TagMergeMode::Append);
+            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append);
         }
 
         assert_eq!(tags.get::<Title>().unwrap().get(), Some("some title"));
-        assert_eq!(
-            tags.get::<Duration>().unwrap().get_some(),
-            (1000u64 * 1000 * 1000 * 120)
-        );
+        assert_eq!(tags.get::<Duration>().unwrap().get_some(), (::SECOND * 120));
         assert_eq!(
             tags.get_index::<Title>(0).unwrap().get(),
             Some("some title")
         );
         assert_eq!(
             tags.get_index::<Duration>(0).unwrap().get_some(),
-            (1000u64 * 1000 * 1000 * 120)
+            (::SECOND * 120)
         );
     }
 }
