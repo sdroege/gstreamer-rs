@@ -156,17 +156,23 @@ impl GstRc<MessageRef> {
         StateDirtyBuilder::new()
     }
 
-    pub fn new_step_done<'a>(
-        format: ::Format,
-        amount: u64,
+    pub fn new_step_done<'a, V: Into<::FormatValue>>(
+        amount: V,
         rate: f64,
         flush: bool,
         intermediate: bool,
-        duration: u64,
+        duration: V,
         eos: bool,
     ) -> StepDoneBuilder<'a> {
         assert_initialized_main_thread!();
-        StepDoneBuilder::new(format, amount, rate, flush, intermediate, duration, eos)
+        StepDoneBuilder::new(
+            amount.into(),
+            rate,
+            flush,
+            intermediate,
+            duration.into(),
+            eos,
+        )
     }
 
     pub fn new_clock_provide(clock: &::Clock, ready: bool) -> ClockProvideBuilder {
@@ -235,7 +241,7 @@ impl GstRc<MessageRef> {
         AsyncStartBuilder::new()
     }
 
-    pub fn new_async_done<'a>(running_time: u64) -> AsyncDoneBuilder<'a> {
+    pub fn new_async_done<'a>(running_time: ::ClockTime) -> AsyncDoneBuilder<'a> {
         assert_initialized_main_thread!();
         AsyncDoneBuilder::new(running_time)
     }
@@ -245,24 +251,23 @@ impl GstRc<MessageRef> {
         RequestStateBuilder::new(state)
     }
 
-    pub fn new_step_start<'a>(
+    pub fn new_step_start<'a, V: Into<::FormatValue>>(
         active: bool,
-        format: ::Format,
-        amount: u64,
+        amount: V,
         rate: f64,
         flush: bool,
         intermediate: bool,
     ) -> StepStartBuilder<'a> {
         assert_initialized_main_thread!();
-        StepStartBuilder::new(active, format, amount, rate, flush, intermediate)
+        StepStartBuilder::new(active, amount.into(), rate, flush, intermediate)
     }
 
     pub fn new_qos_builder<'a>(
         live: bool,
-        running_time: u64,
-        stream_time: u64,
-        timestamp: u64,
-        duration: u64,
+        running_time: ::ClockTime,
+        stream_time: ::ClockTime,
+        timestamp: ::ClockTime,
+        duration: ::ClockTime,
     ) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
@@ -278,7 +283,7 @@ impl GstRc<MessageRef> {
         TocBuilder::new(toc, updated)
     }
 
-    pub fn new_reset_time<'a>(running_time: u64) -> ResetTimeBuilder<'a> {
+    pub fn new_reset_time<'a>(running_time: ::ClockTime) -> ResetTimeBuilder<'a> {
         assert_initialized_main_thread!();
         ResetTimeBuilder::new(running_time)
     }
@@ -622,7 +627,7 @@ pub struct StateDirty<'a>(&'a MessageRef);
 
 pub struct StepDone<'a>(&'a MessageRef);
 impl<'a> StepDone<'a> {
-    pub fn get(&self) -> (::Format, u64, f64, bool, bool, u64, bool) {
+    pub fn get(&self) -> (::FormatValue, f64, bool, bool, ::FormatValue, bool) {
         unsafe {
             let mut format = mem::uninitialized();
             let mut amount = mem::uninitialized();
@@ -644,12 +649,11 @@ impl<'a> StepDone<'a> {
             );
 
             (
-                from_glib(format),
-                amount,
+                ::FormatValue::new(from_glib(format), amount as i64),
                 rate,
                 from_glib(flush),
                 from_glib(intermediate),
-                duration,
+                ::FormatValue::new(from_glib(format), duration as i64),
                 from_glib(eos),
             )
         }
@@ -788,13 +792,13 @@ pub struct AsyncStart<'a>(&'a MessageRef);
 
 pub struct AsyncDone<'a>(&'a MessageRef);
 impl<'a> AsyncDone<'a> {
-    pub fn get_running_time(&self) -> u64 {
+    pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::uninitialized();
 
             ffi::gst_message_parse_async_done(self.0.as_mut_ptr(), &mut running_time);
 
-            running_time
+            from_glib(running_time)
         }
     }
 }
@@ -814,7 +818,7 @@ impl<'a> RequestState<'a> {
 
 pub struct StepStart<'a>(&'a MessageRef);
 impl<'a> StepStart<'a> {
-    pub fn get(&self) -> (bool, ::Format, u64, f64, bool, bool) {
+    pub fn get(&self) -> (bool, ::FormatValue, f64, bool, bool) {
         unsafe {
             let mut active = mem::uninitialized();
             let mut format = mem::uninitialized();
@@ -835,8 +839,7 @@ impl<'a> StepStart<'a> {
 
             (
                 from_glib(active),
-                from_glib(format),
-                amount,
+                ::FormatValue::new(from_glib(format), amount as i64),
                 rate,
                 from_glib(flush),
                 from_glib(intermediate),
@@ -847,7 +850,7 @@ impl<'a> StepStart<'a> {
 
 pub struct Qos<'a>(&'a MessageRef);
 impl<'a> Qos<'a> {
-    pub fn get(&self) -> (bool, u64, u64, u64, u64) {
+    pub fn get(&self) -> (bool, ::ClockTime, ::ClockTime, ::ClockTime, ::ClockTime) {
         unsafe {
             let mut live = mem::uninitialized();
             let mut running_time = mem::uninitialized();
@@ -866,10 +869,10 @@ impl<'a> Qos<'a> {
 
             (
                 from_glib(live),
-                running_time,
-                stream_time,
-                timestamp,
-                duration,
+                from_glib(running_time),
+                from_glib(stream_time),
+                from_glib(timestamp),
+                from_glib(duration),
             )
         }
     }
@@ -891,7 +894,7 @@ impl<'a> Qos<'a> {
         }
     }
 
-    pub fn get_stats(&self) -> (::Format, u64, u64) {
+    pub fn get_stats(&self) -> (::FormatValue, ::FormatValue) {
         unsafe {
             let mut format = mem::uninitialized();
             let mut processed = mem::uninitialized();
@@ -904,7 +907,10 @@ impl<'a> Qos<'a> {
                 &mut dropped,
             );
 
-            (from_glib(format), processed, dropped)
+            (
+                ::FormatValue::new(from_glib(format), processed as i64),
+                ::FormatValue::new(from_glib(format), dropped as i64),
+            )
         }
     }
 }
@@ -950,13 +956,13 @@ impl<'a> Toc<'a> {
 
 pub struct ResetTime<'a>(&'a MessageRef);
 impl<'a> ResetTime<'a> {
-    pub fn get_running_time(&self) -> u64 {
+    pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::uninitialized();
 
             ffi::gst_message_parse_reset_time(self.0.as_mut_ptr(), &mut running_time);
 
-            running_time
+            from_glib(running_time)
         }
     }
 }
@@ -1548,30 +1554,28 @@ pub struct StepDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    format: ::Format,
-    amount: u64,
+    amount: ::FormatValue,
     rate: f64,
     flush: bool,
     intermediate: bool,
-    duration: u64,
+    duration: ::FormatValue,
     eos: bool,
 }
 impl<'a> StepDoneBuilder<'a> {
     fn new(
-        format: ::Format,
-        amount: u64,
+        amount: ::FormatValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
-        duration: u64,
+        duration: ::FormatValue,
         eos: bool,
     ) -> Self {
         skip_assert_initialized!();
+        assert_eq!(amount.to_format(), duration.to_format());
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
-            format: format,
             amount: amount,
             rate: rate,
             flush: flush,
@@ -1584,12 +1588,12 @@ impl<'a> StepDoneBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         ffi::gst_message_new_step_done(
             src,
-            s.format.to_glib(),
-            s.amount,
+            s.amount.to_format().to_glib(),
+            s.amount.to_value() as u64,
             s.rate,
             s.flush.to_glib(),
             s.intermediate.to_glib(),
-            s.duration,
+            s.duration.to_value() as u64,
             s.eos.to_glib(),
         )
     });
@@ -1886,10 +1890,10 @@ pub struct AsyncDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    running_time: u64,
+    running_time: ::ClockTime,
 }
 impl<'a> AsyncDoneBuilder<'a> {
-    fn new(running_time: u64) -> Self {
+    fn new(running_time: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -1900,7 +1904,7 @@ impl<'a> AsyncDoneBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        ffi::gst_message_new_async_done(src, s.running_time)
+        ffi::gst_message_new_async_done(src, s.running_time.to_glib())
     });
 }
 
@@ -1931,8 +1935,7 @@ pub struct StepStartBuilder<'a> {
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     active: bool,
-    format: ::Format,
-    amount: u64,
+    amount: ::FormatValue,
     rate: f64,
     flush: bool,
     intermediate: bool,
@@ -1940,8 +1943,7 @@ pub struct StepStartBuilder<'a> {
 impl<'a> StepStartBuilder<'a> {
     fn new(
         active: bool,
-        format: ::Format,
-        amount: u64,
+        amount: ::FormatValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
@@ -1952,7 +1954,6 @@ impl<'a> StepStartBuilder<'a> {
             seqnum: None,
             other_fields: Vec::new(),
             active: active,
-            format: format,
             amount: amount,
             rate: rate,
             flush: flush,
@@ -1964,8 +1965,8 @@ impl<'a> StepStartBuilder<'a> {
         ffi::gst_message_new_step_start(
             src,
             s.active.to_glib(),
-            s.format.to_glib(),
-            s.amount,
+            s.amount.to_format().to_glib(),
+            s.amount.to_value() as u64,
             s.rate,
             s.flush.to_glib(),
             s.intermediate.to_glib(),
@@ -1978,15 +1979,21 @@ pub struct QosBuilder<'a> {
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     live: bool,
-    running_time: u64,
-    stream_time: u64,
-    timestamp: u64,
-    duration: u64,
+    running_time: ::ClockTime,
+    stream_time: ::ClockTime,
+    timestamp: ::ClockTime,
+    duration: ::ClockTime,
     values: Option<(i64, f64, i32)>,
-    stats: Option<(::Format, u64, u64)>,
+    stats: Option<(::FormatValue, ::FormatValue)>,
 }
 impl<'a> QosBuilder<'a> {
-    fn new(live: bool, running_time: u64, stream_time: u64, timestamp: u64, duration: u64) -> Self {
+    fn new(
+        live: bool,
+        running_time: ::ClockTime,
+        stream_time: ::ClockTime,
+        timestamp: ::ClockTime,
+        duration: ::ClockTime,
+    ) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -2009,9 +2016,10 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    pub fn stats(self, format: ::Format, processed: u64, dropped: u64) -> Self {
+    pub fn stats(self, processed: ::FormatValue, dropped: ::FormatValue) -> Self {
+        assert_eq!(processed.to_format(), dropped.to_format());
         Self {
-            stats: Some((format, processed, dropped)),
+            stats: Some((processed, dropped)),
             ..self
         }
     }
@@ -2020,16 +2028,21 @@ impl<'a> QosBuilder<'a> {
         let msg = ffi::gst_message_new_qos(
             src,
             s.live.to_glib(),
-            s.running_time,
-            s.stream_time,
-            s.timestamp,
-            s.duration,
+            s.running_time.to_glib(),
+            s.stream_time.to_glib(),
+            s.timestamp.to_glib(),
+            s.duration.to_glib(),
         );
         if let Some((jitter, proportion, quality)) = s.values {
             ffi::gst_message_set_qos_values(msg, jitter, proportion, quality);
         }
-        if let Some((format, processed, dropped)) = s.stats {
-            ffi::gst_message_set_qos_stats(msg, format.to_glib(), processed, dropped);
+        if let Some((processed, dropped)) = s.stats {
+            ffi::gst_message_set_qos_stats(
+                msg,
+                processed.to_format().to_glib(),
+                processed.to_value() as u64,
+                dropped.to_value() as u64,
+            );
         }
         msg
     });
@@ -2108,10 +2121,10 @@ pub struct ResetTimeBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    running_time: u64,
+    running_time: ::ClockTime,
 }
 impl<'a> ResetTimeBuilder<'a> {
-    fn new(running_time: u64) -> Self {
+    fn new(running_time: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -2122,7 +2135,7 @@ impl<'a> ResetTimeBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        ffi::gst_message_new_reset_time(src, s.running_time)
+        ffi::gst_message_new_reset_time(src, s.running_time.to_glib())
     });
 }
 

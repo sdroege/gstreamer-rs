@@ -340,7 +340,7 @@ impl GstRc<EventRef> {
         type_: ::QOSType,
         proportion: f64,
         diff: i64,
-        timestamp: u64,
+        timestamp: ::ClockTime,
     ) -> QosBuilder<'a> {
         assert_initialized_main_thread!();
         QosBuilder::new(type_, proportion, diff, timestamp)
@@ -367,20 +367,19 @@ impl GstRc<EventRef> {
         NavigationBuilder::new(structure)
     }
 
-    pub fn new_latency<'a>(latency: u64) -> LatencyBuilder<'a> {
+    pub fn new_latency<'a>(latency: ::ClockTime) -> LatencyBuilder<'a> {
         assert_initialized_main_thread!();
         LatencyBuilder::new(latency)
     }
 
-    pub fn new_step<'a>(
-        format: ::Format,
-        amount: u64,
+    pub fn new_step<'a, V: Into<::FormatValue>>(
+        amount: V,
         rate: f64,
         flush: bool,
         intermediate: bool,
     ) -> StepBuilder<'a> {
         assert_initialized_main_thread!();
-        StepBuilder::new(format, amount, rate, flush, intermediate)
+        StepBuilder::new(amount.into(), rate, flush, intermediate)
     }
 
     pub fn new_reconfigure<'a>() -> ReconfigureBuilder<'a> {
@@ -716,7 +715,7 @@ impl<'a> Gap<'a> {
 
 pub struct Qos<'a>(&'a EventRef);
 impl<'a> Qos<'a> {
-    pub fn get(&self) -> (::QOSType, f64, i64, u64) {
+    pub fn get(&self) -> (::QOSType, f64, i64, ::ClockTime) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut proportion = mem::uninitialized();
@@ -731,7 +730,7 @@ impl<'a> Qos<'a> {
                 &mut timestamp,
             );
 
-            (from_glib(type_), proportion, diff, timestamp)
+            (from_glib(type_), proportion, diff, from_glib(timestamp))
         }
     }
 }
@@ -785,20 +784,20 @@ pub struct Navigation<'a>(&'a EventRef);
 
 pub struct Latency<'a>(&'a EventRef);
 impl<'a> Latency<'a> {
-    pub fn get_latency(&self) -> u64 {
+    pub fn get_latency(&self) -> ::ClockTime {
         unsafe {
             let mut latency = mem::uninitialized();
 
             ffi::gst_event_parse_latency(self.0.as_mut_ptr(), &mut latency);
 
-            latency
+            from_glib(latency)
         }
     }
 }
 
 pub struct Step<'a>(&'a EventRef);
 impl<'a> Step<'a> {
-    pub fn get(&self) -> (::Format, u64, f64, bool, bool) {
+    pub fn get(&self) -> (::FormatValue, f64, bool, bool) {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut amount = mem::uninitialized();
@@ -816,8 +815,7 @@ impl<'a> Step<'a> {
             );
 
             (
-                from_glib(fmt),
-                amount,
+                ::FormatValue::new(from_glib(fmt), amount as i64),
                 rate,
                 from_glib(flush),
                 from_glib(intermediate),
@@ -1295,10 +1293,10 @@ pub struct QosBuilder<'a> {
     type_: ::QOSType,
     proportion: f64,
     diff: i64,
-    timestamp: u64,
+    timestamp: ::ClockTime,
 }
 impl<'a> QosBuilder<'a> {
-    fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: u64) -> Self {
+    fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
@@ -1312,7 +1310,12 @@ impl<'a> QosBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_qos(s.type_.to_glib(), s.proportion, s.diff, s.timestamp)
+        ffi::gst_event_new_qos(
+            s.type_.to_glib(),
+            s.proportion,
+            s.diff,
+            s.timestamp.to_glib(),
+        )
     });
 }
 
@@ -1393,10 +1396,10 @@ pub struct LatencyBuilder<'a> {
     seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    latency: u64,
+    latency: ::ClockTime,
 }
 impl<'a> LatencyBuilder<'a> {
-    fn new(latency: u64) -> Self {
+    fn new(latency: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
@@ -1406,27 +1409,25 @@ impl<'a> LatencyBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency.to_glib()));
 }
 
 pub struct StepBuilder<'a> {
     seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    fmt: ::Format,
-    amount: u64,
+    amount: ::FormatValue,
     rate: f64,
     flush: bool,
     intermediate: bool,
 }
 impl<'a> StepBuilder<'a> {
-    fn new(fmt: ::Format, amount: u64, rate: f64, flush: bool, intermediate: bool) -> Self {
+    fn new(amount: ::FormatValue, rate: f64, flush: bool, intermediate: bool) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            fmt: fmt,
             amount: amount,
             rate: rate,
             flush: flush,
@@ -1436,8 +1437,8 @@ impl<'a> StepBuilder<'a> {
 
     event_builder_generic_impl!(|s: &Self| {
         ffi::gst_event_new_step(
-            s.fmt.to_glib(),
-            s.amount,
+            s.amount.to_format().to_glib(),
+            s.amount.to_value() as u64,
             s.rate,
             s.flush.to_glib(),
             s.intermediate.to_glib(),

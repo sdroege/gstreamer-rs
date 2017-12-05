@@ -323,7 +323,7 @@ impl<'a> Duration<&'a mut QueryRef> {
 
 pub struct Latency<T>(T);
 impl<'a> Latency<&'a QueryRef> {
-    pub fn get_result(&self) -> (bool, u64, u64) {
+    pub fn get_result(&self) -> (bool, ::ClockTime, ::ClockTime) {
         unsafe {
             let mut live = mem::uninitialized();
             let mut min = mem::uninitialized();
@@ -331,7 +331,7 @@ impl<'a> Latency<&'a QueryRef> {
 
             ffi::gst_query_parse_latency(self.0.as_mut_ptr(), &mut live, &mut min, &mut max);
 
-            (from_glib(live), min, max)
+            (from_glib(live), from_glib(min), from_glib(max))
         }
     }
 
@@ -341,9 +341,14 @@ impl<'a> Latency<&'a QueryRef> {
 }
 
 impl<'a> Latency<&'a mut QueryRef> {
-    pub fn set(&mut self, live: bool, min: u64, max: u64) {
+    pub fn set(&mut self, live: bool, min: ::ClockTime, max: ::ClockTime) {
         unsafe {
-            ffi::gst_query_set_latency(self.0.as_mut_ptr(), live.to_glib(), min, max);
+            ffi::gst_query_set_latency(
+                self.0.as_mut_ptr(),
+                live.to_glib(),
+                min.to_glib(),
+                max.to_glib(),
+            );
         }
     }
 
