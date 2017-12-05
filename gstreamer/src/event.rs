@@ -18,12 +18,74 @@ use std::ffi::CStr;
 
 use glib;
 use glib::value::ToSendValue;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;
 
 use EventType;
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct Seqnum(pub u32);
+pub const SEQNUM_INVALID: Seqnum = Seqnum(0);
+
+impl ToGlib for Seqnum {
+    type GlibType = u32;
+
+    fn to_glib(&self) -> u32 {
+        self.0
+    }
+}
+
+impl FromGlib<u32> for Seqnum {
+    fn from_glib(val: u32) -> Seqnum {
+        skip_assert_initialized!();
+        Seqnum(val)
+    }
+}
+
+impl Into<u32> for Seqnum {
+    fn into(self) -> u32 {
+        self.0
+    }
+}
+
+impl From<u32> for Seqnum {
+    fn from(v: u32) -> Seqnum {
+        Seqnum(v)
+    }
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct GroupId(pub u32);
+pub const GROUP_ID_INVALID: GroupId = GroupId(0);
+
+impl ToGlib for GroupId {
+    type GlibType = u32;
+
+    fn to_glib(&self) -> u32 {
+        self.0
+    }
+}
+
+impl Into<u32> for GroupId {
+    fn into(self) -> u32 {
+        self.0
+    }
+}
+
+impl From<u32> for GroupId {
+    fn from(v: u32) -> GroupId {
+        GroupId(v)
+    }
+}
+
+impl FromGlib<u32> for GroupId {
+    fn from_glib(val: u32) -> GroupId {
+        skip_assert_initialized!();
+        GroupId(val)
+    }
+}
 
 #[repr(C)]
 pub struct EventRef(ffi::GstEvent);
@@ -92,8 +154,8 @@ impl PartialOrd for EventType {
 }
 
 impl EventRef {
-    pub fn get_seqnum(&self) -> u32 {
-        unsafe { ffi::gst_event_get_seqnum(self.as_mut_ptr()) }
+    pub fn get_seqnum(&self) -> Seqnum {
+        unsafe { from_glib(ffi::gst_event_get_seqnum(self.as_mut_ptr())) }
     }
 
     pub fn get_running_time_offset(&self) -> i64 {
@@ -239,7 +301,7 @@ impl GstRc<EventRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_stream_group_done<'a>(group_id: u32) -> StreamGroupDoneBuilder<'a> {
+    pub fn new_stream_group_done<'a>(group_id: GroupId) -> StreamGroupDoneBuilder<'a> {
         assert_initialized_main_thread!();
         StreamGroupDoneBuilder::new(group_id)
     }
@@ -474,13 +536,13 @@ impl<'a> StreamStart<'a> {
         }
     }
 
-    pub fn get_group_id(&self) -> u32 {
+    pub fn get_group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::uninitialized();
 
             ffi::gst_event_parse_group_id(self.0.as_mut_ptr(), &mut group_id);
 
-            group_id
+            from_glib(group_id)
         }
     }
 }
@@ -574,13 +636,13 @@ impl<'a> SinkMessage<'a> {
 pub struct StreamGroupDone<'a>(&'a EventRef);
 impl<'a> StreamGroupDone<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn get_group_id(&self) -> u32 {
+    pub fn get_group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::uninitialized();
 
             ffi::gst_event_parse_stream_group_done(self.0.as_mut_ptr(), &mut group_id);
 
-            group_id
+            from_glib(group_id)
         }
     }
 }
@@ -802,7 +864,7 @@ pub struct CustomBothOob<'a>(&'a EventRef);
 
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
-        pub fn seqnum(self, seqnum: u32) -> Self {
+        pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 seqnum: Some(seqnum),
                 .. self
@@ -830,7 +892,7 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.seqnum {
-                    ffi::gst_event_set_seqnum(event, seqnum);
+                    ffi::gst_event_set_seqnum(event, seqnum.to_glib());
                 }
 
                 if let Some(running_time_offset) = self.running_time_offset {
@@ -854,7 +916,7 @@ macro_rules! event_builder_generic_impl {
 }
 
 pub struct FlushStartBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
@@ -872,7 +934,7 @@ impl<'a> FlushStartBuilder<'a> {
 }
 
 pub struct FlushStopBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     reset_time: bool,
@@ -894,12 +956,12 @@ impl<'a> FlushStopBuilder<'a> {
 }
 
 pub struct StreamStartBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     stream_id: &'a str,
     flags: Option<::StreamFlags>,
-    group_id: Option<u32>,
+    group_id: Option<GroupId>,
 }
 impl<'a> StreamStartBuilder<'a> {
     fn new(stream_id: &'a str) -> Self {
@@ -921,7 +983,7 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
-    pub fn group_id(self, group_id: u32) -> Self {
+    pub fn group_id(self, group_id: GroupId) -> Self {
         Self {
             group_id: Some(group_id),
             ..self
@@ -934,14 +996,14 @@ impl<'a> StreamStartBuilder<'a> {
             ffi::gst_event_set_stream_flags(ev, flags.to_glib());
         }
         if let Some(group_id) = s.group_id {
-            ffi::gst_event_set_group_id(ev, group_id);
+            ffi::gst_event_set_group_id(ev, group_id.to_glib());
         }
         ev
     });
 }
 
 pub struct CapsBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     caps: &'a ::Caps,
@@ -961,7 +1023,7 @@ impl<'a> CapsBuilder<'a> {
 }
 
 pub struct SegmentBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     segment: &'a ::Segment,
@@ -984,7 +1046,7 @@ impl<'a> SegmentBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamCollectionBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     stream_collection: &'a ::StreamCollection,
@@ -1007,7 +1069,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 }
 
 pub struct TagBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     tags: Option<::TagList>,
@@ -1030,7 +1092,7 @@ impl<'a> TagBuilder<'a> {
 }
 
 pub struct BufferSizeBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     minsize: ::FormatValue,
@@ -1061,7 +1123,7 @@ impl<'a> BufferSizeBuilder<'a> {
 }
 
 pub struct SinkMessageBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     name: &'a str,
@@ -1086,28 +1148,28 @@ impl<'a> SinkMessageBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamGroupDoneBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    uid: u32,
+    group_id: GroupId,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamGroupDoneBuilder<'a> {
-    fn new(uid: u32) -> Self {
+    fn new(group_id: GroupId) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            uid: uid,
+            group_id: group_id,
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(s.uid));
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(s.group_id.to_glib()));
 }
 
 pub struct EosBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
@@ -1125,7 +1187,7 @@ impl<'a> EosBuilder<'a> {
 }
 
 pub struct TocBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     toc: &'a ::Toc,
@@ -1149,7 +1211,7 @@ impl<'a> TocBuilder<'a> {
 }
 
 pub struct ProtectionBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     system_id: &'a str,
@@ -1179,7 +1241,7 @@ impl<'a> ProtectionBuilder<'a> {
 }
 
 pub struct SegmentDoneBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     position: ::FormatValue,
@@ -1201,7 +1263,7 @@ impl<'a> SegmentDoneBuilder<'a> {
 }
 
 pub struct GapBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     timestamp: u64,
@@ -1223,7 +1285,7 @@ impl<'a> GapBuilder<'a> {
 }
 
 pub struct QosBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::QOSType,
@@ -1251,7 +1313,7 @@ impl<'a> QosBuilder<'a> {
 }
 
 pub struct SeekBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     rate: f64,
@@ -1298,7 +1360,7 @@ impl<'a> SeekBuilder<'a> {
 }
 
 pub struct NavigationBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
@@ -1324,7 +1386,7 @@ impl<'a> NavigationBuilder<'a> {
 }
 
 pub struct LatencyBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     latency: u64,
@@ -1344,7 +1406,7 @@ impl<'a> LatencyBuilder<'a> {
 }
 
 pub struct StepBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     fmt: ::Format,
@@ -1380,7 +1442,7 @@ impl<'a> StepBuilder<'a> {
 }
 
 pub struct ReconfigureBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
@@ -1398,7 +1460,7 @@ impl<'a> ReconfigureBuilder<'a> {
 }
 
 pub struct TocSelectBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     uid: &'a str,
@@ -1421,7 +1483,7 @@ impl<'a> TocSelectBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct SelectStreamsBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     streams: &'a [&'a str],
@@ -1444,7 +1506,7 @@ impl<'a> SelectStreamsBuilder<'a> {
 }
 
 pub struct CustomUpstreamBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
@@ -1471,7 +1533,7 @@ impl<'a> CustomUpstreamBuilder<'a> {
 }
 
 pub struct CustomDownstreamBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
@@ -1498,7 +1560,7 @@ impl<'a> CustomDownstreamBuilder<'a> {
 }
 
 pub struct CustomDownstreamOobBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
@@ -1527,7 +1589,7 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
 }
 
 pub struct CustomDownstreamStickyBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
@@ -1556,7 +1618,7 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
 }
 
 pub struct CustomBothBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,
@@ -1582,7 +1644,7 @@ impl<'a> CustomBothBuilder<'a> {
 }
 
 pub struct CustomBothOobBuilder<'a> {
-    seqnum: Option<u32>,
+    seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     structure: Option<Structure>,

@@ -796,6 +796,16 @@ status = "generate"
     # wrong mutable for context parameter
     ignore = true
 
+    [[object.function]]
+    name = "util_group_id_next"
+    # newtype wrapper
+    ignore = true
+
+    [[object.function]]
+    name = "util_seqnum_next"
+    # newtype wrapper
+    ignore = true
+
 [[object]]
 name = "Gst.StateChangeReturn"
 status = "generate"

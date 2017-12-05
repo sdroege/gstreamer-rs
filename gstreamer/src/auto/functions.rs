@@ -158,20 +158,6 @@ pub fn util_get_timestamp() -> ClockTime {
     }
 }
 
-pub fn util_group_id_next() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gst_util_group_id_next()
-    }
-}
-
-pub fn util_seqnum_next() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gst_util_seqnum_next()
-    }
-}
-
 pub fn version() -> (u32, u32, u32, u32) {
     assert_initialized_main_thread!();
     unsafe {

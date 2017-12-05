@@ -82,7 +82,7 @@ pub use bufferlist::{BufferList, BufferListRef};
 pub mod query;
 pub use query::{Query, QueryRef, QueryView};
 pub mod event;
-pub use event::{Event, EventRef, EventView};
+pub use event::{Event, EventRef, EventView, GroupId, Seqnum, GROUP_ID_INVALID, SEQNUM_INVALID};
 pub mod context;
 pub use context::{Context, ContextRef};
 mod static_caps;
