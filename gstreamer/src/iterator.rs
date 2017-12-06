@@ -53,20 +53,23 @@ where
             let it = self.to_glib_none().0;
             mem::forget(self);
 
-            let mut closure_value: gobject_ffi::GValue = mem::zeroed();
             let func_box: Box<Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
-            gobject_ffi::g_value_init(&mut closure_value, filter_boxed_get_type::<T>());
-            gobject_ffi::g_value_take_boxed(
-                &mut closure_value,
+            // FIXME: Use Value::from_type once we depend on new enough GLib
+            let mut closure_value = glib::Value::uninitialized();
+            gobject_ffi::g_value_init(
+                closure_value.to_glib_none_mut().0,
+                filter_boxed_get_type::<T>(),
+            );
+            gobject_ffi::g_value_set_boxed(
+                closure_value.to_glib_none_mut().0,
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
             );
 
             let it = from_glib_full(ffi::gst_iterator_filter(
                 it as *mut _,
                 Some(filter_trampoline::<T>),
-                &closure_value,
+                closure_value.to_glib_none().0,
             ));
-            gobject_ffi::g_value_unset(&mut closure_value);
 
             it
         }
@@ -129,8 +132,9 @@ where
             let func_obj: &mut (FnMut(U, T) -> Result<U, U>) = &mut func;
             let func_ptr = &func_obj as *const &mut (FnMut(U, T) -> Result<U, U>) as gpointer;
 
-            let mut ret = glib::Value::uninitialized();
             let mut accum = Some(init);
+            // FIXME: Use Value::from_type once we depend on new enough GLib
+            let mut ret = glib::Value::uninitialized();
             gobject_ffi::g_value_init(ret.to_glib_none_mut().0, gobject_ffi::G_TYPE_POINTER);
             gobject_ffi::g_value_set_pointer(
                 ret.to_glib_none_mut().0,
@@ -143,8 +147,6 @@ where
                 ret.to_glib_none_mut().0,
                 func_ptr,
             );
-
-            gobject_ffi::g_value_unset(ret.to_glib_none_mut().0);
 
             match res {
                 ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(accum.unwrap()),
