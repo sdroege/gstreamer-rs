@@ -12,6 +12,9 @@ use PadProbeReturn;
 use Buffer;
 use BufferList;
 use Format;
+use GenericFormattedValue;
+use FormattedValue;
+use SpecificFormattedValue;
 use FlowReturn;
 use Query;
 use QueryRef;
@@ -188,20 +191,37 @@ pub trait PadExtManual {
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
 
-    fn peer_query_convert<V: Into<::FormatValue>>(
+    fn peer_query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+        &self,
+        src_val: V,
+    ) -> Option<U>;
+    fn peer_query_convert_generic<V: Into<GenericFormattedValue>>(
         &self,
         src_val: V,
         dest_format: Format,
-    ) -> Option<::FormatValue>;
-    fn peer_query_duration(&self, format: Format) -> Option<::FormatValue>;
-    fn peer_query_position(&self, format: Format) -> Option<::FormatValue>;
-    fn query_convert<V: Into<::FormatValue>>(
+    ) -> Option<GenericFormattedValue>;
+
+    fn peer_query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn peer_query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
+
+    fn peer_query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn peer_query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
+
+    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
+        &self,
+        src_val: V,
+    ) -> Option<U>;
+    fn query_convert_generic<V: Into<GenericFormattedValue>>(
         &self,
         src_val: V,
         dest_format: Format,
-    ) -> Option<::FormatValue>;
-    fn query_duration(&self, format: Format) -> Option<::FormatValue>;
-    fn query_position(&self, format: Format) -> Option<::FormatValue>;
+    ) -> Option<GenericFormattedValue>;
+
+    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
+
+    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -611,30 +631,68 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn peer_query_convert<V: Into<::FormatValue>>(
+    fn peer_query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
-        dest_format: Format,
-    ) -> Option<::FormatValue> {
+    ) -> Option<U> {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.to_glib_none().0,
-                src_val.to_format().to_glib(),
-                src_val.to_value(),
-                dest_format.to_glib(),
+                src_val.get_format().to_glib(),
+                src_val.to_glib(),
+                U::get_default_format().to_glib(),
                 &mut dest_val,
             ));
             if ret {
-                Some(::FormatValue::new(dest_format, dest_val))
+                Some(U::from_glib(U::get_default_format(), dest_val))
             } else {
                 None
             }
         }
     }
 
-    fn peer_query_duration(&self, format: Format) -> Option<::FormatValue> {
+    fn peer_query_convert_generic<V: Into<GenericFormattedValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<GenericFormattedValue> {
+        let src_val = src_val.into();
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_peer_query_convert(
+                self.to_glib_none().0,
+                src_val.get_format().to_glib(),
+                src_val.to_glib(),
+                dest_format.to_glib(),
+                &mut dest_val,
+            ));
+            if ret {
+                Some(GenericFormattedValue::new(dest_format, dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn peer_query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
+        unsafe {
+            let mut duration = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_peer_query_duration(
+                self.to_glib_none().0,
+                T::get_default_format().to_glib(),
+                &mut duration,
+            ));
+            if ret {
+                Some(T::from_glib(T::get_default_format(), duration))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn peer_query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
@@ -643,14 +701,30 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut duration,
             ));
             if ret {
-                Some(::FormatValue::new(format, duration))
+                Some(GenericFormattedValue::new(format, duration))
             } else {
                 None
             }
         }
     }
 
-    fn peer_query_position(&self, format: Format) -> Option<::FormatValue> {
+    fn peer_query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
+        unsafe {
+            let mut cur = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_peer_query_position(
+                self.to_glib_none().0,
+                T::get_default_format().to_glib(),
+                &mut cur,
+            ));
+            if ret {
+                Some(T::from_glib(T::get_default_format(), cur))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn peer_query_position_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
@@ -659,38 +733,77 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut cur,
             ));
             if ret {
-                Some(::FormatValue::new(format, cur))
+                Some(GenericFormattedValue::new(format, cur))
             } else {
                 None
             }
         }
     }
 
-    fn query_convert<V: Into<::FormatValue>>(
+    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
-        dest_format: Format,
-    ) -> Option<::FormatValue> {
+    ) -> Option<U> {
         let src_val = src_val.into();
 
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.to_glib_none().0,
-                src_val.to_format().to_glib(),
-                src_val.to_value(),
-                dest_format.to_glib(),
+                src_val.get_format().to_glib(),
+                src_val.to_glib(),
+                U::get_default_format().to_glib(),
                 &mut dest_val,
             ));
             if ret {
-                Some(::FormatValue::new(dest_format, dest_val))
+                Some(U::from_glib(U::get_default_format(), dest_val))
             } else {
                 None
             }
         }
     }
 
-    fn query_duration(&self, format: Format) -> Option<::FormatValue> {
+    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<GenericFormattedValue> {
+        let src_val = src_val.into();
+
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_query_convert(
+                self.to_glib_none().0,
+                src_val.get_format().to_glib(),
+                src_val.get_value(),
+                dest_format.to_glib(),
+                &mut dest_val,
+            ));
+            if ret {
+                Some(GenericFormattedValue::new(dest_format, dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
+        unsafe {
+            let mut duration = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_query_duration(
+                self.to_glib_none().0,
+                T::get_default_format().to_glib(),
+                &mut duration,
+            ));
+            if ret {
+                Some(T::from_glib(T::get_default_format(), duration))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_duration(
@@ -699,14 +812,30 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut duration,
             ));
             if ret {
-                Some(::FormatValue::new(format, duration))
+                Some(GenericFormattedValue::new(format, duration))
             } else {
                 None
             }
         }
     }
 
-    fn query_position(&self, format: Format) -> Option<::FormatValue> {
+    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
+        unsafe {
+            let mut cur = mem::uninitialized();
+            let ret = from_glib(ffi::gst_pad_query_position(
+                self.to_glib_none().0,
+                T::get_default_format().to_glib(),
+                &mut cur,
+            ));
+            if ret {
+                Some(T::from_glib(T::get_default_format(), cur))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_position(
@@ -715,7 +844,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut cur,
             ));
             if ret {
-                Some(::FormatValue::new(format, cur))
+                Some(GenericFormattedValue::new(format, cur))
             } else {
                 None
             }
@@ -1065,9 +1194,10 @@ mod tests {
         pad.set_active(true).unwrap();
 
         assert!(pad.send_event(::Event::new_stream_start("test").build()));
-        let mut segment = ::Segment::default();
-        segment.init(::Format::Time);
-        assert!(pad.send_event(::Event::new_segment(&segment).build()));
+        let segment = ::FormattedSegment::<::ClockTime>::new();
+        assert!(pad.send_event(
+            ::Event::new_segment(segment.as_ref()).build()
+        ));
 
         assert_eq!(pad.chain(::Buffer::new()), ::FlowReturn::Ok);
 

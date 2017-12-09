@@ -16,6 +16,10 @@ use QueryRef;
 use Event;
 use Pad;
 use PadTemplate;
+use Format;
+use GenericFormattedValue;
+use FormattedValue;
+use SpecificFormattedValue;
 use miniobject::MiniObject;
 
 use std::ffi::CStr;
@@ -137,15 +141,23 @@ pub trait ElementExtManual {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId);
 
-    fn query_convert<V: Into<::FormatValue>>(
+    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
-        dest_format: ::Format,
-    ) -> Option<::FormatValue>;
-    fn query_duration(&self, format: ::Format) -> Option<::FormatValue>;
-    fn query_position(&self, format: ::Format) -> Option<::FormatValue>;
+    ) -> Option<U>;
+    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<GenericFormattedValue>;
 
-    fn seek<V: Into<::FormatValue>>(
+    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue>;
+
+    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
+    fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
+
+    fn seek<V: Into<GenericFormattedValue>>(
         &self,
         rate: f64,
         flags: ::SeekFlags,
@@ -154,7 +166,7 @@ pub trait ElementExtManual {
         stop_type: ::SeekType,
         stop: V,
     ) -> Result<(), glib::error::BoolError>;
-    fn seek_simple<V: Into<::FormatValue>>(
+    fn seek_simple<V: Into<GenericFormattedValue>>(
         &self,
         seek_flags: ::SeekFlags,
         seek_pos: V,
@@ -363,30 +375,68 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
     }
 
-    fn query_convert<V: Into<::FormatValue>>(
+    fn query_convert<V: Into<GenericFormattedValue>, U: SpecificFormattedValue>(
         &self,
         src_val: V,
-        dest_format: ::Format,
-    ) -> Option<::FormatValue> {
+    ) -> Option<U> {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_convert(
                 self.to_glib_none().0,
-                src_val.to_format().to_glib(),
-                src_val.to_value(),
-                dest_format.to_glib(),
+                src_val.get_format().to_glib(),
+                src_val.to_glib(),
+                U::get_default_format().to_glib(),
                 &mut dest_val,
             ));
             if ret {
-                Some(::FormatValue::new(dest_format, dest_val))
+                Some(U::from_glib(U::get_default_format(), dest_val))
             } else {
                 None
             }
         }
     }
 
-    fn query_duration(&self, format: ::Format) -> Option<::FormatValue> {
+    fn query_convert_generic<V: Into<GenericFormattedValue>>(
+        &self,
+        src_val: V,
+        dest_format: Format,
+    ) -> Option<GenericFormattedValue> {
+        let src_val = src_val.into();
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            let ret = from_glib(ffi::gst_element_query_convert(
+                self.to_glib_none().0,
+                src_val.get_format().to_glib(),
+                src_val.get_value(),
+                dest_format.to_glib(),
+                &mut dest_val,
+            ));
+            if ret {
+                Some(GenericFormattedValue::new(dest_format, dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
+        unsafe {
+            let mut duration = mem::uninitialized();
+            let ret = from_glib(ffi::gst_element_query_duration(
+                self.to_glib_none().0,
+                T::get_default_format().to_glib(),
+                &mut duration,
+            ));
+            if ret {
+                Some(T::from_glib(T::get_default_format(), duration))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_duration(
@@ -395,14 +445,30 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 &mut duration,
             ));
             if ret {
-                Some(::FormatValue::new(format, duration))
+                Some(GenericFormattedValue::new(format, duration))
             } else {
                 None
             }
         }
     }
 
-    fn query_position(&self, format: ::Format) -> Option<::FormatValue> {
+    fn query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
+        unsafe {
+            let mut cur = mem::uninitialized();
+            let ret = from_glib(ffi::gst_element_query_position(
+                self.to_glib_none().0,
+                T::get_default_format().to_glib(),
+                &mut cur,
+            ));
+            if ret {
+                Some(T::from_glib(T::get_default_format(), cur))
+            } else {
+                None
+            }
+        }
+    }
+
+    fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_position(
@@ -411,14 +477,14 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 &mut cur,
             ));
             if ret {
-                Some(::FormatValue::new(format, cur))
+                Some(GenericFormattedValue::new(format, cur))
             } else {
                 None
             }
         }
     }
 
-    fn seek<V: Into<::FormatValue>>(
+    fn seek<V: Into<GenericFormattedValue>>(
         &self,
         rate: f64,
         flags: ::SeekFlags,
@@ -430,26 +496,26 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let start = start.into();
         let stop = stop.into();
 
-        assert_eq!(stop.to_format(), start.to_format());
+        assert_eq!(stop.get_format(), start.get_format());
 
         unsafe {
             glib::error::BoolError::from_glib(
                 ffi::gst_element_seek(
                     self.to_glib_none().0,
                     rate,
-                    start.to_format().to_glib(),
+                    start.get_format().to_glib(),
                     flags.to_glib(),
                     start_type.to_glib(),
-                    start.to_value(),
+                    start.get_value(),
                     stop_type.to_glib(),
-                    stop.to_value(),
+                    stop.get_value(),
                 ),
                 "Failed to seek",
             )
         }
     }
 
-    fn seek_simple<V: Into<::FormatValue>>(
+    fn seek_simple<V: Into<GenericFormattedValue>>(
         &self,
         seek_flags: ::SeekFlags,
         seek_pos: V,
@@ -459,9 +525,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
             glib::error::BoolError::from_glib(
                 ffi::gst_element_seek_simple(
                     self.to_glib_none().0,
-                    seek_pos.to_format().to_glib(),
+                    seek_pos.get_format().to_glib(),
                     seek_flags.to_glib(),
-                    seek_pos.to_value(),
+                    seek_pos.get_value(),
                 ),
                 "Failed to seek",
             )

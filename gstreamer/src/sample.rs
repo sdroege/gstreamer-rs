@@ -18,7 +18,9 @@ use miniobject::*;
 use Buffer;
 use BufferList;
 use Caps;
+use FormattedValue;
 use Segment;
+use FormattedSegment;
 use StructureRef;
 
 pub type Sample = GstRc<SampleRef>;
@@ -29,10 +31,10 @@ unsafe impl MiniObject for SampleRef {
 }
 
 impl GstRc<SampleRef> {
-    pub fn new(
+    pub fn new<F: FormattedValue>(
         buffer: Option<&Buffer>,
         caps: Option<&Caps>,
-        segment: Option<&Segment>,
+        segment: Option<&FormattedSegment<F>>,
         info: Option<&StructureRef>,
     ) -> Self {
         assert_initialized_main_thread!();

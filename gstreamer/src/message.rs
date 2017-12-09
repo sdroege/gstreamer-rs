@@ -14,6 +14,7 @@ use TagList;
 use GstObjectExt;
 use Seqnum;
 use GroupId;
+use GenericFormattedValue;
 
 use std::ptr;
 use std::mem;
@@ -156,7 +157,7 @@ impl GstRc<MessageRef> {
         StateDirtyBuilder::new()
     }
 
-    pub fn new_step_done<'a, V: Into<::FormatValue>>(
+    pub fn new_step_done<'a, V: Into<GenericFormattedValue>>(
         amount: V,
         rate: f64,
         flush: bool,
@@ -214,13 +215,17 @@ impl GstRc<MessageRef> {
         ElementBuilder::new(structure)
     }
 
-    pub fn new_segment_start<'a, V: Into<::FormatValue>>(position: V) -> SegmentStartBuilder<'a> {
+    pub fn new_segment_start<'a, V: Into<GenericFormattedValue>>(
+        position: V,
+    ) -> SegmentStartBuilder<'a> {
         assert_initialized_main_thread!();
         let position = position.into();
         SegmentStartBuilder::new(position)
     }
 
-    pub fn new_segment_done<'a, V: Into<::FormatValue>>(position: V) -> SegmentDoneBuilder<'a> {
+    pub fn new_segment_done<'a, V: Into<GenericFormattedValue>>(
+        position: V,
+    ) -> SegmentDoneBuilder<'a> {
         assert_initialized_main_thread!();
         let position = position.into();
         SegmentDoneBuilder::new(position)
@@ -251,7 +256,7 @@ impl GstRc<MessageRef> {
         RequestStateBuilder::new(state)
     }
 
-    pub fn new_step_start<'a, V: Into<::FormatValue>>(
+    pub fn new_step_start<'a, V: Into<GenericFormattedValue>>(
         active: bool,
         amount: V,
         rate: f64,
@@ -627,7 +632,16 @@ pub struct StateDirty<'a>(&'a MessageRef);
 
 pub struct StepDone<'a>(&'a MessageRef);
 impl<'a> StepDone<'a> {
-    pub fn get(&self) -> (::FormatValue, f64, bool, bool, ::FormatValue, bool) {
+    pub fn get(
+        &self,
+    ) -> (
+        GenericFormattedValue,
+        f64,
+        bool,
+        bool,
+        GenericFormattedValue,
+        bool,
+    ) {
         unsafe {
             let mut format = mem::uninitialized();
             let mut amount = mem::uninitialized();
@@ -649,11 +663,11 @@ impl<'a> StepDone<'a> {
             );
 
             (
-                ::FormatValue::new(from_glib(format), amount as i64),
+                GenericFormattedValue::new(from_glib(format), amount as i64),
                 rate,
                 from_glib(flush),
                 from_glib(intermediate),
-                ::FormatValue::new(from_glib(format), duration as i64),
+                GenericFormattedValue::new(from_glib(format), duration as i64),
                 from_glib(eos),
             )
         }
@@ -758,28 +772,28 @@ pub struct Element<'a>(&'a MessageRef);
 
 pub struct SegmentStart<'a>(&'a MessageRef);
 impl<'a> SegmentStart<'a> {
-    pub fn get(&self) -> ::FormatValue {
+    pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
             ffi::gst_message_parse_segment_start(self.0.as_mut_ptr(), &mut format, &mut position);
 
-            ::FormatValue::new(from_glib(format), position)
+            GenericFormattedValue::new(from_glib(format), position)
         }
     }
 }
 
 pub struct SegmentDone<'a>(&'a MessageRef);
 impl<'a> SegmentDone<'a> {
-    pub fn get(&self) -> ::FormatValue {
+    pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
             ffi::gst_message_parse_segment_done(self.0.as_mut_ptr(), &mut format, &mut position);
 
-            ::FormatValue::new(from_glib(format), position)
+            GenericFormattedValue::new(from_glib(format), position)
         }
     }
 }
@@ -818,7 +832,7 @@ impl<'a> RequestState<'a> {
 
 pub struct StepStart<'a>(&'a MessageRef);
 impl<'a> StepStart<'a> {
-    pub fn get(&self) -> (bool, ::FormatValue, f64, bool, bool) {
+    pub fn get(&self) -> (bool, GenericFormattedValue, f64, bool, bool) {
         unsafe {
             let mut active = mem::uninitialized();
             let mut format = mem::uninitialized();
@@ -839,7 +853,7 @@ impl<'a> StepStart<'a> {
 
             (
                 from_glib(active),
-                ::FormatValue::new(from_glib(format), amount as i64),
+                GenericFormattedValue::new(from_glib(format), amount as i64),
                 rate,
                 from_glib(flush),
                 from_glib(intermediate),
@@ -894,7 +908,7 @@ impl<'a> Qos<'a> {
         }
     }
 
-    pub fn get_stats(&self) -> (::FormatValue, ::FormatValue) {
+    pub fn get_stats(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut format = mem::uninitialized();
             let mut processed = mem::uninitialized();
@@ -908,8 +922,8 @@ impl<'a> Qos<'a> {
             );
 
             (
-                ::FormatValue::new(from_glib(format), processed as i64),
-                ::FormatValue::new(from_glib(format), dropped as i64),
+                GenericFormattedValue::new(from_glib(format), processed as i64),
+                GenericFormattedValue::new(from_glib(format), dropped as i64),
             )
         }
     }
@@ -1554,24 +1568,24 @@ pub struct StepDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    amount: ::FormatValue,
+    amount: GenericFormattedValue,
     rate: f64,
     flush: bool,
     intermediate: bool,
-    duration: ::FormatValue,
+    duration: GenericFormattedValue,
     eos: bool,
 }
 impl<'a> StepDoneBuilder<'a> {
     fn new(
-        amount: ::FormatValue,
+        amount: GenericFormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
-        duration: ::FormatValue,
+        duration: GenericFormattedValue,
         eos: bool,
     ) -> Self {
         skip_assert_initialized!();
-        assert_eq!(amount.to_format(), duration.to_format());
+        assert_eq!(amount.get_format(), duration.get_format());
         Self {
             src: None,
             seqnum: None,
@@ -1588,12 +1602,12 @@ impl<'a> StepDoneBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         ffi::gst_message_new_step_done(
             src,
-            s.amount.to_format().to_glib(),
-            s.amount.to_value() as u64,
+            s.amount.get_format().to_glib(),
+            s.amount.get_value() as u64,
             s.rate,
             s.flush.to_glib(),
             s.intermediate.to_glib(),
-            s.duration.to_value() as u64,
+            s.duration.get_value() as u64,
             s.eos.to_glib(),
         )
     });
@@ -1784,10 +1798,10 @@ pub struct SegmentStartBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    position: ::FormatValue,
+    position: GenericFormattedValue,
 }
 impl<'a> SegmentStartBuilder<'a> {
-    fn new(position: ::FormatValue) -> Self {
+    fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -1800,8 +1814,8 @@ impl<'a> SegmentStartBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         ffi::gst_message_new_segment_start(
             src,
-            s.position.to_format().to_glib(),
-            s.position.to_value(),
+            s.position.get_format().to_glib(),
+            s.position.get_value(),
         )
     });
 }
@@ -1810,10 +1824,10 @@ pub struct SegmentDoneBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
-    position: ::FormatValue,
+    position: GenericFormattedValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
-    fn new(position: ::FormatValue) -> Self {
+    fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -1826,8 +1840,8 @@ impl<'a> SegmentDoneBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         ffi::gst_message_new_segment_done(
             src,
-            s.position.to_format().to_glib(),
-            s.position.to_value(),
+            s.position.get_format().to_glib(),
+            s.position.get_value(),
         )
     });
 }
@@ -1935,7 +1949,7 @@ pub struct StepStartBuilder<'a> {
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     active: bool,
-    amount: ::FormatValue,
+    amount: GenericFormattedValue,
     rate: f64,
     flush: bool,
     intermediate: bool,
@@ -1943,7 +1957,7 @@ pub struct StepStartBuilder<'a> {
 impl<'a> StepStartBuilder<'a> {
     fn new(
         active: bool,
-        amount: ::FormatValue,
+        amount: GenericFormattedValue,
         rate: f64,
         flush: bool,
         intermediate: bool,
@@ -1965,8 +1979,8 @@ impl<'a> StepStartBuilder<'a> {
         ffi::gst_message_new_step_start(
             src,
             s.active.to_glib(),
-            s.amount.to_format().to_glib(),
-            s.amount.to_value() as u64,
+            s.amount.get_format().to_glib(),
+            s.amount.get_value() as u64,
             s.rate,
             s.flush.to_glib(),
             s.intermediate.to_glib(),
@@ -1984,7 +1998,7 @@ pub struct QosBuilder<'a> {
     timestamp: ::ClockTime,
     duration: ::ClockTime,
     values: Option<(i64, f64, i32)>,
-    stats: Option<(::FormatValue, ::FormatValue)>,
+    stats: Option<(GenericFormattedValue, GenericFormattedValue)>,
 }
 impl<'a> QosBuilder<'a> {
     fn new(
@@ -2016,8 +2030,10 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    pub fn stats(self, processed: ::FormatValue, dropped: ::FormatValue) -> Self {
-        assert_eq!(processed.to_format(), dropped.to_format());
+    pub fn stats<V: Into<GenericFormattedValue>>(self, processed: V, dropped: V) -> Self {
+        let processed = processed.into();
+        let dropped = dropped.into();
+        assert_eq!(processed.get_format(), dropped.get_format());
         Self {
             stats: Some((processed, dropped)),
             ..self
@@ -2039,9 +2055,9 @@ impl<'a> QosBuilder<'a> {
         if let Some((processed, dropped)) = s.stats {
             ffi::gst_message_set_qos_stats(
                 msg,
-                processed.to_format().to_glib(),
-                processed.to_value() as u64,
-                dropped.to_value() as u64,
+                processed.get_format().to_glib(),
+                processed.get_value() as u64,
+                dropped.get_value() as u64,
             );
         }
         msg

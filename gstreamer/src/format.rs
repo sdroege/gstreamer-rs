@@ -8,162 +8,477 @@
 
 use ClockTime;
 use Format;
+use std::ops;
+use muldiv::MulDiv;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-pub enum FormatValue {
+pub enum GenericFormattedValue {
     Undefined(i64),
-    Default(Option<u64>),
-    Bytes(Option<u64>),
+    Default(Default),
+    Bytes(Bytes),
     Time(ClockTime),
-    Buffers(Option<u64>),
+    Buffers(Buffers),
     Percent(Option<u32>),
     Other(Format, i64),
 }
 
-impl FormatValue {
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+pub struct Default(pub Option<u64>);
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+pub struct Bytes(pub Option<u64>);
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+pub struct Buffers(pub Option<u64>);
+pub type Time = ClockTime;
+
+pub trait FormattedValue: Copy + Clone + Sized + 'static {
+    fn get_default_format() -> Format;
+    fn try_from(v: GenericFormattedValue) -> Option<Self>;
+
+    fn get_format(&self) -> Format;
+
+    unsafe fn from_glib(format: Format, value: i64) -> Self;
+    unsafe fn to_glib(&self) -> i64;
+}
+
+pub trait SpecificFormattedValue: FormattedValue {}
+
+impl FormattedValue for GenericFormattedValue {
+    fn get_default_format() -> Format {
+        Format::Undefined
+    }
+
+    fn try_from(v: GenericFormattedValue) -> Option<Self> {
+        Some(v)
+    }
+
+    fn get_format(&self) -> Format {
+        self.get_format()
+    }
+
+    unsafe fn from_glib(format: Format, value: i64) -> Self {
+        GenericFormattedValue::new(format, value)
+    }
+
+    unsafe fn to_glib(&self) -> i64 {
+        self.get_value()
+    }
+}
+
+impl GenericFormattedValue {
     pub fn new(format: Format, value: i64) -> Self {
         match format {
-            Format::Undefined => FormatValue::Undefined(value),
-            Format::Default => FormatValue::Default(if value == -1 {
-                None
+            Format::Undefined => GenericFormattedValue::Undefined(value),
+            Format::Default => GenericFormattedValue::Default(if value == -1 {
+                Default(None)
             } else {
-                Some(value as u64)
+                Default(Some(value as u64))
             }),
-            Format::Bytes => FormatValue::Bytes(if value == -1 {
-                None
+            Format::Bytes => GenericFormattedValue::Bytes(if value == -1 {
+                Bytes(None)
             } else {
-                Some(value as u64)
+                Bytes(Some(value as u64))
             }),
-            Format::Time => FormatValue::Time(if value == -1 {
+            Format::Time => GenericFormattedValue::Time(if value == -1 {
                 ClockTime::none()
             } else {
-                ClockTime::from(value as u64)
+                ClockTime::from_nseconds(value as u64)
             }),
-            Format::Buffers => FormatValue::Buffers(if value == -1 {
-                None
+            Format::Buffers => GenericFormattedValue::Buffers(if value == -1 {
+                Buffers(None)
             } else {
-                Some(value as u64)
+                Buffers(Some(value as u64))
             }),
-            Format::Percent => FormatValue::Percent(if value == -1 {
+            Format::Percent => GenericFormattedValue::Percent(if value == -1 {
                 None
             } else {
                 Some(value as u32)
             }),
-            Format::__Unknown(_) => FormatValue::Other(format, value),
+            Format::__Unknown(_) => GenericFormattedValue::Other(format, value),
         }
     }
 
     pub fn from_undefined(v: i64) -> Self {
-        FormatValue::Undefined(v)
+        GenericFormattedValue::Undefined(v)
     }
 
-    pub fn from_default<V: Into<Option<u64>>>(v: V) -> Self {
-        FormatValue::Default(v.into())
+    pub fn from_default<V: Into<Default>>(v: V) -> Self {
+        GenericFormattedValue::Default(v.into())
     }
 
-    pub fn from_bytes<V: Into<Option<u64>>>(v: V) -> Self {
-        FormatValue::Bytes(v.into())
+    pub fn from_bytes<V: Into<Bytes>>(v: V) -> Self {
+        GenericFormattedValue::Bytes(v.into())
     }
 
-    pub fn from_time(v: ClockTime) -> Self {
-        FormatValue::Time(v)
+    pub fn from_time<V: Into<ClockTime>>(v: V) -> Self {
+        GenericFormattedValue::Time(v.into())
     }
 
-    pub fn from_buffers<V: Into<Option<u64>>>(v: V) -> Self {
-        FormatValue::Buffers(v.into())
+    pub fn from_buffers<V: Into<Buffers>>(v: V) -> Self {
+        GenericFormattedValue::Buffers(v.into())
     }
 
     pub fn from_percent<V: Into<Option<u32>>>(v: V) -> Self {
-        FormatValue::Percent(v.into())
+        GenericFormattedValue::Percent(v.into())
     }
 
     pub fn from_other(format: Format, v: i64) -> Self {
-        FormatValue::Other(format, v)
+        GenericFormattedValue::Other(format, v)
     }
 
-    pub fn to_format(&self) -> Format {
+    pub fn get_format(&self) -> Format {
         match *self {
-            FormatValue::Undefined(_) => Format::Undefined,
-            FormatValue::Default(_) => Format::Default,
-            FormatValue::Bytes(_) => Format::Bytes,
-            FormatValue::Time(_) => Format::Time,
-            FormatValue::Buffers(_) => Format::Buffers,
-            FormatValue::Percent(_) => Format::Percent,
-            FormatValue::Other(f, _) => f,
+            GenericFormattedValue::Undefined(_) => Format::Undefined,
+            GenericFormattedValue::Default(_) => Format::Default,
+            GenericFormattedValue::Bytes(_) => Format::Bytes,
+            GenericFormattedValue::Time(_) => Format::Time,
+            GenericFormattedValue::Buffers(_) => Format::Buffers,
+            GenericFormattedValue::Percent(_) => Format::Percent,
+            GenericFormattedValue::Other(f, _) => f,
         }
     }
 
-    pub fn to_value(&self) -> i64 {
+    pub fn get_value(&self) -> i64 {
         match *self {
-            FormatValue::Undefined(v) => v,
-            FormatValue::Default(v) => v.map(|v| v as i64).unwrap_or(-1),
-            FormatValue::Bytes(v) => v.map(|v| v as i64).unwrap_or(-1),
-            FormatValue::Time(v) => v.map(|v| v as i64).unwrap_or(-1),
-            FormatValue::Buffers(v) => v.map(|v| v as i64).unwrap_or(-1),
-            FormatValue::Percent(v) => v.map(|v| v as i64).unwrap_or(-1),
-            FormatValue::Other(_, v) => v,
+            GenericFormattedValue::Undefined(v) => v,
+            GenericFormattedValue::Default(v) => v.map(|v| v as i64).unwrap_or(-1),
+            GenericFormattedValue::Bytes(v) => v.map(|v| v as i64).unwrap_or(-1),
+            GenericFormattedValue::Time(v) => v.map(|v| v as i64).unwrap_or(-1),
+            GenericFormattedValue::Buffers(v) => v.map(|v| v as i64).unwrap_or(-1),
+            GenericFormattedValue::Percent(v) => v.map(|v| v as i64).unwrap_or(-1),
+            GenericFormattedValue::Other(_, v) => v,
         }
     }
 
-    pub fn try_to_undefined(&self) -> Option<i64> {
-        if let FormatValue::Undefined(v) = *self {
-            Some(v)
+    pub fn try_into<F: FormattedValue>(self) -> Result<F, Self> {
+        if F::get_default_format() == self.get_format()
+            || F::get_default_format() == Format::Undefined
+        {
+            Ok(unsafe { F::from_glib(self.get_format(), self.to_glib()) })
         } else {
-            None
+            Err(self)
         }
     }
 
-    pub fn try_to_default(&self) -> Option<Option<u64>> {
-        if let FormatValue::Default(v) = *self {
-            Some(v)
+    pub fn try_into_undefined(self) -> Result<i64, Self> {
+        if let GenericFormattedValue::Undefined(v) = self {
+            Ok(v)
         } else {
-            None
+            Err(self)
         }
     }
 
-    pub fn try_to_bytes(&self) -> Option<Option<u64>> {
-        if let FormatValue::Bytes(v) = *self {
-            Some(v)
+    pub fn try_into_default(self) -> Result<Default, Self> {
+        if let GenericFormattedValue::Default(v) = self {
+            Ok(v)
         } else {
-            None
+            Err(self)
         }
     }
 
-    pub fn try_to_time(&self) -> Option<ClockTime> {
-        if let FormatValue::Time(v) = *self {
-            Some(v)
+    pub fn try_into_bytes(self) -> Result<Bytes, Self> {
+        if let GenericFormattedValue::Bytes(v) = self {
+            Ok(v)
         } else {
-            None
+            Err(self)
         }
     }
 
-    pub fn try_to_buffers(&self) -> Option<Option<u64>> {
-        if let FormatValue::Buffers(v) = *self {
-            Some(v)
+    pub fn try_into_time(self) -> Result<ClockTime, Self> {
+        if let GenericFormattedValue::Time(v) = self {
+            Ok(v)
         } else {
-            None
+            Err(self)
         }
     }
 
-    pub fn try_to_percent(&self) -> Option<Option<u32>> {
-        if let FormatValue::Percent(v) = *self {
-            Some(v)
+    pub fn try_into_buffers(self) -> Result<Buffers, Self> {
+        if let GenericFormattedValue::Buffers(v) = self {
+            Ok(v)
         } else {
-            None
+            Err(self)
         }
     }
 
-    pub fn try_to_other(&self) -> Option<(Format, i64)> {
-        if let FormatValue::Other(f, v) = *self {
-            Some((f, v))
+    pub fn try_into_percent(self) -> Result<Option<u32>, Self> {
+        if let GenericFormattedValue::Percent(v) = self {
+            Ok(v)
         } else {
-            None
+            Err(self)
+        }
+    }
+
+    pub fn try_into_other(self) -> Result<(Format, i64), Self> {
+        if let GenericFormattedValue::Other(f, v) = self {
+            Ok((f, v))
+        } else {
+            Err(self)
         }
     }
 }
 
-impl From<ClockTime> for FormatValue {
-    fn from(v: ClockTime) -> FormatValue {
-        FormatValue::Time(v)
-    }
-}
+macro_rules! impl_op_same(
+    ($name:ident, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident, $e:expr) => {
+        impl ops::$op<$name> for $name {
+            type Output = $name;
+
+            fn $op_name(self, other: $name) -> $name {
+                match (self.0, other.0) {
+                    (Some(a), Some(b)) => $name(Some($e(a, b))),
+                    _ => $name(None),
+                }
+            }
+        }
+
+        impl<'a> ops::$op<&'a $name> for $name {
+            type Output = $name;
+
+            fn $op_name(self, other: &'a $name) -> $name {
+                self.$op_name(*other)
+            }
+        }
+
+        impl ops::$op_assign<$name> for $name {
+            fn $op_assign_name(&mut self, other: $name) {
+                match (self.0, other.0) {
+                    (Some(a), Some(b)) => self.0 = Some($e(a, b)),
+                    _ => self.0 = None,
+                }
+            }
+        }
+
+        impl<'a> ops::$op_assign<&'a $name> for $name {
+            fn $op_assign_name(&mut self, other: &'a $name) {
+                self.$op_assign_name(*other)
+            }
+        }
+    };
+);
+
+macro_rules! impl_op_u64(
+    ($name:ident, $op:ident, $op_name:ident, $op_assign:ident, $op_assign_name:ident, $e:expr) => {
+        impl ops::$op<u64> for $name {
+            type Output = $name;
+
+            fn $op_name(self, other: u64) -> $name {
+                match self.0 {
+                    Some(a) => $name(Some($e(a, other))),
+                    _ => $name(None),
+                }
+            }
+        }
+
+        impl<'a> ops::$op<&'a u64> for $name {
+            type Output = $name;
+
+            fn $op_name(self, other: &'a u64) -> $name {
+                self.$op_name(*other)
+            }
+        }
+
+        impl ops::$op_assign<u64> for $name {
+            fn $op_assign_name(&mut self, other: u64) {
+                match self.0 {
+                    Some(a) => self.0 = Some($e(a, other)),
+                    _ => self.0 = None,
+                }
+            }
+        }
+
+        impl<'a> ops::$op_assign<&'a u64> for $name {
+            fn $op_assign_name(&mut self, other: &'a u64) {
+                self.$op_assign_name(*other)
+            }
+        }
+    };
+);
+
+macro_rules! impl_format_value_traits(
+    ($name:ident, $format:ident, $format_value:ident) => {
+        impl From<$name> for GenericFormattedValue {
+            fn from(v: $name) -> GenericFormattedValue {
+                GenericFormattedValue::$format_value(v)
+            }
+        }
+
+        impl FormattedValue for $name {
+            fn get_default_format() -> Format {
+                Format::$format
+            }
+
+            fn try_from(v: GenericFormattedValue) -> Option<Self> {
+                if let GenericFormattedValue::$format_value(v) = v {
+                    Some(v)
+                } else {
+                    None
+                }
+            }
+
+            fn get_format(&self) -> Format {
+                Format::$format
+            }
+
+            unsafe fn from_glib(format: Format, value: i64) -> Self {
+                debug_assert_eq!(format, Format::$format);
+                if value == -1 {
+                    $name(None)
+                } else {
+                    $name(Some(value as u64))
+                }
+            }
+
+            unsafe fn to_glib(&self) -> i64 {
+                self.0.map(|v| v as i64).unwrap_or(-1)
+            }
+        }
+
+        impl SpecificFormattedValue for $name { }
+
+        impl From<u64> for $name {
+            fn from(v: u64) -> $name {
+                $name(Some(v))
+            }
+        }
+
+        impl From<Option<u64>> for $name {
+            fn from(v: Option<u64>) -> $name {
+                $name(v)
+            }
+        }
+
+        impl Into<Option<u64>> for $name {
+            fn into(self) -> Option<u64> {
+                self.0
+            }
+        }
+
+        impl ops::Deref for $name {
+            type Target = Option<u64>;
+
+            fn deref(&self) -> &Option<u64> {
+                &self.0
+            }
+        }
+
+        impl ops::DerefMut for $name {
+            fn deref_mut(&mut self) -> &mut Option<u64> {
+                &mut self.0
+            }
+        }
+
+        impl AsRef<Option<u64>> for $name {
+            fn as_ref(&self) -> &Option<u64> {
+                &self.0
+            }
+        }
+
+        impl AsMut<Option<u64>> for $name {
+            fn as_mut(&mut self) -> &mut Option<u64> {
+                &mut self.0
+            }
+        }
+
+        impl_op_same!($name, Add, add, AddAssign, add_assign, |a, b| a + b);
+        impl_op_same!($name, Sub, sub, SubAssign, sub_assign, |a, b| a - b);
+        impl_op_same!($name, Mul, mul, MulAssign, mul_assign, |a, b| a * b);
+        impl_op_same!($name, Div, div, DivAssign, div_assign, |a, b| a / b);
+        impl_op_same!($name, Rem, rem, RemAssign, rem_assign, |a, b| a % b);
+
+        impl_op_u64!($name, Mul, mul, MulAssign, mul_assign, |a, b| a * b);
+        impl_op_u64!($name, Div, div, DivAssign, div_assign, |a, b| a / b);
+        impl_op_u64!($name, Rem, rem, RemAssign, rem_assign, |a, b| a % b);
+
+        impl ops::Mul<$name> for u64 {
+            type Output = $name;
+
+            fn mul(self, other: $name) -> $name {
+                other.mul(self)
+            }
+        }
+
+        impl<'a> ops::Mul<&'a $name> for u64 {
+            type Output = $name;
+
+            fn mul(self, other: &'a $name) -> $name {
+                other.mul(self)
+            }
+        }
+
+        impl MulDiv<$name> for $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: $name, denom: $name) -> Option<Self::Output> {
+                match (self.0, num.0, denom.0) {
+                    (Some(s), Some(n), Some(d)) => s.mul_div_floor(n, d).map(|v| $name(Some(v))),
+                    _ => Some($name(None)),
+                }
+            }
+
+            fn mul_div_round(self, num: $name, denom: $name) -> Option<Self::Output> {
+                match (self.0, num.0, denom.0) {
+                    (Some(s), Some(n), Some(d)) => s.mul_div_round(n, d).map(|v| $name(Some(v))),
+                    _ => Some($name(None)),
+                }
+            }
+
+            fn mul_div_ceil(self, num: $name, denom: $name) -> Option<Self::Output> {
+                match (self.0, num.0, denom.0) {
+                    (Some(s), Some(n), Some(d)) => s.mul_div_ceil(n, d).map(|v| $name(Some(v))),
+                    _ => Some($name(None)),
+                }
+            }
+        }
+
+        impl<'a> MulDiv<&'a $name> for $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: &$name, denom: &$name) -> Option<Self::Output> {
+                self.mul_div_floor(*num, *denom)
+            }
+
+            fn mul_div_round(self, num: &$name, denom: &$name) -> Option<Self::Output> {
+                self.mul_div_round(*num, *denom)
+            }
+
+            fn mul_div_ceil(self, num: &$name, denom: &$name) -> Option<Self::Output> {
+                self.mul_div_ceil(*num, *denom)
+            }
+        }
+
+        impl<'a> MulDiv<u64> for $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: u64, denom: u64) -> Option<Self::Output> {
+                self.mul_div_floor($name(Some(num)), $name(Some(denom)))
+            }
+
+            fn mul_div_round(self, num: u64, denom: u64) -> Option<Self::Output> {
+                self.mul_div_round($name(Some(num)), $name(Some(denom)))
+            }
+
+            fn mul_div_ceil(self, num: u64, denom: u64) -> Option<Self::Output> {
+                self.mul_div_ceil($name(Some(num)), $name(Some(denom)))
+            }
+        }
+
+        impl<'a> MulDiv<&'a u64> for $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: &u64, denom: &u64) -> Option<Self::Output> {
+                self.mul_div_floor(*num, *denom)
+            }
+
+            fn mul_div_round(self, num: &u64, denom: &u64) -> Option<Self::Output> {
+                self.mul_div_round(*num, *denom)
+            }
+
+            fn mul_div_ceil(self, num: &u64, denom: &u64) -> Option<Self::Output> {
+                self.mul_div_ceil(*num, *denom)
+            }
+        }
+    };
+);
+
+impl_format_value_traits!(Default, Default, Default);
+impl_format_value_traits!(Bytes, Bytes, Bytes);
+impl_format_value_traits!(ClockTime, Time, Time);
+impl_format_value_traits!(Buffers, Buffers, Buffers);

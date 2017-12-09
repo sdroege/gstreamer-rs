@@ -11,7 +11,7 @@ use glib_ffi;
 use gobject_ffi;
 
 use gst;
-use gst::miniobject::MiniObject;
+use gst::prelude::*;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrNone,
                       ToGlib, ToGlibPtr, ToGlibPtrMut};
@@ -545,25 +545,47 @@ impl VideoInfo {
         self.format_info().n_components()
     }
 
-    pub fn convert<V: Into<gst::FormatValue>>(
+    pub fn convert<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
         &self,
         src_val: V,
-        dest_fmt: gst::Format,
-    ) -> Option<gst::FormatValue> {
+    ) -> Option<U> {
         skip_assert_initialized!();
 
         let src_val = src_val.into();
-
         unsafe {
             let mut dest_val = mem::uninitialized();
             if from_glib(ffi::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
-                src_val.to_format().to_glib(),
-                src_val.to_value(),
+                src_val.get_format().to_glib(),
+                src_val.to_glib(),
+                U::get_default_format().to_glib(),
+                &mut dest_val,
+            )) {
+                Some(U::from_glib(U::get_default_format(), dest_val))
+            } else {
+                None
+            }
+        }
+    }
+
+    pub fn convert_generic<V: Into<gst::GenericFormattedValue>>(
+        &self,
+        src_val: V,
+        dest_fmt: gst::Format,
+    ) -> Option<gst::GenericFormattedValue> {
+        skip_assert_initialized!();
+
+        let src_val = src_val.into();
+        unsafe {
+            let mut dest_val = mem::uninitialized();
+            if from_glib(ffi::gst_video_info_convert(
+                &self.0 as *const _ as *mut _,
+                src_val.get_format().to_glib(),
+                src_val.to_glib(),
                 dest_fmt.to_glib(),
                 &mut dest_val,
             )) {
-                Some(gst::FormatValue::new(dest_fmt, dest_val))
+                Some(gst::GenericFormattedValue::new(dest_fmt, dest_val))
             } else {
                 None
             }

@@ -57,16 +57,14 @@ fn tutorial_main() {
                 if custom_data.playing {
                     let position = custom_data
                         .playbin
-                        .query_position(gst::Format::Time)
-                        .and_then(|v| v.try_to_time())
+                        .query_position::<gst::ClockTime>()
                         .expect("Could not query current position.");
 
                     // If we didn't know it yet, query the stream duration
                     if custom_data.duration == gst::CLOCK_TIME_NONE {
                         custom_data.duration = custom_data
                             .playbin
-                            .query_duration(gst::Format::Time)
-                            .and_then(|v| v.try_to_time())
+                            .query_duration()
                             .expect("Could not query current duration.")
                     }
 

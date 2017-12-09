@@ -105,7 +105,6 @@ mod device_provider;
 mod parse_context;
 mod enums;
 mod clock_time;
-mod format;
 mod date_time;
 pub use object::GstObjectExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
@@ -124,7 +123,9 @@ pub use bus::BusStream;
 pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
                 StateChangeError, StateChangeSuccess};
 pub use clock_time::ClockTime;
-pub use format::FormatValue;
+
+pub mod format;
+pub use format::{FormattedValue, GenericFormattedValue, SpecificFormattedValue};
 
 mod value;
 pub use value::*;
@@ -196,6 +197,8 @@ pub mod prelude {
     pub use miniobject::MiniObject;
 
     pub use muldiv::MulDiv;
+
+    pub use format::{FormattedValue, SpecificFormattedValue};
 }
 
 mod utils;
