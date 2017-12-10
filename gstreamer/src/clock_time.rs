@@ -87,7 +87,7 @@ impl fmt::Display for ClockTime {
             f.write_fmt(format_args!("{:02}:{:02}:{:02}", h, m, s))
         } else {
             let mut divisor = 1;
-            let precision = cmp::max(precision, 9);
+            let precision = cmp::min(precision, 9);
             for _ in 0..(9 - precision) {
                 divisor *= 10;
             }
