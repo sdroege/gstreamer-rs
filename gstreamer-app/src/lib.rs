@@ -41,8 +41,8 @@ pub use auto::*;
 
 mod app_src;
 mod app_sink;
-pub use app_src::AppSrcCallbacks;
-pub use app_sink::AppSinkCallbacks;
+pub use app_src::*;
+pub use app_sink::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

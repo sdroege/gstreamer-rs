@@ -60,67 +60,64 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         ],
     ));
 
-    appsink.set_callbacks(gst_app::AppSinkCallbacks::new(
-        /* eos */
-        |_| {},
-        /* new_preroll */
-        |_| gst::FlowReturn::Ok,
-        /* new_samples */
-        |appsink| {
-            let sample = match appsink.pull_sample() {
-                None => return gst::FlowReturn::Eos,
-                Some(sample) => sample,
-            };
+    appsink.set_callbacks(
+        gst_app::AppSinkCallbacksBuilder::new()
+            .new_sample(|appsink| {
+                let sample = match appsink.pull_sample() {
+                    None => return gst::FlowReturn::Eos,
+                    Some(sample) => sample,
+                };
 
-            let buffer = if let Some(buffer) = sample.get_buffer() {
-                buffer
-            } else {
-                gst_element_error!(
-                    appsink,
-                    gst::ResourceError::Failed,
-                    ("Failed to get buffer from appsink")
-                );
+                let buffer = if let Some(buffer) = sample.get_buffer() {
+                    buffer
+                } else {
+                    gst_element_error!(
+                        appsink,
+                        gst::ResourceError::Failed,
+                        ("Failed to get buffer from appsink")
+                    );
 
-                return gst::FlowReturn::Error;
-            };
+                    return gst::FlowReturn::Error;
+                };
 
-            let map = if let Some(map) = buffer.map_readable() {
-                map
-            } else {
-                gst_element_error!(
-                    appsink,
-                    gst::ResourceError::Failed,
-                    ("Failed to map buffer readable")
-                );
+                let map = if let Some(map) = buffer.map_readable() {
+                    map
+                } else {
+                    gst_element_error!(
+                        appsink,
+                        gst::ResourceError::Failed,
+                        ("Failed to map buffer readable")
+                    );
 
-                return gst::FlowReturn::Error;
-            };
+                    return gst::FlowReturn::Error;
+                };
 
-            let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
-                samples
-            } else {
-                gst_element_error!(
-                    appsink,
-                    gst::ResourceError::Failed,
-                    ("Failed to interprete buffer as S16 PCM")
-                );
+                let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
+                    samples
+                } else {
+                    gst_element_error!(
+                        appsink,
+                        gst::ResourceError::Failed,
+                        ("Failed to interprete buffer as S16 PCM")
+                    );
 
-                return gst::FlowReturn::Error;
-            };
+                    return gst::FlowReturn::Error;
+                };
 
-            let sum: f64 = samples
-                .iter()
-                .map(|sample| {
-                    let f = f64::from(*sample) / f64::from(i16::MAX);
-                    f * f
-                })
-                .sum();
-            let rms = (sum / (samples.len() as f64)).sqrt();
-            println!("rms: {}", rms);
+                let sum: f64 = samples
+                    .iter()
+                    .map(|sample| {
+                        let f = f64::from(*sample) / f64::from(i16::MAX);
+                        f * f
+                    })
+                    .sum();
+                let rms = (sum / (samples.len() as f64)).sqrt();
+                println!("rms: {}", rms);
 
-            gst::FlowReturn::Ok
-        },
-    ));
+                gst::FlowReturn::Ok
+            })
+            .build(),
+    );
 
     Ok(pipeline)
 }

@@ -15,29 +15,63 @@ use glib_ffi::{gboolean, gpointer};
 use std::ptr;
 
 pub struct AppSrcCallbacks {
-    need_data: Box<Fn(&AppSrc, u32) + Send + Sync + 'static>,
-    enough_data: Box<Fn(&AppSrc) + Send + Sync + 'static>,
-    seek_data: Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>,
+    need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,
+    enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
+    seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
     callbacks: ffi::GstAppSrcCallbacks,
 }
 
-impl AppSrcCallbacks {
-    pub fn new<F, G, H>(need_data: F, enough_data: G, seek_data: H) -> Self
-    where
-        F: Fn(&AppSrc, u32) + Send + Sync + 'static,
-        G: Fn(&AppSrc) + Send + Sync + 'static,
-        H: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static,
-    {
+pub struct AppSrcCallbacksBuilder {
+    need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,
+    enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
+    seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
+}
+
+impl AppSrcCallbacksBuilder {
+    pub fn new() -> Self {
         skip_assert_initialized!();
 
+        AppSrcCallbacksBuilder {
+            need_data: None,
+            enough_data: None,
+            seek_data: None,
+        }
+    }
+
+    pub fn need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(self, need_data: F) -> Self {
+        Self {
+            need_data: Some(Box::new(need_data)),
+            ..self
+        }
+    }
+
+    pub fn enough_data<F: Fn(&AppSrc) + Send + Sync + 'static>(self, enough_data: F) -> Self {
+        Self {
+            enough_data: Some(Box::new(enough_data)),
+            ..self
+        }
+    }
+
+    pub fn seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(self, seek_data: F) -> Self {
+        Self {
+            seek_data: Some(Box::new(seek_data)),
+            ..self
+        }
+    }
+
+    pub fn build(self) -> AppSrcCallbacks {
+        let have_need_data = self.need_data.is_some();
+        let have_enough_data = self.enough_data.is_some();
+        let have_seek_data = self.seek_data.is_some();
+
         AppSrcCallbacks {
-            need_data: Box::new(need_data),
-            enough_data: Box::new(enough_data),
-            seek_data: Box::new(seek_data),
+            need_data: self.need_data,
+            enough_data: self.enough_data,
+            seek_data: self.seek_data,
             callbacks: ffi::GstAppSrcCallbacks {
-                need_data: Some(trampoline_need_data),
-                enough_data: Some(trampoline_enough_data),
-                seek_data: Some(trampoline_seek_data),
+                need_data: if have_need_data { Some(trampoline_need_data) } else { None },
+                enough_data: if have_enough_data { Some(trampoline_enough_data) } else { None },
+                seek_data: if have_seek_data { Some(trampoline_seek_data) } else { None },
                 _gst_reserved: [
                     ptr::null_mut(),
                     ptr::null_mut(),
@@ -57,14 +91,14 @@ unsafe extern "C" fn trampoline_need_data(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    (callbacks.need_data)(&from_glib_borrow(appsrc), length);
+    callbacks.need_data.as_ref().map(|f| f(&from_glib_borrow(appsrc), length));
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    (callbacks.enough_data)(&from_glib_borrow(appsrc));
+    callbacks.enough_data.as_ref().map(|f| f(&from_glib_borrow(appsrc)));
 }
 
 unsafe extern "C" fn trampoline_seek_data(
@@ -75,7 +109,7 @@ unsafe extern "C" fn trampoline_seek_data(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    (callbacks.seek_data)(&from_glib_borrow(appsrc), offset).to_glib()
+    callbacks.seek_data.as_ref().map(|f| f(&from_glib_borrow(appsrc), offset)).unwrap_or(false).to_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
