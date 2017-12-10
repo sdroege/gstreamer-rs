@@ -50,6 +50,8 @@ mod video_frame;
 pub use video_frame::VideoFrame;
 mod video_overlay;
 pub use video_overlay::VideoOverlayExtManual;
+mod video_event;
+pub use video_event::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
