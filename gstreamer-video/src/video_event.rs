@@ -13,6 +13,7 @@ use gst;
 use gst::MiniObject;
 use glib::translate::{from_glib, from_glib_full, ToGlib};
 use glib::ToSendValue;
+use std::mem;
 
 pub fn is_force_key_unit_event(event: &gst::EventRef) -> bool {
     unsafe { from_glib(ffi::gst_video_event_is_force_key_unit(event.as_mut_ptr())) }
@@ -72,20 +73,8 @@ macro_rules! event_builder_generic_impl {
     }
 }
 
-pub fn new_downstream_force_key_unit_event<'a>(
-    timestamp: gst::ClockTime,
-    stream_time: gst::ClockTime,
-    running_time: gst::ClockTime,
-    all_headers: bool,
-    count: u32,
-) -> DownstreamForceKeyUnitEventBuilder<'a> {
-    DownstreamForceKeyUnitEventBuilder::new(
-        timestamp,
-        stream_time,
-        running_time,
-        all_headers,
-        count,
-    )
+pub fn new_downstream_force_key_unit_event<'a>() -> DownstreamForceKeyUnitEventBuilder<'a> {
+    DownstreamForceKeyUnitEventBuilder::new()
 }
 
 pub struct DownstreamForceKeyUnitEventBuilder<'a> {
@@ -100,23 +89,52 @@ pub struct DownstreamForceKeyUnitEventBuilder<'a> {
 }
 
 impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
-    fn new(
-        timestamp: gst::ClockTime,
-        stream_time: gst::ClockTime,
-        running_time: gst::ClockTime,
-        all_headers: bool,
-        count: u32,
-    ) -> Self {
+    fn new() -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
+            timestamp: gst::CLOCK_TIME_NONE,
+            stream_time: gst::CLOCK_TIME_NONE,
+            running_time: gst::CLOCK_TIME_NONE,
+            all_headers: true,
+            count: 0,
+        }
+    }
+
+    pub fn timestamp(self, timestamp: gst::ClockTime) -> Self {
+        Self {
             timestamp: timestamp,
+            ..self
+        }
+    }
+
+    pub fn stream_time(self, stream_time: gst::ClockTime) -> Self {
+        Self {
             stream_time: stream_time,
+            ..self
+        }
+    }
+
+    pub fn running_time(self, running_time: gst::ClockTime) -> Self {
+        Self {
             running_time: running_time,
+            ..self
+        }
+    }
+
+    pub fn all_headers(self, all_headers: bool) -> Self {
+        Self {
             all_headers: all_headers,
+            ..self
+        }
+    }
+
+    pub fn count(self, count: u32) -> Self {
+        Self {
             count: count,
+            ..self
         }
     }
 
@@ -144,11 +162,11 @@ pub fn parse_downstream_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Option<DownstreamForceKeyUnitEvent> {
     unsafe {
-        let mut timestamp = 0;
-        let mut stream_time = 0;
-        let mut running_time = 0;
-        let mut all_headers = 0;
-        let mut count = 0;
+        let mut timestamp = mem::uninitialized();
+        let mut stream_time = mem::uninitialized();
+        let mut running_time = mem::uninitialized();
+        let mut all_headers = mem::uninitialized();
+        let mut count = mem::uninitialized();
 
         let res: bool = from_glib(ffi::gst_video_event_parse_downstream_force_key_unit(
             event.as_mut_ptr(),
@@ -172,12 +190,8 @@ pub fn parse_downstream_force_key_unit_event(
     }
 }
 
-pub fn new_upstream_force_key_unit_event<'a>(
-    running_time: gst::ClockTime,
-    all_headers: bool,
-    count: u32,
-) -> UpstreamForceKeyUnitEventBuilder<'a> {
-    UpstreamForceKeyUnitEventBuilder::new(running_time, all_headers, count)
+pub fn new_upstream_force_key_unit_event<'a>() -> UpstreamForceKeyUnitEventBuilder<'a> {
+    UpstreamForceKeyUnitEventBuilder::new()
 }
 
 pub struct UpstreamForceKeyUnitEventBuilder<'a> {
@@ -190,15 +204,36 @@ pub struct UpstreamForceKeyUnitEventBuilder<'a> {
 }
 
 impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
-    fn new(running_time: gst::ClockTime, all_headers: bool, count: u32) -> Self {
+    fn new() -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
+            running_time: gst::CLOCK_TIME_NONE,
+            all_headers: true,
+            count: 0,
+        }
+    }
+
+    pub fn running_time(self, running_time: gst::ClockTime) -> Self {
+        Self {
             running_time: running_time,
+            ..self
+        }
+    }
+
+    pub fn all_headers(self, all_headers: bool) -> Self {
+        Self {
             all_headers: all_headers,
+            ..self
+        }
+    }
+
+    pub fn count(self, count: u32) -> Self {
+        Self {
             count: count,
+            ..self
         }
     }
 
@@ -222,9 +257,9 @@ pub fn parse_upstream_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Option<UpstreamForceKeyUnitEvent> {
     unsafe {
-        let mut running_time = 0;
-        let mut all_headers = 0;
-        let mut count = 0;
+        let mut running_time = mem::uninitialized();
+        let mut all_headers = mem::uninitialized();
+        let mut count = mem::uninitialized();
 
         let res: bool = from_glib(ffi::gst_video_event_parse_upstream_force_key_unit(
             event.as_mut_ptr(),
@@ -292,7 +327,7 @@ pub struct StillFrameEvent {
 
 pub fn parse_still_frame_event(event: &gst::EventRef) -> Option<StillFrameEvent> {
     unsafe {
-        let mut in_still = 0;
+        let mut in_still = mem::uninitialized();
 
         let res: bool = from_glib(ffi::gst_video_event_parse_still_frame(
             event.as_mut_ptr(),
