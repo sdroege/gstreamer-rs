@@ -106,15 +106,15 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = from_glib(ffi::gst_segment_clip(
                 &self.0,
                 start.get_format().to_glib(),
-                start.to_glib() as u64,
-                stop.to_glib() as u64,
+                start.to_raw_value() as u64,
+                stop.to_raw_value() as u64,
                 &mut clip_start,
                 &mut clip_stop,
             ));
             if ret {
                 Some((
-                    T::from_glib(self.get_format(), clip_start as i64),
-                    T::from_glib(self.get_format(), clip_stop as i64),
+                    T::from_raw(self.get_format(), clip_start as i64),
+                    T::from_raw(self.get_format(), clip_stop as i64),
                 ))
             } else {
                 None
@@ -149,9 +149,9 @@ impl<T: FormattedValue> FormattedSegment<T> {
                 self.get_format().to_glib(),
                 flags.to_glib(),
                 start_type.to_glib(),
-                start.to_glib() as u64,
+                start.to_raw_value() as u64,
                 stop_type.to_glib(),
-                stop.to_glib() as u64,
+                stop.to_raw_value() as u64,
                 &mut update,
             ));
             if ret {
@@ -180,12 +180,12 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            T::from_glib(
+            T::from_raw(
                 self.get_format(),
                 ffi::gst_segment_position_from_running_time(
                     &self.0,
                     self.get_format().to_glib(),
-                    running_time.to_glib() as u64,
+                    running_time.to_raw_value() as u64,
                 ) as i64,
             )
         }
@@ -203,10 +203,10 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = ffi::gst_segment_position_from_running_time_full(
                 &self.0,
                 self.get_format().to_glib(),
-                running_time.to_glib() as u64,
+                running_time.to_raw_value() as u64,
                 &mut position,
             );
-            (ret, T::from_glib(self.get_format(), position as i64))
+            (ret, T::from_raw(self.get_format(), position as i64))
         }
     }
 
@@ -218,12 +218,12 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            T::from_glib(
+            T::from_raw(
                 self.get_format(),
                 ffi::gst_segment_position_from_stream_time(
                     &self.0,
                     self.get_format().to_glib(),
-                    stream_time.to_glib() as u64,
+                    stream_time.to_raw_value() as u64,
                 ) as i64,
             )
         }
@@ -241,10 +241,10 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = ffi::gst_segment_position_from_stream_time_full(
                 &self.0,
                 self.get_format().to_glib(),
-                stream_time.to_glib() as u64,
+                stream_time.to_raw_value() as u64,
                 &mut position,
             );
-            (ret, T::from_glib(self.get_format(), position as i64))
+            (ret, T::from_raw(self.get_format(), position as i64))
         }
     }
 
@@ -259,7 +259,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             from_glib(ffi::gst_segment_set_running_time(
                 &mut self.0,
                 self.get_format().to_glib(),
-                running_time.to_glib() as u64,
+                running_time.to_raw_value() as u64,
             ))
         }
     }
@@ -272,12 +272,12 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            T::from_glib(
+            T::from_raw(
                 self.get_format(),
                 ffi::gst_segment_to_position(
                     &self.0,
                     self.get_format().to_glib(),
-                    running_time.to_glib() as u64,
+                    running_time.to_raw_value() as u64,
                 ) as i64,
             )
         }
@@ -291,12 +291,12 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            T::from_glib(
+            T::from_raw(
                 self.get_format(),
                 ffi::gst_segment_to_running_time(
                     &self.0,
                     self.get_format().to_glib(),
-                    position.to_glib() as u64,
+                    position.to_raw_value() as u64,
                 ) as i64,
             )
         }
@@ -314,10 +314,10 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = ffi::gst_segment_to_running_time_full(
                 &self.0,
                 self.get_format().to_glib(),
-                position.to_glib() as u64,
+                position.to_raw_value() as u64,
                 &mut running_time,
             );
-            (ret, T::from_glib(self.get_format(), running_time as i64))
+            (ret, T::from_raw(self.get_format(), running_time as i64))
         }
     }
 
@@ -329,12 +329,12 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            T::from_glib(
+            T::from_raw(
                 self.get_format(),
                 ffi::gst_segment_to_stream_time(
                     &self.0,
                     self.get_format().to_glib(),
-                    position.to_glib() as u64,
+                    position.to_raw_value() as u64,
                 ) as i64,
             )
         }
@@ -352,10 +352,10 @@ impl<T: FormattedValue> FormattedSegment<T> {
             let ret = ffi::gst_segment_to_stream_time_full(
                 &self.0,
                 self.get_format().to_glib(),
-                position.to_glib() as u64,
+                position.to_raw_value() as u64,
                 &mut stream_time,
             );
-            (ret, T::from_glib(self.get_format(), stream_time as i64))
+            (ret, T::from_raw(self.get_format(), stream_time as i64))
         }
     }
 
@@ -390,7 +390,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     pub fn get_base(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.base as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.base as i64) }
     }
 
     pub fn set_base<V: Into<T>>(&mut self, base: V) {
@@ -400,11 +400,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), base.get_format());
         }
 
-        self.0.base = unsafe { base.to_glib() } as u64;
+        self.0.base = unsafe { base.to_raw_value() } as u64;
     }
 
     pub fn get_offset(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.offset as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.offset as i64) }
     }
 
     pub fn set_offset<V: Into<T>>(&mut self, offset: V) {
@@ -414,11 +414,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), offset.get_format());
         }
 
-        self.0.offset = unsafe { offset.to_glib() } as u64;
+        self.0.offset = unsafe { offset.to_raw_value() } as u64;
     }
 
     pub fn get_start(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.start as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.start as i64) }
     }
 
     pub fn set_start<V: Into<T>>(&mut self, start: V) {
@@ -428,11 +428,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), start.get_format());
         }
 
-        self.0.start = unsafe { start.to_glib() } as u64;
+        self.0.start = unsafe { start.to_raw_value() } as u64;
     }
 
     pub fn get_stop(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.stop as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.stop as i64) }
     }
 
     pub fn set_stop<V: Into<T>>(&mut self, stop: V) {
@@ -442,11 +442,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), stop.get_format());
         }
 
-        self.0.stop = unsafe { stop.to_glib() } as u64;
+        self.0.stop = unsafe { stop.to_raw_value() } as u64;
     }
 
     pub fn get_time(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.time as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.time as i64) }
     }
 
     pub fn set_time<V: Into<T>>(&mut self, time: V) {
@@ -456,11 +456,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), time.get_format());
         }
 
-        self.0.time = unsafe { time.to_glib() } as u64;
+        self.0.time = unsafe { time.to_raw_value() } as u64;
     }
 
     pub fn get_position(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.position as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.position as i64) }
     }
 
     pub fn set_position<V: Into<T>>(&mut self, position: V) {
@@ -470,11 +470,11 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), position.get_format());
         }
 
-        self.0.position = unsafe { position.to_glib() } as u64;
+        self.0.position = unsafe { position.to_raw_value() } as u64;
     }
 
     pub fn get_duration(&self) -> T {
-        unsafe { T::from_glib(self.get_format(), self.0.duration as i64) }
+        unsafe { T::from_raw(self.get_format(), self.0.duration as i64) }
     }
 
     pub fn set_duration<V: Into<T>>(&mut self, duration: V) {
@@ -484,7 +484,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
             assert_eq!(self.get_format(), duration.get_format());
         }
 
-        self.0.duration = unsafe { duration.to_glib() } as u64;
+        self.0.duration = unsafe { duration.to_raw_value() } as u64;
     }
 }
 

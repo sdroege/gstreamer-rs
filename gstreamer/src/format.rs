@@ -36,8 +36,8 @@ pub trait FormattedValue: Copy + Clone + Sized + 'static {
 
     fn get_format(&self) -> Format;
 
-    unsafe fn from_glib(format: Format, value: i64) -> Self;
-    unsafe fn to_glib(&self) -> i64;
+    unsafe fn from_raw(format: Format, value: i64) -> Self;
+    unsafe fn to_raw_value(&self) -> i64;
 }
 
 pub trait SpecificFormattedValue: FormattedValue {}
@@ -55,11 +55,11 @@ impl FormattedValue for GenericFormattedValue {
         self.get_format()
     }
 
-    unsafe fn from_glib(format: Format, value: i64) -> Self {
+    unsafe fn from_raw(format: Format, value: i64) -> Self {
         GenericFormattedValue::new(format, value)
     }
 
-    unsafe fn to_glib(&self) -> i64 {
+    unsafe fn to_raw_value(&self) -> i64 {
         self.get_value()
     }
 }
@@ -153,7 +153,9 @@ impl GenericFormattedValue {
         if F::get_default_format() == self.get_format()
             || F::get_default_format() == Format::Undefined
         {
-            Ok(unsafe { F::from_glib(self.get_format(), self.to_glib()) })
+            Ok(unsafe {
+                F::from_raw(self.get_format(), self.to_raw_value())
+            })
         } else {
             Err(self)
         }
@@ -317,7 +319,7 @@ macro_rules! impl_format_value_traits(
                 Format::$format
             }
 
-            unsafe fn from_glib(format: Format, value: i64) -> Self {
+            unsafe fn from_raw(format: Format, value: i64) -> Self {
                 debug_assert_eq!(format, Format::$format);
                 if value == -1 {
                     $name(None)
@@ -326,7 +328,7 @@ macro_rules! impl_format_value_traits(
                 }
             }
 
-            unsafe fn to_glib(&self) -> i64 {
+            unsafe fn to_raw_value(&self) -> i64 {
                 self.0.map(|v| v as i64).unwrap_or(-1)
             }
         }

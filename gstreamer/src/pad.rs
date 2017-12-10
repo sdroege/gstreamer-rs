@@ -641,12 +641,12 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.to_glib_none().0,
                 src_val.get_format().to_glib(),
-                src_val.to_glib(),
+                src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 &mut dest_val,
             ));
             if ret {
-                Some(U::from_glib(U::get_default_format(), dest_val))
+                Some(U::from_raw(U::get_default_format(), dest_val))
             } else {
                 None
             }
@@ -664,7 +664,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
                 self.to_glib_none().0,
                 src_val.get_format().to_glib(),
-                src_val.to_glib(),
+                src_val.to_raw_value(),
                 dest_format.to_glib(),
                 &mut dest_val,
             ));
@@ -685,7 +685,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut duration,
             ));
             if ret {
-                Some(T::from_glib(T::get_default_format(), duration))
+                Some(T::from_raw(T::get_default_format(), duration))
             } else {
                 None
             }
@@ -717,7 +717,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut cur,
             ));
             if ret {
-                Some(T::from_glib(T::get_default_format(), cur))
+                Some(T::from_raw(T::get_default_format(), cur))
             } else {
                 None
             }
@@ -751,12 +751,12 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ret = from_glib(ffi::gst_pad_query_convert(
                 self.to_glib_none().0,
                 src_val.get_format().to_glib(),
-                src_val.to_glib(),
+                src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
                 &mut dest_val,
             ));
             if ret {
-                Some(U::from_glib(U::get_default_format(), dest_val))
+                Some(U::from_raw(U::get_default_format(), dest_val))
             } else {
                 None
             }
@@ -796,7 +796,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut duration,
             ));
             if ret {
-                Some(T::from_glib(T::get_default_format(), duration))
+                Some(T::from_raw(T::get_default_format(), duration))
             } else {
                 None
             }
@@ -828,7 +828,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 &mut cur,
             ));
             if ret {
-                Some(T::from_glib(T::get_default_format(), cur))
+                Some(T::from_raw(T::get_default_format(), cur))
             } else {
                 None
             }
