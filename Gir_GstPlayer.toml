@@ -78,6 +78,8 @@ trait = false
     [[object.signal]]
     name = "duration-changed"
     concurrency = "send"
+    # Pass ClockTime instead of u64
+    ignore = true
 
     [[object.signal]]
     name = "end-of-stream"
@@ -96,12 +98,16 @@ trait = false
     concurrency = "send"
 
     [[object.signal]]
-    name = "position-changed"
+    name = "position-updated"
     concurrency = "send"
+    # Pass ClockTime instead of u64
+    ignore = true
 
     [[object.signal]]
     name = "seek-done"
     concurrency = "send"
+    # Pass ClockTime instead of u64
+    ignore = true
 
     [[object.signal]]
     name = "state-changed"

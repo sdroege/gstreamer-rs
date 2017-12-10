@@ -10,8 +10,13 @@ use Player;
 use PlayerSignalDispatcher;
 use PlayerVideoRenderer;
 use ffi;
+use glib_ffi;
+use glib::signal::SignalHandlerId;
+use glib::signal::connect;
 use glib::translate::*;
 use gst;
+use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 impl Player {
     pub fn new(
@@ -40,4 +45,48 @@ impl Player {
             ))
         }
     }
+
+    pub fn connect_duration_changed<F: Fn(&Player, gst::ClockTime) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "duration-changed",
+                    transmute(duration_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    pub fn connect_position_updated<F: Fn(&Player, gst::ClockTime) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "position-updated",
+                    transmute(position_updated_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+
+    pub fn connect_seek_done<F: Fn(&Player, gst::ClockTime) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "seek-done",
+                    transmute(seek_done_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+}
+
+unsafe extern "C" fn duration_changed_trampoline(this: *mut ffi::GstPlayer, object: u64, f: glib_ffi::gpointer) {
+    callback_guard!();
+    let f: &&(Fn(&Player, gst::ClockTime) + Send + 'static) = transmute(f);
+    f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
+}
+
+unsafe extern "C" fn position_updated_trampoline(this: *mut ffi::GstPlayer, object: u64, f: glib_ffi::gpointer) {
+    callback_guard!();
+    let f: &&(Fn(&Player, gst::ClockTime) + Send + Sync + 'static) = transmute(f);
+    f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
+}
+
+unsafe extern "C" fn seek_done_trampoline(this: *mut ffi::GstPlayer, object: u64, f: glib_ffi::gpointer) {
+    callback_guard!();
+    let f: &&(Fn(&Player, gst::ClockTime) + Send + 'static) = transmute(f);
+    f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }

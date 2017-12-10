@@ -396,14 +396,6 @@ impl Player {
         }
     }
 
-    pub fn connect_duration_changed<F: Fn(&Player, u64) + Send + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Player, u64) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "duration-changed",
-                transmute(duration_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     pub fn connect_end_of_stream<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
@@ -433,22 +425,6 @@ impl Player {
             let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "mute-changed",
                 transmute(mute_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_position_updated<F: Fn(&Player, u64) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Player, u64) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "position-updated",
-                transmute(position_updated_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_seek_done<F: Fn(&Player, u64) + Send + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Player, u64) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "seek-done",
-                transmute(seek_done_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
@@ -638,12 +614,6 @@ unsafe extern "C" fn buffering_trampoline(this: *mut ffi::GstPlayer, object: lib
     f(&from_glib_borrow(this), object)
 }
 
-unsafe extern "C" fn duration_changed_trampoline(this: *mut ffi::GstPlayer, object: u64, f: glib_ffi::gpointer) {
-    callback_guard!();
-    let f: &&(Fn(&Player, u64) + Send + 'static) = transmute(f);
-    f(&from_glib_borrow(this), object)
-}
-
 unsafe extern "C" fn end_of_stream_trampoline(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
     callback_guard!();
     let f: &&(Fn(&Player) + Send + 'static) = transmute(f);
@@ -666,18 +636,6 @@ unsafe extern "C" fn mute_changed_trampoline(this: *mut ffi::GstPlayer, f: glib_
     callback_guard!();
     let f: &&(Fn(&Player) + Send + 'static) = transmute(f);
     f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn position_updated_trampoline(this: *mut ffi::GstPlayer, object: u64, f: glib_ffi::gpointer) {
-    callback_guard!();
-    let f: &&(Fn(&Player, u64) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this), object)
-}
-
-unsafe extern "C" fn seek_done_trampoline(this: *mut ffi::GstPlayer, object: u64, f: glib_ffi::gpointer) {
-    callback_guard!();
-    let f: &&(Fn(&Player, u64) + Send + 'static) = transmute(f);
-    f(&from_glib_borrow(this), object)
 }
 
 unsafe extern "C" fn state_changed_trampoline(this: *mut ffi::GstPlayer, object: ffi::GstPlayerState, f: glib_ffi::gpointer) {
