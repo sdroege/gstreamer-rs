@@ -514,7 +514,7 @@ impl<T> fmt::Debug for MappedBuffer<T> {
 
 impl<T> PartialEq for MappedBuffer<T> {
     fn eq(&self, other: &MappedBuffer<T>) -> bool {
-        self.get_buffer().eq(other.get_buffer())
+        self.as_slice().eq(other.as_slice())
     }
 }
 
