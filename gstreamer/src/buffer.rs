@@ -431,6 +431,48 @@ impl<'a> BufferMap<'a, Writable> {
     }
 }
 
+impl<'a, T> AsRef<[u8]> for BufferMap<'a, T> {
+    fn as_ref(&self) -> &[u8] {
+        self.as_slice()
+    }
+}
+
+impl<'a> AsMut<[u8]> for BufferMap<'a, Writable> {
+    fn as_mut(&mut self) -> &mut [u8] {
+        self.as_mut_slice()
+    }
+}
+
+impl<'a, T> ops::Deref for BufferMap<'a, T> {
+    type Target = [u8];
+
+    fn deref(&self) -> &[u8] {
+        self.as_slice()
+    }
+}
+
+impl<'a> ops::DerefMut for BufferMap<'a, Writable> {
+    fn deref_mut(&mut self) -> &mut [u8] {
+        self.as_mut_slice()
+    }
+}
+
+impl<'a, T> fmt::Debug for BufferMap<'a, T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_tuple("BufferMap")
+            .field(&self.get_buffer())
+            .finish()
+    }
+}
+
+impl<'a, T> PartialEq for BufferMap<'a, T> {
+    fn eq(&self, other: &BufferMap<'a, T>) -> bool {
+        self.as_slice().eq(other.as_slice())
+    }
+}
+
+impl<'a, T> Eq for BufferMap<'a, T> {}
+
 impl<'a, T> Drop for BufferMap<'a, T> {
     fn drop(&mut self) {
         unsafe {
