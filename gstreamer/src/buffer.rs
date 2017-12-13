@@ -467,6 +467,18 @@ impl MappedBuffer<Writable> {
     }
 }
 
+impl<T> AsRef<[u8]> for MappedBuffer<T> {
+    fn as_ref(&self) -> &[u8] {
+        self.as_slice()
+    }
+}
+
+impl AsMut<[u8]> for MappedBuffer<Writable> {
+    fn as_mut(&mut self) -> &mut [u8] {
+        self.as_mut_slice()
+    }
+}
+
 impl<T> Drop for MappedBuffer<T> {
     fn drop(&mut self) {
         if let Some(ref buffer) = self.buffer {
@@ -476,6 +488,22 @@ impl<T> Drop for MappedBuffer<T> {
         }
     }
 }
+
+impl<T> fmt::Debug for MappedBuffer<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_tuple("MappedBuffer")
+            .field(&self.get_buffer())
+            .finish()
+    }
+}
+
+impl<T> PartialEq for MappedBuffer<T> {
+    fn eq(&self, other: &MappedBuffer<T>) -> bool {
+        self.get_buffer().eq(other.get_buffer())
+    }
+}
+
+impl<T> Eq for MappedBuffer<T> {}
 
 unsafe impl<T> Send for MappedBuffer<T> {}
 
