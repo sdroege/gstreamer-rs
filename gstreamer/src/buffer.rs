@@ -10,6 +10,7 @@ use std::ptr;
 use std::mem;
 use std::fmt;
 use std::slice;
+use std::ops;
 use std::u64;
 use std::usize;
 use std::marker::PhantomData;
@@ -475,6 +476,20 @@ impl<T> AsRef<[u8]> for MappedBuffer<T> {
 
 impl AsMut<[u8]> for MappedBuffer<Writable> {
     fn as_mut(&mut self) -> &mut [u8] {
+        self.as_mut_slice()
+    }
+}
+
+impl<T> ops::Deref for MappedBuffer<T> {
+    type Target = [u8];
+
+    fn deref(&self) -> &[u8] {
+        self.as_slice()
+    }
+}
+
+impl ops::DerefMut for MappedBuffer<Writable> {
+    fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
