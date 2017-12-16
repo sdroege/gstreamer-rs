@@ -57,11 +57,12 @@ impl GstRc<BufferRef> {
     pub fn with_size(size: usize) -> Option<Self> {
         assert_initialized_main_thread!();
 
-        let raw = unsafe { ffi::gst_buffer_new_allocate(ptr::null_mut(), size, ptr::null_mut()) };
-        if raw.is_null() {
-            None
-        } else {
-            Some(unsafe { from_glib_full(raw) })
+        unsafe {
+            from_glib_full(ffi::gst_buffer_new_allocate(
+                ptr::null_mut(),
+                size,
+                ptr::null_mut(),
+            ))
         }
     }
 
@@ -73,14 +74,14 @@ impl GstRc<BufferRef> {
     pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Option<Self> {
         assert_initialized_main_thread!();
 
-        let raw = unsafe {
+        unsafe {
             let mut b = Box::new(slice);
             let (size, data) = {
                 let slice = (*b).as_mut();
                 (slice.len(), slice.as_mut_ptr())
             };
             let user_data = Box::into_raw(b);
-            ffi::gst_buffer_new_wrapped_full(
+            from_glib_full(ffi::gst_buffer_new_wrapped_full(
                 ffi::GstMemoryFlags::empty(),
                 data as glib_ffi::gpointer,
                 size,
@@ -88,27 +89,21 @@ impl GstRc<BufferRef> {
                 size,
                 user_data as glib_ffi::gpointer,
                 Some(Self::drop_box::<T>),
-            )
-        };
-
-        if raw.is_null() {
-            None
-        } else {
-            Some(unsafe { from_glib_full(raw) })
+            ))
         }
     }
 
     pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Option<Self> {
         assert_initialized_main_thread!();
 
-        let raw = unsafe {
+        unsafe {
             let b = Box::new(slice);
             let (size, data) = {
                 let slice = (*b).as_ref();
                 (slice.len(), slice.as_ptr())
             };
             let user_data = Box::into_raw(b);
-            ffi::gst_buffer_new_wrapped_full(
+            from_glib_full(ffi::gst_buffer_new_wrapped_full(
                 ffi::GST_MEMORY_FLAG_READONLY,
                 data as glib_ffi::gpointer,
                 size,
@@ -116,13 +111,7 @@ impl GstRc<BufferRef> {
                 size,
                 user_data as glib_ffi::gpointer,
                 Some(Self::drop_box::<T>),
-            )
-        };
-
-        if raw.is_null() {
-            None
-        } else {
-            Some(unsafe { from_glib_full(raw) })
+            ))
         }
     }
 
@@ -212,19 +201,13 @@ impl BufferRef {
 
     pub fn copy_region(&self, offset: usize, size: Option<usize>) -> Option<Buffer> {
         let size_real = size.unwrap_or(usize::MAX);
-        let ptr = unsafe {
-            ffi::gst_buffer_copy_region(
+        unsafe {
+            from_glib_full(ffi::gst_buffer_copy_region(
                 self.as_mut_ptr(),
                 ffi::GST_BUFFER_COPY_ALL,
                 offset,
                 size_real,
-            )
-        };
-
-        if ptr.is_null() {
-            None
-        } else {
-            Some(unsafe { from_glib_full(ptr) })
+            ))
         }
     }
 

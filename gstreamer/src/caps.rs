@@ -55,15 +55,7 @@ impl GstRc<CapsRef> {
 
     pub fn from_string(value: &str) -> Option<Self> {
         assert_initialized_main_thread!();
-        unsafe {
-            let caps_ptr = ffi::gst_caps_from_string(value.to_glib_none().0);
-
-            if caps_ptr.is_null() {
-                None
-            } else {
-                Some(from_glib_full(caps_ptr))
-            }
-        }
+        unsafe { from_glib_full(ffi::gst_caps_from_string(value.to_glib_none().0)) }
     }
 
     pub fn fixate(caps: Self) -> Self {

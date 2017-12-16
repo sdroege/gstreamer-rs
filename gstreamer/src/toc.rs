@@ -12,7 +12,8 @@ use std::mem;
 use ffi;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib,
+                      ToGlibPtr};
 
 use miniobject::*;
 use TocEntryType;
@@ -41,16 +42,7 @@ impl TocRef {
     }
 
     pub fn find_entry(&self, uid: &str) -> Option<TocEntry> {
-        unsafe {
-            let toc_entry = ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0);
-            if toc_entry.is_null() {
-                return None;
-            }
-
-            Some(TocEntry::from_glib_none(
-                toc_entry as *const ffi::GstTocEntry,
-            ))
-        }
+        unsafe { from_glib_none(ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0)) }
     }
 
     pub fn get_entries(&self) -> Vec<TocEntry> {
@@ -64,14 +56,7 @@ impl TocRef {
     }
 
     pub fn get_tags(&self) -> Option<TagList> {
-        unsafe {
-            let tags = ffi::gst_toc_get_tags(self.as_ptr());
-            if tags.is_null() {
-                return None;
-            }
-
-            Some(TagList::from_glib_none(tags as *const ffi::GstTagList))
-        }
+        unsafe { from_glib_none(ffi::gst_toc_get_tags(self.as_ptr())) }
     }
 
     pub fn set_tags(&mut self, tag_list: TagList) {
@@ -158,14 +143,7 @@ impl TocEntryRef {
     }
 
     pub fn get_parent(&self) -> Option<TocEntry> {
-        unsafe {
-            let parent = ffi::gst_toc_entry_get_parent(self.as_mut_ptr());
-            if parent.is_null() {
-                return None;
-            }
-
-            Some(TocEntry::from_glib_none(parent as *const ffi::GstTocEntry))
-        }
+        unsafe { from_glib_none(ffi::gst_toc_entry_get_parent(self.as_mut_ptr())) }
     }
 
     pub fn get_start_stop_times(&self) -> Option<(i64, i64)> {
@@ -192,14 +170,7 @@ impl TocEntryRef {
     }
 
     pub fn get_tags(&self) -> Option<TagList> {
-        unsafe {
-            let tags = ffi::gst_toc_entry_get_tags(self.as_ptr());
-            if tags.is_null() {
-                return None;
-            }
-
-            Some(TagList::from_glib_none(tags as *const ffi::GstTagList))
-        }
+        unsafe { from_glib_none(ffi::gst_toc_entry_get_tags(self.as_ptr())) }
     }
 
     pub fn set_tags(&mut self, tag_list: TagList) {
