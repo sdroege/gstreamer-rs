@@ -22,6 +22,7 @@ use std::fmt;
 use std::marker::PhantomData;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
+#[repr(C)]
 pub struct FormattedSegment<T: FormattedValue>(ffi::GstSegment, PhantomData<T>);
 
 impl Segment {
