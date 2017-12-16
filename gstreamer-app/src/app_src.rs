@@ -21,6 +21,18 @@ pub struct AppSrcCallbacks {
     callbacks: ffi::GstAppSrcCallbacks,
 }
 
+impl AppSrcCallbacks {
+    pub fn new() -> AppSrcCallbacksBuilder {
+        skip_assert_initialized!();
+
+        AppSrcCallbacksBuilder {
+            need_data: None,
+            enough_data: None,
+            seek_data: None,
+        }
+    }
+}
+
 pub struct AppSrcCallbacksBuilder {
     need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,

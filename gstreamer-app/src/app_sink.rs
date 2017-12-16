@@ -22,14 +22,8 @@ pub struct AppSinkCallbacks {
     callbacks: ffi::GstAppSinkCallbacks,
 }
 
-pub struct AppSinkCallbacksBuilder {
-    eos: Option<Box<Fn(&AppSink) + Send + Sync + 'static>>,
-    new_preroll: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
-    new_sample: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
-}
-
-impl AppSinkCallbacksBuilder {
-    pub fn new() -> Self {
+impl AppSinkCallbacks {
+    pub fn new() -> AppSinkCallbacksBuilder {
         skip_assert_initialized!();
         AppSinkCallbacksBuilder {
             eos: None,
@@ -37,7 +31,15 @@ impl AppSinkCallbacksBuilder {
             new_sample: None,
         }
     }
+}
 
+pub struct AppSinkCallbacksBuilder {
+    eos: Option<Box<Fn(&AppSink) + Send + Sync + 'static>>,
+    new_preroll: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
+    new_sample: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
+}
+
+impl AppSinkCallbacksBuilder {
     pub fn eos<F: Fn(&AppSink) + Send + Sync + 'static>(self, eos: F) -> Self {
         Self {
             eos: Some(Box::new(eos)),

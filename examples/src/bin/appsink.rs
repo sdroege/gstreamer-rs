@@ -61,7 +61,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     ));
 
     appsink.set_callbacks(
-        gst_app::AppSinkCallbacksBuilder::new()
+        gst_app::AppSinkCallbacks::new()
             .new_sample(|appsink| {
                 let sample = match appsink.pull_sample() {
                     None => return gst::FlowReturn::Eos,
