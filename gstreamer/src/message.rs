@@ -319,12 +319,12 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_property_notify<'a>(
+    pub fn new_property_notify<'a, V: Into<Option<&'a glib::ToSendValue>>>(
         property_name: &'a str,
-        value: &'a glib::Value,
+        value: V,
     ) -> PropertyNotifyBuilder<'a> {
         assert_initialized_main_thread!();
-        PropertyNotifyBuilder::new(property_name, value)
+        PropertyNotifyBuilder::new(property_name, value.into())
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1058,7 +1058,7 @@ impl<'a> DeviceRemoved<'a> {
 pub struct PropertyNotify<'a>(&'a MessageRef);
 impl<'a> PropertyNotify<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn get(&self) -> (Object, &str, ::Value) {
+    pub fn get(&self) -> (Object, &str, Option<&'a ::Value>) {
         unsafe {
             let mut object = ptr::null_mut();
             let mut property_name = ptr::null();
@@ -1074,7 +1074,11 @@ impl<'a> PropertyNotify<'a> {
             (
                 from_glib_none(object),
                 CStr::from_ptr(property_name).to_str().unwrap(),
-                from_glib_none(value),
+                if value.is_null() {
+                    None
+                } else {
+                    Some(&*(value as *const glib::Value))
+                },
             )
         }
     }
@@ -2283,11 +2287,11 @@ pub struct PropertyNotifyBuilder<'a> {
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     property_name: &'a str,
-    value: &'a glib::Value,
+    value: Option<&'a glib::ToSendValue>,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> PropertyNotifyBuilder<'a> {
-    fn new(property_name: &'a str, value: &'a glib::Value) -> Self {
+    fn new(property_name: &'a str, value: Option<&'a glib::ToSendValue>) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
@@ -2299,10 +2303,15 @@ impl<'a> PropertyNotifyBuilder<'a> {
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
+        let val = s.value.map(|v| v.to_send_value());
         ffi::gst_message_new_property_notify(
             src,
             s.property_name.to_glib_none().0,
-            mut_override(s.value.to_glib_none().0),
+            mut_override(
+                val.as_ref()
+                    .map(|v| v.to_glib_none().0)
+                    .unwrap_or(ptr::null()),
+            ),
         )
     });
 }
