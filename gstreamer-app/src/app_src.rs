@@ -13,6 +13,7 @@ use gst;
 use glib::source::CallbackGuard;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
+use std::mem;
 
 pub struct AppSrcCallbacks {
     need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,
@@ -147,6 +148,22 @@ impl AppSrc {
                 Box::into_raw(Box::new(callbacks)) as *mut _,
                 Some(destroy_callbacks),
             );
+        }
+    }
+
+    pub fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
+        unsafe {
+            ffi::gst_app_src_set_latency(self.to_glib_none().0, min.to_glib(), max.to_glib());
+        }
+    }
+
+
+    pub fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
+        unsafe {
+            let mut min = mem::uninitialized();
+            let mut max = mem::uninitialized();
+            ffi::gst_app_src_get_latency(self.to_glib_none().0, &mut min, &mut max);
+            (from_glib(min), from_glib(max))
         }
     }
 }

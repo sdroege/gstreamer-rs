@@ -87,6 +87,16 @@ trait = false
     ignore = true
 
     [[object.function]]
+    name = "set_latency"
+    # ClockTime
+    ignore = true
+
+    [[object.function]]
+    name = "get_latency"
+    # ClockTime
+    ignore = true
+
+    [[object.function]]
     name = "set_caps"
         [[object.function.parameter]]
             name = "caps"

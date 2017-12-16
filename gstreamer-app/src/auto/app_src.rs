@@ -65,15 +65,6 @@ impl AppSrc {
         }
     }
 
-    pub fn get_latency(&self) -> (u64, u64) {
-        unsafe {
-            let mut min = mem::uninitialized();
-            let mut max = mem::uninitialized();
-            ffi::gst_app_src_get_latency(self.to_glib_none().0, &mut min, &mut max);
-            (min, max)
-        }
-    }
-
     pub fn get_max_bytes(&self) -> u64 {
         unsafe {
             ffi::gst_app_src_get_max_bytes(self.to_glib_none().0)
@@ -120,12 +111,6 @@ impl AppSrc {
     pub fn set_emit_signals(&self, emit: bool) {
         unsafe {
             ffi::gst_app_src_set_emit_signals(self.to_glib_none().0, emit.to_glib());
-        }
-    }
-
-    pub fn set_latency(&self, min: u64, max: u64) {
-        unsafe {
-            ffi::gst_app_src_set_latency(self.to_glib_none().0, min, max);
         }
     }
 
