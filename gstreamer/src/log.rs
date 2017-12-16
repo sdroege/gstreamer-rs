@@ -22,7 +22,11 @@ use glib::translate::{from_glib, ToGlib, ToGlibPtr};
 pub struct DebugCategory(*mut ffi::GstDebugCategory);
 
 impl DebugCategory {
-    pub fn new(name: &str, color: ::DebugColorFlags, description: &str) -> DebugCategory {
+    pub fn new<'a, P: Into<Option<&'a str>>>(
+        name: &str,
+        color: ::DebugColorFlags,
+        description: P,
+    ) -> DebugCategory {
         extern "C" {
             fn _gst_debug_category_new(
                 name: *const c_char,
@@ -30,6 +34,8 @@ impl DebugCategory {
                 description: *const c_char,
             ) -> *mut ffi::GstDebugCategory;
         }
+        let description = description.into();
+
         // Gets the category if it exists already
         unsafe {
             DebugCategory(_gst_debug_category_new(
@@ -81,6 +87,18 @@ impl DebugCategory {
             CStr::from_ptr(ffi::gst_debug_category_get_name(self.0))
                 .to_str()
                 .unwrap()
+        }
+    }
+
+    pub fn get_description(&self) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_debug_category_get_name(self.0);
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
         }
     }
 
