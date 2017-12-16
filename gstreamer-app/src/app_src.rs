@@ -68,7 +68,10 @@ impl AppSrcCallbacksBuilder {
         }
     }
 
-    pub fn seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(self, seek_data: F) -> Self {
+    pub fn seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(
+        self,
+        seek_data: F,
+    ) -> Self {
         Self {
             seek_data: Some(Box::new(seek_data)),
             ..self
@@ -85,9 +88,21 @@ impl AppSrcCallbacksBuilder {
             enough_data: self.enough_data,
             seek_data: self.seek_data,
             callbacks: ffi::GstAppSrcCallbacks {
-                need_data: if have_need_data { Some(trampoline_need_data) } else { None },
-                enough_data: if have_enough_data { Some(trampoline_enough_data) } else { None },
-                seek_data: if have_seek_data { Some(trampoline_seek_data) } else { None },
+                need_data: if have_need_data {
+                    Some(trampoline_need_data)
+                } else {
+                    None
+                },
+                enough_data: if have_enough_data {
+                    Some(trampoline_enough_data)
+                } else {
+                    None
+                },
+                seek_data: if have_seek_data {
+                    Some(trampoline_seek_data)
+                } else {
+                    None
+                },
                 _gst_reserved: [
                     ptr::null_mut(),
                     ptr::null_mut(),
@@ -107,14 +122,20 @@ unsafe extern "C" fn trampoline_need_data(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    callbacks.need_data.as_ref().map(|f| f(&from_glib_borrow(appsrc), length));
+    callbacks
+        .need_data
+        .as_ref()
+        .map(|f| f(&from_glib_borrow(appsrc), length));
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    callbacks.enough_data.as_ref().map(|f| f(&from_glib_borrow(appsrc)));
+    callbacks
+        .enough_data
+        .as_ref()
+        .map(|f| f(&from_glib_borrow(appsrc)));
 }
 
 unsafe extern "C" fn trampoline_seek_data(
@@ -125,7 +146,12 @@ unsafe extern "C" fn trampoline_seek_data(
     let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    callbacks.seek_data.as_ref().map(|f| f(&from_glib_borrow(appsrc), offset)).unwrap_or(false).to_glib()
+    callbacks
+        .seek_data
+        .as_ref()
+        .map(|f| f(&from_glib_borrow(appsrc), offset))
+        .unwrap_or(false)
+        .to_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {

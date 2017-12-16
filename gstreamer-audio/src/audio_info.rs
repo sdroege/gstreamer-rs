@@ -145,9 +145,7 @@ impl AudioInfo {
     }
 
     pub fn to_caps(&self) -> Option<gst::Caps> {
-        unsafe {
-            from_glib_full(ffi::gst_audio_info_to_caps(&self.0))
-        }
+        unsafe { from_glib_full(ffi::gst_audio_info_to_caps(&self.0)) }
     }
 
     pub fn convert<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
