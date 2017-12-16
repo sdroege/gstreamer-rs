@@ -21,11 +21,31 @@ use std::sync::Arc;
 use std::ffi::CString;
 use std::marker::PhantomData;
 use std::iter::Iterator as StdIterator;
+use std::fmt;
+use std::error::Error;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum IteratorError {
     Resync,
     Error,
+}
+
+impl fmt::Display for IteratorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            IteratorError::Resync => write!(f, "Resync"),
+            IteratorError::Error => write!(f, "Error"),
+        }
+    }
+}
+
+impl Error for IteratorError {
+    fn description(&self) -> &str {
+        match *self {
+            IteratorError::Resync => "Resync",
+            IteratorError::Error => "Error",
+        }
+    }
 }
 
 // Implemented manually so that we can use generics for the item
