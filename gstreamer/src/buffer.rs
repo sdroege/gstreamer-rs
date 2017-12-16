@@ -574,6 +574,11 @@ impl<T> Eq for MappedBuffer<T> {}
 
 unsafe impl<T> Send for MappedBuffer<T> {}
 
+lazy_static! {
+    pub static ref BUFFER_COPY_METADATA: ::BufferCopyFlags = ::BufferCopyFlags::FLAGS | ::BufferCopyFlags::TIMESTAMPS | ::BufferCopyFlags::META;
+    pub static ref BUFFER_COPY_ALL: ::BufferCopyFlags = *BUFFER_COPY_METADATA | ::BufferCopyFlags::MEMORY;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
