@@ -11,6 +11,7 @@ use PlayerSubtitleInfo;
 use PlayerVideoInfo;
 use PlayerVisualization;
 use ffi;
+use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
@@ -19,6 +20,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
+use gst_video;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem;
@@ -34,12 +36,6 @@ glib_wrapper! {
 }
 
 impl Player {
-    pub fn config_set_seek_accurate(&self, accurate: bool) {
-        unsafe {
-            ffi::gst_player_config_set_seek_accurate(self.to_glib_none().0, accurate.to_glib());
-        }
-    }
-
     pub fn get_audio_video_offset(&self) -> i64 {
         unsafe {
             ffi::gst_player_get_audio_video_offset(self.to_glib_none().0)
@@ -49,12 +45,6 @@ impl Player {
     pub fn get_color_balance(&self, type_: PlayerColorBalanceType) -> f64 {
         unsafe {
             ffi::gst_player_get_color_balance(self.to_glib_none().0, type_.to_glib())
-        }
-    }
-
-    pub fn get_config(&self) -> Option<gst::Structure> {
-        unsafe {
-            from_glib_full(ffi::gst_player_get_config(self.to_glib_none().0))
         }
     }
 
@@ -94,13 +84,17 @@ impl Player {
         }
     }
 
-    //pub fn get_multiview_flags(&self) -> /*Ignored*/gst_video::VideoMultiviewFlags {
-    //    unsafe { TODO: call ffi::gst_player_get_multiview_flags() }
-    //}
+    pub fn get_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
+        unsafe {
+            from_glib(ffi::gst_player_get_multiview_flags(self.to_glib_none().0))
+        }
+    }
 
-    //pub fn get_multiview_mode(&self) -> /*Ignored*/gst_video::VideoMultiviewMode {
-    //    unsafe { TODO: call ffi::gst_player_get_multiview_mode() }
-    //}
+    pub fn get_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
+        unsafe {
+            from_glib(ffi::gst_player_get_multiview_mode(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_mute(&self) -> bool {
         unsafe {
@@ -108,7 +102,7 @@ impl Player {
         }
     }
 
-    pub fn get_pipeline(&self) -> Option<gst::Element> {
+    pub fn get_pipeline(&self) -> gst::Element {
         unsafe {
             from_glib_full(ffi::gst_player_get_pipeline(self.to_glib_none().0))
         }
@@ -176,9 +170,9 @@ impl Player {
         }
     }
 
-    pub fn set_audio_track(&self, stream_index: i32) -> bool {
+    pub fn set_audio_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_player_set_audio_track(self.to_glib_none().0, stream_index))
+            glib::error::BoolError::from_glib(ffi::gst_player_set_audio_track(self.to_glib_none().0, stream_index), "Failed to set audio track")
         }
     }
 
@@ -200,13 +194,17 @@ impl Player {
         }
     }
 
-    //pub fn set_multiview_flags(&self, flags: /*Ignored*/gst_video::VideoMultiviewFlags) {
-    //    unsafe { TODO: call ffi::gst_player_set_multiview_flags() }
-    //}
+    pub fn set_multiview_flags(&self, flags: gst_video::VideoMultiviewFlags) {
+        unsafe {
+            ffi::gst_player_set_multiview_flags(self.to_glib_none().0, flags.to_glib());
+        }
+    }
 
-    //pub fn set_multiview_mode(&self, mode: /*Ignored*/gst_video::VideoMultiviewMode) {
-    //    unsafe { TODO: call ffi::gst_player_set_multiview_mode() }
-    //}
+    pub fn set_multiview_mode(&self, mode: gst_video::VideoMultiviewFramePacking) {
+        unsafe {
+            ffi::gst_player_set_multiview_mode(self.to_glib_none().0, mode.to_glib());
+        }
+    }
 
     pub fn set_mute(&self, val: bool) {
         unsafe {
@@ -220,9 +218,9 @@ impl Player {
         }
     }
 
-    pub fn set_subtitle_track(&self, stream_index: i32) -> bool {
+    pub fn set_subtitle_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_player_set_subtitle_track(self.to_glib_none().0, stream_index))
+            glib::error::BoolError::from_glib(ffi::gst_player_set_subtitle_track(self.to_glib_none().0, stream_index), "Failed to set subtitle track")
         }
     }
 
@@ -244,9 +242,9 @@ impl Player {
         }
     }
 
-    pub fn set_video_track(&self, stream_index: i32) -> bool {
+    pub fn set_video_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_player_set_video_track(self.to_glib_none().0, stream_index))
+            glib::error::BoolError::from_glib(ffi::gst_player_set_video_track(self.to_glib_none().0, stream_index), "Failed to set video track")
         }
     }
 
@@ -256,9 +254,11 @@ impl Player {
         }
     }
 
-    pub fn set_visualization(&self, name: &str) -> bool {
+    pub fn set_visualization<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError> {
+        let name = name.into();
+        let name = name.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_player_set_visualization(self.to_glib_none().0, name.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_player_set_visualization(self.to_glib_none().0, name.0), "Failed to set visualization")
         }
     }
 
@@ -295,68 +295,33 @@ impl Player {
         }
     }
 
-    //pub fn get_property_video_multiview_flags(&self) -> /*Ignored*/gst_video::VideoMultiviewFlags {
-    //    unsafe {
-    //        let mut value = Value::uninitialized();
-    //        gobject_ffi::g_value_init(value.to_glib_none_mut().0, </*Unknown type*/ as StaticType>::static_type().to_glib());
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "video-multiview-flags".to_glib_none().0, value.to_glib_none_mut().0);
-    //        value.get().unwrap()
-    //    }
-    //}
-
-    //pub fn set_property_video_multiview_flags(&self, video_multiview_flags: /*Ignored*/gst_video::VideoMultiviewFlags) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "video-multiview-flags".to_glib_none().0, Value::from(&video_multiview_flags).to_glib_none().0);
-    //    }
-    //}
-
-    //pub fn get_property_video_multiview_mode(&self) -> /*Ignored*/gst_video::VideoMultiviewFramePacking {
-    //    unsafe {
-    //        let mut value = Value::uninitialized();
-    //        gobject_ffi::g_value_init(value.to_glib_none_mut().0, </*Unknown type*/ as StaticType>::static_type().to_glib());
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "video-multiview-mode".to_glib_none().0, value.to_glib_none_mut().0);
-    //        value.get().unwrap()
-    //    }
-    //}
-
-    //pub fn set_property_video_multiview_mode(&self, video_multiview_mode: /*Ignored*/gst_video::VideoMultiviewFramePacking) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "video-multiview-mode".to_glib_none().0, Value::from(&video_multiview_mode).to_glib_none().0);
-    //    }
-    //}
-
-    pub fn config_get_position_update_interval(config: &gst::Structure) -> u32 {
-        assert_initialized_main_thread!();
+    pub fn get_property_video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
-            ffi::gst_player_config_get_position_update_interval(config.to_glib_none().0)
+            let mut value = Value::uninitialized();
+            gobject_ffi::g_value_init(value.to_glib_none_mut().0, <gst_video::VideoMultiviewFlags as StaticType>::static_type().to_glib());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "video-multiview-flags".to_glib_none().0, value.to_glib_none_mut().0);
+            value.get().unwrap()
         }
     }
 
-    pub fn config_get_seek_accurate(config: &gst::Structure) -> bool {
-        assert_initialized_main_thread!();
+    pub fn set_property_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
         unsafe {
-            from_glib(ffi::gst_player_config_get_seek_accurate(config.to_glib_none().0))
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "video-multiview-flags".to_glib_none().0, Value::from(&video_multiview_flags).to_glib_none().0);
         }
     }
 
-    pub fn config_get_user_agent(config: &gst::Structure) -> Option<String> {
-        assert_initialized_main_thread!();
+    pub fn get_property_video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe {
-            from_glib_full(ffi::gst_player_config_get_user_agent(config.to_glib_none().0))
+            let mut value = Value::uninitialized();
+            gobject_ffi::g_value_init(value.to_glib_none_mut().0, <gst_video::VideoMultiviewFramePacking as StaticType>::static_type().to_glib());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "video-multiview-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            value.get().unwrap()
         }
     }
 
-    pub fn config_set_position_update_interval(config: &mut gst::Structure, interval: u32) {
-        assert_initialized_main_thread!();
+    pub fn set_property_video_multiview_mode(&self, video_multiview_mode: gst_video::VideoMultiviewFramePacking) {
         unsafe {
-            ffi::gst_player_config_set_position_update_interval(config.to_glib_none_mut().0, interval);
-        }
-    }
-
-    pub fn config_set_user_agent(config: &mut gst::Structure, agent: &str) {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gst_player_config_set_user_agent(config.to_glib_none_mut().0, agent.to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "video-multiview-mode".to_glib_none().0, Value::from(&video_multiview_mode).to_glib_none().0);
         }
     }
 

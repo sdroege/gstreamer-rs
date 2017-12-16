@@ -19,7 +19,6 @@ generate = [
     "GstPlayer.PlayerSignalDispatcher",
     "GstPlayer.PlayerSnapshotFormat",
     "GstPlayer.PlayerState",
-    "GstPlayer.PlayerStreamInfo",
     "GstPlayer.PlayerVideoRenderer",
     "GstPlayer.PlayerVisualization",
 ]
@@ -29,6 +28,8 @@ manual = [
     "GLib.MainContext",
     "GObject.Object",
     "Gst.Element",
+    "GstVideo.VideoMultiviewFlags",
+    "GstVideo.VideoMultiviewFramePacking",
 ]
 
 [[object]]
@@ -64,12 +65,51 @@ trait = false
 
     [[object.function]]
     name = "set_config"
-    # Pass by value
+    # Custom type
     ignore = true
 
     [[object.function]]
     name = "new"
     ignore = true
+
+    [[object.function]]
+    name = "get_config"
+    # Custom type
+    ignore = true
+
+    [[object.function]]
+    pattern = "config_.*"
+    # Custom type
+    ignore = true
+
+    [[object.function]]
+    name = "get_pipeline"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "set_audio_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to set audio track"
+
+    [[object.function]]
+    name = "set_subtitle_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to set subtitle track"
+
+    [[object.function]]
+    name = "set_video_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to set video track"
+
+    [[object.function]]
+    name = "set_visualization"
+        [[object.function.parameter]]
+        name = "name"
+        nullable = true
+
+        [object.function.return]
+        bool_return_is_error = "Failed to set visualization"
 
     [[object.signal]]
     name = "buffering"
@@ -129,6 +169,16 @@ trait = false
     name = "warning"
     concurrency = "send"
 
+
+[[object]]
+name = "GstPlayer.PlayerStreamInfo"
+status = "generate"
+
+    [[object.function]]
+    name = "get_stream_type"
+    [object.function.return]
+    nullable = false
+
 [[object]]
 name = "GstPlayer.PlayerAudioInfo"
 status = "generate"
@@ -139,6 +189,16 @@ name = "GstPlayer.PlayerVideoInfo"
 status = "generate"
 trait = false
 
+    [[object.function]]
+    name = "get_framerate"
+    # Fraction
+    ignore = true
+
+    [[object.function]]
+    name = "get_pixel_aspect_ratio"
+    # Fraction
+    ignore = true
+
 [[object]]
 name = "GstPlayer.PlayerSubtitleInfo"
 status = "generate"
@@ -148,6 +208,11 @@ trait = false
 name = "GstPlayer.PlayerMediaInfo"
 status = "generate"
 trait = false
+
+    [[object.function]]
+    name = "get_uri"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "GstPlayer.PlayerVideoOverlayVideoRenderer"

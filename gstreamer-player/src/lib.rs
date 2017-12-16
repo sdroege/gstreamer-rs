@@ -10,7 +10,9 @@ extern crate libc;
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
+extern crate gstreamer_sys as gst_ffi;
 extern crate gstreamer as gst;
+extern crate gstreamer_video as gst_video;
 extern crate gstreamer_player_sys as ffi;
 
 #[macro_use]
@@ -44,9 +46,12 @@ mod auto;
 pub use auto::*;
 
 mod player;
+mod config;
+pub use config::*;
+
+mod player_video_info;
 
 mod player_video_overlay_video_renderer;
-pub use player_video_overlay_video_renderer::PlayerVideoOverlayVideoRendererExtManual;
 mod player_g_main_context_signal_dispatcher;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -56,5 +61,4 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
-    pub use player_video_overlay_video_renderer::PlayerVideoOverlayVideoRendererExtManual;
 }

@@ -8,7 +8,6 @@
 
 use PlayerVideoOverlayVideoRenderer;
 use ffi;
-use glib;
 use glib::IsA;
 use glib::translate::*;
 use gst;
@@ -48,23 +47,13 @@ impl PlayerVideoOverlayVideoRenderer {
             ) as *mut _)
         }
     }
-}
 
-pub trait PlayerVideoOverlayVideoRendererExtManual {
-    unsafe fn get_window_handle(&self) -> uintptr_t;
-
-    unsafe fn set_window_handle(&self, window_handle: uintptr_t);
-}
-
-impl<
-    O: IsA<PlayerVideoOverlayVideoRenderer> + IsA<glib::object::Object>,
-> PlayerVideoOverlayVideoRendererExtManual for O {
-    unsafe fn get_window_handle(&self) -> uintptr_t {
+    pub unsafe fn get_window_handle(&self) -> uintptr_t {
         ffi::gst_player_video_overlay_video_renderer_get_window_handle(self.to_glib_none().0)
             as uintptr_t
     }
 
-    unsafe fn set_window_handle(&self, window_handle: uintptr_t) {
+    pub unsafe fn set_window_handle(&self, window_handle: uintptr_t) {
         ffi::gst_player_video_overlay_video_renderer_set_window_handle(
             self.to_glib_none().0,
             window_handle as *mut _,

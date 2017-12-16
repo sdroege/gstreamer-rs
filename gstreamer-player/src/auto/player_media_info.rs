@@ -94,7 +94,7 @@ impl PlayerMediaInfo {
         }
     }
 
-    pub fn get_uri(&self) -> Option<String> {
+    pub fn get_uri(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_player_media_info_get_uri(self.to_glib_none().0))
         }

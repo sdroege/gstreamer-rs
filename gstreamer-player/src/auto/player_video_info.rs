@@ -24,15 +24,6 @@ impl PlayerVideoInfo {
         }
     }
 
-    pub fn get_framerate(&self) -> (i32, i32) {
-        unsafe {
-            let mut fps_n = mem::uninitialized();
-            let mut fps_d = mem::uninitialized();
-            ffi::gst_player_video_info_get_framerate(self.to_glib_none().0, &mut fps_n, &mut fps_d);
-            (fps_n, fps_d)
-        }
-    }
-
     pub fn get_height(&self) -> i32 {
         unsafe {
             ffi::gst_player_video_info_get_height(self.to_glib_none().0)
@@ -42,15 +33,6 @@ impl PlayerVideoInfo {
     pub fn get_max_bitrate(&self) -> i32 {
         unsafe {
             ffi::gst_player_video_info_get_max_bitrate(self.to_glib_none().0)
-        }
-    }
-
-    pub fn get_pixel_aspect_ratio(&self) -> (u32, u32) {
-        unsafe {
-            let mut par_n = mem::uninitialized();
-            let mut par_d = mem::uninitialized();
-            ffi::gst_player_video_info_get_pixel_aspect_ratio(self.to_glib_none().0, &mut par_n, &mut par_d);
-            (par_n, par_d)
         }
     }
 

@@ -28,7 +28,7 @@ pub trait PlayerStreamInfoExt {
 
     fn get_index(&self) -> i32;
 
-    fn get_stream_type(&self) -> Option<String>;
+    fn get_stream_type(&self) -> String;
 
     fn get_tags(&self) -> Option<gst::TagList>;
 }
@@ -52,7 +52,7 @@ impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
         }
     }
 
-    fn get_stream_type(&self) -> Option<String> {
+    fn get_stream_type(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_stream_type(self.to_glib_none().0))
         }
