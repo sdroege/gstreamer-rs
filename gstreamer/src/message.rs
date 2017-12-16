@@ -319,12 +319,9 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_property_notify<'a, V: Into<Option<&'a glib::ToSendValue>>>(
-        property_name: &'a str,
-        value: V,
-    ) -> PropertyNotifyBuilder<'a> {
+    pub fn new_property_notify<'a>(property_name: &'a str) -> PropertyNotifyBuilder<'a> {
         assert_initialized_main_thread!();
-        PropertyNotifyBuilder::new(property_name, value.into())
+        PropertyNotifyBuilder::new(property_name)
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2291,14 +2288,21 @@ pub struct PropertyNotifyBuilder<'a> {
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> PropertyNotifyBuilder<'a> {
-    fn new(property_name: &'a str, value: Option<&'a glib::ToSendValue>) -> Self {
+    fn new(property_name: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
             property_name: property_name,
-            value: value,
+            value: None,
+        }
+    }
+
+    pub fn value(self, value: &'a glib::ToSendValue) -> Self {
+        Self {
+            value: Some(value),
+            ..self
         }
     }
 
