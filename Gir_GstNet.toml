@@ -1,0 +1,69 @@
+[options]
+girs_dir = "gir-files"
+library = "GstNet"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-net"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+    "Gio",
+]
+
+generate = [
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Object",
+    "Gst.Clock",
+    "Gst.Bus",
+]
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
+name = "GstNet.NtpClock"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "name"
+        nullable = true
+
+[[object]]
+name = "GstNet.PtpClock"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "name"
+        nullable = true
+
+[[object]]
+name = "GstNet.NetClientClock"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "name"
+        nullable = true
+
+[[object]]
+name = "GstNet.NetTimeProvider"
+status = "generate"
+trait = false
