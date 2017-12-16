@@ -278,9 +278,13 @@ impl GstRc<MessageRef> {
         QosBuilder::new(live, running_time, stream_time, timestamp, duration)
     }
 
-    pub fn new_progress<'a>(type_: ::ProgressType) -> ProgressBuilder<'a> {
+    pub fn new_progress<'a>(
+        type_: ::ProgressType,
+        code: &'a str,
+        text: &'a str,
+    ) -> ProgressBuilder<'a> {
         assert_initialized_main_thread!();
-        ProgressBuilder::new(type_)
+        ProgressBuilder::new(type_, code, text)
     }
 
     pub fn new_toc(toc: &::Toc, updated: bool) -> TocBuilder {
@@ -924,7 +928,7 @@ impl<'a> Qos<'a> {
 
 pub struct Progress<'a>(&'a MessageRef);
 impl<'a> Progress<'a> {
-    pub fn get(&self) -> (::ProgressType, Option<&'a str>, Option<&'a str>) {
+    pub fn get(&self) -> (::ProgressType, &'a str, &'a str) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut code = ptr::null_mut();
@@ -932,17 +936,8 @@ impl<'a> Progress<'a> {
 
             ffi::gst_message_parse_progress(self.0.as_mut_ptr(), &mut type_, &mut code, &mut text);
 
-            let code = if code.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(code).to_str().unwrap())
-            };
-
-            let text = if text.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(text).to_str().unwrap())
-            };
+            let code = CStr::from_ptr(code).to_str().unwrap();
+            let text = CStr::from_ptr(text).to_str().unwrap();
 
             (from_glib(type_), code, text)
         }
@@ -2066,33 +2061,19 @@ pub struct ProgressBuilder<'a> {
     seqnum: Option<Seqnum>,
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::ProgressType,
-    code: Option<&'a str>,
-    text: Option<&'a str>,
+    code: &'a str,
+    text: &'a str,
 }
 impl<'a> ProgressBuilder<'a> {
-    fn new(type_: ::ProgressType) -> Self {
+    fn new(type_: ::ProgressType, code: &'a str, text: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
             type_: type_,
-            code: None,
-            text: None,
-        }
-    }
-
-    pub fn code(self, code: &'a str) -> Self {
-        Self {
-            code: Some(code),
-            ..self
-        }
-    }
-
-    pub fn text(self, text: &'a str) -> Self {
-        Self {
-            text: Some(text),
-            ..self
+            code: code,
+            text: text,
         }
     }
 
