@@ -22,6 +22,9 @@ pub struct AppSrcCallbacks {
     callbacks: ffi::GstAppSrcCallbacks,
 }
 
+unsafe impl Send for AppSrcCallbacks {}
+unsafe impl Sync for AppSrcCallbacks {}
+
 impl AppSrcCallbacks {
     pub fn new() -> AppSrcCallbacksBuilder {
         skip_assert_initialized!();

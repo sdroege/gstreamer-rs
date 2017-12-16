@@ -22,6 +22,9 @@ pub struct AppSinkCallbacks {
     callbacks: ffi::GstAppSinkCallbacks,
 }
 
+unsafe impl Send for AppSinkCallbacks {}
+unsafe impl Sync for AppSinkCallbacks {}
+
 impl AppSinkCallbacks {
     pub fn new() -> AppSinkCallbacksBuilder {
         skip_assert_initialized!();
