@@ -723,7 +723,7 @@ impl<'a> NewClock<'a> {
 
 pub struct StructureChange<'a>(&'a MessageRef);
 impl<'a> StructureChange<'a> {
-    pub fn get(&self) -> (::StructureChangeType, Option<::Element>, bool) {
+    pub fn get(&self) -> (::StructureChangeType, ::Element, bool) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut owner = ptr::null_mut();
@@ -743,7 +743,7 @@ impl<'a> StructureChange<'a> {
 
 pub struct StreamStatus<'a>(&'a MessageRef);
 impl<'a> StreamStatus<'a> {
-    pub fn get(&self) -> (::StreamStatusType, Option<::Element>) {
+    pub fn get(&self) -> (::StreamStatusType, ::Element) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut owner = ptr::null_mut();
@@ -989,19 +989,13 @@ impl<'a> StreamStart<'a> {
 
 pub struct NeedContext<'a>(&'a MessageRef);
 impl<'a> NeedContext<'a> {
-    pub fn get_context_type(&self) -> Option<&str> {
+    pub fn get_context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
 
-            if from_glib(ffi::gst_message_parse_context_type(
-                self.0.as_mut_ptr(),
-                &mut context_type,
-            )) && !context_type.is_null()
-            {
-                Some(CStr::from_ptr(context_type).to_str().unwrap())
-            } else {
-                None
-            }
+            ffi::gst_message_parse_context_type(self.0.as_mut_ptr(), &mut context_type);
+
+            CStr::from_ptr(context_type).to_str().unwrap()
         }
     }
 }
