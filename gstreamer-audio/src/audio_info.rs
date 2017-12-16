@@ -288,7 +288,6 @@ impl PartialEq for AudioInfo {
 
 impl Eq for AudioInfo {}
 
-unsafe impl Sync for AudioInfo {}
 unsafe impl Send for AudioInfo {}
 
 impl glib::types::StaticType for AudioInfo {
