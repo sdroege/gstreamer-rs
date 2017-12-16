@@ -405,8 +405,8 @@ The caller should free it with g_object_unref()</doc>
         <doc xml:space="preserve">Retrieve the current value of the indicated @type.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The current value of @type, Default: -1 "none"</doc>
-          <type name="GstVideo.VideoMultiviewMode"
-                c:type="GstVideoMultiviewMode"/>
+          <type name="GstVideo.VideoMultiviewFramePacking"
+                c:type="GstVideoMultiviewFramePacking"/>
         </return-value>
         <parameters>
           <instance-parameter name="player" transfer-ownership="none">
@@ -733,8 +733,8 @@ value.</doc>
           </instance-parameter>
           <parameter name="mode" transfer-ownership="none">
             <doc xml:space="preserve">The new value for the @type</doc>
-            <type name="GstVideo.VideoMultiviewMode"
-                  c:type="GstVideoMultiviewMode"/>
+            <type name="GstVideo.VideoMultiviewFramePacking"
+                  c:type="GstVideoMultiviewFramePacking"/>
           </parameter>
         </parameters>
       </method>

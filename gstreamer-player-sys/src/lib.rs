@@ -300,7 +300,7 @@ extern "C" {
     pub fn gst_player_get_duration(player: *mut GstPlayer) -> gst::GstClockTime;
     pub fn gst_player_get_media_info(player: *mut GstPlayer) -> *mut GstPlayerMediaInfo;
     pub fn gst_player_get_multiview_flags(player: *mut GstPlayer) -> gst_video::GstVideoMultiviewFlags;
-    pub fn gst_player_get_multiview_mode(player: *mut GstPlayer) -> gst_video::GstVideoMultiviewMode;
+    pub fn gst_player_get_multiview_mode(player: *mut GstPlayer) -> gst_video::GstVideoMultiviewFramePacking;
     pub fn gst_player_get_mute(player: *mut GstPlayer) -> gboolean;
     pub fn gst_player_get_pipeline(player: *mut GstPlayer) -> *mut gst::GstElement;
     pub fn gst_player_get_position(player: *mut GstPlayer) -> gst::GstClockTime;
@@ -319,7 +319,7 @@ extern "C" {
     pub fn gst_player_set_color_balance(player: *mut GstPlayer, type_: GstPlayerColorBalanceType, value: c_double);
     pub fn gst_player_set_config(player: *mut GstPlayer, config: *mut gst::GstStructure) -> gboolean;
     pub fn gst_player_set_multiview_flags(player: *mut GstPlayer, flags: gst_video::GstVideoMultiviewFlags);
-    pub fn gst_player_set_multiview_mode(player: *mut GstPlayer, mode: gst_video::GstVideoMultiviewMode);
+    pub fn gst_player_set_multiview_mode(player: *mut GstPlayer, mode: gst_video::GstVideoMultiviewFramePacking);
     pub fn gst_player_set_mute(player: *mut GstPlayer, val: gboolean);
     pub fn gst_player_set_rate(player: *mut GstPlayer, rate: c_double);
     pub fn gst_player_set_subtitle_track(player: *mut GstPlayer, stream_index: c_int) -> gboolean;
