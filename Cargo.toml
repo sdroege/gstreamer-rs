@@ -10,4 +10,5 @@ members = [
   "gstreamer-app-sys",
   "gstreamer-player-sys",
   "gstreamer-mpegts-sys",
+  "gstreamer-net-sys",
 ]
