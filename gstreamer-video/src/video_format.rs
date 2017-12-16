@@ -83,6 +83,10 @@ impl ::VideoFormat {
     }
 
     pub fn to_string<'a>(&self) -> &'a str {
+        if *self == ::VideoFormat::Unknown {
+            return "UNKNOWN";
+        }
+
         unsafe {
             CStr::from_ptr(ffi::gst_video_format_to_string(self.to_glib()))
                 .to_str()
