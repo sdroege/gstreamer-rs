@@ -1704,7 +1704,7 @@ pub struct StreamStatusBuilder<'a> {
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     type_: ::StreamStatusType,
     owner: &'a ::Element,
-    status_object: Option<&'a glib::Value>,
+    status_object: Option<&'a glib::ToSendValue>,
 }
 impl<'a> StreamStatusBuilder<'a> {
     fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
@@ -1719,7 +1719,7 @@ impl<'a> StreamStatusBuilder<'a> {
         }
     }
 
-    pub fn status_object(self, status_object: &'a glib::Value) -> Self {
+    pub fn status_object(self, status_object: &'a glib::ToSendValue) -> Self {
         Self {
             status_object: Some(status_object),
             ..self
@@ -1730,7 +1730,10 @@ impl<'a> StreamStatusBuilder<'a> {
         let msg =
             ffi::gst_message_new_stream_status(src, s.type_.to_glib(), s.owner.to_glib_none().0);
         if let Some(status_object) = s.status_object {
-            ffi::gst_message_set_stream_status_object(msg, status_object.to_glib_none().0);
+            ffi::gst_message_set_stream_status_object(
+                msg,
+                status_object.to_send_value().to_glib_none().0,
+            );
         }
         msg
     });
