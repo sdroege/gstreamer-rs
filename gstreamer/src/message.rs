@@ -337,13 +337,9 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_redirect<'a>(
-        location: &'a str,
-        tag_list: Option<&'a TagList>,
-        entry_struct: Option<Structure>,
-    ) -> RedirectBuilder<'a> {
+    pub fn new_redirect<'a>(location: &'a str) -> RedirectBuilder<'a> {
         assert_initialized_main_thread!();
-        RedirectBuilder::new(location, tag_list, entry_struct)
+        RedirectBuilder::new(location)
     }
 }
 
@@ -2396,20 +2392,30 @@ pub struct RedirectBuilder<'a> {
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> RedirectBuilder<'a> {
-    fn new(
-        location: &'a str,
-        tag_list: Option<&'a TagList>,
-        entry_struct: Option<Structure>,
-    ) -> Self {
+    fn new(location: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
             src: None,
             seqnum: None,
             other_fields: Vec::new(),
             location: location,
-            tag_list: tag_list,
-            entry_struct: entry_struct,
+            tag_list: None,
+            entry_struct: None,
             entries: None,
+        }
+    }
+
+    pub fn tag_list(self, tag_list: &'a TagList) -> Self {
+        Self {
+            tag_list: Some(tag_list),
+            ..self
+        }
+    }
+
+    pub fn entry_struct(self, entry_struct: Structure) -> Self {
+        Self {
+            entry_struct: Some(entry_struct),
+            ..self
         }
     }
 
