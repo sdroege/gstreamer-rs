@@ -130,7 +130,7 @@ impl AudioInfo {
         }
     }
 
-    pub fn from_caps(caps: &gst::Caps) -> Option<Self> {
+    pub fn from_caps(caps: &gst::CapsRef) -> Option<Self> {
         skip_assert_initialized!();
 
         unsafe {
@@ -146,12 +146,7 @@ impl AudioInfo {
 
     pub fn to_caps(&self) -> Option<gst::Caps> {
         unsafe {
-            let caps = ffi::gst_audio_info_to_caps(&self.0);
-            if caps.is_null() {
-                None
-            } else {
-                Some(from_glib_full(caps))
-            }
+            from_glib_full(ffi::gst_audio_info_to_caps(&self.0))
         }
     }
 

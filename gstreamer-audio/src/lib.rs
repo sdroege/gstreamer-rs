@@ -61,7 +61,7 @@ pub fn audio_buffer_clip(
     segment: &gst::Segment,
     rate: u32,
     channels: u32,
-) -> gst::Buffer {
+) -> Option<gst::Buffer> {
     skip_assert_initialized!();
 
     unsafe {

@@ -40,6 +40,10 @@ impl ::AudioFormat {
     }
 
     pub fn to_string<'a>(&self) -> &'a str {
+        if *self == ::AudioFormat::Unknown {
+            return "UNKNOWN";
+        }
+
         unsafe {
             CStr::from_ptr(ffi::gst_audio_format_to_string(self.to_glib()))
                 .to_str()
