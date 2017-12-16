@@ -28,6 +28,7 @@ generate = [
     "GstVideo.VideoMultiviewFlags",
     "GstVideo.VideoFieldOrder",
     "GstVideo.VideoFrameFlags",
+    "GstVideo.VideoMultiviewFramePacking",
 ]
 
 manual = [

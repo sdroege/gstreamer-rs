@@ -574,6 +574,87 @@ impl SetValue for VideoInterlaceMode {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum VideoMultiviewFramePacking {
+    None,
+    Mono,
+    Left,
+    Right,
+    SideBySide,
+    SideBySideQuincunx,
+    ColumnInterleaved,
+    RowInterleaved,
+    TopBottom,
+    Checkerboard,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoMultiviewFramePacking {
+    type GlibType = ffi::GstVideoMultiviewFramePacking;
+
+    fn to_glib(&self) -> ffi::GstVideoMultiviewFramePacking {
+        match *self {
+            VideoMultiviewFramePacking::None => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE,
+            VideoMultiviewFramePacking::Mono => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO,
+            VideoMultiviewFramePacking::Left => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT,
+            VideoMultiviewFramePacking::Right => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT,
+            VideoMultiviewFramePacking::SideBySide => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE,
+            VideoMultiviewFramePacking::SideBySideQuincunx => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX,
+            VideoMultiviewFramePacking::ColumnInterleaved => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED,
+            VideoMultiviewFramePacking::RowInterleaved => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED,
+            VideoMultiviewFramePacking::TopBottom => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM,
+            VideoMultiviewFramePacking::Checkerboard => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD,
+            VideoMultiviewFramePacking::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking {
+    fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
+        skip_assert_initialized!();
+        match value {
+            -1 => VideoMultiviewFramePacking::None,
+            0 => VideoMultiviewFramePacking::Mono,
+            1 => VideoMultiviewFramePacking::Left,
+            2 => VideoMultiviewFramePacking::Right,
+            3 => VideoMultiviewFramePacking::SideBySide,
+            4 => VideoMultiviewFramePacking::SideBySideQuincunx,
+            5 => VideoMultiviewFramePacking::ColumnInterleaved,
+            6 => VideoMultiviewFramePacking::RowInterleaved,
+            7 => VideoMultiviewFramePacking::TopBottom,
+            8 => VideoMultiviewFramePacking::Checkerboard,
+            value => VideoMultiviewFramePacking::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoMultiviewFramePacking {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_video_multiview_frame_packing_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoMultiviewFramePacking {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoMultiviewFramePacking {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoMultiviewFramePacking {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum VideoMultiviewMode {
     None,
     Mono,

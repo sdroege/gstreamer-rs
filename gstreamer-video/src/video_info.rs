@@ -162,6 +162,24 @@ impl fmt::Display for ::VideoColorimetry {
     }
 }
 
+impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
+    fn from(v: ::VideoMultiviewFramePacking) -> Self {
+        from_glib(v.to_glib())
+    }
+}
+
+impl ::VideoMultiviewFramePacking {
+    pub fn try_from(v: ::VideoMultiviewMode) -> Result<::VideoMultiviewFramePacking, ::VideoMultiviewMode> {
+        let v2 = from_glib(v.to_glib());
+
+        if let ::VideoMultiviewFramePacking::__Unknown(_) = v2 {
+            Err(v)
+        } else {
+            Ok(v2)
+        }
+    }
+}
+
 pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 pub struct VideoInfoBuilder<'a> {
@@ -413,7 +431,7 @@ impl VideoInfo {
         }
     }
 
-    pub fn from_caps(caps: &gst::Caps) -> Option<Self> {
+    pub fn from_caps(caps: &gst::CapsRef) -> Option<Self> {
         skip_assert_initialized!();
 
         unsafe {
@@ -428,12 +446,7 @@ impl VideoInfo {
 
     pub fn to_caps(&self) -> Option<gst::Caps> {
         unsafe {
-            let caps = ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _);
-            if caps.is_null() {
-                None
-            } else {
-                Some(from_glib_full(caps))
-            }
+            from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _))
         }
     }
 
