@@ -19,7 +19,7 @@ use std::ffi::CStr;
 
 use glib;
 use glib::value::ToSendValue;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr};
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;
@@ -317,13 +317,9 @@ impl GstRc<EventRef> {
         TocBuilder::new(toc, updated)
     }
 
-    pub fn new_protection<'a>(
-        system_id: &'a str,
-        data: &'a ::Buffer,
-        origin: &'a str,
-    ) -> ProtectionBuilder<'a> {
+    pub fn new_protection<'a>(system_id: &'a str, data: &'a ::Buffer) -> ProtectionBuilder<'a> {
         assert_initialized_main_thread!();
-        ProtectionBuilder::new(system_id, data, origin)
+        ProtectionBuilder::new(system_id, data)
     }
 
     pub fn new_segment_done<'a, V: Into<GenericFormattedValue>>(
@@ -515,16 +511,12 @@ impl<'a> FlushStop<'a> {
 
 pub struct StreamStart<'a>(&'a EventRef);
 impl<'a> StreamStart<'a> {
-    pub fn get_stream_id(&self) -> Option<&'a str> {
+    pub fn get_stream_id(&self) -> &'a str {
         unsafe {
             let mut stream_id = ptr::null();
 
             ffi::gst_event_parse_stream_start(self.0.as_mut_ptr(), &mut stream_id);
-            if stream_id.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(stream_id).to_str().unwrap())
-            }
+            CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
 
@@ -563,12 +555,12 @@ impl<'a> Caps<'a> {
 
 pub struct Segment<'a>(&'a EventRef);
 impl<'a> Segment<'a> {
-    pub fn get_segment(&self) -> ::Segment {
+    pub fn get_segment(&self) -> &'a ::Segment {
         unsafe {
             let mut segment = ptr::null();
 
             ffi::gst_event_parse_segment(self.0.as_mut_ptr(), &mut segment);
-            from_glib_none(segment as *mut _)
+            &*(segment as *mut ffi::GstSegment as *mut ::Segment)
         }
     }
 }
@@ -666,7 +658,7 @@ impl<'a> Toc<'a> {
 
 pub struct Protection<'a>(&'a EventRef);
 impl<'a> Protection<'a> {
-    pub fn get(&self) -> (&'a str, &'a ::BufferRef, &'a str) {
+    pub fn get(&self) -> (&'a str, &'a ::BufferRef, Option<&'a str>) {
         unsafe {
             let mut system_id = ptr::null();
             let mut buffer = ptr::null_mut();
@@ -682,7 +674,11 @@ impl<'a> Protection<'a> {
             (
                 CStr::from_ptr(system_id).to_str().unwrap(),
                 ::BufferRef::from_ptr(buffer),
-                CStr::from_ptr(origin).to_str().unwrap(),
+                if origin.is_null() {
+                    None
+                } else {
+                    Some(CStr::from_ptr(origin).to_str().unwrap())
+                },
             )
         }
     }
@@ -1219,10 +1215,10 @@ pub struct ProtectionBuilder<'a> {
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
     system_id: &'a str,
     data: &'a ::Buffer,
-    origin: &'a str,
+    origin: Option<&'a str>,
 }
 impl<'a> ProtectionBuilder<'a> {
-    fn new(system_id: &'a str, data: &'a ::Buffer, origin: &'a str) -> Self {
+    fn new(system_id: &'a str, data: &'a ::Buffer) -> Self {
         skip_assert_initialized!();
         Self {
             seqnum: None,
@@ -1230,7 +1226,14 @@ impl<'a> ProtectionBuilder<'a> {
             other_fields: Vec::new(),
             system_id: system_id,
             data: data,
-            origin: origin,
+            origin: None,
+        }
+    }
+
+    pub fn origin(self, origin: &'a str) -> Self {
+        Self {
+            origin: Some(origin),
+            ..self
         }
     }
 
