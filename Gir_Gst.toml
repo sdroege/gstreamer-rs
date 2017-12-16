@@ -48,6 +48,7 @@ generate = [
     "Gst.PadProbeReturn",
     "Gst.CapsIntersectMode",
     "Gst.BufferFlags",
+    "Gst.BufferCopyFlags",
     "Gst.SegmentFlags",
     "Gst.PadMode",
     "Gst.SchedulingFlags",

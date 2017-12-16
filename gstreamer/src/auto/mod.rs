@@ -143,6 +143,7 @@ pub use self::enums::URIError;
 pub use self::enums::URIType;
 
 mod flags;
+pub use self::flags::BufferCopyFlags;
 pub use self::flags::BufferFlags;
 pub use self::flags::DebugColorFlags;
 pub use self::flags::DebugGraphDetails;

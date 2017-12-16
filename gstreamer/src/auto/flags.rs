@@ -9,6 +9,59 @@ use gobject_ffi;
 use glib::translate::*;
 
 bitflags! {
+    pub struct BufferCopyFlags: u32 {
+        const NONE = 0;
+        const FLAGS = 1;
+        const TIMESTAMPS = 2;
+        const META = 4;
+        const MEMORY = 8;
+        const MERGE = 16;
+        const DEEP = 32;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for BufferCopyFlags {
+    type GlibType = ffi::GstBufferCopyFlags;
+
+    fn to_glib(&self) -> ffi::GstBufferCopyFlags {
+        ffi::GstBufferCopyFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstBufferCopyFlags> for BufferCopyFlags {
+    fn from_glib(value: ffi::GstBufferCopyFlags) -> BufferCopyFlags {
+        skip_assert_initialized!();
+        BufferCopyFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for BufferCopyFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_buffer_copy_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for BufferCopyFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for BufferCopyFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstBufferCopyFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for BufferCopyFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct BufferFlags: u32 {
         const LIVE = 16;
         const DECODE_ONLY = 32;

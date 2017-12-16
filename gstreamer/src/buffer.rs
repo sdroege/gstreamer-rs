@@ -199,15 +199,42 @@ impl BufferRef {
         }
     }
 
-    pub fn copy_region(&self, offset: usize, size: Option<usize>) -> Option<Buffer> {
+    pub fn copy_region(
+        &self,
+        flags: ::BufferCopyFlags,
+        offset: usize,
+        size: Option<usize>,
+    ) -> Option<Buffer> {
         let size_real = size.unwrap_or(usize::MAX);
         unsafe {
             from_glib_full(ffi::gst_buffer_copy_region(
                 self.as_mut_ptr(),
-                ffi::GST_BUFFER_COPY_ALL,
+                flags.to_glib(),
                 offset,
                 size_real,
             ))
+        }
+    }
+
+    pub fn copy_into(
+        &self,
+        dest: &mut BufferRef,
+        flags: ::BufferCopyFlags,
+        offset: usize,
+        size: Option<usize>,
+    ) -> Result<(), glib::BoolError> {
+        let size_real = size.unwrap_or(usize::MAX);
+        unsafe {
+            glib::BoolError::from_glib(
+                ffi::gst_buffer_copy_into(
+                    dest.as_mut_ptr(),
+                    self.as_mut_ptr(),
+                    flags.to_glib(),
+                    offset,
+                    size_real,
+                ),
+                "Failed to copy into destination buffer",
+            )
         }
     }
 
@@ -252,7 +279,7 @@ impl BufferRef {
         }
     }
 
-    pub fn copy_deep(&self) -> Buffer {
+    pub fn copy_deep(&self) -> Option<Buffer> {
         unsafe { from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr())) }
     }
 
