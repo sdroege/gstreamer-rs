@@ -37,19 +37,6 @@ impl<T> VideoFrame<T> {
         from_glib(self.0.flags)
     }
 
-    pub fn mut_buffer(&self) -> Option<&mut gst::BufferRef> {
-        unsafe {
-            let writable: bool = from_glib(gst_ffi::gst_mini_object_is_writable(
-                self.0.buffer as *const _,
-            ));
-            if !writable {
-                return None;
-            }
-
-            Some(gst::BufferRef::from_mut_ptr(self.0.buffer))
-        }
-    }
-
     pub fn id(&self) -> i32 {
         self.0.id
     }
@@ -136,6 +123,10 @@ impl<T> VideoFrame<T> {
 
     pub fn plane_offset(&self) -> &[usize] {
         self.info().offset()
+    }
+
+    pub fn buffer(&self) -> &gst::BufferRef {
+        unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
     }
 
     pub fn plane_data(&self, plane: u32) -> Option<&[u8]> {
@@ -228,10 +219,6 @@ impl VideoFrame<Readable> {
             }
         }
     }
-
-    pub fn buffer(&self) -> &gst::BufferRef {
-        unsafe { gst::BufferRef::from_ptr(self.0.buffer) }
-    }
 }
 
 impl VideoFrame<Writable> {
@@ -291,7 +278,7 @@ impl VideoFrame<Writable> {
         }
     }
 
-    pub fn buffer(&mut self) -> &mut gst::BufferRef {
+    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         unsafe { gst::BufferRef::from_mut_ptr(self.0.buffer) }
     }
 

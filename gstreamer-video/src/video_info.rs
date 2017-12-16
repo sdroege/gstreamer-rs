@@ -152,7 +152,12 @@ impl str::FromStr for ::VideoColorimetry {
 
 impl fmt::Debug for ::VideoColorimetry {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&self.to_string())
+        f.debug_struct("VideoColorimetry")
+            .field("range", &self.0.range)
+            .field("matrix", &self.0.matrix)
+            .field("transfer", &self.0.transfer)
+            .field("primaries", &self.0.primaries)
+            .finish()
     }
 }
 
@@ -169,7 +174,9 @@ impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
 }
 
 impl ::VideoMultiviewFramePacking {
-    pub fn try_from(v: ::VideoMultiviewMode) -> Result<::VideoMultiviewFramePacking, ::VideoMultiviewMode> {
+    pub fn try_from(
+        v: ::VideoMultiviewMode,
+    ) -> Result<::VideoMultiviewFramePacking, ::VideoMultiviewMode> {
         let v2 = from_glib(v.to_glib());
 
         if let ::VideoMultiviewFramePacking::__Unknown(_) = v2 {
@@ -445,9 +452,7 @@ impl VideoInfo {
     }
 
     pub fn to_caps(&self) -> Option<gst::Caps> {
-        unsafe {
-            from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _))
-        }
+        unsafe { from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _)) }
     }
 
     pub fn format(&self) -> ::VideoFormat {
