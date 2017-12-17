@@ -20,7 +20,7 @@ use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
 use ffi;
 
 impl ProxyPad {
-    pub fn chain_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
+    pub fn chain_default<'a, P: IsA<ProxyPad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
         pad: &P,
         parent: R,
         buffer: Buffer,
@@ -30,14 +30,14 @@ impl ProxyPad {
         let parent = parent.to_glib_none();
         unsafe {
             from_glib(ffi::gst_proxy_pad_chain_default(
-                pad.to_glib_none().0,
+                pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.0,
                 buffer.into_ptr(),
             ))
         }
     }
 
-    pub fn chain_list_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
+    pub fn chain_list_default<'a, P: IsA<ProxyPad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
         pad: &P,
         parent: R,
         list: BufferList,
@@ -47,14 +47,14 @@ impl ProxyPad {
         let parent = parent.to_glib_none();
         unsafe {
             from_glib(ffi::gst_proxy_pad_chain_list_default(
-                pad.to_glib_none().0,
+                pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.0,
                 list.into_ptr(),
             ))
         }
     }
 
-    pub fn getrange_default<P: IsA<Pad>, Q: IsA<Object>>(
+    pub fn getrange_default<P: IsA<ProxyPad>, Q: IsA<Object>>(
         pad: &P,
         parent: &Q,
         offset: u64,
@@ -64,7 +64,7 @@ impl ProxyPad {
         unsafe {
             let mut buffer = ptr::null_mut();
             let ret = from_glib(ffi::gst_proxy_pad_getrange_default(
-                pad.to_glib_none().0,
+                pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.to_glib_none().0,
                 offset,
                 size,
@@ -80,7 +80,7 @@ impl ProxyPad {
 
     pub fn iterate_internal_links_default<
         'a,
-        P: IsA<Pad>,
+        P: IsA<ProxyPad>,
         Q: IsA<Object> + 'a,
         R: Into<Option<&'a Q>>,
     >(
@@ -92,7 +92,7 @@ impl ProxyPad {
         let parent = parent.to_glib_none();
         unsafe {
             from_glib_full(ffi::gst_proxy_pad_iterate_internal_links_default(
-                pad.to_glib_none().0,
+                pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.0,
             ))
         }

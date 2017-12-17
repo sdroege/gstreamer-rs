@@ -550,6 +550,16 @@ status = "generate"
     name = "construct"
     ignore = true
 
+    [[object.function]]
+    name = "activate_mode_default"
+    # wrong instance type
+    ignore = true
+
+    [[object.function]]
+    name = "internal_activate_mode_default"
+    # wrong instance type
+    ignore = true
+
 [[object]]
 name = "Gst.ProxyPad"
 status = "generate"

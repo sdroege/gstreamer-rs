@@ -8,6 +8,8 @@
 
 use Pad;
 use PadTemplate;
+use Object;
+use PadMode;
 use GhostPad;
 use ffi;
 use glib::object::Downcast;
@@ -39,6 +41,54 @@ impl GhostPad {
                 target.to_glib_none().0,
                 templ.to_glib_none().0,
             )).map(|o| Downcast::downcast_unchecked(o))
+        }
+    }
+
+    pub fn activate_mode_default<
+        'a,
+        P: IsA<GhostPad>,
+        Q: IsA<Object> + 'a,
+        R: Into<Option<&'a Q>>,
+    >(
+        pad: &P,
+        parent: R,
+        mode: PadMode,
+        active: bool,
+    ) -> bool {
+        skip_assert_initialized!();
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_ghost_pad_activate_mode_default(
+                pad.to_glib_none().0 as *mut ffi::GstPad,
+                parent.0,
+                mode.to_glib(),
+                active.to_glib(),
+            ))
+        }
+    }
+
+    pub fn internal_activate_mode_default<
+        'a,
+        P: IsA<GhostPad>,
+        Q: IsA<Object> + 'a,
+        R: Into<Option<&'a Q>>,
+    >(
+        pad: &P,
+        parent: R,
+        mode: PadMode,
+        active: bool,
+    ) -> bool {
+        skip_assert_initialized!();
+        let parent = parent.into();
+        let parent = parent.to_glib_none();
+        unsafe {
+            from_glib(ffi::gst_ghost_pad_internal_activate_mode_default(
+                pad.to_glib_none().0 as *mut ffi::GstPad,
+                parent.0,
+                mode.to_glib(),
+                active.to_glib(),
+            ))
         }
     }
 }

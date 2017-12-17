@@ -4,7 +4,6 @@
 use Object;
 use Pad;
 use PadDirection;
-use PadMode;
 use PadTemplate;
 use ProxyPad;
 use ffi;
@@ -41,24 +40,6 @@ impl GhostPad {
         let name = name.to_glib_none();
         unsafe {
             Pad::from_glib_none(ffi::gst_ghost_pad_new_no_target_from_template(name.0, templ.to_glib_none().0)).downcast_unchecked()
-        }
-    }
-
-    pub fn activate_mode_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R, mode: PadMode, active: bool) -> bool {
-        skip_assert_initialized!();
-        let parent = parent.into();
-        let parent = parent.to_glib_none();
-        unsafe {
-            from_glib(ffi::gst_ghost_pad_activate_mode_default(pad.to_glib_none().0, parent.0, mode.to_glib(), active.to_glib()))
-        }
-    }
-
-    pub fn internal_activate_mode_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R, mode: PadMode, active: bool) -> bool {
-        skip_assert_initialized!();
-        let parent = parent.into();
-        let parent = parent.to_glib_none();
-        unsafe {
-            from_glib(ffi::gst_ghost_pad_internal_activate_mode_default(pad.to_glib_none().0, parent.0, mode.to_glib(), active.to_glib()))
         }
     }
 }
