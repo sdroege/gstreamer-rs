@@ -434,7 +434,7 @@ impl SetValue for FractionRange {
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-pub struct Bitmask(u64);
+pub struct Bitmask(pub u64);
 
 impl Bitmask {
     pub fn new(v: u64) -> Self {
