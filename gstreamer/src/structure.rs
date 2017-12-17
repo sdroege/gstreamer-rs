@@ -403,7 +403,7 @@ impl StructureRef {
         unsafe { from_glib(ffi::gst_structure_can_intersect(&self.0, &other.0)) }
     }
 
-    pub fn intersect(&self, other: &StructureRef) -> Structure {
+    pub fn intersect(&self, other: &StructureRef) -> Option<Structure> {
         unsafe { from_glib_full(ffi::gst_structure_intersect(&self.0, &other.0)) }
     }
 
