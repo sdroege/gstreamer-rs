@@ -105,9 +105,10 @@ impl GstRc<QueryRef> {
         unsafe { from_glib_full(ffi::gst_query_new_accept_caps(caps.as_mut_ptr())) }
     }
 
-    pub fn new_caps(filter: &::Caps) -> Self {
+    pub fn new_caps<'a, P: Into<Option<&'a ::Caps>>>(filter: P) -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_query_new_caps(filter.as_mut_ptr())) }
+        let filter = filter.into();
+        unsafe { from_glib_full(ffi::gst_query_new_caps(filter.to_glib_none().0)) }
     }
 
     pub fn new_drain() -> Self {
@@ -1016,19 +1017,27 @@ impl<'a> AcceptCaps<&'a mut QueryRef> {
 
 pub struct Caps<T>(T);
 impl<'a> Caps<&'a QueryRef> {
-    pub fn get_filter(&self) -> &::CapsRef {
+    pub fn get_filter(&self) -> Option<&::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
             ffi::gst_query_parse_caps(self.0.as_mut_ptr(), &mut caps);
-            ::CapsRef::from_ptr(caps)
+            if caps.is_null() {
+                None
+            } else {
+                Some(::CapsRef::from_ptr(caps))
+            }
         }
     }
 
-    pub fn get_result(&self) -> &::CapsRef {
+    pub fn get_result(&self) -> Option<&::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
             ffi::gst_query_parse_caps_result(self.0.as_mut_ptr(), &mut caps);
-            ::CapsRef::from_ptr(caps)
+            if caps.is_null() {
+                None
+            } else {
+                Some(::CapsRef::from_ptr(caps))
+            }
         }
     }
 
