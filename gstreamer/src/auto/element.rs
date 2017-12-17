@@ -60,20 +60,6 @@ impl Element {
             from_glib(ffi::gst_element_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()))
         }
     }
-
-    pub fn state_change_return_get_name(state_ret: StateChangeReturn) -> Option<String> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gst_element_state_change_return_get_name(state_ret.to_glib()))
-        }
-    }
-
-    pub fn state_get_name(state: State) -> Option<String> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gst_element_state_get_name(state.to_glib()))
-        }
-    }
 }
 
 unsafe impl Send for Element {}

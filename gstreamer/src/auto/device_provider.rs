@@ -50,7 +50,7 @@ pub trait DeviceProviderExt {
 
     fn device_remove(&self, device: &Device);
 
-    fn get_bus(&self) -> Option<Bus>;
+    fn get_bus(&self) -> Bus;
 
     fn get_devices(&self) -> Vec<Device>;
 
@@ -90,7 +90,7 @@ impl<O: IsA<DeviceProvider> + IsA<glib::object::Object>> DeviceProviderExt for O
         }
     }
 
-    fn get_bus(&self) -> Option<Bus> {
+    fn get_bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_provider_get_bus(self.to_glib_none().0))
         }

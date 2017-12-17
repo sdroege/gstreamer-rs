@@ -36,9 +36,6 @@ generate = [
     "Gst.URIError",
     "Gst.StructureChangeType",
     "Gst.StreamStatusType",
-    "Gst.DeviceProvider",
-    "Gst.Device",
-    "Gst.DeviceMonitor",
     "Gst.StreamType",
     "Gst.StreamFlags",
     "Gst.ProgressType",
@@ -343,6 +340,16 @@ status = "generate"
     # formatted value
     ignore = true
 
+    [[object.function]]
+    name = "state_change_return_get_name"
+    # Wrong place
+    ignore = true
+
+    [[object.function]]
+    name = "state_get_name"
+    # Wrong place
+    ignore = true
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
@@ -352,6 +359,35 @@ trait = false
 name = "Gst.DeviceProviderFactory"
 status = "generate"
 trait = false
+
+[[object]]
+name = "Gst.DeviceProvider"
+status = "generate"
+    [[object.function]]
+    name = "get_bus"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "Gst.DeviceMonitor"
+status = "generate"
+    [[object.function]]
+    name = "get_bus"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "Gst.Device"
+status = "generate"
+    [[object.function]]
+    name = "get_display_name"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_device_class"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gst.Object"
@@ -526,6 +562,11 @@ status = "generate"
     # formatted value
     ignore = true
 
+    [[object.function]]
+    name = "link_get_name"
+    # Wrong place
+    ignore = true
+
 [[object]]
 name = "Gst.PadTemplate"
 status = "generate"
@@ -632,11 +673,6 @@ trait = false
 
     [[object.function]]
     name = "get_package"
-        [object.function.return]
-        nullable = false
-
-    [[object.function]]
-    name = "get_release_date_string"
         [object.function.return]
         nullable = false
 
@@ -872,6 +908,16 @@ status = "generate"
     name = "util_seqnum_next"
     # newtype wrapper
     ignore = true
+
+    [[object.function]]
+    name = "debug_bin_to_dot_data"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "version_string"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gst.StateChangeReturn"

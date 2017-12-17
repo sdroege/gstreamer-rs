@@ -18,7 +18,7 @@ use std::mem;
 use std::ptr;
 
 
-pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> Option<String> {
+pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> String {
     skip_assert_initialized!();
     unsafe {
         from_glib_full(ffi::gst_debug_bin_to_dot_data(bin.to_glib_none().0, details.to_glib()))
@@ -170,7 +170,7 @@ pub fn version() -> (u32, u32, u32, u32) {
     }
 }
 
-pub fn version_string() -> Option<String> {
+pub fn version_string() -> String {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_version_string())

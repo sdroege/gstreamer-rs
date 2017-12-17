@@ -58,13 +58,6 @@ impl Pad {
             from_glib_none(ffi::gst_pad_new_from_template(templ.to_glib_none().0, name.0))
         }
     }
-
-    pub fn link_get_name(ret: PadLinkReturn) -> Option<String> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gst_pad_link_get_name(ret.to_glib()))
-        }
-    }
 }
 
 unsafe impl Send for Pad {}

@@ -50,7 +50,7 @@ unsafe impl Sync for DeviceMonitor {}
 pub trait DeviceMonitorExt {
     fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, classes: P, caps: Q) -> u32;
 
-    fn get_bus(&self) -> Option<Bus>;
+    fn get_bus(&self) -> Bus;
 
     fn get_devices(&self) -> Vec<Device>;
 
@@ -84,7 +84,7 @@ impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
         }
     }
 
-    fn get_bus(&self) -> Option<Bus> {
+    fn get_bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_monitor_get_bus(self.to_glib_none().0))
         }

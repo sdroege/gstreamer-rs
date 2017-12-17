@@ -69,7 +69,7 @@ impl Plugin {
         }
     }
 
-    pub fn get_release_date_string(&self) -> String {
+    pub fn get_release_date_string(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_release_date_string(self.to_glib_none().0))
         }
