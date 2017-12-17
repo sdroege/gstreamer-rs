@@ -151,6 +151,7 @@ pub use self::flags::ElementFlags;
 pub use self::flags::PadLinkCheck;
 pub use self::flags::PadProbeType;
 pub use self::flags::ParseFlags;
+pub use self::flags::PluginDependencyFlags;
 pub use self::flags::SchedulingFlags;
 pub use self::flags::SeekFlags;
 pub use self::flags::SegmentFlags;

@@ -461,6 +461,57 @@ impl SetValue for ParseFlags {
 }
 
 bitflags! {
+    pub struct PluginDependencyFlags: u32 {
+        const NONE = 0;
+        const RECURSE = 1;
+        const PATHS_ARE_DEFAULT_ONLY = 2;
+        const FILE_NAME_IS_SUFFIX = 4;
+        const FILE_NAME_IS_PREFIX = 8;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for PluginDependencyFlags {
+    type GlibType = ffi::GstPluginDependencyFlags;
+
+    fn to_glib(&self) -> ffi::GstPluginDependencyFlags {
+        ffi::GstPluginDependencyFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstPluginDependencyFlags> for PluginDependencyFlags {
+    fn from_glib(value: ffi::GstPluginDependencyFlags) -> PluginDependencyFlags {
+        skip_assert_initialized!();
+        PluginDependencyFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for PluginDependencyFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_plugin_dependency_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PluginDependencyFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PluginDependencyFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstPluginDependencyFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for PluginDependencyFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct SchedulingFlags: u32 {
         const SEEKABLE = 1;
         const SEQUENTIAL = 2;

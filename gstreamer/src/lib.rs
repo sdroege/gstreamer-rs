@@ -124,6 +124,8 @@ pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, 
                 StateChangeError, StateChangeSuccess};
 pub use clock_time::ClockTime;
 
+mod plugin;
+
 pub mod format;
 pub use format::{FormattedValue, GenericFormattedValue, SpecificFormattedValue};
 

@@ -3,7 +3,7 @@
 
 use Error;
 use Object;
-use Structure;
+use PluginDependencyFlags;
 use ffi;
 use glib::translate::*;
 use glib_ffi;
@@ -21,21 +21,25 @@ glib_wrapper! {
 }
 
 impl Plugin {
-    //pub fn add_dependency<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>, R: Into<Option<&'c str>>>(&self, env_vars: P, paths: Q, names: R, flags: /*Ignored*/PluginDependencyFlags) {
-    //    unsafe { TODO: call ffi::gst_plugin_add_dependency() }
-    //}
-
-    //pub fn add_dependency_simple<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>, R: Into<Option<&'c str>>>(&self, env_vars: P, paths: Q, names: R, flags: /*Ignored*/PluginDependencyFlags) {
-    //    unsafe { TODO: call ffi::gst_plugin_add_dependency_simple() }
-    //}
-
-    pub fn get_cache_data(&self) -> Option<Structure> {
+    pub fn add_dependency(&self, env_vars: &[&str], paths: &[&str], names: &[&str], flags: PluginDependencyFlags) {
         unsafe {
-            from_glib_none(ffi::gst_plugin_get_cache_data(self.to_glib_none().0))
+            ffi::gst_plugin_add_dependency(self.to_glib_none().0, env_vars.to_glib_none().0, paths.to_glib_none().0, names.to_glib_none().0, flags.to_glib());
         }
     }
 
-    pub fn get_description(&self) -> Option<String> {
+    pub fn add_dependency_simple<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>, R: Into<Option<&'c str>>>(&self, env_vars: P, paths: Q, names: R, flags: PluginDependencyFlags) {
+        let env_vars = env_vars.into();
+        let env_vars = env_vars.to_glib_none();
+        let paths = paths.into();
+        let paths = paths.to_glib_none();
+        let names = names.into();
+        let names = names.to_glib_none();
+        unsafe {
+            ffi::gst_plugin_add_dependency_simple(self.to_glib_none().0, env_vars.0, paths.0, names.0, flags.to_glib());
+        }
+    }
+
+    pub fn get_description(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_description(self.to_glib_none().0))
         }
@@ -47,37 +51,37 @@ impl Plugin {
         }
     }
 
-    pub fn get_license(&self) -> Option<String> {
+    pub fn get_license(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_license(self.to_glib_none().0))
         }
     }
 
-    pub fn get_origin(&self) -> Option<String> {
+    pub fn get_origin(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_origin(self.to_glib_none().0))
         }
     }
 
-    pub fn get_package(&self) -> Option<String> {
+    pub fn get_package(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_package(self.to_glib_none().0))
         }
     }
 
-    pub fn get_release_date_string(&self) -> Option<String> {
+    pub fn get_release_date_string(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_release_date_string(self.to_glib_none().0))
         }
     }
 
-    pub fn get_source(&self) -> Option<String> {
+    pub fn get_source(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_source(self.to_glib_none().0))
         }
     }
 
-    pub fn get_version(&self) -> Option<String> {
+    pub fn get_version(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_version(self.to_glib_none().0))
         }
@@ -92,19 +96,6 @@ impl Plugin {
     pub fn load(&self) -> Option<Plugin> {
         unsafe {
             from_glib_full(ffi::gst_plugin_load(self.to_glib_none().0))
-        }
-    }
-
-    pub fn set_cache_data(&self, cache_data: &mut Structure) {
-        unsafe {
-            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.to_glib_full());
-        }
-    }
-
-    pub fn list_free(list: &[Plugin]) {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gst_plugin_list_free(list.to_glib_full());
         }
     }
 

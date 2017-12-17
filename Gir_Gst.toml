@@ -71,6 +71,7 @@ generate = [
     "Gst.DebugGraphDetails",
     "Gst.ParseFlags",
     "Gst.TaskState",
+    "Gst.PluginDependencyFlags",
 ]
 
 manual = [
@@ -593,6 +594,61 @@ trait = false
 name = "Gst.Plugin"
 status = "generate"
 trait = false
+
+    [[object.function]]
+    name = "list_free"
+    # useless and unsafe
+    ignore = true
+
+    [[object.function]]
+    name = "set_cache_data"
+    # pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "get_cache_data"
+    # structure ref
+    ignore = true
+
+    [[object.function]]
+    name = "get_description"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_name"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_license"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_origin"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_package"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_release_date_string"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_source"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_version"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gst.PluginFeature"
