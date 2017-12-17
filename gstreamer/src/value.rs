@@ -13,7 +13,7 @@ use std::borrow::{Borrow, Cow};
 use std::slice;
 
 use glib;
-use glib::value::{FromValue, FromValueOptional, SetValue, ToValue, Value};
+use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut,
                       Uninitialized};
 
@@ -522,36 +522,36 @@ impl SetValue for Bitmask {
 }
 
 #[derive(Clone, Debug)]
-pub struct Array<'a>(Cow<'a, [glib::Value]>);
+pub struct Array<'a>(Cow<'a, [glib::SendValue]>);
 
 unsafe impl<'a> Send for Array<'a> {}
 
 impl<'a> Array<'a> {
-    pub fn new(values: &[&ToValue]) -> Self {
+    pub fn new(values: &[&ToSendValue]) -> Self {
         assert_initialized_main_thread!();
 
-        Array(values.iter().map(|v| v.to_value()).collect())
+        Array(values.iter().map(|v| v.to_send_value()).collect())
     }
 
     pub fn into_owned(self) -> Array<'static> {
         Array(self.0.into_owned().into())
     }
 
-    pub fn as_slice(&self) -> &[glib::Value] {
+    pub fn as_slice(&self) -> &[glib::SendValue] {
         self.0.borrow()
     }
 }
 
-impl<'a> From<&'a [&'a ToValue]> for Array<'a> {
-    fn from(values: &'a [&'a ToValue]) -> Self {
+impl<'a> From<&'a [&'a ToSendValue]> for Array<'a> {
+    fn from(values: &'a [&'a ToSendValue]) -> Self {
         skip_assert_initialized!();
 
         Self::new(values)
     }
 }
 
-impl<'a> From<&'a [glib::Value]> for Array<'a> {
-    fn from(values: &'a [glib::Value]) -> Self {
+impl<'a> From<&'a [glib::SendValue]> for Array<'a> {
+    fn from(values: &'a [glib::SendValue]) -> Self {
         assert_initialized_main_thread!();
 
         Array(Cow::Borrowed(values))
@@ -565,7 +565,7 @@ impl<'a> FromValue<'a> for Array<'a> {
             Array(Cow::Borrowed(&[]))
         } else {
             Array(Cow::Borrowed(slice::from_raw_parts(
-                (*arr).data as *const glib::Value,
+                (*arr).data as *const glib::SendValue,
                 (*arr).len as usize,
             )))
         }
@@ -593,36 +593,36 @@ impl<'a> glib::types::StaticType for Array<'a> {
 }
 
 #[derive(Clone, Debug)]
-pub struct List<'a>(Cow<'a, [glib::Value]>);
+pub struct List<'a>(Cow<'a, [glib::SendValue]>);
 
 unsafe impl<'a> Send for List<'a> {}
 
 impl<'a> List<'a> {
-    pub fn new(values: &[&ToValue]) -> Self {
+    pub fn new(values: &[&ToSendValue]) -> Self {
         assert_initialized_main_thread!();
 
-        List(values.iter().map(|v| v.to_value()).collect())
+        List(values.iter().map(|v| v.to_send_value()).collect())
     }
 
     pub fn into_owned(self) -> List<'static> {
         List(self.0.into_owned().into())
     }
 
-    pub fn as_slice(&self) -> &[glib::Value] {
+    pub fn as_slice(&self) -> &[glib::SendValue] {
         self.0.borrow()
     }
 }
 
-impl<'a> From<&'a [&'a ToValue]> for List<'a> {
-    fn from(values: &'a [&'a ToValue]) -> Self {
+impl<'a> From<&'a [&'a ToSendValue]> for List<'a> {
+    fn from(values: &'a [&'a ToSendValue]) -> Self {
         skip_assert_initialized!();
 
         Self::new(values)
     }
 }
 
-impl<'a> From<&'a [glib::Value]> for List<'a> {
-    fn from(values: &'a [glib::Value]) -> Self {
+impl<'a> From<&'a [glib::SendValue]> for List<'a> {
+    fn from(values: &'a [glib::SendValue]) -> Self {
         assert_initialized_main_thread!();
 
         List(Cow::Borrowed(values))
@@ -636,7 +636,7 @@ impl<'a> FromValue<'a> for List<'a> {
             List(Cow::Borrowed(&[]))
         } else {
             List(Cow::Borrowed(slice::from_raw_parts(
-                (*arr).data as *const glib::Value,
+                (*arr).data as *const glib::SendValue,
                 (*arr).len as usize,
             )))
         }
