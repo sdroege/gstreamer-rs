@@ -31,6 +31,7 @@ manual = [
     "Gst.FlowReturn",
     "Gst.Format",
     "Gst.Pad",
+    "Gst.TypeFindProbability",
 ]
 
 [[object]]
@@ -70,6 +71,15 @@ name = "GstBase.FlowCombiner"
 status = "manual"
 trait = false
 concurrency = "none"
+
+[[object]]
+name = "GstBase.*"
+status = "generate"
+
+    [[object.function]]
+    name = "type_find_helper_for_data"
+    # broken data type
+    ignore = true
 
 [[object]]
 name = "Gst.Structure"
