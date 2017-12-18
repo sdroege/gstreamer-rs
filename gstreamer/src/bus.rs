@@ -70,6 +70,12 @@ fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
 }
 
 impl Bus {
+    pub fn add_signal_watch_full(&self, priority: Priority) {
+        unsafe {
+            ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.to_glib());
+        }
+    }
+
     pub fn create_watch<'a, N: Into<Option<&'a str>>, F>(
         &self,
         name: N,

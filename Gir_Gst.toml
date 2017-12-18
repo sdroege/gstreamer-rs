@@ -119,6 +119,11 @@ trait = false
     ignore = true
 
     [[object.function]]
+    name = "add_signal_watch_full"
+    # Priority
+    ignore = true
+
+    [[object.function]]
     name = "timed_pop_filtered"
     # Uses enum as flags
     ignore = true

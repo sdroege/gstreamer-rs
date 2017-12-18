@@ -37,12 +37,6 @@ impl Bus {
         }
     }
 
-    pub fn add_signal_watch_full(&self, priority: i32) {
-        unsafe {
-            ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority);
-        }
-    }
-
     //pub fn add_watch<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/BusFunc, user_data: P) -> u32 {
     //    unsafe { TODO: call ffi::gst_bus_add_watch() }
     //}
