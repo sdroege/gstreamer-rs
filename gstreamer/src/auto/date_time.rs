@@ -189,3 +189,4 @@ impl DateTime {
 }
 
 unsafe impl Send for DateTime {}
+unsafe impl Sync for DateTime {}

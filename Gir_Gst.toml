@@ -69,6 +69,7 @@ generate = [
     "Gst.ParseFlags",
     "Gst.TaskState",
     "Gst.PluginDependencyFlags",
+    "Gst.DateTime",
 ]
 
 manual = [
@@ -210,11 +211,6 @@ ref_mode = "ref"
 name = "Gst.TocEntry"
 status = "manual"
 ref_mode = "ref"
-
-[[object]]
-name = "Gst.DateTime"
-status = "generate"
-concurrency = "send"
 
 [[object]]
 name = "Gst.Clock"
