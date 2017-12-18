@@ -67,8 +67,6 @@ pub trait ClockExt {
 
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
 
-    fn adjust_with_calibration(&self, internal_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime;
-
     fn get_calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime);
 
     fn get_internal_time(&self) -> ClockTime;
@@ -102,8 +100,6 @@ pub trait ClockExt {
     //fn single_shot_id_reinit(&self, id: /*Unimplemented*/ClockID, time: ClockTime) -> bool;
 
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime;
-
-    fn unadjust_with_calibration(&self, external_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime;
 
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError>;
 
@@ -148,12 +144,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_clock_adjust_unlocked(self.to_glib_none().0, internal.to_glib()))
-        }
-    }
-
-    fn adjust_with_calibration(&self, internal_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime {
-        unsafe {
-            from_glib(ffi::gst_clock_adjust_with_calibration(self.to_glib_none().0, internal_target.to_glib(), cinternal.to_glib(), cexternal.to_glib(), cnum.to_glib(), cdenom.to_glib()))
         }
     }
 
@@ -255,12 +245,6 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_clock_unadjust_unlocked(self.to_glib_none().0, external.to_glib()))
-        }
-    }
-
-    fn unadjust_with_calibration(&self, external_target: ClockTime, cinternal: ClockTime, cexternal: ClockTime, cnum: ClockTime, cdenom: ClockTime) -> ClockTime {
-        unsafe {
-            from_glib(ffi::gst_clock_unadjust_with_calibration(self.to_glib_none().0, external_target.to_glib(), cinternal.to_glib(), cexternal.to_glib(), cnum.to_glib(), cdenom.to_glib()))
         }
     }
 

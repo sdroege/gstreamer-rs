@@ -126,6 +126,46 @@ impl Eq for ClockId {}
 unsafe impl Send for ClockId {}
 unsafe impl Sync for ClockId {}
 
+impl Clock {
+    pub fn adjust_with_calibration(
+        internal_target: ClockTime,
+        cinternal: ClockTime,
+        cexternal: ClockTime,
+        cnum: ClockTime,
+        cdenom: ClockTime,
+    ) -> ClockTime {
+        unsafe {
+            from_glib(ffi::gst_clock_adjust_with_calibration(
+                ptr::null_mut(),
+                internal_target.to_glib(),
+                cinternal.to_glib(),
+                cexternal.to_glib(),
+                cnum.to_glib(),
+                cdenom.to_glib(),
+            ))
+        }
+    }
+
+    pub fn unadjust_with_calibration(
+        external_target: ClockTime,
+        cinternal: ClockTime,
+        cexternal: ClockTime,
+        cnum: ClockTime,
+        cdenom: ClockTime,
+    ) -> ClockTime {
+        unsafe {
+            from_glib(ffi::gst_clock_unadjust_with_calibration(
+                ptr::null_mut(),
+                external_target.to_glib(),
+                cinternal.to_glib(),
+                cexternal.to_glib(),
+                cnum.to_glib(),
+                cdenom.to_glib(),
+            ))
+        }
+    }
+}
+
 pub trait ClockExtManual {
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId>;
 

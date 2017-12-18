@@ -229,6 +229,16 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Timed out waiting for sync"
 
+    [[object.function]]
+    name = "adjust_with_calibration"
+    # Useless clock parameter
+    ignore = true
+
+    [[object.function]]
+    name = "unadjust_with_calibration"
+    # Useless clock parameter
+    ignore = true
+
 [[object]]
 name = "Gst.SystemClock"
 status = "generate"
