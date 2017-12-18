@@ -379,6 +379,11 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "start"
+        [object.function.return]
+        bool_return_is_error = "Failed to start"
+
 [[object]]
 name = "Gst.DeviceMonitor"
 status = "generate"
@@ -386,6 +391,11 @@ status = "generate"
     name = "get_bus"
         [object.function.return]
         nullable = false
+
+    [[object.function]]
+    name = "start"
+        [object.function.return]
+        bool_return_is_error = "Failed to start"
 
 [[object]]
 name = "Gst.Device"

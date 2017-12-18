@@ -62,7 +62,7 @@ pub trait DeviceMonitorExt {
 
     fn set_show_all_devices(&self, show_all: bool);
 
-    fn start(&self) -> bool;
+    fn start(&self) -> Result<(), glib::error::BoolError>;
 
     fn stop(&self);
 
@@ -120,9 +120,9 @@ impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
         }
     }
 
-    fn start(&self) -> bool {
+    fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_device_monitor_start(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_device_monitor_start(self.to_glib_none().0), "Failed to start")
         }
     }
 

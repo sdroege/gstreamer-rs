@@ -60,7 +60,7 @@ pub trait DeviceProviderExt {
 
     fn hide_provider(&self, name: &str);
 
-    fn start(&self) -> bool;
+    fn start(&self) -> Result<(), glib::error::BoolError>;
 
     fn stop(&self);
 
@@ -120,9 +120,9 @@ impl<O: IsA<DeviceProvider> + IsA<glib::object::Object>> DeviceProviderExt for O
         }
     }
 
-    fn start(&self) -> bool {
+    fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_device_provider_start(self.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_device_provider_start(self.to_glib_none().0), "Failed to start")
         }
     }
 
