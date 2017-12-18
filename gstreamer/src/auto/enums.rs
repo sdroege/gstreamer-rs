@@ -2598,6 +2598,75 @@ impl SetValue for TocScope {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum TypeFindProbability {
+    None,
+    Minimum,
+    Possible,
+    Likely,
+    NearlyCertain,
+    Maximum,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TypeFindProbability {
+    type GlibType = ffi::GstTypeFindProbability;
+
+    fn to_glib(&self) -> ffi::GstTypeFindProbability {
+        match *self {
+            TypeFindProbability::None => ffi::GST_TYPE_FIND_NONE,
+            TypeFindProbability::Minimum => ffi::GST_TYPE_FIND_MINIMUM,
+            TypeFindProbability::Possible => ffi::GST_TYPE_FIND_POSSIBLE,
+            TypeFindProbability::Likely => ffi::GST_TYPE_FIND_LIKELY,
+            TypeFindProbability::NearlyCertain => ffi::GST_TYPE_FIND_NEARLY_CERTAIN,
+            TypeFindProbability::Maximum => ffi::GST_TYPE_FIND_MAXIMUM,
+            TypeFindProbability::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
+    fn from_glib(value: ffi::GstTypeFindProbability) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => TypeFindProbability::None,
+            1 => TypeFindProbability::Minimum,
+            50 => TypeFindProbability::Possible,
+            80 => TypeFindProbability::Likely,
+            99 => TypeFindProbability::NearlyCertain,
+            100 => TypeFindProbability::Maximum,
+            value => TypeFindProbability::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TypeFindProbability {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_type_find_probability_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TypeFindProbability {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TypeFindProbability {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for TypeFindProbability {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum URIError {
     UnsupportedProtocol,
     BadUri,

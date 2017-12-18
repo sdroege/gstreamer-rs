@@ -97,6 +97,9 @@ mod toc_setter;
 pub use self::toc_setter::TocSetter;
 pub use self::toc_setter::TocSetterExt;
 
+mod type_find_factory;
+pub use self::type_find_factory::TypeFindFactory;
+
 mod u_r_i_handler;
 pub use self::u_r_i_handler::URIHandler;
 pub use self::u_r_i_handler::URIHandlerExt;
@@ -139,6 +142,7 @@ pub use self::enums::TaskState;
 pub use self::enums::TocEntryType;
 pub use self::enums::TocLoopType;
 pub use self::enums::TocScope;
+pub use self::enums::TypeFindProbability;
 pub use self::enums::URIError;
 pub use self::enums::URIType;
 

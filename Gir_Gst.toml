@@ -70,6 +70,7 @@ generate = [
     "Gst.TaskState",
     "Gst.PluginDependencyFlags",
     "Gst.DateTime",
+    "Gst.TypeFindProbability",
 ]
 
 manual = [
@@ -363,6 +364,11 @@ status = "generate"
 
 [[object]]
 name = "Gst.ElementFactory"
+status = "generate"
+trait = false
+
+[[object]]
+name = "Gst.TypeFindFactory"
 status = "generate"
 trait = false
 
