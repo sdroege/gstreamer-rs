@@ -126,6 +126,9 @@ pub use clock_time::ClockTime;
 
 mod plugin;
 
+mod typefind;
+pub use typefind::*;
+
 pub mod format;
 pub use format::{FormattedValue, GenericFormattedValue, SpecificFormattedValue};
 

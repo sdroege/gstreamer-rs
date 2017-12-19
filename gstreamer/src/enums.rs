@@ -12,6 +12,9 @@ use PadLinkReturn;
 use ClockReturn;
 use std::error::Error;
 use std::fmt;
+use std::cmp;
+
+use glib::translate::ToGlib;
 
 impl StateChangeReturn {
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
@@ -284,4 +287,30 @@ impl Error for ClockError {
             ClockError::Unsupported => "Operation is not supported",
         }
     }
+}
+
+impl PartialOrd for ::TypeFindProbability {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        self.to_glib().partial_cmp(&other.to_glib())
+    }
+}
+
+impl Ord for ::TypeFindProbability {
+    fn cmp(&self, other: &Self) -> cmp::Ordering {
+        self.to_glib().cmp(&other.to_glib())
+    }
+
+}
+
+impl PartialOrd for ::Rank {
+    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
+        self.to_glib().partial_cmp(&other.to_glib())
+    }
+}
+
+impl Ord for ::Rank {
+    fn cmp(&self, other: &Self) -> cmp::Ordering {
+        self.to_glib().cmp(&other.to_glib())
+    }
+
 }
