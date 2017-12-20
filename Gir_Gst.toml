@@ -282,6 +282,11 @@ status = "generate"
         bool_return_is_error = "Failed to link pads"
 
     [[object.function]]
+    name = "link_pads_full"
+        [object.function.return]
+        bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
     name = "post_message"
         [object.function.return]
         bool_return_is_error = "Failed to post message"

@@ -121,7 +121,7 @@ pub trait ElementExt {
 
     fn link_pads_filtered<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>, S: Into<Option<&'c Caps>>>(&self, srcpadname: P, dest: &Q, destpadname: R, filter: S) -> Result<(), glib::error::BoolError>;
 
-    fn link_pads_full<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R, flags: PadLinkCheck) -> bool;
+    fn link_pads_full<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R, flags: PadLinkCheck) -> Result<(), glib::error::BoolError>;
 
     fn lost_state(&self);
 
@@ -342,13 +342,13 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn link_pads_full<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R, flags: PadLinkCheck) -> bool {
+    fn link_pads_full<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Element>, R: Into<Option<&'b str>>>(&self, srcpadname: P, dest: &Q, destpadname: R, flags: PadLinkCheck) -> Result<(), glib::error::BoolError> {
         let srcpadname = srcpadname.into();
         let srcpadname = srcpadname.to_glib_none();
         let destpadname = destpadname.into();
         let destpadname = destpadname.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_element_link_pads_full(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0, flags.to_glib()))
+            glib::error::BoolError::from_glib(ffi::gst_element_link_pads_full(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0, flags.to_glib()), "Failed to link pads")
         }
     }
 
