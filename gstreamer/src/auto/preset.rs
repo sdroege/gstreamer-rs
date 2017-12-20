@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
@@ -25,10 +26,10 @@ impl Preset {
         }
     }
 
-    pub fn set_app_dir(app_dir: &str) -> bool {
+    pub fn set_app_dir(app_dir: &str) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib(ffi::gst_preset_set_app_dir(app_dir.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_preset_set_app_dir(app_dir.to_glib_none().0), "Failed to set app preset directory")
         }
     }
 }

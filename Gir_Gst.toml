@@ -50,7 +50,6 @@ generate = [
     "Gst.PadMode",
     "Gst.SchedulingFlags",
     "Gst.ChildProxy",
-    "Gst.Preset",
     "Gst.TagSetter",
     "Gst.QOSType",
     "Gst.EventType",
@@ -767,6 +766,15 @@ trait = false
     name = "add_plugin"
         [object.function.return]
         bool_return_is_error = "Failed to add plugin"
+
+[[object]]
+name = "Gst.Preset"
+status = "generate"
+
+    [[object.function]]
+    name = "set_app_dir"
+        [object.function.return]
+        bool_return_is_error = "Failed to set app preset directory"
 
 [[object]]
 name = "Gst.*"
