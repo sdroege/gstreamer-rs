@@ -14151,7 +14151,10 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstElement to set the bus of.</doc>
             <type name="Element" c:type="GstElement*"/>
           </instance-parameter>
-          <parameter name="bus" transfer-ownership="none">
+          <parameter name="bus"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the #GstBus to set.</doc>
             <type name="Bus" c:type="GstBus*"/>
           </parameter>
@@ -14174,7 +14177,10 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstElement to set the clock for.</doc>
             <type name="Element" c:type="GstElement*"/>
           </instance-parameter>
-          <parameter name="clock" transfer-ownership="none">
+          <parameter name="clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the #GstClock to set for the element.</doc>
             <type name="Clock" c:type="GstClock*"/>
           </parameter>
@@ -29136,7 +29142,9 @@ codec libraries are currently installed.</doc>
     or %NULL. Environment variable names may be followed by a path component
      which will be added to the content of the environment variable, e.g.
      "HOME/.mystuff/plugins".</doc>
-            <type name="utf8" c:type="const gchar**"/>
+            <array c:type="gchar**">
+              <type name="utf8" c:type="gchar*"/>
+            </array>
           </parameter>
           <parameter name="paths"
                      transfer-ownership="none"
@@ -29144,7 +29152,9 @@ codec libraries are currently installed.</doc>
                      allow-none="1">
             <doc xml:space="preserve">%NULL-terminated array of directories/paths where dependent files
     may be, or %NULL.</doc>
-            <type name="utf8" c:type="const gchar**"/>
+            <array c:type="gchar**">
+              <type name="utf8" c:type="gchar*"/>
+            </array>
           </parameter>
           <parameter name="names"
                      transfer-ownership="none"
@@ -29154,7 +29164,9 @@ codec libraries are currently installed.</doc>
     depending on @flags) to be used in combination with the paths from
     @paths and/or the paths extracted from the environment variables in
     @env_vars, or %NULL.</doc>
-            <type name="utf8" c:type="const gchar**"/>
+            <array c:type="gchar**">
+              <type name="utf8" c:type="gchar*"/>
+            </array>
           </parameter>
           <parameter name="flags" transfer-ownership="none">
             <doc xml:space="preserve">optional flags, or #GST_PLUGIN_DEPENDENCY_FLAG_NONE</doc>
@@ -38005,7 +38017,10 @@ MT safe.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="new_clock" transfer-ownership="none">
+          <parameter name="new_clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstClock</doc>
             <type name="Clock" c:type="GstClock*"/>
           </parameter>
