@@ -46,7 +46,9 @@ impl AsMut<gst::StructureRef> for PlayerConfig {
 impl PlayerConfig {
     pub fn get_position_update_interval(&self) -> u32 {
         assert_initialized_main_thread!();
-        unsafe { ffi::gst_player_config_get_position_update_interval(self.0.to_glib_none().0) }
+        unsafe {
+            ffi::gst_player_config_get_position_update_interval(self.0.to_glib_none().0)
+        }
     }
 
     pub fn get_seek_accurate(&self) -> bool {

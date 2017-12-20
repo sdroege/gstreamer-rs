@@ -218,7 +218,6 @@ impl Error for PadLinkError {
     }
 }
 
-
 impl ClockReturn {
     pub fn into_result(self) -> Result<ClockSuccess, ClockError> {
         match self {
@@ -299,7 +298,6 @@ impl Ord for ::TypeFindProbability {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         self.to_glib().cmp(&other.to_glib())
     }
-
 }
 
 impl PartialOrd for ::Rank {
@@ -312,5 +310,4 @@ impl Ord for ::Rank {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
         self.to_glib().cmp(&other.to_glib())
     }
-
 }

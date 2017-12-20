@@ -83,7 +83,6 @@ impl Player {
         }
     }
 
-
     pub fn connect_seek_done<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
         &self,
         f: F,

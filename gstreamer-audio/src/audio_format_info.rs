@@ -194,7 +194,6 @@ impl AudioFormatInfo {
         self.flags().contains(::AudioFormatFlags::SIGNED)
     }
 
-
     pub fn is_little_endian(&self) -> bool {
         self.endianness() == AudioEndianness::LittleEndian
     }
@@ -253,9 +252,9 @@ impl glib::types::StaticType for AudioFormatInfo {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for AudioFormatInfo {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<AudioFormatInfo>::from_glib_none(
-            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstAudioFormatInfo,
-        )
+        Option::<AudioFormatInfo>::from_glib_none(gobject_ffi::g_value_get_boxed(
+            value.to_glib_none().0,
+        ) as *mut ffi::GstAudioFormatInfo)
     }
 }
 

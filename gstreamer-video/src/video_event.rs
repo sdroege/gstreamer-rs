@@ -237,13 +237,13 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &mut Self| {
-        ffi::gst_video_event_new_upstream_force_key_unit(
+    event_builder_generic_impl!(
+        |s: &mut Self| ffi::gst_video_event_new_upstream_force_key_unit(
             s.running_time.to_glib(),
             s.all_headers.to_glib(),
             s.count,
         )
-    });
+    );
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -315,9 +315,9 @@ impl<'a> StillFrameEventBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &mut Self| {
-        ffi::gst_video_event_new_still_frame(s.in_still.to_glib())
-    });
+    event_builder_generic_impl!(|s: &mut Self| ffi::gst_video_event_new_still_frame(
+        s.in_still.to_glib()
+    ));
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]

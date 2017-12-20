@@ -874,24 +874,24 @@ unsafe extern "C" fn trampoline_pad_probe(
             let data = (*info).data as *const ffi::GstMiniObject;
             if (*data).type_ == Buffer::static_type().to_glib() {
                 data_type = Some(Buffer::static_type());
-                Some(PadProbeData::Buffer(
-                    from_glib_none(data as *const ffi::GstBuffer),
-                ))
+                Some(PadProbeData::Buffer(from_glib_none(
+                    data as *const ffi::GstBuffer,
+                )))
             } else if (*data).type_ == BufferList::static_type().to_glib() {
                 data_type = Some(BufferList::static_type());
-                Some(PadProbeData::BufferList(
-                    from_glib_none(data as *const ffi::GstBufferList),
-                ))
+                Some(PadProbeData::BufferList(from_glib_none(
+                    data as *const ffi::GstBufferList,
+                )))
             } else if (*data).type_ == Query::static_type().to_glib() {
                 data_type = Some(Query::static_type());
-                Some(PadProbeData::Query(
-                    QueryRef::from_mut_ptr(data as *mut ffi::GstQuery),
-                ))
+                Some(PadProbeData::Query(QueryRef::from_mut_ptr(
+                    data as *mut ffi::GstQuery,
+                )))
             } else if (*data).type_ == Event::static_type().to_glib() {
                 data_type = Some(Event::static_type());
-                Some(PadProbeData::Event(
-                    from_glib_none(data as *const ffi::GstEvent),
-                ))
+                Some(PadProbeData::Event(from_glib_none(
+                    data as *const ffi::GstEvent,
+                )))
             } else {
                 Some(PadProbeData::Unknown)
             }
@@ -1195,9 +1195,7 @@ mod tests {
 
         assert!(pad.send_event(::Event::new_stream_start("test").build()));
         let segment = ::FormattedSegment::<::ClockTime>::new();
-        assert!(pad.send_event(
-            ::Event::new_segment(segment.as_ref()).build()
-        ));
+        assert!(pad.send_event(::Event::new_segment(segment.as_ref()).build()));
 
         assert_eq!(pad.chain(::Buffer::new()), ::FlowReturn::Ok);
 

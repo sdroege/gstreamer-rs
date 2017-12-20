@@ -90,12 +90,8 @@ fn main() {
         .unwrap();
 
     gst::Element::link_many(&[&appsrc, &tee]).unwrap();
-    gst::Element::link_many(&[
-        &audio_queue,
-        &audio_convert1,
-        &audio_resample,
-        &audio_sink,
-    ]).unwrap();
+    gst::Element::link_many(&[&audio_queue, &audio_convert1, &audio_resample, &audio_sink])
+        .unwrap();
     gst::Element::link_many(&[
         &video_queue,
         &audio_convert2,
@@ -233,8 +229,6 @@ fn main() {
 
         gst::FlowReturn::Ok
     });
-
-
 
     pipeline
         .set_state(gst::State::Playing)

@@ -44,12 +44,7 @@ fn tutorial_main() {
         .unwrap();
 
     gst::Element::link_many(&[&audio_source, &tee]).unwrap();
-    gst::Element::link_many(&[
-        &audio_queue,
-        &audio_convert,
-        &audio_resample,
-        &audio_sink,
-    ]).unwrap();
+    gst::Element::link_many(&[&audio_queue, &audio_convert, &audio_resample, &audio_sink]).unwrap();
     gst::Element::link_many(&[&video_queue, &visual, &video_convert, &video_sink]).unwrap();
 
     let tee_audio_pad = tee.get_request_pad("src_%u").unwrap();

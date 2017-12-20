@@ -19,10 +19,10 @@ impl PlayerGMainContextSignalDispatcher {
         let application_context = application_context.into();
         let application_context = application_context.to_glib_none();
         unsafe {
-            from_glib_full(
-                ffi::gst_player_g_main_context_signal_dispatcher_new(application_context.0)
-                    as *mut ffi::GstPlayerGMainContextSignalDispatcher,
+            from_glib_full(ffi::gst_player_g_main_context_signal_dispatcher_new(
+                application_context.0,
             )
+                as *mut ffi::GstPlayerGMainContextSignalDispatcher)
         }
     }
 }

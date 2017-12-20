@@ -42,13 +42,14 @@ impl<'a> AudioInfoBuilder<'a> {
                     return None;
                 }
 
-                let positions: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(
-                    |i| if i >= self.channels as usize {
-                        ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
-                    } else {
-                        p[i].to_glib()
-                    },
-                );
+                let positions: [ffi::GstAudioChannelPosition; 64] =
+                    array_init::array_init_copy(|i| {
+                        if i >= self.channels as usize {
+                            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+                        } else {
+                            p[i].to_glib()
+                        }
+                    });
 
                 let valid: bool = from_glib(ffi::gst_audio_check_valid_channel_positions(
                     positions.as_ptr() as *mut _,

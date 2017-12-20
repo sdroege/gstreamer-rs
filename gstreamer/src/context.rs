@@ -59,14 +59,16 @@ impl ContextRef {
     }
 
     pub fn get_structure(&self) -> &StructureRef {
-        unsafe { StructureRef::from_glib_borrow(ffi::gst_context_get_structure(self.as_mut_ptr())) }
+        unsafe {
+            StructureRef::from_glib_borrow(ffi::gst_context_get_structure(self.as_mut_ptr()))
+        }
     }
 
     pub fn get_mut_structure(&mut self) -> &mut StructureRef {
         unsafe {
-            StructureRef::from_glib_borrow_mut(
-                ffi::gst_context_writable_structure(self.as_mut_ptr()),
-            )
+            StructureRef::from_glib_borrow_mut(ffi::gst_context_writable_structure(
+                self.as_mut_ptr(),
+            ))
         }
     }
 }

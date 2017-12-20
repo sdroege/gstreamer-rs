@@ -734,7 +734,6 @@ impl<'a> Qos<'a> {
     }
 }
 
-
 pub struct Seek<'a>(&'a EventRef);
 impl<'a> Seek<'a> {
     pub fn get(
@@ -947,9 +946,7 @@ impl<'a> FlushStopBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_flush_stop(s.reset_time.to_glib())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_flush_stop(s.reset_time.to_glib()));
 }
 
 pub struct StreamStartBuilder<'a> {
@@ -1036,9 +1033,7 @@ impl<'a> SegmentBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_segment(s.segment.to_glib_none().0)
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment(s.segment.to_glib_none().0));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1060,9 +1055,9 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_stream_collection(s.stream_collection.to_glib_none().0)
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_collection(
+        s.stream_collection.to_glib_none().0
+    ));
 }
 
 pub struct TagBuilder<'a> {
@@ -1109,14 +1104,12 @@ impl<'a> BufferSizeBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_buffer_size(
-            s.minsize.get_format().to_glib(),
-            s.minsize.get_value(),
-            s.maxsize.get_value(),
-            s.async.to_glib(),
-        )
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_buffer_size(
+        s.minsize.get_format().to_glib(),
+        s.minsize.get_value(),
+        s.maxsize.get_value(),
+        s.async.to_glib(),
+    ));
 }
 
 pub struct SinkMessageBuilder<'a> {
@@ -1138,9 +1131,10 @@ impl<'a> SinkMessageBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_sink_message(s.name.to_glib_none().0, s.msg.as_mut_ptr())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_sink_message(
+        s.name.to_glib_none().0,
+        s.msg.as_mut_ptr()
+    ));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1162,9 +1156,9 @@ impl<'a> StreamGroupDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_stream_group_done(s.group_id.to_glib())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(
+        s.group_id.to_glib()
+    ));
 }
 
 pub struct EosBuilder<'a> {
@@ -1204,9 +1198,10 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_toc(s.toc.to_glib_none().0, s.updated.to_glib())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc(
+        s.toc.to_glib_none().0,
+        s.updated.to_glib()
+    ));
 }
 
 pub struct ProtectionBuilder<'a> {
@@ -1237,13 +1232,11 @@ impl<'a> ProtectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_protection(
-            s.system_id.to_glib_none().0,
-            s.data.as_mut_ptr(),
-            s.origin.to_glib_none().0,
-        )
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_protection(
+        s.system_id.to_glib_none().0,
+        s.data.as_mut_ptr(),
+        s.origin.to_glib_none().0,
+    ));
 }
 
 pub struct SegmentDoneBuilder<'a> {
@@ -1263,9 +1256,10 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_segment_done(s.position.get_format().to_glib(), s.position.get_value())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment_done(
+        s.position.get_format().to_glib(),
+        s.position.get_value()
+    ));
 }
 
 pub struct GapBuilder<'a> {
@@ -1287,9 +1281,10 @@ impl<'a> GapBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_gap(s.timestamp.to_glib(), s.duration.to_glib())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(
+        s.timestamp.to_glib(),
+        s.duration.to_glib()
+    ));
 }
 
 pub struct QosBuilder<'a> {
@@ -1315,14 +1310,12 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_qos(
-            s.type_.to_glib(),
-            s.proportion,
-            s.diff,
-            s.timestamp.to_glib(),
-        )
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_qos(
+        s.type_.to_glib(),
+        s.proportion,
+        s.diff,
+        s.timestamp.to_glib(),
+    ));
 }
 
 pub struct SeekBuilder<'a> {
@@ -1359,17 +1352,15 @@ impl<'a> SeekBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_seek(
-            s.rate,
-            s.start.get_format().to_glib(),
-            s.flags.to_glib(),
-            s.start_type.to_glib(),
-            s.start.get_value(),
-            s.stop_type.to_glib(),
-            s.stop.get_value(),
-        )
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_seek(
+        s.rate,
+        s.start.get_format().to_glib(),
+        s.flags.to_glib(),
+        s.start_type.to_glib(),
+        s.start.get_value(),
+        s.stop_type.to_glib(),
+        s.stop.get_value(),
+    ));
 }
 
 pub struct NavigationBuilder<'a> {
@@ -1441,15 +1432,13 @@ impl<'a> StepBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_step(
-            s.amount.get_format().to_glib(),
-            s.amount.get_value() as u64,
-            s.rate,
-            s.flush.to_glib(),
-            s.intermediate.to_glib(),
-        )
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_step(
+        s.amount.get_format().to_glib(),
+        s.amount.get_value() as u64,
+        s.rate,
+        s.flush.to_glib(),
+        s.intermediate.to_glib(),
+    ));
 }
 
 pub struct ReconfigureBuilder<'a> {
@@ -1487,9 +1476,7 @@ impl<'a> TocSelectBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_toc_select(s.uid.to_glib_none().0)
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc_select(s.uid.to_glib_none().0));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1511,9 +1498,9 @@ impl<'a> SelectStreamsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_select_streams(s.streams.to_glib_full())
-    });
+    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_select_streams(
+        s.streams.to_glib_full()
+    ));
 }
 
 pub struct CustomUpstreamBuilder<'a> {

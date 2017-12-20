@@ -136,7 +136,9 @@ impl Bus {
     }
 
     pub fn unset_sync_handler(&self) {
-        unsafe { ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None) }
+        unsafe {
+            ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None)
+        }
     }
 }
 

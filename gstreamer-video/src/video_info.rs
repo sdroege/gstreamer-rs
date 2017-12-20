@@ -521,9 +521,9 @@ impl VideoInfo {
     pub fn multiview_flags(&self) -> ::VideoMultiviewFlags {
         unsafe {
             let ptr = &self.0._gst_reserved as *const _ as *const u32;
-            from_glib(ffi::GstVideoMultiviewFlags::from_bits_truncate(
-                ptr::read(ptr.offset(1)),
-            ))
+            from_glib(ffi::GstVideoMultiviewFlags::from_bits_truncate(ptr::read(
+                ptr.offset(1),
+            )))
         }
     }
 

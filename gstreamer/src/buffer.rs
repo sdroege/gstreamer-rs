@@ -157,7 +157,9 @@ impl GstRc<BufferRef> {
 
     pub fn append(buffer: Self, other: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_buffer_append(buffer.into_ptr(), other.into_ptr())) }
+        unsafe {
+            from_glib_full(ffi::gst_buffer_append(buffer.into_ptr(), other.into_ptr()))
+        }
     }
 }
 
@@ -170,8 +172,9 @@ impl Default for GstRc<BufferRef> {
 impl BufferRef {
     pub fn map_readable(&self) -> Option<BufferMap<Readable>> {
         let mut map_info: ffi::GstMapInfo = unsafe { mem::zeroed() };
-        let res =
-            unsafe { ffi::gst_buffer_map(self.as_mut_ptr(), &mut map_info, ffi::GST_MAP_READ) };
+        let res = unsafe {
+            ffi::gst_buffer_map(self.as_mut_ptr(), &mut map_info, ffi::GST_MAP_READ)
+        };
         if res == glib_ffi::GTRUE {
             Some(BufferMap {
                 buffer: self,
@@ -437,7 +440,9 @@ impl<'a, T> BufferMap<'a, T> {
 
 impl<'a> BufferMap<'a, Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
-        unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
+        unsafe {
+            slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size)
+        }
     }
 }
 
@@ -516,7 +521,9 @@ impl<T> MappedBuffer<T> {
 
 impl MappedBuffer<Writable> {
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
-        unsafe { slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size) }
+        unsafe {
+            slice::from_raw_parts_mut(self.map_info.data as *mut u8, self.map_info.size)
+        }
     }
 }
 

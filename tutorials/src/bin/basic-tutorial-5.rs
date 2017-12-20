@@ -53,9 +53,10 @@ mod tutorial5 {
                     }
 
                     if let Some(bitrate) = tags.get::<gst::tags::Bitrate>() {
-                        textbuf.insert_at_cursor(
-                            &format!("    bitrate: {} \n", bitrate.get().unwrap()),
-                        );
+                        textbuf.insert_at_cursor(&format!(
+                            "    bitrate: {} \n",
+                            bitrate.get().unwrap()
+                        ));
                     }
                 }
             },

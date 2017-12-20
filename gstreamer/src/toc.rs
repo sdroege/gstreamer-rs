@@ -42,11 +42,15 @@ impl TocRef {
     }
 
     pub fn find_entry(&self, uid: &str) -> Option<TocEntry> {
-        unsafe { from_glib_none(ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0)) }
+        unsafe {
+            from_glib_none(ffi::gst_toc_find_entry(self.as_ptr(), uid.to_glib_none().0))
+        }
     }
 
     pub fn get_entries(&self) -> Vec<TocEntry> {
-        unsafe { FromGlibPtrContainer::from_glib_none(ffi::gst_toc_get_entries(self.as_ptr())) }
+        unsafe {
+            FromGlibPtrContainer::from_glib_none(ffi::gst_toc_get_entries(self.as_ptr()))
+        }
     }
 
     pub fn append_entry(&mut self, entry: TocEntry) {

@@ -153,9 +153,7 @@ impl GenericFormattedValue {
         if F::get_default_format() == self.get_format()
             || F::get_default_format() == Format::Undefined
         {
-            Ok(unsafe {
-                F::from_raw(self.get_format(), self.to_raw_value())
-            })
+            Ok(unsafe { F::from_raw(self.get_format(), self.to_raw_value()) })
         } else {
             Err(self)
         }

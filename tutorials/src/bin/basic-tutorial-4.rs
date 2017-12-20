@@ -123,8 +123,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
 
             println!(
                 "Pipeline state changed from {:?} to {:?}",
-                old_state,
-                new_state
+                old_state, new_state
             );
 
             custom_data.playing = new_state == gst::State::Playing;

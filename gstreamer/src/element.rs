@@ -224,9 +224,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
                 as *mut ffi::GstElementClass;
 
-            FromGlibPtrContainer::from_glib_none(
-                ffi::gst_element_class_get_pad_template_list(klass),
-            )
+            FromGlibPtrContainer::from_glib_none(ffi::gst_element_class_get_pad_template_list(
+                klass,
+            ))
         }
     }
 

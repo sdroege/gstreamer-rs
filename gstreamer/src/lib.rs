@@ -74,7 +74,7 @@ pub use caps::{Caps, CapsRef};
 pub mod tags;
 pub use tags::{Tag, TagList, TagListRef};
 pub mod buffer;
-pub use buffer::{Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_METADATA, BUFFER_COPY_ALL};
+pub use buffer::{Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA};
 pub mod sample;
 pub use sample::{Sample, SampleRef};
 pub mod bufferlist;

@@ -334,7 +334,6 @@ mod tests {
         assert!(frame.info() == &info);
     }
 
-
     #[test]
     fn test_map_write() {
         gst::init().unwrap();

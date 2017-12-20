@@ -101,13 +101,14 @@ impl AudioChannelPosition {
         }
 
         let len = positions.len();
-        let mut positions_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(
-            |i| if i >= len as usize {
-                ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
-            } else {
-                positions[i].to_glib()
-            },
-        );
+        let mut positions_raw: [ffi::GstAudioChannelPosition; 64] =
+            array_init::array_init_copy(|i| {
+                if i >= len as usize {
+                    ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+                } else {
+                    positions[i].to_glib()
+                }
+            });
 
         let valid: bool = unsafe {
             from_glib(ffi::gst_audio_channel_positions_to_valid_order(

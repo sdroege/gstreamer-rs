@@ -186,7 +186,6 @@ impl AppSrc {
         }
     }
 
-
     pub fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
             let mut min = mem::uninitialized();
