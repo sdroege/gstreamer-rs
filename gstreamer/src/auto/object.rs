@@ -86,7 +86,7 @@ pub trait GstObjectExt {
 
     fn set_control_rate(&self, control_rate: ClockTime);
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError>;
+    fn set_name(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
@@ -202,11 +202,9 @@ impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
         }
     }
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError> {
-        let name = name.into();
-        let name = name.to_glib_none();
+    fn set_name(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_object_set_name(self.to_glib_none().0, name.0), "Failed to set object name")
+            glib::error::BoolError::from_glib(ffi::gst_object_set_name(self.to_glib_none().0, name.to_glib_none().0), "Failed to set object name")
         }
     }
 

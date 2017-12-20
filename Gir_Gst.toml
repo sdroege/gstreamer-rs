@@ -446,6 +446,12 @@ trait_name = "GstObjectExt"
         nullable = false
 
     [[object.function]]
+    name = "set_name"
+        [[object.function.parameter]]
+        name = "name"
+        nullable = false
+
+    [[object.function]]
     name = "get_path_string"
         [object.function.return]
         nullable = false
