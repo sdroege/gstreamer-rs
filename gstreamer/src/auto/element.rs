@@ -144,7 +144,7 @@ pub trait ElementExt {
 
     fn set_base_time(&self, time: ClockTime);
 
-    fn set_bus(&self, bus: &Bus);
+    fn set_bus<'a, P: Into<Option<&'a Bus>>>(&self, bus: P);
 
     fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> Result<(), glib::error::BoolError>;
 
@@ -413,9 +413,11 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn set_bus(&self, bus: &Bus) {
+    fn set_bus<'a, P: Into<Option<&'a Bus>>>(&self, bus: P) {
+        let bus = bus.into();
+        let bus = bus.to_glib_none();
         unsafe {
-            ffi::gst_element_set_bus(self.to_glib_none().0, bus.to_glib_none().0);
+            ffi::gst_element_set_bus(self.to_glib_none().0, bus.0);
         }
     }
 

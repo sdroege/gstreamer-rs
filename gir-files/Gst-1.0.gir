@@ -14151,7 +14151,10 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstElement to set the bus of.</doc>
             <type name="Element" c:type="GstElement*"/>
           </instance-parameter>
-          <parameter name="bus" transfer-ownership="none">
+          <parameter name="bus"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the #GstBus to set.</doc>
             <type name="Bus" c:type="GstBus*"/>
           </parameter>
