@@ -14177,7 +14177,10 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstElement to set the clock for.</doc>
             <type name="Element" c:type="GstElement*"/>
           </instance-parameter>
-          <parameter name="clock" transfer-ownership="none">
+          <parameter name="clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the #GstClock to set for the element.</doc>
             <type name="Clock" c:type="GstClock*"/>
           </parameter>

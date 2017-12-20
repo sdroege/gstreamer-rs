@@ -146,7 +146,7 @@ pub trait ElementExt {
 
     fn set_bus<'a, P: Into<Option<&'a Bus>>>(&self, bus: P);
 
-    fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> Result<(), glib::error::BoolError>;
+    fn set_clock<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, clock: Q) -> Result<(), glib::error::BoolError>;
 
     fn set_context(&self, context: &Context);
 
@@ -421,9 +421,11 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn set_clock<P: IsA<Clock>>(&self, clock: &P) -> Result<(), glib::error::BoolError> {
+    fn set_clock<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, clock: Q) -> Result<(), glib::error::BoolError> {
+        let clock = clock.into();
+        let clock = clock.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_set_clock(self.to_glib_none().0, clock.to_glib_none().0), "Failed to set clock")
+            glib::error::BoolError::from_glib(ffi::gst_element_set_clock(self.to_glib_none().0, clock.0), "Failed to set clock")
         }
     }
 
