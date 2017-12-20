@@ -38,7 +38,7 @@ unsafe impl Send for Preset {}
 unsafe impl Sync for Preset {}
 
 pub trait PresetExt {
-    fn delete_preset(&self, name: &str) -> bool;
+    fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
     fn get_meta(&self, name: &str, tag: &str) -> Option<String>;
 
@@ -48,19 +48,19 @@ pub trait PresetExt {
 
     fn is_editable(&self) -> bool;
 
-    fn load_preset(&self, name: &str) -> bool;
+    fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
-    fn rename_preset(&self, old_name: &str, new_name: &str) -> bool;
+    fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError>;
 
-    fn save_preset(&self, name: &str) -> bool;
+    fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
-    fn set_meta<'a, P: Into<Option<&'a str>>>(&self, name: &str, tag: &str, value: P) -> bool;
+    fn set_meta<'a, P: Into<Option<&'a str>>>(&self, name: &str, tag: &str, value: P) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Preset>> PresetExt for O {
-    fn delete_preset(&self, name: &str) -> bool {
+    fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_preset_delete_preset(self.to_glib_none().0, name.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_preset_delete_preset(self.to_glib_none().0, name.to_glib_none().0), "Failed to delete preset")
         }
     }
 
@@ -90,29 +90,29 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
-    fn load_preset(&self, name: &str) -> bool {
+    fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_preset_load_preset(self.to_glib_none().0, name.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_preset_load_preset(self.to_glib_none().0, name.to_glib_none().0), "Failed to load preset")
         }
     }
 
-    fn rename_preset(&self, old_name: &str, new_name: &str) -> bool {
+    fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_preset_rename_preset(self.to_glib_none().0, old_name.to_glib_none().0, new_name.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_preset_rename_preset(self.to_glib_none().0, old_name.to_glib_none().0, new_name.to_glib_none().0), "Failed to rename preset")
         }
     }
 
-    fn save_preset(&self, name: &str) -> bool {
+    fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_preset_save_preset(self.to_glib_none().0, name.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::gst_preset_save_preset(self.to_glib_none().0, name.to_glib_none().0), "Failed to save preset")
         }
     }
 
-    fn set_meta<'a, P: Into<Option<&'a str>>>(&self, name: &str, tag: &str, value: P) -> bool {
+    fn set_meta<'a, P: Into<Option<&'a str>>>(&self, name: &str, tag: &str, value: P) -> Result<(), glib::error::BoolError> {
         let value = value.into();
         let value = value.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_preset_set_meta(self.to_glib_none().0, name.to_glib_none().0, tag.to_glib_none().0, value.0))
+            glib::error::BoolError::from_glib(ffi::gst_preset_set_meta(self.to_glib_none().0, name.to_glib_none().0, tag.to_glib_none().0, value.0), "Failed to set preset meta")
         }
     }
 }

@@ -776,6 +776,31 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to set app preset directory"
 
+    [[object.function]]
+    name = "delete_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to delete preset"
+
+    [[object.function]]
+    name = "load_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to load preset"
+
+    [[object.function]]
+    name = "save_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to save preset"
+
+    [[object.function]]
+    name = "rename_preset"
+        [object.function.return]
+        bool_return_is_error = "Failed to rename preset"
+
+    [[object.function]]
+    name = "set_meta"
+        [object.function.return]
+        bool_return_is_error = "Failed to set preset meta"
+
 [[object]]
 name = "Gst.*"
 status = "generate"
