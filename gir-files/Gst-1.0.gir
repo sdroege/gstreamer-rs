@@ -38017,7 +38017,10 @@ MT safe.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="new_clock" transfer-ownership="none">
+          <parameter name="new_clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstClock</doc>
             <type name="Clock" c:type="GstClock*"/>
           </parameter>

@@ -36,10 +36,12 @@ impl SystemClock {
         }
     }
 
-    pub fn set_default<P: IsA<Clock>>(new_clock: &P) {
-        skip_assert_initialized!();
+    pub fn set_default<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(new_clock: Q) {
+        assert_initialized_main_thread!();
+        let new_clock = new_clock.into();
+        let new_clock = new_clock.to_glib_none();
         unsafe {
-            ffi::gst_system_clock_set_default(new_clock.to_glib_none().0);
+            ffi::gst_system_clock_set_default(new_clock.0);
         }
     }
 }
