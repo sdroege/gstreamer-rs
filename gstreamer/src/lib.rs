@@ -125,6 +125,8 @@ pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, 
 pub use clock_time::ClockTime;
 
 mod plugin;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+pub mod stream_collection;
 
 mod typefind;
 pub use typefind::*;
