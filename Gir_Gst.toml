@@ -766,11 +766,6 @@ trait = false
 name = "Gst.*"
 status = "generate"
     [[object.function]]
-    name = "update_registry"
-        [object.function.return]
-        bool_return_is_error = "Failed to update registry"
-
-    [[object.function]]
     name = "util_dump_mem"
     ignore = true
 
