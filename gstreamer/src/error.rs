@@ -49,7 +49,7 @@ macro_rules! gst_error_msg(
     }};
 );
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ErrorMessage {
     pub(crate) error_domain: glib_ffi::GQuark,
     pub(crate) error_code: i32,
