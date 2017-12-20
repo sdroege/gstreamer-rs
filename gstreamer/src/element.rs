@@ -116,6 +116,8 @@ pub trait ElementExtManual {
         structure: ::Structure,
     );
 
+    fn post_error_message(&self, msg: &::ErrorMessage);
+
     fn iterate_pads(&self) -> ::Iterator<Pad>;
     fn iterate_sink_pads(&self) -> ::Iterator<Pad>;
     fn iterate_src_pads(&self) -> ::Iterator<Pad>;
@@ -291,6 +293,32 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 function.to_glib_none().0,
                 line as i32,
                 structure.into_ptr(),
+            );
+        }
+    }
+
+    fn post_error_message(&self, msg: &::ErrorMessage) {
+        let ::ErrorMessage {
+            error_domain,
+            error_code,
+            ref message,
+            ref debug,
+            filename,
+            function,
+            line,
+        } = *msg;
+
+        unsafe {
+            ffi::gst_element_message_full(
+                self.to_glib_none().0,
+                ffi::GST_MESSAGE_ERROR,
+                error_domain,
+                error_code,
+                message.to_glib_full(),
+                debug.to_glib_full(),
+                filename.to_glib_none().0,
+                function.to_glib_none().0,
+                line as i32,
             );
         }
     }

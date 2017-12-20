@@ -63,6 +63,10 @@ pub use auto::functions::*;
 mod log;
 pub use log::*;
 
+#[macro_use]
+mod error;
+pub use error::*;
+
 pub mod miniobject;
 pub use miniobject::{GstRc, MiniObject};
 pub mod message;
