@@ -263,7 +263,7 @@ mod tutorial5 {
     // thread of this event through a message in the bus
     fn post_app_message(playbin: &gst::Element) {
         let mbuilder = gst::Message::new_application(gst::Structure::new_empty("tags-changed"));
-        playbin.post_message(&mbuilder.build());
+        let _ = playbin.post_message(&mbuilder.build());
     }
 
     pub fn run() {

@@ -85,13 +85,11 @@ where
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
             );
 
-            let it = from_glib_full(ffi::gst_iterator_filter(
+            from_glib_full(ffi::gst_iterator_filter(
                 it as *mut _,
                 Some(filter_trampoline::<T>),
                 closure_value.to_glib_none().0,
-            ));
-
-            it
+            ))
         }
     }
 

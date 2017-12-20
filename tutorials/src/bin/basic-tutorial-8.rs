@@ -13,7 +13,7 @@ extern crate glib;
 use glib::source::SourceId;
 
 const CHUNK_SIZE: usize = 1024; // Amount of bytes we are sending in each buffer
-const SAMPLE_RATE: u32 = 44100; // Samples per second we are sending
+const SAMPLE_RATE: u32 = 44_100; // Samples per second we are sending
 
 #[derive(Debug)]
 struct CustomData {

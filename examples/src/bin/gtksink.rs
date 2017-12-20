@@ -61,7 +61,7 @@ fn create_ui(app: &gtk::Application) {
         let pipeline = &pipeline_clone;
         let position = pipeline
             .query_position::<gst::ClockTime>()
-            .unwrap_or(0.into());
+            .unwrap_or_else(|| 0.into());
         label.set_text(&format!("Position: {:.0}", position));
 
         glib::Continue(true)

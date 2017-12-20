@@ -323,7 +323,7 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_property_notify<'a>(property_name: &'a str) -> PropertyNotifyBuilder<'a> {
+    pub fn new_property_notify(property_name: &str) -> PropertyNotifyBuilder {
         assert_initialized_main_thread!();
         PropertyNotifyBuilder::new(property_name)
     }
@@ -341,7 +341,7 @@ impl GstRc<MessageRef> {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new_redirect<'a>(location: &'a str) -> RedirectBuilder<'a> {
+    pub fn new_redirect(location: &str) -> RedirectBuilder {
         assert_initialized_main_thread!();
         RedirectBuilder::new(location)
     }

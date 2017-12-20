@@ -44,16 +44,6 @@ pub struct AppSrcCallbacksBuilder {
 }
 
 impl AppSrcCallbacksBuilder {
-    pub fn new() -> Self {
-        skip_assert_initialized!();
-
-        AppSrcCallbacksBuilder {
-            need_data: None,
-            enough_data: None,
-            seek_data: None,
-        }
-    }
-
     pub fn need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(self, need_data: F) -> Self {
         Self {
             need_data: Some(Box::new(need_data)),
