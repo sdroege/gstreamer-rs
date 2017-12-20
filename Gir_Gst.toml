@@ -147,6 +147,10 @@ trait = false
     name = "message"
     concurrency = "send"
 
+    [[object.function]]
+    name = "post"
+        [object.function.return]
+        bool_return_is_error = "Failed to post message"
 
 [[object]]
 name = "Gst.Structure"
@@ -276,6 +280,11 @@ status = "generate"
     name = "link_pads_filtered"
         [object.function.return]
         bool_return_is_error = "Failed to link pads"
+
+    [[object.function]]
+    name = "post_message"
+        [object.function.return]
+        bool_return_is_error = "Failed to post message"
 
     [[object.function]]
     name = "seek"

@@ -132,7 +132,7 @@ pub trait ElementExt {
 
     fn no_more_pads(&self);
 
-    fn post_message(&self, message: &Message) -> bool;
+    fn post_message(&self, message: &Message) -> Result<(), glib::error::BoolError>;
 
     fn provide_clock(&self) -> Option<Clock>;
 
@@ -373,9 +373,9 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
         }
     }
 
-    fn post_message(&self, message: &Message) -> bool {
+    fn post_message(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_element_post_message(self.to_glib_none().0, message.to_glib_full()))
+            glib::error::BoolError::from_glib(ffi::gst_element_post_message(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
         }
     }
 

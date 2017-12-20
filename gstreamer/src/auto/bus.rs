@@ -5,6 +5,7 @@ use ClockTime;
 use Message;
 use Object;
 use ffi;
+use glib;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect;
 use glib::translate::*;
@@ -79,9 +80,9 @@ impl Bus {
         }
     }
 
-    pub fn post(&self, message: &Message) -> bool {
+    pub fn post(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()))
+            glib::error::BoolError::from_glib(ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
         }
     }
 
