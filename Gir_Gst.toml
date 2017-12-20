@@ -960,6 +960,11 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "parse_bin_from_description"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "Gst.StateChangeReturn"
 status = "generate"

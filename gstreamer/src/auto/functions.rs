@@ -117,7 +117,7 @@ pub fn debug_unset_threshold_for_name(name: &str) {
     }
 }
 
-pub fn parse_bin_from_description(bin_description: &str, ghost_unlinked_pads: bool) -> Result<Option<Bin>, Error> {
+pub fn parse_bin_from_description(bin_description: &str, ghost_unlinked_pads: bool) -> Result<Bin, Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
