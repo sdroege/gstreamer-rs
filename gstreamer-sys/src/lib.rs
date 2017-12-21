@@ -5510,7 +5510,7 @@ extern "C" {
     pub fn gst_plugin_load_file(filename: *const c_char, error: *mut *mut glib::GError) -> *mut GstPlugin;
     pub fn gst_plugin_register_static(major_version: c_int, minor_version: c_int, name: *const c_char, description: *const c_char, init_func: GstPluginInitFunc, version: *const c_char, license: *const c_char, source: *const c_char, package: *const c_char, origin: *const c_char) -> gboolean;
     pub fn gst_plugin_register_static_full(major_version: c_int, minor_version: c_int, name: *const c_char, description: *const c_char, init_full_func: GstPluginInitFullFunc, version: *const c_char, license: *const c_char, source: *const c_char, package: *const c_char, origin: *const c_char, user_data: gpointer) -> gboolean;
-    pub fn gst_plugin_add_dependency(plugin: *mut GstPlugin, env_vars: *mut *const c_char, paths: *mut *const c_char, names: *mut *const c_char, flags: GstPluginDependencyFlags);
+    pub fn gst_plugin_add_dependency(plugin: *mut GstPlugin, env_vars: *mut *mut c_char, paths: *mut *mut c_char, names: *mut *mut c_char, flags: GstPluginDependencyFlags);
     pub fn gst_plugin_add_dependency_simple(plugin: *mut GstPlugin, env_vars: *const c_char, paths: *const c_char, names: *const c_char, flags: GstPluginDependencyFlags);
     pub fn gst_plugin_get_cache_data(plugin: *mut GstPlugin) -> *const GstStructure;
     pub fn gst_plugin_get_description(plugin: *mut GstPlugin) -> *const c_char;
