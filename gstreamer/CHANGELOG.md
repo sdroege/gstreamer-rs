@@ -5,6 +5,89 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.10.0] - 2017-12-22
+### Fixed
+- Various clippy warnings
+- Memory leak of the tag list in Toc::merge_tags()
+- Property getters use Values of the correct type
+- Event::get_structure(), Message::get_structure() and
+  Query::get_structure() can return None for the structure
+- Various other nullability fixes all over the API, changing functions to
+  accept Option<> or returning Option<>, or only plain types
+- Functions taking paths/filenames now actually take Paths instead of &strs
+- Element::remove_pad() is not giving away a new reference to the pad
+  anymore, which caused a memory leak of all pads ever removed
+- Precision handling in ClockTime's Display impl
+- Video/AudioInfo are only Send, not Sync
+
+### Added
+- Various enums now also derive useful traits like Copy, Clone and Hash in
+  addition to PartialEq, Eq and Debug
+- TagList::merge() and insert() for combining tag lists
+- EventType gained many useful functions to work with event types and
+  a PartialOrd impl to check expected event order of event types where it matters
+- MessageRef/EventRef/QueryRef implement ToOwned
+- Bindings for Registry and PluginFeature
+- Event::set_running_time_offset() for adjusting the offset while events
+  pass through the pipeline
+- Event/Message GroupIds and Seqnums now have a newtype wrapper around u32
+  instead of the plain value, making usage of them slightly more typesafe.
+  Also add an "invalid" value for both, as exists in latest GStreamer now.
+- FormattedValue, GenericFormattedValue and related types were
+  implemented now, which allows more convenient and type-safe usage of
+  formatted values (time, bytes, etc)
+- Bindings for force-keyunit and still-frame events were added
+- MappedBuffer/BufferMap now implement various other useful traits, including
+  AsRef<[u8]>, AsMut, Deref, DerefMut, Debug, PartialEq and Eq
+- Add VideoMultiviewFramePacking enum, and use it in Player
+- Bindings for the GStreamer Net library, including PTP/NTP/network client
+  clocks and the GStreamer NetClock provider for network synchronization of
+  pipelines
+- IteratorError implements std::error:Error
+- Plugin::add_dependency() and ::add_dependency_simple() was added
+- Rank and TypeFindProbability implement PartialOrd/Ord now
+- Bindings for TypeFind, TypeFindFactory and the typefind helpers
+- StreamCollection::iter() for iterating over all contained streams
+- ErrorMessage type that can be used e.g. in a Result for passing an error
+  message from somewhere to upper layers to then be posted on an element the
+  same way gst_element_error!() would've done
+
+### Changed
+- Sample::new(), TagList::add(), Structure::set() and similar
+  functions take the values (ToSendValue impls) by reference instead of value.
+  They were not consumed by the function before.
+- The Debug impls of various types, including Event/Buffer/Message/Query/Structure
+  were improved to print all the fields, similar to what GST_PTR_FORMAT would
+  do in C
+- Switched to lazy_static 1.0
+- Gap event and Duration tag are using ClockTimes now, as well as various
+  Player signals
+- Segment is now based on a generic type FormattedSegment that can
+  take any format (time, bytes, etc) or a GenericFormattedValue for more
+  type-safety and convenience. Also functions for "casting" between a generic
+  segment and a segment with a specific format exist on this now
+- AppSrc and AppSink now have a builder for the callbacks, making it
+  unnecessary to always provide all callbacks even if only one is actually
+  needed
+- Various functions that returned bool for errors, are now returning a Result
+- Player configuration is now a custom type with more convenient API
+- Player VideoInfo uses a Fraction instead of (u32,u32) for the framerate and
+  pixel-aspect-ratio
+- VideoFrame API has more consistent API between writable and read-only
+  variants
+- Buffer::copy_into() was added, and ::copy_region() now takes a
+  BufferCopyFlags parameter instead of always using the default flags
+- ChildProxy::set_child_property() takes a &ToValue now to follow the API of
+  Object::set_property() and improve usability
+- Proxy/GhostPad default pad functions use the correct specific pad type now
+  instead of a generic Pad
+- Bus::add_signal_watch_full() takes a Priority for the priority instead of u32
+- Clock::(un)adjust_with_calibration() takes no clock parameter anymore
+
+### Removed
+- FormatValue was removed in favour of GenericFormattedValue and the
+  connected traits and specific format impls
+
 ## [0.9.1] - 2017-11-26
 ### Fixed
 - Export `FlowError`/`FlowSuccess`, `ClockError`/`ClockSuccess`,
@@ -110,5 +193,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.8.1...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/sdroege/gstreamer-rs/compare/0.9.1...0.10.0
+[0.9.1]: https://github.com/sdroege/gstreamer-rs/compare/0.9.0...0.9.1
+[0.9.0]: https://github.com/sdroege/gstreamer-rs/compare/0.8.1...0.9.0
+[0.8.2]: https://github.com/sdroege/gstreamer-rs/compare/0.8.1...0.8.2
 [0.8.1]: https://github.com/sdroege/gstreamer-rs/compare/0.8.0...0.8.1
