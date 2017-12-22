@@ -105,7 +105,7 @@ pub trait PadExtManual {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
     where
         F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
-    fn remove_probe(&self, id: PadProbeId);
+    fn remove_probe(&self, id: &PadProbeId);
 
     fn chain(&self, buffer: Buffer) -> FlowReturn;
     fn push(&self, buffer: Buffer) -> FlowReturn;
@@ -245,7 +245,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn remove_probe(&self, id: PadProbeId) {
+    fn remove_probe(&self, id: &PadProbeId) {
         unsafe {
             ffi::gst_pad_remove_probe(self.to_glib_none().0, id.to_glib());
         }
