@@ -99,7 +99,7 @@ handler will return `true`.
 
 # Implements
 
-[`BinExt`](trait.BinExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
+[`BinExt`](trait.BinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
 <!-- trait BinExt -->
 Trait containing all `Bin` methods.
 
@@ -1254,7 +1254,7 @@ from READY to NULL state.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Bus::fn new -->
 Creates a new `Bus` instance.
 
@@ -2333,7 +2333,7 @@ defines the minimum number of samples before the calibration is performed.
 
 # Implements
 
-[`ClockExt`](trait.ClockExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`ClockExt`](trait.ClockExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait ClockExt -->
 Trait containing all `Clock` methods.
 
@@ -3306,7 +3306,7 @@ aggregated by `DeviceMonitor` objects.
 
 # Implements
 
-[`DeviceExt`](trait.DeviceExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`DeviceExt`](trait.DeviceExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait DeviceExt -->
 Trait containing all `Device` methods.
 
@@ -3449,7 +3449,7 @@ The basic use pattern of a device monitor is as follows:
 
 # Implements
 
-[`DeviceMonitorExt`](trait.DeviceMonitorExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`DeviceMonitorExt`](trait.DeviceMonitorExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait DeviceMonitorExt -->
 Trait containing all `DeviceMonitor` methods.
 
@@ -3551,7 +3551,7 @@ from all relevant providers.
 
 # Implements
 
-[`DeviceProviderExt`](trait.DeviceProviderExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`DeviceProviderExt`](trait.DeviceProviderExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait DeviceProviderExt -->
 Trait containing all `DeviceProvider` methods.
 
@@ -3664,7 +3664,7 @@ convenient shortcut.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl DeviceProviderFactory::fn find -->
 Search for an device provider factory of the given name. Refs the returned
 device provider factory; caller is responsible for unreffing.
@@ -3707,7 +3707,7 @@ if the device provider couldn't be created
 <!-- impl DeviceProviderFactory::fn get_device_provider_type -->
 Get the `glib::Type` for device providers managed by this factory. The type can
 only be retrieved if the device provider factory is loaded, which can be
-assured with `PluginFeature::load`.
+assured with `PluginFeatureExt::load`.
 
 # Returns
 
@@ -3800,7 +3800,7 @@ specific situations.
 
 # Implements
 
-[`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait ElementExt -->
 Trait containing all `Element` methods.
 
@@ -4754,7 +4754,7 @@ The following code example shows you how to create a GstFileSrc element.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl ElementFactory::fn find -->
 Search for an element factory of the given name. Refs the returned
 element factory; caller is responsible for unreffing.
@@ -4863,7 +4863,7 @@ new `Element` or `None`
 <!-- impl ElementFactory::fn get_element_type -->
 Get the `glib::Type` for elements managed by this factory. The type can
 only be retrieved if the element factory is loaded, which can be
-assured with `PluginFeature::load`.
+assured with `PluginFeatureExt::load`.
 
 # Returns
 
@@ -5925,7 +5925,7 @@ Note that GhostPads add overhead to the data processing of a pipeline.
 
 # Implements
 
-[`GhostPadExt`](trait.GhostPadExt.html), [`ProxyPadExt`](trait.ProxyPadExt.html), [`PadExt`](trait.PadExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GhostPadExt`](trait.GhostPadExt.html), [`ProxyPadExt`](trait.ProxyPadExt.html), [`PadExt`](trait.PadExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait GhostPadExt -->
 Trait containing all `GhostPad` methods.
 
@@ -7424,13 +7424,13 @@ What needs to be done in applications? Again it's not a lot to change.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait GstObjectExt -->
 Trait containing all `Object` methods.
 
 # Implementors
 
-[`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`Plugin`](struct.Plugin.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
+[`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
 <!-- impl Object::fn check_uniqueness -->
 Checks to see if there is any object named `name` in `list`. This function
 does not do any locking of any kind. You might want to protect the
@@ -7866,7 +7866,7 @@ respectively.
 
 # Implements
 
-[`PadExt`](trait.PadExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PadExt`](trait.PadExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait PadExt -->
 Trait containing all `Pad` methods.
 
@@ -9149,7 +9149,7 @@ element class, this is usually done in the class_init of the class:
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl PadTemplate::fn new -->
 Creates a new pad template with a name according to the given template
 and with the given arguments.
@@ -9293,7 +9293,7 @@ in the PLAYING state. This default behaviour can be changed with the
 
 # Implements
 
-[`PipelineExt`](trait.PipelineExt.html), [`BinExt`](trait.BinExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
+[`PipelineExt`](trait.PipelineExt.html), [`BinExt`](trait.BinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
 <!-- trait PipelineExt -->
 Trait containing all `Pipeline` methods.
 
@@ -9480,7 +9480,7 @@ into memory.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Plugin::fn list_free -->
 Unrefs each member of `list`, then frees the list.
 ## `list`
@@ -9740,6 +9740,113 @@ The plugin could not be loaded
 The plugin has unresolved dependencies
 <!-- enum PluginError::variant NameMismatch -->
 The plugin has already be loaded from a different file
+<!-- struct PluginFeature -->
+This is a base class for anything that can be added to a `Plugin`.
+
+# Implements
+
+[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait PluginFeatureExt -->
+Trait containing all `PluginFeature` methods.
+
+# Implementors
+
+[`DeviceProviderFactory`](struct.DeviceProviderFactory.html), [`ElementFactory`](struct.ElementFactory.html), [`PluginFeature`](struct.PluginFeature.html), [`TypeFindFactory`](struct.TypeFindFactory.html)
+<!-- impl PluginFeature::fn list_copy -->
+Copies the list of features. Caller should call `PluginFeature::list_free`
+when done with the list.
+## `list`
+list
+ of `PluginFeature`
+
+# Returns
+
+a copy of `list`,
+ with each feature's reference count incremented.
+<!-- impl PluginFeature::fn list_debug -->
+Debug the plugin feature names in `list`.
+## `list`
+a `glib::List` of
+ plugin features
+<!-- impl PluginFeature::fn list_free -->
+Unrefs each member of `list`, then frees the list.
+## `list`
+list
+ of `PluginFeature`
+<!-- impl PluginFeature::fn rank_compare_func -->
+Compares the two given `PluginFeature` instances. This function can be
+used as a `GCompareFunc` when sorting by rank and then by name.
+## `p1`
+a `PluginFeature`
+## `p2`
+a `PluginFeature`
+
+# Returns
+
+negative value if the rank of p1 > the rank of p2 or the ranks are
+equal but the name of p1 comes before the name of p2; zero if the rank
+and names are equal; positive value if the rank of p1 < the rank of p2 or the
+ranks are equal but the name of p2 comes before the name of p1
+<!-- trait PluginFeatureExt::fn check_version -->
+Checks whether the given plugin feature is at least
+ the required version
+## `min_major`
+minimum required major version
+## `min_minor`
+minimum required minor version
+## `min_micro`
+minimum required micro version
+
+# Returns
+
+`true` if the plugin feature has at least
+ the required version, otherwise `false`.
+<!-- trait PluginFeatureExt::fn get_plugin -->
+Get the plugin that provides this feature.
+
+# Returns
+
+the plugin that provides this
+ feature, or `None`. Unref with `GstObjectExt::unref` when no
+ longer needed.
+<!-- trait PluginFeatureExt::fn get_plugin_name -->
+Get the name of the plugin that provides this feature.
+
+# Returns
+
+the name of the plugin that provides this
+ feature, or `None` if the feature is not associated with a
+ plugin.
+<!-- trait PluginFeatureExt::fn get_rank -->
+Gets the rank of a plugin feature.
+
+# Returns
+
+The rank of the feature
+<!-- trait PluginFeatureExt::fn load -->
+Loads the plugin containing `self` if it's not already loaded. `self` is
+unaffected; use the return value instead.
+
+Normally this function is used like this:
+
+```C
+GstPluginFeature *loaded_feature;
+
+loaded_feature = gst_plugin_feature_load (feature);
+// presumably, we're no longer interested in the potentially-unloaded feature
+gst_object_unref (feature);
+feature = loaded_feature;
+```
+
+# Returns
+
+a reference to the loaded
+feature, or `None` on error
+<!-- trait PluginFeatureExt::fn set_rank -->
+Specifies a rank for a plugin feature, so that autoplugging uses
+the most appropriate feature.
+## `rank`
+rank value - higher number means more priority rank
 <!-- struct Preset -->
 This interface offers methods to query and manipulate parameter preset sets.
 A preset is a bunch of property settings, together with meta data and a name.
@@ -9895,7 +10002,7 @@ A task caused an error. An error message is also
 
 # Implements
 
-[`ProxyPadExt`](trait.ProxyPadExt.html), [`PadExt`](trait.PadExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`ProxyPadExt`](trait.ProxyPadExt.html), [`PadExt`](trait.PadExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait ProxyPadExt -->
 Trait containing all `ProxyPad` methods.
 
@@ -10755,6 +10862,287 @@ unlikely to be chosen
 likely to be chosen
 <!-- enum Rank::variant Primary -->
 will be chosen first
+<!-- struct Registry -->
+One registry holds the metadata of a set of plugins.
+
+<emphasis role="bold">Design:`</emphasis>`
+
+The `Registry` object is a list of plugins and some functions for dealing
+with them. Each `Plugin` is matched 1-1 with a file on disk, and may or may
+not be loaded at a given time.
+
+The primary source, at all times, of plugin information is each plugin file
+itself. Thus, if an application wants information about a particular plugin,
+or wants to search for a feature that satisfies given criteria, the primary
+means of doing so is to load every plugin and look at the resulting
+information that is gathered in the default registry. Clearly, this is a time
+consuming process, so we cache information in the registry file. The format
+and location of the cache file is internal to gstreamer.
+
+On startup, plugins are searched for in the plugin search path. The following
+locations are checked in this order:
+
+* location from --gst-plugin-path commandline option.
+* the GST_PLUGIN_PATH environment variable.
+* the GST_PLUGIN_SYSTEM_PATH environment variable.
+* default locations (if GST_PLUGIN_SYSTEM_PATH is not set).
+ Those default locations are:
+ `$XDG_DATA_HOME/gstreamer-$GST_API_VERSION/plugins/`
+ and `$prefix/libs/gstreamer-$GST_API_VERSION/`.
+ [$XDG_DATA_HOME](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) defaults to
+ `$HOME/.local/share`.
+
+The registry cache file is loaded from
+`$XDG_CACHE_HOME/gstreamer-$GST_API_VERSION/registry-$ARCH.bin`
+(where $XDG_CACHE_HOME defaults to `$HOME/.cache`) or the file listed in the `GST_REGISTRY`
+env var. One reason to change the registry location is for testing.
+
+For each plugin that is found in the plugin search path, there could be 3
+possibilities for cached information:
+
+ * the cache may not contain information about a given file.
+ * the cache may have stale information.
+ * the cache may have current information.
+
+In the first two cases, the plugin is loaded and the cache updated. In
+addition to these cases, the cache may have entries for plugins that are not
+relevant to the current process. These are marked as not available to the
+current process. If the cache is updated for whatever reason, it is marked
+dirty.
+
+A dirty cache is written out at the end of initialization. Each entry is
+checked to make sure the information is minimally valid. If not, the entry is
+simply dropped.
+
+## Implementation notes:
+
+The "cache" and "registry" are different concepts and can represent
+different sets of plugins. For various reasons, at init time, the cache is
+stored in the default registry, and plugins not relevant to the current
+process are marked with the `PluginFlags::Cached` bit. These plugins are
+removed at the end of initialization.
+
+# Implements
+
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl Registry::fn fork_is_enabled -->
+By default GStreamer will perform scanning and rebuilding of the
+registry file using a helper child process.
+
+Applications might want to disable this behaviour with the
+`Registry::fork_set_enabled` function, in which case new plugins
+are scanned (and loaded) into the application process.
+
+# Returns
+
+`true` if GStreamer will use the child helper process when
+rebuilding the registry.
+<!-- impl Registry::fn fork_set_enabled -->
+Applications might want to disable/enable spawning of a child helper process
+when rebuilding the registry. See `Registry::fork_is_enabled` for more
+information.
+## `enabled`
+whether rebuilding the registry can use a temporary child helper process.
+<!-- impl Registry::fn get -->
+Retrieves the singleton plugin registry. The caller does not own a
+reference on the registry, as it is alive as long as GStreamer is
+initialized.
+
+# Returns
+
+the `Registry`.
+<!-- impl Registry::fn add_feature -->
+Add the feature to the registry. The feature-added signal will be emitted.
+This function sinks `feature`.
+## `feature`
+the feature to add
+
+# Returns
+
+`true` on success.
+
+MT safe.
+<!-- impl Registry::fn add_plugin -->
+Add the plugin to the registry. The plugin-added signal will be emitted.
+This function will sink `plugin`.
+## `plugin`
+the plugin to add
+
+# Returns
+
+`true` on success.
+
+MT safe.
+<!-- impl Registry::fn check_feature_version -->
+Checks whether a plugin feature by the given name exists in
+`self` and whether its version is at least the
+version required.
+## `feature_name`
+the name of the feature (e.g. "oggdemux")
+## `min_major`
+the minimum major version number
+## `min_minor`
+the minimum minor version number
+## `min_micro`
+the minimum micro version number
+
+# Returns
+
+`true` if the feature could be found and the version is
+the same as the required version or newer, and `false` otherwise.
+<!-- impl Registry::fn feature_filter -->
+Runs a filter against all features of the plugins in the registry
+and returns a GList with the results.
+If the first flag is set, only the first match is
+returned (as a list with a single object).
+## `filter`
+the filter to use
+## `first`
+only return first match
+## `user_data`
+user data passed to the filter function
+
+# Returns
+
+a `glib::List` of
+ `PluginFeature`. Use `PluginFeature::list_free` after usage.
+
+MT safe.
+<!-- impl Registry::fn find_feature -->
+Find the pluginfeature with the given name and type in the registry.
+## `name`
+the pluginfeature name to find
+## `type_`
+the pluginfeature type to find
+
+# Returns
+
+the pluginfeature with the
+ given name and type or `None` if the plugin was not
+ found. `GstObjectExt::unref` after usage.
+
+MT safe.
+<!-- impl Registry::fn find_plugin -->
+Find the plugin with the given name in the registry.
+The plugin will be reffed; caller is responsible for unreffing.
+## `name`
+the plugin name to find
+
+# Returns
+
+the plugin with the given name
+ or `None` if the plugin was not found. `GstObjectExt::unref` after
+ usage.
+
+MT safe.
+<!-- impl Registry::fn get_feature_list -->
+Retrieves a `glib::List` of `PluginFeature` of `type_`.
+## `type_`
+a `glib::Type`.
+
+# Returns
+
+a `glib::List` of
+ `PluginFeature` of `type_`. Use `PluginFeature::list_free` after use
+
+MT safe.
+<!-- impl Registry::fn get_feature_list_by_plugin -->
+Retrieves a `glib::List` of features of the plugin with name `name`.
+## `name`
+a plugin name.
+
+# Returns
+
+a `glib::List` of
+ `PluginFeature`. Use `PluginFeature::list_free` after usage.
+<!-- impl Registry::fn get_feature_list_cookie -->
+Returns the registry's feature list cookie. This changes
+every time a feature is added or removed from the registry.
+
+# Returns
+
+the feature list cookie.
+<!-- impl Registry::fn get_plugin_list -->
+Get a copy of all plugins registered in the given registry. The refcount
+of each element in the list in incremented.
+
+# Returns
+
+a `glib::List` of `Plugin`.
+ Use `Plugin::list_free` after usage.
+
+MT safe.
+<!-- impl Registry::fn lookup -->
+Look up a plugin in the given registry with the given filename.
+If found, plugin is reffed.
+## `filename`
+the name of the file to look up
+
+# Returns
+
+the `Plugin` if found, or
+ `None` if not. `GstObjectExt::unref` after usage.
+<!-- impl Registry::fn lookup_feature -->
+Find a `PluginFeature` with `name` in `self`.
+## `name`
+a `PluginFeature` name
+
+# Returns
+
+a `PluginFeature` with its refcount incremented,
+ use `GstObjectExt::unref` after usage.
+
+MT safe.
+<!-- impl Registry::fn plugin_filter -->
+Runs a filter against all plugins in the registry and returns a `glib::List` with
+the results. If the first flag is set, only the first match is
+returned (as a list with a single object).
+Every plugin is reffed; use `Plugin::list_free` after use, which
+will unref again.
+## `filter`
+the filter to use
+## `first`
+only return first match
+## `user_data`
+user data passed to the filter function
+
+# Returns
+
+a `glib::List` of `Plugin`.
+ Use `Plugin::list_free` after usage.
+
+MT safe.
+<!-- impl Registry::fn remove_feature -->
+Remove the feature from the registry.
+
+MT safe.
+## `feature`
+the feature to remove
+<!-- impl Registry::fn remove_plugin -->
+Remove the plugin from the registry.
+
+MT safe.
+## `plugin`
+the plugin to remove
+<!-- impl Registry::fn scan_path -->
+Scan the given path for plugins to add to the registry. The syntax of the
+path is specific to the registry.
+## `path`
+the path to scan
+
+# Returns
+
+`true` if registry changed
+<!-- trait RegistryExt::fn connect_feature_added -->
+Signals that a feature has been added to the registry (possibly
+replacing a previously-added one by the same name)
+## `feature`
+the feature that has been added
+<!-- trait RegistryExt::fn connect_plugin_added -->
+Signals that a plugin has been added to the registry (possibly
+replacing a previously-added one by the same name)
+## `plugin`
+the plugin that has been added
 <!-- enum ResourceError -->
 Resource errors are for any resource used by an element:
 memory, files, network connections, process space, ...
@@ -11382,7 +11770,7 @@ Feature: `v1_10`
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Stream::fn new -->
 Create a new `Stream` for the given `stream_id`, `caps`, `type_`
 and `flags`
@@ -11516,7 +11904,7 @@ Feature: `v1_10`
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl StreamCollection::fn new -->
 Create a new `StreamCollection`.
 
@@ -12465,7 +12853,7 @@ wait operations.
 
 # Implements
 
-[`SystemClockExt`](trait.SystemClockExt.html), [`ClockExt`](trait.ClockExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`SystemClockExt`](trait.SystemClockExt.html), [`ClockExt`](trait.ClockExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait SystemClockExt -->
 Trait containing all `SystemClock` methods.
 
@@ -13185,7 +13573,7 @@ GST_LOG_OBJECT (tagsetter, "final tags: %" GST_PTR_FORMAT, result);
 
 # Implements
 
-[`TagSetterExt`](trait.TagSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`TagSetterExt`](trait.TagSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait TagSetterExt -->
 Trait containing all `TagSetter` methods.
 
@@ -13538,7 +13926,7 @@ with any TOC entries received from downstream.
 
 # Implements
 
-[`TocSetterExt`](trait.TocSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`TocSetterExt`](trait.TocSetterExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait TocSetterExt -->
 Trait containing all `TocSetter` methods.
 
@@ -13561,6 +13949,118 @@ Set the given TOC on the setter. Previously set TOC will be
 unreffed before setting a new one.
 ## `toc`
 a `Toc` to set.
+<!-- struct TypeFindFactory -->
+These functions allow querying informations about registered typefind
+functions. How to create and register these functions is described in
+the section <link linkend="gstreamer-Writing-typefind-functions">
+"Writing typefind functions"`</link>`.
+
+The following example shows how to write a very simple typefinder that
+identifies the given data. You can get quite a bit more complicated than
+that though.
+
+```C
+  typedef struct {
+    guint8 *data;
+    guint size;
+    guint probability;
+    GstCaps *data;
+  } MyTypeFind;
+  static void
+  my_peek (gpointer data, gint64 offset, guint size)
+  {
+    MyTypeFind *find = (MyTypeFind *) data;
+    if (offset &gt;= 0 &amp;&amp; offset + size &lt;= find->size) {
+      return find->data + offset;
+    }
+    return NULL;
+  }
+  static void
+  my_suggest (gpointer data, guint probability, GstCaps *caps)
+  {
+    MyTypeFind *find = (MyTypeFind *) data;
+    if (probability &gt; find->probability) {
+      find->probability = probability;
+      gst_caps_replace (&amp;find->caps, caps);
+    }
+  }
+  static GstCaps *
+  find_type (guint8 *data, guint size)
+  {
+    GList *walk, *type_list;
+    MyTypeFind find = {data, size, 0, NULL};
+    GstTypeFind gst_find = {my_peek, my_suggest, &amp;find, };
+    walk = type_list = gst_type_find_factory_get_list ();
+    while (walk) {
+      GstTypeFindFactory *factory = GST_TYPE_FIND_FACTORY (walk->data);
+      walk = g_list_next (walk)
+      gst_type_find_factory_call_function (factory, &amp;gst_find);
+    }
+    g_list_free (type_list);
+    return find.caps;
+  };
+```
+
+# Implements
+
+[`PluginFeatureExt`](trait.PluginFeatureExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl TypeFindFactory::fn get_list -->
+Gets the list of all registered typefind factories. You must free the
+list using `PluginFeature::list_free`.
+
+The returned factories are sorted by highest rank first, and then by
+factory name.
+
+Free-function: gst_plugin_feature_list_free
+
+# Returns
+
+the list of all
+ registered `TypeFindFactory`.
+<!-- impl TypeFindFactory::fn call_function -->
+Calls the `GstTypeFindFunction` associated with this factory.
+## `find`
+a properly setup `TypeFind` entry. The get_data
+ and suggest_type members must be set.
+<!-- impl TypeFindFactory::fn get_caps -->
+Gets the `Caps` associated with a typefind factory.
+
+# Returns
+
+the `Caps` associated with this factory
+<!-- impl TypeFindFactory::fn get_extensions -->
+Gets the extensions associated with a `TypeFindFactory`. The returned
+array should not be changed. If you need to change stuff in it, you should
+copy it using `g_strdupv`. This function may return `None` to indicate
+a 0-length list.
+
+# Returns
+
+
+ a `None`-terminated array of extensions associated with this factory
+<!-- impl TypeFindFactory::fn has_function -->
+Check whether the factory has a typefind function. Typefind factories
+without typefind functions are a last-effort fallback mechanism to
+e.g. assume a certain media type based on the file extension.
+
+# Returns
+
+`true` if the factory has a typefind functions set, otherwise `false`
+<!-- enum TypeFindProbability -->
+The probability of the typefind function. Higher values have more certainty
+in doing a reliable typefind.
+<!-- enum TypeFindProbability::variant None -->
+type undetected.
+<!-- enum TypeFindProbability::variant Minimum -->
+unlikely typefind.
+<!-- enum TypeFindProbability::variant Possible -->
+possible type detected.
+<!-- enum TypeFindProbability::variant Likely -->
+likely a type was detected.
+<!-- enum TypeFindProbability::variant NearlyCertain -->
+nearly certain that a type was detected.
+<!-- enum TypeFindProbability::variant Maximum -->
+very certain a type was detected.
 <!-- enum URIError -->
 Different URI-related errors that can occur.
 <!-- enum URIError::variant UnsupportedProtocol -->

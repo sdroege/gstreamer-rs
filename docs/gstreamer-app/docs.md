@@ -39,7 +39,7 @@ to avoid polling.
 
 # Implements
 
-[`BaseSinkExt`](trait.BaseSinkExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html), [`URIHandlerExt`](trait.URIHandlerExt.html)
+[`gst_base::BaseSinkExt`](../gst_base/trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
 <!-- impl AppSink::fn get_buffer_list_support -->
 Check if `self` supports buffer lists.
 
@@ -422,7 +422,7 @@ occurs or the state of the appsrc has gone through READY.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html), [`URIHandlerExt`](trait.URIHandlerExt.html)
+[`gst_base::BaseSrcExt`](../gst_base/trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`gst::URIHandlerExt`](../gst/trait.URIHandlerExt.html)
 <!-- impl AppSrc::fn end_of_stream -->
 Indicates to the appsrc element that the last buffer queued in the
 element is the last buffer of the stream.

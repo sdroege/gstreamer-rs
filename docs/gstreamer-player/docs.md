@@ -4,7 +4,7 @@
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html)
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Player::fn new -->
 Creates a new `Player` instance that uses `signal_dispatcher` to dispatch
 signals to some event loop system, or emits signals directly if NULL is
@@ -394,7 +394,7 @@ in the stream.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl PlayerAudioInfo::fn get_bitrate -->
 
 # Returns
@@ -438,7 +438,7 @@ generic error.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
 <!-- impl PlayerGMainContextSignalDispatcher::fn new -->
 Creates a new GstPlayerSignalDispatcher that uses `application_context`,
 or the thread default one if `None` is used. See `gst_player_new_full`.
@@ -453,7 +453,7 @@ Structure containing the media information of a URI.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html)
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl PlayerMediaInfo::fn get_audio_streams -->
 
 # Returns
@@ -570,7 +570,7 @@ the stream type, one can find more media-specific information in
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait PlayerStreamInfoExt -->
 Trait containing all `PlayerStreamInfo` methods.
 
@@ -611,7 +611,7 @@ the tags contained in this stream.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl PlayerSubtitleInfo::fn get_language -->
 
 # Returns
@@ -622,7 +622,7 @@ the language of the stream, or NULL if unknown.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl PlayerVideoInfo::fn get_bitrate -->
 
 # Returns
@@ -659,7 +659,7 @@ the width of video in `PlayerVideoInfo`.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html), [`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
 <!-- impl PlayerVideoOverlayVideoRenderer::fn new -->
 ## `window_handle`
 Window handle to use or `None`

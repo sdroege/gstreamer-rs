@@ -471,6 +471,46 @@ frames contains both interlaced and
  Each field has only half the amount of lines as noted in the
  height property. This mode requires multiple GstVideoMeta metadata
  to describe the fields.
+<!-- enum VideoMultiviewFramePacking -->
+`VideoMultiviewFramePacking` represents the subset of `VideoMultiviewMode`
+values that can be applied to any video frame without needing extra metadata.
+It can be used by elements that provide a property to override the
+multiview interpretation of a video stream when the video doesn't contain
+any markers.
+
+This enum is used (for example) on playbin, to re-interpret a played
+video stream as a stereoscopic video. The individual enum values are
+equivalent to and have the same value as the matching `VideoMultiviewMode`.
+<!-- enum VideoMultiviewFramePacking::variant None -->
+A special value indicating
+no frame packing info.
+<!-- enum VideoMultiviewFramePacking::variant Mono -->
+All frames are monoscopic.
+<!-- enum VideoMultiviewFramePacking::variant Left -->
+All frames represent a left-eye view.
+<!-- enum VideoMultiviewFramePacking::variant Right -->
+All frames represent a right-eye view.
+<!-- enum VideoMultiviewFramePacking::variant SideBySide -->
+Left and right eye views are
+provided in the left and right half of the frame respectively.
+<!-- enum VideoMultiviewFramePacking::variant SideBySideQuincunx -->
+Left and right eye
+views are provided in the left and right half of the frame, but
+have been sampled using quincunx method, with half-pixel offset
+between the 2 views.
+<!-- enum VideoMultiviewFramePacking::variant ColumnInterleaved -->
+Alternating vertical
+columns of pixels represent the left and right eye view respectively.
+<!-- enum VideoMultiviewFramePacking::variant RowInterleaved -->
+Alternating horizontal
+rows of pixels represent the left and right eye view respectively.
+<!-- enum VideoMultiviewFramePacking::variant TopBottom -->
+The top half of the frame
+contains the left eye, and the bottom half the right eye.
+<!-- enum VideoMultiviewFramePacking::variant Checkerboard -->
+Pixels are arranged with
+alternating pixels representing left and right eye views in a
+checkerboard fashion.
 <!-- enum VideoMultiviewMode -->
 All possible stereoscopic 3D and multiview representations.
 In conjunction with `VideoMultiviewFlags`, describes how

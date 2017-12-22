@@ -103,7 +103,7 @@ buffer pushed in it.
 
 # Implements
 
-[`ObjectExt`](trait.ObjectExt.html)
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Adapter::fn new -->
 Creates a new `Adapter`. Free with `gobject::ObjectExt::unref`.
 
@@ -664,7 +664,7 @@ with non-synchronized streams or sparse streams.
 
 # Implements
 
-[`BaseSinkExt`](trait.BaseSinkExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`BaseSinkExt`](trait.BaseSinkExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait BaseSinkExt -->
 Trait containing all `BaseSink` methods.
 
@@ -1126,7 +1126,7 @@ received, it may safely shut down the entire pipeline.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait BaseSrcExt -->
 Trait containing all `BaseSrc` methods.
 
@@ -1403,7 +1403,7 @@ It provides for:
 
 # Implements
 
-[`BaseTransformExt`](trait.BaseTransformExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`BaseTransformExt`](trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait BaseTransformExt -->
 Trait containing all `BaseTransform` methods.
 
@@ -1641,4 +1641,4 @@ base class.
 
 # Implements
 
-[`BaseSrcExt`](trait.BaseSrcExt.html), [`ElementExt`](trait.ElementExt.html), [`ObjectExt`](trait.ObjectExt.html), [`ObjectExt`](trait.ObjectExt.html)
+[`BaseSrcExt`](trait.BaseSrcExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
