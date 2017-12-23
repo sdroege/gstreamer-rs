@@ -9,6 +9,7 @@ gstreamer = { path = "../gstreamer" }
 gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
+gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
