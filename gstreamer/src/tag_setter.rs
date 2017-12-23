@@ -15,13 +15,13 @@ use glib::value::ToSendValue;
 use tags::*;
 
 pub trait TagSetterExtManual {
-    fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
+    fn add<'a, T: Tag<'a>>(&self, value: T::TagType, mode: TagMergeMode)
     where
         T::TagType: ToSendValue;
 }
 
 impl<O: IsA<TagSetter>> TagSetterExtManual for O {
-    fn add<'a, T: Tag<'a>>(&mut self, value: T::TagType, mode: TagMergeMode)
+    fn add<'a, T: Tag<'a>>(&self, value: T::TagType, mode: TagMergeMode)
     where
         T::TagType: ToSendValue,
     {
