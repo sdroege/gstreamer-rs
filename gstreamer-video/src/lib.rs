@@ -31,6 +31,12 @@ macro_rules! skip_assert_initialized {
     )
 }
 
+macro_rules! callback_guard {
+    () => (
+        let _guard = ::glib::CallbackGuard::new();
+    )
+}
+
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
 
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
@@ -52,6 +58,8 @@ mod video_overlay;
 pub use video_overlay::VideoOverlayExtManual;
 mod video_event;
 pub use video_event::*;
+mod functions;
+pub use functions::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
