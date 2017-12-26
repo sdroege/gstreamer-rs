@@ -60,6 +60,8 @@ mod video_event;
 pub use video_event::*;
 mod functions;
 pub use functions::*;
+mod video_rectangle;
+pub use video_rectangle::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
