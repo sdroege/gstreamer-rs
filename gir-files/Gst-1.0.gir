@@ -35441,6 +35441,7 @@ on the returned caps to modify it.</doc>
     <class name="Stream"
            c:symbol-prefix="stream"
            c:type="GstStream"
+           version="1.10"
            parent="Object"
            glib:type-name="GstStream"
            glib:get-type="gst_stream_get_type"
@@ -36103,6 +36104,7 @@ application of new streaming threads and their status.</doc>
       </member>
     </enumeration>
     <bitfield name="StreamType"
+              version="1.10"
               glib:type-name="GstStreamType"
               glib:get-type="gst_stream_type_get_type"
               c:type="GstStreamType">
