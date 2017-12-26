@@ -775,6 +775,7 @@ impl SetValue for StreamFlags {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 bitflags! {
     pub struct StreamType: u32 {
         const UNKNOWN = 1;
@@ -785,6 +786,7 @@ bitflags! {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for StreamType {
     type GlibType = ffi::GstStreamType;
@@ -794,6 +796,7 @@ impl ToGlib for StreamType {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GstStreamType> for StreamType {
     fn from_glib(value: ffi::GstStreamType) -> StreamType {
@@ -802,24 +805,28 @@ impl FromGlib<ffi::GstStreamType> for StreamType {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl StaticType for StreamType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gst_stream_type_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for StreamType {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> FromValue<'a> for StreamType {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(ffi::GstStreamType::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 impl SetValue for StreamType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())

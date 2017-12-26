@@ -162,6 +162,7 @@ pub use self::flags::SegmentFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub use self::flags::StackTraceFlags;
 pub use self::flags::StreamFlags;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 pub use self::flags::StreamType;
 
 mod alias;
