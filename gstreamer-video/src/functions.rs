@@ -85,3 +85,73 @@ pub fn convert_sample_async<F>(
         );
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use gst;
+    use glib;
+    use std::sync::{Arc, Mutex};
+
+    #[test]
+    fn test_convert_sample_async() {
+        gst::init().unwrap();
+
+        let l = glib::MainLoop::new(None, false);
+
+        let mut in_buffer = gst::Buffer::with_size(320 * 240 * 4).unwrap();
+        {
+            let buffer = in_buffer.get_mut().unwrap();
+            let mut data = buffer.map_writable().unwrap();
+
+            for p in data.as_mut_slice().chunks_mut(4) {
+                p[0] = 63;
+                p[1] = 127;
+                p[2] = 191;
+                p[3] = 255;
+            }
+        }
+        let in_caps = ::VideoInfo::new(::VideoFormat::Rgba, 320, 240)
+            .build()
+            .unwrap()
+            .to_caps()
+            .unwrap();
+        let sample = gst::Sample::new(
+            Some(&in_buffer),
+            Some(&in_caps),
+            None::<&gst::Segment>,
+            None,
+        );
+
+        let out_caps = ::VideoInfo::new(::VideoFormat::Abgr, 320, 240)
+            .build()
+            .unwrap()
+            .to_caps()
+            .unwrap();
+
+        let l_clone = l.clone();
+        let res_store = Arc::new(Mutex::new(None));
+        let res_store_clone = res_store.clone();
+        convert_sample_async(&sample, &out_caps, gst::CLOCK_TIME_NONE, move |res| {
+            *res_store_clone.lock().unwrap() = Some(res);
+            l_clone.quit();
+        });
+
+        l.run();
+
+        let res = res_store.lock().unwrap().take().unwrap();
+        assert!(res.is_ok(), "Error {}", res.unwrap_err());
+        let res = res.unwrap();
+
+        let converted_out_caps = res.get_caps().unwrap();
+        assert_eq!(out_caps, converted_out_caps);
+        let out_buffer = res.get_buffer().unwrap();
+        {
+            let data = out_buffer.map_readable().unwrap();
+
+            for p in data.as_slice().chunks(4) {
+                assert_eq!(p, &[255, 191, 127, 63]);
+            }
+        }
+    }
+}
