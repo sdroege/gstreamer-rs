@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::ptr;
+use std::fmt;
 
 use ffi;
 
@@ -94,6 +95,17 @@ impl ToOwned for SampleRef {
             from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
                 as *mut _)
         }
+    }
+}
+
+impl fmt::Debug for SampleRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Sample")
+            .field("buffer", &self.get_buffer())
+            .field("caps", &self.get_caps())
+            .field("segment", &self.get_segment())
+            .field("info", &self.get_info())
+            .finish()
     }
 }
 
