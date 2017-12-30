@@ -83,7 +83,7 @@ impl SampleRef {
         unsafe { from_glib_none(ffi::gst_sample_get_segment(self.as_mut_ptr())) }
     }
 
-    pub fn get_structure(&self) -> Option<&StructureRef> {
+    pub fn get_info(&self) -> Option<&StructureRef> {
         unsafe {
             let ptr = ffi::gst_sample_get_info(self.as_mut_ptr());
             if ptr.is_null() {
@@ -92,6 +92,11 @@ impl SampleRef {
                 Some(StructureRef::from_glib_borrow(ptr))
             }
         }
+    }
+
+    #[deprecated(since = "0.10.1", note = "please use `get_info` instead")]
+    pub fn get_structure(&self) -> Option<&StructureRef> {
+        self.get_info()
     }
 }
 
