@@ -20,6 +20,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
+use gst_ffi;
 use gst_video;
 use libc;
 use std::boxed::Box as Box_;
@@ -28,7 +29,9 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Player(Object<ffi::GstPlayer, ffi::GstPlayerClass>);
+    pub struct Player(Object<ffi::GstPlayer, ffi::GstPlayerClass>): [
+        gst::Object => gst_ffi::GstObject,
+    ];
 
     match fn {
         get_type => || ffi::gst_player_get_type(),

@@ -11,6 +11,7 @@ generate_safety_asserts = true
 external_libraries = [
     "GLib",
     "GObject",
+    "Gst",
 ]
 
 generate = [
@@ -27,6 +28,7 @@ manual = [
     "GLib.Error",
     "GLib.MainContext",
     "GObject.Object",
+    "Gst.Object",
     "Gst.Element",
     "GstVideo.VideoMultiviewFlags",
     "GstVideo.VideoMultiviewFramePacking",
