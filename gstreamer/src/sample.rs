@@ -50,6 +50,20 @@ impl GstRc<SampleRef> {
             ))
         }
     }
+
+    pub fn with_buffer_list<F: FormattedValue>(
+        buffer_list: Option<&BufferList>,
+        caps: Option<&Caps>,
+        segment: Option<&FormattedSegment<F>>,
+        info: Option<&StructureRef>,
+    ) -> Self {
+        assert_initialized_main_thread!();
+        let sample = Self::new(None, caps, segment, info);
+        unsafe {
+            ffi::gst_sample_set_buffer_list(sample.to_glib_none().0, buffer_list.to_glib_none().0);
+        }
+        sample
+    }
 }
 
 impl SampleRef {
