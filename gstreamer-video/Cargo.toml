@@ -18,9 +18,11 @@ libc = "0.2"
 glib-sys = "0.5"
 gobject-sys = "0.5"
 gstreamer-sys = { version = "0.4", features = ["v1_8"] }
+gstreamer-base-sys = { version = "0.4", features = ["v1_8"] }
 gstreamer-video-sys = { version = "0.4", features = ["v1_8"] }
 glib = "0.4"
 gstreamer = { version = "0.10", path = "../gstreamer" }
+gstreamer-base = { version = "0.10", path = "../gstreamer-base" }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"

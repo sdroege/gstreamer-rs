@@ -12,6 +12,7 @@ external_libraries = [
     "GLib",
     "GObject",
     "Gst",
+    "GstBase",
 ]
 
 generate = [
@@ -29,11 +30,14 @@ generate = [
     "GstVideo.VideoFieldOrder",
     "GstVideo.VideoFrameFlags",
     "GstVideo.VideoMultiviewFramePacking",
+    "GstVideo.VideoFilter",
 ]
 
 manual = [
     "GObject.Object",
     "Gst.Object",
+    "Gst.Element",
+    "GstBase.BaseTransform",
     "GstVideo.VideoInfo",
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoColorimetry",
