@@ -12,7 +12,7 @@ use glib_ffi;
 
 use gst;
 use glib;
-use glib::translate::{from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib_full, ToGlib, ToGlibPtr};
 
 use std::ptr;
 use std::mem;
@@ -59,9 +59,9 @@ pub fn convert_sample_async<F>(
         let callback = callback.take().unwrap();
 
         if error.is_null() {
-            callback(Ok(from_glib_none(sample)))
+            callback(Ok(from_glib_full(sample)))
         } else {
-            callback(Err(from_glib_none(error)))
+            callback(Err(from_glib_full(error)))
         }
     }
     unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib_ffi::gpointer)
