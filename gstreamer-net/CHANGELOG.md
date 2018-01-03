@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.10.1] - 2018-01-03
+### Fixed
+- Don't require &mut self for TagSetterExtManual::add()
+
+### Added
+- A TagSetter example application
+- Bindings for gst_video::convert_sample() and ::convert_sample_async()
+- Bindings for gst_video::VideoRectangle
+- Debug impl for Sample and ::with_buffer_list() constructor
+- A borrowing version of VideoFrame: VideoFrameRef
+- Bindings for GstVideoFilter
+
+### Changed
+- Deprecated Sample::get_info() in favour of ::get_structure()
+- Player has gst::Object as another parent class now
+
 ## [0.10.0] - 2017-12-22
 ### Fixed
 - Various clippy warnings
@@ -193,7 +209,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.10.1...HEAD
+[0.10.1]: https://github.com/sdroege/gstreamer-rs/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/sdroege/gstreamer-rs/compare/0.9.1...0.10.0
 [0.9.1]: https://github.com/sdroege/gstreamer-rs/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/sdroege/gstreamer-rs/compare/0.8.1...0.9.0
