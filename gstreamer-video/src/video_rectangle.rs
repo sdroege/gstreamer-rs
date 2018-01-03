@@ -7,8 +7,9 @@
 // except according to those terms.
 
 use ffi;
+use glib::translate::ToGlib;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct VideoRectangle {
     pub x: i32,
     pub y: i32,
@@ -23,8 +24,8 @@ impl VideoRectangle {
 }
 
 pub fn center_video_rectangle(
-    src: VideoRectangle,
-    dst: VideoRectangle,
+    src: &VideoRectangle,
+    dst: &VideoRectangle,
     scale: bool,
 ) -> VideoRectangle {
     let mut result = ffi::GstVideoRectangle {
@@ -46,7 +47,7 @@ pub fn center_video_rectangle(
         h: dst.h,
     };
     unsafe {
-        ffi::gst_video_sink_center_rect(src_rect, dst_rect, &mut result, scale as i32);
+        ffi::gst_video_sink_center_rect(src_rect, dst_rect, &mut result, scale.to_glib());
     }
     VideoRectangle::new(result.x, result.y, result.w, result.h)
 }
