@@ -104,7 +104,7 @@ impl Drop for StreamLock {
 pub trait PadExtManual {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
     where
-        F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
+        F: FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     fn remove_probe(&self, id: PadProbeId);
 
     fn chain(&self, buffer: Buffer) -> FlowReturn;
@@ -227,11 +227,11 @@ pub trait PadExtManual {
 impl<O: IsA<Pad>> PadExtManual for O {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
     where
-        F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
+        F: FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
+                FnMut(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
             > = Box::new(func);
             let id = ffi::gst_pad_add_probe(
                 self.to_glib_none().0,
