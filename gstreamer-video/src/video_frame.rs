@@ -423,6 +423,34 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         }
     }
 
+    pub fn copy_to_ref(&self, dest: &mut VideoFrameRef<&mut gst::BufferRef>) -> Result<(), glib::BoolError> {
+        unsafe {
+            let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.0, &self.0));
+            if res {
+                Ok(())
+            } else {
+                Err(glib::BoolError("Failed to copy video frame"))
+            }
+        }
+    }
+
+    pub fn copy_plane_to_ref(
+        &self,
+        dest: &mut VideoFrameRef<&mut gst::BufferRef>,
+        plane: u32,
+    ) -> Result<(), glib::BoolError> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let res: bool = from_glib(ffi::gst_video_frame_copy_plane(&mut dest.0, &self.0, plane));
+            if res {
+                Ok(())
+            } else {
+                Err(glib::BoolError("Failed to copy video frame plane"))
+            }
+        }
+    }
+
     pub fn format(&self) -> ::VideoFormat {
         self.info().format()
     }
