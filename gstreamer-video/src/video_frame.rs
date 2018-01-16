@@ -395,7 +395,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         self.0.id
     }
 
-    pub fn copy(&self, dest: &mut VideoFrame<Writable>) -> Result<(), glib::BoolError> {
+    pub fn copy(&self, dest: &mut VideoFrameRef<&mut gst::BufferRef>) -> Result<(), glib::BoolError> {
         unsafe {
             let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.0, &self.0));
             if res {
@@ -408,7 +408,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
     pub fn copy_plane(
         &self,
-        dest: &mut VideoFrame<Writable>,
+        dest: &mut VideoFrameRef<&mut gst::BufferRef>,
         plane: u32,
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
