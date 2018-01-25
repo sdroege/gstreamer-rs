@@ -65,7 +65,7 @@ pub enum ElementMessageType {
     Info,
 }
 
-#[derive(Debug, Default, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct NotifyWatchId(libc::c_ulong);
 
 impl ToGlib for NotifyWatchId {
@@ -79,6 +79,7 @@ impl ToGlib for NotifyWatchId {
 impl FromGlib<libc::c_ulong> for NotifyWatchId {
     fn from_glib(val: libc::c_ulong) -> NotifyWatchId {
         skip_assert_initialized!();
+        assert_ne!(val, 0);
         NotifyWatchId(val)
     }
 }

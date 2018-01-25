@@ -115,7 +115,7 @@ pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
 pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
                   ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME};
 pub use bin::BinExtManual;
-pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo, PAD_PROBE_ID_INVALID};
+pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
 pub use gobject::GObjectExtManualGst;
 pub use child_proxy::ChildProxyExtManual;
 pub use tag_setter::TagSetterExtManual;

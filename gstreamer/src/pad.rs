@@ -56,9 +56,8 @@ impl Pad {
     }
 }
 
-#[derive(Debug, Default, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct PadProbeId(libc::c_ulong);
-pub const PAD_PROBE_ID_INVALID: PadProbeId = PadProbeId(0);
 
 impl ToGlib for PadProbeId {
     type GlibType = libc::c_ulong;
@@ -71,6 +70,7 @@ impl ToGlib for PadProbeId {
 impl FromGlib<libc::c_ulong> for PadProbeId {
     fn from_glib(val: libc::c_ulong) -> PadProbeId {
         skip_assert_initialized!();
+        assert_ne!(val, 0);
         PadProbeId(val)
     }
 }
