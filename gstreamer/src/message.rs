@@ -1165,6 +1165,8 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        // Warning: other_fields are ignored with argument-less messages
+        // until GStreamer 1.14 is released
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 other_fields: self.other_fields.iter().cloned()
@@ -1183,13 +1185,19 @@ macro_rules! message_builder_generic_impl {
                     ffi::gst_message_set_seqnum(msg, seqnum.to_glib());
                 }
 
-                {
-                    let s = StructureRef::from_glib_borrow_mut(
-                        ffi::gst_message_get_structure(msg) as *mut _
-                    );
+                if !self.other_fields.is_empty() {
+                    // issue with argument-less messages. We need the function
+                    // ffi::gst_message_writable_structure to sort this out
+                    // and this function will be available in GStreamer 1.14
+                    // See https://github.com/sdroege/gstreamer-rs/pull/75
+                    // and https://bugzilla.gnome.org/show_bug.cgi?id=792928
+                    let structure = ffi::gst_message_get_structure(msg);
+                    if !structure.is_null() {
+                        let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
 
-                    for (k, v) in self.other_fields {
-                        s.set_value(k, v.to_send_value());
+                        for (k, v) in self.other_fields {
+                            structure.set_value(k, v.to_send_value());
+                        }
                     }
                 }
 
@@ -2441,4 +2449,38 @@ impl<'a> RedirectBuilder<'a> {
         }
         msg
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple() {
+        ::init().unwrap();
+
+        // Message without arguments
+        let eos_msg = Message::new_eos().build();
+        match eos_msg.view() {
+            MessageView::Eos(eos_msg) => {
+                assert!(eos_msg.0.get_structure().is_none());
+            },
+            _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
+        }
+
+        // Note: can't define other_fields for argument-less messages before GStreamer 1.14
+
+        // Message with arguments
+        let buffering_msg = Message::new_buffering(42)
+            .other_fields(&[("extra-field", &true)])
+            .build();
+        match buffering_msg.view() {
+            MessageView::Buffering(buffering_msg) => {
+                assert_eq!(buffering_msg.get_percent(), 42);
+                assert!(buffering_msg.0.get_structure().is_some());
+                assert!(buffering_msg.0.get_structure().unwrap().has_field("extra-field"));
+            }
+            _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
+        }
+    }
 }

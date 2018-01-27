@@ -895,7 +895,7 @@ macro_rules! event_builder_generic_impl {
                     ffi::gst_event_set_running_time_offset(event, running_time_offset);
                 }
 
-                {
+                if !self.other_fields.is_empty() {
                     let s = StructureRef::from_glib_borrow_mut(
                         ffi::gst_event_writable_structure(event)
                     );
@@ -1666,4 +1666,50 @@ impl<'a> CustomBothOobBuilder<'a> {
 
         ev
     });
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple() {
+        ::init().unwrap();
+
+        // Event without arguments
+        let flush_start_evt = Event::new_flush_start().build();
+        match flush_start_evt.view() {
+            EventView::FlushStart(flush_start_evt) => {
+                assert!(flush_start_evt.0.get_structure().is_none());
+            },
+            _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
+        }
+
+        let flush_start_evt = Event::new_flush_start()
+            .other_fields(&[("extra-field", &true)])
+            .build();
+        match flush_start_evt.view() {
+            EventView::FlushStart(flush_start_evt) => {
+                assert!(flush_start_evt.0.get_structure().is_some());
+                if let Some(other_fields) = flush_start_evt.0.get_structure() {
+                    assert!(other_fields.has_field("extra-field"));
+                }
+            },
+            _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
+        }
+
+        // Event with arguments
+        let flush_stop_evt = Event::new_flush_stop(true)
+            .other_fields(&[("extra-field", &true)])
+            .build();
+        match flush_stop_evt.view() {
+            EventView::FlushStop(flush_stop_evt) => {
+                assert_eq!(flush_stop_evt.get_reset_time(), true);
+                assert!(flush_stop_evt.0.get_structure().is_some());
+                if let Some(other_fields) = flush_stop_evt.0.get_structure() {
+                    assert!(other_fields.has_field("extra-field"));
+                }
+            }
+            _ => panic!("flush_stop_evt.view() is not an EventView::FlushStop(_)"),
+        }
+    }
 }
