@@ -1165,16 +1165,15 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        // Warning: other_fields are ignored with argument-less messages
-        // until GStreamer 1.14 is released
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        // TODO: restore other_fields method and condition it to the "v1_14" feature
+        /*pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 other_fields: self.other_fields.iter().cloned()
                     .chain(other_fields.iter().cloned())
                     .collect(),
                 .. self
             }
-        }
+        }*/
 
         pub fn build(mut self) -> Message {
             assert_initialized_main_thread!();
@@ -2468,19 +2467,16 @@ mod tests {
             _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
         }
 
-        // Note: can't define other_fields for argument-less messages before GStreamer 1.14
-
         // Message with arguments
-        let buffering_msg = Message::new_buffering(42)
-            .other_fields(&[("extra-field", &true)])
-            .build();
+        let buffering_msg = Message::new_buffering(42).build();
         match buffering_msg.view() {
             MessageView::Buffering(buffering_msg) => {
                 assert_eq!(buffering_msg.get_percent(), 42);
-                assert!(buffering_msg.0.get_structure().is_some());
-                assert!(buffering_msg.0.get_structure().unwrap().has_field("extra-field"));
             }
             _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
         }
+
+        // TODO: add a tests for messages with and without arguments with an extra-field
+        // and condition it to the "v1_14" feature
     }
 }
