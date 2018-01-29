@@ -20,6 +20,7 @@ use std::ptr;
 use std::mem;
 use std::fmt;
 use std::ffi::CStr;
+use std::ops::Deref;
 
 use glib;
 use glib::Cast;
@@ -420,15 +421,29 @@ pub enum MessageView<'a> {
     __NonExhaustive,
 }
 
-pub struct Eos<'a>(&'a MessageRef);
+macro_rules! declare_concrete_message(
+    ($name:ident) => {
+        pub struct $name<'a>(&'a MessageRef);
 
-pub struct Error<'a>(&'a MessageRef);
+        impl<'a> Deref for $name<'a> {
+            type Target = MessageRef;
+
+            fn deref(&self) -> &Self::Target {
+                self.0
+            }
+        }
+    }
+);
+
+declare_concrete_message!(Eos);
+
+declare_concrete_message!(Error);
 impl<'a> Error<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
-            ffi::gst_message_parse_error(self.0.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_error(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -438,7 +453,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            ffi::gst_message_parse_error(self.0.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_error(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -449,7 +464,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -460,13 +475,13 @@ impl<'a> Error<'a> {
     }
 }
 
-pub struct Warning<'a>(&'a MessageRef);
+declare_concrete_message!(Warning);
 impl<'a> Warning<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
-            ffi::gst_message_parse_warning(self.0.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_warning(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -476,7 +491,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            ffi::gst_message_parse_warning(self.0.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_warning(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -487,7 +502,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -498,13 +513,13 @@ impl<'a> Warning<'a> {
     }
 }
 
-pub struct Info<'a>(&'a MessageRef);
+declare_concrete_message!(Info);
 impl<'a> Info<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
-            ffi::gst_message_parse_info(self.0.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_info(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -514,7 +529,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            ffi::gst_message_parse_info(self.0.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_info(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -525,7 +540,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -536,23 +551,23 @@ impl<'a> Info<'a> {
     }
 }
 
-pub struct Tag<'a>(&'a MessageRef);
+declare_concrete_message!(Tag);
 impl<'a> Tag<'a> {
     pub fn get_tags(&self) -> TagList {
         unsafe {
             let mut tags = ptr::null_mut();
-            ffi::gst_message_parse_tag(self.0.as_mut_ptr(), &mut tags);
+            ffi::gst_message_parse_tag(self.as_mut_ptr(), &mut tags);
             from_glib_full(tags)
         }
     }
 }
 
-pub struct Buffering<'a>(&'a MessageRef);
+declare_concrete_message!(Buffering);
 impl<'a> Buffering<'a> {
     pub fn get_percent(&self) -> i32 {
         unsafe {
             let mut p = mem::uninitialized();
-            ffi::gst_message_parse_buffering(self.0.as_mut_ptr(), &mut p);
+            ffi::gst_message_parse_buffering(self.as_mut_ptr(), &mut p);
             p
         }
     }
@@ -565,7 +580,7 @@ impl<'a> Buffering<'a> {
             let mut buffering_left = mem::uninitialized();
 
             ffi::gst_message_parse_buffering_stats(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut mode,
                 &mut avg_in,
                 &mut avg_out,
@@ -577,14 +592,14 @@ impl<'a> Buffering<'a> {
     }
 }
 
-pub struct StateChanged<'a>(&'a MessageRef);
+declare_concrete_message!(StateChanged);
 impl<'a> StateChanged<'a> {
     pub fn get_old(&self) -> ::State {
         unsafe {
             let mut state = mem::uninitialized();
 
             ffi::gst_message_parse_state_changed(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut state,
                 ptr::null_mut(),
                 ptr::null_mut(),
@@ -599,7 +614,7 @@ impl<'a> StateChanged<'a> {
             let mut state = mem::uninitialized();
 
             ffi::gst_message_parse_state_changed(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 ptr::null_mut(),
                 &mut state,
                 ptr::null_mut(),
@@ -614,7 +629,7 @@ impl<'a> StateChanged<'a> {
             let mut state = mem::uninitialized();
 
             ffi::gst_message_parse_state_changed(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
                 &mut state,
@@ -625,9 +640,9 @@ impl<'a> StateChanged<'a> {
     }
 }
 
-pub struct StateDirty<'a>(&'a MessageRef);
+declare_concrete_message!(StateDirty);
 
-pub struct StepDone<'a>(&'a MessageRef);
+declare_concrete_message!(StepDone);
 impl<'a> StepDone<'a> {
     pub fn get(
         &self,
@@ -649,7 +664,7 @@ impl<'a> StepDone<'a> {
             let mut eos = mem::uninitialized();
 
             ffi::gst_message_parse_step_done(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut format,
                 &mut amount,
                 &mut rate,
@@ -671,13 +686,13 @@ impl<'a> StepDone<'a> {
     }
 }
 
-pub struct ClockProvide<'a>(&'a MessageRef);
+declare_concrete_message!(ClockProvide);
 impl<'a> ClockProvide<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            ffi::gst_message_parse_clock_provide(self.0.as_mut_ptr(), &mut clock, ptr::null_mut());
+            ffi::gst_message_parse_clock_provide(self.as_mut_ptr(), &mut clock, ptr::null_mut());
 
             from_glib_none(clock)
         }
@@ -687,40 +702,40 @@ impl<'a> ClockProvide<'a> {
         unsafe {
             let mut ready = mem::uninitialized();
 
-            ffi::gst_message_parse_clock_provide(self.0.as_mut_ptr(), ptr::null_mut(), &mut ready);
+            ffi::gst_message_parse_clock_provide(self.as_mut_ptr(), ptr::null_mut(), &mut ready);
 
             from_glib(ready)
         }
     }
 }
 
-pub struct ClockLost<'a>(&'a MessageRef);
+declare_concrete_message!(ClockLost);
 impl<'a> ClockLost<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            ffi::gst_message_parse_clock_lost(self.0.as_mut_ptr(), &mut clock);
+            ffi::gst_message_parse_clock_lost(self.as_mut_ptr(), &mut clock);
 
             from_glib_none(clock)
         }
     }
 }
 
-pub struct NewClock<'a>(&'a MessageRef);
+declare_concrete_message!(NewClock);
 impl<'a> NewClock<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            ffi::gst_message_parse_new_clock(self.0.as_mut_ptr(), &mut clock);
+            ffi::gst_message_parse_new_clock(self.as_mut_ptr(), &mut clock);
 
             from_glib_none(clock)
         }
     }
 }
 
-pub struct StructureChange<'a>(&'a MessageRef);
+declare_concrete_message!(StructureChange);
 impl<'a> StructureChange<'a> {
     pub fn get(&self) -> (::StructureChangeType, ::Element, bool) {
         unsafe {
@@ -729,7 +744,7 @@ impl<'a> StructureChange<'a> {
             let mut busy = mem::uninitialized();
 
             ffi::gst_message_parse_structure_change(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut type_,
                 &mut owner,
                 &mut busy,
@@ -740,14 +755,14 @@ impl<'a> StructureChange<'a> {
     }
 }
 
-pub struct StreamStatus<'a>(&'a MessageRef);
+declare_concrete_message!(StreamStatus);
 impl<'a> StreamStatus<'a> {
     pub fn get(&self) -> (::StreamStatusType, ::Element) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut owner = ptr::null_mut();
 
-            ffi::gst_message_parse_stream_status(self.0.as_mut_ptr(), &mut type_, &mut owner);
+            ffi::gst_message_parse_stream_status(self.as_mut_ptr(), &mut type_, &mut owner);
 
             (from_glib(type_), from_glib_none(owner))
         }
@@ -755,78 +770,76 @@ impl<'a> StreamStatus<'a> {
 
     pub fn get_stream_status_object(&self) -> Option<glib::Value> {
         unsafe {
-            let value = ffi::gst_message_get_stream_status_object(self.0.as_mut_ptr());
+            let value = ffi::gst_message_get_stream_status_object(self.as_mut_ptr());
 
             from_glib_none(value)
         }
     }
 }
 
-pub struct Application<'a>(&'a MessageRef);
+declare_concrete_message!(Application);
 
-pub struct Element<'a>(&'a MessageRef);
+declare_concrete_message!(Element);
 
-pub struct SegmentStart<'a>(&'a MessageRef);
+declare_concrete_message!(SegmentStart);
 impl<'a> SegmentStart<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
-            ffi::gst_message_parse_segment_start(self.0.as_mut_ptr(), &mut format, &mut position);
+            ffi::gst_message_parse_segment_start(self.as_mut_ptr(), &mut format, &mut position);
 
             GenericFormattedValue::new(from_glib(format), position)
         }
     }
 }
 
-pub struct SegmentDone<'a>(&'a MessageRef);
+declare_concrete_message!(SegmentDone);
 impl<'a> SegmentDone<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
-            ffi::gst_message_parse_segment_done(self.0.as_mut_ptr(), &mut format, &mut position);
+            ffi::gst_message_parse_segment_done(self.as_mut_ptr(), &mut format, &mut position);
 
             GenericFormattedValue::new(from_glib(format), position)
         }
     }
 }
 
-pub struct DurationChanged<'a>(&'a MessageRef);
+declare_concrete_message!(DurationChanged);
+declare_concrete_message!(Latency);
+declare_concrete_message!(AsyncStart);
 
-pub struct Latency<'a>(&'a MessageRef);
-
-pub struct AsyncStart<'a>(&'a MessageRef);
-
-pub struct AsyncDone<'a>(&'a MessageRef);
+declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::uninitialized();
 
-            ffi::gst_message_parse_async_done(self.0.as_mut_ptr(), &mut running_time);
+            ffi::gst_message_parse_async_done(self.as_mut_ptr(), &mut running_time);
 
             from_glib(running_time)
         }
     }
 }
 
-pub struct RequestState<'a>(&'a MessageRef);
+declare_concrete_message!(RequestState);
 impl<'a> RequestState<'a> {
     pub fn get_requested_state(&self) -> ::State {
         unsafe {
             let mut state = mem::uninitialized();
 
-            ffi::gst_message_parse_request_state(self.0.as_mut_ptr(), &mut state);
+            ffi::gst_message_parse_request_state(self.as_mut_ptr(), &mut state);
 
             from_glib(state)
         }
     }
 }
 
-pub struct StepStart<'a>(&'a MessageRef);
+declare_concrete_message!(StepStart);
 impl<'a> StepStart<'a> {
     pub fn get(&self) -> (bool, GenericFormattedValue, f64, bool, bool) {
         unsafe {
@@ -838,7 +851,7 @@ impl<'a> StepStart<'a> {
             let mut intermediate = mem::uninitialized();
 
             ffi::gst_message_parse_step_start(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut active,
                 &mut format,
                 &mut amount,
@@ -858,7 +871,7 @@ impl<'a> StepStart<'a> {
     }
 }
 
-pub struct Qos<'a>(&'a MessageRef);
+declare_concrete_message!(Qos);
 impl<'a> Qos<'a> {
     pub fn get(&self) -> (bool, ::ClockTime, ::ClockTime, ::ClockTime, ::ClockTime) {
         unsafe {
@@ -869,7 +882,7 @@ impl<'a> Qos<'a> {
             let mut duration = mem::uninitialized();
 
             ffi::gst_message_parse_qos(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut live,
                 &mut running_time,
                 &mut stream_time,
@@ -894,7 +907,7 @@ impl<'a> Qos<'a> {
             let mut quality = mem::uninitialized();
 
             ffi::gst_message_parse_qos_values(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut jitter,
                 &mut proportion,
                 &mut quality,
@@ -911,7 +924,7 @@ impl<'a> Qos<'a> {
             let mut dropped = mem::uninitialized();
 
             ffi::gst_message_parse_qos_stats(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut format,
                 &mut processed,
                 &mut dropped,
@@ -925,7 +938,7 @@ impl<'a> Qos<'a> {
     }
 }
 
-pub struct Progress<'a>(&'a MessageRef);
+declare_concrete_message!(Progress);
 impl<'a> Progress<'a> {
     pub fn get(&self) -> (::ProgressType, &'a str, &'a str) {
         unsafe {
@@ -933,7 +946,7 @@ impl<'a> Progress<'a> {
             let mut code = ptr::null_mut();
             let mut text = ptr::null_mut();
 
-            ffi::gst_message_parse_progress(self.0.as_mut_ptr(), &mut type_, &mut code, &mut text);
+            ffi::gst_message_parse_progress(self.as_mut_ptr(), &mut type_, &mut code, &mut text);
 
             let code = CStr::from_ptr(code).to_str().unwrap();
             let text = CStr::from_ptr(text).to_str().unwrap();
@@ -943,39 +956,39 @@ impl<'a> Progress<'a> {
     }
 }
 
-pub struct Toc<'a>(&'a MessageRef);
+declare_concrete_message!(Toc);
 impl<'a> Toc<'a> {
     pub fn get_toc(&self) -> (::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::uninitialized();
-            ffi::gst_message_parse_toc(self.0.as_mut_ptr(), &mut toc, &mut updated);
+            ffi::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
             (from_glib_full(toc), from_glib(updated))
         }
     }
 }
 
-pub struct ResetTime<'a>(&'a MessageRef);
+declare_concrete_message!(ResetTime);
 impl<'a> ResetTime<'a> {
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::uninitialized();
 
-            ffi::gst_message_parse_reset_time(self.0.as_mut_ptr(), &mut running_time);
+            ffi::gst_message_parse_reset_time(self.as_mut_ptr(), &mut running_time);
 
             from_glib(running_time)
         }
     }
 }
 
-pub struct StreamStart<'a>(&'a MessageRef);
+declare_concrete_message!(StreamStart);
 impl<'a> StreamStart<'a> {
     pub fn get_group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::uninitialized();
 
             if from_glib(ffi::gst_message_parse_group_id(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut group_id,
             )) {
                 Some(from_glib(group_id))
@@ -986,57 +999,57 @@ impl<'a> StreamStart<'a> {
     }
 }
 
-pub struct NeedContext<'a>(&'a MessageRef);
+declare_concrete_message!(NeedContext);
 impl<'a> NeedContext<'a> {
     pub fn get_context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
 
-            ffi::gst_message_parse_context_type(self.0.as_mut_ptr(), &mut context_type);
+            ffi::gst_message_parse_context_type(self.as_mut_ptr(), &mut context_type);
 
             CStr::from_ptr(context_type).to_str().unwrap()
         }
     }
 }
 
-pub struct HaveContext<'a>(&'a MessageRef);
+declare_concrete_message!(HaveContext);
 impl<'a> HaveContext<'a> {
     pub fn get_context(&self) -> ::Context {
         unsafe {
             let mut context = ptr::null_mut();
-            ffi::gst_message_parse_have_context(self.0.as_mut_ptr(), &mut context);
+            ffi::gst_message_parse_have_context(self.as_mut_ptr(), &mut context);
             from_glib_full(context)
         }
     }
 }
 
-pub struct DeviceAdded<'a>(&'a MessageRef);
+declare_concrete_message!(DeviceAdded);
 impl<'a> DeviceAdded<'a> {
     pub fn get_device(&self) -> ::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
-            ffi::gst_message_parse_device_added(self.0.as_mut_ptr(), &mut device);
+            ffi::gst_message_parse_device_added(self.as_mut_ptr(), &mut device);
 
             from_glib_none(device)
         }
     }
 }
 
-pub struct DeviceRemoved<'a>(&'a MessageRef);
+declare_concrete_message!(DeviceRemoved);
 impl<'a> DeviceRemoved<'a> {
     pub fn get_device(&self) -> ::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
-            ffi::gst_message_parse_device_removed(self.0.as_mut_ptr(), &mut device);
+            ffi::gst_message_parse_device_removed(self.as_mut_ptr(), &mut device);
 
             from_glib_none(device)
         }
     }
 }
 
-pub struct PropertyNotify<'a>(&'a MessageRef);
+declare_concrete_message!(PropertyNotify);
 impl<'a> PropertyNotify<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get(&self) -> (Object, &str, Option<&'a ::Value>) {
@@ -1046,7 +1059,7 @@ impl<'a> PropertyNotify<'a> {
             let mut value = ptr::null();
 
             ffi::gst_message_parse_property_notify(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut object,
                 &mut property_name,
                 &mut value,
@@ -1065,27 +1078,28 @@ impl<'a> PropertyNotify<'a> {
     }
 }
 
-pub struct StreamCollection<'a>(&'a MessageRef);
+declare_concrete_message!(StreamCollection);
 impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            ffi::gst_message_parse_stream_collection(self.0.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_stream_collection(self.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
     }
 }
-pub struct StreamsSelected<'a>(&'a MessageRef);
+
+declare_concrete_message!(StreamsSelected);
 impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            ffi::gst_message_parse_streams_selected(self.0.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_streams_selected(self.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
@@ -1094,12 +1108,12 @@ impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_streams(&self) -> Vec<::Stream> {
         unsafe {
-            let n = ffi::gst_message_streams_selected_get_size(self.0.as_mut_ptr());
+            let n = ffi::gst_message_streams_selected_get_size(self.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
                     from_glib_full(ffi::gst_message_streams_selected_get_stream(
-                        self.0.as_mut_ptr(),
+                        self.as_mut_ptr(),
                         i,
                     ))
                 })
@@ -1108,12 +1122,12 @@ impl<'a> StreamsSelected<'a> {
     }
 }
 
-pub struct Redirect<'a>(&'a MessageRef);
+declare_concrete_message!(Redirect);
 impl<'a> Redirect<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
-            let n = ffi::gst_message_get_num_redirect_entries(self.0.as_mut_ptr());
+            let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
@@ -1122,7 +1136,7 @@ impl<'a> Redirect<'a> {
                     let mut structure = ptr::null();
 
                     ffi::gst_message_parse_redirect_entry(
-                        self.0.as_mut_ptr(),
+                        self.as_mut_ptr(),
                         i,
                         &mut location,
                         &mut tags,
@@ -1146,30 +1160,71 @@ impl<'a> Redirect<'a> {
     }
 }
 
+struct MessageBuilder<'a> {
+    src: Option<Object>,
+    seqnum: Option<Seqnum>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+}
+
+impl<'a> MessageBuilder<'a> {
+    fn new() -> Self {
+        Self {
+            src: None,
+            seqnum: None,
+            other_fields: Vec::new()
+        }
+    }
+
+    pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
+        Self {
+            src: src.map(|o| {
+                let o = (*o).clone();
+                o.upcast::<Object>()
+            }),
+            .. self
+        }
+    }
+
+    fn seqnum(self, seqnum: Seqnum) -> Self {
+        Self {
+            seqnum: Some(seqnum),
+            .. self
+        }
+    }
+
+    // Warning: other_fields are ignored with argument-less messages
+    // until GStreamer 1.14 is released
+    fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        Self {
+            other_fields: self.other_fields.iter().cloned()
+                .chain(other_fields.iter().cloned())
+                .collect(),
+            .. self
+        }
+    }
+}
+
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
         pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             Self {
-                src: src.map(|o| {
-                    let o = (*o).clone();
-                    o.upcast::<Object>()
-                }),
+                builder: self.builder.src(src),
                 .. self
             }
         }
 
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
-                seqnum: Some(seqnum),
+                builder: self.builder.seqnum(seqnum),
                 .. self
             }
         }
 
+        // Warning: other_fields are ignored with argument-less messages
+        // until GStreamer 1.14 is released
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
-                other_fields: self.other_fields.iter().cloned()
-                    .chain(other_fields.iter().cloned())
-                    .collect(),
+                builder: self.builder.other_fields(other_fields),
                 .. self
             }
         }
@@ -1177,19 +1232,25 @@ macro_rules! message_builder_generic_impl {
         pub fn build(mut self) -> Message {
             assert_initialized_main_thread!();
             unsafe {
-                let src = self.src.to_glib_none().0;
+                let src = self.builder.src.to_glib_none().0;
                 let msg = $new_fn(&mut self, src);
-                if let Some(seqnum) = self.seqnum {
+                if let Some(seqnum) = self.builder.seqnum {
                     ffi::gst_message_set_seqnum(msg, seqnum.to_glib());
                 }
 
-                {
-                    let s = StructureRef::from_glib_borrow_mut(
-                        ffi::gst_message_get_structure(msg) as *mut _
-                    );
+                if !self.builder.other_fields.is_empty() {
+                    // issue with argument-less messages. We need the function
+                    // ffi::gst_message_writable_structure to sort this out
+                    // and this function will be available in GStreamer 1.14
+                    // See https://github.com/sdroege/gstreamer-rs/pull/75
+                    // and https://bugzilla.gnome.org/show_bug.cgi?id=792928
+                    let structure = ffi::gst_message_get_structure(msg);
+                    if !structure.is_null() {
+                        let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
 
-                    for (k, v) in self.other_fields {
-                        s.set_value(k, v.to_send_value());
+                        for (k, v) in self.builder.other_fields {
+                            structure.set_value(k, v.to_send_value());
+                        }
                     }
                 }
 
@@ -1200,17 +1261,13 @@ macro_rules! message_builder_generic_impl {
 }
 
 pub struct EosBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
 }
 impl<'a> EosBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
         }
     }
 
@@ -1225,9 +1282,7 @@ impl MessageErrorDomain for ::StreamError {}
 impl MessageErrorDomain for ::LibraryError {}
 
 pub struct ErrorBuilder<'a, T> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
@@ -1237,9 +1292,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             error: error,
             message: message,
             debug: None,
@@ -1293,9 +1346,7 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
 }
 
 pub struct WarningBuilder<'a, T> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
@@ -1305,9 +1356,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             error: error,
             message: message,
             debug: None,
@@ -1361,9 +1410,7 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
 }
 
 pub struct InfoBuilder<'a, T> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
@@ -1373,9 +1420,7 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             error: error,
             message: message,
             debug: None,
@@ -1429,18 +1474,14 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
 }
 
 pub struct TagBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     tags: &'a TagList,
 }
 impl<'a> TagBuilder<'a> {
     fn new(tags: &'a TagList) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             tags: tags,
         }
     }
@@ -1452,9 +1493,7 @@ impl<'a> TagBuilder<'a> {
 }
 
 pub struct BufferingBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     percent: i32,
     stats: Option<(::BufferingMode, i32, i32, i64)>,
 }
@@ -1462,9 +1501,7 @@ impl<'a> BufferingBuilder<'a> {
     fn new(percent: i32) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             percent: percent,
             stats: None,
         }
@@ -1502,9 +1539,7 @@ impl<'a> BufferingBuilder<'a> {
 }
 
 pub struct StateChangedBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     old: ::State,
     new: ::State,
     pending: ::State,
@@ -1513,9 +1548,7 @@ impl<'a> StateChangedBuilder<'a> {
     fn new(old: ::State, new: ::State, pending: ::State) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             old: old,
             new: new,
             pending: pending,
@@ -1531,17 +1564,13 @@ impl<'a> StateChangedBuilder<'a> {
 }
 
 pub struct StateDirtyBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
 }
 impl<'a> StateDirtyBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
         }
     }
 
@@ -1549,9 +1578,7 @@ impl<'a> StateDirtyBuilder<'a> {
 }
 
 pub struct StepDoneBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     amount: GenericFormattedValue,
     rate: f64,
     flush: bool,
@@ -1571,9 +1598,7 @@ impl<'a> StepDoneBuilder<'a> {
         skip_assert_initialized!();
         assert_eq!(amount.get_format(), duration.get_format());
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             amount: amount,
             rate: rate,
             flush: flush,
@@ -1596,9 +1621,7 @@ impl<'a> StepDoneBuilder<'a> {
 }
 
 pub struct ClockProvideBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     clock: &'a ::Clock,
     ready: bool,
 }
@@ -1606,9 +1629,7 @@ impl<'a> ClockProvideBuilder<'a> {
     fn new(clock: &'a ::Clock, ready: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             clock: clock,
             ready: ready,
         }
@@ -1622,18 +1643,14 @@ impl<'a> ClockProvideBuilder<'a> {
 }
 
 pub struct ClockLostBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     clock: &'a ::Clock,
 }
 impl<'a> ClockLostBuilder<'a> {
     fn new(clock: &'a ::Clock) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             clock: clock,
         }
     }
@@ -1645,18 +1662,14 @@ impl<'a> ClockLostBuilder<'a> {
 }
 
 pub struct NewClockBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     clock: &'a ::Clock,
 }
 impl<'a> NewClockBuilder<'a> {
     fn new(clock: &'a ::Clock) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             clock: clock,
         }
     }
@@ -1668,9 +1681,7 @@ impl<'a> NewClockBuilder<'a> {
 }
 
 pub struct StructureChangeBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     type_: ::StructureChangeType,
     owner: &'a ::Element,
     busy: bool,
@@ -1679,9 +1690,7 @@ impl<'a> StructureChangeBuilder<'a> {
     fn new(type_: ::StructureChangeType, owner: &'a ::Element, busy: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             type_: type_,
             owner: owner,
             busy: busy,
@@ -1697,9 +1706,7 @@ impl<'a> StructureChangeBuilder<'a> {
 }
 
 pub struct StreamStatusBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     type_: ::StreamStatusType,
     owner: &'a ::Element,
     status_object: Option<&'a glib::ToSendValue>,
@@ -1708,9 +1715,7 @@ impl<'a> StreamStatusBuilder<'a> {
     fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             type_: type_,
             owner: owner,
             status_object: None,
@@ -1738,18 +1743,14 @@ impl<'a> StreamStatusBuilder<'a> {
 }
 
 pub struct ApplicationBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     structure: Option<::Structure>,
 }
 impl<'a> ApplicationBuilder<'a> {
     fn new(structure: ::Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1761,18 +1762,14 @@ impl<'a> ApplicationBuilder<'a> {
 }
 
 pub struct ElementBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     structure: Option<::Structure>,
 }
 impl<'a> ElementBuilder<'a> {
     fn new(structure: ::Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1784,18 +1781,14 @@ impl<'a> ElementBuilder<'a> {
 }
 
 pub struct SegmentStartBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     position: GenericFormattedValue,
 }
 impl<'a> SegmentStartBuilder<'a> {
     fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             position: position,
         }
     }
@@ -1808,18 +1801,14 @@ impl<'a> SegmentStartBuilder<'a> {
 }
 
 pub struct SegmentDoneBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     position: GenericFormattedValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
     fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             position: position,
         }
     }
@@ -1832,17 +1821,13 @@ impl<'a> SegmentDoneBuilder<'a> {
 }
 
 pub struct DurationChangedBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
 }
 impl<'a> DurationChangedBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
         }
     }
 
@@ -1850,17 +1835,13 @@ impl<'a> DurationChangedBuilder<'a> {
 }
 
 pub struct LatencyBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
 }
 impl<'a> LatencyBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
         }
     }
 
@@ -1868,17 +1849,13 @@ impl<'a> LatencyBuilder<'a> {
 }
 
 pub struct AsyncStartBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
 }
 impl<'a> AsyncStartBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
         }
     }
 
@@ -1886,18 +1863,14 @@ impl<'a> AsyncStartBuilder<'a> {
 }
 
 pub struct AsyncDoneBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     running_time: ::ClockTime,
 }
 impl<'a> AsyncDoneBuilder<'a> {
     fn new(running_time: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             running_time: running_time,
         }
     }
@@ -1909,18 +1882,14 @@ impl<'a> AsyncDoneBuilder<'a> {
 }
 
 pub struct RequestStateBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     state: ::State,
 }
 impl<'a> RequestStateBuilder<'a> {
     fn new(state: ::State) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             state: state,
         }
     }
@@ -1932,9 +1901,7 @@ impl<'a> RequestStateBuilder<'a> {
 }
 
 pub struct StepStartBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     active: bool,
     amount: GenericFormattedValue,
     rate: f64,
@@ -1951,9 +1918,7 @@ impl<'a> StepStartBuilder<'a> {
     ) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             active: active,
             amount: amount,
             rate: rate,
@@ -1974,9 +1939,7 @@ impl<'a> StepStartBuilder<'a> {
 }
 
 pub struct QosBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     live: bool,
     running_time: ::ClockTime,
     stream_time: ::ClockTime,
@@ -1995,9 +1958,7 @@ impl<'a> QosBuilder<'a> {
     ) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             live: live,
             running_time: running_time,
             stream_time: stream_time,
@@ -2050,9 +2011,7 @@ impl<'a> QosBuilder<'a> {
 }
 
 pub struct ProgressBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     type_: ::ProgressType,
     code: &'a str,
     text: &'a str,
@@ -2061,9 +2020,7 @@ impl<'a> ProgressBuilder<'a> {
     fn new(type_: ::ProgressType, code: &'a str, text: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             type_: type_,
             code: code,
             text: text,
@@ -2079,9 +2036,7 @@ impl<'a> ProgressBuilder<'a> {
 }
 
 pub struct TocBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     toc: &'a ::Toc,
     updated: bool,
 }
@@ -2089,9 +2044,7 @@ impl<'a> TocBuilder<'a> {
     fn new(toc: &'a ::Toc, updated: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             toc: toc,
             updated: updated,
         }
@@ -2105,18 +2058,14 @@ impl<'a> TocBuilder<'a> {
 }
 
 pub struct ResetTimeBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     running_time: ::ClockTime,
 }
 impl<'a> ResetTimeBuilder<'a> {
     fn new(running_time: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             running_time: running_time,
         }
     }
@@ -2128,18 +2077,14 @@ impl<'a> ResetTimeBuilder<'a> {
 }
 
 pub struct StreamStartBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     group_id: Option<GroupId>,
 }
 impl<'a> StreamStartBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             group_id: None,
         }
     }
@@ -2161,18 +2106,14 @@ impl<'a> StreamStartBuilder<'a> {
 }
 
 pub struct NeedContextBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     context_type: &'a str,
 }
 impl<'a> NeedContextBuilder<'a> {
     fn new(context_type: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             context_type: context_type,
         }
     }
@@ -2184,18 +2125,14 @@ impl<'a> NeedContextBuilder<'a> {
 }
 
 pub struct HaveContextBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     context: Option<::Context>,
 }
 impl<'a> HaveContextBuilder<'a> {
     fn new(context: ::Context) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             context: Some(context),
         }
     }
@@ -2207,18 +2144,14 @@ impl<'a> HaveContextBuilder<'a> {
 }
 
 pub struct DeviceAddedBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     device: &'a ::Device,
 }
 impl<'a> DeviceAddedBuilder<'a> {
     fn new(device: &'a ::Device) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             device: device,
         }
     }
@@ -2230,18 +2163,14 @@ impl<'a> DeviceAddedBuilder<'a> {
 }
 
 pub struct DeviceRemovedBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     device: &'a ::Device,
 }
 impl<'a> DeviceRemovedBuilder<'a> {
     fn new(device: &'a ::Device) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             device: device,
         }
     }
@@ -2254,9 +2183,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct PropertyNotifyBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     property_name: &'a str,
     value: Option<&'a glib::ToSendValue>,
 }
@@ -2265,9 +2192,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
     fn new(property_name: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             property_name: property_name,
             value: None,
         }
@@ -2296,9 +2221,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamCollectionBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     collection: &'a ::StreamCollection,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -2306,9 +2229,7 @@ impl<'a> StreamCollectionBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             collection: collection,
         }
     }
@@ -2321,9 +2242,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamsSelectedBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     #[cfg(any(feature = "v1_10", feature = "dox"))] collection: &'a ::StreamCollection,
     #[cfg(any(feature = "v1_10", feature = "dox"))] streams: Option<&'a [&'a ::Stream]>,
 }
@@ -2332,9 +2251,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
     fn new(collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             collection: collection,
             streams: None,
         }
@@ -2360,9 +2277,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct RedirectBuilder<'a> {
-    src: Option<Object>,
-    seqnum: Option<Seqnum>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: MessageBuilder<'a>,
     location: &'a str,
     tag_list: Option<&'a TagList>,
     entry_struct: Option<Structure>,
@@ -2374,9 +2289,7 @@ impl<'a> RedirectBuilder<'a> {
     fn new(location: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            src: None,
-            seqnum: None,
-            other_fields: Vec::new(),
+            builder: MessageBuilder::new(),
             location: location,
             tag_list: None,
             entry_struct: None,
@@ -2441,4 +2354,41 @@ impl<'a> RedirectBuilder<'a> {
         }
         msg
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_simple() {
+        ::init().unwrap();
+
+        // Message without arguments
+        let eos_msg = Message::new_eos()
+            .seqnum(Seqnum(1))
+            .build();
+        match eos_msg.view() {
+            MessageView::Eos(eos_msg) => {
+                assert_eq!(eos_msg.get_seqnum(), Seqnum(1));
+                assert!(eos_msg.get_structure().is_none());
+            },
+            _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
+        }
+
+        // Note: can't define other_fields for argument-less messages before GStreamer 1.14
+
+        // Message with arguments
+        let buffering_msg = Message::new_buffering(42)
+            .other_fields(&[("extra-field", &true)])
+            .build();
+        match buffering_msg.view() {
+            MessageView::Buffering(buffering_msg) => {
+                assert_eq!(buffering_msg.get_percent(), 42);
+                assert!(buffering_msg.get_structure().is_some());
+                assert!(buffering_msg.get_structure().unwrap().has_field("extra-field"));
+            }
+            _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
+        }
+    }
 }

@@ -61,7 +61,7 @@ fn example_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error from {:?}: {} ({:?})",
-                    msg.get_src().map(|s| s.get_path_string()),
+                    err.get_src().map(|s| s.get_path_string()),
                     err.get_error(),
                     err.get_debug()
                 );

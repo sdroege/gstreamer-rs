@@ -238,8 +238,8 @@ mod tutorial5 {
             .get_bus()
             .unwrap()
             .connect_message(move |_, msg| match msg.view() {
-                gst::MessageView::Application(_) => {
-                    if msg.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
+                gst::MessageView::Application(application) => {
+                    if application.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
                         analyze_streams(&pipeline, &textbuf);
                     }
                 }
@@ -339,16 +339,16 @@ mod tutorial5 {
                 gst::MessageView::Error(err) => {
                     println!(
                         "Error from {:?}: {} ({:?})",
-                        msg.get_src().map(|s| s.get_path_string()),
+                        err.get_src().map(|s| s.get_path_string()),
                         err.get_error(),
                         err.get_debug()
                     );
                 }
                 // This is called when the pipeline changes states. We use it to
                 // keep track of the current state.
-                gst::MessageView::StateChanged(view) => {
-                    if msg.get_src().map(|s| s == pipeline).unwrap_or(false) {
-                        println!("State set to {:?}", view.get_current());
+                gst::MessageView::StateChanged(state_changed) => {
+                    if state_changed.get_src().map(|s| s == pipeline).unwrap_or(false) {
+                        println!("State set to {:?}", state_changed.get_current());
                     }
                 }
                 _ => (),
