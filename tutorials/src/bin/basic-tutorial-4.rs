@@ -100,7 +100,7 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
         MessageView::Error(err) => {
             println!(
                 "Error received from element {:?}: {} ({:?})",
-                msg.get_src().map(|s| s.get_path_string()),
+                err.get_src().map(|s| s.get_path_string()),
                 err.get_error(),
                 err.get_debug()
             );
@@ -114,12 +114,12 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
             // The duration has changed, mark the current one as invalid
             custom_data.duration = gst::CLOCK_TIME_NONE;
         }
-        MessageView::StateChanged(state) => if msg.get_src()
+        MessageView::StateChanged(state_changed) => if state_changed.get_src()
             .map(|s| s == custom_data.playbin)
             .unwrap_or(false)
         {
-            let new_state = state.get_current();
-            let old_state = state.get_old();
+            let new_state = state_changed.get_current();
+            let old_state = state_changed.get_old();
 
             println!(
                 "Pipeline state changed from {:?} to {:?}",

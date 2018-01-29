@@ -40,7 +40,7 @@ fn tutorial_main() {
             MessageView::Error(err) => {
                 eprintln!(
                     "Error received from element {:?}: {}",
-                    msg.get_src().map(|s| s.get_path_string()),
+                    err.get_src().map(|s| s.get_path_string()),
                     err.get_error()
                 );
                 eprintln!("Debugging information: {:?}", err.get_debug());
