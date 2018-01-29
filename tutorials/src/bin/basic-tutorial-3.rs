@@ -93,18 +93,18 @@ fn tutorial_main() {
             MessageView::Error(err) => {
                 eprintln!(
                     "Error received from element {:?} {}",
-                    msg.get_src().map(|s| s.get_path_string()),
+                    err.get_src().map(|s| s.get_path_string()),
                     err.get_error()
                 );
                 eprintln!("Debugging information: {:?}", err.get_debug());
                 break;
             }
-            MessageView::StateChanged(s) => {
-                if msg.get_src().map(|s| s == pipeline).unwrap_or(false) {
+            MessageView::StateChanged(state_changed) => {
+                if state_changed.get_src().map(|s| s == pipeline).unwrap_or(false) {
                     println!(
                         "Pipeline state changed from {:?} to {:?}",
-                        s.get_old(),
-                        s.get_current()
+                        state_changed.get_old(),
+                        state_changed.get_current()
                     );
                 }
             }

@@ -126,7 +126,7 @@ fn tutorial_main() {
             MessageView::Error(err) => {
                 println!(
                     "Error received from element {:?}: {} ({:?})",
-                    msg.get_src().map(|s| s.get_path_string()),
+                    err.get_src().map(|s| s.get_path_string()),
                     err.get_error(),
                     err.get_debug()
                 );
@@ -136,11 +136,11 @@ fn tutorial_main() {
                 println!("End-Of-Stream reached.");
                 break;
             }
-            MessageView::StateChanged(state) =>
+            MessageView::StateChanged(state_changed) =>
                 // We are only interested in state-changed messages from the pipeline
-                if msg.get_src().map(|s| s == pipeline).unwrap_or(false) {
-                    let new_state = state.get_current();
-                    let old_state = state.get_old();
+                if state_changed.get_src().map(|s| s == pipeline).unwrap_or(false) {
+                    let new_state = state_changed.get_current();
+                    let old_state = state_changed.get_old();
 
                     println!(
                         "Pipeline state changed from {:?} to {:?}",
