@@ -873,27 +873,64 @@ declare_concrete_event!(CustomDownstreamSticky);
 declare_concrete_event!(CustomBoth);
 declare_concrete_event!(CustomBothOob);
 
+struct EventBuilder<'a> {
+    seqnum: Option<Seqnum>,
+    running_time_offset: Option<i64>,
+    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+}
+
+impl<'a> EventBuilder<'a> {
+    fn new() -> Self {
+        Self {
+            seqnum: None,
+            running_time_offset: None,
+            other_fields: Vec::new()
+        }
+    }
+
+    fn seqnum(self, seqnum: Seqnum) -> Self {
+        Self {
+            seqnum: Some(seqnum),
+            .. self
+        }
+    }
+
+    fn running_time_offset(self, running_time_offset: i64) -> Self {
+        Self {
+            running_time_offset: Some(running_time_offset),
+            .. self
+        }
+    }
+
+    fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        Self {
+            other_fields: self.other_fields.iter().cloned()
+                .chain(other_fields.iter().cloned())
+                .collect(),
+            .. self
+        }
+    }
+}
+
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
-                seqnum: Some(seqnum),
+                builder: self.builder.seqnum(seqnum),
                 .. self
             }
         }
 
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {
-                running_time_offset: Some(running_time_offset),
+                builder: self.builder.running_time_offset(running_time_offset),
                 .. self
             }
         }
 
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
-                other_fields: self.other_fields.iter().cloned()
-                    .chain(other_fields.iter().cloned())
-                    .collect(),
+                builder: self.builder.other_fields(other_fields),
                 .. self
             }
         }
@@ -902,20 +939,20 @@ macro_rules! event_builder_generic_impl {
             assert_initialized_main_thread!();
             unsafe {
                 let event = $new_fn(&mut self);
-                if let Some(seqnum) = self.seqnum {
+                if let Some(seqnum) = self.builder.seqnum {
                     ffi::gst_event_set_seqnum(event, seqnum.to_glib());
                 }
 
-                if let Some(running_time_offset) = self.running_time_offset {
+                if let Some(running_time_offset) = self.builder.running_time_offset {
                     ffi::gst_event_set_running_time_offset(event, running_time_offset);
                 }
 
-                if !self.other_fields.is_empty() {
+                if !self.builder.other_fields.is_empty() {
                     let s = StructureRef::from_glib_borrow_mut(
                         ffi::gst_event_writable_structure(event)
                     );
 
-                    for (k, v) in self.other_fields {
+                    for (k, v) in self.builder.other_fields {
                         s.set_value(k, v.to_send_value());
                     }
                 }
@@ -927,17 +964,13 @@ macro_rules! event_builder_generic_impl {
 }
 
 pub struct FlushStartBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
 }
 impl<'a> FlushStartBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
         }
     }
 
@@ -945,18 +978,14 @@ impl<'a> FlushStartBuilder<'a> {
 }
 
 pub struct FlushStopBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     reset_time: bool,
 }
 impl<'a> FlushStopBuilder<'a> {
     fn new(reset_time: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             reset_time: reset_time,
         }
     }
@@ -965,9 +994,7 @@ impl<'a> FlushStopBuilder<'a> {
 }
 
 pub struct StreamStartBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     stream_id: &'a str,
     flags: Option<::StreamFlags>,
     group_id: Option<GroupId>,
@@ -976,9 +1003,7 @@ impl<'a> StreamStartBuilder<'a> {
     fn new(stream_id: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             stream_id: stream_id,
             flags: None,
             group_id: None,
@@ -1012,18 +1037,14 @@ impl<'a> StreamStartBuilder<'a> {
 }
 
 pub struct CapsBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     caps: &'a ::Caps,
 }
 impl<'a> CapsBuilder<'a> {
     fn new(caps: &'a ::Caps) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             caps: caps,
         }
     }
@@ -1032,18 +1053,14 @@ impl<'a> CapsBuilder<'a> {
 }
 
 pub struct SegmentBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     segment: &'a ::Segment,
 }
 impl<'a> SegmentBuilder<'a> {
     fn new(segment: &'a ::Segment) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             segment: segment,
         }
     }
@@ -1053,9 +1070,7 @@ impl<'a> SegmentBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamCollectionBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     stream_collection: &'a ::StreamCollection,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1063,9 +1078,7 @@ impl<'a> StreamCollectionBuilder<'a> {
     fn new(stream_collection: &'a ::StreamCollection) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             stream_collection: stream_collection,
         }
     }
@@ -1076,18 +1089,14 @@ impl<'a> StreamCollectionBuilder<'a> {
 }
 
 pub struct TagBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     tags: Option<::TagList>,
 }
 impl<'a> TagBuilder<'a> {
     fn new(tags: ::TagList) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             tags: Some(tags),
         }
     }
@@ -1099,9 +1108,7 @@ impl<'a> TagBuilder<'a> {
 }
 
 pub struct BufferSizeBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     minsize: GenericFormattedValue,
     maxsize: GenericFormattedValue,
     async: bool,
@@ -1110,9 +1117,7 @@ impl<'a> BufferSizeBuilder<'a> {
     fn new(minsize: GenericFormattedValue, maxsize: GenericFormattedValue, async: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             minsize: minsize,
             maxsize: maxsize,
             async: async,
@@ -1128,9 +1133,7 @@ impl<'a> BufferSizeBuilder<'a> {
 }
 
 pub struct SinkMessageBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     name: &'a str,
     msg: &'a ::Message,
 }
@@ -1138,9 +1141,7 @@ impl<'a> SinkMessageBuilder<'a> {
     fn new(name: &'a str, msg: &'a ::Message) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             name: name,
             msg: msg,
         }
@@ -1154,9 +1155,7 @@ impl<'a> SinkMessageBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamGroupDoneBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     group_id: GroupId,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1164,9 +1163,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
     fn new(group_id: GroupId) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             group_id: group_id,
         }
     }
@@ -1177,17 +1174,13 @@ impl<'a> StreamGroupDoneBuilder<'a> {
 }
 
 pub struct EosBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
 }
 impl<'a> EosBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
         }
     }
 
@@ -1195,9 +1188,7 @@ impl<'a> EosBuilder<'a> {
 }
 
 pub struct TocBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     toc: &'a ::Toc,
     updated: bool,
 }
@@ -1205,9 +1196,7 @@ impl<'a> TocBuilder<'a> {
     fn new(toc: &'a ::Toc, updated: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             toc: toc,
             updated: updated,
         }
@@ -1220,9 +1209,7 @@ impl<'a> TocBuilder<'a> {
 }
 
 pub struct ProtectionBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     system_id: &'a str,
     data: &'a ::Buffer,
     origin: Option<&'a str>,
@@ -1231,9 +1218,7 @@ impl<'a> ProtectionBuilder<'a> {
     fn new(system_id: &'a str, data: &'a ::Buffer) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             system_id: system_id,
             data: data,
             origin: None,
@@ -1255,18 +1240,14 @@ impl<'a> ProtectionBuilder<'a> {
 }
 
 pub struct SegmentDoneBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     position: GenericFormattedValue,
 }
 impl<'a> SegmentDoneBuilder<'a> {
     fn new(position: GenericFormattedValue) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             position: position,
         }
     }
@@ -1278,9 +1259,7 @@ impl<'a> SegmentDoneBuilder<'a> {
 }
 
 pub struct GapBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     timestamp: ::ClockTime,
     duration: ::ClockTime,
 }
@@ -1288,9 +1267,7 @@ impl<'a> GapBuilder<'a> {
     fn new(timestamp: ::ClockTime, duration: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             timestamp: timestamp,
             duration: duration,
         }
@@ -1303,9 +1280,7 @@ impl<'a> GapBuilder<'a> {
 }
 
 pub struct QosBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     type_: ::QOSType,
     proportion: f64,
     diff: i64,
@@ -1315,9 +1290,7 @@ impl<'a> QosBuilder<'a> {
     fn new(type_: ::QOSType, proportion: f64, diff: i64, timestamp: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             type_: type_,
             proportion: proportion,
             diff: diff,
@@ -1334,9 +1307,7 @@ impl<'a> QosBuilder<'a> {
 }
 
 pub struct SeekBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     rate: f64,
     flags: ::SeekFlags,
     start_type: ::SeekType,
@@ -1355,9 +1326,7 @@ impl<'a> SeekBuilder<'a> {
     ) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             rate: rate,
             flags: flags,
             start_type,
@@ -1379,18 +1348,14 @@ impl<'a> SeekBuilder<'a> {
 }
 
 pub struct NavigationBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> NavigationBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1405,18 +1370,14 @@ impl<'a> NavigationBuilder<'a> {
 }
 
 pub struct LatencyBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     latency: ::ClockTime,
 }
 impl<'a> LatencyBuilder<'a> {
     fn new(latency: ::ClockTime) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             latency: latency,
         }
     }
@@ -1425,9 +1386,7 @@ impl<'a> LatencyBuilder<'a> {
 }
 
 pub struct StepBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     amount: GenericFormattedValue,
     rate: f64,
     flush: bool,
@@ -1437,9 +1396,7 @@ impl<'a> StepBuilder<'a> {
     fn new(amount: GenericFormattedValue, rate: f64, flush: bool, intermediate: bool) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             amount: amount,
             rate: rate,
             flush: flush,
@@ -1457,17 +1414,13 @@ impl<'a> StepBuilder<'a> {
 }
 
 pub struct ReconfigureBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
 }
 impl<'a> ReconfigureBuilder<'a> {
     fn new() -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
         }
     }
 
@@ -1475,18 +1428,14 @@ impl<'a> ReconfigureBuilder<'a> {
 }
 
 pub struct TocSelectBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     uid: &'a str,
 }
 impl<'a> TocSelectBuilder<'a> {
     fn new(uid: &'a str) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             uid: uid,
         }
     }
@@ -1496,9 +1445,7 @@ impl<'a> TocSelectBuilder<'a> {
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct SelectStreamsBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     streams: &'a [&'a str],
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1506,9 +1453,7 @@ impl<'a> SelectStreamsBuilder<'a> {
     fn new(streams: &'a [&'a str]) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             streams: streams,
         }
     }
@@ -1519,18 +1464,14 @@ impl<'a> SelectStreamsBuilder<'a> {
 }
 
 pub struct CustomUpstreamBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> CustomUpstreamBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1546,18 +1487,14 @@ impl<'a> CustomUpstreamBuilder<'a> {
 }
 
 pub struct CustomDownstreamBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> CustomDownstreamBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1573,18 +1510,14 @@ impl<'a> CustomDownstreamBuilder<'a> {
 }
 
 pub struct CustomDownstreamOobBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> CustomDownstreamOobBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1602,18 +1535,14 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
 }
 
 pub struct CustomDownstreamStickyBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> CustomDownstreamStickyBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1631,18 +1560,14 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
 }
 
 pub struct CustomBothBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> CustomBothBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
@@ -1657,18 +1582,14 @@ impl<'a> CustomBothBuilder<'a> {
 }
 
 pub struct CustomBothOobBuilder<'a> {
-    seqnum: Option<Seqnum>,
-    running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    builder: EventBuilder<'a>,
     structure: Option<Structure>,
 }
 impl<'a> CustomBothOobBuilder<'a> {
     fn new(structure: Structure) -> Self {
         skip_assert_initialized!();
         Self {
-            seqnum: None,
-            running_time_offset: None,
-            other_fields: Vec::new(),
+            builder: EventBuilder::new(),
             structure: Some(structure),
         }
     }
