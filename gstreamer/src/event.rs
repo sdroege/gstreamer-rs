@@ -16,6 +16,7 @@ use std::mem;
 use std::cmp;
 use std::fmt;
 use std::ffi::CStr;
+use std::ops::Deref;
 
 use glib;
 use glib::value::ToSendValue;
@@ -494,28 +495,42 @@ pub enum EventView<'a> {
     __NonExhaustive,
 }
 
-pub struct FlushStart<'a>(&'a EventRef);
+macro_rules! declare_concrete_event(
+    ($name:ident) => {
+        pub struct $name<'a>(&'a EventRef);
 
-pub struct FlushStop<'a>(&'a EventRef);
+        impl<'a> Deref for $name<'a> {
+            type Target = EventRef;
+
+            fn deref(&self) -> &Self::Target {
+                self.0
+            }
+        }
+    }
+);
+
+declare_concrete_event!(FlushStart);
+
+declare_concrete_event!(FlushStop);
 impl<'a> FlushStop<'a> {
     pub fn get_reset_time(&self) -> bool {
         unsafe {
             let mut reset_time = mem::uninitialized();
 
-            ffi::gst_event_parse_flush_stop(self.0.as_mut_ptr(), &mut reset_time);
+            ffi::gst_event_parse_flush_stop(self.as_mut_ptr(), &mut reset_time);
 
             from_glib(reset_time)
         }
     }
 }
 
-pub struct StreamStart<'a>(&'a EventRef);
+declare_concrete_event!(StreamStart);
 impl<'a> StreamStart<'a> {
     pub fn get_stream_id(&self) -> &'a str {
         unsafe {
             let mut stream_id = ptr::null();
 
-            ffi::gst_event_parse_stream_start(self.0.as_mut_ptr(), &mut stream_id);
+            ffi::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
             CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
@@ -524,7 +539,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut stream_flags = mem::uninitialized();
 
-            ffi::gst_event_parse_stream_flags(self.0.as_mut_ptr(), &mut stream_flags);
+            ffi::gst_event_parse_stream_flags(self.as_mut_ptr(), &mut stream_flags);
 
             from_glib(stream_flags)
         }
@@ -534,63 +549,63 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut group_id = mem::uninitialized();
 
-            ffi::gst_event_parse_group_id(self.0.as_mut_ptr(), &mut group_id);
+            ffi::gst_event_parse_group_id(self.as_mut_ptr(), &mut group_id);
 
             from_glib(group_id)
         }
     }
 }
 
-pub struct Caps<'a>(&'a EventRef);
+declare_concrete_event!(Caps);
 impl<'a> Caps<'a> {
     pub fn get_caps(&self) -> &'a ::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
 
-            ffi::gst_event_parse_caps(self.0.as_mut_ptr(), &mut caps);
+            ffi::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
             ::CapsRef::from_ptr(caps)
         }
     }
 }
 
-pub struct Segment<'a>(&'a EventRef);
+declare_concrete_event!(Segment);
 impl<'a> Segment<'a> {
     pub fn get_segment(&self) -> &'a ::Segment {
         unsafe {
             let mut segment = ptr::null();
 
-            ffi::gst_event_parse_segment(self.0.as_mut_ptr(), &mut segment);
+            ffi::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
             &*(segment as *mut ffi::GstSegment as *mut ::Segment)
         }
     }
 }
 
-pub struct StreamCollection<'a>(&'a EventRef);
+declare_concrete_event!(StreamCollection);
 impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
-            ffi::gst_event_parse_stream_collection(self.0.as_mut_ptr(), &mut stream_collection);
+            ffi::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
             from_glib_full(stream_collection)
         }
     }
 }
 
-pub struct Tag<'a>(&'a EventRef);
+declare_concrete_event!(Tag);
 impl<'a> Tag<'a> {
     pub fn get_tag(&self) -> &'a ::TagListRef {
         unsafe {
             let mut tags = ptr::null_mut();
 
-            ffi::gst_event_parse_tag(self.0.as_mut_ptr(), &mut tags);
+            ffi::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
             ::TagListRef::from_ptr(tags)
         }
     }
 }
 
-pub struct BufferSize<'a>(&'a EventRef);
+declare_concrete_event!(BufferSize);
 impl<'a> BufferSize<'a> {
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
         unsafe {
@@ -600,7 +615,7 @@ impl<'a> BufferSize<'a> {
             let mut async = mem::uninitialized();
 
             ffi::gst_event_parse_buffer_size(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut fmt,
                 &mut minsize,
                 &mut maxsize,
@@ -615,48 +630,48 @@ impl<'a> BufferSize<'a> {
     }
 }
 
-pub struct SinkMessage<'a>(&'a EventRef);
+declare_concrete_event!(SinkMessage);
 impl<'a> SinkMessage<'a> {
     pub fn get_message(&self) -> ::Message {
         unsafe {
             let mut msg = ptr::null_mut();
 
-            ffi::gst_event_parse_sink_message(self.0.as_mut_ptr(), &mut msg);
+            ffi::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
             from_glib_full(msg)
         }
     }
 }
 
-pub struct StreamGroupDone<'a>(&'a EventRef);
+declare_concrete_event!(StreamGroupDone);
 impl<'a> StreamGroupDone<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_group_id(&self) -> GroupId {
         unsafe {
             let mut group_id = mem::uninitialized();
 
-            ffi::gst_event_parse_stream_group_done(self.0.as_mut_ptr(), &mut group_id);
+            ffi::gst_event_parse_stream_group_done(self.as_mut_ptr(), &mut group_id);
 
             from_glib(group_id)
         }
     }
 }
 
-pub struct Eos<'a>(&'a EventRef);
+declare_concrete_event!(Eos);
 
-pub struct Toc<'a>(&'a EventRef);
+declare_concrete_event!(Toc);
 impl<'a> Toc<'a> {
     pub fn get_toc(&self) -> (&'a ::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::uninitialized();
 
-            ffi::gst_event_parse_toc(self.0.as_mut_ptr(), &mut toc, &mut updated);
+            ffi::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
             (::TocRef::from_ptr(toc), from_glib(updated))
         }
     }
 }
 
-pub struct Protection<'a>(&'a EventRef);
+declare_concrete_event!(Protection);
 impl<'a> Protection<'a> {
     pub fn get(&self) -> (&'a str, &'a ::BufferRef, Option<&'a str>) {
         unsafe {
@@ -665,7 +680,7 @@ impl<'a> Protection<'a> {
             let mut origin = ptr::null();
 
             ffi::gst_event_parse_protection(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut system_id,
                 &mut buffer,
                 &mut origin,
@@ -684,35 +699,35 @@ impl<'a> Protection<'a> {
     }
 }
 
-pub struct SegmentDone<'a>(&'a EventRef);
+declare_concrete_event!(SegmentDone);
 impl<'a> SegmentDone<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::uninitialized();
             let mut position = mem::uninitialized();
 
-            ffi::gst_event_parse_segment_done(self.0.as_mut_ptr(), &mut fmt, &mut position);
+            ffi::gst_event_parse_segment_done(self.as_mut_ptr(), &mut fmt, &mut position);
 
             GenericFormattedValue::new(from_glib(fmt), position)
         }
     }
 }
 
-pub struct Gap<'a>(&'a EventRef);
+declare_concrete_event!(Gap);
 impl<'a> Gap<'a> {
     pub fn get(&self) -> (::ClockTime, ::ClockTime) {
         unsafe {
             let mut timestamp = mem::uninitialized();
             let mut duration = mem::uninitialized();
 
-            ffi::gst_event_parse_gap(self.0.as_mut_ptr(), &mut timestamp, &mut duration);
+            ffi::gst_event_parse_gap(self.as_mut_ptr(), &mut timestamp, &mut duration);
 
             (from_glib(timestamp), from_glib(duration))
         }
     }
 }
 
-pub struct Qos<'a>(&'a EventRef);
+declare_concrete_event!(Qos);
 impl<'a> Qos<'a> {
     pub fn get(&self) -> (::QOSType, f64, i64, ::ClockTime) {
         unsafe {
@@ -722,7 +737,7 @@ impl<'a> Qos<'a> {
             let mut timestamp = mem::uninitialized();
 
             ffi::gst_event_parse_qos(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut type_,
                 &mut proportion,
                 &mut diff,
@@ -734,7 +749,7 @@ impl<'a> Qos<'a> {
     }
 }
 
-pub struct Seek<'a>(&'a EventRef);
+declare_concrete_event!(Seek);
 impl<'a> Seek<'a> {
     pub fn get(
         &self,
@@ -756,7 +771,7 @@ impl<'a> Seek<'a> {
             let mut stop = mem::uninitialized();
 
             ffi::gst_event_parse_seek(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut rate,
                 &mut fmt,
                 &mut flags,
@@ -778,22 +793,22 @@ impl<'a> Seek<'a> {
     }
 }
 
-pub struct Navigation<'a>(&'a EventRef);
+declare_concrete_event!(Navigation);
 
-pub struct Latency<'a>(&'a EventRef);
+declare_concrete_event!(Latency);
 impl<'a> Latency<'a> {
     pub fn get_latency(&self) -> ::ClockTime {
         unsafe {
             let mut latency = mem::uninitialized();
 
-            ffi::gst_event_parse_latency(self.0.as_mut_ptr(), &mut latency);
+            ffi::gst_event_parse_latency(self.as_mut_ptr(), &mut latency);
 
             from_glib(latency)
         }
     }
 }
 
-pub struct Step<'a>(&'a EventRef);
+declare_concrete_event!(Step);
 impl<'a> Step<'a> {
     pub fn get(&self) -> (GenericFormattedValue, f64, bool, bool) {
         unsafe {
@@ -804,7 +819,7 @@ impl<'a> Step<'a> {
             let mut intermediate = mem::uninitialized();
 
             ffi::gst_event_parse_step(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut fmt,
                 &mut amount,
                 &mut rate,
@@ -822,41 +837,41 @@ impl<'a> Step<'a> {
     }
 }
 
-pub struct Reconfigure<'a>(&'a EventRef);
+declare_concrete_event!(Reconfigure);
 
-pub struct TocSelect<'a>(&'a EventRef);
+declare_concrete_event!(TocSelect);
 impl<'a> TocSelect<'a> {
     pub fn get_uid(&self) -> &'a str {
         unsafe {
             let mut uid = ptr::null_mut();
 
-            ffi::gst_event_parse_toc_select(self.0.as_mut_ptr(), &mut uid);
+            ffi::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
 
             CStr::from_ptr(uid).to_str().unwrap()
         }
     }
 }
 
-pub struct SelectStreams<'a>(&'a EventRef);
+declare_concrete_event!(SelectStreams);
 impl<'a> SelectStreams<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_streams(&self) -> Vec<String> {
         unsafe {
             let mut streams = ptr::null_mut();
 
-            ffi::gst_event_parse_select_streams(self.0.as_mut_ptr(), &mut streams);
+            ffi::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
 
             FromGlibPtrContainer::from_glib_full(streams)
         }
     }
 }
 
-pub struct CustomUpstream<'a>(&'a EventRef);
-pub struct CustomDownstream<'a>(&'a EventRef);
-pub struct CustomDownstreamOob<'a>(&'a EventRef);
-pub struct CustomDownstreamSticky<'a>(&'a EventRef);
-pub struct CustomBoth<'a>(&'a EventRef);
-pub struct CustomBothOob<'a>(&'a EventRef);
+declare_concrete_event!(CustomUpstream);
+declare_concrete_event!(CustomDownstream);
+declare_concrete_event!(CustomDownstreamOob);
+declare_concrete_event!(CustomDownstreamSticky);
+declare_concrete_event!(CustomBoth);
+declare_concrete_event!(CustomBothOob);
 
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
@@ -1667,6 +1682,7 @@ impl<'a> CustomBothOobBuilder<'a> {
         ev
     });
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1679,7 +1695,8 @@ mod tests {
         let flush_start_evt = Event::new_flush_start().build();
         match flush_start_evt.view() {
             EventView::FlushStart(flush_start_evt) => {
-                assert!(flush_start_evt.0.get_structure().is_none());
+                assert!(!flush_start_evt.is_sticky());
+                assert!(flush_start_evt.get_structure().is_none());
             },
             _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
         }
@@ -1689,8 +1706,8 @@ mod tests {
             .build();
         match flush_start_evt.view() {
             EventView::FlushStart(flush_start_evt) => {
-                assert!(flush_start_evt.0.get_structure().is_some());
-                if let Some(other_fields) = flush_start_evt.0.get_structure() {
+                assert!(flush_start_evt.get_structure().is_some());
+                if let Some(other_fields) = flush_start_evt.get_structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
             },
@@ -1704,8 +1721,8 @@ mod tests {
         match flush_stop_evt.view() {
             EventView::FlushStop(flush_stop_evt) => {
                 assert_eq!(flush_stop_evt.get_reset_time(), true);
-                assert!(flush_stop_evt.0.get_structure().is_some());
-                if let Some(other_fields) = flush_stop_evt.0.get_structure() {
+                assert!(flush_stop_evt.get_structure().is_some());
+                if let Some(other_fields) = flush_stop_evt.get_structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
             }

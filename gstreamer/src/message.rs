@@ -20,6 +20,7 @@ use std::ptr;
 use std::mem;
 use std::fmt;
 use std::ffi::CStr;
+use std::ops::Deref;
 
 use glib;
 use glib::Cast;
@@ -420,15 +421,29 @@ pub enum MessageView<'a> {
     __NonExhaustive,
 }
 
-pub struct Eos<'a>(&'a MessageRef);
+macro_rules! declare_concrete_message(
+    ($name:ident) => {
+        pub struct $name<'a>(&'a MessageRef);
 
-pub struct Error<'a>(&'a MessageRef);
+        impl<'a> Deref for $name<'a> {
+            type Target = MessageRef;
+
+            fn deref(&self) -> &Self::Target {
+                self.0
+            }
+        }
+    }
+);
+
+declare_concrete_message!(Eos);
+
+declare_concrete_message!(Error);
 impl<'a> Error<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
-            ffi::gst_message_parse_error(self.0.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_error(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -438,7 +453,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            ffi::gst_message_parse_error(self.0.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_error(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -449,7 +464,7 @@ impl<'a> Error<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -460,13 +475,13 @@ impl<'a> Error<'a> {
     }
 }
 
-pub struct Warning<'a>(&'a MessageRef);
+declare_concrete_message!(Warning);
 impl<'a> Warning<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
-            ffi::gst_message_parse_warning(self.0.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_warning(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -476,7 +491,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            ffi::gst_message_parse_warning(self.0.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_warning(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -487,7 +502,7 @@ impl<'a> Warning<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -498,13 +513,13 @@ impl<'a> Warning<'a> {
     }
 }
 
-pub struct Info<'a>(&'a MessageRef);
+declare_concrete_message!(Info);
 impl<'a> Info<'a> {
     pub fn get_error(&self) -> glib::Error {
         unsafe {
             let mut error = ptr::null_mut();
 
-            ffi::gst_message_parse_info(self.0.as_mut_ptr(), &mut error, ptr::null_mut());
+            ffi::gst_message_parse_info(self.as_mut_ptr(), &mut error, ptr::null_mut());
 
             from_glib_full(error)
         }
@@ -514,7 +529,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut debug = ptr::null_mut();
 
-            ffi::gst_message_parse_info(self.0.as_mut_ptr(), ptr::null_mut(), &mut debug);
+            ffi::gst_message_parse_info(self.as_mut_ptr(), ptr::null_mut(), &mut debug);
 
             from_glib_full(debug)
         }
@@ -525,7 +540,7 @@ impl<'a> Info<'a> {
         unsafe {
             let mut details = ptr::null();
 
-            ffi::gst_message_parse_error_details(self.0.as_mut_ptr(), &mut details);
+            ffi::gst_message_parse_error_details(self.as_mut_ptr(), &mut details);
 
             if details.is_null() {
                 None
@@ -536,23 +551,23 @@ impl<'a> Info<'a> {
     }
 }
 
-pub struct Tag<'a>(&'a MessageRef);
+declare_concrete_message!(Tag);
 impl<'a> Tag<'a> {
     pub fn get_tags(&self) -> TagList {
         unsafe {
             let mut tags = ptr::null_mut();
-            ffi::gst_message_parse_tag(self.0.as_mut_ptr(), &mut tags);
+            ffi::gst_message_parse_tag(self.as_mut_ptr(), &mut tags);
             from_glib_full(tags)
         }
     }
 }
 
-pub struct Buffering<'a>(&'a MessageRef);
+declare_concrete_message!(Buffering);
 impl<'a> Buffering<'a> {
     pub fn get_percent(&self) -> i32 {
         unsafe {
             let mut p = mem::uninitialized();
-            ffi::gst_message_parse_buffering(self.0.as_mut_ptr(), &mut p);
+            ffi::gst_message_parse_buffering(self.as_mut_ptr(), &mut p);
             p
         }
     }
@@ -565,7 +580,7 @@ impl<'a> Buffering<'a> {
             let mut buffering_left = mem::uninitialized();
 
             ffi::gst_message_parse_buffering_stats(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut mode,
                 &mut avg_in,
                 &mut avg_out,
@@ -577,14 +592,14 @@ impl<'a> Buffering<'a> {
     }
 }
 
-pub struct StateChanged<'a>(&'a MessageRef);
+declare_concrete_message!(StateChanged);
 impl<'a> StateChanged<'a> {
     pub fn get_old(&self) -> ::State {
         unsafe {
             let mut state = mem::uninitialized();
 
             ffi::gst_message_parse_state_changed(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut state,
                 ptr::null_mut(),
                 ptr::null_mut(),
@@ -599,7 +614,7 @@ impl<'a> StateChanged<'a> {
             let mut state = mem::uninitialized();
 
             ffi::gst_message_parse_state_changed(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 ptr::null_mut(),
                 &mut state,
                 ptr::null_mut(),
@@ -614,7 +629,7 @@ impl<'a> StateChanged<'a> {
             let mut state = mem::uninitialized();
 
             ffi::gst_message_parse_state_changed(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
                 &mut state,
@@ -625,9 +640,9 @@ impl<'a> StateChanged<'a> {
     }
 }
 
-pub struct StateDirty<'a>(&'a MessageRef);
+declare_concrete_message!(StateDirty);
 
-pub struct StepDone<'a>(&'a MessageRef);
+declare_concrete_message!(StepDone);
 impl<'a> StepDone<'a> {
     pub fn get(
         &self,
@@ -649,7 +664,7 @@ impl<'a> StepDone<'a> {
             let mut eos = mem::uninitialized();
 
             ffi::gst_message_parse_step_done(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut format,
                 &mut amount,
                 &mut rate,
@@ -671,13 +686,13 @@ impl<'a> StepDone<'a> {
     }
 }
 
-pub struct ClockProvide<'a>(&'a MessageRef);
+declare_concrete_message!(ClockProvide);
 impl<'a> ClockProvide<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            ffi::gst_message_parse_clock_provide(self.0.as_mut_ptr(), &mut clock, ptr::null_mut());
+            ffi::gst_message_parse_clock_provide(self.as_mut_ptr(), &mut clock, ptr::null_mut());
 
             from_glib_none(clock)
         }
@@ -687,40 +702,40 @@ impl<'a> ClockProvide<'a> {
         unsafe {
             let mut ready = mem::uninitialized();
 
-            ffi::gst_message_parse_clock_provide(self.0.as_mut_ptr(), ptr::null_mut(), &mut ready);
+            ffi::gst_message_parse_clock_provide(self.as_mut_ptr(), ptr::null_mut(), &mut ready);
 
             from_glib(ready)
         }
     }
 }
 
-pub struct ClockLost<'a>(&'a MessageRef);
+declare_concrete_message!(ClockLost);
 impl<'a> ClockLost<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            ffi::gst_message_parse_clock_lost(self.0.as_mut_ptr(), &mut clock);
+            ffi::gst_message_parse_clock_lost(self.as_mut_ptr(), &mut clock);
 
             from_glib_none(clock)
         }
     }
 }
 
-pub struct NewClock<'a>(&'a MessageRef);
+declare_concrete_message!(NewClock);
 impl<'a> NewClock<'a> {
     pub fn get_clock(&self) -> Option<::Clock> {
         let mut clock = ptr::null_mut();
 
         unsafe {
-            ffi::gst_message_parse_new_clock(self.0.as_mut_ptr(), &mut clock);
+            ffi::gst_message_parse_new_clock(self.as_mut_ptr(), &mut clock);
 
             from_glib_none(clock)
         }
     }
 }
 
-pub struct StructureChange<'a>(&'a MessageRef);
+declare_concrete_message!(StructureChange);
 impl<'a> StructureChange<'a> {
     pub fn get(&self) -> (::StructureChangeType, ::Element, bool) {
         unsafe {
@@ -729,7 +744,7 @@ impl<'a> StructureChange<'a> {
             let mut busy = mem::uninitialized();
 
             ffi::gst_message_parse_structure_change(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut type_,
                 &mut owner,
                 &mut busy,
@@ -740,14 +755,14 @@ impl<'a> StructureChange<'a> {
     }
 }
 
-pub struct StreamStatus<'a>(&'a MessageRef);
+declare_concrete_message!(StreamStatus);
 impl<'a> StreamStatus<'a> {
     pub fn get(&self) -> (::StreamStatusType, ::Element) {
         unsafe {
             let mut type_ = mem::uninitialized();
             let mut owner = ptr::null_mut();
 
-            ffi::gst_message_parse_stream_status(self.0.as_mut_ptr(), &mut type_, &mut owner);
+            ffi::gst_message_parse_stream_status(self.as_mut_ptr(), &mut type_, &mut owner);
 
             (from_glib(type_), from_glib_none(owner))
         }
@@ -755,78 +770,76 @@ impl<'a> StreamStatus<'a> {
 
     pub fn get_stream_status_object(&self) -> Option<glib::Value> {
         unsafe {
-            let value = ffi::gst_message_get_stream_status_object(self.0.as_mut_ptr());
+            let value = ffi::gst_message_get_stream_status_object(self.as_mut_ptr());
 
             from_glib_none(value)
         }
     }
 }
 
-pub struct Application<'a>(&'a MessageRef);
+declare_concrete_message!(Application);
 
-pub struct Element<'a>(&'a MessageRef);
+declare_concrete_message!(Element);
 
-pub struct SegmentStart<'a>(&'a MessageRef);
+declare_concrete_message!(SegmentStart);
 impl<'a> SegmentStart<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
-            ffi::gst_message_parse_segment_start(self.0.as_mut_ptr(), &mut format, &mut position);
+            ffi::gst_message_parse_segment_start(self.as_mut_ptr(), &mut format, &mut position);
 
             GenericFormattedValue::new(from_glib(format), position)
         }
     }
 }
 
-pub struct SegmentDone<'a>(&'a MessageRef);
+declare_concrete_message!(SegmentDone);
 impl<'a> SegmentDone<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
             let mut format = mem::uninitialized();
             let mut position = mem::uninitialized();
 
-            ffi::gst_message_parse_segment_done(self.0.as_mut_ptr(), &mut format, &mut position);
+            ffi::gst_message_parse_segment_done(self.as_mut_ptr(), &mut format, &mut position);
 
             GenericFormattedValue::new(from_glib(format), position)
         }
     }
 }
 
-pub struct DurationChanged<'a>(&'a MessageRef);
+declare_concrete_message!(DurationChanged);
+declare_concrete_message!(Latency);
+declare_concrete_message!(AsyncStart);
 
-pub struct Latency<'a>(&'a MessageRef);
-
-pub struct AsyncStart<'a>(&'a MessageRef);
-
-pub struct AsyncDone<'a>(&'a MessageRef);
+declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::uninitialized();
 
-            ffi::gst_message_parse_async_done(self.0.as_mut_ptr(), &mut running_time);
+            ffi::gst_message_parse_async_done(self.as_mut_ptr(), &mut running_time);
 
             from_glib(running_time)
         }
     }
 }
 
-pub struct RequestState<'a>(&'a MessageRef);
+declare_concrete_message!(RequestState);
 impl<'a> RequestState<'a> {
     pub fn get_requested_state(&self) -> ::State {
         unsafe {
             let mut state = mem::uninitialized();
 
-            ffi::gst_message_parse_request_state(self.0.as_mut_ptr(), &mut state);
+            ffi::gst_message_parse_request_state(self.as_mut_ptr(), &mut state);
 
             from_glib(state)
         }
     }
 }
 
-pub struct StepStart<'a>(&'a MessageRef);
+declare_concrete_message!(StepStart);
 impl<'a> StepStart<'a> {
     pub fn get(&self) -> (bool, GenericFormattedValue, f64, bool, bool) {
         unsafe {
@@ -838,7 +851,7 @@ impl<'a> StepStart<'a> {
             let mut intermediate = mem::uninitialized();
 
             ffi::gst_message_parse_step_start(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut active,
                 &mut format,
                 &mut amount,
@@ -858,7 +871,7 @@ impl<'a> StepStart<'a> {
     }
 }
 
-pub struct Qos<'a>(&'a MessageRef);
+declare_concrete_message!(Qos);
 impl<'a> Qos<'a> {
     pub fn get(&self) -> (bool, ::ClockTime, ::ClockTime, ::ClockTime, ::ClockTime) {
         unsafe {
@@ -869,7 +882,7 @@ impl<'a> Qos<'a> {
             let mut duration = mem::uninitialized();
 
             ffi::gst_message_parse_qos(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut live,
                 &mut running_time,
                 &mut stream_time,
@@ -894,7 +907,7 @@ impl<'a> Qos<'a> {
             let mut quality = mem::uninitialized();
 
             ffi::gst_message_parse_qos_values(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut jitter,
                 &mut proportion,
                 &mut quality,
@@ -911,7 +924,7 @@ impl<'a> Qos<'a> {
             let mut dropped = mem::uninitialized();
 
             ffi::gst_message_parse_qos_stats(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut format,
                 &mut processed,
                 &mut dropped,
@@ -925,7 +938,7 @@ impl<'a> Qos<'a> {
     }
 }
 
-pub struct Progress<'a>(&'a MessageRef);
+declare_concrete_message!(Progress);
 impl<'a> Progress<'a> {
     pub fn get(&self) -> (::ProgressType, &'a str, &'a str) {
         unsafe {
@@ -933,7 +946,7 @@ impl<'a> Progress<'a> {
             let mut code = ptr::null_mut();
             let mut text = ptr::null_mut();
 
-            ffi::gst_message_parse_progress(self.0.as_mut_ptr(), &mut type_, &mut code, &mut text);
+            ffi::gst_message_parse_progress(self.as_mut_ptr(), &mut type_, &mut code, &mut text);
 
             let code = CStr::from_ptr(code).to_str().unwrap();
             let text = CStr::from_ptr(text).to_str().unwrap();
@@ -943,39 +956,39 @@ impl<'a> Progress<'a> {
     }
 }
 
-pub struct Toc<'a>(&'a MessageRef);
+declare_concrete_message!(Toc);
 impl<'a> Toc<'a> {
     pub fn get_toc(&self) -> (::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
             let mut updated = mem::uninitialized();
-            ffi::gst_message_parse_toc(self.0.as_mut_ptr(), &mut toc, &mut updated);
+            ffi::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
             (from_glib_full(toc), from_glib(updated))
         }
     }
 }
 
-pub struct ResetTime<'a>(&'a MessageRef);
+declare_concrete_message!(ResetTime);
 impl<'a> ResetTime<'a> {
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
             let mut running_time = mem::uninitialized();
 
-            ffi::gst_message_parse_reset_time(self.0.as_mut_ptr(), &mut running_time);
+            ffi::gst_message_parse_reset_time(self.as_mut_ptr(), &mut running_time);
 
             from_glib(running_time)
         }
     }
 }
 
-pub struct StreamStart<'a>(&'a MessageRef);
+declare_concrete_message!(StreamStart);
 impl<'a> StreamStart<'a> {
     pub fn get_group_id(&self) -> Option<GroupId> {
         unsafe {
             let mut group_id = mem::uninitialized();
 
             if from_glib(ffi::gst_message_parse_group_id(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut group_id,
             )) {
                 Some(from_glib(group_id))
@@ -986,57 +999,57 @@ impl<'a> StreamStart<'a> {
     }
 }
 
-pub struct NeedContext<'a>(&'a MessageRef);
+declare_concrete_message!(NeedContext);
 impl<'a> NeedContext<'a> {
     pub fn get_context_type(&self) -> &str {
         unsafe {
             let mut context_type = ptr::null();
 
-            ffi::gst_message_parse_context_type(self.0.as_mut_ptr(), &mut context_type);
+            ffi::gst_message_parse_context_type(self.as_mut_ptr(), &mut context_type);
 
             CStr::from_ptr(context_type).to_str().unwrap()
         }
     }
 }
 
-pub struct HaveContext<'a>(&'a MessageRef);
+declare_concrete_message!(HaveContext);
 impl<'a> HaveContext<'a> {
     pub fn get_context(&self) -> ::Context {
         unsafe {
             let mut context = ptr::null_mut();
-            ffi::gst_message_parse_have_context(self.0.as_mut_ptr(), &mut context);
+            ffi::gst_message_parse_have_context(self.as_mut_ptr(), &mut context);
             from_glib_full(context)
         }
     }
 }
 
-pub struct DeviceAdded<'a>(&'a MessageRef);
+declare_concrete_message!(DeviceAdded);
 impl<'a> DeviceAdded<'a> {
     pub fn get_device(&self) -> ::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
-            ffi::gst_message_parse_device_added(self.0.as_mut_ptr(), &mut device);
+            ffi::gst_message_parse_device_added(self.as_mut_ptr(), &mut device);
 
             from_glib_none(device)
         }
     }
 }
 
-pub struct DeviceRemoved<'a>(&'a MessageRef);
+declare_concrete_message!(DeviceRemoved);
 impl<'a> DeviceRemoved<'a> {
     pub fn get_device(&self) -> ::Device {
         unsafe {
             let mut device = ptr::null_mut();
 
-            ffi::gst_message_parse_device_removed(self.0.as_mut_ptr(), &mut device);
+            ffi::gst_message_parse_device_removed(self.as_mut_ptr(), &mut device);
 
             from_glib_none(device)
         }
     }
 }
 
-pub struct PropertyNotify<'a>(&'a MessageRef);
+declare_concrete_message!(PropertyNotify);
 impl<'a> PropertyNotify<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get(&self) -> (Object, &str, Option<&'a ::Value>) {
@@ -1046,7 +1059,7 @@ impl<'a> PropertyNotify<'a> {
             let mut value = ptr::null();
 
             ffi::gst_message_parse_property_notify(
-                self.0.as_mut_ptr(),
+                self.as_mut_ptr(),
                 &mut object,
                 &mut property_name,
                 &mut value,
@@ -1065,27 +1078,28 @@ impl<'a> PropertyNotify<'a> {
     }
 }
 
-pub struct StreamCollection<'a>(&'a MessageRef);
+declare_concrete_message!(StreamCollection);
 impl<'a> StreamCollection<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            ffi::gst_message_parse_stream_collection(self.0.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_stream_collection(self.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
     }
 }
-pub struct StreamsSelected<'a>(&'a MessageRef);
+
+declare_concrete_message!(StreamsSelected);
 impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_collection(&self) -> ::StreamCollection {
         unsafe {
             let mut collection = ptr::null_mut();
 
-            ffi::gst_message_parse_streams_selected(self.0.as_mut_ptr(), &mut collection);
+            ffi::gst_message_parse_streams_selected(self.as_mut_ptr(), &mut collection);
 
             from_glib_full(collection)
         }
@@ -1094,12 +1108,12 @@ impl<'a> StreamsSelected<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_streams(&self) -> Vec<::Stream> {
         unsafe {
-            let n = ffi::gst_message_streams_selected_get_size(self.0.as_mut_ptr());
+            let n = ffi::gst_message_streams_selected_get_size(self.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
                     from_glib_full(ffi::gst_message_streams_selected_get_stream(
-                        self.0.as_mut_ptr(),
+                        self.as_mut_ptr(),
                         i,
                     ))
                 })
@@ -1108,12 +1122,12 @@ impl<'a> StreamsSelected<'a> {
     }
 }
 
-pub struct Redirect<'a>(&'a MessageRef);
+declare_concrete_message!(Redirect);
 impl<'a> Redirect<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
         unsafe {
-            let n = ffi::gst_message_get_num_redirect_entries(self.0.as_mut_ptr());
+            let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
 
             (0..n)
                 .map(|i| {
@@ -1122,7 +1136,7 @@ impl<'a> Redirect<'a> {
                     let mut structure = ptr::null();
 
                     ffi::gst_message_parse_redirect_entry(
-                        self.0.as_mut_ptr(),
+                        self.as_mut_ptr(),
                         i,
                         &mut location,
                         &mut tags,
@@ -2460,10 +2474,13 @@ mod tests {
         ::init().unwrap();
 
         // Message without arguments
-        let eos_msg = Message::new_eos().build();
+        let eos_msg = Message::new_eos()
+            .seqnum(Seqnum(1))
+            .build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
-                assert!(eos_msg.0.get_structure().is_none());
+                assert_eq!(eos_msg.get_seqnum(), Seqnum(1));
+                assert!(eos_msg.get_structure().is_none());
             },
             _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
         }
@@ -2477,8 +2494,8 @@ mod tests {
         match buffering_msg.view() {
             MessageView::Buffering(buffering_msg) => {
                 assert_eq!(buffering_msg.get_percent(), 42);
-                assert!(buffering_msg.0.get_structure().is_some());
-                assert!(buffering_msg.0.get_structure().unwrap().has_field("extra-field"));
+                assert!(buffering_msg.get_structure().is_some());
+                assert!(buffering_msg.get_structure().unwrap().has_field("extra-field"));
             }
             _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
         }
