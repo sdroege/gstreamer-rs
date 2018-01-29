@@ -174,7 +174,7 @@ fn example_main() -> Result<(), Error> {
                             .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
-                            src: msg.get_src()
+                            src: err.get_src()
                                 .map(|s| s.get_path_string())
                                 .unwrap_or_else(|| String::from("None")),
                             error: err.get_error().description().into(),
@@ -186,7 +186,7 @@ fn example_main() -> Result<(), Error> {
                 #[cfg(not(feature = "v1_10"))]
                 {
                     Err(ErrorMessage {
-                        src: msg.get_src()
+                        src: err.get_src()
                             .map(|s| s.get_path_string())
                             .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().description().into(),
@@ -199,7 +199,7 @@ fn example_main() -> Result<(), Error> {
             MessageView::StateChanged(s) => {
                 println!(
                     "State changed from {:?}: {:?} -> {:?} ({:?})",
-                    msg.get_src().map(|s| s.get_path_string()),
+                    s.get_src().map(|s| s.get_path_string()),
                     s.get_old(),
                     s.get_current(),
                     s.get_pending()

@@ -71,7 +71,7 @@ fn example_main() -> Result<(), Error> {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
                 Err(ErrorMessage {
-                    src: msg.get_src()
+                    src: err.get_src()
                         .map(|s| s.get_path_string())
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
