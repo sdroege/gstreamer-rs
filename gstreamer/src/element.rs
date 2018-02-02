@@ -12,7 +12,7 @@ use glib;
 use glib::IsA;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
                       ToGlib, ToGlibPtr};
-use QueryRef;
+use Query;
 use Event;
 use Pad;
 use PadTemplate;
@@ -85,7 +85,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
 }
 
 pub trait ElementExtManual {
-    fn query(&self, query: &mut QueryRef) -> bool;
+    fn query(&self, query: &mut Query) -> bool;
 
     fn send_event(&self, event: Event) -> bool;
 
@@ -177,7 +177,7 @@ pub trait ElementExtManual {
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
-    fn query(&self, query: &mut QueryRef) -> bool {
+    fn query(&self, query: &mut Query) -> bool {
         unsafe {
             from_glib(ffi::gst_element_query(
                 self.to_glib_none().0,

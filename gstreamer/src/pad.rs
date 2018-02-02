@@ -17,7 +17,7 @@ use FormattedValue;
 use SpecificFormattedValue;
 use FlowReturn;
 use Query;
-use QueryRef;
+use QueryView;
 use Event;
 use StaticPadTemplate;
 use miniobject::MiniObject;
@@ -75,18 +75,18 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     }
 }
 
-pub struct PadProbeInfo<'a> {
+pub struct PadProbeInfo {
     pub mask: PadProbeType,
     pub id: PadProbeId,
     pub offset: u64,
     pub size: u32,
-    pub data: Option<PadProbeData<'a>>,
+    pub data: Option<PadProbeData>,
 }
 
-pub enum PadProbeData<'a> {
+pub enum PadProbeData {
     Buffer(Buffer),
     BufferList(BufferList),
-    Query(&'a mut QueryRef),
+    Query(QueryView),
     Event(Event),
     Unknown,
 }
@@ -116,15 +116,15 @@ pub trait PadExtManual {
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
     fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
 
-    fn peer_query(&self, query: &mut QueryRef) -> bool;
-    fn query(&self, query: &mut QueryRef) -> bool;
+    fn peer_query(&self, query: &mut Query) -> bool;
+    fn query(&self, query: &mut Query) -> bool;
     fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(
         &self,
         parent: Q,
-        query: &mut QueryRef,
+        query: &mut Query,
     ) -> bool;
-    fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
-    fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
+    fn proxy_query_caps(&self, query: &mut Query) -> bool;
+    fn proxy_query_accept_caps(&self, query: &mut Query) -> bool;
 
     fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
         &self,
@@ -183,7 +183,7 @@ pub trait PadExtManual {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, ::QueryView) -> bool + Send + Sync + 'static;
 
     fn set_unlink_function<F>(&self, func: F)
     where
@@ -311,7 +311,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query(&self, query: &mut QueryRef) -> bool {
+    fn query(&self, query: &mut Query) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_query(
                 self.to_glib_none().0,
@@ -320,7 +320,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn peer_query(&self, query: &mut QueryRef) -> bool {
+    fn peer_query(&self, query: &mut Query) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_peer_query(
                 self.to_glib_none().0,
@@ -332,7 +332,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(
         &self,
         parent: Q,
-        query: &mut QueryRef,
+        query: &mut Query,
     ) -> bool {
         skip_assert_initialized!();
         let parent = parent.into();
@@ -346,7 +346,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool {
+    fn proxy_query_accept_caps(&self, query: &mut Query) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_proxy_query_accept_caps(
                 self.to_glib_none().0,
@@ -355,7 +355,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn proxy_query_caps(&self, query: &mut QueryRef) -> bool {
+    fn proxy_query_caps(&self, query: &mut Query) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_proxy_query_accept_caps(
                 self.to_glib_none().0,
@@ -587,11 +587,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, ::QueryView) -> bool + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, ::QueryView) -> bool + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_query_function_full(
                 self.to_glib_none().0,
@@ -884,7 +884,7 @@ unsafe extern "C" fn trampoline_pad_probe(
                 )))
             } else if (*data).type_ == Query::static_type().to_glib() {
                 data_type = Some(Query::static_type());
-                Some(PadProbeData::Query(QueryRef::from_mut_ptr(
+                Some(PadProbeData::Query(Query::to_view(
                     data as *mut ffi::GstQuery,
                 )))
             } else if (*data).type_ == Event::static_type().to_glib() {
@@ -1113,7 +1113,7 @@ unsafe extern "C" fn trampoline_query_function(
 ) -> glib_ffi::gboolean {
     let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool
+    let func: &&(Fn(&Pad, &Option<::Object>, ::QueryView) -> bool
                          + Send
                          + Sync
                          + 'static) = transmute((*pad).querydata);
@@ -1121,7 +1121,7 @@ unsafe extern "C" fn trampoline_query_function(
     func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
-        ::QueryRef::from_mut_ptr(query),
+        ::Query::to_view(query),
     ).to_glib()
 }
 
