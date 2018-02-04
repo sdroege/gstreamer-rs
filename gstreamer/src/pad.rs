@@ -183,7 +183,7 @@ pub trait PadExtManual {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::QueryView) -> bool + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, &mut ::QueryView) -> bool + Send + Sync + 'static;
 
     fn set_unlink_function<F>(&self, func: F)
     where
@@ -587,11 +587,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::QueryView) -> bool + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, &mut ::QueryView) -> bool + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::QueryView) -> bool + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, &mut ::QueryView) -> bool + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_query_function_full(
                 self.to_glib_none().0,
@@ -884,9 +884,9 @@ unsafe extern "C" fn trampoline_pad_probe(
                 )))
             } else if (*data).type_ == Query::static_type().to_glib() {
                 data_type = Some(Query::static_type());
-                Some(PadProbeData::Query(Query::to_view(
-                    data as *mut ffi::GstQuery,
-                )))
+                Some(PadProbeData::Query(
+                    Query::from_glib_none(data as *mut ffi::GstQuery).into()
+                ))
             } else if (*data).type_ == Event::static_type().to_glib() {
                 data_type = Some(Event::static_type());
                 Some(PadProbeData::Event(from_glib_none(
@@ -1121,7 +1121,7 @@ unsafe extern "C" fn trampoline_query_function(
     func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
-        ::Query::to_view(query),
+        ::Query::from_glib_none(query).into(),
     ).to_glib()
 }
 
