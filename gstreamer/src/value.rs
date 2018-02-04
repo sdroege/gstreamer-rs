@@ -560,7 +560,7 @@ impl<'a> From<&'a [glib::SendValue]> for Array<'a> {
 
 impl<'a> FromValue<'a> for Array<'a> {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let arr = (*v.to_glib_none().0).data[0] as *const glib_ffi::GArray;
+        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib_ffi::GArray;
         if arr.is_null() {
             Array(Cow::Borrowed(&[]))
         } else {
@@ -631,7 +631,7 @@ impl<'a> From<&'a [glib::SendValue]> for List<'a> {
 
 impl<'a> FromValue<'a> for List<'a> {
     unsafe fn from_value(v: &'a Value) -> Self {
-        let arr = (*v.to_glib_none().0).data[0] as *const glib_ffi::GArray;
+        let arr = (*v.to_glib_none().0).data[0].v_pointer as *const glib_ffi::GArray;
         if arr.is_null() {
             List(Cow::Borrowed(&[]))
         } else {
