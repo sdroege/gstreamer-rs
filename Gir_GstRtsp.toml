@@ -1,0 +1,17 @@
+[options]
+girs_dir = "gir-files"
+library = "GstRtsp"
+version = "1.0"
+min_cfg_version = "1.0"
+target_path = "gstreamer-rtsp-sys"
+work_mode = "sys"
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gio"
+]
+
+[external_libraries]
+gstreamer="Gst"
+gstreamer_sdp="GstSdp"

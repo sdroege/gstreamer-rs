@@ -1,0 +1,55 @@
+[badges.travis-ci]
+branch = "master"
+repository = "sdroege/gstreamer-sys"
+
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+bitflags = "1.0"
+libc = "0.2"
+
+[dependencies.gio-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gstreamer-net-sys]
+path = "../gstreamer-net-sys"
+
+[dependencies.gstreamer-rtsp-sys]
+path = "../gstreamer-rtsp-sys"
+
+[dependencies.gstreamer-sdp-sys]
+path = "../gstreamer-sdp-sys"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+
+[features]
+dox = []
+v1_4 = []
+v1_6 = ["v1_4"]
+v1_8 = ["v1_6"]
+v1_10 = ["v1_8"]
+v1_12 = ["v1_10"]
+
+[lib]
+name = "gstreamer_rtsp_server_sys"
+
+[package]
+authors = ["Mathieu Duponchelle <mathieu@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgstrtspserver-1.0"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+links = "gstrtspserver-1.0"
+name = "gstreamer-rtsp-server-sys"
+readme = "README.md"
+repository = "https://github.com/sdroege/gstreamer-sys"
+version = "0.5.0"

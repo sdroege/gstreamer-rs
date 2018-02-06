@@ -1,0 +1,44 @@
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+bitflags = "1.0"
+libc = "0.2"
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+
+[features]
+dox = []
+v1_2 = []
+v1_4 = ["v1_2"]
+v1_6 = ["v1_4"]
+v1_8 = ["v1_4"]
+v1_8_1 = ["v1_8"]
+v1_10 = ["v1_8_1"]
+v1_12 = ["v1_10"]
+
+[lib]
+name = "gstreamer_sdp_sys"
+
+[package]
+build = "build.rs"
+links = "gstsdp-1.0"
+name = "gstreamer-sdp-sys"
+version = "0.5.0"
+authors = ["Mathieu Duponchelle <mathieu@centricular.com>"]
+description = "FFI bindings to libgstsdp-1.0"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+repository = "https://github.com/sdroege/gstreamer-sys"
+license = "MIT"
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-sys", branch = "master" }
