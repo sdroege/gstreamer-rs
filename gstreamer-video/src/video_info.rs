@@ -277,19 +277,19 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if let Some(multiview_mode) = self.multiview_mode {
-                let ptr = &mut info._gst_reserved as *mut _ as *mut i32;
+                let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
                 ptr::write(ptr.offset(0), multiview_mode.to_glib());
             }
 
             if let Some(multiview_flags) = self.multiview_flags {
-                let ptr = &mut info._gst_reserved as *mut _ as *mut u32;
+                let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut u32;
                 ptr::write(ptr.offset(1), multiview_flags.to_glib().bits());
             }
 
             #[cfg(any(feature = "v1_12", feature = "dox"))]
             {
                 if let Some(field_order) = self.field_order {
-                    let ptr = &mut info._gst_reserved as *mut _ as *mut i32;
+                    let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
                     ptr::write(ptr.offset(2), field_order.to_glib());
                 }
             }
@@ -513,14 +513,14 @@ impl VideoInfo {
 
     pub fn multiview_mode(&self) -> ::VideoMultiviewMode {
         unsafe {
-            let ptr = &self.0._gst_reserved as *const _ as *const i32;
+            let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
             from_glib(ptr::read(ptr.offset(0)))
         }
     }
 
     pub fn multiview_flags(&self) -> ::VideoMultiviewFlags {
         unsafe {
-            let ptr = &self.0._gst_reserved as *const _ as *const u32;
+            let ptr = &self.0.ABI._gst_reserved as *const _ as *const u32;
             from_glib(ffi::GstVideoMultiviewFlags::from_bits_truncate(ptr::read(
                 ptr.offset(1),
             )))
@@ -530,7 +530,7 @@ impl VideoInfo {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn field_order(&self) -> ::VideoFieldOrder {
         unsafe {
-            let ptr = &self.0._gst_reserved as *const _ as *const i32;
+            let ptr = &self.0.ABI._gst_reserved as *const _ as *const i32;
             from_glib(ptr::read(ptr.offset(2)))
         }
     }
