@@ -2360,8 +2360,8 @@ encoded form.</doc>
           </field>
         </record>
         <field name="padding" writable="1">
-          <array zero-terminated="0" c:type="void" fixed-size="20">
-            <type name="gpointer" c:type="void*"/>
+          <array zero-terminated="0" c:type="gpointer" fixed-size="20">
+            <type name="gpointer" c:type="gpointer"/>
           </array>
         </field>
       </union>
@@ -2497,8 +2497,8 @@ Decoders and encoders can set the downstream state, by using the
         <type name="Gst.Caps" c:type="GstCaps*"/>
       </field>
       <field name="padding" readable="0" private="1">
-        <array zero-terminated="0" c:type="void" fixed-size="19">
-          <type name="gpointer" c:type="void*"/>
+        <array zero-terminated="0" c:type="gpointer" fixed-size="19">
+          <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
       <method name="ref" c:identifier="gst_video_codec_state_ref">
@@ -4093,8 +4093,8 @@ handler with %GST_PAD_SET_ACCEPT_INTERSECT and
         <type name="VideoDecoderPrivate" c:type="GstVideoDecoderPrivate*"/>
       </field>
       <field name="padding" readable="0" private="1">
-        <array zero-terminated="0" c:type="void" fixed-size="20">
-          <type name="gpointer" c:type="void*"/>
+        <array zero-terminated="0" c:type="gpointer" fixed-size="20">
+          <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
     </class>
@@ -4396,8 +4396,8 @@ and likely as well.  If non-packetized input is supported or expected,
         </callback>
       </field>
       <field name="padding" readable="0" private="1">
-        <array zero-terminated="0" c:type="void" fixed-size="14">
-          <type name="gpointer" c:type="void*"/>
+        <array zero-terminated="0" c:type="gpointer" fixed-size="14">
+          <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
     </record>
@@ -5270,8 +5270,8 @@ from the next call to #gst_video_encoder_finish_frame().</doc>
         <type name="VideoEncoderPrivate" c:type="GstVideoEncoderPrivate*"/>
       </field>
       <field name="padding" readable="0" private="1">
-        <array zero-terminated="0" c:type="void" fixed-size="20">
-          <type name="gpointer" c:type="void*"/>
+        <array zero-terminated="0" c:type="gpointer" fixed-size="20">
+          <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
     </class>
