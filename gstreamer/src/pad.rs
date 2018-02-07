@@ -17,10 +17,11 @@ use FormattedValue;
 use SpecificFormattedValue;
 use FlowReturn;
 use Query;
-use QueryView;
+use QueryRc;
+use QueryWrapper;
 use Event;
 use StaticPadTemplate;
-use miniobject::MiniObject;
+use miniobject::*;
 
 use std::mem::transmute;
 use std::ptr;
@@ -86,7 +87,7 @@ pub struct PadProbeInfo {
 pub enum PadProbeData {
     Buffer(Buffer),
     BufferList(BufferList),
-    Query(QueryView),
+    Query(QueryWrapper),
     Event(Event),
     Unknown,
 }
@@ -183,7 +184,7 @@ pub trait PadExtManual {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &mut ::QueryView) -> bool + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, &mut ::QueryWrapper) -> bool + Send + Sync + 'static;
 
     fn set_unlink_function<F>(&self, func: F)
     where
@@ -587,11 +588,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &mut ::QueryView) -> bool + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, &mut ::QueryWrapper) -> bool + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, &mut ::QueryView) -> bool + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, &mut ::QueryWrapper) -> bool + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_query_function_full(
                 self.to_glib_none().0,
@@ -885,7 +886,7 @@ unsafe extern "C" fn trampoline_pad_probe(
             } else if (*data).type_ == Query::static_type().to_glib() {
                 data_type = Some(Query::static_type());
                 Some(PadProbeData::Query(
-                    Query::from_glib_none(data as *mut ffi::GstQuery).into()
+                    QueryRc::from_glib_full(data as *mut ffi::GstQuery).into()
                 ))
             } else if (*data).type_ == Event::static_type().to_glib() {
                 data_type = Some(Event::static_type());
@@ -1113,7 +1114,7 @@ unsafe extern "C" fn trampoline_query_function(
 ) -> glib_ffi::gboolean {
     let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::QueryView) -> bool
+    let func: &&(Fn(&Pad, &Option<::Object>, ::QueryWrapper) -> bool
                          + Send
                          + Sync
                          + 'static) = transmute((*pad).querydata);
@@ -1121,7 +1122,7 @@ unsafe extern "C" fn trampoline_query_function(
     func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
-        ::Query::from_glib_none(query).into(),
+        QueryRc::from_glib_full(query).into(),
     ).to_glib()
 }
 

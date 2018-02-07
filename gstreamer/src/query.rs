@@ -21,18 +21,56 @@ use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 
 #[repr(C)]
-pub struct QueryRef(ffi::GstQuery);
+pub struct Query(ffi::GstQuery);
 
-unsafe impl Send for QueryRef {}
-unsafe impl Sync for QueryRef {}
+unsafe impl Send for Query {}
+unsafe impl Sync for Query {}
 
-pub type Query = GstRc<QueryRef>;
+pub type QueryRc = GstRc<Query>;
 
-unsafe impl MiniObject for QueryRef {
+unsafe impl MiniObject for Query {
     type GstType = ffi::GstQuery;
 }
 
-impl GstRc<QueryRef> {
+impl Query {
+    pub fn get_structure(&self) -> Option<&StructureRef> {
+        unsafe {
+            let structure = ffi::gst_query_get_structure(self.as_mut_ptr());
+            if structure.is_null() {
+                None
+            } else {
+                Some(StructureRef::from_glib_borrow(structure))
+            }
+        }
+    }
+
+    pub fn get_mut_structure(&mut self) -> &mut StructureRef {
+        unsafe {
+            let structure = ffi::gst_query_writable_structure(self.as_mut_ptr());
+            StructureRef::from_glib_borrow_mut(structure)
+        }
+    }
+
+    pub fn is_downstream(&self) -> bool {
+        unsafe {
+            ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_DOWNSTREAM.bits()) != 0
+        }
+    }
+
+    pub fn is_upstream(&self) -> bool {
+        unsafe {
+            ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_UPSTREAM.bits()) != 0
+        }
+    }
+
+    pub fn is_serialized(&self) -> bool {
+        unsafe {
+            ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_SERIALIZED.bits()) != 0
+        }
+    }
+}
+
+impl Query {
     pub fn new_position(fmt: ::Format) -> Position {
         assert_initialized_main_thread!();
         Position(
@@ -152,159 +190,13 @@ impl GstRc<QueryRef> {
     }
 }
 
-impl From<QueryView> for Query {
-    fn from(view: QueryView) -> Self {
-        match view {
-            QueryView::Position(position) => position.into(),
-            QueryView::Duration(duration) => duration.into(),
-            QueryView::Latency(latency) => latency.into(),
-            QueryView::Jitter(jitter) => jitter.into(),
-            QueryView::Rate(rate) => rate.into(),
-            QueryView::Seeking(seeking) => seeking.into(),
-            QueryView::Segment(segment) => segment.into(),
-            QueryView::Convert(convert) => convert.into(),
-            QueryView::Formats(formats) => formats.into(),
-            QueryView::Buffering(buffering) => buffering.into(),
-            QueryView::Custom(custom) => custom.into(),
-            QueryView::Uri(uri) => uri.into(),
-            QueryView::Allocation(allocation) => allocation.into(),
-            QueryView::Scheduling(scheduling) => scheduling.into(),
-            QueryView::AcceptCaps(accept_caps) => accept_caps.into(),
-            QueryView::Caps(caps) => caps.into(),
-            QueryView::Drain(drain) => drain.into(),
-            QueryView::Context(context) => context.into(),
-            QueryView::Other(other) => other.into(),
-            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
-        }
-    }
-}
-
-impl<'a> From<&'a QueryView> for &'a Query {
-    fn from(view: &'a QueryView) -> Self {
-        match *view {
-            QueryView::Position(ref position) => position.into(),
-            QueryView::Duration(ref duration) => duration.into(),
-            QueryView::Latency(ref latency) => latency.into(),
-            QueryView::Jitter(ref jitter) => jitter.into(),
-            QueryView::Rate(ref rate) => rate.into(),
-            QueryView::Seeking(ref seeking) => seeking.into(),
-            QueryView::Segment(ref segment) => segment.into(),
-            QueryView::Convert(ref convert) => convert.into(),
-            QueryView::Formats(ref formats) => formats.into(),
-            QueryView::Buffering(ref buffering) => buffering.into(),
-            QueryView::Custom(ref custom) => custom.into(),
-            QueryView::Uri(ref uri) => uri.into(),
-            QueryView::Allocation(ref allocation) => allocation.into(),
-            QueryView::Scheduling(ref scheduling) => scheduling.into(),
-            QueryView::AcceptCaps(ref accept_caps) => accept_caps.into(),
-            QueryView::Caps(ref caps) => caps.into(),
-            QueryView::Drain(ref drain) => drain.into(),
-            QueryView::Context(ref context) => context.into(),
-            QueryView::Other(ref other) => other.into(),
-            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
-        }
-    }
-}
-
-impl<'a> From<&'a mut QueryView> for &'a Query {
-    fn from(view: &'a mut QueryView) -> Self {
-        match *view {
-            QueryView::Position(ref position) => position.into(),
-            QueryView::Duration(ref duration) => duration.into(),
-            QueryView::Latency(ref latency) => latency.into(),
-            QueryView::Jitter(ref jitter) => jitter.into(),
-            QueryView::Rate(ref rate) => rate.into(),
-            QueryView::Seeking(ref seeking) => seeking.into(),
-            QueryView::Segment(ref segment) => segment.into(),
-            QueryView::Convert(ref convert) => convert.into(),
-            QueryView::Formats(ref formats) => formats.into(),
-            QueryView::Buffering(ref buffering) => buffering.into(),
-            QueryView::Custom(ref custom) => custom.into(),
-            QueryView::Uri(ref uri) => uri.into(),
-            QueryView::Allocation(ref allocation) => allocation.into(),
-            QueryView::Scheduling(ref scheduling) => scheduling.into(),
-            QueryView::AcceptCaps(ref accept_caps) => accept_caps.into(),
-            QueryView::Caps(ref caps) => caps.into(),
-            QueryView::Drain(ref drain) => drain.into(),
-            QueryView::Context(ref context) => context.into(),
-            QueryView::Other(ref other) => other.into(),
-            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
-        }
-    }
-}
-
-impl<'a> From<&'a mut QueryView> for &'a mut Query {
-    fn from(view: &'a mut QueryView) -> Self {
-        match *view {
-            QueryView::Position(ref mut position) => position.into(),
-            QueryView::Duration(ref mut duration) => duration.into(),
-            QueryView::Latency(ref mut latency) => latency.into(),
-            QueryView::Jitter(ref mut jitter) => jitter.into(),
-            QueryView::Rate(ref mut rate) => rate.into(),
-            QueryView::Seeking(ref mut seeking) => seeking.into(),
-            QueryView::Segment(ref mut segment) => segment.into(),
-            QueryView::Convert(ref mut convert) => convert.into(),
-            QueryView::Formats(ref mut formats) => formats.into(),
-            QueryView::Buffering(ref mut buffering) => buffering.into(),
-            QueryView::Custom(ref mut custom) => custom.into(),
-            QueryView::Uri(ref mut uri) => uri.into(),
-            QueryView::Allocation(ref mut allocation) => allocation.into(),
-            QueryView::Scheduling(ref mut scheduling) => scheduling.into(),
-            QueryView::AcceptCaps(ref mut accept_caps) => accept_caps.into(),
-            QueryView::Caps(ref mut caps) => caps.into(),
-            QueryView::Drain(ref mut drain) => drain.into(),
-            QueryView::Context(ref mut context) => context.into(),
-            QueryView::Other(ref mut other) => other.into(),
-            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
-        }
-    }
-}
-
-impl QueryRef {
-    pub fn get_structure(&self) -> Option<&StructureRef> {
-        unsafe {
-            let structure = ffi::gst_query_get_structure(self.as_mut_ptr());
-            if structure.is_null() {
-                None
-            } else {
-                Some(StructureRef::from_glib_borrow(structure))
-            }
-        }
-    }
-
-    pub fn get_mut_structure(&mut self) -> &mut StructureRef {
-        unsafe {
-            let structure = ffi::gst_query_writable_structure(self.as_mut_ptr());
-            StructureRef::from_glib_borrow_mut(structure)
-        }
-    }
-
-    pub fn is_downstream(&self) -> bool {
-        unsafe {
-            ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_DOWNSTREAM.bits()) != 0
-        }
-    }
-
-    pub fn is_upstream(&self) -> bool {
-        unsafe {
-            ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_UPSTREAM.bits()) != 0
-        }
-    }
-
-    pub fn is_serialized(&self) -> bool {
-        unsafe {
-            ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_SERIALIZED.bits()) != 0
-        }
-    }
-}
-
-impl glib::types::StaticType for QueryRef {
+impl glib::types::StaticType for Query {
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_query_get_type()) }
     }
 }
 
-impl fmt::Debug for QueryRef {
+impl fmt::Debug for Query {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Query")
             .field("type", &unsafe {
@@ -316,13 +208,36 @@ impl fmt::Debug for QueryRef {
     }
 }
 
-impl ToOwned for QueryRef {
-    type Owned = GstRc<QueryRef>;
+impl From<QueryRc> for QueryWrapper {
+    fn from(query: QueryRc) -> Self {
+        QueryWrapper(query.into())
+    }
+}
 
-    fn to_owned(&self) -> GstRc<QueryRef> {
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
-                as *mut _)
+impl From<QueryRc> for QueryView {
+    fn from(query: QueryRc) -> Self {
+        let type_ = (query.0).type_;
+
+        match type_ {
+            ffi::GST_QUERY_POSITION => QueryView::Position(Position(query)),
+            ffi::GST_QUERY_DURATION => QueryView::Duration(Duration(query)),
+            ffi::GST_QUERY_LATENCY => QueryView::Latency(Latency(query)),
+            ffi::GST_QUERY_JITTER => QueryView::Jitter(Jitter(query)),
+            ffi::GST_QUERY_RATE => QueryView::Rate(Rate(query)),
+            ffi::GST_QUERY_SEEKING => QueryView::Seeking(Seeking(query)),
+            ffi::GST_QUERY_SEGMENT => QueryView::Segment(Segment(query)),
+            ffi::GST_QUERY_CONVERT => QueryView::Convert(Convert(query)),
+            ffi::GST_QUERY_FORMATS => QueryView::Formats(Formats(query)),
+            ffi::GST_QUERY_BUFFERING => QueryView::Buffering(Buffering(query)),
+            ffi::GST_QUERY_CUSTOM => QueryView::Custom(Custom(query)),
+            ffi::GST_QUERY_URI => QueryView::Uri(Uri(query)),
+            ffi::GST_QUERY_ALLOCATION => QueryView::Allocation(Allocation(query)),
+            ffi::GST_QUERY_SCHEDULING => QueryView::Scheduling(Scheduling(query)),
+            ffi::GST_QUERY_ACCEPT_CAPS => QueryView::AcceptCaps(AcceptCaps(query)),
+            ffi::GST_QUERY_CAPS => QueryView::Caps(Caps(query)),
+            ffi::GST_QUERY_DRAIN => QueryView::Drain(Drain(query)),
+            ffi::GST_QUERY_CONTEXT => QueryView::Context(Context(query)),
+            _ => QueryView::Other(Other(query)),
         }
     }
 }
@@ -351,38 +266,148 @@ pub enum QueryView {
     __NonExhaustive,
 }
 
-impl From<Query> for QueryView {
-    fn from(query: Query) -> Self {
-        let type_ = (query.0).type_;
+impl Deref for QueryView {
+    type Target = Query;
 
-        match type_ {
-            ffi::GST_QUERY_POSITION => QueryView::Position(Position(query)),
-            ffi::GST_QUERY_DURATION => QueryView::Duration(Duration(query)),
-            ffi::GST_QUERY_LATENCY => QueryView::Latency(Latency(query)),
-            ffi::GST_QUERY_JITTER => QueryView::Jitter(Jitter(query)),
-            ffi::GST_QUERY_RATE => QueryView::Rate(Rate(query)),
-            ffi::GST_QUERY_SEEKING => QueryView::Seeking(Seeking(query)),
-            ffi::GST_QUERY_SEGMENT => QueryView::Segment(Segment(query)),
-            ffi::GST_QUERY_CONVERT => QueryView::Convert(Convert(query)),
-            ffi::GST_QUERY_FORMATS => QueryView::Formats(Formats(query)),
-            ffi::GST_QUERY_BUFFERING => QueryView::Buffering(Buffering(query)),
-            ffi::GST_QUERY_CUSTOM => QueryView::Custom(Custom(query)),
-            ffi::GST_QUERY_URI => QueryView::Uri(Uri(query)),
-            ffi::GST_QUERY_ALLOCATION => QueryView::Allocation(Allocation(query)),
-            ffi::GST_QUERY_SCHEDULING => QueryView::Scheduling(Scheduling(query)),
-            ffi::GST_QUERY_ACCEPT_CAPS => QueryView::AcceptCaps(AcceptCaps(query)),
-            ffi::GST_QUERY_CAPS => QueryView::Caps(Caps(query)),
-            ffi::GST_QUERY_DRAIN => QueryView::Drain(Drain(query)),
-            ffi::GST_QUERY_CONTEXT => QueryView::Context(Context(query)),
-            _ => QueryView::Other(Other(query)),
+    fn deref(&self) -> &Self::Target {
+        match *self {
+            QueryView::Position(ref position) => position,
+            QueryView::Duration(ref duration) => duration,
+            QueryView::Latency(ref latency) => latency,
+            QueryView::Jitter(ref jitter) => jitter,
+            QueryView::Rate(ref rate) => rate,
+            QueryView::Seeking(ref seeking) => seeking,
+            QueryView::Segment(ref segment) => segment,
+            QueryView::Convert(ref convert) => convert,
+            QueryView::Formats(ref formats) => formats,
+            QueryView::Buffering(ref buffering) => buffering,
+            QueryView::Custom(ref custom) => custom,
+            QueryView::Uri(ref uri) => uri,
+            QueryView::Allocation(ref allocation) => allocation,
+            QueryView::Scheduling(ref scheduling) => scheduling,
+            QueryView::AcceptCaps(ref accept_caps) => accept_caps,
+            QueryView::Caps(ref caps) => caps,
+            QueryView::Drain(ref drain) => drain,
+            QueryView::Context(ref context) => context,
+            QueryView::Other(ref other) => other,
+            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
         }
     }
+}
+
+// Bypass `QueryRc`: if `QueryView` is a `&mut`, this means that
+// `Query` can also be accessed as `&mut` thanks to the controls
+// enforced by `QueryWrapper`
+impl DerefMut for QueryView {
+    fn deref_mut(&mut self) -> &mut Query {
+        match *self {
+            QueryView::Position(ref mut position) => position,
+            QueryView::Duration(ref mut duration) => duration,
+            QueryView::Latency(ref mut latency) => latency,
+            QueryView::Jitter(ref mut jitter) => jitter,
+            QueryView::Rate(ref mut rate) => rate,
+            QueryView::Seeking(ref mut seeking) => seeking,
+            QueryView::Segment(ref mut segment) => segment,
+            QueryView::Convert(ref mut convert) => convert,
+            QueryView::Formats(ref mut formats) => formats,
+            QueryView::Buffering(ref mut buffering) => buffering,
+            QueryView::Custom(ref mut custom) => custom,
+            QueryView::Uri(ref mut uri) => uri,
+            QueryView::Allocation(ref mut allocation) => allocation,
+            QueryView::Scheduling(ref mut scheduling) => scheduling,
+            QueryView::AcceptCaps(ref mut accept_caps) => accept_caps,
+            QueryView::Caps(ref mut caps) => caps,
+            QueryView::Drain(ref mut drain) => drain,
+            QueryView::Context(ref mut context) => context,
+            QueryView::Other(ref mut other) => other,
+            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
+        }
+    }
+}
+
+impl<'a> From<&'a QueryView> for &'a QueryRc {
+    fn from(view: &'a QueryView) -> Self {
+        match *view {
+            QueryView::Position(ref position) => &position.0,
+            QueryView::Duration(ref duration) => &duration.0,
+            QueryView::Latency(ref latency) => &latency.0,
+            QueryView::Jitter(ref jitter) => &jitter.0,
+            QueryView::Rate(ref rate) => &rate.0,
+            QueryView::Seeking(ref seeking) => &seeking.0,
+            QueryView::Segment(ref segment) => &segment.0,
+            QueryView::Convert(ref convert) => &convert.0,
+            QueryView::Formats(ref formats) => &formats.0,
+            QueryView::Buffering(ref buffering) => &buffering.0,
+            QueryView::Custom(ref custom) => &custom.0,
+            QueryView::Uri(ref uri) => &uri.0,
+            QueryView::Allocation(ref allocation) => &allocation.0,
+            QueryView::Scheduling(ref scheduling) => &scheduling.0,
+            QueryView::AcceptCaps(ref accept_caps) => &accept_caps.0,
+            QueryView::Caps(ref caps) => &caps.0,
+            QueryView::Drain(ref drain) => &drain.0,
+            QueryView::Context(ref context) => &context.0,
+            QueryView::Other(ref other) => &other.0,
+            _ => unimplemented!("Converting QueryView into Query for unknown query type"),
+        }
+    }
+}
+
+impl From<QueryView> for QueryWrapper {
+    fn from(query_view: QueryView) -> Self {
+        QueryWrapper(query_view)
+    }
+}
+
+pub struct QueryWrapper(QueryView);
+
+impl QueryWrapper {
+    pub fn get_view<'a>(&'a self) -> &'a QueryView {
+        &self.0
+    }
+
+    pub fn is_writable(&mut self) -> bool {
+        let query: &QueryRc = (&self.0).into();
+        query.is_writable()
+    }
+
+    pub fn try_view_mut<'a>(&'a mut self) -> Option<&'a mut QueryView> {
+        if self.is_writable() {
+            Some(&mut self.0)
+        } else {
+            None
+        }
+    }
+
+    pub fn try_query_mut<'a>(&'a mut self) -> Option<&'a mut Query> {
+        if self.is_writable() {
+            Some(&mut self.0)
+        } else {
+            None
+        }
+    }
+}
+
+impl Deref for QueryWrapper {
+    type Target = QueryView;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+// Don't implement `DerefMut` for `QueryWrapper`
+// It is not safe to `deref_mut` a `QueryWrapper` to a mutable `QueryView`
+// Use `try_view_mut` or `try_query_mut` which performs the appropriate checks
+
+pub trait QueryImpl<T> {
+    fn downcast_ref<'a>(&'a self) -> Option<&'a T>;
+    fn downcast_mut<'a>(&'a mut self) -> Option<&'a mut T>;
 }
 
 macro_rules! declare_concrete_query(
     ($name:ident) => {
         #[derive(Debug)]
-        pub struct $name(Query);
+        pub struct $name(QueryRc);
 
         impl $name {
             pub unsafe fn into_ptr(self) -> *mut ffi::GstQuery {
@@ -390,33 +415,35 @@ macro_rules! declare_concrete_query(
             }
         }
 
-        impl From<$name> for QueryView {
-            fn from(concrete: $name) -> QueryView {
-                QueryView::$name($name(concrete.0))
+        impl QueryImpl<$name> for QueryWrapper {
+            fn downcast_ref<'a>(&'a self) -> Option<&'a $name> {
+                match self.0 {
+                    QueryView::$name(ref concrete) => Some(concrete),
+                    _ => None,
+                }
+            }
+
+            fn downcast_mut<'a>(&'a mut self) -> Option<&'a mut $name> {
+                if self.is_writable() {
+                    match self.0 {
+                        QueryView::$name(ref mut concrete) => Some(concrete),
+                        _ => None,
+                    }
+                } else {
+                    None
+                }
             }
         }
 
-        impl From<$name> for Query {
-            fn from(concrete: $name) -> Query {
-                concrete.0
+        impl From<$name> for QueryWrapper {
+            fn from(concrete: $name) -> QueryWrapper {
+                QueryWrapper(QueryView::$name($name(concrete.0)))
             }
         }
 
-        impl<'a> From<&'a $name> for &'a Query {
-            fn from(concrete: &'a $name) -> &'a Query {
-                &concrete.0
-            }
-        }
-
-        impl<'a> From<&'a mut $name> for &'a Query {
-            fn from(concrete: &'a mut $name) -> &'a Query {
-                &concrete.0
-            }
-        }
-
-        impl<'a> From<&'a mut $name> for &'a mut Query {
-            fn from(concrete: &'a mut $name) -> &'a mut Query {
-                &mut concrete.0
+        impl<'a> From<&'a $name> for &'a QueryRc {
+            fn from(concrete: &'a $name) -> Self {
+                (&concrete.0).into()
             }
         }
 
@@ -430,7 +457,11 @@ macro_rules! declare_concrete_query(
 
         impl DerefMut for $name {
             fn deref_mut(&mut self) -> &mut Query {
-                &mut self.0
+                // Mutability is controlled by the borrow checker
+                // and external ref_count on the inner Query
+                // is checked by QueryWrapper
+                // si we can safely use make_mut here
+                self.0.make_mut()
             }
         }
     }
@@ -1132,112 +1163,116 @@ mod tests {
 
     #[test]
     fn test_writability() {
-        ::init().unwrap();
+        fn check_mut_view(view: &mut QueryView) {
+            match *view {
+                QueryView::Position(ref mut p) => {
+                    let pos = p.get_result();
+                    assert_eq!(pos.try_into_time(), Ok(2 * ::SECOND));
+                    p.set(3 * ::SECOND);
+                    let pos = p.get_result();
+                    assert_eq!(pos.try_into_time(), Ok(3 * ::SECOND));
+
+                    p.get_mut_structure()
+                        .set("check_mut", &true);
+                }
+                _ => panic!("Wrong concrete Query in Query"),
+            }
+        }
+
+        fn check_ref_view(view: &QueryView) {
+            match *view {
+                QueryView::Position(ref p) => {
+                    let pos = p.get_result();
+                    assert_eq!(pos.try_into_time(), Ok(3 * ::SECOND));
+                    unsafe { assert!(!p.as_mut_ptr().is_null()); }
+
+                    p.get_structure()
+                        .unwrap()
+                        .has_field("check_mut");
+                }
+                _ => panic!("Wrong concrete Query in Query"),
+            }
+        }
 
         let mut p = Query::new_position(::Format::Time);
-
         let fmt = p.get_format();
         assert_eq!(fmt, ::Format::Time);
 
         // deref
         assert!(!p.is_serialized());
 
-        let pos = p.get_result();
-        assert_eq!(pos.try_into_time(), Ok(::CLOCK_TIME_NONE));
         p.set(2 * ::SECOND);
 
-        let pos = p.get_result();
-        assert_eq!(pos.try_into_time(), Ok(2 * ::SECOND));
+        let mut wrapper: QueryWrapper = p.into();
+
+        {
+            let view = wrapper.try_view_mut().unwrap();
+            check_mut_view(view);
+        }
+
+        // `QueryWrapper` can `deref` to `&QueryView`
+        check_ref_view(&wrapper);
+
+        // or use explicite function
+        check_ref_view(wrapper.get_view());
     }
 
     #[test]
-    fn test_generic_ref() {
-        fn check_ref(q: &Query) {
-            assert!(q.is_writable());
+    fn test_deref() {
+        fn check_mut(q: &mut Query) {
             unsafe { assert!(!q.as_mut_ptr().is_null()); }
         }
 
-        let p = Query::new_position(::Format::Time);
-        check_ref(&p);
+        fn check_ref(q: &Query) {
+            unsafe { assert!(!q.as_mut_ptr().is_null()); }
+        }
+
+        let mut p = Query::new_position(::Format::Time);
+
+        // Concrete `Position` can deref as `&mut Query` here
+        // because its mutability is controlled by the borrow checker
+        check_mut(&mut p);
+
+        let mut wrapper: QueryWrapper = p.into();
+
+        {
+            // Attempt to get `Query` as `&mut` from `QueryWrapper`
+            let query_ref = wrapper.try_query_mut();
+            assert!(query_ref.is_some());
+            let mut query_ref = query_ref.unwrap();
+            check_mut(&mut query_ref);
+        }
+
+        {
+            // Wrong concrete type
+            let d: Option<&::query::Duration> = wrapper.downcast_ref();
+            assert!(d.is_none());
+        }
+
+        {
+            // Expected concrete type
+            let p: Option<&::query::Position> = wrapper.downcast_ref();
+            assert!(p.is_some());
+
+            // Deref `QueryWrapper` as `&Query`
+            check_ref(&wrapper);
+
+            // cannot borrow `wrapper` as mutable because it is also borrowed as immutable
+            //let p: Option<&mut ::query::Position> = wrapper.downcast_mut();
+        }
+
+        // Expected concrete type as `&mut`
+        let p: Option<&mut ::query::Position> = wrapper.downcast_mut();
+        assert!(p.is_some());
+        let mut p = p.unwrap();
+
+        check_mut(&mut p);
+
+        // cannot borrow `wrapper` as immutable because it is also borrowed as mutable
+        //check_ref(&wrapper);
 
         let fmt = p.get_format();
         assert_eq!(fmt, ::Format::Time);
-    }
-
-    #[test]
-    fn test_view_from_generic() {
-        fn check_generic(q: Query) {
-            match q.into() {
-                QueryView::Position(mut p) => {
-                    let pos = p.get_result();
-                    assert_eq!(pos.try_into_time(), Ok(2 * ::SECOND));
-                    p.set(3 * ::SECOND);
-                    let pos = p.get_result();
-                    assert_eq!(pos.try_into_time(), Ok(3 * ::SECOND));
-               }
-                _ => panic!("Wrong concrete Query in QueryView"),
-            }
-        }
-
-        let mut p = Query::new_position(::Format::Time);
-        p.set(2 * ::SECOND);
-
-        check_generic(p.into());
-    }
-
-    #[test]
-    fn test_view_from_concrete() {
-        fn check_view(view: &mut QueryView) {
-            use glib::ToSendValue;
-            match *view {
-                QueryView::Position(ref mut p) => {
-                    let pos = p.get_result();
-                    assert_eq!(pos.try_into_time(), Ok(2 * ::SECOND));
-                    p.set(3 * ::SECOND);
-               }
-                _ => panic!("Wrong concrete Query in QueryView"),
-            }
-
-            {
-                // ref mut QueryView to generic Query as ref
-                let query: &Query = view.into();
-                assert_eq!((query.0).type_, ffi::GST_QUERY_POSITION);
-            }
-
-            {
-                // ref mut QueryView to generic Query as ref mut
-                let query: &mut Query = view.into();
-                {
-                    let structure = query.get_mut().unwrap().get_mut_structure();
-                    structure.set_value("test", true.to_send_value());
-                }
-                unsafe { assert!(!query.as_mut_ptr().is_null()); }
-            }
-        }
-
-        // Concrete Position
-        let mut p = Query::new_position(::Format::Time);
-        p.set(2 * ::SECOND);
-
-        // Postion to QueryView
-        let mut view: QueryView = p.into();
-        check_view(&mut view);
-
-        match view {
-            QueryView::Position(ref p) => {
-                let pos = p.get_result();
-                assert_eq!(pos.try_into_time(), Ok(3 * ::SECOND));
-           }
-            _ => panic!("Wrong concrete Query in QueryView"),
-        }
-
-        // QueryView to generic Query
-        let query: &Query = &view.into();
-        assert_eq!((query.0).type_, ffi::GST_QUERY_POSITION);
-
-        // structure was updated in function check_view
-        let structure = query.get_structure().unwrap();
-        assert!(structure.has_field("test"));
     }
 
     #[test]

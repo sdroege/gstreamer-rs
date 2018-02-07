@@ -84,7 +84,7 @@ pub use sample::{Sample, SampleRef};
 pub mod bufferlist;
 pub use bufferlist::{BufferList, BufferListRef};
 pub mod query;
-pub use query::{Query, QueryView};
+pub use query::{Query, QueryRc, QueryView, QueryWrapper};
 pub mod event;
 pub use event::{Event, EventRef, EventView, GroupId, Seqnum, GROUP_ID_INVALID, SEQNUM_INVALID};
 pub mod context;
