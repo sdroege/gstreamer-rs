@@ -10,6 +10,7 @@ gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
+gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
@@ -27,6 +28,7 @@ gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
 tokio = ["gstreamer/futures", "futures", "tokio-core"]
+gst-rtsp-server = ["gstreamer-rtsp-server"]
 default-features = []
 v1_10 = ["gstreamer/v1_10"]
 

@@ -1,0 +1,80 @@
+[options]
+girs_dir = "gir-files"
+library = "GstRtsp"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-rtsp"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+doc_target_path = "docs/gstreamer-rtsp/docs.md"
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gio",
+    "GstSdp"
+]
+
+generate = [
+    "GstRtsp.RTSPAuthMethod",
+    "GstRtsp.RTSPEvent",
+    "GstRtsp.RTSPFamily",
+    "GstRtsp.RTSPHeaderField",
+    "GstRtsp.RTSPLowerTrans",
+    "GstRtsp.RTSPMethod",
+    "GstRtsp.RTSPMsgType",
+    "GstRtsp.RTSPProfile",
+    "GstRtsp.RTSPRangeUnit",
+    "GstRtsp.RTSPResult",
+    "GstRtsp.RTSPState",
+    "GstRtsp.RTSPStatusCode",
+    "GstRtsp.RTSPTimeType",
+    "GstRtsp.RTSPTransMode"
+]
+
+manual = [
+    "GLib.MainContext",
+]
+
+[[object]]
+name = "GstRtsp.RTSPExtension"
+status = "generate"
+
+    [[object.function]]
+    name = "get_transports"
+    ignore = true
+
+    [[object.function]]
+    name = "configure_stream"
+        [object.function.return]
+        bool_return_is_error = "Failed to configure stream"
+
+[[object]]
+name = "GstRtsp.RTSPUrl"
+status = "generate"
+concurrency = "send"
+
+    [[object.function]]
+    name = "get_port"
+    ignore = true
+
+[[object]]
+name = "GstRtsp.RTSPAuthParam"
+status = "generate"
+concurrency="send"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"

@@ -1,0 +1,213 @@
+[options]
+girs_dir = "gir-files"
+library = "GstRtspServer"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-rtsp-server"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+doc_target_path = "docs/gstreamer-rtsp-server/docs.md"
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gio",
+    "Gst",
+    "GstNet",
+    "GstRtsp",
+    "GstSDP"
+]
+
+generate = [
+    "GstRtspServer.RTSPAddressFlags",
+    "GstRtspServer.RTSPAddressPoolResult",
+    "GstRtspServer.RTSPClient",
+    "GstRtspServer.RTSPMediaFactory",
+    "GstRtspServer.RTSPMediaFactoryURI",
+    "GstRtspServer.RTSPMediaStatus",
+    "GstRtspServer.RTSPMountPoints",
+    "GstRtspServer.RTSPPublishClockMode",
+    "GstRtspServer.RTSPSession",
+    "GstRtspServer.RTSPSuspendMode",
+    "GstRtspServer.RTSPThreadPool",
+    "GstRtspServer.RTSPThreadType",
+    "GstRtspServer.RTSPTransportMode"
+]
+
+manual = [
+    "GLib.MainContext",
+    "GLib.IOCondition",
+    "GLib.Source",
+    "GLib.MainLoop",
+    "GLib.ThreadPool",
+    "GObject.Object",
+    "Gio.TlsCertificateFlags",
+    "Gio.TlsCertificate",
+    "Gio.Socket",
+    "Gio.Cancellable",
+    "Gio.SocketFamily",
+    "Gst.Element",
+    "Gst.State",
+    "Gst.Clock",
+    "Gst.Pipeline",
+    "Gst.Pad",
+    "Gst.Bin",
+    "Gst.FlowReturn",
+    "GstRtsp.RTSPAuthMethod",
+    "GstRtsp.RTSPUrl",
+    "GstRtsp.RTSPResult",
+    "GstRtsp.RTSPStatusCode",
+    "GstRtsp.RTSPRangeUnit",
+    "GstRtsp.RTSPProfile",
+    "GstRtsp.RTSPLowerTrans"
+]
+
+[[object]]
+name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
+name = "GstRtspServer.RTSPServer"
+status = "generate"
+
+    [[object.function]]
+    name = "attach"
+    ignore = true
+
+[[object]]
+name = "GstRtspServer.RTSPStream"
+status = "generate"
+
+    [[object.function]]
+    name = "query_position"
+    ignore = true
+    
+    [[object.function]]
+    name = "query_stop"
+    ignore = true
+
+    [[object.function]]
+    name = "add_transport"
+        [object.function.return]
+        bool_return_is_error = "Failed to add transport"
+
+    [[object.function]]
+    name = "remove_transport"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove transport"
+
+    [[object.function]]
+    name = "join_bin"
+        [object.function.return]
+        bool_return_is_error = "Failed to join bin"
+
+    [[object.function]]
+    name = "leave_bin"
+        [object.function.return]
+        bool_return_is_error = "Failed to leave bin"
+
+[[object]]
+name = "GstRtspServer.RTSPAddress"
+status = "generate"
+concurrency = "send"
+
+[[object]]
+name = "GstRtspServer.RTSPStreamTransport"
+status = "generate"
+concurrency = "none"
+
+    [[object.function]]
+    name = "send_rtcp"
+        [object.function.return]
+        bool_return_is_error = "Failed to send rtcp"
+
+    [[object.function]]
+    name = "send_rtp"
+        [object.function.return]
+        bool_return_is_error = "Failed to send rtp"
+
+    [[object.function]]
+    name = "set_active"
+        [object.function.return]
+        bool_return_is_error = "Failed to set active"
+
+[[object]]
+name = "GstRtspServer.RTSPAddressPool"
+status = "generate"
+
+    [[object.function]]
+    name = "add_range"
+        [object.function.return]
+        bool_return_is_error = "Failed to add address range"
+
+    [[object.function]]
+    name = "reserve_address"
+    ignore = true
+
+[[object]]
+name = "GstRtspServer.RTSPMedia"
+status = "generate"
+
+    [[object.function]]
+    name = "suspend"
+        [object.function.return]
+        bool_return_is_error = "Failed to suspend media"
+
+    [[object.function]]
+    name = "unprepare"
+        [object.function.return]
+        bool_return_is_error = "Failed to unprepare media"
+
+    [[object.function]]
+    name = "unsuspend"
+        [object.function.return]
+        bool_return_is_error = "Failed to unsuspend media"
+
+[[object]]
+name = "GstRtspServer.RTSPSessionMedia"
+status = "generate"
+
+    [[object.function]]
+    name = "set_state"
+        [object.function.return]
+        bool_return_is_error = "Failed to set state of session media"
+
+[[object]]
+name = "GstRtspServer.RTSPSessionPool"
+status = "generate"
+
+    [[object.function]]
+    name = "remove"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove session from pool"
+
+[[object]]
+name="GstRtspServer.RTSPAuth"
+status="generate"
+
+    [[object.function]]
+    name = "make_basic"
+        [object.function.return]
+	nullable = false

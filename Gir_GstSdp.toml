@@ -1,0 +1,40 @@
+[options]
+girs_dir = "gir-files"
+library = "GstSdp"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-sdp"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+doc_target_path = "docs/gstreamer-sdp/docs.md"
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstSdp.MIKEYCacheType",
+    "GstSdp.MIKEYEncAlg",
+    "GstSdp.MIKEYKVType",
+    "GstSdp.MIKEYKeyDataType",
+    "GstSdp.MIKEYMacAlg",
+    "GstSdp.MIKEYMapType",
+    "GstSdp.MIKEYPRFFunc",
+    "GstSdp.MIKEYPayloadType",
+    "GstSdp.MIKEYSecProto",
+    "GstSdp.MIKEYSecSRTP",
+    "GstSdp.MIKEYTSType",
+    "GstSdp.MIKEYType",
+    "GstSdp.SDPResult"
+]
+
+manual = [
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
