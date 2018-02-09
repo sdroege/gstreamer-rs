@@ -9,5 +9,7 @@ work_mode = "sys"
 external_libraries = [
     "GLib",
     "GObject",
-    "Gst",
 ]
+
+[external_libraries]
+gstreamer="Gst"
