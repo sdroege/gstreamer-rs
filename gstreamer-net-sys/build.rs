@@ -15,7 +15,7 @@ fn main() {
 
 fn find() -> Result<(), Error> {
     let package_name = "gstreamer-net-1.0";
-    let shared_libs = ["gstreamer-net-1.0"];
+    let shared_libs = ["gstnet-1.0"];
     let version = if cfg!(feature = "v1_12") {
         "1.12"
     } else if cfg!(feature = "v1_10") {
