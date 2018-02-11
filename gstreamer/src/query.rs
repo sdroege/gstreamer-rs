@@ -272,6 +272,14 @@ impl fmt::Debug for QueryRef {
     }
 }
 
+impl Drop for QueryRef {
+    fn drop(&mut self) {
+        unsafe {
+            ffi::gst_mini_object_unref(self.as_mut_ptr() as *mut ffi::GstMiniObject);
+        }
+    }
+}
+
 #[derive(Debug)]
 pub enum QueryView {
     Position(Position),
