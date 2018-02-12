@@ -45,6 +45,9 @@ pub use functions::*;
 mod adapter;
 mod flow_combiner;
 pub use flow_combiner::*;
+mod base_src;
+mod base_sink;
+mod base_transform;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -53,4 +56,9 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
+    pub use base_src::BaseSrcExtManual;
+    pub use base_sink::BaseSinkExtManual;
+    pub use base_transform::BaseTransformExtManual;
 }
+
+mod utils;
