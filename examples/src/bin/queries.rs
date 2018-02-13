@@ -30,7 +30,7 @@ fn example_main() {
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
         //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
         let pos = {
-            let mut q = gst::QueryRef::new_position(gst::Format::Time);
+            let mut q = gst::Query::new_position(gst::Format::Time);
             if pipeline.query(&mut q) {
                 Some(q.get_result())
             } else {
@@ -40,7 +40,7 @@ fn example_main() {
             .unwrap();
 
         let dur = {
-            let mut q = gst::QueryRef::new_duration(gst::Format::Time);
+            let mut q = gst::Query::new_duration(gst::Format::Time);
             if pipeline.query(&mut q) {
                 Some(q.get_result())
             } else {
