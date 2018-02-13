@@ -8,19 +8,6 @@ basic authentication
 <!-- enum RTSPAuthMethod::variant Digest -->
 digest authentication
 <!-- struct RTSPAuthParam -->
-<!-- struct RTSPExtension -->
-This interface is implemented e.g. by the Windows Media Streaming RTSP
- exentension (rtspwms) and the RealMedia RTSP extension (rtspreal).
-
-# Implements
-
-[`RTSPExtensionExt`](trait.RTSPExtensionExt.html)
-<!-- trait RTSPExtensionExt -->
-Trait containing all `RTSPExtension` methods.
-
-# Implementors
-
-[`RTSPExtension`](struct.RTSPExtension.html)
 <!-- enum RTSPFamily -->
 The possible network families.
 <!-- enum RTSPFamily::variant None -->

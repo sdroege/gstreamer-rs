@@ -54,9 +54,13 @@ pub use auto::*;
 
 mod r_t_s_p_server;
 mod r_t_s_p_address_pool;
+mod r_t_s_p_client;
+mod r_t_s_p_session_pool;
 
 pub use r_t_s_p_server::RTSPServerExtManual;
 pub use r_t_s_p_address_pool::RTSPAddressPoolExtManual;
+pub use r_t_s_p_client::RTSPClientExtManual;
+pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -68,4 +72,6 @@ pub mod prelude {
 
     pub use r_t_s_p_server::RTSPServerExtManual;
     pub use r_t_s_p_address_pool::RTSPAddressPoolExtManual;
+    pub use r_t_s_p_client::RTSPClientExtManual;
+    pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
 }

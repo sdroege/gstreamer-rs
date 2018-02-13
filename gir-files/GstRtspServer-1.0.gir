@@ -3507,7 +3507,10 @@ gst_rtsp_media_prepare().</doc>
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="clock" transfer-ownership="none">
+          <parameter name="clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">#GstClock to be used</doc>
             <type name="Gst.Clock" c:type="GstClock*"/>
           </parameter>
@@ -4785,7 +4788,10 @@ of all medias created from this factory.</doc>
             <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
             <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
           </instance-parameter>
-          <parameter name="clock" transfer-ownership="none">
+          <parameter name="clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the clock to be used by the media factory</doc>
             <type name="Gst.Clock" c:type="GstClock*"/>
           </parameter>
@@ -7017,7 +7023,7 @@ for more than their timeout.</doc>
               c:identifier="gst_rtsp_session_pool_create_watch">
         <doc xml:space="preserve">Create a #GSource that will be dispatched when the session should be cleaned
 up.</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">a #GSource</doc>
           <type name="GLib.Source" c:type="GSource*"/>
         </return-value>
@@ -7950,7 +7956,7 @@ the RTP parts of the pipeline and not the RTCP parts.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">A #GstClockTime to set the position on</doc>
+            <doc xml:space="preserve">current position of a #GstRTSPStream</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
         </parameters>
@@ -7971,7 +7977,7 @@ the RTP parts of the pipeline and not the RTCP parts.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">a #GstClockTime to set the stop on</doc>
+            <doc xml:space="preserve">current stop of a #GstRTSPStream</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
         </parameters>

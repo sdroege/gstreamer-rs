@@ -22,7 +22,6 @@ external_libraries = [
 generate = [
     "GstRtspServer.RTSPAddressFlags",
     "GstRtspServer.RTSPAddressPoolResult",
-    "GstRtspServer.RTSPClient",
     "GstRtspServer.RTSPMediaFactory",
     "GstRtspServer.RTSPMediaFactoryURI",
     "GstRtspServer.RTSPMediaStatus",
@@ -90,6 +89,14 @@ conversion_type = "scalar"
 
 [[object]]
 name = "GstRtspServer.RTSPServer"
+status = "generate"
+
+    [[object.function]]
+    name = "attach"
+    ignore = true
+
+[[object]]
+name = "GstRtspServer.RTSPClient"
 status = "generate"
 
     [[object.function]]
@@ -202,6 +209,11 @@ status = "generate"
     name = "remove"
         [object.function.return]
         bool_return_is_error = "Failed to remove session from pool"
+
+    [[object.function]]
+    name = "create_watch"
+    # GSource return
+    ignore = true
 
 [[object]]
 name="GstRtspServer.RTSPAuth"

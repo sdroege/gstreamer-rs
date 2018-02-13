@@ -38,19 +38,6 @@ manual = [
 ]
 
 [[object]]
-name = "GstRtsp.RTSPExtension"
-status = "generate"
-
-    [[object.function]]
-    name = "get_transports"
-    ignore = true
-
-    [[object.function]]
-    name = "configure_stream"
-        [object.function.return]
-        bool_return_is_error = "Failed to configure stream"
-
-[[object]]
 name = "GstRtsp.RTSPUrl"
 status = "generate"
 concurrency = "send"
