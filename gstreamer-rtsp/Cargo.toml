@@ -1,0 +1,42 @@
+[package]
+name = "gstreamer-rtsp"
+version = "0.11.0"
+authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Sebastian Dröge <sebastian@centricular.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer Rtsp library"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+homepage = "https://gstreamer.freedesktop.org"
+documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer_rtsp"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+build = "build.rs"
+
+[dependencies]
+bitflags = "1.0"
+libc = "0.2"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gio-sys = { git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-rtsp-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-sdp-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gio = { git = "https://github.com/gtk-rs/gio" }
+gstreamer = { path = "../gstreamer" }
+gstreamer-sdp = { path = "../gstreamer-sdp" }
+
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
+
+[features]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-rtsp-sys/v1_10", "gstreamer-sdp-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-rtsp-sys/v1_12", "gstreamer-sdp-sys/v1_12", "v1_10"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
+dox = ["gstreamer-rtsp-sys/dox", "glib/dox", "gstreamer/dox"]
+default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }

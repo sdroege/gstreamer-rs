@@ -1,0 +1,44 @@
+[package]
+name = "gstreamer-rtsp-server"
+version = "0.11.0"
+authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Sebastian Dröge <sebastian@centricular.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer RTSP Server library"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+homepage = "https://gstreamer.freedesktop.org"
+documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer_rtsp_server"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+build = "build.rs"
+
+[dependencies]
+bitflags = "1.0"
+libc = "0.2"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gio-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-rtsp-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-net-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gio = { git = "https://github.com/gtk-rs/gio" }
+gstreamer = { path = "../gstreamer" }
+gstreamer-rtsp = { path = "../gstreamer-rtsp" }
+gstreamer-net = { path = "../gstreamer-net" }
+
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
+
+[features]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-rtsp-sys/v1_10", "gstreamer-net-sys/v1_10", "gstreamer-rtsp-server-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-rtsp-sys/v1_12", "gstreamer-net-sys/v1_12", "gstreamer-rtsp-server-sys/v1_12", "v1_10"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
+dox = ["gstreamer-rtsp-server-sys/dox", "glib/dox", "gstreamer/dox"]
+default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
