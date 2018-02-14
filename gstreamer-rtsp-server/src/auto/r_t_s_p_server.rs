@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files @ ???)
 // DO NOT EDIT
 
+use Error;
 use RTSPAuth;
 use RTSPClient;
 use RTSPMountPoints;
@@ -58,9 +59,9 @@ unsafe impl Sync for RTSPServer {}
 pub trait RTSPServerExt {
     //fn client_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPServerClientFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPClient>;
 
-    //fn create_socket<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P, error: /*Ignored*/Option<Error>) -> Option<gio::Socket>;
+    fn create_socket<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P) -> Result<gio::Socket, Error>;
 
-    //fn create_source<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P, error: /*Ignored*/Option<Error>) -> Option<glib::Source>;
+    fn create_source<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P) -> Result<glib::Source, Error>;
 
     fn get_address(&self) -> Option<String>;
 
@@ -114,13 +115,25 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     //    unsafe { TODO: call ffi::gst_rtsp_server_client_filter() }
     //}
 
-    //fn create_socket<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P, error: /*Ignored*/Option<Error>) -> Option<gio::Socket> {
-    //    unsafe { TODO: call ffi::gst_rtsp_server_create_socket() }
-    //}
+    fn create_socket<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P) -> Result<gio::Socket, Error> {
+        let cancellable = cancellable.into();
+        let cancellable = cancellable.to_glib_none();
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ffi::gst_rtsp_server_create_socket(self.to_glib_none().0, cancellable.0, &mut error);
+            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+        }
+    }
 
-    //fn create_source<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P, error: /*Ignored*/Option<Error>) -> Option<glib::Source> {
-    //    unsafe { TODO: call ffi::gst_rtsp_server_create_source() }
-    //}
+    fn create_source<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P) -> Result<glib::Source, Error> {
+        let cancellable = cancellable.into();
+        let cancellable = cancellable.to_glib_none();
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ffi::gst_rtsp_server_create_source(self.to_glib_none().0, cancellable.0, &mut error);
+            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+        }
+    }
 
     fn get_address(&self) -> Option<String> {
         unsafe {
