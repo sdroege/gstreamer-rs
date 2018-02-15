@@ -25,19 +25,14 @@ fn example_main() {
 
     let pipeline_clone = pipeline.clone();
     glib::timeout_add_seconds(1, move || {
-        use gst::QueryView;
-
         let pipeline = &pipeline_clone;
 
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
         //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
         let pos = {
             let mut q = gst::Query::new_position(gst::Format::Time);
-            if pipeline.query(q.get_mut().unwrap()) {
-                match q.view() {
-                    QueryView::Position(ref p) => Some(p.get_result()),
-                    _ => None,
-                }
+            if pipeline.query(&mut q) {
+                Some(q.get_result())
             } else {
                 None
             }
@@ -46,11 +41,8 @@ fn example_main() {
 
         let dur = {
             let mut q = gst::Query::new_duration(gst::Format::Time);
-            if pipeline.query(q.get_mut().unwrap()) {
-                match q.view() {
-                    QueryView::Duration(ref p) => Some(p.get_result()),
-                    _ => None,
-                }
+            if pipeline.query(&mut q) {
+                Some(q.get_result())
             } else {
                 None
             }
