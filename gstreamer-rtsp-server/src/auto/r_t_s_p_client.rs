@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use RTSPAuth;
+use RTSPContext;
 use RTSPMountPoints;
 use RTSPSession;
 use RTSPSessionPool;
@@ -18,6 +19,10 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+use gst_rtsp;
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+use gst_rtsp_ffi;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -84,65 +89,65 @@ pub trait RTSPClientExt {
 
     fn set_property_drop_backlog(&self, drop_backlog: bool);
 
-    //fn connect_announce_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     //fn connect_check_requirements<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     fn connect_closed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_describe_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_describe_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_get_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_get_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_handle_response<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_handle_response<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_new_session<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_options_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_options_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_pause_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_pause_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_play_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_play_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_announce_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_announce_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_describe_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_describe_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_get_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_get_parameter_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_options_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_options_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_pause_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_pause_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_play_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_play_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_record_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_record_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_set_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_set_parameter_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_setup_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_setup_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_teardown_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_teardown_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_record_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_record_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     //fn connect_send_message<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_set_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_set_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_setup_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_setup_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //fn connect_teardown_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_teardown_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_drop_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -252,12 +257,15 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
         }
     }
 
-    //fn connect_announce_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "announce-request",
+                transmute(announce_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     //fn connect_check_requirements<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
     //    Empty ctype arr: *.CArray TypeId { ns_id: 0, id: 28 }
     //}
 
@@ -269,17 +277,29 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
         }
     }
 
-    //fn connect_describe_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_describe_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "describe-request",
+                transmute(describe_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_get_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_get_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "get-parameter-request",
+                transmute(get_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_handle_response<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_handle_response<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "handle-response",
+                transmute(handle_response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     fn connect_new_session<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
@@ -289,87 +309,155 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
         }
     }
 
-    //fn connect_options_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_options_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "options-request",
+                transmute(options_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_pause_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_pause_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pause-request",
+                transmute(pause_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_play_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_play_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "play-request",
+                transmute(play_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_announce_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_announce_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-announce-request",
+                transmute(pre_announce_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_describe_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_describe_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-describe-request",
+                transmute(pre_describe_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_get_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_get_parameter_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-get-parameter-request",
+                transmute(pre_get_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_options_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_options_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-options-request",
+                transmute(pre_options_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_pause_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_pause_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-pause-request",
+                transmute(pre_pause_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_play_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_play_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-play-request",
+                transmute(pre_play_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_record_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_record_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-record-request",
+                transmute(pre_record_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_set_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_set_parameter_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-set-parameter-request",
+                transmute(pre_set_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_setup_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_setup_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-setup-request",
+                transmute(pre_setup_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //#[cfg(any(feature = "v1_12", feature = "dox"))]
-    //fn connect_pre_teardown_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    fn connect_pre_teardown_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "pre-teardown-request",
+                transmute(pre_teardown_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_record_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_record_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "record-request",
+                transmute(record_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     //fn connect_send_message<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored message: GstRtsp.RTSPMessage
     //}
 
-    //fn connect_set_parameter_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_set_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "set-parameter-request",
+                transmute(set_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_setup_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_setup_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "setup-request",
+                transmute(setup_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_teardown_request<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored ctx: GstRtspServer.RTSPContext
-    //}
+    fn connect_teardown_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "teardown-request",
+                transmute(teardown_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     fn connect_property_drop_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
@@ -396,6 +484,13 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     }
 }
 
+unsafe extern "C" fn announce_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
 unsafe extern "C" fn closed_trampoline<P>(this: *mut ffi::GstRTSPClient, f: glib_ffi::gpointer)
 where P: IsA<RTSPClient> {
     callback_guard!();
@@ -403,11 +498,161 @@ where P: IsA<RTSPClient> {
     f(&RTSPClient::from_glib_borrow(this).downcast_unchecked())
 }
 
+unsafe extern "C" fn describe_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn get_parameter_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn handle_response_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
 unsafe extern "C" fn new_session_trampoline<P>(this: *mut ffi::GstRTSPClient, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
 where P: IsA<RTSPClient> {
     callback_guard!();
     let f: &&(Fn(&P, &RTSPSession) + Send + Sync + 'static) = transmute(f);
     f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
+}
+
+unsafe extern "C" fn options_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn pause_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn play_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_announce_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_describe_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_get_parameter_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_options_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_pause_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_play_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_record_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_set_parameter_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_setup_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+unsafe extern "C" fn pre_teardown_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx)).to_glib()
+}
+
+unsafe extern "C" fn record_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn set_parameter_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn setup_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
+}
+
+unsafe extern "C" fn teardown_request_trampoline<P>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+where P: IsA<RTSPClient> {
+    callback_guard!();
+    let f: &&(Fn(&P, &RTSPContext) + Send + Sync + 'static) = transmute(f);
+    f(&RTSPClient::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(ctx))
 }
 
 unsafe extern "C" fn notify_drop_backlog_trampoline<P>(this: *mut ffi::GstRTSPClient, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)

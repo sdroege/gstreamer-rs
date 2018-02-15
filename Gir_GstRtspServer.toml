@@ -84,6 +84,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "GstRtspServer.RTSPContext"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"

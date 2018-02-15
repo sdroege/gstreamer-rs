@@ -52,7 +52,7 @@ unsafe impl Sync for RTSPThreadPool {}
 pub trait RTSPThreadPoolExt {
     fn get_max_threads(&self) -> i32;
 
-    //fn get_thread(&self, type_: RTSPThreadType, ctx: /*Ignored*/&mut RTSPContext) -> /*Ignored*/Option<RTSPThread>;
+    //fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> /*Ignored*/Option<RTSPThread>;
 
     fn set_max_threads(&self, max_threads: i32);
 
@@ -66,7 +66,7 @@ impl<O: IsA<RTSPThreadPool> + IsA<glib::object::Object>> RTSPThreadPoolExt for O
         }
     }
 
-    //fn get_thread(&self, type_: RTSPThreadType, ctx: /*Ignored*/&mut RTSPContext) -> /*Ignored*/Option<RTSPThread> {
+    //fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> /*Ignored*/Option<RTSPThread> {
     //    unsafe { TODO: call ffi::gst_rtsp_thread_pool_get_thread() }
     //}
 
