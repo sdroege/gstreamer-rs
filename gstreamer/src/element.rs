@@ -20,7 +20,6 @@ use Format;
 use GenericFormattedValue;
 use FormattedValue;
 use SpecificFormattedValue;
-use miniobject::MiniObject;
 
 use std::ffi::CStr;
 use std::mem;
