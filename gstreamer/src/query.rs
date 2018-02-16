@@ -33,46 +33,46 @@ unsafe impl MiniObject for QueryRef {
 }
 
 impl GstRc<QueryRef> {
-    pub fn new_position(fmt: ::Format) -> Position<Self> {
+    pub fn new_position(fmt: ::Format) -> PositionImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Position::<Self>(
+            PositionImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_position(fmt.to_glib()))
             )
         }
     }
 
-    pub fn new_duration(fmt: ::Format) -> Duration<Self> {
+    pub fn new_duration(fmt: ::Format) -> DurationImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Duration::<Self>(
+            DurationImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_duration(fmt.to_glib()))
             )
         }
     }
 
-    pub fn new_latency() -> Latency<Self> {
+    pub fn new_latency() -> LatencyImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Latency::<Self>(
+            LatencyImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_latency())
             )
         }
     }
 
-    pub fn new_seeking(fmt: ::Format) -> Seeking<Self> {
+    pub fn new_seeking(fmt: ::Format) -> SeekingImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Seeking::<Self>(
+            SeekingImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_seeking(fmt.to_glib()))
             )
         }
     }
 
-    pub fn new_segment(fmt: ::Format) -> Segment<Self> {
+    pub fn new_segment(fmt: ::Format) -> SegmentImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Segment::<Self>(
+            SegmentImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_segment(fmt.to_glib()))
             )
         }
@@ -81,11 +81,11 @@ impl GstRc<QueryRef> {
     pub fn new_convert<V: Into<GenericFormattedValue>>(
         value: V,
         dest_fmt: ::Format
-    ) -> Convert<Self> {
+    ) -> ConvertImpl<Self> {
         assert_initialized_main_thread!();
         let value = value.into();
         unsafe {
-            Convert::<Self>(
+            ConvertImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_convert(
                     value.get_format().to_glib(),
                     value.get_value(),
@@ -95,28 +95,28 @@ impl GstRc<QueryRef> {
         }
     }
 
-    pub fn new_formats() -> Formats<Self> {
+    pub fn new_formats() -> FormatsImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Formats::<Self>(
+            FormatsImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_formats())
             )
         }
     }
 
-    pub fn new_buffering(fmt: ::Format) -> Buffering<Self> {
+    pub fn new_buffering(fmt: ::Format) -> BufferingImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Buffering::<Self>(
+            BufferingImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_buffering(fmt.to_glib()))
             )
         }
     }
 
-    pub fn new_custom(structure: ::Structure) -> Custom<Self> {
+    pub fn new_custom(structure: ::Structure) -> CustomImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Custom::<Self>(
+            CustomImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_custom(
                     ffi::GST_QUERY_CUSTOM,
                     structure.into_ptr(),
@@ -125,56 +125,56 @@ impl GstRc<QueryRef> {
         }
     }
 
-    pub fn new_uri() -> Uri<Self> {
+    pub fn new_uri() -> UriImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Uri::<Self>(
+            UriImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_uri())
             )
         }
     }
 
-    pub fn new_scheduling() -> Scheduling<Self> {
+    pub fn new_scheduling() -> SchedulingImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Scheduling::<Self>(
+            SchedulingImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_scheduling())
             )
         }
     }
 
-    pub fn new_accept_caps(caps: &::Caps) -> AcceptCaps<Self> {
+    pub fn new_accept_caps(caps: &::Caps) -> AcceptCapsImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            AcceptCaps::<Self>(
+            AcceptCapsImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_accept_caps(caps.as_mut_ptr()))
             )
         }
     }
 
-    pub fn new_caps<'a, P: Into<Option<&'a ::Caps>>>(filter: P) -> Caps<Self> {
+    pub fn new_caps<'a, P: Into<Option<&'a ::Caps>>>(filter: P) -> CapsImpl<Self> {
         assert_initialized_main_thread!();
         let filter = filter.into();
         unsafe {
-            Caps::<Self>(
+            CapsImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_caps(filter.to_glib_none().0))
             )
         }
     }
 
-    pub fn new_drain() -> Drain<Self> {
+    pub fn new_drain() -> DrainImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Drain::<Self>(
+            DrainImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_drain())
             )
         }
     }
 
-    pub fn new_context(context_type: &str) -> Context<Self> {
+    pub fn new_context(context_type: &str) -> ContextImpl<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            Context::<Self>(
+            ContextImpl::<Self>(
                 from_glib_full(ffi::gst_query_new_context(context_type.to_glib_none().0))
             )
         }
@@ -222,25 +222,25 @@ impl QueryRef {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         match type_ {
-            ffi::GST_QUERY_POSITION => QueryView::Position(Position(self)),
-            ffi::GST_QUERY_DURATION => QueryView::Duration(Duration(self)),
-            ffi::GST_QUERY_LATENCY => QueryView::Latency(Latency(self)),
-            ffi::GST_QUERY_JITTER => QueryView::Jitter(Jitter(self)),
-            ffi::GST_QUERY_RATE => QueryView::Rate(Rate(self)),
-            ffi::GST_QUERY_SEEKING => QueryView::Seeking(Seeking(self)),
-            ffi::GST_QUERY_SEGMENT => QueryView::Segment(Segment(self)),
-            ffi::GST_QUERY_CONVERT => QueryView::Convert(Convert(self)),
-            ffi::GST_QUERY_FORMATS => QueryView::Formats(Formats(self)),
-            ffi::GST_QUERY_BUFFERING => QueryView::Buffering(Buffering(self)),
-            ffi::GST_QUERY_CUSTOM => QueryView::Custom(Custom(self)),
-            ffi::GST_QUERY_URI => QueryView::Uri(Uri(self)),
-            ffi::GST_QUERY_ALLOCATION => QueryView::Allocation(Allocation(self)),
-            ffi::GST_QUERY_SCHEDULING => QueryView::Scheduling(Scheduling(self)),
-            ffi::GST_QUERY_ACCEPT_CAPS => QueryView::AcceptCaps(AcceptCaps(self)),
-            ffi::GST_QUERY_CAPS => QueryView::Caps(Caps(self)),
-            ffi::GST_QUERY_DRAIN => QueryView::Drain(Drain(self)),
-            ffi::GST_QUERY_CONTEXT => QueryView::Context(Context(self)),
-            _ => QueryView::Other(Other(self)),
+            ffi::GST_QUERY_POSITION => QueryView::Position(PositionImpl(self)),
+            ffi::GST_QUERY_DURATION => QueryView::Duration(DurationImpl(self)),
+            ffi::GST_QUERY_LATENCY => QueryView::Latency(LatencyImpl(self)),
+            ffi::GST_QUERY_JITTER => QueryView::Jitter(JitterImpl(self)),
+            ffi::GST_QUERY_RATE => QueryView::Rate(RateImpl(self)),
+            ffi::GST_QUERY_SEEKING => QueryView::Seeking(SeekingImpl(self)),
+            ffi::GST_QUERY_SEGMENT => QueryView::Segment(SegmentImpl(self)),
+            ffi::GST_QUERY_CONVERT => QueryView::Convert(ConvertImpl(self)),
+            ffi::GST_QUERY_FORMATS => QueryView::Formats(FormatsImpl(self)),
+            ffi::GST_QUERY_BUFFERING => QueryView::Buffering(BufferingImpl(self)),
+            ffi::GST_QUERY_CUSTOM => QueryView::Custom(CustomImpl(self)),
+            ffi::GST_QUERY_URI => QueryView::Uri(UriImpl(self)),
+            ffi::GST_QUERY_ALLOCATION => QueryView::Allocation(AllocationImpl(self)),
+            ffi::GST_QUERY_SCHEDULING => QueryView::Scheduling(SchedulingImpl(self)),
+            ffi::GST_QUERY_ACCEPT_CAPS => QueryView::AcceptCaps(AcceptCapsImpl(self)),
+            ffi::GST_QUERY_CAPS => QueryView::Caps(CapsImpl(self)),
+            ffi::GST_QUERY_DRAIN => QueryView::Drain(DrainImpl(self)),
+            ffi::GST_QUERY_CONTEXT => QueryView::Context(ContextImpl(self)),
+            _ => QueryView::Other(OtherImpl(self)),
         }
     }
 
@@ -307,32 +307,35 @@ unsafe impl<'a> AsMutPtr for &'a mut QueryRef {
 
 #[derive(Debug)]
 pub enum QueryView<T> {
-    Position(Position<T>),
-    Duration(Duration<T>),
-    Latency(Latency<T>),
-    Jitter(Jitter<T>),
-    Rate(Rate<T>),
-    Seeking(Seeking<T>),
-    Segment(Segment<T>),
-    Convert(Convert<T>),
-    Formats(Formats<T>),
-    Buffering(Buffering<T>),
-    Custom(Custom<T>),
-    Uri(Uri<T>),
-    Allocation(Allocation<T>),
-    Scheduling(Scheduling<T>),
-    AcceptCaps(AcceptCaps<T>),
-    Caps(Caps<T>),
-    Drain(Drain<T>),
-    Context(Context<T>),
-    Other(Other<T>),
+    Position(PositionImpl<T>),
+    Duration(DurationImpl<T>),
+    Latency(LatencyImpl<T>),
+    Jitter(JitterImpl<T>),
+    Rate(RateImpl<T>),
+    Seeking(SeekingImpl<T>),
+    Segment(SegmentImpl<T>),
+    Convert(ConvertImpl<T>),
+    Formats(FormatsImpl<T>),
+    Buffering(BufferingImpl<T>),
+    Custom(CustomImpl<T>),
+    Uri(UriImpl<T>),
+    Allocation(AllocationImpl<T>),
+    Scheduling(SchedulingImpl<T>),
+    AcceptCaps(AcceptCapsImpl<T>),
+    Caps(CapsImpl<T>),
+    Drain(DrainImpl<T>),
+    Context(ContextImpl<T>),
+    Other(OtherImpl<T>),
     __NonExhaustive,
 }
 
 macro_rules! declare_concrete_query(
-    ($name:ident, $param:ident) => {
+    ($name_owned:ident, $name:ident, $param:ident) => {
         #[derive(Debug)]
         pub struct $name<$param>($param);
+
+        #[allow(dead_code)]
+        pub type $name_owned = $name<Query>;
 
         impl<'a> $name<&'a QueryRef> {
             pub fn get_query(&self) -> &QueryRef {
@@ -386,8 +389,8 @@ macro_rules! declare_concrete_query(
     }
 );
 
-declare_concrete_query!(Position, T);
-impl<T: AsPtr> Position<T> {
+declare_concrete_query!(Position, PositionImpl, T);
+impl<T: AsPtr> PositionImpl<T> {
     pub fn get_result(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::uninitialized();
@@ -410,7 +413,7 @@ impl<T: AsPtr> Position<T> {
     }
 }
 
-impl<T: AsMutPtr> Position<T> {
+impl<T: AsMutPtr> PositionImpl<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, pos: V) {
         let pos = pos.into();
         assert_eq!(pos.get_format(), self.get_format());
@@ -424,8 +427,8 @@ impl<T: AsMutPtr> Position<T> {
     }
 }
 
-declare_concrete_query!(Duration, T);
-impl<T: AsPtr> Duration<T> {
+declare_concrete_query!(Duration, DurationImpl, T);
+impl<T: AsPtr> DurationImpl<T> {
     pub fn get_result(&self) -> GenericFormattedValue {
         unsafe {
             let mut fmt = mem::uninitialized();
@@ -448,7 +451,7 @@ impl<T: AsPtr> Duration<T> {
     }
 }
 
-impl<T: AsMutPtr> Duration<T> {
+impl<T: AsMutPtr> DurationImpl<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, dur: V) {
         let dur = dur.into();
         assert_eq!(dur.get_format(), self.get_format());
@@ -462,8 +465,8 @@ impl<T: AsMutPtr> Duration<T> {
     }
 }
 
-declare_concrete_query!(Latency, T);
-impl<T: AsPtr> Latency<T> {
+declare_concrete_query!(Latency, LatencyImpl, T);
+impl<T: AsPtr> LatencyImpl<T> {
     pub fn get_result(&self) -> (bool, ::ClockTime, ::ClockTime) {
         unsafe {
             let mut live = mem::uninitialized();
@@ -477,7 +480,7 @@ impl<T: AsPtr> Latency<T> {
     }
 }
 
-impl<T: AsMutPtr> Latency<T> {
+impl<T: AsMutPtr> LatencyImpl<T> {
     pub fn set(&mut self, live: bool, min: ::ClockTime, max: ::ClockTime) {
         unsafe {
             ffi::gst_query_set_latency(
@@ -490,11 +493,11 @@ impl<T: AsMutPtr> Latency<T> {
     }
 }
 
-declare_concrete_query!(Jitter, T);
-declare_concrete_query!(Rate, T);
+declare_concrete_query!(Jitter, JitterImpl, T);
+declare_concrete_query!(Rate, RateImpl, T);
 
-declare_concrete_query!(Seeking, T);
-impl<T: AsPtr> Seeking<T> {
+declare_concrete_query!(Seeking, SeekingImpl, T);
+impl<T: AsPtr> SeekingImpl<T> {
     pub fn get_result(&self) -> (bool, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut fmt = mem::uninitialized();
@@ -533,7 +536,7 @@ impl<T: AsPtr> Seeking<T> {
     }
 }
 
-impl<T: AsMutPtr> Seeking<T> {
+impl<T: AsMutPtr> SeekingImpl<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, seekable: bool, start: V, end: V) {
         let start = start.into();
         let end = end.into();
@@ -553,8 +556,8 @@ impl<T: AsMutPtr> Seeking<T> {
     }
 }
 
-declare_concrete_query!(Segment, T);
-impl<T: AsPtr> Segment<T> {
+declare_concrete_query!(Segment, SegmentImpl, T);
+impl<T: AsPtr> SegmentImpl<T> {
     pub fn get_result(&self) -> (f64, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut rate = mem::uninitialized();
@@ -593,7 +596,7 @@ impl<T: AsPtr> Segment<T> {
     }
 }
 
-impl<T: AsMutPtr> Segment<T> {
+impl<T: AsMutPtr> SegmentImpl<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, rate: f64, start: V, stop: V) {
         let start = start.into();
         let stop = stop.into();
@@ -612,8 +615,8 @@ impl<T: AsMutPtr> Segment<T> {
     }
 }
 
-declare_concrete_query!(Convert, T);
-impl<T: AsPtr> Convert<T> {
+declare_concrete_query!(Convert, ConvertImpl, T);
+impl<T: AsPtr> ConvertImpl<T> {
     pub fn get_result(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
             let mut src_fmt = mem::uninitialized();
@@ -656,7 +659,7 @@ impl<T: AsPtr> Convert<T> {
     }
 }
 
-impl<T: AsMutPtr> Convert<T> {
+impl<T: AsMutPtr> ConvertImpl<T> {
     pub fn set<V: Into<GenericFormattedValue>>(&mut self, src: V, dest: V) {
         let src = src.into();
         let dest = dest.into();
@@ -673,8 +676,8 @@ impl<T: AsMutPtr> Convert<T> {
     }
 }
 
-declare_concrete_query!(Formats, T);
-impl<T: AsPtr> Formats<T> {
+declare_concrete_query!(Formats, FormatsImpl, T);
+impl<T: AsPtr> FormatsImpl<T> {
     pub fn get_result(&self) -> Vec<::Format> {
         unsafe {
             let mut n = mem::uninitialized();
@@ -692,7 +695,7 @@ impl<T: AsPtr> Formats<T> {
     }
 }
 
-impl<T: AsMutPtr> Formats<T> {
+impl<T: AsMutPtr> FormatsImpl<T> {
     pub fn set(&mut self, formats: &[::Format]) {
         unsafe {
             let v: Vec<_> = formats.iter().map(|f| f.to_glib()).collect();
@@ -701,8 +704,8 @@ impl<T: AsMutPtr> Formats<T> {
     }
 }
 
-declare_concrete_query!(Buffering, T);
-impl<T: AsPtr> Buffering<T> {
+declare_concrete_query!(Buffering, BufferingImpl, T);
+impl<T: AsPtr> BufferingImpl<T> {
     pub fn get_format(&self) -> ::Format {
         unsafe {
             let mut fmt = mem::uninitialized();
@@ -807,7 +810,7 @@ impl<T: AsPtr> Buffering<T> {
     }
 }
 
-impl<T: AsMutPtr> Buffering<T> {
+impl<T: AsMutPtr> BufferingImpl<T> {
     pub fn set_percent(&mut self, busy: bool, percent: i32) {
         unsafe {
             ffi::gst_query_set_buffering_percent(self.0.as_mut_ptr(), busy.to_glib(), percent);
@@ -878,10 +881,10 @@ impl<T: AsMutPtr> Buffering<T> {
     }
 }
 
-declare_concrete_query!(Custom, T);
+declare_concrete_query!(Custom, CustomImpl, T);
 
-declare_concrete_query!(Uri, T);
-impl<T: AsPtr> Uri<T> {
+declare_concrete_query!(Uri, UriImpl, T);
+impl<T: AsPtr> UriImpl<T> {
     pub fn get_uri(&self) -> Option<String> {
         unsafe {
             let mut uri = ptr::null_mut();
@@ -902,7 +905,7 @@ impl<T: AsPtr> Uri<T> {
     }
 }
 
-impl<T: AsMutPtr> Uri<T> {
+impl<T: AsMutPtr> UriImpl<T> {
     pub fn set_uri<'b, U: Into<&'b str>>(&mut self, uri: U) {
         let uri = uri.into();
         unsafe {
@@ -920,10 +923,10 @@ impl<T: AsMutPtr> Uri<T> {
 }
 
 // TODO
-declare_concrete_query!(Allocation, T);
+declare_concrete_query!(Allocation, AllocationImpl, T);
 
-declare_concrete_query!(Scheduling, T);
-impl<T: AsPtr> Scheduling<T> {
+declare_concrete_query!(Scheduling, SchedulingImpl, T);
+impl<T: AsPtr> SchedulingImpl<T> {
     pub fn has_scheduling_mode(&self, mode: ::PadMode) -> bool {
         unsafe {
             from_glib(ffi::gst_query_has_scheduling_mode(
@@ -983,7 +986,7 @@ impl<T: AsPtr> Scheduling<T> {
     }
 }
 
-impl<T: AsMutPtr> Scheduling<T> {
+impl<T: AsMutPtr> SchedulingImpl<T> {
     pub fn add_scheduling_modes(&mut self, modes: &[::PadMode]) {
         unsafe {
             for mode in modes {
@@ -1005,8 +1008,8 @@ impl<T: AsMutPtr> Scheduling<T> {
     }
 }
 
-declare_concrete_query!(AcceptCaps, T);
-impl<T: AsPtr> AcceptCaps<T> {
+declare_concrete_query!(AcceptCaps, AcceptCapsImpl, T);
+impl<T: AsPtr> AcceptCapsImpl<T> {
     pub fn get_caps(&self) -> &::CapsRef {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -1024,7 +1027,7 @@ impl<T: AsPtr> AcceptCaps<T> {
     }
 }
 
-impl<T: AsMutPtr> AcceptCaps<T> {
+impl<T: AsMutPtr> AcceptCapsImpl<T> {
     pub fn set_result(&mut self, accepted: bool) {
         unsafe {
             ffi::gst_query_set_accept_caps_result(self.0.as_mut_ptr(), accepted.to_glib());
@@ -1032,8 +1035,8 @@ impl<T: AsMutPtr> AcceptCaps<T> {
     }
 }
 
-declare_concrete_query!(Caps, T);
-impl<T: AsPtr> Caps<T> {
+declare_concrete_query!(Caps, CapsImpl, T);
+impl<T: AsPtr> CapsImpl<T> {
     pub fn get_filter(&self) -> Option<&::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -1059,7 +1062,7 @@ impl<T: AsPtr> Caps<T> {
     }
 }
 
-impl<T: AsMutPtr> Caps<T> {
+impl<T: AsMutPtr> CapsImpl<T> {
     pub fn set_result(&mut self, caps: &::Caps) {
         unsafe {
             ffi::gst_query_set_caps_result(self.0.as_mut_ptr(), caps.as_mut_ptr());
@@ -1067,10 +1070,10 @@ impl<T: AsMutPtr> Caps<T> {
     }
 }
 
-declare_concrete_query!(Drain, T);
+declare_concrete_query!(Drain, DrainImpl, T);
 
-declare_concrete_query!(Context, T);
-impl<T: AsPtr> Context<T> {
+declare_concrete_query!(Context, ContextImpl, T);
+impl<T: AsPtr> ContextImpl<T> {
     pub fn get_context(&self) -> Option<&::ContextRef> {
         unsafe {
             let mut context = ptr::null_mut();
@@ -1092,7 +1095,7 @@ impl<T: AsPtr> Context<T> {
     }
 }
 
-impl<T: AsMutPtr> Context<T> {
+impl<T: AsMutPtr> ContextImpl<T> {
     pub fn set_context(&mut self, context: &::Context) {
         unsafe {
             ffi::gst_query_set_context(self.0.as_mut_ptr(), context.as_mut_ptr());
@@ -1100,7 +1103,7 @@ impl<T: AsMutPtr> Context<T> {
     }
 }
 
-declare_concrete_query!(Other, T);
+declare_concrete_query!(Other, OtherImpl, T);
 
 #[cfg(test)]
 mod tests {
