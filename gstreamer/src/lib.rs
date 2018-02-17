@@ -29,12 +29,6 @@ extern crate muldiv;
 
 use glib::translate::{from_glib, from_glib_full};
 
-macro_rules! callback_guard {
-    () => (
-        let _guard = ::glib::CallbackGuard::new();
-    )
-}
-
 macro_rules! assert_initialized_main_thread {
     () => (
         if unsafe {::ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {

@@ -54,7 +54,6 @@ pub fn convert_sample_async<F>(
     ) where
         F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
     {
-        callback_guard!();
         let callback: &mut Option<Box<F>> = mem::transmute(user_data);
         let callback = callback.take().unwrap();
 
@@ -68,7 +67,6 @@ pub fn convert_sample_async<F>(
     where
         F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
     {
-        callback_guard!();
         let _: Box<Option<Box<F>>> = Box::from_raw(user_data as *mut _);
     }
 

@@ -11,7 +11,7 @@ use std::mem::transmute;
 use ffi;
 use glib;
 use glib::translate::*;
-use glib::source::{CallbackGuard, Continue, Priority, SourceId};
+use glib::source::{Continue, Priority, SourceId};
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
@@ -25,14 +25,12 @@ unsafe extern "C" fn trampoline_watch(
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
-    let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>> = transmute(func);
     (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch(ptr: gpointer) {
-    let _guard = CallbackGuard::new();
     Box::<RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>>>::from_raw(
         ptr as *mut _,
     );
@@ -50,14 +48,12 @@ unsafe extern "C" fn trampoline_sync(
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
-    let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static) = transmute(func);
     f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_sync(ptr: gpointer) {
-    let _guard = CallbackGuard::new();
     Box::<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>>::from_raw(ptr as *mut _);
 }
 

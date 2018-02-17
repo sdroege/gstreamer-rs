@@ -24,12 +24,6 @@ extern crate gstreamer_net as gst_net;
 extern crate gstreamer_net_sys as gst_net_ffi;
 extern crate gstreamer_rtsp_server_sys as ffi;
 
-macro_rules! callback_guard {
-    () => (
-        let _guard = ::glib::CallbackGuard::new();
-    )
-}
-
 macro_rules! assert_initialized_main_thread {
     () => (
         if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
