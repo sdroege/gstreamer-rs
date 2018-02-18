@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.4.1] - 2018-02-18
+### Fixed
+- Fix native library name of GstNet bindings
+
 ## [0.4.0] - 2017-12-23
 ### Added
 - GstNet bindings
