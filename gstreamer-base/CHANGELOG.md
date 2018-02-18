@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.10.2] - 2018-02-18
+### Fixed
+- Fix building of messages with custom fields for types that don't have a
+  GstStructure
+
+### Added
+- VideoFrameRef::copy_to_ref() and ::copy_plane_to_ref(), which work with
+  VideoFrameRefs instead of full VideoFrames
+- Getters for the BaseSrc/Sink/Transform configured segment
+- Document the gstreamer-player-1.0 dependency in the README.md
+
 ## [0.10.1] - 2018-01-03
 ### Fixed
 - Don't require &mut self for TagSetterExtManual::add()
