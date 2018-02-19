@@ -1,0 +1,137 @@
+[options]
+girs_dir = "gir-files"
+library = "GstPbutils"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-pbutils"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstPbutils.DiscovererResult",
+    "GstPbutils.DiscovererSerializeFlags",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.Source",
+    "GLib.DateTime",
+    "GLib.Variant",
+    "GObject.Object",
+    "Gst.Object",
+    "Gst.Element",
+    "Gst.Toc",
+]
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Message"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Event"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
+name = "GstPbutils.Discoverer"
+status = "generate"
+
+    [[object.function]]
+    name = "discover_uri_async"
+        [object.function.return]
+        bool_return_is_error = "Failed to add URI to list of discovers"
+
+    # Manually implemented to use ClockTime
+    [[object.property]]
+    name = "timeout"
+    ignore = true
+
+[[object]]
+name = "GstPbutils.DiscovererInfo"
+status = "generate"
+
+    [[object.function]]
+    name = "copy"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstPbutils.DiscovererStreamInfo"
+status = "generate"
+
+    # Not useful
+    [[object.function]]
+    name = "list_free"
+    ignore = true
+
+    [[object.function]]
+    name = "get_stream_type_nick"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstPbutils.DiscovererAudioInfo"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPbutils.DiscovererVideoInfo"
+status = "generate"
+trait = false
+
+    # Implement manually to expose as gst::Fraction
+    [[object.function]]
+    name = "get_framerate_num"
+    ignore = true
+    [[object.function]]
+    name = "get_framerate_denom"
+    ignore = true
+    [[object.function]]
+    name = "get_par_num"
+    ignore = true
+    [[object.function]]
+    name = "get_par_denom"
+    ignore = true
+
+[[object]]
+name = "GstPbutils.DiscovererSubtitleInfo"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPbutils.DiscovererContainerInfo"
+status = "generate"
+trait = false
