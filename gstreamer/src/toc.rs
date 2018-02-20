@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 use std::mem;
 
 use ffi;
@@ -96,6 +97,16 @@ impl ToOwned for TocRef {
             from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
                 as *mut _)
         }
+    }
+}
+
+impl fmt::Debug for TocRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Toc")
+            .field("scope", &self.get_scope())
+            .field("tags", &self.get_tags())
+            .field("entries", &self.get_entries())
+            .finish()
     }
 }
 
@@ -234,6 +245,21 @@ impl ToOwned for TocEntryRef {
             from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
                 as *mut _)
         }
+    }
+}
+
+impl fmt::Debug for TocEntryRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("TocEntry")
+            .field("entry_type", &self.get_entry_type())
+            .field("uid", &self.get_uid())
+            .field("start_stop", &self.get_start_stop_times())
+            .field("tags", &self.get_tags())
+            .field("is_alternative", &self.is_alternative())
+            .field("is_sequence", &self.is_sequence())
+            .field("loop", &self.get_loop())
+            .field("sub_entries", &self.get_sub_entries())
+            .finish()
     }
 }
 
