@@ -47,6 +47,7 @@ fn find() -> Result<(), Error> {
 
     let mut config = Config::new();
     config.atleast_version(version);
+    config.print_system_libs(false);
     if hardcode_shared_libs {
         config.cargo_metadata(false);
     }
