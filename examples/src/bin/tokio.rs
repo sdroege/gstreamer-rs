@@ -15,7 +15,7 @@ use tokio_core::reactor::Core;
 #[cfg(feature = "tokio")]
 use std::env;
 
-#[allow(unused_imports)]
+#[cfg(feature = "tokio")]
 #[path = "../examples-common.rs"]
 mod examples_common;
 
