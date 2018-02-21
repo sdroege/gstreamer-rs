@@ -5,7 +5,6 @@ use gst::prelude::*;
 extern crate glib;
 
 use std::error::Error as StdError;
-use std::sync::{Arc, Mutex};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
@@ -39,10 +38,13 @@ struct ErrorMessage {
     #[cause] cause: glib::Error,
 }
 
-fn make_element <'a, P: Into<Option<&'a str>>>(factory_name: &'static str, element_name: P) -> Result<gst::Element, Error> {
+fn make_element<'a, P: Into<Option<&'a str>>>(
+    factory_name: &'static str,
+    element_name: P,
+) -> Result<gst::Element, Error> {
     match gst::ElementFactory::make(factory_name, element_name.into()) {
         Some(elem) => Ok(elem),
-        None => Err(Error::from(MissingElement(factory_name)))
+        None => Err(Error::from(MissingElement(factory_name))),
     }
 }
 
@@ -66,14 +68,14 @@ fn get_request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst
     }
 }
 
-fn connect_decodebin_pad (src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), Error> {
+fn connect_decodebin_pad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), Error> {
     let sinkpad = get_static_pad(&sink, "sink")?;
     src_pad.link(&sinkpad).into_result()?;
 
-    Ok (())
+    Ok(())
 }
 
-fn make_fec_encoder (fec_percentage: u32) -> Result<gst::Element, Error> {
+fn make_fec_encoder(fec_percentage: u32) -> Result<gst::Element, Error> {
     let fecenc = make_element("rtpulpfecenc", None)?;
 
     fecenc.set_property("pt", &100u32.to_value())?;
@@ -81,7 +83,7 @@ fn make_fec_encoder (fec_percentage: u32) -> Result<gst::Element, Error> {
     fecenc.set_property("multipacket", &true.to_value())?;
     fecenc.set_property("percentage", &fec_percentage.to_value())?;
 
-    Ok (fecenc)
+    Ok(fecenc)
 }
 
 fn example_main() -> Result<(), Error> {
@@ -116,8 +118,8 @@ fn example_main() -> Result<(), Error> {
     rtpbin.connect("request-fec-encoder", false, move |values| {
         let rtpbin = values[0].get::<gst::Element>().expect("Invalid argument");
 
-        match make_fec_encoder (fec_percentage) {
-            Ok(elem) => Some (elem.to_value()),
+        match make_fec_encoder(fec_percentage) {
+            Ok(elem) => Some(elem.to_value()),
             Err(err) => {
                 gst_element_error!(
                     rtpbin,
@@ -131,17 +133,17 @@ fn example_main() -> Result<(), Error> {
     })?;
 
     let srcpad = get_static_pad(&q2, "src")?;
-    let sinkpad = get_request_pad (&rtpbin, "send_rtp_sink_0")?;
+    let sinkpad = get_request_pad(&rtpbin, "send_rtp_sink_0")?;
     srcpad.link(&sinkpad).into_result()?;
 
     let srcpad = get_static_pad(&rtpbin, "send_rtp_src_0")?;
-    let sinkpad = get_static_pad (&sink, "sink")?;
+    let sinkpad = get_static_pad(&sink, "sink")?;
     srcpad.link(&sinkpad).into_result()?;
 
     let convclone = conv.clone();
     src.connect_pad_added(move |decodebin, src_pad| {
-        match connect_decodebin_pad (&src_pad, &convclone) {
-            Ok (_) => (),
+        match connect_decodebin_pad(&src_pad, &convclone) {
+            Ok(_) => (),
             Err(err) => {
                 gst_element_error!(
                     decodebin,
@@ -168,7 +170,9 @@ fn example_main() -> Result<(), Error> {
     src.set_property("caps", &video_caps.to_value())?;
     src.set_property("uri", &uri.to_value())?;
 
-    let bus = pipeline.get_bus().expect("Pipeline without bus. Shouldn't happen!");
+    let bus = pipeline
+        .get_bus()
+        .expect("Pipeline without bus. Shouldn't happen!");
 
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
@@ -179,42 +183,28 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                {
-                    match err.get_details() {
-                        Some(details) if details.get_name() == "error-details" => details
-                            .get::<&glib::AnySendValue>("error")
-                            .cloned()
-                            .and_then(|v| {
-                                v.downcast_ref::<Arc<Mutex<Option<Error>>>>()
-                                    .and_then(|v| v.lock().unwrap().take())
-                            })
-                            .map(Result::Err)
-                            .expect("error-details message without actual error"),
-                        _ => Err(
-                            ErrorMessage {
-                                src: msg.get_src()
-                                    .map(|s| s.get_path_string())
-                                    .unwrap_or(String::from("None")),
-                                error: err.get_error().description().into(),
-                                debug: err.get_debug(),
-                                cause: err.get_error(),
-                            }.into(),
-                        ),
-                    }?;
-                }
-                break;
+                return Err(
+                    ErrorMessage {
+                        src: msg.get_src()
+                            .map(|s| s.get_path_string())
+                            .unwrap_or(String::from("None")),
+                        error: err.get_error().description().into(),
+                        debug: err.get_debug(),
+                        cause: err.get_error(),
+                    }.into(),
+                );
             }
-            MessageView::StateChanged(s) => {
-                match msg.get_src() {
-                    Some(element) => {
-                        if element == pipeline && s.get_current() == gst::State::Playing {
-                            eprintln! ("PLAYING");
-                            gst::debug_bin_to_dot_file (&pipeline, gst::DebugGraphDetails::all(), "server-playing");
-                        }
-                    },
-                    None => ()
-                }
-            }
+            MessageView::StateChanged(s) => match msg.get_src() {
+                Some(element) => if element == pipeline && s.get_current() == gst::State::Playing {
+                    eprintln!("PLAYING");
+                    gst::debug_bin_to_dot_file(
+                        &pipeline,
+                        gst::DebugGraphDetails::all(),
+                        "server-playing",
+                    );
+                },
+                None => (),
+            },
             _ => (),
         }
     }
