@@ -56,6 +56,9 @@ pub use auto::*;
 mod discoverer;
 pub use discoverer::*;
 
+mod discoverer_stream_info;
+pub use discoverer_stream_info::*;
+
 mod discoverer_video_info;
 pub use discoverer_video_info::*;
 
@@ -66,6 +69,7 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use discoverer::*;
+    pub use discoverer_stream_info::*;
     pub use discoverer_video_info::*;
 
     pub use auto::traits::*;
