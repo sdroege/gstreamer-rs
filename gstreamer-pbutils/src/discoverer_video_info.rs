@@ -11,15 +11,10 @@ use DiscovererVideoInfo;
 
 use gst;
 use ffi;
-use glib::object::IsA;
+use glib::translate::*;
 
-pub trait DiscovererVideoInfoExtManual {
-    fn get_framerate(&self) -> gst::Fraction;
-    fn get_par(&self) -> gst::Fraction;
-}
-
-impl<O: IsA<DiscovererVideoInfo>> DiscovererVideoInfoExtManual for O {
-    fn get_framerate(&self) -> gst::Fraction {
+impl DiscovererVideoInfo {
+    pub fn get_framerate(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(
                 ffi::gst_discoverer_video_info_get_framerate_num(self.to_glib_none().0) as i32,
@@ -27,7 +22,7 @@ impl<O: IsA<DiscovererVideoInfo>> DiscovererVideoInfoExtManual for O {
         }
     }
 
-    fn get_par(&self) -> gst::Fraction {
+    pub fn get_par(&self) -> gst::Fraction {
         unsafe {
             gst::Fraction::new(
                 ffi::gst_discoverer_video_info_get_par_num(self.to_glib_none().0) as i32,
