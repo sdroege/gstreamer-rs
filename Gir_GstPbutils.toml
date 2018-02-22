@@ -27,8 +27,12 @@ manual = [
     "GObject.Object",
     "Gst.Object",
     "Gst.Element",
-    "Gst.Toc",
 ]
+
+[[object]]
+name = "Gst.Toc"
+status = "manual"
+ref_mode = "ref"
 
 [[object]]
 name = "Gst.Caps"
