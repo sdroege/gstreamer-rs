@@ -10,19 +10,19 @@
 extern crate bitflags;
 extern crate libc;
 
+extern crate gio;
+extern crate gio_sys as gio_ffi;
 #[macro_use]
 extern crate glib;
 extern crate glib_sys as glib_ffi;
-extern crate gio;
-extern crate gio_sys as gio_ffi;
 extern crate gobject_sys as gobject_ffi;
 extern crate gstreamer as gst;
-extern crate gstreamer_sys as gst_ffi;
-extern crate gstreamer_rtsp as gst_rtsp;
-extern crate gstreamer_rtsp_sys as gst_rtsp_ffi;
 extern crate gstreamer_net as gst_net;
 extern crate gstreamer_net_sys as gst_net_ffi;
+extern crate gstreamer_rtsp as gst_rtsp;
 extern crate gstreamer_rtsp_server_sys as ffi;
+extern crate gstreamer_rtsp_sys as gst_rtsp_ffi;
+extern crate gstreamer_sys as gst_ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => (

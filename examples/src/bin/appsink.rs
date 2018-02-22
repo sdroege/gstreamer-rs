@@ -32,7 +32,8 @@ struct ErrorMessage {
     src: String,
     error: String,
     debug: Option<String>,
-    #[cause] cause: glib::Error,
+    #[cause]
+    cause: glib::Error,
 }
 
 fn create_pipeline() -> Result<gst::Pipeline, Error> {

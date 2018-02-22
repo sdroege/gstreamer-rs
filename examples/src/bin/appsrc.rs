@@ -28,7 +28,8 @@ struct ErrorMessage {
     src: String,
     error: String,
     debug: Option<String>,
-    #[cause] cause: glib::Error,
+    #[cause]
+    cause: glib::Error,
 }
 
 const WIDTH: usize = 320;

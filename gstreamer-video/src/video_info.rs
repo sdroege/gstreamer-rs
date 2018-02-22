@@ -26,7 +26,8 @@ pub enum VideoColorRange {
     Unknown,
     Range0255,
     Range16235,
-    #[doc(hidden)] __Unknown(i32),
+    #[doc(hidden)]
+    __Unknown(i32),
 }
 
 #[doc(hidden)]
@@ -205,7 +206,8 @@ pub struct VideoInfoBuilder<'a> {
     stride: Option<&'a [i32]>,
     multiview_mode: Option<::VideoMultiviewMode>,
     multiview_flags: Option<::VideoMultiviewFlags>,
-    #[cfg(any(feature = "v1_12", feature = "dox"))] field_order: Option<::VideoFieldOrder>,
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    field_order: Option<::VideoFieldOrder>,
 }
 
 impl<'a> VideoInfoBuilder<'a> {
@@ -636,8 +638,7 @@ impl glib::types::StaticType for VideoInfo {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for VideoInfo {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<VideoInfo>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
-            as *mut ffi::GstVideoInfo)
+        Option::<VideoInfo>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstVideoInfo)
     }
 }
 

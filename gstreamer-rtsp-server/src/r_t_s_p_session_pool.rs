@@ -50,7 +50,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
         func: F,
     ) -> glib::Source
     where
-        F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static
+        F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static,
     {
         skip_assert_initialized!();
         unsafe {

@@ -567,8 +567,7 @@ impl<T: FormattedValue> glib::types::StaticType for FormattedSegment<T> {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for Segment {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
-            as *mut ffi::GstSegment)
+        Option::<Segment>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment)
     }
 }
 
@@ -601,7 +600,8 @@ impl<T: FormattedValue> glib::translate::GlibPtrDefault for FormattedSegment<T> 
 
 #[doc(hidden)]
 impl<'a, T: FormattedValue> glib::translate::ToGlibPtr<'a, *const ffi::GstSegment>
-    for FormattedSegment<T> {
+    for FormattedSegment<T>
+{
     type Storage = &'a FormattedSegment<T>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstSegment, Self> {
@@ -615,7 +615,8 @@ impl<'a, T: FormattedValue> glib::translate::ToGlibPtr<'a, *const ffi::GstSegmen
 
 #[doc(hidden)]
 impl<'a, T: FormattedValue> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstSegment>
-    for FormattedSegment<T> {
+    for FormattedSegment<T>
+{
     type Storage = &'a mut FormattedSegment<T>;
 
     #[inline]

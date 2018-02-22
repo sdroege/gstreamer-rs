@@ -114,7 +114,8 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
             // The duration has changed, mark the current one as invalid
             custom_data.duration = gst::CLOCK_TIME_NONE;
         }
-        MessageView::StateChanged(state_changed) => if state_changed.get_src()
+        MessageView::StateChanged(state_changed) => if state_changed
+            .get_src()
             .map(|s| s == custom_data.playbin)
             .unwrap_or(false)
         {

@@ -50,7 +50,10 @@ fn main_loop() -> Result<(), Error> {
 
     server.attach(None);
 
-    println!("Stream ready at rtsp://127.0.0.1:{}/test", server.get_bound_port());
+    println!(
+        "Stream ready at rtsp://127.0.0.1:{}/test",
+        server.get_bound_port()
+    );
 
     main_loop.run();
 
@@ -62,7 +65,9 @@ fn example_main() -> Result<(), Error> {
 
     #[cfg(not(feature = "gst-rtsp-server"))]
     {
-        eprintln!("Feature gst-rtsp-server is required. Please rebuild with --features gst-rtsp-server");
+        eprintln!(
+            "Feature gst-rtsp-server is required. Please rebuild with --features gst-rtsp-server"
+        );
         std::process::exit(-1)
     }
 

@@ -454,10 +454,7 @@ impl ToOwned for EventRef {
     type Owned = GstRc<EventRef>;
 
     fn to_owned(&self) -> GstRc<EventRef> {
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
-                as *mut _)
-        }
+        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
 
@@ -884,30 +881,32 @@ impl<'a> EventBuilder<'a> {
         Self {
             seqnum: None,
             running_time_offset: None,
-            other_fields: Vec::new()
+            other_fields: Vec::new(),
         }
     }
 
     fn seqnum(self, seqnum: Seqnum) -> Self {
         Self {
             seqnum: Some(seqnum),
-            .. self
+            ..self
         }
     }
 
     fn running_time_offset(self, running_time_offset: i64) -> Self {
         Self {
             running_time_offset: Some(running_time_offset),
-            .. self
+            ..self
         }
     }
 
     fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
         Self {
-            other_fields: self.other_fields.iter().cloned()
+            other_fields: self.other_fields
+                .iter()
+                .cloned()
                 .chain(other_fields.iter().cloned())
                 .collect(),
-            .. self
+            ..self
         }
     }
 }
@@ -1618,7 +1617,7 @@ mod tests {
             EventView::FlushStart(flush_start_evt) => {
                 assert!(!flush_start_evt.is_sticky());
                 assert!(flush_start_evt.get_structure().is_none());
-            },
+            }
             _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
         }
 
@@ -1631,7 +1630,7 @@ mod tests {
                 if let Some(other_fields) = flush_start_evt.get_structure() {
                     assert!(other_fields.has_field("extra-field"));
                 }
-            },
+            }
             _ => panic!("flush_start_evt.view() is not an EventView::FlushStart(_)"),
         }
 

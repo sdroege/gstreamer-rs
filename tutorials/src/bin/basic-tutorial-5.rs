@@ -347,7 +347,11 @@ mod tutorial5 {
                 // This is called when the pipeline changes states. We use it to
                 // keep track of the current state.
                 gst::MessageView::StateChanged(state_changed) => {
-                    if state_changed.get_src().map(|s| s == pipeline).unwrap_or(false) {
+                    if state_changed
+                        .get_src()
+                        .map(|s| s == pipeline)
+                        .unwrap_or(false)
+                    {
                         println!("State set to {:?}", state_changed.get_current());
                     }
                 }

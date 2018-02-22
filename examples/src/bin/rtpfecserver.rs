@@ -35,7 +35,8 @@ struct ErrorMessage {
     src: String,
     error: String,
     debug: Option<String>,
-    #[cause] cause: glib::Error,
+    #[cause]
+    cause: glib::Error,
 }
 
 fn make_element<'a, P: Into<Option<&'a str>>>(
@@ -183,16 +184,14 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                return Err(
-                    ErrorMessage {
-                        src: msg.get_src()
-                            .map(|s| s.get_path_string())
-                            .unwrap_or(String::from("None")),
-                        error: err.get_error().description().into(),
-                        debug: err.get_debug(),
-                        cause: err.get_error(),
-                    }.into(),
-                );
+                return Err(ErrorMessage {
+                    src: msg.get_src()
+                        .map(|s| s.get_path_string())
+                        .unwrap_or(String::from("None")),
+                    error: err.get_error().description().into(),
+                    debug: err.get_debug(),
+                    cause: err.get_error(),
+                }.into());
             }
             MessageView::StateChanged(s) => match msg.get_src() {
                 Some(element) => if element == pipeline && s.get_current() == gst::State::Playing {

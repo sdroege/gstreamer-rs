@@ -14,7 +14,10 @@ impl<O: IsA<RTSPClient>> RTSPClientExtManual for O {
         let context = context.into();
         let context = context.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_rtsp_client_attach(self.to_glib_none().0, context.0))
+            from_glib(ffi::gst_rtsp_client_attach(
+                self.to_glib_none().0,
+                context.0,
+            ))
         }
     }
 }

@@ -306,9 +306,7 @@ impl TagListRef {
     }
 
     pub fn get_size<'a, T: Tag<'a>>(&'a self) -> u32 {
-        unsafe {
-            ffi::gst_tag_list_get_tag_size(self.as_ptr(), T::tag_name().to_glib_none().0)
-        }
+        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), T::tag_name().to_glib_none().0) }
     }
 
     pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIterator<'a, T> {
@@ -320,9 +318,7 @@ impl TagListRef {
     }
 
     pub fn insert(&mut self, other: &TagListRef, mode: TagMergeMode) {
-        unsafe {
-            ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib())
-        }
+        unsafe { ffi::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib()) }
     }
 
     pub fn merge(&self, other: &TagListRef, mode: TagMergeMode) -> TagList {
@@ -360,10 +356,7 @@ impl ToOwned for TagListRef {
     type Owned = GstRc<TagListRef>;
 
     fn to_owned(&self) -> GstRc<TagListRef> {
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
-                as *mut _)
-        }
+        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
 

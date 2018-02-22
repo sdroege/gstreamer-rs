@@ -372,10 +372,7 @@ impl ToOwned for MessageRef {
     type Owned = GstRc<MessageRef>;
 
     fn to_owned(&self) -> GstRc<MessageRef> {
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _)
-                as *mut _)
-        }
+        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
 
@@ -1171,7 +1168,7 @@ impl<'a> MessageBuilder<'a> {
         Self {
             src: None,
             seqnum: None,
-            other_fields: Vec::new()
+            other_fields: Vec::new(),
         }
     }
 
@@ -1181,14 +1178,14 @@ impl<'a> MessageBuilder<'a> {
                 let o = (*o).clone();
                 o.upcast::<Object>()
             }),
-            .. self
+            ..self
         }
     }
 
     fn seqnum(self, seqnum: Seqnum) -> Self {
         Self {
             seqnum: Some(seqnum),
-            .. self
+            ..self
         }
     }
 
@@ -1284,7 +1281,8 @@ pub struct ErrorBuilder<'a, T> {
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
-    #[allow(unused)] details: Option<Structure>,
+    #[allow(unused)]
+    details: Option<Structure>,
 }
 impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
@@ -1348,7 +1346,8 @@ pub struct WarningBuilder<'a, T> {
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
-    #[allow(unused)] details: Option<Structure>,
+    #[allow(unused)]
+    details: Option<Structure>,
 }
 impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
@@ -1412,7 +1411,8 @@ pub struct InfoBuilder<'a, T> {
     error: T,
     message: &'a str,
     debug: Option<&'a str>,
-    #[allow(unused)] details: Option<Structure>,
+    #[allow(unused)]
+    details: Option<Structure>,
 }
 impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
     fn new(error: T, message: &'a str) -> Self {
@@ -2241,8 +2241,10 @@ impl<'a> StreamCollectionBuilder<'a> {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
-    #[cfg(any(feature = "v1_10", feature = "dox"))] collection: &'a ::StreamCollection,
-    #[cfg(any(feature = "v1_10", feature = "dox"))] streams: Option<&'a [&'a ::Stream]>,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    collection: &'a ::StreamCollection,
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    streams: Option<&'a [&'a ::Stream]>,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> StreamsSelectedBuilder<'a> {
@@ -2363,14 +2365,12 @@ mod tests {
         ::init().unwrap();
 
         // Message without arguments
-        let eos_msg = Message::new_eos()
-            .seqnum(Seqnum(1))
-            .build();
+        let eos_msg = Message::new_eos().seqnum(Seqnum(1)).build();
         match eos_msg.view() {
             MessageView::Eos(eos_msg) => {
                 assert_eq!(eos_msg.get_seqnum(), Seqnum(1));
                 assert!(eos_msg.get_structure().is_none());
-            },
+            }
             _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
         }
 

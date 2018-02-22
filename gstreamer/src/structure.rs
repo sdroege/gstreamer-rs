@@ -37,9 +37,7 @@ impl Structure {
     pub fn new_empty(name: &str) -> Structure {
         assert_initialized_main_thread!();
         Structure(
-            unsafe {
-                ffi::gst_structure_new_empty(name.to_glib_none().0) as *mut StructureRef
-            },
+            unsafe { ffi::gst_structure_new_empty(name.to_glib_none().0) as *mut StructureRef },
             PhantomData,
         )
     }

@@ -66,9 +66,10 @@ impl<T: MiniObject> GstRc<T> {
                 return &mut *self.obj;
             }
 
-            self.obj = T::from_mut_ptr(ffi::gst_mini_object_make_writable(self.as_mut_ptr()
-                as *mut ffi::GstMiniObject)
-                as *mut T::GstType);
+            self.obj = T::from_mut_ptr(
+                ffi::gst_mini_object_make_writable(self.as_mut_ptr() as *mut ffi::GstMiniObject)
+                    as *mut T::GstType,
+            );
             assert!(self.is_writable());
 
             &mut *self.obj
@@ -85,8 +86,7 @@ impl<T: MiniObject> GstRc<T> {
 
     pub fn is_writable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_mini_object_is_writable(self.as_ptr()
-                as *const ffi::GstMiniObject))
+            from_glib(ffi::gst_mini_object_is_writable(self.as_ptr() as *const ffi::GstMiniObject))
         }
     }
 
@@ -191,9 +191,10 @@ where
 
     fn copy(&self) -> GstRc<Self> {
         unsafe {
-            GstRc::from_glib_full(ffi::gst_mini_object_copy(self.as_ptr()
-                as *const ffi::GstMiniObject)
-                as *const Self::GstType)
+            GstRc::from_glib_full(
+                ffi::gst_mini_object_copy(self.as_ptr() as *const ffi::GstMiniObject)
+                    as *const Self::GstType,
+            )
         }
     }
 }
@@ -287,7 +288,8 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
 }
 
 impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *const *mut T::GstType>
-    for GstRc<T> {
+    for GstRc<T>
+{
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     type Storage = (
         Vec<Stash<'a, *mut T::GstType, GstRc<T>>>,
@@ -351,7 +353,8 @@ impl<T: MiniObject + 'static> FromGlibPtrBorrow<*mut T::GstType> for GstRc<T> {
 }
 
 impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *mut *mut T::GstType>
-    for GstRc<T> {
+    for GstRc<T>
+{
     unsafe fn from_glib_none_num_as_vec(ptr: *mut *mut T::GstType, num: usize) -> Vec<Self> {
         if num == 0 || ptr.is_null() {
             return Vec::new();
@@ -385,7 +388,8 @@ impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *mut *mut 
 }
 
 impl<T: MiniObject + 'static> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *mut *mut T::GstType>
-    for GstRc<T> {
+    for GstRc<T>
+{
     unsafe fn from_glib_none_as_vec(ptr: *mut *mut T::GstType) -> Vec<Self> {
         FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, c_ptr_array_len(ptr))
     }
@@ -400,7 +404,8 @@ impl<T: MiniObject + 'static> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *m
 }
 
 impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *const *mut T::GstType>
-    for GstRc<T> {
+    for GstRc<T>
+{
     unsafe fn from_glib_none_num_as_vec(ptr: *const *mut T::GstType, num: usize) -> Vec<Self> {
         FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr as *mut *mut _, num)
     }
@@ -418,7 +423,8 @@ impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *const *mu
 
 impl<
     T: MiniObject + 'static,
-> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *const *mut T::GstType> for GstRc<T> {
+> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *const *mut T::GstType> for GstRc<T>
+{
     unsafe fn from_glib_none_as_vec(ptr: *const *mut T::GstType) -> Vec<Self> {
         FromGlibPtrArrayContainerAsVec::from_glib_none_as_vec(ptr as *mut *mut _)
     }
@@ -441,7 +447,8 @@ impl<T: MiniObject + glib::StaticType> glib::StaticType for GstRc<T> {
 }
 
 impl<'a, T: MiniObject + glib::StaticType + 'static> glib::value::FromValueOptional<'a>
-    for GstRc<T> {
+    for GstRc<T>
+{
     unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
         let ptr = gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
         from_glib_none(ptr as *const T::GstType)
