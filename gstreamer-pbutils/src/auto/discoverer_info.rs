@@ -44,9 +44,6 @@ pub trait DiscovererInfoExt {
 
     fn get_duration(&self) -> gst::ClockTime;
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    fn get_live(&self) -> bool;
-
     fn get_misc(&self) -> Option<gst::Structure>;
 
     fn get_missing_elements_installer_details(&self) -> Vec<String>;
@@ -96,13 +93,6 @@ impl<O: IsA<DiscovererInfo>> DiscovererInfoExt for O {
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_discoverer_info_get_duration(const_override(self.to_glib_none().0)))
-        }
-    }
-
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    fn get_live(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_discoverer_info_get_live(const_override(self.to_glib_none().0)))
         }
     }
 
