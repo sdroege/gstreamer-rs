@@ -65,5 +65,8 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
+    pub use discoverer::*;
+    pub use discoverer_video_info::*;
+
     pub use auto::traits::*;
 }
