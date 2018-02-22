@@ -9,9 +9,8 @@
 
 use gst;
 
-use Discoverer;
+use auto::Discoverer;
 
-use glib;
 use glib::Value;
 use glib::IsA;
 use glib::signal::connect;
@@ -26,21 +25,15 @@ use gobject_ffi;
 use std::mem::transmute;
 use std::boxed::Box as Box_;
 
-pub trait DiscovererExtManual {
-    fn set_property_timeout(&self, timeout: gst::ClockTime);
-    fn get_property_timeout(&self) -> gst::ClockTime;
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<Discoverer> + IsA<glib::object::Object>> DiscovererExtManual for O {
-    fn set_property_timeout(&self, timeout: gst::ClockTime) {
+impl Discoverer {
+    pub fn set_property_timeout(&self, timeout: gst::ClockTime) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0,
                     "timeout".to_glib_none().0, Value::from(&timeout).to_glib_none().0);
         }
     }
 
-    fn get_property_timeout(&self) -> gst::ClockTime {
+    pub fn get_property_timeout(&self) -> gst::ClockTime {
         let mut value = Value::from(&0u64);
         unsafe {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "timeout".to_glib_none().0, value.to_glib_none_mut().0);
@@ -48,7 +41,7 @@ impl<O: IsA<Discoverer> + IsA<glib::object::Object>> DiscovererExtManual for O {
         value.get().unwrap()
     }
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "notify::timeout",

@@ -4,7 +4,6 @@
 
 mod discoverer;
 pub use self::discoverer::Discoverer;
-pub use self::discoverer::DiscovererExt;
 
 mod discoverer_audio_info;
 pub use self::discoverer_audio_info::DiscovererAudioInfo;
@@ -34,7 +33,6 @@ pub use self::flags::DiscovererSerializeFlags;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::DiscovererExt;
     pub use super::DiscovererInfoExt;
     pub use super::DiscovererStreamInfoExt;
 }

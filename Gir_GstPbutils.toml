@@ -72,6 +72,7 @@ conversion_type = "scalar"
 [[object]]
 name = "GstPbutils.Discoverer"
 status = "generate"
+trait = false
 
     [[object.function]]
     name = "discover_uri_async"
