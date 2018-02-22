@@ -10,6 +10,8 @@
 extern crate bitflags;
 extern crate libc;
 
+use std::sync::{Once, ONCE_INIT};
+
 #[macro_use]
 extern crate glib;
 extern crate glib_sys as glib_ffi;
@@ -17,6 +19,8 @@ extern crate gobject_sys as gobject_ffi;
 extern crate gstreamer as gst;
 extern crate gstreamer_sys as gst_ffi;
 extern crate gstreamer_pbutils_sys as ffi;
+
+static PBUTILS_INIT: Once = ONCE_INIT;
 
 macro_rules! callback_guard {
     () => (
@@ -29,6 +33,9 @@ macro_rules! assert_initialized_main_thread {
         if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
+        ::PBUTILS_INIT.call_once(|| {
+            unsafe{::ffi::gst_pb_utils_init()};
+        });
     )
 }
 
