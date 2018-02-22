@@ -10,17 +10,25 @@
 use DiscovererStreamInfo;
 use DiscovererStreamInfoExt;
 
-pub struct DiscovererStreamInfoIterator {
-    stream_info: Option<DiscovererStreamInfo>
+pub struct DiscovererStreamInfoIter {
+    stream_info: Option<DiscovererStreamInfo>,
+    direction_forward: bool
 }
 
-impl Iterator for DiscovererStreamInfoIterator {
+impl Iterator for DiscovererStreamInfoIter {
     type Item = DiscovererStreamInfo;
 
     fn next(&mut self) -> Option<DiscovererStreamInfo> {
         let current = self.stream_info.take();
         self.stream_info = match &current {
-            &Some(ref c) => c.get_next(),
+            &Some(ref c) => {
+                // Decide on the direction
+                if self.direction_forward {
+                    c.get_next()
+                } else {
+                    c.get_previous()
+                }
+            },
             &None => None
         };
         current
@@ -28,9 +36,17 @@ impl Iterator for DiscovererStreamInfoIterator {
 }
 
 impl DiscovererStreamInfo {
-    pub fn next_iter(&self) -> DiscovererStreamInfoIterator {
-        DiscovererStreamInfoIterator {
-            stream_info: self.get_next()
+    pub fn next_iter(&self) -> DiscovererStreamInfoIter {
+        DiscovererStreamInfoIter {
+            stream_info: self.get_next(),
+            direction_forward: true
+        }
+    }
+
+    pub fn previous_iter(&self) -> DiscovererStreamInfoIter {
+        DiscovererStreamInfoIter {
+            stream_info: self.get_previous(),
+            direction_forward: false
         }
     }
 }
