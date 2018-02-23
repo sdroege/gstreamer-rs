@@ -61,6 +61,9 @@ pub use self::r_t_s_p_thread_pool::RTSPThreadPoolExt;
 mod r_t_s_p_address;
 pub use self::r_t_s_p_address::RTSPAddress;
 
+mod r_t_s_p_token;
+pub use self::r_t_s_p_token::RTSPToken;
+
 mod enums;
 pub use self::enums::RTSPAddressPoolResult;
 pub use self::enums::RTSPMediaStatus;

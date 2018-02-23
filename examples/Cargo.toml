@@ -10,7 +10,9 @@ gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
+gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
+gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
@@ -29,6 +31,7 @@ gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
 tokio = ["gstreamer/futures", "futures", "tokio-core"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
+gst-rtsp-server-record = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 default-features = []
 v1_10 = ["gstreamer/v1_10"]
 
@@ -96,3 +99,7 @@ name = "toc"
 [[bin]]
 name = "tokio"
 required-features = ["tokio"]
+
+[[bin]]
+name = "rtsp-server-record"
+required-features = ["gst-rtsp-server-record"]
