@@ -44,6 +44,9 @@ manual = [
     "GObject.Object",
     "Gio.TlsCertificateFlags",
     "Gio.TlsCertificate",
+    "Gio.TlsDatabase",
+    "Gio.TlsConnection",
+    "Gio.TlsAuthenticationMode",
     "Gio.Socket",
     "Gio.Cancellable",
     "Gio.SocketFamily",
@@ -229,3 +232,17 @@ status="generate"
     name = "make_basic"
         [object.function.return]
 	nullable = false
+
+    [[object.function]]
+    name = "set_default_token"
+    # gir forgets mut
+    ignore = true
+
+[[object]]
+name="GstRtspServer.RTSPToken"
+status = "generate"
+concurrency = "none"
+    [[object.function]]
+    name = "writable_structure"
+    # mutable ref
+    ignore = true
