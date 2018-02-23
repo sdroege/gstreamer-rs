@@ -644,10 +644,7 @@ When set to another value than %G_TLS_AUTHENTICATION_NONE,
             <doc xml:space="preserve">a #GstRTSPAuth</doc>
             <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
           </instance-parameter>
-          <parameter name="mode"
-                     transfer-ownership="none"
-                     nullable="1"
-                     allow-none="1">
+          <parameter name="mode" transfer-ownership="none">
             <doc xml:space="preserve">a #GTlsAuthenticationMode</doc>
             <type name="Gio.TlsAuthenticationMode"
                   c:type="GTlsAuthenticationMode"/>
