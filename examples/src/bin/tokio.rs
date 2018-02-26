@@ -1,25 +1,16 @@
-#[cfg(feature = "tokio")]
 extern crate gstreamer as gst;
-#[cfg(feature = "tokio")]
 use gst::prelude::*;
 
-#[cfg(feature = "tokio")]
 extern crate futures;
-#[cfg(feature = "tokio")]
 use futures::stream::Stream;
-#[cfg(feature = "tokio")]
 extern crate tokio_core;
-#[cfg(feature = "tokio")]
 use tokio_core::reactor::Core;
 
-#[cfg(feature = "tokio")]
 use std::env;
 
-#[cfg(feature = "tokio")]
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[cfg(feature = "tokio")]
 fn example_main() {
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
@@ -63,14 +54,8 @@ fn example_main() {
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 }
 
-#[cfg(feature = "tokio")]
 fn main() {
     // tutorials_common::run is only required to set up the application environent on macOS
     // (but not necessary in normal Cocoa applications where this is set up autmatically)
     examples_common::run(example_main);
-}
-
-#[cfg(not(feature = "tokio"))]
-fn main() {
-    println!("Please compile with --features tokio");
 }

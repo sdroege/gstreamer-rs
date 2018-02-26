@@ -1,15 +1,11 @@
 extern crate gstreamer as gst;
-#[cfg(feature = "gst-player")]
 use gst::prelude::*;
 
-#[cfg(feature = "gst-player")]
 extern crate gstreamer_player as gst_player;
 
-#[cfg(feature = "gst-player")]
 extern crate glib;
 
 use std::env;
-#[cfg(feature = "gst-player")]
 use std::sync::{Arc, Mutex};
 
 extern crate failure;
@@ -21,7 +17,6 @@ use failure::Error;
 #[path = "../examples-common.rs"]
 mod examples_common;
 
-#[cfg(feature = "gst-player")]
 fn main_loop(uri: &str) -> Result<(), Error> {
     gst::init()?;
 
@@ -78,13 +73,6 @@ fn example_main() {
         std::process::exit(-1)
     };
 
-    #[cfg(not(feature = "gst-player"))]
-    {
-        eprintln!("Feature gst-player is required. Please rebuild with --features gst-player");
-        std::process::exit(-1)
-    }
-
-    #[cfg(feature = "gst-player")]
     match main_loop(uri) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
