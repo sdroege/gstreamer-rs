@@ -80,7 +80,6 @@ fn make_fec_encoder(fec_percentage: u32) -> Result<gst::Element, Error> {
     let fecenc = make_element("rtpulpfecenc", None)?;
 
     fecenc.set_property("pt", &100u32.to_value())?;
-    fecenc.set_property("mux-seq", &true.to_value())?;
     fecenc.set_property("multipacket", &true.to_value())?;
     fecenc.set_property("percentage", &fec_percentage.to_value())?;
 
