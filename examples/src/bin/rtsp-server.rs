@@ -1,11 +1,8 @@
-#[cfg(feature = "gst-rtsp-server")]
 use std::env;
 
 extern crate gstreamer as gst;
 
-#[cfg(feature = "gst-rtsp-server")]
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
-#[cfg(feature = "gst-rtsp-server")]
 use gst_rtsp_server::prelude::*;
 
 extern crate glib;
@@ -13,7 +10,6 @@ extern crate glib;
 extern crate failure;
 use failure::Error;
 
-#[cfg(feature = "gst-rtsp-server")]
 #[macro_use]
 extern crate failure_derive;
 
@@ -22,15 +18,12 @@ mod examples_common;
 
 #[derive(Debug, Fail)]
 #[fail(display = "Could not get mount points")]
-#[cfg(feature = "gst-rtsp-server")]
 struct NoMountPoints;
 
 #[derive(Debug, Fail)]
 #[fail(display = "Usage: {} LAUNCH_LINE", _0)]
-#[cfg(feature = "gst-rtsp-server")]
 struct UsageError(String);
 
-#[cfg(feature = "gst-rtsp-server")]
 fn main_loop() -> Result<(), Error> {
     let args: Vec<_> = env::args().collect();
 
@@ -62,16 +55,6 @@ fn main_loop() -> Result<(), Error> {
 
 fn example_main() -> Result<(), Error> {
     gst::init()?;
-
-    #[cfg(not(feature = "gst-rtsp-server"))]
-    {
-        eprintln!(
-            "Feature gst-rtsp-server is required. Please rebuild with --features gst-rtsp-server"
-        );
-        std::process::exit(-1)
-    }
-
-    #[cfg(feature = "gst-rtsp-server")]
     main_loop()
 }
 

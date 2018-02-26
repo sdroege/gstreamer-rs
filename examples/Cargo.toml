@@ -34,3 +34,65 @@ v1_10 = ["gstreamer/v1_10"]
 
 [badges]
 travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+
+[[bin]]
+name = "appsink"
+
+[[bin]]
+name = "appsrc"
+
+[[bin]]
+name = "decodebin"
+
+[[bin]]
+name = "events"
+
+[[bin]]
+name = "gtksink"
+required-features = ["gtksink"]
+
+[[bin]]
+name = "gtkvideooverlay"
+required-features = ["gtkvideooverlay"]
+
+[[bin]]
+name = "iterator"
+
+[[bin]]
+name = "launch_glib_main"
+
+[[bin]]
+name = "launch"
+
+[[bin]]
+name = "pad_probes"
+
+[[bin]]
+name = "playbin"
+
+[[bin]]
+name = "player"
+required-features = ["gst-player"]
+
+[[bin]]
+name = "queries"
+
+[[bin]]
+name = "rtpfecclient"
+
+[[bin]]
+name = "rtpfecserver"
+
+[[bin]]
+name = "rtsp-server"
+required-features = ["gst-rtsp-server"]
+
+[[bin]]
+name = "tagsetter"
+
+[[bin]]
+name = "toc"
+
+[[bin]]
+name = "tokio"
+required-features = ["tokio"]

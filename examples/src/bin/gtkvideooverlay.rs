@@ -1,48 +1,30 @@
-#[cfg(feature = "gtkvideooverlay")]
 extern crate gstreamer as gst;
-#[cfg(feature = "gtkvideooverlay")]
 use gst::prelude::*;
 
-#[cfg(feature = "gtkvideooverlay")]
 extern crate gstreamer_video as gst_video;
-#[cfg(feature = "gtkvideooverlay")]
 use gst_video::prelude::*;
 
-#[cfg(feature = "gtkvideooverlay")]
 extern crate glib;
-#[cfg(feature = "gtkvideooverlay")]
 use glib::translate::ToGlibPtr;
 
-#[cfg(feature = "gtkvideooverlay")]
 extern crate gio;
-#[cfg(feature = "gtkvideooverlay")]
 use gio::prelude::*;
 
-#[cfg(feature = "gtkvideooverlay")]
 extern crate gtk;
-#[cfg(feature = "gtkvideooverlay")]
 use gtk::prelude::*;
 
-#[cfg(feature = "gtkvideooverlay")]
 extern crate gdk;
-#[cfg(feature = "gtkvideooverlay")]
 use gdk::prelude::*;
 
-#[cfg(feature = "gtkvideooverlay")]
 use std::env;
 
-#[cfg(feature = "gtkvideooverlay")]
 use std::os::raw::c_void;
 
-#[cfg(feature = "gtkvideooverlay")]
 extern crate send_cell;
-#[cfg(feature = "gtkvideooverlay")]
 use send_cell::SendCell;
 
-#[cfg(feature = "gtkvideooverlay")]
 use std::process;
 
-#[cfg(feature = "gtkvideooverlay")]
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
     let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
@@ -179,7 +161,6 @@ fn create_ui(app: &gtk::Application) {
     });
 }
 
-#[cfg(feature = "gtkvideooverlay")]
 fn main() {
     #[cfg(not(unix))]
     {
@@ -195,9 +176,4 @@ fn main() {
     app.connect_activate(create_ui);
     let args = env::args().collect::<Vec<_>>();
     app.run(&args);
-}
-
-#[cfg(not(feature = "gtkvideooverlay"))]
-fn main() {
-    println!("Please compile with --feature gtkvideooverlay");
 }
