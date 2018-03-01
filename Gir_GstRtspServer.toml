@@ -92,6 +92,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "GstRtspServer.RTSPToken"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
@@ -236,13 +241,4 @@ status="generate"
     [[object.function]]
     name = "set_default_token"
     # gir forgets mut
-    ignore = true
-
-[[object]]
-name="GstRtspServer.RTSPToken"
-status = "generate"
-concurrency = "none"
-    [[object.function]]
-    name = "writable_structure"
-    # mutable ref
     ignore = true
