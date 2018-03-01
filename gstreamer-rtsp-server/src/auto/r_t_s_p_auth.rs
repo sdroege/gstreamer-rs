@@ -62,10 +62,10 @@ unsafe impl Send for RTSPAuth {}
 unsafe impl Sync for RTSPAuth {}
 
 pub trait RTSPAuthExt {
-    fn add_basic(&self, basic: &str, token: &mut RTSPToken);
+    fn add_basic(&self, basic: &str, token: &RTSPToken);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    fn add_digest(&self, user: &str, pass: &str, token: &mut RTSPToken);
+    fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken);
 
     fn get_default_token(&self) -> Option<RTSPToken>;
 
@@ -96,16 +96,16 @@ pub trait RTSPAuthExt {
 }
 
 impl<O: IsA<RTSPAuth> + IsA<glib::object::Object>> RTSPAuthExt for O {
-    fn add_basic(&self, basic: &str, token: &mut RTSPToken) {
+    fn add_basic(&self, basic: &str, token: &RTSPToken) {
         unsafe {
-            ffi::gst_rtsp_auth_add_basic(self.to_glib_none().0, basic.to_glib_none().0, token.to_glib_none_mut().0);
+            ffi::gst_rtsp_auth_add_basic(self.to_glib_none().0, basic.to_glib_none().0, token.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    fn add_digest(&self, user: &str, pass: &str, token: &mut RTSPToken) {
+    fn add_digest(&self, user: &str, pass: &str, token: &RTSPToken) {
         unsafe {
-            ffi::gst_rtsp_auth_add_digest(self.to_glib_none().0, user.to_glib_none().0, pass.to_glib_none().0, token.to_glib_none_mut().0);
+            ffi::gst_rtsp_auth_add_digest(self.to_glib_none().0, user.to_glib_none().0, pass.to_glib_none().0, token.to_glib_none().0);
         }
     }
 

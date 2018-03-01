@@ -93,4 +93,5 @@ pub mod prelude {
     pub use r_t_s_p_client::RTSPClientExtManual;
     pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
     pub use r_t_s_p_auth::RTSPAuthExtManual;
+    pub use r_t_s_p_token::GstRcRTSPTokenExt;
 }
