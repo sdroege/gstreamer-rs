@@ -261,6 +261,7 @@ unsafe extern "C" fn rs_iterator_copy<T, I: IteratorImpl<T>>(
 ) where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
+    callback_guard!();
     let it = it as *const RsIterator<T, I>;
     let copy = copy as *mut RsIterator<T, I>;
 
@@ -271,6 +272,7 @@ unsafe extern "C" fn rs_iterator_free<T, I: IteratorImpl<T>>(it: *mut ffi::GstIt
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
+    callback_guard!();
     let it = it as *mut RsIterator<T, I>;
     let _ = (*it).imp.take();
 }
@@ -282,6 +284,7 @@ unsafe extern "C" fn rs_iterator_next<T, I: IteratorImpl<T>>(
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
+    callback_guard!();
     let it = it as *mut RsIterator<T, I>;
     match (*it).imp.as_mut().map(|imp| imp.next()).unwrap() {
         Some(Ok(value)) => {
@@ -302,6 +305,7 @@ unsafe extern "C" fn rs_iterator_resync<T, I: IteratorImpl<T>>(it: *mut ffi::Gst
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
+    callback_guard!();
     let it = it as *mut RsIterator<T, I>;
     (*it).imp.as_mut().map(|imp| imp.resync()).unwrap();
 }
@@ -349,6 +353,7 @@ unsafe extern "C" fn filter_trampoline<T>(value: gconstpointer, func: gconstpoin
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    callback_guard!();
     let value = value as *const gobject_ffi::GValue;
 
     let func = func as *const gobject_ffi::GValue;
@@ -367,6 +372,8 @@ where
 }
 
 unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
+    callback_guard!();
+
     let boxed = Arc::from_raw(boxed as *const (Box<Fn(T) -> bool + Send + Sync + 'static>));
     let copy = Arc::clone(&boxed);
 
@@ -377,11 +384,15 @@ unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
 }
 
 unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
+    callback_guard!();
+
     let _ = Arc::from_raw(boxed as *const (Box<Fn(T) -> bool + Send + Sync + 'static>));
 }
 
 unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_ffi::GType {
     use std::sync::{Once, ONCE_INIT};
+
+    callback_guard!();
 
     static mut TYPE: glib_ffi::GType = gobject_ffi::G_TYPE_INVALID;
     static ONCE: Once = ONCE_INIT;
@@ -418,6 +429,7 @@ unsafe extern "C" fn find_trampoline<T>(value: gconstpointer, func: gconstpointe
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    callback_guard!();
     let value = value as *const gobject_ffi::GValue;
 
     let func = func as *const &mut (FnMut(T) -> bool);
@@ -435,6 +447,7 @@ unsafe extern "C" fn foreach_trampoline<T>(value: *const gobject_ffi::GValue, fu
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    callback_guard!();
     let func = func as *const &mut (FnMut(T));
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
@@ -450,6 +463,7 @@ unsafe extern "C" fn fold_trampoline<T, U>(
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    callback_guard!();
     let func = func as *const &mut (FnMut(U, T) -> Result<U, U>);
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();

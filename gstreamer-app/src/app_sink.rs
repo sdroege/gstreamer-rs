@@ -11,6 +11,7 @@ use ffi;
 use gst_ffi;
 use glib::translate::*;
 use gst;
+use glib::source::CallbackGuard;
 use glib_ffi::gpointer;
 use std::ptr;
 
@@ -102,6 +103,7 @@ impl AppSinkCallbacksBuilder {
 }
 
 unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
+    let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     callbacks
@@ -114,6 +116,7 @@ unsafe extern "C" fn trampoline_new_preroll(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> gst_ffi::GstFlowReturn {
+    let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     callbacks
@@ -128,6 +131,7 @@ unsafe extern "C" fn trampoline_new_sample(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> gst_ffi::GstFlowReturn {
+    let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     callbacks
@@ -139,6 +143,7 @@ unsafe extern "C" fn trampoline_new_sample(
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
+    let _guard = CallbackGuard::new();
     Box::<AppSinkCallbacks>::from_raw(ptr as *mut _);
 }
 

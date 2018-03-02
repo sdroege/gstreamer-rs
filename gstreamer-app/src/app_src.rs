@@ -10,6 +10,7 @@ use AppSrc;
 use ffi;
 use glib::translate::*;
 use gst;
+use glib::source::CallbackGuard;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
 use std::mem;
@@ -108,6 +109,7 @@ unsafe extern "C" fn trampoline_need_data(
     length: u32,
     callbacks: gpointer,
 ) {
+    let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
     callbacks
@@ -117,6 +119,7 @@ unsafe extern "C" fn trampoline_need_data(
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
+    let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
     callbacks
@@ -130,6 +133,7 @@ unsafe extern "C" fn trampoline_seek_data(
     offset: u64,
     callbacks: gpointer,
 ) -> gboolean {
+    let _guard = CallbackGuard::new();
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
     callbacks
@@ -141,6 +145,7 @@ unsafe extern "C" fn trampoline_seek_data(
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
+    let _guard = CallbackGuard::new();
     Box::<AppSrcCallbacks>::from_raw(ptr as *mut _);
 }
 

@@ -18,6 +18,7 @@ use ffi;
 use glib;
 use glib::IsA;
 use glib::translate::*;
+use glib::source::CallbackGuard;
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use libc::c_void;
@@ -37,6 +38,7 @@ unsafe extern "C" fn trampoline_wait_async(
     id: gpointer,
     func: gpointer,
 ) -> gboolean {
+    let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static) = transmute(func);
     f(
@@ -47,6 +49,7 @@ unsafe extern "C" fn trampoline_wait_async(
 }
 
 unsafe extern "C" fn destroy_closure_wait_async(ptr: gpointer) {
+    let _guard = CallbackGuard::new();
     Box::<Box<Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static>>::from_raw(ptr as *mut _);
 }
 
