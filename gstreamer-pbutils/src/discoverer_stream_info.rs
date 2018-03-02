@@ -12,7 +12,7 @@ use DiscovererStreamInfoExt;
 
 pub struct Iter {
     stream_info: Option<DiscovererStreamInfo>,
-    direction_forward: bool
+    direction_forward: bool,
 }
 
 impl Iterator for Iter {
@@ -28,8 +28,8 @@ impl Iterator for Iter {
                 } else {
                     c.get_previous()
                 }
-            },
-            &None => None
+            }
+            &None => None,
         };
         current
     }
@@ -39,14 +39,14 @@ impl DiscovererStreamInfo {
     pub fn next_iter(&self) -> Iter {
         Iter {
             stream_info: self.get_next(),
-            direction_forward: true
+            direction_forward: true,
         }
     }
 
     pub fn previous_iter(&self) -> Iter {
         Iter {
             stream_info: self.get_previous(),
-            direction_forward: false
+            direction_forward: false,
         }
     }
 }

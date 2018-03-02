@@ -9,7 +9,6 @@ pub trait RTSPAuthExtManual {
 }
 
 impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {
-
     fn set_default_token<'a, P: Into<Option<&'a mut RTSPToken>>>(&self, token: P) {
         let mut token = token.into();
         unsafe {
