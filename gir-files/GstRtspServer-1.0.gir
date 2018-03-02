@@ -484,7 +484,7 @@ enables the client with privileges listed in @token.</doc>
               c:identifier="gst_rtsp_auth_get_default_token">
         <doc xml:space="preserve">Get the default token for @auth. This token will be used for unauthenticated
 users.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPToken of @auth. gst_rtsp_token_unref() after
 usage.</doc>
           <type name="RTSPToken" c:type="GstRTSPToken*"/>
@@ -529,7 +529,7 @@ usage.</doc>
       <method name="get_tls_certificate"
               c:identifier="gst_rtsp_auth_get_tls_certificate">
         <doc xml:space="preserve">Get the #GTlsCertificate used for negotiating TLS @auth.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GTlsCertificate of @auth. g_object_unref() after
 usage.</doc>
           <type name="Gio.TlsCertificate" c:type="GTlsCertificate*"/>
@@ -545,7 +545,7 @@ usage.</doc>
               c:identifier="gst_rtsp_auth_get_tls_database"
               version="1.6">
         <doc xml:space="preserve">Get the #GTlsDatabase used for verifying client certificate.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GTlsDatabase of @auth. g_object_unref() after
 usage.</doc>
           <type name="Gio.TlsDatabase" c:type="GTlsDatabase*"/>
@@ -644,10 +644,7 @@ When set to another value than %G_TLS_AUTHENTICATION_NONE,
             <doc xml:space="preserve">a #GstRTSPAuth</doc>
             <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
           </instance-parameter>
-          <parameter name="mode"
-                     transfer-ownership="none"
-                     nullable="1"
-                     allow-none="1">
+          <parameter name="mode" transfer-ownership="none">
             <doc xml:space="preserve">a #GTlsAuthenticationMode</doc>
             <type name="Gio.TlsAuthenticationMode"
                   c:type="GTlsAuthenticationMode"/>
@@ -1325,9 +1322,9 @@ configured and the client is ready to start.</doc>
       </method>
       <method name="get_auth" c:identifier="gst_rtsp_client_get_auth">
         <doc xml:space="preserve">Get the #GstRTSPAuth used as the authentication manager of @client.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the #GstRTSPAuth of @client. g_object_unref() after
-usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the #GstRTSPAuth of @client.
+g_object_unref() after usage.</doc>
           <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
         </return-value>
         <parameters>
@@ -1340,7 +1337,7 @@ usage.</doc>
       <method name="get_connection"
               c:identifier="gst_rtsp_client_get_connection">
         <doc xml:space="preserve">Get the #GstRTSPConnection of @client.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the #GstRTSPConnection of @client.
 The connection object returned remains valid until the client is freed.</doc>
           <type name="GstRtsp.RTSPConnection" c:type="GstRTSPConnection*"/>
@@ -1355,7 +1352,7 @@ The connection object returned remains valid until the client is freed.</doc>
       <method name="get_mount_points"
               c:identifier="gst_rtsp_client_get_mount_points">
         <doc xml:space="preserve">Get the #GstRTSPMountPoints object that @client uses to manage its sessions.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstRTSPMountPoints, unref after usage.</doc>
           <type name="RTSPMountPoints" c:type="GstRTSPMountPoints*"/>
         </return-value>
@@ -1369,7 +1366,7 @@ The connection object returned remains valid until the client is freed.</doc>
       <method name="get_session_pool"
               c:identifier="gst_rtsp_client_get_session_pool">
         <doc xml:space="preserve">Get the #GstRTSPSessionPool object that @client uses to manage its sessions.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstRTSPSessionPool, unref after usage.</doc>
           <type name="RTSPSessionPool" c:type="GstRTSPSessionPool*"/>
         </return-value>
@@ -1383,7 +1380,7 @@ The connection object returned remains valid until the client is freed.</doc>
       <method name="get_thread_pool"
               c:identifier="gst_rtsp_client_get_thread_pool">
         <doc xml:space="preserve">Get the #GstRTSPThreadPool used as the thread pool of @client.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPThreadPool of @client. g_object_unref() after
 usage.</doc>
           <type name="RTSPThreadPool" c:type="GstRTSPThreadPool*"/>
@@ -1496,7 +1493,10 @@ element in the #GList should be unreffed before the list is freed.</doc>
             <doc xml:space="preserve">a #GstRTSPClient</doc>
             <type name="RTSPClient" c:type="GstRTSPClient*"/>
           </instance-parameter>
-          <parameter name="auth" transfer-ownership="none">
+          <parameter name="auth"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAuth</doc>
             <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
           </parameter>
@@ -1534,7 +1534,10 @@ created the client but can be overriden later.</doc>
             <doc xml:space="preserve">a #GstRTSPClient</doc>
             <type name="RTSPClient" c:type="GstRTSPClient*"/>
           </instance-parameter>
-          <parameter name="mounts" transfer-ownership="none">
+          <parameter name="mounts"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPMountPoints</doc>
             <type name="RTSPMountPoints" c:type="GstRTSPMountPoints*"/>
           </parameter>
@@ -1594,7 +1597,10 @@ that created the client but can be overridden later.</doc>
             <doc xml:space="preserve">a #GstRTSPClient</doc>
             <type name="RTSPClient" c:type="GstRTSPClient*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPSessionPool</doc>
             <type name="RTSPSessionPool" c:type="GstRTSPSessionPool*"/>
           </parameter>
@@ -1611,7 +1617,10 @@ that created the client but can be overridden later.</doc>
             <doc xml:space="preserve">a #GstRTSPClient</doc>
             <type name="RTSPClient" c:type="GstRTSPClient*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPThreadPool</doc>
             <type name="RTSPThreadPool" c:type="GstRTSPThreadPool*"/>
           </parameter>
@@ -3026,9 +3035,9 @@ not exist.</doc>
       <method name="get_address_pool"
               c:identifier="gst_rtsp_media_get_address_pool">
         <doc xml:space="preserve">Get the #GstRTSPAddressPool used as the address pool of @media.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the #GstRTSPAddressPool of @media. g_object_unref() after
-usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the #GstRTSPAddressPool of @media.
+g_object_unref() after usage.</doc>
           <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
         </return-value>
         <parameters>
@@ -3071,7 +3080,7 @@ usage.</doc>
         <doc xml:space="preserve">Get the clock that is used by the pipeline in @media.
 
 @media must be prepared before this method returns a valid clock object.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstClock used by @media. unref after usage.</doc>
           <type name="Gst.Clock" c:type="GstClock*"/>
         </return-value>
@@ -3111,9 +3120,9 @@ usage.</doc>
       <method name="get_multicast_iface"
               c:identifier="gst_rtsp_media_get_multicast_iface">
         <doc xml:space="preserve">Get the multicast interface used for @media.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the multicast interface for @media. g_free() after
-usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the multicast interface for @media.
+g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
@@ -3126,7 +3135,7 @@ usage.</doc>
       <method name="get_permissions"
               c:identifier="gst_rtsp_media_get_permissions">
         <doc xml:space="preserve">Get the permissions object from @media.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstRTSPPermissions object, unref after usage.</doc>
           <type name="RTSPPermissions" c:type="GstRTSPPermissions*"/>
         </return-value>
@@ -3182,7 +3191,7 @@ usage.</doc>
               c:identifier="gst_rtsp_media_get_range_string">
         <doc xml:space="preserve">Get the current range as a string. @media must be prepared with
 gst_rtsp_media_prepare ().</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">The range as a string, g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
@@ -3459,7 +3468,10 @@ gst_rtsp_media_prepare().</doc>
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAddressPool</doc>
             <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
           </parameter>
@@ -3492,7 +3504,10 @@ gst_rtsp_media_prepare().</doc>
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="clock" transfer-ownership="none">
+          <parameter name="clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">#GstClock to be used</doc>
             <type name="Gst.Clock" c:type="GstClock*"/>
           </parameter>
@@ -3543,7 +3558,10 @@ it is unprepared.</doc>
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="multicast_iface" transfer-ownership="none">
+          <parameter name="multicast_iface"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a multicast interface name</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -3560,7 +3578,10 @@ it is unprepared.</doc>
             <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
-          <parameter name="permissions" transfer-ownership="none">
+          <parameter name="permissions"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPPermissions</doc>
             <type name="RTSPPermissions" c:type="GstRTSPPermissions*"/>
           </parameter>
@@ -4473,7 +4494,7 @@ launch parameter.</doc>
       <method name="get_address_pool"
               c:identifier="gst_rtsp_media_factory_get_address_pool">
         <doc xml:space="preserve">Get the #GstRTSPAddressPool used as the address pool of @factory.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPAddressPool of @factory. g_object_unref() after
 usage.</doc>
           <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
@@ -4533,7 +4554,7 @@ of all medias created from this factory.</doc>
               c:identifier="gst_rtsp_media_factory_get_launch">
         <doc xml:space="preserve">Get the gst_parse_launch() pipeline description that will be used in the
 default prepare vmethod.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the configured launch description. g_free() after
 usage.</doc>
           <type name="utf8" c:type="gchar*"/>
@@ -4563,7 +4584,7 @@ factory will create.</doc>
       <method name="get_multicast_iface"
               c:identifier="gst_rtsp_media_factory_get_multicast_iface">
         <doc xml:space="preserve">Get the multicast interface used for @factory.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the multicast interface for @factory. g_free() after
 usage.</doc>
           <type name="utf8" c:type="gchar*"/>
@@ -4578,7 +4599,7 @@ usage.</doc>
       <method name="get_permissions"
               c:identifier="gst_rtsp_media_factory_get_permissions">
         <doc xml:space="preserve">Get the permissions object from @factory.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstRTSPPermissions object, unref after usage.</doc>
           <type name="RTSPPermissions" c:type="GstRTSPPermissions*"/>
         </return-value>
@@ -4725,7 +4746,10 @@ pipeline before shutdown.</doc>
             <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
             <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAddressPool</doc>
             <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
           </parameter>
@@ -4761,7 +4785,10 @@ of all medias created from this factory.</doc>
             <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
             <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
           </instance-parameter>
-          <parameter name="clock" transfer-ownership="none">
+          <parameter name="clock"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the clock to be used by the media factory</doc>
             <type name="Gst.Clock" c:type="GstClock*"/>
           </parameter>
@@ -4858,7 +4885,10 @@ may of course do something different)</doc>
             <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
             <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
           </instance-parameter>
-          <parameter name="multicast_iface" transfer-ownership="none">
+          <parameter name="multicast_iface"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a multicast interface name</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -4875,7 +4905,10 @@ may of course do something different)</doc>
             <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
             <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
           </instance-parameter>
-          <parameter name="permissions" transfer-ownership="none">
+          <parameter name="permissions"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPPermissions</doc>
             <type name="RTSPPermissions" c:type="GstRTSPPermissions*"/>
           </parameter>
@@ -5349,7 +5382,7 @@ when a client disconnects without sending TEARDOWN.</doc>
       </constructor>
       <virtual-method name="make_path" invoker="make_path">
         <doc xml:space="preserve">Make a path string from @url.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a path string for @url, g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
@@ -5392,7 +5425,7 @@ used after calling this function.</doc>
       </method>
       <method name="make_path" c:identifier="gst_rtsp_mount_points_make_path">
         <doc xml:space="preserve">Make a path string from @url.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a path string for @url, g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
@@ -5476,7 +5509,7 @@ g_object_unref() after usage.</doc>
       </field>
       <field name="make_path">
         <callback name="make_path">
-          <return-value transfer-ownership="full">
+          <return-value transfer-ownership="full" nullable="1">
             <doc xml:space="preserve">a path string for @url, g_free() after usage.</doc>
             <type name="utf8" c:type="gchar*"/>
           </return-value>
@@ -5877,7 +5910,7 @@ occurred. Free with g_source_unref ()</doc>
       </method>
       <method name="get_address" c:identifier="gst_rtsp_server_get_address">
         <doc xml:space="preserve">Get the address on which the server will accept connections.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the server address. g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
@@ -5890,7 +5923,7 @@ occurred. Free with g_source_unref ()</doc>
       </method>
       <method name="get_auth" c:identifier="gst_rtsp_server_get_auth">
         <doc xml:space="preserve">Get the #GstRTSPAuth used as the authentication manager of @server.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPAuth of @server. g_object_unref() after
 usage.</doc>
           <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
@@ -5932,7 +5965,7 @@ usage.</doc>
       <method name="get_mount_points"
               c:identifier="gst_rtsp_server_get_mount_points">
         <doc xml:space="preserve">Get the #GstRTSPMountPoints used as the mount points of @server.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPMountPoints of @server. g_object_unref() after
 usage.</doc>
           <type name="RTSPMountPoints" c:type="GstRTSPMountPoints*"/>
@@ -5946,7 +5979,7 @@ usage.</doc>
       </method>
       <method name="get_service" c:identifier="gst_rtsp_server_get_service">
         <doc xml:space="preserve">Get the service on which the server will accept connections.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the service. use g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
@@ -5960,7 +5993,7 @@ usage.</doc>
       <method name="get_session_pool"
               c:identifier="gst_rtsp_server_get_session_pool">
         <doc xml:space="preserve">Get the #GstRTSPSessionPool used as the session pool of @server.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPSessionPool used for sessions. g_object_unref() after
 usage.</doc>
           <type name="RTSPSessionPool" c:type="GstRTSPSessionPool*"/>
@@ -5975,7 +6008,7 @@ usage.</doc>
       <method name="get_thread_pool"
               c:identifier="gst_rtsp_server_get_thread_pool">
         <doc xml:space="preserve">Get the #GstRTSPThreadPool used as the thread pool of @server.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPThreadPool of @server. g_object_unref() after
 usage.</doc>
           <type name="RTSPThreadPool" c:type="GstRTSPThreadPool*"/>
@@ -6015,7 +6048,10 @@ This function must be called before the server is bound.</doc>
             <doc xml:space="preserve">a #GstRTSPServer</doc>
             <type name="RTSPServer" c:type="GstRTSPServer*"/>
           </instance-parameter>
-          <parameter name="auth" transfer-ownership="none">
+          <parameter name="auth"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAuth</doc>
             <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
           </parameter>
@@ -6051,7 +6087,10 @@ This function must be called before the server is bound.</doc>
             <doc xml:space="preserve">a #GstRTSPServer</doc>
             <type name="RTSPServer" c:type="GstRTSPServer*"/>
           </instance-parameter>
-          <parameter name="mounts" transfer-ownership="none">
+          <parameter name="mounts"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPMountPoints</doc>
             <type name="RTSPMountPoints" c:type="GstRTSPMountPoints*"/>
           </parameter>
@@ -6092,7 +6131,10 @@ This function must be called before the server is bound.</doc>
             <doc xml:space="preserve">a #GstRTSPServer</doc>
             <type name="RTSPServer" c:type="GstRTSPServer*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPSessionPool</doc>
             <type name="RTSPSessionPool" c:type="GstRTSPSessionPool*"/>
           </parameter>
@@ -6109,7 +6151,10 @@ This function must be called before the server is bound.</doc>
             <doc xml:space="preserve">a #GstRTSPServer</doc>
             <type name="RTSPServer" c:type="GstRTSPServer*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPThreadPool</doc>
             <type name="RTSPThreadPool" c:type="GstRTSPThreadPool*"/>
           </parameter>
@@ -6142,7 +6187,10 @@ that the HTTP server read from the socket while parsing the HTTP header.</doc>
             <doc xml:space="preserve">the port used by the other end</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
-          <parameter name="initial_buffer" transfer-ownership="none">
+          <parameter name="initial_buffer"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">any initial data that was already read from the socket</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -6353,8 +6401,9 @@ element in the #GList should be unreffed before the list is freed.</doc>
       </method>
       <method name="get_header" c:identifier="gst_rtsp_session_get_header">
         <doc xml:space="preserve">Get the string that can be placed in the Session header field.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the Session header of @session. g_free() after usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the Session header of @session.
+g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
@@ -6367,7 +6416,7 @@ element in the #GList should be unreffed before the list is freed.</doc>
       <method name="get_media" c:identifier="gst_rtsp_session_get_media">
         <doc xml:space="preserve">Get the session media for @path. @matched will contain the number of matched
 characters of @path.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the configuration for @path in @sess.</doc>
           <type name="RTSPSessionMedia" c:type="GstRTSPSessionMedia*"/>
         </return-value>
@@ -6392,9 +6441,9 @@ characters of @path.</doc>
       <method name="get_sessionid"
               c:identifier="gst_rtsp_session_get_sessionid">
         <doc xml:space="preserve">Get the sessionid of @session.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">the sessionid of @session. The value remains valid
-as long as @session is alive.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">the sessionid of @session.
+The value remains valid as long as @session is alive.</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
         <parameters>
@@ -6716,9 +6765,9 @@ interleaved transport.</doc>
       </method>
       <method name="get_media" c:identifier="gst_rtsp_session_media_get_media">
         <doc xml:space="preserve">Get the #GstRTSPMedia that was used when constructing @media</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">the #GstRTSPMedia of @media. Remains valid as long
-as @media is valid.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">the #GstRTSPMedia of @media.
+Remains valid as long as @media is valid.</doc>
           <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
         </return-value>
         <parameters>
@@ -6761,9 +6810,9 @@ with configured transports.</doc>
       <method name="get_transport"
               c:identifier="gst_rtsp_session_media_get_transport">
         <doc xml:space="preserve">Get a previously created #GstRTSPStreamTransport for the stream at @idx.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">a #GstRTSPStreamTransport that is valid until the
-session of @media is unreffed.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">a #GstRTSPStreamTransport that is
+valid until the session of @media is unreffed.</doc>
           <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
         </return-value>
         <parameters>
@@ -6956,7 +7005,7 @@ for more than their timeout.</doc>
       </method>
       <method name="create" c:identifier="gst_rtsp_session_pool_create">
         <doc xml:space="preserve">Create a new #GstRTSPSession object in @pool.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a new #GstRTSPSession.</doc>
           <type name="RTSPSession" c:type="GstRTSPSession*"/>
         </return-value>
@@ -7346,9 +7395,9 @@ then also be send to the values configured in @trans.
       <method name="get_address_pool"
               c:identifier="gst_rtsp_stream_get_address_pool">
         <doc xml:space="preserve">Get the #GstRTSPAddressPool used as the address pool of @stream.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the #GstRTSPAddressPool of @stream. g_object_unref() after
-usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the #GstRTSPAddressPool of @stream.
+g_object_unref() after usage.</doc>
           <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
         </return-value>
         <parameters>
@@ -7375,9 +7424,9 @@ usage.</doc>
       </method>
       <method name="get_caps" c:identifier="gst_rtsp_stream_get_caps">
         <doc xml:space="preserve">Retrieve the current caps of @stream.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the #GstCaps of @stream. use gst_caps_unref()
-after usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the #GstCaps of @stream.
+use gst_caps_unref() after usage.</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </return-value>
         <parameters>
@@ -7389,7 +7438,7 @@ after usage.</doc>
       </method>
       <method name="get_control" c:identifier="gst_rtsp_stream_get_control">
         <doc xml:space="preserve">Get the control string to identify this stream.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the control string. g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
@@ -7440,7 +7489,7 @@ after usage.</doc>
       <method name="get_joined_bin"
               c:identifier="gst_rtsp_stream_get_joined_bin">
         <doc xml:space="preserve">Get the previous joined bin with gst_rtsp_stream_join_bin() or NULL.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the joined bin or NULL.</doc>
           <type name="Gst.Bin" c:type="GstBin*"/>
         </return-value>
@@ -7489,9 +7538,9 @@ after usage.</doc>
       <method name="get_multicast_iface"
               c:identifier="gst_rtsp_stream_get_multicast_iface">
         <doc xml:space="preserve">Get the multicast interface used for @stream.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">the multicast interface for @stream. g_free() after
-usage.</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">the multicast interface for @stream.
+g_free() after usage.</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
@@ -7715,7 +7764,7 @@ only be called when @stream has been joined.</doc>
       </method>
       <method name="get_sinkpad" c:identifier="gst_rtsp_stream_get_sinkpad">
         <doc xml:space="preserve">Get the sinkpad associated with @stream.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the sinkpad. Unref after usage.</doc>
           <type name="Gst.Pad" c:type="GstPad*"/>
         </return-value>
@@ -7728,7 +7777,7 @@ only be called when @stream has been joined.</doc>
       </method>
       <method name="get_srcpad" c:identifier="gst_rtsp_stream_get_srcpad">
         <doc xml:space="preserve">Get the srcpad associated with @stream.</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the srcpad. Unref after usage.</doc>
           <type name="Gst.Pad" c:type="GstPad*"/>
         </return-value>
@@ -7784,7 +7833,10 @@ be called when @stream has been joined.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="control" transfer-ownership="none">
+          <parameter name="control"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a control string</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -7897,7 +7949,11 @@ the RTP parts of the pipeline and not the RTCP parts.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="position" transfer-ownership="none">
+          <parameter name="position"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:space="preserve">current position of a #GstRTSPStream</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
         </parameters>
@@ -7914,7 +7970,11 @@ the RTP parts of the pipeline and not the RTCP parts.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="stop" transfer-ownership="none">
+          <parameter name="stop"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:space="preserve">current stop of a #GstRTSPStream</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
         </parameters>
@@ -7986,7 +8046,7 @@ not be sent to the values configured in @trans.
               c:identifier="gst_rtsp_stream_request_aux_sender"
               version="1.6">
         <doc xml:space="preserve">Creating a rtxsend bin</doc>
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">a #GstElement.</doc>
           <type name="Gst.Element" c:type="GstElement*"/>
         </return-value>
@@ -8045,7 +8105,10 @@ the address could be reserved. gst_rtsp_address_free() after usage.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="pool" transfer-ownership="none">
+          <parameter name="pool"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAddressPool</doc>
             <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
           </parameter>
@@ -8119,7 +8182,10 @@ an RTSP connection.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="control" transfer-ownership="none">
+          <parameter name="control"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a control string</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -8168,7 +8234,10 @@ an RTSP connection.</doc>
             <doc xml:space="preserve">a #GstRTSPStream</doc>
             <type name="RTSPStream" c:type="GstRTSPStream*"/>
           </instance-parameter>
-          <parameter name="multicast_iface" transfer-ownership="none">
+          <parameter name="multicast_iface"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a multicast interface name</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -8476,7 +8545,7 @@ determined. g_free() after usage.</doc>
       <method name="get_stream"
               c:identifier="gst_rtsp_stream_transport_get_stream">
         <doc xml:space="preserve">Get the #GstRTSPStream used when constructing @trans.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the stream used when constructing @trans.</doc>
           <type name="RTSPStream" c:type="GstRTSPStream*"/>
         </return-value>
@@ -8490,7 +8559,7 @@ determined. g_free() after usage.</doc>
       <method name="get_transport"
               c:identifier="gst_rtsp_stream_transport_get_transport">
         <doc xml:space="preserve">Get the transport configured in @trans.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the transport configured in @trans. It remains
 valid for as long as @trans is valid.</doc>
           <type name="GstRtsp.RTSPTransport" c:type="const GstRTSPTransport*"/>
@@ -8504,9 +8573,9 @@ valid for as long as @trans is valid.</doc>
       </method>
       <method name="get_url" c:identifier="gst_rtsp_stream_transport_get_url">
         <doc xml:space="preserve">Get the url configured in @trans.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">the url configured in @trans. It remains
-valid for as long as @trans is valid.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">the url configured in @trans.
+It remains valid for as long as @trans is valid.</doc>
           <type name="GstRtsp.RTSPUrl" c:type="const GstRTSPUrl*"/>
         </return-value>
         <parameters>
@@ -8745,7 +8814,10 @@ passed @tr.</doc>
             <doc xml:space="preserve">a #GstRTSPStreamTransport</doc>
             <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
           </instance-parameter>
-          <parameter name="url" transfer-ownership="none">
+          <parameter name="url"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a client #GstRTSPUrl</doc>
             <type name="GstRtsp.RTSPUrl" c:type="const GstRTSPUrl*"/>
           </parameter>
@@ -8945,8 +9017,9 @@ structures.</doc>
       </virtual-method>
       <virtual-method name="get_thread" invoker="get_thread">
         <doc xml:space="preserve">Get a new #GstRTSPThread for @type and @ctx.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstRTSPThread, gst_rtsp_thread_stop() after usage</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">a new #GstRTSPThread,
+gst_rtsp_thread_stop() after usage</doc>
           <type name="RTSPThread" c:type="GstRTSPThread*"/>
         </return-value>
         <parameters>
@@ -9007,8 +9080,9 @@ See gst_rtsp_thread_pool_set_max_threads().</doc>
       </method>
       <method name="get_thread" c:identifier="gst_rtsp_thread_pool_get_thread">
         <doc xml:space="preserve">Get a new #GstRTSPThread for @type and @ctx.</doc>
-        <return-value transfer-ownership="full">
-          <doc xml:space="preserve">a new #GstRTSPThread, gst_rtsp_thread_stop() after usage</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">a new #GstRTSPThread,
+gst_rtsp_thread_stop() after usage</doc>
           <type name="RTSPThread" c:type="GstRTSPThread*"/>
         </return-value>
         <parameters>
@@ -9073,8 +9147,9 @@ unlimited number of threads.</doc>
       </field>
       <field name="get_thread">
         <callback name="get_thread">
-          <return-value transfer-ownership="full">
-            <doc xml:space="preserve">a new #GstRTSPThread, gst_rtsp_thread_stop() after usage</doc>
+          <return-value transfer-ownership="full" nullable="1">
+            <doc xml:space="preserve">a new #GstRTSPThread,
+gst_rtsp_thread_stop() after usage</doc>
             <type name="RTSPThread" c:type="GstRTSPThread*"/>
           </return-value>
           <parameters>
