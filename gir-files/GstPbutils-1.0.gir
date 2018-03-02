@@ -523,6 +523,23 @@ thread.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_channel_mask"
+              c:identifier="gst_discoverer_audio_info_get_channel_mask"
+              version="1.14">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the channel-mask of the stream, refer to
+gst_audio_channel_positions_from_mask() for more
+information.</doc>
+          <type name="guint64" c:type="guint64"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="info" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstDiscovererAudioInfo</doc>
+            <type name="DiscovererAudioInfo"
+                  c:type="const GstDiscovererAudioInfo*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_channels"
               c:identifier="gst_discoverer_audio_info_get_channels">
         <return-value transfer-ownership="none">
@@ -765,6 +782,20 @@ gst_discoverer_stream_info_list_free().</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the duration of the URI in #GstClockTime (nanoseconds).</doc>
           <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="info" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstDiscovererInfo</doc>
+            <type name="DiscovererInfo" c:type="const GstDiscovererInfo*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_live"
+              c:identifier="gst_discoverer_info_get_live"
+              version="1.14">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">whether the URI is live.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="info" transfer-ownership="none">
@@ -1402,7 +1433,7 @@ image based ones).</doc>
       <method name="is_image"
               c:identifier="gst_discoverer_video_info_is_image">
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if the video stream corresponds to an image (i.e. only contains
+          <doc xml:space="preserve">%TRUE if the video stream corresponds to an image (i.e. only contains
 one frame).</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -1498,7 +1529,7 @@ safely freed/unreferenced after calling this method.</doc>
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the preset(s) to use on the encoder, can be #NULL</doc>
+            <doc xml:space="preserve">the preset(s) to use on the encoder, can be %NULL</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="restriction"
@@ -1918,7 +1949,9 @@ during the encoding</doc>
       </method>
       <method name="set_enabled"
               c:identifier="gst_encoding_profile_set_enabled">
-        <doc xml:space="preserve">Set whether the profile should be used or not.</doc>
+        <doc xml:space="preserve">Set whether the profile should be used or not.
+
+Since 1.6</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2312,7 +2345,7 @@ gst_encoding_video_profile_set_variableframerate() documentation.</doc>
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the preset(s) to use on the encoder, can be #NULL</doc>
+            <doc xml:space="preserve">the preset(s) to use on the encoder, can be %NULL</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="restriction"
@@ -2717,13 +2750,13 @@ in debugging.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PLUGINS_BASE_VERSION_MINOR"
-              value="12"
+              value="13"
               c:type="GST_PLUGINS_BASE_VERSION_MINOR">
       <doc xml:space="preserve">The minor version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PLUGINS_BASE_VERSION_NANO"
-              value="0"
+              value="1"
               c:type="GST_PLUGINS_BASE_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer's gst-plugins-base libraries at compile time.
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
@@ -2746,10 +2779,12 @@ If mpegversion is 4, the "base-profile" field is also set in @caps.</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </parameter>
         <parameter name="audio_config" transfer-ownership="none">
-          <doc xml:space="preserve">a pointer to the AudioSpecificConfig as specified in the
-               Elementary Stream Descriptor (esds) in ISO/IEC 14496-1 (see
-               below for a more details).</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">a pointer to the AudioSpecificConfig
+               as specified in the Elementary Stream Descriptor (esds)
+               in ISO/IEC 14496-1. (See below for more details)</doc>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of @audio_config in bytes</doc>
@@ -2768,11 +2803,15 @@ Since 1.10</doc>
       </return-value>
       <parameters>
         <parameter name="audio_config" transfer-ownership="none">
-          <doc xml:space="preserve">a pointer to the AudioSpecificConfig as specified in the
-               Elementary Stream Descriptor (esds) in ISO/IEC 14496-1.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">a pointer to the AudioSpecificConfig
+               as specified in the Elementary Stream Descriptor (esds)
+               in ISO/IEC 14496-1.</doc>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve">Length of @audio_config in bytes</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
       </parameters>
@@ -2815,9 +2854,12 @@ determined.</doc>
       </return-value>
       <parameters>
         <parameter name="audio_config" transfer-ownership="none">
-          <doc xml:space="preserve">a pointer to the AudioSpecificConfig as specified in the
-               Elementary Stream Descriptor (esds) in ISO/IEC 14496-1.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">a pointer to the AudioSpecificConfig
+               as specified in the Elementary Stream Descriptor (esds)
+               in ISO/IEC 14496-1.</doc>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of @audio_config in bytes</doc>
@@ -2839,10 +2881,12 @@ determined.</doc>
       </return-value>
       <parameters>
         <parameter name="audio_config" transfer-ownership="none">
-          <doc xml:space="preserve">a pointer to the AudioSpecificConfig as specified in the
-               Elementary Stream Descriptor (esds) in ISO/IEC 14496-1 (see
-               gst_codec_utils_aac_get_level() for a more details).</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">a pointer to the AudioSpecificConfig
+               as specified in the Elementary Stream Descriptor (esds)
+               in ISO/IEC 14496-1.</doc>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of @audio_config in bytes</doc>
@@ -2862,12 +2906,15 @@ Since 1.10</doc>
       </return-value>
       <parameters>
         <parameter name="audio_config" transfer-ownership="none">
-          <doc xml:space="preserve">a pointer to the AudioSpecificConfig as specified in the
-               Elementary Stream Descriptor (esds) in ISO/IEC 14496-1.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">a pointer to the AudioSpecificConfig
+               as specified in the Elementary Stream Descriptor (esds)
+               in ISO/IEC 14496-1.</doc>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
-          <doc xml:space="preserve">Length of @audio_config in bytes</doc>
+          <doc xml:space="preserve">Length of @audio_config</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
       </parameters>
@@ -2904,7 +2951,9 @@ for more details on the parameters.</doc>
         </parameter>
         <parameter name="sps" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the sequence parameter set for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @sps.</doc>
@@ -2924,7 +2973,9 @@ same format as for gst_codec_utils_h264_get_profile().</doc>
       <parameters>
         <parameter name="sps" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the sequence parameter set for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @sps.</doc>
@@ -2969,7 +3020,9 @@ byte.
       <parameters>
         <parameter name="sps" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the sequence parameter set for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @sps.</doc>
@@ -2995,8 +3048,11 @@ Since 1.4</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </parameter>
         <parameter name="profile_tier_level" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to the profile_tier_level struct</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">Pointer to the profile_tier_level
+  struct</doc>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @profile_tier_level.</doc>
@@ -3017,9 +3073,11 @@ Since 1.4</doc>
       </return-value>
       <parameters>
         <parameter name="profile_tier_level" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to the profile_tier_level structure
+          <doc xml:space="preserve">Pointer to the profile_tier_level
   for the stream</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @profile_tier_level.</doc>
@@ -3071,7 +3129,9 @@ Since 1.4</doc>
         <parameter name="profile_tier_level" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the profile_tier_level
   structure for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @profile_tier_level</doc>
@@ -3092,9 +3152,11 @@ Since 1.4</doc>
       </return-value>
       <parameters>
         <parameter name="profile_tier_level" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to the profile_tier_level structure
+          <doc xml:space="preserve">Pointer to the profile_tier_level
   for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @profile_tier_level.</doc>
@@ -3118,8 +3180,11 @@ parameters.</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </parameter>
         <parameter name="vis_obj_seq" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to the visual object sequence for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">Pointer to the visual object
+  sequence for the stream.</doc>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @sps.</doc>
@@ -3139,8 +3204,11 @@ object sequence start code. Only the first byte
       </return-value>
       <parameters>
         <parameter name="vis_obj_seq" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to the visual object sequence for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">Pointer to the visual object
+  sequence for the stream.</doc>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @sps.</doc>
@@ -3160,8 +3228,11 @@ object sequence start code. Only the first byte
       </return-value>
       <parameters>
         <parameter name="vis_obj_seq" transfer-ownership="none">
-          <doc xml:space="preserve">Pointer to the visual object sequence for the stream.</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">Pointer to the visual object
+  sequence for the stream.</doc>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve">Length of the data available in @sps.</doc>
@@ -3174,7 +3245,8 @@ object sequence start code. Only the first byte
               version="1.8">
       <doc xml:space="preserve">Creates Opus caps from the given parameters.</doc>
       <return-value transfer-ownership="full">
-        <doc xml:space="preserve">The #GstCaps.</doc>
+        <doc xml:space="preserve">The #GstCaps, or %NULL if the parameters would lead to
+invalid Opus caps.</doc>
         <type name="Gst.Caps" c:type="GstCaps*"/>
       </return-value>
       <parameters>
@@ -3203,7 +3275,9 @@ object sequence start code. Only the first byte
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -3264,7 +3338,9 @@ object sequence start code. Only the first byte
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="pre_skip" transfer-ownership="none">
           <doc xml:space="preserve">Pre-skip in 48kHz samples or 0</doc>
@@ -3286,32 +3362,52 @@ object sequence start code. Only the first byte
       </return-value>
       <parameters>
         <parameter name="caps" transfer-ownership="none">
-          <doc xml:space="preserve">the #GstCaps to which the level and profile are to be added</doc>
+          <doc xml:space="preserve">the #GstCaps to parse the data from</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </parameter>
-        <parameter name="rate" transfer-ownership="none">
+        <parameter name="rate"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the sample rate</doc>
           <type name="guint32" c:type="guint32*"/>
         </parameter>
-        <parameter name="channels" transfer-ownership="none">
+        <parameter name="channels"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the number of channels</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="channel_mapping_family" transfer-ownership="none">
+        <parameter name="channel_mapping_family"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the channel mapping family</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="stream_count" transfer-ownership="none">
+        <parameter name="stream_count"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the number of independent streams</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="coupled_count" transfer-ownership="none">
+        <parameter name="coupled_count"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the number of stereo streams</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="channel_mapping" transfer-ownership="none">
+        <parameter name="channel_mapping"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <type name="guint8" c:type="guint8"/>
+          <array zero-terminated="0" c:type="guint8">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -3328,35 +3424,61 @@ object sequence start code. Only the first byte
           <doc xml:space="preserve">the OpusHead #GstBuffer</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </parameter>
-        <parameter name="rate" transfer-ownership="none">
+        <parameter name="rate"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the sample rate</doc>
           <type name="guint32" c:type="guint32*"/>
         </parameter>
-        <parameter name="channels" transfer-ownership="none">
+        <parameter name="channels"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the number of channels</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="channel_mapping_family" transfer-ownership="none">
+        <parameter name="channel_mapping_family"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the channel mapping family</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="stream_count" transfer-ownership="none">
+        <parameter name="stream_count"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the number of independent streams</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="coupled_count" transfer-ownership="none">
+        <parameter name="coupled_count"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the number of stereo streams</doc>
           <type name="guint8" c:type="guint8*"/>
         </parameter>
-        <parameter name="channel_mapping" transfer-ownership="none">
+        <parameter name="channel_mapping"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <type name="guint8" c:type="guint8"/>
+          <array zero-terminated="0" c:type="guint8">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
-        <parameter name="pre_skip" transfer-ownership="none">
+        <parameter name="pre_skip"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">Pre-skip in 48kHz samples or 0</doc>
           <type name="guint16" c:type="guint16*"/>
         </parameter>
-        <parameter name="output_gain" transfer-ownership="none">
+        <parameter name="output_gain"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">Output gain or 0</doc>
           <type name="gint16" c:type="gint16*"/>
         </parameter>
