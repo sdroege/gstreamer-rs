@@ -11,6 +11,7 @@ members = [
   "gstreamer-rtsp-server",
   "gstreamer-sdp",
   "gstreamer-video",
+  "gstreamer-pbutils",
   "examples",
   "tutorials",
 ]
