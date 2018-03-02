@@ -804,6 +804,11 @@ status = "generate"
 [[object]]
 name = "Gst.*"
 status = "generate"
+    # We'll opt-in for constants at a later time
+    [[object.constant]]
+    pattern = ".+"
+    ignore = true
+
     [[object.function]]
     name = "util_dump_mem"
     ignore = true
