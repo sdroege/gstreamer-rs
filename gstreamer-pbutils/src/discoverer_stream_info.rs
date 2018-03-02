@@ -10,12 +10,12 @@
 use DiscovererStreamInfo;
 use DiscovererStreamInfoExt;
 
-pub struct DiscovererStreamInfoIter {
+pub struct Iter {
     stream_info: Option<DiscovererStreamInfo>,
     direction_forward: bool
 }
 
-impl Iterator for DiscovererStreamInfoIter {
+impl Iterator for Iter {
     type Item = DiscovererStreamInfo;
 
     fn next(&mut self) -> Option<DiscovererStreamInfo> {
@@ -36,15 +36,15 @@ impl Iterator for DiscovererStreamInfoIter {
 }
 
 impl DiscovererStreamInfo {
-    pub fn next_iter(&self) -> DiscovererStreamInfoIter {
-        DiscovererStreamInfoIter {
+    pub fn next_iter(&self) -> Iter {
+        Iter {
             stream_info: self.get_next(),
             direction_forward: true
         }
     }
 
-    pub fn previous_iter(&self) -> DiscovererStreamInfoIter {
-        DiscovererStreamInfoIter {
+    pub fn previous_iter(&self) -> Iter {
+        Iter {
             stream_info: self.get_previous(),
             direction_forward: false
         }
