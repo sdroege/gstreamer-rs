@@ -125,6 +125,57 @@ impl SetValue for BufferFlags {
 }
 
 bitflags! {
+    pub struct BufferPoolAcquireFlags: u32 {
+        const NONE = 0;
+        const KEY_UNIT = 1;
+        const DONTWAIT = 2;
+        const DISCONT = 4;
+        const LAST = 65536;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for BufferPoolAcquireFlags {
+    type GlibType = ffi::GstBufferPoolAcquireFlags;
+
+    fn to_glib(&self) -> ffi::GstBufferPoolAcquireFlags {
+        ffi::GstBufferPoolAcquireFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstBufferPoolAcquireFlags> for BufferPoolAcquireFlags {
+    fn from_glib(value: ffi::GstBufferPoolAcquireFlags) -> BufferPoolAcquireFlags {
+        skip_assert_initialized!();
+        BufferPoolAcquireFlags::from_bits_truncate(value.bits())
+    }
+}
+
+impl StaticType for BufferPoolAcquireFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_buffer_pool_acquire_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for BufferPoolAcquireFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for BufferPoolAcquireFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(ffi::GstBufferPoolAcquireFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
+    }
+}
+
+impl SetValue for BufferPoolAcquireFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
+    }
+}
+
+bitflags! {
     pub struct DebugColorFlags: u32 {
         const FG_BLACK = 0;
         const FG_RED = 1;

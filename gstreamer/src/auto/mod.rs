@@ -6,6 +6,10 @@ mod bin;
 pub use self::bin::Bin;
 pub use self::bin::BinExt;
 
+mod buffer_pool;
+pub use self::buffer_pool::BufferPool;
+pub use self::buffer_pool::BufferPoolExt;
+
 mod bus;
 pub use self::bus::Bus;
 
@@ -150,6 +154,7 @@ pub use self::enums::URIType;
 mod flags;
 pub use self::flags::BufferCopyFlags;
 pub use self::flags::BufferFlags;
+pub use self::flags::BufferPoolAcquireFlags;
 pub use self::flags::DebugColorFlags;
 pub use self::flags::DebugGraphDetails;
 pub use self::flags::ElementFlags;
@@ -175,6 +180,7 @@ pub mod functions;
 #[doc(hidden)]
 pub mod traits {
     pub use super::BinExt;
+    pub use super::BufferPoolExt;
     pub use super::ChildProxyExt;
     pub use super::ClockExt;
     pub use super::DeviceExt;

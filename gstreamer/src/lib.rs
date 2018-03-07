@@ -150,6 +150,9 @@ pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
 mod clock;
 pub use clock::{ClockExtManual, ClockId};
 
+mod buffer_pool;
+pub use buffer_pool::*;
+
 pub mod functions;
 pub use functions::*;
 
@@ -203,6 +206,7 @@ pub mod prelude {
     pub use device_provider::DeviceProviderExtManual;
     pub use clock::ClockExtManual;
     pub use value::GstValueExt;
+    pub use buffer_pool::BufferPoolExtManual;
 
     pub use tags::Tag;
     pub use miniobject::MiniObject;

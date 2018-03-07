@@ -70,6 +70,7 @@ generate = [
     "Gst.PluginDependencyFlags",
     "Gst.DateTime",
     "Gst.TypeFindProbability",
+    "Gst.BufferPoolAcquireFlags",
 ]
 
 manual = [
@@ -766,6 +767,39 @@ trait = false
     name = "add_plugin"
         [object.function.return]
         bool_return_is_error = "Failed to add plugin"
+
+[[object]]
+name = "Gst.BufferPool"
+status = "generate"
+    [[object.function]]
+    pattern = "config_.*"
+    # A different type
+    ignore = true
+
+    [[object.function]]
+    name = "get_config"
+    # A different type
+    ignore = true
+
+    [[object.function]]
+    name = "set_config"
+    # Takes ownership
+    ignore = true
+
+    [[object.function]]
+    name = "acquire_buffer"
+    # Params and return value
+    ignore = true
+
+    [[object.function]]
+    name = "release_buffer"
+    # Takes ownership
+    ignore = true
+
+    [[object.function]]
+    name = "set_active"
+        [object.function.return]
+        bool_return_is_error = "Failed to activate buffer pool"
 
 [[object]]
 name = "Gst.Preset"
