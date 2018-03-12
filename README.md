@@ -48,7 +48,7 @@ On Debian/Ubuntu they can be installed with
 $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
       gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-      gstreamer1.0-libav
+      gstreamer1.0-libav libgstrtspserver-1.0-dev
 ```
 
 The minimum required version of the above libraries is >= 1.8. If you
@@ -79,7 +79,7 @@ provided by the GStreamer project.
 
 ```
 $ brew install gstreamer gst-plugins-base gst-plugins-good \
-      gst-plugins-bad gst-plugins-ugly gst-libav
+      gst-plugins-bad gst-plugins-ugly gst-libav gst-rtsp-server
 ```
 
 If you wish to install the gstreamer-player sub-crate, make sure the
@@ -113,7 +113,8 @@ the GStreamer project.
 ```
 $ pacman -S pkg-config mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
       mingw-w64-x86_64-gst-plugins-good mingw-w64-x86_64-gst-plugins-bad \
-      mingw-w64-x86_64-gst-plugins-ugly mingw-w64-x86_64-gst-libav
+      mingw-w64-x86_64-gst-plugins-ugly mingw-w64-x86_64-gst-libav \
+      mingw-w64-x86_64-gst-rtsp-server
 ```
 
 If you wish to install the gstreamer-player sub-crate, make sure the
