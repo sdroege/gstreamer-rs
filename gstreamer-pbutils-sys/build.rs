@@ -16,7 +16,9 @@ fn main() {
 fn find() -> Result<(), Error> {
     let package_name = "gstreamer-pbutils-1.0";
     let shared_libs = ["gstpbutils-1.0"];
-    let version = if cfg!(feature = "v1_12") {
+    let version = if cfg!(feature = "v1_14") {
+        "1.14"
+    } else if cfg!(feature = "v1_12") {
         "1.12"
     } else if cfg!(feature = "v1_10") {
         "1.10"
