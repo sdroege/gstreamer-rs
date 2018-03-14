@@ -10,8 +10,9 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
-                      ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrBorrow,
+                      FromGlibPtrContainer, ToGlib, ToGlibPtr};
+use glib::object::Downcast;
 use QueryRef;
 use Event;
 use Pad;
@@ -28,6 +29,7 @@ use std::mem;
 use libc;
 
 use ffi;
+use glib_ffi;
 use gobject_ffi;
 
 impl Element {
@@ -174,6 +176,11 @@ pub trait ElementExtManual {
         seek_flags: ::SeekFlags,
         seek_pos: V,
     ) -> Result<(), glib::error::BoolError>;
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn call_async<F>(&self, func: F)
+    where
+        F: FnOnce(&Self) + Send + 'static;
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
@@ -560,6 +567,42 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 ),
                 "Failed to seek",
             )
+        }
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    fn call_async<F>(&self, func: F)
+    where
+        F: FnOnce(&Self) + Send + 'static,
+    {
+        let user_data: Box<Option<Box<F>>> = Box::new(Some(Box::new(func)));
+
+        unsafe extern "C" fn trampoline<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
+            element: *mut ffi::GstElement,
+            user_data: glib_ffi::gpointer,
+        ) {
+            callback_guard!();
+            let user_data: &mut Option<Box<F>> = &mut *(user_data as *mut _);
+            let callback = user_data.take().unwrap();
+
+            callback(&Element::from_glib_borrow(element).downcast_unchecked());
+        }
+
+        unsafe extern "C" fn free_user_data<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
+            user_data: glib_ffi::gpointer,
+        ) {
+            let _: Box<Option<Box<F>>> = Box::from_raw(user_data as *mut _);
+        }
+
+        let trampoline = trampoline::<Self, F>;
+        let free_user_data = free_user_data::<Self, F>;
+        unsafe {
+            ffi::gst_element_call_async(
+                self.to_glib_none().0,
+                Some(trampoline),
+                Box::into_raw(user_data) as *mut _,
+                Some(free_user_data),
+            );
         }
     }
 }
@@ -1042,6 +1085,7 @@ macro_rules! gst_element_info(
 mod tests {
     use super::*;
     use prelude::*;
+    use std::sync::mpsc::channel;
 
     #[test]
     fn test_get_pads() {
@@ -1072,5 +1116,19 @@ mod tests {
             .collect::<Vec<String>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("src")]);
+    }
+
+    #[test]
+    fn test_call_async() {
+        ::init().unwrap();
+
+        let identity = ::ElementFactory::make("identity", None).unwrap();
+        let (sender, receiver) = channel();
+
+        identity.call_async(move |_| {
+            sender.send(()).unwrap();
+        });
+
+        assert_eq!(receiver.recv(), Ok(()));
     }
 }
