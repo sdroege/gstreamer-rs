@@ -71,6 +71,7 @@ generate = [
     "Gst.DateTime",
     "Gst.TypeFindProbability",
     "Gst.BufferPoolAcquireFlags",
+    "Gst.PromiseResult",
 ]
 
 manual = [
@@ -214,6 +215,11 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.TocEntry"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Promise"
 status = "manual"
 ref_mode = "ref"
 
