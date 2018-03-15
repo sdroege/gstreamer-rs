@@ -71,6 +71,11 @@ trait = false
     # Pass by value
     ignore = true
 
+    [[object.function]]
+    name = "push_buffer_list"
+    # Pass by value
+    ignore = true
+
     [[object.signal]]
     name = "end-of-stream"
     # Action signal
@@ -78,6 +83,11 @@ trait = false
 
     [[object.signal]]
     name = "push-buffer"
+    # Action signal
+    ignore = true
+
+    [[object.signal]]
+    name = "push-buffer-list"
     # Action signal
     ignore = true
 
@@ -114,6 +124,11 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferList"
 status = "manual"
 ref_mode = "ref"
 

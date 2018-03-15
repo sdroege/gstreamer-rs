@@ -159,6 +159,16 @@ impl AppSrc {
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    pub fn push_buffer_list(&self, list: gst::BufferList) -> gst::FlowReturn {
+        unsafe {
+            from_glib(ffi::gst_app_src_push_buffer_list(
+                self.to_glib_none().0,
+                list.into_ptr(),
+            ))
+        }
+    }
+
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         unsafe {
             ffi::gst_app_src_set_callbacks(
