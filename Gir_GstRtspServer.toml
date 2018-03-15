@@ -22,7 +22,6 @@ external_libraries = [
 generate = [
     "GstRtspServer.RTSPAddressFlags",
     "GstRtspServer.RTSPAddressPoolResult",
-    "GstRtspServer.RTSPMediaFactory",
     "GstRtspServer.RTSPMediaFactoryURI",
     "GstRtspServer.RTSPMediaStatus",
     "GstRtspServer.RTSPMountPoints",
@@ -205,6 +204,15 @@ status = "generate"
     name = "unsuspend"
         [object.function.return]
         bool_return_is_error = "Failed to unsuspend media"
+
+[[object]]
+name = "GstRtspServer.RTSPMediaFactory"
+status = "generate"
+
+    [[object.function]]
+    name = "add_role_from_structure"
+    # Different structure mutability needed
+    ignore = true
 
 [[object]]
 name = "GstRtspServer.RTSPSessionMedia"
