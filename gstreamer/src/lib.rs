@@ -94,6 +94,11 @@ pub use static_caps::*;
 mod static_pad_template;
 pub use static_pad_template::*;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+mod promise;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+pub use promise::*;
+
 mod element;
 mod bin;
 mod bus;
