@@ -252,6 +252,12 @@ status = "generate"
 name = "Gst.Element"
 status = "generate"
     [[object.function]]
+    name = "make_from_uri"
+        [object.function.return]
+        # It is already a Result
+        nullable = false
+
+    [[object.function]]
     name = "add_pad"
         [object.function.return]
         bool_return_is_error = "Failed to add pad"
@@ -376,6 +382,21 @@ status = "generate"
     # Wrong place
     ignore = true
 
+    [[object.function]]
+    name = "get_metadata"
+    # better manual function
+    ignore = true
+
+    [[object.function]]
+    name = "get_pad_template"
+    # better manual function
+    ignore = true
+
+    [[object.function]]
+    name = "get_pad_template_list"
+    # better manual function
+    ignore = true
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
@@ -403,6 +424,11 @@ status = "generate"
     name = "start"
         [object.function.return]
         bool_return_is_error = "Failed to start"
+
+    [[object.function]]
+    name = "get_metadata"
+    # better manual function
+    ignore = true
 
 [[object]]
 name = "Gst.DeviceMonitor"
@@ -848,6 +874,11 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "util_dump_buffer"
+    # We have our Debug impl on buffers
+    ignore = true
+
+    [[object.function]]
     name = "protection_select_system"
     # unsupported array type
     ignore = true
@@ -1036,6 +1067,18 @@ status = "generate"
     [[object.function]]
     name = "parse_bin_from_description"
         [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "parse_launch"
+        [object.function.return]
+        # Already a Result
+        nullable = false
+
+    [[object.function]]
+    name = "parse_launchv"
+        [object.function.return]
+        # Already a Result
         nullable = false
 
 [[object]]

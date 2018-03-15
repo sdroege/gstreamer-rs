@@ -16,6 +16,12 @@ use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
 
+#[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
+use std::os::unix;
+
+#[cfg(any(all(not(unix), feature = "v1_14"), feature = "dox"))]
+use std::os::windows;
+
 use Bus;
 use BusSyncReply;
 use Message;
@@ -137,6 +143,26 @@ impl Bus {
 
     pub fn unset_sync_handler(&self) {
         unsafe { ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None) }
+    }
+
+    #[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
+    pub fn get_pollfd(&self) -> unix::io::RawFd {
+        unsafe {
+            let mut pollfd: glib_ffi::GPollFD = mem::zeroed();
+            ffi::gst_bus_get_pollfd(self.to_glib_none().0, &mut pollfd);
+
+            pollfd.fd
+        }
+    }
+
+    #[cfg(any(all(not(unix), feature = "v1_14"), feature = "dox"))]
+    pub fn get_pollfd(&self) -> windows::io::RawHandle {
+        unsafe {
+            let mut pollfd: glib_ffi::GPollFD = mem::zeroed();
+            ffi::gst_bus_get_pollfd(self.to_glib_none().0, &mut pollfd);
+
+            pollfd.fd as *mut _
+        }
     }
 }
 
