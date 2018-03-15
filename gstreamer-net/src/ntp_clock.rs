@@ -10,6 +10,7 @@ use ffi;
 use NtpClock;
 
 use gst;
+use glib::object::Downcast;
 use glib::translate::*;
 
 impl NtpClock {

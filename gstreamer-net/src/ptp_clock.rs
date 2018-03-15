@@ -10,6 +10,7 @@ use ffi;
 use PtpClock;
 
 use gst;
+use glib::object::Downcast;
 use glib::translate::*;
 
 impl PtpClock {

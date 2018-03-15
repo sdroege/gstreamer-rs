@@ -75,7 +75,7 @@ impl<'a> AudioInfoBuilder<'a> {
                 self.format.to_glib(),
                 self.rate as i32,
                 self.channels as i32,
-                positions_ptr,
+                positions_ptr as *mut _,
             );
 
             if info.finfo.is_null() || info.rate <= 0 || info.channels <= 0 {
