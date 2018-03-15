@@ -644,6 +644,10 @@ status = "generate"
 name = "Gst.PadTemplate"
 status = "generate"
 trait = false
+    [[object.function]]
+    name = "new_from_static_pad_template_with_gtype"
+    # static pad template manual
+    ignore = true
 
 [[object]]
 name = "Gst.GhostPad"
@@ -1052,6 +1056,11 @@ status = "generate"
     [[object.function]]
     name = "util_seqnum_next"
     # newtype wrapper
+    ignore = true
+
+    [[object.function]]
+    name = "protection_filter_systems_by_available_decryptors"
+    # wrong array annotations
     ignore = true
 
     [[object.function]]

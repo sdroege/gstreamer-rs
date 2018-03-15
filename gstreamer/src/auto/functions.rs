@@ -176,14 +176,6 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-pub fn protection_filter_systems_by_available_decryptors(system_identifiers: &str) -> Vec<String> {
-    assert_initialized_main_thread!();
-    unsafe {
-        FromGlibPtrContainer::from_glib_full(ffi::gst_protection_filter_systems_by_available_decryptors(system_identifiers.to_glib_none().0))
-    }
-}
-
 pub fn update_registry() -> bool {
     assert_initialized_main_thread!();
     unsafe {

@@ -6,24 +6,23 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use RTSPMediaFactory;
-
-use glib::IsA;
+use PadTemplate;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-use gst;
+use StaticPadTemplate;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use glib::translate::*;
+
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use ffi;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use glib;
 
-pub trait RTSPMediaFactoryExtManual {
+impl PadTemplate {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    fn add_role_from_structure(&self, structure: &gst::StructureRef);
-}
-
-impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    fn add_role_from_structure(&self, structure: &gst::StructureRef) {
+    pub fn new_from_static_pad_template_with_gtype(pad_template: &StaticPadTemplate, pad_type: glib::types::Type) -> PadTemplate {
+        assert_initialized_main_thread!();
         unsafe {
-            ffi::gst_rtsp_media_factory_add_role_from_structure(self.to_glib_none().0, structure.as_mut_ptr());
+            from_glib_none(ffi::gst_pad_template_new_from_static_pad_template_with_gtype(mut_override(pad_template.to_glib_none().0), pad_type.to_glib()))
         }
     }
 }

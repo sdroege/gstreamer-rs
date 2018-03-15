@@ -15,6 +15,8 @@ use glib::source::{CallbackGuard, Continue, Priority, SourceId};
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use std::mem;
 
 #[cfg(any(all(unix, feature = "v1_14"), feature = "dox"))]
 use std::os::unix;
