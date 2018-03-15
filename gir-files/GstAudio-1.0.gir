@@ -8417,6 +8417,7 @@ functionality.</doc>
     </record>
     <record name="AudioStreamAlign"
             c:type="GstAudioStreamAlign"
+            version="1.14"
             glib:type-name="GstAudioStreamAlign"
             glib:get-type="gst_audio_stream_align_get_type"
             c:symbol-prefix="audio_stream_align">
