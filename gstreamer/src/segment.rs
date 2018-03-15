@@ -265,25 +265,6 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
-    pub fn to_position<V: Into<T>>(&self, running_time: V) -> T {
-        let running_time = running_time.into();
-
-        if T::get_default_format() == Format::Undefined {
-            assert_eq!(self.get_format(), running_time.get_format());
-        }
-
-        unsafe {
-            T::from_raw(
-                self.get_format(),
-                ffi::gst_segment_to_position(
-                    &self.0,
-                    self.get_format().to_glib(),
-                    running_time.to_raw_value() as u64,
-                ) as i64,
-            )
-        }
-    }
-
     pub fn to_running_time<V: Into<T>>(&self, position: V) -> T {
         let position = position.into();
 

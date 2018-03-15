@@ -7,8 +7,6 @@ use Object;
 use Pad;
 use PadDirection;
 use PadPresence;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-use StaticPadTemplate;
 use ffi;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use glib;
@@ -38,14 +36,6 @@ impl PadTemplate {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_pad_template_new(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0))
-        }
-    }
-
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn new_from_static_pad_template_with_gtype(pad_template: &mut StaticPadTemplate, pad_type: glib::types::Type) -> PadTemplate {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gst_pad_template_new_from_static_pad_template_with_gtype(pad_template.to_glib_none_mut().0, pad_type.to_glib()))
         }
     }
 
