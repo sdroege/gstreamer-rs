@@ -65,8 +65,25 @@ impl BufferListRef {
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    pub fn get_writable(&mut self, idx: u32) -> Option<&mut BufferRef> {
+        unsafe {
+            let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(BufferRef::from_mut_ptr(ptr))
+            }
+        }
+    }
+
     pub fn len(&self) -> usize {
         unsafe { ffi::gst_buffer_list_length(self.as_mut_ptr()) as usize }
+    }
+
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    pub fn calculate_size(&self) -> usize {
+        unsafe { ffi::gst_buffer_list_calculate_size(self.as_mut_ptr()) as usize }
     }
 
     pub fn is_empty(&self) -> bool {
