@@ -1505,6 +1505,76 @@ impl SetValue for ProgressType {
     }
 }
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PromiseResult {
+    Pending,
+    Interrupted,
+    Replied,
+    Expired,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for PromiseResult {
+    type GlibType = ffi::GstPromiseResult;
+
+    fn to_glib(&self) -> ffi::GstPromiseResult {
+        match *self {
+            PromiseResult::Pending => ffi::GST_PROMISE_RESULT_PENDING,
+            PromiseResult::Interrupted => ffi::GST_PROMISE_RESULT_INTERRUPTED,
+            PromiseResult::Replied => ffi::GST_PROMISE_RESULT_REPLIED,
+            PromiseResult::Expired => ffi::GST_PROMISE_RESULT_EXPIRED,
+            PromiseResult::__Unknown(value) => value
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
+    fn from_glib(value: ffi::GstPromiseResult) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => PromiseResult::Pending,
+            1 => PromiseResult::Interrupted,
+            2 => PromiseResult::Replied,
+            3 => PromiseResult::Expired,
+            value => PromiseResult::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+impl StaticType for PromiseResult {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_promise_result_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for PromiseResult {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+impl<'a> FromValue<'a> for PromiseResult {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+impl SetValue for PromiseResult {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum QOSType {
     Overflow,
