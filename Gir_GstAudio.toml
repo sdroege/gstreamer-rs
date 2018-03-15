@@ -37,6 +37,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
 name = "GstAudio.AudioFormat"
 status = "generate"
 
@@ -108,4 +113,13 @@ status = "generate"
     [[object.member]]
     name = "f64"
     # Platform dependant
+    ignore = true
+
+[[object]]
+name = "GstAudio.AudioStreamAlign"
+status = "generate"
+
+    [[object.function]]
+    name = "process"
+    # bool does not signal error
     ignore = true
