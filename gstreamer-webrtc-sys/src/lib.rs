@@ -362,8 +362,6 @@ extern "C" {
     //=========================================================================
     pub fn gst_webrtc_rtp_receiver_get_type() -> GType;
     pub fn gst_webrtc_rtp_receiver_new() -> *mut GstWebRTCRTPReceiver;
-    pub fn gst_webrtc_rtp_receiver_get_parameters(receiver: *mut GstWebRTCRTPReceiver, kind: *mut c_char) -> *mut gst::GstStructure;
-    pub fn gst_webrtc_rtp_receiver_set_parameters(receiver: *mut GstWebRTCRTPReceiver, parameters: *mut gst::GstStructure) -> gboolean;
     pub fn gst_webrtc_rtp_receiver_set_rtcp_transport(receiver: *mut GstWebRTCRTPReceiver, transport: *mut GstWebRTCDTLSTransport);
     pub fn gst_webrtc_rtp_receiver_set_transport(receiver: *mut GstWebRTCRTPReceiver, transport: *mut GstWebRTCDTLSTransport);
 
@@ -371,9 +369,7 @@ extern "C" {
     // GstWebRTCRTPSender
     //=========================================================================
     pub fn gst_webrtc_rtp_sender_get_type() -> GType;
-    pub fn gst_webrtc_rtp_sender_new(send_encodings: *mut glib::GArray) -> *mut GstWebRTCRTPSender;
-    pub fn gst_webrtc_rtp_sender_get_parameters(sender: *mut GstWebRTCRTPSender, kind: *mut c_char) -> *mut gst::GstStructure;
-    pub fn gst_webrtc_rtp_sender_set_parameters(sender: *mut GstWebRTCRTPSender, parameters: *mut gst::GstStructure) -> gboolean;
+    pub fn gst_webrtc_rtp_sender_new() -> *mut GstWebRTCRTPSender;
     pub fn gst_webrtc_rtp_sender_set_rtcp_transport(sender: *mut GstWebRTCRTPSender, transport: *mut GstWebRTCDTLSTransport);
     pub fn gst_webrtc_rtp_sender_set_transport(sender: *mut GstWebRTCRTPSender, transport: *mut GstWebRTCDTLSTransport);
 
@@ -381,7 +377,6 @@ extern "C" {
     // GstWebRTCRTPTransceiver
     //=========================================================================
     pub fn gst_webrtc_rtp_transceiver_get_type() -> GType;
-    pub fn gst_webrtc_rtp_transceiver_stop(transceiver: *mut GstWebRTCRTPTransceiver);
 
     //=========================================================================
     // Other functions
