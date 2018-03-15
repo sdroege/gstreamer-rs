@@ -30890,7 +30890,7 @@ application.</doc>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the directory or %NULL, don't free or modify
 the string</doc>
-          <type name="utf8" c:type="const gchar*"/>
+          <type name="filename" c:type="gchar*"/>
         </return-value>
       </function>
       <function name="set_app_dir" c:identifier="gst_preset_set_app_dir">
@@ -30904,7 +30904,7 @@ system presets.</doc>
         <parameters>
           <parameter name="app_dir" transfer-ownership="none">
             <doc xml:space="preserve">the application specific preset dir</doc>
-            <type name="utf8" c:type="const gchar*"/>
+            <type name="filename" c:type="gchar*"/>
           </parameter>
         </parameters>
       </function>
@@ -31488,11 +31488,20 @@ application of the status of asynchronous tasks.</doc>
       <doc xml:space="preserve">The #GstPromise object implements the container for values that may
 be available later. i.e. a Future or a Promise in
 &lt;ulink url="https://en.wikipedia.org/wiki/Futures_and_promises"&gt;https://en.wikipedia.org/wiki/Futures_and_promises&lt;/ulink&gt;
+As with all Future/Promise-like functionality, there is the concept of the
+producer of the value and the consumer of the value.
 
-A #GstPromise can be created with gst_promise_new(), replied to
-with gst_promise_reply(), interrupted with gst_promise_interrupt() and
-expired with gst_promise_expire(). A callback can also be installed at
-#GstPromise creation for result changes with gst_promise_new_with_change_func().
+A #GstPromise is created with gst_promise_new() by the consumer and passed
+to the producer to avoid thread safety issues with the change callback.
+A #GstPromise can be replied to with a value (or an error) by the producer
+with gst_promise_reply(). gst_promise_interrupt() is for the consumer to
+indicate to the producer that the value is not needed anymore and producing
+that value can stop.  The @GST_PROMISE_RESULT_EXPIRED state set by a call
+to gst_promise_expire() indicates to the consumer that a value will never
+be produced and is intended to be called by a third party that implements
+some notion of message handling such as #GstBus.
+A callback can also be installed at #GstPromise creation for
+result changes with gst_promise_new_with_change_func().
 The change callback can be used to chain #GstPromises's together as in the
 following example.
 |[&lt;!-- language="C" --&gt;
@@ -31508,18 +31517,25 @@ pass p to promise-using API
 ]|
 
 Each #GstPromise starts out with a #GstPromiseResult of
-%GST_PROMISE_RESULT_PENDING and only ever transitions out of that result
-into one of the other #GstPromiseResult.
+%GST_PROMISE_RESULT_PENDING and only ever transitions once
+into one of the other #GstPromiseResult's.
 
 In order to support multi-threaded code, gst_promise_reply(),
 gst_promise_interrupt() and gst_promise_expire() may all be from
-different threads with some restrictions, the final result of the promise
+different threads with some restrictions and the final result of the promise
 is whichever call is made first.  There are two restrictions on ordering:
 
 1. That gst_promise_reply() and gst_promise_interrupt() cannot be called
 after gst_promise_expire()
 2. That gst_promise_reply() and gst_promise_interrupt()
-cannot be called twice.</doc>
+cannot be called twice.
+
+The change function set with gst_promise_new_with_change_func() is
+called directly from either the gst_promise_reply(),
+gst_promise_interrupt() or gst_promise_expire() and can be called
+from an arbitrary thread.  #GstPromise using APIs can restrict this to
+a single thread or a subset of threads but that is entirely up to the API
+that uses #GstPromise.</doc>
       <field name="parent" writable="1">
         <doc xml:space="preserve">parent #GstMiniObject</doc>
         <type name="MiniObject" c:type="GstMiniObject"/>
@@ -31564,7 +31580,8 @@ states.</doc>
       </constructor>
       <method name="expire" c:identifier="gst_promise_expire" version="1.14">
         <doc xml:space="preserve">Expire a @promise.  This will wake up any waiters with
-%GST_PROMISE_RESULT_EXPIRED</doc>
+%GST_PROMISE_RESULT_EXPIRED.  Called by a message loop when the parent
+message is handled and/or destroyed (possibly unanswered).</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -31579,7 +31596,7 @@ states.</doc>
               c:identifier="gst_promise_get_reply"
               version="1.14">
         <doc xml:space="preserve">Retrieve the reply set on @promise.  @promise must be in
-%GST_PROMISE_RESULT_REPLIED and is owned by @promise</doc>
+%GST_PROMISE_RESULT_REPLIED and the returned structure is owned by @promise</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The reply set on @promise</doc>
           <type name="Structure" c:type="const GstStructure*"/>
@@ -31595,7 +31612,8 @@ states.</doc>
               c:identifier="gst_promise_interrupt"
               version="1.14">
         <doc xml:space="preserve">Interrupt waiting for a @promise.  This will wake up any waiters with
-%GST_PROMISE_RESULT_INTERRUPTED</doc>
+%GST_PROMISE_RESULT_INTERRUPTED.  Called when the consumer does not want
+the value produced anymore.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -31608,7 +31626,11 @@ states.</doc>
       </method>
       <method name="reply" c:identifier="gst_promise_reply" version="1.14">
         <doc xml:space="preserve">Set a reply on @promise.  This will wake up any waiters with
-%GST_PROMISE_RESULT_REPLIED.</doc>
+%GST_PROMISE_RESULT_REPLIED.  Called by the producer of the value to
+indicate success (or failure).
+
+If @promise has already been interrupted by the consumer, then this reply
+is not visible to the consumer.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -44695,7 +44717,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="1" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="91" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
@@ -44703,7 +44725,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The minor version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_NANO" value="1" c:type="GST_VERSION_NANO">
+    <constant name="VERSION_NANO" value="0" c:type="GST_VERSION_NANO">
       <doc xml:space="preserve">The nano version of GStreamer at compile time:
 Actual releases have 0, GIT versions have 1, prerelease versions have 2-...</doc>
       <type name="gint" c:type="gint"/>
@@ -45201,11 +45223,17 @@ Only one logger at a time is possible.</doc>
     </function>
     <function name="debug_bin_to_dot_data"
               c:identifier="gst_debug_bin_to_dot_data">
+      <doc xml:space="preserve">To aid debugging applications one can use this method to obtain the whole
+network of gstreamer elements that form the pipeline into an dot file.
+This data can be processed with graphviz to get an image.</doc>
       <return-value transfer-ownership="full">
+        <doc xml:space="preserve">a string containing the pipeline in graphviz
+dot format.</doc>
         <type name="utf8" c:type="gchar*"/>
       </return-value>
       <parameters>
         <parameter name="bin" transfer-ownership="none">
+          <doc xml:space="preserve">the top-level pipeline that should be analyzed</doc>
           <type name="Bin" c:type="GstBin*"/>
         </parameter>
         <parameter name="details" transfer-ownership="none">
@@ -45215,35 +45243,47 @@ Only one logger at a time is possible.</doc>
     </function>
     <function name="debug_bin_to_dot_file"
               c:identifier="gst_debug_bin_to_dot_file">
+      <doc xml:space="preserve">To aid debugging applications one can use this method to write out the whole
+network of gstreamer elements that form the pipeline into an dot file.
+This file can be processed with graphviz to get an image.
+&lt;informalexample&gt;&lt;programlisting&gt;
+ dot -Tpng -oimage.png graph_lowlevel.dot
+&lt;/programlisting&gt;&lt;/informalexample&gt;</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="bin" transfer-ownership="none">
+          <doc xml:space="preserve">the top-level pipeline that should be analyzed</doc>
           <type name="Bin" c:type="GstBin*"/>
         </parameter>
         <parameter name="details" transfer-ownership="none">
           <type name="DebugGraphDetails" c:type="GstDebugGraphDetails"/>
         </parameter>
         <parameter name="file_name" transfer-ownership="none">
-          <type name="utf8" c:type="const gchar*"/>
+          <doc xml:space="preserve">output base filename (e.g. "myplayer")</doc>
+          <type name="filename" c:type="gchar*"/>
         </parameter>
       </parameters>
     </function>
     <function name="debug_bin_to_dot_file_with_ts"
               c:identifier="gst_debug_bin_to_dot_file_with_ts">
+      <doc xml:space="preserve">This works like gst_debug_bin_to_dot_file(), but adds the current timestamp
+to the filename, so that it can be used to take multiple snapshots.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="bin" transfer-ownership="none">
+          <doc xml:space="preserve">the top-level pipeline that should be analyzed</doc>
           <type name="Bin" c:type="GstBin*"/>
         </parameter>
         <parameter name="details" transfer-ownership="none">
           <type name="DebugGraphDetails" c:type="GstDebugGraphDetails"/>
         </parameter>
         <parameter name="file_name" transfer-ownership="none">
-          <type name="utf8" c:type="const gchar*"/>
+          <doc xml:space="preserve">output base filename (e.g. "myplayer")</doc>
+          <type name="filename" c:type="gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -45811,7 +45851,7 @@ On Windows #filename should be in UTF-8 encoding.</doc>
       <parameters>
         <parameter name="filename" transfer-ownership="none">
           <doc xml:space="preserve">absolute or relative file name path</doc>
-          <type name="utf8" c:type="const gchar*"/>
+          <type name="filename" c:type="gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -46788,7 +46828,7 @@ application.</doc>
       <return-value transfer-ownership="none" nullable="1">
         <doc xml:space="preserve">the directory or %NULL, don't free or modify
 the string</doc>
-        <type name="utf8" c:type="const gchar*"/>
+        <type name="filename" c:type="gchar*"/>
       </return-value>
     </function>
     <function name="preset_set_app_dir"
@@ -46804,7 +46844,7 @@ system presets.</doc>
       <parameters>
         <parameter name="app_dir" transfer-ownership="none">
           <doc xml:space="preserve">the application specific preset dir</doc>
-          <type name="utf8" c:type="const gchar*"/>
+          <type name="filename" c:type="gchar*"/>
         </parameter>
       </parameters>
     </function>

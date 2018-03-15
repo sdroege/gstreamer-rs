@@ -11729,6 +11729,23 @@ it from the queue.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="pop_tail_struct"
+              c:identifier="gst_queue_array_pop_tail_struct"
+              version="1.14"
+              introspectable="0">
+        <doc xml:space="preserve">Returns the tail of the queue @array and removes
+it from the queue.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The tail of the queue</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="array" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstQueueArray object</doc>
+            <type name="QueueArray" c:type="GstQueueArray*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="push_tail"
               c:identifier="gst_queue_array_push_tail"
               version="1.2"

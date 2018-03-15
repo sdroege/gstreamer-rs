@@ -6367,19 +6367,19 @@ to implement frame dropping.</doc>
               value="78"
               c:identifier="GST_VIDEO_FORMAT_GRAY10_LE32"
               glib:nick="gray10-le32">
-        <doc xml:space="preserve">10-bit grayscale, packet in 32bit words (2 bits padding)</doc>
+        <doc xml:space="preserve">10-bit grayscale, packed into 32bit words (2 bits padding) (Since: 1.14)</doc>
       </member>
       <member name="nv12_10le32"
               value="79"
               c:identifier="GST_VIDEO_FORMAT_NV12_10LE32"
               glib:nick="nv12-10le32">
-        <doc xml:space="preserve">10-bit variant of @GST_VIDEO_FORMAT_NV12, packet in 32bit words (MSB 2 bits padding) (Since: 1.14)</doc>
+        <doc xml:space="preserve">10-bit variant of @GST_VIDEO_FORMAT_NV12, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)</doc>
       </member>
       <member name="nv16_10le32"
               value="80"
               c:identifier="GST_VIDEO_FORMAT_NV16_10LE32"
               glib:nick="nv16-10le32">
-        <doc xml:space="preserve">10-bit variant of @GST_VIDEO_FORMAT_NV16, packet in 32bit words (MSB 2 bits padding) (Since: 1.14)</doc>
+        <doc xml:space="preserve">10-bit variant of @GST_VIDEO_FORMAT_NV16, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)</doc>
       </member>
       <function name="from_fourcc" c:identifier="gst_video_format_from_fourcc">
         <doc xml:space="preserve">Converts a FOURCC value into the corresponding #GstVideoFormat.

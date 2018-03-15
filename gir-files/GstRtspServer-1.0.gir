@@ -5852,7 +5852,12 @@ which can be accomplished by enclosing the description with brackets '('
 The description should return a pipeline with a single depayloader named
 depay_backchannel. A caps query on the depayloader's sinkpad should return
 all possible, complete RTP caps that are going to be supported. At least
-the payload type, clock-rate and encoding-name need to be specified.</doc>
+the payload type, clock-rate and encoding-name need to be specified.
+
+Note: The pipeline part passed here must end in sinks that are not waiting
+until pre-rolling before reaching the PAUSED state, i.e. setting
+async=false on #GstBaseSink. Otherwise the whole media will not be able to
+prepare.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
