@@ -37,9 +37,8 @@ trait = false
 
     [[object.function]]
     name = "new"
-        [[object.function.parameter]]
-        name = "name"
-        nullable = true
+    # Floating reference handling
+    ignore = true
 
 [[object]]
 name = "GstNet.PtpClock"
@@ -48,9 +47,8 @@ trait = false
 
     [[object.function]]
     name = "new"
-        [[object.function.parameter]]
-        name = "name"
-        nullable = true
+    # Floating reference handling
+    ignore = true
 
 [[object]]
 name = "GstNet.NetClientClock"
@@ -59,9 +57,8 @@ trait = false
 
     [[object.function]]
     name = "new"
-        [[object.function.parameter]]
-        name = "name"
-        nullable = true
+    # Floating reference handling
+    ignore = true
 
 [[object]]
 name = "GstNet.NetTimeProvider"
