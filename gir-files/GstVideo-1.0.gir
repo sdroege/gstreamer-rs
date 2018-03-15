@@ -1708,7 +1708,7 @@ of cores.</doc>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="VIDEO_FORMATS_ALL"
-              value="{ I420, YV12, YUY2, UYVY, AYUV, RGBx, BGRx, xRGB, xBGR, RGBA, BGRA, ARGB, ABGR, RGB, BGR, Y41B, Y42B, YVYU, Y444, v210, v216, NV12, NV21, GRAY8, GRAY16_BE, GRAY16_LE, v308, RGB16, BGR16, RGB15, BGR15, UYVP, A420, RGB8P, YUV9, YVU9, IYU1, ARGB64, AYUV64, r210, I420_10BE, I420_10LE, I422_10BE, I422_10LE, Y444_10BE, Y444_10LE, GBR, GBR_10BE, GBR_10LE, NV16, NV24, NV12_64Z32, A420_10BE, A420_10LE, A422_10BE, A422_10LE, A444_10BE, A444_10LE, NV61, P010_10BE, P010_10LE, IYU2, VYUY, GBRA, GBRA_10BE, GBRA_10LE, GBR_12BE, GBR_12LE, GBRA_12BE, GBRA_12LE, I420_12BE, I420_12LE, I422_12BE, I422_12LE, Y444_12BE, Y444_12LE }"
+              value="{ I420, YV12, YUY2, UYVY, AYUV, RGBx, BGRx, xRGB, xBGR, RGBA, BGRA, ARGB, ABGR, RGB, BGR, Y41B, Y42B, YVYU, Y444, v210, v216, NV12, NV21, GRAY8, GRAY16_BE, GRAY16_LE, v308, RGB16, BGR16, RGB15, BGR15, UYVP, A420, RGB8P, YUV9, YVU9, IYU1, ARGB64, AYUV64, r210, I420_10BE, I420_10LE, I422_10BE, I422_10LE, Y444_10BE, Y444_10LE, GBR, GBR_10BE, GBR_10LE, NV16, NV24, NV12_64Z32, A420_10BE, A420_10LE, A422_10BE, A422_10LE, A444_10BE, A444_10LE, NV61, P010_10BE, P010_10LE, IYU2, VYUY, GBRA, GBRA_10BE, GBRA_10LE, GBR_12BE, GBR_12LE, GBRA_12BE, GBRA_12LE, I420_12BE, I420_12LE, I422_12BE, I422_12LE, Y444_12BE, Y444_12LE, GRAY10_LE32, NV12_10LE32, NV16_10LE32 }"
               c:type="GST_VIDEO_FORMATS_ALL">
       <type name="utf8" c:type="gchar*"/>
     </constant>
@@ -1842,11 +1842,24 @@ quatization errors.</doc>
       </parameters>
     </callback>
     <record name="VideoAffineTransformationMeta"
-            c:type="GstVideoAffineTransformationMeta">
+            c:type="GstVideoAffineTransformationMeta"
+            version="1.8">
+      <doc xml:space="preserve">Extra buffer metadata for performing an affine transformation using a 4x4
+matrix. The transformation matrix can be composed with
+gst_video_affine_transformation_meta_apply_matrix().
+
+The vertices operated on are all in the range 0 to 1, not in
+Normalized Device Coordinates (-1 to +1). Transforming points in this space
+are assumed to have an origin at (0.5, 0.5, 0.5) in a left-handed coordinate
+system with the x-axis moving horizontally (positive values to the right),
+the y-axis moving vertically (positive values up the screen) and the z-axis
+perpendicular to the screen (positive values into the screen).</doc>
       <field name="meta" writable="1">
+        <doc xml:space="preserve">parent #GstMeta</doc>
         <type name="Gst.Meta" c:type="GstMeta"/>
       </field>
       <field name="matrix" writable="1">
+        <doc xml:space="preserve">the column-major 4x4 transformation matrix</doc>
         <array zero-terminated="0" c:type="gfloat" fixed-size="16">
           <type name="gfloat" c:type="gfloat"/>
         </array>
@@ -1854,7 +1867,8 @@ quatization errors.</doc>
       <method name="apply_matrix"
               c:identifier="gst_video_affine_transformation_meta_apply_matrix"
               version="1.8">
-        <doc xml:space="preserve">Apply a transformation using the given 4x4 transformation matrix</doc>
+        <doc xml:space="preserve">Apply a transformation using the given 4x4 transformation matrix.
+Performs the multiplication, meta-&gt;matrix X matrix.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2024,7 +2038,7 @@ They can conflict with other extended buffer flags.</doc>
       <constructor name="new" c:identifier="gst_video_buffer_pool_new">
         <doc xml:space="preserve">Create a new bufferpool that can allocate video frames. This bufferpool
 supports all the video bufferpool options.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstBufferPool to allocate video frames</doc>
           <type name="Gst.BufferPool" c:type="GstBufferPool*"/>
         </return-value>
@@ -2574,7 +2588,7 @@ non-linear RGB (R'G'B')</doc>
               value="6"
               c:identifier="GST_VIDEO_COLOR_MATRIX_BT2020"
               glib:nick="bt2020">
-        <doc xml:space="preserve">ITU-R BT.2020 color matrix. Since: 1.6.</doc>
+        <doc xml:space="preserve">ITU-R BT.2020 color matrix. Since: 1.6</doc>
       </member>
       <function name="get_Kr_Kb"
                 c:identifier="gst_video_color_matrix_get_Kr_Kb"
@@ -2676,7 +2690,7 @@ the CIE XYZ colorspace.</doc>
               value="7"
               c:identifier="GST_VIDEO_COLOR_PRIMARIES_BT2020"
               glib:nick="bt2020">
-        <doc xml:space="preserve">BT2020 primaries. Since: 1.6.</doc>
+        <doc xml:space="preserve">BT2020 primaries. Since: 1.6</doc>
       </member>
       <member name="adobergb"
               value="8"
@@ -2831,7 +2845,7 @@ the component values in range [0.0 .. 1.0] back to their representation in
         <doc xml:space="preserve">Parse the colorimetry string and update @cinfo with the parsed
 values.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if @color points to valid colorimetry info.</doc>
+          <doc xml:space="preserve">%TRUE if @color points to valid colorimetry info.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -2850,7 +2864,7 @@ values.</doc>
               version="1.6">
         <doc xml:space="preserve">Compare the 2 colorimetry sets for equality</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if @cinfo and @other are equal.</doc>
+          <doc xml:space="preserve">%TRUE if @cinfo and @other are equal.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -2868,7 +2882,7 @@ values.</doc>
         <doc xml:space="preserve">Check if the colorimetry information in @info matches that of the
 string @color.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if @color conveys the same colorimetry info as the color
+          <doc xml:space="preserve">%TRUE if @color conveys the same colorimetry info as the color
 information in @info.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3244,7 +3258,7 @@ The bare minimum that a functional subclass needs to implement is:
 Unmark GST_PAD_FLAG_NEED_RECONFIGURE in any case. But mark it again if
 negotiate fails.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if the negotiation succeeded, else #FALSE.</doc>
+          <doc xml:space="preserve">%TRUE if the negotiation succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -3839,7 +3853,7 @@ MT safe.</doc>
 Unmark GST_PAD_FLAG_NEED_RECONFIGURE in any case. But mark it again if
 negotiate fails.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if the negotiation succeeded, else #FALSE.</doc>
+          <doc xml:space="preserve">%TRUE if the negotiation succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4267,7 +4281,7 @@ and likely as well.  If non-packetized input is supported or expected,
       <field name="negotiate">
         <callback name="negotiate">
           <return-value transfer-ownership="none">
-            <doc xml:space="preserve">#TRUE if the negotiation succeeded, else #FALSE.</doc>
+            <doc xml:space="preserve">%TRUE if the negotiation succeeded, else %FALSE.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
@@ -4634,7 +4648,15 @@ Things that subclass need to take care of:
   * Provide pad templates
   * Provide source pad caps before pushing the first buffer
   * Accept data in @handle_frame and provide encoded results to
-     @gst_video_encoder_finish_frame.</doc>
+     @gst_video_encoder_finish_frame.
+
+
+The #GstVideoEncoder:qos property will enable the Quality-of-Service
+features of the encoder which gather statistics about the real-time
+performance of the downstream elements. If enabled, subclasses can
+use gst_video_encoder_get_max_encode_time() to check if input frames
+are already late and drop them right away to give a chance to the
+pipeline to catch up.</doc>
       <implements name="Gst.Preset"/>
       <virtual-method name="close">
         <return-value transfer-ownership="none">
@@ -4710,7 +4732,7 @@ Things that subclass need to take care of:
 Unmark GST_PAD_FLAG_NEED_RECONFIGURE in any case. But mark it again if
 negotiate fails.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if the negotiation succeeded, else #FALSE.</doc>
+          <doc xml:space="preserve">%TRUE if the negotiation succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -5043,6 +5065,31 @@ used</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="get_max_encode_time"
+              c:identifier="gst_video_encoder_get_max_encode_time"
+              version="1.14">
+        <doc xml:space="preserve">Determines maximum possible encoding time for @frame that will
+allow it to encode and arrive in time (as determined by QoS events).
+In particular, a negative result means encoding in time is no longer possible
+and should therefore occur as soon/skippy as possible.
+
+If no QoS events have been received from downstream, or if
+#GstVideoEncoder:qos is disabled this function returns #G_MAXINT64.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">max decoding time.</doc>
+          <type name="Gst.ClockTimeDiff" c:type="GstClockTimeDiff"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="encoder" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstVideoEncoder</doc>
+            <type name="VideoEncoder" c:type="GstVideoEncoder*"/>
+          </instance-parameter>
+          <parameter name="frame" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstVideoCodecFrame</doc>
+            <type name="VideoCodecFrame" c:type="GstVideoCodecFrame*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="get_oldest_frame"
               c:identifier="gst_video_encoder_get_oldest_frame">
         <doc xml:space="preserve">Get the oldest unfinished pending #GstVideoCodecFrame</doc>
@@ -5067,6 +5114,22 @@ used</doc>
         <parameters>
           <instance-parameter name="encoder" transfer-ownership="none">
             <doc xml:space="preserve">a #GstVideoEncoder</doc>
+            <type name="VideoEncoder" c:type="GstVideoEncoder*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="is_qos_enabled"
+              c:identifier="gst_video_encoder_is_qos_enabled"
+              version="1.14">
+        <doc xml:space="preserve">Checks if @encoder is currently configured to handle Quality-of-Service
+events from downstream.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the encoder is configured to perform Quality-of-Service.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="encoder" transfer-ownership="none">
+            <doc xml:space="preserve">the encoder</doc>
             <type name="VideoEncoder" c:type="GstVideoEncoder*"/>
           </instance-parameter>
         </parameters>
@@ -5107,7 +5170,7 @@ MT safe.</doc>
 Unmark GST_PAD_FLAG_NEED_RECONFIGURE in any case. But mark it again if
 negotiate fails.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">#TRUE if the negotiation succeeded, else #FALSE.</doc>
+          <doc xml:space="preserve">%TRUE if the negotiation succeeded, else %FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -5248,6 +5311,27 @@ from the next call to #gst_video_encoder_finish_frame().</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_qos_enabled"
+              c:identifier="gst_video_encoder_set_qos_enabled"
+              version="1.14">
+        <doc xml:space="preserve">Configures @encoder to handle Quality-of-Service events from downstream.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="encoder" transfer-ownership="none">
+            <doc xml:space="preserve">the encoder</doc>
+            <type name="VideoEncoder" c:type="GstVideoEncoder*"/>
+          </instance-parameter>
+          <parameter name="enabled" transfer-ownership="none">
+            <doc xml:space="preserve">the new qos value.</doc>
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
+      <property name="qos" writable="1" transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
       <field name="element" readable="0" private="1">
         <type name="Gst.Element" c:type="GstElement"/>
       </field>
@@ -5452,7 +5536,7 @@ and @get_caps are likely needed as well.</doc>
       <field name="negotiate">
         <callback name="negotiate">
           <return-value transfer-ownership="none">
-            <doc xml:space="preserve">#TRUE if the negotiation succeeded, else #FALSE.</doc>
+            <doc xml:space="preserve">%TRUE if the negotiation succeeded, else %FALSE.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
@@ -6278,6 +6362,24 @@ to implement frame dropping.</doc>
               c:identifier="GST_VIDEO_FORMAT_Y444_12LE"
               glib:nick="y444-12le">
         <doc xml:space="preserve">planar 4:4:4 YUV, 12 bits per channel (Since: 1.12)</doc>
+      </member>
+      <member name="gray10_le32"
+              value="78"
+              c:identifier="GST_VIDEO_FORMAT_GRAY10_LE32"
+              glib:nick="gray10-le32">
+        <doc xml:space="preserve">10-bit grayscale, packed into 32bit words (2 bits padding) (Since: 1.14)</doc>
+      </member>
+      <member name="nv12_10le32"
+              value="79"
+              c:identifier="GST_VIDEO_FORMAT_NV12_10LE32"
+              glib:nick="nv12-10le32">
+        <doc xml:space="preserve">10-bit variant of @GST_VIDEO_FORMAT_NV12, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)</doc>
+      </member>
+      <member name="nv16_10le32"
+              value="80"
+              c:identifier="GST_VIDEO_FORMAT_NV16_10LE32"
+              glib:nick="nv16-10le32">
+        <doc xml:space="preserve">10-bit variant of @GST_VIDEO_FORMAT_NV16, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)</doc>
       </member>
       <function name="from_fourcc" c:identifier="gst_video_format_from_fourcc">
         <doc xml:space="preserve">Converts a FOURCC value into the corresponding #GstVideoFormat.
@@ -8792,6 +8894,59 @@ int main(int argc, char *argv[])
   return ret;
 }
 ]|</doc>
+      <function name="install_properties"
+                c:identifier="gst_video_overlay_install_properties">
+        <doc xml:space="preserve">This helper shall be used by classes implementing the #GstVideoOverlay
+interface that want the render rectangle to be controllable using
+properties. This helper will install "render-rectangle" property into the
+class.
+
+Since 1.14</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="oclass" transfer-ownership="none">
+            <doc xml:space="preserve">The class on which the properties will be installed</doc>
+            <type name="GObject.ObjectClass" c:type="GObjectClass*"/>
+          </parameter>
+          <parameter name="last_prop_id" transfer-ownership="none">
+            <doc xml:space="preserve">The first free property ID to use</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="set_property"
+                c:identifier="gst_video_overlay_set_property">
+        <doc xml:space="preserve">This helper shall be used by classes implementing the #GstVideoOverlay
+interface that want the render rectangle to be controllable using
+properties. This helper will parse and set the render rectangle calling
+gst_video_overlay_set_render_rectangle().</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the @property_id matches the GstVideoOverlay property
+
+Since 1.14</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">The instance on which the property is set</doc>
+            <type name="GObject.Object" c:type="GObject*"/>
+          </parameter>
+          <parameter name="last_prop_id" transfer-ownership="none">
+            <doc xml:space="preserve">The highest property ID.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="property_id" transfer-ownership="none">
+            <doc xml:space="preserve">The property ID</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="value" transfer-ownership="none">
+            <doc xml:space="preserve">The #GValue to be set</doc>
+            <type name="GObject.Value" c:type="const GValue*"/>
+          </parameter>
+        </parameters>
+      </function>
       <virtual-method name="expose" invoker="expose">
         <doc xml:space="preserve">Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.</doc>
@@ -9301,6 +9456,10 @@ contained in the rectangles are not copied.</doc>
           </parameters>
         </callback>
       </field>
+    </record>
+    <record name="VideoOverlayProperties"
+            c:type="GstVideoOverlayProperties"
+            disguised="1">
     </record>
     <record name="VideoOverlayRectangle"
             c:type="GstVideoOverlayRectangle"
@@ -9835,6 +9994,61 @@ gst_video_overlay_composition_copy().</doc>
         <doc xml:space="preserve">bounding box height</doc>
         <type name="guint" c:type="guint"/>
       </field>
+      <field name="params" writable="1">
+        <doc xml:space="preserve">list of #GstStructure containing element-specific params for downstream, see gst_video_region_of_interest_meta_add_params(). (Since: 1.14)</doc>
+        <type name="GLib.List" c:type="GList*">
+          <type name="gpointer" c:type="gpointer"/>
+        </type>
+      </field>
+      <method name="add_param"
+              c:identifier="gst_video_region_of_interest_meta_add_param"
+              version="1.14">
+        <doc xml:space="preserve">Attach element-specific parameters to @meta meant to be used by downstream
+elements which may handle this ROI.
+The name of @s is used to identify the element these parameters are meant for.
+
+This is typically used to tell encoders how they should encode this specific region.
+For example, a structure named "roi/x264enc" could be used to give the
+QP offsets this encoder should use when encoding the region described in @meta.
+Multiple parameters can be defined for the same meta so different encoders
+can be supported by cross platform applications).</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="meta" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstVideoRegionOfInterestMeta</doc>
+            <type name="VideoRegionOfInterestMeta"
+                  c:type="GstVideoRegionOfInterestMeta*"/>
+          </instance-parameter>
+          <parameter name="s" transfer-ownership="full">
+            <doc xml:space="preserve">a #GstStructure</doc>
+            <type name="Gst.Structure" c:type="GstStructure*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_param"
+              c:identifier="gst_video_region_of_interest_meta_get_param"
+              version="1.14">
+        <doc xml:space="preserve">Retrieve the parameter for @meta having @name as structure name,
+or %NULL if there is none.</doc>
+        <doc-version xml:space="preserve">
+See also: gst_video_region_of_interest_meta_add_param()</doc-version>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">a #GstStructure</doc>
+          <type name="Gst.Structure" c:type="GstStructure*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="meta" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstVideoRegionOfInterestMeta</doc>
+            <type name="VideoRegionOfInterestMeta"
+                  c:type="GstVideoRegionOfInterestMeta*"/>
+          </instance-parameter>
+          <parameter name="name" transfer-ownership="none">
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
       <function name="get_info"
                 c:identifier="gst_video_region_of_interest_meta_get_info">
         <return-value transfer-ownership="none">
@@ -10340,7 +10554,7 @@ the @dst one and @scaling is set to FALSE.</doc>
                 writable="1"
                 construct="1"
                 transfer-ownership="none">
-        <doc xml:space="preserve">Whether to show video frames during preroll. If set to #FALSE, video
+        <doc xml:space="preserve">Whether to show video frames during preroll. If set to %FALSE, video
 frames will only be rendered in PLAYING state.</doc>
         <type name="gboolean" c:type="gboolean"/>
       </property>
@@ -11166,7 +11380,7 @@ non-linear RGB (R'G'B') and linear RGB</doc>
               glib:nick="bt2020-12">
         <doc xml:space="preserve">Gamma 2.2 curve with a linear segment in the lower
                                range. Used for BT.2020 with 12 bits per
-                               component. Since: 1.6.</doc>
+                               component. Since: 1.6</doc>
       </member>
       <member name="adobergb"
               value="12"
@@ -11560,7 +11774,7 @@ no such metadata on @buffer.</doc>
       <doc xml:space="preserve">Get the video alignment from the bufferpool configuration @config in
 in @align</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">#TRUE if @config could be parsed correctly.</doc>
+        <doc xml:space="preserve">%TRUE if @config could be parsed correctly.</doc>
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
       <parameters>
@@ -13361,6 +13575,61 @@ the requested mode.</doc>
       <return-value transfer-ownership="none">
         <type name="Gst.MetaInfo" c:type="const GstMetaInfo*"/>
       </return-value>
+    </function>
+    <function name="video_overlay_install_properties"
+              c:identifier="gst_video_overlay_install_properties"
+              moved-to="VideoOverlay.install_properties">
+      <doc xml:space="preserve">This helper shall be used by classes implementing the #GstVideoOverlay
+interface that want the render rectangle to be controllable using
+properties. This helper will install "render-rectangle" property into the
+class.
+
+Since 1.14</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="oclass" transfer-ownership="none">
+          <doc xml:space="preserve">The class on which the properties will be installed</doc>
+          <type name="GObject.ObjectClass" c:type="GObjectClass*"/>
+        </parameter>
+        <parameter name="last_prop_id" transfer-ownership="none">
+          <doc xml:space="preserve">The first free property ID to use</doc>
+          <type name="gint" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="video_overlay_set_property"
+              c:identifier="gst_video_overlay_set_property"
+              moved-to="VideoOverlay.set_property">
+      <doc xml:space="preserve">This helper shall be used by classes implementing the #GstVideoOverlay
+interface that want the render rectangle to be controllable using
+properties. This helper will parse and set the render rectangle calling
+gst_video_overlay_set_render_rectangle().</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">%TRUE if the @property_id matches the GstVideoOverlay property
+
+Since 1.14</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="object" transfer-ownership="none">
+          <doc xml:space="preserve">The instance on which the property is set</doc>
+          <type name="GObject.Object" c:type="GObject*"/>
+        </parameter>
+        <parameter name="last_prop_id" transfer-ownership="none">
+          <doc xml:space="preserve">The highest property ID.</doc>
+          <type name="gint" c:type="gint"/>
+        </parameter>
+        <parameter name="property_id" transfer-ownership="none">
+          <doc xml:space="preserve">The property ID</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="value" transfer-ownership="none">
+          <doc xml:space="preserve">The #GValue to be set</doc>
+          <type name="GObject.Value" c:type="const GValue*"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="video_region_of_interest_meta_api_get_type"
               c:identifier="gst_video_region_of_interest_meta_api_get_type">
