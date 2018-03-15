@@ -2,6 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files @ ???)
 // DO NOT EDIT
 
+mod s_d_p_media;
+pub use self::s_d_p_media::SDPMedia;
+
+mod s_d_p_message;
+pub use self::s_d_p_message::SDPMessage;
+
 mod enums;
 pub use self::enums::MIKEYCacheType;
 pub use self::enums::MIKEYEncAlg;

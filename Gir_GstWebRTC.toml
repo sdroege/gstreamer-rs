@@ -1,0 +1,62 @@
+[options]
+girs_dir = "gir-files"
+library = "GstWebRTC"
+version = "1.0"
+min_cfg_version = "1.14"
+target_path = "gstreamer-webrtc"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+    "GstSdp",
+]
+
+generate = [
+    "GstWebRTC.WebRTCDTLSTransportState",
+    "GstWebRTC.WebRTCICEGatheringState",
+    "GstWebRTC.WebRTCICEConnectionState",
+    "GstWebRTC.WebRTCICERole",
+    "GstWebRTC.WebRTCICEComponent",
+    "GstWebRTC.WebRTCSDPType",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Structure",
+    "GstSdp.SDPMessage",
+]
+
+[[object]]
+name = "GstWebRTC.WebRTCDTLSTransport"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstWebRTC.WebRTCICETransport"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstWebRTC.WebRTCRTPReceiver"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstWebRTC.WebRTCRTPSender"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstWebRTC.WebRTCRTPTransceiver"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstWebRTC.WebRTCSessionDescription"
+status = "generate"
+trait = false
+
