@@ -15,8 +15,8 @@ build = "build.rs"
 [dependencies]
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gstreamer-net-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"], branch = "1.14" }
+gstreamer-net-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"], branch = "1.14" }
 glib = { git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
 
