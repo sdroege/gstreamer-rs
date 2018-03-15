@@ -50,9 +50,9 @@ pub const GST_WEBRTC_ICE_GATHERING_STATE_NEW: GstWebRTCICEGatheringState = 0;
 pub const GST_WEBRTC_ICE_GATHERING_STATE_GATHERING: GstWebRTCICEGatheringState = 1;
 pub const GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE: GstWebRTCICEGatheringState = 2;
 
-pub type GstWebRTCIceRole = c_int;
-pub const GST_WEBRTC_ICE_ROLE_CONTROLLED: GstWebRTCIceRole = 0;
-pub const GST_WEBRTC_ICE_ROLE_CONTROLLING: GstWebRTCIceRole = 1;
+pub type GstWebRTCICERole = c_int;
+pub const GST_WEBRTC_ICE_ROLE_CONTROLLED: GstWebRTCICERole = 0;
+pub const GST_WEBRTC_ICE_ROLE_CONTROLLING: GstWebRTCICERole = 1;
 
 pub type GstWebRTCPeerConnectionState = c_int;
 pub const GST_WEBRTC_PEER_CONNECTION_STATE_NEW: GstWebRTCPeerConnectionState = 0;
@@ -233,7 +233,7 @@ impl ::std::fmt::Debug for GstWebRTCDTLSTransport {
 #[derive(Copy, Clone)]
 pub struct GstWebRTCICETransport {
     pub parent: gst::GstObject,
-    pub role: GstWebRTCIceRole,
+    pub role: GstWebRTCICERole,
     pub component: GstWebRTCICEComponent,
     pub state: GstWebRTCICEConnectionState,
     pub gathering_state: GstWebRTCICEGatheringState,

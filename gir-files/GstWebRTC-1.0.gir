@@ -168,6 +168,8 @@ GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED: connected</doc>
       </member>
     </enumeration>
     <enumeration name="WebRTCICEComponent" c:type="GstWebRTCICEComponent">
+      <doc xml:space="preserve">GST_WEBRTC_ICE_COMPONENT_RTP,
+GST_WEBRTC_ICE_COMPONENT_RTCP,</doc>
       <member name="rtp" value="0" c:identifier="GST_WEBRTC_ICE_COMPONENT_RTP">
       </member>
       <member name="rtcp"
@@ -231,6 +233,18 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcicegatheringstate"&gt;
       <member name="complete"
               value="2"
               c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE">
+      </member>
+    </enumeration>
+    <enumeration name="WebRTCICERole" c:type="GstWebRTCICERole">
+      <doc xml:space="preserve">GST_WEBRTC_ICE_ROLE_CONTROLLED: controlled
+GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling</doc>
+      <member name="controlled"
+              value="0"
+              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLED">
+      </member>
+      <member name="controlling"
+              value="1"
+              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLING">
       </member>
     </enumeration>
     <class name="WebRTCICETransport"
@@ -331,7 +345,7 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcicegatheringstate"&gt;
         <type name="Gst.Object" c:type="GstObject"/>
       </field>
       <field name="role">
-        <type name="WebRTCIceRole" c:type="GstWebRTCIceRole"/>
+        <type name="WebRTCICERole" c:type="GstWebRTCICERole"/>
       </field>
       <field name="component">
         <type name="WebRTCICEComponent" c:type="GstWebRTCICEComponent"/>
@@ -395,18 +409,6 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcicegatheringstate"&gt;
         </array>
       </field>
     </record>
-    <enumeration name="WebRTCIceRole" c:type="GstWebRTCIceRole">
-      <doc xml:space="preserve">GST_WEBRTC_ICE_ROLE_CONTROLLED: controlled
-GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling</doc>
-      <member name="controlled"
-              value="0"
-              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLED">
-      </member>
-      <member name="controlling"
-              value="1"
-              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLING">
-      </member>
-    </enumeration>
     <enumeration name="WebRTCPeerConnectionState"
                  c:type="GstWebRTCPeerConnectionState">
       <doc xml:space="preserve">GST_WEBRTC_PEER_CONNECTION_STATE_NEW: new
