@@ -93,11 +93,6 @@ impl SampleRef {
             }
         }
     }
-
-    #[deprecated(since = "0.10.1", note = "please use `get_info` instead")]
-    pub fn get_structure(&self) -> Option<&StructureRef> {
-        self.get_info()
-    }
 }
 
 impl StaticType for SampleRef {

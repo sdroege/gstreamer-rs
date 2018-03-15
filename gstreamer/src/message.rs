@@ -1160,6 +1160,7 @@ impl<'a> Redirect<'a> {
 struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
+    #[allow(unused)]
     other_fields: Vec<(&'a str, &'a ToSendValue)>,
 }
 
@@ -1189,15 +1190,15 @@ impl<'a> MessageBuilder<'a> {
         }
     }
 
-    // TODO: restore clone_and_chain_other_fields method and condition it to the "v1_14" feature
-    /*fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
         Self {
             other_fields: self.other_fields.iter().cloned()
                 .chain(other_fields.iter().cloned())
                 .collect(),
             .. self
         }
-    }*/
+    }
 }
 
 macro_rules! message_builder_generic_impl {
@@ -1216,13 +1217,13 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        // TODO: restore other_fields method and condition it to the "v1_14" feature
-        /*pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        #[cfg(any(feature = "v1_14", feature = "dox"))]
+        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
                 .. self
             }
-        }*/
+        }
 
         pub fn build(mut self) -> Message {
             assert_initialized_main_thread!();
@@ -1233,18 +1234,17 @@ macro_rules! message_builder_generic_impl {
                     ffi::gst_message_set_seqnum(msg, seqnum.to_glib());
                 }
 
-                if !self.builder.other_fields.is_empty() {
-                    // issue with argument-less messages. We need the function
-                    // ffi::gst_message_writable_structure to sort this out
-                    // and this function will be available in GStreamer 1.14
-                    // See https://github.com/sdroege/gstreamer-rs/pull/75
-                    // and https://bugzilla.gnome.org/show_bug.cgi?id=792928
-                    let structure = ffi::gst_message_get_structure(msg);
-                    if !structure.is_null() {
-                        let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
+                #[cfg(any(feature = "v1_14", feature = "dox"))]
+                {
+                    if !self.builder.other_fields.is_empty() {
+                        let structure = ffi::gst_message_writable_structure(msg);
 
-                        for (k, v) in self.builder.other_fields {
-                            structure.set_value(k, v.to_send_value());
+                        if !structure.is_null() {
+                            let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
+
+                            for (k, v) in self.builder.other_fields {
+                                structure.set_value(k, v.to_send_value());
+                            }
                         }
                     }
                 }
