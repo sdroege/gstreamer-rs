@@ -37,6 +37,9 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
 mod auto;
 pub use auto::*;
+mod net_client_clock;
+mod ntp_clock;
+mod ptp_clock;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
