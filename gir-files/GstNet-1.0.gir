@@ -72,7 +72,7 @@ statistics about clock accuracy and network traffic.</doc>
         <doc xml:space="preserve">Create a new #GstNetClientInternalClock that will report the time
 provided by the #GstNetTimeProvider on @remote_address and
 @remote_port.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstClock that receives a time from the remote
 clock.</doc>
           <type name="Gst.Clock" c:type="GstClock*"/>
@@ -123,6 +123,9 @@ clock.</doc>
                 writable="1"
                 construct="1"
                 transfer-ownership="none">
+        <type name="gint" c:type="gint"/>
+      </property>
+      <property name="qos-dscp" writable="1" transfer-ownership="none">
         <type name="gint" c:type="gint"/>
       </property>
       <property name="round-trip-limit" writable="1" transfer-ownership="none">
@@ -197,7 +200,7 @@ structures.</doc>
 caller is responsible for ensuring that @buffer is at least
 #GST_NET_TIME_PACKET_SIZE bytes long.
 
-If @buffer is #NULL, the local and remote times will be set to
+If @buffer is %NULL, the local and remote times will be set to
 #GST_CLOCK_TIME_NONE.
 
 MT safe. Caller owns return value (gst_net_time_packet_free to free).</doc>
@@ -324,7 +327,7 @@ The #GstNetTimeProvider typically wraps the clock used by a #GstPipeline.</doc>
       <implements name="Gio.Initable"/>
       <constructor name="new" c:identifier="gst_net_time_provider_new">
         <doc xml:space="preserve">Allows network clients to get the current time of @clock.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">the new #GstNetTimeProvider, or NULL on error</doc>
           <type name="NetTimeProvider" c:type="GstNetTimeProvider*"/>
         </return-value>
@@ -368,6 +371,9 @@ The #GstNetTimeProvider typically wraps the clock used by a #GstPipeline.</doc>
                 transfer-ownership="none">
         <type name="gint" c:type="gint"/>
       </property>
+      <property name="qos-dscp" writable="1" transfer-ownership="none">
+        <type name="gint" c:type="gint"/>
+      </property>
       <field name="parent">
         <type name="Gst.Object" c:type="GstObject"/>
       </field>
@@ -407,7 +413,7 @@ The #GstNetTimeProvider typically wraps the clock used by a #GstPipeline.</doc>
       <constructor name="new" c:identifier="gst_ntp_clock_new" version="1.6">
         <doc xml:space="preserve">Create a new #GstNtpClock that will report the time provided by
 the NTPv4 server on @remote_address and @remote_port.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new #GstClock that receives a time from the remote
 clock.</doc>
           <type name="Gst.Clock" c:type="GstClock*"/>
@@ -522,7 +528,8 @@ times from the PTP master clock on the network. Once this happens the
 GstPtpClock::internal-clock property will become non-NULL. You can
 check this with gst_clock_wait_for_sync(), the GstClock::synced signal and
 gst_clock_is_synced().</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A new #GstClock</doc>
           <type name="Gst.Clock" c:type="GstClock*"/>
         </return-value>
         <parameters>

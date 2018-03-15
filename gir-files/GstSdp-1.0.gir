@@ -1512,7 +1512,10 @@ specific security protocol</doc>
             <doc xml:space="preserve">the key</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="value" transfer-ownership="none">
+          <parameter name="value"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the value</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -1717,7 +1720,10 @@ keys.</doc>
             <doc xml:space="preserve">a key</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="value" transfer-ownership="none">
+          <parameter name="value"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">a value</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -2683,7 +2689,10 @@ messages.</doc>
             <doc xml:space="preserve">the key</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="value" transfer-ownership="none">
+          <parameter name="value"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">the value</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
