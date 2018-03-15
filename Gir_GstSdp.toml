@@ -5,7 +5,7 @@ version = "1.0"
 min_cfg_version = "1.8"
 target_path = "gstreamer-sdp"
 work_mode = "normal"
-concurrency = "send+sync"
+concurrency = "send"
 generate_safety_asserts = true
 doc_target_path = "docs/gstreamer-sdp/docs.md"
 
@@ -28,7 +28,7 @@ generate = [
     "GstSdp.MIKEYSecSRTP",
     "GstSdp.MIKEYTSType",
     "GstSdp.MIKEYType",
-    "GstSdp.SDPResult"
+    "GstSdp.SDPResult",
 ]
 
 manual = [
@@ -38,3 +38,23 @@ manual = [
 name = "Gst.Caps"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstSdp.SDPMessage"
+status = "generate"
+use_boxed_functions = true
+
+    [[object.function]]
+    name = "new"
+    # special return type...
+    ignore = true
+
+    [[object.function]]
+    name = "uninit"
+    # unsafe
+    ignore = true
+
+
+[[object]]
+name = "GstSdp.SDPMedia"
+status = "generate"
