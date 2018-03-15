@@ -54,6 +54,7 @@ mod audio_info;
 pub use audio_info::*;
 mod audio_channel_position;
 pub use audio_channel_position::*;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 mod audio_stream_align;
 
 use glib::translate::{from_glib_full, ToGlibPtr};

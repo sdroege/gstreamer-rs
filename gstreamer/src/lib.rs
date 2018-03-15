@@ -153,6 +153,8 @@ pub use clock::{ClockExtManual, ClockId};
 mod buffer_pool;
 pub use buffer_pool::*;
 
+mod pad_template;
+
 pub mod functions;
 pub use functions::*;
 
