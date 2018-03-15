@@ -28,6 +28,7 @@ version = "0.1"
 optional = true
 
 [features]
+v1_14 = ["gstreamer-sys/v1_14", "gstreamer-player-sys/v1_14"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-player-sys/dox", "glib/dox", "gstreamer/dox"]
