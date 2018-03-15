@@ -507,42 +507,47 @@ accumulator, such as g_signal_accumulator_true_handled().</doc>
       </function>
       <function name="marshal_BOOLEAN__FLAGS"
                 c:identifier="g_cclosure_marshal_BOOLEAN__FLAGS">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`gboolean (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter
-denotes a flags type.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with handlers that
+take a flags type as an argument and return a boolean.  If you have
+such a signal, you will probably also need to use an accumulator,
+such as g_signal_accumulator_true_handled().</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue which can store the returned #gboolean</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding instance and arg1</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -600,41 +605,46 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_STRING__OBJECT_POINTER"
                 c:identifier="g_cclosure_marshal_STRING__OBJECT_POINTER">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`gchar* (*callback) (gpointer instance, GObject *arg1, gpointer arg2, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with handlers that
+take a #GObject and a pointer and produce a string.  It is highly
+unlikely that your signal handler fits this description.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue, which can store the returned string</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">3</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding instance, arg1 and arg2</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -692,41 +702,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__BOOLEAN"
                 c:identifier="g_cclosure_marshal_VOID__BOOLEAN">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gboolean arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+boolean argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gboolean parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -784,41 +798,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__BOXED"
                 c:identifier="g_cclosure_marshal_VOID__BOXED">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GBoxed *arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument which is any boxed pointer type.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #GBoxed* parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -876,41 +894,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__CHAR"
                 c:identifier="g_cclosure_marshal_VOID__CHAR">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gchar arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+character argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gchar parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -968,41 +990,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__DOUBLE"
                 c:identifier="g_cclosure_marshal_VOID__DOUBLE">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gdouble arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with one
+double-precision floating point argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gdouble parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1060,41 +1086,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__ENUM"
                 c:identifier="g_cclosure_marshal_VOID__ENUM">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter denotes an enumeration type..</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument with an enumerated type.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the enumeration parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1152,41 +1182,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__FLAGS"
                 c:identifier="g_cclosure_marshal_VOID__FLAGS">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter denotes a flags type.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument with a flags types.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the flags parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1244,41 +1278,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__FLOAT"
                 c:identifier="g_cclosure_marshal_VOID__FLOAT">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gfloat arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with one
+single-precision floating point argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gfloat parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1336,41 +1374,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__INT"
                 c:identifier="g_cclosure_marshal_VOID__INT">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gint arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+integer argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gint parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1428,41 +1470,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__LONG"
                 c:identifier="g_cclosure_marshal_VOID__LONG">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, glong arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with with a single
+long integer argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #glong parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1520,41 +1566,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__OBJECT"
                 c:identifier="g_cclosure_marshal_VOID__OBJECT">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GObject *arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+#GObject argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #GObject* parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1612,41 +1662,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__PARAM"
                 c:identifier="g_cclosure_marshal_VOID__PARAM">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GParamSpec *arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument of type #GParamSpec.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #GParamSpec* parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1704,41 +1758,49 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__POINTER"
                 c:identifier="g_cclosure_marshal_VOID__POINTER">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gpointer arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single raw
+pointer argument type.
+
+If it is possible, it is better to use one of the more specific
+functions such as g_cclosure_marshal_VOID__OBJECT() or
+g_cclosure_marshal_VOID__OBJECT().</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gpointer parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1796,41 +1858,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__STRING"
                 c:identifier="g_cclosure_marshal_VOID__STRING">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, const gchar *arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single string
+argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gchar* parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1888,41 +1954,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__UCHAR"
                 c:identifier="g_cclosure_marshal_VOID__UCHAR">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, guchar arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+unsigned character argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #guchar parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1980,82 +2050,90 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__UINT"
                 c:identifier="g_cclosure_marshal_VOID__UINT">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, guint arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with with a single
+unsigned integer argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #guint parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
       </function>
       <function name="marshal_VOID__UINT_POINTER"
                 c:identifier="g_cclosure_marshal_VOID__UINT_POINTER">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, guint arg1, gpointer arg2, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a unsigned int
+and a pointer as arguments.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">3</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding instance, arg1 and arg2</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -2164,41 +2242,45 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__ULONG"
                 c:identifier="g_cclosure_marshal_VOID__ULONG">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gulong arg1, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+unsigned long integer argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #gulong parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -2255,43 +2337,46 @@ denotes a flags type.</doc>
         </parameters>
       </function>
       <function name="marshal_VOID__VARIANT"
-                c:identifier="g_cclosure_marshal_VOID__VARIANT"
-                version="2.26">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GVariant *arg1, gpointer user_data)`.</doc>
+                c:identifier="g_cclosure_marshal_VOID__VARIANT">
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+#GVariant argument.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">2</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding the instance and the #GVariant* parameter</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -2349,41 +2434,44 @@ denotes a flags type.</doc>
       </function>
       <function name="marshal_VOID__VOID"
                 c:identifier="g_cclosure_marshal_VOID__VOID">
-        <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gpointer user_data)`.</doc>
+        <doc xml:space="preserve">A #GClosureMarshal function for use with signals with no arguments.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="closure" transfer-ownership="none">
-            <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+            <doc xml:space="preserve">A #GClosure.</doc>
             <type name="Closure" c:type="GClosure*"/>
           </parameter>
           <parameter name="return_value" transfer-ownership="none">
-            <doc xml:space="preserve">ignored</doc>
+            <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="n_param_values" transfer-ownership="none">
-            <doc xml:space="preserve">1</doc>
+            <doc xml:space="preserve">The length of the @param_values array.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="param_values" transfer-ownership="none">
-            <doc xml:space="preserve">a #GValue array holding only the instance</doc>
+            <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
             <type name="Value" c:type="const GValue*"/>
           </parameter>
           <parameter name="invocation_hint"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+            <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="marshal_data"
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+            <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -3814,7 +3902,7 @@ zeros before this function is called.</doc>
 to the #GObject implementation and should never be accessed directly.</doc>
       <constructor name="new"
                    c:identifier="g_object_new"
-                   shadowed-by="newv"
+                   shadowed-by="new_with_properties"
                    introspectable="0">
         <doc xml:space="preserve">Creates a new instance of a #GObject subtype and sets its properties.
 
@@ -3868,11 +3956,54 @@ which are not explicitly specified are set to their default values.</doc>
           </parameter>
         </parameters>
       </constructor>
-      <constructor name="newv" c:identifier="g_object_newv" shadows="new">
+      <constructor name="new_with_properties"
+                   c:identifier="g_object_new_with_properties"
+                   shadows="new"
+                   version="2.54">
+        <doc xml:space="preserve">Creates a new instance of a #GObject subtype and sets its properties using
+the provided arrays. Both arrays must have exactly @n_properties elements,
+and the names and values correspond by index.
+
+Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
+which are not explicitly specified are set to their default values.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">a new instance of
+@object_type</doc>
+          <type name="Object" c:type="GObject*"/>
+        </return-value>
+        <parameters>
+          <parameter name="object_type" transfer-ownership="none">
+            <doc xml:space="preserve">the object type to instantiate</doc>
+            <type name="GType" c:type="GType"/>
+          </parameter>
+          <parameter name="n_properties" transfer-ownership="none">
+            <doc xml:space="preserve">the number of properties</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="names" transfer-ownership="none">
+            <doc xml:space="preserve">the names of each property to be set</doc>
+            <array length="1" zero-terminated="0" c:type="char*">
+              <type name="utf8" c:type="char"/>
+            </array>
+          </parameter>
+          <parameter name="values" transfer-ownership="none">
+            <doc xml:space="preserve">the values of each property to be set</doc>
+            <array length="1" zero-terminated="0" c:type="GValue">
+              <type name="Value" c:type="GValue"/>
+            </array>
+          </parameter>
+        </parameters>
+      </constructor>
+      <constructor name="newv"
+                   c:identifier="g_object_newv"
+                   deprecated="1"
+                   deprecated-version="2.54">
         <doc xml:space="preserve">Creates a new instance of a #GObject subtype and sets its properties.
 
 Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
 which are not explicitly specified are set to their default values.</doc>
+        <doc-deprecated xml:space="preserve">Use g_object_new_with_properties() instead.
+deprecated. See #GParameter for more information.</doc-deprecated>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a new instance of
 @object_type</doc>
@@ -4739,6 +4870,37 @@ See g_object_get().</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="getv" c:identifier="g_object_getv" version="2.54">
+        <doc xml:space="preserve">Gets @n_properties properties for an @object.
+Obtained properties will be set to @values. All properties must be valid.
+Warnings will be emitted and undefined behaviour may result if invalid
+properties are passed in.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">a #GObject</doc>
+            <type name="Object" c:type="GObject*"/>
+          </instance-parameter>
+          <parameter name="n_properties" transfer-ownership="none">
+            <doc xml:space="preserve">the number of properties</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="names" transfer-ownership="none">
+            <doc xml:space="preserve">the names of each property to get</doc>
+            <array length="0" zero-terminated="0" c:type="gchar*">
+              <type name="utf8" c:type="gchar"/>
+            </array>
+          </parameter>
+          <parameter name="values" transfer-ownership="none">
+            <doc xml:space="preserve">the values of each property to get</doc>
+            <array length="0" zero-terminated="0" c:type="GValue">
+              <type name="Value" c:type="GValue"/>
+            </array>
+          </parameter>
+        </parameters>
+      </method>
       <method name="is_floating"
               c:identifier="g_object_is_floating"
               version="2.10">
@@ -5250,6 +5412,40 @@ with the same @quark.</doc>
             <doc xml:space="preserve">value for the first property, followed optionally by more
  name/value pairs, followed by %NULL</doc>
             <type name="va_list" c:type="va_list"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="setv"
+              c:identifier="g_object_setv"
+              version="2.54"
+              introspectable="0">
+        <doc xml:space="preserve">Sets @n_properties properties for an @object.
+Properties to be set will be taken from @values. All properties must be
+valid. Warnings will be emitted and undefined behaviour may result if invalid
+properties are passed in.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">a #GObject</doc>
+            <type name="Object" c:type="GObject*"/>
+          </instance-parameter>
+          <parameter name="n_properties" transfer-ownership="none">
+            <doc xml:space="preserve">the number of properties</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="names" transfer-ownership="none">
+            <doc xml:space="preserve">the names of each property to be set</doc>
+            <array length="0" zero-terminated="0" c:type="gchar*">
+              <type name="utf8" c:type="gchar"/>
+            </array>
+          </parameter>
+          <parameter name="values" transfer-ownership="none">
+            <doc xml:space="preserve">the values of each property to be set</doc>
+            <array length="0" zero-terminated="0" c:type="GValue">
+              <type name="Value" c:type="GValue"/>
+            </array>
           </parameter>
         </parameters>
       </method>
@@ -7260,9 +7456,13 @@ g_param_type_register_static().</doc>
         </array>
       </field>
     </class>
-    <record name="Parameter" c:type="GParameter">
+    <record name="Parameter"
+            c:type="GParameter"
+            deprecated="1"
+            deprecated-version="2.54">
       <doc xml:space="preserve">The GParameter struct is an auxiliary structure used
 to hand parameter name/value pairs to g_object_newv().</doc>
+      <doc-deprecated xml:space="preserve">This type is not introspectable.</doc-deprecated>
       <field name="name" writable="1">
         <doc xml:space="preserve">the parameter name</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -10755,42 +10955,47 @@ accumulator, such as g_signal_accumulator_true_handled().</doc>
     <function name="cclosure_marshal_BOOLEAN__FLAGS"
               c:identifier="g_cclosure_marshal_BOOLEAN__FLAGS"
               moved-to="CClosure.marshal_BOOLEAN__FLAGS">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`gboolean (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter
-denotes a flags type.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with handlers that
+take a flags type as an argument and return a boolean.  If you have
+such a signal, you will probably also need to use an accumulator,
+such as g_signal_accumulator_true_handled().</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue which can store the returned #gboolean</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding instance and arg1</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -10798,41 +11003,46 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_STRING__OBJECT_POINTER"
               c:identifier="g_cclosure_marshal_STRING__OBJECT_POINTER"
               moved-to="CClosure.marshal_STRING__OBJECT_POINTER">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`gchar* (*callback) (gpointer instance, GObject *arg1, gpointer arg2, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with handlers that
+take a #GObject and a pointer and produce a string.  It is highly
+unlikely that your signal handler fits this description.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue, which can store the returned string</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">3</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding instance, arg1 and arg2</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -10840,41 +11050,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__BOOLEAN"
               c:identifier="g_cclosure_marshal_VOID__BOOLEAN"
               moved-to="CClosure.marshal_VOID__BOOLEAN">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gboolean arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+boolean argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gboolean parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -10882,41 +11096,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__BOXED"
               c:identifier="g_cclosure_marshal_VOID__BOXED"
               moved-to="CClosure.marshal_VOID__BOXED">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GBoxed *arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument which is any boxed pointer type.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #GBoxed* parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -10924,41 +11142,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__CHAR"
               c:identifier="g_cclosure_marshal_VOID__CHAR"
               moved-to="CClosure.marshal_VOID__CHAR">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gchar arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+character argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gchar parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -10966,41 +11188,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__DOUBLE"
               c:identifier="g_cclosure_marshal_VOID__DOUBLE"
               moved-to="CClosure.marshal_VOID__DOUBLE">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gdouble arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with one
+double-precision floating point argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gdouble parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11008,41 +11234,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__ENUM"
               c:identifier="g_cclosure_marshal_VOID__ENUM"
               moved-to="CClosure.marshal_VOID__ENUM">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter denotes an enumeration type..</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument with an enumerated type.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the enumeration parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11050,41 +11280,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__FLAGS"
               c:identifier="g_cclosure_marshal_VOID__FLAGS"
               moved-to="CClosure.marshal_VOID__FLAGS">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter denotes a flags type.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument with a flags types.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the flags parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11092,41 +11326,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__FLOAT"
               c:identifier="g_cclosure_marshal_VOID__FLOAT"
               moved-to="CClosure.marshal_VOID__FLOAT">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gfloat arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with one
+single-precision floating point argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gfloat parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11134,41 +11372,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__INT"
               c:identifier="g_cclosure_marshal_VOID__INT"
               moved-to="CClosure.marshal_VOID__INT">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gint arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+integer argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gint parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11176,41 +11418,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__LONG"
               c:identifier="g_cclosure_marshal_VOID__LONG"
               moved-to="CClosure.marshal_VOID__LONG">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, glong arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with with a single
+long integer argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #glong parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11218,41 +11464,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__OBJECT"
               c:identifier="g_cclosure_marshal_VOID__OBJECT"
               moved-to="CClosure.marshal_VOID__OBJECT">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GObject *arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+#GObject argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #GObject* parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11260,41 +11510,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__PARAM"
               c:identifier="g_cclosure_marshal_VOID__PARAM"
               moved-to="CClosure.marshal_VOID__PARAM">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GParamSpec *arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+argument of type #GParamSpec.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #GParamSpec* parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11302,41 +11556,49 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__POINTER"
               c:identifier="g_cclosure_marshal_VOID__POINTER"
               moved-to="CClosure.marshal_VOID__POINTER">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gpointer arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single raw
+pointer argument type.
+
+If it is possible, it is better to use one of the more specific
+functions such as g_cclosure_marshal_VOID__OBJECT() or
+g_cclosure_marshal_VOID__OBJECT().</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gpointer parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11344,41 +11606,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__STRING"
               c:identifier="g_cclosure_marshal_VOID__STRING"
               moved-to="CClosure.marshal_VOID__STRING">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, const gchar *arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single string
+argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gchar* parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11386,41 +11652,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__UCHAR"
               c:identifier="g_cclosure_marshal_VOID__UCHAR"
               moved-to="CClosure.marshal_VOID__UCHAR">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, guchar arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+unsigned character argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #guchar parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11428,41 +11698,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__UINT"
               c:identifier="g_cclosure_marshal_VOID__UINT"
               moved-to="CClosure.marshal_VOID__UINT">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, guint arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with with a single
+unsigned integer argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #guint parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11470,41 +11744,45 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__UINT_POINTER"
               c:identifier="g_cclosure_marshal_VOID__UINT_POINTER"
               moved-to="CClosure.marshal_VOID__UINT_POINTER">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, guint arg1, gpointer arg2, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a unsigned int
+and a pointer as arguments.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">3</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding instance, arg1 and arg2</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11512,84 +11790,91 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__ULONG"
               c:identifier="g_cclosure_marshal_VOID__ULONG"
               moved-to="CClosure.marshal_VOID__ULONG">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gulong arg1, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+unsigned long integer argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #gulong parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </function>
     <function name="cclosure_marshal_VOID__VARIANT"
               c:identifier="g_cclosure_marshal_VOID__VARIANT"
-              moved-to="CClosure.marshal_VOID__VARIANT"
-              version="2.26">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, GVariant *arg1, gpointer user_data)`.</doc>
+              moved-to="CClosure.marshal_VOID__VARIANT">
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with a single
+#GVariant argument.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">2</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding the instance and the #GVariant* parameter</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11597,41 +11882,44 @@ denotes a flags type.</doc>
     <function name="cclosure_marshal_VOID__VOID"
               c:identifier="g_cclosure_marshal_VOID__VOID"
               moved-to="CClosure.marshal_VOID__VOID">
-      <doc xml:space="preserve">A marshaller for a #GCClosure with a callback of type
-`void (*callback) (gpointer instance, gpointer user_data)`.</doc>
+      <doc xml:space="preserve">A #GClosureMarshal function for use with signals with no arguments.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="closure" transfer-ownership="none">
-          <doc xml:space="preserve">the #GClosure to which the marshaller belongs</doc>
+          <doc xml:space="preserve">A #GClosure.</doc>
           <type name="Closure" c:type="GClosure*"/>
         </parameter>
         <parameter name="return_value" transfer-ownership="none">
-          <doc xml:space="preserve">ignored</doc>
+          <doc xml:space="preserve">A #GValue to store the return value. May be %NULL
+  if the callback of closure doesn't return a value.</doc>
           <type name="Value" c:type="GValue*"/>
         </parameter>
         <parameter name="n_param_values" transfer-ownership="none">
-          <doc xml:space="preserve">1</doc>
+          <doc xml:space="preserve">The length of the @param_values array.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="param_values" transfer-ownership="none">
-          <doc xml:space="preserve">a #GValue array holding only the instance</doc>
+          <doc xml:space="preserve">An array of #GValues holding the arguments
+  on which to invoke the callback of closure.</doc>
           <type name="Value" c:type="const GValue*"/>
         </parameter>
         <parameter name="invocation_hint"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">the invocation hint given as the last argument
- to g_closure_invoke()</doc>
+          <doc xml:space="preserve">The invocation hint given as the last argument to
+  g_closure_invoke().</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="marshal_data"
                    transfer-ownership="none"
                    nullable="1"
                    allow-none="1">
-          <doc xml:space="preserve">additional data specified when registering the marshaller</doc>
+          <doc xml:space="preserve">Additional data specified when registering the
+  marshaller, see g_closure_set_marshal() and
+  g_closure_set_meta_marshal()</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -11952,6 +12240,28 @@ definition  than to write one yourself using g_enum_register_static().</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="enum_to_string"
+              c:identifier="g_enum_to_string"
+              version="2.54">
+      <doc xml:space="preserve">Pretty-prints @value in the form of the enum’s name.
+
+This is intended to be used for debugging purposes. The format of the output
+may change in the future.</doc>
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">a newly-allocated text string</doc>
+        <type name="utf8" c:type="gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="g_enum_type" transfer-ownership="none">
+          <doc xml:space="preserve">the type identifier of a #GEnumClass type</doc>
+          <type name="GType" c:type="GType"/>
+        </parameter>
+        <parameter name="value" transfer-ownership="none">
+          <doc xml:space="preserve">the value</doc>
+          <type name="gint" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="flags_complete_type_info"
               c:identifier="g_flags_complete_type_info">
       <doc xml:space="preserve">This function is meant to be called from the complete_type_info()
@@ -12058,6 +12368,29 @@ definition than to write one yourself using g_flags_register_static().</doc>
  flags values. The array is terminated by a struct with all members being 0.
  GObject keeps a reference to the data, so it cannot be stack-allocated.</doc>
           <type name="FlagsValue" c:type="const GFlagsValue*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="flags_to_string"
+              c:identifier="g_flags_to_string"
+              version="2.54">
+      <doc xml:space="preserve">Pretty-prints @value in the form of the flag names separated by ` | ` and
+sorted. Any extra bits will be shown at the end as a hexadecimal number.
+
+This is intended to be used for debugging purposes. The format of the output
+may change in the future.</doc>
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve">a newly-allocated text string</doc>
+        <type name="utf8" c:type="gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="flags_type" transfer-ownership="none">
+          <doc xml:space="preserve">the type identifier of a #GFlagsClass type</doc>
+          <type name="GType" c:type="GType"/>
+        </parameter>
+        <parameter name="value" transfer-ownership="none">
+          <doc xml:space="preserve">the value</doc>
+          <type name="guint" c:type="guint"/>
         </parameter>
       </parameters>
     </function>
@@ -13229,7 +13562,7 @@ g_signal_override_class_handler().</doc>
               c:identifier="g_signal_connect_closure">
       <doc xml:space="preserve">Connects a closure to a signal for a particular object.</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the handler id (always greater than 0 for successful connections)</doc>
+        <doc xml:space="preserve">the handler ID (always greater than 0 for successful connections)</doc>
         <type name="gulong" c:type="gulong"/>
       </return-value>
       <parameters>
@@ -13256,7 +13589,7 @@ g_signal_override_class_handler().</doc>
               c:identifier="g_signal_connect_closure_by_id">
       <doc xml:space="preserve">Connects a closure to a signal for a particular object.</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the handler id (always greater than 0 for successful connections)</doc>
+        <doc xml:space="preserve">the handler ID (always greater than 0 for successful connections)</doc>
         <type name="gulong" c:type="gulong"/>
       </return-value>
       <parameters>
@@ -13292,7 +13625,7 @@ which will be called when the signal handler is disconnected and no longer
 used. Specify @connect_flags if you need `..._after()` or
 `..._swapped()` variants of this function.</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the handler id (always greater than 0 for successful connections)</doc>
+        <doc xml:space="preserve">the handler ID (always greater than 0 for successful connections)</doc>
         <type name="gulong" c:type="gulong"/>
       </return-value>
       <parameters>
@@ -13606,7 +13939,7 @@ If no handler was found, 0 is returned.</doc>
     </function>
     <function name="signal_handler_is_connected"
               c:identifier="g_signal_handler_is_connected">
-      <doc xml:space="preserve">Returns whether @handler_id is the id of a handler connected to @instance.</doc>
+      <doc xml:space="preserve">Returns whether @handler_id is the ID of a handler connected to @instance.</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">whether @handler_id identifies a handler connected to @instance.</doc>
         <type name="gboolean" c:type="gboolean"/>
@@ -13617,7 +13950,7 @@ If no handler was found, 0 is returned.</doc>
           <type name="Object" c:type="gpointer"/>
         </parameter>
         <parameter name="handler_id" transfer-ownership="none">
-          <doc xml:space="preserve">the handler id.</doc>
+          <doc xml:space="preserve">the handler ID.</doc>
           <type name="gulong" c:type="gulong"/>
         </parameter>
       </parameters>

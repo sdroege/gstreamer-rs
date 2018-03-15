@@ -928,6 +928,927 @@ buffer in the list before freeing the list after usage.</doc>
             disguised="1"
             glib:is-gtype-struct-for="Adapter">
     </record>
+    <class name="Aggregator"
+           c:symbol-prefix="aggregator"
+           c:type="GstAggregator"
+           parent="Gst.Element"
+           abstract="1"
+           glib:type-name="GstAggregator"
+           glib:get-type="gst_aggregator_get_type"
+           glib:type-struct="AggregatorClass">
+      <doc xml:space="preserve">Manages a set of pads with the purpose of aggregating their buffers.
+Control is given to the subclass when all pads have data.
+
+ * Base class for mixers and muxers. Subclasses should at least implement
+   the #GstAggregatorClass.aggregate() virtual method.
+
+ * Installs a #GstPadChainFunction, a #GstPadEventFullFunction and a
+   #GstPadQueryFunction to queue all serialized data packets per sink pad.
+   Subclasses should not overwrite those, but instead implement
+   #GstAggregatorClass.sink_event() and #GstAggregatorClass.sink_query() as
+   needed.
+
+ * When data is queued on all pads, the aggregate vmethod is called.
+
+ * One can peek at the data on any given GstAggregatorPad with the
+   gst_aggregator_pad_peek_buffer () method, and remove it from the pad
+   with the gst_aggregator_pad_pop_buffer () method. When a buffer
+   has been taken with pop_buffer (), a new buffer can be queued
+   on that pad.
+
+ * If the subclass wishes to push a buffer downstream in its aggregate
+   implementation, it should do so through the
+   gst_aggregator_finish_buffer () method. This method will take care
+   of sending and ordering mandatory events such as stream start, caps
+   and segment.
+
+ * Same goes for EOS events, which should not be pushed directly by the
+   subclass, it should instead return GST_FLOW_EOS in its aggregate
+   implementation.
+
+ * Note that the aggregator logic regarding gap event handling is to turn
+   these into gap buffers with matching PTS and duration. It will also
+   flag these buffers with GST_BUFFER_FLAG_GAP and GST_BUFFER_FLAG_DROPPABLE
+   to ease their identification and subsequent processing.
+
+ * Subclasses must use (a subclass of) #GstAggregatorPad for both their
+   sink and source pads.
+   See gst_element_class_add_static_pad_template_with_gtype().
+
+This class used to live in gst-plugins-bad and was moved to core.</doc>
+      <virtual-method name="aggregate">
+        <return-value transfer-ownership="none">
+          <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="timeout" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="clip">
+        <return-value transfer-ownership="full">
+          <type name="Gst.Buffer" c:type="GstBuffer*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="aggregator_pad" transfer-ownership="none">
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </parameter>
+          <parameter name="buf" transfer-ownership="none">
+            <type name="Gst.Buffer" c:type="GstBuffer*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="create_new_pad" introspectable="0">
+        <return-value>
+          <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="templ" transfer-ownership="none">
+            <type name="Gst.PadTemplate" c:type="GstPadTemplate*"/>
+          </parameter>
+          <parameter name="req_name" transfer-ownership="none">
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+          <parameter name="caps" transfer-ownership="none">
+            <type name="Gst.Caps" c:type="const GstCaps*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="decide_allocation">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="query" transfer-ownership="none">
+            <type name="Gst.Query" c:type="GstQuery*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="finish_buffer" invoker="finish_buffer">
+        <doc xml:space="preserve">This method will push the provided output buffer downstream. If needed,
+mandatory events such as stream-start, caps, and segment events will be
+sent before pushing the buffer.</doc>
+        <return-value transfer-ownership="none">
+          <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <doc xml:space="preserve">The #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="buffer" transfer-ownership="full">
+            <doc xml:space="preserve">the #GstBuffer to push.</doc>
+            <type name="Gst.Buffer" c:type="GstBuffer*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="fixate_src_caps">
+        <return-value transfer-ownership="full">
+          <type name="Gst.Caps" c:type="GstCaps*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="caps" transfer-ownership="none">
+            <type name="Gst.Caps" c:type="GstCaps*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="flush">
+        <return-value transfer-ownership="none">
+          <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="get_next_time">
+        <return-value transfer-ownership="none">
+          <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="negotiated_src_caps">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="caps" transfer-ownership="none">
+            <type name="Gst.Caps" c:type="GstCaps*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="propose_allocation">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="pad" transfer-ownership="none">
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </parameter>
+          <parameter name="decide_query" transfer-ownership="none">
+            <type name="Gst.Query" c:type="GstQuery*"/>
+          </parameter>
+          <parameter name="query" transfer-ownership="none">
+            <type name="Gst.Query" c:type="GstQuery*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="sink_event">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="aggregator_pad" transfer-ownership="none">
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </parameter>
+          <parameter name="event" transfer-ownership="none">
+            <type name="Gst.Event" c:type="GstEvent*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="sink_query">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="aggregator_pad" transfer-ownership="none">
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </parameter>
+          <parameter name="query" transfer-ownership="none">
+            <type name="Gst.Query" c:type="GstQuery*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="src_activate">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="mode" transfer-ownership="none">
+            <type name="Gst.PadMode" c:type="GstPadMode"/>
+          </parameter>
+          <parameter name="active" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="src_event">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="event" transfer-ownership="none">
+            <type name="Gst.Event" c:type="GstEvent*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="src_query">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="query" transfer-ownership="none">
+            <type name="Gst.Query" c:type="GstQuery*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="start">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="stop">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="update_src_caps">
+        <return-value transfer-ownership="none">
+          <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="caps" transfer-ownership="none">
+            <type name="Gst.Caps" c:type="GstCaps*"/>
+          </parameter>
+          <parameter name="ret" transfer-ownership="none">
+            <type name="Gst.Caps" c:type="GstCaps**"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="finish_buffer" c:identifier="gst_aggregator_finish_buffer">
+        <doc xml:space="preserve">This method will push the provided output buffer downstream. If needed,
+mandatory events such as stream-start, caps, and segment events will be
+sent before pushing the buffer.</doc>
+        <return-value transfer-ownership="none">
+          <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggregator" transfer-ownership="none">
+            <doc xml:space="preserve">The #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="buffer" transfer-ownership="full">
+            <doc xml:space="preserve">the #GstBuffer to push.</doc>
+            <type name="Gst.Buffer" c:type="GstBuffer*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_allocator" c:identifier="gst_aggregator_get_allocator">
+        <doc xml:space="preserve">Lets #GstAggregator sub-classes get the memory @allocator
+acquired by the base class and its @params.
+
+Unref the @allocator after use it.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="allocator"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">the #GstAllocator
+used</doc>
+            <type name="Gst.Allocator" c:type="GstAllocator**"/>
+          </parameter>
+          <parameter name="params"
+                     direction="out"
+                     caller-allocates="1"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
+            <doc xml:space="preserve">the
+#GstAllocationParams of @allocator</doc>
+            <type name="Gst.AllocationParams" c:type="GstAllocationParams*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_buffer_pool"
+              c:identifier="gst_aggregator_get_buffer_pool">
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">the instance of the #GstBufferPool used
+by @trans; free it after use it</doc>
+          <type name="Gst.BufferPool" c:type="GstBufferPool*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_latency" c:identifier="gst_aggregator_get_latency">
+        <doc xml:space="preserve">Retrieves the latency values reported by @self in response to the latency
+query, or %GST_CLOCK_TIME_NONE if there is not live source connected and the element
+will not wait for the clock.
+
+Typically only called by subclasses.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The latency or %GST_CLOCK_TIME_NONE if the element does not sync</doc>
+          <type name="Gst.ClockTime" c:type="GstClockTime"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="set_latency" c:identifier="gst_aggregator_set_latency">
+        <doc xml:space="preserve">Lets #GstAggregator sub-classes tell the baseclass what their internal
+latency is. Will also post a LATENCY message on the bus so the pipeline
+can reconfigure its global latency.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="min_latency" transfer-ownership="none">
+            <doc xml:space="preserve">minimum latency</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+          <parameter name="max_latency" transfer-ownership="none">
+            <doc xml:space="preserve">maximum latency</doc>
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_src_caps" c:identifier="gst_aggregator_set_src_caps">
+        <doc xml:space="preserve">Sets the caps to be used on the src pad.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">The #GstAggregator</doc>
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </instance-parameter>
+          <parameter name="caps" transfer-ownership="none">
+            <doc xml:space="preserve">The #GstCaps to set on the src pad.</doc>
+            <type name="Gst.Caps" c:type="GstCaps*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <property name="latency" writable="1" transfer-ownership="none">
+        <type name="guint64" c:type="guint64"/>
+      </property>
+      <property name="start-time" writable="1" transfer-ownership="none">
+        <type name="guint64" c:type="guint64"/>
+      </property>
+      <property name="start-time-selection"
+                introspectable="0"
+                writable="1"
+                transfer-ownership="none">
+        <type/>
+      </property>
+      <field name="parent">
+        <type name="Gst.Element" c:type="GstElement"/>
+      </field>
+      <field name="srcpad">
+        <doc xml:space="preserve">the aggregator's source pad</doc>
+        <type name="Gst.Pad" c:type="GstPad*"/>
+      </field>
+      <field name="priv" readable="0" private="1">
+        <type name="AggregatorPrivate" c:type="GstAggregatorPrivate*"/>
+      </field>
+      <field name="_gst_reserved" readable="0" private="1">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="20">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </class>
+    <record name="AggregatorClass"
+            c:type="GstAggregatorClass"
+            glib:is-gtype-struct-for="Aggregator">
+      <doc xml:space="preserve">The aggregator base class will handle in a thread-safe way all manners of
+concurrent flushes, seeks, pad additions and removals, leaving to the
+subclass the responsibility of clipping buffers, and aggregating buffers in
+the way the implementor sees fit.
+
+It will also take care of event ordering (stream-start, segment, eos).
+
+Basically, a simple implementation will override @aggregate, and call
+_finish_buffer from inside that function.</doc>
+      <field name="parent_class">
+        <type name="Gst.ElementClass" c:type="GstElementClass"/>
+      </field>
+      <field name="flush">
+        <callback name="flush">
+          <return-value transfer-ownership="none">
+            <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="clip">
+        <callback name="clip">
+          <return-value transfer-ownership="full">
+            <type name="Gst.Buffer" c:type="GstBuffer*"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="aggregator_pad" transfer-ownership="none">
+              <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+            </parameter>
+            <parameter name="buf" transfer-ownership="none">
+              <type name="Gst.Buffer" c:type="GstBuffer*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="finish_buffer">
+        <callback name="finish_buffer">
+          <return-value transfer-ownership="none">
+            <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <doc xml:space="preserve">The #GstAggregator</doc>
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="buffer" transfer-ownership="full">
+              <doc xml:space="preserve">the #GstBuffer to push.</doc>
+              <type name="Gst.Buffer" c:type="GstBuffer*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="sink_event">
+        <callback name="sink_event">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="aggregator_pad" transfer-ownership="none">
+              <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+            </parameter>
+            <parameter name="event" transfer-ownership="none">
+              <type name="Gst.Event" c:type="GstEvent*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="sink_query">
+        <callback name="sink_query">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="aggregator_pad" transfer-ownership="none">
+              <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+            </parameter>
+            <parameter name="query" transfer-ownership="none">
+              <type name="Gst.Query" c:type="GstQuery*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="src_event">
+        <callback name="src_event">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="event" transfer-ownership="none">
+              <type name="Gst.Event" c:type="GstEvent*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="src_query">
+        <callback name="src_query">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="query" transfer-ownership="none">
+              <type name="Gst.Query" c:type="GstQuery*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="src_activate">
+        <callback name="src_activate">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="mode" transfer-ownership="none">
+              <type name="Gst.PadMode" c:type="GstPadMode"/>
+            </parameter>
+            <parameter name="active" transfer-ownership="none">
+              <type name="gboolean" c:type="gboolean"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="aggregate">
+        <callback name="aggregate">
+          <return-value transfer-ownership="none">
+            <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="timeout" transfer-ownership="none">
+              <type name="gboolean" c:type="gboolean"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="stop">
+        <callback name="stop">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="start">
+        <callback name="start">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="get_next_time">
+        <callback name="get_next_time">
+          <return-value transfer-ownership="none">
+            <type name="Gst.ClockTime" c:type="GstClockTime"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="create_new_pad" introspectable="0">
+        <callback name="create_new_pad" introspectable="0">
+          <return-value>
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="templ" transfer-ownership="none">
+              <type name="Gst.PadTemplate" c:type="GstPadTemplate*"/>
+            </parameter>
+            <parameter name="req_name" transfer-ownership="none">
+              <type name="utf8" c:type="const gchar*"/>
+            </parameter>
+            <parameter name="caps" transfer-ownership="none">
+              <type name="Gst.Caps" c:type="const GstCaps*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="update_src_caps">
+        <callback name="update_src_caps">
+          <return-value transfer-ownership="none">
+            <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="caps" transfer-ownership="none">
+              <type name="Gst.Caps" c:type="GstCaps*"/>
+            </parameter>
+            <parameter name="ret" transfer-ownership="none">
+              <type name="Gst.Caps" c:type="GstCaps**"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="fixate_src_caps">
+        <callback name="fixate_src_caps">
+          <return-value transfer-ownership="full">
+            <type name="Gst.Caps" c:type="GstCaps*"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="caps" transfer-ownership="none">
+              <type name="Gst.Caps" c:type="GstCaps*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="negotiated_src_caps">
+        <callback name="negotiated_src_caps">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="caps" transfer-ownership="none">
+              <type name="Gst.Caps" c:type="GstCaps*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="decide_allocation">
+        <callback name="decide_allocation">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="query" transfer-ownership="none">
+              <type name="Gst.Query" c:type="GstQuery*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="propose_allocation">
+        <callback name="propose_allocation">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="pad" transfer-ownership="none">
+              <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+            </parameter>
+            <parameter name="decide_query" transfer-ownership="none">
+              <type name="Gst.Query" c:type="GstQuery*"/>
+            </parameter>
+            <parameter name="query" transfer-ownership="none">
+              <type name="Gst.Query" c:type="GstQuery*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="_gst_reserved" readable="0" private="1">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="20">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </record>
+    <class name="AggregatorPad"
+           c:symbol-prefix="aggregator_pad"
+           c:type="GstAggregatorPad"
+           parent="Gst.Pad"
+           glib:type-name="GstAggregatorPad"
+           glib:get-type="gst_aggregator_pad_get_type"
+           glib:type-struct="AggregatorPadClass">
+      <doc xml:space="preserve">Pads managed by a #GstAggregor subclass.
+
+This class used to live in gst-plugins-bad and was moved to core.</doc>
+      <virtual-method name="flush">
+        <return-value transfer-ownership="none">
+          <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggpad" transfer-ownership="none">
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+          <parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="skip_buffer">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="aggpad" transfer-ownership="none">
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+          <parameter name="aggregator" transfer-ownership="none">
+            <type name="Aggregator" c:type="GstAggregator*"/>
+          </parameter>
+          <parameter name="buffer" transfer-ownership="none">
+            <type name="Gst.Buffer" c:type="GstBuffer*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="drop_buffer" c:identifier="gst_aggregator_pad_drop_buffer">
+        <doc xml:space="preserve">Drop the buffer currently queued in @pad.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">TRUE if there was a buffer queued in @pad, or FALSE if not.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="pad" transfer-ownership="none">
+            <doc xml:space="preserve">the pad where to drop any pending buffer</doc>
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="is_eos" c:identifier="gst_aggregator_pad_is_eos">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the pad is EOS, otherwise %FALSE.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="pad" transfer-ownership="none">
+            <doc xml:space="preserve">an aggregator pad</doc>
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="peek_buffer" c:identifier="gst_aggregator_pad_peek_buffer">
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A reference to the buffer in @pad or
+NULL if no buffer was queued. You should unref the buffer after
+usage.</doc>
+          <type name="Gst.Buffer" c:type="GstBuffer*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="pad" transfer-ownership="none">
+            <doc xml:space="preserve">the pad to get buffer from</doc>
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="pop_buffer" c:identifier="gst_aggregator_pad_pop_buffer">
+        <doc xml:space="preserve">Steal the ref to the buffer currently queued in @pad.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">The buffer in @pad or NULL if no buffer was
+  queued. You should unref the buffer after usage.</doc>
+          <type name="Gst.Buffer" c:type="GstBuffer*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="pad" transfer-ownership="none">
+            <doc xml:space="preserve">the pad to get buffer from</doc>
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <field name="parent">
+        <type name="Gst.Pad" c:type="GstPad"/>
+      </field>
+      <field name="segment">
+        <doc xml:space="preserve">last segment received.</doc>
+        <type name="Gst.Segment" c:type="GstSegment"/>
+      </field>
+      <field name="priv">
+        <type name="AggregatorPadPrivate" c:type="GstAggregatorPadPrivate*"/>
+      </field>
+      <field name="_gst_reserved">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </class>
+    <record name="AggregatorPadClass"
+            c:type="GstAggregatorPadClass"
+            glib:is-gtype-struct-for="AggregatorPad">
+      <field name="parent_class">
+        <type name="Gst.PadClass" c:type="GstPadClass"/>
+      </field>
+      <field name="flush">
+        <callback name="flush">
+          <return-value transfer-ownership="none">
+            <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggpad" transfer-ownership="none">
+              <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+            </parameter>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="skip_buffer">
+        <callback name="skip_buffer">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="aggpad" transfer-ownership="none">
+              <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+            </parameter>
+            <parameter name="aggregator" transfer-ownership="none">
+              <type name="Aggregator" c:type="GstAggregator*"/>
+            </parameter>
+            <parameter name="buffer" transfer-ownership="none">
+              <type name="Gst.Buffer" c:type="GstBuffer*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="_gst_reserved" readable="0" private="1">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="20">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </record>
+    <record name="AggregatorPadPrivate"
+            c:type="GstAggregatorPadPrivate"
+            disguised="1">
+    </record>
+    <record name="AggregatorPrivate"
+            c:type="GstAggregatorPrivate"
+            disguised="1">
+    </record>
     <constant name="BASE_PARSE_FLAG_DRAINING"
               value="2"
               c:type="GST_BASE_PARSE_FLAG_DRAINING">
@@ -3554,6 +4475,8 @@ received, it may safely shut down the entire pipeline.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="create">
+        <doc xml:space="preserve">Ask the subclass to create a buffer with @offset and @size, the default
+implementation will call alloc and fill.</doc>
         <return-value transfer-ownership="none">
           <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
         </return-value>
@@ -3567,7 +4490,10 @@ received, it may safely shut down the entire pipeline.</doc>
           <parameter name="size" transfer-ownership="none">
             <type name="guint" c:type="guint"/>
           </parameter>
-          <parameter name="buf" transfer-ownership="none">
+          <parameter name="buf"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer**"/>
           </parameter>
         </parameters>
@@ -3670,6 +4596,8 @@ received, it may safely shut down the entire pipeline.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="get_times">
+        <doc xml:space="preserve">Given @buffer, return @start and @end time when it should be pushed
+out. The base class will sync on the clock using these times.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3680,10 +4608,16 @@ received, it may safely shut down the entire pipeline.</doc>
           <parameter name="buffer" transfer-ownership="none">
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
-          <parameter name="start" transfer-ownership="none">
+          <parameter name="start"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="Gst.ClockTime" c:type="GstClockTime*"/>
           </parameter>
-          <parameter name="end" transfer-ownership="none">
+          <parameter name="end"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="Gst.ClockTime" c:type="GstClockTime*"/>
           </parameter>
         </parameters>
@@ -4161,6 +5095,39 @@ helper thread.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="submit_buffer_list"
+              c:identifier="gst_base_src_submit_buffer_list"
+              version="1.14">
+        <doc xml:space="preserve">Subclasses can call this from their create virtual method implementation
+to submit a buffer list to be pushed out later. This is useful in
+cases where the create function wants to produce multiple buffers to be
+pushed out in one go in form of a #GstBufferList, which can reduce overhead
+drastically, especially for packetised inputs (for data streams where
+the packetisation/chunking is not important it is usually more efficient
+to return larger buffers instead).
+
+Subclasses that use this function from their create function must return
+%GST_FLOW_OK and no buffer from their create virtual method implementation.
+If a buffer is returned after a buffer list has also been submitted via this
+function the behaviour is undefined.
+
+Subclasses must only call this function once per create function call and
+subclasses must only call this function when the source operates in push
+mode.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="src" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstBaseSrc</doc>
+            <type name="BaseSrc" c:type="GstBaseSrc*"/>
+          </instance-parameter>
+          <parameter name="buffer_list" transfer-ownership="full">
+            <doc xml:space="preserve">a #GstBufferList</doc>
+            <type name="Gst.BufferList" c:type="GstBufferList*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="wait_playing" c:identifier="gst_base_src_wait_playing">
         <doc xml:space="preserve">If the #GstBaseSrcClass.create() method performs its own synchronisation
 against the clock it must unblock when going from PLAYING to the PAUSED state
@@ -4375,10 +5342,16 @@ buffers.</doc>
             <parameter name="buffer" transfer-ownership="none">
               <type name="Gst.Buffer" c:type="GstBuffer*"/>
             </parameter>
-            <parameter name="start" transfer-ownership="none">
+            <parameter name="start"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="Gst.ClockTime" c:type="GstClockTime*"/>
             </parameter>
-            <parameter name="end" transfer-ownership="none">
+            <parameter name="end"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="Gst.ClockTime" c:type="GstClockTime*"/>
             </parameter>
           </parameters>
@@ -4513,7 +5486,10 @@ buffers.</doc>
             <parameter name="size" transfer-ownership="none">
               <type name="guint" c:type="guint"/>
             </parameter>
-            <parameter name="buf" transfer-ownership="none">
+            <parameter name="buf"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="Gst.Buffer" c:type="GstBuffer**"/>
             </parameter>
           </parameters>
@@ -4803,7 +5779,10 @@ It provides for:
           <instance-parameter name="trans" transfer-ownership="none">
             <type name="BaseTransform" c:type="GstBaseTransform*"/>
           </instance-parameter>
-          <parameter name="outbuf" transfer-ownership="none">
+          <parameter name="outbuf"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer**"/>
           </parameter>
         </parameters>
@@ -4819,7 +5798,10 @@ It provides for:
           <parameter name="caps" transfer-ownership="none">
             <type name="Gst.Caps" c:type="GstCaps*"/>
           </parameter>
-          <parameter name="size" transfer-ownership="none">
+          <parameter name="size"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="gsize" c:type="gsize*"/>
           </parameter>
         </parameters>
@@ -4835,7 +5817,10 @@ It provides for:
           <parameter name="input" transfer-ownership="none">
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
-          <parameter name="outbuf" transfer-ownership="none">
+          <parameter name="outbuf"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="Gst.Buffer" c:type="GstBuffer**"/>
           </parameter>
         </parameters>
@@ -5037,7 +6022,10 @@ It provides for:
           <parameter name="othercaps" transfer-ownership="none">
             <type name="Gst.Caps" c:type="GstCaps*"/>
           </parameter>
-          <parameter name="othersize" transfer-ownership="none">
+          <parameter name="othersize"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="gsize" c:type="gsize*"/>
           </parameter>
         </parameters>
@@ -5566,7 +6554,10 @@ same type and quantity) it should provide @transform_ip.</doc>
             <parameter name="othercaps" transfer-ownership="none">
               <type name="Gst.Caps" c:type="GstCaps*"/>
             </parameter>
-            <parameter name="othersize" transfer-ownership="none">
+            <parameter name="othersize"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="gsize" c:type="gsize*"/>
             </parameter>
           </parameters>
@@ -5584,7 +6575,10 @@ same type and quantity) it should provide @transform_ip.</doc>
             <parameter name="caps" transfer-ownership="none">
               <type name="Gst.Caps" c:type="GstCaps*"/>
             </parameter>
-            <parameter name="size" transfer-ownership="none">
+            <parameter name="size"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="gsize" c:type="gsize*"/>
             </parameter>
           </parameters>
@@ -5656,7 +6650,10 @@ same type and quantity) it should provide @transform_ip.</doc>
             <parameter name="input" transfer-ownership="none">
               <type name="Gst.Buffer" c:type="GstBuffer*"/>
             </parameter>
-            <parameter name="outbuf" transfer-ownership="none">
+            <parameter name="outbuf"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="Gst.Buffer" c:type="GstBuffer**"/>
             </parameter>
           </parameters>
@@ -5776,7 +6773,10 @@ same type and quantity) it should provide @transform_ip.</doc>
             <parameter name="trans" transfer-ownership="none">
               <type name="BaseTransform" c:type="GstBaseTransform*"/>
             </parameter>
-            <parameter name="outbuf" transfer-ownership="none">
+            <parameter name="outbuf"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <type name="Gst.Buffer" c:type="GstBuffer**"/>
             </parameter>
           </parameters>
@@ -8647,10 +9647,10 @@ is given to the manager of this object when all pads have data.
     be installed with gst_collect_pads_set_function ().
 
   * Pads are added to the collection with gst_collect_pads_add_pad()/
-    gst_collect_pads_remove_pad(). The pad
-    has to be a sinkpad. The chain and event functions of the pad are
-    overridden. The element_private of the pad is used to store
-    private information for the collectpads.
+    gst_collect_pads_remove_pad(). The pad has to be a sinkpad. When added,
+    the chain, event and query functions of the pad are overridden. The
+    element_private of the pad is used to store private information for the
+    collectpads.
 
   * For each pad, data is queued in the _chain function or by
     performing a pull_range.
@@ -10221,13 +11221,15 @@ returned immediatelly from the gst_flow_combiner_update_flow() function.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="ref" c:identifier="gst_flow_combiner_ref"
-              version="1.12.1">
+      <method name="ref" c:identifier="gst_flow_combiner_ref" version="1.12.1">
+        <doc xml:space="preserve">Increments the reference count on the #GstFlowCombiner.</doc>
         <return-value transfer-ownership="full">
+          <doc xml:space="preserve">the #GstFlowCombiner.</doc>
           <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
         </return-value>
         <parameters>
           <instance-parameter name="combiner" transfer-ownership="none">
+            <doc xml:space="preserve">the #GstFlowCombiner to add a reference to.</doc>
             <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
           </instance-parameter>
         </parameters>
@@ -10264,13 +11266,16 @@ returned immediatelly from the gst_flow_combiner_update_flow() function.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="unref" c:identifier="gst_flow_combiner_unref"
+      <method name="unref"
+              c:identifier="gst_flow_combiner_unref"
               version="1.12.1">
+        <doc xml:space="preserve">Decrements the reference count on the #GstFlowCombiner.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="combiner" transfer-ownership="none">
+            <doc xml:space="preserve">the #GstFlowCombiner to unreference.</doc>
             <type name="FlowCombiner" c:type="GstFlowCombiner*"/>
           </instance-parameter>
         </parameters>
@@ -10640,6 +11645,38 @@ remove it from the queue.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="peek_tail"
+              c:identifier="gst_queue_array_peek_tail"
+              version="1.14"
+              introspectable="0">
+        <doc xml:space="preserve">Returns the tail of the queue @array, but does not remove it from the queue.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The tail of the queue</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="array" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstQueueArray object</doc>
+            <type name="QueueArray" c:type="GstQueueArray*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="peek_tail_struct"
+              c:identifier="gst_queue_array_peek_tail_struct"
+              version="1.14"
+              introspectable="0">
+        <doc xml:space="preserve">Returns the tail of the queue @array, but does not remove it from the queue.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The tail of the queue</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="array" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstQueueArray object</doc>
+            <type name="QueueArray" c:type="GstQueueArray*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="pop_head"
               c:identifier="gst_queue_array_pop_head"
               version="1.2"
@@ -10666,6 +11703,40 @@ it from the queue.</doc>
           <doc xml:space="preserve">pointer to element or struct, or NULL if @array was empty. The
    data pointed to by the returned pointer stays valid only as long as
    the queue array is not modified further!</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="array" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstQueueArray object</doc>
+            <type name="QueueArray" c:type="GstQueueArray*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="pop_tail"
+              c:identifier="gst_queue_array_pop_tail"
+              version="1.14"
+              introspectable="0">
+        <doc xml:space="preserve">Returns the tail of the queue @array and removes
+it from the queue.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The tail of the queue</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="array" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstQueueArray object</doc>
+            <type name="QueueArray" c:type="GstQueueArray*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="pop_tail_struct"
+              c:identifier="gst_queue_array_pop_tail_struct"
+              version="1.14"
+              introspectable="0">
+        <doc xml:space="preserve">Returns the tail of the queue @array and removes
+it from the queue.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">The tail of the queue</doc>
           <type name="gpointer" c:type="gpointer"/>
         </return-value>
         <parameters>
