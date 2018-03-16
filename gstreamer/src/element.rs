@@ -10,8 +10,11 @@ use Element;
 
 use glib;
 use glib::IsA;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrBorrow,
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib,
                       FromGlibPtrContainer, ToGlib, ToGlibPtr};
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use glib::translate::FromGlibPtrBorrow;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::object::Downcast;
 use QueryRef;
 use Event;
@@ -29,6 +32,7 @@ use std::mem;
 use libc;
 
 use ffi;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib_ffi;
 use gobject_ffi;
 
