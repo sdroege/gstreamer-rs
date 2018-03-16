@@ -1089,6 +1089,7 @@ macro_rules! gst_element_info(
 mod tests {
     use super::*;
     use prelude::*;
+    #[cfg(feature = "v1_10")]
     use std::sync::mpsc::channel;
 
     #[test]
@@ -1122,6 +1123,7 @@ mod tests {
         assert_eq!(pad_names, vec![String::from("src")]);
     }
 
+    #[cfg(feature = "v1_10")]
     #[test]
     fn test_call_async() {
         ::init().unwrap();
