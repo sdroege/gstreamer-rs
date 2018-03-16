@@ -102,6 +102,7 @@ impl DebugCategory {
         }
     }
 
+    #[inline]
     pub fn log<O: IsA<::Object>>(
         &self,
         obj: Option<&O>,
@@ -111,8 +112,10 @@ impl DebugCategory {
         line: u32,
         args: fmt::Arguments,
     ) {
-        if level.to_glib() as u32 > self.get_threshold().to_glib() as u32 {
-            return;
+        unsafe {
+            if level.to_glib() as i32 > (*self.0).threshold {
+                return;
+            }
         }
 
         let obj_ptr = match obj {
