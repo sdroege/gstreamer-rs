@@ -2382,8 +2382,36 @@ mod tests {
             }
             _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
         }
+    }
 
-        // TODO: add a tests for messages with and without arguments with an extra-field
-        // and condition it to the "v1_14" feature
+    #[cfg(feature = "v1_14")]
+    #[test]
+    fn test_other_fields() {
+        let eos_msg = Message::new_eos()
+            .other_fields(&[("extra-field", &true)])
+            .seqnum(Seqnum(1))
+            .build();
+        match eos_msg.view() {
+            MessageView::Eos(eos_msg) => {
+                assert_eq!(eos_msg.get_seqnum(), Seqnum(1));
+                if let Some(other_fields) = eos_msg.get_structure() {
+                    assert!(other_fields.has_field("extra-field"));
+                }
+            }
+            _ => panic!("eos_msg.view() is not a MessageView::Eos(_)"),
+        }
+
+        let buffering_msg = Message::new_buffering(42)
+            .other_fields(&[("extra-field", &true)])
+            .build();
+        match buffering_msg.view() {
+            MessageView::Buffering(buffering_msg) => {
+                assert_eq!(buffering_msg.get_percent(), 42);
+                if let Some(other_fields) = buffering_msg.get_structure() {
+                    assert!(other_fields.has_field("extra-field"));
+                }
+            }
+            _ => panic!("buffering_msg.view() is not a MessageView::Buffering(_)"),
+        }
     }
 }
