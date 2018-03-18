@@ -141,3 +141,66 @@ trait = false
 name = "GstPbutils.DiscovererContainerInfo"
 status = "generate"
 trait = false
+
+[[object]]
+name = "GstPbutils.EncodingProfile"
+status = "generate"
+    [[object.function]]
+    name = "is_equal"
+    ignore = true
+
+    [[object.function]]
+    name = "copy"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_input_caps"
+        [object.function.return]
+        nullable = false
+
+    [[object.function]]
+    name = "get_format"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstPbutils.EncodingContainerProfile"
+status = "generate"
+
+    [[object.function]]
+    name = "add_profile"
+        [object.function.return]
+        bool_return_is_error = "Failed to add profile"
+
+[[object]]
+name = "GstPbutils.EncodingTarget"
+status = "generate"
+
+    [[object.function]]
+    name = "add_profile"
+        [object.function.return]
+        bool_return_is_error = "Failed to add profile"
+
+    [[object.function]]
+    name = "get_category"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_description"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_name"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GstPbutils.EncodingAudioProfile"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstPbutils.EncodingVideoProfile"
+status = "generate"
+trait = false
