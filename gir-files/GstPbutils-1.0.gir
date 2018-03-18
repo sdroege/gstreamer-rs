@@ -1684,8 +1684,11 @@ information like name, description, format and preset.</doc>
             <doc xml:space="preserve">The name of the target</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
-          <parameter name="profilename" transfer-ownership="none">
-            <doc xml:space="preserve">(allow-none): The name of the profile, if %NULL
+          <parameter name="profilename"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
+            <doc xml:space="preserve">The name of the profile, if %NULL
 provided, it will default to the encoding profile called `default`.</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>

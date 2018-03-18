@@ -25,6 +25,24 @@ pub use self::discoverer_subtitle_info::DiscovererSubtitleInfo;
 mod discoverer_video_info;
 pub use self::discoverer_video_info::DiscovererVideoInfo;
 
+mod encoding_audio_profile;
+pub use self::encoding_audio_profile::EncodingAudioProfile;
+
+mod encoding_container_profile;
+pub use self::encoding_container_profile::EncodingContainerProfile;
+pub use self::encoding_container_profile::EncodingContainerProfileExt;
+
+mod encoding_profile;
+pub use self::encoding_profile::EncodingProfile;
+pub use self::encoding_profile::EncodingProfileExt;
+
+mod encoding_target;
+pub use self::encoding_target::EncodingTarget;
+pub use self::encoding_target::EncodingTargetExt;
+
+mod encoding_video_profile;
+pub use self::encoding_video_profile::EncodingVideoProfile;
+
 mod enums;
 pub use self::enums::DiscovererResult;
 
@@ -35,4 +53,7 @@ pub use self::flags::DiscovererSerializeFlags;
 pub mod traits {
     pub use super::DiscovererInfoExt;
     pub use super::DiscovererStreamInfoExt;
+    pub use super::EncodingContainerProfileExt;
+    pub use super::EncodingProfileExt;
+    pub use super::EncodingTargetExt;
 }
