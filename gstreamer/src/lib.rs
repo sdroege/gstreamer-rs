@@ -9,6 +9,9 @@
 #![recursion_limit = "256"]
 #[macro_use]
 extern crate bitflags;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[macro_use]
+extern crate cfg_if;
 #[macro_use]
 extern crate lazy_static;
 extern crate libc;
@@ -102,6 +105,21 @@ pub use promise::*;
 mod element;
 mod bin;
 mod bus;
+
+// OS dependent Bus extensions (also import the other plateform mod for doc)
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+cfg_if! {
+    if #[cfg(unix)] {
+        mod bus_unix;
+        #[cfg(feature = "dox")]
+        mod bus_windows;
+    } else {
+        mod bus_windows;
+        #[cfg(feature = "dox")]
+        mod bus_unix;
+    }
+}
+
 mod pad;
 mod object;
 mod gobject;
@@ -120,6 +138,21 @@ pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
 pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
                   ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME};
 pub use bin::BinExtManual;
+
+// OS dependent Bus extensions (also import the other plateform trait for doc)
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+cfg_if! {
+    if #[cfg(unix)] {
+        pub use bus_unix::UnixBusExtManual;
+        #[cfg(feature = "dox")]
+        pub use bus_windows::WindowsBusExtManual;
+    } else {
+        pub use bus_windows::WindowsBusExtManual;
+        #[cfg(feature = "dox")]
+        pub use bus_unix::UnixBusExtManual;
+    }
+}
+
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
 pub use gobject::GObjectExtManualGst;
 pub use child_proxy::ChildProxyExtManual;
@@ -205,6 +238,21 @@ pub mod prelude {
 
     pub use element::ElementExtManual;
     pub use bin::BinExtManual;
+
+    // OS dependent Bus extensions (also import the other plateform trait for doc)
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    cfg_if! {
+        if #[cfg(unix)] {
+            pub use bus_unix::UnixBusExtManual;
+            #[cfg(feature = "dox")]
+            pub use bus_windows::WindowsBusExtManual;
+        } else {
+            pub use bus_windows::WindowsBusExtManual;
+            #[cfg(feature = "dox")]
+            pub use bus_unix::UnixBusExtManual;
+        }
+    }
+
     pub use pad::PadExtManual;
     pub use object::GstObjectExtManual;
     pub use gobject::GObjectExtManualGst;
