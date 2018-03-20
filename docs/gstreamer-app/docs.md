@@ -96,12 +96,14 @@ PLAYING state.
 `true` if no more samples can be pulled and the appsink is EOS.
 <!-- impl AppSink::fn pull_preroll -->
 Get the last preroll sample in `self`. This was the sample that caused the
-appsink to preroll in the PAUSED state. This sample can be pulled many times
-and remains available to the application even after EOS.
+appsink to preroll in the PAUSED state.
 
 This function is typically used when dealing with a pipeline in the PAUSED
 state. Calling this function after doing a seek will give the sample right
 after the seek position.
+
+Calling this function will clear the internal reference to the preroll
+buffer.
 
 Note that the preroll sample will also be returned as the first sample
 when calling `AppSink::pull_sample`.
@@ -186,12 +188,14 @@ Instruct `self` to wait for all buffers to be consumed when an EOS is received.
 the new state
 <!-- impl AppSink::fn try_pull_preroll -->
 Get the last preroll sample in `self`. This was the sample that caused the
-appsink to preroll in the PAUSED state. This sample can be pulled many times
-and remains available to the application even after EOS.
+appsink to preroll in the PAUSED state.
 
 This function is typically used when dealing with a pipeline in the PAUSED
 state. Calling this function after doing a seek will give the sample right
 after the seek position.
+
+Calling this function will clear the internal reference to the preroll
+buffer.
 
 Note that the preroll sample will also be returned as the first sample
 when calling `AppSink::pull_sample`.
@@ -264,12 +268,14 @@ Note that this signal is only emitted when the "emit-signals" property is
 set to `true`, which it is not by default for performance reasons.
 <!-- trait AppSinkExt::fn connect_pull_preroll -->
 Get the last preroll sample in `appsink`. This was the sample that caused the
-appsink to preroll in the PAUSED state. This sample can be pulled many times
-and remains available to the application even after EOS.
+appsink to preroll in the PAUSED state.
 
 This function is typically used when dealing with a pipeline in the PAUSED
 state. Calling this function after doing a seek will give the sample right
 after the seek position.
+
+Calling this function will clear the internal reference to the preroll
+buffer.
 
 Note that the preroll sample will also be returned as the first sample
 when calling `AppSink::pull_sample` or the "pull-sample" action signal.
@@ -304,12 +310,14 @@ If an EOS event was received before any buffers, this function returns
 a `gst::Sample` or NULL when the appsink is stopped or EOS.
 <!-- trait AppSinkExt::fn connect_try_pull_preroll -->
 Get the last preroll sample in `appsink`. This was the sample that caused the
-appsink to preroll in the PAUSED state. This sample can be pulled many times
-and remains available to the application even after EOS.
+appsink to preroll in the PAUSED state.
 
 This function is typically used when dealing with a pipeline in the PAUSED
 state. Calling this function after doing a seek will give the sample right
 after the seek position.
+
+Calling this function will clear the internal reference to the preroll
+buffer.
 
 Note that the preroll sample will also be returned as the first sample
 when calling `AppSink::pull_sample` or the "pull-sample" action signal.
@@ -465,7 +473,7 @@ Retrieve the min and max latencies in `min` and `max` respectively.
 ## `min`
 the min latency
 ## `max`
-the min latency
+the max latency
 <!-- impl AppSrc::fn get_max_bytes -->
 Get the maximum amount of bytes that can be queued in `self`.
 
@@ -498,6 +506,24 @@ a `gst::Buffer` to push
 # Returns
 
 `gst::FlowReturn::Ok` when the buffer was successfuly queued.
+`gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
+`gst::FlowReturn::Eos` when EOS occured.
+<!-- impl AppSrc::fn push_buffer_list -->
+Adds a buffer list to the queue of buffers and buffer lists that the
+appsrc element will push to its source pad. This function takes ownership
+of `buffer_list`.
+
+When the block property is TRUE, this function can block until free
+space becomes available in the queue.
+
+Feature: `v1_14`
+
+## `buffer_list`
+a `gst::BufferList` to push
+
+# Returns
+
+`gst::FlowReturn::Ok` when the buffer list was successfuly queued.
 `gst::FlowReturn::Flushing` when `self` is not PAUSED or PLAYING.
 `gst::FlowReturn::Eos` when EOS occured.
 <!-- impl AppSrc::fn push_sample -->
@@ -558,7 +584,7 @@ default latency calculations for pseudo-live sources will be used.
 ## `min`
 the min latency
 ## `max`
-the min latency
+the max latency
 <!-- impl AppSrc::fn set_max_bytes -->
 Set the maximum amount of bytes that can be queued in `self`.
 After the maximum amount of bytes are queued, `self` will emit the
@@ -603,6 +629,19 @@ When the block property is TRUE, this function can block until free space
 becomes available in the queue.
 ## `buffer`
 a buffer to push
+<!-- trait AppSrcExt::fn connect_push_buffer_list -->
+Adds a buffer list to the queue of buffers and buffer lists that the
+appsrc element will push to its source pad. This function does not take
+ownership of the buffer list so the buffer list needs to be unreffed
+after calling this function.
+
+When the block property is TRUE, this function can block until free space
+becomes available in the queue.
+
+Feature: `v1_14`
+
+## `buffer_list`
+a buffer list to push
 <!-- trait AppSrcExt::fn connect_push_sample -->
 Extract a buffer from the provided sample and adds the extracted buffer
 to the queue of buffers that the appsrc element will

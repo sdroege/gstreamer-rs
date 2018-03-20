@@ -134,3 +134,7 @@ check this with `gst::ClockExt::wait_for_sync`, the GstClock::synced signal and
 Name of the clock
 ## `domain`
 PTP domain
+
+# Returns
+
+A new `gst::Clock`

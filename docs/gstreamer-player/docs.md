@@ -4,7 +4,7 @@
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Player::fn new -->
 Creates a new `Player` instance that uses `signal_dispatcher` to dispatch
 signals to some event loop system, or emits signals directly if NULL is
@@ -57,6 +57,20 @@ Since 1.10
 a `Player` configuration
 ## `interval`
 interval in ms
+<!-- impl Player::fn config_set_seek_accurate -->
+Enable or disable accurate seeking. When enabled, elements will try harder
+to seek as accurately as possible to the requested seek position. Generally
+it will be slower especially for formats that don't have any indexes or
+timestamp markers in the stream.
+
+If accurate seeking is disabled, elements will seek as close as the request
+position without slowing down seeking too much.
+
+Accurate seeking is disabled by default.
+## `config`
+a `Player` configuration
+## `accurate`
+accurate seek or not
 <!-- impl Player::fn config_set_user_agent -->
 Set the user agent to pass to the server if `player` needs to connect
 to a server during playback. This is typically used when playing HTTP
@@ -103,18 +117,6 @@ a `None` terminated array of `PlayerVisualization` to free
  a `None` terminated array containing all available
  visualizations. Use `Player::visualizations_free` after
  usage.
-<!-- impl Player::fn config_set_seek_accurate -->
-Enable or disable accurate seeking. When enabled, elements will try harder
-to seek as accurately as possible to the requested seek position. Generally
-it will be slower especially for formats that don't have any indexes or
-timestamp markers in the stream.
-
-If accurate seeking is disabled, elements will seek as close as the request
-position without slowing down seeking too much.
-
-Accurate seeking is disabled by default.
-## `accurate`
-accurate seek or not
 <!-- impl Player::fn get_audio_video_offset -->
 Retrieve the current value of audio-video-offset property
 
@@ -349,7 +351,9 @@ Enable or disable the current subtitle track.
 ## `enabled`
 TRUE or FALSE
 <!-- impl Player::fn set_subtitle_uri -->
-Sets the external subtitle URI.
+Sets the external subtitle URI. This should be combined with a call to
+gst_player_set_subtitle_track_enabled(`self`, TRUE) so the subtitles are actually
+rendered.
 ## `uri`
 subtitle URI
 <!-- impl Player::fn set_uri -->

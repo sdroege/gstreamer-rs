@@ -572,6 +572,21 @@ a `RTSPContext`
 <!-- trait RTSPClientExt::fn connect_teardown_request -->
 ## `ctx`
 a `RTSPContext`
+<!-- struct RTSPContext -->
+Information passed around containing the context of a request.
+<!-- impl RTSPContext::fn pop_current -->
+Pops `self` off the context stack (verifying that `self`
+is on the top of the stack).
+<!-- impl RTSPContext::fn push_current -->
+Pushes `self` onto the context stack. The current
+context can then be received using `RTSPContext::get_current`.
+<!-- impl RTSPContext::fn get_current -->
+Get the current `RTSPContext`. This object is retrieved from the
+current thread that is handling the request for a client.
+
+# Returns
+
+a `RTSPContext`
 <!-- struct RTSPMedia -->
 A class that contains the GStreamer element along with a list of
 `RTSPStream` objects that can produce data.
@@ -609,6 +624,15 @@ the list of dynamic elements.
 
 Find all depayloader elements, they should be named depay\%d in the
 element of `self`, and create `GstRTSPStreams` for them.
+<!-- trait RTSPMediaExt::fn complete_pipeline -->
+Add a receiver and sender parts to the pipeline based on the transport from
+SETUP.
+## `transports`
+a list of `gst_rtsp::RTSPTransport`
+
+# Returns
+
+`true` if the media pipeline has been sucessfully updated.
 <!-- trait RTSPMediaExt::fn create_stream -->
 Create a new stream in `self` that provides RTP data on `pad`.
 `pad` should be a pad of an element inside `self`->element.
@@ -831,6 +855,17 @@ a `gst_rtsp::RTSPTimeRange`
 # Returns
 
 `true` on success.
+<!-- trait RTSPMediaExt::fn seek_full -->
+Seek the pipeline of `self` to `range`. `self` must be prepared with
+`RTSPMediaExt::prepare`.
+## `range`
+a `gst_rtsp::RTSPTimeRange`
+## `flags`
+The minimal set of `gst::SeekFlags` to use
+
+# Returns
+
+`true` on success.
 <!-- trait RTSPMediaExt::fn set_address_pool -->
 configure `pool` to be used as the address pool of `self`.
 ## `pool`
@@ -992,6 +1027,13 @@ will be created and the role will be added to it.
 a role
 ## `fieldname`
 the first field name
+<!-- trait RTSPMediaFactoryExt::fn add_role_from_structure -->
+A convenience wrapper around `RTSPPermissions::add_role_from_structure`.
+If `self` had no permissions, new permissions will be created and the
+role will be added to it.
+
+Feature: `v1_14`
+
 <!-- trait RTSPMediaFactoryExt::fn construct -->
 Construct the media object and create its streams. Implementations
 should create the needed gstreamer elements and add them to the result
@@ -1107,7 +1149,7 @@ methods.
 
 # Returns
 
-The supported transport modes.
+The transport mode.
 <!-- trait RTSPMediaFactoryExt::fn is_eos_shutdown -->
 Get if media created from this factory will have an EOS event sent to the
 pipeline before shutdown.
@@ -1742,6 +1784,13 @@ the stream index
 
 a `RTSPStreamTransport` that is
 valid until the session of `self` is unreffed.
+<!-- trait RTSPSessionMediaExt::fn get_transports -->
+Get a list of all available `RTSPStreamTransport` in this session.
+
+# Returns
+
+a
+list of `RTSPStreamTransport`, g_ptr_array_unref () after usage.
 <!-- trait RTSPSessionMediaExt::fn matches -->
 Check if the path of `self` matches `path`. It `path` matches, the amount of
 matched characters is returned in `matched`.
@@ -1918,20 +1967,25 @@ a `RTSPStreamTransport`
 `true` if `trans` was added
 <!-- trait RTSPStreamExt::fn allocate_udp_sockets -->
 Allocates RTP and RTCP ports.
-
-# Deprecated
-
-This function shouldn't have been made public
 ## `family`
 protocol family
 ## `transport`
 transport method
-## `use_client_setttings`
+## `use_client_settings`
 Whether to use client settings or not
 
 # Returns
 
 `true` if the RTP and RTCP sockets have been succeccully allocated.
+<!-- trait RTSPStreamExt::fn complete_stream -->
+Add a receiver and sender part to the pipeline based on the transport from
+SETUP.
+## `transport`
+a `gst_rtsp::RTSPTransport`
+
+# Returns
+
+`true` if the stream has been sucessfully updated.
 <!-- trait RTSPStreamExt::fn get_address_pool -->
 Get the `RTSPAddressPool` used as the address pool of `self`.
 
@@ -2037,6 +2091,15 @@ Get the amount of time to store retransmission data.
 # Returns
 
 the amount of time to store retransmission data.
+<!-- trait RTSPStreamExt::fn get_rtcp_multicast_socket -->
+Get the multicast RTCP socket from `self` for a `family`.
+## `family`
+the socket family
+
+# Returns
+
+the multicast RTCP socket or `None` if no
+socket could be allocated for `family`. Unref after usage
 <!-- trait RTSPStreamExt::fn get_rtcp_socket -->
 Get the RTCP socket from `self` for a `family`.
 
@@ -2047,6 +2110,15 @@ the socket family
 # Returns
 
 the RTCP socket or `None` if no
+socket could be allocated for `family`. Unref after usage
+<!-- trait RTSPStreamExt::fn get_rtp_multicast_socket -->
+Get the multicast RTP socket from `self` for a `family`.
+## `family`
+the socket family
+
+# Returns
+
+the multicast RTP socket or `None` if no
 socket could be allocated for `family`. Unref after usage
 <!-- trait RTSPStreamExt::fn get_rtp_socket -->
 Get the RTP socket from `self` for a `family`.
@@ -2130,6 +2202,26 @@ See `RTSPStreamExt::set_client_side`
 # Returns
 
 TRUE if this `RTSPStream` is client-side.
+<!-- trait RTSPStreamExt::fn is_complete -->
+Checks whether the stream is complete, contains the receiver and the sender
+parts. As the stream contains sink(s) element(s), it's possible to perform
+seek operations on it.
+
+# Returns
+
+`true` if the stream contains at least one sink element.
+<!-- trait RTSPStreamExt::fn is_receiver -->
+Checks whether the stream is a receiver.
+
+# Returns
+
+`true` if the stream is a receiver and `false` otherwise.
+<!-- trait RTSPStreamExt::fn is_sender -->
+Checks whether the stream is a sender.
+
+# Returns
+
+`true` if the stream is a sender and `false` otherwise.
 <!-- trait RTSPStreamExt::fn is_transport_supported -->
 Check if `transport` can be handled by stream
 ## `transport`
@@ -2241,6 +2333,12 @@ a TTL
 
 the `RTSPAddress` of `self` or `None` when
 the address could be reserved. `RTSPAddress::free` after usage.
+<!-- trait RTSPStreamExt::fn seekable -->
+Checks whether the individual `self` is seekable.
+
+# Returns
+
+`true` if `self` is seekable, else `false`.
 <!-- trait RTSPStreamExt::fn set_address_pool -->
 configure `pool` to be used as the address pool of `self`.
 ## `pool`
@@ -2537,3 +2635,89 @@ Different thread types
 a thread to handle the client communication
 <!-- enum RTSPThreadType::variant Media -->
 a thread to handle media
+<!-- struct RTSPToken -->
+An opaque object used for checking authorisations.
+It is generated after successful authentication.
+<!-- impl RTSPToken::fn new -->
+Create a new Authorization token with the given fieldnames and values.
+Arguments are given similar to `gst::Structure::new`.
+## `firstfield`
+the first fieldname
+
+# Returns
+
+a new authorization token.
+<!-- impl RTSPToken::fn new_empty -->
+Create a new empty Authorization token.
+
+# Returns
+
+a new empty authorization token.
+<!-- impl RTSPToken::fn new_valist -->
+Create a new Authorization token with the given fieldnames and values.
+Arguments are given similar to `gst::Structure::new_valist`.
+## `firstfield`
+the first fieldname
+## `var_args`
+additional arguments
+
+# Returns
+
+a new authorization token.
+<!-- impl RTSPToken::fn get_string -->
+Get the string value of `field` in `self`.
+## `field`
+a field name
+
+# Returns
+
+the string value of `field` in
+`self` or `None` when `field` is not defined in `self`. The string
+becomes invalid when you free `self`.
+<!-- impl RTSPToken::fn get_structure -->
+Access the structure of the token.
+
+# Returns
+
+The structure of the token. The structure is still
+owned by the token, which means that you should not free it and that the
+pointer becomes invalid when you free the token.
+
+MT safe.
+<!-- impl RTSPToken::fn is_allowed -->
+Check if `self` has a boolean `field` and if it is set to `true`.
+## `field`
+a field name
+
+# Returns
+
+`true` if `self` has a boolean field named `field` set to `true`.
+<!-- impl RTSPToken::fn set_bool -->
+Sets a boolean value on `self`.
+
+Feature: `v1_14`
+
+## `field`
+field to set
+## `bool_value`
+boolean value to set
+<!-- impl RTSPToken::fn set_string -->
+Sets a string value on `self`.
+
+Feature: `v1_14`
+
+## `field`
+field to set
+## `string_value`
+string value to set
+<!-- impl RTSPToken::fn writable_structure -->
+Get a writable version of the structure.
+
+# Returns
+
+The structure of the token. The structure is still
+owned by the token, which means that you should not free it and that the
+pointer becomes invalid when you free the token. This function checks if
+`self` is writable and will never return `None`.
+
+MT safe.

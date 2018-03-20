@@ -63,7 +63,7 @@ function not implemented
 <!-- enum RTSPResult::variant Esys -->
 a system error occured, errno contains more details
 <!-- enum RTSPResult::variant Eparse -->
-a persing error occured
+a parsing error occured
 <!-- enum RTSPResult::variant Ewsastart -->
 windows networking could not start
 <!-- enum RTSPResult::variant Ewsaversion -->

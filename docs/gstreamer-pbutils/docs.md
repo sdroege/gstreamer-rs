@@ -5,13 +5,13 @@ information as possible from one or many URIs.
 
 It provides two APIs, allowing usage in blocking or non-blocking mode.
 
-The blocking mode just requires calling `DiscovererExt::discover_uri`
+The blocking mode just requires calling `Discoverer::discover_uri`
 with the URI one wishes to discover.
 
 The non-blocking mode requires a running `glib::MainLoop` iterating a
 `glib::MainContext`, where one connects to the various signals, appends the
-URIs to be processed (through `DiscovererExt::discover_uri_async`) and then
-asks for the discovery to begin (through `DiscovererExt::start`).
+URIs to be processed (through `Discoverer::discover_uri_async`) and then
+asks for the discovery to begin (through `Discoverer::start`).
 By default this will use the GLib default main context unless you have
 set a custom context using `glib::MainContext::push_thread_default`.
 
@@ -19,13 +19,7 @@ All the information is returned in a `DiscovererInfo` structure.
 
 # Implements
 
-[`DiscovererExt`](trait.DiscovererExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- trait DiscovererExt -->
-Trait containing all `Discoverer` methods.
-
-# Implementors
-
-[`Discoverer`](struct.Discoverer.html)
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl Discoverer::fn new -->
 Creates a new `Discoverer` with the provided timeout.
 ## `timeout`
@@ -38,7 +32,7 @@ The new `Discoverer`.
 If an error occurred when creating the discoverer, `err` will be set
 accordingly and `None` will be returned. If `err` is set, the caller must
 free it when no longer needed using `glib::Error::free`.
-<!-- trait DiscovererExt::fn discover_uri -->
+<!-- impl Discoverer::fn discover_uri -->
 Synchronously discovers the given `uri`.
 
 A copy of `uri` will be made internally, so the caller can safely `g_free`
@@ -50,9 +44,9 @@ The URI to run on.
 
 the result of the scanning. Can be `None` if an
 error occurred.
-<!-- trait DiscovererExt::fn discover_uri_async -->
+<!-- impl Discoverer::fn discover_uri_async -->
 Appends the given `uri` to the list of URIs to discoverer. The actual
-discovery of the `uri` will only take place if `DiscovererExt::start` has
+discovery of the `uri` will only take place if `Discoverer::start` has
 been called.
 
 A copy of `uri` will be made internally, so the caller can safely `g_free`
@@ -64,11 +58,11 @@ the URI to add.
 
 `true` if the `uri` was successfully appended to the list of pending
 uris, else `false`
-<!-- trait DiscovererExt::fn start -->
+<!-- impl Discoverer::fn start -->
 Allow asynchronous discovering of URIs to take place.
 A `glib::MainLoop` must be available for `Discoverer` to properly work in
 asynchronous mode.
-<!-- trait DiscovererExt::fn stop -->
+<!-- impl Discoverer::fn stop -->
 Stop the discovery of any pending URIs and clears the list of
 pending URIS (if any).
 <!-- trait DiscovererExt::fn connect_discovered -->
@@ -80,9 +74,10 @@ depending on the circumstances of the error.
 ## `info`
 the results `DiscovererInfo`
 ## `error`
-`glib::Error`, which will be non-NULL if an error
- occurred during discovery. You must not
- free this `glib::Error`, it will be freed by
+`glib::Error`, which will be non-NULL
+ if an error occurred during
+ discovery. You must not free
+ this `glib::Error`, it will be freed by
  the discoverer.
 <!-- trait DiscovererExt::fn connect_finished -->
 Will be emitted in async mode when all pending URIs have been processed.
@@ -121,6 +116,16 @@ set on the result flags.
 # Returns
 
 the average or nominal bitrate of the stream in bits/second.
+<!-- impl DiscovererAudioInfo::fn get_channel_mask -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+the channel-mask of the stream, refer to
+`gst_audio_channel_positions_from_mask` for more
+information.
 <!-- impl DiscovererAudioInfo::fn get_channels -->
 
 # Returns
@@ -206,6 +211,14 @@ matching `DiscovererStreamInfo`. The caller should free it with
 # Returns
 
 the duration of the URI in `gst::ClockTime` (nanoseconds).
+<!-- trait DiscovererInfoExt::fn get_live -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+whether the URI is live.
 <!-- trait DiscovererInfoExt::fn get_misc -->
 
 # Deprecated

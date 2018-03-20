@@ -1281,6 +1281,28 @@ Wait until the start operation completes.
 # Returns
 
 a `gst::FlowReturn`.
+<!-- trait BaseSrcExt::fn submit_buffer_list -->
+Subclasses can call this from their create virtual method implementation
+to submit a buffer list to be pushed out later. This is useful in
+cases where the create function wants to produce multiple buffers to be
+pushed out in one go in form of a `gst::BufferList`, which can reduce overhead
+drastically, especially for packetised inputs (for data streams where
+the packetisation/chunking is not important it is usually more efficient
+to return larger buffers instead).
+
+Subclasses that use this function from their create function must return
+`gst::FlowReturn::Ok` and no buffer from their create virtual method implementation.
+If a buffer is returned after a buffer list has also been submitted via this
+function the behaviour is undefined.
+
+Subclasses must only call this function once per create function call and
+subclasses must only call this function when the source operates in push
+mode.
+
+Feature: `v1_14`
+
+## `buffer_list`
+a `gst::BufferList`
 <!-- trait BaseSrcExt::fn wait_playing -->
 If the `BaseSrcClass.create`() method performs its own synchronisation
 against the clock it must unblock when going from PLAYING to the PAUSED state
@@ -1583,12 +1605,26 @@ the `gst::Pad` that is being added
 Removes all pads from a `FlowCombiner` and resets it to its initial state.
 <!-- impl FlowCombiner::fn free -->
 Frees a `FlowCombiner` struct and all its internal data.
+<!-- impl FlowCombiner::fn ref -->
+Increments the reference count on the `FlowCombiner`.
+
+Feature: `v1_12_1`
+
+
+# Returns
+
+the `FlowCombiner`.
 <!-- impl FlowCombiner::fn remove_pad -->
 Removes a `gst::Pad` from the `FlowCombiner`.
 ## `pad`
 the `gst::Pad` to remove
 <!-- impl FlowCombiner::fn reset -->
 Reset flow combiner and all pads to their initial state without removing pads.
+<!-- impl FlowCombiner::fn unref -->
+Decrements the reference count on the `FlowCombiner`.
+
+Feature: `v1_12_1`
+
 <!-- impl FlowCombiner::fn update_flow -->
 Computes the combined flow return for the pads in it.
 

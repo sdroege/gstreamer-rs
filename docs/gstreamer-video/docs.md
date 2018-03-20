@@ -15,7 +15,7 @@ ITU-R BT.601 color matrix
 <!-- enum VideoColorMatrix::variant Smpte240m -->
 SMPTE 240M color matrix
 <!-- enum VideoColorMatrix::variant Bt2020 -->
-ITU-R BT.2020 color matrix. Since: 1.6.
+ITU-R BT.2020 color matrix. Since: 1.6
 <!-- enum VideoColorPrimaries -->
 The color primaries define the how to transform linear RGB values to and from
 the CIE XYZ colorspace.
@@ -34,7 +34,7 @@ SMPTE240M primaries
 <!-- enum VideoColorPrimaries::variant Film -->
 Generic film
 <!-- enum VideoColorPrimaries::variant Bt2020 -->
-BT2020 primaries. Since: 1.6.
+BT2020 primaries. Since: 1.6
 <!-- enum VideoColorPrimaries::variant Adobergb -->
 Adobe RGB primaries. Since: 1.8
 <!-- enum VideoColorRange -->
@@ -97,6 +97,15 @@ bottom field is first
 
 Feature: `v1_12`
 
+<!-- struct VideoFilter -->
+Provides useful functions and a base class for video filters.
+
+The videofilter will by default enable QoS on the parent GstBaseTransform
+to implement frame dropping.
+
+# Implements
+
+[`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- enum VideoFormat -->
 Enum value describing the most common video formats.
 <!-- enum VideoFormat::variant Unknown -->
@@ -258,6 +267,12 @@ planar 4:2:2 YUV, 12 bits per channel (Since: 1.12)
 planar 4:4:4 YUV, 12 bits per channel (Since: 1.12)
 <!-- enum VideoFormat::variant Y44412le -->
 planar 4:4:4 YUV, 12 bits per channel (Since: 1.12)
+<!-- enum VideoFormat::variant Gray10Le32 -->
+10-bit grayscale, packed into 32bit words (2 bits padding) (Since: 1.14)
+<!-- enum VideoFormat::variant Nv1210le32 -->
+10-bit variant of `VideoFormat::Nv12`, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
+<!-- enum VideoFormat::variant Nv1610le32 -->
+10-bit variant of `VideoFormat::Nv16`, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
 <!-- struct VideoFormatInfo -->
 Information for a video format.
 <!-- struct VideoFrame -->
@@ -833,6 +848,36 @@ Trait containing all `VideoOverlay` methods.
 # Implementors
 
 [`VideoOverlay`](struct.VideoOverlay.html)
+<!-- impl VideoOverlay::fn install_properties -->
+This helper shall be used by classes implementing the `VideoOverlay`
+interface that want the render rectangle to be controllable using
+properties. This helper will install "render-rectangle" property into the
+class.
+
+Since 1.14
+## `oclass`
+The class on which the properties will be installed
+## `last_prop_id`
+The first free property ID to use
+<!-- impl VideoOverlay::fn set_property -->
+This helper shall be used by classes implementing the `VideoOverlay`
+interface that want the render rectangle to be controllable using
+properties. This helper will parse and set the render rectangle calling
+`VideoOverlay::set_render_rectangle`.
+## `object`
+The instance on which the property is set
+## `last_prop_id`
+The highest property ID.
+## `property_id`
+The property ID
+## `value`
+The `gobject::Value` to be set
+
+# Returns
+
+`true` if the `property_id` matches the GstVideoOverlay property
+
+Since 1.14
 <!-- trait VideoOverlayExt::fn expose -->
 Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.
@@ -929,6 +974,6 @@ Logarithmic transfer characteristic
 <!-- enum VideoTransferFunction::variant Bt202012 -->
 Gamma 2.2 curve with a linear segment in the lower
  range. Used for BT.2020 with 12 bits per
- component. Since: 1.6.
+ component. Since: 1.6
 <!-- enum VideoTransferFunction::variant Adobergb -->
 Gamma 2.19921875. Since: 1.8

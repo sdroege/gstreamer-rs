@@ -266,6 +266,116 @@ Layout of the audio samples for the different channels.
 interleaved audio
 <!-- enum AudioLayout::variant NonInterleaved -->
 non-interleaved audio
+<!-- struct AudioStreamAlign -->
+`AudioStreamAlign` provides a helper object that helps tracking audio
+stream alignment and discontinuities, and detects discontinuities if
+possible.
+
+See `AudioStreamAlign::new` for a description of its parameters and
+`AudioStreamAlign::process` for the details of the processing.
+
+Feature: `v1_14`
+<!-- impl AudioStreamAlign::fn new -->
+Allocate a new `AudioStreamAlign` with the given configuration. All
+processing happens according to sample rate `rate`, until
+`gst_audio_discont_wait_set_rate` is called with a new `rate`.
+A negative rate can be used for reverse playback.
+
+`alignment_threshold` gives the tolerance in nanoseconds after which a
+timestamp difference is considered a discontinuity. Once detected,
+`discont_wait` nanoseconds have to pass without going below the threshold
+again until the output buffer is marked as a discontinuity. These can later
+be re-configured with `AudioStreamAlign::set_alignment_threshold` and
+`AudioStreamAlign::set_discont_wait`.
+
+Feature: `v1_14`
+
+## `rate`
+a sample rate
+## `alignment_threshold`
+a alignment threshold in nanoseconds
+## `discont_wait`
+discont wait in nanoseconds
+
+# Returns
+
+a new `AudioStreamAlign`. free with `AudioStreamAlign::free`.
+<!-- impl AudioStreamAlign::fn copy -->
+Copy a GstAudioStreamAlign structure.
+
+Feature: `v1_14`
+
+
+# Returns
+
+a new `AudioStreamAlign`. free with gst_audio_stream_align_free.
+<!-- impl AudioStreamAlign::fn free -->
+Free a GstAudioStreamAlign structure previously allocated with `AudioStreamAlign::new`
+or `AudioStreamAlign::copy`.
+
+Feature: `v1_14`
+
+<!-- impl AudioStreamAlign::fn get_samples_since_discont -->
+Returns the number of samples that were processed since the last
+discontinuity was detected.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The number of samples processed since the last discontinuity.
+<!-- impl AudioStreamAlign::fn get_timestamp_at_discont -->
+Timestamp that was passed when a discontinuity was detected, i.e. the first
+timestamp after the discontinuity.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The last timestamp at when a discontinuity was detected
+<!-- impl AudioStreamAlign::fn mark_discont -->
+Marks the next buffer as discontinuous and resets timestamp tracking.
+
+Feature: `v1_14`
+
+<!-- impl AudioStreamAlign::fn process -->
+Processes data with `timestamp` and `n_samples`, and returns the output
+timestamp, duration and sample position together with a boolean to signal
+whether a discontinuity was detected or not. All non-discontinuous data
+will have perfect timestamps and durations.
+
+A discontinuity is detected once the difference between the actual
+timestamp and the timestamp calculated from the sample count since the last
+discontinuity differs by more than the alignment threshold for a duration
+longer than discont wait.
+
+Note: In reverse playback, every buffer is considered discontinuous in the
+context of buffer flags because the last sample of the previous buffer is
+discontinuous with the first sample of the current one. However for this
+function they are only considered discontinuous in reverse playback if the
+first sample of the previous buffer is discontinuous with the last sample
+of the current one.
+
+Feature: `v1_14`
+
+## `discont`
+if this data is considered to be discontinuous
+## `timestamp`
+a `gst::ClockTime` of the start of the data
+## `n_samples`
+number of samples to process
+## `out_timestamp`
+output timestamp of the data
+## `out_duration`
+output duration of the data
+## `out_sample_position`
+output sample position of the start of the data
+
+# Returns
+
+`true` if a discontinuity was detected, `false` otherwise.
 <!-- struct StreamVolume -->
 This interface is implemented by elements that provide a stream volume. Examples for
 such elements are `volume` and `playbin`.

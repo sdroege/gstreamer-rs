@@ -167,7 +167,8 @@ the `glib::Type` of an interface
 
 # Returns
 
-A `Element` inside the bin implementing the interface
+A `Element` inside the bin
+implementing the interface
 <!-- trait BinExt::fn get_by_name -->
 Gets the element with the given name from a bin. This
 function recurses into child bins.
@@ -587,6 +588,23 @@ a `Structure` holding cryptographic
 
 a pointer to the added `ProtectionMeta` if successful; `None` if
 unsuccessful.
+<!-- impl Buffer::fn add_reference_timestamp_meta -->
+Add a `ReferenceTimestampMeta` to `self` that holds a `timestamp` and
+optionally `duration` based on a specific timestamp `reference`. See the
+documentation of `ReferenceTimestampMeta` for details.
+
+Feature: `v1_14`
+
+## `reference`
+identifier for the timestamp reference.
+## `timestamp`
+timestamp
+## `duration`
+duration, or `GST_CLOCK_TIME_NONE`
+
+# Returns
+
+The `ReferenceTimestampMeta` that was added to the buffer
 <!-- impl Buffer::fn append -->
 Append all the memory from `buf2` to `self`. The result buffer will contain a
 concatenation of the memory of `self` and `buf2`.
@@ -692,7 +710,7 @@ the offset to extract
 the size to extract
 ## `dest`
 A pointer where
- the destination array will be written.
+ the destination array will be written. Might be `None` if the size is 0.
 ## `dest_size`
 A location where the size of `dest` can be written
 <!-- impl Buffer::fn fill -->
@@ -801,6 +819,32 @@ the `glib::Type` of an API
 
 the metadata for `api` on
 `self`.
+<!-- impl Buffer::fn get_n_meta -->
+
+Feature: `v1_14`
+
+## `api_type`
+the `glib::Type` of an API
+
+# Returns
+
+number of metas of type `api_type` on `self`.
+<!-- impl Buffer::fn get_reference_timestamp_meta -->
+Find the first `ReferenceTimestampMeta` on `self` that conforms to
+`reference`. Conformance is tested by checking if the meta's reference is a
+subset of `reference`.
+
+Buffers can contain multiple `ReferenceTimestampMeta` metadata items.
+
+Feature: `v1_14`
+
+## `reference`
+a reference `Caps`
+
+# Returns
+
+the `ReferenceTimestampMeta` or `None` when there
+is no such metadata on `self`.
 <!-- impl Buffer::fn get_size -->
 Get the total size of the memory blocks in `self`.
 
@@ -1147,6 +1191,16 @@ an initial reserved size
 
 the new `BufferList`. `gst_buffer_list_unref`
  after usage.
+<!-- impl BufferList::fn calculate_size -->
+Calculates the size of the data contained in buffer list by adding the
+size of all buffers.
+
+Feature: `v1_14`
+
+
+# Returns
+
+the size of the data contained in buffer list in bytes.
 <!-- impl BufferList::fn copy_deep -->
 Create a copy of the given buffer list. This will make a newly allocated
 copy of the buffer that the source buffer list contains.
@@ -1171,6 +1225,9 @@ user data passed to `func`
 `self` is empty.
 <!-- impl BufferList::fn get -->
 Get the buffer at `idx`.
+
+You must make sure that `idx` does not exceed the number of
+buffers available.
 ## `idx`
 the index
 
@@ -1179,6 +1236,22 @@ the index
 the buffer at `idx` in `group`
  or `None` when there is no buffer. The buffer remains valid as
  long as `self` is valid and buffer is not removed from the list.
+<!-- impl BufferList::fn get_writable -->
+Gets the buffer at `idx`, ensuring it is a writable buffer.
+
+You must make sure that `idx` does not exceed the number of
+buffers available.
+
+Feature: `v1_14`
+
+## `idx`
+the index
+
+# Returns
+
+the buffer at `idx` in `group`.
+ The returned buffer remains valid as long as `self` is valid and
+ the buffer is not removed from the list.
 <!-- impl BufferList::fn insert -->
 Insert `buffer` at `idx` in `self`. Other buffers are moved to make room for
 this new buffer.
@@ -1201,6 +1274,282 @@ are moved to close the gap.
 the index
 ## `length`
 the amount to remove
+<!-- struct BufferPool -->
+A `BufferPool` is an object that can be used to pre-allocate and recycle
+buffers of the same size and with the same properties.
+
+A `BufferPool` is created with `BufferPool::new`.
+
+Once a pool is created, it needs to be configured. A call to
+`BufferPool::get_config` returns the current configuration structure from
+the pool. With `BufferPool::config_set_params` and
+`BufferPool::config_set_allocator` the bufferpool parameters and
+allocator can be configured. Other properties can be configured in the pool
+depending on the pool implementation.
+
+A bufferpool can have extra options that can be enabled with
+`BufferPool::config_add_option`. The available options can be retrieved
+with `BufferPoolExt::get_options`. Some options allow for additional
+configuration properties to be set.
+
+After the configuration structure has been configured,
+`BufferPool::set_config` updates the configuration in the pool. This can
+fail when the configuration structure is not accepted.
+
+After the a pool has been configured, it can be activated with
+`BufferPoolExt::set_active`. This will preallocate the configured resources
+in the pool.
+
+When the pool is active, `BufferPool::acquire_buffer` can be used to
+retrieve a buffer from the pool.
+
+Buffers allocated from a bufferpool will automatically be returned to the
+pool with `BufferPool::release_buffer` when their refcount drops to 0.
+
+The bufferpool can be deactivated again with `BufferPoolExt::set_active`.
+All further `BufferPool::acquire_buffer` calls will return an error. When
+all buffers are returned to the pool they will be freed.
+
+Use `GstObjectExt::unref` to release the reference to a bufferpool. If the
+refcount of the pool reaches 0, the pool will be freed.
+
+# Implements
+
+[`BufferPoolExt`](trait.BufferPoolExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait BufferPoolExt -->
+Trait containing all `BufferPool` methods.
+
+# Implementors
+
+[`BufferPool`](struct.BufferPool.html)
+<!-- impl BufferPool::fn new -->
+Creates a new `BufferPool` instance.
+
+# Returns
+
+a new `BufferPool` instance
+<!-- impl BufferPool::fn config_add_option -->
+Enabled the option in `config`. This will instruct the `bufferpool` to enable
+the specified option on the buffers that it allocates.
+
+The supported options by `pool` can be retrieved with `BufferPoolExt::get_options`.
+## `config`
+a `BufferPool` configuration
+## `option`
+an option to add
+<!-- impl BufferPool::fn config_get_allocator -->
+Get the `allocator` and `params` from `config`.
+## `config`
+a `BufferPool` configuration
+## `allocator`
+a `Allocator`, or `None`
+## `params`
+`AllocationParams`, or `None`
+
+# Returns
+
+`true`, if the values are set.
+<!-- impl BufferPool::fn config_get_option -->
+Parse an available `config` and get the option at `index` of the options API
+array.
+## `config`
+a `BufferPool` configuration
+## `index`
+position in the option array to read
+
+# Returns
+
+a `gchar` of the option at `index`.
+<!-- impl BufferPool::fn config_get_params -->
+Get the configuration values from `config`.
+## `config`
+a `BufferPool` configuration
+## `caps`
+the caps of buffers
+## `size`
+the size of each buffer, not including prefix and padding
+## `min_buffers`
+the minimum amount of buffers to allocate.
+## `max_buffers`
+the maximum amount of buffers to allocate or 0 for unlimited.
+
+# Returns
+
+`true` if all parameters could be fetched.
+<!-- impl BufferPool::fn config_has_option -->
+Check if `config` contains `option`.
+## `config`
+a `BufferPool` configuration
+## `option`
+an option
+
+# Returns
+
+`true` if the options array contains `option`.
+<!-- impl BufferPool::fn config_n_options -->
+Retrieve the number of values currently stored in the options array of the
+`config` structure.
+## `config`
+a `BufferPool` configuration
+
+# Returns
+
+the options array size as a `guint`.
+<!-- impl BufferPool::fn config_set_allocator -->
+Set the `allocator` and `params` on `config`.
+
+One of `allocator` and `params` can be `None`, but not both. When `allocator`
+is `None`, the default allocator of the pool will use the values in `param`
+to perform its allocation. When `param` is `None`, the pool will use the
+provided `allocator` with its default `AllocationParams`.
+
+A call to `BufferPool::set_config` can update the allocator and params
+with the values that it is able to do. Some pools are, for example, not able
+to operate with different allocators or cannot allocate with the values
+specified in `params`. Use `BufferPool::get_config` to get the currently
+used values.
+## `config`
+a `BufferPool` configuration
+## `allocator`
+a `Allocator`
+## `params`
+`AllocationParams`
+<!-- impl BufferPool::fn config_set_params -->
+Configure `config` with the given parameters.
+## `config`
+a `BufferPool` configuration
+## `caps`
+caps for the buffers
+## `size`
+the size of each buffer, not including prefix and padding
+## `min_buffers`
+the minimum amount of buffers to allocate.
+## `max_buffers`
+the maximum amount of buffers to allocate or 0 for unlimited.
+<!-- impl BufferPool::fn config_validate_params -->
+Validate that changes made to `config` are still valid in the context of the
+expected parameters. This function is a helper that can be used to validate
+changes made by a pool to a config when `BufferPool::set_config`
+returns `false`. This expects that `caps` haven't changed and that
+`min_buffers` aren't lower then what we initially expected.
+This does not check if options or allocator parameters are still valid,
+won't check if size have changed, since changing the size is valid to adapt
+padding.
+## `config`
+a `BufferPool` configuration
+## `caps`
+the excepted caps of buffers
+## `size`
+the expected size of each buffer, not including prefix and padding
+## `min_buffers`
+the expected minimum amount of buffers to allocate.
+## `max_buffers`
+the expect maximum amount of buffers to allocate or 0 for unlimited.
+
+# Returns
+
+`true`, if the parameters are valid in this context.
+<!-- trait BufferPoolExt::fn acquire_buffer -->
+Acquire a buffer from `self`. `buffer` should point to a memory location that
+can hold a pointer to the new buffer.
+
+`params` can be `None` or contain optional parameters to influence the
+allocation.
+## `buffer`
+a location for a `Buffer`
+## `params`
+parameters.
+
+# Returns
+
+a `FlowReturn` such as `FlowReturn::Flushing` when the pool is
+inactive.
+<!-- trait BufferPoolExt::fn get_config -->
+Get a copy of the current configuration of the pool. This configuration
+can either be modified and used for the `BufferPool::set_config` call
+or it must be freed after usage.
+
+# Returns
+
+a copy of the current configuration of `self`. use
+`Structure::free` after usage or `BufferPool::set_config`.
+<!-- trait BufferPoolExt::fn get_options -->
+Get a `None` terminated array of string with supported bufferpool options for
+`self`. An option would typically be enabled with
+`BufferPool::config_add_option`.
+
+# Returns
+
+a `None` terminated array
+ of strings.
+<!-- trait BufferPoolExt::fn has_option -->
+Check if the bufferpool supports `option`.
+## `option`
+an option
+
+# Returns
+
+`true` if the buffer pool contains `option`.
+<!-- trait BufferPoolExt::fn is_active -->
+Check if `self` is active. A pool can be activated with the
+`BufferPoolExt::set_active` call.
+
+# Returns
+
+`true` when the pool is active.
+<!-- trait BufferPoolExt::fn release_buffer -->
+Release `buffer` to `self`. `buffer` should have previously been allocated from
+`self` with `BufferPool::acquire_buffer`.
+
+This function is usually called automatically when the last ref on `buffer`
+disappears.
+## `buffer`
+a `Buffer`
+<!-- trait BufferPoolExt::fn set_active -->
+Control the active state of `self`. When the pool is inactive, new calls to
+`BufferPool::acquire_buffer` will return with `FlowReturn::Flushing`.
+
+Activating the bufferpool will preallocate all resources in the pool based on
+the configuration of the pool.
+
+Deactivating will free the resources again when there are no outstanding
+buffers. When there are outstanding buffers, they will be freed as soon as
+they are all returned to the pool.
+## `active`
+the new active state
+
+# Returns
+
+`false` when the pool was not configured or when preallocation of the
+buffers failed.
+<!-- trait BufferPoolExt::fn set_config -->
+Set the configuration of the pool. If the pool is already configured, and
+the configuration haven't change, this function will return `true`. If the
+pool is active, this method will return `false` and active configuration
+will remain. Buffers allocated form this pool must be returned or else this
+function will do nothing and return `false`.
+
+`config` is a `Structure` that contains the configuration parameters for
+the pool. A default and mandatory set of parameters can be configured with
+`BufferPool::config_set_params`, `BufferPool::config_set_allocator`
+and `BufferPool::config_add_option`.
+
+If the parameters in `config` can not be set exactly, this function returns
+`false` and will try to update as much state as possible. The new state can
+then be retrieved and refined with `BufferPool::get_config`.
+
+This function takes ownership of `config`.
+## `config`
+a `Structure`
+
+# Returns
+
+`true` when the configuration could be set.
+<!-- trait BufferPoolExt::fn set_flushing -->
+Enable or disable the flushing state of a `self` without freeing or
+allocating buffers.
+## `flushing`
+whether to start or stop flushing
 <!-- enum BufferingMode -->
 The different types of buffering methods.
 <!-- enum BufferingMode::variant Stream -->
@@ -1312,6 +1661,11 @@ The bus watch will only work if a GLib main loop is being run.
 The watch can be removed using `Bus::remove_watch` or by returning `false`
 from `func`. If the watch was added to the default main context it is also
 possible to remove the watch using `glib::Source::remove`.
+
+The bus watch will take its own reference to the `self`, so it is safe to unref
+`self` using `GstObjectExt::unref` after setting the bus watch.
+
+MT safe.
 ## `func`
 A function to call when a message is received.
 ## `user_data`
@@ -1320,8 +1674,6 @@ user data passed to `func`.
 # Returns
 
 The event source id or 0 if `self` already got an event source.
-
-MT safe.
 <!-- impl Bus::fn add_watch_full -->
 Adds a bus watch to the default main context with the given `priority` (e.g.
 `G_PRIORITY_DEFAULT`). It is also possible to use a non-default main
@@ -1341,6 +1693,9 @@ keep a copy of it, call `gst_message_ref` before leaving `func`.
 The watch can be removed using `Bus::remove_watch` or by returning `false`
 from `func`. If the watch was added to the default main context it is also
 possible to remove the watch using `glib::Source::remove`.
+
+The bus watch will take its own reference to the `self`, so it is safe to unref
+`self` using `GstObjectExt::unref` after setting the bus watch.
 
 MT safe.
 ## `priority`
@@ -1404,6 +1759,20 @@ comes from the thread of whatever object posted the message; the "message"
 signal is marshalled to the main thread via the main loop.
 
 MT safe.
+<!-- impl Bus::fn get_pollfd -->
+Gets the file descriptor from the bus which can be used to get notified about
+messages being available with functions like `g_poll`, and allows integration
+into other event loops based on file descriptors.
+Whenever a message is available, the POLLIN / `glib::IOCondition::In` event is set.
+
+Warning: NEVER read or write anything to the returned fd but only use it
+for getting notifications via `g_poll` or similar and then use the normal
+GstBus API, e.g. `Bus::pop`.
+
+Feature: `v1_14`
+
+## `fd`
+A GPollFD to fill
 <!-- impl Bus::fn have_pending -->
 Check if there are pending messages on the bus that
 should be handled.
@@ -1806,8 +2175,8 @@ the index of the structure
 
 # Returns
 
-a pointer to the `CapsFeatures` corresponding
- to `index`
+a pointer to the `CapsFeatures`
+ corresponding to `index`
 <!-- impl Caps::fn get_size -->
 Gets the number of structures contained in `self`.
 
@@ -2048,8 +2417,8 @@ Index of the structure to retrieve
 
 # Returns
 
-a pointer to the `Structure` corresponding
- to `index`.
+a pointer to the `Structure`
+ corresponding to `index`.
 <!-- impl Caps::fn subtract -->
 Subtracts the `subtrahend` from the `self`.
 > This function does not work reliably if optional properties for caps
@@ -3322,7 +3691,8 @@ create a unique name.
 
 # Returns
 
-a new `Element` configured to use this device
+a new `Element` configured to use
+this device
 <!-- trait DeviceExt::fn get_caps -->
 Getter for the `Caps` that this device supports.
 
@@ -3579,6 +3949,9 @@ Posts a message on the provider's `Bus` to inform applications that
 a new device has been added.
 
 This is for use by subclasses.
+
+`device`'s reference count will be incremented, and any floating reference
+will be removed (see `Object::ref_sink`).
 ## `device`
 a `Device` that has been added
 <!-- trait DeviceProviderExt::fn device_remove -->
@@ -3618,6 +3991,17 @@ are hidden by `self`.
 
  a list of hidden providers factory names or `None` when
  nothing is hidden by `self`. Free with g_strfreev.
+<!-- trait DeviceProviderExt::fn get_metadata -->
+Get metadata with `key` in `self`.
+
+Feature: `v1_14`
+
+## `key`
+the key to get
+
+# Returns
+
+the metadata for `key`.
 <!-- trait DeviceProviderExt::fn hide_provider -->
 Make `self` hide the devices from the factory with `name`.
 
@@ -3818,7 +4202,8 @@ Name of created element, can be `None`.
 
 # Returns
 
-a new element or `None` if none could be created
+a new element or `None` if none
+could be created
 <!-- impl Element::fn register -->
 Create a new elementfactory capable of instantiating objects of the
 `type_` and add the factory to `plugin`.
@@ -3952,6 +4337,8 @@ the pending state, the next state change is performed.
 
 This method is used internally and should normally not be called by plugins
 or applications.
+
+This function must be called with STATE_LOCK held.
 ## `ret`
 The previous state return value
 
@@ -3964,6 +4351,63 @@ MT safe.
 Creates a pad for each pad template that is always available.
 This function is only useful during object initialization of
 subclasses of `Element`.
+<!-- trait ElementExt::fn foreach_pad -->
+Call `func` with `user_data` for each of `self`'s pads. `func` will be called
+exactly once for each pad that exists at the time of this call, unless
+one of the calls to `func` returns `false` in which case we will stop
+iterating pads and return early. If new pads are added or pads are removed
+while pads are being iterated, this will not be taken into account until
+next time this function is used.
+
+Feature: `v1_14`
+
+## `func`
+function to call for each pad
+## `user_data`
+user data passed to `func`
+
+# Returns
+
+`false` if `self` had no pads or if one of the calls to `func`
+ returned `false`.
+<!-- trait ElementExt::fn foreach_sink_pad -->
+Call `func` with `user_data` for each of `self`'s sink pads. `func` will be
+called exactly once for each sink pad that exists at the time of this call,
+unless one of the calls to `func` returns `false` in which case we will stop
+iterating pads and return early. If new sink pads are added or sink pads
+are removed while the sink pads are being iterated, this will not be taken
+into account until next time this function is used.
+
+Feature: `v1_14`
+
+## `func`
+function to call for each sink pad
+## `user_data`
+user data passed to `func`
+
+# Returns
+
+`false` if `self` had no sink pads or if one of the calls to `func`
+ returned `false`.
+<!-- trait ElementExt::fn foreach_src_pad -->
+Call `func` with `user_data` for each of `self`'s source pads. `func` will be
+called exactly once for each source pad that exists at the time of this call,
+unless one of the calls to `func` returns `false` in which case we will stop
+iterating pads and return early. If new source pads are added or source pads
+are removed while the source pads are being iterated, this will not be taken
+into account until next time this function is used.
+
+Feature: `v1_14`
+
+## `func`
+function to call for each source pad
+## `user_data`
+user data passed to `func`
+
+# Returns
+
+`false` if `self` had no source pads or if one of the calls
+ to `func` returned `false`.
 <!-- trait ElementExt::fn get_base_time -->
 Returns the base time of the element. The base time is the
 absolute time of the clock when this element was last put to
@@ -3981,7 +4425,8 @@ bus for the application.
 
 # Returns
 
-the element's `Bus`. unref after usage.
+the element's `Bus`. unref after
+usage.
 
 MT safe.
 <!-- trait ElementExt::fn get_clock -->
@@ -4058,6 +4503,41 @@ Retrieves the factory that was used to create this element.
 
 the `ElementFactory` used for creating this
  element. no refcounting is needed.
+<!-- trait ElementExt::fn get_metadata -->
+Get metadata with `key` in `klass`.
+
+Feature: `v1_14`
+
+## `key`
+the key to get
+
+# Returns
+
+the metadata for `key`.
+<!-- trait ElementExt::fn get_pad_template -->
+Retrieves a padtemplate from `self` with the given name.
+
+Feature: `v1_14`
+
+## `name`
+the name of the `PadTemplate` to get.
+
+# Returns
+
+the `PadTemplate` with the
+ given name, or `None` if none was found. No unreferencing is
+ necessary.
+<!-- trait ElementExt::fn get_pad_template_list -->
+Retrieves a list of the pad templates associated with `self`. The
+list must not be modified by the calling code.
+
+Feature: `v1_14`
+
+
+# Returns
+
+the `glib::List` of
+ pad templates.
 <!-- trait ElementExt::fn get_request_pad -->
 Retrieves a pad from the element by name (e.g. "src_\%d"). This version only
 retrieves request pads. The pad should be released with
@@ -5327,7 +5807,9 @@ The select-streams event requests the specified `streams` to be activated.
 The list of `streams` corresponds to the "Stream ID" of each stream to be
 activated. Those ID can be obtained via the `Stream` objects present
 in `EventType::StreamStart`, `EventType::StreamCollection` or
-`GST_MESSSAGE_STREAM_COLLECTION`.
+`MessageType::StreamCollection`.
+
+Note: The list of `streams` can not be empty.
 
 Feature: `v1_10`
 
@@ -5337,7 +5819,8 @@ activate
 
 # Returns
 
-a new select-streams event.
+a new select-streams event or `None` in case of
+an error (like an empty streams list).
 <!-- impl Event::fn new_sink_message -->
 Create a new sink-message event. The purpose of the sink-message event is
 to instruct a sink to post the message contained in the event synchronized
@@ -5526,9 +6009,9 @@ Access the structure of the event.
 
 # Returns
 
-The structure of the event. The structure is still
-owned by the event, which means that you should not free it and
-that the pointer becomes invalid when you free the event.
+The structure of the event. The
+structure is still owned by the event, which means that you should not free
+it and that the pointer becomes invalid when you free the event.
 
 MT safe.
 <!-- impl Event::fn has_name -->
@@ -6825,17 +7308,18 @@ Extracts the object managing the streaming thread from `self`.
 
 # Returns
 
-a GValue containing the object that manages the streaming thread.
-This object is usually of type GstTask but other types can be added in the
-future. The object remains valid as long as `self` is valid.
+a GValue containing the object that manages the
+streaming thread. This object is usually of type GstTask but other types can
+be added in the future. The object remains valid as long as `self` is
+valid.
 <!-- impl Message::fn get_structure -->
 Access the structure of the message.
 
 # Returns
 
-The structure of the message. The structure is
-still owned by the message, which means that you should not free it and
-that the pointer becomes invalid when you free the message.
+The structure of the message. The
+structure is still owned by the message, which means that you should not
+free it and that the pointer becomes invalid when you free the message.
 
 MT safe.
 <!-- impl Message::fn has_name -->
@@ -7013,12 +7497,13 @@ Feature: `v1_10`
 location where to store a
  pointer to the object whose property got changed, or `None`
 ## `property_name`
-return location for the name of the
- property that got changed, or `None`
+return location for
+ the name of the property that got changed, or `None`
 ## `property_value`
-return location for the new value of
- the property that got changed, or `None`. This will only be set if the
- property notify watch was told to include the value when it was set up
+return location for
+ the new value of the property that got changed, or `None`. This will
+ only be set if the property notify watch was told to include the value
+ when it was set up
 <!-- impl Message::fn parse_qos -->
 Extract the timestamps and live status from the QoS message.
 
@@ -7371,6 +7856,21 @@ Index of the stream to retrieve
 # Returns
 
 A `Stream`
+<!-- impl Message::fn writable_structure -->
+Get a writable version of the structure.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The structure of the message. The structure
+is still owned by the message, which means that you should not free
+it and that the pointer becomes invalid when you free the message.
+This function checks if `self` is writable and will never return
+`None`.
+
+MT safe.
 <!-- struct Object -->
 `Object` provides a root for the object hierarchy tree filed in by the
 GStreamer library. It is currently a thin wrapper on top of
@@ -7430,7 +7930,7 @@ Trait containing all `Object` methods.
 
 # Implementors
 
-[`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
+[`BufferPool`](struct.BufferPool.html), [`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
 <!-- impl Object::fn check_uniqueness -->
 Checks to see if there is any object named `name` in `list`. This function
 does not do any locking of any kind. You might want to protect the
@@ -7476,6 +7976,9 @@ of the floating reference, converting it to a normal reference by clearing
 the floating flag while leaving the reference count unchanged. If the object
 is not floating, then this call adds a new normal reference increasing the
 reference count by one.
+
+For more background on "floating references" please see the `gobject::Object`
+documentation.
 ## `object`
 a `Object` to sink
 <!-- impl Object::fn replace -->
@@ -7497,7 +8000,8 @@ a new `Object`
 Attach the `ControlBinding` to the object. If there already was a
 `ControlBinding` for this property it will be replaced.
 
-The `self` will take ownership of the `binding`.
+The object's reference count will be incremented, and any floating
+reference will be removed (see `Object::ref_sink`)
 ## `binding`
 the `ControlBinding` that should be used
 
@@ -9165,6 +9669,39 @@ a `Caps` set for the template.
 # Returns
 
 a new `PadTemplate`.
+<!-- impl PadTemplate::fn new_from_static_pad_template_with_gtype -->
+Converts a `StaticPadTemplate` into a `PadTemplate` with a type.
+
+Feature: `v1_14`
+
+## `pad_template`
+the static pad template
+## `pad_type`
+The `glib::Type` of the pad to create
+
+# Returns
+
+a new `PadTemplate`.
+<!-- impl PadTemplate::fn new_with_gtype -->
+Creates a new pad template with a name according to the given template
+and with the given arguments.
+
+Feature: `v1_14`
+
+## `name_template`
+the name template.
+## `direction`
+the `PadDirection` of the template.
+## `presence`
+the `PadPresence` of the pad.
+## `caps`
+a `Caps` set for the template.
+## `pad_type`
+The `glib::Type` of the pad to create
+
+# Returns
+
+a new `PadTemplate`.
 <!-- impl PadTemplate::fn get_caps -->
 Gets the capabilities of the pad template.
 
@@ -9188,6 +9725,16 @@ The capabilities of the pad described by the pad template.
 The direction of the pad described by the pad template.
 <!-- trait PadTemplateExt::fn set_property_direction -->
 The direction of the pad described by the pad template.
+<!-- trait PadTemplateExt::fn get_property_gtype -->
+The type of the pad described by the pad template.
+
+Feature: `v1_14`
+
+<!-- trait PadTemplateExt::fn set_property_gtype -->
+The type of the pad described by the pad template.
+
+Feature: `v1_14`
+
 <!-- trait PadTemplateExt::fn get_property_name-template -->
 The name template of the pad template.
 <!-- trait PadTemplateExt::fn set_property_name-template -->
@@ -9206,8 +9753,8 @@ Free-function: gst_parse_context_free
 
 # Returns
 
-a newly-allocated parse context. Free with
- `ParseContext::free` when no longer needed.
+a newly-allocated parse context. Free
+ with `ParseContext::free` when no longer needed.
 <!-- impl ParseContext::fn copy -->
 Copies the `self`.
 
@@ -9492,7 +10039,8 @@ name of plugin to load
 
 # Returns
 
-a reference to a loaded plugin, or `None` on error.
+a reference to a loaded plugin, or
+`None` on error.
 <!-- impl Plugin::fn load_file -->
 Loads the given plugin and refs it. Caller needs to unref after use.
 ## `filename`
@@ -9724,7 +10272,8 @@ plugin = loaded_plugin;
 
 # Returns
 
-a reference to a loaded plugin, or `None` on error.
+a reference to a loaded plugin, or
+`None` on error.
 <!-- impl Plugin::fn set_cache_data -->
 Adds plugin specific data to cache. Passes the ownership of the structure to
 the `self`.
@@ -9997,6 +10546,149 @@ A task was canceled.
 <!-- enum ProgressType::variant Error -->
 A task caused an error. An error message is also
  posted on the bus.
+<!-- struct Promise -->
+The `Promise` object implements the container for values that may
+be available later. i.e. a Future or a Promise in
+<ulink url="https://en.wikipedia.org/wiki/Futures_and_promises">https://en.wikipedia.org/wiki/Futures_and_promises`</ulink>`
+As with all Future/Promise-like functionality, there is the concept of the
+producer of the value and the consumer of the value.
+
+A `Promise` is created with `Promise::new` by the consumer and passed
+to the producer to avoid thread safety issues with the change callback.
+A `Promise` can be replied to with a value (or an error) by the producer
+with `Promise::reply`. `Promise::interrupt` is for the consumer to
+indicate to the producer that the value is not needed anymore and producing
+that value can stop. The `PromiseResult::Expired` state set by a call
+to `Promise::expire` indicates to the consumer that a value will never
+be produced and is intended to be called by a third party that implements
+some notion of message handling such as `Bus`.
+A callback can also be installed at `Promise` creation for
+result changes with `Promise::new_with_change_func`.
+The change callback can be used to chain `GstPromises`'s together as in the
+following example.
+
+```C
+const GstStructure *reply;
+GstPromise *p;
+if (gst_promise_wait (promise) != GST_PROMISE_RESULT_REPLIED)
+  return; // interrupted or expired value
+reply = gst_promise_get_reply (promise);
+if (error in reply)
+  return; // propagate error
+p = gst_promise_new_with_change_func (another_promise_change_func, user_data, notify);
+pass p to promise-using API
+```
+
+Each `Promise` starts out with a `PromiseResult` of
+`PromiseResult::Pending` and only ever transitions once
+into one of the other `PromiseResult`'s.
+
+In order to support multi-threaded code, `Promise::reply`,
+`Promise::interrupt` and `Promise::expire` may all be from
+different threads with some restrictions and the final result of the promise
+is whichever call is made first. There are two restrictions on ordering:
+
+1. That `Promise::reply` and `Promise::interrupt` cannot be called
+after `Promise::expire`
+2. That `Promise::reply` and `Promise::interrupt`
+cannot be called twice.
+
+The change function set with `Promise::new_with_change_func` is
+called directly from either the `Promise::reply`,
+`Promise::interrupt` or `Promise::expire` and can be called
+from an arbitrary thread. `Promise` using APIs can restrict this to
+a single thread or a subset of threads but that is entirely up to the API
+that uses `Promise`.
+
+Feature: `v1_14`
+<!-- impl Promise::fn new -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+a new `Promise`
+<!-- impl Promise::fn new_with_change_func -->
+`func` will be called exactly once when transitioning out of
+`PromiseResult::Pending` into any of the other `PromiseResult`
+states.
+
+Feature: `v1_14`
+
+## `func`
+a `GstPromiseChangeFunc` to call
+## `user_data`
+argument to call `func` with
+## `notify`
+notification function that `user_data` is no longer needed
+
+# Returns
+
+a new `Promise`
+<!-- impl Promise::fn expire -->
+Expire a `self`. This will wake up any waiters with
+`PromiseResult::Expired`. Called by a message loop when the parent
+message is handled and/or destroyed (possibly unanswered).
+
+Feature: `v1_14`
+
+<!-- impl Promise::fn get_reply -->
+Retrieve the reply set on `self`. `self` must be in
+`PromiseResult::Replied` and the returned structure is owned by `self`
+
+Feature: `v1_14`
+
+
+# Returns
+
+The reply set on `self`
+<!-- impl Promise::fn interrupt -->
+Interrupt waiting for a `self`. This will wake up any waiters with
+`PromiseResult::Interrupted`. Called when the consumer does not want
+the value produced anymore.
+
+Feature: `v1_14`
+
+<!-- impl Promise::fn reply -->
+Set a reply on `self`. This will wake up any waiters with
+`PromiseResult::Replied`. Called by the producer of the value to
+indicate success (or failure).
+
+If `self` has already been interrupted by the consumer, then this reply
+is not visible to the consumer.
+
+Feature: `v1_14`
+
+## `s`
+a `Structure` with the the reply contents
+<!-- impl Promise::fn wait -->
+Wait for `self` to move out of the `PromiseResult::Pending` state.
+If `self` is not in `PromiseResult::Pending` then it will return
+immediately with the current result.
+
+Feature: `v1_14`
+
+
+# Returns
+
+the result of the promise
+<!-- enum PromiseResult -->
+The result of a `Promise`
+<!-- enum PromiseResult::variant Pending -->
+Initial state. Waiting for transition to any
+    other state.
+<!-- enum PromiseResult::variant Interrupted -->
+Interrupted by the consumer as it doesn't
+    want the value anymore.
+<!-- enum PromiseResult::variant Replied -->
+A producer marked a reply
+<!-- enum PromiseResult::variant Expired -->
+The promise expired (the carrying object
+    lost all refs) and the promise will never be fulfilled.
+
+Feature: `v1_14`
+
 <!-- struct ProxyPad -->
 
 
@@ -10399,9 +11091,9 @@ Get the structure of a query.
 
 # Returns
 
-the `Structure` of the query. The structure is
- still owned by the query and will therefore be freed when the query
- is unreffed.
+the `Structure` of the query. The
+ structure is still owned by the query and will therefore be freed when the
+ query is unreffed.
 <!-- impl Query::fn has_scheduling_mode -->
 Check if `self` has scheduling mode set.
 
@@ -10773,7 +11465,7 @@ index to modify
 ## `pool`
 the `BufferPool`
 ## `size`
-the size
+the buffer size
 ## `min_buffers`
 the min buffers
 ## `max_buffers`
@@ -10953,7 +11645,9 @@ initialized.
 the `Registry`.
 <!-- impl Registry::fn add_feature -->
 Add the feature to the registry. The feature-added signal will be emitted.
-This function sinks `feature`.
+
+`feature`'s reference count will be incremented, and any floating
+reference will be removed (see `Object::ref_sink`)
 ## `feature`
 the feature to add
 
@@ -10964,7 +11658,9 @@ the feature to add
 MT safe.
 <!-- impl Registry::fn add_plugin -->
 Add the plugin to the registry. The plugin-added signal will be emitted.
-This function will sink `plugin`.
+
+`plugin`'s reference count will be incremented, and any floating
+reference will be removed (see `Object::ref_sink`)
 ## `plugin`
 the plugin to add
 
@@ -11526,6 +12222,10 @@ returned, `running_time` is -1 or not in `self`.
 <!-- impl Segment::fn to_position -->
 Convert `running_time` into a position in the segment so that
 `Segment::to_running_time` with that position returns `running_time`.
+
+# Deprecated
+
+Use `Segment::position_from_running_time` instead.
 ## `format`
 the format of the segment.
 ## `running_time`
@@ -11535,8 +12235,6 @@ the running_time in the segment
 
 the position in the segment for `running_time`. This function returns
 -1 when `running_time` is -1 or when it is not inside `self`.
-
-Deprecated. Use `Segment::position_from_running_time` instead.
 <!-- impl Segment::fn to_running_time -->
 Translate `position` to the total running time using the currently configured
 segment. Position is a value between `self` start and stop time.
@@ -11708,6 +12406,18 @@ state change from PAUSED to READY.
 state change from READY to NULL.
  * Elements close devices
  * Elements reset any internal state.
+<!-- enum StateChange::variant NullToNull -->
+state change from NULL to NULL. (Since 1.14)
+<!-- enum StateChange::variant ReadyToReady -->
+state change from READY to READY,
+This might happen when going to PAUSED asynchronously failed, in that case
+elements should make sure they are in a proper, coherent READY state. (Since 1.14)
+<!-- enum StateChange::variant PausedToPaused -->
+state change from PAUSED to PAUSED.
+This might happen when elements were in PLAYING state and 'lost state',
+they should make sure to go back to real 'PAUSED' state (prerolling for example). (Since 1.14)
+<!-- enum StateChange::variant PlayingToPlaying -->
+state change from PLAYING to PLAYING. (Since 1.14)
 <!-- enum StateChangeReturn -->
 The possible return values from a state change function such as
 `ElementExt::set_state`. Only `StateChangeReturn::Failure` is a real failure.
@@ -11732,9 +12442,10 @@ Converts a `StaticCaps` to a `Caps`.
 
 # Returns
 
-a pointer to the `Caps`. Unref after usage.
- Since the core holds an additional ref to the returned caps,
- use `gst_caps_make_writable` on the returned caps to modify it.
+a pointer to the `Caps`. Unref
+ after usage. Since the core holds an additional ref to the
+ returned caps, use `gst_caps_make_writable` on the returned caps
+ to modify it.
 <!-- struct StaticPadTemplate -->
 Structure describing the `StaticPadTemplate`.
 <!-- impl StaticPadTemplate::fn get -->
@@ -12540,7 +13251,8 @@ the name of the field to get
 
 # Returns
 
-the `gobject::Value` corresponding to the field with the given name.
+the `gobject::Value` corresponding to the field with the given
+name.
 <!-- impl Structure::fn has_field -->
 Check if `self` contains a field named `fieldname`.
 ## `fieldname`
@@ -12610,8 +13322,8 @@ the `glib::Quark` of the field to get
 
 # Returns
 
-the `gobject::Value` corresponding to the field with the given name
- identifier.
+the `gobject::Value` corresponding to the field with the given
+name identifier.
 <!-- impl Structure::fn id_has_field -->
 Check if `self` contains a field named `field`.
 ## `field`
@@ -13124,6 +13836,18 @@ location for the result
 `true`, if a value was copied, `false` if the tag didn't exist in the
  given list.
 <!-- impl TagList::fn get_int -->
+Copies the contents for the given tag into the value, merging multiple values
+into one if multiple values are associated with the tag.
+## `tag`
+tag to read out
+## `value`
+location for the result
+
+# Returns
+
+`true`, if a value was copied, `false` if the tag didn't exist in the
+ given list.
+<!-- impl TagList::fn get_int64 -->
 Copies the contents for the given tag into the value, merging multiple values
 into one if multiple values are associated with the tag.
 ## `tag`
