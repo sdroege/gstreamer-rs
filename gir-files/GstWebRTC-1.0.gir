@@ -15,24 +15,33 @@ and/or use gtk-doc annotations.  -->
              shared-library="libgstwebrtc-1.0.so.0"
              c:identifier-prefixes="Gst"
              c:symbol-prefixes="gst">
-    <enumeration name="WebRTCDTLSSetup" c:type="GstWebRTCDTLSSetup">
+    <enumeration name="WebRTCDTLSSetup"
+                 glib:type-name="GstWebRTCDTLSSetup"
+                 glib:get-type="gst_webrtc_dtls_setup_get_type"
+                 c:type="GstWebRTCDTLSSetup">
       <doc xml:space="preserve">GST_WEBRTC_DTLS_SETUP_NONE: none
 GST_WEBRTC_DTLS_SETUP_ACTPASS: actpass
 GST_WEBRTC_DTLS_SETUP_ACTIVE: sendonly
 GST_WEBRTC_DTLS_SETUP_PASSIVE: recvonly</doc>
-      <member name="none" value="0" c:identifier="GST_WEBRTC_DTLS_SETUP_NONE">
+      <member name="none"
+              value="0"
+              c:identifier="GST_WEBRTC_DTLS_SETUP_NONE"
+              glib:nick="none">
       </member>
       <member name="actpass"
               value="1"
-              c:identifier="GST_WEBRTC_DTLS_SETUP_ACTPASS">
+              c:identifier="GST_WEBRTC_DTLS_SETUP_ACTPASS"
+              glib:nick="actpass">
       </member>
       <member name="active"
               value="2"
-              c:identifier="GST_WEBRTC_DTLS_SETUP_ACTIVE">
+              c:identifier="GST_WEBRTC_DTLS_SETUP_ACTIVE"
+              glib:nick="active">
       </member>
       <member name="passive"
               value="3"
-              c:identifier="GST_WEBRTC_DTLS_SETUP_PASSIVE">
+              c:identifier="GST_WEBRTC_DTLS_SETUP_PASSIVE"
+              glib:nick="passive">
       </member>
     </enumeration>
     <class name="WebRTCDTLSTransport"
@@ -90,8 +99,8 @@ GST_WEBRTC_DTLS_SETUP_PASSIVE: recvonly</doc>
                 transfer-ownership="none">
         <type name="guint" c:type="guint"/>
       </property>
-      <property name="state" introspectable="0" transfer-ownership="none">
-        <type/>
+      <property name="state" transfer-ownership="none">
+        <type name="WebRTCDTLSTransportState"/>
       </property>
       <property name="transport" transfer-ownership="none">
         <type name="WebRTCICETransport"/>
@@ -140,6 +149,8 @@ GST_WEBRTC_DTLS_SETUP_PASSIVE: recvonly</doc>
       </field>
     </record>
     <enumeration name="WebRTCDTLSTransportState"
+                 glib:type-name="GstWebRTCDTLSTransportState"
+                 glib:get-type="gst_webrtc_dtls_transport_state_get_type"
                  c:type="GstWebRTCDTLSTransportState">
       <doc xml:space="preserve">GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW: new
 GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED: closed
@@ -148,36 +159,50 @@ GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING: connecting
 GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED: connected</doc>
       <member name="new"
               value="0"
-              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW">
+              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW"
+              glib:nick="new">
       </member>
       <member name="closed"
               value="1"
-              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED">
+              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED"
+              glib:nick="closed">
       </member>
       <member name="failed"
               value="2"
-              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED">
+              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED"
+              glib:nick="failed">
       </member>
       <member name="connecting"
               value="3"
-              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING">
+              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING"
+              glib:nick="connecting">
       </member>
       <member name="connected"
               value="4"
-              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED">
+              c:identifier="GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED"
+              glib:nick="connected">
       </member>
     </enumeration>
-    <enumeration name="WebRTCICEComponent" c:type="GstWebRTCICEComponent">
+    <enumeration name="WebRTCICEComponent"
+                 glib:type-name="GstWebRTCICEComponent"
+                 glib:get-type="gst_webrtc_ice_component_get_type"
+                 c:type="GstWebRTCICEComponent">
       <doc xml:space="preserve">GST_WEBRTC_ICE_COMPONENT_RTP,
 GST_WEBRTC_ICE_COMPONENT_RTCP,</doc>
-      <member name="rtp" value="0" c:identifier="GST_WEBRTC_ICE_COMPONENT_RTP">
+      <member name="rtp"
+              value="0"
+              c:identifier="GST_WEBRTC_ICE_COMPONENT_RTP"
+              glib:nick="rtp">
       </member>
       <member name="rtcp"
               value="1"
-              c:identifier="GST_WEBRTC_ICE_COMPONENT_RTCP">
+              c:identifier="GST_WEBRTC_ICE_COMPONENT_RTCP"
+              glib:nick="rtcp">
       </member>
     </enumeration>
     <enumeration name="WebRTCICEConnectionState"
+                 glib:type-name="GstWebRTCICEConnectionState"
+                 glib:get-type="gst_webrtc_ice_connection_state_get_type"
                  c:type="GstWebRTCICEConnectionState">
       <doc xml:space="preserve">GST_WEBRTC_ICE_CONNECTION_STATE_NEW: new
 GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING: checking
@@ -189,34 +214,43 @@ GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED: closed
 See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtciceconnectionstate"&gt;http://w3c.github.io/webrtc-pc/#dom-rtciceconnectionstate&lt;/ulink&gt;</doc>
       <member name="new"
               value="0"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_NEW">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_NEW"
+              glib:nick="new">
       </member>
       <member name="checking"
               value="1"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING"
+              glib:nick="checking">
       </member>
       <member name="connected"
               value="2"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_CONNECTED">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_CONNECTED"
+              glib:nick="connected">
       </member>
       <member name="completed"
               value="3"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_COMPLETED">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_COMPLETED"
+              glib:nick="completed">
       </member>
       <member name="failed"
               value="4"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_FAILED">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_FAILED"
+              glib:nick="failed">
       </member>
       <member name="disconnected"
               value="5"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_DISCONNECTED">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_DISCONNECTED"
+              glib:nick="disconnected">
       </member>
       <member name="closed"
               value="6"
-              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED">
+              c:identifier="GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED"
+              glib:nick="closed">
       </member>
     </enumeration>
     <enumeration name="WebRTCICEGatheringState"
+                 glib:type-name="GstWebRTCICEGatheringState"
+                 glib:get-type="gst_webrtc_ice_gathering_state_get_type"
                  c:type="GstWebRTCICEGatheringState">
       <doc xml:space="preserve">GST_WEBRTC_ICE_GATHERING_STATE_NEW: new
 GST_WEBRTC_ICE_GATHERING_STATE_GATHERING: gathering
@@ -224,27 +258,35 @@ GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE: complete
 See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcicegatheringstate"&gt;http://w3c.github.io/webrtc-pc/#dom-rtcicegatheringstate&lt;/ulink&gt;</doc>
       <member name="new"
               value="0"
-              c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_NEW">
+              c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_NEW"
+              glib:nick="new">
       </member>
       <member name="gathering"
               value="1"
-              c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_GATHERING">
+              c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_GATHERING"
+              glib:nick="gathering">
       </member>
       <member name="complete"
               value="2"
-              c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE">
+              c:identifier="GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE"
+              glib:nick="complete">
       </member>
     </enumeration>
-    <enumeration name="WebRTCICERole" c:type="GstWebRTCICERole">
+    <enumeration name="WebRTCICERole"
+                 glib:type-name="GstWebRTCICERole"
+                 glib:get-type="gst_webrtc_ice_role_get_type"
+                 c:type="GstWebRTCICERole">
       <doc xml:space="preserve">GST_WEBRTC_ICE_ROLE_CONTROLLED: controlled
 GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling</doc>
       <member name="controlled"
               value="0"
-              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLED">
+              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLED"
+              glib:nick="controlled">
       </member>
       <member name="controlling"
               value="1"
-              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLING">
+              c:identifier="GST_WEBRTC_ICE_ROLE_CONTROLLING"
+              glib:nick="controlling">
       </member>
     </enumeration>
     <class name="WebRTCICETransport"
@@ -327,19 +369,16 @@ GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling</doc>
         </parameters>
       </method>
       <property name="component"
-                introspectable="0"
                 writable="1"
                 construct-only="1"
                 transfer-ownership="none">
-        <type/>
+        <type name="WebRTCICEComponent"/>
       </property>
-      <property name="gathering-state"
-                introspectable="0"
-                transfer-ownership="none">
-        <type/>
+      <property name="gathering-state" transfer-ownership="none">
+        <type name="WebRTCICEGatheringState"/>
       </property>
-      <property name="state" introspectable="0" transfer-ownership="none">
-        <type/>
+      <property name="state" transfer-ownership="none">
+        <type name="WebRTCICEConnectionState"/>
       </property>
       <field name="parent">
         <type name="Gst.Object" c:type="GstObject"/>
@@ -410,6 +449,8 @@ GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling</doc>
       </field>
     </record>
     <enumeration name="WebRTCPeerConnectionState"
+                 glib:type-name="GstWebRTCPeerConnectionState"
+                 glib:get-type="gst_webrtc_peer_connection_state_get_type"
                  c:type="GstWebRTCPeerConnectionState">
       <doc xml:space="preserve">GST_WEBRTC_PEER_CONNECTION_STATE_NEW: new
 GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING: connecting
@@ -420,27 +461,33 @@ GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED: closed
 See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcpeerconnectionstate"&gt;http://w3c.github.io/webrtc-pc/#dom-rtcpeerconnectionstate&lt;/ulink&gt;</doc>
       <member name="new"
               value="0"
-              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_NEW">
+              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_NEW"
+              glib:nick="new">
       </member>
       <member name="connecting"
               value="1"
-              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING">
+              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING"
+              glib:nick="connecting">
       </member>
       <member name="connected"
               value="2"
-              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED">
+              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED"
+              glib:nick="connected">
       </member>
       <member name="disconnected"
               value="3"
-              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED">
+              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED"
+              glib:nick="disconnected">
       </member>
       <member name="failed"
               value="4"
-              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_FAILED">
+              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_FAILED"
+              glib:nick="failed">
       </member>
       <member name="closed"
               value="5"
-              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED">
+              c:identifier="GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED"
+              glib:nick="closed">
       </member>
     </enumeration>
     <class name="WebRTCRTPReceiver"
@@ -656,48 +703,77 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcpeerconnectionstate"&g
       </field>
     </record>
     <enumeration name="WebRTCRTPTransceiverDirection"
+                 glib:type-name="GstWebRTCRTPTransceiverDirection"
+                 glib:get-type="gst_webrtc_rtp_transceiver_direction_get_type"
                  c:type="GstWebRTCRTPTransceiverDirection">
       <member name="none"
               value="0"
-              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE">
+              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE"
+              glib:nick="none">
       </member>
       <member name="inactive"
               value="1"
-              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE">
+              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE"
+              glib:nick="inactive">
       </member>
       <member name="sendonly"
               value="2"
-              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY">
+              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY"
+              glib:nick="sendonly">
       </member>
       <member name="recvonly"
               value="3"
-              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY">
+              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY"
+              glib:nick="recvonly">
       </member>
       <member name="sendrecv"
               value="4"
-              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV">
+              c:identifier="GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV"
+              glib:nick="sendrecv">
       </member>
     </enumeration>
-    <enumeration name="WebRTCSDPType" c:type="GstWebRTCSDPType">
+    <enumeration name="WebRTCSDPType"
+                 glib:type-name="GstWebRTCSDPType"
+                 glib:get-type="gst_webrtc_sdp_type_get_type"
+                 c:type="GstWebRTCSDPType">
       <doc xml:space="preserve">GST_WEBRTC_SDP_TYPE_OFFER: offer
 GST_WEBRTC_SDP_TYPE_PRANSWER: pranswer
 GST_WEBRTC_SDP_TYPE_ANSWER: answer
 GST_WEBRTC_SDP_TYPE_ROLLBACK: rollback
 See &lt;ulink url="http://w3c.github.io/webrtc-pc/#rtcsdptype"&gt;http://w3c.github.io/webrtc-pc/#rtcsdptype&lt;/ulink&gt;</doc>
-      <member name="offer" value="1" c:identifier="GST_WEBRTC_SDP_TYPE_OFFER">
+      <member name="offer"
+              value="1"
+              c:identifier="GST_WEBRTC_SDP_TYPE_OFFER"
+              glib:nick="offer">
       </member>
       <member name="pranswer"
               value="2"
-              c:identifier="GST_WEBRTC_SDP_TYPE_PRANSWER">
+              c:identifier="GST_WEBRTC_SDP_TYPE_PRANSWER"
+              glib:nick="pranswer">
       </member>
       <member name="answer"
               value="3"
-              c:identifier="GST_WEBRTC_SDP_TYPE_ANSWER">
+              c:identifier="GST_WEBRTC_SDP_TYPE_ANSWER"
+              glib:nick="answer">
       </member>
       <member name="rollback"
               value="4"
-              c:identifier="GST_WEBRTC_SDP_TYPE_ROLLBACK">
+              c:identifier="GST_WEBRTC_SDP_TYPE_ROLLBACK"
+              glib:nick="rollback">
       </member>
+      <function name="to_string" c:identifier="gst_webrtc_sdp_type_to_string">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the string representation of @type or "unknown" when @type is not
+     recognized.</doc>
+          <type name="utf8" c:type="const gchar*"/>
+        </return-value>
+        <parameters>
+          <parameter name="type" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstWebRTCSDPType</doc>
+            <type name="WebRTCSDPType" c:type="GstWebRTCSDPType"/>
+          </parameter>
+        </parameters>
+      </function>
     </enumeration>
     <record name="WebRTCSessionDescription"
             c:type="GstWebRTCSessionDescription"
@@ -759,7 +835,10 @@ See &lt;ulink url="https://www.w3.org/TR/webrtc/#rtcsessiondescription-class"&gt
         </parameters>
       </method>
     </record>
-    <enumeration name="WebRTCSignalingState" c:type="GstWebRTCSignalingState">
+    <enumeration name="WebRTCSignalingState"
+                 glib:type-name="GstWebRTCSignalingState"
+                 glib:get-type="gst_webrtc_signaling_state_get_type"
+                 c:type="GstWebRTCSignalingState">
       <doc xml:space="preserve">GST_WEBRTC_SIGNALING_STATE_STABLE: stable
 GST_WEBRTC_SIGNALING_STATE_CLOSED: closed
 GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER: have-local-offer
@@ -769,30 +848,39 @@ GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER: have-remote-pranswer
 See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcsignalingstate"&gt;http://w3c.github.io/webrtc-pc/#dom-rtcsignalingstate&lt;/ulink&gt;</doc>
       <member name="stable"
               value="0"
-              c:identifier="GST_WEBRTC_SIGNALING_STATE_STABLE">
+              c:identifier="GST_WEBRTC_SIGNALING_STATE_STABLE"
+              glib:nick="stable">
       </member>
       <member name="closed"
               value="1"
-              c:identifier="GST_WEBRTC_SIGNALING_STATE_CLOSED">
+              c:identifier="GST_WEBRTC_SIGNALING_STATE_CLOSED"
+              glib:nick="closed">
       </member>
       <member name="have_local_offer"
               value="2"
-              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER">
+              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER"
+              glib:nick="have-local-offer">
       </member>
       <member name="have_remote_offer"
               value="3"
-              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER">
+              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER"
+              glib:nick="have-remote-offer">
       </member>
       <member name="have_local_pranswer"
               value="4"
-              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER">
+              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER"
+              glib:nick="have-local-pranswer">
       </member>
       <member name="have_remote_pranswer"
               value="5"
-              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER">
+              c:identifier="GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER"
+              glib:nick="have-remote-pranswer">
       </member>
     </enumeration>
-    <enumeration name="WebRTCStatsType" c:type="GstWebRTCStatsType">
+    <enumeration name="WebRTCStatsType"
+                 glib:type-name="GstWebRTCStatsType"
+                 glib:get-type="gst_webrtc_stats_type_get_type"
+                 c:type="GstWebRTCStatsType">
       <doc xml:space="preserve">GST_WEBRTC_STATS_CODEC: codec
 GST_WEBRTC_STATS_INBOUND_RTP: inbound-rtp
 GST_WEBRTC_STATS_OUTBOUND_RTP: outbound-rtp
@@ -807,59 +895,80 @@ GST_WEBRTC_STATS_CANDIDATE_PAIR: candidate-pair
 GST_WEBRTC_STATS_LOCAL_CANDIDATE: local-candidate
 GST_WEBRTC_STATS_REMOTE_CANDIDATE: remote-candidate
 GST_WEBRTC_STATS_CERTIFICATE: certificate</doc>
-      <member name="codec" value="1" c:identifier="GST_WEBRTC_STATS_CODEC">
+      <member name="codec"
+              value="1"
+              c:identifier="GST_WEBRTC_STATS_CODEC"
+              glib:nick="codec">
       </member>
       <member name="inbound_rtp"
               value="2"
-              c:identifier="GST_WEBRTC_STATS_INBOUND_RTP">
+              c:identifier="GST_WEBRTC_STATS_INBOUND_RTP"
+              glib:nick="inbound-rtp">
       </member>
       <member name="outbound_rtp"
               value="3"
-              c:identifier="GST_WEBRTC_STATS_OUTBOUND_RTP">
+              c:identifier="GST_WEBRTC_STATS_OUTBOUND_RTP"
+              glib:nick="outbound-rtp">
       </member>
       <member name="remote_inbound_rtp"
               value="4"
-              c:identifier="GST_WEBRTC_STATS_REMOTE_INBOUND_RTP">
+              c:identifier="GST_WEBRTC_STATS_REMOTE_INBOUND_RTP"
+              glib:nick="remote-inbound-rtp">
       </member>
       <member name="remote_outbound_rtp"
               value="5"
-              c:identifier="GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP">
+              c:identifier="GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP"
+              glib:nick="remote-outbound-rtp">
       </member>
-      <member name="csrc" value="6" c:identifier="GST_WEBRTC_STATS_CSRC">
+      <member name="csrc"
+              value="6"
+              c:identifier="GST_WEBRTC_STATS_CSRC"
+              glib:nick="csrc">
       </member>
       <member name="peer_connection"
               value="7"
-              c:identifier="GST_WEBRTC_STATS_PEER_CONNECTION">
+              c:identifier="GST_WEBRTC_STATS_PEER_CONNECTION"
+              glib:nick="peer-connection">
       </member>
       <member name="data_channel"
               value="8"
-              c:identifier="GST_WEBRTC_STATS_DATA_CHANNEL">
+              c:identifier="GST_WEBRTC_STATS_DATA_CHANNEL"
+              glib:nick="data-channel">
       </member>
-      <member name="stream" value="9" c:identifier="GST_WEBRTC_STATS_STREAM">
+      <member name="stream"
+              value="9"
+              c:identifier="GST_WEBRTC_STATS_STREAM"
+              glib:nick="stream">
       </member>
       <member name="transport"
               value="10"
-              c:identifier="GST_WEBRTC_STATS_TRANSPORT">
+              c:identifier="GST_WEBRTC_STATS_TRANSPORT"
+              glib:nick="transport">
       </member>
       <member name="candidate_pair"
               value="11"
-              c:identifier="GST_WEBRTC_STATS_CANDIDATE_PAIR">
+              c:identifier="GST_WEBRTC_STATS_CANDIDATE_PAIR"
+              glib:nick="candidate-pair">
       </member>
       <member name="local_candidate"
               value="12"
-              c:identifier="GST_WEBRTC_STATS_LOCAL_CANDIDATE">
+              c:identifier="GST_WEBRTC_STATS_LOCAL_CANDIDATE"
+              glib:nick="local-candidate">
       </member>
       <member name="remote_candidate"
               value="13"
-              c:identifier="GST_WEBRTC_STATS_REMOTE_CANDIDATE">
+              c:identifier="GST_WEBRTC_STATS_REMOTE_CANDIDATE"
+              glib:nick="remote-candidate">
       </member>
       <member name="certificate"
               value="14"
-              c:identifier="GST_WEBRTC_STATS_CERTIFICATE">
+              c:identifier="GST_WEBRTC_STATS_CERTIFICATE"
+              glib:nick="certificate">
       </member>
     </enumeration>
     <function name="webrtc_sdp_type_to_string"
-              c:identifier="gst_webrtc_sdp_type_to_string">
+              c:identifier="gst_webrtc_sdp_type_to_string"
+              moved-to="WebRTCSDPType.to_string">
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the string representation of @type or "unknown" when @type is not
      recognized.</doc>

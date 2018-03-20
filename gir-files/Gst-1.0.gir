@@ -44717,11 +44717,11 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="91" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="0" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MINOR" value="13" c:type="GST_VERSION_MINOR">
+    <constant name="VERSION_MINOR" value="14" c:type="GST_VERSION_MINOR">
       <doc xml:space="preserve">The minor version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
