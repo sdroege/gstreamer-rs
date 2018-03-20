@@ -17,7 +17,7 @@ fn find() -> Result<(), Error> {
     let package_name = "gstreamer-rtsp-server-1.0";
     let shared_libs = ["gstrtspserver-1.0"];
     let version = if cfg!(feature = "v1_14") {
-        "1.13.91"
+        "1.14"
     } else if cfg!(feature = "v1_12") {
         "1.12"
     } else if cfg!(feature = "v1_10") {
