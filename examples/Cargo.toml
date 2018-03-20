@@ -13,7 +13,7 @@ gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
 gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"], branch = "1.14" }
+gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
