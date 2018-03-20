@@ -4,19 +4,19 @@ version = "0.11.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
-gstreamer-app = { path = "../gstreamer-app" }
-gstreamer-audio = { path = "../gstreamer-audio" }
-gstreamer-video = { path = "../gstreamer-video" }
-gstreamer-pbutils = { path = "../gstreamer-pbutils" }
-gstreamer-player = { path = "../gstreamer-player", optional = true }
-gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
-gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
-gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
-gio = { git = "https://github.com/gtk-rs/gio", optional = true }
+glib = "0.5"
+gstreamer = { version = "0.11", path = "../gstreamer" }
+gstreamer-app = { version = "0.11", path = "../gstreamer-app" }
+gstreamer-audio = { version = "0.11", path = "../gstreamer-audio" }
+gstreamer-video = { version = "0.11", path = "../gstreamer-video" }
+gstreamer-pbutils = { version = "0.11", path = "../gstreamer-pbutils" }
+gstreamer-player = { version = "0.11", path = "../gstreamer-player", optional = true }
+gstreamer-rtsp = { version = "0.11", path = "../gstreamer-rtsp", optional = true }
+gstreamer-rtsp-server = { version = "0.11", path = "../gstreamer-rtsp-server", optional = true }
+gstreamer-rtsp-server-sys = { version = "0.5", features = ["v1_8"] }
+gtk = { version = "0.4", features = ["v3_6"], optional = true }
+gdk = { version = "0.8", optional = true }
+gio = { version = "0.4", optional = true }
 futures = { version = "0.1", optional = true }
 tokio-core = { version = "0.1", optional = true }
 send-cell = "0.1"
