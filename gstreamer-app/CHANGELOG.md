@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.0] - 2018-03-20
+### Changed
+- Updated everything to GStreamer 1.14.0
+- Event, Message and Query types were refactored to improve usability.
+  Especially newly constructed queries allow to directly use the type-specific
+  functions to be used without first creating a view
+- VideoFrameRef::copy_to_ref() and ::copy_plane_to_ref() are gone now and the
+  original functions work with refs instead of full frames
+- PadProbeId and NotifyIds are not Copy/Clone anymore and are taken by value
+- GstPlayer has GstObject as parent class now
+
+### Added
+- GstPbutils, GstSdp, GstRtsp and GstRtspServer bindings
+- GstPromise, GstAudioStreamAlign and various other 1.14 API
+- GstVideoFilter and GstBufferPool bindings
+- Element::call_async()
+- Debug impl For Toc and TocEntry
+- Various new examples (RTP FEC, RTSP server, tag usage, ...)
+
+### Fixed
+- Memory leak in gst_video::convert_sample_async()
+
 ## [0.10.2] - 2018-02-18
 ### Fixed
 - Fix building of messages with custom fields for types that don't have a
@@ -220,7 +242,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.10.1...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.0...HEAD
+[0.11.0]: https://github.com/sdroege/gstreamer-rs/compare/0.10.2...0.11.0
+[0.10.2]: https://github.com/sdroege/gstreamer-rs/compare/0.10.1...0.10.2
 [0.10.1]: https://github.com/sdroege/gstreamer-rs/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/sdroege/gstreamer-rs/compare/0.9.1...0.10.0
 [0.9.1]: https://github.com/sdroege/gstreamer-rs/compare/0.9.0...0.9.1
