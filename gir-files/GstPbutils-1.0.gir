@@ -2181,7 +2181,7 @@ valid for target names).</doc>
         <parameters>
           <parameter name="filepath" transfer-ownership="none">
             <doc xml:space="preserve">The file location to load the #GstEncodingTarget from</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </function>
@@ -2308,7 +2308,7 @@ count.</doc>
           </instance-parameter>
           <parameter name="filepath" transfer-ownership="none">
             <doc xml:space="preserve">the location to store the @target at.</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>

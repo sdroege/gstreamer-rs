@@ -1807,7 +1807,7 @@ quatization errors.</doc>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <constant name="VIDEO_TILE_TYPE_MASK"
-              value="0"
+              value="65535"
               c:type="GST_VIDEO_TILE_TYPE_MASK">
       <type name="gint" c:type="gint"/>
     </constant>
@@ -1817,7 +1817,7 @@ quatization errors.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="VIDEO_TILE_X_TILES_MASK"
-              value="0"
+              value="65535"
               c:type="GST_VIDEO_TILE_X_TILES_MASK">
       <type name="gint" c:type="gint"/>
     </constant>
