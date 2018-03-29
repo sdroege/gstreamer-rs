@@ -1,4 +1,4 @@
-// Copyright (C) 2017 Sebastian Dröge <sebastian@centricular.com>
+// Copyright (C) 2018 Sebastian Dröge <sebastian@centricular.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
@@ -16,6 +16,14 @@ extern crate gstreamer as gst;
 extern crate gstreamer_sdp_sys as ffi;
 extern crate gstreamer_sys as gst_ffi;
 
+macro_rules! assert_initialized_main_thread {
+    () => (
+        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+            panic!("GStreamer has not been initialized. Call `gst::init` first.");
+        }
+    )
+}
+
 macro_rules! skip_assert_initialized {
     () => {};
 }
@@ -29,6 +37,23 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
+mod s_d_p_message;
+mod s_d_p_media;
+mod s_d_p_attribute;
+mod s_d_p_bandwidth;
+mod s_d_p_connection;
+mod s_d_p_key;
+mod s_d_p_origin;
+mod s_d_p_time;
+mod s_d_p_zone;
+mod m_i_k_e_y_message;
+mod m_i_k_e_y_payload;
+mod m_i_k_e_y_encrypt_info;
+mod m_i_k_e_y_decrypt_info;
+mod m_i_k_e_y_map_s_r_t_p;
+
+pub use s_d_p_message::SDPMessage;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
@@ -36,4 +61,6 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
+
+    pub use s_d_p_message::SDPMessage;
 }
