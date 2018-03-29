@@ -32,6 +32,7 @@ generate = [
 ]
 
 manual = [
+    "GLib.Bytes",
 ]
 
 [[object]]
@@ -40,21 +41,23 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
-name = "GstSdp.SDPMessage"
+name = "GstSdp.MIKEYMessage"
 status = "generate"
-use_boxed_functions = true
-
     [[object.function]]
-    name = "new"
-    # special return type...
+    name = "replace_payload"
     ignore = true
 
     [[object.function]]
-    name = "uninit"
-    # unsafe
+    name = "insert_payload"
     ignore = true
 
+    [[object.function]]
+    name = "add_payload"
+    ignore = true
 
 [[object]]
-name = "GstSdp.SDPMedia"
+name = "GstSdp.MIKEYPayload"
 status = "generate"
+    [[object.function]]
+    name = "kemac_add_sub"
+    ignore = true
