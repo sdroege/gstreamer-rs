@@ -3,8 +3,8 @@ extern crate gstreamer as gst;
 extern crate gstreamer_pbutils as pbutils;
 use pbutils::prelude::*;
 
-use pbutils::DiscovererStreamInfo;
 use pbutils::DiscovererInfo;
+use pbutils::DiscovererStreamInfo;
 
 extern crate glib;
 

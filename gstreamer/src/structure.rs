@@ -6,22 +6,22 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::fmt;
-use std::ptr;
-use std::mem;
-use std::str;
-use std::ffi::CStr;
-use std::ops::{Deref, DerefMut};
 use std::borrow::{Borrow, BorrowMut, ToOwned};
+use std::ffi::CStr;
+use std::fmt;
 use std::marker::PhantomData;
+use std::mem;
+use std::ops::{Deref, DerefMut};
+use std::ptr;
+use std::str;
 
 use Fraction;
 
+use ffi;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone,
                       GlibPtrDefault, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::value::{FromValueOptional, SendValue, ToSendValue};
-use ffi;
 use glib_ffi::gpointer;
 use gobject_ffi;
 

@@ -2,8 +2,8 @@ use RTSPServer;
 use ffi;
 use glib;
 use glib::object::IsA;
-use glib::translate::*;
 use glib::source::SourceId;
+use glib::translate::*;
 
 pub trait RTSPServerExtManual {
     fn attach<'a, P: Into<Option<&'a glib::MainContext>>>(&self, context: P) -> SourceId;

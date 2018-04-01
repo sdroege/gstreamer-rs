@@ -10,16 +10,16 @@ use ffi;
 use glib_ffi;
 use gobject_ffi;
 
-use gst;
-use gst::prelude::*;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrNone,
                       ToGlib, ToGlibPtr, ToGlibPtrMut};
+use gst;
+use gst::prelude::*;
 
+use std::fmt;
 use std::mem;
 use std::ptr;
 use std::str;
-use std::fmt;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum VideoColorRange {

@@ -7,9 +7,9 @@
 // except according to those terms.
 
 use ffi;
-use gst_ffi;
 use glib::translate::*;
 use gst;
+use gst_ffi;
 
 use std::mem;
 use std::ops;

@@ -1,7 +1,7 @@
 #[cfg(feature = "tutorial5")]
 mod tutorial5 {
-    use std::process;
     use std::os::raw::c_void;
+    use std::process;
 
     extern crate glib;
     use self::glib::translate::*;

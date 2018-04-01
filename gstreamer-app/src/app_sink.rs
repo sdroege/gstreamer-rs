@@ -8,11 +8,11 @@
 
 use AppSink;
 use ffi;
-use gst_ffi;
-use glib::translate::*;
-use gst;
 use glib::source::CallbackGuard;
+use glib::translate::*;
 use glib_ffi::gpointer;
+use gst;
+use gst_ffi;
 use std::ptr;
 
 pub struct AppSinkCallbacks {

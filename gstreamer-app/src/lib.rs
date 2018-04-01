@@ -20,14 +20,13 @@ extern crate gstreamer_sys as gst_ffi;
 extern crate glib;
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
@@ -39,10 +38,10 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
-mod app_src;
 mod app_sink;
-pub use app_src::*;
+mod app_src;
 pub use app_sink::*;
+pub use app_src::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

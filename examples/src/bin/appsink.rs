@@ -9,9 +9,9 @@ extern crate glib;
 extern crate byte_slice_cast;
 use byte_slice_cast::*;
 
+use std::error::Error as StdError;
 use std::i16;
 use std::i32;
-use std::error::Error as StdError;
 
 extern crate failure;
 use failure::Error;

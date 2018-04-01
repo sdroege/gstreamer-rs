@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::ptr;
 use std::fmt;
+use std::ptr;
 
 use ffi;
 
@@ -15,14 +15,14 @@ use glib;
 use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlibPtr};
 
-use miniobject::*;
 use Buffer;
 use BufferList;
 use Caps;
+use FormattedSegment;
 use FormattedValue;
 use Segment;
-use FormattedSegment;
 use StructureRef;
+use miniobject::*;
 
 pub type Sample = GstRc<SampleRef>;
 pub struct SampleRef(ffi::GstSample);

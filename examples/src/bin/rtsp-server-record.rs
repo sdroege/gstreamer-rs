@@ -10,14 +10,14 @@ extern crate gstreamer_rtsp as gst_rtsp;
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
 extern crate gstreamer_rtsp_server_sys as ffi;
 
+use failure::Error;
 use std::env;
 use std::ptr;
-use failure::Error;
 
 use glib::translate::*;
+use gst_rtsp::*;
 use gst_rtsp_server::prelude::*;
 use gst_rtsp_server::*;
-use gst_rtsp::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

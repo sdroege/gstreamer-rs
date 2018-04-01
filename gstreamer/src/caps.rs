@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use miniobject::*;
 use std::fmt;
 use std::str;
-use miniobject::*;
 use structure::*;
 
 use CapsIntersectMode;
 
-use glib;
 use ffi;
+use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
@@ -392,8 +392,8 @@ impl Builder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use Fraction;
     use Array;
+    use Fraction;
 
     #[test]
     fn test_simple() {

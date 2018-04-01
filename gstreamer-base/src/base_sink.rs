@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use BaseSink;
 use ffi;
 use glib::IsA;
 use glib::translate::*;
 use gst;
-use BaseSink;
 
 pub trait BaseSinkExtManual {
     fn get_segment(&self) -> gst::Segment;

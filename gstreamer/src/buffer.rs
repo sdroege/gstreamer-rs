@@ -6,23 +6,23 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::ptr;
-use std::mem;
 use std::fmt;
-use std::slice;
+use std::marker::PhantomData;
+use std::mem;
 use std::ops;
+use std::ptr;
+use std::slice;
 use std::u64;
 use std::usize;
-use std::marker::PhantomData;
 
-use miniobject::*;
 use BufferFlags;
 use ClockTime;
+use miniobject::*;
 
-use glib;
-use glib_ffi;
 use ffi;
+use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib};
+use glib_ffi;
 
 pub struct Readable;
 pub struct Writable;
@@ -573,8 +573,10 @@ impl<T> Eq for MappedBuffer<T> {}
 unsafe impl<T> Send for MappedBuffer<T> {}
 
 lazy_static! {
-    pub static ref BUFFER_COPY_METADATA: ::BufferCopyFlags = ::BufferCopyFlags::FLAGS | ::BufferCopyFlags::TIMESTAMPS | ::BufferCopyFlags::META;
-    pub static ref BUFFER_COPY_ALL: ::BufferCopyFlags = *BUFFER_COPY_METADATA | ::BufferCopyFlags::MEMORY;
+    pub static ref BUFFER_COPY_METADATA: ::BufferCopyFlags =
+        ::BufferCopyFlags::FLAGS | ::BufferCopyFlags::TIMESTAMPS | ::BufferCopyFlags::META;
+    pub static ref BUFFER_COPY_ALL: ::BufferCopyFlags =
+        *BUFFER_COPY_METADATA | ::BufferCopyFlags::MEMORY;
 }
 
 #[cfg(test)]

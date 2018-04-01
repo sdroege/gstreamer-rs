@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use StreamCollection;
 use Stream;
+use StreamCollection;
 
 pub struct Iter<'a> {
     collection: &'a StreamCollection,

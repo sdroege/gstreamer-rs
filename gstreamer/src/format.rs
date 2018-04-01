@@ -8,8 +8,8 @@
 
 use ClockTime;
 use Format;
-use std::ops;
 use muldiv::MulDiv;
+use std::ops;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum GenericFormattedValue {

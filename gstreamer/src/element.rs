@@ -8,22 +8,22 @@
 
 use Element;
 
-use glib;
-use glib::IsA;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib,
-                      FromGlibPtrContainer, ToGlib, ToGlibPtr};
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-use glib::translate::FromGlibPtrBorrow;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-use glib::object::Downcast;
-use QueryRef;
 use Event;
+use Format;
+use FormattedValue;
+use GenericFormattedValue;
 use Pad;
 use PadTemplate;
-use Format;
-use GenericFormattedValue;
-use FormattedValue;
+use QueryRef;
 use SpecificFormattedValue;
+use glib;
+use glib::IsA;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use glib::object::Downcast;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use glib::translate::FromGlibPtrBorrow;
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
+                      ToGlib, ToGlibPtr};
 use miniobject::MiniObject;
 
 use std::ffi::CStr;
@@ -611,13 +611,37 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 }
 
-lazy_static!{
-    pub static ref ELEMENT_METADATA_AUTHOR: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_AUTHOR).to_str().unwrap() };
-    pub static ref ELEMENT_METADATA_DESCRIPTION: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DESCRIPTION).to_str().unwrap() };
-    pub static ref ELEMENT_METADATA_DOC_URI: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DOC_URI).to_str().unwrap() };
-    pub static ref ELEMENT_METADATA_ICON_NAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_ICON_NAME).to_str().unwrap() };
-    pub static ref ELEMENT_METADATA_KLASS: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_KLASS).to_str().unwrap() };
-    pub static ref ELEMENT_METADATA_LONGNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_ELEMENT_METADATA_LONGNAME).to_str().unwrap() };
+lazy_static! {
+    pub static ref ELEMENT_METADATA_AUTHOR: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_AUTHOR)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref ELEMENT_METADATA_DESCRIPTION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DESCRIPTION)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref ELEMENT_METADATA_DOC_URI: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DOC_URI)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref ELEMENT_METADATA_ICON_NAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_ICON_NAME)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref ELEMENT_METADATA_KLASS: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_KLASS)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref ELEMENT_METADATA_LONGNAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_LONGNAME)
+            .to_str()
+            .unwrap()
+    };
 }
 
 #[macro_export]

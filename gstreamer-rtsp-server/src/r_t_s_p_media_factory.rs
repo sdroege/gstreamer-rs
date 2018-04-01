@@ -8,11 +8,11 @@
 
 use RTSPMediaFactory;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use ffi;
 use glib::IsA;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use gst;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-use ffi;
 
 pub trait RTSPMediaFactoryExtManual {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -23,7 +23,10 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExtManual for O {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef) {
         unsafe {
-            ffi::gst_rtsp_media_factory_add_role_from_structure(self.to_glib_none().0, structure.as_mut_ptr());
+            ffi::gst_rtsp_media_factory_add_role_from_structure(
+                self.to_glib_none().0,
+                structure.as_mut_ptr(),
+            );
         }
     }
 }

@@ -6,16 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use GenericFormattedValue;
 use ffi;
 use miniobject::*;
 use structure::*;
-use GenericFormattedValue;
 
-use std::ptr;
-use std::mem;
-use std::fmt;
 use std::ffi::CStr;
+use std::fmt;
+use std::mem;
 use std::ops::{Deref, DerefMut};
+use std::ptr;
 
 use glib;
 use glib::translate::*;

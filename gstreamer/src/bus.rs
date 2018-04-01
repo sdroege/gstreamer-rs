@@ -6,14 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::cell::RefCell;
-use std::mem::transmute;
 use ffi;
 use glib;
-use glib::translate::*;
 use glib::source::{CallbackGuard, Continue, Priority, SourceId};
+use glib::translate::*;
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
+use std::cell::RefCell;
+use std::mem::transmute;
 use std::ptr;
 
 use Bus;
@@ -142,12 +142,12 @@ impl Bus {
 
 #[cfg(any(feature = "futures", feature = "dox"))]
 mod futures {
-    use std::sync::{Arc, Mutex};
-    use futures;
-    use futures::{Async, Poll};
-    use futures::task::Task;
-    use futures::stream::Stream;
     use super::*;
+    use futures;
+    use futures::stream::Stream;
+    use futures::task::Task;
+    use futures::{Async, Poll};
+    use std::sync::{Arc, Mutex};
 
     pub struct BusStream(Bus, Arc<Mutex<Option<Task>>>);
 

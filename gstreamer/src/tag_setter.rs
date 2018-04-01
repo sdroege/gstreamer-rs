@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use TagSetter;
 use TagMergeMode;
+use TagSetter;
+use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::value::ToSendValue;

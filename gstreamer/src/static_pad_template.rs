@@ -6,16 +6,16 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use PadTemplate;
 use Caps;
+use PadTemplate;
 
 use ffi;
 use glib_ffi;
 use gobject_ffi;
 
-use std::ffi::CStr;
 use glib;
 use glib::translate::{from_glib, from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
+use std::ffi::CStr;
 
 use std::ptr;
 

@@ -1,12 +1,12 @@
 use ffi;
-use gst_ffi;
-use gst;
 use glib;
 use glib::StaticType;
-use glib::value::ToSendValue;
 use glib::translate::*;
+use glib::value::ToSendValue;
+use gst;
+use gst_ffi;
 
-use gst::miniobject::{MiniObject, GstRc};
+use gst::miniobject::{GstRc, MiniObject};
 
 pub trait GstRcRTSPTokenExt<T: MiniObject> {
     fn new_empty() -> Self;
@@ -44,19 +44,23 @@ impl GstRcRTSPTokenExt<RTSPTokenRef> for GstRc<RTSPTokenRef> {
 impl RTSPTokenRef {
     pub fn get_string(&self, field: &str) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gst_rtsp_token_get_string(self.as_mut_ptr(), field.to_glib_none().0))
+            from_glib_none(ffi::gst_rtsp_token_get_string(
+                self.as_mut_ptr(),
+                field.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_structure(&self) -> Option<gst::Structure> {
-        unsafe {
-            from_glib_none(ffi::gst_rtsp_token_get_structure(self.as_mut_ptr()))
-        }
+        unsafe { from_glib_none(ffi::gst_rtsp_token_get_structure(self.as_mut_ptr())) }
     }
 
     pub fn is_allowed(&self, field: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_token_is_allowed(self.as_mut_ptr(), field.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_token_is_allowed(
+                self.as_mut_ptr(),
+                field.to_glib_none().0,
+            ))
         }
     }
 
@@ -76,7 +80,9 @@ impl ToOwned for RTSPTokenRef {
     type Owned = GstRc<RTSPTokenRef>;
 
     fn to_owned(&self) -> GstRc<RTSPTokenRef> {
-        unsafe { from_glib_full(gst_ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
+        unsafe {
+            from_glib_full(gst_ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
+        }
     }
 }
 

@@ -16,12 +16,12 @@ use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib,
                       ToGlibPtr};
 
-use miniobject::*;
-use TocEntryType;
-use TocScope;
-use TocLoopType;
 use TagList;
 use TagMergeMode;
+use TocEntryType;
+use TocLoopType;
+use TocScope;
+use miniobject::*;
 
 pub type Toc = GstRc<TocRef>;
 pub struct TocRef(ffi::GstToc);

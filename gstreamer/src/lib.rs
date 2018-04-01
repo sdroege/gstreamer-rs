@@ -33,22 +33,21 @@ extern crate muldiv;
 use glib::translate::{from_glib, from_glib_full};
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-        if unsafe {::ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+    () => {
+        if unsafe { ::ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
-    )
+    };
 }
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
@@ -59,8 +58,8 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
 #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 mod auto;
-pub use auto::*;
 pub use auto::functions::*;
+pub use auto::*;
 
 #[macro_use]
 mod log;
@@ -102,9 +101,9 @@ mod promise;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use promise::*;
 
-mod element;
 mod bin;
 mod bus;
+mod element;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -120,24 +119,24 @@ cfg_if! {
     }
 }
 
-mod pad;
-mod object;
-mod gobject;
-mod proxy_pad;
-mod ghost_pad;
 mod child_proxy;
-mod tag_setter;
-mod iterator;
-mod device_provider;
-mod parse_context;
-mod enums;
 mod clock_time;
 mod date_time;
-pub use object::GstObjectExtManual;
-pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
+mod device_provider;
+mod enums;
+mod ghost_pad;
+mod gobject;
+mod iterator;
+mod object;
+mod pad;
+mod parse_context;
+mod proxy_pad;
+mod tag_setter;
+pub use bin::BinExtManual;
 pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
                   ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME};
-pub use bin::BinExtManual;
+pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
+pub use object::GstObjectExtManual;
 
 // OS dependent Bus extensions (also import the other plateform trait for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -153,18 +152,18 @@ cfg_if! {
     }
 }
 
-pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
-pub use gobject::GObjectExtManualGst;
-pub use child_proxy::ChildProxyExtManual;
-pub use tag_setter::TagSetterExtManual;
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl};
-pub use device_provider::DeviceProviderExtManual;
-pub use parse_context::ParseContext;
 #[cfg(any(feature = "futures", feature = "dox"))]
 pub use bus::BusStream;
+pub use child_proxy::ChildProxyExtManual;
+pub use clock_time::ClockTime;
+pub use device_provider::DeviceProviderExtManual;
 pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
                 StateChangeError, StateChangeSuccess};
-pub use clock_time::ClockTime;
+pub use gobject::GObjectExtManualGst;
+pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
+pub use parse_context::ParseContext;
+pub use tag_setter::TagSetterExtManual;
 
 mod plugin;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -236,8 +235,8 @@ pub mod prelude {
 
     pub use auto::traits::*;
 
-    pub use element::ElementExtManual;
     pub use bin::BinExtManual;
+    pub use element::ElementExtManual;
 
     // OS dependent Bus extensions (also import the other plateform trait for doc)
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -253,18 +252,18 @@ pub mod prelude {
         }
     }
 
-    pub use pad::PadExtManual;
-    pub use object::GstObjectExtManual;
-    pub use gobject::GObjectExtManualGst;
-    pub use child_proxy::ChildProxyExtManual;
-    pub use tag_setter::TagSetterExtManual;
-    pub use device_provider::DeviceProviderExtManual;
-    pub use clock::ClockExtManual;
-    pub use value::GstValueExt;
     pub use buffer_pool::BufferPoolExtManual;
+    pub use child_proxy::ChildProxyExtManual;
+    pub use clock::ClockExtManual;
+    pub use device_provider::DeviceProviderExtManual;
+    pub use gobject::GObjectExtManualGst;
+    pub use object::GstObjectExtManual;
+    pub use pad::PadExtManual;
+    pub use tag_setter::TagSetterExtManual;
+    pub use value::GstValueExt;
 
-    pub use tags::Tag;
     pub use miniobject::MiniObject;
+    pub use tags::Tag;
 
     pub use muldiv::MulDiv;
 

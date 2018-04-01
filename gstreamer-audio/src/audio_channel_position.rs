@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use AudioChannelPosition;
+use ffi;
 
 use std::mem;
 
-use gst;
-use gst::MiniObject;
 use glib;
 use glib::translate::{from_glib, ToGlib};
+use gst;
+use gst::MiniObject;
 
 use array_init;
 

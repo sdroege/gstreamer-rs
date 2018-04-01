@@ -8,9 +8,9 @@
 
 use glib;
 use glib::IsA;
-use glib::translate::ToGlibPtr;
-use glib::signal::SignalHandlerId;
 use glib::object::{Downcast, ObjectExt};
+use glib::signal::SignalHandlerId;
+use glib::translate::ToGlibPtr;
 
 use gobject_ffi;
 

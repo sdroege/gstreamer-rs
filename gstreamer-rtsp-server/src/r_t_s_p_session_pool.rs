@@ -1,13 +1,13 @@
-use std::cell::RefCell;
-use std::mem::transmute;
 use RTSPSessionPool;
 use ffi;
 use glib;
-use glib_ffi;
 use glib::object::IsA;
-use glib::translate::*;
 use glib::source::{CallbackGuard, Continue, Priority};
+use glib::translate::*;
+use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
+use std::cell::RefCell;
+use std::mem::transmute;
 
 unsafe extern "C" fn trampoline_watch(
     pool: *mut ffi::GstRTSPSessionPool,

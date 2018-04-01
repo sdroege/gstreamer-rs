@@ -6,21 +6,21 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use GenericFormattedValue;
 use ffi;
 use miniobject::*;
 use structure::*;
-use GenericFormattedValue;
 
-use std::ptr;
-use std::mem;
 use std::cmp;
-use std::fmt;
 use std::ffi::CStr;
+use std::fmt;
+use std::mem;
 use std::ops::Deref;
+use std::ptr;
 
 use glib;
-use glib::value::ToSendValue;
 use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr};
+use glib::value::ToSendValue;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;

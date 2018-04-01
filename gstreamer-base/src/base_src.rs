@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use BaseSrc;
 use ffi;
 use glib::IsA;
 use glib::translate::*;
 use gst;
-use BaseSrc;
 
 pub trait BaseSrcExtManual {
     fn get_segment(&self) -> gst::Segment;

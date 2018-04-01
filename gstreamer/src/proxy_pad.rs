@@ -6,13 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::ptr;
-use Pad;
-use ProxyPad;
-use Object;
-use FlowReturn;
 use Buffer;
 use BufferList;
+use FlowReturn;
+use Object;
+use Pad;
+use ProxyPad;
+use std::ptr;
 
 use glib::IsA;
 use glib::translate::{from_glib, from_glib_full, ToGlibPtr};

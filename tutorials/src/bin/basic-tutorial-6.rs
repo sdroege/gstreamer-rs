@@ -1,6 +1,6 @@
 extern crate gstreamer as gst;
-use gst::prelude::*;
 use gst::MessageView;
+use gst::prelude::*;
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

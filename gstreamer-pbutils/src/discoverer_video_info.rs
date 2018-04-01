@@ -9,9 +9,9 @@
 
 use DiscovererVideoInfo;
 
-use gst;
 use ffi;
 use glib::translate::*;
+use gst;
 
 impl DiscovererVideoInfo {
     pub fn get_framerate(&self) -> gst::Fraction {

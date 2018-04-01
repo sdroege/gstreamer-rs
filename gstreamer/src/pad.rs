@@ -6,35 +6,35 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Pad;
-use PadProbeType;
-use PadProbeReturn;
 use Buffer;
 use BufferList;
-use Format;
-use GenericFormattedValue;
-use FormattedValue;
-use SpecificFormattedValue;
+use Event;
 use FlowReturn;
+use Format;
+use FormattedValue;
+use GenericFormattedValue;
+use Pad;
+use PadProbeReturn;
+use PadProbeType;
 use Query;
 use QueryRef;
-use Event;
+use SpecificFormattedValue;
 use StaticPadTemplate;
 use miniobject::MiniObject;
 
+use std::cell::RefCell;
+use std::mem;
 use std::mem::transmute;
 use std::ptr;
-use std::mem;
-use std::cell::RefCell;
 
 use glib;
-use glib::{IsA, StaticType};
+use glib::Object;
+use glib::source::CallbackGuard;
 use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override,
                       FromGlib, ToGlib, ToGlibPtr};
-use glib::source::CallbackGuard;
+use glib::{IsA, StaticType};
 use glib_ffi;
 use glib_ffi::gpointer;
-use glib::Object;
 
 use libc;
 
@@ -1164,8 +1164,8 @@ fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
 mod tests {
     use super::*;
     use prelude::*;
-    use std::sync::{Arc, Mutex};
     use std::sync::mpsc::channel;
+    use std::sync::{Arc, Mutex};
 
     #[test]
     fn test_event_chain_functions() {

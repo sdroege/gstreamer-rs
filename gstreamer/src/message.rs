@@ -6,27 +6,27 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use GenericFormattedValue;
+use GroupId;
+use GstObjectExt;
 use Object;
+use Seqnum;
+use TagList;
+use ffi;
 use miniobject::*;
 use structure::*;
-use TagList;
-use GstObjectExt;
-use Seqnum;
-use GroupId;
-use GenericFormattedValue;
 
-use std::ptr;
-use std::mem;
-use std::fmt;
 use std::ffi::CStr;
+use std::fmt;
+use std::mem;
 use std::ops::Deref;
+use std::ptr;
 
 use glib;
 use glib::Cast;
 use glib::IsA;
-use glib::value::ToSendValue;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
+use glib::value::ToSendValue;
 
 #[repr(C)]
 pub struct MessageRef(ffi::GstMessage);
@@ -1193,10 +1193,12 @@ impl<'a> MessageBuilder<'a> {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
         Self {
-            other_fields: self.other_fields.iter().cloned()
+            other_fields: self.other_fields
+                .iter()
+                .cloned()
                 .chain(other_fields.iter().cloned())
                 .collect(),
-            .. self
+            ..self
         }
     }
 }

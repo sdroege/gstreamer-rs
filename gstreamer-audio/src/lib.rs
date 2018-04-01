@@ -19,22 +19,21 @@ extern crate gstreamer_audio_sys as ffi;
 extern crate gstreamer_sys as gst_ffi;
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+    () => {
+        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
-    )
+    };
 }
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};

@@ -23,25 +23,24 @@ extern crate gstreamer_sys as gst_ffi;
 static PBUTILS_INIT: Once = ONCE_INIT;
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+    () => {
+        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
         ::PBUTILS_INIT.call_once(|| {
-            unsafe{::ffi::gst_pb_utils_init()};
+            unsafe { ::ffi::gst_pb_utils_init() };
         });
-    )
+    };
 }
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};

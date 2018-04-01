@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use StructureRef;
+use PromiseResult;
 use Structure;
+use StructureRef;
 use ffi;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::mem;
 use std::ptr;
-use PromiseResult;
 
 glib_wrapper! {
     pub struct Promise(Shared<ffi::GstPromise>);
@@ -30,14 +30,14 @@ impl Promise {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn new() -> Promise {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gst_promise_new())
-        }
+        unsafe { from_glib_full(ffi::gst_promise_new()) }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn new_with_change_func<F>(func: F) -> Promise
-      where F: FnOnce(&Promise) + Send + 'static {
+    where
+        F: FnOnce(&Promise) + Send + 'static,
+    {
         let user_data: Box<Option<Box<F>>> = Box::new(Some(Box::new(func)));
 
         unsafe extern "C" fn trampoline<F: FnOnce(&Promise) + Send + 'static>(
@@ -103,9 +103,7 @@ impl Promise {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn wait(&self) -> PromiseResult {
-        unsafe {
-            from_glib(ffi::gst_promise_wait(self.to_glib_none().0))
-        }
+        unsafe { from_glib(ffi::gst_promise_wait(self.to_glib_none().0)) }
     }
 }
 

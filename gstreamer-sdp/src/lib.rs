@@ -17,8 +17,7 @@ extern crate gstreamer_sdp_sys as ffi;
 extern crate gstreamer_sys as gst_ffi;
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};

@@ -10,10 +10,10 @@ use ffi;
 use glib::translate::*;
 use std::ptr;
 
-use ParseContext;
-use ParseFlags;
 use Element;
 use Error;
+use ParseContext;
+use ParseFlags;
 
 pub fn parse_bin_from_description_full<'a, P: Into<Option<&'a mut ParseContext>>>(
     bin_description: &str,

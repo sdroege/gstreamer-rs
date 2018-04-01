@@ -7,21 +7,21 @@
 // except according to those terms.
 
 use Clock;
+use ClockReturn;
 use ClockTime;
 use ClockTimeDiff;
-use ClockReturn;
-use std::mem;
-use std::cmp;
-use std::ptr;
-use std::mem::transmute;
 use ffi;
 use glib;
 use glib::IsA;
-use glib::translate::*;
 use glib::source::CallbackGuard;
+use glib::translate::*;
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use libc::c_void;
+use std::cmp;
+use std::mem;
+use std::mem::transmute;
+use std::ptr;
 
 glib_wrapper! {
     pub struct ClockId(Shared<c_void>);
@@ -241,8 +241,8 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::*;
+    use super::*;
     use std::sync::mpsc::channel;
 
     #[test]

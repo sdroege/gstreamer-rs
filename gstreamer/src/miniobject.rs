@@ -6,20 +6,20 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::{borrow, fmt, ops};
+use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
-use std::marker::PhantomData;
+use std::{borrow, fmt, ops};
 
 use ffi;
-use glib_ffi::gpointer;
-use glib_ffi;
-use gobject_ffi;
+use glib;
 use glib::translate::{c_ptr_array_len, from_glib, from_glib_full, from_glib_none,
                       FromGlibContainerAsVec, FromGlibPtrArrayContainerAsVec, FromGlibPtrBorrow,
                       FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
                       ToGlibContainerFromSlice, ToGlibPtr, ToGlibPtrMut};
-use glib;
+use glib_ffi;
+use glib_ffi::gpointer;
+use gobject_ffi;
 
 pub struct GstRc<T: MiniObject> {
     obj: ptr::NonNull<T>,
@@ -422,9 +422,8 @@ impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *const *mu
     }
 }
 
-impl<
-    T: MiniObject + 'static,
-> FromGlibPtrArrayContainerAsVec<*mut T::GstType, *const *mut T::GstType> for GstRc<T>
+impl<T: MiniObject + 'static>
+    FromGlibPtrArrayContainerAsVec<*mut T::GstType, *const *mut T::GstType> for GstRc<T>
 {
     unsafe fn from_glib_none_as_vec(ptr: *const *mut T::GstType) -> Vec<Self> {
         FromGlibPtrArrayContainerAsVec::from_glib_none_as_vec(ptr as *mut *mut _)

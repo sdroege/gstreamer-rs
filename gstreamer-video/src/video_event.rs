@@ -9,10 +9,10 @@
 use ffi;
 use gst_ffi;
 
+use glib::ToSendValue;
+use glib::translate::{from_glib, from_glib_full, ToGlib};
 use gst;
 use gst::MiniObject;
-use glib::translate::{from_glib, from_glib_full, ToGlib};
-use glib::ToSendValue;
 use std::mem;
 
 pub fn is_force_key_unit_event(event: &gst::EventRef) -> bool {
@@ -138,15 +138,15 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &mut Self| {
-        ffi::gst_video_event_new_downstream_force_key_unit(
+    event_builder_generic_impl!(
+        |s: &mut Self| ffi::gst_video_event_new_downstream_force_key_unit(
             s.timestamp.to_glib(),
             s.stream_time.to_glib(),
             s.running_time.to_glib(),
             s.all_headers.to_glib(),
             s.count,
         )
-    });
+    );
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]

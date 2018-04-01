@@ -6,18 +6,18 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use Plugin;
-use TypeFindProbability;
-use TypeFindFactory;
 use Caps;
+use Plugin;
+use TypeFindFactory;
+use TypeFindProbability;
+use ffi;
 
+use glib::translate::*;
+use glib_ffi;
+use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
 use std::slice;
-use std::marker::PhantomData;
-use glib_ffi;
-use glib::translate::*;
 
 #[repr(C)]
 pub struct TypeFind<'a>(ffi::GstTypeFind, PhantomData<&'a ()>);

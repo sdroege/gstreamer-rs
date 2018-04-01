@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use VideoOverlay;
+use ffi;
 use libc::uintptr_t;
 
 use glib::IsA;

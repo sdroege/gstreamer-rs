@@ -16,17 +16,17 @@ extern crate gstreamer_sys as gst_ffi;
 extern crate glib;
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+    () => {
+        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
-    )
+    };
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
@@ -36,8 +36,8 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
 mod auto;
-pub use auto::*;
 pub use auto::functions::*;
+pub use auto::*;
 
 pub mod functions;
 pub use functions::*;
@@ -45,8 +45,8 @@ pub use functions::*;
 mod adapter;
 mod flow_combiner;
 pub use flow_combiner::*;
-mod base_src;
 mod base_sink;
+mod base_src;
 mod base_transform;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -56,8 +56,8 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
-    pub use base_src::BaseSrcExtManual;
     pub use base_sink::BaseSinkExtManual;
+    pub use base_src::BaseSrcExtManual;
     pub use base_transform::BaseTransformExtManual;
 }
 

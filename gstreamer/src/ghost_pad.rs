@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Pad;
-use PadTemplate;
-use Object;
-use PadMode;
 use GhostPad;
+use Object;
+use Pad;
+use PadMode;
+use PadTemplate;
 use ffi;
 use glib::object::Downcast;
 use glib::object::IsA;

@@ -10,11 +10,11 @@ use ffi;
 use glib_ffi;
 use gobject_ffi;
 
-use gst;
-use gst::prelude::*;
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrNone, ToGlib,
                       ToGlibPtr, ToGlibPtrMut};
+use gst;
+use gst::prelude::*;
 
 use std::mem;
 use std::ptr;

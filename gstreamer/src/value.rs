@@ -7,15 +7,15 @@
 // except according to those terms.
 
 use num_rational::Rational32;
+use std::borrow::{Borrow, Cow};
 use std::fmt;
 use std::ops;
-use std::borrow::{Borrow, Cow};
 use std::slice;
 
 use glib;
-use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut,
                       Uninitialized};
+use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 
 use ffi;
 use glib_ffi;

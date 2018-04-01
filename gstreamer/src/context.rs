@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::fmt;
 use std::ffi::CStr;
+use std::fmt;
 
 use ffi;
 
@@ -15,8 +15,8 @@ use glib;
 use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 
-use miniobject::*;
 use StructureRef;
+use miniobject::*;
 
 pub type Context = GstRc<ContextRef>;
 pub struct ContextRef(ffi::GstContext);

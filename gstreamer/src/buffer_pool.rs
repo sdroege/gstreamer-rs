@@ -16,8 +16,8 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibP
 use ffi;
 
 use std::mem;
-use std::ptr;
 use std::ops;
+use std::ptr;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct BufferPoolConfig(Structure);

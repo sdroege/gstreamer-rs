@@ -28,22 +28,21 @@ extern crate gstreamer_rtsp_sys as gst_rtsp_ffi;
 extern crate gstreamer_sys as gst_ffi;
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-        if unsafe {::gst_ffi::gst_is_initialized()} != ::glib_ffi::GTRUE {
+    () => {
+        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
-    )
+    };
 }
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
@@ -55,37 +54,81 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
-mod r_t_s_p_server;
 mod r_t_s_p_address_pool;
-mod r_t_s_p_client;
-mod r_t_s_p_session_pool;
-mod r_t_s_p_context;
 mod r_t_s_p_auth;
-mod r_t_s_p_token;
+mod r_t_s_p_client;
+mod r_t_s_p_context;
 mod r_t_s_p_media_factory;
+mod r_t_s_p_server;
+mod r_t_s_p_session_pool;
+mod r_t_s_p_token;
 
-pub use r_t_s_p_server::RTSPServerExtManual;
 pub use r_t_s_p_address_pool::RTSPAddressPoolExtManual;
-pub use r_t_s_p_client::RTSPClientExtManual;
-pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
 pub use r_t_s_p_auth::RTSPAuthExtManual;
+pub use r_t_s_p_client::RTSPClientExtManual;
 pub use r_t_s_p_media_factory::RTSPMediaFactoryExtManual;
+pub use r_t_s_p_server::RTSPServerExtManual;
+pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
 
 pub use r_t_s_p_context::*;
 pub use r_t_s_p_token::*;
 
 lazy_static! {
-  pub static ref RTSP_ADDRESS_POOL_ANY_IPV4: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV4).to_str().unwrap()};
-  pub static ref RTSP_ADDRESS_POOL_ANY_IPV6: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV6).to_str().unwrap()};
-  pub static ref RTSP_AUTH_CHECK_CONNECT: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_CONNECT).to_str().unwrap()};
-  pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS).to_str().unwrap()};
-  pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT).to_str().unwrap()};
-  pub static ref RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS).to_str().unwrap()};
-  pub static ref RTSP_AUTH_CHECK_URL: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_URL).to_str().unwrap()};
-  pub static ref RTSP_PERM_MEDIA_FACTORY_ACCESS: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_PERM_MEDIA_FACTORY_ACCESS).to_str().unwrap()};
-  pub static ref RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT).to_str().unwrap()};
-  pub static ref RTSP_TOKEN_MEDIA_FACTORY_ROLE: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE).to_str().unwrap()};
-  pub static ref RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe{CStr::from_ptr(ffi::GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS).to_str().unwrap()};
+    pub static ref RTSP_ADDRESS_POOL_ANY_IPV4: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV4)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_ADDRESS_POOL_ANY_IPV6: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV6)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_AUTH_CHECK_CONNECT: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_CONNECT)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_AUTH_CHECK_URL: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_URL)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_PERM_MEDIA_FACTORY_ACCESS: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_PERM_MEDIA_FACTORY_ACCESS)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_TOKEN_MEDIA_FACTORY_ROLE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE)
+            .to_str()
+            .unwrap()
+    };
+    pub static ref RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS)
+            .to_str()
+            .unwrap()
+    };
 }
 
 // Re-export all the traits in a prelude module, so that applications
@@ -96,11 +139,11 @@ pub mod prelude {
 
     pub use auto::traits::*;
 
-    pub use r_t_s_p_server::RTSPServerExtManual;
     pub use r_t_s_p_address_pool::RTSPAddressPoolExtManual;
-    pub use r_t_s_p_client::RTSPClientExtManual;
-    pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
     pub use r_t_s_p_auth::RTSPAuthExtManual;
-    pub use r_t_s_p_token::GstRcRTSPTokenExt;
+    pub use r_t_s_p_client::RTSPClientExtManual;
     pub use r_t_s_p_media_factory::RTSPMediaFactoryExtManual;
+    pub use r_t_s_p_server::RTSPServerExtManual;
+    pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
+    pub use r_t_s_p_token::GstRcRTSPTokenExt;
 }

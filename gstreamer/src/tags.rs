@@ -6,21 +6,21 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::fmt;
-use std::mem;
-use std::marker::PhantomData;
 use std::ffi::CStr;
+use std::fmt;
+use std::marker::PhantomData;
+use std::mem;
 
 use ffi;
 use glib;
 use glib::StaticType;
-use glib::value::{FromValueOptional, SetValue, ToSendValue, TypedValue, Value};
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::value::{FromValueOptional, SetValue, ToSendValue, TypedValue, Value};
 
 use miniobject::*;
 
-use TagMergeMode;
 use Sample;
+use TagMergeMode;
 
 pub trait Tag<'a> {
     type TagType: FromValueOptional<'a> + SetValue + Send;
@@ -146,92 +146,280 @@ impl_tag!(InterpretedBy, &'a str, *TAG_INTERPRETED_BY);
 impl_tag!(MidiBaseNote, &'a str, *TAG_MIDI_BASE_NOTE);
 impl_tag!(PrivateData, Sample, *TAG_PRIVATE_DATA);
 
-lazy_static!{
-    static ref TAG_TITLE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TITLE).to_str().unwrap() };
-    static ref TAG_TITLE_SORTNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TITLE_SORTNAME).to_str().unwrap() };
-    static ref TAG_ARTIST: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ARTIST).to_str().unwrap() };
-    static ref TAG_ARTIST_SORTNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ARTIST_SORTNAME).to_str().unwrap() };
-    static ref TAG_ALBUM: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM).to_str().unwrap() };
-    static ref TAG_ALBUM_SORTNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_SORTNAME).to_str().unwrap() };
-    static ref TAG_ALBUM_ARTIST: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_ARTIST).to_str().unwrap() };
-    static ref TAG_ALBUM_ARTIST_SORTNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_ARTIST_SORTNAME).to_str().unwrap() };
+lazy_static! {
+    static ref TAG_TITLE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_TITLE).to_str().unwrap() };
+    static ref TAG_TITLE_SORTNAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_TITLE_SORTNAME)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_ARTIST: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ARTIST).to_str().unwrap() };
+    static ref TAG_ARTIST_SORTNAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_ARTIST_SORTNAME)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_ALBUM: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM).to_str().unwrap() };
+    static ref TAG_ALBUM_SORTNAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_ALBUM_SORTNAME)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_ALBUM_ARTIST: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_ARTIST).to_str().unwrap() };
+    static ref TAG_ALBUM_ARTIST_SORTNAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_ALBUM_ARTIST_SORTNAME)
+            .to_str()
+            .unwrap()
+    };
     static ref TAG_DATE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DATE).to_str().unwrap() };
-    static ref TAG_DATE_TIME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DATE_TIME).to_str().unwrap() };
-    static ref TAG_GENRE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GENRE).to_str().unwrap() };
-    static ref TAG_COMMENT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_COMMENT).to_str().unwrap() };
-    static ref TAG_EXTENDED_COMMENT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_EXTENDED_COMMENT).to_str().unwrap() };
-    static ref TAG_TRACK_NUMBER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_NUMBER).to_str().unwrap() };
-    static ref TAG_TRACK_COUNT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_COUNT).to_str().unwrap() };
-    static ref TAG_ALBUM_VOLUME_NUMBER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_VOLUME_NUMBER).to_str().unwrap() };
-    static ref TAG_ALBUM_VOLUME_COUNT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_VOLUME_COUNT).to_str().unwrap() };
-    static ref TAG_LOCATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LOCATION).to_str().unwrap() };
-    static ref TAG_HOMEPAGE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_HOMEPAGE).to_str().unwrap() };
-    static ref TAG_DESCRIPTION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DESCRIPTION).to_str().unwrap() };
-    static ref TAG_VERSION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_VERSION).to_str().unwrap() };
+    static ref TAG_DATE_TIME: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_DATE_TIME).to_str().unwrap() };
+    static ref TAG_GENRE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_GENRE).to_str().unwrap() };
+    static ref TAG_COMMENT: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_COMMENT).to_str().unwrap() };
+    static ref TAG_EXTENDED_COMMENT: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_EXTENDED_COMMENT)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_TRACK_NUMBER: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_NUMBER).to_str().unwrap() };
+    static ref TAG_TRACK_COUNT: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_COUNT).to_str().unwrap() };
+    static ref TAG_ALBUM_VOLUME_NUMBER: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_ALBUM_VOLUME_NUMBER)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_ALBUM_VOLUME_COUNT: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_ALBUM_VOLUME_COUNT)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_LOCATION: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_LOCATION).to_str().unwrap() };
+    static ref TAG_HOMEPAGE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_HOMEPAGE).to_str().unwrap() };
+    static ref TAG_DESCRIPTION: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_DESCRIPTION).to_str().unwrap() };
+    static ref TAG_VERSION: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_VERSION).to_str().unwrap() };
     static ref TAG_ISRC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ISRC).to_str().unwrap() };
-    static ref TAG_ORGANIZATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ORGANIZATION).to_str().unwrap() };
-    static ref TAG_COPYRIGHT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_COPYRIGHT).to_str().unwrap() };
-    static ref TAG_COPYRIGHT_URI: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_COPYRIGHT_URI).to_str().unwrap() };
-    static ref TAG_ENCODED_BY: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ENCODED_BY).to_str().unwrap() };
-    static ref TAG_COMPOSER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_COMPOSER).to_str().unwrap() };
-    static ref TAG_CONDUCTOR: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_CONDUCTOR).to_str().unwrap() };
-    static ref TAG_CONTACT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_CONTACT).to_str().unwrap() };
-    static ref TAG_LICENSE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LICENSE).to_str().unwrap() };
-    static ref TAG_LICENSE_URI: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LICENSE_URI).to_str().unwrap() };
-    static ref TAG_PERFORMER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_PERFORMER).to_str().unwrap() };
-    static ref TAG_DURATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DURATION).to_str().unwrap() };
-    static ref TAG_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_CODEC).to_str().unwrap() };
-    static ref TAG_VIDEO_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_VIDEO_CODEC).to_str().unwrap() };
-    static ref TAG_AUDIO_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_AUDIO_CODEC).to_str().unwrap() };
-    static ref TAG_SUBTITLE_CODEC: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SUBTITLE_CODEC).to_str().unwrap() };
-    static ref TAG_CONTAINER_FORMAT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_CONTAINER_FORMAT).to_str().unwrap() };
-    static ref TAG_BITRATE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_BITRATE).to_str().unwrap() };
-    static ref TAG_NOMINAL_BITRATE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_NOMINAL_BITRATE).to_str().unwrap() };
-    static ref TAG_MINIMUM_BITRATE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_MINIMUM_BITRATE).to_str().unwrap() };
-    static ref TAG_MAXIMUM_BITRATE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_MAXIMUM_BITRATE).to_str().unwrap() };
-    static ref TAG_SERIAL: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SERIAL).to_str().unwrap() };
-    static ref TAG_ENCODER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ENCODER).to_str().unwrap() };
-    static ref TAG_ENCODER_VERSION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ENCODER_VERSION).to_str().unwrap() };
-    static ref TAG_TRACK_GAIN: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_GAIN).to_str().unwrap() };
-    static ref TAG_TRACK_PEAK: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_PEAK).to_str().unwrap() };
-    static ref TAG_ALBUM_GAIN: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_GAIN).to_str().unwrap() };
-    static ref TAG_ALBUM_PEAK: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_PEAK).to_str().unwrap() };
-    static ref TAG_REFERENCE_LEVEL: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_REFERENCE_LEVEL).to_str().unwrap() };
-    static ref TAG_LANGUAGE_CODE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LANGUAGE_CODE).to_str().unwrap() };
-    static ref TAG_LANGUAGE_NAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LANGUAGE_NAME).to_str().unwrap() };
-    static ref TAG_IMAGE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_IMAGE).to_str().unwrap() };
-    static ref TAG_PREVIEW_IMAGE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_PREVIEW_IMAGE).to_str().unwrap() };
-    static ref TAG_ATTACHMENT: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_ATTACHMENT).to_str().unwrap() };
-    static ref TAG_BEATS_PER_MINUTE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_BEATS_PER_MINUTE).to_str().unwrap() };
-    static ref TAG_KEYWORDS: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_KEYWORDS).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_NAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_NAME).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_LATITUDE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_LATITUDE).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_LONGITUDE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_LONGITUDE).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_ELEVATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_ELEVATION).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_CITY: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_CITY).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_COUNTRY: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_COUNTRY).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_SUBLOCATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_SUBLOCATION).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_HORIZONTAL_ERROR: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_MOVEMENT_DIRECTION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_MOVEMENT_SPEED: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_MOVEMENT_SPEED).to_str().unwrap() };
-    static ref TAG_GEO_LOCATION_CAPTURE_DIRECTION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION).to_str().unwrap() };
-    static ref TAG_SHOW_NAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SHOW_NAME).to_str().unwrap() };
-    static ref TAG_SHOW_SORTNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SHOW_SORTNAME).to_str().unwrap() };
-    static ref TAG_SHOW_EPISODE_NUMBER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SHOW_EPISODE_NUMBER).to_str().unwrap() };
-    static ref TAG_SHOW_SEASON_NUMBER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_SHOW_SEASON_NUMBER).to_str().unwrap() };
-    static ref TAG_LYRICS: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_LYRICS).to_str().unwrap() };
-    static ref TAG_COMPOSER_SORTNAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_COMPOSER_SORTNAME).to_str().unwrap() };
-    static ref TAG_GROUPING: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_GROUPING).to_str().unwrap() };
-    static ref TAG_USER_RATING: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_USER_RATING).to_str().unwrap() };
-    static ref TAG_DEVICE_MANUFACTURER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DEVICE_MANUFACTURER).to_str().unwrap() };
-    static ref TAG_DEVICE_MODEL: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_DEVICE_MODEL).to_str().unwrap() };
-    static ref TAG_APPLICATION_NAME: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_APPLICATION_NAME).to_str().unwrap() };
-    static ref TAG_APPLICATION_DATA: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_APPLICATION_DATA).to_str().unwrap() };
-    static ref TAG_IMAGE_ORIENTATION: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_IMAGE_ORIENTATION).to_str().unwrap() };
-    static ref TAG_PUBLISHER: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_PUBLISHER).to_str().unwrap() };
-    static ref TAG_INTERPRETED_BY: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_INTERPRETED_BY).to_str().unwrap() };
-    static ref TAG_MIDI_BASE_NOTE: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_MIDI_BASE_NOTE).to_str().unwrap() };
-    static ref TAG_PRIVATE_DATA: &'static str = unsafe { CStr::from_ptr(ffi::GST_TAG_PRIVATE_DATA).to_str().unwrap() };
+    static ref TAG_ORGANIZATION: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ORGANIZATION).to_str().unwrap() };
+    static ref TAG_COPYRIGHT: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_COPYRIGHT).to_str().unwrap() };
+    static ref TAG_COPYRIGHT_URI: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_COPYRIGHT_URI).to_str().unwrap() };
+    static ref TAG_ENCODED_BY: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ENCODED_BY).to_str().unwrap() };
+    static ref TAG_COMPOSER: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_COMPOSER).to_str().unwrap() };
+    static ref TAG_CONDUCTOR: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_CONDUCTOR).to_str().unwrap() };
+    static ref TAG_CONTACT: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_CONTACT).to_str().unwrap() };
+    static ref TAG_LICENSE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_LICENSE).to_str().unwrap() };
+    static ref TAG_LICENSE_URI: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_LICENSE_URI).to_str().unwrap() };
+    static ref TAG_PERFORMER: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_PERFORMER).to_str().unwrap() };
+    static ref TAG_DURATION: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_DURATION).to_str().unwrap() };
+    static ref TAG_CODEC: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_CODEC).to_str().unwrap() };
+    static ref TAG_VIDEO_CODEC: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_VIDEO_CODEC).to_str().unwrap() };
+    static ref TAG_AUDIO_CODEC: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_AUDIO_CODEC).to_str().unwrap() };
+    static ref TAG_SUBTITLE_CODEC: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_SUBTITLE_CODEC)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_CONTAINER_FORMAT: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_CONTAINER_FORMAT)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_BITRATE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_BITRATE).to_str().unwrap() };
+    static ref TAG_NOMINAL_BITRATE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_NOMINAL_BITRATE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_MINIMUM_BITRATE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_MINIMUM_BITRATE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_MAXIMUM_BITRATE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_MAXIMUM_BITRATE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_SERIAL: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_SERIAL).to_str().unwrap() };
+    static ref TAG_ENCODER: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ENCODER).to_str().unwrap() };
+    static ref TAG_ENCODER_VERSION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_ENCODER_VERSION)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_TRACK_GAIN: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_GAIN).to_str().unwrap() };
+    static ref TAG_TRACK_PEAK: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_TRACK_PEAK).to_str().unwrap() };
+    static ref TAG_ALBUM_GAIN: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_GAIN).to_str().unwrap() };
+    static ref TAG_ALBUM_PEAK: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ALBUM_PEAK).to_str().unwrap() };
+    static ref TAG_REFERENCE_LEVEL: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_REFERENCE_LEVEL)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_LANGUAGE_CODE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_LANGUAGE_CODE).to_str().unwrap() };
+    static ref TAG_LANGUAGE_NAME: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_LANGUAGE_NAME).to_str().unwrap() };
+    static ref TAG_IMAGE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_IMAGE).to_str().unwrap() };
+    static ref TAG_PREVIEW_IMAGE: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_PREVIEW_IMAGE).to_str().unwrap() };
+    static ref TAG_ATTACHMENT: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_ATTACHMENT).to_str().unwrap() };
+    static ref TAG_BEATS_PER_MINUTE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_BEATS_PER_MINUTE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_KEYWORDS: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_KEYWORDS).to_str().unwrap() };
+    static ref TAG_GEO_LOCATION_NAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_NAME)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_LATITUDE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_LATITUDE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_LONGITUDE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_LONGITUDE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_ELEVATION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_ELEVATION)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_CITY: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_CITY)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_COUNTRY: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_COUNTRY)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_SUBLOCATION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_SUBLOCATION)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_HORIZONTAL_ERROR: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_MOVEMENT_DIRECTION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_MOVEMENT_SPEED: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_MOVEMENT_SPEED)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GEO_LOCATION_CAPTURE_DIRECTION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_SHOW_NAME: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_SHOW_NAME).to_str().unwrap() };
+    static ref TAG_SHOW_SORTNAME: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_SHOW_SORTNAME).to_str().unwrap() };
+    static ref TAG_SHOW_EPISODE_NUMBER: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_SHOW_EPISODE_NUMBER)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_SHOW_SEASON_NUMBER: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_SHOW_SEASON_NUMBER)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_LYRICS: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_LYRICS).to_str().unwrap() };
+    static ref TAG_COMPOSER_SORTNAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_COMPOSER_SORTNAME)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_GROUPING: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_GROUPING).to_str().unwrap() };
+    static ref TAG_USER_RATING: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_USER_RATING).to_str().unwrap() };
+    static ref TAG_DEVICE_MANUFACTURER: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_DEVICE_MANUFACTURER)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_DEVICE_MODEL: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_DEVICE_MODEL).to_str().unwrap() };
+    static ref TAG_APPLICATION_NAME: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_APPLICATION_NAME)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_APPLICATION_DATA: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_APPLICATION_DATA)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_IMAGE_ORIENTATION: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_IMAGE_ORIENTATION)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_PUBLISHER: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_PUBLISHER).to_str().unwrap() };
+    static ref TAG_INTERPRETED_BY: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_INTERPRETED_BY)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_MIDI_BASE_NOTE: &'static str = unsafe {
+        CStr::from_ptr(ffi::GST_TAG_MIDI_BASE_NOTE)
+            .to_str()
+            .unwrap()
+    };
+    static ref TAG_PRIVATE_DATA: &'static str =
+        unsafe { CStr::from_ptr(ffi::GST_TAG_PRIVATE_DATA).to_str().unwrap() };
 }
 
 pub type TagList = GstRc<TagListRef>;

@@ -9,11 +9,11 @@
 use libc::c_char;
 use std::ffi::CStr;
 use std::fmt;
-use std::ptr;
 use std::mem;
+use std::ptr;
 
-use gobject_ffi;
 use ffi;
+use gobject_ffi;
 
 use glib::IsA;
 use glib::translate::{from_glib, ToGlib, ToGlibPtr};

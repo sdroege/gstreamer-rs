@@ -7,22 +7,22 @@
 // except according to those terms.
 
 use ffi;
+use glib;
+use glib::StaticType;
+use glib::Value;
 use glib::translate::*;
+use glib::value::{FromValueOptional, ToValue};
 use glib_ffi;
 use glib_ffi::{gconstpointer, gpointer};
 use gobject_ffi;
+use std::error::Error;
+use std::ffi::CString;
+use std::fmt;
+use std::iter::Iterator as StdIterator;
+use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
-use glib;
-use glib::Value;
-use glib::StaticType;
-use glib::value::{FromValueOptional, ToValue};
 use std::sync::Arc;
-use std::ffi::CString;
-use std::marker::PhantomData;
-use std::iter::Iterator as StdIterator;
-use std::fmt;
-use std::error::Error;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum IteratorError {

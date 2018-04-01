@@ -8,12 +8,12 @@
 
 use AppSrc;
 use ffi;
-use glib::translate::*;
-use gst;
 use glib::source::CallbackGuard;
+use glib::translate::*;
 use glib_ffi::{gboolean, gpointer};
-use std::ptr;
+use gst;
 use std::mem;
+use std::ptr;
 
 pub struct AppSrcCallbacks {
     need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,

@@ -9,16 +9,16 @@
 use ffi;
 use gst_ffi;
 
-use gst;
-use gst::miniobject::MiniObject;
 use glib;
 use glib::translate::{from_glib, ToGlibPtr};
+use gst;
+use gst::miniobject::MiniObject;
 
-use std::mem;
-use std::ptr;
 use std::marker::PhantomData;
-use std::slice;
+use std::mem;
 use std::ops;
+use std::ptr;
+use std::slice;
 
 pub struct Readable;
 pub struct Writable;

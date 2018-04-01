@@ -7,19 +7,19 @@
 // except according to those terms.
 
 use Format;
-use GenericFormattedValue;
 use FormattedValue;
+use GenericFormattedValue;
 use SeekFlags;
 use SeekType;
 use ffi;
+use glib;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-use glib;
-use std::mem;
-use std::ptr;
 use std::fmt;
 use std::marker::PhantomData;
+use std::mem;
+use std::ptr;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
 #[repr(C)]

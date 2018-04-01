@@ -19,19 +19,17 @@ extern crate gstreamer_video as gst_video;
 extern crate glib;
 
 macro_rules! callback_guard {
-    () => (
+    () => {
         let _guard = ::glib::CallbackGuard::new();
-    )
+    };
 }
 
 macro_rules! skip_assert_initialized {
-    () => (
-    )
+    () => {};
 }
 
 macro_rules! assert_initialized_main_thread {
-    () => (
-    )
+    () => {};
 }
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
@@ -45,14 +43,14 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
-mod player;
 mod config;
+mod player;
 pub use config::*;
 
 mod player_video_info;
 
-mod player_video_overlay_video_renderer;
 mod player_g_main_context_signal_dispatcher;
+mod player_video_overlay_video_renderer;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

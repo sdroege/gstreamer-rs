@@ -7,15 +7,15 @@
 // except according to those terms.
 
 use ffi;
-use gst_ffi;
 use glib_ffi;
+use gst_ffi;
 
-use gst;
 use glib;
 use glib::translate::{from_glib_full, ToGlib, ToGlibPtr};
+use gst;
 
-use std::ptr;
 use std::mem;
+use std::ptr;
 
 pub fn convert_sample(
     sample: &gst::Sample,
@@ -89,8 +89,8 @@ pub fn convert_sample_async<F>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
     use glib;
+    use gst;
     use std::sync::{Arc, Mutex};
 
     #[test]

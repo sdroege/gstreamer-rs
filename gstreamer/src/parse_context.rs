@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib::translate::*;
 use ffi;
+use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 

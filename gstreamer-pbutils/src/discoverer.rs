@@ -11,19 +11,19 @@ use gst;
 
 use auto::Discoverer;
 
-use glib::Value;
 use glib::IsA;
-use glib::signal::connect;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
+use glib::Value;
 use glib::object::Downcast;
+use glib::signal::SignalHandlerId;
+use glib::signal::connect;
+use glib::translate::*;
 
 use ffi;
 use glib_ffi;
 use gobject_ffi;
 
-use std::mem::transmute;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 
 impl Discoverer {
     pub fn set_property_timeout(&self, timeout: gst::ClockTime) {
