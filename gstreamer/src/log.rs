@@ -19,7 +19,7 @@ use glib::IsA;
 use glib::translate::{from_glib, ToGlib, ToGlibPtr};
 
 #[derive(PartialEq, Eq, Clone, Copy)]
-pub struct DebugCategory(*mut ffi::GstDebugCategory);
+pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
 
 impl DebugCategory {
     pub fn new<'a, P: Into<Option<&'a str>>>(
@@ -38,11 +38,13 @@ impl DebugCategory {
 
         // Gets the category if it exists already
         unsafe {
-            DebugCategory(_gst_debug_category_new(
+            let ptr = _gst_debug_category_new(
                 name.to_glib_none().0,
                 color.to_glib(),
                 description.to_glib_none().0,
-            ))
+            );
+            assert!(!ptr.is_null());
+            DebugCategory(ptr::NonNull::new_unchecked(ptr))
         }
     }
 
@@ -57,34 +59,34 @@ impl DebugCategory {
             if cat.is_null() {
                 None
             } else {
-                Some(DebugCategory(cat))
+                Some(DebugCategory(ptr::NonNull::new_unchecked(cat)))
             }
         }
     }
 
     pub fn get_threshold(&self) -> ::DebugLevel {
-        from_glib(unsafe { ffi::gst_debug_category_get_threshold(self.0) })
+        from_glib(unsafe { ffi::gst_debug_category_get_threshold(self.0.as_ptr()) })
     }
 
     pub fn set_threshold(&self, threshold: ::DebugLevel) {
-        unsafe { ffi::gst_debug_category_set_threshold(self.0, threshold.to_glib()) }
+        unsafe { ffi::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
     }
 
     pub fn reset_threshold(&self) {
-        unsafe { ffi::gst_debug_category_reset_threshold(self.0) }
+        unsafe { ffi::gst_debug_category_reset_threshold(self.0.as_ptr()) }
     }
 
     pub fn get_color(&self) -> ::DebugColorFlags {
         unsafe {
             from_glib(mem::transmute::<u32, ffi::GstDebugColorFlags>(
-                ffi::gst_debug_category_get_color(self.0),
+                ffi::gst_debug_category_get_color(self.0.as_ptr()),
             ))
         }
     }
 
     pub fn get_name(&self) -> &str {
         unsafe {
-            CStr::from_ptr(ffi::gst_debug_category_get_name(self.0))
+            CStr::from_ptr(ffi::gst_debug_category_get_name(self.0.as_ptr()))
                 .to_str()
                 .unwrap()
         }
@@ -92,7 +94,7 @@ impl DebugCategory {
 
     pub fn get_description(&self) -> Option<&str> {
         unsafe {
-            let ptr = ffi::gst_debug_category_get_name(self.0);
+            let ptr = ffi::gst_debug_category_get_name(self.0.as_ptr());
 
             if ptr.is_null() {
                 None
@@ -113,7 +115,7 @@ impl DebugCategory {
         args: fmt::Arguments,
     ) {
         unsafe {
-            if level.to_glib() as i32 > (*self.0).threshold {
+            if level.to_glib() as i32 > self.0.as_ref().threshold {
                 return;
             }
         }
@@ -125,7 +127,7 @@ impl DebugCategory {
 
         unsafe {
             ffi::gst_debug_log(
-                self.0,
+                self.0.as_ptr(),
                 level.to_glib(),
                 file.to_glib_none().0,
                 module.to_glib_none().0,

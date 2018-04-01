@@ -15,12 +15,14 @@ use gobject_ffi;
 use glib;
 use glib::translate::{from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
 
+use std::ptr;
+
 #[repr(C)]
-pub struct StaticCaps(*mut ffi::GstStaticCaps);
+pub struct StaticCaps(ptr::NonNull<ffi::GstStaticCaps>);
 
 impl StaticCaps {
     pub fn get(&self) -> Caps {
-        unsafe { from_glib_full(ffi::gst_static_caps_get(self.0)) }
+        unsafe { from_glib_full(ffi::gst_static_caps_get(self.0.as_ptr())) }
     }
 }
 
@@ -72,7 +74,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCap
     type Storage = &'a StaticCaps;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstStaticCaps, Self> {
-        glib::translate::Stash(self.0, self)
+        glib::translate::Stash(self.0.as_ptr(), self)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstStaticCaps {
@@ -84,7 +86,8 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCap
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticCaps) -> Self {
-        StaticCaps(ptr as *mut _)
+        assert!(!ptr.is_null());
+        StaticCaps(ptr::NonNull::new_unchecked(ptr as *mut _))
     }
 }
 
@@ -92,7 +95,8 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticCaps) -> Self {
-        StaticCaps(ptr)
+        assert!(!ptr.is_null());
+        StaticCaps(ptr::NonNull::new_unchecked(ptr))
     }
 }
 
@@ -100,7 +104,8 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticCaps) -> Self {
-        StaticCaps(ptr)
+        assert!(!ptr.is_null());
+        StaticCaps(ptr::NonNull::new_unchecked(ptr))
     }
 }
 

@@ -22,7 +22,7 @@ use glib::translate::{c_ptr_array_len, from_glib, from_glib_full, from_glib_none
 use glib;
 
 pub struct GstRc<T: MiniObject> {
-    obj: *mut T,
+    obj: ptr::NonNull<T>,
     borrowed: bool,
     phantom: PhantomData<T>,
 }
@@ -34,7 +34,7 @@ impl<T: MiniObject> GstRc<T> {
         ffi::gst_mini_object_ref(ptr as *mut ffi::GstMiniObject);
 
         GstRc {
-            obj: T::from_mut_ptr(ptr as *mut T::GstType) as *mut T,
+            obj: ptr::NonNull::new_unchecked(T::from_mut_ptr(ptr as *mut T::GstType) as *mut T),
             borrowed: false,
             phantom: PhantomData,
         }
@@ -44,7 +44,7 @@ impl<T: MiniObject> GstRc<T> {
         assert!(!ptr.is_null());
 
         GstRc {
-            obj: T::from_mut_ptr(ptr as *mut T::GstType) as *mut T,
+            obj: ptr::NonNull::new_unchecked(T::from_mut_ptr(ptr as *mut T::GstType) as *mut T),
             borrowed: false,
             phantom: PhantomData,
         }
@@ -54,7 +54,7 @@ impl<T: MiniObject> GstRc<T> {
         assert!(!ptr.is_null());
 
         GstRc {
-            obj: T::from_mut_ptr(ptr as *mut T::GstType) as *mut T,
+            obj: ptr::NonNull::new_unchecked(T::from_mut_ptr(ptr as *mut T::GstType) as *mut T),
             borrowed: true,
             phantom: PhantomData,
         }
@@ -63,22 +63,23 @@ impl<T: MiniObject> GstRc<T> {
     pub fn make_mut(&mut self) -> &mut T {
         unsafe {
             if self.is_writable() {
-                return &mut *self.obj;
+                return self.obj.as_mut();
             }
 
-            self.obj = T::from_mut_ptr(
+            let ptr = T::from_mut_ptr(
                 ffi::gst_mini_object_make_writable(self.as_mut_ptr() as *mut ffi::GstMiniObject)
                     as *mut T::GstType,
             );
+            self.obj = ptr::NonNull::new_unchecked(ptr);
             assert!(self.is_writable());
 
-            &mut *self.obj
+            self.obj.as_mut()
         }
     }
 
     pub fn get_mut(&mut self) -> Option<&mut T> {
         if self.is_writable() {
-            Some(unsafe { &mut *self.obj })
+            Some(unsafe { self.obj.as_mut() })
         } else {
             None
         }
@@ -107,7 +108,7 @@ impl<T: MiniObject> ops::Deref for GstRc<T> {
 
 impl<T: MiniObject> AsRef<T> for GstRc<T> {
     fn as_ref(&self) -> &T {
-        unsafe { &*self.obj }
+        unsafe { self.obj.as_ref() }
     }
 }
 

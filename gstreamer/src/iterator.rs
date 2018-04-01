@@ -50,7 +50,7 @@ impl Error for IteratorError {
 
 // Implemented manually so that we can use generics for the item
 pub struct Iterator<T> {
-    iter: *mut ffi::GstIterator,
+    iter: ptr::NonNull<ffi::GstIterator>,
     borrowed: bool,
     phantom: PhantomData<T>,
 }
@@ -492,7 +492,7 @@ impl<T> Drop for Iterator<T> {
     fn drop(&mut self) {
         if !self.borrowed {
             unsafe {
-                ffi::gst_iterator_free(self.iter);
+                ffi::gst_iterator_free(self.iter.as_ptr());
             }
         }
     }
@@ -545,7 +545,7 @@ impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const ffi::GstIterator> for
     type Storage = &'a Iterator<T>;
 
     fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstIterator, Self> {
-        glib::translate::Stash(self.iter, self)
+        glib::translate::Stash(self.iter.as_ptr(), self)
     }
 
     fn to_glib_full(&self) -> *const ffi::GstIterator {
@@ -561,7 +561,7 @@ impl<'a, T: 'static> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstIterator> fo
     fn to_glib_none_mut(
         &'a mut self,
     ) -> glib::translate::StashMut<'a, *mut ffi::GstIterator, Self> {
-        glib::translate::StashMut(self.iter, self)
+        glib::translate::StashMut(self.iter.as_ptr(), self)
     }
 }
 
@@ -593,12 +593,13 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for 
 impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstIterator) -> Self {
+        assert!(!ptr.is_null());
         assert_ne!(
             gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
             glib_ffi::GFALSE
         );
         Self {
-            iter: ptr,
+            iter: ptr::NonNull::new_unchecked(ptr),
             borrowed: true,
             phantom: PhantomData,
         }
@@ -609,12 +610,13 @@ impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstIterator) -> Self {
+        assert!(!ptr.is_null());
         assert_ne!(
             gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
             glib_ffi::GFALSE
         );
         Self {
-            iter: ptr,
+            iter: ptr::NonNull::new_unchecked(ptr),
             borrowed: false,
             phantom: PhantomData,
         }
