@@ -6,22 +6,25 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::ffi::CStr;
+use std::slice;
 
 use ffi;
 
-pub struct SDPKey(ffi::GstSDPKey);
+#[repr(C)]
+pub struct MIKEYPayloadSPParam(ffi::GstMIKEYPayloadSPParam);
 
-impl SDPKey {
-	pub fn type_(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.type_).to_str().unwrap()
-        }
-	}
+impl MIKEYPayloadSPParam {
+    pub fn type_(&self) -> u8 {
+        self.0.type_
+    }
 
-	pub fn data(&self) -> &str {
+    pub fn len(&self) -> u8 {
+        self.0.len
+    }
+
+    pub fn val(&self) -> &[u8] {
         unsafe {
-            CStr::from_ptr(self.0.data).to_str().unwrap()
+            slice::from_raw_parts(self.0.val as *const u8, self.0.len as usize)
         }
-	}
+    }
 }

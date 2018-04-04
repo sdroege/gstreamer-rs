@@ -9,6 +9,7 @@
 extern crate bitflags;
 extern crate libc;
 
+#[macro_use]
 extern crate glib;
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
@@ -46,13 +47,10 @@ mod s_d_p_key;
 mod s_d_p_origin;
 mod s_d_p_time;
 mod s_d_p_zone;
-mod m_i_k_e_y_message;
-mod m_i_k_e_y_payload;
+mod m_i_k_e_y_payload_s_p_param;
 mod m_i_k_e_y_encrypt_info;
 mod m_i_k_e_y_decrypt_info;
 mod m_i_k_e_y_map_s_r_t_p;
-
-pub use s_d_p_message::SDPMessage;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

@@ -7,20 +7,23 @@
 // except according to those terms.
 
 use std::mem;
-use std::ffi:CStr;
+use std::os::raw::c_char;
+use std::ffi::CStr;
 
 use ffi;
+use glib::translate::*;
 
 use auto::SDPResult;
 
-pub struct SDPTime(ffi::GstSDPTime);
+#[repr(C)]
+pub struct SDPTime(pub ffi::GstSDPTime);
 
 impl SDPTime {
-    pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Result<Self, SDPResult> {
+    pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Result<Self, ()> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut time = mem::uninitialized();
-            let result =from_glib(ffi::gst_sdp_time_set(
+            let mut time = mem::zeroed();
+            let result = from_glib(ffi::gst_sdp_time_set(
                 &mut time,
                 start.to_glib_none().0,
                 stop.to_glib_none().0,
@@ -28,32 +31,40 @@ impl SDPTime {
             ));
 			match result {
 				SDPResult::Ok => Ok(SDPTime(time)),
-				_ => Err(result),
+				_ => Err(()),
 			}
         }
     }
 
     pub fn start(&self) -> &str {
-        CStr::from_ptr(self.0.start).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.start).to_str().unwrap()
+        }
     }
 
     pub fn stop(&self) -> &str {
-        CStr::from_ptr(self.0.stop).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.stop).to_str().unwrap()
+        }
     }
 
     pub fn repeat(&self) -> Vec<&str> {
-        let arr = (*self.0.repeat).data as *const *const c_char;
-        let len = (*self.0.repeat).len as usize;
-        let vec = Vec::with_capacity(len);
-        for i in 0..len {
-            vec.push(CStr::from_ptr(arr.offset(i)).to_str().unwrap());
+        unsafe {
+            let arr = (*self.0.repeat).data as *const *const c_char;
+            let len = (*self.0.repeat).len as usize;
+            let mut vec = Vec::with_capacity(len);
+            for i in 0..len {
+                vec.push(CStr::from_ptr(*arr.offset(i as isize)).to_str().unwrap());
+            }
+            vec
         }
-        vec
     }
 }
 
 impl Drop for SDPTime {
     fn drop(&mut self) {
-        ffi::gst_sdp_time_clear(self.to_glib_none_mut().0);
+        unsafe {
+            ffi::gst_sdp_time_clear(&mut self.0);
+        }
     }
 }

@@ -10,30 +10,43 @@ use std::ffi::CStr;
 
 use ffi;
 
-pub struct SDPOrigin(ffi::GstSDPOrigin);
+#[repr(C)]
+pub struct SDPOrigin(pub ffi::GstSDPOrigin);
 
 impl SDPOrigin {
 	pub fn username(&self) -> &str {
-		CStr::from_ptr(self.0.username).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.username).to_str().unwrap()
+        }
 	}
 
 	pub fn sess_id(&self) -> &str {
-		CStr::from_ptr(self.0.sess_id).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.sess_id).to_str().unwrap()
+        }
 	}
 
 	pub fn sess_version(&self) -> &str {
-		CStr::from_ptr(self.0.sess_version).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.sess_version).to_str().unwrap()
+        }
 	}
 
 	pub fn nettype(&self) -> &str {
-		CStr::from_ptr(self.0.nettype).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.nettype).to_str().unwrap()
+        }
 	}
 
 	pub fn addrtype(&self) -> &str {
-		CStr::from_ptr(self.0.addrtype).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.addrtype).to_str().unwrap()
+        }
 	}
 
 	pub fn addr(&self) -> &str {
-		CStr::from_ptr(self.0.addr).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.addr).to_str().unwrap()
+        }
 	}
 }

@@ -7,38 +7,46 @@
 // except according to those terms.
 
 use std::mem;
-use std::ffi:CStr;
+use std::ffi::CStr;
+
+use ffi;
+use glib::translate::*;
 
 use auto::SDPResult;
 
-use ffi;
-
-pub struct SDPZone(ffi::GstSDPZone);
+#[repr(C)]
+pub struct SDPZone(pub ffi::GstSDPZone);
 
 impl SDPZone {
-    pub fn new(time: &str, typed_time: &str) -> Result<Self, SDPResult> {
+    pub fn new(time: &str, typed_time: &str) -> Result<Self, ()> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut zone = mem::uninitialized();
+            let mut zone = mem::zeroed();
             let result = from_glib(ffi::gst_sdp_zone_set(&mut zone, time.to_glib_none().0, typed_time.to_glib_none().0));
 			match result {
 				SDPResult::Ok => Ok(SDPZone(zone)),
-				_ => Err(result),
+				_ => Err(()),
 			}
         }
     }
 
     pub fn time(&self) -> &str {
-        CStr::from_ptr(self.0.time).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.time).to_str().unwrap()
+        }
     }
 
     pub fn typed_time(&self) -> &str {
-        CStr::from_ptr(self.0.typed_time).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.typed_time).to_str().unwrap()
+        }
     }
 }
 
 impl Drop for SDPZone {
     fn drop(&mut self) {
-        ffi::gst_sdp_zone_clear(self.to_glib_none_mut().0);
+        unsafe {
+            ffi::gst_sdp_zone_clear(&mut self.0);
+        }
     }
 }

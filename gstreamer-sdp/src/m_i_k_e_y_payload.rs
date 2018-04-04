@@ -15,6 +15,7 @@ use glib_ffi;
 use gobject_ffi;
 
 use auto::MIKEYPayload;
+use m_i_k_e_y_map_s_r_t_p::MIKEYPayloadSPParam;
 
 impl MIKEYPayload {
 
@@ -25,11 +26,30 @@ impl MIKEYPayload {
         mem::forget(newpay);
     }
 
-    //pub fn sp_get_param(&self, idx: u32) -> /*Ignored*/Option<MIKEYPayloadSPParam> {
-    //    unsafe { TODO: call ffi::gst_mikey_payload_sp_get_param() }
-    //}
+    pub fn kemac_get_sub(&self, idx: u32) -> Option<MIKEYPayload> {
+        unsafe {
+            &*(from_glib_none(ffi::gst_mikey_payload_kemac_get_sub(self.to_glib_none().0, idx)) as *mut MIKEYPayload)
+        }
+    }
 
-    //pub fn t_set(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> bool {
-    //    unsafe { TODO: call ffi::gst_mikey_payload_t_set() }
-    //}
+    pub fn sp_get_param(&self, idx: u32) -> Option<&MIKEYPayloadSPParam> {
+        unsafe {
+            &*(from_glib_none(ffi::gst_mikey_payload_sp_get_param(self.to_glib_none().0, idx)) as *mut MIKEYPayloadSPParam)
+        }
+    }
+
+    pub fn t_set(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> bool {
+        unsafe {
+            from_glib(ffi::gst_mikey_payload_t_set(self.to_glib_none_mut().0, type_.to_glib(), ts_value.to_glib_none().0))
+        }
+    }
+
+    pub fn key_data_set_interval(&mut self, vf_data: &[u8], vt_data: &[u8]) -> bool {
+        let vf_len = vf_data.len() as u8;
+        let vt_len = vt_data.len() as u8;
+        unsafe {
+            from_glib(ffi::gst_mikey_payload_key_data_set_interval(self.to_glib_none_mut().0, vf_len, vf_data.to_glib_none().0, vt_len, vt_data.to_glib_none().0))
+        }
+    }
+
 }

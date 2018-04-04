@@ -85,12 +85,6 @@ impl MIKEYMessage {
         }
     }
 
-    pub fn base64_encode(&mut self) -> Option<String> {
-        unsafe {
-            from_glib_full(ffi::gst_mikey_message_base64_encode(self.to_glib_none_mut().0))
-        }
-    }
-
     pub fn find_payload(&self, type_: MIKEYPayloadType, nth: u32) -> Option<MIKEYPayload> {
         unsafe {
             from_glib_none(ffi::gst_mikey_message_find_payload(self.to_glib_none().0, type_.to_glib(), nth))
@@ -110,12 +104,6 @@ impl MIKEYMessage {
     pub fn get_n_payloads(&self) -> u32 {
         unsafe {
             ffi::gst_mikey_message_get_n_payloads(self.to_glib_none().0)
-        }
-    }
-
-    pub fn get_payload(&self, idx: u32) -> Option<MIKEYPayload> {
-        unsafe {
-            from_glib_none(ffi::gst_mikey_message_get_payload(self.to_glib_none().0, idx))
         }
     }
 

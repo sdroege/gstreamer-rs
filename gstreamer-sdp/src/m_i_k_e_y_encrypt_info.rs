@@ -6,18 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::mem;
-use std::ptr;
-
 use ffi;
-use glib::translate::*;
-use glib_ffi;
-use libc::c_void;
 
 pub struct MIKEYEncryptInfo(ffi::GstMIKEYEncryptInfo);
-
-impl MIKEYEncryptInfo {
-    pub fn new() -> MIKEYEncryptInfo {
-        MIKEYEncryptInfo(ffi::GstMIKEYEncryptInfo(ptr::null_mut() as *mut c_void))
-    }
-}
