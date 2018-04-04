@@ -14,8 +14,8 @@ fn main() {
 }
 
 fn find() -> Result<(), Error> {
-    let package_name = "gstreamer-player-1.0";
-    let shared_libs = ["gstplayer-1.0"];
+    let package_name = "gstreamer-webrtc-1.0";
+    let shared_libs = ["gstwebrtc-1.0"];
     let version = "1.14";
 
     if let Ok(lib_dir) = env::var("GTK_LIB_DIR") {
