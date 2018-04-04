@@ -39,12 +39,6 @@ impl MIKEYPayload {
         }
     }
 
-    pub fn kemac_get_sub(&self, idx: u32) -> Option<MIKEYPayload> {
-        unsafe {
-            from_glib_none(ffi::gst_mikey_payload_kemac_get_sub(self.to_glib_none().0, idx))
-        }
-    }
-
     pub fn kemac_remove_sub(&mut self, idx: u32) -> bool {
         unsafe {
             from_glib(ffi::gst_mikey_payload_kemac_remove_sub(self.to_glib_none_mut().0, idx))
@@ -54,14 +48,6 @@ impl MIKEYPayload {
     pub fn kemac_set(&mut self, enc_alg: MIKEYEncAlg, mac_alg: MIKEYMacAlg) -> bool {
         unsafe {
             from_glib(ffi::gst_mikey_payload_kemac_set(self.to_glib_none_mut().0, enc_alg.to_glib(), mac_alg.to_glib()))
-        }
-    }
-
-    pub fn key_data_set_interval(&mut self, vf_len: u8, vt_data: &[u8]) -> bool {
-        let vf_data = vf_data.len() as Vec<u8>;
-        let vt_len = vt_data.len() as u8;
-        unsafe {
-            from_glib(ffi::gst_mikey_payload_key_data_set_interval(self.to_glib_none_mut().0, vf_len, vf_data.to_glib_none().0, vt_len, vt_data.to_glib_none().0))
         }
     }
 

@@ -10,35 +10,43 @@ use std::mem;
 use std::ffi::CStr;
 
 use ffi;
+use glib::translate::*;
 
 use auto::SDPResult;
 
-pub struct SDPAttribute(ffi::GstSDPAttribute);
+#[repr(C)]
+pub struct SDPAttribute(pub ffi::GstSDPAttribute);
 
 impl SDPAttribute {
-    pub fn new(key: &str, value: &str) -> Result<Self, SDPResult> {
+    pub fn new(key: &str, value: &str) -> Result<Self, ()> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut attr = mem::uninitialized();
+            let mut attr = mem::zeroed();
             let result = from_glib(ffi::gst_sdp_attribute_set(&mut attr, key.to_glib_none().0, value.to_glib_none().0));
             match result {
                 SDPResult::Ok => Ok(SDPAttribute(attr)),
-                _ => Err(result),
+                _ => Err(()),
             }
         }
     }
 
     pub fn key(&self) -> &str {
-        CStr::from_ptr(self.0.key).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.key).to_str().unwrap()
+        }
     }
 
     pub fn value(&self) -> &str {
-        CStr::from_ptr(self.0.value).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.value).to_str().unwrap()
+        }
     }
 }
 
 impl Drop for SDPAttribute {
     fn drop(&mut self) {
-        ffi::gst_sdp_attribute_clear(self.to_glib_none_mut().0);
+        unsafe {
+            ffi::gst_sdp_attribute_clear(&mut self.0);
+        }
     }
 }

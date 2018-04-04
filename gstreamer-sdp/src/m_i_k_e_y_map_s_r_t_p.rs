@@ -6,13 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::mem;
-use std::ptr;
-
 use ffi;
-use glib::translate::*;
-use glib_ffi;
 
+#[repr(C)]
 pub struct MIKEYMapSRTP(ffi::GstMIKEYMapSRTP);
 
 impl MIKEYMapSRTP {

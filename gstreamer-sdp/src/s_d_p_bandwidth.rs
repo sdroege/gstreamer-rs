@@ -10,26 +10,30 @@ use std::mem;
 use std::ffi::CStr;
 
 use ffi;
+use glib::translate::*;
 
 use auto::SDPResult;
 
-pub struct SDPBandwidth(ffi::GstSDPBandwidth);
+#[repr(C)]
+pub struct SDPBandwidth(pub ffi::GstSDPBandwidth);
 
 impl SDPBandwidth {
-    pub fn new(bwtype: &str, bandwidth: u32) -> Result<Self, SDPResult> {
+    pub fn new(bwtype: &str, bandwidth: u32) -> Result<Self, ()> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut bw = mem::uninitialized();
+            let mut bw = mem::zeroed();
             let result = from_glib(ffi::gst_sdp_bandwidth_set(&mut bw, bwtype.to_glib_none().0, bandwidth));
             match result {
                 SDPResult::Ok => Ok(SDPBandwidth(bw)),
-                _ => Err(result),
+                _ => Err(()),
             }
         }
     }
 
     pub fn bwtype(&self) -> &str {
-        CStr::from_ptr(self.0.bwtype).to_str().unwrap()
+        unsafe {
+            CStr::from_ptr(self.0.bwtype).to_str().unwrap()
+        }
     }
 
     pub fn value(&self) -> u32 {
@@ -39,6 +43,8 @@ impl SDPBandwidth {
 
 impl Drop for SDPBandwidth {
     fn drop(&mut self) {
-        ffi::gst_sdp_bandwidth_clear(self.to_glib_none_mut().0);
+        unsafe {
+            ffi::gst_sdp_bandwidth_clear(&mut self.0);
+        }
     }
 }

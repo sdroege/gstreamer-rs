@@ -55,9 +55,25 @@ status = "generate"
     name = "add_payload"
     ignore = true
 
+    [[object.function]]
+    name = "get_payload"
+    ignore = true
+
+    [[object.function]]
+    name = "base64_encode"
+    ignore = true
+
 [[object]]
 name = "GstSdp.MIKEYPayload"
 status = "generate"
     [[object.function]]
     name = "kemac_add_sub"
+    ignore = true
+
+    [[object.function]]
+    name = "kemac_get_sub"
+    ignore = true
+
+    [[object.function]]
+    name = "key_data_set_interval"
     ignore = true
