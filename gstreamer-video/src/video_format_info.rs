@@ -106,35 +106,35 @@ impl VideoFormatInfo {
     }
 
     pub fn has_alpha(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_ALPHA)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_ALPHA != 0
     }
 
     pub fn has_palette(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_PALETTE)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
     }
 
     pub fn is_complex(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
     }
 
     pub fn is_gray(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_GRAY)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_GRAY != 0
     }
 
     pub fn is_le(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_LE)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_LE != 0
     }
 
     pub fn is_rgb(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_RGB)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_RGB != 0
     }
 
     pub fn is_tiled(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_TILED)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_TILED != 0
     }
 
     pub fn is_yuv(&self) -> bool {
-        self.0.flags.contains(ffi::GST_VIDEO_FORMAT_FLAG_YUV)
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_YUV != 0
     }
 
     pub fn scale_width(&self, component: u8, width: u32) -> u32 {

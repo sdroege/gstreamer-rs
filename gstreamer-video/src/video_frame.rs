@@ -179,9 +179,7 @@ impl VideoFrame<Readable> {
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits(),
-                ),
+                mem::transmute(ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ),
             ));
 
             if !res {
@@ -207,9 +205,7 @@ impl VideoFrame<Readable> {
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits(),
-                ),
+                mem::transmute(ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ),
             ));
 
             if !res {
@@ -242,8 +238,8 @@ impl VideoFrame<Writable> {
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits()
-                        | gst_ffi::GST_MAP_WRITE.bits(),
+                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                        | gst_ffi::GST_MAP_WRITE,
                 ),
             ));
 
@@ -271,8 +267,8 @@ impl VideoFrame<Writable> {
                 buffer.to_glib_none().0,
                 id,
                 mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits()
-                        | gst_ffi::GST_MAP_WRITE.bits(),
+                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                        | gst_ffi::GST_MAP_WRITE,
                 ),
             ));
 
@@ -341,9 +337,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits(),
-                ),
+                mem::transmute(ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ),
             ));
 
             if !res {
@@ -369,9 +363,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
-                mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits(),
-                ),
+                mem::transmute(ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ),
             ));
 
             if !res {
@@ -524,8 +516,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits()
-                        | gst_ffi::GST_MAP_WRITE.bits(),
+                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                        | gst_ffi::GST_MAP_WRITE,
                 ),
             ));
 
@@ -553,8 +545,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 buffer.as_mut_ptr(),
                 id,
                 mem::transmute(
-                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF.bits() | gst_ffi::GST_MAP_READ.bits()
-                        | gst_ffi::GST_MAP_WRITE.bits(),
+                    ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                        | gst_ffi::GST_MAP_WRITE,
                 ),
             ));
 

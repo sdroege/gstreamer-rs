@@ -103,23 +103,23 @@ unsafe impl MiniObject for EventRef {
 
 impl EventType {
     pub fn is_upstream(&self) -> bool {
-        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_UPSTREAM.bits()) != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
     pub fn is_downstream(&self) -> bool {
-        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_DOWNSTREAM.bits()) != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
     pub fn is_serialized(&self) -> bool {
-        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_SERIALIZED.bits()) != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
     pub fn is_sticky(&self) -> bool {
-        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_STICKY.bits()) != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
     }
 
     pub fn is_sticky_multi(&self) -> bool {
-        (self.to_glib() as u32) & (ffi::GST_EVENT_TYPE_STICKY_MULTI.bits()) != 0
+        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
 }
 

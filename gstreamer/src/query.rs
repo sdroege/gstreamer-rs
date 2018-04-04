@@ -157,15 +157,15 @@ impl QueryRef {
     }
 
     pub fn is_downstream(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_DOWNSTREAM.bits()) != 0 }
+        unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_DOWNSTREAM != 0 }
     }
 
     pub fn is_upstream(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_UPSTREAM.bits()) != 0 }
+        unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_UPSTREAM != 0 }
     }
 
     pub fn is_serialized(&self) -> bool {
-        unsafe { ((*self.as_ptr()).type_ as u32) & (ffi::GST_QUERY_TYPE_SERIALIZED.bits()) != 0 }
+        unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_SERIALIZED != 0 }
     }
 
     pub fn view(&self) -> QueryView<&Self> {

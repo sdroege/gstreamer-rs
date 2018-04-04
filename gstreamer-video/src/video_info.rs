@@ -285,7 +285,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(multiview_flags) = self.multiview_flags {
                 let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut u32;
-                ptr::write(ptr.offset(1), multiview_flags.to_glib().bits());
+                ptr::write(ptr.offset(1), multiview_flags.to_glib());
             }
 
             #[cfg(any(feature = "v1_12", feature = "dox"))]
@@ -523,9 +523,7 @@ impl VideoInfo {
     pub fn multiview_flags(&self) -> ::VideoMultiviewFlags {
         unsafe {
             let ptr = &self.0.ABI._gst_reserved as *const _ as *const u32;
-            from_glib(ffi::GstVideoMultiviewFlags::from_bits_truncate(ptr::read(
-                ptr.offset(1),
-            )))
+            from_glib(ptr::read(ptr.offset(1)))
         }
     }
 

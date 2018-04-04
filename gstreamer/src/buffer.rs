@@ -83,7 +83,7 @@ impl GstRc<BufferRef> {
             };
             let user_data = Box::into_raw(b);
             from_glib_full(ffi::gst_buffer_new_wrapped_full(
-                ffi::GstMemoryFlags::empty(),
+                0,
                 data as glib_ffi::gpointer,
                 size,
                 0,
