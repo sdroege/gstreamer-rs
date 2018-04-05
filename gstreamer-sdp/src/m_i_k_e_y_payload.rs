@@ -21,12 +21,13 @@ impl MIKEYPayload {
 
     pub fn kemac_add_sub(&mut self, newpay: MIKEYPayload) -> bool {
         unsafe {
-            from_glib(ffi::gst_mikey_payload_kemac_add_sub(self.to_glib_none_mut().0, newpay.to_glib_full()))
+            let ret = from_glib(ffi::gst_mikey_payload_kemac_add_sub(self.to_glib_none_mut().0, newpay.to_glib_full()));
+            mem::forget(newpay);
+            ret
         }
-        mem::forget(newpay);
     }
 
-    pub fn kemac_get_sub(&self, idx: u32) -> Option<MIKEYPayload> {
+    pub fn kemac_get_sub(&self, idx: u32) -> Option<&MIKEYPayload> {
         unsafe {
             &*(from_glib_none(ffi::gst_mikey_payload_kemac_get_sub(self.to_glib_none().0, idx)) as *mut MIKEYPayload)
         }

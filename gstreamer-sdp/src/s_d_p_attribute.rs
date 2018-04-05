@@ -15,7 +15,7 @@ use glib::translate::*;
 use auto::SDPResult;
 
 #[repr(C)]
-pub struct SDPAttribute(pub ffi::GstSDPAttribute);
+pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
 
 impl SDPAttribute {
     pub fn new(key: &str, value: &str) -> Result<Self, ()> {

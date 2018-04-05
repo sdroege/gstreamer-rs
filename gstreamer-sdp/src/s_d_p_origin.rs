@@ -11,7 +11,7 @@ use std::ffi::CStr;
 use ffi;
 
 #[repr(C)]
-pub struct SDPOrigin(pub ffi::GstSDPOrigin);
+pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
 
 impl SDPOrigin {
 	pub fn username(&self) -> &str {

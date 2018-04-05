@@ -15,7 +15,7 @@ use glib::translate::*;
 use auto::SDPResult;
 
 #[repr(C)]
-pub struct SDPConnection(pub ffi::GstSDPConnection);
+pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
 
 impl SDPConnection {
     pub fn new(nettype: &str, addrtype: &str, address: &str, ttl: u32, addr_number: u32) -> Result<Self, ()> {
