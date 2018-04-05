@@ -17,7 +17,7 @@ use gobject_ffi;
 use gst;
 use gst::MiniObject;
 
-use auto::{MIKEYMessage, SDPResult};
+use SDPResult;
 use s_d_p_attribute::SDPAttribute;
 use s_d_p_bandwidth::SDPBandwidth;
 use s_d_p_connection::SDPConnection;

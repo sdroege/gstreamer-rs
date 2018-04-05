@@ -15,7 +15,7 @@ use glib::translate::*;
 use glib_ffi;
 use gst;
 
-use auto::{MIKEYMessage, SDPResult};
+use SDPResult;
 use s_d_p_attribute::SDPAttribute;
 use s_d_p_bandwidth::SDPBandwidth;
 use s_d_p_connection::SDPConnection;
