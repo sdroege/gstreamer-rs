@@ -16,7 +16,7 @@ use glib::translate::*;
 use auto::SDPResult;
 
 #[repr(C)]
-pub struct SDPTime(pub ffi::GstSDPTime);
+pub struct SDPTime(pub(crate) ffi::GstSDPTime);
 
 impl SDPTime {
     pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Result<Self, ()> {

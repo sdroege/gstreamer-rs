@@ -15,7 +15,7 @@ use glib::translate::*;
 use auto::SDPResult;
 
 #[repr(C)]
-pub struct SDPBandwidth(pub ffi::GstSDPBandwidth);
+pub struct SDPBandwidth(pub(crate) ffi::GstSDPBandwidth);
 
 impl SDPBandwidth {
     pub fn new(bwtype: &str, bandwidth: u32) -> Result<Self, ()> {

@@ -15,7 +15,7 @@ use glib::translate::*;
 use auto::SDPResult;
 
 #[repr(C)]
-pub struct SDPZone(pub ffi::GstSDPZone);
+pub struct SDPZone(pub(crate) ffi::GstSDPZone);
 
 impl SDPZone {
     pub fn new(time: &str, typed_time: &str) -> Result<Self, ()> {

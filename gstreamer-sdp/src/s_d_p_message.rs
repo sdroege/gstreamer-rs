@@ -672,7 +672,10 @@ impl SDPMessage {
             let result = from_glib(ffi::gst_sdp_message_parse_buffer(data.to_glib_none().0, size, msg));
             match result {
                 SDPResult::Ok => Ok(from_glib_full(msg)),
-                _ => Err(()),
+                _ => {
+                    glib_ffi::g_free(msg as *mut _);
+                    Err(())
+                },
             }
         }
     }
@@ -684,7 +687,10 @@ impl SDPMessage {
             let result = from_glib(ffi::gst_sdp_message_parse_uri(uri.to_glib_none().0, msg));
             match result {
                 SDPResult::Ok => Ok(from_glib_full(msg)),
-                _ => Err(()),
+                _ => {
+                    glib_ffi::g_free(msg as *mut _);
+                    Err(())
+                },
             }
         }
     }
