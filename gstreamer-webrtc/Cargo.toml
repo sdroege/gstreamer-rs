@@ -16,8 +16,8 @@ build = "build.rs"
 libc = "0.2"
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", branch = "1.14" }
-gstreamer-webrtc-sys = { git = "https://github.com/sdroege/gstreamer-sys", branch = "1.14" }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys" }
+gstreamer-webrtc-sys = { git = "https://github.com/sdroege/gstreamer-sys" }
 glib = { git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer", features = ["v1_14"] }
 gstreamer-sdp = { path = "../gstreamer-sdp" }
