@@ -13,8 +13,6 @@ use std::os::raw::c_char;
 use ffi;
 use glib::translate::*;
 
-use auto::SDPResult;
-
 #[repr(C)]
 pub struct SDPTime(pub(crate) ffi::GstSDPTime);
 
@@ -23,14 +21,14 @@ impl SDPTime {
         assert_initialized_main_thread!();
         unsafe {
             let mut time = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_time_set(
+            let result = ffi::gst_sdp_time_set(
                 &mut time,
                 start.to_glib_none().0,
                 stop.to_glib_none().0,
                 repeat.to_glib_none().0,
-            ));
+            );
             match result {
-                SDPResult::Ok => Ok(SDPTime(time)),
+                ffi::GST_SDP_OK => Ok(SDPTime(time)),
                 _ => Err(()),
             }
         }

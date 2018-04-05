@@ -12,8 +12,6 @@ use std::mem;
 use ffi;
 use glib::translate::*;
 
-use auto::SDPResult;
-
 #[repr(C)]
 pub struct SDPZone(pub(crate) ffi::GstSDPZone);
 
@@ -22,13 +20,13 @@ impl SDPZone {
         assert_initialized_main_thread!();
         unsafe {
             let mut zone = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_zone_set(
+            let result = ffi::gst_sdp_zone_set(
                 &mut zone,
                 time.to_glib_none().0,
                 typed_time.to_glib_none().0,
-            ));
+            );
             match result {
-                SDPResult::Ok => Ok(SDPZone(zone)),
+                ffi::GST_SDP_OK => Ok(SDPZone(zone)),
                 _ => Err(()),
             }
         }

@@ -12,8 +12,6 @@ use std::mem;
 use ffi;
 use glib::translate::*;
 
-use auto::SDPResult;
-
 #[repr(C)]
 pub struct SDPBandwidth(pub(crate) ffi::GstSDPBandwidth);
 
@@ -22,13 +20,9 @@ impl SDPBandwidth {
         assert_initialized_main_thread!();
         unsafe {
             let mut bw = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_bandwidth_set(
-                &mut bw,
-                bwtype.to_glib_none().0,
-                bandwidth,
-            ));
+            let result = ffi::gst_sdp_bandwidth_set(&mut bw, bwtype.to_glib_none().0, bandwidth);
             match result {
-                SDPResult::Ok => Ok(SDPBandwidth(bw)),
+                ffi::GST_SDP_OK => Ok(SDPBandwidth(bw)),
                 _ => Err(()),
             }
         }

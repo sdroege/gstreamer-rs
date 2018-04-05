@@ -28,7 +28,6 @@ generate = [
     "GstSdp.MIKEYSecSRTP",
     "GstSdp.MIKEYTSType",
     "GstSdp.MIKEYType",
-    "GstSdp.SDPResult",
 ]
 
 manual = [

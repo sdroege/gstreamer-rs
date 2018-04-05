@@ -12,8 +12,6 @@ use std::mem;
 use ffi;
 use glib::translate::*;
 
-use auto::SDPResult;
-
 #[repr(C)]
 pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
 
@@ -22,13 +20,10 @@ impl SDPAttribute {
         assert_initialized_main_thread!();
         unsafe {
             let mut attr = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_attribute_set(
-                &mut attr,
-                key.to_glib_none().0,
-                value.to_glib_none().0,
-            ));
+            let result =
+                ffi::gst_sdp_attribute_set(&mut attr, key.to_glib_none().0, value.to_glib_none().0);
             match result {
-                SDPResult::Ok => Ok(SDPAttribute(attr)),
+                ffi::GST_SDP_OK => Ok(SDPAttribute(attr)),
                 _ => Err(()),
             }
         }

@@ -12,8 +12,6 @@ use std::mem;
 use ffi;
 use glib::translate::*;
 
-use auto::SDPResult;
-
 #[repr(C)]
 pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
 
@@ -28,16 +26,16 @@ impl SDPConnection {
         assert_initialized_main_thread!();
         unsafe {
             let mut conn = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_connection_set(
+            let result = ffi::gst_sdp_connection_set(
                 &mut conn,
                 nettype.to_glib_none().0,
                 addrtype.to_glib_none().0,
                 address.to_glib_none().0,
                 ttl,
                 addr_number,
-            ));
+            );
             match result {
-                SDPResult::Ok => Ok(SDPConnection(conn)),
+                ffi::GST_SDP_OK => Ok(SDPConnection(conn)),
                 _ => Err(()),
             }
         }

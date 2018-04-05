@@ -494,36 +494,3 @@ impl FromGlib<ffi::GstMIKEYType> for MIKEYType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub enum SDPResult {
-    Ok,
-    Einval,
-    #[doc(hidden)]
-    __Unknown(i32),
-}
-
-#[doc(hidden)]
-impl ToGlib for SDPResult {
-    type GlibType = ffi::GstSDPResult;
-
-    fn to_glib(&self) -> ffi::GstSDPResult {
-        match *self {
-            SDPResult::Ok => ffi::GST_SDP_OK,
-            SDPResult::Einval => ffi::GST_SDP_EINVAL,
-            SDPResult::__Unknown(value) => value
-        }
-    }
-}
-
-#[doc(hidden)]
-impl FromGlib<ffi::GstSDPResult> for SDPResult {
-    fn from_glib(value: ffi::GstSDPResult) -> Self {
-        skip_assert_initialized!();
-        match value {
-            0 => SDPResult::Ok,
-            -1 => SDPResult::Einval,
-            value => SDPResult::__Unknown(value),
-        }
-    }
-}
-

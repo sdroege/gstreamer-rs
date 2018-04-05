@@ -21,7 +21,6 @@ pub use self::enums::MIKEYSecProto;
 pub use self::enums::MIKEYSecSRTP;
 pub use self::enums::MIKEYTSType;
 pub use self::enums::MIKEYType;
-pub use self::enums::SDPResult;
 
 #[doc(hidden)]
 pub mod traits {
