@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::mem;
 use std::ffi::CStr;
+use std::mem;
 
 use ffi;
 use glib::translate::*;
@@ -22,24 +22,24 @@ impl SDPZone {
         assert_initialized_main_thread!();
         unsafe {
             let mut zone = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_zone_set(&mut zone, time.to_glib_none().0, typed_time.to_glib_none().0));
-			match result {
-				SDPResult::Ok => Ok(SDPZone(zone)),
-				_ => Err(()),
-			}
+            let result = from_glib(ffi::gst_sdp_zone_set(
+                &mut zone,
+                time.to_glib_none().0,
+                typed_time.to_glib_none().0,
+            ));
+            match result {
+                SDPResult::Ok => Ok(SDPZone(zone)),
+                _ => Err(()),
+            }
         }
     }
 
     pub fn time(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.time).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.time).to_str().unwrap() }
     }
 
     pub fn typed_time(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.typed_time).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.typed_time).to_str().unwrap() }
     }
 }
 

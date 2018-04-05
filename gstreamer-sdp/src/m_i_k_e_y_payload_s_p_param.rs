@@ -23,8 +23,6 @@ impl MIKEYPayloadSPParam {
     }
 
     pub fn val(&self) -> &[u8] {
-        unsafe {
-            slice::from_raw_parts(self.0.val as *const u8, self.0.len as usize)
-        }
+        unsafe { slice::from_raw_parts(self.0.val as *const u8, self.0.len as usize) }
     }
 }

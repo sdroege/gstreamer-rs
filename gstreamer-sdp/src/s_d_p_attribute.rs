@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::mem;
 use std::ffi::CStr;
+use std::mem;
 
 use ffi;
 use glib::translate::*;
@@ -22,7 +22,11 @@ impl SDPAttribute {
         assert_initialized_main_thread!();
         unsafe {
             let mut attr = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_attribute_set(&mut attr, key.to_glib_none().0, value.to_glib_none().0));
+            let result = from_glib(ffi::gst_sdp_attribute_set(
+                &mut attr,
+                key.to_glib_none().0,
+                value.to_glib_none().0,
+            ));
             match result {
                 SDPResult::Ok => Ok(SDPAttribute(attr)),
                 _ => Err(()),
@@ -31,15 +35,11 @@ impl SDPAttribute {
     }
 
     pub fn key(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.key).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.key).to_str().unwrap() }
     }
 
     pub fn value(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.value).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.value).to_str().unwrap() }
     }
 }
 

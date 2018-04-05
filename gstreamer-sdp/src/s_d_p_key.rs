@@ -13,15 +13,11 @@ use ffi;
 pub struct SDPKey(ffi::GstSDPKey);
 
 impl SDPKey {
-	pub fn type_(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.type_).to_str().unwrap()
-        }
-	}
+    pub fn type_(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.type_).to_str().unwrap() }
+    }
 
-	pub fn data(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.data).to_str().unwrap()
-        }
-	}
+    pub fn data(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.data).to_str().unwrap() }
+    }
 }

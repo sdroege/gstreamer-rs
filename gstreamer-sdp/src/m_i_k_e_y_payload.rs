@@ -18,10 +18,12 @@ use auto::MIKEYPayload;
 use m_i_k_e_y_map_s_r_t_p::MIKEYPayloadSPParam;
 
 impl MIKEYPayload {
-
     pub fn kemac_add_sub(&mut self, newpay: MIKEYPayload) -> bool {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_payload_kemac_add_sub(self.to_glib_none_mut().0, newpay.to_glib_full()));
+            let ret = from_glib(ffi::gst_mikey_payload_kemac_add_sub(
+                self.to_glib_none_mut().0,
+                newpay.to_glib_full(),
+            ));
             mem::forget(newpay);
             ret
         }
@@ -29,19 +31,29 @@ impl MIKEYPayload {
 
     pub fn kemac_get_sub(&self, idx: u32) -> Option<&MIKEYPayload> {
         unsafe {
-            &*(from_glib_none(ffi::gst_mikey_payload_kemac_get_sub(self.to_glib_none().0, idx)) as *mut MIKEYPayload)
+            &*(from_glib_none(ffi::gst_mikey_payload_kemac_get_sub(
+                self.to_glib_none().0,
+                idx,
+            )) as *mut MIKEYPayload)
         }
     }
 
     pub fn sp_get_param(&self, idx: u32) -> Option<&MIKEYPayloadSPParam> {
         unsafe {
-            &*(from_glib_none(ffi::gst_mikey_payload_sp_get_param(self.to_glib_none().0, idx)) as *mut MIKEYPayloadSPParam)
+            &*(from_glib_none(ffi::gst_mikey_payload_sp_get_param(
+                self.to_glib_none().0,
+                idx,
+            )) as *mut MIKEYPayloadSPParam)
         }
     }
 
     pub fn t_set(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> bool {
         unsafe {
-            from_glib(ffi::gst_mikey_payload_t_set(self.to_glib_none_mut().0, type_.to_glib(), ts_value.to_glib_none().0))
+            from_glib(ffi::gst_mikey_payload_t_set(
+                self.to_glib_none_mut().0,
+                type_.to_glib(),
+                ts_value.to_glib_none().0,
+            ))
         }
     }
 
@@ -49,8 +61,13 @@ impl MIKEYPayload {
         let vf_len = vf_data.len() as u8;
         let vt_len = vt_data.len() as u8;
         unsafe {
-            from_glib(ffi::gst_mikey_payload_key_data_set_interval(self.to_glib_none_mut().0, vf_len, vf_data.to_glib_none().0, vt_len, vt_data.to_glib_none().0))
+            from_glib(ffi::gst_mikey_payload_key_data_set_interval(
+                self.to_glib_none_mut().0,
+                vf_len,
+                vf_data.to_glib_none().0,
+                vt_len,
+                vt_data.to_glib_none().0,
+            ))
         }
     }
-
 }

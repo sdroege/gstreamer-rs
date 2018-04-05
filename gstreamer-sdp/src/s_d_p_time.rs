@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use std::ffi::CStr;
 use std::mem;
 use std::os::raw::c_char;
-use std::ffi::CStr;
 
 use ffi;
 use glib::translate::*;
@@ -29,23 +29,19 @@ impl SDPTime {
                 stop.to_glib_none().0,
                 repeat.to_glib_none().0,
             ));
-			match result {
-				SDPResult::Ok => Ok(SDPTime(time)),
-				_ => Err(()),
-			}
+            match result {
+                SDPResult::Ok => Ok(SDPTime(time)),
+                _ => Err(()),
+            }
         }
     }
 
     pub fn start(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.start).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.start).to_str().unwrap() }
     }
 
     pub fn stop(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.stop).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.stop).to_str().unwrap() }
     }
 
     pub fn repeat(&self) -> Vec<&str> {

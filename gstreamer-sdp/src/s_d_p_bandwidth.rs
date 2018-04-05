@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::mem;
 use std::ffi::CStr;
+use std::mem;
 
 use ffi;
 use glib::translate::*;
@@ -22,7 +22,11 @@ impl SDPBandwidth {
         assert_initialized_main_thread!();
         unsafe {
             let mut bw = mem::zeroed();
-            let result = from_glib(ffi::gst_sdp_bandwidth_set(&mut bw, bwtype.to_glib_none().0, bandwidth));
+            let result = from_glib(ffi::gst_sdp_bandwidth_set(
+                &mut bw,
+                bwtype.to_glib_none().0,
+                bandwidth,
+            ));
             match result {
                 SDPResult::Ok => Ok(SDPBandwidth(bw)),
                 _ => Err(()),
@@ -31,9 +35,7 @@ impl SDPBandwidth {
     }
 
     pub fn bwtype(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.bwtype).to_str().unwrap()
-        }
+        unsafe { CStr::from_ptr(self.0.bwtype).to_str().unwrap() }
     }
 
     pub fn value(&self) -> u32 {

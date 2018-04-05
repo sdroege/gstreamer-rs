@@ -14,39 +14,27 @@ use ffi;
 pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
 
 impl SDPOrigin {
-	pub fn username(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.username).to_str().unwrap()
-        }
-	}
+    pub fn username(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.username).to_str().unwrap() }
+    }
 
-	pub fn sess_id(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.sess_id).to_str().unwrap()
-        }
-	}
+    pub fn sess_id(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.sess_id).to_str().unwrap() }
+    }
 
-	pub fn sess_version(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.sess_version).to_str().unwrap()
-        }
-	}
+    pub fn sess_version(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.sess_version).to_str().unwrap() }
+    }
 
-	pub fn nettype(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.nettype).to_str().unwrap()
-        }
-	}
+    pub fn nettype(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.nettype).to_str().unwrap() }
+    }
 
-	pub fn addrtype(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.addrtype).to_str().unwrap()
-        }
-	}
+    pub fn addrtype(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.addrtype).to_str().unwrap() }
+    }
 
-	pub fn addr(&self) -> &str {
-        unsafe {
-            CStr::from_ptr(self.0.addr).to_str().unwrap()
-        }
-	}
+    pub fn addr(&self) -> &str {
+        unsafe { CStr::from_ptr(self.0.addr).to_str().unwrap() }
+    }
 }
