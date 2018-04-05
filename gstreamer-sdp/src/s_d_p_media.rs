@@ -20,6 +20,9 @@ use s_d_p_bandwidth::SDPBandwidth;
 use s_d_p_connection::SDPConnection;
 use s_d_p_key::SDPKey;
 
+#[cfg(any(feature = "v1_8_1", feature = "dox"))]
+use MIKEYMessage;
+
 glib_wrapper! {
     pub struct SDPMedia(Boxed<ffi::GstSDPMedia>);
 

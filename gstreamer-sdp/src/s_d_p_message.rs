@@ -26,6 +26,9 @@ use s_d_p_origin::SDPOrigin;
 use s_d_p_time::SDPTime;
 use s_d_p_zone::SDPZone;
 
+#[cfg(any(feature = "v1_8_1", feature = "dox"))]
+use MIKEYMessage;
+
 glib_wrapper! {
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
 
@@ -451,13 +454,14 @@ impl SDPMessage {
     }
 
     #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn parse_keymgmt(&self, mikey: MIKEYMessage) -> Result<(), ()> {
-        let result =
-            unsafe { ffi::gst_sdp_message_parse_keymgmt(self.to_glib_none().0, &mut mikey) };
-        mem::forget(mikey);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+    pub fn parse_keymgmt(&self) -> Result<MIKEYMessage, ()> {
+        unsafe {
+            let mut mikey = ptr::null_mut();
+            let result = ffi::gst_sdp_message_parse_keymgmt(self.to_glib_none().0, &mut mikey);
+            match result {
+                ffi::GST_SDP_OK => Ok(from_glib_full(mikey)),
+                _ => Err(()),
+            }
         }
     }
 
