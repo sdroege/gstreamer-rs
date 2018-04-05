@@ -60,3 +60,7 @@ name = "GstWebRTC.WebRTCSessionDescription"
 status = "generate"
 trait = false
 
+    [[object.function]]
+    name = "new"
+    # takes ownership of SDP message
+    ignore = true
