@@ -121,13 +121,15 @@ impl Drop for Structure {
 
 impl fmt::Debug for Structure {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Structure").field(&self.to_string()).finish()
+        f.debug_tuple("Structure")
+            .field(&self.as_ref().to_string())
+            .finish()
     }
 }
 
 impl fmt::Display for Structure {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        f.write_str(&self.as_ref().to_string())
     }
 }
 
@@ -506,7 +508,7 @@ impl StructureRef {
 
 impl fmt::Debug for StructureRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        f.write_str(&StructureRef::to_string(self))
     }
 }
 
@@ -697,7 +699,7 @@ mod tests {
 
     #[test]
     fn test_string_conversion() {
-        let a = "Test, f1=(string)abc, f2=(uint)123";
+        let a = "Test, f1=(string)abc, f2=(uint)123;";
 
         let s = Structure::from_string(&a).unwrap();
         assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
