@@ -673,4 +673,15 @@ mod tests {
         assert_eq!(s.get::<&str>("f2").unwrap(), "bcd");
         assert_eq!(s.get::<i32>("f3").unwrap(), 123i32);
     }
+
+    #[test]
+    fn test_string_conversion() {
+        let a = "Test, f1=(string)abc, f2=(uint)123";
+
+        let s = Structure::from_string(&a).unwrap();
+        assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
+        assert_eq!(s.get::<u32>("f2").unwrap(), 123);
+
+        assert_eq!(a, s.to_string());
+    }
 }
