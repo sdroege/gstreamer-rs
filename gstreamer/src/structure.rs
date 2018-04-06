@@ -485,6 +485,12 @@ impl StructureRef {
     }
 }
 
+impl fmt::Display for StructureRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(&StructureRef::to_string(self))
+    }
+}
+
 impl fmt::Debug for StructureRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(&StructureRef::to_string(self))
