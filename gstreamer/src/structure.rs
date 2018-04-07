@@ -116,15 +116,15 @@ impl Drop for Structure {
 
 impl fmt::Debug for Structure {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("Structure")
-            .field(&self.as_ref().to_string())
-            .finish()
+        f.debug_tuple("Structure").field(&self.to_string()).finish()
     }
 }
 
 impl fmt::Display for Structure {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.as_ref().to_string())
+        // Need to make sure to not call ToString::to_string() here, which
+        // we have because of the Display impl. We need StructureRef::to_string()
+        f.write_str(&StructureRef::to_string(self.as_ref()))
     }
 }
 
@@ -487,13 +487,13 @@ impl StructureRef {
 
 impl fmt::Display for StructureRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&StructureRef::to_string(self))
+        f.write_str(&self.to_string())
     }
 }
 
 impl fmt::Debug for StructureRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&StructureRef::to_string(self))
+        f.write_str(&self.to_string())
     }
 }
 
