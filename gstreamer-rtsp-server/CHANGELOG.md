@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.1] - 2018-04-07
+### Fixed
+- Fix Structure::to_string() to not run into an infinite recursion but call
+  the method on the contained StructureRef instead of on itself
+
 ## [0.11.0] - 2018-03-20
 ### Changed
 - Updated everything to GStreamer 1.14.0
