@@ -2,9 +2,8 @@ extern crate gstreamer as gst;
 use gst::prelude::*;
 
 extern crate futures;
-use futures::stream::Stream;
-extern crate tokio_core;
-use tokio_core::reactor::Core;
+use futures::executor::block_on;
+use futures::prelude::*;
 
 use std::env;
 
@@ -16,39 +15,39 @@ fn example_main() {
 
     gst::init().unwrap();
 
-    let mut core = Core::new().unwrap();
-
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    let messages = gst::BusStream::new(&bus).for_each(|msg| {
-        use gst::MessageView;
+    let messages = gst::BusStream::new(&bus)
+        .for_each(|msg| {
+            use gst::MessageView;
 
-        let quit = match msg.view() {
-            MessageView::Eos(..) => true,
-            MessageView::Error(err) => {
-                println!(
-                    "Error from {:?}: {} ({:?})",
-                    err.get_src().map(|s| s.get_path_string()),
-                    err.get_error(),
-                    err.get_debug()
-                );
-                true
+            let quit = match msg.view() {
+                MessageView::Eos(..) => true,
+                MessageView::Error(err) => {
+                    println!(
+                        "Error from {:?}: {} ({:?})",
+                        err.get_src().map(|s| s.get_path_string()),
+                        err.get_error(),
+                        err.get_debug()
+                    );
+                    true
+                }
+                _ => false,
+            };
+
+            if quit {
+                Err(())
+            } else {
+                Ok(())
             }
-            _ => false,
-        };
+        })
+        .and_then(|_| Ok(()));
 
-        if quit {
-            Err(())
-        } else {
-            Ok(())
-        }
-    });
-
-    let _ = core.run(messages);
+    let _ = block_on(messages);
 
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);

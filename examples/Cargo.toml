@@ -17,8 +17,7 @@ gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", 
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
-futures = { version = "0.1", optional = true }
-tokio-core = { version = "0.1", optional = true }
+futures = { version = "0.2", optional = true }
 send-cell = "0.1"
 byte-slice-cast = "0.1"
 failure = "0.1"
@@ -30,7 +29,7 @@ gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
-tokio = ["gstreamer/futures", "futures", "tokio-core"]
+generic-futures = ["gstreamer/futures", "futures"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 default-features = []
@@ -98,8 +97,8 @@ name = "tagsetter"
 name = "toc"
 
 [[bin]]
-name = "tokio"
-required-features = ["tokio"]
+name = "futures"
+required-features = ["generic-futures"]
 
 [[bin]]
 name = "rtsp-server-record"
