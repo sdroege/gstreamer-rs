@@ -26,7 +26,7 @@ extern crate glib;
 extern crate num_rational;
 
 #[cfg(any(feature = "futures", feature = "dox"))]
-extern crate futures;
+extern crate futures_core;
 
 extern crate muldiv;
 

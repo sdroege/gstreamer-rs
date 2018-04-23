@@ -22,7 +22,7 @@ gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = [
 glib = { git = "https://github.com/gtk-rs/glib" }
 num-rational = { version = "0.1.38", default-features = false, features = [] }
 lazy_static = "1.0"
-futures = { version = "0.1", optional = true }
+futures-core = { version = "0.2", optional = true }
 muldiv = "0.1.1"
 
 [build-dependencies.rustdoc-stripper]
@@ -36,6 +36,7 @@ v1_14 = ["gstreamer-sys/v1_14", "v1_12"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-sys/dox", "glib/dox", "futures"]
+futures = ["futures-core"]
 default-features = []
 
 [badges]

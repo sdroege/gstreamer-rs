@@ -143,32 +143,31 @@ impl Bus {
 #[cfg(any(feature = "futures", feature = "dox"))]
 mod futures {
     use super::*;
-    use futures;
-    use futures::stream::Stream;
-    use futures::task::Task;
-    use futures::{Async, Poll};
+    use futures_core::stream::Stream;
+    use futures_core::task::{Context, Waker};
+    use futures_core::{Async, Poll};
     use std::sync::{Arc, Mutex};
 
-    pub struct BusStream(Bus, Arc<Mutex<Option<Task>>>);
+    pub struct BusStream(Bus, Arc<Mutex<Option<Waker>>>);
 
     impl BusStream {
         pub fn new(bus: &Bus) -> Self {
             skip_assert_initialized!();
-            let task = Arc::new(Mutex::new(None));
-            let task_clone = Arc::clone(&task);
+            let waker = Arc::new(Mutex::new(None));
+            let waker_clone = Arc::clone(&waker);
 
             bus.set_sync_handler(move |_, _| {
-                let mut task = task_clone.lock().unwrap();
-                if let Some(task) = task.take() {
+                let mut waker = waker_clone.lock().unwrap();
+                if let Some(waker) = waker.take() {
                     // FIXME: Force type...
-                    let task: Task = task;
-                    task.notify();
+                    let waker: Waker = waker;
+                    waker.wake();
                 }
 
                 BusSyncReply::Pass
             });
 
-            BusStream(bus.clone(), task)
+            BusStream(bus.clone(), waker)
         }
     }
 
@@ -182,15 +181,16 @@ mod futures {
         type Item = Message;
         type Error = ();
 
-        fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
-            let mut task = self.1.lock().unwrap();
+        fn poll_next(&mut self, ctx: &mut Context) -> Poll<Option<Self::Item>, Self::Error> {
+            let BusStream(ref bus, ref waker) = *self;
 
-            let msg = self.0.pop();
+            let msg = bus.pop();
             if let Some(msg) = msg {
                 Ok(Async::Ready(Some(msg)))
             } else {
-                *task = Some(futures::task::current());
-                Ok(Async::NotReady)
+                let mut waker = waker.lock().unwrap();
+                *waker = Some(ctx.waker().clone());
+                Ok(Async::Pending)
             }
         }
     }
