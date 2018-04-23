@@ -272,7 +272,7 @@ fn example_main() -> Result<(), Error> {
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    Ok((()))
+    Ok(())
 }
 
 fn main() {
