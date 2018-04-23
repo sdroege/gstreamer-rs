@@ -30,6 +30,7 @@ gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
 generic-futures = ["gstreamer/futures", "futures"]
+glib-futures = ["generic-futures", "glib/futures"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 default-features = []
@@ -99,6 +100,11 @@ name = "toc"
 [[bin]]
 name = "futures"
 required-features = ["generic-futures"]
+
+[[bin]]
+name = "glib-futures"
+required-features = ["glib-futures"]
+
 
 [[bin]]
 name = "rtsp-server-record"
