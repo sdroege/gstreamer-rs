@@ -54,24 +54,24 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
-mod r_t_s_p_address_pool;
-mod r_t_s_p_auth;
-mod r_t_s_p_client;
-mod r_t_s_p_context;
-mod r_t_s_p_media_factory;
-mod r_t_s_p_server;
-mod r_t_s_p_session_pool;
-mod r_t_s_p_token;
+mod rtsp_address_pool;
+mod rtsp_auth;
+mod rtsp_client;
+mod rtsp_context;
+mod rtsp_media_factory;
+mod rtsp_server;
+mod rtsp_session_pool;
+mod rtsp_token;
 
-pub use r_t_s_p_address_pool::RTSPAddressPoolExtManual;
-pub use r_t_s_p_auth::RTSPAuthExtManual;
-pub use r_t_s_p_client::RTSPClientExtManual;
-pub use r_t_s_p_media_factory::RTSPMediaFactoryExtManual;
-pub use r_t_s_p_server::RTSPServerExtManual;
-pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
+pub use rtsp_address_pool::RTSPAddressPoolExtManual;
+pub use rtsp_auth::RTSPAuthExtManual;
+pub use rtsp_client::RTSPClientExtManual;
+pub use rtsp_media_factory::RTSPMediaFactoryExtManual;
+pub use rtsp_server::RTSPServerExtManual;
+pub use rtsp_session_pool::RTSPSessionPoolExtManual;
 
-pub use r_t_s_p_context::*;
-pub use r_t_s_p_token::*;
+pub use rtsp_context::*;
+pub use rtsp_token::*;
 
 lazy_static! {
     pub static ref RTSP_ADDRESS_POOL_ANY_IPV4: &'static str = unsafe {
@@ -139,11 +139,11 @@ pub mod prelude {
 
     pub use auto::traits::*;
 
-    pub use r_t_s_p_address_pool::RTSPAddressPoolExtManual;
-    pub use r_t_s_p_auth::RTSPAuthExtManual;
-    pub use r_t_s_p_client::RTSPClientExtManual;
-    pub use r_t_s_p_media_factory::RTSPMediaFactoryExtManual;
-    pub use r_t_s_p_server::RTSPServerExtManual;
-    pub use r_t_s_p_session_pool::RTSPSessionPoolExtManual;
-    pub use r_t_s_p_token::GstRcRTSPTokenExt;
+    pub use rtsp_address_pool::RTSPAddressPoolExtManual;
+    pub use rtsp_auth::RTSPAuthExtManual;
+    pub use rtsp_client::RTSPClientExtManual;
+    pub use rtsp_media_factory::RTSPMediaFactoryExtManual;
+    pub use rtsp_server::RTSPServerExtManual;
+    pub use rtsp_session_pool::RTSPSessionPoolExtManual;
+    pub use rtsp_token::GstRcRTSPTokenExt;
 }

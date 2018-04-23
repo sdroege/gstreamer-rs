@@ -17,14 +17,14 @@ use gobject_ffi;
 use gst;
 use gst::MiniObject;
 
-use s_d_p_attribute::SDPAttribute;
-use s_d_p_bandwidth::SDPBandwidth;
-use s_d_p_connection::SDPConnection;
-use s_d_p_key::SDPKey;
-use s_d_p_media::SDPMedia;
-use s_d_p_origin::SDPOrigin;
-use s_d_p_time::SDPTime;
-use s_d_p_zone::SDPZone;
+use sdp_attribute::SDPAttribute;
+use sdp_bandwidth::SDPBandwidth;
+use sdp_connection::SDPConnection;
+use sdp_key::SDPKey;
+use sdp_media::SDPMedia;
+use sdp_origin::SDPOrigin;
+use sdp_time::SDPTime;
+use sdp_zone::SDPZone;
 
 #[cfg(any(feature = "v1_8_1", feature = "dox"))]
 use MIKEYMessage;

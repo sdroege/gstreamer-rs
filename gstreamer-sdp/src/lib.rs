@@ -39,32 +39,32 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
-mod m_i_k_e_y_decrypt_info;
-pub use m_i_k_e_y_decrypt_info::*;
-mod m_i_k_e_y_encrypt_info;
-pub use m_i_k_e_y_encrypt_info::*;
-mod m_i_k_e_y_map_s_r_t_p;
-pub use m_i_k_e_y_map_s_r_t_p::*;
-mod m_i_k_e_y_payload_s_p_param;
-pub use m_i_k_e_y_payload_s_p_param::*;
-mod s_d_p_attribute;
-pub use s_d_p_attribute::*;
-mod s_d_p_bandwidth;
-pub use s_d_p_bandwidth::*;
-mod s_d_p_connection;
-pub use s_d_p_connection::*;
-mod s_d_p_key;
-pub use s_d_p_key::*;
-mod s_d_p_media;
-pub use s_d_p_media::*;
-mod s_d_p_message;
-pub use s_d_p_message::*;
-mod s_d_p_origin;
-pub use s_d_p_origin::*;
-mod s_d_p_time;
-pub use s_d_p_time::*;
-mod s_d_p_zone;
-pub use s_d_p_zone::*;
+mod mikey_decrypt_info;
+pub use mikey_decrypt_info::*;
+mod mikey_encrypt_info;
+pub use mikey_encrypt_info::*;
+mod mikey_map_s_r_t_p;
+pub use mikey_map_s_r_t_p::*;
+mod mikey_payload_s_p_param;
+pub use mikey_payload_s_p_param::*;
+mod sdp_attribute;
+pub use sdp_attribute::*;
+mod sdp_bandwidth;
+pub use sdp_bandwidth::*;
+mod sdp_connection;
+pub use sdp_connection::*;
+mod sdp_key;
+pub use sdp_key::*;
+mod sdp_media;
+pub use sdp_media::*;
+mod sdp_message;
+pub use sdp_message::*;
+mod sdp_origin;
+pub use sdp_origin::*;
+mod sdp_time;
+pub use sdp_time::*;
+mod sdp_zone;
+pub use sdp_zone::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

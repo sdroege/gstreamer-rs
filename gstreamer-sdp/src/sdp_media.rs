@@ -15,10 +15,10 @@ use glib::translate::*;
 use glib_ffi;
 use gst;
 
-use s_d_p_attribute::SDPAttribute;
-use s_d_p_bandwidth::SDPBandwidth;
-use s_d_p_connection::SDPConnection;
-use s_d_p_key::SDPKey;
+use sdp_attribute::SDPAttribute;
+use sdp_bandwidth::SDPBandwidth;
+use sdp_connection::SDPConnection;
+use sdp_key::SDPKey;
 
 #[cfg(any(feature = "v1_8_1", feature = "dox"))]
 use MIKEYMessage;
