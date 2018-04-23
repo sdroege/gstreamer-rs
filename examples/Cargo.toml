@@ -52,6 +52,9 @@ name = "appsrc"
 name = "decodebin"
 
 [[bin]]
+name = "encodebin"
+
+[[bin]]
 name = "events"
 
 [[bin]]
