@@ -14,11 +14,12 @@ use glib_ffi::gpointer;
 use gst;
 use gst_ffi;
 use std::ptr;
+use std::cell::RefCell;
 
 pub struct AppSinkCallbacks {
-    eos: Option<Box<Fn(&AppSink) + Send + Sync + 'static>>,
-    new_preroll: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
-    new_sample: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
+    eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
+    new_preroll: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
+    new_sample: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
     callbacks: ffi::GstAppSinkCallbacks,
 }
 
@@ -37,15 +38,15 @@ impl AppSinkCallbacks {
 }
 
 pub struct AppSinkCallbacksBuilder {
-    eos: Option<Box<Fn(&AppSink) + Send + Sync + 'static>>,
-    new_preroll: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
-    new_sample: Option<Box<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>>,
+    eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
+    new_preroll: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
+    new_sample: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
 }
 
 impl AppSinkCallbacksBuilder {
     pub fn eos<F: Fn(&AppSink) + Send + Sync + 'static>(self, eos: F) -> Self {
         Self {
-            eos: Some(Box::new(eos)),
+            eos: Some(RefCell::new(Box::new(eos))),
             ..self
         }
     }
@@ -55,7 +56,7 @@ impl AppSinkCallbacksBuilder {
         new_preroll: F,
     ) -> Self {
         Self {
-            new_preroll: Some(Box::new(new_preroll)),
+            new_preroll: Some(RefCell::new(Box::new(new_preroll))),
             ..self
         }
     }
@@ -65,7 +66,7 @@ impl AppSinkCallbacksBuilder {
         new_sample: F,
     ) -> Self {
         Self {
-            new_sample: Some(Box::new(new_sample)),
+            new_sample: Some(RefCell::new(Box::new(new_sample))),
             ..self
         }
     }
@@ -109,7 +110,7 @@ unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gp
     callbacks
         .eos
         .as_ref()
-        .map(|f| f(&from_glib_borrow(appsink)));
+        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsink)));
 }
 
 unsafe extern "C" fn trampoline_new_preroll(
@@ -122,7 +123,7 @@ unsafe extern "C" fn trampoline_new_preroll(
     callbacks
         .new_preroll
         .as_ref()
-        .map(|f| f(&from_glib_borrow(appsink)))
+        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsink)))
         .unwrap_or(gst::FlowReturn::Error)
         .to_glib()
 }
@@ -137,7 +138,7 @@ unsafe extern "C" fn trampoline_new_sample(
     callbacks
         .new_sample
         .as_ref()
-        .map(|f| f(&from_glib_borrow(appsink)))
+        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsink)))
         .unwrap_or(gst::FlowReturn::Error)
         .to_glib()
 }
