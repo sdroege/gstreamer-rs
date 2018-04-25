@@ -14,9 +14,10 @@ use glib::source::CallbackGuard;
 use glib_ffi::{gboolean, gpointer};
 use std::ptr;
 use std::mem;
+use std::cell::RefCell;
 
 pub struct AppSrcCallbacks {
-    need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,
+    need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
     callbacks: ffi::GstAppSrcCallbacks,
@@ -38,15 +39,15 @@ impl AppSrcCallbacks {
 }
 
 pub struct AppSrcCallbacksBuilder {
-    need_data: Option<Box<Fn(&AppSrc, u32) + Send + Sync + 'static>>,
+    need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
 }
 
 impl AppSrcCallbacksBuilder {
-    pub fn need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(self, need_data: F) -> Self {
+    pub fn need_data<F: FnMut(&AppSrc, u32) + Send + 'static>(self, need_data: F) -> Self {
         Self {
-            need_data: Some(Box::new(need_data)),
+            need_data: Some(RefCell::new(Box::new(need_data))),
             ..self
         }
     }
@@ -115,7 +116,7 @@ unsafe extern "C" fn trampoline_need_data(
     callbacks
         .need_data
         .as_ref()
-        .map(|f| f(&from_glib_borrow(appsrc), length));
+        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsrc), length));
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
