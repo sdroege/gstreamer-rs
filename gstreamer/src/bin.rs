@@ -10,8 +10,8 @@ use Bin;
 use Element;
 
 use glib;
-use glib::IsA;
 use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
+use glib::IsA;
 
 use ffi;
 

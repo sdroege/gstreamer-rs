@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use ffi;
+use miniobject::*;
+use structure::*;
 use GenericFormattedValue;
 use GroupId;
 use GstObjectExt;
 use Object;
 use Seqnum;
 use TagList;
-use ffi;
-use miniobject::*;
-use structure::*;
 
 use std::ffi::CStr;
 use std::fmt;
@@ -23,10 +23,10 @@ use std::ops::Deref;
 use std::ptr;
 
 use glib;
-use glib::Cast;
-use glib::IsA;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
+use glib::Cast;
+use glib::IsA;
 
 #[repr(C)]
 pub struct MessageRef(ffi::GstMessage);

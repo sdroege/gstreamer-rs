@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use miniobject::MiniObject;
 use Buffer;
 use BufferList;
 use Event;
@@ -20,7 +21,6 @@ use Query;
 use QueryRef;
 use SpecificFormattedValue;
 use StaticPadTemplate;
-use miniobject::MiniObject;
 
 use std::cell::RefCell;
 use std::mem;
@@ -28,10 +28,10 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib;
-use glib::Object;
 use glib::source::CallbackGuard;
 use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override,
                       FromGlib, ToGlib, ToGlibPtr};
+use glib::Object;
 use glib::{IsA, StaticType};
 use glib_ffi;
 use glib_ffi::gpointer;

@@ -1,6 +1,6 @@
 use glib;
-use glib::IsA;
 use glib::translate::ToGlibPtr;
+use glib::IsA;
 
 use ffi;
 

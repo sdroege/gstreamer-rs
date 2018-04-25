@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use PlayerGMainContextSignalDispatcher;
 use ffi;
 use glib;
 use glib::translate::*;
+use PlayerGMainContextSignalDispatcher;
 
 impl PlayerGMainContextSignalDispatcher {
     pub fn new<'a, P: Into<Option<&'a glib::MainContext>>>(

@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use AppSink;
 use ffi;
 use glib::source::CallbackGuard;
 use glib::translate::*;
 use glib_ffi::gpointer;
 use gst;
 use gst_ffi;
-use std::ptr;
 use std::cell::RefCell;
+use std::ptr;
+use AppSink;
 
 pub struct AppSinkCallbacks {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,

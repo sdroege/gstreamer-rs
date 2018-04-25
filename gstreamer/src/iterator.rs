@@ -8,10 +8,10 @@
 
 use ffi;
 use glib;
-use glib::StaticType;
-use glib::Value;
 use glib::translate::*;
 use glib::value::{FromValueOptional, ToValue};
+use glib::StaticType;
+use glib::Value;
 use glib_ffi;
 use glib_ffi::{gconstpointer, gpointer};
 use gobject_ffi;

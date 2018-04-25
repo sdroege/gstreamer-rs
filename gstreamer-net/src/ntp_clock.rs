@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use NtpClock;
 use ffi;
+use NtpClock;
 
 use glib::object::Downcast;
 use glib::translate::*;

@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use ffi;
 use Plugin;
 use Structure;
 use StructureRef;
-use ffi;
 
 use glib::translate::*;
 

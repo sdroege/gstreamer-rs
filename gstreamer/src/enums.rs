@@ -6,13 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use std::cmp;
+use std::error::Error;
+use std::fmt;
 use ClockReturn;
 use FlowReturn;
 use PadLinkReturn;
 use StateChangeReturn;
-use std::cmp;
-use std::error::Error;
-use std::fmt;
 
 use glib::translate::ToGlib;
 

@@ -8,8 +8,8 @@
 
 use DeviceProvider;
 
-use glib::IsA;
 use glib::translate::ToGlibPtr;
+use glib::IsA;
 
 use std::ffi::CStr;
 

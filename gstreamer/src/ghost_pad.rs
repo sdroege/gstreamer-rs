@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use ffi;
+use glib::object::Downcast;
+use glib::object::IsA;
+use glib::translate::*;
 use GhostPad;
 use Object;
 use Pad;
 use PadMode;
 use PadTemplate;
-use ffi;
-use glib::object::Downcast;
-use glib::object::IsA;
-use glib::translate::*;
 
 impl GhostPad {
     pub fn new<'a, P: Into<Option<&'a str>>, Q: IsA<Pad>>(name: P, target: &Q) -> Option<GhostPad> {

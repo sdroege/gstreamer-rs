@@ -424,7 +424,7 @@ mod tests {
                     ("bool", &true),
                     ("string", &"bla"),
                     ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2]))
+                    ("array", &Array::new(&[&1, &2])),
                 ],
             ).as_ref()
         );

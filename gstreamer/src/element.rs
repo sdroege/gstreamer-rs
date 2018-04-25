@@ -8,6 +8,15 @@
 
 use Element;
 
+use glib;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use glib::object::Downcast;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+use glib::translate::FromGlibPtrBorrow;
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
+                      ToGlib, ToGlibPtr};
+use glib::IsA;
+use miniobject::MiniObject;
 use Event;
 use Format;
 use FormattedValue;
@@ -16,15 +25,6 @@ use Pad;
 use PadTemplate;
 use QueryRef;
 use SpecificFormattedValue;
-use glib;
-use glib::IsA;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-use glib::object::Downcast;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
-use glib::translate::FromGlibPtrBorrow;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
-                      ToGlib, ToGlibPtr};
-use miniobject::MiniObject;
 
 use std::ffi::CStr;
 use std::mem;

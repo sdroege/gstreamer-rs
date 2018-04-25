@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ClockTime;
-use Format;
 use muldiv::MulDiv;
 use std::ops;
+use ClockTime;
+use Format;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum GenericFormattedValue {

@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use DateTime;
 use std::fmt;
+use DateTime;
 
 impl fmt::Display for DateTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

@@ -6,13 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use TagMergeMode;
-use TagSetter;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::value::ToSendValue;
 use tags::*;
+use TagMergeMode;
+use TagSetter;
 
 pub trait TagSetterExtManual {
     fn add<'a, T: Tag<'a>>(&self, value: T::TagType, mode: TagMergeMode)

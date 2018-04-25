@@ -6,11 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Format;
-use FormattedValue;
-use GenericFormattedValue;
-use SeekFlags;
-use SeekType;
 use ffi;
 use glib;
 use glib::translate::*;
@@ -20,6 +15,11 @@ use std::fmt;
 use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
+use Format;
+use FormattedValue;
+use GenericFormattedValue;
+use SeekFlags;
+use SeekType;
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;
 #[repr(C)]

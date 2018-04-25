@@ -1,8 +1,8 @@
-use RTSPAuth;
-use RTSPToken;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
+use RTSPAuth;
+use RTSPToken;
 
 pub trait RTSPAuthExtManual {
     fn set_default_token<'a, P: Into<Option<&'a mut RTSPToken>>>(&self, token: P);

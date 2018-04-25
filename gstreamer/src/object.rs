@@ -7,10 +7,10 @@
 // except according to those terms.
 
 use glib;
-use glib::IsA;
 use glib::object::{Downcast, ObjectExt};
 use glib::signal::SignalHandlerId;
 use glib::translate::ToGlibPtr;
+use glib::IsA;
 
 use gobject_ffi;
 

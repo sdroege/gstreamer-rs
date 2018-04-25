@@ -6,15 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Clock;
-use ClockReturn;
-use ClockTime;
-use ClockTimeDiff;
 use ffi;
 use glib;
-use glib::IsA;
 use glib::source::CallbackGuard;
 use glib::translate::*;
+use glib::IsA;
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use libc::c_void;
@@ -22,6 +18,10 @@ use std::cmp;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
+use Clock;
+use ClockReturn;
+use ClockTime;
+use ClockTimeDiff;
 
 glib_wrapper! {
     pub struct ClockId(Shared<c_void>);

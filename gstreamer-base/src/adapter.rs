@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Adapter;
 use ffi;
 use glib::translate::*;
 use gst;
 use std::io;
+use Adapter;
 
 impl Adapter {
     pub fn copy(&self, offset: usize, dest: &mut [u8]) {

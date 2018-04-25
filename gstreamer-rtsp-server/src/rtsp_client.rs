@@ -1,9 +1,9 @@
-use RTSPClient;
 use ffi;
 use glib;
 use glib::object::IsA;
 use glib::source::SourceId;
 use glib::translate::*;
+use RTSPClient;
 
 pub trait RTSPClientExtManual {
     fn attach<'a, P: Into<Option<&'a glib::MainContext>>>(&self, context: P) -> SourceId;

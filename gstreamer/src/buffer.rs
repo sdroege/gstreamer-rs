@@ -15,9 +15,9 @@ use std::slice;
 use std::u64;
 use std::usize;
 
+use miniobject::*;
 use BufferFlags;
 use ClockTime;
-use miniobject::*;
 
 use ffi;
 use glib;

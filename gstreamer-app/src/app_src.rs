@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use AppSrc;
 use ffi;
 use glib::source::CallbackGuard;
 use glib::translate::*;
 use glib_ffi::{gboolean, gpointer};
 use gst;
+use std::cell::RefCell;
 use std::mem;
 use std::ptr;
-use std::cell::RefCell;
+use AppSrc;
 
 pub struct AppSrcCallbacks {
     need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,

@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use ffi;
 use Caps;
 use Plugin;
 use TypeFindFactory;
 use TypeFindProbability;
-use ffi;
 
 use glib::translate::*;
 use glib_ffi;

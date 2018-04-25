@@ -6,12 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use WebRTCSDPType;
-use WebRTCSessionDescription;
 use ffi;
 use glib::translate::*;
 use gst_sdp;
 use std::mem;
+use WebRTCSDPType;
+use WebRTCSessionDescription;
 
 impl WebRTCSessionDescription {
     pub fn new(type_: WebRTCSDPType, mut sdp: gst_sdp::SDPMessage) -> WebRTCSessionDescription {

@@ -15,8 +15,8 @@ use std::ptr;
 use ffi;
 use gobject_ffi;
 
-use glib::IsA;
 use glib::translate::{from_glib, ToGlib, ToGlibPtr};
+use glib::IsA;
 
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);

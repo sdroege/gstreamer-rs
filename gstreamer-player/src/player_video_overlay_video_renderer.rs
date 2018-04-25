@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use PlayerVideoOverlayVideoRenderer;
 use ffi;
-use glib::IsA;
 use glib::translate::*;
+use glib::IsA;
 use gst;
+use PlayerVideoOverlayVideoRenderer;
 
 use std::ptr;
 

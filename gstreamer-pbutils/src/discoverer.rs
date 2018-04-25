@@ -11,12 +11,12 @@ use gst;
 
 use auto::Discoverer;
 
+use glib::object::Downcast;
+use glib::signal::connect;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 use glib::IsA;
 use glib::Value;
-use glib::object::Downcast;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect;
-use glib::translate::*;
 
 use ffi;
 use glib_ffi;

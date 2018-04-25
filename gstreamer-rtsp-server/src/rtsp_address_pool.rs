@@ -1,10 +1,10 @@
-use RTSPAddress;
-use RTSPAddressPool;
-use RTSPAddressPoolResult;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
+use RTSPAddress;
+use RTSPAddressPool;
+use RTSPAddressPoolResult;
 
 pub trait RTSPAddressPoolExtManual {
     fn reserve_address(

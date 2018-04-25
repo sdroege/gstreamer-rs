@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use AudioStreamAlign;
 use ffi;
+use AudioStreamAlign;
 
 use glib::translate::*;
 use gst;

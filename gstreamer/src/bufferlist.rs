@@ -8,13 +8,13 @@
 
 use ffi;
 use glib;
-use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full};
+use glib::StaticType;
 use std::fmt;
 
+use miniobject::*;
 use Buffer;
 use BufferRef;
-use miniobject::*;
 
 pub type BufferList = GstRc<BufferListRef>;
 pub struct BufferListRef(ffi::GstBufferList);

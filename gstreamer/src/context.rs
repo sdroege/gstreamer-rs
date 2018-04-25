@@ -12,11 +12,11 @@ use std::fmt;
 use ffi;
 
 use glib;
-use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::StaticType;
 
-use StructureRef;
 use miniobject::*;
+use StructureRef;
 
 pub type Context = GstRc<ContextRef>;
 pub struct ContextRef(ffi::GstContext);

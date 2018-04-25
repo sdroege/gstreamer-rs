@@ -389,7 +389,7 @@ mod tests {
             &info.positions().unwrap(),
             &[
                 ::AudioChannelPosition::FrontLeft,
-                ::AudioChannelPosition::FrontRight
+                ::AudioChannelPosition::FrontRight,
             ]
         );
 
@@ -408,7 +408,7 @@ mod tests {
             &info.positions().unwrap(),
             &[
                 ::AudioChannelPosition::RearLeft,
-                ::AudioChannelPosition::RearRight
+                ::AudioChannelPosition::RearRight,
             ]
         );
     }
@@ -435,7 +435,7 @@ mod tests {
             &info.positions().unwrap(),
             &[
                 ::AudioChannelPosition::FrontLeft,
-                ::AudioChannelPosition::FrontRight
+                ::AudioChannelPosition::FrontRight,
             ]
         );
 

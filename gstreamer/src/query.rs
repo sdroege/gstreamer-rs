@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use GenericFormattedValue;
 use ffi;
 use miniobject::*;
 use structure::*;
+use GenericFormattedValue;
 
 use std::ffi::CStr;
 use std::fmt;

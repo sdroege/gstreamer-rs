@@ -10,8 +10,8 @@ use BufferPool;
 use Structure;
 
 use glib;
-use glib::IsA;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::IsA;
 
 use ffi;
 

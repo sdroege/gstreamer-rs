@@ -13,9 +13,9 @@ use std::mem;
 
 use ffi;
 use glib;
-use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::value::{FromValueOptional, SetValue, ToSendValue, TypedValue, Value};
+use glib::StaticType;
 
 use miniobject::*;
 

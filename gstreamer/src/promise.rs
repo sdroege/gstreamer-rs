@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use PromiseResult;
-use Structure;
-use StructureRef;
 use ffi;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::mem;
 use std::ptr;
+use PromiseResult;
+use Structure;
+use StructureRef;
 
 glib_wrapper! {
     pub struct Promise(Shared<ffi::GstPromise>);

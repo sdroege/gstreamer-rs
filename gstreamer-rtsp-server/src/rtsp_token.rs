@@ -1,8 +1,8 @@
 use ffi;
 use glib;
-use glib::StaticType;
 use glib::translate::*;
 use glib::value::ToSendValue;
+use glib::StaticType;
 use gst;
 use gst_ffi;
 

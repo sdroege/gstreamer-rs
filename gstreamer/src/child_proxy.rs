@@ -6,12 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ChildProxy;
 use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
+use ChildProxy;
 
 pub trait ChildProxyExtManual {
     fn get_child_property(&self, name: &str) -> Option<glib::Value>;

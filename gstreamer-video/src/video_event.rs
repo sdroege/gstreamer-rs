@@ -9,8 +9,8 @@
 use ffi;
 use gst_ffi;
 
-use glib::ToSendValue;
 use glib::translate::{from_glib, from_glib_full, ToGlib};
+use glib::ToSendValue;
 use gst;
 use gst::MiniObject;
 use std::mem;

@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use glib::translate::*;
 use PadTemplate;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use StaticPadTemplate;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-use glib::translate::*;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use ffi;

@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use PlayerVideoInfo;
 use ffi;
 use glib::translate::*;
 use gst;
 use std::mem;
+use PlayerVideoInfo;
 
 impl PlayerVideoInfo {
     pub fn get_framerate(&self) -> gst::Fraction {

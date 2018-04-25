@@ -1,4 +1,3 @@
-use RTSPSessionPool;
 use ffi;
 use glib;
 use glib::object::IsA;
@@ -8,6 +7,7 @@ use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use std::cell::RefCell;
 use std::mem::transmute;
+use RTSPSessionPool;
 
 unsafe extern "C" fn trampoline_watch(
     pool: *mut ffi::GstRTSPSessionPool,

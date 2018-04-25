@@ -12,9 +12,10 @@ use std::ptr;
 use ffi;
 
 use glib;
-use glib::StaticType;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlibPtr};
+use glib::StaticType;
 
+use miniobject::*;
 use Buffer;
 use BufferList;
 use Caps;
@@ -22,7 +23,6 @@ use FormattedSegment;
 use FormattedValue;
 use Segment;
 use StructureRef;
-use miniobject::*;
 
 pub type Sample = GstRc<SampleRef>;
 pub struct SampleRef(ffi::GstSample);

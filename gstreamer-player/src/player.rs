@@ -6,18 +6,18 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Player;
-use PlayerSignalDispatcher;
-use PlayerVideoRenderer;
 use ffi;
 use glib;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_ffi;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use Player;
+use PlayerSignalDispatcher;
+use PlayerVideoRenderer;
 
 impl Player {
     pub fn new(
