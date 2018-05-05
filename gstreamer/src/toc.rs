@@ -96,6 +96,7 @@ impl ToOwned for TocRef {
 impl fmt::Debug for TocRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Toc")
+            .field("ptr", unsafe { &self.as_ptr() } )
             .field("scope", &self.get_scope())
             .field("tags", &self.get_tags())
             .field("entries", &self.get_entries())
@@ -241,6 +242,7 @@ impl ToOwned for TocEntryRef {
 impl fmt::Debug for TocEntryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("TocEntry")
+            .field("ptr", unsafe { &self.as_ptr() } )
             .field("entry_type", &self.get_entry_type())
             .field("uid", &self.get_uid())
             .field("start_stop", &self.get_start_stop_times())

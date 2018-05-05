@@ -112,6 +112,7 @@ impl ToOwned for SampleRef {
 impl fmt::Debug for SampleRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Sample")
+            .field("ptr", unsafe { &self.as_ptr() } )
             .field("buffer", &self.get_buffer())
             .field("caps", &self.get_caps())
             .field("segment", &self.get_segment())
