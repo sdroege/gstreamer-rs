@@ -390,6 +390,7 @@ impl ToOwned for BufferRef {
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Buffer")
+            .field("ptr", unsafe { &self.as_ptr() } )
             .field("pts", &self.get_pts().to_string())
             .field("dts", &self.get_dts().to_string())
             .field("duration", &self.get_duration().to_string())

@@ -117,6 +117,7 @@ impl fmt::Debug for BufferListRef {
             .unwrap_or((::ClockTime::none(), ::ClockTime::none()));
 
         f.debug_struct("BufferList")
+            .field("ptr", unsafe { &self.as_ptr() } )
             .field("buffers", &self.len())
             .field("pts", &pts.to_string())
             .field("dts", &dts.to_string())

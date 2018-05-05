@@ -357,6 +357,7 @@ impl glib::types::StaticType for MessageRef {
 impl fmt::Debug for MessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Message")
+            .field("ptr", unsafe { &self.as_ptr() } )
             .field("type", &unsafe {
                 let type_ = ffi::gst_message_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
