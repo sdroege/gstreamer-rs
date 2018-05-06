@@ -2,6 +2,8 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
+extern crate gstreamer_pbutils as pbutils;
+
 extern crate glib;
 
 use std::env;
@@ -32,7 +34,36 @@ struct ErrorMessage {
     cause: glib::Error,
 }
 
-fn configure_encodebin(encodebin: &gst::Element) {
+fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
+    let audio_profile = pbutils::EncodingAudioProfileBuilder::new()
+        .format(&gst::Caps::new_simple(
+            "audio/x-vorbis",
+            &[],
+        ))
+        .presence(0)
+        .build()?;
+
+    let video_profile = pbutils::EncodingVideoProfileBuilder::new()
+        .format(&gst::Caps::new_simple(
+            "video/x-theora",
+            &[],
+        ))
+        .presence(0)
+        .build()?;
+
+    let container_profile = pbutils::EncodingContainerProfileBuilder::new()
+        .name("container")
+        .format(&gst::Caps::new_simple(
+            "video/x-matroska",
+            &[],
+        ))
+        .add_profile(&(video_profile.upcast()))
+        .add_profile(&(audio_profile.upcast()))
+        .build()?;
+
+    encodebin.set_property("profile", &container_profile)?;
+
+    Ok(())
 }
 
 fn example_main() -> Result<(), Error> {
@@ -58,18 +89,18 @@ fn example_main() -> Result<(), Error> {
     src.set_property("uri", &uri)?;
     sink.set_property("location", &output_file)?;
 
-    configure_encodebin(&encodebin);
+    configure_encodebin(&encodebin)?;
 
     pipeline.add_many(&[&src, &encodebin, &sink])?;
     gst::Element::link_many(&[&encodebin, &sink])?;
 
     // Need to move a new reference into the closure
     let pipeline_clone = pipeline.clone();
-    src.connect_pad_added(move |dbin, src_pad| {
+    src.connect_pad_added(move |dbin, dbin_src_pad| {
         let pipeline = &pipeline_clone;
 
         let (is_audio, is_video) = {
-            let media_type = src_pad.get_current_caps().and_then(|caps| {
+            let media_type = dbin_src_pad.get_current_caps().and_then(|caps| {
                 caps.get_structure(0).map(|s| {
                     let name = s.get_name();
                     (name.starts_with("audio/"), name.starts_with("video/"))
@@ -81,7 +112,7 @@ fn example_main() -> Result<(), Error> {
                     gst_element_warning!(
                         dbin,
                         gst::CoreError::Negotiation,
-                        ("Failed to get media type from pad {}", src_pad.get_name())
+                        ("Failed to get media type from pad {}", dbin_src_pad.get_name())
                     );
 
                     return;
@@ -112,7 +143,7 @@ fn example_main() -> Result<(), Error> {
                 }
 
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
-                src_pad.link(&sink_pad).into_result()?;
+                dbin_src_pad.link(&sink_pad).into_result()?;
             } else if is_video {
                 let queue =
                     gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
@@ -134,7 +165,7 @@ fn example_main() -> Result<(), Error> {
                 }
 
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
-                src_pad.link(&sink_pad).into_result()?;
+                dbin_src_pad.link(&sink_pad).into_result()?;
             }
 
             Ok(())
