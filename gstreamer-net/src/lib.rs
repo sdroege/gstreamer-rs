@@ -38,6 +38,7 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 mod net_client_clock;
+mod net_time_provider;
 mod ntp_clock;
 mod ptp_clock;
 

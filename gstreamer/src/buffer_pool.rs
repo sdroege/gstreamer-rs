@@ -205,6 +205,29 @@ impl PartialEq for BufferPoolAcquireParams {
 
 impl Eq for BufferPoolAcquireParams {}
 
+impl BufferPool {
+    pub fn new() -> BufferPool {
+        assert_initialized_main_thread!();
+        let (major, minor, _, _) = ::version();
+        if (major, minor) > (1, 12) {
+            unsafe {
+                from_glib_full(ffi::gst_buffer_pool_new())
+            }
+        } else {
+            // Work-around for 1.14 switching from transfer-floating to transfer-full
+            unsafe {
+                from_glib_none(ffi::gst_buffer_pool_new())
+            }
+        }
+    }
+}
+
+impl Default for BufferPool {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub trait BufferPoolExtManual {
     fn get_config(&self) -> BufferPoolConfig;
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError>;

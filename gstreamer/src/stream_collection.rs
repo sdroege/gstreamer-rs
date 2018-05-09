@@ -8,6 +8,8 @@
 
 use Stream;
 use StreamCollection;
+use ffi;
+use glib::translate::*;
 
 pub struct Iter<'a> {
     collection: &'a StreamCollection,
@@ -65,6 +67,23 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
 impl StreamCollection {
+    pub fn new<'a, P: Into<Option<&'a str>>>(upstream_id: P) -> StreamCollection {
+        assert_initialized_main_thread!();
+        let upstream_id = upstream_id.into();
+        let upstream_id = upstream_id.to_glib_none();
+        let (major, minor, _, _) = ::version();
+        if (major, minor) > (1, 12) {
+            unsafe {
+                from_glib_full(ffi::gst_stream_collection_new(upstream_id.0))
+            }
+        } else {
+            // Work-around for 1.14 switching from transfer-floating to transfer-full
+            unsafe {
+                from_glib_none(ffi::gst_stream_collection_new(upstream_id.0))
+            }
+        }
+    }
+
     pub fn iter(&self) -> Iter {
         Iter::new(self)
     }

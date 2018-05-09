@@ -122,6 +122,7 @@ cfg_if! {
 mod child_proxy;
 mod clock_time;
 mod date_time;
+mod device_monitor;
 mod device_provider;
 mod enums;
 mod ghost_pad;
@@ -168,6 +169,8 @@ pub use tag_setter::TagSetterExtManual;
 mod plugin;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub mod stream_collection;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+mod stream;
 
 mod typefind;
 pub use typefind::*;

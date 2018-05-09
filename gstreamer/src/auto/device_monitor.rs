@@ -30,21 +30,6 @@ glib_wrapper! {
     }
 }
 
-impl DeviceMonitor {
-    pub fn new() -> DeviceMonitor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gst_device_monitor_new())
-        }
-    }
-}
-
-impl Default for DeviceMonitor {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 unsafe impl Send for DeviceMonitor {}
 unsafe impl Sync for DeviceMonitor {}
 

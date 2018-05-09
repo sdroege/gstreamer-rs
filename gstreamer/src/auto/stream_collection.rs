@@ -28,16 +28,6 @@ glib_wrapper! {
 
 impl StreamCollection {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new<'a, P: Into<Option<&'a str>>>(upstream_id: P) -> StreamCollection {
-        assert_initialized_main_thread!();
-        let upstream_id = upstream_id.into();
-        let upstream_id = upstream_id.to_glib_none();
-        unsafe {
-            from_glib_full(ffi::gst_stream_collection_new(upstream_id.0))
-        }
-    }
-
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn add_stream(&self, stream: &Stream) -> bool {
         unsafe {
             from_glib(ffi::gst_stream_collection_add_stream(self.to_glib_none().0, stream.to_glib_full()))
