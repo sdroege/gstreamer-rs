@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.2] - 2018-05-09
+### Fixed
+- Work-around various floating reference handling changes between 1.12 and
+  1.14 to be able to run with both versions without memory leaks or other
+  reference count problems.
+  This affects NetTimeProvider, BufferPool, DeviceMonitor, Stream,
+  StreamCollection, and Player, NetClientClock, NetClock, PtpClock which were
+  already previously fixed.
+
+### Changed
+- Change the appsrc need-data and all appsink callbacks to not require the
+  Sync bound anymore and change from Fn to FnMut. They can only be called from
+  a single thread at a time. This change is only done for the corresponding
+  callbacks, not the signals.
+
 ## [0.11.1] - 2018-04-07
 ### Fixed
 - Fix Structure::to_string() to not run into an infinite recursion but call
@@ -247,7 +262,9 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.0...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.2...HEAD
+[0.11.2]: https://github.com/sdroege/gstreamer-rs/compare/0.11.1...0.11.2
+[0.11.1]: https://github.com/sdroege/gstreamer-rs/compare/0.11.0...0.11.1
 [0.11.0]: https://github.com/sdroege/gstreamer-rs/compare/0.10.2...0.11.0
 [0.10.2]: https://github.com/sdroege/gstreamer-rs/compare/0.10.1...0.10.2
 [0.10.1]: https://github.com/sdroege/gstreamer-rs/compare/0.10.0...0.10.1
