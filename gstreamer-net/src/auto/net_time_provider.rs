@@ -5,7 +5,6 @@
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect;
 use glib::translate::*;
@@ -29,15 +28,6 @@ glib_wrapper! {
 }
 
 impl NetTimeProvider {
-    pub fn new<'a, P: IsA<gst::Clock>, Q: Into<Option<&'a str>>>(clock: &P, address: Q, port: i32) -> NetTimeProvider {
-        assert_initialized_main_thread!();
-        let address = address.into();
-        let address = address.to_glib_none();
-        unsafe {
-            from_glib_full(ffi::gst_net_time_provider_new(clock.to_glib_none().0, address.0, port))
-        }
-    }
-
     pub fn get_property_active(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());

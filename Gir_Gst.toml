@@ -440,6 +440,11 @@ status = "generate"
 name = "Gst.DeviceMonitor"
 status = "generate"
     [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    ignore = true
+
+    [[object.function]]
     name = "get_bus"
         [object.function.return]
         nullable = false
@@ -708,11 +713,19 @@ status = "generate"
 name = "Gst.Stream"
 status = "generate"
 trait = false
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    ignore = true
 
 [[object]]
 name = "Gst.StreamCollection"
 status = "generate"
 trait = false
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
+    ignore = true
 
 [[object]]
 name = "Gst.Plugin"
@@ -830,6 +843,11 @@ status = "generate"
     [[object.function]]
     name = "release_buffer"
     # Takes ownership
+    ignore = true
+
+    [[object.function]]
+    name = "new"
+    # Work-around for 1.14 switch from transfer-floating to transfer-full
     ignore = true
 
     [[object.function]]

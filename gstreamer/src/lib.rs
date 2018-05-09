@@ -128,6 +128,7 @@ mod ghost_pad;
 mod child_proxy;
 mod tag_setter;
 mod iterator;
+mod device_monitor;
 mod device_provider;
 mod parse_context;
 mod enums;
@@ -169,6 +170,8 @@ pub use clock_time::ClockTime;
 mod plugin;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub mod stream_collection;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+mod stream;
 
 mod typefind;
 pub use typefind::*;

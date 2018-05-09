@@ -20,21 +20,6 @@ glib_wrapper! {
     }
 }
 
-impl BufferPool {
-    pub fn new() -> BufferPool {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gst_buffer_pool_new())
-        }
-    }
-}
-
-impl Default for BufferPool {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
 

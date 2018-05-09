@@ -64,3 +64,8 @@ trait = false
 name = "GstNet.NetTimeProvider"
 status = "generate"
 trait = false
+
+    [[object.function]]
+    name = "new"
+    # Floating reference handling
+    ignore = true

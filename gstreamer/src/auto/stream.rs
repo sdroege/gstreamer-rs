@@ -30,18 +30,6 @@ glib_wrapper! {
 
 impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(stream_id: P, caps: Q, type_: StreamType, flags: StreamFlags) -> Stream {
-        assert_initialized_main_thread!();
-        let stream_id = stream_id.into();
-        let stream_id = stream_id.to_glib_none();
-        let caps = caps.into();
-        let caps = caps.to_glib_none();
-        unsafe {
-            from_glib_full(ffi::gst_stream_new(stream_id.0, caps.0, type_.to_glib(), flags.to_glib()))
-        }
-    }
-
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_caps(&self) -> Option<Caps> {
         unsafe {
             from_glib_full(ffi::gst_stream_get_caps(self.to_glib_none().0))
