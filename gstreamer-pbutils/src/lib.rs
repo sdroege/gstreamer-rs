@@ -55,14 +55,8 @@ pub mod discoverer_stream_info;
 mod discoverer_video_info;
 pub use discoverer_video_info::*;
 
-mod encoding_container_profile;
-pub use encoding_container_profile::*;
-
-mod encoding_audio_profile;
-pub use encoding_audio_profile::*;
-
-mod encoding_video_profile;
-pub use encoding_video_profile::*;
+mod encoding_profile;
+pub use encoding_profile::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
@@ -74,9 +68,7 @@ pub mod prelude {
     pub use discoverer_stream_info::*;
     pub use discoverer_video_info::*;
 
-    pub use encoding_container_profile::*;
-    pub use encoding_video_profile::*;
-    pub use encoding_audio_profile::*;
+    pub use encoding_profile::*;
 
     pub use auto::traits::*;
 }
