@@ -3,6 +3,7 @@ extern crate gstreamer as gst;
 use gst::prelude::*;
 
 extern crate gstreamer_pbutils as pbutils;
+use pbutils::EncodingProfileBuilder;
 
 extern crate glib;
 
