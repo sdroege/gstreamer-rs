@@ -149,6 +149,14 @@ status = "generate"
     name = "is_equal"
     ignore = true
 
+    # Ignore all setters, making it imutable. A builder will be provided.
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    pattern = "set_.*"
+    ignore = true
+
     [[object.function]]
     name = "copy"
         [object.function.return]
@@ -168,10 +176,14 @@ status = "generate"
 name = "GstPbutils.EncodingContainerProfile"
 status = "generate"
 
+    # Make it imutable, only able to be constructed for a builder
+    [[object.function]]
+    name = "new"
+    ignore = true
+
     [[object.function]]
     name = "add_profile"
-        [object.function.return]
-        bool_return_is_error = "Failed to add profile"
+    ignore = true
 
 [[object]]
 name = "GstPbutils.EncodingTarget"
@@ -199,8 +211,23 @@ status = "generate"
 name = "GstPbutils.EncodingAudioProfile"
 status = "generate"
 trait = false
+    # Ignore all setters, making it imutable. A builder will be provided.
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    pattern = "set_.*"
+    ignore = true
 
 [[object]]
 name = "GstPbutils.EncodingVideoProfile"
 status = "generate"
 trait = false
+    # Ignore all setters, making it imutable. A builder will be provided.
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    pattern = "set_.*"
+    ignore = true
+
