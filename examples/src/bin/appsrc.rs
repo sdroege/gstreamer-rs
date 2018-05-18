@@ -60,6 +60,11 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     // Our frame counter, that is stored in the mutable environment
     // of the closure of the need-data callback
+    //
+    // Alternatively we could also simply start a new thread that
+    // pushes a buffer to the appsrc whenever it wants to, but this
+    // is not really needed here. It is *not required* to use the
+    // need-data callback.
     let mut i = 0;
     appsrc.set_callbacks(
         gst_app::AppSrcCallbacks::new()
