@@ -5,8 +5,6 @@ extern crate gstreamer_video as gst_video;
 
 extern crate glib;
 
-use std::thread;
-
 use std::error::Error as StdError;
 
 extern crate failure;
@@ -35,7 +33,7 @@ struct ErrorMessage {
 const WIDTH: usize = 320;
 const HEIGHT: usize = 240;
 
-fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSrc), Error> {
+fn create_pipeline() -> Result<gst::Pipeline, Error> {
     gst::init()?;
 
     let pipeline = gst::Pipeline::new(None);
@@ -59,45 +57,52 @@ fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSrc), Error> {
 
     appsrc.set_caps(&info.to_caps().unwrap());
     appsrc.set_property_format(gst::Format::Time);
-    appsrc.set_max_bytes(1);
-    appsrc.set_property_block(true);
 
-    Ok((pipeline, appsrc))
+    // Our frame counter, that is stored in the mutable environment
+    // of the closure of the need-data callback
+    let mut i = 0;
+    appsrc.set_callbacks(
+        gst_app::AppSrcCallbacks::new()
+            .need_data(move |appsrc, _| {
+                if i == 100 {
+                    let _ = appsrc.end_of_stream();
+                    return;
+                }
+
+                println!("Producing frame {}", i);
+
+                let r = if i % 2 == 0 { 0 } else { 255 };
+                let g = if i % 3 == 0 { 0 } else { 255 };
+                let b = if i % 5 == 0 { 0 } else { 255 };
+
+                let mut buffer = gst::Buffer::with_size(WIDTH * HEIGHT * 4).unwrap();
+                {
+                    let buffer = buffer.get_mut().unwrap();
+                    buffer.set_pts(i * 500 * gst::MSECOND);
+
+                    let mut data = buffer.map_writable().unwrap();
+
+                    for p in data.as_mut_slice().chunks_mut(4) {
+                        assert_eq!(p.len(), 4);
+                        p[0] = b;
+                        p[1] = g;
+                        p[2] = r;
+                        p[3] = 0;
+                    }
+                }
+
+                i += 1;
+
+                // appsrc already handles the error here
+                let _ = appsrc.push_buffer(buffer);
+            })
+            .build(),
+    );
+
+    Ok(pipeline)
 }
 
-fn main_loop(pipeline: gst::Pipeline, appsrc: gst_app::AppSrc) -> Result<(), Error> {
-    thread::spawn(move || {
-        for i in 0..100 {
-            println!("Producing frame {}", i);
-
-            let r = if i % 2 == 0 { 0 } else { 255 };
-            let g = if i % 3 == 0 { 0 } else { 255 };
-            let b = if i % 5 == 0 { 0 } else { 255 };
-
-            let mut buffer = gst::Buffer::with_size(WIDTH * HEIGHT * 4).unwrap();
-            {
-                let buffer = buffer.get_mut().unwrap();
-                buffer.set_pts(i * 500 * gst::MSECOND);
-
-                let mut data = buffer.map_writable().unwrap();
-
-                for p in data.as_mut_slice().chunks_mut(4) {
-                    assert_eq!(p.len(), 4);
-                    p[0] = b;
-                    p[1] = g;
-                    p[2] = r;
-                    p[3] = 0;
-                }
-            }
-
-            if appsrc.push_buffer(buffer) != gst::FlowReturn::Ok {
-                break;
-            }
-        }
-
-        let _ = appsrc.end_of_stream();
-    });
-
+fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
     pipeline.set_state(gst::State::Playing).into_result()?;
 
     let bus = pipeline
@@ -130,7 +135,7 @@ fn main_loop(pipeline: gst::Pipeline, appsrc: gst_app::AppSrc) -> Result<(), Err
 }
 
 fn example_main() {
-    match create_pipeline().and_then(|(pipeline, appsrc)| main_loop(pipeline, appsrc)) {
+    match create_pipeline().and_then(main_loop) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
