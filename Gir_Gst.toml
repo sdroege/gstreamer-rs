@@ -118,11 +118,6 @@ name = "Gst.Bus"
 status = "generate"
 trait = false
     [[object.function]]
-    name = "remove_watch"
-    # Needs manual bindings and GSource support in glib-rs
-    ignore = true
-
-    [[object.function]]
     name = "add_signal_watch_full"
     # Priority
     ignore = true
