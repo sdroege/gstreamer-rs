@@ -98,6 +98,12 @@ impl Bus {
         }
     }
 
+    pub fn remove_watch(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_bus_remove_watch(self.to_glib_none().0))
+        }
+    }
+
     pub fn set_flushing(&self, flushing: bool) {
         unsafe {
             ffi::gst_bus_set_flushing(self.to_glib_none().0, flushing.to_glib());
