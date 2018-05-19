@@ -81,7 +81,7 @@ impl Bus {
         name: N,
         priority: Priority,
         func: F,
-    ) -> Option<glib::Source>
+    ) -> glib::Source
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
