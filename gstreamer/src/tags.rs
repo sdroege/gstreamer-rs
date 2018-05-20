@@ -188,6 +188,23 @@ impl TagListRef {
         }
     }
 
+    pub fn add_dynamic<'a, T>(&'a mut self, tag_name : &str, value: &T, mode: TagMergeMode)
+    where
+        T: ToSendValue
+    {
+        /* TODO: implement limiting values for tags? */
+        unsafe {
+            let v = value.to_send_value();
+
+            ffi::gst_tag_list_add_value(
+                self.as_mut_ptr(),
+                mode.to_glib(),
+                tag_name.to_glib_none().0,
+                v.to_glib_none().0,
+            );
+        }
+    }
+
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TypedValue<T::TagType>> {
         unsafe {
             let mut value: Value = mem::zeroed();
@@ -203,6 +220,34 @@ impl TagListRef {
             }
 
             value.downcast().ok()
+        }
+    }
+
+    pub fn n_tags<'a>(&'a self) -> i32 {
+        unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) }
+    }
+
+    pub fn nth_tag<'a>(&'a self, idx: u32) -> &str {
+        unsafe { CStr::from_ptr(ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx)).to_str().unwrap() }
+    }
+
+    pub fn get_size_dynamic<'a>(&'a self, tag_name: &str) -> u32 {
+        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
+    }
+
+    pub fn get_index_dynamic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a Value> {
+        unsafe {
+            let value = ffi::gst_tag_list_get_value_index(
+                self.as_ptr(),
+                tag_name.to_glib_none().0,
+                idx,
+            );
+
+            if value.is_null() {
+                return None;
+            }
+
+            Some(&*(value as *const Value))
         }
     }
 
@@ -399,5 +444,22 @@ mod tests {
             tags.get_index::<Duration>(0).unwrap().get_some(),
             (::SECOND * 120)
         );
+    }
+
+    #[test]
+    fn test_dynamic() {
+        ::init().unwrap();
+
+        let mut tags = TagList::new();
+        {
+            let tags = tags.get_mut().unwrap();
+            tags.add_dynamic(&TAG_TITLE, &"some title", TagMergeMode::Append);
+            tags.add_dynamic(&TAG_TITLE, &"second title", TagMergeMode::Append);
+            tags.add_dynamic(&TAG_DURATION, &(::SECOND * 120), TagMergeMode::Append);
+        }
+
+        assert_eq!(tags.get_index_dynamic(&TAG_TITLE, 0).unwrap().get(), Some("some title"));
+        assert_eq!(tags.get_index_dynamic(&TAG_TITLE, 1).unwrap().get(), Some("second title"));
+        assert_eq!(tags.get_index_dynamic(&TAG_DURATION, 0).unwrap().get(), Some(::SECOND * 120));
     }
 }
