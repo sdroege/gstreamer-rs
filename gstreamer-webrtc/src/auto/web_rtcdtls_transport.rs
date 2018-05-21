@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use WebRTCDTLSTransportState;
 use WebRTCICETransport;
 use ffi;
 use glib::StaticType;
@@ -90,6 +91,14 @@ impl WebRTCDTLSTransport {
         }
     }
 
+    pub fn get_property_state(&self) -> WebRTCDTLSTransportState {
+        unsafe {
+            let mut value = Value::from_type(<WebRTCDTLSTransportState as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "state".to_glib_none().0, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
     pub fn get_property_transport(&self) -> Option<WebRTCICETransport> {
         unsafe {
             let mut value = Value::from_type(<WebRTCICETransport as StaticType>::static_type());
@@ -138,6 +147,14 @@ impl WebRTCDTLSTransport {
         }
     }
 
+    pub fn connect_property_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "notify::state",
+                transmute(notify_state_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
     pub fn connect_property_transport_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -175,6 +192,12 @@ unsafe extern "C" fn notify_rtcp_trampoline(this: *mut ffi::GstWebRTCDTLSTranspo
 }
 
 unsafe extern "C" fn notify_session_id_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    callback_guard!();
+    let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
+}
+
+unsafe extern "C" fn notify_state_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

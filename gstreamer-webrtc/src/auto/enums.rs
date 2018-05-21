@@ -3,7 +3,14 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::StaticType;
+use glib::Type;
 use glib::translate::*;
+use glib::value::FromValue;
+use glib::value::FromValueOptional;
+use glib::value::SetValue;
+use glib::value::Value;
+use gobject_ffi;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WebRTCDTLSTransportState {
@@ -47,6 +54,30 @@ impl FromGlib<ffi::GstWebRTCDTLSTransportState> for WebRTCDTLSTransportState {
     }
 }
 
+impl StaticType for WebRTCDTLSTransportState {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_dtls_transport_state_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCDTLSTransportState {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCDTLSTransportState {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCDTLSTransportState {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WebRTCICEComponent {
     Rtp,
@@ -77,6 +108,30 @@ impl FromGlib<ffi::GstWebRTCICEComponent> for WebRTCICEComponent {
             1 => WebRTCICEComponent::Rtcp,
             value => WebRTCICEComponent::__Unknown(value),
         }
+    }
+}
+
+impl StaticType for WebRTCICEComponent {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_component_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCICEComponent {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCICEComponent {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCICEComponent {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -128,6 +183,30 @@ impl FromGlib<ffi::GstWebRTCICEConnectionState> for WebRTCICEConnectionState {
     }
 }
 
+impl StaticType for WebRTCICEConnectionState {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_connection_state_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCICEConnectionState {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCICEConnectionState {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCICEConnectionState {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WebRTCICEGatheringState {
     New,
@@ -164,6 +243,30 @@ impl FromGlib<ffi::GstWebRTCICEGatheringState> for WebRTCICEGatheringState {
     }
 }
 
+impl StaticType for WebRTCICEGatheringState {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_gathering_state_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCICEGatheringState {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCICEGatheringState {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCICEGatheringState {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WebRTCICERole {
     Controlled,
@@ -194,6 +297,30 @@ impl FromGlib<ffi::GstWebRTCICERole> for WebRTCICERole {
             1 => WebRTCICERole::Controlling,
             value => WebRTCICERole::__Unknown(value),
         }
+    }
+}
+
+impl StaticType for WebRTCICERole {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_role_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCICERole {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCICERole {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCICERole {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -233,6 +360,30 @@ impl FromGlib<ffi::GstWebRTCSDPType> for WebRTCSDPType {
             4 => WebRTCSDPType::Rollback,
             value => WebRTCSDPType::__Unknown(value),
         }
+    }
+}
+
+impl StaticType for WebRTCSDPType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_sdp_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCSDPType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCSDPType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCSDPType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
