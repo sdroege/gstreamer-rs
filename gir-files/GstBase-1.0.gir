@@ -1740,6 +1740,20 @@ This class used to live in gst-plugins-bad and was moved to core.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="has_buffer"
+              c:identifier="gst_aggregator_pad_has_buffer"
+              version="1.14.1">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the pad has a buffer available as the next thing.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="pad" transfer-ownership="none">
+            <doc xml:space="preserve">the pad to check the buffer on</doc>
+            <type name="AggregatorPad" c:type="GstAggregatorPad*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="is_eos" c:identifier="gst_aggregator_pad_is_eos">
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the pad is EOS, otherwise %FALSE.</doc>
@@ -2226,7 +2240,10 @@ to the new entry, etc.</doc>
             <doc xml:space="preserve">#GstFormat defining the converted format.</doc>
             <type name="Gst.Format" c:type="GstFormat"/>
           </parameter>
-          <parameter name="dest_value" transfer-ownership="none">
+          <parameter name="dest_value"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">Pointer where the conversion result will be put.</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
@@ -8079,7 +8096,10 @@ enough data (offset+size bytes) in the byte reader.</doc>
             <doc xml:space="preserve">number of bytes to scan from offset</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
-          <parameter name="value" transfer-ownership="none">
+          <parameter name="value"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">pointer to uint32 to return matching data</doc>
             <type name="guint32" c:type="guint32*"/>
           </parameter>
@@ -9294,11 +9314,8 @@ read @size bytes from the #GstByteWriter from the beginning.</doc>
             <type name="ByteWriter" c:type="GstByteWriter*"/>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
-            <doc xml:space="preserve">UTF8 string to
-    write</doc>
-            <array c:type="gchar*">
-              <type name="utf8" c:type="gchar"/>
-            </array>
+            <doc xml:space="preserve">UTF8 string to write</doc>
+            <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>
@@ -9789,8 +9806,10 @@ negative. G_MININT64 is used to indicate invalid value.</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
           </parameter>
           <parameter name="outbuf"
-                     transfer-ownership="none"
-                     nullable="1"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
                      allow-none="1">
             <doc xml:space="preserve">output buffer with running time, or NULL if clipped</doc>
             <type name="Gst.Buffer" c:type="GstBuffer**"/>
@@ -10434,7 +10453,10 @@ This function takes ownership of @inbuffer and should output a buffer in
           <doc xml:space="preserve">the input #GstBuffer</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
         </parameter>
-        <parameter name="outbuffer" transfer-ownership="none">
+        <parameter name="outbuffer"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">the output #GstBuffer</doc>
           <type name="Gst.Buffer" c:type="GstBuffer**"/>
         </parameter>
@@ -11857,7 +11879,10 @@ This function is supposed to behave exactly like a #GstPadGetRangeFunction.</doc
           <doc xml:space="preserve">the length of the range</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
-        <parameter name="buffer" transfer-ownership="none">
+        <parameter name="buffer"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">a memory location to hold the result buffer</doc>
           <type name="Gst.Buffer" c:type="GstBuffer**"/>
         </parameter>
@@ -12110,8 +12135,10 @@ Free-function: gst_caps_unref</doc>
           <type name="Gst.Object" c:type="GstObject*"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
-          <doc xml:space="preserve">a pointer with data to typefind</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <doc xml:space="preserve">* a pointer with data to typefind</doc>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="size" transfer-ownership="none">
           <doc xml:space="preserve">the size of @data</doc>

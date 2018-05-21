@@ -2299,7 +2299,8 @@ gst_audio_converter_get_out_frames().</doc>
       <method name="get_config" c:identifier="gst_audio_converter_get_config">
         <doc xml:space="preserve">Get the current configuration of @convert.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">a #GstStructure that remains valid for as long as @convert is valid
+          <doc xml:space="preserve">
+  a #GstStructure that remains valid for as long as @convert is valid
   or until gst_audio_converter_update_config() is called.</doc>
           <type name="Gst.Structure" c:type="const GstStructure*"/>
         </return-value>
@@ -2308,11 +2309,21 @@ gst_audio_converter_get_out_frames().</doc>
             <doc xml:space="preserve">a #GstAudioConverter</doc>
             <type name="AudioConverter" c:type="GstAudioConverter*"/>
           </instance-parameter>
-          <parameter name="in_rate" transfer-ownership="none">
+          <parameter name="in_rate"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">result input rate</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
-          <parameter name="out_rate" transfer-ownership="none">
+          <parameter name="out_rate"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">result output rate</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -3080,11 +3091,21 @@ MT safe.</doc>
             <doc xml:space="preserve">a #GstAudioDecoder</doc>
             <type name="AudioDecoder" c:type="GstAudioDecoder*"/>
           </instance-parameter>
-          <parameter name="sync" transfer-ownership="none">
+          <parameter name="sync"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">a pointer to a variable to hold the current sync state</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
-          <parameter name="eos" transfer-ownership="none">
+          <parameter name="eos"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <doc xml:space="preserve">a pointer to a variable to hold the current eos state</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
@@ -5825,7 +5846,10 @@ function can be used to handle pad queries of the type GST_QUERY_CONVERT.</doc>
             <doc xml:space="preserve">#GstFormat of the @dest_val</doc>
             <type name="Gst.Format" c:type="GstFormat"/>
           </parameter>
-          <parameter name="dest_val" transfer-ownership="none">
+          <parameter name="dest_val"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">pointer to destination value</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
@@ -6689,7 +6713,9 @@ with a flush or stop.</doc>
           </parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">the data to commit</doc>
-            <type name="guint8" c:type="guint8*"/>
+            <array length="2" zero-terminated="0" c:type="guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="in_samples" transfer-ownership="none">
             <doc xml:space="preserve">the number of samples in the data to commit</doc>
@@ -6699,7 +6725,10 @@ with a flush or stop.</doc>
             <doc xml:space="preserve">the number of samples to write to the ringbuffer</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
-          <parameter name="accum" transfer-ownership="none">
+          <parameter name="accum"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">accumulator for rate conversion.</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -6963,7 +6992,9 @@ with a flush or stop.</doc>
           </parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">the data to commit</doc>
-            <type name="guint8" c:type="guint8*"/>
+            <array length="2" zero-terminated="0" c:type="guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="in_samples" transfer-ownership="none">
             <doc xml:space="preserve">the number of samples in the data to commit</doc>
@@ -6973,7 +7004,10 @@ with a flush or stop.</doc>
             <doc xml:space="preserve">the number of samples to write to the ringbuffer</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
-          <parameter name="accum" transfer-ownership="none">
+          <parameter name="accum"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">accumulator for rate conversion.</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -7003,7 +7037,10 @@ will be put in @dest_val.</doc>
             <doc xml:space="preserve">the destination format</doc>
             <type name="Gst.Format" c:type="GstFormat"/>
           </parameter>
-          <parameter name="dest_val" transfer-ownership="none">
+          <parameter name="dest_val"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">a location to store the converted value</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
@@ -7163,15 +7200,27 @@ MT safe.</doc>
             <doc xml:space="preserve">the #GstAudioRingBuffer to read from</doc>
             <type name="AudioRingBuffer" c:type="GstAudioRingBuffer*"/>
           </instance-parameter>
-          <parameter name="segment" transfer-ownership="none">
+          <parameter name="segment"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the segment to read</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
-          <parameter name="readptr" transfer-ownership="none">
-            <doc xml:space="preserve">the pointer to the memory where samples can be read</doc>
-            <type name="guint8" c:type="guint8**"/>
+          <parameter name="readptr"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:space="preserve">
+    the pointer to the memory where samples can be read</doc>
+            <array length="2" zero-terminated="0" c:type="guint8**">
+              <type name="guint8" c:type="guint8*"/>
+            </array>
           </parameter>
-          <parameter name="len" transfer-ownership="none">
+          <parameter name="len"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the number of bytes to read</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -7205,13 +7254,18 @@ MT safe.</doc>
           </parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">where the data should be read</doc>
-            <type name="guint8" c:type="guint8*"/>
+            <array length="2" zero-terminated="0" c:type="guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="len" transfer-ownership="none">
             <doc xml:space="preserve">the number of samples in data to read</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
-          <parameter name="timestamp" transfer-ownership="none">
+          <parameter name="timestamp"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">where the timestamp is returned</doc>
             <type name="Gst.ClockTime" c:type="GstClockTime*"/>
           </parameter>
@@ -7338,8 +7392,10 @@ be called in when the ringbuffer is acquired.</doc>
           </instance-parameter>
           <parameter name="position" transfer-ownership="none">
             <doc xml:space="preserve">the device channel positions</doc>
-            <type name="AudioChannelPosition"
-                  c:type="const GstAudioChannelPosition*"/>
+            <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+              <type name="AudioChannelPosition"
+                    c:type="GstAudioChannelPosition"/>
+            </array>
           </parameter>
         </parameters>
       </method>
@@ -7743,7 +7799,9 @@ with a flush or stop.</doc>
             </parameter>
             <parameter name="data" transfer-ownership="none">
               <doc xml:space="preserve">the data to commit</doc>
-              <type name="guint8" c:type="guint8*"/>
+              <array length="3" zero-terminated="0" c:type="guint8*">
+                <type name="guint8" c:type="guint8"/>
+              </array>
             </parameter>
             <parameter name="in_samples" transfer-ownership="none">
               <doc xml:space="preserve">the number of samples in the data to commit</doc>
@@ -7753,7 +7811,10 @@ with a flush or stop.</doc>
               <doc xml:space="preserve">the number of samples to write to the ringbuffer</doc>
               <type name="gint" c:type="gint"/>
             </parameter>
-            <parameter name="accum" transfer-ownership="none">
+            <parameter name="accum"
+                       direction="inout"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <doc xml:space="preserve">accumulator for rate conversion.</doc>
               <type name="gint" c:type="gint*"/>
             </parameter>
@@ -8892,14 +8953,18 @@ positions and the same positions, only in a different order.
         </parameter>
         <parameter name="from" transfer-ownership="none">
           <doc xml:space="preserve">The channel positions in the buffer.</doc>
-          <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+          <array length="2"
+                 zero-terminated="0"
+                 c:type="GstAudioChannelPosition*">
             <type name="AudioChannelPosition"
                   c:type="GstAudioChannelPosition"/>
           </array>
         </parameter>
         <parameter name="to" transfer-ownership="none">
           <doc xml:space="preserve">The channel positions to convert to.</doc>
-          <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+          <array length="2"
+                 zero-terminated="0"
+                 c:type="GstAudioChannelPosition*">
             <type name="AudioChannelPosition"
                   c:type="GstAudioChannelPosition"/>
           </array>
@@ -9306,21 +9371,25 @@ is possible.</doc>
         </parameter>
         <parameter name="from" transfer-ownership="none">
           <doc xml:space="preserve">The channel positions to reorder from.</doc>
-          <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+          <array length="0"
+                 zero-terminated="0"
+                 c:type="GstAudioChannelPosition*">
             <type name="AudioChannelPosition"
                   c:type="GstAudioChannelPosition"/>
           </array>
         </parameter>
         <parameter name="to" transfer-ownership="none">
           <doc xml:space="preserve">The channel positions to reorder to.</doc>
-          <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+          <array length="0"
+                 zero-terminated="0"
+                 c:type="GstAudioChannelPosition*">
             <type name="AudioChannelPosition"
                   c:type="GstAudioChannelPosition"/>
           </array>
         </parameter>
         <parameter name="reorder_map" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the reorder map.</doc>
-          <array zero-terminated="0" c:type="gint*">
+          <array length="0" zero-terminated="0" c:type="gint*">
             <type name="gint" c:type="gint"/>
           </array>
         </parameter>
@@ -9460,14 +9529,18 @@ positions and the same positions, only in a different order.</doc>
         </parameter>
         <parameter name="from" transfer-ownership="none">
           <doc xml:space="preserve">The channel positions in the buffer.</doc>
-          <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+          <array length="3"
+                 zero-terminated="0"
+                 c:type="GstAudioChannelPosition*">
             <type name="AudioChannelPosition"
                   c:type="GstAudioChannelPosition"/>
           </array>
         </parameter>
         <parameter name="to" transfer-ownership="none">
           <doc xml:space="preserve">The channel positions to convert to.</doc>
-          <array zero-terminated="0" c:type="GstAudioChannelPosition*">
+          <array length="3"
+                 zero-terminated="0"
+                 c:type="GstAudioChannelPosition*">
             <type name="AudioChannelPosition"
                   c:type="GstAudioChannelPosition"/>
           </array>

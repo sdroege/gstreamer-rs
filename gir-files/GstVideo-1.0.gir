@@ -2627,11 +2627,17 @@ and the other way around:
             <doc xml:space="preserve">a #GstVideoColorMatrix</doc>
             <type name="VideoColorMatrix" c:type="GstVideoColorMatrix"/>
           </parameter>
-          <parameter name="Kr" transfer-ownership="none">
+          <parameter name="Kr"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">result red channel coefficient</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
-          <parameter name="Kb" transfer-ownership="none">
+          <parameter name="Kb"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">result blue channel coefficient</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
@@ -2805,17 +2811,21 @@ the component values in range [0.0 .. 1.0] back to their representation in
           </parameter>
           <parameter name="offset"
                      direction="out"
-                     caller-allocates="0"
-                     transfer-ownership="full">
+                     caller-allocates="1"
+                     transfer-ownership="none">
             <doc xml:space="preserve">output offsets</doc>
-            <type name="gint" c:type="gint"/>
+            <array zero-terminated="0" c:type="gint" fixed-size="4">
+              <type name="gint" c:type="gint"/>
+            </array>
           </parameter>
           <parameter name="scale"
                      direction="out"
-                     caller-allocates="0"
-                     transfer-ownership="full">
+                     caller-allocates="1"
+                     transfer-ownership="none">
             <doc xml:space="preserve">output scale</doc>
-            <type name="gint" c:type="gint"/>
+            <array zero-terminated="0" c:type="gint" fixed-size="4">
+              <type name="gint" c:type="gint"/>
+            </array>
           </parameter>
         </parameters>
       </function>
@@ -7402,7 +7412,10 @@ function can be used to handle pad queries of the type GST_QUERY_CONVERT.</doc>
             <doc xml:space="preserve">#GstFormat of the @dest_value</doc>
             <type name="Gst.Format" c:type="GstFormat"/>
           </parameter>
-          <parameter name="dest_value" transfer-ownership="none">
+          <parameter name="dest_value"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">pointer to destination value</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
@@ -7742,13 +7755,17 @@ first byte of the plane and the stride of the plane.</doc>
             <type name="Gst.MapInfo" c:type="GstMapInfo*"/>
           </parameter>
           <parameter name="data"
-                     transfer-ownership="none"
-                     nullable="1"
-                     allow-none="1">
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     nullable="1">
             <doc xml:space="preserve">the data of @plane</doc>
             <type name="gpointer" c:type="gpointer*"/>
           </parameter>
-          <parameter name="stride" transfer-ownership="none">
+          <parameter name="stride"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the stride of @plane</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -8129,7 +8146,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="center" transfer-ownership="none">
+          <parameter name="center"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -8147,7 +8167,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="flip" transfer-ownership="none">
+          <parameter name="flip"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
@@ -8165,7 +8188,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="center" transfer-ownership="none">
+          <parameter name="center"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -8183,7 +8209,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="flip" transfer-ownership="none">
+          <parameter name="flip"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
@@ -8274,7 +8303,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="center" transfer-ownership="none">
+          <parameter name="center"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -8292,7 +8324,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="flip" transfer-ownership="none">
+          <parameter name="flip"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
@@ -8311,7 +8346,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="center" transfer-ownership="none">
+          <parameter name="center"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -8329,7 +8367,10 @@ operation of video-sources or operators.</doc>
             <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
             <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
           </instance-parameter>
-          <parameter name="flip" transfer-ownership="none">
+          <parameter name="flip"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">return location for the result</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
@@ -8429,7 +8470,10 @@ operation of video-sources or operators.</doc>
               <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
               <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
             </parameter>
-            <parameter name="flip" transfer-ownership="none">
+            <parameter name="flip"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <doc xml:space="preserve">return location for the result</doc>
               <type name="gboolean" c:type="gboolean*"/>
             </parameter>
@@ -8447,7 +8491,10 @@ operation of video-sources or operators.</doc>
               <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
               <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
             </parameter>
-            <parameter name="flip" transfer-ownership="none">
+            <parameter name="flip"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <doc xml:space="preserve">return location for the result</doc>
               <type name="gboolean" c:type="gboolean*"/>
             </parameter>
@@ -8465,7 +8512,10 @@ operation of video-sources or operators.</doc>
               <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
               <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
             </parameter>
-            <parameter name="center" transfer-ownership="none">
+            <parameter name="center"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <doc xml:space="preserve">return location for the result</doc>
               <type name="gint" c:type="gint*"/>
             </parameter>
@@ -8483,7 +8533,10 @@ operation of video-sources or operators.</doc>
               <doc xml:space="preserve">#GstVideoOrientation interface of a #GstElement</doc>
               <type name="VideoOrientation" c:type="GstVideoOrientation*"/>
             </parameter>
-            <parameter name="center" transfer-ownership="none">
+            <parameter name="center"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
               <doc xml:space="preserve">return location for the result</doc>
               <type name="gint" c:type="gint*"/>
             </parameter>
@@ -12608,11 +12661,17 @@ and the other way around:
           <doc xml:space="preserve">a #GstVideoColorMatrix</doc>
           <type name="VideoColorMatrix" c:type="GstVideoColorMatrix"/>
         </parameter>
-        <parameter name="Kr" transfer-ownership="none">
+        <parameter name="Kr"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">result red channel coefficient</doc>
           <type name="gdouble" c:type="gdouble*"/>
         </parameter>
-        <parameter name="Kb" transfer-ownership="none">
+        <parameter name="Kb"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">result blue channel coefficient</doc>
           <type name="gdouble" c:type="gdouble*"/>
         </parameter>
@@ -12659,17 +12718,21 @@ the component values in range [0.0 .. 1.0] back to their representation in
         </parameter>
         <parameter name="offset"
                    direction="out"
-                   caller-allocates="0"
-                   transfer-ownership="full">
+                   caller-allocates="1"
+                   transfer-ownership="none">
           <doc xml:space="preserve">output offsets</doc>
-          <type name="gint" c:type="gint"/>
+          <array zero-terminated="0" c:type="gint" fixed-size="4">
+            <type name="gint" c:type="gint"/>
+          </array>
         </parameter>
         <parameter name="scale"
                    direction="out"
-                   caller-allocates="0"
-                   transfer-ownership="full">
+                   caller-allocates="1"
+                   transfer-ownership="none">
           <doc xml:space="preserve">output scale</doc>
-          <type name="gint" c:type="gint"/>
+          <array zero-terminated="0" c:type="gint" fixed-size="4">
+            <type name="gint" c:type="gint"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -13067,8 +13130,12 @@ Create a still frame event using gst_video_event_new_still_frame()</doc>
           <doc xml:space="preserve">A #GstEvent to parse</doc>
           <type name="Gst.Event" c:type="GstEvent*"/>
         </parameter>
-        <parameter name="in_still" transfer-ownership="none">
-          <doc xml:space="preserve">A boolean to receive the still-frame status from the event, or NULL</doc>
+        <parameter name="in_still"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve">
+    A boolean to receive the still-frame status from the event, or NULL</doc>
           <type name="gboolean" c:type="gboolean*"/>
         </parameter>
       </parameters>

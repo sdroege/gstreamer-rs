@@ -780,12 +780,13 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#rtcsdptype"&gt;http://w3c.git
             glib:type-name="GstWebRTCSessionDescription"
             glib:get-type="gst_webrtc_session_description_get_type"
             c:symbol-prefix="webrtc_session_description">
-      <doc xml:space="preserve">sdp: the #GstSDPMessage of the description
-See &lt;ulink url="https://www.w3.org/TR/webrtc/#rtcsessiondescription-class"&gt;https://www.w3.org/TR/webrtc/#rtcsessiondescription-class&lt;/ulink&gt;</doc>
+      <doc xml:space="preserve">See &lt;ulink url="https://www.w3.org/TR/webrtc/#rtcsessiondescription-class"&gt;https://www.w3.org/TR/webrtc/#rtcsessiondescription-class&lt;/ulink&gt;</doc>
       <field name="type" writable="1">
+        <doc xml:space="preserve">the #GstWebRTCSDPType of the description</doc>
         <type name="WebRTCSDPType" c:type="GstWebRTCSDPType"/>
       </field>
       <field name="sdp" writable="1">
+        <doc xml:space="preserve">the #GstSDPMessage of the description</doc>
         <type name="GstSdp.SDPMessage" c:type="GstSDPMessage*"/>
       </field>
       <constructor name="new"
