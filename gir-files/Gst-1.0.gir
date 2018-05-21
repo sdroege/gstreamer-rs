@@ -2012,13 +2012,19 @@ MT safe.</doc>
             <type name="gsize" c:type="gsize"/>
           </parameter>
           <parameter name="dest"
-                     transfer-ownership="none"
-                     nullable="1"
-                     allow-none="1">
-            <doc xml:space="preserve">the destination address</doc>
-            <type name="gpointer" c:type="gpointer"/>
+                     direction="out"
+                     caller-allocates="1"
+                     transfer-ownership="none">
+            <doc xml:space="preserve">
+    the destination address</doc>
+            <array length="2" zero-terminated="0" c:type="gpointer">
+              <type name="guint8"/>
+            </array>
           </parameter>
-          <parameter name="size" transfer-ownership="none">
+          <parameter name="size"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the size to extract</doc>
             <type name="gsize" c:type="gsize"/>
           </parameter>
@@ -12255,7 +12261,7 @@ plugin_init (GstPlugin * plugin)
       <type name="ElementFactoryListType" c:type="GstElementFactoryListType"/>
     </constant>
     <constant name="ELEMENT_FACTORY_TYPE_DECODABLE"
-              value="353"
+              value="1377"
               c:type="GST_ELEMENT_FACTORY_TYPE_DECODABLE">
       <doc xml:space="preserve">All elements used to 'decode' streams (decoders, demuxers, parsers, depayloaders)</doc>
       <type name="ElementFactoryListType" c:type="GstElementFactoryListType"/>
@@ -23252,7 +23258,9 @@ buffers.</doc>
           </parameter>
           <parameter name="tags" transfer-ownership="none">
             <doc xml:space="preserve">tags for @api</doc>
-            <type name="utf8" c:type="const gchar**"/>
+            <array c:type="gchar**">
+              <type name="utf8" c:type="gchar*"/>
+            </array>
           </parameter>
         </parameters>
       </function>
@@ -24908,14 +24916,14 @@ detection tools. (Since 1.10)</doc>
       </member>
     </bitfield>
     <constant name="PARAM_CONTROLLABLE"
-              value="2"
+              value="512"
               c:type="GST_PARAM_CONTROLLABLE">
       <doc xml:space="preserve">Use this flag on GObject properties to signal they can make sense to be.
 controlled over time. This hint is used by the GstController.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PARAM_MUTABLE_PAUSED"
-              value="8"
+              value="2048"
               c:type="GST_PARAM_MUTABLE_PAUSED">
       <doc xml:space="preserve">Use this flag on GObject properties of GstElements to indicate that
 they can be changed when the element is in the PAUSED or lower state.
@@ -24923,7 +24931,7 @@ This flag implies GST_PARAM_MUTABLE_READY.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PARAM_MUTABLE_PLAYING"
-              value="16"
+              value="4096"
               c:type="GST_PARAM_MUTABLE_PLAYING">
       <doc xml:space="preserve">Use this flag on GObject properties of GstElements to indicate that
 they can be changed when the element is in the PLAYING or lower state.
@@ -24931,14 +24939,14 @@ This flag implies GST_PARAM_MUTABLE_PAUSED.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PARAM_MUTABLE_READY"
-              value="4"
+              value="1024"
               c:type="GST_PARAM_MUTABLE_READY">
       <doc xml:space="preserve">Use this flag on GObject properties of GstElements to indicate that
 they can be changed when the element is in the READY or lower state.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PARAM_USER_SHIFT"
-              value="256"
+              value="65536"
               c:type="GST_PARAM_USER_SHIFT">
       <doc xml:space="preserve">Bits based on GST_PARAM_USER_SHIFT can be used by 3rd party applications.</doc>
       <type name="gint" c:type="gint"/>
@@ -29531,7 +29539,7 @@ reference to the newly-loaded GstPlugin, or %NULL if an error occurred.</doc>
         <parameters>
           <parameter name="filename" transfer-ownership="none">
             <doc xml:space="preserve">the plugin filename to load</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </function>
@@ -29817,7 +29825,7 @@ stored. This is the case when the registry is getting rebuilt.</doc>
         <doc xml:space="preserve">get the filename of the plugin</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">the filename of the plugin</doc>
-          <type name="filename" c:type="gchar*"/>
+          <type name="filename" c:type="const gchar*"/>
         </return-value>
         <parameters>
           <instance-parameter name="plugin" transfer-ownership="none">
@@ -30890,7 +30898,7 @@ application.</doc>
         <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">the directory or %NULL, don't free or modify
 the string</doc>
-          <type name="filename" c:type="gchar*"/>
+          <type name="filename" c:type="const gchar*"/>
         </return-value>
       </function>
       <function name="set_app_dir" c:identifier="gst_preset_set_app_dir">
@@ -30904,7 +30912,7 @@ system presets.</doc>
         <parameters>
           <parameter name="app_dir" transfer-ownership="none">
             <doc xml:space="preserve">the application specific preset dir</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </function>
@@ -34728,7 +34736,7 @@ path is specific to the registry.</doc>
           </instance-parameter>
           <parameter name="path" transfer-ownership="none">
             <doc xml:space="preserve">the path to scan</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>
@@ -44717,7 +44725,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="0" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="1" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
@@ -45262,7 +45270,7 @@ This file can be processed with graphviz to get an image.
         </parameter>
         <parameter name="file_name" transfer-ownership="none">
           <doc xml:space="preserve">output base filename (e.g. "myplayer")</doc>
-          <type name="filename" c:type="gchar*"/>
+          <type name="filename" c:type="const gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -45283,7 +45291,7 @@ to the filename, so that it can be used to take multiple snapshots.</doc>
         </parameter>
         <parameter name="file_name" transfer-ownership="none">
           <doc xml:space="preserve">output base filename (e.g. "myplayer")</doc>
-          <type name="filename" c:type="gchar*"/>
+          <type name="filename" c:type="const gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -45851,7 +45859,7 @@ On Windows #filename should be in UTF-8 encoding.</doc>
       <parameters>
         <parameter name="filename" transfer-ownership="none">
           <doc xml:space="preserve">absolute or relative file name path</doc>
-          <type name="filename" c:type="gchar*"/>
+          <type name="filename" c:type="const gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -46324,7 +46332,9 @@ or gst_init_check().</doc>
         </parameter>
         <parameter name="tags" transfer-ownership="none">
           <doc xml:space="preserve">tags for @api</doc>
-          <type name="utf8" c:type="const gchar**"/>
+          <array c:type="gchar**">
+            <type name="utf8" c:type="gchar*"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -46828,7 +46838,7 @@ application.</doc>
       <return-value transfer-ownership="none" nullable="1">
         <doc xml:space="preserve">the directory or %NULL, don't free or modify
 the string</doc>
-        <type name="filename" c:type="gchar*"/>
+        <type name="filename" c:type="const gchar*"/>
       </return-value>
     </function>
     <function name="preset_set_app_dir"
@@ -46844,7 +46854,7 @@ system presets.</doc>
       <parameters>
         <parameter name="app_dir" transfer-ownership="none">
           <doc xml:space="preserve">the application specific preset dir</doc>
-          <type name="filename" c:type="gchar*"/>
+          <type name="filename" c:type="const gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -46978,7 +46988,8 @@ This function is primarily for printing debug output.</doc>
       <doc xml:space="preserve">Iterates the supplied list of UUIDs and checks the GstRegistry for
 all the decryptors supporting one of the supplied UUIDs.</doc>
       <return-value transfer-ownership="full" nullable="1">
-        <doc xml:space="preserve">A null terminated array containing all
+        <doc xml:space="preserve">
+A null terminated array containing all
 the @system_identifiers supported by the set of available decryptors, or
 %NULL if no matches were found.</doc>
         <array c:type="gchar**">
@@ -46987,10 +46998,12 @@ the @system_identifiers supported by the set of available decryptors, or
       </return-value>
       <parameters>
         <parameter name="system_identifiers" transfer-ownership="none">
-          <doc xml:space="preserve">A null terminated array of strings
-that contains the UUID values of each protection system that is to be
-checked.</doc>
-          <type name="utf8" c:type="const gchar**"/>
+          <doc xml:space="preserve">
+A null terminated array of strings that contains the UUID values of each
+protection system that is to be checked.</doc>
+          <array c:type="gchar**">
+            <type name="utf8" c:type="gchar*"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -47857,7 +47870,9 @@ the result.</doc>
       <parameters>
         <parameter name="mem" transfer-ownership="none">
           <doc xml:space="preserve">a pointer to the memory to dump</doc>
-          <type name="guint8" c:type="const guchar*"/>
+          <array length="1" zero-terminated="0" c:type="guchar*">
+            <type name="guint8" c:type="guchar"/>
+          </array>
         </parameter>
         <parameter name="size" transfer-ownership="none">
           <doc xml:space="preserve">the size of the memory block to dump</doc>

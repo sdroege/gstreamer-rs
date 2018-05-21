@@ -1039,16 +1039,20 @@ WINDOWS-1252/ISO-8859-1 is assumed (which will almost always succeed).</doc>
       <parameters>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">string data</doc>
-          <type name="utf8" c:type="const gchar*"/>
+          <array length="1" zero-terminated="0" c:type="gchar*">
+            <type name="gchar"/>
+          </array>
         </parameter>
         <parameter name="size" transfer-ownership="none">
           <doc xml:space="preserve">length of string data, or -1 if the string is NUL-terminated</doc>
           <type name="gint" c:type="gint"/>
         </parameter>
         <parameter name="env_vars" transfer-ownership="none">
-          <doc xml:space="preserve">a NULL-terminated string array of environment variable names,
-           or NULL</doc>
-          <type name="utf8" c:type="const gchar**"/>
+          <doc xml:space="preserve">
+   a NULL-terminated string array of environment variable names, or NULL</doc>
+          <array c:type="gchar**">
+            <type name="utf8" c:type="gchar*"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -1387,7 +1391,9 @@ data (we can't trust the declared mime type).</doc>
       <parameters>
         <parameter name="image_data" transfer-ownership="none">
           <doc xml:space="preserve">the (encoded) image</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="image_data_len" transfer-ownership="none">
           <doc xml:space="preserve">the length of the encoded image data at @image_data</doc>
@@ -1417,7 +1423,9 @@ more information on image tags in GStreamer.</doc>
         </parameter>
         <parameter name="image_data" transfer-ownership="none">
           <doc xml:space="preserve">the (encoded) image</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="image_data_len" transfer-ownership="none">
           <doc xml:space="preserve">the length of the encoded image data at @image_data</doc>
@@ -1497,7 +1505,9 @@ vorbiscomment packet.</doc>
       <parameters>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">data to convert</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="1" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="size" transfer-ownership="none">
           <doc xml:space="preserve">size of @data</doc>
@@ -1505,15 +1515,22 @@ vorbiscomment packet.</doc>
         </parameter>
         <parameter name="id_data" transfer-ownership="none">
           <doc xml:space="preserve">identification data at start of stream</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="3" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="id_data_length" transfer-ownership="none">
           <doc xml:space="preserve">length of identification data</doc>
           <type name="guint" c:type="const guint"/>
         </parameter>
-        <parameter name="vendor_string" transfer-ownership="none">
-          <doc xml:space="preserve">pointer to a string that should take the vendor string
-                of this vorbis comment or NULL if you don't need it.</doc>
+        <parameter name="vendor_string"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">pointer to a string that should take the
+    vendor string of this vorbis comment or NULL if you don't need it.</doc>
           <type name="utf8" c:type="gchar**"/>
         </parameter>
       </parameters>
@@ -1534,15 +1551,22 @@ vorbiscomment packet.</doc>
         </parameter>
         <parameter name="id_data" transfer-ownership="none">
           <doc xml:space="preserve">identification data at start of stream</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="id_data_length" transfer-ownership="none">
           <doc xml:space="preserve">length of identification data</doc>
           <type name="guint" c:type="const guint"/>
         </parameter>
-        <parameter name="vendor_string" transfer-ownership="none">
-          <doc xml:space="preserve">pointer to a string that should take the vendor string
-                of this vorbis comment or NULL if you don't need it.</doc>
+        <parameter name="vendor_string"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">pointer to a string that should take the
+    vendor string of this vorbis comment or NULL if you don't need it.</doc>
           <type name="utf8" c:type="gchar**"/>
         </parameter>
       </parameters>
@@ -1572,7 +1596,9 @@ parsed data.</doc>
       <parameters>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">128 bytes of data containing the ID3v1 tag</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array zero-terminated="0" c:type="guint8*" fixed-size="128">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -1629,13 +1655,18 @@ is put in the beginning of the buffer.</doc>
         </parameter>
         <parameter name="id_data" transfer-ownership="none">
           <doc xml:space="preserve">identification data at start of stream</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="id_data_length" transfer-ownership="none">
           <doc xml:space="preserve">length of identification data, may be 0 if @id_data is NULL</doc>
           <type name="guint" c:type="const guint"/>
         </parameter>
-        <parameter name="vendor_string" transfer-ownership="none">
+        <parameter name="vendor_string"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <doc xml:space="preserve">string that describes the vendor string or NULL</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
@@ -1660,8 +1691,11 @@ be used</doc>
           <type name="gboolean" c:type="gboolean"/>
         </parameter>
         <parameter name="schemas" transfer-ownership="none">
-          <doc xml:space="preserve">%NULL terminated array of schemas to be used on serialization</doc>
-          <type name="utf8" c:type="const gchar**"/>
+          <doc xml:space="preserve">
+    %NULL terminated array of schemas to be used on serialization</doc>
+          <array c:type="gchar**">
+            <type name="utf8" c:type="gchar*"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -1683,15 +1717,28 @@ code in the extended comment string.</doc>
           <doc xml:space="preserve">an extended comment string, see #GST_TAG_EXTENDED_COMMENT</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
-        <parameter name="key" transfer-ownership="none">
-          <doc xml:space="preserve">return location for the comment description key, or NULL</doc>
+        <parameter name="key"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   nullable="1">
+          <doc xml:space="preserve">
+    return location for the comment description key, or NULL</doc>
           <type name="utf8" c:type="gchar**"/>
         </parameter>
-        <parameter name="lang" transfer-ownership="none">
-          <doc xml:space="preserve">return location for the comment ISO-639 language code, or NULL</doc>
+        <parameter name="lang"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   nullable="1">
+          <doc xml:space="preserve">
+    return location for the comment ISO-639 language code, or NULL</doc>
           <type name="utf8" c:type="gchar**"/>
         </parameter>
-        <parameter name="value" transfer-ownership="none">
+        <parameter name="value"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <doc xml:space="preserve">return location for the actual comment string, or NULL</doc>
           <type name="utf8" c:type="gchar**"/>
         </parameter>

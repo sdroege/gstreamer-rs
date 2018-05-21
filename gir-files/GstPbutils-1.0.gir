@@ -2181,7 +2181,7 @@ valid for target names).</doc>
         <parameters>
           <parameter name="filepath" transfer-ownership="none">
             <doc xml:space="preserve">The file location to load the #GstEncodingTarget from</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </function>
@@ -2308,7 +2308,7 @@ count.</doc>
           </instance-parameter>
           <parameter name="filepath" transfer-ownership="none">
             <doc xml:space="preserve">the location to store the @target at.</doc>
-            <type name="filename" c:type="gchar*"/>
+            <type name="filename" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>
@@ -2744,7 +2744,7 @@ in debugging.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PLUGINS_BASE_VERSION_MICRO"
-              value="0"
+              value="1"
               c:type="GST_PLUGINS_BASE_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       <type name="gint" c:type="gint"/>
@@ -3405,7 +3405,7 @@ invalid Opus caps.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <array zero-terminated="0" c:type="guint8">
+          <array zero-terminated="0" c:type="guint8" fixed-size="256">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3464,7 +3464,7 @@ invalid Opus caps.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <array zero-terminated="0" c:type="guint8">
+          <array zero-terminated="0" c:type="guint8" fixed-size="256">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
