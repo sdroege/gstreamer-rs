@@ -723,8 +723,8 @@ impl SDPMessage {
         assert_initialized_main_thread!();
         unsafe {
             let size = data.len() as u32;
-            let msg = glib_ffi::g_malloc0(mem::size_of::<ffi::GstSDPMessage>())
-                as *mut ffi::GstSDPMessage;
+            let mut msg = mem::zeroed();
+            ffi::gst_sdp_message_new(&mut msg);
             let result = ffi::gst_sdp_message_parse_buffer(data.to_glib_none().0, size, msg);
             match result {
                 ffi::GST_SDP_OK => Ok(from_glib_full(msg)),
@@ -739,8 +739,8 @@ impl SDPMessage {
     pub fn parse_uri(uri: &str) -> Result<Self, ()> {
         assert_initialized_main_thread!();
         unsafe {
-            let msg = glib_ffi::g_malloc0(mem::size_of::<ffi::GstSDPMessage>())
-                as *mut ffi::GstSDPMessage;
+            let mut msg = mem::zeroed();
+            ffi::gst_sdp_message_new(&mut msg);
             let result = ffi::gst_sdp_message_parse_uri(uri.to_glib_none().0, msg);
             match result {
                 ffi::GST_SDP_OK => Ok(from_glib_full(msg)),
