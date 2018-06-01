@@ -167,7 +167,7 @@ fn main() {
                         let buffer = buffer.get_mut().unwrap();
                         {
                             let mut samples = buffer.map_writable().unwrap();
-                            let samples = samples.as_mut_slice().as_mut_slice_of::<i16>().unwrap();
+                            let samples = samples.as_mut_slice_of::<i16>().unwrap();
 
                             // Generate some psychodelic waveforms
                             data.c += data.d;

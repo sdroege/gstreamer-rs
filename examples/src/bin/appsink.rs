@@ -93,7 +93,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     return gst::FlowReturn::Error;
                 };
 
-                let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
+                let samples = if let Ok(samples) = map.as_slice_of::<i16>() {
                     samples
                 } else {
                     gst_element_error!(

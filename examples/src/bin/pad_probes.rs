@@ -30,7 +30,7 @@ fn example_main() {
         if let Some(gst::PadProbeData::Buffer(ref buffer)) = probe_info.data {
             let map = buffer.map_readable().unwrap();
 
-            let samples = if let Ok(samples) = map.as_slice().as_slice_of::<i16>() {
+            let samples = if let Ok(samples) = map.as_slice_of::<i16>() {
                 samples
             } else {
                 return gst::PadProbeReturn::Ok;
