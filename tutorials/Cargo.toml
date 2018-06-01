@@ -12,7 +12,7 @@ gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-app = { path = "../gstreamer-app" }
 send-cell = "0.1"
-byte-slice-cast = "0.1"
+byte-slice-cast = "0.2"
 
 [badges]
 travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
