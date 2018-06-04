@@ -13,6 +13,69 @@ use glib::value::Value;
 use gobject_ffi;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum WebRTCDTLSSetup {
+    None,
+    Actpass,
+    Active,
+    Passive,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for WebRTCDTLSSetup {
+    type GlibType = ffi::GstWebRTCDTLSSetup;
+
+    fn to_glib(&self) -> ffi::GstWebRTCDTLSSetup {
+        match *self {
+            WebRTCDTLSSetup::None => ffi::GST_WEBRTC_DTLS_SETUP_NONE,
+            WebRTCDTLSSetup::Actpass => ffi::GST_WEBRTC_DTLS_SETUP_ACTPASS,
+            WebRTCDTLSSetup::Active => ffi::GST_WEBRTC_DTLS_SETUP_ACTIVE,
+            WebRTCDTLSSetup::Passive => ffi::GST_WEBRTC_DTLS_SETUP_PASSIVE,
+            WebRTCDTLSSetup::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCDTLSSetup> for WebRTCDTLSSetup {
+    fn from_glib(value: ffi::GstWebRTCDTLSSetup) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => WebRTCDTLSSetup::None,
+            1 => WebRTCDTLSSetup::Actpass,
+            2 => WebRTCDTLSSetup::Active,
+            3 => WebRTCDTLSSetup::Passive,
+            value => WebRTCDTLSSetup::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for WebRTCDTLSSetup {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_dtls_setup_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCDTLSSetup {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCDTLSSetup {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCDTLSSetup {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WebRTCDTLSTransportState {
     New,
     Closed,
@@ -325,6 +388,141 @@ impl SetValue for WebRTCICERole {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum WebRTCPeerConnectionState {
+    New,
+    Connecting,
+    Connected,
+    Disconnected,
+    Failed,
+    Closed,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for WebRTCPeerConnectionState {
+    type GlibType = ffi::GstWebRTCPeerConnectionState;
+
+    fn to_glib(&self) -> ffi::GstWebRTCPeerConnectionState {
+        match *self {
+            WebRTCPeerConnectionState::New => ffi::GST_WEBRTC_PEER_CONNECTION_STATE_NEW,
+            WebRTCPeerConnectionState::Connecting => ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING,
+            WebRTCPeerConnectionState::Connected => ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED,
+            WebRTCPeerConnectionState::Disconnected => ffi::GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED,
+            WebRTCPeerConnectionState::Failed => ffi::GST_WEBRTC_PEER_CONNECTION_STATE_FAILED,
+            WebRTCPeerConnectionState::Closed => ffi::GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED,
+            WebRTCPeerConnectionState::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCPeerConnectionState> for WebRTCPeerConnectionState {
+    fn from_glib(value: ffi::GstWebRTCPeerConnectionState) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => WebRTCPeerConnectionState::New,
+            1 => WebRTCPeerConnectionState::Connecting,
+            2 => WebRTCPeerConnectionState::Connected,
+            3 => WebRTCPeerConnectionState::Disconnected,
+            4 => WebRTCPeerConnectionState::Failed,
+            5 => WebRTCPeerConnectionState::Closed,
+            value => WebRTCPeerConnectionState::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for WebRTCPeerConnectionState {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_peer_connection_state_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCPeerConnectionState {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCPeerConnectionState {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCPeerConnectionState {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum WebRTCRTPTransceiverDirection {
+    None,
+    Inactive,
+    Sendonly,
+    Recvonly,
+    Sendrecv,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for WebRTCRTPTransceiverDirection {
+    type GlibType = ffi::GstWebRTCRTPTransceiverDirection;
+
+    fn to_glib(&self) -> ffi::GstWebRTCRTPTransceiverDirection {
+        match *self {
+            WebRTCRTPTransceiverDirection::None => ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE,
+            WebRTCRTPTransceiverDirection::Inactive => ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE,
+            WebRTCRTPTransceiverDirection::Sendonly => ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY,
+            WebRTCRTPTransceiverDirection::Recvonly => ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY,
+            WebRTCRTPTransceiverDirection::Sendrecv => ffi::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV,
+            WebRTCRTPTransceiverDirection::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCRTPTransceiverDirection> for WebRTCRTPTransceiverDirection {
+    fn from_glib(value: ffi::GstWebRTCRTPTransceiverDirection) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => WebRTCRTPTransceiverDirection::None,
+            1 => WebRTCRTPTransceiverDirection::Inactive,
+            2 => WebRTCRTPTransceiverDirection::Sendonly,
+            3 => WebRTCRTPTransceiverDirection::Recvonly,
+            4 => WebRTCRTPTransceiverDirection::Sendrecv,
+            value => WebRTCRTPTransceiverDirection::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for WebRTCRTPTransceiverDirection {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_rtp_transceiver_direction_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCRTPTransceiverDirection {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCRTPTransceiverDirection {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCRTPTransceiverDirection {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum WebRTCSDPType {
     Offer,
     Pranswer,
@@ -382,6 +580,168 @@ impl<'a> FromValue<'a> for WebRTCSDPType {
 }
 
 impl SetValue for WebRTCSDPType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum WebRTCSignalingState {
+    Stable,
+    Closed,
+    HaveLocalOffer,
+    HaveRemoteOffer,
+    HaveLocalPranswer,
+    HaveRemotePranswer,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for WebRTCSignalingState {
+    type GlibType = ffi::GstWebRTCSignalingState;
+
+    fn to_glib(&self) -> ffi::GstWebRTCSignalingState {
+        match *self {
+            WebRTCSignalingState::Stable => ffi::GST_WEBRTC_SIGNALING_STATE_STABLE,
+            WebRTCSignalingState::Closed => ffi::GST_WEBRTC_SIGNALING_STATE_CLOSED,
+            WebRTCSignalingState::HaveLocalOffer => ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER,
+            WebRTCSignalingState::HaveRemoteOffer => ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER,
+            WebRTCSignalingState::HaveLocalPranswer => ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER,
+            WebRTCSignalingState::HaveRemotePranswer => ffi::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER,
+            WebRTCSignalingState::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCSignalingState> for WebRTCSignalingState {
+    fn from_glib(value: ffi::GstWebRTCSignalingState) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => WebRTCSignalingState::Stable,
+            1 => WebRTCSignalingState::Closed,
+            2 => WebRTCSignalingState::HaveLocalOffer,
+            3 => WebRTCSignalingState::HaveRemoteOffer,
+            4 => WebRTCSignalingState::HaveLocalPranswer,
+            5 => WebRTCSignalingState::HaveRemotePranswer,
+            value => WebRTCSignalingState::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for WebRTCSignalingState {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_signaling_state_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCSignalingState {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCSignalingState {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCSignalingState {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum WebRTCStatsType {
+    Codec,
+    InboundRtp,
+    OutboundRtp,
+    RemoteInboundRtp,
+    RemoteOutboundRtp,
+    Csrc,
+    PeerConnection,
+    DataChannel,
+    Stream,
+    Transport,
+    CandidatePair,
+    LocalCandidate,
+    RemoteCandidate,
+    Certificate,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for WebRTCStatsType {
+    type GlibType = ffi::GstWebRTCStatsType;
+
+    fn to_glib(&self) -> ffi::GstWebRTCStatsType {
+        match *self {
+            WebRTCStatsType::Codec => ffi::GST_WEBRTC_STATS_CODEC,
+            WebRTCStatsType::InboundRtp => ffi::GST_WEBRTC_STATS_INBOUND_RTP,
+            WebRTCStatsType::OutboundRtp => ffi::GST_WEBRTC_STATS_OUTBOUND_RTP,
+            WebRTCStatsType::RemoteInboundRtp => ffi::GST_WEBRTC_STATS_REMOTE_INBOUND_RTP,
+            WebRTCStatsType::RemoteOutboundRtp => ffi::GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP,
+            WebRTCStatsType::Csrc => ffi::GST_WEBRTC_STATS_CSRC,
+            WebRTCStatsType::PeerConnection => ffi::GST_WEBRTC_STATS_PEER_CONNECTION,
+            WebRTCStatsType::DataChannel => ffi::GST_WEBRTC_STATS_DATA_CHANNEL,
+            WebRTCStatsType::Stream => ffi::GST_WEBRTC_STATS_STREAM,
+            WebRTCStatsType::Transport => ffi::GST_WEBRTC_STATS_TRANSPORT,
+            WebRTCStatsType::CandidatePair => ffi::GST_WEBRTC_STATS_CANDIDATE_PAIR,
+            WebRTCStatsType::LocalCandidate => ffi::GST_WEBRTC_STATS_LOCAL_CANDIDATE,
+            WebRTCStatsType::RemoteCandidate => ffi::GST_WEBRTC_STATS_REMOTE_CANDIDATE,
+            WebRTCStatsType::Certificate => ffi::GST_WEBRTC_STATS_CERTIFICATE,
+            WebRTCStatsType::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCStatsType> for WebRTCStatsType {
+    fn from_glib(value: ffi::GstWebRTCStatsType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            1 => WebRTCStatsType::Codec,
+            2 => WebRTCStatsType::InboundRtp,
+            3 => WebRTCStatsType::OutboundRtp,
+            4 => WebRTCStatsType::RemoteInboundRtp,
+            5 => WebRTCStatsType::RemoteOutboundRtp,
+            6 => WebRTCStatsType::Csrc,
+            7 => WebRTCStatsType::PeerConnection,
+            8 => WebRTCStatsType::DataChannel,
+            9 => WebRTCStatsType::Stream,
+            10 => WebRTCStatsType::Transport,
+            11 => WebRTCStatsType::CandidatePair,
+            12 => WebRTCStatsType::LocalCandidate,
+            13 => WebRTCStatsType::RemoteCandidate,
+            14 => WebRTCStatsType::Certificate,
+            value => WebRTCStatsType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for WebRTCStatsType {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_webrtc_stats_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for WebRTCStatsType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for WebRTCStatsType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for WebRTCStatsType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }

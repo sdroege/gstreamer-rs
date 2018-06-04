@@ -23,6 +23,11 @@ generate = [
     "GstWebRTC.WebRTCICERole",
     "GstWebRTC.WebRTCICEComponent",
     "GstWebRTC.WebRTCSDPType",
+    "GstWebRTC.WebRTCDTLSSetup",
+    "GstWebRTC.WebRTCPeerConnectionState",
+    "GstWebRTC.WebRTCRTPTransceiverDirection",
+    "GstWebRTC.WebRTCSignalingState",
+    "GstWebRTC.WebRTCStatsType",
 ]
 
 manual = [

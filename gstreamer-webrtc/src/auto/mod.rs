@@ -21,12 +21,17 @@ mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;
 
 mod enums;
+pub use self::enums::WebRTCDTLSSetup;
 pub use self::enums::WebRTCDTLSTransportState;
 pub use self::enums::WebRTCICEComponent;
 pub use self::enums::WebRTCICEConnectionState;
 pub use self::enums::WebRTCICEGatheringState;
 pub use self::enums::WebRTCICERole;
+pub use self::enums::WebRTCPeerConnectionState;
+pub use self::enums::WebRTCRTPTransceiverDirection;
 pub use self::enums::WebRTCSDPType;
+pub use self::enums::WebRTCSignalingState;
+pub use self::enums::WebRTCStatsType;
 
 #[doc(hidden)]
 pub mod traits {
