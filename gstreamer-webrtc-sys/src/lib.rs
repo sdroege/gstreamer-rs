@@ -103,7 +103,7 @@ pub const GST_WEBRTC_STATS_CERTIFICATE: GstWebRTCStatsType = 14;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct GstWebRTCDTLSTransportClass {
-    pub parent_class: gst::GstBinClass,
+    pub parent_class: gst::GstObjectClass,
     pub _padding: [gpointer; 4],
 }
 
@@ -119,7 +119,7 @@ impl ::std::fmt::Debug for GstWebRTCDTLSTransportClass {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct GstWebRTCICETransportClass {
-    pub parent_class: gst::GstBinClass,
+    pub parent_class: gst::GstObjectClass,
     pub gather_candidates: Option<unsafe extern "C" fn(*mut GstWebRTCICETransport) -> gboolean>,
     pub _padding: [gpointer; 4],
 }
