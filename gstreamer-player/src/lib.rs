@@ -52,6 +52,7 @@ pub use config::*;
 mod player_video_info;
 
 mod player_video_overlay_video_renderer;
+mod player_g_main_context_signal_dispatcher;
 mod player_visualization;
 
 // Re-export all the traits in a prelude module, so that applications
