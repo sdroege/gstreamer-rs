@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.3] - 2018-06-08
+### Added
+- `gst::Bus::remove_watch()` is now available to remove a bus watch again
+- `fmt::Debug` impls for `AudioInfo` and `VideoInfo` were added
+- `fmt::Debug` impls for mini objects also print the pointer value now to make
+  it easier to track them in debug logs
+- `PlayerVisualization` has accessors for the name and description fields now,
+  without which there is no sensible way to use them or to set a player
+  visualization
+
 ## [0.11.2] - 2018-05-09
 ### Fixed
 - Work-around various floating reference handling changes between 1.12 and
@@ -262,7 +272,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.2...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.3...HEAD
+[0.11.3]: https://github.com/sdroege/gstreamer-rs/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/sdroege/gstreamer-rs/compare/0.11.1...0.11.2
 [0.11.1]: https://github.com/sdroege/gstreamer-rs/compare/0.11.0...0.11.1
 [0.11.0]: https://github.com/sdroege/gstreamer-rs/compare/0.10.2...0.11.0
