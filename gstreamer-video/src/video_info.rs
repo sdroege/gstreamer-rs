@@ -192,15 +192,32 @@ pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.debug_struct("VideoInfo")
-            .field("format", &self.format())
+        let mut b = f.debug_struct("VideoInfo");
+
+        b.field("format", &self.format())
             .field("width", &self.width())
             .field("height", &self.height())
+            .field("interlace_mode", &self.interlace_mode())
+            .field("flags", &self.flags())
             .field("size", &self.size())
-            .finish()
+            .field("views", &self.views())
+            .field("chroma_site", &self.chroma_site())
+            .field("colorimetry", &self.colorimetry())
+            .field("par", &self.par())
+            .field("fps", &self.fps())
+            .field("offset", &self.offset())
+            .field("stride", &self.stride())
+            .field("multiview_mode", &self.multiview_mode())
+            .field("multiview_flags", &self.multiview_flags());
+
+        #[cfg(any(feature = "v1_12", feature = "dox"))]
+        {
+            b.field("field_order", &self.field_order());
+        };
+
+        b.finish()
     }
 }
-
 
 pub struct VideoInfoBuilder<'a> {
     format: ::VideoFormat,
