@@ -16,12 +16,25 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrNone
 use gst;
 use gst::prelude::*;
 
+use std::fmt;
 use std::mem;
 use std::ptr;
 
 use array_init;
 
 pub struct AudioInfo(ffi::GstAudioInfo, [::AudioChannelPosition; 64]);
+
+impl fmt::Debug for AudioInfo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        f.debug_struct("AudioInfo")
+            .field("rate", &self.rate())
+            .field("channels", &self.channels())
+            .field("positions", &self.positions())
+            .field("flags", &self.flags())
+            .field("layout", &self.layout())
+            .finish()
+    }
+}
 
 pub struct AudioInfoBuilder<'a> {
     format: ::AudioFormat,
