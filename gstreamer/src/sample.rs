@@ -22,6 +22,7 @@ use Caps;
 use FormattedSegment;
 use FormattedValue;
 use Segment;
+use Structure;
 use StructureRef;
 
 pub type Sample = GstRc<SampleRef>;
@@ -36,16 +37,16 @@ impl GstRc<SampleRef> {
         buffer: Option<&Buffer>,
         caps: Option<&Caps>,
         segment: Option<&FormattedSegment<F>>,
-        info: Option<&StructureRef>,
+        info: Option<Structure>,
     ) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let info = info.map(|i| i.as_ptr()).unwrap_or(ptr::null());
+            let info = info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut());
 
             from_glib_full(ffi::gst_sample_new(
                 buffer.to_glib_none().0,
                 caps.to_glib_none().0,
-                mut_override(segment.to_glib_none().0),
+                segment.to_glib_none().0,
                 mut_override(info),
             ))
         }
@@ -55,7 +56,7 @@ impl GstRc<SampleRef> {
         buffer_list: Option<&BufferList>,
         caps: Option<&Caps>,
         segment: Option<&FormattedSegment<F>>,
-        info: Option<&StructureRef>,
+        info: Option<Structure>,
     ) -> Self {
         assert_initialized_main_thread!();
         let sample = Self::new(None, caps, segment, info);
@@ -122,3 +123,23 @@ impl fmt::Debug for SampleRef {
 
 unsafe impl Sync for SampleRef {}
 unsafe impl Send for SampleRef {}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_sample_new_with_info() {
+        use GenericFormattedValue;
+        use Sample;
+        use Structure;
+
+        ::init().unwrap();
+
+        let info = Structure::builder("sample.info")
+            .field("f3", &123i32)
+            .build();
+        let sample = Sample::new::<GenericFormattedValue>(None, None, None, Some(info));
+
+        assert!(sample.get_info().is_some());
+    }
+}
