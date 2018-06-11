@@ -40,13 +40,13 @@ impl GstRc<SampleRef> {
     ) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let info = info.map(|i| i.as_ptr()).unwrap_or(ptr::null());
+            let info = info.map(|i| ffi::gst_structure_copy(i.as_ptr())).unwrap_or(ptr::null_mut());
 
             from_glib_full(ffi::gst_sample_new(
                 buffer.to_glib_none().0,
                 caps.to_glib_none().0,
                 mut_override(segment.to_glib_none().0),
-                mut_override(info),
+                info,
             ))
         }
     }
@@ -122,3 +122,28 @@ impl fmt::Debug for SampleRef {
 
 unsafe impl Sync for SampleRef {}
 unsafe impl Send for SampleRef {}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_sample_new_with_info() {
+        use GenericFormattedValue;
+        use Sample;
+        use Structure;
+
+        ::init().unwrap();
+
+        let info = Structure::builder("sample.info")
+            .field("f3", &123i32)
+            .build();
+        let sample = Sample::new::<GenericFormattedValue>(
+            None,
+            None,
+            None,
+            Some(info.as_ref()),
+        );
+
+        assert!(sample.get_info().is_some());
+    }
+}
