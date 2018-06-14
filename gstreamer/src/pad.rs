@@ -244,7 +244,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             if id == 0 {
                 None
             } else {
-                Some(PadProbeId(id))
+                Some(from_glib(id))
             }
         }
     }
