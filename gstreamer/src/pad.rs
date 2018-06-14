@@ -102,7 +102,7 @@ impl Drop for StreamLock {
 }
 
 pub trait PadExtManual {
-    fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
+    fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
         F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     fn remove_probe(&self, id: PadProbeId);
@@ -225,7 +225,7 @@ pub trait PadExtManual {
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
-    fn add_probe<F>(&self, mask: PadProbeType, func: F) -> PadProbeId
+    fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
         F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
     {
@@ -241,7 +241,11 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Some(destroy_closure),
             );
 
-            from_glib(id)
+            if id == 0 {
+                None
+            } else {
+                Some(from_glib(id))
+            }
         }
     }
 
