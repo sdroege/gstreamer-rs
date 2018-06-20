@@ -30,6 +30,12 @@ extern crate futures_core;
 
 extern crate muldiv;
 
+#[cfg(feature = "ser_de")]
+extern crate serde;
+#[cfg(feature = "ser_de")]
+#[macro_use]
+extern crate serde_derive;
+
 use glib::translate::{from_glib, from_glib_full};
 
 macro_rules! assert_initialized_main_thread {
