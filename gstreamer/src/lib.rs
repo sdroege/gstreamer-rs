@@ -73,6 +73,9 @@ pub mod miniobject;
 pub use miniobject::{GstRc, MiniObject};
 pub mod message;
 pub use message::{Message, MessageErrorDomain, MessageRef, MessageView};
+#[macro_use]
+mod value;
+pub use value::*;
 pub mod structure;
 pub use structure::{Structure, StructureRef};
 pub mod caps;
@@ -183,9 +186,6 @@ pub use typefind::*;
 
 pub mod format;
 pub use format::{FormattedValue, GenericFormattedValue, SpecificFormattedValue};
-
-mod value;
-pub use value::*;
 
 mod segment;
 pub use segment::*;

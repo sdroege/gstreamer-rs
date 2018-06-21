@@ -43,7 +43,7 @@ embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-sys/dox", "glib/dox", "futures", "ser_de"]
 futures = ["futures-core-preview"]
-ser_de = ["serde", "serde_derive"]
+ser_de = ["num-rational/serde", "serde", "serde_derive"]
 default-features = []
 
 [badges]
