@@ -20,7 +20,7 @@ glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/glib" }
-num-rational = { version = "0.1.38", default-features = false, features = [] }
+num-rational = { version = "0.2", default-features = false, features = [] }
 lazy_static = "1.0"
 futures-core = { version = "0.2", optional = true }
 muldiv = "0.2"
