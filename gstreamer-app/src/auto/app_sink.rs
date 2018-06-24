@@ -252,61 +252,51 @@ unsafe impl Send for AppSink {}
 unsafe impl Sync for AppSink {}
 
 unsafe extern "C" fn eos_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn new_preroll_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
-    callback_guard!();
     let f: &&(Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this)).to_glib()
 }
 
 unsafe extern "C" fn new_sample_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
-    callback_guard!();
     let f: &&(Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this)).to_glib()
 }
 
 unsafe extern "C" fn notify_buffer_list_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_caps_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_drop_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_emit_signals_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_eos_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_max_buffers_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_wait_on_eos_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

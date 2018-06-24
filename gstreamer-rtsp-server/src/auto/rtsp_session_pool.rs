@@ -131,14 +131,12 @@ impl<O: IsA<RTSPSessionPool> + IsA<glib::object::Object>> RTSPSessionPoolExt for
 
 unsafe extern "C" fn session_removed_trampoline<P>(this: *mut ffi::GstRTSPSessionPool, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
 where P: IsA<RTSPSessionPool> {
-    callback_guard!();
     let f: &&(Fn(&P, &RTSPSession) + Send + Sync + 'static) = transmute(f);
     f(&RTSPSessionPool::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_max_sessions_trampoline<P>(this: *mut ffi::GstRTSPSessionPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSessionPool> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&RTSPSessionPool::from_glib_borrow(this).downcast_unchecked())
 }

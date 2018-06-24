@@ -158,14 +158,12 @@ impl<O: IsA<DeviceProvider> + IsA<glib::object::Object>> DeviceProviderExt for O
 
 unsafe extern "C" fn provider_hidden_trampoline<P>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<DeviceProvider> {
-    callback_guard!();
     let f: &&(Fn(&P, &str) + Send + Sync + 'static) = transmute(f);
     f(&DeviceProvider::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(object))
 }
 
 unsafe extern "C" fn provider_unhidden_trampoline<P>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<DeviceProvider> {
-    callback_guard!();
     let f: &&(Fn(&P, &str) + Send + Sync + 'static) = transmute(f);
     f(&DeviceProvider::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(object))
 }

@@ -87,7 +87,6 @@ impl<O: IsA<RTSPThreadPool> + IsA<glib::object::Object>> RTSPThreadPoolExt for O
 
 unsafe extern "C" fn notify_max_threads_trampoline<P>(this: *mut ffi::GstRTSPThreadPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPThreadPool> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&RTSPThreadPool::from_glib_borrow(this).downcast_unchecked())
 }

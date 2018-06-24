@@ -143,7 +143,6 @@ impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
 
 unsafe extern "C" fn notify_show_all_trampoline<P>(this: *mut ffi::GstDeviceMonitor, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<DeviceMonitor> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&DeviceMonitor::from_glib_borrow(this).downcast_unchecked())
 }

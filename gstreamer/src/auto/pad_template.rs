@@ -146,38 +146,32 @@ unsafe impl Send for PadTemplate {}
 unsafe impl Sync for PadTemplate {}
 
 unsafe extern "C" fn pad_created_trampoline(this: *mut ffi::GstPadTemplate, pad: *mut ffi::GstPad, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PadTemplate, &Pad) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(pad))
 }
 
 unsafe extern "C" fn notify_caps_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_direction_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 unsafe extern "C" fn notify_gtype_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_name_template_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_presence_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

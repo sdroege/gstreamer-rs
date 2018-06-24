@@ -168,43 +168,36 @@ unsafe impl Send for WebRTCDTLSTransport {}
 unsafe impl Sync for WebRTCDTLSTransport {}
 
 unsafe extern "C" fn notify_certificate_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_client_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_remote_certificate_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_rtcp_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_session_id_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_state_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_transport_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

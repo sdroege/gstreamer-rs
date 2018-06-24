@@ -210,21 +210,18 @@ impl<O: IsA<RTSPSession> + IsA<glib::object::Object>> RTSPSessionExt for O {
 
 unsafe extern "C" fn notify_sessionid_trampoline<P>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&RTSPSession::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_timeout_trampoline<P>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&RTSPSession::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_timeout_always_visible_trampoline<P>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&RTSPSession::from_glib_borrow(this).downcast_unchecked())
 }

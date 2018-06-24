@@ -84,7 +84,6 @@ impl<O: IsA<SystemClock> + IsA<glib::object::Object>> SystemClockExt for O {
 
 unsafe extern "C" fn notify_clock_type_trampoline<P>(this: *mut ffi::GstSystemClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SystemClock> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&SystemClock::from_glib_borrow(this).downcast_unchecked())
 }

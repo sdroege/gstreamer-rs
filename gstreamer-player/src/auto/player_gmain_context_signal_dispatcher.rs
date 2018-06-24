@@ -47,7 +47,6 @@ unsafe impl Send for PlayerGMainContextSignalDispatcher {}
 unsafe impl Sync for PlayerGMainContextSignalDispatcher {}
 
 unsafe extern "C" fn notify_application_context_trampoline(this: *mut ffi::GstPlayerGMainContextSignalDispatcher, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PlayerGMainContextSignalDispatcher) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

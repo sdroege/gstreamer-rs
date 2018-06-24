@@ -193,7 +193,6 @@ impl<O: IsA<RTSPAuth> + IsA<glib::object::Object>> RTSPAuthExt for O {
 
 unsafe extern "C" fn accept_certificate_trampoline<P>(this: *mut ffi::GstRTSPAuth, connection: *mut gio_ffi::GTlsConnection, peer_cert: *mut gio_ffi::GTlsCertificate, errors: gio_ffi::GTlsCertificateFlags, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<RTSPAuth> {
-    callback_guard!();
     let f: &&(Fn(&P, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static) = transmute(f);
     f(&RTSPAuth::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(connection), &from_glib_borrow(peer_cert), from_glib(errors)).to_glib()
 }

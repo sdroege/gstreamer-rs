@@ -153,35 +153,30 @@ impl<O: IsA<Device> + IsA<glib::object::Object>> DeviceExt for O {
 
 unsafe extern "C" fn removed_trampoline<P>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Device::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_caps_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Device::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_device_class_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Device::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_display_name_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Device::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_properties_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Device::from_glib_borrow(this).downcast_unchecked())
 }

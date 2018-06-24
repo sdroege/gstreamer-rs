@@ -154,21 +154,18 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
 
 unsafe extern "C" fn notify_auto_flush_bus_trampoline<P>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_delay_trampoline<P>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_latency_trampoline<P>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
 }

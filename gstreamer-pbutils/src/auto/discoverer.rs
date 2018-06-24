@@ -99,25 +99,21 @@ unsafe impl Send for Discoverer {}
 unsafe impl Sync for Discoverer {}
 
 unsafe extern "C" fn discovered_trampoline(this: *mut ffi::GstDiscoverer, info: *mut ffi::GstDiscovererInfo, error: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(info), &from_glib_borrow(error))
 }
 
 unsafe extern "C" fn finished_trampoline(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Discoverer) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn source_setup_trampoline(this: *mut ffi::GstDiscoverer, source: *mut gst_ffi::GstElement, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Discoverer, &gst::Element) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(source))
 }
 
 unsafe extern "C" fn starting_trampoline(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Discoverer) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

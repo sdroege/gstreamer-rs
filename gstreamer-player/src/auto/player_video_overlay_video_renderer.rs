@@ -102,13 +102,11 @@ unsafe impl Send for PlayerVideoOverlayVideoRenderer {}
 unsafe impl Sync for PlayerVideoOverlayVideoRenderer {}
 
 unsafe extern "C" fn notify_video_sink_trampoline(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_window_handle_trampoline(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

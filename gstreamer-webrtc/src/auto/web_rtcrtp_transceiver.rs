@@ -79,19 +79,16 @@ unsafe impl Send for WebRTCRTPTransceiver {}
 unsafe impl Sync for WebRTCRTPTransceiver {}
 
 unsafe extern "C" fn notify_mlineindex_trampoline(this: *mut ffi::GstWebRTCRTPTransceiver, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_receiver_trampoline(this: *mut ffi::GstWebRTCRTPTransceiver, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_sender_trampoline(this: *mut ffi::GstWebRTCRTPTransceiver, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

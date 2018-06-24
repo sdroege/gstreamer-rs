@@ -86,7 +86,6 @@ unsafe impl Send for StreamCollection {}
 unsafe impl Sync for StreamCollection {}
 
 unsafe extern "C" fn notify_upstream_id_trampoline(this: *mut ffi::GstStreamCollection, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&StreamCollection) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

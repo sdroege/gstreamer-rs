@@ -198,49 +198,41 @@ unsafe impl Send for NetClientClock {}
 unsafe impl Sync for NetClientClock {}
 
 unsafe extern "C" fn notify_address_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_base_time_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_bus_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_internal_clock_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_minimum_update_interval_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_port_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_qos_dscp_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_round_trip_limit_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

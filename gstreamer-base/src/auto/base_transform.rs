@@ -176,7 +176,6 @@ impl<O: IsA<BaseTransform> + IsA<glib::object::Object>> BaseTransformExt for O {
 
 unsafe extern "C" fn notify_qos_trampoline<P>(this: *mut ffi::GstBaseTransform, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseTransform> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&BaseTransform::from_glib_borrow(this).downcast_unchecked())
 }

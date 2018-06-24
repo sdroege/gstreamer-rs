@@ -159,19 +159,16 @@ unsafe impl Send for Bus {}
 unsafe impl Sync for Bus {}
 
 unsafe extern "C" fn message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Bus, &Message) + Send + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
 }
 
 unsafe extern "C" fn sync_message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Bus, &Message) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
 }
 
 unsafe extern "C" fn notify_enable_async_trampoline(this: *mut ffi::GstBus, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Bus) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

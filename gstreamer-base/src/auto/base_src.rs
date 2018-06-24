@@ -268,28 +268,24 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
 
 unsafe extern "C" fn notify_blocksize_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_do_timestamp_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_num_buffers_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_typefind_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
 }

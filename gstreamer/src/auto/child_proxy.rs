@@ -136,14 +136,12 @@ impl<O: IsA<ChildProxy> + IsA<glib::object::Object>> ChildProxyExt for O {
 
 unsafe extern "C" fn child_added_trampoline<P>(this: *mut ffi::GstChildProxy, object: *mut gobject_ffi::GObject, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<ChildProxy> {
-    callback_guard!();
     let f: &&(Fn(&P, &glib::Object, &str) + Send + Sync + 'static) = transmute(f);
     f(&ChildProxy::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object), &String::from_glib_none(name))
 }
 
 unsafe extern "C" fn child_removed_trampoline<P>(this: *mut ffi::GstChildProxy, object: *mut gobject_ffi::GObject, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<ChildProxy> {
-    callback_guard!();
     let f: &&(Fn(&P, &glib::Object, &str) + Send + Sync + 'static) = transmute(f);
     f(&ChildProxy::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object), &String::from_glib_none(name))
 }
