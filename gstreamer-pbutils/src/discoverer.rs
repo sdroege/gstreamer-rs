@@ -71,7 +71,6 @@ unsafe extern "C" fn notify_timeout_trampoline<P>(
 ) where
     P: IsA<Discoverer>,
 {
-    callback_guard!();
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Discoverer::from_glib_borrow(this).downcast_unchecked())
 }

@@ -585,7 +585,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
             element: *mut ffi::GstElement,
             user_data: glib_ffi::gpointer,
         ) {
-            callback_guard!();
             let user_data: &mut Option<Box<F>> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 

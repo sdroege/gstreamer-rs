@@ -22,12 +22,6 @@ extern crate gstreamer_sys as gst_ffi;
 
 static PBUTILS_INIT: Once = ONCE_INIT;
 
-macro_rules! callback_guard {
-    () => {
-        let _guard = ::glib::CallbackGuard::new();
-    };
-}
-
 macro_rules! assert_initialized_main_thread {
     () => {
         if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {

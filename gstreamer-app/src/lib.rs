@@ -19,12 +19,6 @@ extern crate gstreamer_sys as gst_ffi;
 #[macro_use]
 extern crate glib;
 
-macro_rules! callback_guard {
-    () => {
-        let _guard = ::glib::CallbackGuard::new();
-    };
-}
-
 macro_rules! skip_assert_initialized {
     () => {};
 }

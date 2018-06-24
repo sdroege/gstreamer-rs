@@ -67,7 +67,6 @@ impl GstRc<BufferRef> {
     }
 
     unsafe extern "C" fn drop_box<T>(vec: glib_ffi::gpointer) {
-        callback_guard!();
         let slice: Box<T> = Box::from_raw(vec as *mut T);
         drop(slice);
     }

@@ -116,18 +116,15 @@ unsafe extern "C" fn type_find_trampoline(
     find: *mut ffi::GstTypeFind,
     user_data: glib_ffi::gpointer,
 ) {
-    callback_guard!();
     let func: &&(Fn(&mut TypeFind) + Send + Sync + 'static) = mem::transmute(user_data);
     func(&mut *(find as *mut TypeFind));
 }
 
 unsafe extern "C" fn type_find_closure_drop(data: glib_ffi::gpointer) {
-    callback_guard!();
     Box::<Box<Fn(&mut TypeFind) + Send + Sync + 'static>>::from_raw(data as *mut _);
 }
 
 unsafe extern "C" fn type_find_peek(data: glib_ffi::gpointer, offset: i64, size: u32) -> *const u8 {
-    callback_guard!();
     let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
     match find.peek(offset, size) {
         None => ptr::null(),
@@ -140,7 +137,6 @@ unsafe extern "C" fn type_find_suggest(
     probability: u32,
     caps: *mut ffi::GstCaps,
 ) {
-    callback_guard!();
     let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
     find.suggest(from_glib(probability as i32), &from_glib_borrow(caps));
 }
@@ -148,7 +144,6 @@ unsafe extern "C" fn type_find_suggest(
 unsafe extern "C" fn type_find_get_length(data: glib_ffi::gpointer) -> u64 {
     use std::u64;
 
-    callback_guard!();
     let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
     find.get_length().unwrap_or(u64::MAX)
 }

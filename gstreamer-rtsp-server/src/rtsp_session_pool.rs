@@ -1,7 +1,7 @@
 use ffi;
 use glib;
 use glib::object::IsA;
-use glib::source::{CallbackGuard, Continue, Priority};
+use glib::source::{Continue, Priority};
 use glib::translate::*;
 use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
@@ -13,14 +13,12 @@ unsafe extern "C" fn trampoline_watch(
     pool: *mut ffi::GstRTSPSessionPool,
     func: gpointer,
 ) -> gboolean {
-    let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &RefCell<Box<FnMut(&RTSPSessionPool) -> Continue + Send + 'static>> = transmute(func);
     (&mut *func.borrow_mut())(&from_glib_borrow(pool)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_watch(ptr: gpointer) {
-    let _guard = CallbackGuard::new();
     Box::<RefCell<Box<FnMut(&RTSPSessionPool) -> Continue + Send + 'static>>>::from_raw(
         ptr as *mut _,
     );
