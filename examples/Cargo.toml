@@ -17,7 +17,7 @@ gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", 
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
-futures = { version = "0.2", optional = true }
+futures-preview = { version = "0.2", optional = true }
 send-cell = "0.1"
 byte-slice-cast = "0.2"
 failure = "0.1"
@@ -29,7 +29,7 @@ gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
-generic-futures = ["gstreamer/futures", "futures"]
+generic-futures = ["gstreamer/futures", "futures-preview"]
 glib-futures = ["generic-futures", "glib/futures"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
