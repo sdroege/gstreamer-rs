@@ -773,6 +773,7 @@ impl SetValue for FlowReturn {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum Format {
     Undefined,
     Default,
