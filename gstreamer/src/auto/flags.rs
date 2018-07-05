@@ -66,6 +66,7 @@ impl SetValue for BufferCopyFlags {
 }
 
 bitflags! {
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
     pub struct BufferFlags: u32 {
         const LIVE = 16;
         const DECODE_ONLY = 32;

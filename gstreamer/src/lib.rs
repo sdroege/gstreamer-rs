@@ -33,6 +33,8 @@ extern crate muldiv;
 #[cfg(feature = "ser_de")]
 extern crate serde;
 #[cfg(feature = "ser_de")]
+extern crate serde_bytes;
+#[cfg(feature = "ser_de")]
 #[macro_use]
 extern crate serde_derive;
 

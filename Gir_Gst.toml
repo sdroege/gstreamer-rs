@@ -45,7 +45,6 @@ generate = [
     "Gst.PadProbeType",
     "Gst.PadProbeReturn",
     "Gst.CapsIntersectMode",
-    "Gst.BufferFlags",
     "Gst.BufferCopyFlags",
     "Gst.SegmentFlags",
     "Gst.PadMode",
@@ -148,6 +147,13 @@ trait = false
     name = "post"
         [object.function.return]
         bool_return_is_error = "Failed to post message"
+
+[[object]]
+name = "Gst.BufferFlags"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
 
 [[object]]
 name = "Gst.Structure"
