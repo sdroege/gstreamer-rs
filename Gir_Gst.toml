@@ -26,7 +26,6 @@ generate = [
     "Gst.URIHandler",
     "Gst.URIType",
     "Gst.ElementFactoryListType",
-    "Gst.Format",
     "Gst.BufferingMode",
     "Gst.CoreError",
     "Gst.ResourceError",
@@ -150,6 +149,13 @@ trait = false
 
 [[object]]
 name = "Gst.BufferFlags"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+
+[[object]]
+name = "Gst.Format"
 status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"

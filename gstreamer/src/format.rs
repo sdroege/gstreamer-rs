@@ -12,6 +12,7 @@ use ClockTime;
 use Format;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum GenericFormattedValue {
     Undefined(i64),
     Default(Default),
@@ -23,10 +24,13 @@ pub enum GenericFormattedValue {
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub struct Default(pub Option<u64>);
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub struct Bytes(pub Option<u64>);
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub struct Buffers(pub Option<u64>);
 pub type Time = ClockTime;
 
@@ -482,3 +486,100 @@ impl_format_value_traits!(Default, Default, Default);
 impl_format_value_traits!(Bytes, Bytes, Bytes);
 impl_format_value_traits!(ClockTime, Time, Time);
 impl_format_value_traits!(Buffers, Buffers, Buffers);
+
+#[cfg(test)]
+mod tests {
+    #[cfg(feature = "ser_de")]
+    #[test]
+    fn test_serialize() {
+        extern crate ron;
+        extern crate serde_json;
+
+        use super::Buffers;
+        use super::Bytes;
+        use ClockTime;
+        use super::Default;
+        use Format;
+        use GenericFormattedValue;
+
+        ::init().unwrap();
+
+        // don't use newlines
+        let mut pretty_config = ron::ser::PrettyConfig::default();
+        pretty_config.new_line = "".to_string();
+
+        let value = GenericFormattedValue::Undefined(42);
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Undefined(42)".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Undefined\":42}".to_owned(), res);
+
+        let value = GenericFormattedValue::Default(Default(Some(42)));
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Default((Some(42)))".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Default\":42}".to_owned(), res);
+
+        let value = GenericFormattedValue::Default(Default(None));
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Default((None))".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Default\":null}".to_owned(), res);
+
+        let value = GenericFormattedValue::Bytes(Bytes(Some(42)));
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Bytes((Some(42)))".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Bytes\":42}".to_owned(), res);
+
+        let value = GenericFormattedValue::Time(ClockTime::from_nseconds(42_123_456_789));
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Time(Some(42123456789))".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Time\":42123456789}".to_owned(), res);
+
+        let value = GenericFormattedValue::Buffers(Buffers(Some(42)));
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Buffers((Some(42)))".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Buffers\":42}".to_owned(), res);
+
+        let value = GenericFormattedValue::Percent(Some(42));
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Percent(Some(42))".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Percent\":42}".to_owned(), res);
+
+        let value = GenericFormattedValue::Other(Format::Percent, 42);
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Other(Percent, 42)".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Other\":[\"Percent\",42]}".to_owned(), res);
+
+        let value = GenericFormattedValue::Other(Format::__Unknown(7), 42);
+        let res = ron::ser::to_string_pretty(&value, pretty_config.clone());
+        assert_eq!(Ok("Other(__Unknown(7), 42)".to_owned()), res);
+        let res = serde_json::to_string(&value).unwrap();
+        assert_eq!("{\"Other\":[{\"__Unknown\":7},42]}".to_owned(), res);
+    }
+
+    #[cfg(feature = "ser_de")]
+    #[test]
+    fn test_deserialize() {
+        extern crate ron;
+        extern crate serde_json;
+
+        use GenericFormattedValue;
+        use Format;
+
+        ::init().unwrap();
+
+        let format_ron = "Other(Percent, 42)";
+        let format: GenericFormattedValue = ron::de::from_str(format_ron).unwrap();
+        assert_eq!(format, GenericFormattedValue::Other(Format::Percent, 42));
+
+        let format_json = "{\"Other\":[\"Percent\",42]}";
+        let format: GenericFormattedValue = serde_json::from_str(format_json).unwrap();
+        assert_eq!(format, GenericFormattedValue::Other(Format::Percent, 42));
+    }
+}
