@@ -243,7 +243,7 @@ mod tests {
             .cloned()
             .find(|f| {
                 f.get_caps()
-                    .map(|c| c.get_structure(0).unwrap().get_name() == "application/xml")
+                    .map(|c| c.get_structure(0).map(|s| s.get_name() == "application/xml").unwrap_or(false))
                     .unwrap_or(false)
             })
             .unwrap();
