@@ -180,11 +180,11 @@ impl CapsRef {
         unsafe { ffi::gst_caps_append(self.as_mut_ptr(), other.into_ptr()) }
     }
 
-    pub fn can_intersect(&self, other: &Caps) -> bool {
+    pub fn can_intersect(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_caps_can_intersect(self.as_ptr(), other.as_ptr())) }
     }
 
-    pub fn intersect(&self, other: &Caps) -> Caps {
+    pub fn intersect(&self, other: &Self) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_caps_intersect(
                 self.as_mut_ptr(),
@@ -193,7 +193,7 @@ impl CapsRef {
         }
     }
 
-    pub fn intersect_with_mode(&self, other: &Caps, mode: CapsIntersectMode) -> Caps {
+    pub fn intersect_with_mode(&self, other: &Self, mode: CapsIntersectMode) -> Caps {
         unsafe {
             from_glib_full(ffi::gst_caps_intersect_full(
                 self.as_mut_ptr(),
@@ -203,7 +203,7 @@ impl CapsRef {
         }
     }
 
-    pub fn is_always_compatible(&self, other: &Caps) -> bool {
+    pub fn is_always_compatible(&self, other: &Self) -> bool {
         unsafe {
             from_glib(ffi::gst_caps_is_always_compatible(
                 self.as_ptr(),
@@ -224,11 +224,11 @@ impl CapsRef {
         unsafe { from_glib(ffi::gst_caps_is_fixed(self.as_ptr())) }
     }
 
-    pub fn is_equal_fixed(&self, other: &Caps) -> bool {
+    pub fn is_equal_fixed(&self, other: &Self) -> bool {
         unsafe { from_glib(ffi::gst_caps_is_equal_fixed(self.as_ptr(), other.as_ptr())) }
     }
 
-    pub fn is_strictly_equal(&self, other: &Caps) -> bool {
+    pub fn is_strictly_equal(&self, other: &Self) -> bool {
         unsafe {
             from_glib(ffi::gst_caps_is_strictly_equal(
                 self.as_ptr(),
@@ -237,7 +237,7 @@ impl CapsRef {
         }
     }
 
-    pub fn is_subset(&self, superset: &Caps) -> bool {
+    pub fn is_subset(&self, superset: &Self) -> bool {
         unsafe { from_glib(ffi::gst_caps_is_subset(self.as_ptr(), superset.as_ptr())) }
     }
 
