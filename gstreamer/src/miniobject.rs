@@ -34,7 +34,7 @@ impl<T: MiniObject> GstRc<T> {
         ffi::gst_mini_object_ref(ptr as *mut ffi::GstMiniObject);
 
         GstRc {
-            obj: ptr::NonNull::new_unchecked(T::from_mut_ptr(ptr as *mut T::GstType) as *mut T),
+            obj: ptr::NonNull::new_unchecked(ptr as *mut T::GstType as *mut T),
             borrowed: false,
             phantom: PhantomData,
         }
@@ -44,7 +44,7 @@ impl<T: MiniObject> GstRc<T> {
         assert!(!ptr.is_null());
 
         GstRc {
-            obj: ptr::NonNull::new_unchecked(T::from_mut_ptr(ptr as *mut T::GstType) as *mut T),
+            obj: ptr::NonNull::new_unchecked(ptr as *mut T::GstType as *mut T),
             borrowed: false,
             phantom: PhantomData,
         }
@@ -54,7 +54,7 @@ impl<T: MiniObject> GstRc<T> {
         assert!(!ptr.is_null());
 
         GstRc {
-            obj: ptr::NonNull::new_unchecked(T::from_mut_ptr(ptr as *mut T::GstType) as *mut T),
+            obj: ptr::NonNull::new_unchecked(ptr as *mut T::GstType as *mut T),
             borrowed: true,
             phantom: PhantomData,
         }
@@ -187,6 +187,7 @@ where
 
     unsafe fn from_mut_ptr<'a>(ptr: *mut Self::GstType) -> &'a mut Self {
         assert!(!ptr.is_null());
+        assert_ne!(ffi::gst_mini_object_is_writable(ptr as *mut ffi::GstMiniObject), glib_ffi::GFALSE);
         &mut *(ptr as *mut Self)
     }
 
