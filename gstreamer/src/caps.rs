@@ -128,6 +128,10 @@ impl CapsRef {
     }
 
     pub fn get_structure(&self, idx: u32) -> Option<&StructureRef> {
+        if idx >= self.get_size() {
+            return None;
+        }
+
         unsafe {
             let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
             if structure.is_null() {
@@ -141,6 +145,10 @@ impl CapsRef {
     }
 
     pub fn get_mut_structure(&mut self, idx: u32) -> Option<&mut StructureRef> {
+        if idx >= self.get_size() {
+            return None;
+        }
+
         unsafe {
             let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
             if structure.is_null() {
