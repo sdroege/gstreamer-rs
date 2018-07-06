@@ -88,11 +88,6 @@ impl GstRc<CapsRef> {
         unsafe { from_glib_full(ffi::gst_caps_simplify(caps.into_ptr())) }
     }
 
-    pub fn subtract(caps: Self, other: Self) -> Self {
-        skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_subtract(caps.into_ptr(), other.into_ptr())) }
-    }
-
     pub fn truncate(caps: Self) -> Self {
         skip_assert_initialized!();
         unsafe { from_glib_full(ffi::gst_caps_truncate(caps.into_ptr())) }
@@ -253,6 +248,11 @@ impl CapsRef {
                 structure.as_ptr(),
             ))
         }
+    }
+
+    pub fn subtract(&self, other: &Self) -> Caps {
+        skip_assert_initialized!();
+        unsafe { from_glib_full(ffi::gst_caps_subtract(self.as_mut_ptr(), other.as_mut_ptr())) }
     }
 }
 
