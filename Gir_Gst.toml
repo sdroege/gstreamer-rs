@@ -45,7 +45,6 @@ generate = [
     "Gst.PadProbeReturn",
     "Gst.CapsIntersectMode",
     "Gst.BufferCopyFlags",
-    "Gst.SegmentFlags",
     "Gst.PadMode",
     "Gst.SchedulingFlags",
     "Gst.ChildProxy",
@@ -156,6 +155,13 @@ status = "generate"
 
 [[object]]
 name = "Gst.Format"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+
+[[object]]
+name = "Gst.SegmentFlags"
 status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"

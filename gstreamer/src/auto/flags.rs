@@ -677,6 +677,7 @@ impl SetValue for SeekFlags {
 }
 
 bitflags! {
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
     pub struct SegmentFlags: u32 {
         const NONE = 0;
         const RESET = 1;
