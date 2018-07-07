@@ -2493,6 +2493,7 @@ impl SetValue for TaskState {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum TocEntryType {
     Angle,
     Version,
@@ -2565,6 +2566,7 @@ impl SetValue for TocEntryType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum TocLoopType {
     None,
     Forward,
@@ -2628,6 +2630,7 @@ impl SetValue for TocLoopType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum TocScope {
     Global,
     Current,

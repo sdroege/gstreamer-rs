@@ -51,9 +51,6 @@ generate = [
     "Gst.TagSetter",
     "Gst.QOSType",
     "Gst.EventType",
-    "Gst.TocScope",
-    "Gst.TocEntryType",
-    "Gst.TocLoopType",
     "Gst.TocSetter",
     "Gst.ClockType",
     "Gst.ElementFlags",
@@ -162,6 +159,27 @@ status = "generate"
 
 [[object]]
 name = "Gst.SegmentFlags"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+
+[[object]]
+name = "Gst.TocScope"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+
+[[object]]
+name = "Gst.TocEntryType"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+
+[[object]]
+name = "Gst.TocLoopType"
 status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"
