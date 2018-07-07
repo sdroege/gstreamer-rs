@@ -874,7 +874,7 @@ pub(crate) mod serde {
     use std::mem;
 
     use DateTime;
-    //use Sample;
+    use Sample;
 
     use super::*;
 
@@ -900,7 +900,7 @@ pub(crate) mod serde {
         pub(crate) static ref INT_RANGE_I64_OTHER_TYPE_ID: usize =
             get_other_type_id::<IntRange<i64>>();
         pub(crate) static ref LIST_OTHER_TYPE_ID: usize = get_other_type_id::<List>();
-        //pub(crate) static ref SAMPLE_OTHER_TYPE_ID: usize = get_other_type_id::<Sample>();
+        pub(crate) static ref SAMPLE_OTHER_TYPE_ID: usize = get_other_type_id::<Sample>();
     }
 
     impl<'a> Serialize for Fraction {
@@ -954,8 +954,8 @@ pub(crate) mod serde {
                         ser_value!($value, "IntRange<i64>", IntRange<i64>, $ser_closure)
                     } else if *LIST_OTHER_TYPE_ID == type_id {
                         ser_value!($value, LIST_TYPE_NAME, List, $ser_closure)
-                    /*} else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                        ser_value!($value, "Sample", Sample, $ser_closure)*/
+                    } else if *SAMPLE_OTHER_TYPE_ID == type_id {
+                        ser_value!($value, "Sample", Sample, $ser_closure)
                     } else {
                         Err(
                             ser::Error::custom(
@@ -1068,7 +1068,7 @@ pub(crate) mod serde {
                 "FractionRange" => de_send_value!($type_name, $seq, FractionRange),
                 "IntRange<i32>" => de_send_value!($type_name, $seq, IntRange<i32>),
                 "IntRange<i64>" => de_send_value!($type_name, $seq, IntRange<i64>),
-                //"Sample" => de_send_value!($type_name, $seq, Sample),
+                "Sample" => de_send_value!($type_name, $seq, Sample),
                 _ => return Err(
                     de::Error::custom(
                         format!(

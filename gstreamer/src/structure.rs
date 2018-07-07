@@ -668,7 +668,7 @@ pub(crate) mod serde {
     use std::fmt;
 
     use DateTime;
-    //use Sample;
+    use Sample;
 
     use value::*;
     use value::serde::*;
