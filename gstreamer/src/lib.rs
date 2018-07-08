@@ -154,7 +154,7 @@ pub use child_proxy::ChildProxyExtManual;
 pub use clock_time::ClockTime;
 pub use device_provider::DeviceProviderExtManual;
 pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
-                StateChangeError, StateChangeSuccess};
+                StateChangeError, StateChangeSuccess, TagError};
 pub use gobject::GObjectExtManualGst;
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
 pub use parse_context::ParseContext;

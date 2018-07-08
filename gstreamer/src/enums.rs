@@ -311,3 +311,23 @@ impl Ord for ::Rank {
         self.to_glib().cmp(&other.to_glib())
     }
 }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[must_use]
+pub enum TagError {
+    TypeMismatch,
+}
+
+impl fmt::Display for TagError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Tag error: {}", self.description())
+    }
+}
+
+impl Error for TagError {
+    fn description(&self) -> &str {
+        match *self {
+            TagError::TypeMismatch => "The value type doesn't match with the specified Tag",
+        }
+    }
+}

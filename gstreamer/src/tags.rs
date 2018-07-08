@@ -20,6 +20,7 @@ use glib::StaticType;
 use miniobject::*;
 
 use Sample;
+use TagError;
 use TagMergeMode;
 
 pub trait Tag<'a> {
@@ -188,13 +189,24 @@ impl TagListRef {
         }
     }
 
-    pub fn add_dynamic<'a, T>(&'a mut self, tag_name : &str, value: &T, mode: TagMergeMode)
+    pub fn add_generic<T>(
+        &mut self,
+        tag_name : &str,
+        value: &T,
+        mode: TagMergeMode,
+    ) -> Result<(), TagError>
     where
         T: ToSendValue
     {
-        /* TODO: implement limiting values for tags? */
         unsafe {
             let v = value.to_send_value();
+
+            let tag_type: glib::Type = from_glib(
+                ffi::gst_tag_get_type(tag_name.as_ptr() as *const i8)
+            );
+            if tag_type != v.type_() {
+                return Err(TagError::TypeMismatch)
+            }
 
             ffi::gst_tag_list_add_value(
                 self.as_mut_ptr(),
@@ -203,6 +215,8 @@ impl TagListRef {
                 v.to_glib_none().0,
             );
         }
+
+        Ok(())
     }
 
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TypedValue<T::TagType>> {
@@ -223,32 +237,30 @@ impl TagListRef {
         }
     }
 
-    pub fn n_tags<'a>(&'a self) -> i32 {
-        unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) }
-    }
-
-    pub fn nth_tag<'a>(&'a self, idx: u32) -> &str {
-        unsafe { CStr::from_ptr(ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx)).to_str().unwrap() }
-    }
-
-    pub fn get_size_dynamic<'a>(&'a self, tag_name: &str) -> u32 {
-        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
-    }
-
-    pub fn get_index_dynamic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a Value> {
+    pub fn get_generic(&self, tag_name: &str) -> Option<Value> {
         unsafe {
-            let value = ffi::gst_tag_list_get_value_index(
+            let mut value: Value = mem::zeroed();
+
+            let found: bool = from_glib(ffi::gst_tag_list_copy_value(
+                value.to_glib_none_mut().0,
                 self.as_ptr(),
                 tag_name.to_glib_none().0,
-                idx,
-            );
+            ));
 
-            if value.is_null() {
+            if !found {
                 return None;
             }
 
-            Some(&*(value as *const Value))
+            Some(value)
         }
+    }
+
+    pub fn n_tags(&self) -> i32 {
+        unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) }
+    }
+
+    pub fn nth_tag_name<'a>(&'a self, idx: u32) -> &'a str {
+        unsafe { CStr::from_ptr(ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx)).to_str().unwrap() }
     }
 
     pub fn get_index<'a, T: Tag<'a>>(&'a self, idx: u32) -> Option<&'a TypedValue<T::TagType>> {
@@ -267,12 +279,40 @@ impl TagListRef {
         }
     }
 
-    pub fn get_size<'a, T: Tag<'a>>(&'a self) -> u32 {
+    pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a Value> {
+        unsafe {
+            let value = ffi::gst_tag_list_get_value_index(
+                self.as_ptr(),
+                tag_name.to_glib_none().0,
+                idx,
+            );
+
+            if value.is_null() {
+                return None;
+            }
+
+            Some(&*(value as *const Value))
+        }
+    }
+
+    pub fn get_size<'a, T: Tag<'a>>(&self) -> u32 {
         unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), T::tag_name().to_glib_none().0) }
+    }
+
+    pub fn get_size_by_name(&self, tag_name: &str) -> u32 {
+        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
     }
 
     pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIterator<'a, T> {
         TagIterator::new(self)
+    }
+
+    pub fn iter_tag_generic<'a>(&'a self, tag_name: &'a str) -> GenericTagIterator<'a> {
+        GenericTagIterator::new(self, tag_name)
+    }
+
+    pub fn iter_tag_list<'a>(&'a self) -> TagListIterator<'a> {
+        TagListIterator::new(self)
     }
 
     pub fn to_string(&self) -> String {
@@ -401,6 +441,127 @@ where
 {
 }
 
+pub struct GenericTagIterator<'a> {
+    taglist: &'a TagListRef,
+    name: &'a str,
+    idx: u32,
+    size: u32,
+}
+
+impl<'a> GenericTagIterator<'a> {
+    fn new(taglist: &'a TagListRef, name: &'a str) -> GenericTagIterator<'a> {
+        skip_assert_initialized!();
+        GenericTagIterator {
+            taglist: taglist,
+            name,
+            idx: 0,
+            size: taglist.get_size_by_name(name),
+        }
+    }
+}
+
+impl<'a> Iterator for GenericTagIterator<'a> {
+    type Item = &'a Value;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.idx >= self.size {
+            return None;
+        }
+
+        let item = self.taglist.get_index_generic(self.name, self.idx);
+        self.idx += 1;
+
+        item
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        if self.idx == self.size {
+            return (0, Some(0));
+        }
+
+        let remaining = (self.size - self.idx) as usize;
+
+        (remaining, Some(remaining))
+    }
+}
+
+impl<'a> DoubleEndedIterator for GenericTagIterator<'a> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            return None;
+        }
+
+        self.size -= 1;
+        self.taglist.get_index_generic(self.name, self.size)
+    }
+}
+
+impl<'a> ExactSizeIterator for GenericTagIterator<'a> {
+}
+
+pub struct TagListIterator<'a> {
+    taglist: &'a TagListRef,
+    idx: u32,
+    size: u32,
+}
+
+impl<'a> TagListIterator<'a> {
+    fn new(taglist: &'a TagListRef) -> TagListIterator<'a> {
+        skip_assert_initialized!();
+        let size = taglist.n_tags();
+        TagListIterator {
+            taglist: taglist,
+            idx: 0,
+            size: if size > 0 {
+                size as u32
+            } else {
+                0
+            },
+        }
+    }
+}
+
+impl<'a> Iterator for TagListIterator<'a> {
+    type Item = (&'a str, GenericTagIterator<'a>);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.idx >= self.size {
+            return None;
+        }
+
+        let name = self.taglist.nth_tag_name(self.idx);
+        let item = (name, self.taglist.iter_tag_generic(name));
+        self.idx += 1;
+
+        Some(item)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        if self.idx == self.size {
+            return (0, Some(0));
+        }
+
+        let remaining = (self.size - self.idx) as usize;
+
+        (remaining, Some(remaining))
+    }
+}
+
+impl<'a> DoubleEndedIterator for TagListIterator<'a> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.idx == self.size {
+            return None;
+        }
+
+        self.size -= 1;
+        let name = self.taglist.nth_tag_name(self.idx);
+        Some((name, self.taglist.iter_tag_generic(name)))
+    }
+}
+
+impl<'a> ExactSizeIterator for TagListIterator<'a> {
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -447,19 +608,72 @@ mod tests {
     }
 
     #[test]
-    fn test_dynamic() {
+    fn test_generic() {
         ::init().unwrap();
 
         let mut tags = TagList::new();
         {
             let tags = tags.get_mut().unwrap();
-            tags.add_dynamic(&TAG_TITLE, &"some title", TagMergeMode::Append);
-            tags.add_dynamic(&TAG_TITLE, &"second title", TagMergeMode::Append);
-            tags.add_dynamic(&TAG_DURATION, &(::SECOND * 120), TagMergeMode::Append);
+            assert!(tags.add_generic(&TAG_TITLE, &"some title", TagMergeMode::Append).is_ok());
+            assert!(tags.add_generic(&TAG_TITLE, &"second title", TagMergeMode::Append).is_ok());
+            assert!(tags.add_generic(&TAG_DURATION, &(::SECOND * 120), TagMergeMode::Append).is_ok());
+            assert!(tags.add_generic(&TAG_TITLE, &"third title", TagMergeMode::Append).is_ok());
+
+            assert_eq!(
+                tags.add_generic(
+                    &TAG_IMAGE,
+                    &"`&[str] instead of `Sample`",
+                    TagMergeMode::Append
+                ),
+                Err(TagError::TypeMismatch),
+            );
         }
 
-        assert_eq!(tags.get_index_dynamic(&TAG_TITLE, 0).unwrap().get(), Some("some title"));
-        assert_eq!(tags.get_index_dynamic(&TAG_TITLE, 1).unwrap().get(), Some("second title"));
-        assert_eq!(tags.get_index_dynamic(&TAG_DURATION, 0).unwrap().get(), Some(::SECOND * 120));
+        assert_eq!(tags.get_index_generic(&TAG_TITLE, 0).unwrap().get(), Some("some title"));
+        assert_eq!(tags.get_index_generic(&TAG_TITLE, 1).unwrap().get(), Some("second title"));
+        assert_eq!(tags.get_index_generic(&TAG_DURATION, 0).unwrap().get(), Some(::SECOND * 120));
+        assert_eq!(tags.get_index_generic(&TAG_TITLE, 2).unwrap().get(), Some("third title"));
+
+        assert_eq!(
+            tags.get_generic(&TAG_TITLE).unwrap().get(),
+            Some("some title, second title, third title"),
+        );
+
+        assert_eq!(tags.n_tags(), 2);
+        assert_eq!(tags.nth_tag_name(0), *TAG_TITLE);
+        assert_eq!(tags.get_size_by_name(&TAG_TITLE), 3);
+        assert_eq!(tags.nth_tag_name(1), *TAG_DURATION);
+        assert_eq!(tags.get_size_by_name(&TAG_DURATION), 1);
+
+        // GenericTagIterator
+        let mut title_iter = tags.iter_tag_generic(&TAG_TITLE);
+        assert_eq!(title_iter.size_hint(), (3, Some(3)));
+        let first_title = title_iter.next().unwrap();
+        assert_eq!(first_title.get(), Some("some title"));
+        let second_title = title_iter.next().unwrap();
+        assert_eq!(second_title.get(), Some("second title"));
+        let third_title = title_iter.next().unwrap();
+        assert_eq!(third_title.get(), Some("third title"));
+        assert!(title_iter.next().is_none());
+
+        // TagListIterator
+        let mut tag_list_iter = tags.iter_tag_list();
+        assert_eq!(tag_list_iter.size_hint(), (2, Some(2)));
+
+        let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
+        assert_eq!(tag_name, *TAG_TITLE);
+        let first_title = tag_iter.next().unwrap();
+        assert_eq!(first_title.get(), Some("some title"));
+        let second_title = tag_iter.next().unwrap();
+        assert_eq!(second_title.get(), Some("second title"));
+        let third_title = tag_iter.next().unwrap();
+        assert_eq!(third_title.get(), Some("third title"));
+        assert!(tag_iter.next().is_none());
+
+        let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
+        assert_eq!(tag_name, *TAG_DURATION);
+        let first_duration = tag_iter.next().unwrap();
+        assert_eq!(first_duration.get(), Some(::SECOND * 120));
+        assert!(tag_iter.next().is_none());
     }
 }
