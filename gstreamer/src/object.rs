@@ -9,26 +9,33 @@
 use glib;
 use glib::object::{Downcast, ObjectExt};
 use glib::signal::SignalHandlerId;
-use glib::translate::ToGlibPtr;
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::IsA;
 
 use gobject_ffi;
 
-use std::ffi::CStr;
-
 pub trait GstObjectExtManual {
-    fn connect_deep_notify<F: Fn(&Self, &::Object, &str) + Send + Sync + 'static>(
+    fn connect_deep_notify<'a, P: Into<Option<&'a str>>, F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static>(
         &self,
+        name: P,
         f: F,
     ) -> SignalHandlerId;
 }
 
 impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtManual for O {
-    fn connect_deep_notify<F: Fn(&Self, &::Object, &str) + Send + Sync + 'static>(
+    fn connect_deep_notify<'a, P: Into<Option<&'a str>>, F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static>(
         &self,
+        name: P,
         f: F,
     ) -> SignalHandlerId {
-        self.connect("deep-notify", false, move |values| {
+        let name = name.into();
+        let signal_name = if let Some(name) = name {
+            format!("deep-notify::{}", name)
+        } else {
+            "deep-notify".into()
+        };
+
+        self.connect(signal_name.as_str(), false, move |values| {
             let obj: O = unsafe {
                 values[0]
                     .get::<glib::Object>()
@@ -37,12 +44,12 @@ impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtM
             };
             let prop_obj: ::Object = values[1].get().unwrap();
 
-            let prop_name = unsafe {
+            let pspec = unsafe {
                 let pspec = gobject_ffi::g_value_get_param(values[2].to_glib_none().0);
-                CStr::from_ptr((*pspec).name).to_str().unwrap()
+                from_glib_none(pspec)
             };
 
-            f(&obj, &prop_obj, prop_name);
+            f(&obj, &prop_obj, &pspec);
 
             None
         }).unwrap()
@@ -65,8 +72,8 @@ mod tests {
 
         let notify = Arc::new(Mutex::new(None));
         let notify_clone = notify.clone();
-        bin.connect_deep_notify(move |_, id, prop| {
-            *notify_clone.lock().unwrap() = Some((id.clone(), String::from(prop)));
+        bin.connect_deep_notify(None, move |_, id, prop| {
+            *notify_clone.lock().unwrap() = Some((id.clone(), String::from(prop.get_name())));
         });
 
         identity.set_property("silent", &false).unwrap();
