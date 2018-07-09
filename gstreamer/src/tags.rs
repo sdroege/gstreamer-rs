@@ -14,7 +14,7 @@ use std::mem;
 use ffi;
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::value::{FromValueOptional, SetValue, ToSendValue, TypedValue, Value};
+use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue, Value};
 use glib::StaticType;
 
 use miniobject::*;
@@ -237,9 +237,9 @@ impl TagListRef {
         }
     }
 
-    pub fn get_generic(&self, tag_name: &str) -> Option<Value> {
+    pub fn get_generic(&self, tag_name: &str) -> Option<SendValue> {
         unsafe {
-            let mut value: Value = mem::zeroed();
+            let mut value: SendValue = mem::zeroed();
 
             let found: bool = from_glib(ffi::gst_tag_list_copy_value(
                 value.to_glib_none_mut().0,
@@ -279,7 +279,7 @@ impl TagListRef {
         }
     }
 
-    pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a Value> {
+    pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
         unsafe {
             let value = ffi::gst_tag_list_get_value_index(
                 self.as_ptr(),
@@ -291,7 +291,7 @@ impl TagListRef {
                 return None;
             }
 
-            Some(&*(value as *const Value))
+            Some(&*(value as *const SendValue))
         }
     }
 
@@ -461,7 +461,7 @@ impl<'a> GenericTagIterator<'a> {
 }
 
 impl<'a> Iterator for GenericTagIterator<'a> {
-    type Item = &'a Value;
+    type Item = &'a SendValue;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.size {
