@@ -264,19 +264,15 @@ impl TagListRef {
     }
 
     pub fn get_index<'a, T: Tag<'a>>(&'a self, idx: u32) -> Option<&'a TypedValue<T::TagType>> {
-        unsafe {
-            let value = ffi::gst_tag_list_get_value_index(
-                self.as_ptr(),
-                T::tag_name().to_glib_none().0,
-                idx,
-            );
+        self.get_index_generic(T::tag_name(), idx)
+            .and_then(|value| unsafe {
+                let value = value.to_glib_none().0;
+                if (*value).g_type != T::TagType::static_type().to_glib() {
+                    return None;
+                }
 
-            if value.is_null() || (*value).g_type != T::TagType::static_type().to_glib() {
-                return None;
-            }
-
-            Some(&*(value as *const TypedValue<T::TagType>))
-        }
+                Some(&*(value as *const TypedValue<T::TagType>))
+            })
     }
 
     pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
