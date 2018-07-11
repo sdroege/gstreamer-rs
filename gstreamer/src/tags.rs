@@ -14,7 +14,7 @@ use std::mem;
 use ffi;
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue, Value};
+use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue};
 use glib::StaticType;
 
 use miniobject::*;
@@ -177,16 +177,8 @@ impl TagListRef {
     where
         T::TagType: ToSendValue,
     {
-        unsafe {
-            let v = value.to_send_value();
-
-            ffi::gst_tag_list_add_value(
-                self.as_mut_ptr(),
-                mode.to_glib(),
-                T::tag_name().to_glib_none().0,
-                v.to_glib_none().0,
-            );
-        }
+        // result can be safely ignored here as `value`'s type is tied to `T::tag_name()`
+        let _res = self.add_generic(T::tag_name(), value, mode);
     }
 
     pub fn add_generic<T>(
@@ -220,21 +212,8 @@ impl TagListRef {
     }
 
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TypedValue<T::TagType>> {
-        unsafe {
-            let mut value: Value = mem::zeroed();
-
-            let found: bool = from_glib(ffi::gst_tag_list_copy_value(
-                value.to_glib_none_mut().0,
-                self.as_ptr(),
-                T::tag_name().to_glib_none().0,
-            ));
-
-            if !found {
-                return None;
-            }
-
-            value.downcast().ok()
-        }
+        self.get_generic(T::tag_name())
+            .and_then(|value| value.downcast().ok())
     }
 
     pub fn get_generic(&self, tag_name: &str) -> Option<SendValue> {
@@ -265,14 +244,7 @@ impl TagListRef {
 
     pub fn get_index<'a, T: Tag<'a>>(&'a self, idx: u32) -> Option<&'a TypedValue<T::TagType>> {
         self.get_index_generic(T::tag_name(), idx)
-            .and_then(|value| unsafe {
-                let value = value.to_glib_none().0;
-                if (*value).g_type != T::TagType::static_type().to_glib() {
-                    return None;
-                }
-
-                Some(&*(value as *const TypedValue<T::TagType>))
-            })
+            .and_then(|value| value.downcast_ref())
     }
 
     pub fn get_index_generic<'a>(&'a self, tag_name: &str, idx: u32) -> Option<&'a SendValue> {
@@ -292,7 +264,7 @@ impl TagListRef {
     }
 
     pub fn get_size<'a, T: Tag<'a>>(&self) -> u32 {
-        unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), T::tag_name().to_glib_none().0) }
+        self.get_size_by_name(T::tag_name())
     }
 
     pub fn get_size_by_name(&self, tag_name: &str) -> u32 {
