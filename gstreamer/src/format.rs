@@ -504,7 +504,6 @@ mod tests {
 
         ::init().unwrap();
 
-        // don't use newlines
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
 

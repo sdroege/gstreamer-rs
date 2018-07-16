@@ -75,23 +75,45 @@ pub mod miniobject;
 pub use miniobject::{GstRc, MiniObject};
 pub mod message;
 pub use message::{Message, MessageErrorDomain, MessageRef, MessageView};
-#[macro_use]
+
 mod value;
 pub use value::*;
+#[cfg(feature = "ser_de")]
+#[macro_use]
+pub(crate) mod value_serde;
+
 pub mod structure;
 pub use structure::{Structure, StructureRef};
+#[cfg(feature = "ser_de")]
+pub(crate) mod structure_serde;
+
 pub mod caps;
 pub use caps::{Caps, CapsRef};
+#[cfg(feature = "ser_de")]
+pub(crate) mod caps_serde;
+
 pub mod tags;
 pub use tags::{Tag, TagList, TagListRef};
+#[cfg(feature = "ser_de")]
+pub(crate) mod tags_serde;
+
 pub mod buffer;
 pub use buffer::{
     Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
 };
+#[cfg(feature = "ser_de")]
+pub(crate) mod buffer_serde;
+
 pub mod sample;
 pub use sample::{Sample, SampleRef};
+#[cfg(feature = "ser_de")]
+pub(crate) mod sample_serde;
+
 pub mod bufferlist;
 pub use bufferlist::{BufferList, BufferListRef};
+#[cfg(feature = "ser_de")]
+pub(crate) mod bufferlist_serde;
+
 pub mod query;
 pub use query::{Query, QueryRef, QueryView};
 pub mod event;
@@ -128,7 +150,11 @@ cfg_if! {
 
 mod child_proxy;
 mod clock_time;
+#[cfg(feature = "ser_de")]
+pub(crate) mod clock_time_serde;
 mod date_time;
+#[cfg(feature = "ser_de")]
+mod date_time_serde;
 mod device_monitor;
 mod device_provider;
 mod enums;
@@ -191,9 +217,13 @@ pub use format::{FormattedValue, GenericFormattedValue, SpecificFormattedValue};
 
 mod segment;
 pub use segment::*;
+#[cfg(feature = "ser_de")]
+pub(crate) mod segment_serde;
 
 pub mod toc;
 pub use toc::{Toc, TocEntry, TocEntryRef, TocRef};
+#[cfg(feature = "ser_de")]
+pub(crate) mod toc_serde;
 
 mod clock;
 pub use clock::{ClockExtManual, ClockId};
