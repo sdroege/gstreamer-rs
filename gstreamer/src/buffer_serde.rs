@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use serde::de::{Deserialize, Deserializer};
+use serde::ser;
 use serde::ser::{Serialize, Serializer, SerializeStruct};
 use serde_bytes::{Bytes, ByteBuf};
 
@@ -25,7 +26,9 @@ impl<'a> Serialize for BufferRef {
         buffer.serialize_field("offset_end", &self.get_offset_end())?;
         buffer.serialize_field("flags", &self.get_flags())?;
         {
-            let data = self.map_readable().unwrap();
+            let data = self
+                .map_readable()
+                .ok_or_else(|| ser::Error::custom("Couldn't map `buffer` as readable"))?;
             buffer.serialize_field("buffer", &Bytes::new(data.as_slice()))?;
         }
         buffer.end()
@@ -68,7 +71,7 @@ impl From<BufferDe> for Buffer {
 impl<'de> Deserialize<'de> for Buffer {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         BufferDe::deserialize(deserializer)
-            .and_then(|buffer_de| Ok(buffer_de.into()))
+            .map(|buffer_de| buffer_de.into())
     }
 }
 
