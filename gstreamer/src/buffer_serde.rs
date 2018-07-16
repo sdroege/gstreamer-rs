@@ -50,12 +50,8 @@ struct BufferDe {
 }
 
 impl From<BufferDe> for Buffer {
-    fn from(mut buf_de: BufferDe) -> Self {
-        // Move the `ByteBuff`'s byte array into the `gst::Buffer`
-        // Are we really avoiding copies with that?
-        let drained_buffer: &mut Vec<u8> = buf_de.buffer.as_mut();
-        let mut buffer =
-            Buffer::from_slice(drained_buffer.drain(..).collect::<Vec<u8>>()).unwrap();
+    fn from(buf_de: BufferDe) -> Self {
+        let mut buffer = Buffer::from_mut_slice(buf_de.buffer.to_vec()).unwrap();
         {
             let buffer = buffer.get_mut().unwrap();
             buffer.set_pts(buf_de.pts);
