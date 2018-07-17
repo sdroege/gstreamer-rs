@@ -93,7 +93,9 @@ impl<'de> Visitor<'de> for FieldVisitor {
             .ok_or(de::Error::custom("Expected a value for `Value` name"))?;
         let type_name = seq.next_element::<String>()?
             .ok_or(de::Error::custom("Expected a value for `Value` type"))?;
-        Ok(FieldDe(name, de_send_value!(type_name, seq)))
+        let send_value = de_send_value!(type_name, seq)?
+            .ok_or(de::Error::custom("Expected a value for `Value`"))?;
+        Ok(FieldDe(name, send_value))
     }
 }
 
@@ -103,6 +105,7 @@ impl<'de> Deserialize<'de> for FieldDe {
     }
 }
 
+// FIXME: use DeserializeSeed instead
 // Use `NamelessStructure` to deserialize the `Field`s and
 // to add them to the `Structure` at the same time.
 struct NamelessStructure(Structure);
