@@ -199,7 +199,9 @@ mod tests {
                     "(",
                     "    scope: Global,",
                     "    tags: Some([",
-                    "        (\"title\", \"toc\"),",
+                    "        (\"title\", [",
+                    "            \"toc\",",
+                    "        ]),",
                     "    ]),",
                     "    entries: [",
                     "        (",
@@ -221,7 +223,9 @@ mod tests {
                     "                            uid: \"chapter1.1\",",
                     "                            start_stop: Some((0, 4)),",
                     "                            tags: Some([",
-                    "                                (\"title\", \"chapter 1.1\"),",
+                    "                                (\"title\", [",
+                    "                                    \"chapter 1.1\",",
+                    "                                ]),",
                     "                            ]),",
                     "                            loop_: Some((None, 0)),",
                     "                            sub_entries: [",
@@ -232,7 +236,9 @@ mod tests {
                     "                            uid: \"chapter1.2\",",
                     "                            start_stop: Some((4, 10)),",
                     "                            tags: Some([",
-                    "                                (\"title\", \"chapter 1.2\"),",
+                    "                                (\"title\", [",
+                    "                                    \"chapter 1.2\",",
+                    "                                ]),",
                     "                            ]),",
                     "                            loop_: Some((None, 0)),",
                     "                            sub_entries: [",
@@ -245,7 +251,9 @@ mod tests {
                     "                    uid: \"chapter2\",",
                     "                    start_stop: Some((10, 15)),",
                     "                    tags: Some([",
-                    "                        (\"title\", \"chapter 2\"),",
+                    "                        (\"title\", [",
+                    "                            \"chapter 2\",",
+                    "                        ]),",
                     "                    ]),",
                     "                    loop_: Some((None, 0)),",
                     "                    sub_entries: [",
@@ -271,7 +279,7 @@ mod tests {
             (
                 scope: Global,
                 tags: Some([
-                    ("title", "toc"),
+                    ("title", ["toc"]),
                 ]),
                 entries: [
                     (
@@ -293,7 +301,7 @@ mod tests {
                                         uid: "chapter1.1",
                                         start_stop: Some((0, 4)),
                                         tags: Some([
-                                            ("title", "chapter 1.1"),
+                                            ("title", ["chapter 1.1"]),
                                         ]),
                                         loop_: Some((None, 0)),
                                         sub_entries: [
@@ -304,7 +312,7 @@ mod tests {
                                         uid: "chapter1.2",
                                         start_stop: Some((4, 10)),
                                         tags: Some([
-                                            ("title", "chapter 1.2"),
+                                            ("title", ["chapter 1.2"]),
                                         ]),
                                         loop_: Some((None, 0)),
                                         sub_entries: [
@@ -317,7 +325,7 @@ mod tests {
                                 uid: "chapter2",
                                 start_stop: Some((10, 15)),
                                 tags: Some([
-                                    ("title", "chapter 2"),
+                                    ("title", ["chapter 2"]),
                                 ]),
                                 loop_: Some((None, 0)),
                                 sub_entries: [

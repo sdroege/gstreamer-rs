@@ -163,32 +163,36 @@ impl_ser_send_value_collection!(Array);
 impl_ser_send_value_collection!(List);
 
 macro_rules! de_value(
-    ($outer_type:expr, $type_name:expr, $seq:expr, $t:ty) => (
-        $seq
-            .next_element::<$t>()?
-            .ok_or_else(||
-                de::Error::custom(format!(
-                    "Expected a value for `{}` with type {:?}",
-                    $outer_type,
-                    $type_name,
-                ))
-            )?
-            .to_value()
+    ($seq:expr, $t:ty) => (
+        {
+            let value = $seq
+                .next_element::<$t>()?
+                .and_then(|base_value| Some(base_value.to_value()));
+            Ok(value)
+        }
     );
 );
 
 macro_rules! de_send_value(
     ($type_name:expr, $seq:expr, $t:ty) => (
-        SendValue::from(
-            de_value!("Value", $type_name, $seq, $t)
-                .try_into_send_value::<$t>()
-                .map_err(|_|
-                    de::Error::custom(format!(
-                        "Failed to convert `Value` with type {:?} to `SendValue`",
-                        $type_name,
-                    ))
-                )?
-        )
+        de_send_value!("Value", $type_name, $seq, $t)
+    );
+    ($outer_type:expr, $type_name:expr, $seq:expr, $t:ty) => (
+        match de_value!($seq, $t)? {
+            Some(value) => {
+                let glib_send_value = value
+                    .try_into_send_value::<$t>()
+                    .map_err(|_|
+                        de::Error::custom(format!(
+                            "Failed to convert `{}` with type {:?} to `SendValue`",
+                            $outer_type,
+                            $type_name,
+                        ))
+                    )?;
+                Ok(Some(SendValue::from(glib_send_value)))
+            }
+            None => Ok(None)
+        }
     );
     ($type_name:expr, $seq:expr) => (
         match $type_name.as_str() {
@@ -233,7 +237,9 @@ impl<'de> Visitor<'de> for SendValueVisitor {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let type_name = seq.next_element::<String>()?
             .ok_or(de::Error::custom("Expected a value for `Value` type"))?;
-        Ok(de_send_value!(type_name, seq))
+        let send_value = de_send_value!(type_name, seq)?
+            .ok_or(de::Error::custom("Expected a value for `Value`"))?;
+        Ok(send_value)
     }
 }
 

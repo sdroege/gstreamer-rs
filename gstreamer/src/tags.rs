@@ -39,7 +39,7 @@ macro_rules! impl_tag(
         }
 
         lazy_static! {
-            static ref $rust_tag: &'static str =
+            pub static ref $rust_tag: &'static str =
                 unsafe { CStr::from_ptr(ffi::$gst_tag).to_str().unwrap() };
         }
     };

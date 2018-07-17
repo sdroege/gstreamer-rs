@@ -8,107 +8,102 @@
 
 use ffi;
 use glib;
-use glib::translate::{ToGlibPtr, from_glib, from_glib_none};
-use glib::{ToValue, Value};
-use gobject_ffi;
+use glib::translate::{ToGlibPtr, from_glib};
+use glib::{SendValue, ToValue};
 
 use serde::de;
-use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
+use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
 use serde::ser;
 use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeTuple};
 
-use std::ffi::CStr;
-use std::ffi::CString;
+use std::cell::RefCell;
 use std::fmt;
+use std::rc::Rc;
 
 use DateTime;
 use Sample;
-use miniobject::MiniObject;
+use TagMergeMode;
 use tags::*;
 use value_serde::{DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
 
-struct TagSer<'a>(&'a str, Value);
-
 macro_rules! ser_tag (
-    ($tag_ser:ident, $ser:ident, $t:ty) => (
-        ser_value!($tag_ser.1, $tag_ser.0, $t, |tag_name, value| {
-            let mut tup = $ser.serialize_tuple(2)?;
-            tup.serialize_element(tag_name)?;
-            tup.serialize_element(&value)?;
-            tup.end()
+    ($value:ident, $seq:ident, $t:ty) => (
+        ser_value!($value, (), $t, |_, value| {
+            $seq.serialize_element(&value)
         })
     );
 );
 
-impl<'a> Serialize for TagSer<'a> {
+// serialize trait is only available for `&self`, but we need to mutate the iterator
+struct TagValuesSer<'a>(Rc<RefCell<GenericTagIterator<'a>>>);
+impl<'a> TagValuesSer<'a> {
+    fn from(tags_ser: &TagsSer<'a>) -> Self {
+        TagValuesSer(Rc::clone(&tags_ser.1))
+    }
+}
+
+impl<'a> Serialize for TagValuesSer<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        match self.1.type_() {
-            glib::Type::F64 => ser_tag!(self, serializer, f64),
-            glib::Type::String => ser_tag!(self, serializer, String),
-            glib::Type::U32 => ser_tag!(self, serializer, u32),
-            glib::Type::U64 => ser_tag!(self, serializer, u64),
-            glib::Type::Other(type_id) => {
-                if *DATE_TIME_OTHER_TYPE_ID == type_id {
-                    ser_tag!(self, serializer, DateTime)
-                } else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                    ser_tag!(self, serializer, Sample)
-                } else {
+        let mut tag_iter = self.0.borrow_mut();
+        let mut seq = serializer.serialize_seq(tag_iter.size_hint().1)?;
+        while let Some(value) = tag_iter.next() {
+            match value.type_() {
+                glib::Type::F64 => ser_tag!(value, seq, f64),
+                glib::Type::String => ser_tag!(value, seq, String),
+                glib::Type::U32 => ser_tag!(value, seq, u32),
+                glib::Type::U64 => ser_tag!(value, seq, u64),
+                glib::Type::Other(type_id) => {
+                    if *DATE_TIME_OTHER_TYPE_ID == type_id {
+                        ser_tag!(value, seq, DateTime)
+                    } else if *SAMPLE_OTHER_TYPE_ID == type_id {
+                        ser_tag!(value, seq, Sample)
+                    } else {
+                        Err(
+                            ser::Error::custom(
+                                format!("unimplemented `Tag` serialization for type {}",
+                                    glib::Type::Other(type_id),
+                                )
+                            )
+                        )
+                    }
+                }
+                type_ => {
                     Err(
                         ser::Error::custom(
-                            format!("unimplemented Tag serialization for type {}",
-                                glib::Type::Other(type_id),
-                            )
+                            format!("unimplemented `Tag` serialization for type {}", type_)
                         )
                     )
                 }
-            }
-            type_ => {
-                Err(
-                    ser::Error::custom(
-                        format!("unimplemented Tag serialization for type {}", type_)
-                    )
-                )
-            }
+            }?;
         }
+        seq.end()
+    }
+}
+
+struct TagsSer<'a>(&'a str, Rc<RefCell<GenericTagIterator<'a>>>);
+impl<'a> TagsSer<'a> {
+    fn new(name: &'a str, tag_iter: GenericTagIterator<'a>) -> Self {
+        TagsSer(name, Rc::new(RefCell::new(tag_iter)))
+    }
+}
+
+impl<'a> Serialize for TagsSer<'a> {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let mut tup = serializer.serialize_tuple(2)?;
+        tup.serialize_element(self.0)?;
+        tup.serialize_element(&TagValuesSer::from(&self))?;
+        tup.end()
     }
 }
 
 impl Serialize for TagListRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let tag_count = unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) };
+        let tag_count = self.n_tags();
         if tag_count > 0 {
             let mut seq = serializer.serialize_seq(Some(tag_count as usize))?;
-            for name_index in 0..tag_count {
-                unsafe {
-                    let tag_name = ffi::gst_tag_list_nth_tag_name(self.as_ptr(), name_index as u32);
-                    let tag_size = ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name);
-                    for tag_index in 0..tag_size {
-                        let value = ffi::gst_tag_list_get_value_index(
-                            self.as_ptr(),
-                            tag_name,
-                            tag_index,
-                        );
-
-                        if !value.is_null() {
-                            let tag_name = CStr::from_ptr(tag_name)
-                                .to_str()
-                                .map_err(|_| {
-                                    ser::Error::custom(
-                                        format!(
-                                            "invalid UTF-8 characters in Tag name {:?}",
-                                            tag_name,
-                                        )
-                                    )
-                                })?;
-                            seq.serialize_element(
-                                &TagSer(
-                                    tag_name,
-                                    from_glib_none(value as *mut gobject_ffi::GValue),
-                                )
-                            )?
-                        }
-                    }
-                }
+            let tag_list_iter = self.iter_tag_list();
+            for (tag_name, tag_iter) in tag_list_iter {
+                seq.serialize_element(&TagsSer::new(tag_name, tag_iter))?;
             }
             seq.end()
         } else if tag_count == 0 {
@@ -126,54 +121,45 @@ impl Serialize for TagList {
     }
 }
 
-struct TagDe(CString, Value);
-struct TagVisitor;
-
 macro_rules! de_tag_value(
     ($tag_name:expr, $seq:expr, $t:ty) => (
-        {
-            let value = de_value!("Tag", $tag_name, $seq, $t);
-            TagDe($tag_name, value)
-        }
+        de_send_value!("Tag", $tag_name, $seq, $t)
     );
 );
 
-impl<'de> Visitor<'de> for TagVisitor {
-    type Value = TagDe;
+struct TagValues<'a>(&'a str, &'a mut TagListRef);
+
+struct TagValuesVisitor<'a>(&'a str, &'a mut TagListRef);
+impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
+    type Value = ();
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("a tuple of 2 elements (name: String, value: Tag value type)")
+        formatter.write_str("a sequence of `Tag` values with the same type")
     }
 
-    fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
-        let name = CString::new(
-                seq
-                    .next_element::<String>()
-                    .map_err(|err| de::Error::custom(
-                        format!("Error reading Tag name. {:?}", err)
-                    ))?
-                    .ok_or(de::Error::custom("Expected a value for Tag name"))?
-                    .as_str()
-            ).unwrap();
+    fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
+        let tag_type: glib::Type = unsafe {
+            let tag_name = self.0.to_glib_none();
+            from_glib(ffi::gst_tag_get_type(tag_name.0))
+        };
 
-        unsafe {
-            let type_: glib::Type = from_glib(ffi::gst_tag_get_type(name.as_ptr() as *const i8));
-            let tag_de = match type_ {
-                glib::Type::F64 => de_tag_value!(name, seq, f64),
-                glib::Type::String => de_tag_value!(name, seq, String),
-                glib::Type::U32 => de_tag_value!(name, seq, u32),
-                glib::Type::U64 => de_tag_value!(name, seq, u64),
+        loop {
+            let tag_value = match tag_type {
+                glib::Type::F64 => de_tag_value!(self.0, seq, f64),
+                glib::Type::String => de_tag_value!(self.0, seq, String),
+                glib::Type::U32 => de_tag_value!(self.0, seq, u32),
+                glib::Type::U64 => de_tag_value!(self.0, seq, u64),
                 glib::Type::Other(type_id) => {
                     if *DATE_TIME_OTHER_TYPE_ID == type_id {
-                        de_tag_value!(name, seq, DateTime)
+                        de_tag_value!(self.0, seq, DateTime)
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                        de_tag_value!(name, seq, Sample)
+                        de_tag_value!(self.0, seq, Sample)
                     } else {
                         return Err(
                             de::Error::custom(
                                 format!(
-                                    "unimplemented deserialization for Tag {:?} with type `{}`",
-                                    name,
+                                    "unimplemented deserialization for `Tag` {} with type `{}`",
+                                    self.0,
                                     glib::Type::Other(type_id),
                                 ),
                             )
@@ -184,23 +170,68 @@ impl<'de> Visitor<'de> for TagVisitor {
                     return Err(
                         de::Error::custom(
                             format!(
-                                "unimplemented deserialization for Tag {:?} with type `{}`",
-                                name,
+                                "unimplemented deserialization for `Tag` {} with type `{}`",
+                                self.0,
                                 type_,
                             ),
                         )
                     );
                 }
-            };
+            }?;
 
-            Ok(tag_de)
+            match tag_value {
+                Some(tag_value) => {
+                    self.1.add_generic(self.0, &tag_value, TagMergeMode::Append)
+                        .map_err(|_| de::Error::custom(format!(
+                            "wrong value type for `Tag` {}",
+                            self.0,
+                        )))?
+                }
+                None => break,
+            }
         }
+
+        Ok(())
     }
 }
 
-impl<'de> Deserialize<'de> for TagDe {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_tuple(2, TagVisitor{}) // 2 items in the tuple: (name, value)
+impl<'de, 'a> DeserializeSeed<'de> for TagValues<'a> {
+    type Value = ();
+
+    fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
+        deserializer.deserialize_seq(TagValuesVisitor(self.0, self.1))
+    }
+}
+
+struct TagValuesTuple<'a>(&'a mut TagListRef);
+
+struct TagValuesTupleVisitor<'a>(&'a mut TagListRef);
+impl<'de, 'a> Visitor<'de> for TagValuesTupleVisitor<'a> {
+    type Value = ();
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str(
+            "a tuple (`Tag` name: `String`, seq. of `Tag` values with the same type)"
+        )
+    }
+
+    fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
+        let name = seq
+            .next_element::<String>()
+            .map_err(|err| de::Error::custom(
+                format!("Error reading Tag name. {:?}", err)
+            ))?
+            .ok_or(de::Error::custom("Expected a name for the `Tag` name"))?;
+        seq.next_element_seed(TagValues(name.as_str(), self.0))?
+            .ok_or(de::Error::custom("Expected a seq of values for the `Tag`"))
+    }
+}
+
+impl<'de, 'a> DeserializeSeed<'de> for TagValuesTuple<'a> {
+    type Value = ();
+
+    fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
+        deserializer.deserialize_tuple(2, TagValuesTupleVisitor(self.0))
     }
 }
 
@@ -209,19 +240,15 @@ impl<'de> Visitor<'de> for TagListVisitor {
     type Value = TagList;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("a sequence of Tags")
+        formatter.write_str("a sequence of `Tag`s")
     }
 
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
-        let tag_list = TagList::new();
-        while let Some(tag_de) = seq.next_element::<TagDe>()? {
-            unsafe {
-                ffi::gst_tag_list_add_value(
-                    tag_list.as_mut_ptr(),
-                    ffi::GST_TAG_MERGE_APPEND,
-                    tag_de.0.as_ptr(),
-                    tag_de.1.to_glib_none().0,
-                );
+        let mut tag_list = TagList::new();
+        {
+            let tag_list = tag_list.get_mut().unwrap();
+            while seq.next_element_seed(TagValuesTuple(tag_list))?.is_some() {
+                // tags are added in the dedicated deserializers
             }
         }
         Ok(tag_list)
@@ -233,7 +260,6 @@ impl<'de> Deserialize<'de> for TagList {
         deserializer.deserialize_seq(TagListVisitor)
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -289,52 +315,64 @@ mod tests {
             Ok(
                 concat!(
                     "[",
-                    "    (\"title\", \"a title\"),",
-                    "    (\"title\", \"another title\"),",
-                    "    (\"duration\", 120000000000),",
-                    "    (\"bitrate\", 96000),",
-                    "    (\"replaygain-track-gain\", 1),",
-                    "    (\"datetime\", (",
-                    "        tz_offset: 2,",
-                    "        y: 2018,",
-                    "        m: 5,",
-                    "        d: 28,",
-                    "        h: 16,",
-                    "        mn: 6,",
-                    "        s: 42,",
-                    "        us: 841000,",
-                    "    )),",
-                    "    (\"image\", (",
-                    "        buffer: Some((",
-                    "            pts: None,",
-                    "            dts: None,",
-                    "            duration: None,",
-                    "            offset: 0,",
-                    "            offset_end: 0,",
-                    "            flags: (",
-                    "                bits: 0,",
-                    "            ),",
-                    "            buffer: \"AQIDBA==\",",
-                    "        )),",
-                    "        buffer_list: None,",
-                    "        caps: None,",
-                    "        segment: Some((",
-                    "            flags: (",
-                    "                bits: 0,",
-                    "            ),",
-                    "            rate: 1,",
-                    "            applied_rate: 1,",
-                    "            format: Time,",
-                    "            base: 0,",
-                    "            offset: 0,",
-                    "            start: 0,",
-                    "            stop: -1,",
-                    "            time: 0,",
-                    "            position: 0,",
-                    "            duration: -1,",
-                    "        )),",
-                    "        info: None,",
-                    "    )),",
+                    "    (\"title\", [",
+                    "        \"a title\",",
+                    "        \"another title\",",
+                    "    ]),",
+                    "    (\"duration\", [",
+                    "        120000000000,",
+                    "    ]),",
+                    "    (\"bitrate\", [",
+                    "        96000,",
+                    "    ]),",
+                    "    (\"replaygain-track-gain\", [",
+                    "        1,",
+                    "    ]),",
+                    "    (\"datetime\", [",
+                    "        (",
+                    "            tz_offset: 2,",
+                    "            y: 2018,",
+                    "            m: 5,",
+                    "            d: 28,",
+                    "            h: 16,",
+                    "            mn: 6,",
+                    "            s: 42,",
+                    "            us: 841000,",
+                    "        ),",
+                    "    ]),",
+                    "    (\"image\", [",
+                    "        (",
+                    "            buffer: Some((",
+                    "                pts: None,",
+                    "                dts: None,",
+                    "                duration: None,",
+                    "                offset: 0,",
+                    "                offset_end: 0,",
+                    "                flags: (",
+                    "                    bits: 0,",
+                    "                ),",
+                    "                buffer: \"AQIDBA==\",",
+                    "            )),",
+                    "            buffer_list: None,",
+                    "            caps: None,",
+                    "            segment: Some((",
+                    "                flags: (",
+                    "                    bits: 0,",
+                    "                ),",
+                    "                rate: 1,",
+                    "                applied_rate: 1,",
+                    "                format: Time,",
+                    "                base: 0,",
+                    "                offset: 0,",
+                    "                start: 0,",
+                    "                stop: -1,",
+                    "                time: 0,",
+                    "                position: 0,",
+                    "                duration: -1,",
+                    "            )),",
+                    "            info: None,",
+                    "        ),",
+                    "    ]),",
                     "]",
                 ).to_owned()
             ),
@@ -350,38 +388,44 @@ mod tests {
 
         let tag_list_ron = r#"
             [
-                ("title", "a title"),
-                ("title", "another title"),
-                ("duration", 120000000000),
-                ("bitrate", 96000),
-                ("replaygain-track-gain", 1),
-                ("datetime", (
-                    tz_offset: 2,
-                    y: 2018,
-                    m: 5,
-                    d: 28,
-                    h: 16,
-                    mn: 6,
-                    s: 42,
-                    us: 841000,
-                )),
-                ("image", (
-                    buffer: Some((
-                        pts: None,
-                        dts: None,
-                        duration: None,
-                        offset: 0,
-                        offset_end: 0,
-                        flags: (
-                            bits: 0,
-                        ),
-                        buffer: "AQIDBA==",
-                    )),
-                    buffer_list: None,
-                    caps: None,
-                    segment: None,
-                    info: None,
-                ))
+                ("title", [
+                    "a title",
+                    "another title",
+                ]),
+                ("duration", [120000000000]),
+                ("bitrate", [96000]),
+                ("replaygain-track-gain", [1]),
+                ("datetime", [
+                    (
+                        tz_offset: 2,
+                        y: 2018,
+                        m: 5,
+                        d: 28,
+                        h: 16,
+                        mn: 6,
+                        s: 42,
+                        us: 841000,
+                    ),
+                ]),
+                ("image", [
+                    (
+                        buffer: Some((
+                            pts: None,
+                            dts: None,
+                            duration: None,
+                            offset: 0,
+                            offset_end: 0,
+                            flags: (
+                                bits: 0,
+                            ),
+                            buffer: "AQIDBA==",
+                        )),
+                        buffer_list: None,
+                        caps: None,
+                        segment: None,
+                        info: None,
+                    ),
+                ])
             ]
         "#;
         let tags: TagList = ron::de::from_str(tag_list_ron).unwrap();
@@ -402,13 +446,12 @@ mod tests {
 
         let tag_json = r#"
             [
-                ["title", "a title"],
-                ["title", "another title"],
-                ["duration", 120000000000],
-                ["bitrate", 96000],
-                ["replaygain-track-gain", 1.0],
-                ["datetime",{"tz_offset":2.0,"y":2018,"m":5,"d":28,"h":16,"mn":6,"s":42,"us":841000}],
-                ["image",{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]
+                ["title", ["a title", "another title"]],
+                ["duration", [120000000000]],
+                ["bitrate", [96000]],
+                ["replaygain-track-gain", [1.0]],
+                ["datetime",[{"tz_offset":2.0,"y":2018,"m":5,"d":28,"h":16,"mn":6,"s":42,"us":841000}]],
+                ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
             ]
         "#;
         let tags: TagList = serde_json::from_str(tag_json).unwrap();
