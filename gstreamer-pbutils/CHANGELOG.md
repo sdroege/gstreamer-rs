@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.4] - 2018-07-19
+### Fixed
+- `gst::Caps::subtract()` does not leak its arguments anymore
+- `gst::Caps::get_structure()` gracefully returns `None` if the index
+  is out of bounds instead of a `g_return_val_if_fail()`
+- `gst::Structure::new()` has to give away ownership of the info structure
+  but didn't. For 0.11 we internally copy, in 0.12 it will take the info
+  structure by value
+- Typefind tests don't fail anymore if the system has typefind factories
+  without caps
+
+### Added
+- An additional assertion that ensures that miniobjects are actually
+  writable before creating a mutable reference
+
 ## [0.11.3] - 2018-06-08
 ### Added
 - `gst::Bus::remove_watch()` is now available to remove a bus watch again
