@@ -90,7 +90,7 @@ impl GstRc<CapsRef> {
 
     pub fn subtract(caps: Self, other: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_subtract(caps.into_ptr(), other.into_ptr())) }
+        unsafe { from_glib_full(ffi::gst_caps_subtract(caps.as_mut_ptr(), other.as_mut_ptr())) }
     }
 
     pub fn truncate(caps: Self) -> Self {
