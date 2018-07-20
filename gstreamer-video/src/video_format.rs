@@ -82,8 +82,8 @@ impl ::VideoFormat {
         }
     }
 
-    pub fn to_string<'a>(&self) -> &'a str {
-        if *self == ::VideoFormat::Unknown {
+    pub fn to_string<'a>(self) -> &'a str {
+        if self == ::VideoFormat::Unknown {
             return "UNKNOWN";
         }
 
@@ -112,6 +112,6 @@ impl str::FromStr for ::VideoFormat {
 
 impl fmt::Display for ::VideoFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(self.to_string())
+        f.write_str(self.to_string().as_str())
     }
 }

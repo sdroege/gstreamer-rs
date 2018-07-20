@@ -102,23 +102,23 @@ unsafe impl MiniObject for EventRef {
 }
 
 impl EventType {
-    pub fn is_upstream(&self) -> bool {
+    pub fn is_upstream(self) -> bool {
         (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
-    pub fn is_downstream(&self) -> bool {
+    pub fn is_downstream(self) -> bool {
         (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
-    pub fn is_serialized(&self) -> bool {
+    pub fn is_serialized(self) -> bool {
         (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
-    pub fn is_sticky(&self) -> bool {
+    pub fn is_sticky(self) -> bool {
         (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
     }
 
-    pub fn is_sticky_multi(&self) -> bool {
+    pub fn is_sticky_multi(self) -> bool {
         (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
 }
@@ -914,6 +914,7 @@ impl<'a> EventBuilder<'a> {
 
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
+        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 builder: self.builder.seqnum(seqnum),
@@ -921,6 +922,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {
                 builder: self.builder.running_time_offset(running_time_offset),
@@ -928,6 +930,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
@@ -986,7 +989,7 @@ impl<'a> FlushStopBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            reset_time: reset_time,
+            reset_time,
         }
     }
 
@@ -1004,7 +1007,7 @@ impl<'a> StreamStartBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            stream_id: stream_id,
+            stream_id,
             flags: None,
             group_id: None,
         }
@@ -1045,7 +1048,7 @@ impl<'a> CapsBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            caps: caps,
+            caps,
         }
     }
 
@@ -1061,7 +1064,7 @@ impl<'a> SegmentBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            segment: segment,
+            segment,
         }
     }
 
@@ -1079,7 +1082,7 @@ impl<'a> StreamCollectionBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            stream_collection: stream_collection,
+            stream_collection,
         }
     }
 
@@ -1118,9 +1121,9 @@ impl<'a> BufferSizeBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            minsize: minsize,
-            maxsize: maxsize,
-            async: async,
+            minsize,
+            maxsize,
+            async,
         }
     }
 
@@ -1142,8 +1145,8 @@ impl<'a> SinkMessageBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            name: name,
-            msg: msg,
+            name,
+            msg,
         }
     }
 
@@ -1164,7 +1167,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            group_id: group_id,
+            group_id,
         }
     }
 
@@ -1197,8 +1200,8 @@ impl<'a> TocBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            toc: toc,
-            updated: updated,
+            toc,
+            updated,
         }
     }
 
@@ -1219,8 +1222,8 @@ impl<'a> ProtectionBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            system_id: system_id,
-            data: data,
+            system_id,
+            data,
             origin: None,
         }
     }
@@ -1248,7 +1251,7 @@ impl<'a> SegmentDoneBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            position: position,
+            position,
         }
     }
 
@@ -1268,8 +1271,8 @@ impl<'a> GapBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            timestamp: timestamp,
-            duration: duration,
+            timestamp,
+            duration,
         }
     }
 
@@ -1291,10 +1294,10 @@ impl<'a> QosBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            type_: type_,
-            proportion: proportion,
-            diff: diff,
-            timestamp: timestamp,
+            type_,
+            proportion,
+            diff,
+            timestamp,
         }
     }
 
@@ -1327,8 +1330,8 @@ impl<'a> SeekBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            rate: rate,
-            flags: flags,
+            rate,
+            flags,
             start_type,
             start,
             stop_type,
@@ -1378,7 +1381,7 @@ impl<'a> LatencyBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            latency: latency,
+            latency,
         }
     }
 
@@ -1397,10 +1400,10 @@ impl<'a> StepBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            amount: amount,
-            rate: rate,
-            flush: flush,
-            intermediate: intermediate,
+            amount,
+            rate,
+            flush,
+            intermediate,
         }
     }
 
@@ -1436,7 +1439,7 @@ impl<'a> TocSelectBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            uid: uid,
+            uid,
         }
     }
 
@@ -1454,7 +1457,7 @@ impl<'a> SelectStreamsBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            streams: streams,
+            streams,
         }
     }
 

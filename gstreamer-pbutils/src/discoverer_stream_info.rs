@@ -20,8 +20,8 @@ impl Iterator for Iter {
 
     fn next(&mut self) -> Option<DiscovererStreamInfo> {
         let current = self.stream_info.take();
-        self.stream_info = match &current {
-            &Some(ref c) => {
+        self.stream_info = match current {
+            Some(ref c) => {
                 // Decide on the direction
                 if self.direction_forward {
                     c.get_next()
@@ -29,7 +29,7 @@ impl Iterator for Iter {
                     c.get_previous()
                 }
             }
-            &None => None,
+            None => None,
         };
         current
     }

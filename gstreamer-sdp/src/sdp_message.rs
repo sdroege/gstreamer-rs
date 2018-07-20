@@ -709,12 +709,12 @@ impl SDPMessage {
         unsafe { ffi::gst_sdp_message_zones_len(self.to_glib_none().0) }
     }
 
-    pub fn as_uri(scheme: &str, msg: &SDPMessage) -> Option<String> {
+    pub fn as_uri(&self, scheme: &str) -> Option<String> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_sdp_message_as_uri(
                 scheme.to_glib_none().0,
-                msg.to_glib_none().0,
+                self.to_glib_none().0,
             ))
         }
     }
@@ -750,6 +750,12 @@ impl SDPMessage {
                 }
             }
         }
+    }
+}
+
+impl Default for SDPMessage {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

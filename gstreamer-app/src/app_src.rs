@@ -15,6 +15,7 @@ use std::mem;
 use std::ptr;
 use AppSrc;
 
+#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 pub struct AppSrcCallbacks {
     need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
@@ -37,6 +38,7 @@ impl AppSrcCallbacks {
     }
 }
 
+#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 pub struct AppSrcCallbacksBuilder {
     need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
@@ -111,19 +113,17 @@ unsafe extern "C" fn trampoline_need_data(
 ) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    callbacks
-        .need_data
-        .as_ref()
-        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsrc), length));
+    if let Some(ref need_data) = callbacks.need_data {
+        (&mut *need_data.borrow_mut())(&from_glib_borrow(appsrc), length);
+    }
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    callbacks
-        .enough_data
-        .as_ref()
-        .map(|f| f(&from_glib_borrow(appsrc)));
+    if let Some(ref enough_data) = callbacks.enough_data {
+        (*enough_data)(&from_glib_borrow(appsrc));
+    }
 }
 
 unsafe extern "C" fn trampoline_seek_data(
@@ -133,12 +133,13 @@ unsafe extern "C" fn trampoline_seek_data(
 ) -> gboolean {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
-    callbacks
-        .seek_data
-        .as_ref()
-        .map(|f| f(&from_glib_borrow(appsrc), offset))
-        .unwrap_or(false)
-        .to_glib()
+    let ret = if let Some(ref seek_data) = callbacks.seek_data {
+        (*seek_data)(&from_glib_borrow(appsrc), offset)
+    } else {
+        false
+    };
+
+    ret.to_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {

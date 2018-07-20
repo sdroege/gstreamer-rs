@@ -100,6 +100,7 @@ pub trait ElementExtManual {
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate>;
     fn get_pad_template_list(&self) -> Vec<PadTemplate>;
 
+    #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     fn message_full<T: ::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,
@@ -110,7 +111,9 @@ pub trait ElementExtManual {
         function: &str,
         line: u32,
     );
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
+    #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     fn message_full_with_details<T: ::MessageErrorDomain>(
         &self,
         type_: ElementMessageType,

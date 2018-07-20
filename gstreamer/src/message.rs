@@ -1206,6 +1206,7 @@ impl<'a> MessageBuilder<'a> {
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
+        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
         pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             Self {
                 builder: self.builder.src(src),
@@ -1213,6 +1214,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 builder: self.builder.seqnum(seqnum),
@@ -1221,6 +1223,7 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[cfg(any(feature = "v1_14", feature = "dox"))]
+        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
@@ -1292,8 +1295,8 @@ impl<'a, T: MessageErrorDomain> ErrorBuilder<'a, T> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            error: error,
-            message: message,
+            error,
+            message,
             debug: None,
             details: None,
         }
@@ -1357,8 +1360,8 @@ impl<'a, T: MessageErrorDomain> WarningBuilder<'a, T> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            error: error,
-            message: message,
+            error,
+            message,
             debug: None,
             details: None,
         }
@@ -1422,8 +1425,8 @@ impl<'a, T: MessageErrorDomain> InfoBuilder<'a, T> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            error: error,
-            message: message,
+            error,
+            message,
             debug: None,
             details: None,
         }
@@ -1483,7 +1486,7 @@ impl<'a> TagBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            tags: tags,
+            tags,
         }
     }
 
@@ -1503,7 +1506,7 @@ impl<'a> BufferingBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            percent: percent,
+            percent,
             stats: None,
         }
     }
@@ -1550,9 +1553,9 @@ impl<'a> StateChangedBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            old: old,
-            new: new,
-            pending: pending,
+            old,
+            new,
+            pending,
         }
     }
 
@@ -1600,12 +1603,12 @@ impl<'a> StepDoneBuilder<'a> {
         assert_eq!(amount.get_format(), duration.get_format());
         Self {
             builder: MessageBuilder::new(),
-            amount: amount,
-            rate: rate,
-            flush: flush,
-            intermediate: intermediate,
-            duration: duration,
-            eos: eos,
+            amount,
+            rate,
+            flush,
+            intermediate,
+            duration,
+            eos,
         }
     }
 
@@ -1631,8 +1634,8 @@ impl<'a> ClockProvideBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            clock: clock,
-            ready: ready,
+            clock,
+            ready,
         }
     }
 
@@ -1652,7 +1655,7 @@ impl<'a> ClockLostBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            clock: clock,
+            clock,
         }
     }
 
@@ -1671,7 +1674,7 @@ impl<'a> NewClockBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            clock: clock,
+            clock,
         }
     }
 
@@ -1692,9 +1695,9 @@ impl<'a> StructureChangeBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            type_: type_,
-            owner: owner,
-            busy: busy,
+            type_,
+            owner,
+            busy,
         }
     }
 
@@ -1717,8 +1720,8 @@ impl<'a> StreamStatusBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            type_: type_,
-            owner: owner,
+            type_,
+            owner,
             status_object: None,
         }
     }
@@ -1790,7 +1793,7 @@ impl<'a> SegmentStartBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            position: position,
+            position,
         }
     }
 
@@ -1810,7 +1813,7 @@ impl<'a> SegmentDoneBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            position: position,
+            position,
         }
     }
 
@@ -1872,7 +1875,7 @@ impl<'a> AsyncDoneBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            running_time: running_time,
+            running_time,
         }
     }
 
@@ -1891,7 +1894,7 @@ impl<'a> RequestStateBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            state: state,
+            state,
         }
     }
 
@@ -1920,11 +1923,11 @@ impl<'a> StepStartBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            active: active,
-            amount: amount,
-            rate: rate,
-            flush: flush,
-            intermediate: intermediate,
+            active,
+            amount,
+            rate,
+            flush,
+            intermediate,
         }
     }
 
@@ -1960,11 +1963,11 @@ impl<'a> QosBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            live: live,
-            running_time: running_time,
-            stream_time: stream_time,
-            timestamp: timestamp,
-            duration: duration,
+            live,
+            running_time,
+            stream_time,
+            timestamp,
+            duration,
             values: None,
             stats: None,
         }
@@ -2022,9 +2025,9 @@ impl<'a> ProgressBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            type_: type_,
-            code: code,
-            text: text,
+            type_,
+            code,
+            text,
         }
     }
 
@@ -2046,8 +2049,8 @@ impl<'a> TocBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            toc: toc,
-            updated: updated,
+            toc,
+            updated,
         }
     }
 
@@ -2067,7 +2070,7 @@ impl<'a> ResetTimeBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            running_time: running_time,
+            running_time,
         }
     }
 
@@ -2115,7 +2118,7 @@ impl<'a> NeedContextBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            context_type: context_type,
+            context_type,
         }
     }
 
@@ -2153,7 +2156,7 @@ impl<'a> DeviceAddedBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            device: device,
+            device,
         }
     }
 
@@ -2172,7 +2175,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            device: device,
+            device,
         }
     }
 
@@ -2194,7 +2197,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            property_name: property_name,
+            property_name,
             value: None,
         }
     }
@@ -2231,7 +2234,7 @@ impl<'a> StreamCollectionBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            collection: collection,
+            collection,
         }
     }
 
@@ -2255,7 +2258,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            collection: collection,
+            collection,
             streams: None,
         }
     }
@@ -2293,7 +2296,7 @@ impl<'a> RedirectBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            location: location,
+            location,
             tag_list: None,
             entry_struct: None,
             entries: None,

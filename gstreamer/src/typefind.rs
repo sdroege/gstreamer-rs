@@ -116,6 +116,7 @@ unsafe extern "C" fn type_find_trampoline(
     find: *mut ffi::GstTypeFind,
     user_data: glib_ffi::gpointer,
 ) {
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&mut TypeFind) + Send + Sync + 'static) = mem::transmute(user_data);
     func(&mut *(find as *mut TypeFind));
 }
@@ -159,7 +160,7 @@ impl<T: AsRef<[u8]>> SliceTypeFind<T> {
         SliceTypeFind {
             probability: None,
             caps: None,
-            data: data,
+            data,
         }
     }
 
@@ -180,7 +181,7 @@ impl<T: AsRef<[u8]>> SliceTypeFind<T> {
         let mut t = SliceTypeFind {
             probability: None,
             caps: None,
-            data: data,
+            data,
         };
 
         t.run();

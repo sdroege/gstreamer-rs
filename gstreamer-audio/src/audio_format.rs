@@ -39,8 +39,8 @@ impl ::AudioFormat {
         unsafe { from_glib(ffi::gst_audio_format_from_string(s.to_glib_none().0)) }
     }
 
-    pub fn to_string<'a>(&self) -> &'a str {
-        if *self == ::AudioFormat::Unknown {
+    pub fn to_string<'a>(self) -> &'a str {
+        if self == ::AudioFormat::Unknown {
             return "UNKNOWN";
         }
 
@@ -69,7 +69,7 @@ impl str::FromStr for ::AudioFormat {
 
 impl fmt::Display for ::AudioFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(self.to_string())
+        f.write_str(self.to_string().as_str())
     }
 }
 

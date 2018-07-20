@@ -42,7 +42,7 @@ fn main_loop() -> Result<(), Error> {
     let factory = RTSPMediaFactory::new();
     let mounts = server.get_mount_points().ok_or(NoMountPoints)?;
     let auth = RTSPAuth::new();
-    let mut token = RTSPToken::new(&[(*RTSP_TOKEN_MEDIA_FACTORY_ROLE, &"user")]);
+    let token = RTSPToken::new(&[(*RTSP_TOKEN_MEDIA_FACTORY_ROLE, &"user")]);
     let basic = RTSPAuth::make_basic("user", "password");
     let cert = gio::TlsCertificate::new_from_pem(
         "-----BEGIN CERTIFICATE-----\
@@ -86,7 +86,7 @@ fn main_loop() -> Result<(), Error> {
     }
 
     auth.set_tls_certificate(&cert);
-    auth.add_basic(basic.as_str(), &mut token);
+    auth.add_basic(basic.as_str(), &token);
     server.set_auth(&auth);
     factory.set_launch(args[1].as_str());
     factory.set_transport_mode(RTSPTransportMode::RECORD);

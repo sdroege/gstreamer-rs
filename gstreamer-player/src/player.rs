@@ -105,6 +105,7 @@ unsafe extern "C" fn duration_changed_trampoline(
     object: u64,
     f: glib_ffi::gpointer,
 ) {
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Player, gst::ClockTime) + Send + 'static) = transmute(f);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
@@ -114,6 +115,7 @@ unsafe extern "C" fn position_updated_trampoline(
     object: u64,
     f: glib_ffi::gpointer,
 ) {
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Player, gst::ClockTime) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
@@ -123,6 +125,7 @@ unsafe extern "C" fn seek_done_trampoline(
     object: u64,
     f: glib_ffi::gpointer,
 ) {
+    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Player, gst::ClockTime) + Send + 'static) = transmute(f);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }

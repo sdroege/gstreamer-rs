@@ -12,6 +12,7 @@ use glib_ffi;
 pub struct MutexGuard<'a>(&'a glib_ffi::GMutex);
 
 impl<'a> MutexGuard<'a> {
+    #[cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
     pub fn lock(mutex: &'a glib_ffi::GMutex) -> Self {
         unsafe {
             glib_ffi::g_mutex_lock(mut_override(mutex));

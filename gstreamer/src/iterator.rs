@@ -319,7 +319,7 @@ where
     fn new(items: Vec<T>) -> Self {
         Self {
             pos: 0,
-            items: items,
+            items,
         }
     }
 }

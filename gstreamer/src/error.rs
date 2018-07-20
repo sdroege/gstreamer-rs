@@ -75,19 +75,19 @@ impl ErrorMessage {
         function: &'static str,
         line: u32,
     ) -> ErrorMessage {
-        let domain = T::domain();
-        let code = error.code();
+        let error_domain = T::domain();
+        let error_code = error.code();
         let message = message.into();
         let debug = debug.into();
 
         ErrorMessage {
-            error_domain: domain,
-            error_code: code,
+            error_domain,
+            error_code,
             message: message.map(String::from),
             debug: debug.map(String::from),
-            filename: filename,
-            function: function,
-            line: line,
+            filename,
+            function,
+            line,
         }
     }
 }

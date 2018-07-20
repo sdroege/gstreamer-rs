@@ -508,7 +508,6 @@ impl SDPMedia {
                 media.to_glib_none_mut().0,
             )
         };
-        mem::forget(media);
         match result {
             ffi::GST_SDP_OK => Ok(()),
             _ => Err(()),

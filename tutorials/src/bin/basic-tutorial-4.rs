@@ -38,7 +38,7 @@ fn tutorial_main() {
     // Listen to the bus
     let bus = playbin.get_bus().unwrap();
     let mut custom_data = CustomData {
-        playbin: playbin,
+        playbin,
         playing: false,
         terminate: false,
         seek_enabled: false,

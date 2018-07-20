@@ -304,7 +304,7 @@ macro_rules! declare_concrete_query(
 
             fn deref(&self) -> &Self::Target {
                 unsafe {
-                    mem::transmute(self)
+                    &*(self as *const $name<&'a mut QueryRef> as *const $name<&'a QueryRef>)
                 }
             }
         }

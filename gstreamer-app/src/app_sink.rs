@@ -15,6 +15,7 @@ use std::cell::RefCell;
 use std::ptr;
 use AppSink;
 
+#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 pub struct AppSinkCallbacks {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
@@ -36,6 +37,7 @@ impl AppSinkCallbacks {
     }
 }
 
+#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 pub struct AppSinkCallbacksBuilder {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
@@ -105,10 +107,9 @@ impl AppSinkCallbacksBuilder {
 unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
-    callbacks
-        .eos
-        .as_ref()
-        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsink)));
+    if let Some(ref eos) = callbacks.eos {
+        (&mut *eos.borrow_mut())(&from_glib_borrow(appsink))
+    }
 }
 
 unsafe extern "C" fn trampoline_new_preroll(
@@ -117,12 +118,13 @@ unsafe extern "C" fn trampoline_new_preroll(
 ) -> gst_ffi::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
-    callbacks
-        .new_preroll
-        .as_ref()
-        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsink)))
-        .unwrap_or(gst::FlowReturn::Error)
-        .to_glib()
+    let ret = if let Some(ref new_preroll) = callbacks.new_preroll {
+        (&mut *new_preroll.borrow_mut())(&from_glib_borrow(appsink))
+    } else {
+        gst::FlowReturn::Error
+    };
+
+    ret.to_glib()
 }
 
 unsafe extern "C" fn trampoline_new_sample(
@@ -131,12 +133,13 @@ unsafe extern "C" fn trampoline_new_sample(
 ) -> gst_ffi::GstFlowReturn {
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
-    callbacks
-        .new_sample
-        .as_ref()
-        .map(|f| (&mut *f.borrow_mut())(&from_glib_borrow(appsink)))
-        .unwrap_or(gst::FlowReturn::Error)
-        .to_glib()
+    let ret = if let Some(ref new_sample) = callbacks.new_sample {
+        (&mut *new_sample.borrow_mut())(&from_glib_borrow(appsink))
+    } else {
+        gst::FlowReturn::Error
+    };
+
+    ret.to_glib()
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {

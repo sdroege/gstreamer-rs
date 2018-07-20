@@ -157,10 +157,10 @@ fn main() {
                     let mut buffer = gst::Buffer::with_size(CHUNK_SIZE).unwrap();
                     let num_samples = CHUNK_SIZE / 2; /* Each sample is 16 bits */
                     let pts = gst::SECOND
-                        .mul_div_floor(data.num_samples, SAMPLE_RATE as u64)
+                        .mul_div_floor(data.num_samples, u64::from(SAMPLE_RATE))
                         .expect("u64 overflow");
                     let duration = gst::SECOND
-                        .mul_div_floor(num_samples as u64, SAMPLE_RATE as u64)
+                        .mul_div_floor(num_samples as u64, u64::from(SAMPLE_RATE))
                         .expect("u64 overflow");
 
                     {

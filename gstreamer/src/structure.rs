@@ -538,9 +538,9 @@ impl<'a> FieldIterator<'a> {
         let n_fields = structure.n_fields();
 
         FieldIterator {
-            structure: structure,
+            structure,
             idx: 0,
-            n_fields: n_fields,
+            n_fields,
         }
     }
 }

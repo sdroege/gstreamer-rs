@@ -21,7 +21,7 @@ impl<'a> Iter<'a> {
     fn new(collection: &'a StreamCollection) -> Iter<'a> {
         skip_assert_initialized!();
         Iter {
-            collection: collection,
+            collection,
             idx: 0,
             size: collection.len() as u32,
         }

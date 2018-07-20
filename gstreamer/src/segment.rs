@@ -50,7 +50,7 @@ impl Segment {
         if T::get_default_format() == Format::Undefined
             || T::get_default_format() == self.get_format()
         {
-            Some(unsafe { mem::transmute(self) })
+            Some(unsafe { &*(self as *const FormattedSegment<GenericFormattedValue> as *const FormattedSegment<T>) })
         } else {
             None
         }
@@ -60,7 +60,7 @@ impl Segment {
         if T::get_default_format() == Format::Undefined
             || T::get_default_format() == self.get_format()
         {
-            Some(unsafe { mem::transmute(self) })
+            Some(unsafe { &mut *(self as *mut FormattedSegment<GenericFormattedValue> as *mut FormattedSegment<T>) })
         } else {
             None
         }
@@ -83,7 +83,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     pub fn upcast_ref(&self) -> &Segment {
-        unsafe { mem::transmute(self) }
+        unsafe { &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>) }
     }
 
     pub fn reset(&mut self) {
@@ -353,6 +353,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.rate
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(float_cmp))]
     pub fn set_rate(&mut self, rate: f64) {
         assert_ne!(rate, 0.0);
         self.0.rate = rate;
@@ -362,6 +363,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.applied_rate
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(float_cmp))]
     pub fn set_applied_rate(&mut self, applied_rate: f64) {
         assert_ne!(applied_rate, 0.0);
         self.0.applied_rate = applied_rate;
@@ -489,7 +491,7 @@ impl<T: FormattedValue> Clone for FormattedSegment<T> {
 
 impl<T: FormattedValue> AsRef<Segment> for FormattedSegment<T> {
     fn as_ref(&self) -> &Segment {
-        unsafe { mem::transmute(self) }
+        unsafe { &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>) }
     }
 }
 

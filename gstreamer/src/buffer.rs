@@ -127,7 +127,7 @@ impl GstRc<BufferRef> {
         if res {
             Ok(MappedBuffer {
                 buffer: Some(self),
-                map_info: map_info,
+                map_info,
                 phantom: PhantomData,
             })
         } else {
@@ -147,7 +147,7 @@ impl GstRc<BufferRef> {
         if res {
             Ok(MappedBuffer {
                 buffer: Some(self),
-                map_info: map_info,
+                map_info,
                 phantom: PhantomData,
             })
         } else {
@@ -175,7 +175,7 @@ impl BufferRef {
         if res == glib_ffi::GTRUE {
             Some(BufferMap {
                 buffer: self,
-                map_info: map_info,
+                map_info,
                 phantom: PhantomData,
             })
         } else {
@@ -191,7 +191,7 @@ impl BufferRef {
         if res == glib_ffi::GTRUE {
             Some(BufferMap {
                 buffer: self,
-                map_info: map_info,
+                map_info,
                 phantom: PhantomData,
             })
         } else {

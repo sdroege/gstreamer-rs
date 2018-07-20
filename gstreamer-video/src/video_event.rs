@@ -105,35 +105,35 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
 
     pub fn timestamp(self, timestamp: gst::ClockTime) -> Self {
         Self {
-            timestamp: timestamp,
+            timestamp,
             ..self
         }
     }
 
     pub fn stream_time(self, stream_time: gst::ClockTime) -> Self {
         Self {
-            stream_time: stream_time,
+            stream_time,
             ..self
         }
     }
 
     pub fn running_time(self, running_time: gst::ClockTime) -> Self {
         Self {
-            running_time: running_time,
+            running_time,
             ..self
         }
     }
 
     pub fn all_headers(self, all_headers: bool) -> Self {
         Self {
-            all_headers: all_headers,
+            all_headers,
             ..self
         }
     }
 
     pub fn count(self, count: u32) -> Self {
         Self {
-            count: count,
+            count,
             ..self
         }
     }
@@ -182,7 +182,7 @@ pub fn parse_downstream_force_key_unit_event(
                 stream_time: from_glib(stream_time),
                 running_time: from_glib(running_time),
                 all_headers: from_glib(all_headers),
-                count: count,
+                count,
             })
         } else {
             None
@@ -218,21 +218,21 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
 
     pub fn running_time(self, running_time: gst::ClockTime) -> Self {
         Self {
-            running_time: running_time,
+            running_time,
             ..self
         }
     }
 
     pub fn all_headers(self, all_headers: bool) -> Self {
         Self {
-            all_headers: all_headers,
+            all_headers,
             ..self
         }
     }
 
     pub fn count(self, count: u32) -> Self {
         Self {
-            count: count,
+            count,
             ..self
         }
     }
@@ -271,7 +271,7 @@ pub fn parse_upstream_force_key_unit_event(
             Some(UpstreamForceKeyUnitEvent {
                 running_time: from_glib(running_time),
                 all_headers: from_glib(all_headers),
-                count: count,
+                count,
             })
         } else {
             None
@@ -311,7 +311,7 @@ impl<'a> StillFrameEventBuilder<'a> {
             seqnum: None,
             running_time_offset: None,
             other_fields: Vec::new(),
-            in_still: in_still,
+            in_still,
         }
     }
 

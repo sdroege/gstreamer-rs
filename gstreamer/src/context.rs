@@ -90,6 +90,7 @@ impl ToOwned for ContextRef {
     type Owned = GstRc<ContextRef>;
 
     fn to_owned(&self) -> GstRc<ContextRef> {
+        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }

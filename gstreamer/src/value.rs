@@ -249,9 +249,9 @@ impl IntRange<i32> {
         assert!(step > 0);
 
         Self {
-            min: min,
-            max: max,
-            step: step,
+            min,
+            max,
+            step,
         }
     }
 }
@@ -269,9 +269,9 @@ impl IntRange<i64> {
         assert!(step > 0);
 
         Self {
-            min: min,
-            max: max,
-            step: step,
+            min,
+            max,
+            step,
         }
     }
 }
@@ -375,7 +375,7 @@ impl FractionRange {
 
         assert!(min <= max);
 
-        FractionRange { min: min, max: max }
+        FractionRange { min, max }
     }
 
     pub fn min(&self) -> Fraction {
@@ -564,6 +564,7 @@ impl<'a> FromValue<'a> for Array<'a> {
         if arr.is_null() {
             Array(Cow::Borrowed(&[]))
         } else {
+            #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
             Array(Cow::Borrowed(slice::from_raw_parts(
                 (*arr).data as *const glib::SendValue,
                 (*arr).len as usize,
@@ -635,6 +636,7 @@ impl<'a> FromValue<'a> for List<'a> {
         if arr.is_null() {
             List(Cow::Borrowed(&[]))
         } else {
+            #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
             List(Cow::Borrowed(slice::from_raw_parts(
                 (*arr).data as *const glib::SendValue,
                 (*arr).len as usize,

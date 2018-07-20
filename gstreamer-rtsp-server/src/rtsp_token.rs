@@ -27,10 +27,11 @@ impl GstRcRTSPTokenExt<RTSPTokenRef> for GstRc<RTSPTokenRef> {
     }
 
     fn new(values: &[(&str, &ToSendValue)]) -> Self {
-        let token = RTSPToken::new_empty();
+        let mut token = RTSPToken::new_empty();
 
         {
-            let structure = token.writable_structure().unwrap();
+            let token = token.get_mut().unwrap();
+            let structure = token.get_mut_structure().unwrap();
 
             for &(f, v) in values {
                 structure.set_value(f, v.to_send_value());
@@ -64,7 +65,7 @@ impl RTSPTokenRef {
         }
     }
 
-    pub fn writable_structure(&self) -> Option<&mut gst::StructureRef> {
+    pub fn get_mut_structure(&mut self) -> Option<&mut gst::StructureRef> {
         unsafe {
             let structure = ffi::gst_rtsp_token_writable_structure(self.as_mut_ptr());
             if structure.is_null() {

@@ -238,7 +238,7 @@ impl TagListRef {
         unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) }
     }
 
-    pub fn nth_tag_name<'a>(&'a self, idx: u32) -> &'a str {
+    pub fn nth_tag_name(&self, idx: u32) -> &str {
         unsafe { CStr::from_ptr(ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx)).to_str().unwrap() }
     }
 
@@ -279,7 +279,7 @@ impl TagListRef {
         GenericTagIterator::new(self, tag_name)
     }
 
-    pub fn iter_tag_list<'a>(&'a self) -> TagListIterator<'a> {
+    pub fn iter_tag_list(&self) -> TagListIterator {
         TagListIterator::new(self)
     }
 
@@ -350,7 +350,7 @@ impl<'a, T: Tag<'a>> TagIterator<'a, T> {
     fn new(taglist: &'a TagListRef) -> TagIterator<'a, T> {
         skip_assert_initialized!();
         TagIterator {
-            taglist: taglist,
+            taglist,
             idx: 0,
             size: taglist.get_size::<T>(),
             phantom: PhantomData,
@@ -420,7 +420,7 @@ impl<'a> GenericTagIterator<'a> {
     fn new(taglist: &'a TagListRef, name: &'a str) -> GenericTagIterator<'a> {
         skip_assert_initialized!();
         GenericTagIterator {
-            taglist: taglist,
+            taglist,
             name,
             idx: 0,
             size: taglist.get_size_by_name(name),
@@ -478,7 +478,7 @@ impl<'a> TagListIterator<'a> {
         skip_assert_initialized!();
         let size = taglist.n_tags();
         TagListIterator {
-            taglist: taglist,
+            taglist,
             idx: 0,
             size: if size > 0 {
                 size as u32

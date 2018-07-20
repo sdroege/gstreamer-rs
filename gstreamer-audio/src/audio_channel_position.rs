@@ -19,7 +19,7 @@ use gst::MiniObject;
 use array_init;
 
 impl AudioChannelPosition {
-    pub fn to_mask(&self) -> u64 {
+    pub fn to_mask(self) -> u64 {
         unsafe {
             let val = mem::transmute::<ffi::GstAudioChannelPosition, u32>(self.to_glib());
             1 << val

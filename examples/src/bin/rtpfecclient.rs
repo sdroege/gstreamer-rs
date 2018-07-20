@@ -74,7 +74,7 @@ fn get_request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst
 
 fn connect_rtpbin_srcpad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), Error> {
     let name = src_pad.get_name();
-    let split_name = name.split("_");
+    let split_name = name.split('_');
     let split_name = split_name.collect::<Vec<&str>>();
     let pt = split_name[5].parse::<u32>()?;
 
@@ -248,7 +248,7 @@ fn example_main() -> Result<(), Error> {
                 return Err(ErrorMessage {
                     src: msg.get_src()
                         .map(|s| s.get_path_string())
-                        .unwrap_or(String::from("None")),
+                        .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
                     debug: err.get_debug(),
                     cause: err.get_error(),

@@ -251,7 +251,7 @@ impl<'a> VideoInfoBuilder<'a> {
                 self.height,
             );
 
-            if info.finfo.is_null() || info.width <= 0 || info.width <= 0 {
+            if info.finfo.is_null() || info.width <= 0 || info.height <= 0 {
                 return None;
             }
 
@@ -423,6 +423,7 @@ impl<'a> VideoInfoBuilder<'a> {
 }
 
 impl VideoInfo {
+    #[cfg_attr(feature = "cargo-clippy", allow(new_ret_no_self))]
     pub fn new<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 
@@ -449,9 +450,9 @@ impl VideoInfo {
         #[cfg(any(feature = "v1_12", feature = "dox"))]
         {
             VideoInfoBuilder {
-                format: format,
-                width: width,
-                height: height,
+                format,
+                width,
+                height,
                 interlace_mode: None,
                 flags: None,
                 size: None,
@@ -736,7 +737,7 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl ::VideoFieldOrder {
-    pub fn to_string(&self) -> String {
+    pub fn to_string(self) -> String {
         unsafe { from_glib_full(ffi::gst_video_field_order_to_string(self.to_glib())) }
     }
 
@@ -765,7 +766,7 @@ impl fmt::Display for ::VideoFieldOrder {
 }
 
 impl ::VideoInterlaceMode {
-    pub fn to_string(&self) -> String {
+    pub fn to_string(self) -> String {
         unsafe { from_glib_full(ffi::gst_video_interlace_mode_to_string(self.to_glib())) }
     }
 

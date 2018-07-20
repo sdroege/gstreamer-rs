@@ -432,6 +432,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     where
         F: Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static,
     {
+        #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
             let func_box: Box<
                 Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static,
@@ -449,6 +450,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     where
         F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static,
     {
+        #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
             let func_box: Box<
                 Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static,

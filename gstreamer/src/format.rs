@@ -144,7 +144,7 @@ impl GenericFormattedValue {
             GenericFormattedValue::Bytes(v) => v.map(|v| v as i64).unwrap_or(-1),
             GenericFormattedValue::Time(v) => v.map(|v| v as i64).unwrap_or(-1),
             GenericFormattedValue::Buffers(v) => v.map(|v| v as i64).unwrap_or(-1),
-            GenericFormattedValue::Percent(v) => v.map(|v| v as i64).unwrap_or(-1),
+            GenericFormattedValue::Percent(v) => v.map(i64::from).unwrap_or(-1),
             GenericFormattedValue::Other(_, v) => v,
         }
     }

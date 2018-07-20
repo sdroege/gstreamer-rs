@@ -22,6 +22,10 @@ impl MIKEYPayloadSPParam {
         self.0.len
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.0.len == 0
+    }
+
     pub fn val(&self) -> &[u8] {
         unsafe { slice::from_raw_parts(self.0.val as *const u8, self.0.len as usize) }
     }

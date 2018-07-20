@@ -106,6 +106,7 @@ impl ToOwned for SampleRef {
     type Owned = GstRc<SampleRef>;
 
     fn to_owned(&self) -> GstRc<SampleRef> {
+        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }

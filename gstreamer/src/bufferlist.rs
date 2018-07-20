@@ -105,6 +105,7 @@ impl ToOwned for BufferListRef {
     type Owned = GstRc<BufferListRef>;
 
     fn to_owned(&self) -> GstRc<BufferListRef> {
+        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
@@ -145,7 +146,7 @@ impl<'a> Iter<'a> {
     fn new(list: &'a BufferListRef) -> Iter<'a> {
         skip_assert_initialized!();
         Iter {
-            list: list,
+            list,
             idx: 0,
             size: list.len() as u32,
         }

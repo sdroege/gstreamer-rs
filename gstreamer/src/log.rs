@@ -9,7 +9,6 @@
 use libc::c_char;
 use std::ffi::CStr;
 use std::fmt;
-use std::mem;
 use std::ptr;
 
 use ffi;
@@ -18,9 +17,11 @@ use gobject_ffi;
 use glib::translate::{from_glib, ToGlib, ToGlibPtr};
 use glib::IsA;
 
+
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
 
+#[cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
 impl DebugCategory {
     pub fn new<'a, P: Into<Option<&'a str>>>(
         name: &str,
@@ -78,9 +79,9 @@ impl DebugCategory {
 
     pub fn get_color(&self) -> ::DebugColorFlags {
         unsafe {
-            from_glib(mem::transmute::<u32, ffi::GstDebugColorFlags>(
+            from_glib(
                 ffi::gst_debug_category_get_color(self.0.as_ptr()),
-            ))
+            )
         }
     }
 

@@ -53,7 +53,7 @@ fn example_main() -> Result<(), Error> {
 
     let tagsetter = pipeline
         .get_by_interface(gst::TagSetter::static_type())
-        .ok_or(failure::err_msg("No TagSetter found"))?;
+        .ok_or_else(|| failure::err_msg("No TagSetter found"))?;
     let tagsetter = tagsetter
         .dynamic_cast::<gst::TagSetter>()
         .map_err(|_| failure::err_msg("No TagSetter found"))?;
