@@ -10,7 +10,7 @@ use glib;
 use glib::ToValue;
 
 use serde::de;
-use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
+use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
 use serde::ser;
 use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeTuple};
 
@@ -105,39 +105,31 @@ impl<'de> Deserialize<'de> for FieldDe {
     }
 }
 
-// FIXME: use DeserializeSeed instead
-// Use `NamelessStructure` to deserialize the `Field`s and
-// to add them to the `Structure` at the same time.
-struct NamelessStructure(Structure);
-impl From<NamelessStructure> for Structure {
-    fn from(nameless_structure: NamelessStructure) -> Self {
-        nameless_structure.0
-    }
-}
+struct FieldsDe<'a>(&'a mut StructureRef);
 
-struct NamelessStructureVisitor;
-impl<'de> Visitor<'de> for NamelessStructureVisitor {
-    type Value = NamelessStructure;
+struct FieldsVisitor<'a>(&'a mut StructureRef);
+impl<'de, 'a> Visitor<'de> for FieldsVisitor<'a> {
+    type Value = ();
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("a nameless `Structure` consisting of a sequence of `Field`s)")
+        formatter.write_str("a sequence of `Structure` `Field`s")
     }
 
-    fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
-        // Can't build a `Structure` with an empty name
-        let mut structure = Structure::new_empty("None");
+    fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
         while let Some(field) = seq.next_element::<FieldDe>()? {
             let (name, value): (String, glib::SendValue) = field.into();
-            structure.as_mut().set_value(name.as_str(), value);
+            self.0.set_value(name.as_str(), value);
         }
 
-        Ok(NamelessStructure(structure))
+        Ok(())
     }
 }
 
-impl<'de> Deserialize<'de> for NamelessStructure {
-    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_seq(NamelessStructureVisitor)
+impl<'de, 'a> DeserializeSeed<'de> for FieldsDe<'a> {
+    type Value = ();
+
+    fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
+        deserializer.deserialize_seq(FieldsVisitor(self.0))
     }
 }
 
@@ -146,16 +138,15 @@ impl<'de> Visitor<'de> for StructureVisitor {
     type Value = Structure;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("a `Structure`: (name: `String`, fields: sequence of `Field`s)")
+        formatter.write_str("a `Structure` (name, sequence of `Field`s)")
     }
 
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let name = seq.next_element::<String>()?
             .ok_or(de::Error::custom("Expected a name for the `Structure`"))?;
-        let mut structure: Structure = seq.next_element::<NamelessStructure>()?
-            .ok_or(de::Error::custom("Expected a sequence of `Field`s"))?
-            .into();
-        structure.set_name(name.as_str());
+        let mut structure = Structure::new_empty(&name);
+        seq.next_element_seed(FieldsDe(structure.as_mut()))?
+            .ok_or(de::Error::custom("Expected a sequence of `Field`s"))?;
 
         Ok(structure)
     }
