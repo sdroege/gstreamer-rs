@@ -152,10 +152,10 @@ mod tests {
                     "    )),",
                     "    buffer_list: None,",
                     "    caps: Some([",
-                    "        (\"sample/caps\", [",
+                    "        ((\"sample/caps\", [",
                     "            (\"int\", \"i32\", 12),",
                     "            (\"bool\", \"bool\", true),",
-                    "        ]),",
+                    "        ]), None),",
                     "    ]),",
                     "    segment: Some((",
                     "        flags: (",
@@ -257,10 +257,10 @@ mod tests {
                 )),
                 buffer_list: None,
                 caps: Some([
-                    ("sample/caps", [
+                    (("sample/caps", [
                         ("int", "i32", 12),
                         ("bool", "bool", true),
-                    ]),
+                    ]), None),
                 ]),
                 segment: Some((
                     flags: (
