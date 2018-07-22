@@ -8,7 +8,7 @@
 
 use serde::de;
 use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
-use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeTuple};
+use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::fmt;
 
@@ -70,15 +70,19 @@ impl<'de> Visitor<'de> for CapsItemVisitor {
     }
 
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
-        let structure = seq.next_element::<Structure>()?
+        let structure = seq
+            .next_element::<Structure>()?
             .ok_or(de::Error::custom("Expected a `Structure` for `Caps` item"))?;
         // `CapsFeature` is not available in `gstreamer-rs` yet
         // Fake the type for now and expect `None` as a value
-        let feature_option = seq.next_element::<Option<Structure>>()?
-            .ok_or(de::Error::custom("Expected an `Option<CapsFeature>` for `Caps` item"))?;
+        let feature_option = seq
+            .next_element::<Option<Structure>>()?
+            .ok_or(de::Error::custom(
+                "Expected an `Option<CapsFeature>` for `Caps` item",
+            ))?;
         if feature_option.is_some() {
             Err(de::Error::custom(
-                "Found a value for `CapsFeature`, expected `None` (not implemented yet)"
+                "Found a value for `CapsFeature`, expected `None` (not implemented yet)",
             ))
         } else {
             Ok(CapsItemDe(structure))
@@ -143,23 +147,20 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "[",
-                    "    ((\"foo/bar\", [",
-                    "        (\"int\", \"i32\", 12),",
-                    "        (\"bool\", \"bool\", true),",
-                    "        (\"string\", \"String\", \"bla\"),",
-                    "        (\"fraction\", \"Fraction\", (1, 2)),",
-                    "        (\"array\", \"Array\", [",
-                    "            (\"i32\", 1),",
-                    "            (\"i32\", 2),",
-                    "        ]),",
-                    "    ]), None),",
-                    "]"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "[",
+                "    ((\"foo/bar\", [",
+                "        (\"int\", \"i32\", 12),",
+                "        (\"bool\", \"bool\", true),",
+                "        (\"string\", \"String\", \"bla\"),",
+                "        (\"fraction\", \"Fraction\", (1, 2)),",
+                "        (\"array\", \"Array\", [",
+                "            (\"i32\", 1),",
+                "            (\"i32\", 2),",
+                "        ]),",
+                "    ]), None),",
+                "]"
+            ).to_owned()),
             res,
         );
     }

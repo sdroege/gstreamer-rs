@@ -12,7 +12,7 @@ use glib::ToValue;
 use serde::de;
 use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
 use serde::ser;
-use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeTuple};
+use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::fmt;
 
@@ -84,14 +84,16 @@ impl<'de> Visitor<'de> for FieldVisitor {
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         formatter.write_str(
-            "a tuple of 3 elements (name: `String`, type name: `String`, value: `Value`)"
+            "a tuple of 3 elements (name: `String`, type name: `String`, value: `Value`)",
         )
     }
 
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
-        let name = seq.next_element::<String>()?
+        let name = seq
+            .next_element::<String>()?
             .ok_or(de::Error::custom("Expected a value for `Value` name"))?;
-        let type_name = seq.next_element::<String>()?
+        let type_name = seq
+            .next_element::<String>()?
             .ok_or(de::Error::custom("Expected a value for `Value` type"))?;
         let send_value = de_send_value!(type_name, seq)?
             .ok_or(de::Error::custom("Expected a value for `Value`"))?;
@@ -142,7 +144,8 @@ impl<'de> Visitor<'de> for StructureVisitor {
     }
 
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
-        let name = seq.next_element::<String>()?
+        let name = seq
+            .next_element::<String>()?
             .ok_or(de::Error::custom("Expected a name for the `Structure`"))?;
         let mut structure = Structure::new_empty(&name);
         seq.next_element_seed(FieldsDe(structure.as_mut()))?
@@ -184,21 +187,18 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&s, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "(\"test\", [",
-                    "    (\"f1\", \"String\", \"abc\"),",
-                    "    (\"f2\", \"String\", \"bcd\"),",
-                    "    (\"f3\", \"i32\", 123),",
-                    "    (\"fraction\", \"Fraction\", (1, 2)),",
-                    "    (\"array\", \"Array\", [",
-                    "        (\"i32\", 1),",
-                    "        (\"i32\", 2),",
-                    "    ]),",
-                    "])"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "(\"test\", [",
+                "    (\"f1\", \"String\", \"abc\"),",
+                "    (\"f2\", \"String\", \"bcd\"),",
+                "    (\"f3\", \"i32\", 123),",
+                "    (\"fraction\", \"Fraction\", (1, 2)),",
+                "    (\"array\", \"Array\", [",
+                "        (\"i32\", 1),",
+                "        (\"i32\", 2),",
+                "    ]),",
+                "])"
+            ).to_owned()),
             res,
         );
     }

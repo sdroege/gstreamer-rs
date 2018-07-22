@@ -8,23 +8,23 @@
 
 use ffi;
 use glib;
-use glib::translate::{ToGlibPtr, from_glib};
+use glib::translate::{from_glib, ToGlibPtr};
 use glib::{SendValue, ToValue};
 
 use serde::de;
 use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
 use serde::ser;
-use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeTuple};
+use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::cell::RefCell;
 use std::fmt;
 use std::rc::Rc;
 
+use tags::*;
+use value_serde::{DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
 use DateTime;
 use Sample;
 use TagMergeMode;
-use tags::*;
-use value_serde::{DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
 
 macro_rules! ser_tag (
     ($value:ident, $seq:ident, $t:ty) => (
@@ -58,22 +58,16 @@ impl<'a> Serialize for TagValuesSer<'a> {
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
                         ser_tag!(value, seq, Sample)
                     } else {
-                        Err(
-                            ser::Error::custom(
-                                format!("unimplemented `Tag` serialization for type {}",
-                                    glib::Type::Other(type_id),
-                                )
-                            )
-                        )
+                        Err(ser::Error::custom(format!(
+                            "unimplemented `Tag` serialization for type {}",
+                            glib::Type::Other(type_id),
+                        )))
                     }
                 }
-                type_ => {
-                    Err(
-                        ser::Error::custom(
-                            format!("unimplemented `Tag` serialization for type {}", type_)
-                        )
-                    )
-                }
+                type_ => Err(ser::Error::custom(format!(
+                    "unimplemented `Tag` serialization for type {}",
+                    type_
+                ))),
             }?;
         }
         seq.end()
@@ -155,38 +149,28 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
                         de_tag_value!(self.0, seq, Sample)
                     } else {
-                        return Err(
-                            de::Error::custom(
-                                format!(
-                                    "unimplemented deserialization for `Tag` {} with type `{}`",
-                                    self.0,
-                                    glib::Type::Other(type_id),
-                                ),
-                            )
-                        );
+                        return Err(de::Error::custom(format!(
+                            "unimplemented deserialization for `Tag` {} with type `{}`",
+                            self.0,
+                            glib::Type::Other(type_id),
+                        )));
                     }
                 }
                 type_ => {
-                    return Err(
-                        de::Error::custom(
-                            format!(
-                                "unimplemented deserialization for `Tag` {} with type `{}`",
-                                self.0,
-                                type_,
-                            ),
-                        )
-                    );
+                    return Err(de::Error::custom(format!(
+                        "unimplemented deserialization for `Tag` {} with type `{}`",
+                        self.0, type_,
+                    )));
                 }
             }?;
 
             match tag_value {
-                Some(tag_value) => {
-                    self.1.add_generic(self.0, &tag_value, TagMergeMode::Append)
-                        .map_err(|_| de::Error::custom(format!(
-                            "wrong value type for `Tag` {}",
-                            self.0,
-                        )))?
-                }
+                Some(tag_value) => self
+                    .1
+                    .add_generic(self.0, &tag_value, TagMergeMode::Append)
+                    .map_err(|_| {
+                        de::Error::custom(format!("wrong value type for `Tag` {}", self.0))
+                    })?,
                 None => break,
             }
         }
@@ -210,17 +194,14 @@ impl<'de, 'a> Visitor<'de> for TagValuesTupleVisitor<'a> {
     type Value = ();
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str(
-            "a tuple (`Tag` name: `String`, seq. of `Tag` values with the same type)"
-        )
+        formatter
+            .write_str("a tuple (`Tag` name: `String`, seq. of `Tag` values with the same type)")
     }
 
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
         let name = seq
             .next_element::<String>()
-            .map_err(|err| de::Error::custom(
-                format!("Error reading Tag name. {:?}", err)
-            ))?
+            .map_err(|err| de::Error::custom(format!("Error reading Tag name. {:?}", err)))?
             .ok_or(de::Error::custom("Expected a name for the `Tag` name"))?;
         seq.next_element_seed(TagValues(name.as_str(), self.0))?
             .ok_or(de::Error::custom("Expected a seq of values for the `Tag`"))
@@ -271,8 +252,8 @@ mod tests {
     fn test_serialize() {
         use Buffer;
         use GenericFormattedValue;
-        use TagMergeMode;
         use Sample;
+        use TagMergeMode;
 
         ::init().unwrap();
 
@@ -297,12 +278,7 @@ mod tests {
                     buffer.set_offset(0);
                     buffer.set_offset_end(0);
                 }
-                Sample::new::<GenericFormattedValue>(
-                    Some(&buffer),
-                    None,
-                    None,
-                    None,
-                )
+                Sample::new::<GenericFormattedValue>(Some(&buffer), None, None, None)
             };
             tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
         }
@@ -312,70 +288,68 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&tags, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "[",
-                    "    (\"title\", [",
-                    "        \"a title\",",
-                    "        \"another title\",",
-                    "    ]),",
-                    "    (\"duration\", [",
-                    "        120000000000,",
-                    "    ]),",
-                    "    (\"bitrate\", [",
-                    "        96000,",
-                    "    ]),",
-                    "    (\"replaygain-track-gain\", [",
-                    "        1,",
-                    "    ]),",
-                    "    (\"datetime\", [",
-                    "        (",
-                    "            tz_offset: 2,",
-                    "            y: 2018,",
-                    "            m: 5,",
-                    "            d: 28,",
-                    "            h: 16,",
-                    "            mn: 6,",
-                    "            s: 42,",
-                    "            us: 841000,",
-                    "        ),",
-                    "    ]),",
-                    "    (\"image\", [",
-                    "        (",
-                    "            buffer: Some((",
-                    "                pts: None,",
-                    "                dts: None,",
-                    "                duration: None,",
-                    "                offset: 0,",
-                    "                offset_end: 0,",
-                    "                flags: (",
-                    "                    bits: 0,",
-                    "                ),",
-                    "                buffer: \"AQIDBA==\",",
-                    "            )),",
-                    "            buffer_list: None,",
-                    "            caps: None,",
-                    "            segment: Some((",
-                    "                flags: (",
-                    "                    bits: 0,",
-                    "                ),",
-                    "                rate: 1,",
-                    "                applied_rate: 1,",
-                    "                format: Time,",
-                    "                base: 0,",
-                    "                offset: 0,",
-                    "                start: 0,",
-                    "                stop: -1,",
-                    "                time: 0,",
-                    "                position: 0,",
-                    "                duration: -1,",
-                    "            )),",
-                    "            info: None,",
-                    "        ),",
-                    "    ]),",
-                    "]",
-                ).to_owned()
-            ),
+            Ok(concat!(
+                "[",
+                "    (\"title\", [",
+                "        \"a title\",",
+                "        \"another title\",",
+                "    ]),",
+                "    (\"duration\", [",
+                "        120000000000,",
+                "    ]),",
+                "    (\"bitrate\", [",
+                "        96000,",
+                "    ]),",
+                "    (\"replaygain-track-gain\", [",
+                "        1,",
+                "    ]),",
+                "    (\"datetime\", [",
+                "        (",
+                "            tz_offset: 2,",
+                "            y: 2018,",
+                "            m: 5,",
+                "            d: 28,",
+                "            h: 16,",
+                "            mn: 6,",
+                "            s: 42,",
+                "            us: 841000,",
+                "        ),",
+                "    ]),",
+                "    (\"image\", [",
+                "        (",
+                "            buffer: Some((",
+                "                pts: None,",
+                "                dts: None,",
+                "                duration: None,",
+                "                offset: 0,",
+                "                offset_end: 0,",
+                "                flags: (",
+                "                    bits: 0,",
+                "                ),",
+                "                buffer: \"AQIDBA==\",",
+                "            )),",
+                "            buffer_list: None,",
+                "            caps: None,",
+                "            segment: Some((",
+                "                flags: (",
+                "                    bits: 0,",
+                "                ),",
+                "                rate: 1,",
+                "                applied_rate: 1,",
+                "                format: Time,",
+                "                base: 0,",
+                "                offset: 0,",
+                "                start: 0,",
+                "                stop: -1,",
+                "                time: 0,",
+                "                position: 0,",
+                "                duration: -1,",
+                "            )),",
+                "            info: None,",
+                "        ),",
+                "    ]),",
+                "]",
+            ).to_owned()),
             res,
         );
     }
@@ -430,8 +404,14 @@ mod tests {
         "#;
         let tags: TagList = ron::de::from_str(tag_list_ron).unwrap();
         assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
-        assert_eq!(tags.get_index::<Title>(1).unwrap().get(), Some("another title"));
-        assert_eq!(tags.get_index::<Duration>(0).unwrap().get(), Some(::SECOND * 120));
+        assert_eq!(
+            tags.get_index::<Title>(1).unwrap().get(),
+            Some("another title")
+        );
+        assert_eq!(
+            tags.get_index::<Duration>(0).unwrap().get(),
+            Some(::SECOND * 120)
+        );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get(), Some(96_000));
         assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get(), Some(1f64));
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
@@ -456,7 +436,10 @@ mod tests {
         "#;
         let tags: TagList = serde_json::from_str(tag_json).unwrap();
         assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
-        assert_eq!(tags.get_index::<Title>(1).unwrap().get(), Some("another title"));
+        assert_eq!(
+            tags.get_index::<Title>(1).unwrap().get(),
+            Some("another title")
+        );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get(), Some(96_000));
         assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get(), Some(1f64));
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
