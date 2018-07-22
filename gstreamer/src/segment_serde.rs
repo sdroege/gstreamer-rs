@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, Serializer, SerializeStruct};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
 
 use Format;
 use GenericFormattedValue;
@@ -54,13 +54,34 @@ impl From<SegmentDe> for Segment {
         segment.set_rate(segment_de.rate);
         segment.set_applied_rate(segment_de.applied_rate);
         segment.set_format(segment_de.format);
-        segment.set_base(GenericFormattedValue::new(segment_de.format, segment_de.base));
-        segment.set_offset(GenericFormattedValue::new(segment_de.format, segment_de.offset));
-        segment.set_start(GenericFormattedValue::new(segment_de.format, segment_de.start));
-        segment.set_stop(GenericFormattedValue::new(segment_de.format, segment_de.stop));
-        segment.set_time(GenericFormattedValue::new(segment_de.format, segment_de.time));
-        segment.set_position(GenericFormattedValue::new(segment_de.format, segment_de.position));
-        segment.set_duration(GenericFormattedValue::new(segment_de.format, segment_de.duration));
+        segment.set_base(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.base,
+        ));
+        segment.set_offset(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.offset,
+        ));
+        segment.set_start(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.start,
+        ));
+        segment.set_stop(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.stop,
+        ));
+        segment.set_time(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.time,
+        ));
+        segment.set_position(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.position,
+        ));
+        segment.set_duration(GenericFormattedValue::new(
+            segment_de.format,
+            segment_de.duration,
+        ));
 
         segment
     }
@@ -68,8 +89,7 @@ impl From<SegmentDe> for Segment {
 
 impl<'de> Deserialize<'de> for Segment {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        SegmentDe::deserialize(deserializer)
-            .and_then(|segment_de| Ok(segment_de.into()))
+        SegmentDe::deserialize(deserializer).and_then(|segment_de| Ok(segment_de.into()))
     }
 }
 
@@ -105,26 +125,23 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&segment, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "(",
-                    "    flags: (",
-                    "        bits: 9,",
-                    "    ),",
-                    "    rate: 1,",
-                    "    applied_rate: 0.9,",
-                    "    format: Time,",
-                    "    base: 123,",
-                    "    offset: 42,",
-                    "    start: 1024,",
-                    "    stop: 2048,",
-                    "    time: 1042,",
-                    "    position: 256,",
-                    "    duration: -1,",
-                    ")"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "(",
+                "    flags: (",
+                "        bits: 9,",
+                "    ),",
+                "    rate: 1,",
+                "    applied_rate: 0.9,",
+                "    format: Time,",
+                "    base: 123,",
+                "    offset: 42,",
+                "    start: 1024,",
+                "    stop: 2048,",
+                "    time: 1042,",
+                "    position: 256,",
+                "    duration: -1,",
+                ")"
+            ).to_owned()),
             res,
         );
     }
@@ -152,16 +169,40 @@ mod tests {
         "#;
 
         let segment: Segment = ron::de::from_str(segment_ron).unwrap();
-        assert_eq!(segment.get_flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
+        assert_eq!(
+            segment.get_flags(),
+            SegmentFlags::RESET | SegmentFlags::SEGMENT
+        );
         assert_eq!(segment.get_rate(), 1f64);
         assert_eq!(segment.get_applied_rate(), 0.9f64);
         assert_eq!(segment.get_format(), Format::Time);
-        assert_eq!(segment.get_base(), GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
-        assert_eq!(segment.get_offset(), GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
-        assert_eq!(segment.get_start(), GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
-        assert_eq!(segment.get_stop(), GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
-        assert_eq!(segment.get_time(), GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
-        assert_eq!(segment.get_position(), GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
-        assert_eq!(segment.get_duration(), GenericFormattedValue::Time(ClockTime::none()));
+        assert_eq!(
+            segment.get_base(),
+            GenericFormattedValue::Time(ClockTime::from_nseconds(123))
+        );
+        assert_eq!(
+            segment.get_offset(),
+            GenericFormattedValue::Time(ClockTime::from_nseconds(42))
+        );
+        assert_eq!(
+            segment.get_start(),
+            GenericFormattedValue::Time(ClockTime::from_nseconds(1024))
+        );
+        assert_eq!(
+            segment.get_stop(),
+            GenericFormattedValue::Time(ClockTime::from_nseconds(2048))
+        );
+        assert_eq!(
+            segment.get_time(),
+            GenericFormattedValue::Time(ClockTime::from_nseconds(1042))
+        );
+        assert_eq!(
+            segment.get_position(),
+            GenericFormattedValue::Time(ClockTime::from_nseconds(256))
+        );
+        assert_eq!(
+            segment.get_duration(),
+            GenericFormattedValue::Time(ClockTime::none())
+        );
     }
 }

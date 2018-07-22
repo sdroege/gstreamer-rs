@@ -497,8 +497,8 @@ mod tests {
 
         use super::Buffers;
         use super::Bytes;
-        use ClockTime;
         use super::Default;
+        use ClockTime;
         use Format;
         use GenericFormattedValue;
 
@@ -568,8 +568,8 @@ mod tests {
         extern crate ron;
         extern crate serde_json;
 
-        use GenericFormattedValue;
         use Format;
+        use GenericFormattedValue;
 
         ::init().unwrap();
 

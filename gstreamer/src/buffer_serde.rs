@@ -8,8 +8,8 @@
 
 use serde::de::{Deserialize, Deserializer};
 use serde::ser;
-use serde::ser::{Serialize, Serializer, SerializeStruct};
-use serde_bytes::{Bytes, ByteBuf};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
+use serde_bytes::{ByteBuf, Bytes};
 
 use Buffer;
 use BufferFlags;
@@ -70,8 +70,7 @@ impl From<BufferDe> for Buffer {
 
 impl<'de> Deserialize<'de> for Buffer {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        BufferDe::deserialize(deserializer)
-            .map(|buffer_de| buffer_de.into())
+        BufferDe::deserialize(deserializer).map(|buffer_de| buffer_de.into())
     }
 }
 
@@ -103,22 +102,19 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&buffer, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "(",
-                    "    pts: Some(1),",
-                    "    dts: None,",
-                    "    duration: Some(5),",
-                    "    offset: 3,",
-                    "    offset_end: 4,",
-                    "    flags: (",
-                    "        bits: 1048592,",
-                    "    ),",
-                    "    buffer: \"AQIDBA==\",",
-                    ")"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "(",
+                "    pts: Some(1),",
+                "    dts: None,",
+                "    duration: Some(5),",
+                "    offset: 3,",
+                "    offset_end: 4,",
+                "    flags: (",
+                "        bits: 1048592,",
+                "    ),",
+                "    buffer: \"AQIDBA==\",",
+                ")"
+            ).to_owned()),
             res
         );
 
@@ -126,29 +122,27 @@ mod tests {
         assert_eq!(
             concat!(
                 "{",
-                    "\"pts\":1,",
-                    "\"dts\":null,",
-                    "\"duration\":5,",
-                    "\"offset\":3,",
-                    "\"offset_end\":4,",
-                    "\"flags\":{\"bits\":1048592},",
-                    "\"buffer\":[1,2,3,4]",
+                "\"pts\":1,",
+                "\"dts\":null,",
+                "\"duration\":5,",
+                "\"offset\":3,",
+                "\"offset_end\":4,",
+                "\"flags\":{\"bits\":1048592},",
+                "\"buffer\":[1,2,3,4]",
                 "}"
-            )
-                .to_owned(),
+            ).to_owned(),
             res
         );
 
         let res = serde_pickle::to_vec(&buffer, true).unwrap();
         assert_eq!(
             vec![
-                128, 3, 125, 40, 88, 3, 0, 0, 0, 112, 116, 115, 74, 1, 0, 0, 0, 88, 3, 0, 0, 0, 100,
-                116, 115, 78, 88, 8, 0, 0, 0, 100, 117, 114, 97, 116, 105, 111, 110, 74, 5, 0, 0, 0,
-                88, 6, 0, 0, 0, 111, 102, 102, 115, 101, 116, 74, 3, 0, 0, 0, 88, 10, 0, 0, 0, 111,
-                102, 102, 115, 101, 116, 95, 101, 110, 100, 74, 4, 0, 0, 0, 88, 5, 0, 0, 0, 102, 108,
-                97, 103, 115, 125, 40, 88, 4, 0, 0, 0, 98, 105, 116, 115, 74, 16, 0, 16, 0, 117, 88,
-                6, 0, 0, 0, 98, 117, 102, 102, 101, 114, 67,
-                4, 1, 2, 3, 4, 117, 46
+                128, 3, 125, 40, 88, 3, 0, 0, 0, 112, 116, 115, 74, 1, 0, 0, 0, 88, 3, 0, 0, 0,
+                100, 116, 115, 78, 88, 8, 0, 0, 0, 100, 117, 114, 97, 116, 105, 111, 110, 74, 5, 0,
+                0, 0, 88, 6, 0, 0, 0, 111, 102, 102, 115, 101, 116, 74, 3, 0, 0, 0, 88, 10, 0, 0,
+                0, 111, 102, 102, 115, 101, 116, 95, 101, 110, 100, 74, 4, 0, 0, 0, 88, 5, 0, 0, 0,
+                102, 108, 97, 103, 115, 125, 40, 88, 4, 0, 0, 0, 98, 105, 116, 115, 74, 16, 0, 16,
+                0, 117, 88, 6, 0, 0, 0, 98, 117, 102, 102, 101, 114, 67, 4, 1, 2, 3, 4, 117, 46,
             ],
             res
         );
@@ -211,9 +205,8 @@ mod tests {
             116, 115, 78, 88, 8, 0, 0, 0, 100, 117, 114, 97, 116, 105, 111, 110, 74, 5, 0, 0, 0,
             88, 6, 0, 0, 0, 111, 102, 102, 115, 101, 116, 74, 3, 0, 0, 0, 88, 10, 0, 0, 0, 111,
             102, 102, 115, 101, 116, 95, 101, 110, 100, 74, 4, 0, 0, 0, 88, 5, 0, 0, 0, 102, 108,
-            97, 103, 115, 125, 40, 88, 4, 0, 0, 0, 98, 105, 116, 115, 74, 16, 0, 16, 0, 117, 88,
-            6, 0, 0, 0, 98, 117, 102, 102, 101, 114, 67,
-            4, 1, 2, 3, 4, 117, 46
+            97, 103, 115, 125, 40, 88, 4, 0, 0, 0, 98, 105, 116, 115, 74, 16, 0, 16, 0, 117, 88, 6,
+            0, 0, 0, 98, 117, 102, 102, 101, 114, 67, 4, 1, 2, 3, 4, 117, 46,
         ];
         let buffer: Buffer = serde_pickle::from_slice(buffer_pickle).unwrap();
         assert_eq!(buffer.get_pts(), 1.into());

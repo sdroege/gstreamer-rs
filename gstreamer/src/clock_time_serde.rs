@@ -35,8 +35,7 @@ impl<'de> Visitor<'de> for ClockTimeVisitor {
     where
         D: Deserializer<'de>,
     {
-        u64::deserialize(deserializer)
-            .and_then(|value| Ok(ClockTime::from_nseconds(value)))
+        u64::deserialize(deserializer).and_then(|value| Ok(ClockTime::from_nseconds(value)))
     }
 
     fn visit_none<E: de::Error>(self) -> Result<Self::Value, E> {

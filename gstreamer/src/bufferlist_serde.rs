@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
-use serde::ser::{Serialize, Serializer, SerializeSeq};
+use serde::ser::{Serialize, SerializeSeq, Serializer};
 
 use std::fmt;
 
@@ -106,35 +106,32 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&buffer_list, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "[",
-                    "    (",
-                    "        pts: Some(1),",
-                    "        dts: None,",
-                    "        duration: Some(4),",
-                    "        offset: 0,",
-                    "        offset_end: 4,",
-                    "        flags: (",
-                    "            bits: 0,",
-                    "        ),",
-                    "        buffer: \"AQIDBA==\",",
-                    "    ),",
-                    "    (",
-                    "        pts: Some(5),",
-                    "        dts: None,",
-                    "        duration: Some(2),",
-                    "        offset: 4,",
-                    "        offset_end: 6,",
-                    "        flags: (",
-                    "            bits: 0,",
-                    "        ),",
-                    "        buffer: \"BQY=\",",
-                    "    ),",
-                    "]"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "[",
+                "    (",
+                "        pts: Some(1),",
+                "        dts: None,",
+                "        duration: Some(4),",
+                "        offset: 0,",
+                "        offset_end: 4,",
+                "        flags: (",
+                "            bits: 0,",
+                "        ),",
+                "        buffer: \"AQIDBA==\",",
+                "    ),",
+                "    (",
+                "        pts: Some(5),",
+                "        dts: None,",
+                "        duration: Some(2),",
+                "        offset: 4,",
+                "        offset_end: 6,",
+                "        flags: (",
+                "            bits: 0,",
+                "        ),",
+                "        buffer: \"BQY=\",",
+                "    ),",
+                "]"
+            ).to_owned()),
             res,
         );
     }

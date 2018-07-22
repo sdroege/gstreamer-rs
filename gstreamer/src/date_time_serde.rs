@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, Serializer, SerializeStruct};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
 use DateTime;
 
 impl<'a> Serialize for DateTime {
@@ -53,8 +53,7 @@ impl From<DateTimeDe> for DateTime {
 
 impl<'de> Deserialize<'de> for DateTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        DateTimeDe::deserialize(deserializer)
-            .and_then(|datetime_de| Ok(datetime_de.into()))
+        DateTimeDe::deserialize(deserializer).and_then(|datetime_de| Ok(datetime_de.into()))
     }
 }
 
@@ -76,21 +75,18 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&datetime, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "(",
-                    "    tz_offset: 2,",
-                    "    y: 2018,",
-                    "    m: 5,",
-                    "    d: 28,",
-                    "    h: 16,",
-                    "    mn: 6,",
-                    "    s: 42,",
-                    "    us: 841000,",
-                    ")"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "(",
+                "    tz_offset: 2,",
+                "    y: 2018,",
+                "    m: 5,",
+                "    d: 28,",
+                "    h: 16,",
+                "    mn: 6,",
+                "    s: 42,",
+                "    us: 841000,",
+                ")"
+            ).to_owned()),
             res,
         );
 

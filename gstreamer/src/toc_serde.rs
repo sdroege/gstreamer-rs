@@ -7,13 +7,13 @@
 // except according to those terms.
 
 use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, Serializer, SerializeStruct};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
 
 use toc::*;
 use TagList;
 use TocEntryType;
-use TocScope;
 use TocLoopType;
+use TocScope;
 
 impl Serialize for TocRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -76,8 +76,7 @@ impl From<TocDe> for Toc {
 
 impl<'de> Deserialize<'de> for Toc {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        TocDe::deserialize(deserializer)
-            .map(|toc_de| toc_de.into())
+        TocDe::deserialize(deserializer).map(|toc_de| toc_de.into())
     }
 }
 
@@ -118,8 +117,7 @@ impl From<TocEntryDe> for TocEntry {
 
 impl<'de> Deserialize<'de> for TocEntry {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        TocEntryDe::deserialize(deserializer)
-            .map(|toc_entry_de| toc_entry_de.into())
+        TocEntryDe::deserialize(deserializer).map(|toc_entry_de| toc_entry_de.into())
     }
 }
 
@@ -127,15 +125,15 @@ impl<'de> Deserialize<'de> for TocEntry {
 mod tests {
     extern crate ron;
 
+    use toc::*;
     use TocEntryType;
     use TocScope;
-    use toc::*;
 
     #[test]
     fn test_serialize() {
-        use TagMergeMode;
-        use TagList;
         use tags::Title;
+        use TagList;
+        use TagMergeMode;
 
         ::init().unwrap();
 
@@ -143,7 +141,9 @@ mod tests {
         {
             let toc = toc.get_mut().unwrap();
             let mut tags = TagList::new();
-            tags.get_mut().unwrap().add::<Title>(&"toc", TagMergeMode::Append);
+            tags.get_mut()
+                .unwrap()
+                .add::<Title>(&"toc", TagMergeMode::Append);
             toc.set_tags(tags);
 
             let mut toc_edition = TocEntry::new(TocEntryType::Edition, "edition");
@@ -160,7 +160,9 @@ mod tests {
                         let toc_chap_1_1 = toc_chap_1_1.get_mut().unwrap();
                         toc_chap_1_1.set_start_stop_times(0, 4);
                         let mut tags = TagList::new();
-                        tags.get_mut().unwrap().add::<Title>(&"chapter 1.1", TagMergeMode::Append);
+                        tags.get_mut()
+                            .unwrap()
+                            .add::<Title>(&"chapter 1.1", TagMergeMode::Append);
                         toc_chap_1_1.set_tags(tags);
                     }
                     toc_chap_1.append_sub_entry(toc_chap_1_1);
@@ -170,7 +172,9 @@ mod tests {
                         let toc_chap_1_2 = toc_chap_1_2.get_mut().unwrap();
                         toc_chap_1_2.set_start_stop_times(4, 10);
                         let mut tags = TagList::new();
-                        tags.get_mut().unwrap().add::<Title>(&"chapter 1.2", TagMergeMode::Append);
+                        tags.get_mut()
+                            .unwrap()
+                            .add::<Title>(&"chapter 1.2", TagMergeMode::Append);
                         toc_chap_1_2.set_tags(tags);
                     }
                     toc_chap_1.append_sub_entry(toc_chap_1_2);
@@ -182,7 +186,9 @@ mod tests {
                     let toc_chap_2 = toc_chap_2.get_mut().unwrap();
                     toc_chap_2.set_start_stop_times(10, 15);
                     let mut tags = TagList::new();
-                    tags.get_mut().unwrap().add::<Title>(&"chapter 2", TagMergeMode::Append);
+                    tags.get_mut()
+                        .unwrap()
+                        .add::<Title>(&"chapter 2", TagMergeMode::Append);
                     toc_chap_2.set_tags(tags);
                 }
                 toc_edition.append_sub_entry(toc_chap_2);
@@ -195,77 +201,75 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&toc, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "(",
-                    "    scope: Global,",
-                    "    tags: Some([",
-                    "        (\"title\", [",
-                    "            \"toc\",",
-                    "        ]),",
-                    "    ]),",
-                    "    entries: [",
-                    "        (",
-                    "            entry_type: Edition,",
-                    "            uid: \"edition\",",
-                    "            start_stop: Some((0, 15)),",
-                    "            tags: None,",
-                    "            loop: Some((None, 0)),",
-                    "            sub_entries: [",
-                    "                (",
-                    "                    entry_type: Chapter,",
-                    "                    uid: \"chapter1\",",
-                    "                    start_stop: Some((0, 10)),",
-                    "                    tags: None,",
-                    "                    loop: Some((None, 0)),",
-                    "                    sub_entries: [",
-                    "                        (",
-                    "                            entry_type: Chapter,",
-                    "                            uid: \"chapter1.1\",",
-                    "                            start_stop: Some((0, 4)),",
-                    "                            tags: Some([",
-                    "                                (\"title\", [",
-                    "                                    \"chapter 1.1\",",
-                    "                                ]),",
-                    "                            ]),",
-                    "                            loop: Some((None, 0)),",
-                    "                            sub_entries: [",
-                    "                            ],",
-                    "                        ),",
-                    "                        (",
-                    "                            entry_type: Chapter,",
-                    "                            uid: \"chapter1.2\",",
-                    "                            start_stop: Some((4, 10)),",
-                    "                            tags: Some([",
-                    "                                (\"title\", [",
-                    "                                    \"chapter 1.2\",",
-                    "                                ]),",
-                    "                            ]),",
-                    "                            loop: Some((None, 0)),",
-                    "                            sub_entries: [",
-                    "                            ],",
-                    "                        ),",
-                    "                    ],",
-                    "                ),",
-                    "                (",
-                    "                    entry_type: Chapter,",
-                    "                    uid: \"chapter2\",",
-                    "                    start_stop: Some((10, 15)),",
-                    "                    tags: Some([",
-                    "                        (\"title\", [",
-                    "                            \"chapter 2\",",
-                    "                        ]),",
-                    "                    ]),",
-                    "                    loop: Some((None, 0)),",
-                    "                    sub_entries: [",
-                    "                    ],",
-                    "                ),",
-                    "            ],",
-                    "        ),",
-                    "    ],",
-                    ")",
-                ).to_owned()
-            ),
+            Ok(concat!(
+                "(",
+                "    scope: Global,",
+                "    tags: Some([",
+                "        (\"title\", [",
+                "            \"toc\",",
+                "        ]),",
+                "    ]),",
+                "    entries: [",
+                "        (",
+                "            entry_type: Edition,",
+                "            uid: \"edition\",",
+                "            start_stop: Some((0, 15)),",
+                "            tags: None,",
+                "            loop: Some((None, 0)),",
+                "            sub_entries: [",
+                "                (",
+                "                    entry_type: Chapter,",
+                "                    uid: \"chapter1\",",
+                "                    start_stop: Some((0, 10)),",
+                "                    tags: None,",
+                "                    loop: Some((None, 0)),",
+                "                    sub_entries: [",
+                "                        (",
+                "                            entry_type: Chapter,",
+                "                            uid: \"chapter1.1\",",
+                "                            start_stop: Some((0, 4)),",
+                "                            tags: Some([",
+                "                                (\"title\", [",
+                "                                    \"chapter 1.1\",",
+                "                                ]),",
+                "                            ]),",
+                "                            loop: Some((None, 0)),",
+                "                            sub_entries: [",
+                "                            ],",
+                "                        ),",
+                "                        (",
+                "                            entry_type: Chapter,",
+                "                            uid: \"chapter1.2\",",
+                "                            start_stop: Some((4, 10)),",
+                "                            tags: Some([",
+                "                                (\"title\", [",
+                "                                    \"chapter 1.2\",",
+                "                                ]),",
+                "                            ]),",
+                "                            loop: Some((None, 0)),",
+                "                            sub_entries: [",
+                "                            ],",
+                "                        ),",
+                "                    ],",
+                "                ),",
+                "                (",
+                "                    entry_type: Chapter,",
+                "                    uid: \"chapter2\",",
+                "                    start_stop: Some((10, 15)),",
+                "                    tags: Some([",
+                "                        (\"title\", [",
+                "                            \"chapter 2\",",
+                "                        ]),",
+                "                    ]),",
+                "                    loop: Some((None, 0)),",
+                "                    sub_entries: [",
+                "                    ],",
+                "                ),",
+                "            ],",
+                "        ),",
+                "    ],",
+                ")",
+            ).to_owned()),
             res,
         );
     }
@@ -366,7 +370,10 @@ mod tests {
         assert_eq!("chapter1.1", chapter1_1.get_uid());
         assert_eq!(Some((0, 4)), chapter1_1.get_start_stop_times());
         let tags = chapter1_1.get_tags().unwrap();
-        assert_eq!(Some("chapter 1.1"), tags.get_index::<Title>(0).unwrap().get());
+        assert_eq!(
+            Some("chapter 1.1"),
+            tags.get_index::<Title>(0).unwrap().get()
+        );
         assert_eq!(0, chapter1_1.get_sub_entries().len());
 
         let chapter1_2 = &chap1_sub_entries[1];
@@ -374,7 +381,10 @@ mod tests {
         assert_eq!("chapter1.2", chapter1_2.get_uid());
         assert_eq!(Some((4, 10)), chapter1_2.get_start_stop_times());
         let tags = chapter1_2.get_tags().unwrap();
-        assert_eq!(Some("chapter 1.2"), tags.get_index::<Title>(0).unwrap().get());
+        assert_eq!(
+            Some("chapter 1.2"),
+            tags.get_index::<Title>(0).unwrap().get()
+        );
         assert_eq!(0, chapter1_2.get_sub_entries().len());
 
         let chapter2 = &sub_entries[1];

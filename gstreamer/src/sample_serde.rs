@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, Serializer, SerializeStruct};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
 
 use Buffer;
 use BufferList;
@@ -67,8 +67,7 @@ impl From<SampleDe> for Sample {
 
 impl<'de> Deserialize<'de> for Sample {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        SampleDe::deserialize(deserializer)
-            .and_then(|sample_de| Ok(sample_de.into()))
+        SampleDe::deserialize(deserializer).and_then(|sample_de| Ok(sample_de.into()))
     }
 }
 
@@ -136,49 +135,46 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&sample, pretty_config.clone());
         assert_eq!(
-            Ok(
-                concat!(
-                    "(",
-                    "    buffer: Some((",
-                    "        pts: Some(1),",
-                    "        dts: None,",
-                    "        duration: Some(4),",
-                    "        offset: 0,",
-                    "        offset_end: 4,",
-                    "        flags: (",
-                    "            bits: 0,",
-                    "        ),",
-                    "        buffer: \"AQIDBA==\",",
-                    "    )),",
-                    "    buffer_list: None,",
-                    "    caps: Some([",
-                    "        ((\"sample/caps\", [",
-                    "            (\"int\", \"i32\", 12),",
-                    "            (\"bool\", \"bool\", true),",
-                    "        ]), None),",
-                    "    ]),",
-                    "    segment: Some((",
-                    "        flags: (",
-                    "            bits: 9,",
-                    "        ),",
-                    "        rate: 1,",
-                    "        applied_rate: 0.9,",
-                    "        format: Time,",
-                    "        base: 123,",
-                    "        offset: 42,",
-                    "        start: 1024,",
-                    "        stop: 2048,",
-                    "        time: 1042,",
-                    "        position: 256,",
-                    "        duration: -1,",
-                    "    )),",
-                    "    info: Some((\"sample.info\", [",
-                    "        (\"f3\", \"i32\", 123),",
-                    "    ])),",
-                    ")"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "(",
+                "    buffer: Some((",
+                "        pts: Some(1),",
+                "        dts: None,",
+                "        duration: Some(4),",
+                "        offset: 0,",
+                "        offset_end: 4,",
+                "        flags: (",
+                "            bits: 0,",
+                "        ),",
+                "        buffer: \"AQIDBA==\",",
+                "    )),",
+                "    buffer_list: None,",
+                "    caps: Some([",
+                "        ((\"sample/caps\", [",
+                "            (\"int\", \"i32\", 12),",
+                "            (\"bool\", \"bool\", true),",
+                "        ]), None),",
+                "    ]),",
+                "    segment: Some((",
+                "        flags: (",
+                "            bits: 9,",
+                "        ),",
+                "        rate: 1,",
+                "        applied_rate: 0.9,",
+                "        format: Time,",
+                "        base: 123,",
+                "        offset: 42,",
+                "        start: 1024,",
+                "        stop: 2048,",
+                "        time: 1042,",
+                "        position: 256,",
+                "        duration: -1,",
+                "    )),",
+                "    info: Some((\"sample.info\", [",
+                "        (\"f3\", \"i32\", 123),",
+                "    ])),",
+                ")"
+            ).to_owned()),
             res
         );
 
@@ -198,42 +194,39 @@ mod tests {
 
         let res = ron::ser::to_string_pretty(&sample, pretty_config);
         assert_eq!(
-            Ok(
-                concat!(
-                    "(",
-                    "    buffer: Some((",
-                    "        pts: Some(1),",
-                    "        dts: None,",
-                    "        duration: Some(4),",
-                    "        offset: 0,",
-                    "        offset_end: 4,",
-                    "        flags: (",
-                    "            bits: 0,",
-                    "        ),",
-                    "        buffer: \"AQIDBA==\",",
-                    "    )),",
-                    "    buffer_list: None,",
-                    "    caps: None,",
-                    "    segment: Some((",
-                    "        flags: (",
-                    "            bits: 0,",
-                    "        ),",
-                    "        rate: 1,",
-                    "        applied_rate: 1,",
-                    "        format: Time,",
-                    "        base: 0,",
-                    "        offset: 0,",
-                    "        start: 0,",
-                    "        stop: -1,",
-                    "        time: 0,",
-                    "        position: 0,",
-                    "        duration: -1,",
-                    "    )),",
-                    "    info: None,",
-                    ")"
-                )
-                    .to_owned()
-            ),
+            Ok(concat!(
+                "(",
+                "    buffer: Some((",
+                "        pts: Some(1),",
+                "        dts: None,",
+                "        duration: Some(4),",
+                "        offset: 0,",
+                "        offset_end: 4,",
+                "        flags: (",
+                "            bits: 0,",
+                "        ),",
+                "        buffer: \"AQIDBA==\",",
+                "    )),",
+                "    buffer_list: None,",
+                "    caps: None,",
+                "    segment: Some((",
+                "        flags: (",
+                "            bits: 0,",
+                "        ),",
+                "        rate: 1,",
+                "        applied_rate: 1,",
+                "        format: Time,",
+                "        base: 0,",
+                "        offset: 0,",
+                "        start: 0,",
+                "        stop: -1,",
+                "        time: 0,",
+                "        position: 0,",
+                "        duration: -1,",
+                "    )),",
+                "    info: None,",
+                ")"
+            ).to_owned()),
             res
         );
     }
