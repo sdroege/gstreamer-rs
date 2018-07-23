@@ -193,8 +193,10 @@ impl TagListRef {
         unsafe {
             let v = value.to_send_value();
 
+            let tag_name = tag_name.to_glib_none();
+
             let tag_type: glib::Type = from_glib(
-                ffi::gst_tag_get_type(tag_name.as_ptr() as *const i8)
+                ffi::gst_tag_get_type(tag_name.0)
             );
             if tag_type != v.type_() {
                 return Err(TagError::TypeMismatch)
@@ -203,7 +205,7 @@ impl TagListRef {
             ffi::gst_tag_list_add_value(
                 self.as_mut_ptr(),
                 mode.to_glib(),
-                tag_name.to_glib_none().0,
+                tag_name.0,
                 v.to_glib_none().0,
             );
         }
