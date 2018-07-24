@@ -53,7 +53,13 @@ unsafe extern "C" fn trampoline_sync(
     let _guard = CallbackGuard::new();
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static) = transmute(func);
-    f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
+    let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib();
+
+    if res == ffi::GST_BUS_DROP {
+        ffi::gst_mini_object_unref(msg as *mut _);
+    }
+
+    res
 }
 
 unsafe extern "C" fn destroy_closure_sync(ptr: gpointer) {
