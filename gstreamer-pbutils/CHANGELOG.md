@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.5] - 2018-07-24
+### Fixed
+- `gst::Bus`'s sync handler must unref every message if
+  `gst::BusSyncReply::Drop` is returned, otherwise they are all leaked
+
 ## [0.11.4] - 2018-07-19
 ### Fixed
 - `gst::Caps::subtract()` does not leak its arguments anymore
