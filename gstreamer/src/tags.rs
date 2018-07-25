@@ -30,7 +30,7 @@ pub trait Tag<'a> {
 
 macro_rules! impl_tag(
     ($name:ident, $t:ty, $rust_tag:ident, $gst_tag:ident) => {
-        pub struct $name;
+        pub enum $name {}
         impl<'a> Tag<'a> for $name {
             type TagType = $t;
             fn tag_name<'b>() -> &'b str {

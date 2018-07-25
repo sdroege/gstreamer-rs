@@ -24,8 +24,8 @@ use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib};
 use glib_ffi;
 
-pub struct Readable;
-pub struct Writable;
+pub enum Readable {}
+pub enum Writable {}
 
 #[repr(C)]
 pub struct BufferRef(ffi::GstBuffer);

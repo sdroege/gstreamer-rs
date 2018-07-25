@@ -20,8 +20,9 @@ use std::ops;
 use std::ptr;
 use std::slice;
 
-pub struct Readable;
-pub struct Writable;
+pub enum Readable {}
+pub enum Writable {}
+
 pub struct VideoFrame<T>(
     ffi::GstVideoFrame,
     Option<gst::Buffer>,
