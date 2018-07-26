@@ -87,7 +87,8 @@ pub enum PadProbeData<'a> {
     BufferList(BufferList),
     Query(&'a mut QueryRef),
     Event(Event),
-    Unknown,
+    #[doc(hidden)]
+    __Unknown(*mut ffi::GstMiniObject),
 }
 
 pub struct StreamLock(Pad);
@@ -875,15 +876,16 @@ unsafe extern "C" fn trampoline_pad_probe(
         data: if (*info).data.is_null() {
             None
         } else {
-            let data = (*info).data as *const ffi::GstMiniObject;
+            let data = (*info).data as *mut ffi::GstMiniObject;
+            (*info).data = ptr::null_mut();
             if (*data).type_ == Buffer::static_type().to_glib() {
                 data_type = Some(Buffer::static_type());
-                Some(PadProbeData::Buffer(from_glib_none(
+                Some(PadProbeData::Buffer(from_glib_full(
                     data as *const ffi::GstBuffer,
                 )))
             } else if (*data).type_ == BufferList::static_type().to_glib() {
                 data_type = Some(BufferList::static_type());
-                Some(PadProbeData::BufferList(from_glib_none(
+                Some(PadProbeData::BufferList(from_glib_full(
                     data as *const ffi::GstBufferList,
                 )))
             } else if (*data).type_ == Query::static_type().to_glib() {
@@ -893,11 +895,11 @@ unsafe extern "C" fn trampoline_pad_probe(
                 )))
             } else if (*data).type_ == Event::static_type().to_glib() {
                 data_type = Some(Event::static_type());
-                Some(PadProbeData::Event(from_glib_none(
+                Some(PadProbeData::Event(from_glib_full(
                     data as *const ffi::GstEvent,
                 )))
             } else {
-                Some(PadProbeData::Unknown)
+                Some(PadProbeData::__Unknown(data))
             }
         },
     };
@@ -907,33 +909,26 @@ unsafe extern "C" fn trampoline_pad_probe(
     match probe_info.data {
         Some(PadProbeData::Buffer(buffer)) => {
             assert_eq!(data_type, Some(Buffer::static_type()));
-            if (*info).data != buffer.as_mut_ptr() as *mut _ {
-                ffi::gst_mini_object_unref((*info).data as *mut _);
-                (*info).data = buffer.into_ptr() as *mut libc::c_void;
-            }
+            (*info).data = buffer.into_ptr() as *mut libc::c_void;
         }
         Some(PadProbeData::BufferList(bufferlist)) => {
             assert_eq!(data_type, Some(BufferList::static_type()));
-            if (*info).data != bufferlist.as_mut_ptr() as *mut _ {
-                ffi::gst_mini_object_unref((*info).data as *mut _);
-                (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
-            }
+            (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
         }
         Some(PadProbeData::Event(event)) => {
             assert_eq!(data_type, Some(Event::static_type()));
-            if (*info).data != event.as_mut_ptr() as *mut _ {
-                ffi::gst_mini_object_unref((*info).data as *mut _);
-                (*info).data = event.into_ptr() as *mut libc::c_void;
-            }
+            (*info).data = event.into_ptr() as *mut libc::c_void;
+        }
+        Some(PadProbeData::Query(query)) => {
+            assert_eq!(data_type, Some(Query::static_type()));
+            (*info).data = query.as_mut_ptr() as *mut libc::c_void;
+        }
+        Some(PadProbeData::__Unknown(ptr)) => {
+            (*info).data = ptr as *mut libc::c_void;
         }
         None => {
             assert_ne!(data_type, Some(Query::static_type()));
-            if !(*info).data.is_null() {
-                ffi::gst_mini_object_unref((*info).data as *mut _);
-                (*info).data = ptr::null_mut();
-            }
         }
-        _ => (),
     }
 
     ret
