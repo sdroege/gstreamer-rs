@@ -13,8 +13,9 @@ use glib;
 use glib::object::Downcast;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrBorrow;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer,
-                      ToGlib, ToGlibPtr};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer, ToGlib, ToGlibPtr,
+};
 use glib::IsA;
 use miniobject::MiniObject;
 use Event;

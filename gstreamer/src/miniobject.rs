@@ -13,10 +13,11 @@ use std::{borrow, fmt, ops};
 
 use ffi;
 use glib;
-use glib::translate::{c_ptr_array_len, from_glib, from_glib_full, from_glib_none,
-                      FromGlibContainerAsVec, FromGlibPtrArrayContainerAsVec, FromGlibPtrBorrow,
-                      FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault, Stash, StashMut,
-                      ToGlibContainerFromSlice, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    c_ptr_array_len, from_glib, from_glib_full, from_glib_none, FromGlibContainerAsVec,
+    FromGlibPtrArrayContainerAsVec, FromGlibPtrBorrow, FromGlibPtrFull, FromGlibPtrNone,
+    GlibPtrDefault, Stash, StashMut, ToGlibContainerFromSlice, ToGlibPtr, ToGlibPtrMut,
+};
 use glib_ffi;
 use glib_ffi::gpointer;
 use gobject_ffi;
@@ -66,10 +67,9 @@ impl<T: MiniObject> GstRc<T> {
                 return self.obj.as_mut();
             }
 
-            let ptr = T::from_mut_ptr(
-                ffi::gst_mini_object_make_writable(self.as_mut_ptr() as *mut ffi::GstMiniObject)
-                    as *mut T::GstType,
-            );
+            let ptr = T::from_mut_ptr(ffi::gst_mini_object_make_writable(
+                self.as_mut_ptr() as *mut ffi::GstMiniObject
+            ) as *mut T::GstType);
             self.obj = ptr::NonNull::new_unchecked(ptr);
             assert!(self.is_writable());
 
@@ -87,7 +87,9 @@ impl<T: MiniObject> GstRc<T> {
 
     pub fn is_writable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_mini_object_is_writable(self.as_ptr() as *const ffi::GstMiniObject))
+            from_glib(ffi::gst_mini_object_is_writable(
+                self.as_ptr() as *const ffi::GstMiniObject
+            ))
         }
     }
 
@@ -187,16 +189,18 @@ where
 
     unsafe fn from_mut_ptr<'a>(ptr: *mut Self::GstType) -> &'a mut Self {
         assert!(!ptr.is_null());
-        assert_ne!(ffi::gst_mini_object_is_writable(ptr as *mut ffi::GstMiniObject), glib_ffi::GFALSE);
+        assert_ne!(
+            ffi::gst_mini_object_is_writable(ptr as *mut ffi::GstMiniObject),
+            glib_ffi::GFALSE
+        );
         &mut *(ptr as *mut Self)
     }
 
     fn copy(&self) -> GstRc<Self> {
         unsafe {
-            GstRc::from_glib_full(
-                ffi::gst_mini_object_copy(self.as_ptr() as *const ffi::GstMiniObject)
-                    as *const Self::GstType,
-            )
+            GstRc::from_glib_full(ffi::gst_mini_object_copy(
+                self.as_ptr() as *const ffi::GstMiniObject
+            ) as *const Self::GstType)
         }
     }
 }

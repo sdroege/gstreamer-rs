@@ -13,8 +13,9 @@ use std::mem;
 use ffi;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib,
-                      ToGlibPtr};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib, ToGlibPtr,
+};
 
 use miniobject::*;
 use TagList;
@@ -90,7 +91,9 @@ impl ToOwned for TocRef {
 
     fn to_owned(&self) -> GstRc<TocRef> {
         #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
+        }
     }
 }
 
@@ -236,7 +239,9 @@ impl ToOwned for TocEntryRef {
 
     fn to_owned(&self) -> GstRc<TocEntryRef> {
         #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
+        }
     }
 }
 

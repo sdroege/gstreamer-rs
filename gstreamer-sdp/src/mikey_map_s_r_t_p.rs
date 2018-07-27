@@ -13,11 +13,7 @@ pub struct MIKEYMapSRTP(ffi::GstMIKEYMapSRTP);
 
 impl MIKEYMapSRTP {
     pub fn new(policy: u8, ssrc: u32, roc: u32) -> MIKEYMapSRTP {
-        MIKEYMapSRTP(ffi::GstMIKEYMapSRTP {
-            policy,
-            ssrc,
-            roc,
-        })
+        MIKEYMapSRTP(ffi::GstMIKEYMapSRTP { policy, ssrc, roc })
     }
 
     pub fn policy(&self) -> u8 {

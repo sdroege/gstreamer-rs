@@ -6,23 +6,19 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use DeviceMonitor;
 use ffi;
 use glib::translate::*;
+use DeviceMonitor;
 
 impl DeviceMonitor {
     pub fn new() -> DeviceMonitor {
         assert_initialized_main_thread!();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {
-            unsafe {
-                from_glib_full(ffi::gst_device_monitor_new())
-            }
+            unsafe { from_glib_full(ffi::gst_device_monitor_new()) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe {
-                from_glib_none(ffi::gst_device_monitor_new())
-            }
+            unsafe { from_glib_none(ffi::gst_device_monitor_new()) }
         }
     }
 }

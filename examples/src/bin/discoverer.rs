@@ -51,13 +51,17 @@ fn print_stream_info(stream: &DiscovererStreamInfo) {
 }
 
 fn print_discoverer_info(info: &DiscovererInfo) -> Result<(), Error> {
-    let uri = info.get_uri()
+    let uri = info
+        .get_uri()
         .ok_or(DiscovererError("URI should not be null"))?;
     println!("URI: {}", uri);
     println!("Duration: {}", info.get_duration());
     print_tags(info);
-    print_stream_info(&info.get_stream_info()
-        .ok_or(DiscovererError("Error while obtaining stream info"))?);
+    print_stream_info(
+        &info
+            .get_stream_info()
+            .ok_or(DiscovererError("Error while obtaining stream info"))?,
+    );
 
     let children = info.get_stream_list();
     println!("Children streams:");

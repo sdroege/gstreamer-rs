@@ -27,7 +27,12 @@ mod examples_common;
 struct MissingElement(&'static str);
 
 #[derive(Debug, Fail)]
-#[fail(display = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[fail(
+    display = "Received error from {}: {} (debug: {:?})",
+    src,
+    error,
+    debug
+)]
 struct ErrorMessage {
     src: String,
     error: String,
@@ -138,7 +143,8 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
             MessageView::Error(err) => {
                 pipeline.set_state(gst::State::Null).into_result()?;
                 Err(ErrorMessage {
-                    src: err.get_src()
+                    src: err
+                        .get_src()
                         .map(|s| s.get_path_string())
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),

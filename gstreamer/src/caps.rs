@@ -252,7 +252,12 @@ impl CapsRef {
 
     pub fn subtract(&self, other: &Self) -> Caps {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_subtract(self.as_mut_ptr(), other.as_mut_ptr())) }
+        unsafe {
+            from_glib_full(ffi::gst_caps_subtract(
+                self.as_mut_ptr(),
+                other.as_mut_ptr(),
+            ))
+        }
     }
 }
 

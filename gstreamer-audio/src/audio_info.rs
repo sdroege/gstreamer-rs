@@ -11,8 +11,9 @@ use glib_ffi;
 use gobject_ffi;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrNone, ToGlib,
-                      ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, FromGlibPtrNone, ToGlib, ToGlibPtr, ToGlibPtrMut,
+};
 use gst;
 use gst::prelude::*;
 
@@ -312,7 +313,9 @@ impl glib::types::StaticType for AudioInfo {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for AudioInfo {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<AudioInfo>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstAudioInfo)
+        Option::<AudioInfo>::from_glib_none(
+            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstAudioInfo
+        )
     }
 }
 

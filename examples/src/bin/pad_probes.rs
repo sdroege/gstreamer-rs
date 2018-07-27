@@ -17,13 +17,9 @@ fn example_main() {
         "audiotestsrc name=src ! audio/x-raw,format={},channels=1 ! fakesink",
         gst_audio::AUDIO_FORMAT_S16.to_string()
     )).unwrap();
-    let pipeline = pipeline
-        .dynamic_cast::<gst::Pipeline>()
-        .unwrap();
+    let pipeline = pipeline.dynamic_cast::<gst::Pipeline>().unwrap();
 
-    let src = pipeline
-        .get_by_name("src")
-        .unwrap();
+    let src = pipeline.get_by_name("src").unwrap();
     let src_pad = src.get_static_pad("src").unwrap();
     src_pad.add_probe(gst::PadProbeType::BUFFER, |_, probe_info| {
         if let Some(gst::PadProbeData::Buffer(ref buffer)) = probe_info.data {

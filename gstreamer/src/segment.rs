@@ -50,7 +50,10 @@ impl Segment {
         if T::get_default_format() == Format::Undefined
             || T::get_default_format() == self.get_format()
         {
-            Some(unsafe { &*(self as *const FormattedSegment<GenericFormattedValue> as *const FormattedSegment<T>) })
+            Some(unsafe {
+                &*(self as *const FormattedSegment<GenericFormattedValue>
+                    as *const FormattedSegment<T>)
+            })
         } else {
             None
         }
@@ -60,7 +63,10 @@ impl Segment {
         if T::get_default_format() == Format::Undefined
             || T::get_default_format() == self.get_format()
         {
-            Some(unsafe { &mut *(self as *mut FormattedSegment<GenericFormattedValue> as *mut FormattedSegment<T>) })
+            Some(unsafe {
+                &mut *(self as *mut FormattedSegment<GenericFormattedValue>
+                    as *mut FormattedSegment<T>)
+            })
         } else {
             None
         }
@@ -83,7 +89,9 @@ impl<T: FormattedValue> FormattedSegment<T> {
     }
 
     pub fn upcast_ref(&self) -> &Segment {
-        unsafe { &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>) }
+        unsafe {
+            &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>)
+        }
     }
 
     pub fn reset(&mut self) {
@@ -491,7 +499,9 @@ impl<T: FormattedValue> Clone for FormattedSegment<T> {
 
 impl<T: FormattedValue> AsRef<Segment> for FormattedSegment<T> {
     fn as_ref(&self) -> &Segment {
-        unsafe { &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>) }
+        unsafe {
+            &*(self as *const FormattedSegment<T> as *const FormattedSegment<GenericFormattedValue>)
+        }
     }
 }
 
@@ -499,7 +509,8 @@ impl<T: FormattedValue> fmt::Debug for FormattedSegment<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let segment = self.as_ref();
         match segment.get_format() {
-            Format::Undefined => f.debug_struct("Segment")
+            Format::Undefined => f
+                .debug_struct("Segment")
                 .field("format", &Format::Undefined)
                 .finish(),
             Format::Time => {
@@ -518,7 +529,8 @@ impl<T: FormattedValue> fmt::Debug for FormattedSegment<T> {
                     .field("duration", &segment.get_duration().to_string())
                     .finish()
             }
-            _ => f.debug_struct("Segment")
+            _ => f
+                .debug_struct("Segment")
                 .field("format", &segment.get_format())
                 .field("start", &segment.get_start())
                 .field("offset", &segment.get_offset())
@@ -550,7 +562,9 @@ impl<T: FormattedValue> glib::types::StaticType for FormattedSegment<T> {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for Segment {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<Segment>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment)
+        Option::<Segment>::from_glib_none(
+            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment
+        )
     }
 }
 

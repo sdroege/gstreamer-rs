@@ -13,8 +13,9 @@ use std::ops;
 use std::slice;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut,
-                      Uninitialized};
+use glib::translate::{
+    from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut, Uninitialized,
+};
 use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 
 use ffi;
@@ -248,11 +249,7 @@ impl IntRange<i32> {
         assert!(min <= max);
         assert!(step > 0);
 
-        Self {
-            min,
-            max,
-            step,
-        }
+        Self { min, max, step }
     }
 }
 
@@ -268,11 +265,7 @@ impl IntRange<i64> {
         assert!(min <= max);
         assert!(step > 0);
 
-        Self {
-            min,
-            max,
-            step,
-        }
+        Self { min, max, step }
     }
 }
 

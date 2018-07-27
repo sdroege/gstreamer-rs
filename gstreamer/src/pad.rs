@@ -28,8 +28,10 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override,
-                      FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{
+    from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override, FromGlib, ToGlib,
+    ToGlibPtr,
+};
 use glib::Object;
 use glib::{IsA, StaticType};
 use glib_ffi;

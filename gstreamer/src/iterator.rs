@@ -317,10 +317,7 @@ where
     for<'a> T: StaticType + ToValue + FromValueOptional<'a> + Clone + Send + 'static,
 {
     fn new(items: Vec<T>) -> Self {
-        Self {
-            pos: 0,
-            items,
-        }
+        Self { pos: 0, items }
     }
 }
 

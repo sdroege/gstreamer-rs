@@ -357,7 +357,7 @@ impl glib::types::StaticType for MessageRef {
 impl fmt::Debug for MessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Message")
-            .field("ptr", unsafe { &self.as_ptr() } )
+            .field("ptr", unsafe { &self.as_ptr() })
             .field("type", &unsafe {
                 let type_ = ffi::gst_message_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
@@ -1194,7 +1194,8 @@ impl<'a> MessageBuilder<'a> {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
         Self {
-            other_fields: self.other_fields
+            other_fields: self
+                .other_fields
                 .iter()
                 .cloned()
                 .chain(other_fields.iter().cloned())

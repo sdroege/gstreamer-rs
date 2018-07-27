@@ -46,7 +46,8 @@ fn create_ui(app: &gtk::Application) {
 
     let video_window = gtk::DrawingArea::new();
     video_window.set_size_request(320, 240);
-    let video_overlay = sink.clone()
+    let video_overlay = sink
+        .clone()
         .dynamic_cast::<gst_video::VideoOverlay>()
         .unwrap()
         .downgrade();

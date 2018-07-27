@@ -38,7 +38,9 @@ impl glib::types::StaticType for StaticCaps {
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for StaticCaps {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<StaticCaps>::from_glib_none(gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstStaticCaps)
+        Option::<StaticCaps>::from_glib_none(
+            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstStaticCaps
+        )
     }
 }
 

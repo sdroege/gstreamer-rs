@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use Stream;
-use StreamCollection;
 use ffi;
 use glib::translate::*;
+use Stream;
+use StreamCollection;
 
 pub struct Iter<'a> {
     collection: &'a StreamCollection,
@@ -73,14 +73,10 @@ impl StreamCollection {
         let upstream_id = upstream_id.to_glib_none();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {
-            unsafe {
-                from_glib_full(ffi::gst_stream_collection_new(upstream_id.0))
-            }
+            unsafe { from_glib_full(ffi::gst_stream_collection_new(upstream_id.0)) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe {
-                from_glib_none(ffi::gst_stream_collection_new(upstream_id.0))
-            }
+            unsafe { from_glib_none(ffi::gst_stream_collection_new(upstream_id.0)) }
         }
     }
 

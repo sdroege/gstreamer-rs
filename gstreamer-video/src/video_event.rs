@@ -104,10 +104,7 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
     }
 
     pub fn timestamp(self, timestamp: gst::ClockTime) -> Self {
-        Self {
-            timestamp,
-            ..self
-        }
+        Self { timestamp, ..self }
     }
 
     pub fn stream_time(self, stream_time: gst::ClockTime) -> Self {
@@ -132,10 +129,7 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
     }
 
     pub fn count(self, count: u32) -> Self {
-        Self {
-            count,
-            ..self
-        }
+        Self { count, ..self }
     }
 
     event_builder_generic_impl!(
@@ -231,10 +225,7 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
     }
 
     pub fn count(self, count: u32) -> Self {
-        Self {
-            count,
-            ..self
-        }
+        Self { count, ..self }
     }
 
     event_builder_generic_impl!(

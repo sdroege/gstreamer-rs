@@ -74,7 +74,9 @@ pub use caps::{Caps, CapsRef};
 pub mod tags;
 pub use tags::{Tag, TagList, TagListRef};
 pub mod buffer;
-pub use buffer::{Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA};
+pub use buffer::{
+    Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
+};
 pub mod sample;
 pub use sample::{Sample, SampleRef};
 pub mod bufferlist;
@@ -129,8 +131,10 @@ mod proxy_pad;
 mod tag_setter;
 pub use bin::BinExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
-pub use element::{ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
-                  ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME};
+pub use element::{
+    ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
+    ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
+};
 pub use object::GstObjectExtManual;
 
 // OS dependent Bus extensions (also import the other plateform trait for doc)
@@ -153,8 +157,10 @@ pub use bus::BusStream;
 pub use child_proxy::ChildProxyExtManual;
 pub use clock_time::ClockTime;
 pub use device_provider::DeviceProviderExtManual;
-pub use enums::{ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
-                StateChangeError, StateChangeSuccess, TagError};
+pub use enums::{
+    ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
+    StateChangeError, StateChangeSuccess, TagError,
+};
 pub use gobject::GObjectExtManualGst;
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
 pub use parse_context::ParseContext;
@@ -162,9 +168,9 @@ pub use tag_setter::TagSetterExtManual;
 
 mod plugin;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-pub mod stream_collection;
-#[cfg(any(feature = "v1_10", feature = "dox"))]
 mod stream;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+pub mod stream_collection;
 
 mod typefind;
 pub use typefind::*;

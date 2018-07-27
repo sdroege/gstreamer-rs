@@ -198,7 +198,8 @@ impl BufferPoolAcquireParams {
 
 impl PartialEq for BufferPoolAcquireParams {
     fn eq(&self, other: &Self) -> bool {
-        self.format() == other.format() && self.start() == other.start()
+        self.format() == other.format()
+            && self.start() == other.start()
             && self.stop() == other.stop()
     }
 }
@@ -210,14 +211,10 @@ impl BufferPool {
         assert_initialized_main_thread!();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {
-            unsafe {
-                from_glib_full(ffi::gst_buffer_pool_new())
-            }
+            unsafe { from_glib_full(ffi::gst_buffer_pool_new()) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe {
-                from_glib_none(ffi::gst_buffer_pool_new())
-            }
+            unsafe { from_glib_none(ffi::gst_buffer_pool_new()) }
         }
     }
 }

@@ -29,7 +29,10 @@ pub fn type_find_helper_for_data<
         let data = data.as_ref();
         let (ptr, len) = (data.as_ptr(), data.len());
         let ret = from_glib_full(ffi::gst_type_find_helper_for_data(
-            obj.0, mut_override(ptr), len, &mut prob,
+            obj.0,
+            mut_override(ptr),
+            len,
+            &mut prob,
         ));
         (ret, from_glib(prob))
     }

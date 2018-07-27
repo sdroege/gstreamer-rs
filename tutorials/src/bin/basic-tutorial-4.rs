@@ -72,7 +72,8 @@ fn tutorial_main() {
                     print!("\rPosition {} / {}", position, custom_data.duration);
                     io::stdout().flush().unwrap();
 
-                    if custom_data.seek_enabled && !custom_data.seek_done
+                    if custom_data.seek_enabled
+                        && !custom_data.seek_done
                         && position > 10 * gst::SECOND
                     {
                         println!("\nReached 10s, performing seek...");

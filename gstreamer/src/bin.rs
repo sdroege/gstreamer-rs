@@ -113,7 +113,8 @@ mod tests {
         bin.add(&::ElementFactory::make("identity", "identity1").unwrap())
             .unwrap();
 
-        let mut child_names = bin.get_children()
+        let mut child_names = bin
+            .get_children()
             .iter()
             .map(|c| c.get_name())
             .collect::<Vec<String>>();

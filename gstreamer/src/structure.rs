@@ -19,8 +19,10 @@ use Fraction;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone,
-                      GlibPtrDefault, Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault,
+    Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut,
+};
 use glib::value::{FromValueOptional, SendValue, ToSendValue};
 use glib_ffi::gpointer;
 use gobject_ffi;

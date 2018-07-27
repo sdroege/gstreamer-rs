@@ -9,8 +9,8 @@ use gio::prelude::*;
 extern crate gtk;
 use gtk::prelude::*;
 
-use std::env;
 use std::cell::RefCell;
+use std::env;
 
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);

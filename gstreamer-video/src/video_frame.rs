@@ -238,7 +238,8 @@ impl VideoFrame<Writable> {
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_ffi::GST_MAP_READ
                     | gst_ffi::GST_MAP_WRITE,
             ));
 
@@ -265,7 +266,8 @@ impl VideoFrame<Writable> {
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_ffi::GST_MAP_READ
                     | gst_ffi::GST_MAP_WRITE,
             ));
 
@@ -512,7 +514,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_ffi::GST_MAP_READ
                     | gst_ffi::GST_MAP_WRITE,
             ));
 
@@ -539,7 +542,8 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ
+                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_ffi::GST_MAP_READ
                     | gst_ffi::GST_MAP_WRITE,
             ));
 
@@ -591,7 +595,10 @@ impl<'a> ops::Deref for VideoFrameRef<&'a mut gst::BufferRef> {
     type Target = VideoFrameRef<&'a gst::BufferRef>;
 
     fn deref(&self) -> &Self::Target {
-        unsafe { &*(self as *const VideoFrameRef<&'a mut gst::BufferRef> as *const VideoFrameRef<&'a gst::BufferRef>) }
+        unsafe {
+            &*(self as *const VideoFrameRef<&'a mut gst::BufferRef>
+                as *const VideoFrameRef<&'a gst::BufferRef>)
+        }
     }
 }
 

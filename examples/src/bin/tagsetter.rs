@@ -19,7 +19,12 @@ mod examples_common;
 struct MissingElement(String);
 
 #[derive(Debug, Fail)]
-#[fail(display = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[fail(
+    display = "Received error from {}: {} (debug: {:?})",
+    src,
+    error,
+    debug
+)]
 struct ErrorMessage {
     src: String,
     error: String,
@@ -72,7 +77,8 @@ fn example_main() -> Result<(), Error> {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
                 Err(ErrorMessage {
-                    src: err.get_src()
+                    src: err
+                        .get_src()
                         .map(|s| s.get_path_string())
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),

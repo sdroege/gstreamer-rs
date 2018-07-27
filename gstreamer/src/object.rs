@@ -15,7 +15,11 @@ use glib::IsA;
 use gobject_ffi;
 
 pub trait GstObjectExtManual {
-    fn connect_deep_notify<'a, P: Into<Option<&'a str>>, F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static>(
+    fn connect_deep_notify<
+        'a,
+        P: Into<Option<&'a str>>,
+        F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static,
+    >(
         &self,
         name: P,
         f: F,
@@ -23,7 +27,11 @@ pub trait GstObjectExtManual {
 }
 
 impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtManual for O {
-    fn connect_deep_notify<'a, P: Into<Option<&'a str>>, F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static>(
+    fn connect_deep_notify<
+        'a,
+        P: Into<Option<&'a str>>,
+        F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static,
+    >(
         &self,
         name: P,
         f: F,

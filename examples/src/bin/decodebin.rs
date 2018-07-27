@@ -23,7 +23,12 @@ mod examples_common;
 struct MissingElement(&'static str);
 
 #[derive(Debug, Fail)]
-#[fail(display = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[fail(
+    display = "Received error from {}: {} (debug: {:?})",
+    src,
+    error,
+    debug
+)]
 struct ErrorMessage {
     src: String,
     error: String,
@@ -177,7 +182,8 @@ fn example_main() -> Result<(), Error> {
                             .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
-                            src: err.get_src()
+                            src: err
+                                .get_src()
                                 .map(|s| s.get_path_string())
                                 .unwrap_or_else(|| String::from("None")),
                             error: err.get_error().description().into(),
@@ -189,7 +195,8 @@ fn example_main() -> Result<(), Error> {
                 #[cfg(not(feature = "v1_10"))]
                 {
                     Err(ErrorMessage {
-                        src: err.get_src()
+                        src: err
+                            .get_src()
                             .map(|s| s.get_path_string())
                             .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().description().into(),

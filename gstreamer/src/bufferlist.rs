@@ -106,19 +106,22 @@ impl ToOwned for BufferListRef {
 
     fn to_owned(&self) -> GstRc<BufferListRef> {
         #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
+        unsafe {
+            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
+        }
     }
 }
 
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let size = self.iter().map(|b| b.get_size()).sum::<usize>();
-        let (pts, dts) = self.get(0)
+        let (pts, dts) = self
+            .get(0)
             .map(|b| (b.get_pts(), b.get_dts()))
             .unwrap_or((::ClockTime::none(), ::ClockTime::none()));
 
         f.debug_struct("BufferList")
-            .field("ptr", unsafe { &self.as_ptr() } )
+            .field("ptr", unsafe { &self.as_ptr() })
             .field("buffers", &self.len())
             .field("pts", &pts.to_string())
             .field("dts", &dts.to_string())

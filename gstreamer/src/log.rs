@@ -17,7 +17,6 @@ use gobject_ffi;
 use glib::translate::{from_glib, ToGlib, ToGlibPtr};
 use glib::IsA;
 
-
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
 
@@ -78,11 +77,7 @@ impl DebugCategory {
     }
 
     pub fn get_color(&self) -> ::DebugColorFlags {
-        unsafe {
-            from_glib(
-                ffi::gst_debug_category_get_color(self.0.as_ptr()),
-            )
-        }
+        unsafe { from_glib(ffi::gst_debug_category_get_color(self.0.as_ptr())) }
     }
 
     pub fn get_name(&self) -> &str {
