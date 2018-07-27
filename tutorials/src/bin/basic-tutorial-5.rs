@@ -13,9 +13,6 @@ mod tutorial5 {
     extern crate gtk;
     use self::gtk::*;
 
-    extern crate send_cell;
-    use self::send_cell::SendCell;
-
     extern crate gstreamer as gst;
     extern crate gstreamer_video as gst_video;
     use self::gst_video::prelude::*;
@@ -48,12 +45,7 @@ mod tutorial5 {
     }
 
     // Extract tags from streams of @stype and add the info in the UI.
-    fn add_streams_info(
-        playbin: &gst::Element,
-        textbufcell: &SendCell<gtk::TextBuffer>,
-        stype: &str,
-    ) {
-        let textbuf = textbufcell.borrow();
+    fn add_streams_info(playbin: &gst::Element, textbuf: &gtk::TextBuffer, stype: &str) {
         let propname: &str = &format!("n-{}", stype);
         let signame: &str = &format!("get-{}-tags", stype);
 
@@ -94,15 +86,14 @@ mod tutorial5 {
     }
 
     // Extract metadata from all the streams and write it to the text widget in the GUI
-    fn analyze_streams(playbin: &gst::Element, textbufcell: &SendCell<gtk::TextBuffer>) {
+    fn analyze_streams(playbin: &gst::Element, textbuf: &gtk::TextBuffer) {
         {
-            let textbuf = textbufcell.borrow();
             textbuf.set_text("");
         }
 
-        add_streams_info(playbin, textbufcell, "video");
-        add_streams_info(playbin, textbufcell, "audio");
-        add_streams_info(playbin, textbufcell, "text");
+        add_streams_info(playbin, textbuf, "video");
+        add_streams_info(playbin, textbuf, "audio");
+        add_streams_info(playbin, textbuf, "text");
     }
 
     // This creates all the GTK+ widgets that compose our application, and registers the callbacks
@@ -256,11 +247,7 @@ mod tutorial5 {
         let streams_list = gtk::TextView::new();
         streams_list.set_editable(false);
         let pipeline_weak = playbin.downgrade();
-        let textbuf = SendCell::new(
-            streams_list
-                .get_buffer()
-                .expect("Couldn't get buffer from text_view"),
-        );
+        let streams_list_weak = glib::SendWeakRef::from(streams_list.downgrade());
         playbin
             .get_bus()
             .unwrap()
@@ -271,7 +258,15 @@ mod tutorial5 {
                         None => return,
                     };
 
+                    let streams_list = match streams_list_weak.upgrade() {
+                        Some(streams_list) => streams_list,
+                        None => return,
+                    };
+
                     if application.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
+                        let textbuf = streams_list
+                            .get_buffer()
+                            .expect("Couldn't get buffer from text_view");
                         analyze_streams(&pipeline, &textbuf);
                     }
                 }
@@ -326,9 +321,7 @@ mod tutorial5 {
         let uri = "https://www.freedesktop.org/software/gstreamer-sdk/\
                    data/media/sintel_trailer-480p.webm";
         let playbin = gst::ElementFactory::make("playbin", None).unwrap();
-        playbin
-            .set_property("uri", &uri)
-            .unwrap();
+        playbin.set_property("uri", &uri).unwrap();
 
         playbin
             .connect("video-tags-changed", false, |args| {

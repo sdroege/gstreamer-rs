@@ -18,7 +18,6 @@ gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = t
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
 futures-preview = { version = "0.2", optional = true }
-send-cell = "0.1"
 byte-slice-cast = "0.2"
 failure = "0.1"
 failure_derive = "0.1"
