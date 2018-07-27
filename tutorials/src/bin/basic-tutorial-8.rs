@@ -127,30 +127,34 @@ fn main() {
     let audio_caps = info.to_caps().unwrap();
 
     let appsrc = appsrc
-        .clone()
         .dynamic_cast::<AppSrc>()
         .expect("Source element is expected to be an appsrc!");
     appsrc.set_caps(&audio_caps);
     appsrc.set_property_format(gst::Format::Time);
 
     let appsink = appsink
-        .clone()
         .dynamic_cast::<AppSink>()
         .expect("Sink element is expected to be an appsink!");
 
     let data: Arc<Mutex<CustomData>> = Arc::new(Mutex::new(CustomData::new(&appsrc, &appsink)));
 
-    let data_clone = Arc::clone(&data);
+    let data_weak = Arc::downgrade(&data);
     appsrc.connect_need_data(move |_, _size| {
-        let data = &data_clone;
+        let data = match data_weak.upgrade() {
+            Some(data) => data,
+            None => return,
+        };
         let mut d = data.lock().unwrap();
 
         if d.source_id.is_none() {
             println!("start feeding");
 
-            let data_clone = Arc::clone(data);
+            let data_weak = Arc::downgrade(&data);
             d.source_id = Some(glib::source::idle_add(move || {
-                let data = &data_clone;
+                let data = match data_weak.upgrade() {
+                    Some(data) => data,
+                    None => return glib::Continue(false),
+                };
 
                 let (appsrc, buffer) = {
                     let mut data = data.lock().unwrap();
@@ -198,9 +202,12 @@ fn main() {
         }
     });
 
-    let data_clone = Arc::clone(&data);
+    let data_weak = Arc::downgrade(&data);
     appsrc.connect_enough_data(move |_| {
-        let data = &data_clone;
+        let data = match data_weak.upgrade() {
+            Some(data) => data,
+            None => return,
+        };
 
         let mut data = data.lock().unwrap();
         if let Some(source) = data.source_id.take() {
@@ -213,10 +220,15 @@ fn main() {
     appsink.set_emit_signals(true);
     appsink.set_caps(&audio_caps);
 
-    let data_clone = Arc::clone(&data);
+    let data_weak = Arc::downgrade(&data);
     appsink.connect_new_sample(move |_| {
+        let data = match data_weak.upgrade() {
+            Some(data) => data,
+            None => return gst::FlowReturn::Ok,
+        };
+
         let appsink = {
-            let data = &data_clone.lock().unwrap();
+            let data = data.lock().unwrap();
             data.appsink.clone()
         };
 
@@ -230,10 +242,6 @@ fn main() {
         gst::FlowReturn::Ok
     });
 
-    pipeline
-        .set_state(gst::State::Playing)
-        .into_result()
-        .expect("Unable to set the pipeline to the Playing state.");
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();
     let bus = pipeline.get_bus().unwrap();
@@ -252,10 +260,17 @@ fn main() {
     });
     bus.add_signal_watch();
 
+    pipeline
+        .set_state(gst::State::Playing)
+        .into_result()
+        .expect("Unable to set the pipeline to the Playing state.");
+
     main_loop.run();
 
     pipeline
         .set_state(gst::State::Null)
         .into_result()
         .expect("Unable to set the pipeline to the Null state.");
+
+    bus.remove_signal_watch();
 }

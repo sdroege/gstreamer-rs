@@ -20,6 +20,33 @@ mod tutorial5 {
     extern crate gstreamer_video as gst_video;
     use self::gst_video::prelude::*;
 
+    use std::ops;
+
+    // Custom struct to keep our window reference alive
+    // and to store the timeout id so that we can remove
+    // it from the main context again later and drop the
+    // references it keeps inside its closures
+    struct AppWindow {
+        main_window: Window,
+        timeout_id: Option<glib::SourceId>,
+    }
+
+    impl ops::Deref for AppWindow {
+        type Target = Window;
+
+        fn deref(&self) -> &Window {
+            &self.main_window
+        }
+    }
+
+    impl Drop for AppWindow {
+        fn drop(&mut self) {
+            if let Some(source_id) = self.timeout_id.take() {
+                glib::source_remove(source_id);
+            }
+        }
+    }
+
     // Extract tags from streams of @stype and add the info in the UI.
     fn add_streams_info(
         playbin: &gst::Element,
@@ -79,7 +106,7 @@ mod tutorial5 {
     }
 
     // This creates all the GTK+ widgets that compose our application, and registers the callbacks
-    pub fn create_ui(playbin: &gst::Element) {
+    fn create_ui(playbin: &gst::Element) -> AppWindow {
         let main_window = Window::new(WindowType::Toplevel);
         main_window.connect_delete_event(|_, _| {
             gtk::main_quit();
@@ -144,7 +171,7 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         let lslider = slider.clone();
         // Update the UI (seekbar) every second
-        gtk::timeout_add_seconds(1, move || {
+        let timeout_id = gtk::timeout_add_seconds(1, move || {
             let pipeline = &pipeline;
             let lslider = &lslider;
 
@@ -228,7 +255,7 @@ mod tutorial5 {
 
         let streams_list = gtk::TextView::new();
         streams_list.set_editable(false);
-        let pipeline = playbin.clone();
+        let pipeline_weak = playbin.downgrade();
         let textbuf = SendCell::new(
             streams_list
                 .get_buffer()
@@ -239,6 +266,11 @@ mod tutorial5 {
             .unwrap()
             .connect_message(move |_, msg| match msg.view() {
                 gst::MessageView::Application(application) => {
+                    let pipeline = match pipeline_weak.upgrade() {
+                        Some(pipeline) => pipeline,
+                        None => return,
+                    };
+
                     if application.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
                         analyze_streams(&pipeline, &textbuf);
                     }
@@ -257,6 +289,11 @@ mod tutorial5 {
         main_window.set_default_size(640, 480);
 
         main_window.show_all();
+
+        AppWindow {
+            main_window,
+            timeout_id: Some(timeout_id),
+        }
     }
 
     // We are possibly in a GStreamer working thread, so we notify the main
@@ -290,43 +327,45 @@ mod tutorial5 {
                    data/media/sintel_trailer-480p.webm";
         let playbin = gst::ElementFactory::make("playbin", None).unwrap();
         playbin
-            .set_property("uri", &glib::Value::from(uri))
+            .set_property("uri", &uri)
             .unwrap();
 
-        let pipeline = playbin.clone();
         playbin
-            .connect("video-tags-changed", false, move |_| {
+            .connect("video-tags-changed", false, |args| {
+                let pipeline = args[0].get::<gst::Element>().unwrap();
                 post_app_message(&pipeline);
                 None
             })
             .unwrap();
 
-        let pipeline = playbin.clone();
         playbin
-            .connect("audio-tags-changed", false, move |_| {
+            .connect("audio-tags-changed", false, |args| {
+                let pipeline = args[0].get::<gst::Element>().unwrap();
                 post_app_message(&pipeline);
                 None
             })
             .unwrap();
 
-        let pipeline = playbin.clone();
         playbin
-            .connect("text-tags-changed", false, move |_| {
+            .connect("text-tags-changed", false, move |args| {
+                let pipeline = args[0].get::<gst::Element>().unwrap();
                 post_app_message(&pipeline);
                 None
             })
             .unwrap();
 
-        create_ui(&playbin);
-        playbin
-            .set_state(gst::State::Playing)
-            .into_result()
-            .unwrap();
+        let window = create_ui(&playbin);
 
         let bus = playbin.get_bus().unwrap();
-        let pipeline = playbin.clone();
         bus.add_signal_watch();
-        playbin.get_bus().unwrap().connect_message(move |_, msg| {
+
+        let pipeline_weak = playbin.downgrade();
+        bus.connect_message(move |_, msg| {
+            let pipeline = match pipeline_weak.upgrade() {
+                Some(pipeline) => pipeline,
+                None => return,
+            };
+
             match msg.view() {
                 //  This is called when an End-Of-Stream message is posted on the bus.
                 // We just set the pipeline to READY (which stops playback).
@@ -359,8 +398,16 @@ mod tutorial5 {
             }
         });
 
+        playbin
+            .set_state(gst::State::Playing)
+            .into_result()
+            .unwrap();
+
         gtk::main();
+        window.hide();
         playbin.set_state(gst::State::Null).into_result().unwrap();
+
+        bus.remove_signal_watch();
     }
 }
 

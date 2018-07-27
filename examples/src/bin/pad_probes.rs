@@ -17,12 +17,11 @@ fn example_main() {
         "audiotestsrc name=src ! audio/x-raw,format={},channels=1 ! fakesink",
         gst_audio::AUDIO_FORMAT_S16.to_string()
     )).unwrap();
-    let bus = pipeline.get_bus().unwrap();
+    let pipeline = pipeline
+        .dynamic_cast::<gst::Pipeline>()
+        .unwrap();
 
     let src = pipeline
-        .clone()
-        .dynamic_cast::<gst::Bin>()
-        .unwrap()
         .get_by_name("src")
         .unwrap();
     let src_pad = src.get_static_pad("src").unwrap();
@@ -53,6 +52,7 @@ fn example_main() {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
+    let bus = pipeline.get_bus().unwrap();
     while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 

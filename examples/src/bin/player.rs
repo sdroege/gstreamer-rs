@@ -32,21 +32,17 @@ fn main_loop(uri: &str) -> Result<(), Error> {
 
     let error = Arc::new(Mutex::new(Ok(())));
 
-    let player_clone = player.clone();
     let main_loop_clone = main_loop.clone();
-    player.connect_end_of_stream(move |_| {
+    player.connect_end_of_stream(move |player| {
         let main_loop = &main_loop_clone;
-        let player = &player_clone;
         player.stop();
         main_loop.quit();
     });
 
-    let player_clone = player.clone();
     let main_loop_clone = main_loop.clone();
     let error_clone = Arc::clone(&error);
-    player.connect_error(move |_, err| {
+    player.connect_error(move |player, err| {
         let main_loop = &main_loop_clone;
-        let player = &player_clone;
         let error = &error_clone;
 
         *error.lock().unwrap() = Err(err.clone());

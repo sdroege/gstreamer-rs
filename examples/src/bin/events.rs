@@ -17,11 +17,12 @@ fn example_main() {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    let main_loop_clone = main_loop.clone();
-
-    let pipeline_clone = pipeline.clone();
+    let pipeline_weak = pipeline.downgrade();
     glib::timeout_add_seconds(5, move || {
-        let pipeline = &pipeline_clone;
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return glib::Continue(false),
+        };
 
         println!("sending eos");
 
@@ -33,6 +34,7 @@ fn example_main() {
 
     //bus.add_signal_watch();
     //bus.connect_message(move |_, msg| {
+    let main_loop_clone = main_loop.clone();
     bus.add_watch(move |_, msg| {
         use gst::MessageView;
 
@@ -61,6 +63,8 @@ fn example_main() {
 
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+
+    bus.remove_watch();
 }
 
 fn main() {

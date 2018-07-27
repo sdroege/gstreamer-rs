@@ -41,7 +41,7 @@ fn main_loop() -> Result<(), Error> {
 
     mounts.add_factory("/test", &factory);
 
-    server.attach(None);
+    let id = server.attach(None);
 
     println!(
         "Stream ready at rtsp://127.0.0.1:{}/test",
@@ -49,6 +49,8 @@ fn main_loop() -> Result<(), Error> {
     );
 
     main_loop.run();
+
+    glib::source_remove(id);
 
     Ok(())
 }

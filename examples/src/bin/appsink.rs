@@ -47,7 +47,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     pipeline.add_many(&[&src, &sink])?;
     src.link(&sink)?;
 
-    let appsink = sink.clone()
+    let appsink = sink
         .dynamic_cast::<gst_app::AppSink>()
         .expect("Sink element is expected to be an appsink!");
 

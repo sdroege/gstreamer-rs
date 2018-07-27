@@ -30,9 +30,12 @@ fn example_main() {
     gst::Element::link_many(&[&src, &decodebin]).unwrap();
 
     // Need to move a new reference into the closure
-    let pipeline_clone = pipeline.clone();
+    let pipeline_weak = pipeline.downgrade();
     decodebin.connect_pad_added(move |_, src_pad| {
-        let pipeline = &pipeline_clone;
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return,
+        };
         let queue = gst::ElementFactory::make("queue", None).unwrap();
         let sink = gst::ElementFactory::make("fakesink", None).unwrap();
 

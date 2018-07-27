@@ -32,11 +32,18 @@ fn tutorial_main() {
         .expect("Can't set uri property on uridecodebin");
 
     // Connect the pad-added signal
-    let pipeline_clone = pipeline.clone();
-    let convert_clone = convert.clone();
+    let pipeline_weak = pipeline.downgrade();
+    let convert_weak = convert.downgrade();
     source.connect_pad_added(move |_, src_pad| {
-        let pipeline = &pipeline_clone;
-        let convert = &convert_clone;
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return,
+        };
+
+        let convert = match convert_weak.upgrade() {
+            Some(convert) => convert,
+            None => return,
+        };
 
         println!(
             "Received new pad {} from {}",

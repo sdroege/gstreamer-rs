@@ -50,6 +50,8 @@ fn example_main() {
 
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+
+    bus.remove_watch();
 }
 
 fn main() {

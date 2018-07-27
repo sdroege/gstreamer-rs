@@ -10,9 +10,7 @@ extern crate gtk;
 use gtk::prelude::*;
 
 use std::env;
-
-extern crate send_cell;
-use send_cell::SendCell;
+use std::cell::RefCell;
 
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
@@ -45,9 +43,13 @@ fn create_ui(app: &gtk::Application) {
 
     app.add_window(&window);
 
-    let pipeline_clone = pipeline.clone();
-    gtk::timeout_add(500, move || {
-        let pipeline = &pipeline_clone;
+    let pipeline_weak = pipeline.downgrade();
+    let timeout_id = gtk::timeout_add(500, move || {
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return glib::Continue(true),
+        };
+
         let position = pipeline
             .query_position::<gst::ClockTime>()
             .unwrap_or_else(|| 0.into());
@@ -56,9 +58,13 @@ fn create_ui(app: &gtk::Application) {
         glib::Continue(true)
     });
 
-    let app_clone = app.clone();
+    let app_weak = app.downgrade();
     window.connect_delete_event(move |_, _| {
-        let app = &app_clone;
+        let app = match app_weak.upgrade() {
+            Some(app) => app,
+            None => return Inhibit(false),
+        };
+
         app.quit();
         Inhibit(false)
     });
@@ -68,11 +74,15 @@ fn create_ui(app: &gtk::Application) {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    let app_clone = SendCell::new(app.clone());
+    let app_weak = glib::SendWeakRef::from(app.downgrade());
     bus.add_watch(move |_, msg| {
         use gst::MessageView;
 
-        let app = app_clone.borrow();
+        let app = match app_weak.upgrade() {
+            Some(app) => app,
+            None => return glib::Continue(false),
+        };
+
         match msg.view() {
             MessageView::Eos(..) => gtk::main_quit(),
             MessageView::Error(err) => {
@@ -90,11 +100,17 @@ fn create_ui(app: &gtk::Application) {
         glib::Continue(true)
     });
 
-    let pipeline_clone = pipeline.clone();
+    // Pipeline reference is owned by the closure below, so will be
+    // destroyed once the app is destroyed
+    let timeout_id = RefCell::new(Some(timeout_id));
     app.connect_shutdown(move |_| {
-        let pipeline = &pipeline_clone;
         let ret = pipeline.set_state(gst::State::Null);
         assert_ne!(ret, gst::StateChangeReturn::Failure);
+
+        bus.remove_watch();
+        if let Some(timeout_id) = timeout_id.borrow_mut().take() {
+            glib::source_remove(timeout_id);
+        }
     });
 }
 

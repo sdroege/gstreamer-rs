@@ -23,9 +23,12 @@ fn example_main() {
 
     let main_loop_clone = main_loop.clone();
 
-    let pipeline_clone = pipeline.clone();
-    glib::timeout_add_seconds(1, move || {
-        let pipeline = &pipeline_clone;
+    let pipeline_weak = pipeline.downgrade();
+    let timeout_id = glib::timeout_add_seconds(1, move || {
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return glib::Continue(true),
+        };
 
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
         //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
@@ -81,6 +84,9 @@ fn example_main() {
 
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
+
+    bus.remove_watch();
+    glib::source_remove(timeout_id);
 }
 
 fn main() {

@@ -20,8 +20,7 @@ use std::env;
 
 use std::os::raw::c_void;
 
-extern crate send_cell;
-use send_cell::SendCell;
+use std::cell::RefCell;
 
 use std::process;
 
@@ -49,9 +48,13 @@ fn create_ui(app: &gtk::Application) {
     video_window.set_size_request(320, 240);
     let video_overlay = sink.clone()
         .dynamic_cast::<gst_video::VideoOverlay>()
-        .unwrap();
+        .unwrap()
+        .downgrade();
     video_window.connect_realize(move |video_window| {
-        let video_overlay = &video_overlay;
+        let video_overlay = match video_overlay.upgrade() {
+            Some(video_overlay) => video_overlay,
+            None => return,
+        };
 
         let gdk_window = video_window.get_window().unwrap();
 
@@ -108,9 +111,13 @@ fn create_ui(app: &gtk::Application) {
 
     app.add_window(&window);
 
-    let pipeline_clone = pipeline.clone();
-    gtk::timeout_add(500, move || {
-        let pipeline = &pipeline_clone;
+    let pipeline_weak = pipeline.downgrade();
+    let timeout_id = gtk::timeout_add(500, move || {
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return glib::Continue(true),
+        };
+
         let position = pipeline
             .query_position::<gst::ClockTime>()
             .unwrap_or_else(|| 0.into());
@@ -119,9 +126,13 @@ fn create_ui(app: &gtk::Application) {
         glib::Continue(true)
     });
 
-    let app_clone = app.clone();
+    let app_weak = app.downgrade();
     window.connect_delete_event(move |_, _| {
-        let app = &app_clone;
+        let app = match app_weak.upgrade() {
+            Some(app) => app,
+            None => return Inhibit(false),
+        };
+
         app.quit();
         Inhibit(false)
     });
@@ -131,11 +142,15 @@ fn create_ui(app: &gtk::Application) {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    let app_clone = SendCell::new(app.clone());
+    let app_weak = glib::SendWeakRef::from(app.downgrade());
     bus.add_watch(move |_, msg| {
         use gst::MessageView;
 
-        let app = app_clone.borrow();
+        let app = match app_weak.upgrade() {
+            Some(app) => app,
+            None => return glib::Continue(false),
+        };
+
         match msg.view() {
             MessageView::Eos(..) => gtk::main_quit(),
             MessageView::Error(err) => {
@@ -153,11 +168,17 @@ fn create_ui(app: &gtk::Application) {
         glib::Continue(true)
     });
 
-    let pipeline_clone = pipeline.clone();
+    // Pipeline reference is owned by the closure below, so will be
+    // destroyed once the app is destroyed
+    let timeout_id = RefCell::new(Some(timeout_id));
     app.connect_shutdown(move |_| {
-        let pipeline = &pipeline_clone;
         let ret = pipeline.set_state(gst::State::Null);
         assert_ne!(ret, gst::StateChangeReturn::Failure);
+
+        bus.remove_watch();
+        if let Some(timeout_id) = timeout_id.borrow_mut().take() {
+            glib::source_remove(timeout_id);
+        }
     });
 }
 

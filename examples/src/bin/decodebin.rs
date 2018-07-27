@@ -53,10 +53,12 @@ fn example_main() -> Result<(), Error> {
     pipeline.add_many(&[&src, &decodebin])?;
     gst::Element::link_many(&[&src, &decodebin])?;
 
-    // Need to move a new reference into the closure
-    let pipeline_clone = pipeline.clone();
+    let pipeline_weak = pipeline.downgrade();
     decodebin.connect_pad_added(move |dbin, src_pad| {
-        let pipeline = &pipeline_clone;
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return,
+        };
 
         let (is_audio, is_video) = {
             let media_type = src_pad.get_current_caps().and_then(|caps| {

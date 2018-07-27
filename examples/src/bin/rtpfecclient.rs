@@ -205,9 +205,14 @@ fn example_main() -> Result<(), Error> {
     let sinkpad = get_request_pad(&rtpbin, "recv_rtp_sink_0")?;
     srcpad.link(&sinkpad).into_result()?;
 
-    let depay_clone = depay.clone();
+    let depay_weak = depay.downgrade();
     rtpbin.connect_pad_added(move |rtpbin, src_pad| {
-        match connect_rtpbin_srcpad(&src_pad, &depay_clone) {
+        let depay = match depay_weak.upgrade() {
+            Some(depay) => depay,
+            None => return,
+        };
+
+        match connect_rtpbin_srcpad(&src_pad, &depay) {
             Ok(_) => (),
             Err(err) => {
                 gst_element_error!(
@@ -245,6 +250,9 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
+                let ret = pipeline.set_state(gst::State::Null);
+                assert_ne!(ret, gst::StateChangeReturn::Failure);
+
                 return Err(ErrorMessage {
                     src: msg.get_src()
                         .map(|s| s.get_path_string())

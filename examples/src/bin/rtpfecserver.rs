@@ -183,6 +183,9 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
+                let ret = pipeline.set_state(gst::State::Null);
+                assert_ne!(ret, gst::StateChangeReturn::Failure);
+
                 return Err(ErrorMessage {
                     src: msg.get_src()
                         .map(|s| s.get_path_string())

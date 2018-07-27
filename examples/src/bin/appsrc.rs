@@ -46,7 +46,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     pipeline.add_many(&[&src, &videoconvert, &sink])?;
     gst::Element::link_many(&[&src, &videoconvert, &sink])?;
 
-    let appsrc = src.clone()
+    let appsrc = src
         .dynamic_cast::<gst_app::AppSrc>()
         .expect("Source element is expected to be an appsrc!");
 
