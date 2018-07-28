@@ -6,34 +6,20 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use serde::de;
 use serde::de::{Deserialize, Deserializer};
-use serde::ser::{Serialize, SerializeStruct, Serializer};
+use serde::ser::{Serialize, Serializer};
 
 use Format;
+use FormattedSegment;
+use FormattedValue;
 use GenericFormattedValue;
 use Segment;
 use SegmentFlags;
+use SpecificFormattedValue;
 
-impl<'a> Serialize for Segment {
-    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let mut datetime = serializer.serialize_struct("Segment", 11)?;
-        datetime.serialize_field("flags", &self.get_flags())?;
-        datetime.serialize_field("rate", &self.get_rate())?;
-        datetime.serialize_field("applied_rate", &self.get_applied_rate())?;
-        datetime.serialize_field("format", &self.get_format())?;
-        datetime.serialize_field("base", &self.get_base().get_value())?;
-        datetime.serialize_field("offset", &self.get_offset().get_value())?;
-        datetime.serialize_field("start", &self.get_start().get_value())?;
-        datetime.serialize_field("stop", &self.get_stop().get_value())?;
-        datetime.serialize_field("time", &self.get_time().get_value())?;
-        datetime.serialize_field("position", &self.get_position().get_value())?;
-        datetime.serialize_field("duration", &self.get_duration().get_value())?;
-        datetime.end()
-    }
-}
-
-#[derive(Deserialize)]
-struct SegmentDe {
+#[derive(Serialize, Deserialize)]
+struct FormattedSegmentSerde {
     flags: SegmentFlags,
     rate: f64,
     applied_rate: f64,
@@ -47,49 +33,82 @@ struct SegmentDe {
     duration: i64,
 }
 
-impl From<SegmentDe> for Segment {
-    fn from(segment_de: SegmentDe) -> Self {
-        let mut segment = Segment::new();
-        segment.set_flags(segment_de.flags);
-        segment.set_rate(segment_de.rate);
-        segment.set_applied_rate(segment_de.applied_rate);
-        segment.set_format(segment_de.format);
-        segment.set_base(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.base,
-        ));
-        segment.set_offset(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.offset,
-        ));
-        segment.set_start(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.start,
-        ));
-        segment.set_stop(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.stop,
-        ));
-        segment.set_time(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.time,
-        ));
-        segment.set_position(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.position,
-        ));
-        segment.set_duration(GenericFormattedValue::new(
-            segment_de.format,
-            segment_de.duration,
-        ));
-
-        segment
+impl<T: FormattedValue> Serialize for FormattedSegment<T> {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let fmt_seg = unsafe {
+            FormattedSegmentSerde {
+                flags: self.get_flags(),
+                rate: self.get_rate(),
+                applied_rate: self.get_applied_rate(),
+                format: self.get_format(),
+                base: self.get_base().to_raw_value(),
+                offset: self.get_offset().to_raw_value(),
+                start: self.get_start().to_raw_value(),
+                stop: self.get_stop().to_raw_value(),
+                time: self.get_time().to_raw_value(),
+                position: self.get_position().to_raw_value(),
+                duration: self.get_duration().to_raw_value(),
+            }
+        };
+        fmt_seg.serialize(serializer)
     }
 }
 
 impl<'de> Deserialize<'de> for Segment {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        SegmentDe::deserialize(deserializer).and_then(|segment_de| Ok(segment_de.into()))
+        FormattedSegmentSerde::deserialize(deserializer).map(|fmt_seg_de| {
+            let mut segment = Self::new();
+            segment.set_flags(fmt_seg_de.flags);
+            segment.set_rate(fmt_seg_de.rate);
+            segment.set_applied_rate(fmt_seg_de.applied_rate);
+            segment.set_format(fmt_seg_de.format);
+            segment.set_base(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.base,
+            ));
+            segment.set_offset(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.offset,
+            ));
+            segment.set_start(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.start,
+            ));
+            segment.set_stop(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.stop,
+            ));
+            segment.set_time(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.time,
+            ));
+            segment.set_position(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.position,
+            ));
+            segment.set_duration(GenericFormattedValue::new(
+                fmt_seg_de.format,
+                fmt_seg_de.duration,
+            ));
+
+            segment
+        })
+    }
+}
+
+impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for FormattedSegment<T> {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        Segment::deserialize(deserializer)
+            .and_then(|segment| {
+                segment.downcast::<T>()
+                    .map_err(|segment| {
+                        de::Error::custom(format!(
+                            "failed to convert segment with format {:?} to {:?}",
+                            segment.get_format(),
+                            T::get_default_format(),
+                        ))
+                    })
+            })
     }
 }
 
@@ -147,7 +166,7 @@ mod tests {
     }
 
     #[test]
-    fn test_deserialize() {
+    fn test_deserialize_segment() {
         ::init().unwrap();
 
         let segment_ron = r#"
@@ -204,5 +223,47 @@ mod tests {
             segment.get_duration(),
             GenericFormattedValue::Time(ClockTime::none())
         );
+    }
+
+    #[test]
+    fn test_deserialize_formatted() {
+        use format::Time;
+        use FormattedSegment;
+
+        ::init().unwrap();
+
+        let segment_ron = r#"
+            (
+                flags: (
+                    bits: 9,
+                ),
+                rate: 1,
+                applied_rate: 0.9,
+                format: Time,
+                base: 123,
+                offset: 42,
+                start: 1024,
+                stop: 2048,
+                time: 1042,
+                position: 256,
+                duration: -1,
+            )
+        "#;
+
+        let fmt_seg: FormattedSegment<Time> = ron::de::from_str(segment_ron).unwrap();
+        assert_eq!(
+            fmt_seg.get_flags(),
+            SegmentFlags::RESET | SegmentFlags::SEGMENT
+        );
+        assert_eq!(fmt_seg.get_rate(), 1f64);
+        assert_eq!(fmt_seg.get_applied_rate(), 0.9f64);
+        assert_eq!(fmt_seg.get_format(), Format::Time);
+        assert_eq!(fmt_seg.get_base(), ClockTime::from_nseconds(123));
+        assert_eq!(fmt_seg.get_offset(), ClockTime::from_nseconds(42));
+        assert_eq!(fmt_seg.get_start(), ClockTime::from_nseconds(1024));
+        assert_eq!(fmt_seg.get_stop(), ClockTime::from_nseconds(2048));
+        assert_eq!(fmt_seg.get_time(), ClockTime::from_nseconds(1042));
+        assert_eq!(fmt_seg.get_position(), ClockTime::from_nseconds(256));
+        assert_eq!(fmt_seg.get_duration(), ClockTime::none());
     }
 }
