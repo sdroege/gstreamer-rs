@@ -55,7 +55,7 @@ impl<'a> Serialize for Fraction {
 impl<'de> Deserialize<'de> for Fraction {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         Rational32::deserialize(deserializer)
-            .and_then(|rational| Ok(Fraction::new(*rational.numer(), *rational.denom())))
+            .map(|rational| Fraction::new(*rational.numer(), *rational.denom()))
     }
 }
 
@@ -165,7 +165,7 @@ macro_rules! de_value(
         {
             let value = $seq
                 .next_element::<$t>()?
-                .and_then(|base_value| Some(base_value.to_value()));
+                .map(|base_value| base_value.to_value());
             Ok(value)
         }
     );
