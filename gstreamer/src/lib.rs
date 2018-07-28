@@ -214,6 +214,8 @@ pub use typefind::*;
 
 pub mod format;
 pub use format::{FormattedValue, GenericFormattedValue, SpecificFormattedValue};
+#[cfg(feature = "ser_de")]
+pub(crate) mod format_serde;
 
 mod segment;
 pub use segment::*;
