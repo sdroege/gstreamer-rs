@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use serde::de;
-use serde::de::{Deserialize, Deserializer, SeqAccess, Visitor};
+use serde::de::{Deserialize, Deserializer, EnumAccess, SeqAccess, VariantAccess, Visitor};
 use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::fmt;
@@ -16,6 +16,25 @@ use Caps;
 use CapsRef;
 use Structure;
 use StructureRef;
+
+enum CapsVariantKinds {
+    Any,
+    Empty,
+    Some,
+}
+
+const CAPS_VARIANT_ANY_ID: u32 = 0;
+const CAPS_VARIANT_ANY_STR: &str = "Any";
+const CAPS_VARIANT_EMPTY_ID: u32 = 1;
+const CAPS_VARIANT_EMPTY_STR: &str = "Empty";
+const CAPS_VARIANT_SOME_ID: u32 = 2;
+const CAPS_VARIANT_SOME_STR: &str = "Some";
+
+const CAPS_VARIANT_NAMES: &[&str] = &[
+    &CAPS_VARIANT_ANY_STR,
+    &CAPS_VARIANT_EMPTY_STR,
+    &CAPS_VARIANT_SOME_STR,
+];
 
 // `CapsFeature` is not available in `gstreamer-rs` yet
 struct CapsItemSe<'a>(&'a StructureRef);
@@ -30,9 +49,10 @@ impl<'a> Serialize for CapsItemSe<'a> {
     }
 }
 
-impl Serialize for CapsRef {
+struct CapsForIterSe<'a>(&'a CapsRef);
+impl<'a> Serialize for CapsForIterSe<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let iter = self.iter();
+        let iter = self.0.iter();
         let size = iter.size_hint().0;
         if size > 0 {
             let mut seq = serializer.serialize_seq(Some(size))?;
@@ -43,6 +63,31 @@ impl Serialize for CapsRef {
         } else {
             let seq = serializer.serialize_seq(None)?;
             seq.end()
+        }
+    }
+}
+
+impl Serialize for CapsRef {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        if self.is_any() {
+            serializer.serialize_unit_variant(
+                stringify!(Caps),
+                CAPS_VARIANT_ANY_ID,
+                CAPS_VARIANT_ANY_STR,
+            )
+        } else if self.is_empty() {
+            serializer.serialize_unit_variant(
+                stringify!(Caps),
+                CAPS_VARIANT_EMPTY_ID,
+                CAPS_VARIANT_EMPTY_STR,
+            )
+        } else {
+            serializer.serialize_newtype_variant(
+                stringify!(Caps),
+                CAPS_VARIANT_SOME_ID,
+                CAPS_VARIANT_SOME_STR,
+                &CapsForIterSe(&self),
+            )
         }
     }
 }
@@ -96,9 +141,11 @@ impl<'de> Deserialize<'de> for CapsItemDe {
     }
 }
 
-struct CapsVisitor;
-impl<'de> Visitor<'de> for CapsVisitor {
-    type Value = Caps;
+struct CapsSome(Caps);
+
+struct CapsSomeVisitor;
+impl<'de> Visitor<'de> for CapsSomeVisitor {
+    type Value = CapsSome;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         formatter.write_str("a sequence of `(Structure, Option<CapsFeature>)`")
@@ -112,13 +159,76 @@ impl<'de> Visitor<'de> for CapsVisitor {
                 caps.append_structure(caps_item.into());
             }
         }
-        Ok(caps)
+        Ok(CapsSome(caps))
+    }
+}
+
+impl<'de> Deserialize<'de> for CapsSome {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<CapsSome, D::Error> {
+        deserializer.deserialize_seq(CapsSomeVisitor)
+    }
+}
+
+struct CapsVariantKindsVisitor;
+impl<'de> Visitor<'de> for CapsVariantKindsVisitor {
+    type Value = CapsVariantKinds;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("a Caps variant kind (`Any`, `None` or `Some`)")
+    }
+
+    fn visit_u32<E: de::Error>(self, value: u32) -> Result<Self::Value, E> {
+        match value {
+            CAPS_VARIANT_ANY_ID => Ok(CapsVariantKinds::Any),
+            CAPS_VARIANT_EMPTY_ID => Ok(CapsVariantKinds::Empty),
+            CAPS_VARIANT_SOME_ID => Ok(CapsVariantKinds::Some),
+            _ => Err(de::Error::invalid_value(
+                de::Unexpected::Unsigned(value as u64),
+                &self,
+            )),
+        }
+    }
+
+    fn visit_str<E: de::Error>(self, value: &str) -> Result<Self::Value, E> {
+        match value {
+            CAPS_VARIANT_ANY_STR => Ok(CapsVariantKinds::Any),
+            CAPS_VARIANT_EMPTY_STR => Ok(CapsVariantKinds::Empty),
+            CAPS_VARIANT_SOME_STR => Ok(CapsVariantKinds::Some),
+            _ => Err(de::Error::unknown_variant(value, CAPS_VARIANT_NAMES)),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for CapsVariantKinds {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        deserializer.deserialize_identifier(CapsVariantKindsVisitor)
+    }
+}
+
+struct CapsVisitor;
+impl<'de> Visitor<'de> for CapsVisitor {
+    type Value = Caps;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("a Caps enum (`Any`, `None` or `Some()`)")
+    }
+
+    fn visit_enum<A: EnumAccess<'de>>(self, data: A) -> Result<Self::Value, A::Error> {
+        let res = match data.variant()? {
+            (CapsVariantKinds::Any, _v) => Caps::new_any(),
+            (CapsVariantKinds::Empty, _v) => Caps::new_empty(),
+            (CapsVariantKinds::Some, v) => v
+                .newtype_variant::<CapsSome>()
+                .map(|caps_some| caps_some.0)?,
+        };
+
+        Ok(res)
     }
 }
 
 impl<'de> Deserialize<'de> for Caps {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_seq(CapsVisitor)
+        deserializer.deserialize_enum(stringify!(Caps), CAPS_VARIANT_NAMES, CapsVisitor)
     }
 }
 
@@ -145,10 +255,10 @@ mod tests {
         let mut pretty_config = ron::ser::PrettyConfig::default();
         pretty_config.new_line = "".to_string();
 
-        let res = ron::ser::to_string_pretty(&caps, pretty_config);
+        let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
         assert_eq!(
             Ok(concat!(
-                "[",
+                "Some([",
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",
@@ -159,10 +269,18 @@ mod tests {
                 "            (\"i32\", 2),",
                 "        ]),",
                 "    ]), None),",
-                "]"
+                "])"
             ).to_owned()),
             res,
         );
+
+        let caps_any = Caps::new_any();
+        let res = ron::ser::to_string_pretty(&caps_any, pretty_config.clone());
+        assert_eq!(Ok("Any".to_owned()), res);
+
+        let caps_empty = Caps::new_empty();
+        let res = ron::ser::to_string_pretty(&caps_empty, pretty_config.clone());
+        assert_eq!(Ok("Empty".to_owned()), res);
     }
 
     #[test]
@@ -171,8 +289,16 @@ mod tests {
 
         ::init().unwrap();
 
+        let caps_ron = "Any";
+        let caps: Caps = ron::de::from_str(caps_ron).unwrap();
+        assert!(caps.is_any());
+
+        let caps_ron = "Empty";
+        let caps: Caps = ron::de::from_str(caps_ron).unwrap();
+        assert!(caps.is_empty());
+
         let caps_ron = r#"
-            [
+            Some([
                 (
                     ("foo/bar", [
                         ("int", "i32", 12),
@@ -186,7 +312,7 @@ mod tests {
                     ]),
                     None,
                 ),
-            ]"#;
+            ])"#;
         let caps: Caps = ron::de::from_str(caps_ron).unwrap();
         let s = caps.get_structure(0).unwrap();
         assert_eq!(
@@ -202,5 +328,31 @@ mod tests {
                 ],
             ).as_ref()
         );
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let caps = Caps::new_any();
+        let caps_ser = ron::ser::to_string(&caps).unwrap();
+        let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
+        assert!(caps_de.is_any());
+
+        let caps = Caps::new_empty();
+        let caps_ser = ron::ser::to_string(&caps).unwrap();
+        let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
+        assert!(caps_de.is_empty());
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .field("bool", &true)
+            .field("string", &"bla")
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
+            .build();
+        let caps_ser = ron::ser::to_string(&caps).unwrap();
+        let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
+        assert!(caps_de.is_strictly_equal(&caps));
     }
 }
