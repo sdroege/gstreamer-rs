@@ -67,7 +67,7 @@ impl From<SampleDe> for Sample {
 
 impl<'de> Deserialize<'de> for Sample {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        SampleDe::deserialize(deserializer).and_then(|sample_de| Ok(sample_de.into()))
+        SampleDe::deserialize(deserializer).map(|sample_de| sample_de.into())
     }
 }
 
@@ -149,12 +149,12 @@ mod tests {
                 "        buffer: \"AQIDBA==\",",
                 "    )),",
                 "    buffer_list: None,",
-                "    caps: Some([",
+                "    caps: Some(Some([",
                 "        ((\"sample/caps\", [",
                 "            (\"int\", \"i32\", 12),",
                 "            (\"bool\", \"bool\", true),",
                 "        ]), None),",
-                "    ]),",
+                "    ])),",
                 "    segment: Some((",
                 "        flags: (",
                 "            bits: 9,",
@@ -249,12 +249,12 @@ mod tests {
                     buffer: "AQIDBA==",
                 )),
                 buffer_list: None,
-                caps: Some([
+                caps: Some(Some([
                     (("sample/caps", [
                         ("int", "i32", 12),
                         ("bool", "bool", true),
                     ]), None),
-                ]),
+                ])),
                 segment: Some((
                     flags: (
                         bits: 0,
