@@ -23,9 +23,6 @@ use Sample;
 
 use value::*;
 
-pub const ARRAY_TYPE_NAME: &'static str = "Array";
-pub const LIST_TYPE_NAME: &'static str = "List";
-
 fn get_other_type_id<T: StaticType>() -> usize {
     match T::static_type() {
         glib::Type::Other(type_id) => type_id,
@@ -60,43 +57,43 @@ impl<'de> Deserialize<'de> for Fraction {
 }
 
 macro_rules! ser_value (
-    ($value:expr, $t_str:expr, $t:ty, $ser_closure:expr) => (
+    ($value:expr, $t:ty, $ser_closure:expr) => (
         {
             let value = $value.get::<$t>().unwrap();
-            $ser_closure($t_str, value)
+            $ser_closure(stringify!($t), value)
         }
     );
     ($value:expr, $ser_closure:expr) => (
         match $value.type_() {
-            glib::Type::I8 => ser_value!($value, "i8", i8, $ser_closure),
-            glib::Type::U8 => ser_value!($value, "ui8", u8, $ser_closure),
-            glib::Type::Bool => ser_value!($value, "bool", bool, $ser_closure),
-            glib::Type::I32 => ser_value!($value, "i32", i32, $ser_closure),
-            glib::Type::U32 => ser_value!($value, "u32", u32, $ser_closure),
-            glib::Type::I64 => ser_value!($value, "i64", i64, $ser_closure),
-            glib::Type::U64 => ser_value!($value, "u64", u64, $ser_closure),
-            glib::Type::F32 => ser_value!($value, "f32", f32, $ser_closure),
-            glib::Type::F64 => ser_value!($value, "f64", f64, $ser_closure),
-            glib::Type::String => ser_value!($value, "String", String, $ser_closure),
+            glib::Type::I8 => ser_value!($value, i8, $ser_closure),
+            glib::Type::U8 => ser_value!($value, u8, $ser_closure),
+            glib::Type::Bool => ser_value!($value, bool, $ser_closure),
+            glib::Type::I32 => ser_value!($value, i32, $ser_closure),
+            glib::Type::U32 => ser_value!($value, u32, $ser_closure),
+            glib::Type::I64 => ser_value!($value, i64, $ser_closure),
+            glib::Type::U64 => ser_value!($value, u64, $ser_closure),
+            glib::Type::F32 => ser_value!($value, f32, $ser_closure),
+            glib::Type::F64 => ser_value!($value, f64, $ser_closure),
+            glib::Type::String => ser_value!($value, String, $ser_closure),
             glib::Type::Other(type_id) => {
                 if *ARRAY_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, ARRAY_TYPE_NAME, Array, $ser_closure)
+                    ser_value!($value, Array, $ser_closure)
                 } else if *BITMASK_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "Bitmask", Bitmask, $ser_closure)
+                    ser_value!($value, Bitmask, $ser_closure)
                 } else if *DATE_TIME_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "DateTime", DateTime, $ser_closure)
+                    ser_value!($value, DateTime, $ser_closure)
                 } else if *FRACTION_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "Fraction", Fraction, $ser_closure)
+                    ser_value!($value, Fraction, $ser_closure)
                 } else if *FRACTION_RANGE_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "FractionRange", FractionRange, $ser_closure)
+                    ser_value!($value, FractionRange, $ser_closure)
                 } else if *INT_RANGE_I32_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "IntRange<i32>", IntRange<i32>, $ser_closure)
+                    ser_value!($value, IntRange<i32>, $ser_closure)
                 } else if *INT_RANGE_I64_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "IntRange<i64>", IntRange<i64>, $ser_closure)
+                    ser_value!($value, IntRange<i64>, $ser_closure)
                 } else if *LIST_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, LIST_TYPE_NAME, List, $ser_closure)
+                    ser_value!($value, List, $ser_closure)
                 } else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, "Sample", Sample, $ser_closure)
+                    ser_value!($value, Sample, $ser_closure)
                 } else {
                     Err(
                         ser::Error::custom(
@@ -115,7 +112,7 @@ macro_rules! ser_value (
                 )
             }
         }
-    )
+    );
 );
 
 pub(crate) struct SendValue(glib::SendValue);
