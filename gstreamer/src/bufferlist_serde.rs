@@ -184,4 +184,54 @@ mod tests {
             assert_eq!(data.as_slice(), vec![5, 6].as_slice());
         }
     }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        use Buffer;
+
+        ::init().unwrap();
+
+        let mut buffer_list = BufferList::new();
+        {
+            let buffer_list = buffer_list.get_mut().unwrap();
+
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            {
+                let buffer = buffer.get_mut().unwrap();
+                buffer.set_pts(1.into());
+                buffer.set_offset(0);
+                buffer.set_offset_end(4);
+                buffer.set_duration(4.into());
+            }
+            buffer_list.add(buffer);
+
+            let mut buffer = Buffer::from_slice(vec![5, 6]).unwrap();
+            {
+                let buffer = buffer.get_mut().unwrap();
+                buffer.set_pts(5.into());
+                buffer.set_offset(4);
+                buffer.set_offset_end(6);
+                buffer.set_duration(2.into());
+            }
+            buffer_list.add(buffer);
+        }
+        let buffer_list_ser = ron::ser::to_string(&buffer_list).unwrap();
+
+        let buffer_list: BufferList = ron::de::from_str(buffer_list_ser.as_str()).unwrap();
+        let mut iter = buffer_list.iter();
+        let buffer = iter.next().unwrap();
+        assert_eq!(buffer.get_pts(), 1.into());
+        assert_eq!(buffer.get_dts(), None.into());
+        {
+            let data = buffer.map_readable().unwrap();
+            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
+        }
+
+        let buffer = iter.next().unwrap();
+        assert_eq!(buffer.get_pts(), 5.into());
+        {
+            let data = buffer.map_readable().unwrap();
+            assert_eq!(data.as_slice(), vec![5, 6].as_slice());
+        }
+    }
 }

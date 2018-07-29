@@ -220,4 +220,47 @@ mod tests {
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
     }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.set_pts(1.into());
+            buffer.set_offset(3);
+            buffer.set_offset_end(4);
+            buffer.set_duration(5.into());
+            buffer.set_flags(BufferFlags::LIVE | BufferFlags::LAST);
+        }
+
+        // Ron
+        let buffer_ser = ron::ser::to_string(&buffer).unwrap();
+        let buffer_de: Buffer = ron::de::from_str(buffer_ser.as_str()).unwrap();
+        assert_eq!(buffer_de.get_pts(), buffer.get_pts());
+        assert_eq!(buffer_de.get_dts(), buffer.get_dts());
+        assert_eq!(buffer_de.get_offset(), buffer.get_offset());
+        assert_eq!(buffer_de.get_offset_end(), buffer.get_offset_end());
+        assert_eq!(buffer_de.get_duration(), buffer.get_duration());
+        assert_eq!(buffer_de.get_flags(), buffer.get_flags());
+        {
+            let data = buffer_de.map_readable().unwrap();
+            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
+        }
+
+        // Pickle
+        let buffer_ser = serde_pickle::to_vec(&buffer, true).unwrap();
+        let buffer_de: Buffer = serde_pickle::from_slice(buffer_ser.as_slice()).unwrap();
+        assert_eq!(buffer_de.get_pts(), buffer.get_pts());
+        assert_eq!(buffer_de.get_dts(), buffer.get_dts());
+        assert_eq!(buffer_de.get_offset(), buffer.get_offset());
+        assert_eq!(buffer_de.get_offset_end(), buffer.get_offset_end());
+        assert_eq!(buffer_de.get_duration(), buffer.get_duration());
+        assert_eq!(buffer_de.get_flags(), buffer.get_flags());
+        {
+            let data = buffer_de.map_readable().unwrap();
+            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
+        }
+    }
 }

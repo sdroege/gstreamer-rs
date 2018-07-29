@@ -53,7 +53,7 @@ impl From<DateTimeDe> for DateTime {
 
 impl<'de> Deserialize<'de> for DateTime {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        DateTimeDe::deserialize(deserializer).and_then(|datetime_de| Ok(datetime_de.into()))
+        DateTimeDe::deserialize(deserializer).map(|datetime_de| datetime_de.into())
     }
 }
 
@@ -136,5 +136,25 @@ mod tests {
         assert_eq!(datetime.get_minute(), 6);
         assert_eq!(datetime.get_second(), 42);
         assert_eq!(datetime.get_microsecond(), 841_000);
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.841f64);
+        let datetime_ser = ron::ser::to_string(&datetime).unwrap();
+        let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
+        assert_eq!(
+            datetime_de.get_time_zone_offset(),
+            datetime.get_time_zone_offset()
+        );
+        assert_eq!(datetime_de.get_year(), datetime.get_year());
+        assert_eq!(datetime_de.get_month(), datetime.get_month());
+        assert_eq!(datetime_de.get_day(), datetime.get_day());
+        assert_eq!(datetime_de.get_hour(), datetime.get_hour());
+        assert_eq!(datetime_de.get_minute(), datetime.get_minute());
+        assert_eq!(datetime_de.get_second(), datetime.get_second());
+        assert_eq!(datetime_de.get_microsecond(), datetime.get_microsecond());
     }
 }

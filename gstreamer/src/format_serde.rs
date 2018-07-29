@@ -39,16 +39,13 @@ mod tests {
     extern crate ron;
     extern crate serde_json;
 
-    use format::Default;
+    use format::{Buffers, Bytes, Default};
+    use ClockTime;
     use Format;
     use GenericFormattedValue;
 
     #[test]
     fn test_serialize() {
-        use format::Buffers;
-        use format::Bytes;
-        use ClockTime;
-
         ::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
@@ -113,20 +110,44 @@ mod tests {
     fn test_deserialize() {
         ::init().unwrap();
 
-        let format_ron = "Default(Some(42))";
-        let format: GenericFormattedValue = ron::de::from_str(format_ron).unwrap();
-        assert_eq!(format, GenericFormattedValue::Default(Default(Some(42))));
+        let value_ron = "Default(Some(42))";
+        let value_de: GenericFormattedValue = ron::de::from_str(value_ron).unwrap();
+        assert_eq!(value_de, GenericFormattedValue::Default(Default(Some(42))));
 
-        let format_json = "{\"Default\":42}";
-        let format: GenericFormattedValue = serde_json::from_str(format_json).unwrap();
-        assert_eq!(format, GenericFormattedValue::Default(Default(Some(42))));
+        let value_json = "{\"Default\":42}";
+        let value_de: GenericFormattedValue = serde_json::from_str(value_json).unwrap();
+        assert_eq!(value_de, GenericFormattedValue::Default(Default(Some(42))));
 
-        let format_ron = "Other(Percent, 42)";
-        let format: GenericFormattedValue = ron::de::from_str(format_ron).unwrap();
-        assert_eq!(format, GenericFormattedValue::Other(Format::Percent, 42));
+        let value_ron = "Other(Percent, 42)";
+        let value_de: GenericFormattedValue = ron::de::from_str(value_ron).unwrap();
+        assert_eq!(value_de, GenericFormattedValue::Other(Format::Percent, 42));
 
-        let format_json = "{\"Other\":[\"Percent\",42]}";
-        let format: GenericFormattedValue = serde_json::from_str(format_json).unwrap();
-        assert_eq!(format, GenericFormattedValue::Other(Format::Percent, 42));
+        let value_json = "{\"Other\":[\"Percent\",42]}";
+        let value_de: GenericFormattedValue = serde_json::from_str(value_json).unwrap();
+        assert_eq!(value_de, GenericFormattedValue::Other(Format::Percent, 42));
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        macro_rules! test_roundrip(
+            ($value:expr) => {
+                let value_ser = ron::ser::to_string(&$value).unwrap();
+                let value_de: GenericFormattedValue = ron::de::from_str(value_ser.as_str()).unwrap();
+                assert_eq!(value_de, $value);
+            }
+        );
+
+        test_roundrip!(GenericFormattedValue::Undefined(42));
+        test_roundrip!(GenericFormattedValue::Default(Default(Some(42))));
+        test_roundrip!(GenericFormattedValue::Bytes(Bytes(Some(42))));
+        test_roundrip!(GenericFormattedValue::Time(ClockTime::from_nseconds(
+            42_123_456_789
+        )));
+        test_roundrip!(GenericFormattedValue::Buffers(Buffers(Some(42))));
+        test_roundrip!(GenericFormattedValue::Percent(Some(42)));
+        test_roundrip!(GenericFormattedValue::Other(Format::Percent, 42));
+        test_roundrip!(GenericFormattedValue::Other(Format::__Unknown(7), 42));
     }
 }
