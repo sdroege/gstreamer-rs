@@ -265,10 +265,7 @@ mod tests {
             tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
-            tags.add::<DateTime>(
-                &::DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.841f64),
-                TagMergeMode::Append,
-            ); // DateTime
+            tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
 
             let sample = {
                 let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
@@ -303,16 +300,7 @@ mod tests {
                 "        1,",
                 "    ]),",
                 "    (\"datetime\", [",
-                "        (",
-                "            tz_offset: 2,",
-                "            y: 2018,",
-                "            m: 5,",
-                "            d: 28,",
-                "            h: 16,",
-                "            mn: 6,",
-                "            s: 42,",
-                "            us: 841000,",
-                "        ),",
+                "        YMD(2018, 5, 28),",
                 "    ]),",
                 "    (\"image\", [",
                 "        (",
@@ -369,16 +357,7 @@ mod tests {
                 ("bitrate", [96000]),
                 ("replaygain-track-gain", [1]),
                 ("datetime", [
-                    (
-                        tz_offset: 2,
-                        y: 2018,
-                        m: 5,
-                        d: 28,
-                        h: 16,
-                        mn: 6,
-                        s: 42,
-                        us: 841000,
-                    ),
+                    YMD(2018, 5, 28),
                 ]),
                 ("image", [
                     (
@@ -415,7 +394,8 @@ mod tests {
         assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get(), Some(1f64));
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);
-        assert_eq!(datetime.get_microsecond(), 841_000);
+        assert_eq!(datetime.get_month(), 5);
+        assert_eq!(datetime.get_day(), 28);
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {
@@ -429,7 +409,7 @@ mod tests {
                 ["duration", [120000000000]],
                 ["bitrate", [96000]],
                 ["replaygain-track-gain", [1.0]],
-                ["datetime",[{"tz_offset":2.0,"y":2018,"m":5,"d":28,"h":16,"mn":6,"s":42,"us":841000}]],
+                ["datetime",[{"YMD":[2018,5,28]}]],
                 ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
             ]
         "#;
@@ -442,8 +422,9 @@ mod tests {
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get(), Some(96_000));
         assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get(), Some(1f64));
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
+        assert_eq!(datetime.get_year(), 2018);
         assert_eq!(datetime.get_month(), 5);
-        assert_eq!(datetime.get_hour(), 16);
+        assert_eq!(datetime.get_day(), 28);
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {
@@ -465,10 +446,7 @@ mod tests {
             tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
-            tags.add::<DateTime>(
-                &::DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.841f64),
-                TagMergeMode::Append,
-            ); // DateTime
+            tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
 
             let sample = {
                 let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
@@ -506,7 +484,8 @@ mod tests {
         );
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);
-        assert_eq!(datetime.get_microsecond(), 841_000);
+        assert_eq!(datetime.get_month(), 5);
+        assert_eq!(datetime.get_day(), 28);
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {
