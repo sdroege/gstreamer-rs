@@ -28,7 +28,7 @@ use TagMergeMode;
 
 macro_rules! ser_tag (
     ($value:ident, $seq:ident, $t:ty) => (
-        ser_value!($value, (), $t, |_, value| {
+        ser_value!($value, $t, |_, value| {
             $seq.serialize_element(&value)
         })
     );
