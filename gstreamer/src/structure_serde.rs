@@ -165,13 +165,12 @@ impl<'de> Deserialize<'de> for Structure {
 mod tests {
     extern crate ron;
 
+    use Array;
+    use Fraction;
     use Structure;
 
     #[test]
     fn test_serialize() {
-        use Array;
-        use Fraction;
-
         ::init().unwrap();
 
         let s = Structure::builder("test")
@@ -205,9 +204,6 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        use Array;
-        use Fraction;
-
         ::init().unwrap();
 
         let s_ron = r#"
@@ -235,5 +231,21 @@ mod tests {
                 ],
             ).as_ref()
         );
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let s = Structure::builder("test")
+            .field("f1", &"abc")
+            .field("f2", &String::from("bcd"))
+            .field("f3", &123i32)
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
+            .build();
+        let s_ser = ron::ser::to_string(&s).unwrap();
+        let s_de: Structure = ron::de::from_str(s_ser.as_str()).unwrap();
+        assert_eq!(s_de.as_ref(), s.as_ref());
     }
 }

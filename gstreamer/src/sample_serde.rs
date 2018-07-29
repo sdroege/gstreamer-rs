@@ -75,19 +75,18 @@ impl<'de> Deserialize<'de> for Sample {
 mod tests {
     extern crate ron;
 
+    use Buffer;
+    use Caps;
+    use ClockTime;
+    use Format;
+    use GenericFormattedValue;
     use Sample;
+    use Segment;
+    use SegmentFlags;
+    use Structure;
 
     #[test]
     fn test_serialize() {
-        use Buffer;
-        use Caps;
-        use ClockTime;
-        use Format;
-        use GenericFormattedValue;
-        use Segment;
-        use SegmentFlags;
-        use Structure;
-
         ::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
@@ -314,5 +313,64 @@ mod tests {
         // Not true in GStreamer 1.x, should be fixed in version 2.0
         //assert!(sample.get_segment().is_none());
         assert!(sample.get_info().is_none());
+    }
+
+    #[test]
+    fn test_roundrip() {
+        ::init().unwrap();
+
+        // Segment present
+        let sample = {
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            {
+                let buffer = buffer.get_mut().unwrap();
+                buffer.set_pts(1.into());
+                buffer.set_offset(0);
+                buffer.set_offset_end(4);
+                buffer.set_duration(4.into());
+            }
+
+            let caps = Caps::builder("sample/caps")
+                .field("int", &12)
+                .field("bool", &true)
+                .build();
+
+            let mut segment = Segment::new();
+            segment.set_flags(SegmentFlags::RESET | SegmentFlags::SEGMENT);
+            segment.set_rate(1f64);
+            segment.set_applied_rate(0.9f64);
+            segment.set_format(Format::Time);
+            segment.set_base(GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
+            segment.set_offset(GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
+            segment.set_start(GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
+            segment.set_stop(GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
+            segment.set_time(GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
+            segment.set_position(GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
+            segment.set_duration(GenericFormattedValue::Time(ClockTime::none()));
+
+            let info = Structure::builder("sample.info")
+                .field("f3", &123i32)
+                .build();
+
+            Sample::new::<GenericFormattedValue>(
+                Some(&buffer),
+                Some(&caps),
+                Some(&segment),
+                Some(info),
+            )
+        };
+        let sample_ser = ron::ser::to_string(&sample).unwrap();
+        let sample_de: Sample = ron::de::from_str(sample_ser.as_str()).unwrap();
+        let buffer_de = sample_de.get_buffer().unwrap();
+        assert_eq!(buffer_de.get_pts(), 1.into());
+        assert_eq!(buffer_de.get_offset_end(), 4);
+        {
+            let data = buffer_de.map_readable().unwrap();
+            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
+        }
+        assert!(sample_de.get_buffer_list().is_none());
+        assert!(sample_de.get_caps().is_some());
+        assert!(sample_de.get_segment().is_some());
+        assert!(sample_de.get_info().is_some());
     }
 }

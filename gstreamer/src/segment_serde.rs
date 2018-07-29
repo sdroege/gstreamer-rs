@@ -98,17 +98,15 @@ impl<'de> Deserialize<'de> for Segment {
 
 impl<'de, T: FormattedValue + SpecificFormattedValue> Deserialize<'de> for FormattedSegment<T> {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        Segment::deserialize(deserializer)
-            .and_then(|segment| {
-                segment.downcast::<T>()
-                    .map_err(|segment| {
-                        de::Error::custom(format!(
-                            "failed to convert segment with format {:?} to {:?}",
-                            segment.get_format(),
-                            T::get_default_format(),
-                        ))
-                    })
+        Segment::deserialize(deserializer).and_then(|segment| {
+            segment.downcast::<T>().map_err(|segment| {
+                de::Error::custom(format!(
+                    "failed to convert segment with format {:?} to {:?}",
+                    segment.get_format(),
+                    T::get_default_format(),
+                ))
             })
+        })
     }
 }
 
@@ -265,5 +263,37 @@ mod tests {
         assert_eq!(fmt_seg.get_time(), ClockTime::from_nseconds(1042));
         assert_eq!(fmt_seg.get_position(), ClockTime::from_nseconds(256));
         assert_eq!(fmt_seg.get_duration(), ClockTime::none());
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let mut segment = Segment::new();
+        segment.set_flags(SegmentFlags::RESET | SegmentFlags::SEGMENT);
+        segment.set_rate(1f64);
+        segment.set_applied_rate(0.9f64);
+        segment.set_format(Format::Time);
+        segment.set_base(GenericFormattedValue::Time(ClockTime::from_nseconds(123)));
+        segment.set_offset(GenericFormattedValue::Time(ClockTime::from_nseconds(42)));
+        segment.set_start(GenericFormattedValue::Time(ClockTime::from_nseconds(1024)));
+        segment.set_stop(GenericFormattedValue::Time(ClockTime::from_nseconds(2048)));
+        segment.set_time(GenericFormattedValue::Time(ClockTime::from_nseconds(1042)));
+        segment.set_position(GenericFormattedValue::Time(ClockTime::from_nseconds(256)));
+        segment.set_duration(GenericFormattedValue::Time(ClockTime::none()));
+        let segment_se = ron::ser::to_string(&segment).unwrap();
+
+        let segment_de: Segment = ron::de::from_str(segment_se.as_str()).unwrap();
+        assert_eq!(segment_de.get_flags(), segment.get_flags());
+        assert_eq!(segment_de.get_rate(), segment.get_rate());
+        assert_eq!(segment_de.get_applied_rate(), segment.get_applied_rate());
+        assert_eq!(segment_de.get_format(), segment.get_format());
+        assert_eq!(segment_de.get_base(), segment.get_base());
+        assert_eq!(segment_de.get_offset(), segment.get_offset());
+        assert_eq!(segment_de.get_start(), segment.get_start());
+        assert_eq!(segment_de.get_stop(), segment.get_stop());
+        assert_eq!(segment_de.get_time(), segment.get_time());
+        assert_eq!(segment_de.get_position(), segment.get_position());
+        assert_eq!(segment_de.get_duration(), segment.get_duration());
     }
 }

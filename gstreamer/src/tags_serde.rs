@@ -247,14 +247,13 @@ mod tests {
     extern crate ron;
 
     use tags::*;
+    use Buffer;
+    use GenericFormattedValue;
+    use Sample;
+    use TagMergeMode;
 
     #[test]
     fn test_serialize() {
-        use Buffer;
-        use GenericFormattedValue;
-        use Sample;
-        use TagMergeMode;
-
         ::init().unwrap();
 
         let mut tags = TagList::new();
@@ -445,6 +444,69 @@ mod tests {
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_month(), 5);
         assert_eq!(datetime.get_hour(), 16);
+        let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
+        let buffer = sample.get_buffer().unwrap();
+        {
+            let data = buffer.map_readable().unwrap();
+            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
+        }
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let mut tags = TagList::new();
+        assert_eq!(tags.to_string(), "taglist;");
+        {
+            let tags = tags.get_mut().unwrap();
+            tags.add::<Title>(&"a title", TagMergeMode::Append); // String
+            tags.add::<Title>(&"another title", TagMergeMode::Append); // String
+            tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
+            tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
+            tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
+            tags.add::<DateTime>(
+                &::DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.841f64),
+                TagMergeMode::Append,
+            ); // DateTime
+
+            let sample = {
+                let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+                {
+                    let buffer = buffer.get_mut().unwrap();
+                    buffer.set_offset(0);
+                    buffer.set_offset_end(0);
+                }
+                Sample::new::<GenericFormattedValue>(Some(&buffer), None, None, None)
+            };
+            tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
+        }
+        let tags_ser = ron::ser::to_string(&tags).unwrap();
+
+        let tags_de: TagList = ron::de::from_str(tags_ser.as_str()).unwrap();
+        assert_eq!(
+            tags_de.get_index::<Title>(0).unwrap().get(),
+            tags.get_index::<Title>(0).unwrap().get(),
+        );
+        assert_eq!(
+            tags_de.get_index::<Title>(1).unwrap().get(),
+            tags.get_index::<Title>(1).unwrap().get(),
+        );
+        assert_eq!(
+            tags_de.get_index::<Duration>(0).unwrap().get(),
+            tags.get_index::<Duration>(0).unwrap().get(),
+        );
+        assert_eq!(
+            tags_de.get_index::<Bitrate>(0).unwrap().get(),
+            tags.get_index::<Bitrate>(0).unwrap().get(),
+        );
+        assert_eq!(
+            tags_de.get_index::<TrackGain>(0).unwrap().get(),
+            tags.get_index::<TrackGain>(0).unwrap().get(),
+        );
+        let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
+        assert_eq!(datetime.get_year(), 2018);
+        assert_eq!(datetime.get_microsecond(), 841_000);
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {

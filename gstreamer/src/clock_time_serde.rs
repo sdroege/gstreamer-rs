@@ -35,7 +35,7 @@ impl<'de> Visitor<'de> for ClockTimeVisitor {
     where
         D: Deserializer<'de>,
     {
-        u64::deserialize(deserializer).and_then(|value| Ok(ClockTime::from_nseconds(value)))
+        u64::deserialize(deserializer).map(|value| ClockTime::from_nseconds(value))
     }
 
     fn visit_none<E: de::Error>(self) -> Result<Self::Value, E> {
@@ -108,6 +108,26 @@ mod tests {
 
         let clocktime_json = "null";
         let clocktime: ClockTime = serde_json::from_str(clocktime_json).unwrap();
+        assert_eq!(clocktime.nseconds(), None);
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        // Some
+        let clocktime = ClockTime::from_nseconds(42_123_456_789);
+        let clocktime_ser = ron::ser::to_string(&clocktime).unwrap();
+        let clocktime: ClockTime = ron::de::from_str(clocktime_ser.as_str()).unwrap();
+        assert_eq!(clocktime.seconds(), Some(42));
+        assert_eq!(clocktime.mseconds(), Some(42_123));
+        assert_eq!(clocktime.useconds(), Some(42_123_456));
+        assert_eq!(clocktime.nseconds(), Some(42_123_456_789));
+
+        // None
+        let clocktime = ClockTime(None);
+        let clocktime_ser = ron::ser::to_string(&clocktime).unwrap();
+        let clocktime: ClockTime = ron::de::from_str(clocktime_ser.as_str()).unwrap();
         assert_eq!(clocktime.nseconds(), None);
     }
 }

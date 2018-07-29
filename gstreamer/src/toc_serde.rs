@@ -125,16 +125,15 @@ impl<'de> Deserialize<'de> for TocEntry {
 mod tests {
     extern crate ron;
 
+    use tags::Title;
     use toc::*;
+    use TagList;
+    use TagMergeMode;
     use TocEntryType;
     use TocScope;
 
     #[test]
     fn test_serialize() {
-        use tags::Title;
-        use TagList;
-        use TagMergeMode;
-
         ::init().unwrap();
 
         let mut toc = Toc::new(TocScope::Global);
@@ -394,5 +393,165 @@ mod tests {
         assert_eq!(Some("chapter 2"), tags.get_index::<Title>(0).unwrap().get());
         assert_eq!(Some((10, 15)), chapter2.get_start_stop_times());
         assert_eq!(0, chapter2.get_sub_entries().len());
+    }
+
+    #[test]
+    fn test_serde_roundtrip() {
+        ::init().unwrap();
+
+        let mut toc = Toc::new(TocScope::Global);
+        {
+            let toc = toc.get_mut().unwrap();
+            let mut tags = TagList::new();
+            tags.get_mut()
+                .unwrap()
+                .add::<Title>(&"toc", TagMergeMode::Append);
+            toc.set_tags(tags);
+
+            let mut toc_edition = TocEntry::new(TocEntryType::Edition, "edition");
+            {
+                let toc_edition = toc_edition.get_mut().unwrap();
+                toc_edition.set_start_stop_times(0, 15);
+
+                let mut toc_chap_1 = TocEntry::new(TocEntryType::Chapter, "chapter1");
+                {
+                    let toc_chap_1 = toc_chap_1.get_mut().unwrap();
+                    toc_chap_1.set_start_stop_times(0, 10);
+                    let mut toc_chap_1_1 = TocEntry::new(TocEntryType::Chapter, "chapter1.1");
+                    {
+                        let toc_chap_1_1 = toc_chap_1_1.get_mut().unwrap();
+                        toc_chap_1_1.set_start_stop_times(0, 4);
+                        let mut tags = TagList::new();
+                        tags.get_mut()
+                            .unwrap()
+                            .add::<Title>(&"chapter 1.1", TagMergeMode::Append);
+                        toc_chap_1_1.set_tags(tags);
+                    }
+                    toc_chap_1.append_sub_entry(toc_chap_1_1);
+
+                    let mut toc_chap_1_2 = TocEntry::new(TocEntryType::Chapter, "chapter1.2");
+                    {
+                        let toc_chap_1_2 = toc_chap_1_2.get_mut().unwrap();
+                        toc_chap_1_2.set_start_stop_times(4, 10);
+                        let mut tags = TagList::new();
+                        tags.get_mut()
+                            .unwrap()
+                            .add::<Title>(&"chapter 1.2", TagMergeMode::Append);
+                        toc_chap_1_2.set_tags(tags);
+                    }
+                    toc_chap_1.append_sub_entry(toc_chap_1_2);
+                }
+                toc_edition.append_sub_entry(toc_chap_1);
+
+                let mut toc_chap_2 = TocEntry::new(TocEntryType::Chapter, "chapter2");
+                {
+                    let toc_chap_2 = toc_chap_2.get_mut().unwrap();
+                    toc_chap_2.set_start_stop_times(10, 15);
+                    let mut tags = TagList::new();
+                    tags.get_mut()
+                        .unwrap()
+                        .add::<Title>(&"chapter 2", TagMergeMode::Append);
+                    toc_chap_2.set_tags(tags);
+                }
+                toc_edition.append_sub_entry(toc_chap_2);
+            }
+            toc.append_entry(toc_edition);
+        }
+        let toc_ser = ron::ser::to_string(&toc).unwrap();
+
+        let toc_de: Toc = ron::de::from_str(toc_ser.as_str()).unwrap();
+        assert_eq!(toc_de.get_scope(), toc.get_scope());
+
+        let entries_de = toc_de.get_entries();
+        let entries = toc.get_entries();
+        assert_eq!(entries_de.len(), entries.len());
+
+        let edition_de = &entries_de[0];
+        let edition = &entries[0];
+        assert_eq!(edition_de.get_entry_type(), edition.get_entry_type());
+        assert_eq!(edition_de.get_uid(), edition.get_uid());
+        assert_eq!(edition_de.get_tags(), edition.get_tags());
+        assert_eq!(
+            edition_de.get_start_stop_times(),
+            edition.get_start_stop_times()
+        );
+
+        let sub_entries_de = edition_de.get_sub_entries();
+        let sub_entries = edition.get_sub_entries();
+        assert_eq!(sub_entries_de.len(), sub_entries.len());
+
+        let chapter1_de = &sub_entries_de[0];
+        let chapter1 = &sub_entries[0];
+        assert_eq!(chapter1_de.get_entry_type(), chapter1.get_entry_type());
+        assert_eq!(chapter1_de.get_uid(), chapter1.get_uid());
+        assert_eq!(
+            chapter1_de.get_tags().is_none(),
+            chapter1.get_tags().is_none()
+        );
+        assert_eq!(
+            chapter1_de.get_start_stop_times(),
+            chapter1.get_start_stop_times()
+        );
+
+        let chap1_sub_entries_de = chapter1_de.get_sub_entries();
+        let chap1_sub_entries = chapter1.get_sub_entries();
+        assert_eq!(sub_entries_de.len(), sub_entries.len());
+
+        let chapter1_1_de = &chap1_sub_entries_de[0];
+        let chapter1_1 = &chap1_sub_entries[0];
+        assert_eq!(chapter1_1_de.get_entry_type(), chapter1_1.get_entry_type());
+        assert_eq!(chapter1_1_de.get_uid(), chapter1_1.get_uid());
+        assert_eq!(
+            chapter1_1_de.get_start_stop_times(),
+            chapter1_1.get_start_stop_times()
+        );
+        let tags_de = chapter1_1_de.get_tags().unwrap();
+        let tags = chapter1_1.get_tags().unwrap();
+        assert_eq!(
+            tags_de.get_index::<Title>(0).unwrap().get(),
+            tags.get_index::<Title>(0).unwrap().get()
+        );
+        assert_eq!(
+            chapter1_1_de.get_sub_entries().len(),
+            chapter1_1.get_sub_entries().len()
+        );
+
+        let chapter1_2_de = &chap1_sub_entries_de[1];
+        let chapter1_2 = &chap1_sub_entries[1];
+        assert_eq!(chapter1_2_de.get_entry_type(), chapter1_2.get_entry_type());
+        assert_eq!(chapter1_2_de.get_uid(), chapter1_2.get_uid());
+        assert_eq!(
+            chapter1_2_de.get_start_stop_times(),
+            chapter1_2.get_start_stop_times()
+        );
+        let tags_de = chapter1_2_de.get_tags().unwrap();
+        let tags = chapter1_2.get_tags().unwrap();
+        assert_eq!(
+            tags_de.get_index::<Title>(0).unwrap().get(),
+            tags.get_index::<Title>(0).unwrap().get()
+        );
+        assert_eq!(
+            chapter1_2_de.get_sub_entries().len(),
+            chapter1_2.get_sub_entries().len()
+        );
+
+        let chapter2_de = &sub_entries_de[1];
+        let chapter2 = &sub_entries[1];
+        assert_eq!(chapter2_de.get_entry_type(), chapter2.get_entry_type());
+        assert_eq!(chapter2_de.get_uid(), chapter2.get_uid());
+        let tags_de = chapter2_de.get_tags().unwrap();
+        let tags = chapter2.get_tags().unwrap();
+        assert_eq!(
+            tags_de.get_index::<Title>(0).unwrap().get(),
+            tags.get_index::<Title>(0).unwrap().get()
+        );
+        assert_eq!(
+            chapter2_de.get_start_stop_times(),
+            chapter2.get_start_stop_times()
+        );
+        assert_eq!(
+            chapter2_de.get_sub_entries().len(),
+            chapter2.get_sub_entries().len()
+        );
     }
 }

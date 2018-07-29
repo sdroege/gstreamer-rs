@@ -269,13 +269,15 @@ mod tests {
     extern crate ron;
     extern crate serde_json;
 
+    use Array;
+    use Bitmask;
+    use Fraction;
+    use FractionRange;
+    use IntRange;
+    use List;
+
     #[test]
     fn test_serialize_simple() {
-        use Bitmask;
-        use Fraction;
-        use FractionRange;
-        use IntRange;
-
         ::init().unwrap();
 
         let mut pretty_config = ron::ser::PrettyConfig::default();
@@ -321,7 +323,6 @@ mod tests {
     fn test_serialize_collections() {
         use glib::value::ToValue;
 
-        use Array;
         use Fraction;
         use List;
 
@@ -384,14 +385,6 @@ mod tests {
     #[cfg(feature = "ser_de")]
     #[test]
     fn test_deserialize_simple() {
-        extern crate ron;
-        extern crate serde_json;
-
-        use Bitmask;
-        use Fraction;
-        use FractionRange;
-        use IntRange;
-
         ::init().unwrap();
 
         // Fraction
@@ -443,14 +436,48 @@ mod tests {
 
     #[cfg(feature = "ser_de")]
     #[test]
+    fn test_serde_roundtrip_simple() {
+        ::init().unwrap();
+
+        // Fraction
+        let fraction = Fraction::new(1, 3);
+        let fraction_ser = ron::ser::to_string(&fraction).unwrap();
+        let fraction_de: Fraction = ron::de::from_str(fraction_ser.as_str()).unwrap();
+        assert_eq!(fraction_de.0.numer(), fraction.0.numer());
+        assert_eq!(fraction_de.0.denom(), fraction.0.denom());
+
+        // FractionRange
+        let fraction_range = FractionRange::new(Fraction::new(1, 3), Fraction::new(1, 2));
+        let fraction_range_ser = ron::ser::to_string(&fraction_range).unwrap();
+        let fraction_range_de: FractionRange =
+            ron::de::from_str(fraction_range_ser.as_str()).unwrap();
+        assert_eq!(
+            fraction_range_de.min().0.denom(),
+            fraction_range.min().0.denom()
+        );
+        assert_eq!(
+            fraction_range_de.max().0.denom(),
+            fraction_range.max().0.denom()
+        );
+
+        // IntRange
+        let int_range = IntRange::<i32>::new_with_step(0, 42, 21);
+        let int_range_ser = ron::ser::to_string(&int_range).unwrap();
+        let int_range_de: IntRange<i32> = ron::de::from_str(int_range_ser.as_str()).unwrap();
+        assert_eq!(int_range_de.min(), int_range.min());
+        assert_eq!(int_range_de.max(), int_range.max());
+        assert_eq!(int_range_de.step(), int_range.step());
+
+        // Bitmask
+        let bitmask = Bitmask::new(1024 + 128 + 32);
+        let bitmask_ser = ron::ser::to_string(&bitmask).unwrap();
+        let bitmask_de: Bitmask = ron::de::from_str(bitmask_ser.as_str()).unwrap();
+        assert_eq!(bitmask_de, bitmask);
+    }
+
+    #[cfg(feature = "ser_de")]
+    #[test]
     fn test_deserialize_collections() {
-        extern crate ron;
-        extern crate serde_json;
-
-        use Array;
-        use Fraction;
-        use List;
-
         ::init().unwrap();
 
         // Array
@@ -502,5 +529,66 @@ mod tests {
         assert_eq!(fraction.0.denom(), &2);
 
         assert_eq!("test str".to_owned(), slice[1].get::<String>().unwrap());
+    }
+
+    #[cfg(feature = "ser_de")]
+    #[test]
+    fn test_serde_roundtrip_collection() {
+        use glib::value::ToValue;
+
+        ::init().unwrap();
+
+        // Array
+        let value_13 = Fraction::new(1, 3).to_value();
+        let send_value_13 = value_13.try_into_send_value::<Fraction>().unwrap();
+        let value_12 = Fraction::new(1, 2).to_value();
+        let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
+        let value_str = "test str".to_value();
+        let send_value_str = value_str.try_into_send_value::<String>().unwrap();
+        let array = Array::new(&[&send_value_13, &send_value_12, &send_value_str]);
+        let array_ser = ron::ser::to_string(&array).unwrap();
+
+        let array_de: Array = ron::de::from_str(array_ser.as_str()).unwrap();
+        let slice_de = array_de.as_slice();
+        let slice = array.as_slice();
+        assert_eq!(slice_de.len(), slice.len());
+
+        let fraction_de = slice_de[0].get::<Fraction>().unwrap();
+        let fraction = slice[0].get::<Fraction>().unwrap();
+        assert_eq!(fraction_de.0.numer(), fraction.0.numer());
+        assert_eq!(fraction_de.0.denom(), fraction.0.denom());
+
+        let fraction_de = slice_de[1].get::<Fraction>().unwrap();
+        let fraction = slice[1].get::<Fraction>().unwrap();
+        assert_eq!(fraction_de.0.numer(), fraction.0.numer());
+        assert_eq!(fraction.0.denom(), fraction.0.denom());
+
+        assert_eq!(
+            slice_de[2].get::<String>().unwrap(),
+            slice[2].get::<String>().unwrap()
+        );
+
+        // List
+        let value_12 = Fraction::new(1, 2).to_value();
+        let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
+        let value_str = "test str".to_value();
+        let send_value_str = value_str.try_into_send_value::<String>().unwrap();
+        let list = List::new(&[&send_value_12, &send_value_str]);
+        let list_ser = ron::ser::to_string(&list).unwrap();
+
+        let list_de: List = ron::de::from_str(list_ser.as_str()).unwrap();
+        let slice_de = list_de.as_slice();
+        let slice = list.as_slice();
+        assert_eq!(slice_de.len(), slice.len());
+
+        let fraction_de = slice_de[0].get::<Fraction>().unwrap();
+        let fraction = slice[0].get::<Fraction>().unwrap();
+        assert_eq!(fraction_de.0.numer(), fraction.0.numer());
+        assert_eq!(fraction_de.0.denom(), fraction.0.denom());
+
+        assert_eq!(
+            slice_de[1].get::<String>().unwrap(),
+            slice[1].get::<String>().unwrap()
+        );
     }
 }
