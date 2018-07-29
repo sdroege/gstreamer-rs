@@ -16,6 +16,9 @@ use BufferFlags;
 use BufferRef;
 use ClockTime;
 
+// TODO: try `Either<ByteBuf, Bytes>` to merge the base reprensentations for ser and de
+// while avoiding unneeded copy
+
 impl<'a> Serialize for BufferRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut buffer = serializer.serialize_struct("Buffer", 6)?;
