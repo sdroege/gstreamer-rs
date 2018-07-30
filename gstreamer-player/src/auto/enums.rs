@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::Quark;
 use glib::StaticType;
 use glib::Type;
 use glib::error::ErrorDomain;
@@ -11,7 +12,6 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use glib_ffi;
 use gobject_ffi;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
@@ -108,9 +108,9 @@ impl FromGlib<ffi::GstPlayerError> for PlayerError {
 }
 
 impl ErrorDomain for PlayerError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_player_error_quark() }
+        unsafe { from_glib(ffi::gst_player_error_quark()) }
     }
 
     fn code(self) -> i32 {

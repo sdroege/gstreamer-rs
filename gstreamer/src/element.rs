@@ -268,7 +268,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             ffi::gst_element_message_full(
                 self.to_glib_none().0,
                 type_,
-                T::domain(),
+                T::domain().to_glib(),
                 code.code(),
                 message.to_glib_full(),
                 debug.to_glib_full(),
@@ -301,7 +301,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             ffi::gst_element_message_full_with_details(
                 self.to_glib_none().0,
                 type_,
-                T::domain(),
+                T::domain().to_glib(),
                 code.code(),
                 message.to_glib_full(),
                 debug.to_glib_full(),
@@ -328,7 +328,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             ffi::gst_element_message_full(
                 self.to_glib_none().0,
                 ffi::GST_MESSAGE_ERROR,
-                error_domain,
+                error_domain.to_glib(),
                 error_code,
                 message.to_glib_full(),
                 debug.to_glib_full(),

@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::Quark;
 use glib::StaticType;
 use glib::Type;
 use glib::error::ErrorDomain;
@@ -11,7 +12,6 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use glib_ffi;
 use gobject_ffi;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
@@ -403,9 +403,9 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
 }
 
 impl ErrorDomain for CoreError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_core_error_quark() }
+        unsafe { from_glib(ffi::gst_core_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -890,9 +890,9 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
 }
 
 impl ErrorDomain for LibraryError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_library_error_quark() }
+        unsafe { from_glib(ffi::gst_library_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1309,9 +1309,9 @@ impl FromGlib<ffi::GstParseError> for ParseError {
 }
 
 impl ErrorDomain for ParseError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_parse_error_quark() }
+        unsafe { from_glib(ffi::gst_parse_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1395,9 +1395,9 @@ impl FromGlib<ffi::GstPluginError> for PluginError {
 }
 
 impl ErrorDomain for PluginError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_plugin_error_quark() }
+        unsafe { from_glib(ffi::gst_plugin_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1774,9 +1774,9 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
 }
 
 impl ErrorDomain for ResourceError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_resource_error_quark() }
+        unsafe { from_glib(ffi::gst_resource_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -2172,9 +2172,9 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
 }
 
 impl ErrorDomain for StreamError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_stream_error_quark() }
+        unsafe { from_glib(ffi::gst_stream_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -2792,9 +2792,9 @@ impl FromGlib<ffi::GstURIError> for URIError {
 }
 
 impl ErrorDomain for URIError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gst_uri_error_quark() }
+        unsafe { from_glib(ffi::gst_uri_error_quark()) }
     }
 
     fn code(self) -> i32 {

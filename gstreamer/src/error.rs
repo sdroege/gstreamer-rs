@@ -9,7 +9,7 @@
 use std::error::Error;
 use std::fmt;
 
-use glib_ffi;
+use glib;
 
 #[macro_export]
 macro_rules! gst_error_msg(
@@ -51,7 +51,7 @@ macro_rules! gst_error_msg(
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ErrorMessage {
-    pub(crate) error_domain: glib_ffi::GQuark,
+    pub(crate) error_domain: glib::Quark,
     pub(crate) error_code: i32,
     pub(crate) message: Option<String>,
     pub(crate) debug: Option<String>,
