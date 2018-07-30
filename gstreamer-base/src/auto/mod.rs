@@ -5,6 +5,14 @@
 mod adapter;
 pub use self::adapter::Adapter;
 
+mod aggregator;
+pub use self::aggregator::Aggregator;
+pub use self::aggregator::AggregatorExt;
+
+mod aggregator_pad;
+pub use self::aggregator_pad::AggregatorPad;
+pub use self::aggregator_pad::AggregatorPadExt;
+
 mod base_sink;
 pub use self::base_sink::BaseSink;
 pub use self::base_sink::BaseSinkExt;
@@ -24,6 +32,8 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::AggregatorExt;
+    pub use super::AggregatorPadExt;
     pub use super::BaseSinkExt;
     pub use super::BaseSrcExt;
     pub use super::BaseTransformExt;

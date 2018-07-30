@@ -19,6 +19,7 @@ generate = [
     "GstBase.BaseSink",
     "GstBase.BaseTransform",
     "GstBase.PushSrc",
+    "GstBase.AggregatorPad",
 ]
 
 manual = [
@@ -26,6 +27,7 @@ manual = [
     "GLib.Bytes",
     "Gst.Object",
     "Gst.Element",
+    "Gst.BufferPool",
     "Gst.ClockTimeDiff",
     "Gst.ClockReturn",
     "Gst.FlowReturn",
@@ -79,6 +81,15 @@ status = "generate"
     [[object.function]]
     name = "submit_buffer_list"
     # Pass by value, to be added manually
+    ignore = true
+
+[[object]]
+name = "GstBase.Aggregator"
+status = "generate"
+
+    [[object.function]]
+    name = "finish_buffer"
+    # Takes ownership
     ignore = true
 
 [[object]]

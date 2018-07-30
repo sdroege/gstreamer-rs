@@ -40,6 +40,7 @@ pub use functions::*;
 mod adapter;
 mod flow_combiner;
 pub use flow_combiner::*;
+mod aggregator;
 mod base_sink;
 mod base_src;
 mod base_transform;
@@ -50,6 +51,7 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
+    pub use aggregator::AggregatorExtManual;
     pub use auto::traits::*;
     pub use base_sink::BaseSinkExtManual;
     pub use base_src::BaseSrcExtManual;
