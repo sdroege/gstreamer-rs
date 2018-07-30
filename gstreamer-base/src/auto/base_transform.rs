@@ -37,7 +37,7 @@ unsafe impl Sync for BaseTransform {}
 pub trait BaseTransformExt {
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
 
-    //fn get_buffer_pool(&self) -> /*Ignored*/Option<gst::BufferPool>;
+    fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
     fn is_in_place(&self) -> bool;
 
@@ -75,9 +75,11 @@ impl<O: IsA<BaseTransform> + IsA<glib::object::Object>> BaseTransformExt for O {
     //    unsafe { TODO: call ffi::gst_base_transform_get_allocator() }
     //}
 
-    //fn get_buffer_pool(&self) -> /*Ignored*/Option<gst::BufferPool> {
-    //    unsafe { TODO: call ffi::gst_base_transform_get_buffer_pool() }
-    //}
+    fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
+        unsafe {
+            from_glib_full(ffi::gst_base_transform_get_buffer_pool(self.to_glib_none().0))
+        }
+    }
 
     fn is_in_place(&self) -> bool {
         unsafe {

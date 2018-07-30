@@ -39,7 +39,7 @@ pub trait BaseSrcExt {
 
     fn get_blocksize(&self) -> u32;
 
-    //fn get_buffer_pool(&self) -> /*Ignored*/Option<gst::BufferPool>;
+    fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
     fn get_do_timestamp(&self) -> bool;
 
@@ -101,9 +101,11 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
         }
     }
 
-    //fn get_buffer_pool(&self) -> /*Ignored*/Option<gst::BufferPool> {
-    //    unsafe { TODO: call ffi::gst_base_src_get_buffer_pool() }
-    //}
+    fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
+        unsafe {
+            from_glib_full(ffi::gst_base_src_get_buffer_pool(self.to_glib_none().0))
+        }
+    }
 
     fn get_do_timestamp(&self) -> bool {
         unsafe {
