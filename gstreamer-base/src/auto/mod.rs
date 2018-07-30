@@ -5,12 +5,18 @@
 mod adapter;
 pub use self::adapter::Adapter;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator::Aggregator;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator::AggregatorExt;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator_pad::AggregatorPad;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator_pad::AggregatorPadExt;
 
 mod base_sink;
@@ -32,7 +38,9 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub use super::AggregatorExt;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub use super::AggregatorPadExt;
     pub use super::BaseSinkExt;
     pub use super::BaseSrcExt;

@@ -27,19 +27,24 @@ unsafe impl Send for AggregatorPad {}
 unsafe impl Sync for AggregatorPad {}
 
 pub trait AggregatorPadExt {
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn drop_buffer(&self) -> bool;
 
     #[cfg(any(feature = "v1_14_1", feature = "dox"))]
     fn has_buffer(&self) -> bool;
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn is_eos(&self) -> bool;
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn peek_buffer(&self) -> Option<gst::Buffer>;
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn pop_buffer(&self) -> Option<gst::Buffer>;
 }
 
 impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn drop_buffer(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_drop_buffer(self.to_glib_none().0))
@@ -53,18 +58,21 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn is_eos(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_aggregator_pad_is_eos(self.to_glib_none().0))
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn peek_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_pad_peek_buffer(self.to_glib_none().0))
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn pop_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_pad_pop_buffer(self.to_glib_none().0))

@@ -35,48 +35,59 @@ unsafe impl Send for Aggregator {}
 unsafe impl Sync for Aggregator {}
 
 pub trait AggregatorExt {
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_latency(&self) -> gst::ClockTime;
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime);
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_src_caps(&self, caps: &gst::Caps);
 
     fn get_property_start_time(&self) -> u64;
 
     fn set_property_start_time(&self, start_time: u64);
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi::gst_aggregator_get_allocator() }
     //}
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
             from_glib_full(ffi::gst_aggregator_get_buffer_pool(self.to_glib_none().0))
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_latency(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::gst_aggregator_get_latency(self.to_glib_none().0))
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_latency(&self, min_latency: gst::ClockTime, max_latency: gst::ClockTime) {
         unsafe {
             ffi::gst_aggregator_set_latency(self.to_glib_none().0, min_latency.to_glib(), max_latency.to_glib());
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_src_caps(&self, caps: &gst::Caps) {
         unsafe {
             ffi::gst_aggregator_set_src_caps(self.to_glib_none().0, caps.to_glib_none().0);
@@ -97,6 +108,7 @@ impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -114,6 +126,7 @@ impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
     }
 }
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 unsafe extern "C" fn notify_latency_trampoline<P>(this: *mut ffi::GstAggregator, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Aggregator> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);

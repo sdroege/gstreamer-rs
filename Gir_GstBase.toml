@@ -19,7 +19,6 @@ generate = [
     "GstBase.BaseSink",
     "GstBase.BaseTransform",
     "GstBase.PushSrc",
-    "GstBase.AggregatorPad",
 ]
 
 manual = [
@@ -86,11 +85,21 @@ status = "generate"
 [[object]]
 name = "GstBase.Aggregator"
 status = "generate"
+version = "1.14"
 
     [[object.function]]
     name = "finish_buffer"
     # Takes ownership
     ignore = true
+
+    [[object.property]]
+    name = "latency"
+    version = "1.14"
+
+[[object]]
+name = "GstBase.AggregatorPad"
+status = "generate"
+version = "1.14"
 
 [[object]]
 name = "GstBase.*"

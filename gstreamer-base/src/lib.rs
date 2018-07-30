@@ -40,6 +40,7 @@ pub use functions::*;
 mod adapter;
 mod flow_combiner;
 pub use flow_combiner::*;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
 mod base_sink;
 mod base_src;
@@ -51,6 +52,7 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub use aggregator::AggregatorExtManual;
     pub use auto::traits::*;
     pub use base_sink::BaseSinkExtManual;
