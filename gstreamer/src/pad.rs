@@ -222,6 +222,8 @@ pub trait PadExtManual {
 
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T>;
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
+
+    fn get_mode(&self) -> ::PadMode;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -848,6 +850,14 @@ impl<O: IsA<Pad>> PadExtManual for O {
             } else {
                 None
             }
+        }
+    }
+
+    fn get_mode(&self) -> ::PadMode {
+        unsafe {
+            let stash = self.to_glib_none();
+            let ptr: &ffi::GstPad = &*stash.0;
+            from_glib(ptr.mode)
         }
     }
 }
