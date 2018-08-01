@@ -42,6 +42,8 @@ mod flow_combiner;
 pub use flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+mod aggregator_pad;
 mod base_sink;
 mod base_src;
 mod base_transform;
@@ -54,6 +56,8 @@ pub mod prelude {
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub use aggregator::AggregatorExtManual;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    pub use aggregator_pad::AggregatorPadExtManual;
     pub use auto::traits::*;
     pub use base_sink::BaseSinkExtManual;
     pub use base_src::BaseSrcExtManual;
