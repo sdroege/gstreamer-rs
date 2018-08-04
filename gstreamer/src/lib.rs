@@ -216,6 +216,10 @@ pub fn init() -> Result<(), glib::Error> {
     }
 }
 
+pub unsafe fn deinit() {
+    ffi::gst_deinit();
+}
+
 pub const BUFFER_OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
 pub const CLOCK_TIME_NONE: ClockTime = ClockTime(None);
 
