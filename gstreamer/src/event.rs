@@ -58,6 +58,27 @@ impl From<u32> for Seqnum {
     }
 }
 
+impl cmp::PartialOrd for Seqnum {
+    fn partial_cmp(&self, other: &Seqnum) -> Option<cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl cmp::Ord for Seqnum {
+    fn cmp(&self, other: &Seqnum) -> cmp::Ordering {
+        unsafe {
+            let ret = ffi::gst_util_seqnum_compare(self.0, other.0);
+            if ret < 0 {
+                cmp::Ordering::Less
+            } else if ret > 0 {
+                cmp::Ordering::Greater
+            } else {
+                cmp::Ordering::Equal
+            }
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct GroupId(pub u32);
 pub const GROUP_ID_INVALID: GroupId = GroupId(0);
