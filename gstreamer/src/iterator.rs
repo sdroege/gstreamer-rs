@@ -432,7 +432,7 @@ where
     callback_guard!();
     let value = value as *const gobject_ffi::GValue;
 
-    let func = func as *const &mut (FnMut(T) -> bool);
+    let func = func as *mut &mut (FnMut(T) -> bool);
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
@@ -448,7 +448,7 @@ where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
     callback_guard!();
-    let func = func as *const &mut (FnMut(T));
+    let func = func as *mut &mut (FnMut(T));
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
@@ -464,7 +464,7 @@ where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
     callback_guard!();
-    let func = func as *const &mut (FnMut(U, T) -> Result<U, U>);
+    let func = func as *mut &mut (FnMut(U, T) -> Result<U, U>);
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
