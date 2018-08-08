@@ -417,7 +417,7 @@ where
 {
     let value = value as *const gobject_ffi::GValue;
 
-    let func = func as *const &mut (FnMut(T) -> bool);
+    let func = func as *mut &mut (FnMut(T) -> bool);
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
@@ -432,7 +432,7 @@ unsafe extern "C" fn foreach_trampoline<T>(value: *const gobject_ffi::GValue, fu
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
-    let func = func as *const &mut (FnMut(T));
+    let func = func as *mut &mut (FnMut(T));
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
@@ -447,7 +447,7 @@ unsafe extern "C" fn fold_trampoline<T, U>(
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
-    let func = func as *const &mut (FnMut(U, T) -> Result<U, U>);
+    let func = func as *mut &mut (FnMut(U, T) -> Result<U, U>);
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
