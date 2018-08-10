@@ -8,14 +8,13 @@
 
 use num_rational::Rational32;
 use std::borrow::{Borrow, Cow};
+use std::cmp;
 use std::fmt;
 use std::ops;
 use std::slice;
 
 use glib;
-use glib::translate::{
-    from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr, ToGlibPtrMut, Uninitialized,
-};
+use glib::translate::{from_glib, from_glib_full, ToGlibPtr, ToGlibPtrMut, Uninitialized};
 use glib::value::{FromValue, FromValueOptional, SetValue, ToSendValue, Value};
 
 use ffi;
@@ -673,44 +672,10 @@ impl<'a> glib::types::StaticType for List<'a> {
     }
 }
 
-#[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
-pub enum ValueOrder {
-    LessThan,
-    Equal,
-    GreaterThan,
-    Unordered,
-}
-
-impl ToGlib for ValueOrder {
-    type GlibType = i32;
-
-    fn to_glib(&self) -> Self::GlibType {
-        match *self {
-            ValueOrder::LessThan => ffi::GST_VALUE_LESS_THAN,
-            ValueOrder::Equal => ffi::GST_VALUE_EQUAL,
-            ValueOrder::GreaterThan => ffi::GST_VALUE_GREATER_THAN,
-            ValueOrder::Unordered => ffi::GST_VALUE_UNORDERED,
-        }
-    }
-}
-
-impl FromGlib<i32> for ValueOrder {
-    fn from_glib(v: i32) -> Self {
-        skip_assert_initialized!();
-
-        match v {
-            ffi::GST_VALUE_LESS_THAN => ValueOrder::LessThan,
-            ffi::GST_VALUE_EQUAL => ValueOrder::Equal,
-            ffi::GST_VALUE_GREATER_THAN => ValueOrder::GreaterThan,
-            ffi::GST_VALUE_UNORDERED => ValueOrder::Unordered,
-            _ => unreachable!(),
-        }
-    }
-}
-
 pub trait GstValueExt: Sized {
     fn can_compare(&self, other: &Self) -> bool;
-    fn compare(&self, other: &Self) -> ValueOrder;
+    fn compare(&self, other: &Self) -> Option<cmp::Ordering>;
+    fn eq(&self, other: &Self) -> bool;
     fn can_intersect(&self, other: &Self) -> bool;
     fn intersect(&self, other: &Self) -> Option<Self>;
     fn can_subtract(&self, other: &Self) -> bool;
@@ -734,13 +699,21 @@ impl GstValueExt for glib::Value {
         }
     }
 
-    fn compare(&self, other: &Self) -> ValueOrder {
+    fn compare(&self, other: &Self) -> Option<cmp::Ordering> {
         unsafe {
-            from_glib(ffi::gst_value_compare(
-                self.to_glib_none().0,
-                other.to_glib_none().0,
-            ))
+            let val = ffi::gst_value_compare(self.to_glib_none().0, other.to_glib_none().0);
+
+            match val {
+                ffi::GST_VALUE_LESS_THAN => Some(cmp::Ordering::Less),
+                ffi::GST_VALUE_EQUAL => Some(cmp::Ordering::Equal),
+                ffi::GST_VALUE_GREATER_THAN => Some(cmp::Ordering::Greater),
+                _ => None,
+            }
         }
+    }
+
+    fn eq(&self, other: &Self) -> bool {
+        self.compare(other) == Some(cmp::Ordering::Equal)
     }
 
     fn can_intersect(&self, other: &Self) -> bool {
