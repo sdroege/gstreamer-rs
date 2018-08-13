@@ -226,6 +226,11 @@ pub trait PadExtManual {
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue>;
 
     fn get_mode(&self) -> ::PadMode;
+
+    fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
+        &self,
+        func: F,
+    );
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -866,6 +871,50 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let stash = self.to_glib_none();
             let ptr: &ffi::GstPad = &*stash.0;
             from_glib(ptr.mode)
+        }
+    }
+
+    fn sticky_events_foreach<F: FnMut(Event) -> Result<Option<Event>, Option<Event>>>(
+        &self,
+        func: F,
+    ) {
+        unsafe extern "C" fn trampoline(
+            _pad: *mut ffi::GstPad,
+            event: *mut *mut ffi::GstEvent,
+            user_data: glib_ffi::gpointer,
+        ) -> glib_ffi::gboolean {
+            let func =
+                user_data as *mut &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>);
+            let res = (*func)(from_glib_full(*event));
+
+            match res {
+                Ok(Some(ev)) => {
+                    *event = ev.into_ptr();
+                    glib_ffi::GTRUE
+                }
+                Err(Some(ev)) => {
+                    *event = ev.into_ptr();
+                    glib_ffi::GFALSE
+                }
+                Ok(None) => {
+                    *event = ptr::null_mut();
+                    glib_ffi::GTRUE
+                }
+                Err(None) => {
+                    *event = ptr::null_mut();
+                    glib_ffi::GFALSE
+                }
+            }
+        }
+
+        unsafe {
+            let mut func = func;
+            let func_obj: &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>) = &mut func;
+            let func_ptr = &func_obj
+                as *const &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>)
+                as glib_ffi::gpointer;
+
+            ffi::gst_pad_sticky_events_foreach(self.to_glib_none().0, Some(trampoline), func_ptr);
         }
     }
 }
