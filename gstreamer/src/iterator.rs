@@ -18,7 +18,6 @@ use gobject_ffi;
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
-use std::iter::Iterator as StdIterator;
 use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
@@ -59,6 +58,22 @@ impl<T> Iterator<T>
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    pub fn next(&mut self) -> Result<Option<T>, IteratorError> {
+        unsafe {
+            let mut value = Value::uninitialized();
+            let res = ffi::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
+            match res {
+                ffi::GST_ITERATOR_OK => match value.get::<T>() {
+                    Some(value) => Ok(Some(value)),
+                    None => Err(IteratorError::Error),
+                },
+                ffi::GST_ITERATOR_DONE => Ok(None),
+                ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
+                ffi::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
+            }
+        }
+    }
+
     pub fn resync(&mut self) {
         unsafe {
             ffi::gst_iterator_resync(self.to_glib_none_mut().0);
@@ -93,7 +108,7 @@ where
         }
     }
 
-    pub fn find_simple<F>(&mut self, func: F) -> Option<T>
+    pub fn find<F>(&mut self, func: F) -> Option<T>
     where
         F: FnMut(T) -> bool,
     {
@@ -141,7 +156,7 @@ where
         }
     }
 
-    pub fn fold_with_early_exit<F, U>(&mut self, init: U, func: F) -> Result<U, IteratorError>
+    pub fn fold<F, U>(&mut self, init: U, func: F) -> Result<U, IteratorError>
     where
         F: FnMut(U, T) -> Result<U, U>,
     {
@@ -211,29 +226,6 @@ where
 {
     pub fn from_vec(items: Vec<T>) -> Self {
         Self::new(VecIteratorImpl::new(items))
-    }
-}
-
-impl<T> StdIterator for Iterator<T>
-where
-    for<'a> T: FromValueOptional<'a> + 'static,
-{
-    type Item = Result<T, IteratorError>;
-
-    fn next(&mut self) -> Option<Result<T, IteratorError>> {
-        unsafe {
-            let mut value = Value::uninitialized();
-            let res = ffi::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
-            match res {
-                ffi::GST_ITERATOR_OK => match value.get::<T>() {
-                    Some(value) => Some(Ok(value)),
-                    None => Some(Err(IteratorError::Error)),
-                },
-                ffi::GST_ITERATOR_DONE => None,
-                ffi::GST_ITERATOR_RESYNC => Some(Err(IteratorError::Resync)),
-                ffi::GST_ITERATOR_ERROR | _ => Some(Err(IteratorError::Error)),
-            }
-        }
     }
 }
 
@@ -616,35 +608,19 @@ mod tests {
 
         let vec = vec![1i32, 2, 3];
         let mut it = Iterator::from_vec(vec);
-        let val = it.next().unwrap();
-        assert_eq!(val, Ok(1));
-        let val = it.next().unwrap();
-        assert_eq!(val, Ok(2));
-        let val = it.next().unwrap();
-        assert_eq!(val, Ok(3));
-        assert!(it.next().is_none());
-
-        let vec = vec![1i32, 2, 3];
-        let it = Iterator::from_vec(vec);
-        let vals: Vec<_> = it.map(|v| v.unwrap()).collect();
-        assert_eq!(vals, [1, 2, 3]);
+        let val = it.next();
+        assert_eq!(val, Ok(Some(1)));
+        let val = it.next();
+        assert_eq!(val, Ok(Some(2)));
+        let val = it.next();
+        assert_eq!(val, Ok(Some(3)));
+        assert_eq!(it.next(), Ok(None));
 
         let vec = vec![1i32, 2, 3];
         let mut it = Iterator::from_vec(vec);
         let mut vals = Vec::new();
-        while let Some(res) = it.next() {
-            match res {
-                Ok(v) => vals.push(v),
-                _ => unreachable!(),
-            }
-        }
-        assert_eq!(vals, [1, 2, 3]);
-
-        let vec = vec![1i32, 2, 3];
-        let it = Iterator::from_vec(vec);
-        let mut vals = Vec::new();
-        for v in it {
-            vals.push(v.unwrap());
+        while let Ok(Some(res)) = it.next() {
+            vals.push(res);
         }
         assert_eq!(vals, [1, 2, 3]);
     }
@@ -654,8 +630,12 @@ mod tests {
         ::init().unwrap();
 
         let vec = vec![1i32, 2, 3];
-        let it = Iterator::from_vec(vec).filter(|val| val % 2 == 1);
-        let vals: Vec<_> = it.map(|v| v.unwrap()).collect();
+        let mut it = Iterator::from_vec(vec).filter(|val| val % 2 == 1);
+
+        let mut vals = Vec::new();
+        while let Ok(Some(res)) = it.next() {
+            vals.push(res);
+        }
         assert_eq!(vals, [1, 3]);
     }
 
@@ -665,13 +645,8 @@ mod tests {
 
         // Our find
         let vec = vec![1i32, 2, 3];
-        let val = Iterator::from_vec(vec).find_simple(|val| val == 2);
+        let val = Iterator::from_vec(vec).find(|val| val == 2);
         assert_eq!(val.unwrap(), 2);
-
-        // Find from std::iter::Iterator
-        let vec = vec![1i32, 2, 3];
-        let val = Iterator::from_vec(vec).find(|val| val.unwrap() == 2);
-        assert_eq!(val.unwrap(), Ok(2));
     }
 
     #[test]
@@ -691,18 +666,10 @@ mod tests {
 
         // Our fold
         let vec = vec![1i32, 2, 3];
-        let res = Iterator::from_vec(vec).fold_with_early_exit(0, |mut sum, val| {
+        let res = Iterator::from_vec(vec).fold(0, |mut sum, val| {
             sum += val;
             Ok(sum)
         });
         assert_eq!(res.unwrap(), 6);
-
-        // Fold from std::iter::Iterator
-        let vec = vec![1i32, 2, 3];
-        let res = Iterator::from_vec(vec).fold(0, |mut sum, val| {
-            sum += val.unwrap();
-            sum
-        });
-        assert_eq!(res, 6);
     }
 }
