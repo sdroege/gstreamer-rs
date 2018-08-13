@@ -9,9 +9,13 @@ fn example_main() {
 
     let identity = gst::ElementFactory::make("identity", None).unwrap();
     let mut iter = identity.iterate_pads();
-    while let Some(res) = iter.next() {
-        match res {
-            Ok(pad) => println!("Pad: {}", pad.get_name()),
+    loop {
+        match iter.next() {
+            Ok(Some(pad)) => println!("Pad: {}", pad.get_name()),
+            Ok(None) => {
+                println!("Done");
+                break;
+            }
             Err(gst::IteratorError::Resync) => {
                 println!("Iterator resync");
                 iter.resync();
