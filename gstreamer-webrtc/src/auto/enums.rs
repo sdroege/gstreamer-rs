@@ -12,7 +12,8 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCDTLSSetup {
     None,
     Actpass,
@@ -75,7 +76,8 @@ impl SetValue for WebRTCDTLSSetup {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCDTLSTransportState {
     New,
     Closed,
@@ -141,7 +143,8 @@ impl SetValue for WebRTCDTLSTransportState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCICEComponent {
     Rtp,
     Rtcp,
@@ -198,7 +201,8 @@ impl SetValue for WebRTCICEComponent {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCICEConnectionState {
     New,
     Checking,
@@ -270,7 +274,8 @@ impl SetValue for WebRTCICEConnectionState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCICEGatheringState {
     New,
     Gathering,
@@ -330,7 +335,8 @@ impl SetValue for WebRTCICEGatheringState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCICERole {
     Controlled,
     Controlling,
@@ -387,7 +393,8 @@ impl SetValue for WebRTCICERole {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCPeerConnectionState {
     New,
     Connecting,
@@ -456,7 +463,8 @@ impl SetValue for WebRTCPeerConnectionState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCRTPTransceiverDirection {
     None,
     Inactive,
@@ -522,7 +530,8 @@ impl SetValue for WebRTCRTPTransceiverDirection {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCSDPType {
     Offer,
     Pranswer,
@@ -585,7 +594,8 @@ impl SetValue for WebRTCSDPType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCSignalingState {
     Stable,
     Closed,
@@ -654,7 +664,8 @@ impl SetValue for WebRTCSignalingState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum WebRTCStatsType {
     Codec,
     InboundRtp,

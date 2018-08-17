@@ -12,7 +12,8 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPAuthMethod {
     None,
     Basic,
@@ -72,7 +73,8 @@ impl SetValue for RTSPAuthMethod {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPFamily {
     None,
     Inet,
@@ -132,7 +134,8 @@ impl SetValue for RTSPFamily {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPHeaderField {
     Invalid,
     Accept,
@@ -447,7 +450,8 @@ impl SetValue for RTSPHeaderField {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPMsgType {
     Invalid,
     Request,
@@ -516,7 +520,8 @@ impl SetValue for RTSPMsgType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPRangeUnit {
     Smpte,
     Smpte30Drop,
@@ -582,7 +587,8 @@ impl SetValue for RTSPRangeUnit {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPResult {
     Ok,
     Error,
@@ -687,7 +693,8 @@ impl SetValue for RTSPResult {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPState {
     Invalid,
     Init,
@@ -756,7 +763,8 @@ impl SetValue for RTSPState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPStatusCode {
     Invalid,
     Continue,
@@ -945,7 +953,8 @@ impl SetValue for RTSPStatusCode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPTimeType {
     Seconds,
     Now,

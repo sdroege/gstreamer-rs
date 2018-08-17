@@ -14,7 +14,8 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum BufferingMode {
     Stream,
     Download,
@@ -77,7 +78,8 @@ impl SetValue for BufferingMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum BusSyncReply {
     Drop,
     Pass,
@@ -137,7 +139,8 @@ impl SetValue for BusSyncReply {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum CapsIntersectMode {
     ZigZag,
     First,
@@ -194,8 +197,9 @@ impl SetValue for CapsIntersectMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ClockReturn {
     Ok,
     Early,
@@ -270,7 +274,8 @@ impl SetValue for ClockReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ClockType {
     Realtime,
     Monotonic,
@@ -330,7 +335,8 @@ impl SetValue for ClockType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum CoreError {
     Failed,
     TooLazy,
@@ -459,7 +465,8 @@ impl SetValue for CoreError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum DebugLevel {
     None,
     Error,
@@ -540,7 +547,8 @@ impl SetValue for DebugLevel {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+    #[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy)]
 pub enum EventType {
     Unknown,
     FlushStart,
@@ -681,8 +689,9 @@ impl SetValue for EventType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum FlowReturn {
     CustomSuccess2,
     CustomSuccess1,
@@ -772,8 +781,9 @@ impl SetValue for FlowReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy)]
 pub enum Format {
     Undefined,
     Default,
@@ -842,7 +852,8 @@ impl SetValue for Format {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum LibraryError {
     Failed,
     TooLazy,
@@ -939,7 +950,8 @@ impl SetValue for LibraryError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PadDirection {
     Unknown,
     Src,
@@ -999,8 +1011,9 @@ impl SetValue for PadDirection {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PadLinkReturn {
     Ok,
     WrongHierarchy,
@@ -1072,7 +1085,8 @@ impl SetValue for PadLinkReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PadMode {
     None,
     Push,
@@ -1132,7 +1146,8 @@ impl SetValue for PadMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PadPresence {
     Always,
     Sometimes,
@@ -1192,7 +1207,8 @@ impl SetValue for PadPresence {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PadProbeReturn {
     Drop,
     Ok,
@@ -1258,7 +1274,8 @@ impl SetValue for PadProbeReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ParseError {
     Syntax,
     NoSuchElement,
@@ -1359,7 +1376,8 @@ impl SetValue for ParseError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PluginError {
     Module,
     Dependencies,
@@ -1440,7 +1458,8 @@ impl SetValue for PluginError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ProgressType {
     Start,
     Continue,
@@ -1507,7 +1526,8 @@ impl SetValue for ProgressType {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PromiseResult {
     Pending,
     Interrupted,
@@ -1576,7 +1596,8 @@ impl SetValue for PromiseResult {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum QOSType {
     Overflow,
     Underflow,
@@ -1636,7 +1657,8 @@ impl SetValue for QOSType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+    #[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy)]
 pub enum Rank {
     None,
     Marginal,
@@ -1699,7 +1721,8 @@ impl SetValue for Rank {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum ResourceError {
     Failed,
     TooLazy,
@@ -1832,7 +1855,8 @@ impl SetValue for ResourceError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum SeekType {
     None,
     Set,
@@ -1892,7 +1916,8 @@ impl SetValue for SeekType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum State {
     VoidPending,
     Null,
@@ -1958,7 +1983,8 @@ impl SetValue for State {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum StateChange {
     NullToReady,
     ReadyToPaused,
@@ -2039,8 +2065,9 @@ impl SetValue for StateChange {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum StateChangeReturn {
     Failure,
     Success,
@@ -2103,7 +2130,8 @@ impl SetValue for StateChangeReturn {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum StreamError {
     Failed,
     TooLazy,
@@ -2228,7 +2256,8 @@ impl SetValue for StreamError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum StreamStatusType {
     Create,
     Enter,
@@ -2300,7 +2329,8 @@ impl SetValue for StreamStatusType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum StructureChangeType {
     Link,
     Unlink,
@@ -2357,7 +2387,8 @@ impl SetValue for StructureChangeType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum TagMergeMode {
     Undefined,
     ReplaceAll,
@@ -2432,7 +2463,8 @@ impl SetValue for TagMergeMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum TaskState {
     Started,
     Stopped,
@@ -2492,8 +2524,9 @@ impl SetValue for TaskState {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy)]
 pub enum TocEntryType {
     Angle,
     Version,
@@ -2565,8 +2598,9 @@ impl SetValue for TocEntryType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy)]
 pub enum TocLoopType {
     None,
     Forward,
@@ -2629,8 +2663,9 @@ impl SetValue for TocLoopType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy)]
 pub enum TocScope {
     Global,
     Current,
@@ -2687,7 +2722,8 @@ impl SetValue for TocScope {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+    #[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy)]
 pub enum TypeFindProbability {
     None,
     Minimum,
@@ -2756,7 +2792,8 @@ impl SetValue for TypeFindProbability {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum URIError {
     UnsupportedProtocol,
     BadUri,
@@ -2841,7 +2878,8 @@ impl SetValue for URIError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum URIType {
     Unknown,
     Sink,

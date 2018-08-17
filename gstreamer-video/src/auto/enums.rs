@@ -12,7 +12,8 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoColorMatrix {
     Unknown,
     Rgb,
@@ -84,7 +85,8 @@ impl SetValue for VideoColorMatrix {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoColorPrimaries {
     Unknown,
     Bt709,
@@ -163,7 +165,8 @@ impl SetValue for VideoColorPrimaries {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoFieldOrder {
     Unknown,
     TopFieldFirst,
@@ -229,7 +232,8 @@ impl SetValue for VideoFieldOrder {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoFormat {
     Unknown,
     Encoded,
@@ -523,7 +527,8 @@ impl SetValue for VideoFormat {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoInterlaceMode {
     Progressive,
     Interleaved,
@@ -586,7 +591,8 @@ impl SetValue for VideoInterlaceMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoMultiviewFramePacking {
     None,
     Mono,
@@ -667,7 +673,8 @@ impl SetValue for VideoMultiviewFramePacking {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoMultiviewMode {
     None,
     Mono,
@@ -757,7 +764,8 @@ impl SetValue for VideoMultiviewMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoTileMode {
     Unknown,
     Zflipz2x2,
@@ -814,7 +822,8 @@ impl SetValue for VideoTileMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoTransferFunction {
     Unknown,
     Gamma10,

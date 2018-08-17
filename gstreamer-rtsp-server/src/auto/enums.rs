@@ -12,7 +12,8 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPAddressPoolResult {
     Ok,
     Einval,
@@ -54,7 +55,8 @@ impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPMediaStatus {
     Unprepared,
     Unpreparing,
@@ -99,7 +101,8 @@ impl FromGlib<ffi::GstRTSPMediaStatus> for RTSPMediaStatus {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPPublishClockMode {
     None,
     Clock,
@@ -159,7 +162,8 @@ impl SetValue for RTSPPublishClockMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPSuspendMode {
     None,
     Pause,
@@ -219,7 +223,8 @@ impl SetValue for RTSPSuspendMode {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPThreadType {
     Client,
     Media,

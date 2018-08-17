@@ -14,7 +14,8 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PlayerColorBalanceType {
     Hue,
     Brightness,
@@ -77,7 +78,8 @@ impl SetValue for PlayerColorBalanceType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PlayerError {
     Failed,
     #[doc(hidden)]
@@ -150,7 +152,8 @@ impl SetValue for PlayerError {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PlayerSnapshotFormat {
     RawNative,
     RawXrgb,
@@ -192,7 +195,8 @@ impl FromGlib<ffi::GstPlayerSnapshotFormat> for PlayerSnapshotFormat {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum PlayerState {
     Stopped,
     Buffering,

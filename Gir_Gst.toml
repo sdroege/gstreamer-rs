@@ -50,11 +50,9 @@ generate = [
     "Gst.ChildProxy",
     "Gst.TagSetter",
     "Gst.QOSType",
-    "Gst.EventType",
     "Gst.TocSetter",
     "Gst.ClockType",
     "Gst.ElementFlags",
-    "Gst.Rank",
     "Gst.PadLinkCheck",
     "Gst.DebugLevel",
     "Gst.DebugColorFlags",
@@ -64,7 +62,6 @@ generate = [
     "Gst.TaskState",
     "Gst.PluginDependencyFlags",
     "Gst.DateTime",
-    "Gst.TypeFindProbability",
     "Gst.BufferPoolAcquireFlags",
     "Gst.PromiseResult",
 ]
@@ -156,6 +153,8 @@ status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"
     cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
 name = "Gst.SegmentFlags"
@@ -170,6 +169,8 @@ status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"
     cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
 name = "Gst.TocEntryType"
@@ -177,6 +178,8 @@ status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"
     cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
 
 [[object]]
 name = "Gst.TocLoopType"
@@ -184,6 +187,26 @@ status = "generate"
     [[object.derive]]
     name = "Serialize, Deserialize"
     cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
+name = "Gst.Rank"
+status = "generate"
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, Hash"
+
+[[object]]
+name = "Gst.TypeFindProbability"
+status = "generate"
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, Hash"
+
+[[object]]
+name = "Gst.EventType"
+status = "generate"
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, Hash"
 
 [[object]]
 name = "Gst.Structure"

@@ -16,6 +16,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct MIKEYPayload(Boxed<ffi::GstMIKEYPayload>);
 
     match fn {

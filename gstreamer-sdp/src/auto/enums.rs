@@ -5,7 +5,8 @@
 use ffi;
 use glib::translate::*;
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYCacheType {
     None,
     Always,
@@ -41,7 +42,8 @@ impl FromGlib<ffi::GstMIKEYCacheType> for MIKEYCacheType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYEncAlg {
     Null,
     AesCm128,
@@ -77,7 +79,8 @@ impl FromGlib<ffi::GstMIKEYEncAlg> for MIKEYEncAlg {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYKVType {
     Null,
     Spi,
@@ -113,7 +116,8 @@ impl FromGlib<ffi::GstMIKEYKVType> for MIKEYKVType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYKeyDataType {
     Tgk,
     Tek,
@@ -146,7 +150,8 @@ impl FromGlib<ffi::GstMIKEYKeyDataType> for MIKEYKeyDataType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYMacAlg {
     Null,
     HmacSha1160,
@@ -179,7 +184,8 @@ impl FromGlib<ffi::GstMIKEYMacAlg> for MIKEYMacAlg {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYMapType {
     MikeyMapTypeSrtp,
     #[doc(hidden)]
@@ -209,7 +215,8 @@ impl FromGlib<ffi::GstMIKEYMapType> for MIKEYMapType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYPRFFunc {
     MikeyPrfMikey1,
     #[doc(hidden)]
@@ -239,7 +246,8 @@ impl FromGlib<ffi::GstMIKEYPRFFunc> for MIKEYPRFFunc {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYPayloadType {
     Last,
     Kemac,
@@ -311,7 +319,8 @@ impl FromGlib<ffi::GstMIKEYPayloadType> for MIKEYPayloadType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYSecProto {
     MikeySecProtoSrtp,
     #[doc(hidden)]
@@ -341,7 +350,8 @@ impl FromGlib<ffi::GstMIKEYSecProto> for MIKEYSecProto {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYSecSRTP {
     EncAlg,
     EncKeyLen,
@@ -407,7 +417,8 @@ impl FromGlib<ffi::GstMIKEYSecSRTP> for MIKEYSecSRTP {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYTSType {
     NtpUtc,
     Ntp,
@@ -443,7 +454,8 @@ impl FromGlib<ffi::GstMIKEYTSType> for MIKEYTSType {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum MIKEYType {
     Invalid,
     PskInit,
