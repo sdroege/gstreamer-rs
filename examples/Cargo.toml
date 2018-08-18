@@ -104,7 +104,9 @@ required-features = ["generic-futures"]
 name = "glib-futures"
 required-features = ["glib-futures"]
 
-
 [[bin]]
 name = "rtsp-server-record"
 required-features = ["gst-rtsp-server-record"]
+
+[[bin]]
+name = "discoverer"
