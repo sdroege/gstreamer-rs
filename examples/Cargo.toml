@@ -104,3 +104,6 @@ required-features = ["tokio"]
 [[bin]]
 name = "rtsp-server-record"
 required-features = ["gst-rtsp-server-record"]
+
+[[bin]]
+name = "discoverer"
