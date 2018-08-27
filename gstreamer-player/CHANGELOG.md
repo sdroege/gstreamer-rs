@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.11.6] - 2018-08-27
+### Fixed
+- Build with NLL/two-phase borrows
+- Explicitly define [bin] section for discoverer example to fix a cargo
+  warning
+
+### Added
+- Add unsafe gst::deinit() function
+- Ord/PartialOrd impls on gst::Seqnum
+- Getter for current pad mode
+- gst::Pad::sticky_events_foreach() for iterating over all sticky events
+  in a thread-safe way
+
 ## [0.11.5] - 2018-07-24
 ### Fixed
 - `gst::Bus`'s sync handler must unref every message if
@@ -292,7 +305,10 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.3...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.6...HEAD
+[0.11.6]: https://github.com/sdroege/gstreamer-rs/compare/0.11.5...0.11.6
+[0.11.5]: https://github.com/sdroege/gstreamer-rs/compare/0.11.4...0.11.5
+[0.11.4]: https://github.com/sdroege/gstreamer-rs/compare/0.11.3...0.11.4
 [0.11.3]: https://github.com/sdroege/gstreamer-rs/compare/0.11.2...0.11.3
 [0.11.2]: https://github.com/sdroege/gstreamer-rs/compare/0.11.1...0.11.2
 [0.11.1]: https://github.com/sdroege/gstreamer-rs/compare/0.11.0...0.11.1
