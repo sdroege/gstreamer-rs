@@ -21,6 +21,9 @@ futures-preview = { version = "0.2", optional = true }
 byte-slice-cast = "0.2"
 failure = "0.1"
 failure_derive = "0.1"
+cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
+pango = { git = "https://github.com/gtk-rs/pango", optional = true }
+pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
 
 [features]
 gst-player = ["gstreamer-player"]
@@ -34,6 +37,7 @@ gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 default-features = []
 v1_10 = ["gstreamer/v1_10"]
+pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 
 [badges]
 travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
@@ -110,3 +114,7 @@ required-features = ["gst-rtsp-server-record"]
 
 [[bin]]
 name = "discoverer"
+
+[[bin]]
+name = "pango-cairo"
+required-features = ["pango-cairo"]
