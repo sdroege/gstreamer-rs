@@ -12,7 +12,7 @@ def update_workspace():
         old_lines = f.readlines()
     lines = old_lines[:]
     with open('Cargo.toml', 'w') as f:
-        lines.insert(len(lines) - 1, '"gir",')
+        lines.insert(len(lines) - 2, '"gir",')
         f.write(''.join(lines))
     success = True
     try:
