@@ -13,6 +13,5 @@ external_libraries = [
 
 [external_libraries]
 gstreamer="Gst"
-gstreamer_tag="GstTag"
 gstreamer_audio="GstAudio"
 gstreamer_video="GstVideo"
