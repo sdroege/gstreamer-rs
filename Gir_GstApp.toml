@@ -8,7 +8,6 @@ work_mode = "sys"
 
 external_libraries = [
     "GLib",
-    "GObject",
 ]
 
 [external_libraries]
