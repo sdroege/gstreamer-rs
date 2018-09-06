@@ -7,8 +7,12 @@ pkg-config = "0.3.7"
 
 [dependencies]
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gstreamer-base-sys]
 path = "../gstreamer-base-sys"

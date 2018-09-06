@@ -1,16 +1,24 @@
+[badges.travis-ci]
+branch = "master"
+repository = "sdroege/gstreamer-sys"
+
 [build-dependencies]
 pkg-config = "0.3.7"
 
 [dependencies]
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 
-[dependencies.gstreamer-sys]
-path = "../gstreamer-sys"
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gstreamer-sdp-sys]
 path = "../gstreamer-sdp-sys"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
 
 [dev-dependencies]
 shell-words = "0.1.0"
@@ -23,17 +31,14 @@ dox = []
 name = "gstreamer_webrtc_sys"
 
 [package]
-build = "build.rs"
-links = "gstwebrtc-1.0"
-name = "gstreamer-webrtc-sys"
-version = "0.6.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+build = "build.rs"
 description = "FFI bindings to libgstwebrtc-1.0"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
-repository = "https://github.com/sdroege/gstreamer-sys"
 license = "MIT"
+links = "gstwebrtc-1.0"
+name = "gstreamer-webrtc-sys"
 readme = "README.md"
-
-[badges]
-travis-ci = { repository = "sdroege/gstreamer-sys", branch = "master" }
+repository = "https://github.com/sdroege/gstreamer-sys"
+version = "0.6.0"
