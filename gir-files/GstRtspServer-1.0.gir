@@ -5672,6 +5672,7 @@ bits per second.</doc>
         </return-value>
         <parameters>
           <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPOnvifMedia" c:type="GstRTSPOnvifMedia*"/>
           </instance-parameter>
         </parameters>
@@ -5686,6 +5687,7 @@ bits per second.</doc>
         </return-value>
         <parameters>
           <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPOnvifMedia" c:type="GstRTSPOnvifMedia*"/>
           </instance-parameter>
           <parameter name="bandwidth" transfer-ownership="none">
