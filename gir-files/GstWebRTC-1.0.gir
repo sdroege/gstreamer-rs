@@ -183,6 +183,23 @@ GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED: connected</doc>
               glib:nick="connected">
       </member>
     </enumeration>
+    <enumeration name="WebRTCFECType"
+                 glib:type-name="GstWebRTCFECType"
+                 glib:get-type="gst_webrtc_fec_type_get_type"
+                 c:type="GstWebRTCFECType">
+      <doc xml:space="preserve">GST_WEBRTC_FEC_TYPE_NONE: none
+GST_WEBRTC_FEC_TYPE_ULP_RED: ulpfec + red</doc>
+      <member name="none"
+              value="0"
+              c:identifier="GST_WEBRTC_FEC_TYPE_NONE"
+              glib:nick="none">
+      </member>
+      <member name="ulp_red"
+              value="1"
+              c:identifier="GST_WEBRTC_FEC_TYPE_ULP_RED"
+              glib:nick="ulp-red">
+      </member>
+    </enumeration>
     <enumeration name="WebRTCICEComponent"
                  glib:type-name="GstWebRTCICEComponent"
                  glib:get-type="gst_webrtc_ice_component_get_type"
@@ -802,7 +819,7 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#rtcsdptype"&gt;http://w3c.git
             <doc xml:space="preserve">a #GstWebRTCSDPType</doc>
             <type name="WebRTCSDPType" c:type="GstWebRTCSDPType"/>
           </parameter>
-          <parameter name="sdp" transfer-ownership="none">
+          <parameter name="sdp" transfer-ownership="full">
             <doc xml:space="preserve">a #GstSDPMessage</doc>
             <type name="GstSdp.SDPMessage" c:type="GstSDPMessage*"/>
           </parameter>
