@@ -5,6 +5,41 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.12.0] - 2018-09-08
+### Added
+- Bindings for the GStreamer SDP and WebRTC libraries
+- Generic API for working with tags that is based on string tag names and
+  glib::Value for the tag values
+- Bindings for Aggregator and AggregatorPad
+- Bindings for BaseTransform/BaseSrc::get_buffer_pool()
+- Optional serde implementations for the basic GStreamer data flow and metadata types
+
+### Changed
+- Use ptr::NonNull in various places
+- Updated to muldiv 0.2, num-rational 0.2
+- Bus::create_watch() can't return None
+- Remove CallbackGuard as unwinding across FFI boundaries is not undefined
+  behaviour anymore but will directly cause a panic
+- Changed from the futures to the futures-preview crate as an optional
+  dependency
+- Various Caps operations take a &CapsRef instead of &Caps
+- "deep-notify" signal takes the whole ParamSpec as parameter instead of only
+  the signal name
+- Some structs were changed from empty struct to empty enums
+- Pad probe code does not take an additional reference to the data anymore,
+  potentially passing writable events/buffers into the probe
+- ValueExt::compare() is implemented around std::cmp::Ordering now instead of
+  a custom enum that was basically the same
+
+### Fixed
+- Pad::add_probe() can return None if an IDLE probe was already called and
+  removed in the meantime
+- Various compiler and clippy warnings
+
+### Removed
+- std::Iterator impl for gst::Iterator. It was awkward to use because the
+  gst::Iterator could fail at each iteration
+
 ## [0.11.6] - 2018-08-27
 ### Fixed
 - Build with NLL/two-phase borrows
@@ -305,7 +340,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.11.6...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.12.0...HEAD
+[0.12.0]: https://github.com/sdroege/gstreamer-rs/compare/0.11.6...0.12.0
 [0.11.6]: https://github.com/sdroege/gstreamer-rs/compare/0.11.5...0.11.6
 [0.11.5]: https://github.com/sdroege/gstreamer-rs/compare/0.11.4...0.11.5
 [0.11.4]: https://github.com/sdroege/gstreamer-rs/compare/0.11.3...0.11.4
