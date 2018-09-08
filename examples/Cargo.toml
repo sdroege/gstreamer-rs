@@ -4,26 +4,26 @@ version = "0.12.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
-gstreamer-app = { path = "../gstreamer-app" }
-gstreamer-audio = { path = "../gstreamer-audio" }
-gstreamer-video = { path = "../gstreamer-video" }
-gstreamer-pbutils = { path = "../gstreamer-pbutils" }
-gstreamer-player = { path = "../gstreamer-player", optional = true }
-gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
-gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
-gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
-gio = { git = "https://github.com/gtk-rs/gio", optional = true }
+glib = "0.6"
+gstreamer = { version = "0.12", path = "../gstreamer" }
+gstreamer-app = { version = "0.12", path = "../gstreamer-app" }
+gstreamer-audio = { version = "0.12", path = "../gstreamer-audio" }
+gstreamer-video = { version = "0.12", path = "../gstreamer-video" }
+gstreamer-pbutils = { version = "0.12", path = "../gstreamer-pbutils" }
+gstreamer-player = { version = "0.12", path = "../gstreamer-player", optional = true }
+gstreamer-rtsp = { version = "0.12", path = "../gstreamer-rtsp", optional = true }
+gstreamer-rtsp-server = { version = "0.12", path = "../gstreamer-rtsp-server", optional = true }
+gstreamer-rtsp-server-sys = { version = "0.6", features = ["v1_8"] }
+gtk = { version = "0.5", features = ["v3_6"], optional = true }
+gdk = { version = "0.9", optional = true }
+gio = { version = "0.5", optional = true }
 futures-preview = { version = "0.2", optional = true }
 byte-slice-cast = "0.2"
 failure = "0.1"
 failure_derive = "0.1"
-cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
-pango = { git = "https://github.com/gtk-rs/pango", optional = true }
-pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
+cairo-rs = { version = "0.5", features=["use_glib"], optional = true }
+pango = { version = "0.5", optional = true }
+pangocairo = { version = "0.6", optional = true }
 
 [features]
 gst-player = ["gstreamer-player"]

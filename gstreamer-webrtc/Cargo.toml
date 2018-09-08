@@ -14,13 +14,13 @@ build = "build.rs"
 
 [dependencies]
 libc = "0.2"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys" }
-gstreamer-webrtc-sys = { git = "https://github.com/sdroege/gstreamer-sys" }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer", features = ["v1_14"] }
-gstreamer-sdp = { path = "../gstreamer-sdp" }
+glib-sys = "0.7"
+gobject-sys = "0.7"
+gstreamer-sys = "0.6"
+gstreamer-webrtc-sys = "0.6"
+glib = "0.6"
+gstreamer = { version = "0.12", path = "../gstreamer", features = ["v1_14"] }
+gstreamer-sdp = { version = "0.12", path = "../gstreamer-sdp" }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
