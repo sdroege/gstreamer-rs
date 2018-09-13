@@ -39,6 +39,8 @@ pub trait VideoOverlayExt {
 
     fn handle_events(&self, handle_events: bool);
 
+    fn prepare_window_handle(&self);
+
     fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError>;
 
     //fn set_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr);
@@ -58,6 +60,12 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
     fn handle_events(&self, handle_events: bool) {
         unsafe {
             ffi::gst_video_overlay_handle_events(self.to_glib_none().0, handle_events.to_glib());
+        }
+    }
+
+    fn prepare_window_handle(&self) {
+        unsafe {
+            ffi::gst_video_overlay_prepare_window_handle(self.to_glib_none().0);
         }
     }
 

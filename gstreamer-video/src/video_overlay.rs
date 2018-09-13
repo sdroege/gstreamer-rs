@@ -14,10 +14,15 @@ use glib::IsA;
 
 pub trait VideoOverlayExtManual {
     unsafe fn set_window_handle(&self, handle: uintptr_t);
+    unsafe fn got_window_handle(&self, handle: uintptr_t);
 }
 
 impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {
     unsafe fn set_window_handle(&self, handle: uintptr_t) {
         ffi::gst_video_overlay_set_window_handle(self.to_glib_none().0, handle)
+    }
+
+    unsafe fn got_window_handle(&self, handle: uintptr_t) {
+        ffi::gst_video_overlay_got_window_handle(self.to_glib_none().0, handle)
     }
 }
