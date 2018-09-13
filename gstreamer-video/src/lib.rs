@@ -50,7 +50,7 @@ pub use video_info::*;
 pub mod video_frame;
 pub use video_frame::{VideoFrame, VideoFrameRef};
 mod video_overlay;
-pub use video_overlay::VideoOverlayExtManual;
+pub use video_overlay::*;
 mod video_event;
 pub use video_event::*;
 mod functions;
