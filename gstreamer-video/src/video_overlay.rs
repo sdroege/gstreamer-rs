@@ -7,6 +7,9 @@
 // except according to those terms.
 
 use ffi;
+use glib::translate::*;
+use gst;
+use gst::prelude::*;
 use libc::uintptr_t;
 use VideoOverlay;
 
@@ -24,5 +27,13 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {
 
     unsafe fn got_window_handle(&self, handle: uintptr_t) {
         ffi::gst_video_overlay_got_window_handle(self.to_glib_none().0, handle)
+    }
+}
+
+pub fn is_video_overlay_prepare_window_handle_message(msg: &gst::MessageRef) -> bool {
+    unsafe {
+        from_glib(ffi::gst_is_video_overlay_prepare_window_handle_message(
+            msg.as_mut_ptr(),
+        ))
     }
 }
