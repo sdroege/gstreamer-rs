@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files @ ???)
 // DO NOT EDIT
 
-extern crate gst_gl_sys;
+extern crate gstreamer_gl_sys;
 extern crate shell_words;
 extern crate tempdir;
 use std::env;
@@ -11,7 +11,7 @@ use std::path::Path;
 use std::mem::{align_of, size_of};
 use std::process::Command;
 use std::str;
-use gst_gl_sys::*;
+use gstreamer_gl_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-gl-1.0"];
 
