@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.12.1] - 2018-09-21
+### Added
+- More complete bindings for the gst_video::VideoOverlay interface, especially
+  gst_video::is_video_overlay_prepare_window_handle_message()
+
 ## [0.12.0] - 2018-09-08
 ### Added
 - Bindings for the GStreamer SDP and WebRTC libraries
@@ -340,7 +345,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.12.0...HEAD
+[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.12.1...HEAD
+[0.12.1]: https://github.com/sdroege/gstreamer-rs/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/sdroege/gstreamer-rs/compare/0.11.6...0.12.0
 [0.11.6]: https://github.com/sdroege/gstreamer-rs/compare/0.11.5...0.11.6
 [0.11.5]: https://github.com/sdroege/gstreamer-rs/compare/0.11.4...0.11.5
