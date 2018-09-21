@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-base"
-version = "0.12.0"
+version = "0.12.1"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Base library"
