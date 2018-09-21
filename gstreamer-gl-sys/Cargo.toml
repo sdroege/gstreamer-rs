@@ -1,0 +1,46 @@
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+path = "../glib-sys"
+version = "0.2.0"
+
+[dependencies.gobject-sys]
+path = "../gobject-sys"
+version = "0.2.0"
+
+[dependencies.gstreamer-base-sys]
+path = "../gstreamer-base-sys"
+version = "0.2.0"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+version = "0.2.0"
+
+[dependencies.gstreamer-video-sys]
+path = "../gstreamer-video-sys"
+version = "0.2.0"
+
+[dev-dependencies]
+shell-words = "0.1.0"
+tempdir = "0.3"
+
+[features]
+dox = []
+v1_10 = ["v1_8"]
+v1_12 = ["v1_10"]
+v1_4 = []
+v1_6 = ["v1_4"]
+v1_8 = ["v1_6"]
+
+[lib]
+name = "gst_gl_sys"
+
+[package]
+build = "build.rs"
+links = "gst_gl"
+name = "gst-gl-sys"
+version = "0.2.0"
