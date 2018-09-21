@@ -15,6 +15,7 @@ addons:
       - libgles2-mesa
       - libgl1-mesa-dri
       - libgl1-mesa-glx
+      - libwayland-egl1-mesa
 
 matrix:
   allow_failures:
