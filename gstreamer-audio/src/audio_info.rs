@@ -303,6 +303,7 @@ impl PartialEq for AudioInfo {
 impl Eq for AudioInfo {}
 
 unsafe impl Send for AudioInfo {}
+unsafe impl Sync for AudioInfo {}
 
 impl glib::types::StaticType for AudioInfo {
     fn static_type() -> glib::types::Type {
