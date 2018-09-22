@@ -658,6 +658,7 @@ impl PartialEq for VideoInfo {
 impl Eq for VideoInfo {}
 
 unsafe impl Send for VideoInfo {}
+unsafe impl Sync for VideoInfo {}
 
 impl glib::types::StaticType for VideoInfo {
     fn static_type() -> glib::types::Type {
