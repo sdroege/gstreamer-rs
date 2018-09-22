@@ -29,6 +29,7 @@ use gobject_ffi;
 
 pub struct Structure(ptr::NonNull<StructureRef>, PhantomData<StructureRef>);
 unsafe impl Send for Structure {}
+unsafe impl Sync for Structure {}
 
 impl Structure {
     pub fn builder(name: &str) -> Builder {
@@ -294,6 +295,9 @@ impl GlibPtrDefault for Structure {
 
 #[repr(C)]
 pub struct StructureRef(ffi::GstStructure);
+
+unsafe impl Send for StructureRef {}
+unsafe impl Sync for StructureRef {}
 
 impl StructureRef {
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a StructureRef {
