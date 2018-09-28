@@ -27,9 +27,9 @@ matrix:
 script:
     - rustc --version
     - cargo build --all
-    - cargo test --all
+    - G_DEBUG=fatal_warnings cargo test --all
     - cargo build --all --all-features
-    - cargo test --all --all-features
+    - G_DEBUG=fatal_warnings cargo test --all --all-features
 
 before_install:
 - curl -L https://people.freedesktop.org/~slomo/gstreamer-1.14.3.tar.gz | tar xz
