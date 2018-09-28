@@ -71,6 +71,7 @@ pub use log::*;
 mod error;
 pub use error::*;
 
+#[macro_use]
 pub mod miniobject;
 pub use miniobject::{GstRc, MiniObject};
 pub mod message;

@@ -27,18 +27,11 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, T
 use glib::value::ToSendValue;
 use glib::Cast;
 use glib::IsA;
+use glib_ffi;
 
-#[repr(C)]
-pub struct MessageRef(ffi::GstMessage);
-
-pub type Message = GstRc<MessageRef>;
-
-unsafe impl Sync for MessageRef {}
-unsafe impl Send for MessageRef {}
-
-unsafe impl MiniObject for MessageRef {
-    type GstType = ffi::GstMessage;
-}
+gst_define_mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, [Debug,], || {
+    ffi::gst_message_get_type()
+});
 
 impl MessageRef {
     pub fn get_src(&self) -> Option<Object> {
@@ -113,7 +106,7 @@ impl MessageRef {
     }
 }
 
-impl GstRc<MessageRef> {
+impl Message {
     pub fn new_eos<'a>() -> EosBuilder<'a> {
         assert_initialized_main_thread!();
         EosBuilder::new()
@@ -348,12 +341,6 @@ impl GstRc<MessageRef> {
     }
 }
 
-impl glib::types::StaticType for MessageRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_message_get_type()) }
-    }
-}
-
 impl fmt::Debug for MessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Message")
@@ -365,14 +352,6 @@ impl fmt::Debug for MessageRef {
             .field("src", &self.get_src().map(|s| s.get_name()))
             .field("structure", &self.get_structure())
             .finish()
-    }
-}
-
-impl ToOwned for MessageRef {
-    type Owned = GstRc<MessageRef>;
-
-    fn to_owned(&self) -> GstRc<MessageRef> {
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
 

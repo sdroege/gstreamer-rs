@@ -19,20 +19,13 @@ use std::ptr;
 
 use glib;
 use glib::translate::*;
+use glib_ffi;
 
-#[repr(C)]
-pub struct QueryRef(ffi::GstQuery);
+gst_define_mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, [Debug,], || {
+    ffi::gst_query_get_type()
+});
 
-unsafe impl Send for QueryRef {}
-unsafe impl Sync for QueryRef {}
-
-pub type Query = GstRc<QueryRef>;
-
-unsafe impl MiniObject for QueryRef {
-    type GstType = ffi::GstQuery;
-}
-
-impl GstRc<QueryRef> {
+impl Query {
     pub fn new_position(fmt: ::Format) -> Position<Self> {
         assert_initialized_main_thread!();
         unsafe { Position::<Self>(from_glib_full(ffi::gst_query_new_position(fmt.to_glib()))) }
@@ -196,12 +189,6 @@ impl QueryRef {
 
     pub fn view_mut(&mut self) -> QueryView<&mut Self> {
         unsafe { mem::transmute(self.view()) }
-    }
-}
-
-impl glib::types::StaticType for QueryRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_query_get_type()) }
     }
 }
 

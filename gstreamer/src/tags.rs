@@ -13,9 +13,9 @@ use std::mem;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue};
-use glib::StaticType;
+use glib_ffi;
 
 use miniobject::*;
 
@@ -337,21 +337,22 @@ impl_tag!(
 );
 impl_tag!(PrivateData, Sample, TAG_PRIVATE_DATA, GST_TAG_PRIVATE_DATA);
 
-pub type TagList = GstRc<TagListRef>;
-pub struct TagListRef(ffi::GstTagList);
+gst_define_mini_object_wrapper!(
+    TagList,
+    TagListRef,
+    ffi::GstTagList,
+    [Debug, PartialEq, Eq,],
+    || ffi::gst_tag_list_get_type()
+);
 
-unsafe impl MiniObject for TagListRef {
-    type GstType = ffi::GstTagList;
-}
-
-impl GstRc<TagListRef> {
+impl TagList {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_tag_list_new_empty()) }
     }
 }
 
-impl Default for GstRc<TagListRef> {
+impl Default for TagList {
     fn default() -> Self {
         Self::new()
     }
@@ -507,23 +508,6 @@ impl PartialEq for TagListRef {
 }
 
 impl Eq for TagListRef {}
-
-impl ToOwned for TagListRef {
-    type Owned = GstRc<TagListRef>;
-
-    fn to_owned(&self) -> GstRc<TagListRef> {
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
-    }
-}
-
-impl StaticType for TagListRef {
-    fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_tag_list_get_type()) }
-    }
-}
-
-unsafe impl Sync for TagListRef {}
-unsafe impl Send for TagListRef {}
 
 pub struct TagIterator<'a, T: Tag<'a>> {
     taglist: &'a TagListRef,

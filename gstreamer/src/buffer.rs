@@ -21,19 +21,19 @@ use ClockTime;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlib};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib_ffi;
 
 pub enum Readable {}
 pub enum Writable {}
 
-#[repr(C)]
-pub struct BufferRef(ffi::GstBuffer);
-pub type Buffer = GstRc<BufferRef>;
-
-unsafe impl MiniObject for BufferRef {
-    type GstType = ffi::GstBuffer;
-}
+gst_define_mini_object_wrapper!(
+    Buffer,
+    BufferRef,
+    ffi::GstBuffer,
+    [Debug, PartialEq, Eq,],
+    || ffi::gst_buffer_get_type()
+);
 
 pub struct BufferMap<'a, T> {
     buffer: &'a BufferRef,
@@ -47,7 +47,7 @@ pub struct MappedBuffer<T> {
     phantom: PhantomData<T>,
 }
 
-impl GstRc<BufferRef> {
+impl Buffer {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
 
@@ -161,7 +161,7 @@ impl GstRc<BufferRef> {
     }
 }
 
-impl Default for GstRc<BufferRef> {
+impl Default for Buffer {
     fn default() -> Self {
         Self::new()
     }
@@ -366,23 +366,6 @@ impl BufferRef {
 
     pub fn set_flags(&mut self, flags: BufferFlags) {
         self.0.mini_object.flags = flags.bits();
-    }
-}
-
-unsafe impl Sync for BufferRef {}
-unsafe impl Send for BufferRef {}
-
-impl glib::types::StaticType for BufferRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_buffer_get_type()) }
-    }
-}
-
-impl ToOwned for BufferRef {
-    type Owned = GstRc<BufferRef>;
-
-    fn to_owned(&self) -> GstRc<BufferRef> {
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
 

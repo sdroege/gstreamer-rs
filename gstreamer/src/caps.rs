@@ -17,19 +17,15 @@ use CapsIntersectMode;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
+use glib_ffi;
 
-#[repr(C)]
-pub struct CapsRef(ffi::GstCaps);
+gst_define_mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, [Debug, PartialEq, Eq,], || {
+    ffi::gst_caps_get_type()
+});
 
-pub type Caps = GstRc<CapsRef>;
-
-unsafe impl MiniObject for CapsRef {
-    type GstType = ffi::GstCaps;
-}
-
-impl GstRc<CapsRef> {
+impl Caps {
     pub fn builder(name: &str) -> Builder {
         assert_initialized_main_thread!();
         Builder::new(name)
@@ -340,12 +336,6 @@ impl CapsRef {
     }
 }
 
-impl glib::types::StaticType for CapsRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_caps_get_type()) }
-    }
-}
-
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $styp:ty, $get_item:expr) => {
     pub struct $name<'a> {
@@ -499,17 +489,6 @@ impl PartialEq for CapsRef {
 }
 
 impl Eq for CapsRef {}
-
-impl ToOwned for CapsRef {
-    type Owned = GstRc<CapsRef>;
-
-    fn to_owned(&self) -> GstRc<CapsRef> {
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
-    }
-}
-
-unsafe impl Sync for CapsRef {}
-unsafe impl Send for CapsRef {}
 
 pub struct Builder<'a> {
     s: ::Structure,

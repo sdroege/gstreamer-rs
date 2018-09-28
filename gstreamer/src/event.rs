@@ -19,8 +19,9 @@ use std::ops::Deref;
 use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
+use glib_ffi;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;
@@ -110,18 +111,6 @@ impl FromGlib<u32> for GroupId {
     }
 }
 
-#[repr(C)]
-pub struct EventRef(ffi::GstEvent);
-
-pub type Event = GstRc<EventRef>;
-
-unsafe impl Sync for EventRef {}
-unsafe impl Send for EventRef {}
-
-unsafe impl MiniObject for EventRef {
-    type GstType = ffi::GstEvent;
-}
-
 impl EventType {
     pub fn is_upstream(self) -> bool {
         (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
@@ -175,6 +164,10 @@ impl PartialOrd for EventType {
         }
     }
 }
+
+gst_define_mini_object_wrapper!(Event, EventRef, ffi::GstEvent, [Debug,], || {
+    ffi::gst_event_get_type()
+});
 
 impl EventRef {
     pub fn get_seqnum(&self) -> Seqnum {
@@ -266,7 +259,7 @@ impl EventRef {
     }
 }
 
-impl GstRc<EventRef> {
+impl Event {
     pub fn new_flush_start<'a>() -> FlushStartBuilder<'a> {
         assert_initialized_main_thread!();
         FlushStartBuilder::new()
@@ -452,12 +445,6 @@ impl GstRc<EventRef> {
     }
 }
 
-impl glib::types::StaticType for EventRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_event_get_type()) }
-    }
-}
-
 impl fmt::Debug for EventRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Event")
@@ -468,14 +455,6 @@ impl fmt::Debug for EventRef {
             }).field("seqnum", &self.get_seqnum())
             .field("structure", &self.get_structure())
             .finish()
-    }
-}
-
-impl ToOwned for EventRef {
-    type Owned = GstRc<EventRef>;
-
-    fn to_owned(&self) -> GstRc<EventRef> {
-        unsafe { from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _) }
     }
 }
 

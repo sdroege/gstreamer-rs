@@ -8,22 +8,23 @@
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full};
-use glib::StaticType;
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlibPtr};
+use glib_ffi;
 use std::fmt;
 
 use miniobject::*;
 use Buffer;
 use BufferRef;
 
-pub type BufferList = GstRc<BufferListRef>;
-pub struct BufferListRef(ffi::GstBufferList);
+gst_define_mini_object_wrapper!(
+    BufferList,
+    BufferListRef,
+    ffi::GstBufferList,
+    [Debug,],
+    || ffi::gst_buffer_list_get_type()
+);
 
-unsafe impl MiniObject for BufferListRef {
-    type GstType = ffi::GstBufferList;
-}
-
-impl GstRc<BufferListRef> {
+impl BufferList {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_buffer_list_new()) }
@@ -95,20 +96,9 @@ impl BufferListRef {
     }
 }
 
-impl Default for GstRc<BufferListRef> {
+impl Default for BufferList {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl ToOwned for BufferListRef {
-    type Owned = GstRc<BufferListRef>;
-
-    fn to_owned(&self) -> GstRc<BufferListRef> {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
-        }
     }
 }
 
@@ -129,15 +119,6 @@ impl fmt::Debug for BufferListRef {
             .finish()
     }
 }
-
-impl StaticType for BufferListRef {
-    fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_buffer_list_get_type()) }
-    }
-}
-
-unsafe impl Sync for BufferListRef {}
-unsafe impl Send for BufferListRef {}
 
 pub struct Iter<'a> {
     list: &'a BufferListRef,

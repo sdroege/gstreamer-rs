@@ -12,20 +12,17 @@ use std::fmt;
 use ffi;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
-use glib::StaticType;
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib_ffi;
 
 use miniobject::*;
 use StructureRef;
 
-pub type Context = GstRc<ContextRef>;
-pub struct ContextRef(ffi::GstContext);
+gst_define_mini_object_wrapper!(Context, ContextRef, ffi::GstContext, [Debug,], || {
+    ffi::gst_context_get_type()
+});
 
-unsafe impl MiniObject for ContextRef {
-    type GstType = ffi::GstContext;
-}
-
-impl GstRc<ContextRef> {
+impl Context {
     pub fn new(context_type: &str, persistent: bool) -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -71,12 +68,6 @@ impl ContextRef {
     }
 }
 
-impl StaticType for ContextRef {
-    fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_context_get_type()) }
-    }
-}
-
 impl fmt::Debug for ContextRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Context")
@@ -85,17 +76,3 @@ impl fmt::Debug for ContextRef {
             .finish()
     }
 }
-
-impl ToOwned for ContextRef {
-    type Owned = GstRc<ContextRef>;
-
-    fn to_owned(&self) -> GstRc<ContextRef> {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
-        }
-    }
-}
-
-unsafe impl Sync for ContextRef {}
-unsafe impl Send for ContextRef {}

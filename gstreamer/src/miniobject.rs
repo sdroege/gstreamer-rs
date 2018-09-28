@@ -501,19 +501,31 @@ macro_rules! gst_define_mini_object_wrapper(
 
         impl $name {
             pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
-                $name(from_glib_none(ptr))
+                $name(glib::translate::from_glib_none(ptr))
             }
 
             pub unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
-                $name(from_glib_full(ptr))
+                $name(glib::translate::from_glib_full(ptr))
             }
 
             pub unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> Self {
-                $name(from_glib_borrow(ptr))
+                $name(glib::translate::from_glib_borrow(ptr))
             }
 
             pub unsafe fn into_ptr(self) -> *mut $ffi_name {
                 self.0.into_ptr()
+            }
+        }
+
+        impl From<$crate::GstRc<$ref_name>> for $name {
+            fn from(rc: $crate::GstRc<$ref_name>) -> $name {
+                $name(rc)
+            }
+        }
+
+        impl Into<$crate::GstRc<$ref_name>> for $name {
+            fn into(self) -> $crate::GstRc<$ref_name> {
+                self.0
             }
         }
 
@@ -595,7 +607,7 @@ macro_rules! gst_define_mini_object_wrapper(
                 skip_assert_initialized!();
                 let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
                 let mut v_ptr: Vec<_> = v.iter().map(|s| s.0).collect();
-                v_ptr.push(ptr::null_mut() as *mut $ffi_name);
+                v_ptr.push(::std::ptr::null_mut() as *mut $ffi_name);
 
                 (v_ptr.as_ptr() as *mut *mut $ffi_name, (v, Some(v_ptr)))
             }
@@ -605,11 +617,11 @@ macro_rules! gst_define_mini_object_wrapper(
                 let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
 
                 let v_ptr = unsafe {
-                    let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut $ffi_name>() * t.len() + 1)
+                    let v_ptr = glib_ffi::g_malloc0(::std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
                     for (i, s) in v.iter().enumerate() {
-                        ptr::write(v_ptr.offset(i as isize), s.0);
+                        ::std::ptr::write(v_ptr.offset(i as isize), s.0);
                     }
 
                     v_ptr
@@ -621,11 +633,11 @@ macro_rules! gst_define_mini_object_wrapper(
             fn to_glib_full_from_slice(t: &[$name]) -> *mut *mut $ffi_name {
                 skip_assert_initialized!();
                 unsafe {
-                    let v_ptr = glib_ffi::g_malloc0(mem::size_of::<*mut $ffi_name>() * t.len() + 1)
+                    let v_ptr = glib_ffi::g_malloc0(::std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
                     for (i, s) in t.iter().enumerate() {
-                        ptr::write(v_ptr.offset(i as isize), s.to_glib_full());
+                        ::std::ptr::write(v_ptr.offset(i as isize), s.to_glib_full());
                     }
 
                     v_ptr
@@ -708,7 +720,7 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 let mut res = Vec::with_capacity(num);
                 for i in 0..num {
-                    res.push(from_glib_none(ptr::read(ptr.offset(i as isize))));
+                    res.push(from_glib_none(::std::ptr::read(ptr.offset(i as isize))));
                 }
                 res
             }
@@ -726,7 +738,7 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 let mut res = Vec::with_capacity(num);
                 for i in 0..num {
-                    res.push(from_glib_full(ptr::read(ptr.offset(i as isize))));
+                    res.push(from_glib_full(::std::ptr::read(ptr.offset(i as isize))));
                 }
                 glib_ffi::g_free(ptr as *mut _);
                 res
@@ -788,19 +800,19 @@ macro_rules! gst_define_mini_object_wrapper(
             for $name
         {
             unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-                <gst::GstRc<$ref_name> as glib::value::FromValueOptional>::from_value_optional(v).map($name)
+                <$crate::GstRc<$ref_name> as glib::value::FromValueOptional>::from_value_optional(v).map($name)
             }
         }
 
         impl glib::value::SetValue for $name {
             unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-                <gst::GstRc<$ref_name> as glib::value::SetValue>::set_value(v, &s.0)
+                <$crate::GstRc<$ref_name> as glib::value::SetValue>::set_value(v, &s.0)
             }
         }
 
         impl glib::value::SetValueOptional for $name {
             unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-                <gst::GstRc<$ref_name> as glib::value::SetValueOptional>::set_value_optional(v, s.map(|s| &s.0))
+                <$crate::GstRc<$ref_name> as glib::value::SetValueOptional>::set_value_optional(v, s.map(|s| &s.0))
             }
         }
 

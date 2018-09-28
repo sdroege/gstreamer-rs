@@ -16,6 +16,7 @@ use glib;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
+use glib_ffi;
 
 use miniobject::*;
 use TagList;
@@ -24,14 +25,15 @@ use TocEntryType;
 use TocLoopType;
 use TocScope;
 
-pub type Toc = GstRc<TocRef>;
-pub struct TocRef(ffi::GstToc);
+gst_define_mini_object_wrapper!(
+    Toc,
+    TocRef,
+    ffi::GstToc,
+    [Debug,],
+    || ffi::gst_toc_get_type()
+);
 
-unsafe impl MiniObject for TocRef {
-    type GstType = ffi::GstToc;
-}
-
-impl GstRc<TocRef> {
+impl Toc {
     pub fn new(scope: TocScope) -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_toc_new(scope.to_glib())) }
@@ -80,23 +82,6 @@ impl TocRef {
     }
 }
 
-impl glib::types::StaticType for TocRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_toc_get_type()) }
-    }
-}
-
-impl ToOwned for TocRef {
-    type Owned = GstRc<TocRef>;
-
-    fn to_owned(&self) -> GstRc<TocRef> {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
-        }
-    }
-}
-
 impl fmt::Debug for TocRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Toc")
@@ -107,17 +92,11 @@ impl fmt::Debug for TocRef {
     }
 }
 
-unsafe impl Sync for TocRef {}
-unsafe impl Send for TocRef {}
+gst_define_mini_object_wrapper!(TocEntry, TocEntryRef, ffi::GstTocEntry, [Debug,], || {
+    ffi::gst_toc_entry_get_type()
+});
 
-pub type TocEntry = GstRc<TocEntryRef>;
-pub struct TocEntryRef(ffi::GstTocEntry);
-
-unsafe impl MiniObject for TocEntryRef {
-    type GstType = ffi::GstTocEntry;
-}
-
-impl GstRc<TocEntryRef> {
+impl TocEntry {
     pub fn new(type_: TocEntryType, uid: &str) -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -228,23 +207,6 @@ impl TocEntryRef {
     }
 }
 
-impl glib::types::StaticType for TocEntryRef {
-    fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_toc_entry_get_type()) }
-    }
-}
-
-impl ToOwned for TocEntryRef {
-    type Owned = GstRc<TocEntryRef>;
-
-    fn to_owned(&self) -> GstRc<TocEntryRef> {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
-        }
-    }
-}
-
 impl fmt::Debug for TocEntryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("TocEntry")
@@ -259,9 +221,6 @@ impl fmt::Debug for TocEntryRef {
             .finish()
     }
 }
-
-unsafe impl Sync for TocEntryRef {}
-unsafe impl Send for TocEntryRef {}
 
 #[cfg(test)]
 mod tests {

@@ -13,7 +13,7 @@ use ffi;
 
 use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlibPtr};
-use glib::StaticType;
+use glib_ffi;
 
 use miniobject::*;
 use Buffer;
@@ -25,14 +25,11 @@ use Segment;
 use Structure;
 use StructureRef;
 
-pub type Sample = GstRc<SampleRef>;
-pub struct SampleRef(ffi::GstSample);
+gst_define_mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, [Debug,], || {
+    ffi::gst_sample_get_type()
+});
 
-unsafe impl MiniObject for SampleRef {
-    type GstType = ffi::GstSample;
-}
-
-impl GstRc<SampleRef> {
+impl Sample {
     pub fn new<F: FormattedValue>(
         buffer: Option<&Buffer>,
         caps: Option<&Caps>,
@@ -96,23 +93,6 @@ impl SampleRef {
     }
 }
 
-impl StaticType for SampleRef {
-    fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_sample_get_type()) }
-    }
-}
-
-impl ToOwned for SampleRef {
-    type Owned = GstRc<SampleRef>;
-
-    fn to_owned(&self) -> GstRc<SampleRef> {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
-        unsafe {
-            from_glib_full(ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
-        }
-    }
-}
-
 impl fmt::Debug for SampleRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Sample")
@@ -123,9 +103,6 @@ impl fmt::Debug for SampleRef {
             .finish()
     }
 }
-
-unsafe impl Sync for SampleRef {}
-unsafe impl Send for SampleRef {}
 
 #[cfg(test)]
 mod tests {
