@@ -212,8 +212,7 @@ impl fmt::Debug for QueryRef {
             .field("type", &unsafe {
                 let type_ = ffi::gst_query_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
-            })
-            .field("structure", &self.get_structure())
+            }).field("structure", &self.get_structure())
             .finish()
     }
 }

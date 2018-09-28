@@ -89,10 +89,13 @@ mod structure_serde;
 
 pub mod caps;
 pub use caps::{Caps, CapsRef};
+mod caps_features;
 #[cfg(feature = "ser_de")]
 mod caps_serde;
-mod caps_features;
-pub use caps_features::{CapsFeatures, CapsFeaturesRef, CAPS_FEATURE_MEMORY_SYSTEM_MEMORY, CAPS_FEATURES_MEMORY_SYSTEM_MEMORY};
+pub use caps_features::{
+    CapsFeatures, CapsFeaturesRef, CAPS_FEATURES_MEMORY_SYSTEM_MEMORY,
+    CAPS_FEATURE_MEMORY_SYSTEM_MEMORY,
+};
 #[cfg(feature = "ser_de")]
 mod caps_features_serde;
 
