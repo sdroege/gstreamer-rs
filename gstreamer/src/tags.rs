@@ -358,6 +358,12 @@ impl Default for TagList {
     }
 }
 
+impl fmt::Display for TagList {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
 impl TagListRef {
     pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode)
     where

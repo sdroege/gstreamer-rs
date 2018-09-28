@@ -116,6 +116,12 @@ impl str::FromStr for Caps {
     }
 }
 
+impl fmt::Display for Caps {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
 impl CapsRef {
     pub fn set_simple(&mut self, values: &[(&str, &ToSendValue)]) {
         for &(name, value) in values {
