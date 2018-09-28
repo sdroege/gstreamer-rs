@@ -6,8 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use caps_features::*;
 use miniobject::*;
 use std::fmt;
+use std::ptr;
 use std::str;
 use structure::*;
 
@@ -68,12 +70,27 @@ impl GstRc<CapsRef> {
         unsafe { from_glib_full(ffi::gst_caps_merge(caps.into_ptr(), other.into_ptr())) }
     }
 
-    pub fn merge_structure(caps: Self, other: Structure) -> Self {
+    pub fn merge_structure(caps: Self, structure: Structure) -> Self {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(ffi::gst_caps_merge_structure(
                 caps.into_ptr(),
-                other.into_ptr(),
+                structure.into_ptr(),
+            ))
+        }
+    }
+
+    pub fn merge_structure_full(
+        caps: Self,
+        structure: Structure,
+        features: Option<CapsFeatures>,
+    ) -> Self {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(ffi::gst_caps_merge_structure_full(
+                caps.into_ptr(),
+                structure.into_ptr(),
+                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
             ))
         }
     }
@@ -133,9 +150,7 @@ impl CapsRef {
                 return None;
             }
 
-            Some(StructureRef::from_glib_borrow(
-                structure as *const ffi::GstStructure,
-            ))
+            Some(StructureRef::from_glib_borrow(structure))
         }
     }
 
@@ -150,9 +165,41 @@ impl CapsRef {
                 return None;
             }
 
-            Some(StructureRef::from_glib_borrow_mut(
-                structure as *mut ffi::GstStructure,
-            ))
+            Some(StructureRef::from_glib_borrow_mut(structure))
+        }
+    }
+
+    pub fn get_features(&self, idx: u32) -> Option<&CapsFeaturesRef> {
+        if idx >= self.get_size() {
+            return None;
+        }
+
+        unsafe {
+            let features = ffi::gst_caps_get_features(self.as_ptr(), idx);
+            Some(CapsFeaturesRef::from_glib_borrow(features))
+        }
+    }
+
+    pub fn get_mut_features(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
+        if idx >= self.get_size() {
+            return None;
+        }
+
+        unsafe {
+            let features = ffi::gst_caps_get_features(self.as_ptr(), idx);
+            Some(CapsFeaturesRef::from_glib_borrow_mut(features))
+        }
+    }
+
+    pub fn set_features(&mut self, idx: u32, features: Option<CapsFeatures>) {
+        assert!(idx < self.get_size());
+
+        unsafe {
+            ffi::gst_caps_set_features(
+                self.as_mut_ptr(),
+                idx,
+                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+            )
         }
     }
 
@@ -168,8 +215,26 @@ impl CapsRef {
         IterMut::new(self)
     }
 
+    pub fn iter_with_features(&self) -> IterFeatures {
+        IterFeatures::new(self)
+    }
+
+    pub fn iter_with_features_mut(&mut self) -> IterFeaturesMut {
+        IterFeaturesMut::new(self)
+    }
+
     pub fn append_structure(&mut self, structure: Structure) {
         unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
+    }
+
+    pub fn append_structure_full(&mut self, structure: Structure, features: Option<CapsFeatures>) {
+        unsafe {
+            ffi::gst_caps_append_structure_full(
+                self.as_mut_ptr(),
+                structure.into_ptr(),
+                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+            )
+        }
     }
 
     pub fn remove_structure(&mut self, idx: u32) {
@@ -250,6 +315,20 @@ impl CapsRef {
         }
     }
 
+    pub fn is_subset_structure_full(
+        &self,
+        structure: &StructureRef,
+        features: Option<&CapsFeaturesRef>,
+    ) -> bool {
+        unsafe {
+            from_glib(ffi::gst_caps_is_subset_structure_full(
+                self.as_ptr(),
+                structure.as_ptr(),
+                features.map(|f| f.as_ptr()).unwrap_or(ptr::null()),
+            ))
+        }
+    }
+
     pub fn subtract(&self, other: &Self) -> Caps {
         skip_assert_initialized!();
         unsafe {
@@ -268,7 +347,7 @@ impl glib::types::StaticType for CapsRef {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $styp:ty) => {
+    ($name:ident, $typ:ty, $styp:ty, $get_item:expr) => {
     pub struct $name<'a> {
         caps: $typ,
         idx: u32,
@@ -297,15 +376,13 @@ macro_rules! define_iter(
             }
 
             unsafe {
-                let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.idx);
-                if structure.is_null() {
+                let item = $get_item(self.caps, self.idx);
+                if item.is_none() {
                     return None;
                 }
 
                 self.idx += 1;
-                Some(StructureRef::from_glib_borrow_mut(
-                    structure as *mut ffi::GstStructure,
-                ))
+                item
             }
         }
 
@@ -329,14 +406,7 @@ macro_rules! define_iter(
             self.n_structures -= 1;
 
             unsafe {
-                let structure = ffi::gst_caps_get_structure(self.caps.as_ptr(), self.n_structures);
-                if structure.is_null() {
-                    return None;
-                }
-
-                Some(StructureRef::from_glib_borrow_mut(
-                    structure as *mut ffi::GstStructure,
-                ))
+                $get_item(self.caps, self.n_structures)
             }
         }
     }
@@ -345,8 +415,70 @@ macro_rules! define_iter(
     }
 );
 
-define_iter!(Iter, &'a CapsRef, &'a StructureRef);
-define_iter!(IterMut, &'a mut CapsRef, &'a mut StructureRef);
+define_iter!(
+    Iter,
+    &'a CapsRef,
+    &'a StructureRef,
+    |caps: &CapsRef, idx| {
+        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(StructureRef::from_glib_borrow(
+                ptr as *const ffi::GstStructure,
+            ))
+        }
+    }
+);
+define_iter!(
+    IterMut,
+    &'a mut CapsRef,
+    &'a mut StructureRef,
+    |caps: &CapsRef, idx| {
+        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        if ptr.is_null() {
+            None
+        } else {
+            Some(StructureRef::from_glib_borrow_mut(
+                ptr as *mut ffi::GstStructure,
+            ))
+        }
+    }
+);
+define_iter!(
+    IterFeatures,
+    &'a CapsRef,
+    (&'a StructureRef, &'a CapsFeaturesRef),
+    |caps: &CapsRef, idx| {
+        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx);
+        if ptr1.is_null() || ptr2.is_null() {
+            None
+        } else {
+            Some((
+                StructureRef::from_glib_borrow(ptr1 as *const ffi::GstStructure),
+                CapsFeaturesRef::from_glib_borrow(ptr2 as *const ffi::GstCapsFeatures),
+            ))
+        }
+    }
+);
+define_iter!(
+    IterFeaturesMut,
+    &'a mut CapsRef,
+    (&'a mut StructureRef, &'a mut CapsFeaturesRef),
+    |caps: &CapsRef, idx| {
+        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx);
+        if ptr1.is_null() || ptr2.is_null() {
+            None
+        } else {
+            Some((
+                StructureRef::from_glib_borrow_mut(ptr1 as *mut ffi::GstStructure),
+                CapsFeaturesRef::from_glib_borrow_mut(ptr2 as *mut ffi::GstCapsFeatures),
+            ))
+        }
+    }
+);
 
 impl fmt::Debug for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -379,25 +511,47 @@ impl ToOwned for CapsRef {
 unsafe impl Sync for CapsRef {}
 unsafe impl Send for CapsRef {}
 
-pub struct Builder {
+pub struct Builder<'a> {
     s: ::Structure,
+    features: Option<&'a [&'a str]>,
+    any_features: bool,
 }
 
-impl Builder {
-    fn new(name: &str) -> Self {
+impl<'a> Builder<'a> {
+    fn new<'b>(name: &'b str) -> Builder<'a> {
         Builder {
             s: ::Structure::new_empty(name),
+            features: None,
+            any_features: false,
         }
     }
 
-    pub fn field<V: ToSendValue>(mut self, name: &str, value: &V) -> Self {
+    pub fn field<'b, V: ToSendValue>(mut self, name: &'b str, value: &'b V) -> Self {
         self.s.set(name, value);
+        self
+    }
+
+    pub fn features(mut self, features: &'a [&'a str]) -> Self {
+        self.features = Some(features);
+        self
+    }
+
+    pub fn any_features(mut self) -> Self {
+        self.any_features = true;
         self
     }
 
     pub fn build(self) -> Caps {
         let mut caps = Caps::new_empty();
-        caps.get_mut().unwrap().append_structure(self.s);
+        let features = if self.any_features {
+            Some(CapsFeatures::new_any())
+        } else {
+            self.features.map(|f| CapsFeatures::new(f))
+        };
+
+        caps.get_mut()
+            .unwrap()
+            .append_structure_full(self.s, features);
         caps
     }
 }
@@ -412,7 +566,7 @@ mod tests {
     fn test_simple() {
         ::init().unwrap();
 
-        let caps = Caps::new_simple(
+        let mut caps = Caps::new_simple(
             "foo/bar",
             &[
                 ("int", &12),
@@ -427,19 +581,36 @@ mod tests {
             "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
         );
 
-        let s = caps.get_structure(0).unwrap();
-        assert_eq!(
-            s,
-            Structure::new(
-                "foo/bar",
-                &[
-                    ("int", &12),
-                    ("bool", &true),
-                    ("string", &"bla"),
-                    ("fraction", &Fraction::new(1, 2)),
-                    ("array", &Array::new(&[&1, &2])),
-                ],
-            ).as_ref()
+        {
+            let s = caps.get_structure(0).unwrap();
+            assert_eq!(
+                s,
+                Structure::new(
+                    "foo/bar",
+                    &[
+                        ("int", &12),
+                        ("bool", &true),
+                        ("string", &"bla"),
+                        ("fraction", &Fraction::new(1, 2)),
+                        ("array", &Array::new(&[&1, &2])),
+                    ],
+                ).as_ref()
+            );
+        }
+        assert!(
+            caps.get_features(0)
+                .unwrap()
+                .is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
+        );
+
+        {
+            let caps = caps.get_mut().unwrap();
+            caps.set_features(0, Some(CapsFeatures::new(&["foo:bla"])));
+        }
+        assert!(
+            caps.get_features(0)
+                .unwrap()
+                .is_equal(CapsFeatures::new(&["foo:bla"]).as_ref())
         );
     }
 
@@ -458,5 +629,17 @@ mod tests {
             caps.to_string(),
             "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
         );
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .any_features()
+            .build();
+        assert_eq!(caps.to_string(), "foo/bar(ANY), int=(int)12");
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .features(&["foo:bla", "foo:baz"])
+            .build();
+        assert_eq!(caps.to_string(), "foo/bar(foo:bla, foo:baz), int=(int)12");
     }
 }

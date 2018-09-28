@@ -91,6 +91,10 @@ pub mod caps;
 pub use caps::{Caps, CapsRef};
 #[cfg(feature = "ser_de")]
 mod caps_serde;
+mod caps_features;
+pub use caps_features::{CapsFeatures, CapsFeaturesRef, CAPS_FEATURE_MEMORY_SYSTEM_MEMORY, CAPS_FEATURES_MEMORY_SYSTEM_MEMORY};
+#[cfg(feature = "ser_de")]
+mod caps_features_serde;
 
 pub mod tags;
 pub use tags::{Tag, TagList, TagListRef};

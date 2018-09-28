@@ -13,6 +13,8 @@ use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 use std::fmt;
 
 use Caps;
+use CapsFeatures;
+use CapsFeaturesRef;
 use CapsRef;
 use Structure;
 use StructureRef;
@@ -36,15 +38,12 @@ const CAPS_VARIANT_NAMES: &[&str] = &[
     &CAPS_VARIANT_SOME_STR,
 ];
 
-// `CapsFeature` is not available in `gstreamer-rs` yet
-struct CapsItemSe<'a>(&'a StructureRef);
+struct CapsItemSe<'a>(&'a StructureRef, Option<&'a CapsFeaturesRef>);
 impl<'a> Serialize for CapsItemSe<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tup = serializer.serialize_tuple(2)?;
         tup.serialize_element(self.0)?;
-        // `CapsFeature` is not available in `gstreamer-rs` yet
-        // Fake the type for now and use `None` as a value
-        tup.serialize_element::<Option<Structure>>(&None)?;
+        tup.serialize_element(&self.1)?;
         tup.end()
     }
 }
@@ -52,12 +51,19 @@ impl<'a> Serialize for CapsItemSe<'a> {
 struct CapsForIterSe<'a>(&'a CapsRef);
 impl<'a> Serialize for CapsForIterSe<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let iter = self.0.iter();
+        let iter = self.0.iter_with_features();
         let size = iter.size_hint().0;
         if size > 0 {
             let mut seq = serializer.serialize_seq(Some(size))?;
-            for structure in iter {
-                seq.serialize_element(&CapsItemSe(structure))?;
+            for (structure, features) in iter {
+                let features = if !features.is_any() && features
+                    .is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
+                {
+                    None
+                } else {
+                    Some(features)
+                };
+                seq.serialize_element(&CapsItemSe(structure, features))?;
             }
             seq.end()
         } else {
@@ -98,13 +104,7 @@ impl Serialize for Caps {
     }
 }
 
-// `CapsFeature` is not available in `gstreamer-rs` yet
-struct CapsItemDe(Structure);
-impl From<CapsItemDe> for Structure {
-    fn from(caps_item: CapsItemDe) -> Structure {
-        caps_item.0
-    }
-}
+struct CapsItemDe(Structure, Option<CapsFeatures>);
 
 struct CapsItemVisitor;
 impl<'de> Visitor<'de> for CapsItemVisitor {
@@ -118,20 +118,13 @@ impl<'de> Visitor<'de> for CapsItemVisitor {
         let structure = seq
             .next_element::<Structure>()?
             .ok_or(de::Error::custom("Expected a `Structure` for `Caps` item"))?;
-        // `CapsFeature` is not available in `gstreamer-rs` yet
-        // Fake the type for now and expect `None` as a value
-        let feature_option = seq
-            .next_element::<Option<Structure>>()?
-            .ok_or(de::Error::custom(
-                "Expected an `Option<CapsFeature>` for `Caps` item",
-            ))?;
-        if feature_option.is_some() {
-            Err(de::Error::custom(
-                "Found a value for `CapsFeature`, expected `None` (not implemented yet)",
-            ))
-        } else {
-            Ok(CapsItemDe(structure))
-        }
+        let features_option =
+            seq.next_element::<Option<CapsFeatures>>()?
+                .ok_or(de::Error::custom(
+                    "Expected an `Option<CapsFeature>` for `Caps` item",
+                ))?;
+
+        Ok(CapsItemDe(structure, features_option))
     }
 }
 
@@ -156,7 +149,7 @@ impl<'de> Visitor<'de> for CapsSomeVisitor {
         {
             let caps = caps.get_mut().unwrap();
             while let Some(caps_item) = seq.next_element::<CapsItemDe>()? {
-                caps.append_structure(caps_item.into());
+                caps.append_structure_full(caps_item.0, caps_item.1);
             }
         }
         Ok(CapsSome(caps))
@@ -238,6 +231,7 @@ mod tests {
 
     use Array;
     use Caps;
+    use CapsFeatures;
     use Fraction;
 
     #[test]
@@ -269,6 +263,71 @@ mod tests {
                 "            (\"i32\", 2),",
                 "        ]),",
                 "    ]), None),",
+                "])"
+            ).to_owned()),
+            res,
+        );
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .field("bool", &true)
+            .field("string", &"bla")
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
+            .features(&["foo:bar", "foo:baz"])
+            .build();
+
+        let mut pretty_config = ron::ser::PrettyConfig::default();
+        pretty_config.new_line = "".to_string();
+
+        let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
+        assert_eq!(
+            Ok(concat!(
+                "Some([",
+                "    ((\"foo/bar\", [",
+                "        (\"int\", \"i32\", 12),",
+                "        (\"bool\", \"bool\", true),",
+                "        (\"string\", \"String\", \"bla\"),",
+                "        (\"fraction\", \"Fraction\", (1, 2)),",
+                "        (\"array\", \"Array\", [",
+                "            (\"i32\", 1),",
+                "            (\"i32\", 2),",
+                "        ]),",
+                "    ]), Some(Some([",
+                "        \"foo:bar\",",
+                "        \"foo:baz\",",
+                "    ]))),",
+                "])"
+            ).to_owned()),
+            res,
+        );
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .field("bool", &true)
+            .field("string", &"bla")
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
+            .any_features()
+            .build();
+
+        let mut pretty_config = ron::ser::PrettyConfig::default();
+        pretty_config.new_line = "".to_string();
+
+        let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
+        assert_eq!(
+            Ok(concat!(
+                "Some([",
+                "    ((\"foo/bar\", [",
+                "        (\"int\", \"i32\", 12),",
+                "        (\"bool\", \"bool\", true),",
+                "        (\"string\", \"String\", \"bla\"),",
+                "        (\"fraction\", \"Fraction\", (1, 2)),",
+                "        (\"array\", \"Array\", [",
+                "            (\"i32\", 1),",
+                "            (\"i32\", 2),",
+                "        ]),",
+                "    ]), Some(Any)),",
                 "])"
             ).to_owned()),
             res,
@@ -328,6 +387,74 @@ mod tests {
                 ],
             ).as_ref()
         );
+
+        let caps_ron = r#"
+            Some([
+                (
+                    ("foo/bar", [
+                        ("int", "i32", 12),
+                        ("bool", "bool", true),
+                        ("string", "String", "bla"),
+                        ("fraction", "Fraction", (1, 2)),
+                        ("array", "Array", [
+                            ("i32", 1),
+                            ("i32", 2),
+                        ]),
+                    ]),
+                    Some(Some(["foo:bar", "foo:baz"])),
+                ),
+            ])"#;
+        let caps: Caps = ron::de::from_str(caps_ron).unwrap();
+        let s = caps.get_structure(0).unwrap();
+        assert_eq!(
+            s,
+            Structure::new(
+                "foo/bar",
+                &[
+                    ("int", &12),
+                    ("bool", &true),
+                    ("string", &"bla"),
+                    ("fraction", &Fraction::new(1, 2)),
+                    ("array", &Array::new(&[&1, &2])),
+                ],
+            ).as_ref()
+        );
+        let f = caps.get_features(0).unwrap();
+        assert!(f.is_equal(CapsFeatures::new(&["foo:bar", "foo:baz"]).as_ref()));
+
+        let caps_ron = r#"
+            Some([
+                (
+                    ("foo/bar", [
+                        ("int", "i32", 12),
+                        ("bool", "bool", true),
+                        ("string", "String", "bla"),
+                        ("fraction", "Fraction", (1, 2)),
+                        ("array", "Array", [
+                            ("i32", 1),
+                            ("i32", 2),
+                        ]),
+                    ]),
+                    Some(Any),
+                ),
+            ])"#;
+        let caps: Caps = ron::de::from_str(caps_ron).unwrap();
+        let s = caps.get_structure(0).unwrap();
+        assert_eq!(
+            s,
+            Structure::new(
+                "foo/bar",
+                &[
+                    ("int", &12),
+                    ("bool", &true),
+                    ("string", &"bla"),
+                    ("fraction", &Fraction::new(1, 2)),
+                    ("array", &Array::new(&[&1, &2])),
+                ],
+            ).as_ref()
+        );
+        let f = caps.get_features(0).unwrap();
+        assert!(f.is_any());
     }
 
     #[test]
@@ -350,6 +477,30 @@ mod tests {
             .field("string", &"bla")
             .field("fraction", &Fraction::new(1, 2))
             .field("array", &Array::new(&[&1, &2]))
+            .build();
+        let caps_ser = ron::ser::to_string(&caps).unwrap();
+        let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
+        assert!(caps_de.is_strictly_equal(&caps));
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .field("bool", &true)
+            .field("string", &"bla")
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
+            .features(&["foo:bar", "foo:baz"])
+            .build();
+        let caps_ser = ron::ser::to_string(&caps).unwrap();
+        let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
+        assert!(caps_de.is_strictly_equal(&caps));
+
+        let caps = Caps::builder("foo/bar")
+            .field("int", &12)
+            .field("bool", &true)
+            .field("string", &"bla")
+            .field("fraction", &Fraction::new(1, 2))
+            .field("array", &Array::new(&[&1, &2]))
+            .any_features()
             .build();
         let caps_ser = ron::ser::to_string(&caps).unwrap();
         let caps_de: Caps = ron::de::from_str(caps_ser.as_str()).unwrap();
