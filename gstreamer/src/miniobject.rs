@@ -493,6 +493,7 @@ impl<T: MiniObject + 'static> GlibPtrDefault for GstRc<T> {
 macro_rules! gst_define_mini_object_wrapper(
     ($name:ident, $ref_name:ident, $ffi_name:path, [$($derives:ident,)*], $get_type:expr) => {
         #[derive($($derives,)*)]
+        #[derive(Clone)]
         pub struct $name($crate::GstRc<$ref_name>);
 
         #[repr(C)]
