@@ -223,6 +223,10 @@ impl VideoFrame<Readable> {
         let info = self.2.clone();
         VideoFrameRef(vframe, Some(self.buffer()), info, true)
     }
+
+    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
+        &self.0
+    }
 }
 
 impl VideoFrame<Writable> {
@@ -319,11 +323,19 @@ impl VideoFrame<Writable> {
         let info = self.2.clone();
         VideoFrameRef(vframe, Some(self.buffer_mut()), info, true)
     }
+
+    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
+        &mut self.0
+    }
 }
 
 pub struct VideoFrameRef<T>(ffi::GstVideoFrame, Option<T>, ::VideoInfo, bool);
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
+    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
+        &self.0
+    }
+
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b ::VideoInfo,
@@ -588,6 +600,10 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 (w * h) as usize,
             ))
         }
+    }
+
+    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
+        &mut self.0
     }
 }
 
