@@ -32,6 +32,7 @@ generate = [
     "GstVideo.VideoFrameFlags",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
+    "GstVideo.VideoOverlayFormatFlags",
 ]
 
 manual = [

@@ -14,6 +14,7 @@ extern crate libc;
 extern crate glib;
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
+#[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_base as gst_base;
 extern crate gstreamer_base_sys as gst_base_ffi;
@@ -57,6 +58,8 @@ mod functions;
 pub use functions::*;
 mod video_rectangle;
 pub use video_rectangle::*;
+mod video_overlay_composition;
+pub use video_overlay_composition::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

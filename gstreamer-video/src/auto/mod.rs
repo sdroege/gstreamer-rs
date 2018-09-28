@@ -18,6 +18,7 @@ pub use self::enums::VideoFormat;
 pub use self::enums::VideoInterlaceMode;
 pub use self::enums::VideoMultiviewFramePacking;
 pub use self::enums::VideoMultiviewMode;
+pub use self::enums::VideoOverlayFormatFlags;
 pub use self::enums::VideoTileMode;
 pub use self::enums::VideoTransferFunction;
 

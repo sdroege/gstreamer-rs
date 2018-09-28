@@ -766,6 +766,43 @@ impl SetValue for VideoMultiviewMode {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+pub enum VideoOverlayFormatFlags {
+    None,
+    PremultipliedAlpha,
+    GlobalAlpha,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoOverlayFormatFlags {
+    type GlibType = ffi::GstVideoOverlayFormatFlags;
+
+    fn to_glib(&self) -> ffi::GstVideoOverlayFormatFlags {
+        match *self {
+            VideoOverlayFormatFlags::None => ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_NONE,
+            VideoOverlayFormatFlags::PremultipliedAlpha => ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA,
+            VideoOverlayFormatFlags::GlobalAlpha => ffi::GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA,
+            VideoOverlayFormatFlags::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
+    fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoOverlayFormatFlags::None,
+            1 => VideoOverlayFormatFlags::PremultipliedAlpha,
+            2 => VideoOverlayFormatFlags::GlobalAlpha,
+            value => VideoOverlayFormatFlags::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum VideoTileMode {
     Unknown,
     Zflipz2x2,
