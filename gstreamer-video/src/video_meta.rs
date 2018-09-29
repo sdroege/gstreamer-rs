@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use std::fmt;
-use std::marker::PhantomData;
 
 use ffi;
 use glib;
@@ -18,10 +17,10 @@ use gst::prelude::*;
 use gst_ffi;
 
 #[repr(C)]
-pub struct VideoMeta<'a>(ffi::GstVideoMeta, PhantomData<&'a ()>);
+pub struct VideoMeta(ffi::GstVideoMeta);
 
-impl<'a> VideoMeta<'a> {
-    pub fn add(
+impl VideoMeta {
+    pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         flags: ::VideoFrameFlags,
         format: ::VideoFormat,
@@ -40,11 +39,11 @@ impl<'a> VideoMeta<'a> {
                 height,
             );
 
-            Self::from_mut_ptr(buffer.as_mut_ptr(), meta)
+            Self::from_mut_ptr(buffer, meta)
         }
     }
 
-    pub fn add_full(
+    pub fn add_full<'a>(
         buffer: &'a mut gst::BufferRef,
         flags: ::VideoFrameFlags,
         format: ::VideoFormat,
@@ -73,7 +72,7 @@ impl<'a> VideoMeta<'a> {
                 stride.as_ptr() as *mut _,
             );
 
-            Self::from_mut_ptr(buffer.as_mut_ptr(), meta)
+            Self::from_mut_ptr(buffer, meta)
         }
     }
 
@@ -110,7 +109,7 @@ impl<'a> VideoMeta<'a> {
     }
 }
 
-unsafe impl<'a> MetaAPI for VideoMeta<'a> {
+unsafe impl MetaAPI for VideoMeta {
     type GstType = ffi::GstVideoMeta;
 
     fn get_meta_api() -> glib::Type {
@@ -118,7 +117,7 @@ unsafe impl<'a> MetaAPI for VideoMeta<'a> {
     }
 }
 
-impl<'a> fmt::Debug for VideoMeta<'a> {
+impl fmt::Debug for VideoMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoMeta")
             .field("id", &self.get_id())
@@ -134,13 +133,10 @@ impl<'a> fmt::Debug for VideoMeta<'a> {
 }
 
 #[repr(C)]
-pub struct VideoOverlayCompositionMeta<'a>(
-    ffi::GstVideoOverlayCompositionMeta,
-    PhantomData<&'a ()>,
-);
+pub struct VideoOverlayCompositionMeta(ffi::GstVideoOverlayCompositionMeta);
 
-impl<'a> VideoOverlayCompositionMeta<'a> {
-    pub fn add(
+impl VideoOverlayCompositionMeta {
+    pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
         overlay: ::VideoOverlayComposition,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
@@ -150,7 +146,7 @@ impl<'a> VideoOverlayCompositionMeta<'a> {
                 overlay.as_mut_ptr(),
             );
 
-            Self::from_mut_ptr(buffer.as_mut_ptr(), meta)
+            Self::from_mut_ptr(buffer, meta)
         }
     }
 
@@ -177,7 +173,7 @@ impl<'a> VideoOverlayCompositionMeta<'a> {
     }
 }
 
-unsafe impl<'a> MetaAPI for VideoOverlayCompositionMeta<'a> {
+unsafe impl MetaAPI for VideoOverlayCompositionMeta {
     type GstType = ffi::GstVideoOverlayCompositionMeta;
 
     fn get_meta_api() -> glib::Type {
@@ -185,7 +181,7 @@ unsafe impl<'a> MetaAPI for VideoOverlayCompositionMeta<'a> {
     }
 }
 
-impl<'a> fmt::Debug for VideoOverlayCompositionMeta<'a> {
+impl fmt::Debug for VideoOverlayCompositionMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoOverlayCompositionMeta")
             .field("overlay", &self.get_overlay())

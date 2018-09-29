@@ -375,10 +375,7 @@ impl BufferRef {
             if meta.is_null() {
                 None
             } else {
-                Some(T::from_ptr(
-                    self.as_ptr(),
-                    meta as *const <T as MetaAPI>::GstType,
-                ))
+                Some(T::from_ptr(self, meta as *const <T as MetaAPI>::GstType))
             }
         }
     }
@@ -389,10 +386,7 @@ impl BufferRef {
             if meta.is_null() {
                 None
             } else {
-                Some(T::from_mut_ptr(
-                    self.as_mut_ptr(),
-                    meta as *mut <T as MetaAPI>::GstType,
-                ))
+                Some(T::from_mut_ptr(self, meta as *mut <T as MetaAPI>::GstType))
             }
         }
     }
@@ -407,7 +401,7 @@ impl BufferRef {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $mtyp:ty, $from_ptr:expr) => {
+    ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
         state: glib_ffi::gpointer,
@@ -439,7 +433,9 @@ macro_rules! define_iter(
                     if meta.is_null() {
                         return None;
                     } else if self.meta_api == glib::Type::Invalid || glib::Type::from_glib((*(*meta).info).api) == self.meta_api {
-                        let item = $from_ptr(self.buffer.as_mut_ptr(), meta);
+                        // FIXME: Workaround for a lifetime issue with the mutable iterator only
+                        let buffer = $prepare_buffer(self.buffer.as_mut_ptr());
+                        let item = $from_ptr(buffer, meta);
                         return Some(item);
                     }
                 }
@@ -451,14 +447,19 @@ macro_rules! define_iter(
     }
 );
 
-define_iter!(MetaIter, &'a BufferRef, MetaRef<'a, T>, |buffer, meta| {
-    T::from_ptr(buffer, meta as *const <T as MetaAPI>::GstType)
-});
+define_iter!(
+    MetaIter,
+    &'a BufferRef,
+    MetaRef<'a, T>,
+    |buffer: *const ffi::GstBuffer| BufferRef::from_ptr(buffer),
+    |buffer, meta| T::from_ptr(buffer, meta as *const <T as MetaAPI>::GstType)
+);
 define_iter!(
     MetaIterMut,
     &'a mut BufferRef,
     MetaRefMut<'a, T, ::meta::Iterated>,
-    |buffer, meta| T::from_mut_ptr(buffer, meta as *mut <T as MetaAPI>::GstType)
+    |buffer: *mut ffi::GstBuffer| BufferRef::from_mut_ptr(buffer),
+    |buffer: &'a mut BufferRef, meta| T::from_mut_ptr(buffer, meta as *mut <T as MetaAPI>::GstType)
 );
 
 impl fmt::Debug for BufferRef {

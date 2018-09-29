@@ -24,10 +24,7 @@ pub unsafe trait MetaAPI: Sized {
 
     fn get_meta_api() -> glib::Type;
 
-    unsafe fn from_ptr<'a>(
-        buffer: *const ffi::GstBuffer,
-        ptr: *const Self::GstType,
-    ) -> MetaRef<'a, Self> {
+    unsafe fn from_ptr<'a>(buffer: &'a BufferRef, ptr: *const Self::GstType) -> MetaRef<'a, Self> {
         assert!(!ptr.is_null());
 
         let meta_api = Self::get_meta_api();
@@ -45,7 +42,7 @@ pub unsafe trait MetaAPI: Sized {
     }
 
     unsafe fn from_mut_ptr<'a, T>(
-        buffer: *mut ffi::GstBuffer,
+        buffer: &'a mut BufferRef,
         ptr: *mut Self::GstType,
     ) -> MetaRefMut<'a, Self, T> {
         assert!(!ptr.is_null());
@@ -69,7 +66,7 @@ pub unsafe trait MetaAPI: Sized {
 #[derive(Debug)]
 pub struct MetaRef<'a, T: MetaAPI + 'a> {
     meta: &'a T,
-    buffer: *const ffi::GstBuffer,
+    buffer: &'a BufferRef,
 }
 
 pub enum Standalone {}
@@ -78,7 +75,7 @@ pub enum Iterated {}
 #[derive(Debug)]
 pub struct MetaRefMut<'a, T: MetaAPI + 'a, U> {
     meta: &'a mut T,
-    buffer: *mut ffi::GstBuffer,
+    buffer: &'a mut BufferRef,
     mode: PhantomData<U>,
 }
 
@@ -130,7 +127,7 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
     }
 }
 
-impl<'a> MetaRef<'a, Meta<'a>> {
+impl<'a> MetaRef<'a, Meta> {
     pub fn downcast_ref<T: MetaAPI>(&self) -> Option<&MetaRef<'a, T>> {
         let target_type = T::get_meta_api();
         let type_ = self.get_api();
@@ -164,14 +161,16 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
 impl<'a, T: MetaAPI> MetaRefMut<'a, T, Standalone> {
     pub fn remove(mut self) {
         unsafe {
-            let res =
-                ffi::gst_buffer_remove_meta(self.buffer, self.as_mut_ptr() as *mut ffi::GstMeta);
+            let res = ffi::gst_buffer_remove_meta(
+                self.buffer.as_mut_ptr(),
+                self.as_mut_ptr() as *mut ffi::GstMeta,
+            );
             assert_ne!(res, glib_ffi::GFALSE);
         }
     }
 }
 
-impl<'a, U> MetaRefMut<'a, Meta<'a>, U> {
+impl<'a, U> MetaRefMut<'a, Meta, U> {
     pub fn downcast_ref<T: MetaAPI>(&mut self) -> Option<&MetaRefMut<'a, T, U>> {
         let target_type = T::get_meta_api();
         let type_ = self.get_api();
@@ -185,15 +184,15 @@ impl<'a, U> MetaRefMut<'a, Meta<'a>, U> {
 }
 
 #[repr(C)]
-pub struct Meta<'a>(ffi::GstMeta, PhantomData<&'a ()>);
+pub struct Meta(ffi::GstMeta);
 
-impl<'a> Meta<'a> {
+impl Meta {
     fn get_api(&self) -> glib::Type {
         unsafe { glib::Type::from_glib((*self.0.info).api) }
     }
 }
 
-unsafe impl<'a> MetaAPI for Meta<'a> {
+unsafe impl MetaAPI for Meta {
     type GstType = ffi::GstMeta;
 
     fn get_meta_api() -> glib::Type {
@@ -201,7 +200,7 @@ unsafe impl<'a> MetaAPI for Meta<'a> {
     }
 }
 
-impl<'a> fmt::Debug for Meta<'a> {
+impl fmt::Debug for Meta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Meta")
             .field("api", &self.get_api())
@@ -210,15 +209,18 @@ impl<'a> fmt::Debug for Meta<'a> {
 }
 
 #[repr(C)]
-pub struct ParentBufferMeta<'a>(ffi::GstParentBufferMeta, PhantomData<&'a ()>);
+pub struct ParentBufferMeta(ffi::GstParentBufferMeta);
 
-impl<'a> ParentBufferMeta<'a> {
-    pub fn add(buffer: &'a mut BufferRef, parent: &BufferRef) -> MetaRefMut<'a, Self, Standalone> {
+impl ParentBufferMeta {
+    pub fn add<'a>(
+        buffer: &'a mut BufferRef,
+        parent: &BufferRef,
+    ) -> MetaRefMut<'a, Self, Standalone> {
         unsafe {
             let meta =
                 ffi::gst_buffer_add_parent_buffer_meta(buffer.as_mut_ptr(), parent.as_mut_ptr());
 
-            Self::from_mut_ptr(buffer.as_mut_ptr(), meta)
+            Self::from_mut_ptr(buffer, meta)
         }
     }
 
@@ -227,7 +229,7 @@ impl<'a> ParentBufferMeta<'a> {
     }
 }
 
-unsafe impl<'a> MetaAPI for ParentBufferMeta<'a> {
+unsafe impl MetaAPI for ParentBufferMeta {
     type GstType = ffi::GstParentBufferMeta;
 
     fn get_meta_api() -> glib::Type {
@@ -235,7 +237,7 @@ unsafe impl<'a> MetaAPI for ParentBufferMeta<'a> {
     }
 }
 
-impl<'a> fmt::Debug for ParentBufferMeta<'a> {
+impl fmt::Debug for ParentBufferMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("ParentBufferMeta")
             .field("parent", &self.get_parent())
