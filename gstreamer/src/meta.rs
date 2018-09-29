@@ -249,7 +249,7 @@ mod tests {
 
     #[test]
     fn test_add_get_iterate_meta() {
-        gst::init().unwrap();
+        ::init().unwrap();
 
         let mut buffer = ::Buffer::new();
         let parent = ::Buffer::new();
