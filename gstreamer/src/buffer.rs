@@ -15,13 +15,14 @@ use std::slice;
 use std::u64;
 use std::usize;
 
+use meta::*;
 use miniobject::*;
 use BufferFlags;
 use ClockTime;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 use glib_ffi;
 
 pub enum Readable {}
@@ -367,7 +368,98 @@ impl BufferRef {
     pub fn set_flags(&mut self, flags: BufferFlags) {
         self.0.mini_object.flags = flags.bits();
     }
+
+    pub fn get_meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
+        unsafe {
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
+            if meta.is_null() {
+                None
+            } else {
+                Some(T::from_ptr(
+                    self.as_ptr(),
+                    meta as *const <T as MetaAPI>::GstType,
+                ))
+            }
+        }
+    }
+
+    pub fn get_meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, ::meta::Standalone>> {
+        unsafe {
+            let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::get_meta_api().to_glib());
+            if meta.is_null() {
+                None
+            } else {
+                Some(T::from_mut_ptr(
+                    self.as_mut_ptr(),
+                    meta as *mut <T as MetaAPI>::GstType,
+                ))
+            }
+        }
+    }
+
+    pub fn iter_meta<T: MetaAPI>(&self) -> MetaIter<T> {
+        MetaIter::new(self)
+    }
+
+    pub fn iter_meta_mut<T: MetaAPI>(&mut self) -> MetaIterMut<T> {
+        MetaIterMut::new(self)
+    }
 }
+
+macro_rules! define_iter(
+    ($name:ident, $typ:ty, $mtyp:ty, $from_ptr:expr) => {
+    pub struct $name<'a, T: MetaAPI + 'a> {
+        buffer: $typ,
+        state: glib_ffi::gpointer,
+        meta_api: glib::Type,
+        items: PhantomData<$mtyp>,
+    }
+
+    impl<'a, T: MetaAPI> $name<'a, T> {
+        fn new(buffer: $typ) -> $name<'a, T> {
+            skip_assert_initialized!();
+
+            $name {
+                buffer,
+                state: ptr::null_mut(),
+                meta_api: T::get_meta_api(),
+                items: PhantomData,
+            }
+        }
+    }
+
+    impl<'a, T: MetaAPI> Iterator for $name<'a, T> {
+        type Item = $mtyp;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            loop {
+                unsafe {
+                    let meta = ffi::gst_buffer_iterate_meta(self.buffer.as_mut_ptr(), &mut self.state);
+
+                    if meta.is_null() {
+                        return None;
+                    } else if self.meta_api == glib::Type::Invalid || glib::Type::from_glib((*(*meta).info).api) == self.meta_api {
+                        let item = $from_ptr(self.buffer.as_mut_ptr(), meta);
+                        return Some(item);
+                    }
+                }
+            }
+        }
+    }
+
+    impl<'a, T: MetaAPI> ExactSizeIterator for $name<'a, T> {}
+    }
+);
+
+define_iter!(MetaIter, &'a BufferRef, MetaRef<'a, T>, |buffer, meta| {
+    T::from_ptr(buffer, meta as *const <T as MetaAPI>::GstType)
+});
+define_iter!(
+    MetaIterMut,
+    &'a mut BufferRef,
+    MetaRefMut<'a, T, ::meta::Iterated>,
+    |buffer, meta| T::from_mut_ptr(buffer, meta as *mut <T as MetaAPI>::GstType)
+);
 
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

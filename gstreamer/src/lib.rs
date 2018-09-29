@@ -105,6 +105,8 @@ pub use tags::{Tag, TagList, TagListRef};
 #[cfg(feature = "ser_de")]
 mod tags_serde;
 
+pub mod meta;
+pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta};
 pub mod buffer;
 pub use buffer::{
     Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
@@ -289,6 +291,8 @@ pub mod prelude {
     pub use glib::prelude::*;
 
     pub use auto::traits::*;
+
+    pub use meta::MetaAPI;
 
     pub use bin::BinExtManual;
     pub use element::ElementExtManual;
