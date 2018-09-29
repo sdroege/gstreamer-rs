@@ -60,6 +60,8 @@ mod video_rectangle;
 pub use video_rectangle::*;
 mod video_overlay_composition;
 pub use video_overlay_composition::*;
+mod video_meta;
+pub use video_meta::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

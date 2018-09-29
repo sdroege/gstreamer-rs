@@ -13,9 +13,7 @@ use gst;
 use gst::miniobject::*;
 
 use glib;
-use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr,
-};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
 use glib_ffi;
 
 gst_define_mini_object_wrapper!(
@@ -45,6 +43,7 @@ impl VideoOverlayRectangle {
         render_height: u32,
         flags: ::VideoOverlayFormatFlags,
     ) -> Self {
+        assert!(buffer.get_meta::<::VideoMeta>().is_some());
         unsafe {
             from_glib_full(ffi::gst_video_overlay_rectangle_new_raw(
                 buffer.as_mut_ptr(),
