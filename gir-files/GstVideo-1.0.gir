@@ -11582,11 +11582,15 @@ gst_buffer_add_video_meta_full() with them.</doc>
         </parameter>
         <parameter name="offset" transfer-ownership="none">
           <doc xml:space="preserve">offset of each plane</doc>
-          <type name="gsize" c:type="gsize"/>
+          <array zero-terminated="0" c:type="gsize*" fixed-size="4">
+            <type name="gsize" c:type="gsize"/>
+          </array>
         </parameter>
         <parameter name="stride" transfer-ownership="none">
           <doc xml:space="preserve">stride of each plane</doc>
-          <type name="gint" c:type="gint"/>
+          <array zero-terminated="0" c:type="gint*" fixed-size="4">
+            <type name="gint" c:type="gint"/>
+          </array>
         </parameter>
       </parameters>
     </function>
