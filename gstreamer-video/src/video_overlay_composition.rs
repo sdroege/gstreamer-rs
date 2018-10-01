@@ -185,18 +185,31 @@ impl fmt::Debug for VideoOverlayCompositionRef {
 }
 
 impl VideoOverlayComposition {
-    pub fn new(rect: &VideoOverlayRectangle) -> Self {
-        unsafe { from_glib_full(ffi::gst_video_overlay_composition_new(rect.as_mut_ptr())) }
+    pub fn new<'a, T: IntoIterator<Item = &'a VideoOverlayRectangle>>(rects: T) -> Option<Self> {
+        unsafe {
+            let mut iter = rects.into_iter();
+
+            let first = match iter.next() {
+                None => return None,
+                Some(first) => first,
+            };
+
+            let composition =
+                Self::from_glib_full(ffi::gst_video_overlay_composition_new(first.as_mut_ptr()));
+
+            for rect in iter {
+                ffi::gst_video_overlay_composition_add_rectangle(
+                    composition.as_mut_ptr(),
+                    rect.as_mut_ptr(),
+                );
+            }
+
+            Some(composition)
+        }
     }
 }
 
 impl VideoOverlayCompositionRef {
-    pub fn add_rectangle(&mut self, rect: &VideoOverlayRectangle) {
-        unsafe {
-            ffi::gst_video_overlay_composition_add_rectangle(self.as_mut_ptr(), rect.as_mut_ptr());
-        }
-    }
-
     pub fn n_rectangles(&self) -> u32 {
         unsafe { ffi::gst_video_overlay_composition_n_rectangles(self.as_mut_ptr()) }
     }
