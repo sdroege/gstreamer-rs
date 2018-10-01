@@ -91,6 +91,16 @@ impl Query {
         unsafe { Uri::<Self>(from_glib_full(ffi::gst_query_new_uri())) }
     }
 
+    pub fn new_allocation(caps: &::Caps, need_pool: bool) -> Allocation<Self> {
+        assert_initialized_main_thread!();
+        unsafe {
+            Allocation::<Self>(from_glib_full(ffi::gst_query_new_allocation(
+                caps.as_mut_ptr(),
+                need_pool.to_glib(),
+            )))
+        }
+    }
+
     pub fn new_scheduling() -> Scheduling<Self> {
         assert_initialized_main_thread!();
         unsafe { Scheduling::<Self>(from_glib_full(ffi::gst_query_new_scheduling())) }
@@ -856,8 +866,148 @@ impl<T: AsMutPtr> Uri<T> {
     }
 }
 
-// TODO
 declare_concrete_query!(Allocation, T);
+impl<T: AsPtr> Allocation<T> {
+    pub fn get(&self) -> (&::CapsRef, bool) {
+        unsafe {
+            let mut caps = ptr::null_mut();
+            let mut need_pool = 0;
+
+            ffi::gst_query_parse_allocation(self.0.as_ptr(), &mut caps, &mut need_pool);
+            (::CapsRef::from_ptr(caps), from_glib(need_pool))
+        }
+    }
+
+    pub fn get_allocation_pools(&self) -> Vec<(Option<::BufferPool>, u32, u32, u32)> {
+        unsafe {
+            let n = ffi::gst_query_get_n_allocation_pools(self.0.as_ptr());
+            let mut pools = Vec::with_capacity(n as usize);
+            for i in 0..n {
+                let mut pool = ptr::null_mut();
+                let mut size = 0;
+                let mut min_buffers = 0;
+                let mut max_buffers = 0;
+
+                ffi::gst_query_parse_nth_allocation_pool(
+                    self.0.as_ptr(),
+                    i,
+                    &mut pool,
+                    &mut size,
+                    &mut min_buffers,
+                    &mut max_buffers,
+                );
+                pools.push((from_glib_full(pool), size, min_buffers, max_buffers));
+            }
+
+            pools
+        }
+    }
+
+    pub fn get_allocation_metas(&self) -> Vec<(glib::Type, Option<&::StructureRef>)> {
+        unsafe {
+            let n = ffi::gst_query_get_n_allocation_metas(self.0.as_ptr());
+            let mut metas = Vec::with_capacity(n as usize);
+            for i in 0..n {
+                let mut structure = ptr::null();
+
+                let api =
+                    ffi::gst_query_parse_nth_allocation_meta(self.0.as_ptr(), i, &mut structure);
+                metas.push((
+                    from_glib(api),
+                    if structure.is_null() {
+                        None
+                    } else {
+                        Some(::StructureRef::from_glib_borrow(structure))
+                    },
+                ));
+            }
+
+            metas
+        }
+    }
+
+    pub fn find_allocation_meta<U: ::MetaAPI>(&self) -> Option<u32> {
+        unsafe {
+            let mut idx = 0;
+            if ffi::gst_query_find_allocation_meta(
+                self.0.as_ptr(),
+                U::get_meta_api().to_glib(),
+                &mut idx,
+            ) != glib_ffi::GFALSE
+            {
+                Some(idx)
+            } else {
+                None
+            }
+        }
+    }
+}
+
+impl<T: AsMutPtr> Allocation<T> {
+    pub fn add_allocation_pool(
+        &mut self,
+        pool: Option<&::BufferPool>,
+        size: u32,
+        min_buffers: u32,
+        max_buffers: u32,
+    ) {
+        unsafe {
+            ffi::gst_query_add_allocation_pool(
+                self.0.as_mut_ptr(),
+                pool.to_glib_none().0,
+                size,
+                min_buffers,
+                max_buffers,
+            );
+        }
+    }
+
+    pub fn set_nth_allocation_pool(
+        &mut self,
+        idx: u32,
+        pool: Option<&::BufferPool>,
+        size: u32,
+        min_buffers: u32,
+        max_buffers: u32,
+    ) {
+        unsafe {
+            ffi::gst_query_set_nth_allocation_pool(
+                self.0.as_mut_ptr(),
+                idx,
+                pool.to_glib_none().0,
+                size,
+                min_buffers,
+                max_buffers,
+            );
+        }
+    }
+
+    pub fn remove_nth_allocation_pool(&mut self, idx: u32) {
+        unsafe {
+            ffi::gst_query_remove_nth_allocation_pool(self.0.as_mut_ptr(), idx);
+        }
+    }
+
+    pub fn add_allocation_meta<U: ::MetaAPI>(&mut self, structure: Option<&::StructureRef>) {
+        unsafe {
+            ffi::gst_query_add_allocation_meta(
+                self.0.as_mut_ptr(),
+                U::get_meta_api().to_glib(),
+                if let Some(structure) = structure {
+                    structure.as_ptr()
+                } else {
+                    ptr::null()
+                },
+            );
+        }
+    }
+
+    pub fn remove_nth_allocation_meta(&mut self, idx: u32) {
+        unsafe {
+            ffi::gst_query_remove_nth_allocation_meta(self.0.as_mut_ptr(), idx);
+        }
+    }
+}
 
 declare_concrete_query!(Scheduling, T);
 impl<T: AsPtr> Scheduling<T> {
