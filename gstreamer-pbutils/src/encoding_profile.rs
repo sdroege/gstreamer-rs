@@ -2,6 +2,7 @@
 use gst;
 use glib;
 use ffi;
+use gst_ffi;
 
 use std::error;
 use std::fmt;
@@ -96,9 +97,13 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileEdit fo
 
     fn set_restriction<'a, P: Into<Option<&'a gst::Caps>>>(&self, restriction: P) {
         let restriction = restriction.into();
-        let restriction = restriction.to_glib_none();
         unsafe {
-            ffi::gst_encoding_profile_set_restriction(self.to_glib_none().0, restriction.0);
+            let restriction = match restriction {
+                Some(restriction) => restriction.to_glib_full(),
+                None => gst_ffi::gst_caps_new_any(),
+            };
+
+            ffi::gst_encoding_profile_set_restriction(self.to_glib_none().0, restriction);
         }
     }
 }
@@ -279,7 +284,6 @@ fn set_common_fields<T: EncodingProfileEdit>(profile: &mut T, base_data: &Encodi
     profile.set_preset_name(base_data.preset_name);
     profile.set_allow_dynamic_output(base_data.allow_dynamic_output);
     profile.set_enabled(base_data.enabled);
-
     profile.set_restriction(base_data.restriction);
     profile.set_presence(base_data.presence);
 }
