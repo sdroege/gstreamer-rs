@@ -515,6 +515,10 @@ macro_rules! gst_define_mini_object_wrapper(
             pub unsafe fn into_ptr(self) -> *mut $ffi_name {
                 self.0.into_ptr()
             }
+
+            pub fn copy(&self) -> Self {
+                $name(self.0.copy())
+            }
         }
 
         impl From<$crate::GstRc<$ref_name>> for $name {
