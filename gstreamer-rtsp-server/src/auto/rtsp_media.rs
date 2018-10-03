@@ -188,8 +188,6 @@ pub trait RTSPMediaExt {
 
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_element_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
@@ -640,14 +638,6 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
         }
     }
 
-    fn connect_property_element_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::element",
-                transmute(notify_element_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -772,12 +762,6 @@ where P: IsA<RTSPMedia> {
 }
 
 unsafe extern "C" fn notify_clock_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMedia::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_element_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).downcast_unchecked())

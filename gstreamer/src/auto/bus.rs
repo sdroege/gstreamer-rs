@@ -139,14 +139,6 @@ impl Bus {
                 transmute(sync_message_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    pub fn connect_property_enable_async_notify<F: Fn(&Bus) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Bus) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::enable-async",
-                transmute(notify_enable_async_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 impl Default for Bus {
@@ -166,9 +158,4 @@ unsafe extern "C" fn message_trampoline(this: *mut ffi::GstBus, message: *mut ff
 unsafe extern "C" fn sync_message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Bus, &Message) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
-}
-
-unsafe extern "C" fn notify_enable_async_trampoline(this: *mut ffi::GstBus, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Bus) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
 }

@@ -99,47 +99,6 @@ impl PadTemplate {
                 transmute(pad_created_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    pub fn connect_property_caps_notify<F: Fn(&PadTemplate) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&PadTemplate) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::caps",
-                transmute(notify_caps_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_property_direction_notify<F: Fn(&PadTemplate) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&PadTemplate) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::direction",
-                transmute(notify_direction_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn connect_property_gtype_notify<F: Fn(&PadTemplate) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&PadTemplate) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::gtype",
-                transmute(notify_gtype_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_property_name_template_notify<F: Fn(&PadTemplate) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&PadTemplate) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::name-template",
-                transmute(notify_name_template_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_property_presence_notify<F: Fn(&PadTemplate) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&PadTemplate) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::presence",
-                transmute(notify_presence_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe impl Send for PadTemplate {}
@@ -148,30 +107,4 @@ unsafe impl Sync for PadTemplate {}
 unsafe extern "C" fn pad_created_trampoline(this: *mut ffi::GstPadTemplate, pad: *mut ffi::GstPad, f: glib_ffi::gpointer) {
     let f: &&(Fn(&PadTemplate, &Pad) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(pad))
-}
-
-unsafe extern "C" fn notify_caps_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_direction_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-unsafe extern "C" fn notify_gtype_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_name_template_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_presence_trampoline(this: *mut ffi::GstPadTemplate, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PadTemplate) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
 }

@@ -7,14 +7,10 @@ use WebRTCRTPSender;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-use std::boxed::Box as Box_;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
@@ -49,46 +45,7 @@ impl WebRTCRTPTransceiver {
             value.get()
         }
     }
-
-    pub fn connect_property_mlineindex_notify<F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mlineindex",
-                transmute(notify_mlineindex_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_property_receiver_notify<F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::receiver",
-                transmute(notify_receiver_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_property_sender_notify<F: Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sender",
-                transmute(notify_sender_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe impl Send for WebRTCRTPTransceiver {}
 unsafe impl Sync for WebRTCRTPTransceiver {}
-
-unsafe extern "C" fn notify_mlineindex_trampoline(this: *mut ffi::GstWebRTCRTPTransceiver, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_receiver_trampoline(this: *mut ffi::GstWebRTCRTPTransceiver, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_sender_trampoline(this: *mut ffi::GstWebRTCRTPTransceiver, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCRTPTransceiver) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}

@@ -49,14 +49,6 @@ pub trait DeviceExt {
     fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> bool;
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_device_class_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_display_name_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Device> + IsA<glib::object::Object>> DeviceExt for O {
@@ -117,65 +109,9 @@ impl<O: IsA<Device> + IsA<glib::object::Object>> DeviceExt for O {
                 transmute(removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    fn connect_property_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::caps",
-                transmute(notify_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_device_class_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::device-class",
-                transmute(notify_device_class_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_display_name_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::display-name",
-                transmute(notify_display_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_properties_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::properties",
-                transmute(notify_properties_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe extern "C" fn removed_trampoline<P>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
-where P: IsA<Device> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Device::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_caps_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Device> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Device::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_device_class_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Device> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Device::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_display_name_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Device> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Device::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_properties_trampoline<P>(this: *mut ffi::GstDevice, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Device> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
     f(&Device::from_glib_borrow(this).downcast_unchecked())

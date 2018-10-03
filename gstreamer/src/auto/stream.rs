@@ -176,14 +176,6 @@ impl Stream {
         }
     }
 
-    pub fn connect_property_stream_id_notify<F: Fn(&Stream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Stream) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stream-id",
-                transmute(notify_stream_id_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     pub fn connect_property_stream_type_notify<F: Fn(&Stream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Stream) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -210,11 +202,6 @@ unsafe extern "C" fn notify_caps_trampoline(this: *mut ffi::GstStream, _param_sp
 }
 
 unsafe extern "C" fn notify_stream_flags_trampoline(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Stream) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_stream_id_trampoline(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Stream) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

@@ -514,14 +514,6 @@ impl Player {
         }
     }
 
-    pub fn connect_property_signal_dispatcher_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::signal-dispatcher",
-                transmute(notify_signal_dispatcher_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     pub fn connect_property_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -551,14 +543,6 @@ impl Player {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "notify::video-multiview-mode",
                 transmute(notify_video_multiview_mode_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_property_video_renderer_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::video-renderer",
-                transmute(notify_video_renderer_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
@@ -674,11 +658,6 @@ unsafe extern "C" fn notify_rate_trampoline(this: *mut ffi::GstPlayer, _param_sp
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_signal_dispatcher_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
 unsafe extern "C" fn notify_suburi_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
@@ -695,11 +674,6 @@ unsafe extern "C" fn notify_video_multiview_flags_trampoline(this: *mut ffi::Gst
 }
 
 unsafe extern "C" fn notify_video_multiview_mode_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_video_renderer_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

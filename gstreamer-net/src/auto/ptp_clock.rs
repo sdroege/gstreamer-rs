@@ -61,14 +61,6 @@ impl PtpClock {
         }
     }
 
-    pub fn connect_property_domain_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::domain",
-                transmute(notify_domain_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     pub fn connect_property_grandmaster_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -96,11 +88,6 @@ impl PtpClock {
 
 unsafe impl Send for PtpClock {}
 unsafe impl Sync for PtpClock {}
-
-unsafe extern "C" fn notify_domain_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this))
-}
 
 unsafe extern "C" fn notify_grandmaster_clock_id_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);
