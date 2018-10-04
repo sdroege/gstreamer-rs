@@ -9411,7 +9411,7 @@ contained in the rectangles are not copied.</doc>
         </return-value>
       </function>
     </record>
-    <enumeration name="VideoOverlayFormatFlags"
+    <bitfield name="VideoOverlayFormatFlags"
                  c:type="GstVideoOverlayFormatFlags">
       <doc xml:space="preserve">Overlay format flags.</doc>
       <member name="none"
@@ -9429,7 +9429,7 @@ contained in the rectangles are not copied.</doc>
               c:identifier="GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA">
         <doc xml:space="preserve">a global-alpha value != 1 is set.</doc>
       </member>
-    </enumeration>
+    </bitfield>
     <record name="VideoOverlayInterface"
             c:type="GstVideoOverlayInterface"
             glib:is-gtype-struct-for="VideoOverlay">

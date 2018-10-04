@@ -267,11 +267,6 @@ pub const GST_VIDEO_ORIENTATION_UR_LL: GstVideoOrientationMethod = 7;
 pub const GST_VIDEO_ORIENTATION_AUTO: GstVideoOrientationMethod = 8;
 pub const GST_VIDEO_ORIENTATION_CUSTOM: GstVideoOrientationMethod = 9;
 
-pub type GstVideoOverlayFormatFlags = c_int;
-pub const GST_VIDEO_OVERLAY_FORMAT_FLAG_NONE: GstVideoOverlayFormatFlags = 0;
-pub const GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA: GstVideoOverlayFormatFlags = 1;
-pub const GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA: GstVideoOverlayFormatFlags = 2;
-
 pub type GstVideoPrimariesMode = c_int;
 pub const GST_VIDEO_PRIMARIES_MODE_NONE: GstVideoPrimariesMode = 0;
 pub const GST_VIDEO_PRIMARIES_MODE_MERGE_ONLY: GstVideoPrimariesMode = 1;
@@ -453,6 +448,11 @@ pub const GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLIPPED: GstVideoMultiviewFlags = 8;
 pub const GST_VIDEO_MULTIVIEW_FLAGS_RIGHT_FLOPPED: GstVideoMultiviewFlags = 16;
 pub const GST_VIDEO_MULTIVIEW_FLAGS_HALF_ASPECT: GstVideoMultiviewFlags = 16384;
 pub const GST_VIDEO_MULTIVIEW_FLAGS_MIXED_MONO: GstVideoMultiviewFlags = 32768;
+
+pub type GstVideoOverlayFormatFlags = c_uint;
+pub const GST_VIDEO_OVERLAY_FORMAT_FLAG_NONE: GstVideoOverlayFormatFlags = 0;
+pub const GST_VIDEO_OVERLAY_FORMAT_FLAG_PREMULTIPLIED_ALPHA: GstVideoOverlayFormatFlags = 1;
+pub const GST_VIDEO_OVERLAY_FORMAT_FLAG_GLOBAL_ALPHA: GstVideoOverlayFormatFlags = 2;
 
 pub type GstVideoPackFlags = c_uint;
 pub const GST_VIDEO_PACK_FLAG_NONE: GstVideoPackFlags = 0;
