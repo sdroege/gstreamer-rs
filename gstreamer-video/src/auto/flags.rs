@@ -278,3 +278,28 @@ impl SetValue for VideoMultiviewFlags {
     }
 }
 
+bitflags! {
+    pub struct VideoOverlayFormatFlags: u32 {
+        const NONE = 0;
+        const PREMULTIPLIED_ALPHA = 1;
+        const GLOBAL_ALPHA = 2;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoOverlayFormatFlags {
+    type GlibType = ffi::GstVideoOverlayFormatFlags;
+
+    fn to_glib(&self) -> ffi::GstVideoOverlayFormatFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
+    fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
+        skip_assert_initialized!();
+        VideoOverlayFormatFlags::from_bits_truncate(value)
+    }
+}
+
