@@ -1,8 +1,6 @@
 dist: trusty
 sudo: required
 language: rust
-cache:
-    cargo: true
 rust:
   - stable
   - beta
