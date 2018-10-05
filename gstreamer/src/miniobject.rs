@@ -517,7 +517,13 @@ macro_rules! gst_define_mini_object_wrapper(
             }
 
             pub fn copy(&self) -> Self {
-                $name(self.0.copy())
+                self.0.copy()
+            }
+        }
+
+        impl $ref_name {
+            fn copy(&self) -> $name {
+                $name(<$ref_name as $crate::MiniObject>::copy(self))
             }
         }
 
