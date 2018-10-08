@@ -30,10 +30,10 @@ stages:
     - export LD_LIBRARY_PATH=$PWD/gstreamer/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
   script:
     - rustc --version
-    - cargo build --all
-    - G_DEBUG=fatal_warnings cargo test --all
-    - cargo build --all --all-features
-    - G_DEBUG=fatal_warnings cargo test --all --all-features
+    - cargo build --color=always --all
+    - G_DEBUG=fatal_warnings cargo test --color=always --all
+    - cargo build --color=always --all --all-features
+    - G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
 
 
 test stable:
