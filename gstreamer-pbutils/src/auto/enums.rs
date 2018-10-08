@@ -12,7 +12,6 @@ use glib::value::SetValue;
 use glib::value::Value;
 use gobject_ffi;
 
-/// Result values for the discovery process.
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum DiscovererResult {
