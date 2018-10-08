@@ -64,11 +64,6 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use discoverer::*;
-    pub use discoverer_stream_info::*;
-    pub use discoverer_video_info::*;
-
-    pub use encoding_profile::*;
-
+    pub use encoding_profile::EncodingProfileBuilder;
     pub use auto::traits::*;
 }
