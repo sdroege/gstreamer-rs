@@ -64,6 +64,6 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
-    pub use encoding_profile::EncodingProfileBuilder;
     pub use auto::traits::*;
+    pub use encoding_profile::EncodingProfileBuilder;
 }
