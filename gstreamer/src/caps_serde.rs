@@ -264,7 +264,8 @@ mod tests {
                 "        ]),",
                 "    ]), None),",
                 "])"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
 
@@ -298,7 +299,8 @@ mod tests {
                 "        \"foo:baz\",",
                 "    ]))),",
                 "])"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
 
@@ -329,7 +331,8 @@ mod tests {
                 "        ]),",
                 "    ]), Some(Any)),",
                 "])"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
 
@@ -385,7 +388,8 @@ mod tests {
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
                 ],
-            ).as_ref()
+            )
+            .as_ref()
         );
 
         let caps_ron = r#"
@@ -417,7 +421,8 @@ mod tests {
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
                 ],
-            ).as_ref()
+            )
+            .as_ref()
         );
         let f = caps.get_features(0).unwrap();
         assert!(f.is_equal(CapsFeatures::new(&["foo:bar", "foo:baz"]).as_ref()));
@@ -451,7 +456,8 @@ mod tests {
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
                 ],
-            ).as_ref()
+            )
+            .as_ref()
         );
         let f = caps.get_features(0).unwrap();
         assert!(f.is_any());

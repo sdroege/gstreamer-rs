@@ -579,7 +579,8 @@ mod tests {
                         ("fraction", &Fraction::new(1, 2)),
                         ("array", &Array::new(&[&1, &2])),
                     ],
-                ).as_ref()
+                )
+                .as_ref()
             );
         }
         assert!(

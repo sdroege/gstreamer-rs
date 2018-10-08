@@ -268,7 +268,8 @@ mod tests {
                 "        ),",
                 "    ],",
                 ")",
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
     }

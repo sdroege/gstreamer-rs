@@ -31,7 +31,8 @@ impl NetClientClock {
                     remote_address.to_glib_none().0,
                     remote_port,
                     base_time.to_glib(),
-                )).downcast_unchecked()
+                ))
+                .downcast_unchecked()
             }
         } else {
             // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13
@@ -41,7 +42,8 @@ impl NetClientClock {
                     remote_address.to_glib_none().0,
                     remote_port,
                     base_time.to_glib(),
-                )).downcast_unchecked()
+                ))
+                .downcast_unchecked()
             }
         }
     }

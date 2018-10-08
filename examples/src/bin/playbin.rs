@@ -60,7 +60,8 @@ fn example_main() {
             }
 
             None
-        }).unwrap();
+        })
+        .unwrap();
 
     let bus = playbin.get_bus().unwrap();
 

@@ -173,7 +173,8 @@ mod tests {
                 "        (\"f3\", \"i32\", 123),",
                 "    ])),",
                 ")"
-            ).to_owned()),
+            )
+            .to_owned()),
             res
         );
 
@@ -225,7 +226,8 @@ mod tests {
                 "    )),",
                 "    info: None,",
                 ")"
-            ).to_owned()),
+            )
+            .to_owned()),
             res
         );
     }

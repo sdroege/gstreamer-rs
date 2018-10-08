@@ -197,7 +197,8 @@ mod tests {
                 "        (\"i32\", 2),",
                 "    ]),",
                 "])"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
     }
@@ -229,7 +230,8 @@ mod tests {
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
                 ],
-            ).as_ref()
+            )
+            .as_ref()
         );
     }
 

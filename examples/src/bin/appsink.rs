@@ -115,12 +115,14 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     .map(|sample| {
                         let f = f64::from(*sample) / f64::from(i16::MAX);
                         f * f
-                    }).sum();
+                    })
+                    .sum();
                 let rms = (sum / (samples.len() as f64)).sqrt();
                 println!("rms: {}", rms);
 
                 gst::FlowReturn::Ok
-            }).build(),
+            })
+            .build(),
     );
 
     Ok(pipeline)

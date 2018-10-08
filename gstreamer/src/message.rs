@@ -348,7 +348,8 @@ impl fmt::Debug for MessageRef {
             .field("type", &unsafe {
                 let type_ = ffi::gst_message_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
-            }).field("seqnum", &self.get_seqnum())
+            })
+            .field("seqnum", &self.get_seqnum())
             .field("src", &self.get_src().map(|s| s.get_name()))
             .field("structure", &self.get_structure())
             .finish()
@@ -1092,7 +1093,8 @@ impl<'a> StreamsSelected<'a> {
                         self.as_mut_ptr(),
                         i,
                     ))
-                }).collect()
+                })
+                .collect()
         }
     }
 }
@@ -1129,7 +1131,8 @@ impl<'a> Redirect<'a> {
                         from_glib_none(tags),
                         structure,
                     )
-                }).collect()
+                })
+                .collect()
         }
     }
 }

@@ -40,7 +40,8 @@ fn tutorial_main() {
             &visual,
             &video_convert,
             &video_sink,
-        ]).unwrap();
+        ])
+        .unwrap();
 
     gst::Element::link_many(&[&audio_source, &tee]).unwrap();
     gst::Element::link_many(&[&audio_queue, &audio_convert, &audio_resample, &audio_sink]).unwrap();

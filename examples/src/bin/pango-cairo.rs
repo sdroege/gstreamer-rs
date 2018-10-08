@@ -146,7 +146,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             }
 
             None
-        }).unwrap();
+        })
+        .unwrap();
 
     let drawer_clone = drawer.clone();
     overlay
@@ -159,7 +160,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             drawer.info = Some(gst_video::VideoInfo::from_caps(&caps).unwrap());
 
             None
-        }).unwrap();
+        })
+        .unwrap();
 
     Ok(pipeline)
 }

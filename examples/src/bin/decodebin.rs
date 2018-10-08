@@ -178,7 +178,8 @@ fn example_main() -> Result<(), Error> {
                             .and_then(|v| {
                                 v.downcast_ref::<Arc<Mutex<Option<Error>>>>()
                                     .and_then(|v| v.lock().unwrap().take())
-                            }).map(Result::Err)
+                            })
+                            .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
                             src: err
@@ -188,7 +189,8 @@ fn example_main() -> Result<(), Error> {
                             error: err.get_error().description().into(),
                             debug: err.get_debug(),
                             cause: err.get_error(),
-                        }.into()),
+                        }
+                        .into()),
                     }?;
                 }
                 #[cfg(not(feature = "v1_10"))]

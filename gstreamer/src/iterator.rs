@@ -384,7 +384,8 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_ff
                     "GstRsIteratorFilterBoxed-{}-{}",
                     T::static_type().name(),
                     idx
-                )).unwrap();
+                ))
+                .unwrap();
                 if gobject_ffi::g_type_from_name(type_name.as_ptr()) == gobject_ffi::G_TYPE_INVALID
                 {
                     break type_name;

@@ -117,7 +117,8 @@ mod tests {
                 "    ),",
                 "    buffer: \"AQIDBA==\",",
                 ")"
-            ).to_owned()),
+            )
+            .to_owned()),
             res
         );
 
@@ -133,7 +134,8 @@ mod tests {
                 "\"flags\":{\"bits\":1048592},",
                 "\"buffer\":[1,2,3,4]",
                 "}"
-            ).to_owned(),
+            )
+            .to_owned(),
             res
         );
 

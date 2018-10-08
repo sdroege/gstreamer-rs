@@ -131,7 +131,8 @@ mod tests {
                 "        buffer: \"BQY=\",",
                 "    ),",
                 "]"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
     }

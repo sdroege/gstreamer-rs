@@ -39,7 +39,8 @@ fn example_main() {
             } else {
                 None
             }
-        }.and_then(|pos| pos.try_into_time().ok())
+        }
+        .and_then(|pos| pos.try_into_time().ok())
         .unwrap();
 
         let dur = {
@@ -49,7 +50,8 @@ fn example_main() {
             } else {
                 None
             }
-        }.and_then(|dur| dur.try_into_time().ok())
+        }
+        .and_then(|dur| dur.try_into_time().ok())
         .unwrap();
 
         println!("{} / {}", pos, dur);

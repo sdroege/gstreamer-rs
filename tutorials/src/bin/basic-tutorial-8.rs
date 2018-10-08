@@ -86,7 +86,8 @@ fn main() {
             &video_sink,
             &app_queue,
             &appsink,
-        ]).unwrap();
+        ])
+        .unwrap();
 
     gst::Element::link_many(&[&appsrc, &tee]).unwrap();
     gst::Element::link_many(&[&audio_queue, &audio_convert1, &audio_resample, &audio_sink])
@@ -97,7 +98,8 @@ fn main() {
         &visual,
         &video_convert,
         &video_sink,
-    ]).unwrap();
+    ])
+    .unwrap();
     gst::Element::link_many(&[&app_queue, &appsink]).unwrap();
 
     let tee_audio_pad = tee.get_request_pad("src_%u").unwrap();

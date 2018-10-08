@@ -248,8 +248,10 @@ mod tests {
                         c.get_structure(0)
                             .map(|s| s.get_name() == "application/xml")
                             .unwrap_or(false)
-                    }).unwrap_or(false)
-            }).unwrap();
+                    })
+                    .unwrap_or(false)
+            })
+            .unwrap();
 
         let data = b"<?xml version=\"1.0\"?><test>test</test>";
         let data = &data[..];
