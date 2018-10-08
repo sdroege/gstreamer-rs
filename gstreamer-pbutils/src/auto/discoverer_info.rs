@@ -16,6 +16,11 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    /// Structure containing the information of a URI analyzed by `Discoverer`.
+    ///
+    /// # Implements
+    ///
+    /// [`DiscovererInfoExt`](trait.DiscovererInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
     pub struct DiscovererInfo(Object<ffi::GstDiscovererInfo>);
 
     match fn {
@@ -24,6 +29,14 @@ glib_wrapper! {
 }
 
 impl DiscovererInfo {
+    /// Parses a `glib::Variant` as produced by `DiscovererInfoExt::to_variant`
+    /// back to a `DiscovererInfo`.
+    /// ## `variant`
+    /// A `glib::Variant` to deserialize into a `DiscovererInfo`.
+    ///
+    /// # Returns
+    ///
+    /// A newly-allocated `DiscovererInfo`.
     pub fn from_variant(variant: &glib::Variant) -> Option<DiscovererInfo> {
         assert_initialized_main_thread!();
         unsafe {
@@ -35,42 +48,167 @@ impl DiscovererInfo {
 unsafe impl Send for DiscovererInfo {}
 unsafe impl Sync for DiscovererInfo {}
 
+/// Trait containing all `DiscovererInfo` methods.
+///
+/// # Implementors
+///
+/// [`DiscovererInfo`](struct.DiscovererInfo.html)
 pub trait DiscovererInfoExt {
+    ///
+    /// # Returns
+    ///
+    /// A copy of the `DiscovererInfo`
     fn copy(&self) -> DiscovererInfo;
 
+    /// Finds all the `DiscovererAudioInfo` contained in `self`
+    ///
+    /// # Returns
+    ///
+    /// A `glib::List` of
+    /// matching `DiscovererStreamInfo`. The caller should free it with
+    /// `DiscovererStreamInfo::list_free`.
     fn get_audio_streams(&self) -> Vec<DiscovererStreamInfo>;
 
+    /// Finds all the `DiscovererContainerInfo` contained in `self`
+    ///
+    /// # Returns
+    ///
+    /// A `glib::List` of
+    /// matching `DiscovererStreamInfo`. The caller should free it with
+    /// `DiscovererStreamInfo::list_free`.
     fn get_container_streams(&self) -> Vec<DiscovererStreamInfo>;
 
+    ///
+    /// # Returns
+    ///
+    /// the duration of the URI in `gst::ClockTime` (nanoseconds).
     fn get_duration(&self) -> gst::ClockTime;
 
+    ///
+    /// Feature: `v1_14`
+    ///
+    ///
+    /// # Returns
+    ///
+    /// whether the URI is live.
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_live(&self) -> bool;
 
+    ///
+    /// # Deprecated
+    ///
+    /// This functions is deprecated since version 1.4, use
+    /// `DiscovererInfoExt::get_missing_elements_installer_details`
+    ///
+    /// # Returns
+    ///
+    /// Miscellaneous information stored as a `gst::Structure`
+    /// (for example: information about missing plugins). If you wish to use the
+    /// `gst::Structure` after the life-time of `self`, you will need to copy it.
     fn get_misc(&self) -> Option<gst::Structure>;
 
+    /// Get the installer details for missing elements
+    ///
+    /// # Returns
+    ///
+    /// An array of strings
+    /// containing informations about how to install the various missing elements
+    /// for `self` to be usable. If you wish to use the strings after the life-time
+    /// of `self`, you will need to copy them.
     fn get_missing_elements_installer_details(&self) -> Vec<String>;
 
+    ///
+    /// # Returns
+    ///
+    /// the result of the discovery as a `DiscovererResult`.
     fn get_result(&self) -> DiscovererResult;
 
+    ///
+    /// # Returns
+    ///
+    /// the whether the URI is seekable.
     fn get_seekable(&self) -> bool;
 
+    ///
+    /// # Returns
+    ///
+    /// the structure (or topology) of the URI as a
+    /// `DiscovererStreamInfo`.
+    /// This structure can be traversed to see the original hierarchy. Unref with
+    /// `gst_discoverer_stream_info_unref` after usage.
     fn get_stream_info(&self) -> Option<DiscovererStreamInfo>;
 
+    ///
+    /// # Returns
+    ///
+    /// the list of
+    /// all streams contained in the `info`. Free after usage
+    /// with `DiscovererStreamInfo::list_free`.
     fn get_stream_list(&self) -> Vec<DiscovererStreamInfo>;
 
+    /// Finds the `DiscovererStreamInfo` contained in `self` that match the
+    /// given `streamtype`.
+    /// ## `streamtype`
+    /// a `glib::Type` derived from `DiscovererStreamInfo`
+    ///
+    /// # Returns
+    ///
+    /// A `glib::List` of
+    /// matching `DiscovererStreamInfo`. The caller should free it with
+    /// `DiscovererStreamInfo::list_free`.
     fn get_streams(&self, streamtype: glib::types::Type) -> Vec<DiscovererStreamInfo>;
 
+    /// Finds all the `DiscovererSubtitleInfo` contained in `self`
+    ///
+    /// # Returns
+    ///
+    /// A `glib::List` of
+    /// matching `DiscovererStreamInfo`. The caller should free it with
+    /// `DiscovererStreamInfo::list_free`.
     fn get_subtitle_streams(&self) -> Vec<DiscovererStreamInfo>;
 
+    ///
+    /// # Returns
+    ///
+    /// all tags contained in the URI. If you wish to use
+    /// the tags after the life-time of `self`, you will need to copy them.
     fn get_tags(&self) -> Option<gst::TagList>;
 
+    ///
+    /// # Returns
+    ///
+    /// TOC contained in the URI. If you wish to use
+    /// the TOC after the life-time of `self`, you will need to copy it.
     fn get_toc(&self) -> Option<gst::Toc>;
 
+    ///
+    /// # Returns
+    ///
+    /// the URI to which this information corresponds to.
+    /// Copy it if you wish to use it after the life-time of `self`.
     fn get_uri(&self) -> Option<String>;
 
+    /// Finds all the `DiscovererVideoInfo` contained in `self`
+    ///
+    /// # Returns
+    ///
+    /// A `glib::List` of
+    /// matching `DiscovererStreamInfo`. The caller should free it with
+    /// `DiscovererStreamInfo::list_free`.
     fn get_video_streams(&self) -> Vec<DiscovererStreamInfo>;
 
+    /// Serializes `self` to a `glib::Variant` that can be parsed again
+    /// through `DiscovererInfo::from_variant`.
+    ///
+    /// Note that any `gst::Toc` (s) that might have been discovered will not be serialized
+    /// for now.
+    /// ## `flags`
+    /// A combination of `DiscovererSerializeFlags` to specify
+    /// what needs to be serialized.
+    ///
+    /// # Returns
+    ///
+    /// A newly-allocated `glib::Variant` representing `self`.
     fn to_variant(&self, flags: DiscovererSerializeFlags) -> Option<glib::Variant>;
 }
 
