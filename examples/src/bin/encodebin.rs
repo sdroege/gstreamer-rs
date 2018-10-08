@@ -58,11 +58,11 @@ fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
             "video/x-matroska",
             &[],
         ))
-        .add_profile(&(video_profile.upcast()))
-        .add_profile(&(audio_profile.upcast()))
+        .add_profile(&(video_profile))
+        .add_profile(&(audio_profile))
         .build()?;
 
-    encodebin.set_property("profile", &container_profile)?;
+    encodebin.set_property("profile", &container_profile).expect("set profile property failed");
 
     Ok(())
 }
@@ -87,12 +87,12 @@ fn example_main() -> Result<(), Error> {
     let encodebin = gst::ElementFactory::make("encodebin", None).ok_or(MissingElement("encodebin"))?;
     let sink = gst::ElementFactory::make("filesink", None).ok_or(MissingElement("filesink"))?;
 
-    src.set_property("uri", &uri)?;
-    sink.set_property("location", &output_file)?;
+    src.set_property("uri", &uri).expect("setting URI Property failed");
+    sink.set_property("location", &output_file).expect("setting location property failed");
 
     configure_encodebin(&encodebin)?;
 
-    pipeline.add_many(&[&src, &encodebin, &sink])?;
+    pipeline.add_many(&[&src, &encodebin, &sink]).expect("failed to add elements to pipeline");
     gst::Element::link_many(&[&encodebin, &sink])?;
 
     // Need to move a new reference into the closure
@@ -122,7 +122,7 @@ fn example_main() -> Result<(), Error> {
             }
         };
 
-        let insert_sink = |is_audio, is_video| -> Result<(), Error> {
+        let link_to_encodebin = |is_audio, is_video| -> Result<(), Error> {
             if is_audio {
                 let queue =
                     gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
@@ -132,7 +132,7 @@ fn example_main() -> Result<(), Error> {
                     .ok_or(MissingElement("audioresample"))?;
 
                 let elements = &[&queue, &convert, &resample];
-                pipeline.add_many(elements)?;
+                pipeline.add_many(elements).expect("failed to add audio elements to pipeline");
                 gst::Element::link_many(elements)?;
 
                 let enc_sink_pad = encodebin.get_request_pad("audio_%u").expect("Could not get audio pad from encodebin");
@@ -154,7 +154,7 @@ fn example_main() -> Result<(), Error> {
                     .ok_or(MissingElement("videoscale"))?;
 
                 let elements = &[&queue, &convert, &scale];
-                pipeline.add_many(elements)?;
+                pipeline.add_many(elements).expect("failed to add video elements to pipeline");
                 gst::Element::link_many(elements)?;
 
                 let enc_sink_pad = encodebin.get_request_pad("video_%u").expect("Could not get video pad from encodebin");
@@ -172,7 +172,7 @@ fn example_main() -> Result<(), Error> {
             Ok(())
         };
 
-        if let Err(err) = insert_sink(is_audio, is_video) {
+        if let Err(err) = link_to_encodebin(is_audio, is_video) {
             #[cfg(feature = "v1_10")]
             gst_element_error!(
                 dbin,

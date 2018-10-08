@@ -12,6 +12,25 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    /// Base structure for information concerning a media stream. Depending on the
+    /// stream type, one can find more media-specific information in
+    /// `DiscovererAudioInfo`, `DiscovererVideoInfo`, and
+    /// `DiscovererContainerInfo`.
+    ///
+    /// The `DiscovererStreamInfo` represents the topology of the stream. Siblings
+    /// can be iterated over with `DiscovererStreamInfoExt::get_next` and
+    /// `DiscovererStreamInfoExt::get_previous`. Children (sub-streams) of a
+    /// stream can be accessed using the `DiscovererContainerInfo` API.
+    ///
+    /// As a simple example, if you run `Discoverer` on an AVI file with one audio
+    /// and one video stream, you will get a `DiscovererContainerInfo`
+    /// corresponding to the AVI container, which in turn will have a
+    /// `DiscovererAudioInfo` sub-stream and a `DiscovererVideoInfo` sub-stream
+    /// for the audio and video streams respectively.
+    ///
+    /// # Implements
+    ///
+    /// [`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
     pub struct DiscovererStreamInfo(Object<ffi::GstDiscovererStreamInfo>);
 
     match fn {
@@ -22,21 +41,74 @@ glib_wrapper! {
 unsafe impl Send for DiscovererStreamInfo {}
 unsafe impl Sync for DiscovererStreamInfo {}
 
+/// Trait containing all `DiscovererStreamInfo` methods.
+///
+/// # Implementors
+///
+/// [`DiscovererAudioInfo`](struct.DiscovererAudioInfo.html), [`DiscovererContainerInfo`](struct.DiscovererContainerInfo.html), [`DiscovererStreamInfo`](struct.DiscovererStreamInfo.html), [`DiscovererSubtitleInfo`](struct.DiscovererSubtitleInfo.html), [`DiscovererVideoInfo`](struct.DiscovererVideoInfo.html)
 pub trait DiscovererStreamInfoExt {
+    ///
+    /// # Returns
+    ///
+    /// the `gst::Caps` of the stream. Unref with
+    /// `gst_caps_unref` after usage.
     fn get_caps(&self) -> Option<gst::Caps>;
 
+    ///
+    /// # Deprecated
+    ///
+    /// This functions is deprecated since version 1.4, use
+    /// `DiscovererInfoExt::get_missing_elements_installer_details`
+    ///
+    /// # Returns
+    ///
+    /// additional information regarding the stream (for
+    /// example codec version, profile, etc..). If you wish to use the `gst::Structure`
+    /// after the life-time of `self` you will need to copy it.
     fn get_misc(&self) -> Option<gst::Structure>;
 
+    ///
+    /// # Returns
+    ///
+    /// the next `DiscovererStreamInfo` in a chain. `None`
+    /// for final streams.
+    /// Unref with `gst_discoverer_stream_info_unref` after usage.
     fn get_next(&self) -> Option<DiscovererStreamInfo>;
 
+    ///
+    /// # Returns
+    ///
+    /// the previous `DiscovererStreamInfo` in a chain.
+    /// `None` for starting points. Unref with `gst_discoverer_stream_info_unref`
+    /// after usage.
     fn get_previous(&self) -> Option<DiscovererStreamInfo>;
 
+    ///
+    /// # Returns
+    ///
+    /// the stream ID of this stream. If you wish to
+    /// use the stream ID after the life-time of `self` you will need to copy it.
     fn get_stream_id(&self) -> Option<String>;
 
+    ///
+    /// # Returns
+    ///
+    /// a human readable name for the stream type of the given `self` (ex : "audio",
+    /// "container",...).
     fn get_stream_type_nick(&self) -> String;
 
+    ///
+    /// # Returns
+    ///
+    /// the tags contained in this stream. If you wish to
+    /// use the tags after the life-time of `self` you will need to copy them.
     fn get_tags(&self) -> Option<gst::TagList>;
 
+    ///
+    /// # Returns
+    ///
+    /// the TOC contained in this stream. If you wish to
+    /// use the TOC after the life-time of `self` you will need to copy it.
     fn get_toc(&self) -> Option<gst::Toc>;
 }
 

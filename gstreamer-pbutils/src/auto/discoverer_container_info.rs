@@ -11,6 +11,11 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    /// `DiscovererStreamInfo` specific to container streams.
+    ///
+    /// # Implements
+    ///
+    /// [`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
     pub struct DiscovererContainerInfo(Object<ffi::GstDiscovererContainerInfo>): DiscovererStreamInfo;
 
     match fn {
@@ -19,6 +24,12 @@ glib_wrapper! {
 }
 
 impl DiscovererContainerInfo {
+    ///
+    /// # Returns
+    ///
+    /// the list of
+    /// `DiscovererStreamInfo` this container stream offers.
+    /// Free with `DiscovererStreamInfo::list_free` after usage.
     pub fn get_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_container_info_get_streams(self.to_glib_none().0))

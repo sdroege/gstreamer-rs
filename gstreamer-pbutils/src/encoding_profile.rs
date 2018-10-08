@@ -1,23 +1,21 @@
-
-use gst;
-use glib;
 use ffi;
+use glib;
+use gst;
 use gst_ffi;
 
 use std::error;
 use std::fmt;
-use std::collections::LinkedList;
 
-use glib::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 
-use auto::EncodingProfile;
 use auto::EncodingAudioProfile;
-use auto::EncodingVideoProfile;
 use auto::EncodingContainerProfile;
+use auto::EncodingContainerProfileExt;
+use auto::EncodingProfile;
+use auto::EncodingVideoProfile;
 
-trait EncodingProfileEdit {
+trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);
 
     fn set_description<'a, P: Into<Option<&'a str>>>(&self, description: P);
@@ -37,11 +35,13 @@ trait EncodingProfileEdit {
     fn set_restriction<'a, P: Into<Option<&'a gst::Caps>>>(&self, restriction: P);
 }
 
-impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileEdit for O {
-
+impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilderCommon for O {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool) {
         unsafe {
-            ffi::gst_encoding_profile_set_allow_dynamic_output(self.to_glib_none().0, allow_dynamic_output.to_glib());
+            ffi::gst_encoding_profile_set_allow_dynamic_output(
+                self.to_glib_none().0,
+                allow_dynamic_output.to_glib(),
+            );
         }
     }
 
@@ -109,27 +109,47 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileEdit fo
 }
 
 impl EncodingAudioProfile {
-    fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b gst::Caps>>>(format: &gst::Caps, preset: P, restriction: Q, presence: u32) -> EncodingAudioProfile {
+    fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b gst::Caps>>>(
+        format: &gst::Caps,
+        preset: P,
+        restriction: Q,
+        presence: u32,
+    ) -> EncodingAudioProfile {
         assert_initialized_main_thread!();
         let preset = preset.into();
         let preset = preset.to_glib_none();
         let restriction = restriction.into();
         let restriction = restriction.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_encoding_audio_profile_new(format.to_glib_none().0, preset.0, restriction.0, presence))
+            from_glib_full(ffi::gst_encoding_audio_profile_new(
+                format.to_glib_none().0,
+                preset.0,
+                restriction.0,
+                presence,
+            ))
         }
     }
 }
 
 impl EncodingVideoProfile {
-    fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b gst::Caps>>>(format: &gst::Caps, preset: P, restriction: Q, presence: u32) -> EncodingVideoProfile {
+    fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b gst::Caps>>>(
+        format: &gst::Caps,
+        preset: P,
+        restriction: Q,
+        presence: u32,
+    ) -> EncodingVideoProfile {
         assert_initialized_main_thread!();
         let preset = preset.into();
         let preset = preset.to_glib_none();
         let restriction = restriction.into();
         let restriction = restriction.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_encoding_video_profile_new(format.to_glib_none().0, preset.0, restriction.0, presence))
+            from_glib_full(ffi::gst_encoding_video_profile_new(
+                format.to_glib_none().0,
+                preset.0,
+                restriction.0,
+                presence,
+            ))
         }
     }
 
@@ -141,13 +161,28 @@ impl EncodingVideoProfile {
 
     fn set_variableframerate(&self, variableframerate: bool) {
         unsafe {
-            ffi::gst_encoding_video_profile_set_variableframerate(self.to_glib_none().0, variableframerate.to_glib());
+            ffi::gst_encoding_video_profile_set_variableframerate(
+                self.to_glib_none().0,
+                variableframerate.to_glib(),
+            );
         }
     }
 }
 
 impl EncodingContainerProfile {
-    fn new<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>, R: Into<Option<&'c str>>>(name: P, description: Q, format: &gst::Caps, preset: R) -> EncodingContainerProfile {
+    fn new<
+        'a,
+        'b,
+        'c,
+        P: Into<Option<&'a str>>,
+        Q: Into<Option<&'b str>>,
+        R: Into<Option<&'c str>>,
+    >(
+        name: P,
+        description: Q,
+        format: &gst::Caps,
+        preset: R,
+    ) -> EncodingContainerProfile {
         assert_initialized_main_thread!();
         let name = name.into();
         let name = name.to_glib_none();
@@ -156,13 +191,27 @@ impl EncodingContainerProfile {
         let preset = preset.into();
         let preset = preset.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_encoding_container_profile_new(name.0, description.0, format.to_glib_none().0, preset.0))
+            from_glib_full(ffi::gst_encoding_container_profile_new(
+                name.0,
+                description.0,
+                format.to_glib_none().0,
+                preset.0,
+            ))
         }
     }
 
-    fn add_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError> {
+    fn add_profile<P: IsA<EncodingProfile>>(
+        &self,
+        profile: &P,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_encoding_container_profile_add_profile(self.to_glib_none().0, profile.to_glib_full()), "Failed to add profile")
+            glib::error::BoolError::from_glib(
+                ffi::gst_encoding_container_profile_add_profile(
+                    self.to_glib_none().0,
+                    profile.to_glib_full(),
+                ),
+                "Failed to add profile",
+            )
         }
     }
 }
@@ -186,47 +235,47 @@ impl error::Error for EncodingProfileBuilderError {
     }
 }
 
-struct EncodingProfileBuilderData<'a> {
-    name: Option<& 'a str>,
-    description: Option<& 'a str>,
-    format: Option<& 'a gst::Caps>,
-    preset: Option<& 'a str>,
-    preset_name: Option<& 'a str>,
-    restriction: Option<& 'a gst::Caps>,
+struct EncodingProfileBuilderCommonData<'a> {
+    name: Option<&'a str>,
+    description: Option<&'a str>,
+    format: Option<&'a gst::Caps>,
+    preset: Option<&'a str>,
+    preset_name: Option<&'a str>,
+    restriction: Option<&'a gst::Caps>,
     presence: u32,
     allow_dynamic_output: bool,
-    enabled: bool
+    enabled: bool,
 }
 
-impl<'a> EncodingProfileBuilderData<'a> {
-    fn new() -> EncodingProfileBuilderData<'a> {
-        EncodingProfileBuilderData {
+impl<'a> EncodingProfileBuilderCommonData<'a> {
+    fn new() -> EncodingProfileBuilderCommonData<'a> {
+        EncodingProfileBuilderCommonData {
             name: None,
             description: None,
             format: None,
             preset: None,
-            preset_name : None,
+            preset_name: None,
             restriction: None,
             presence: 0,
             allow_dynamic_output: true,
-            enabled: true
+            enabled: true,
         }
     }
 }
 
 pub trait EncodingProfileBuilder<'a>: Sized {
-    fn name(self, name: & 'a str) -> Self;
-    fn description(self, description: & 'a str) -> Self;
-    fn format(self, format: & 'a gst::Caps) -> Self;
-    fn preset(self, preset: & 'a str) -> Self;
-    fn preset_name(self, preset_name: & 'a str) -> Self;
-    fn restriction(self, format: & 'a gst::Caps) -> Self;
+    fn name(self, name: &'a str) -> Self;
+    fn description(self, description: &'a str) -> Self;
+    fn format(self, format: &'a gst::Caps) -> Self;
+    fn preset(self, preset: &'a str) -> Self;
+    fn preset_name(self, preset_name: &'a str) -> Self;
+    fn restriction(self, format: &'a gst::Caps) -> Self;
     fn presence(self, presence: u32) -> Self;
     fn allow_dynamic_output(self, allow: bool) -> Self;
     fn enabled(self, enabled: bool) -> Self;
 }
 
-macro_rules! declare_encoding_profile_builder(
+macro_rules! declare_encoding_profile_builder_common(
     ($name:ident) => {
         impl<'a> EncodingProfileBuilder<'a> for $name<'a> {
             fn name(mut self, name: &'a str) -> $name<'a> {
@@ -277,7 +326,10 @@ macro_rules! declare_encoding_profile_builder(
     }
 );
 
-fn set_common_fields<T: EncodingProfileEdit>(profile: &mut T, base_data: &EncodingProfileBuilderData) {
+fn set_common_fields<T: EncodingProfileBuilderCommon>(
+    profile: &T,
+    base_data: &EncodingProfileBuilderCommonData,
+) {
     profile.set_name(base_data.name);
     profile.set_description(base_data.description);
     profile.set_preset(base_data.preset);
@@ -289,47 +341,49 @@ fn set_common_fields<T: EncodingProfileEdit>(profile: &mut T, base_data: &Encodi
 }
 
 pub struct EncodingAudioProfileBuilder<'a> {
-    base : EncodingProfileBuilderData<'a>
+    base: EncodingProfileBuilderCommonData<'a>,
 }
 
-declare_encoding_profile_builder!(EncodingAudioProfileBuilder);
+declare_encoding_profile_builder_common!(EncodingAudioProfileBuilder);
 
 impl<'a> EncodingAudioProfileBuilder<'a> {
     pub fn new() -> Self {
         EncodingAudioProfileBuilder {
-            base: EncodingProfileBuilderData::new(),
+            base: EncodingProfileBuilderCommonData::new(),
         }
     }
 
-    pub fn build(self) -> Result<EncodingProfile, EncodingProfileBuilderError> {
+    pub fn build(self) -> Result<EncodingAudioProfile, EncodingProfileBuilderError> {
         if self.base.format.is_none() {
             return Err(EncodingProfileBuilderError);
         }
 
         let profile = EncodingAudioProfile::new(
-            self.base.format.unwrap(), self.base.preset,
-            self.base.restriction, self.base.presence);
+            self.base.format.unwrap(),
+            self.base.preset,
+            self.base.restriction,
+            self.base.presence,
+        );
 
-        let mut profile = profile.upcast();
-        set_common_fields(&mut profile, &self.base);
+        set_common_fields(&profile, &self.base);
         Ok(profile)
     }
 }
 
 pub struct EncodingVideoProfileBuilder<'a> {
-    base : EncodingProfileBuilderData<'a>,
+    base: EncodingProfileBuilderCommonData<'a>,
     pass: u32,
     variable_framerate: bool,
 }
 
-declare_encoding_profile_builder!(EncodingVideoProfileBuilder);
+declare_encoding_profile_builder_common!(EncodingVideoProfileBuilder);
 
 impl<'a> EncodingVideoProfileBuilder<'a> {
     pub fn new() -> Self {
         EncodingVideoProfileBuilder {
-            base: EncodingProfileBuilderData::new(),
+            base: EncodingProfileBuilderCommonData::new(),
             pass: 0,
-            variable_framerate: false
+            variable_framerate: false,
         }
     }
 
@@ -343,70 +397,90 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
         self
     }
 
-    pub fn build(self) -> Result<EncodingProfile, EncodingProfileBuilderError> {
+    pub fn build(self) -> Result<EncodingVideoProfile, EncodingProfileBuilderError> {
         if self.base.format.is_none() {
             return Err(EncodingProfileBuilderError);
         }
 
         let video_profile = EncodingVideoProfile::new(
-            self.base.format.unwrap(), self.base.preset, self.base.restriction, self.base.presence);
+            self.base.format.unwrap(),
+            self.base.preset,
+            self.base.restriction,
+            self.base.presence,
+        );
 
         video_profile.set_pass(self.pass);
         video_profile.set_variableframerate(self.variable_framerate);
 
-        let mut profile = video_profile.upcast();
-        set_common_fields(&mut profile, &self.base);
-        Ok(profile)
+        set_common_fields(&video_profile, &self.base);
+        Ok(video_profile)
     }
 }
 
 pub struct EncodingContainerProfileBuilder<'a> {
-    base : EncodingProfileBuilderData<'a>,
-    profiles: LinkedList<& 'a EncodingProfile>
+    base: EncodingProfileBuilderCommonData<'a>,
+    /*
+     * Not proud of this.
+     * Couldn't figure out how to store a IsA<EncodingProfile> to be used
+     * only when building the final profile object. So I'm using a real
+     * EncodingContainerProfile object just as a means to store it under
+     * the ffi APIs. This preserves the public APIs of this builder as
+     * they should be at the end.
+     */
+    helper_profile: EncodingContainerProfile,
 }
 
-declare_encoding_profile_builder!(EncodingContainerProfileBuilder);
+declare_encoding_profile_builder_common!(EncodingContainerProfileBuilder);
 
 impl<'a> EncodingContainerProfileBuilder<'a> {
     pub fn new() -> Self {
         EncodingContainerProfileBuilder {
-            base: EncodingProfileBuilderData::new(),
-            profiles: LinkedList::new()
+            base: EncodingProfileBuilderCommonData::new(),
+            helper_profile: EncodingContainerProfile::new(
+                "helper",
+                None,
+                &gst::Caps::new_any(),
+                None,
+            ),
         }
     }
 
-    pub fn build(self) -> Result<EncodingProfile, EncodingProfileBuilderError> {
+    pub fn build(self) -> Result<EncodingContainerProfile, EncodingProfileBuilderError> {
         if self.base.format.is_none() {
             return Err(EncodingProfileBuilderError);
         }
 
         let container_profile = EncodingContainerProfile::new(
-            self.base.name, self.base.description, self.base.format.unwrap(), self.base.preset);
+            self.base.name,
+            self.base.description,
+            self.base.format.unwrap(),
+            self.base.preset,
+        );
 
-        for profile in self.profiles {
-            container_profile.add_profile(profile).or_else(|_error| Err(EncodingProfileBuilderError))?;
+        for profile in self.helper_profile.get_profiles() {
+            container_profile
+                .add_profile(&profile)
+                .or_else(|_error| Err(EncodingProfileBuilderError))?;
         }
 
-        let mut profile = container_profile.upcast();
-        set_common_fields(&mut profile, &self.base);
-        Ok(profile)
+        set_common_fields(&container_profile, &self.base);
+        Ok(container_profile)
     }
 
-    pub fn add_profile(mut self, profile: & 'a EncodingProfile) -> Self {
-        self.profiles.push_back(profile);
+    pub fn add_profile<P: IsA<EncodingProfile>>(mut self, profile: &P) -> Self {
+        self.helper_profile.add_profile(profile).unwrap();
         self
     }
-
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gst;
-    use auto::EncodingProfileExt;
-    use auto::EncodingVideoProfile;
     use auto::EncodingContainerProfile;
     use auto::EncodingContainerProfileExt;
+    use auto::EncodingProfileExt;
+    use auto::EncodingVideoProfile;
+    use gst;
 
     const AUDIO_PROFILE_NAME: &'static str = "audio-profile";
     const AUDIO_PROFILE_DESCRIPTION: &'static str = "audio-profile-description";
@@ -430,17 +504,9 @@ mod tests {
     fn test_encoding_audio_profile_builder() {
         gst::init().unwrap();
 
-        let caps = gst::Caps::new_simple(
-            "audio/x-raw",
-            &[],
-        );
+        let caps = gst::Caps::new_simple("audio/x-raw", &[]);
 
-        let restriction = gst::Caps::new_simple(
-            "audio/x-raw",
-            &[
-                ("format", &"S32LE"),
-            ],
-        );
+        let restriction = gst::Caps::new_simple("audio/x-raw", &[("format", &"S32LE")]);
 
         let audio_profile = EncodingAudioProfileBuilder::new()
             .name(AUDIO_PROFILE_NAME)
@@ -452,16 +518,23 @@ mod tests {
             .presence(PRESENCE)
             .allow_dynamic_output(ALLOW_DYNAMIC_OUTPUT)
             .enabled(ENABLED)
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         assert_eq!(audio_profile.get_name().unwrap(), AUDIO_PROFILE_NAME);
-        assert_eq!(audio_profile.get_description().unwrap(), AUDIO_PROFILE_DESCRIPTION);
+        assert_eq!(
+            audio_profile.get_description().unwrap(),
+            AUDIO_PROFILE_DESCRIPTION
+        );
         assert_eq!(audio_profile.get_format(), caps);
         assert_eq!(audio_profile.get_preset().unwrap(), PRESET);
         assert_eq!(audio_profile.get_preset_name().unwrap(), PRESET_NAME);
         assert_eq!(audio_profile.get_restriction().unwrap(), restriction);
         assert_eq!(audio_profile.get_presence(), PRESENCE);
-        assert_eq!(audio_profile.get_allow_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
+        assert_eq!(
+            audio_profile.get_allow_dynamic_output(),
+            ALLOW_DYNAMIC_OUTPUT
+        );
         assert_eq!(audio_profile.is_enabled(), ENABLED);
     }
 
@@ -469,17 +542,9 @@ mod tests {
     fn test_encoding_video_profile_builder() {
         gst::init().unwrap();
 
-        let caps = gst::Caps::new_simple(
-            "video/x-raw",
-            &[],
-        );
+        let caps = gst::Caps::new_simple("video/x-raw", &[]);
 
-        let restriction = gst::Caps::new_simple(
-            "video/x-raw",
-            &[
-                ("format", &"RGBA"),
-            ],
-        );
+        let restriction = gst::Caps::new_simple("video/x-raw", &[("format", &"RGBA")]);
 
         let video_profile = EncodingVideoProfileBuilder::new()
             .name(VIDEO_PROFILE_NAME)
@@ -493,20 +558,28 @@ mod tests {
             .enabled(ENABLED)
             .pass(PASS)
             .variable_framerate(VARIABLE_FRAMERATE)
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         assert_eq!(video_profile.get_name().unwrap(), VIDEO_PROFILE_NAME);
-        assert_eq!(video_profile.get_description().unwrap(), VIDEO_PROFILE_DESCRIPTION);
+        assert_eq!(
+            video_profile.get_description().unwrap(),
+            VIDEO_PROFILE_DESCRIPTION
+        );
         assert_eq!(video_profile.get_format(), caps);
         assert_eq!(video_profile.get_preset().unwrap(), PRESET);
         assert_eq!(video_profile.get_preset_name().unwrap(), PRESET_NAME);
         assert_eq!(video_profile.get_restriction().unwrap(), restriction);
         assert_eq!(video_profile.get_presence(), PRESENCE);
-        assert_eq!(video_profile.get_allow_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
+        assert_eq!(
+            video_profile.get_allow_dynamic_output(),
+            ALLOW_DYNAMIC_OUTPUT
+        );
         assert_eq!(video_profile.is_enabled(), ENABLED);
 
-        let video_profile: EncodingVideoProfile =
-            glib::object::Downcast::downcast(video_profile).ok().unwrap();
+        let video_profile: EncodingVideoProfile = glib::object::Downcast::downcast(video_profile)
+            .ok()
+            .unwrap();
         assert_eq!(video_profile.get_variableframerate(), VARIABLE_FRAMERATE);
         assert_eq!(video_profile.get_pass(), PASS);
     }
@@ -515,35 +588,23 @@ mod tests {
     fn test_encoding_container_profile_builder() {
         gst::init().unwrap();
 
-        let container_caps = gst::Caps::new_simple(
-            "container/x-caps",
-            &[],
-        );
-        let restriction = gst::Caps::new_simple(
-            "container/x-caps",
-            &[
-                ("field", &"somevalue")
-            ],
-        );
-        let video_caps = gst::Caps::new_simple(
-            "video/x-raw",
-            &[],
-        );
-        let audio_caps = gst::Caps::new_simple(
-            "audio/x-raw",
-            &[],
-        );
+        let container_caps = gst::Caps::new_simple("container/x-caps", &[]);
+        let restriction = gst::Caps::new_simple("container/x-caps", &[("field", &"somevalue")]);
+        let video_caps = gst::Caps::new_simple("video/x-raw", &[]);
+        let audio_caps = gst::Caps::new_simple("audio/x-raw", &[]);
 
         let video_profile = EncodingVideoProfileBuilder::new()
             .name(VIDEO_PROFILE_NAME)
             .description(VIDEO_PROFILE_DESCRIPTION)
             .format(&video_caps)
-            .build().unwrap();
+            .build()
+            .unwrap();
         let audio_profile = EncodingAudioProfileBuilder::new()
             .name(AUDIO_PROFILE_NAME)
             .description(AUDIO_PROFILE_DESCRIPTION)
             .format(&audio_caps)
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         let profile = EncodingContainerProfileBuilder::new()
             .name(CONTAINER_PROFILE_NAME)
@@ -557,10 +618,14 @@ mod tests {
             .enabled(ENABLED)
             .add_profile(&audio_profile)
             .add_profile(&video_profile)
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         assert_eq!(profile.get_name().unwrap(), CONTAINER_PROFILE_NAME);
-        assert_eq!(profile.get_description().unwrap(), CONTAINER_PROFILE_DESCRIPTION);
+        assert_eq!(
+            profile.get_description().unwrap(),
+            CONTAINER_PROFILE_DESCRIPTION
+        );
         assert_eq!(profile.get_format(), container_caps);
         assert_eq!(profile.get_preset().unwrap(), PRESET);
         assert_eq!(profile.get_preset_name().unwrap(), PRESET_NAME);
