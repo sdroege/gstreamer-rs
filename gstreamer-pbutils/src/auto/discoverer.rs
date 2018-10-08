@@ -19,26 +19,6 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    /// The `Discoverer` is a utility object which allows to get as much
-    /// information as possible from one or many URIs.
-    ///
-    /// It provides two APIs, allowing usage in blocking or non-blocking mode.
-    ///
-    /// The blocking mode just requires calling `Discoverer::discover_uri`
-    /// with the URI one wishes to discover.
-    ///
-    /// The non-blocking mode requires a running `glib::MainLoop` iterating a
-    /// `glib::MainContext`, where one connects to the various signals, appends the
-    /// URIs to be processed (through `Discoverer::discover_uri_async`) and then
-    /// asks for the discovery to begin (through `Discoverer::start`).
-    /// By default this will use the GLib default main context unless you have
-    /// set a custom context using `glib::MainContext::push_thread_default`.
-    ///
-    /// All the information is returned in a `DiscovererInfo` structure.
-    ///
-    /// # Implements
-    ///
-    /// [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
     pub struct Discoverer(Object<ffi::GstDiscoverer, ffi::GstDiscovererClass>);
 
     match fn {
@@ -47,17 +27,6 @@ glib_wrapper! {
 }
 
 impl Discoverer {
-    /// Creates a new `Discoverer` with the provided timeout.
-    /// ## `timeout`
-    /// timeout per file, in nanoseconds. Allowed are values between
-    ///  one second (`GST_SECOND`) and one hour (3600 * `GST_SECOND`)
-    ///
-    /// # Returns
-    ///
-    /// The new `Discoverer`.
-    /// If an error occurred when creating the discoverer, `err` will be set
-    /// accordingly and `None` will be returned. If `err` is set, the caller must
-    /// free it when no longer needed using `glib::Error::free`.
     pub fn new(timeout: gst::ClockTime) -> Result<Discoverer, Error> {
         assert_initialized_main_thread!();
         unsafe {
