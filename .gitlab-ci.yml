@@ -1,6 +1,12 @@
 stages:
   - "test"
 
+.cargo_cache: &cache
+  cache:
+    key: "gst"
+    paths:
+      - ".cargo_cache/"
+
 .cargo_test_template: &cargo_test
   stage: "test"
   variables:
@@ -16,9 +22,15 @@ stages:
       libgl1-mesa-glx
       libwayland-egl1-mesa
 
+  <<: *cache
   before_script:
     - apt-get update -yqq
     - apt-get install -yqq --no-install-recommends $DEPENDENCIES
+
+    # Only stuff inside the repo directory can be cached
+    # Override the CARGO_HOME variable to force its location
+    - export CARGO_HOME="${PWD}/.cargo_cache"
+
     - mkdir -p precompiled-gst && cd precompiled-gst
 
     - curl -L https://people.freedesktop.org/~slomo/gstreamer-1.14.3.tar.gz | tar xz
@@ -48,4 +60,3 @@ test nightly:
   image: "rustlang/rust:nightly-slim"
   allow_failure: true
   <<: *cargo_test
-
