@@ -137,18 +137,23 @@ fn tutorial_main() {
                 break;
             }
             MessageView::StateChanged(state_changed) =>
-                // We are only interested in state-changed messages from the pipeline
-                if state_changed.get_src().map(|s| s == pipeline).unwrap_or(false) {
+            // We are only interested in state-changed messages from the pipeline
+            {
+                if state_changed
+                    .get_src()
+                    .map(|s| s == pipeline)
+                    .unwrap_or(false)
+                {
                     let new_state = state_changed.get_current();
                     let old_state = state_changed.get_old();
 
                     println!(
                         "Pipeline state changed from {:?} to {:?}",
-                        old_state,
-                        new_state
+                        old_state, new_state
                     );
                     print_pad_capabilities(&sink, "sink");
-                },
+                }
+            }
             _ => (),
         }
     }

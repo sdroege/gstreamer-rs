@@ -86,8 +86,7 @@ fn main() {
             &video_sink,
             &app_queue,
             &appsink,
-        ])
-        .unwrap();
+        ]).unwrap();
 
     gst::Element::link_many(&[&appsrc, &tee]).unwrap();
     gst::Element::link_many(&[&audio_queue, &audio_convert1, &audio_resample, &audio_sink])

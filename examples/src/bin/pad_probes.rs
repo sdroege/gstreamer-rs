@@ -36,8 +36,7 @@ fn example_main() {
                 .map(|sample| {
                     let f = f64::from(*sample) / f64::from(i16::MAX);
                     f * f
-                })
-                .sum();
+                }).sum();
             let rms = (sum / (samples.len() as f64)).sqrt();
             println!("rms: {}", rms);
         }

@@ -328,24 +328,21 @@ mod tutorial5 {
                 let pipeline = args[0].get::<gst::Element>().unwrap();
                 post_app_message(&pipeline);
                 None
-            })
-            .unwrap();
+            }).unwrap();
 
         playbin
             .connect("audio-tags-changed", false, |args| {
                 let pipeline = args[0].get::<gst::Element>().unwrap();
                 post_app_message(&pipeline);
                 None
-            })
-            .unwrap();
+            }).unwrap();
 
         playbin
             .connect("text-tags-changed", false, move |args| {
                 let pipeline = args[0].get::<gst::Element>().unwrap();
                 post_app_message(&pipeline);
                 None
-            })
-            .unwrap();
+            }).unwrap();
 
         let window = create_ui(&playbin);
 

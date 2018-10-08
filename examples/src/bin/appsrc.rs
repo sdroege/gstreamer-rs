@@ -105,8 +105,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
                 // appsrc already handles the error here
                 let _ = appsrc.push_buffer(buffer);
-            })
-            .build(),
+            }).build(),
     );
 
     Ok(pipeline)

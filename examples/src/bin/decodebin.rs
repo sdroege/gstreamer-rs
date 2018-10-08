@@ -178,8 +178,7 @@ fn example_main() -> Result<(), Error> {
                             .and_then(|v| {
                                 v.downcast_ref::<Arc<Mutex<Option<Error>>>>()
                                     .and_then(|v| v.lock().unwrap().take())
-                            })
-                            .map(Result::Err)
+                            }).map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
                             src: err

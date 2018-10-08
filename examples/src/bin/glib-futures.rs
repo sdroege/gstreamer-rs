@@ -47,8 +47,7 @@ fn example_main() {
             } else {
                 Ok(())
             }
-        })
-        .and_then(|_| Ok(()));
+        }).and_then(|_| Ok(()));
 
     let _ = ctx.block_on(messages);
 

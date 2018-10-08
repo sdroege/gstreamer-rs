@@ -44,8 +44,7 @@ fn example_main() {
             } else {
                 Ok(())
             }
-        })
-        .and_then(|_| Ok(()));
+        }).and_then(|_| Ok(()));
 
     let _ = block_on(messages);
 

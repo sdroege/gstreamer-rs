@@ -82,8 +82,7 @@ fn tutorial_main() {
                             .seek_simple(
                                 gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
                                 30 * gst::SECOND,
-                            )
-                            .expect("Failed to seek.");
+                            ).expect("Failed to seek.");
                         custom_data.seek_done = true;
                     }
                 }
