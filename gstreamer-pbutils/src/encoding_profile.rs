@@ -467,7 +467,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         Ok(container_profile)
     }
 
-    pub fn add_profile<P: IsA<EncodingProfile>>(mut self, profile: &P) -> Self {
+    pub fn add_profile<P: IsA<EncodingProfile>>(self, profile: &P) -> Self {
         self.helper_profile.add_profile(profile).unwrap();
         self
     }
