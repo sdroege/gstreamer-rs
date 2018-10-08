@@ -11,6 +11,11 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    /// `DiscovererStreamInfo` specific to audio streams.
+    ///
+    /// # Implements
+    ///
+    /// [`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
     pub struct DiscovererAudioInfo(Object<ffi::GstDiscovererAudioInfo>): DiscovererStreamInfo;
 
     match fn {
@@ -19,12 +24,25 @@ glib_wrapper! {
 }
 
 impl DiscovererAudioInfo {
+    ///
+    /// # Returns
+    ///
+    /// the average or nominal bitrate of the stream in bits/second.
     pub fn get_bitrate(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_audio_info_get_bitrate(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// Feature: `v1_14`
+    ///
+    ///
+    /// # Returns
+    ///
+    /// the channel-mask of the stream, refer to
+    /// `gst_audio_channel_positions_from_mask` for more
+    /// information.
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn get_channel_mask(&self) -> u64 {
         unsafe {
@@ -32,30 +50,50 @@ impl DiscovererAudioInfo {
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the number of channels in the stream.
     pub fn get_channels(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_audio_info_get_channels(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the number of bits used per sample in each channel.
     pub fn get_depth(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_audio_info_get_depth(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the language of the stream, or NULL if unknown.
     pub fn get_language(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_audio_info_get_language(self.to_glib_none().0))
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the maximum bitrate of the stream in bits/second.
     pub fn get_max_bitrate(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_audio_info_get_max_bitrate(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the sample rate of the stream in Hertz.
     pub fn get_sample_rate(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_audio_info_get_sample_rate(self.to_glib_none().0)

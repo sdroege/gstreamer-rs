@@ -145,11 +145,8 @@ trait = false
 [[object]]
 name = "GstPbutils.EncodingProfile"
 status = "generate"
-    [[object.function]]
-    name = "is_equal"
-    ignore = true
 
-    # Ignore all setters, making it imutable. A builder will be provided.
+    # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
     ignore = true
@@ -172,11 +169,16 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.property]]
+    name = "restriction-caps"
+    # encodingprofile is immutable after constructed
+    ignore = true
+
 [[object]]
 name = "GstPbutils.EncodingContainerProfile"
 status = "generate"
 
-    # Make it imutable, only able to be constructed for a builder
+    # Make it immutable, only able to be constructed for a builder
     [[object.function]]
     name = "new"
     ignore = true
@@ -211,7 +213,7 @@ status = "generate"
 name = "GstPbutils.EncodingAudioProfile"
 status = "generate"
 trait = false
-    # Ignore all setters, making it imutable. A builder will be provided.
+    # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
     ignore = true
@@ -223,7 +225,7 @@ trait = false
 name = "GstPbutils.EncodingVideoProfile"
 status = "generate"
 trait = false
-    # Ignore all setters, making it imutable. A builder will be provided.
+    # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
     ignore = true

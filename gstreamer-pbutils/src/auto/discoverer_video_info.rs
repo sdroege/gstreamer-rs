@@ -11,6 +11,11 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    /// `DiscovererStreamInfo` specific to video streams (this includes images).
+    ///
+    /// # Implements
+    ///
+    /// [`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
     pub struct DiscovererVideoInfo(Object<ffi::GstDiscovererVideoInfo>): DiscovererStreamInfo;
 
     match fn {
@@ -19,42 +24,71 @@ glib_wrapper! {
 }
 
 impl DiscovererVideoInfo {
+    ///
+    /// # Returns
+    ///
+    /// the average or nominal bitrate of the video stream in bits/second.
     pub fn get_bitrate(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_video_info_get_bitrate(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the depth in bits of the video stream.
     pub fn get_depth(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_video_info_get_depth(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the height of the video stream in pixels.
     pub fn get_height(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_video_info_get_height(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the maximum bitrate of the video stream in bits/second.
     pub fn get_max_bitrate(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_video_info_get_max_bitrate(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the width of the video stream in pixels.
     pub fn get_width(&self) -> u32 {
         unsafe {
             ffi::gst_discoverer_video_info_get_width(self.to_glib_none().0)
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// `true` if the video stream corresponds to an image (i.e. only contains
+    /// one frame).
     pub fn is_image(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_discoverer_video_info_is_image(self.to_glib_none().0))
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// `true` if the stream is interlaced, else `false`.
     pub fn is_interlaced(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_discoverer_video_info_is_interlaced(self.to_glib_none().0))

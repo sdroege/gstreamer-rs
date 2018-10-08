@@ -4,20 +4,12 @@
 
 use DiscovererInfo;
 use ffi;
-use glib;
-use glib::StaticType;
-use glib::Value;
-use glib::object::Downcast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use std::boxed::Box as Box_;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
@@ -78,14 +70,10 @@ pub trait EncodingProfileExt {
 
     fn is_enabled(&self) -> bool;
 
-    fn get_property_restriction_caps(&self) -> Option<gst::Caps>;
-
-    fn set_property_restriction_caps(&self, restriction_caps: Option<&gst::Caps>);
-
-    fn connect_property_restriction_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool;
 }
 
-impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileExt for O {
+impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     fn copy(&self) -> EncodingProfile {
         unsafe {
             from_glib_full(ffi::gst_encoding_profile_copy(self.to_glib_none().0))
@@ -164,31 +152,9 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileExt for
         }
     }
 
-    fn get_property_restriction_caps(&self) -> Option<gst::Caps> {
+    fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool {
         unsafe {
-            let mut value = Value::from_type(<gst::Caps as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "restriction-caps".to_glib_none().0, value.to_glib_none_mut().0);
-            value.get()
+            from_glib(ffi::gst_encoding_profile_is_equal(self.to_glib_none().0, b.to_glib_none().0))
         }
     }
-
-    fn set_property_restriction_caps(&self, restriction_caps: Option<&gst::Caps>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "restriction-caps".to_glib_none().0, Value::from(restriction_caps).to_glib_none().0);
-        }
-    }
-
-    fn connect_property_restriction_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::restriction-caps",
-                transmute(notify_restriction_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-}
-
-unsafe extern "C" fn notify_restriction_caps_trampoline<P>(this: *mut ffi::GstEncodingProfile, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<EncodingProfile> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&EncodingProfile::from_glib_borrow(this).downcast_unchecked())
 }
