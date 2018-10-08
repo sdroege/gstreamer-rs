@@ -1,0 +1,14 @@
+ignore = [
+    "gstreamer/src/auto/",
+    "gstreamer-app/src/auto",
+    "gstreamer-audio/src/auto",
+    "gstreamer-base/src/auto",
+    "gstreamer-net/src/auto",
+    "gstreamer-pbutils/src/auto",
+    "gstreamer-player/src/auto",
+    "gstreamer-rtsp/src/auto",
+    "gstreamer-rtsp-server/src/auto",
+    "gstreamer-sdp/src/auto",
+    "gstreamer-video/src/auto",
+    "gstreamer-webrtc/src/auto",
+]
