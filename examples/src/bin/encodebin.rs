@@ -2,8 +2,8 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-extern crate gstreamer_pbutils as pbutils;
-use pbutils::EncodingProfileBuilder;
+extern crate gstreamer_pbutils as gst_pbutils;
+use gst_pbutils::prelude::*;
 
 extern crate glib;
 
@@ -36,7 +36,7 @@ struct ErrorMessage {
 }
 
 fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
-    let audio_profile = pbutils::EncodingAudioProfileBuilder::new()
+    let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
         .format(&gst::Caps::new_simple(
             "audio/x-vorbis",
             &[],
@@ -44,7 +44,7 @@ fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
         .presence(0)
         .build()?;
 
-    let video_profile = pbutils::EncodingVideoProfileBuilder::new()
+    let video_profile = gst_pbutils::EncodingVideoProfileBuilder::new()
         .format(&gst::Caps::new_simple(
             "video/x-theora",
             &[],
@@ -52,7 +52,7 @@ fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
         .presence(0)
         .build()?;
 
-    let container_profile = pbutils::EncodingContainerProfileBuilder::new()
+    let container_profile = gst_pbutils::EncodingContainerProfileBuilder::new()
         .name("container")
         .format(&gst::Caps::new_simple(
             "video/x-matroska",
