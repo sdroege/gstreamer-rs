@@ -193,8 +193,9 @@ status = "generate"
 
     [[object.function]]
     name = "add_profile"
-        [object.function.return]
-        bool_return_is_error = "Failed to add profile"
+    # can be provided on constructor and we better
+    # consider this immutable
+    ignore = true
 
     [[object.function]]
     name = "get_category"
