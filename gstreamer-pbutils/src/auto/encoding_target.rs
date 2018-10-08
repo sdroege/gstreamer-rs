@@ -5,7 +5,6 @@
 use EncodingProfile;
 use Error;
 use ffi;
-use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
@@ -55,8 +54,6 @@ unsafe impl Send for EncodingTarget {}
 unsafe impl Sync for EncodingTarget {}
 
 pub trait EncodingTargetExt {
-    fn add_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError>;
-
     fn get_category(&self) -> String;
 
     fn get_description(&self) -> String;
@@ -73,12 +70,6 @@ pub trait EncodingTargetExt {
 }
 
 impl<O: IsA<EncodingTarget>> EncodingTargetExt for O {
-    fn add_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_encoding_target_add_profile(self.to_glib_none().0, profile.to_glib_full()), "Failed to add profile")
-        }
-    }
-
     fn get_category(&self) -> String {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_category(self.to_glib_none().0))
