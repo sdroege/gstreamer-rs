@@ -11,7 +11,6 @@ use glib::translate::*;
 
 use auto::EncodingAudioProfile;
 use auto::EncodingContainerProfile;
-use auto::EncodingContainerProfileExt;
 use auto::EncodingProfile;
 use auto::EncodingVideoProfile;
 
@@ -419,15 +418,7 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
 
 pub struct EncodingContainerProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
-    /*
-     * Not proud of this.
-     * Couldn't figure out how to store a IsA<EncodingProfile> to be used
-     * only when building the final profile object. So I'm using a real
-     * EncodingContainerProfile object just as a means to store it under
-     * the ffi APIs. This preserves the public APIs of this builder as
-     * they should be at the end.
-     */
-    helper_profile: EncodingContainerProfile,
+    profiles: Vec<EncodingProfile>,
 }
 
 declare_encoding_profile_builder_common!(EncodingContainerProfileBuilder);
@@ -436,12 +427,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
     pub fn new() -> Self {
         EncodingContainerProfileBuilder {
             base: EncodingProfileBuilderCommonData::new(),
-            helper_profile: EncodingContainerProfile::new(
-                "helper",
-                None,
-                &gst::Caps::new_any(),
-                None,
-            ),
+            profiles: Vec::new(),
         }
     }
 
@@ -457,7 +443,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
             self.base.preset,
         );
 
-        for profile in self.helper_profile.get_profiles() {
+        for profile in self.profiles {
             container_profile
                 .add_profile(&profile)
                 .or_else(|_error| Err(EncodingProfileBuilderError))?;
@@ -467,8 +453,10 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
         Ok(container_profile)
     }
 
-    pub fn add_profile<P: IsA<EncodingProfile>>(self, profile: &P) -> Self {
-        self.helper_profile.add_profile(profile).unwrap();
+    pub fn add_profile<P: IsA<EncodingProfile>>(mut self, profile: &P) -> Self {
+        unsafe {
+            self.profiles.push(from_glib_none(profile.to_glib_none().0));
+        }
         self
     }
 }
