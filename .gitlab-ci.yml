@@ -1,5 +1,6 @@
 stages:
   - "test"
+  - "lint"
 
 .cargo_cache: &cache
   cache:
@@ -60,3 +61,11 @@ test nightly:
   image: "rustlang/rust:nightly-slim"
   allow_failure: true
   <<: *cargo_test
+
+rustfmt:
+  image: "rustlang/rust:nightly-slim"
+  stage: "lint"
+  script:
+    - rustup component add rustfmt-preview
+    - cargo fmt --version
+    - cargo fmt -- --color=always --check
