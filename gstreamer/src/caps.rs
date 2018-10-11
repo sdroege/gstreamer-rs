@@ -372,13 +372,9 @@ macro_rules! define_iter(
             }
 
             unsafe {
-                let item = $get_item(self.caps, self.idx);
-                if item.is_none() {
-                    return None;
-                }
-
+                let item = $get_item(self.caps, self.idx)?;
                 self.idx += 1;
-                item
+                Some(item)
             }
         }
 
