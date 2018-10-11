@@ -8,7 +8,6 @@
 
 use std::fmt;
 use std::marker::PhantomData;
-use std::mem;
 use std::ops;
 
 use miniobject::MiniObject;
@@ -36,7 +35,7 @@ pub unsafe trait MetaAPI: Sized {
         }
 
         MetaRef {
-            meta: mem::transmute(ptr),
+            meta: &*(ptr as *const Self),
             buffer,
         }
     }
@@ -56,7 +55,7 @@ pub unsafe trait MetaAPI: Sized {
         }
 
         MetaRefMut {
-            meta: mem::transmute(ptr),
+            meta: &mut *(ptr as *mut Self),
             buffer,
             mode: PhantomData,
         }
@@ -109,7 +108,7 @@ impl<'a, T: MetaAPI, U> ops::DerefMut for MetaRefMut<'a, T, U> {
 
 impl<'a, T: MetaAPI, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
     fn as_ref(&self) -> &MetaRef<'a, T> {
-        unsafe { mem::transmute(self) }
+        unsafe { &*(self as *const MetaRefMut<'a, T, U> as *const MetaRef<'a, T>) }
     }
 }
 
@@ -133,7 +132,7 @@ impl<'a> MetaRef<'a, Meta> {
         let type_ = self.get_api();
 
         if type_ == glib::Type::Invalid || target_type == type_ {
-            Some(unsafe { mem::transmute(self) })
+            Some(unsafe { &*(self as *const MetaRef<'a, Meta> as *const MetaRef<'a, T>) })
         } else {
             None
         }
@@ -176,7 +175,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
         let type_ = self.get_api();
 
         if type_ == glib::Type::Invalid || target_type == type_ {
-            Some(unsafe { mem::transmute(self) })
+            Some(unsafe { &*(self as *mut MetaRefMut<'a, Meta, U> as *const MetaRefMut<'a, T, U>) })
         } else {
             None
         }
