@@ -269,7 +269,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
                 as *mut *mut T::GstType;
 
             for (i, s) in v.iter().enumerate() {
-                ptr::write(v_ptr.offset(i as isize), s.0);
+                ptr::write(v_ptr.add(i), s.0);
             }
 
             v_ptr
@@ -285,7 +285,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
                 as *mut *mut T::GstType;
 
             for (i, s) in t.iter().enumerate() {
-                ptr::write(v_ptr.offset(i as isize), s.to_glib_full());
+                ptr::write(v_ptr.add(i), s.to_glib_full());
             }
 
             v_ptr
@@ -368,7 +368,7 @@ impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *mut *mut 
 
         let mut res = Vec::with_capacity(num);
         for i in 0..num {
-            res.push(from_glib_none(ptr::read(ptr.offset(i as isize))));
+            res.push(from_glib_none(ptr::read(ptr.add(i))));
         }
         res
     }
@@ -386,7 +386,7 @@ impl<T: MiniObject + 'static> FromGlibContainerAsVec<*mut T::GstType, *mut *mut 
 
         let mut res = Vec::with_capacity(num);
         for i in 0..num {
-            res.push(from_glib_full(ptr::read(ptr.offset(i as isize))));
+            res.push(from_glib_full(ptr::read(ptr.add(i))));
         }
         glib_ffi::g_free(ptr as *mut _);
         res
@@ -631,7 +631,7 @@ macro_rules! gst_define_mini_object_wrapper(
                         as *mut *mut $ffi_name;
 
                     for (i, s) in v.iter().enumerate() {
-                        ::std::ptr::write(v_ptr.offset(i as isize), s.0);
+                        ::std::ptr::write(v_ptr.add(i), s.0);
                     }
 
                     v_ptr
@@ -647,7 +647,7 @@ macro_rules! gst_define_mini_object_wrapper(
                         as *mut *mut $ffi_name;
 
                     for (i, s) in t.iter().enumerate() {
-                        ::std::ptr::write(v_ptr.offset(i as isize), s.to_glib_full());
+                        ::std::ptr::write(v_ptr.add(i), s.to_glib_full());
                     }
 
                     v_ptr
@@ -730,7 +730,7 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 let mut res = Vec::with_capacity(num);
                 for i in 0..num {
-                    res.push(from_glib_none(::std::ptr::read(ptr.offset(i as isize))));
+                    res.push(from_glib_none(::std::ptr::read(ptr.add(i))));
                 }
                 res
             }
@@ -748,7 +748,7 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 let mut res = Vec::with_capacity(num);
                 for i in 0..num {
-                    res.push(from_glib_full(::std::ptr::read(ptr.offset(i as isize))));
+                    res.push(from_glib_full(::std::ptr::read(ptr.add(i))));
                 }
                 glib_ffi::g_free(ptr as *mut _);
                 res

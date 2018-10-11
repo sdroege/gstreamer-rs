@@ -49,7 +49,7 @@ impl SDPTime {
             let len = (*self.0.repeat).len as usize;
             let mut vec = Vec::with_capacity(len);
             for i in 0..len {
-                vec.push(CStr::from_ptr(*arr.offset(i as isize)).to_str().unwrap());
+                vec.push(CStr::from_ptr(*arr.add(i)).to_str().unwrap());
             }
             vec
         }
