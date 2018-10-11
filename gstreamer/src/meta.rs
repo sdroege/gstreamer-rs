@@ -24,7 +24,7 @@ pub unsafe trait MetaAPI: Sized {
 
     fn get_meta_api() -> glib::Type;
 
-    unsafe fn from_ptr<'a>(buffer: &'a BufferRef, ptr: *const Self::GstType) -> MetaRef<'a, Self> {
+    unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         assert!(!ptr.is_null());
 
         let meta_api = Self::get_meta_api();
@@ -41,10 +41,10 @@ pub unsafe trait MetaAPI: Sized {
         }
     }
 
-    unsafe fn from_mut_ptr<'a, T>(
-        buffer: &'a mut BufferRef,
+    unsafe fn from_mut_ptr<T>(
+        buffer: &mut BufferRef,
         ptr: *mut Self::GstType,
-    ) -> MetaRefMut<'a, Self, T> {
+    ) -> MetaRefMut<Self, T> {
         assert!(!ptr.is_null());
 
         let meta_api = Self::get_meta_api();
