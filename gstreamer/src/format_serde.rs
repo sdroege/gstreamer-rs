@@ -24,7 +24,7 @@ macro_rules! impl_ser_de(
 
         impl<'de> Deserialize<'de> for $t {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                Option::<u64>::deserialize(deserializer).map(|value| $t(value))
+                Option::<u64>::deserialize(deserializer).map($t)
             }
         }
     }

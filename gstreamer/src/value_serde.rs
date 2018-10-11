@@ -115,6 +115,7 @@ macro_rules! ser_value (
     );
 );
 
+#[repr(C)]
 pub(crate) struct SendValue(glib::SendValue);
 impl SendValue {
     pub(crate) fn from(send_value: glib::SendValue) -> Self {
@@ -144,9 +145,7 @@ macro_rules! impl_ser_send_value_collection (
         impl<'a> Serialize for $t<'a> {
             fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
                 let send_value_vec = unsafe {
-                    mem::transmute::<&[glib::SendValue], &[SendValue]>(
-                        self.as_slice()
-                    )
+                    &*(self.as_slice() as *const [glib::SendValue] as *const [SendValue])
                 };
                 send_value_vec.serialize(serializer)
             }
@@ -232,9 +231,9 @@ impl<'de> Visitor<'de> for SendValueVisitor {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let type_name = seq
             .next_element::<String>()?
-            .ok_or(de::Error::custom("Expected a value for `Value` type"))?;
+            .ok_or_else(|| de::Error::custom("Expected a value for `Value` type"))?;
         let send_value = de_send_value!(type_name, seq)?
-            .ok_or(de::Error::custom("Expected a value for `Value`"))?;
+            .ok_or_else(|| de::Error::custom("Expected a value for `Value`"))?;
         Ok(send_value)
     }
 }

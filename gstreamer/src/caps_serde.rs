@@ -117,10 +117,10 @@ impl<'de> Visitor<'de> for CapsItemVisitor {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let structure = seq
             .next_element::<Structure>()?
-            .ok_or(de::Error::custom("Expected a `Structure` for `Caps` item"))?;
+            .ok_or_else(|| de::Error::custom("Expected a `Structure` for `Caps` item"))?;
         let features_option =
             seq.next_element::<Option<CapsFeatures>>()?
-                .ok_or(de::Error::custom(
+                .ok_or_else(|| de::Error::custom(
                     "Expected an `Option<CapsFeature>` for `Caps` item",
                 ))?;
 

@@ -91,12 +91,12 @@ impl<'de> Visitor<'de> for FieldVisitor {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let name = seq
             .next_element::<String>()?
-            .ok_or(de::Error::custom("Expected a value for `Value` name"))?;
+            .ok_or_else(|| de::Error::custom("Expected a value for `Value` name"))?;
         let type_name = seq
             .next_element::<String>()?
-            .ok_or(de::Error::custom("Expected a value for `Value` type"))?;
+            .ok_or_else(|| de::Error::custom("Expected a value for `Value` type"))?;
         let send_value = de_send_value!(type_name, seq)?
-            .ok_or(de::Error::custom("Expected a value for `Value`"))?;
+            .ok_or_else(|| de::Error::custom("Expected a value for `Value`"))?;
         Ok(FieldDe(name, send_value))
     }
 }
@@ -146,10 +146,10 @@ impl<'de> Visitor<'de> for StructureVisitor {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
         let name = seq
             .next_element::<String>()?
-            .ok_or(de::Error::custom("Expected a name for the `Structure`"))?;
+            .ok_or_else(|| de::Error::custom("Expected a name for the `Structure`"))?;
         let mut structure = Structure::new_empty(&name);
         seq.next_element_seed(FieldsDe(structure.as_mut()))?
-            .ok_or(de::Error::custom("Expected a sequence of `Field`s"))?;
+            .ok_or_else(|| de::Error::custom("Expected a sequence of `Field`s"))?;
 
         Ok(structure)
     }

@@ -44,9 +44,11 @@ impl<'a> TagValuesSer<'a> {
 
 impl<'a> Serialize for TagValuesSer<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        use std::ops::DerefMut;
+
         let mut tag_iter = self.0.borrow_mut();
         let mut seq = serializer.serialize_seq(tag_iter.size_hint().1)?;
-        while let Some(value) = tag_iter.next() {
+        for value in tag_iter.deref_mut() {
             match value.type_() {
                 glib::Type::F64 => ser_tag!(value, seq, f64),
                 glib::Type::String => ser_tag!(value, seq, String),
@@ -202,9 +204,9 @@ impl<'de, 'a> Visitor<'de> for TagValuesTupleVisitor<'a> {
         let name = seq
             .next_element::<String>()
             .map_err(|err| de::Error::custom(format!("Error reading Tag name. {:?}", err)))?
-            .ok_or(de::Error::custom("Expected a name for the `Tag` name"))?;
+            .ok_or_else(|| de::Error::custom("Expected a name for the `Tag` name"))?;
         seq.next_element_seed(TagValues(name.as_str(), self.0))?
-            .ok_or(de::Error::custom("Expected a seq of values for the `Tag`"))
+            .ok_or_else(|| de::Error::custom("Expected a seq of values for the `Tag`"))
     }
 }
 
