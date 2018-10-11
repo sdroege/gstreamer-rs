@@ -11,7 +11,6 @@ use std::fmt;
 use ffi;
 use glib;
 use glib::translate::{from_glib, ToGlib};
-use glib_ffi;
 use gst;
 use gst::prelude::*;
 use gst_ffi;
@@ -20,13 +19,13 @@ use gst_ffi;
 pub struct VideoMeta(ffi::GstVideoMeta);
 
 impl VideoMeta {
-    pub fn add<'a>(
-        buffer: &'a mut gst::BufferRef,
+    pub fn add(
+        buffer: &mut gst::BufferRef,
         flags: ::VideoFrameFlags,
         format: ::VideoFormat,
         width: u32,
         height: u32,
-    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
         let info = ::VideoInfo::new(format, width, height).build().unwrap();
         assert!(buffer.get_size() >= info.size());
 
@@ -50,12 +49,12 @@ impl VideoMeta {
         width: u32,
         height: u32,
         n_planes: u32,
-        offset: [usize; 4],
-        stride: [i32; 4],
+        offset: &[usize; 4],
+        stride: &[i32; 4],
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         let info = ::VideoInfo::new(format, width, height)
-            .offset(&offset)
-            .stride(&stride)
+            .offset(offset)
+            .stride(stride)
             .build()
             .unwrap();
         assert!(buffer.get_size() >= info.size());
@@ -138,7 +137,7 @@ pub struct VideoOverlayCompositionMeta(ffi::GstVideoOverlayCompositionMeta);
 impl VideoOverlayCompositionMeta {
     pub fn add<'a>(
         buffer: &'a mut gst::BufferRef,
-        overlay: ::VideoOverlayComposition,
+        overlay: &::VideoOverlayComposition,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         unsafe {
             let meta = ffi::gst_buffer_add_video_overlay_composition_meta(
@@ -154,18 +153,7 @@ impl VideoOverlayCompositionMeta {
         unsafe { ::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
     }
 
-    pub fn get_overlay_mut(&mut self) -> Option<&mut ::VideoOverlayCompositionRef> {
-        unsafe {
-            if gst_ffi::gst_mini_object_is_writable(self.0.overlay as *const _) == glib_ffi::GFALSE
-            {
-                return None;
-            }
-
-            Some(::VideoOverlayCompositionRef::from_mut_ptr(self.0.overlay))
-        }
-    }
-
-    pub fn set_overlay(&mut self, overlay: ::VideoOverlayComposition) {
+    pub fn set_overlay(&mut self, overlay: &::VideoOverlayComposition) {
         unsafe {
             gst_ffi::gst_mini_object_unref(self.0.overlay as *mut _);
             self.0.overlay = gst_ffi::gst_mini_object_ref(overlay.as_mut_ptr() as *mut _) as *mut _;
