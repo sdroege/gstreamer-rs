@@ -1376,35 +1376,23 @@ extern "C" {
     // GstGLAllocationParams
     //=========================================================================
     pub fn gst_gl_allocation_params_get_type() -> GType;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_allocation_params_copy(src: *mut GstGLAllocationParams) -> *mut GstGLAllocationParams;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_allocation_params_copy_data(src: *mut GstGLAllocationParams, dest: *mut GstGLAllocationParams);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_allocation_params_free(params: *mut GstGLAllocationParams);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_allocation_params_free_data(params: *mut GstGLAllocationParams);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_allocation_params_init(params: *mut GstGLAllocationParams, struct_size: size_t, alloc_flags: c_uint, copy: GstGLAllocationParamsCopyFunc, free: GstGLAllocationParamsFreeFunc, context: *mut GstGLContext, alloc_size: size_t, alloc_params: *mut gst::GstAllocationParams, wrapped_data: gpointer, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> gboolean;
 
     //=========================================================================
     // GstGLAsyncDebug
     //=========================================================================
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_async_debug_free(ad: *mut GstGLAsyncDebug);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_async_debug_freeze(ad: *mut GstGLAsyncDebug);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_async_debug_init(ad: *mut GstGLAsyncDebug);
     pub fn gst_gl_async_debug_output_log_msg(ad: *mut GstGLAsyncDebug);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_async_debug_store_log_msg(ad: *mut GstGLAsyncDebug, cat: *mut gst::GstDebugCategory, level: gst::GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, ...);
-    //#[cfg(any(feature = "v1_8", feature = "dox"))]
     //pub fn gst_gl_async_debug_store_log_msg_valist(ad: *mut GstGLAsyncDebug, cat: *mut gst::GstDebugCategory, level: gst::GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, varargs: /*Unimplemented*/va_list);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_async_debug_thaw(ad: *mut GstGLAsyncDebug);
     pub fn gst_gl_async_debug_unset(ad: *mut GstGLAsyncDebug);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_async_debug_new() -> *mut GstGLAsyncDebug;
 
     //=========================================================================
@@ -1412,120 +1400,81 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_base_memory_get_type() -> GType;
     pub fn gst_gl_base_memory_alloc_data(gl_mem: *mut GstGLBaseMemory) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_base_memory_init(mem: *mut GstGLBaseMemory, allocator: *mut gst::GstAllocator, parent: *mut gst::GstMemory, context: *mut GstGLContext, params: *mut gst::GstAllocationParams, size: size_t, user_data: gpointer, notify: glib::GDestroyNotify);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_base_memory_memcpy(src: *mut GstGLBaseMemory, dest: *mut GstGLBaseMemory, offset: ssize_t, size: ssize_t) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_base_memory_alloc(allocator: *mut GstGLBaseMemoryAllocator, params: *mut GstGLAllocationParams) -> *mut GstGLBaseMemory;
     pub fn gst_gl_base_memory_error_quark() -> glib::GQuark;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_base_memory_init_once();
 
     //=========================================================================
     // GstGLBuffer
     //=========================================================================
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_buffer_init_once();
 
     //=========================================================================
     // GstGLBufferAllocationParams
     //=========================================================================
     pub fn gst_gl_buffer_allocation_params_get_type() -> GType;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_buffer_allocation_params_new(context: *mut GstGLContext, alloc_size: size_t, alloc_params: *mut gst::GstAllocationParams, gl_target: c_uint, gl_usage: c_uint) -> *mut GstGLBufferAllocationParams;
 
     //=========================================================================
     // GstGLMemory
     //=========================================================================
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_copy_into(gl_mem: *mut GstGLMemory, tex_id: c_uint, target: GstGLTextureTarget, tex_format: GstGLFormat, width: c_int, height: c_int) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_copy_teximage(src: *mut GstGLMemory, tex_id: c_uint, out_target: GstGLTextureTarget, out_tex_format: GstGLFormat, out_width: c_int, out_height: c_int) -> gboolean;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_gl_memory_get_texture_format(gl_mem: *mut GstGLMemory) -> GstGLFormat;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_get_texture_height(gl_mem: *mut GstGLMemory) -> c_int;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_get_texture_id(gl_mem: *mut GstGLMemory) -> c_uint;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_get_texture_target(gl_mem: *mut GstGLMemory) -> GstGLTextureTarget;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_get_texture_width(gl_mem: *mut GstGLMemory) -> c_int;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_init(mem: *mut GstGLMemory, allocator: *mut gst::GstAllocator, parent: *mut gst::GstMemory, context: *mut GstGLContext, target: GstGLTextureTarget, tex_format: GstGLFormat, params: *mut gst::GstAllocationParams, info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, user_data: gpointer, notify: glib::GDestroyNotify);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_read_pixels(gl_mem: *mut GstGLMemory, read_pointer: gpointer) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_texsubimage(gl_mem: *mut GstGLMemory, read_pointer: gpointer);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_memory_init_once();
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_setup_buffer(allocator: *mut GstGLMemoryAllocator, buffer: *mut gst::GstBuffer, params: *mut GstGLVideoAllocationParams, tex_formats: *mut GstGLFormat, wrapped_data: *mut gpointer, n_wrapped_pointers: size_t) -> gboolean;
 
     //=========================================================================
     // GstGLMemoryPBO
     //=========================================================================
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_pbo_copy_into_texture(gl_mem: *mut GstGLMemoryPBO, tex_id: c_uint, target: GstGLTextureTarget, tex_format: GstGLFormat, width: c_int, height: c_int, stride: c_int, respecify: gboolean) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_pbo_download_transfer(gl_mem: *mut GstGLMemoryPBO);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_pbo_upload_transfer(gl_mem: *mut GstGLMemoryPBO);
     pub fn gst_gl_memory_pbo_init_once();
 
     //=========================================================================
     // GstGLQuery
     //=========================================================================
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_counter(query: *mut GstGLQuery);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_end(query: *mut GstGLQuery);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_free(query: *mut GstGLQuery);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_init(query: *mut GstGLQuery, context: *mut GstGLContext, query_type: GstGLQueryType);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_result(query: *mut GstGLQuery) -> u64;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_start(query: *mut GstGLQuery);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_unset(query: *mut GstGLQuery);
     pub fn gst_gl_query_local_gl_context(element: *mut gst::GstElement, direction: gst::GstPadDirection, context_ptr: *mut *mut GstGLContext) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_query_new(context: *mut GstGLContext, query_type: GstGLQueryType) -> *mut GstGLQuery;
 
     //=========================================================================
     // GstGLRenderbuffer
     //=========================================================================
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_gl_renderbuffer_get_format(gl_mem: *mut GstGLRenderbuffer) -> GstGLFormat;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_renderbuffer_get_height(gl_mem: *mut GstGLRenderbuffer) -> c_int;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_renderbuffer_get_id(gl_mem: *mut GstGLRenderbuffer) -> c_uint;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_renderbuffer_get_width(gl_mem: *mut GstGLRenderbuffer) -> c_int;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_renderbuffer_init_once();
 
     //=========================================================================
     // GstGLRenderbufferAllocationParams
     //=========================================================================
     pub fn gst_gl_renderbuffer_allocation_params_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_renderbuffer_allocation_params_new(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, renderbuffer_format: GstGLFormat, width: c_uint, height: c_uint) -> *mut GstGLRenderbufferAllocationParams;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_renderbuffer_allocation_params_new_wrapped(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, renderbuffer_format: GstGLFormat, width: c_uint, height: c_uint, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLRenderbufferAllocationParams;
 
     //=========================================================================
     // GstGLSyncMeta
     //=========================================================================
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_sync_meta_set_sync_point(sync_meta: *mut GstGLSyncMeta, context: *mut GstGLContext);
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_sync_meta_wait(sync_meta: *mut GstGLSyncMeta, context: *mut GstGLContext);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_sync_meta_wait_cpu(sync_meta: *mut GstGLSyncMeta, context: *mut GstGLContext);
     pub fn gst_gl_sync_meta_get_info() -> *const gst::GstMetaInfo;
 
@@ -1533,19 +1482,12 @@ extern "C" {
     // GstGLVideoAllocationParams
     //=========================================================================
     pub fn gst_gl_video_allocation_params_get_type() -> GType;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_new(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat) -> *mut GstGLVideoAllocationParams;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_new_wrapped_data(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, wrapped_data: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLVideoAllocationParams;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_new_wrapped_gl_handle(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLVideoAllocationParams;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_new_wrapped_texture(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, tex_id: c_uint, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLVideoAllocationParams;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_copy_data(src_vid: *mut GstGLVideoAllocationParams, dest_vid: *mut GstGLVideoAllocationParams);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_free_data(params: *mut GstGLVideoAllocationParams);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_video_allocation_params_init_full(params: *mut GstGLVideoAllocationParams, struct_size: size_t, alloc_flags: c_uint, copy: GstGLAllocationParamsCopyFunc, free: GstGLAllocationParamsFreeFunc, context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, wrapped_data: gpointer, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> gboolean;
 
     //=========================================================================
@@ -1573,109 +1515,66 @@ extern "C" {
     // GstGLColorConvert
     //=========================================================================
     pub fn gst_gl_color_convert_get_type() -> GType;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_color_convert_new(context: *mut GstGLContext) -> *mut GstGLColorConvert;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_color_convert_fixate_caps(context: *mut GstGLContext, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, other: *mut gst::GstCaps) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_color_convert_transform_caps(context: *mut GstGLContext, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_color_convert_decide_allocation(convert: *mut GstGLColorConvert, query: *mut gst::GstQuery) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_color_convert_perform(convert: *mut GstGLColorConvert, inbuf: *mut gst::GstBuffer) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_color_convert_set_caps(convert: *mut GstGLColorConvert, in_caps: *mut gst::GstCaps, out_caps: *mut gst::GstCaps) -> gboolean;
 
     //=========================================================================
     // GstGLContext
     //=========================================================================
     pub fn gst_gl_context_get_type() -> GType;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_new(display: *mut GstGLDisplay) -> *mut GstGLContext;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_new_wrapped(display: *mut GstGLDisplay, handle: uintptr_t, context_type: GstGLPlatform, available_apis: GstGLAPI) -> *mut GstGLContext;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_default_get_proc_address(gl_api: GstGLAPI, name: *const c_char) -> gpointer;
     pub fn gst_gl_context_error_quark() -> glib::GQuark;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_get_current() -> *mut GstGLContext;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_get_current_gl_api(platform: GstGLPlatform, major: *mut c_uint, minor: *mut c_uint) -> GstGLAPI;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_get_current_gl_context(context_type: GstGLPlatform) -> uintptr_t;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_get_proc_address_with_platform(context_type: GstGLPlatform, gl_api: GstGLAPI, name: *const c_char) -> gpointer;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_activate(context: *mut GstGLContext, activate: gboolean) -> gboolean;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_can_share(context: *mut GstGLContext, other_context: *mut GstGLContext) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_check_feature(context: *mut GstGLContext, feature: *const c_char) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_context_check_framebuffer_status(context: *mut GstGLContext, fbo_target: c_uint) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_check_gl_version(context: *mut GstGLContext, api: GstGLAPI, maj: c_int, min: c_int) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_context_clear_framebuffer(context: *mut GstGLContext);
     pub fn gst_gl_context_clear_shader(context: *mut GstGLContext);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_create(context: *mut GstGLContext, other_context: *mut GstGLContext, error: *mut *mut glib::GError) -> gboolean;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_destroy(context: *mut GstGLContext);
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_fill_info(context: *mut GstGLContext, error: *mut *mut glib::GError) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_display(context: *mut GstGLContext) -> *mut GstGLDisplay;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_gl_api(context: *mut GstGLContext) -> GstGLAPI;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_gl_context(context: *mut GstGLContext) -> uintptr_t;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_gl_platform(context: *mut GstGLContext) -> GstGLPlatform;
     pub fn gst_gl_context_get_gl_platform_version(context: *mut GstGLContext, major: *mut c_int, minor: *mut c_int);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_gl_version(context: *mut GstGLContext, maj: *mut c_int, min: *mut c_int);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_proc_address(context: *mut GstGLContext, name: *const c_char) -> gpointer;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_context_get_thread(context: *mut GstGLContext) -> *mut glib::GThread;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_get_window(context: *mut GstGLContext) -> *mut GstGLWindow;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_context_is_shared(context: *mut GstGLContext) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_context_set_shared_with(context: *mut GstGLContext, share: *mut GstGLContext);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_set_window(context: *mut GstGLContext, window: *mut GstGLWindow) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_context_supports_glsl_profile_version(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> gboolean;
     pub fn gst_gl_context_swap_buffers(context: *mut GstGLContext);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_context_thread_add(context: *mut GstGLContext, func: GstGLContextThreadFunc, data: gpointer);
 
     //=========================================================================
     // GstGLDisplay
     //=========================================================================
     pub fn gst_gl_display_get_type() -> GType;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_display_new() -> *mut GstGLDisplay;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_display_add_context(display: *mut GstGLDisplay, context: *mut GstGLContext) -> gboolean;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_display_create_context(display: *mut GstGLDisplay, other_context: *mut GstGLContext, p_context: *mut *mut GstGLContext, error: *mut *mut glib::GError) -> gboolean;
     pub fn gst_gl_display_create_window(display: *mut GstGLDisplay) -> *mut GstGLWindow;
     pub fn gst_gl_display_filter_gl_api(display: *mut GstGLDisplay, gl_api: GstGLAPI);
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_gl_display_find_window(display: *mut GstGLDisplay, data: gpointer, compare_func: glib::GCompareFunc) -> *mut GstGLWindow;
     pub fn gst_gl_display_get_gl_api(display: *mut GstGLDisplay) -> GstGLAPI;
     pub fn gst_gl_display_get_gl_api_unlocked(display: *mut GstGLDisplay) -> GstGLAPI;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_display_get_gl_context_for_thread(display: *mut GstGLDisplay, thread: *mut glib::GThread) -> *mut GstGLContext;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_display_get_handle(display: *mut GstGLDisplay) -> uintptr_t;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_display_get_handle_type(display: *mut GstGLDisplay) -> GstGLDisplayType;
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_gl_display_remove_window(display: *mut GstGLDisplay, window: *mut GstGLWindow) -> gboolean;
 
     //=========================================================================
@@ -1683,39 +1582,27 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_filter_get_type() -> GType;
     pub fn gst_gl_filter_add_rgba_pad_templates(klass: *mut GstGLFilterClass);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_filter_draw_fullscreen_quad(filter: *mut GstGLFilter);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_filter_filter_texture(filter: *mut GstGLFilter, inbuf: *mut gst::GstBuffer, outbuf: *mut gst::GstBuffer) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_filter_render_to_target(filter: *mut GstGLFilter, input: *mut GstGLMemory, output: *mut GstGLMemory, func: GstGLFilterRenderFunc, data: gpointer) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_filter_render_to_target_with_shader(filter: *mut GstGLFilter, input: *mut GstGLMemory, output: *mut GstGLMemory, shader: *mut GstGLShader);
 
     //=========================================================================
     // GstGLFramebuffer
     //=========================================================================
     pub fn gst_gl_framebuffer_get_type() -> GType;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_new(context: *mut GstGLContext) -> *mut GstGLFramebuffer;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_new_with_default_depth(context: *mut GstGLContext, width: c_uint, height: c_uint) -> *mut GstGLFramebuffer;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_attach(fb: *mut GstGLFramebuffer, attachment_point: c_uint, mem: *mut GstGLBaseMemory);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_bind(fb: *mut GstGLFramebuffer);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_draw_to_texture(fb: *mut GstGLFramebuffer, mem: *mut GstGLMemory, func: GstGLFramebufferFunc, user_data: gpointer) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_get_effective_dimensions(fb: *mut GstGLFramebuffer, width: *mut c_uint, height: *mut c_uint);
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_gl_framebuffer_get_id(fb: *mut GstGLFramebuffer) -> c_uint;
 
     //=========================================================================
     // GstGLMemoryAllocator
     //=========================================================================
     pub fn gst_gl_memory_allocator_get_type() -> GType;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_memory_allocator_get_default(context: *mut GstGLContext) -> *mut GstGLMemoryAllocator;
 
     //=========================================================================
@@ -1742,25 +1629,16 @@ extern "C" {
     // GstGLSLStage
     //=========================================================================
     pub fn gst_glsl_stage_get_type() -> GType;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_new(context: *mut GstGLContext, type_: c_uint) -> *mut GstGLSLStage;
     pub fn gst_glsl_stage_new_default_fragment(context: *mut GstGLContext) -> *mut GstGLSLStage;
     pub fn gst_glsl_stage_new_default_vertex(context: *mut GstGLContext) -> *mut GstGLSLStage;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_new_with_string(context: *mut GstGLContext, type_: c_uint, version: GstGLSLVersion, profile: GstGLSLProfile, str: *const c_char) -> *mut GstGLSLStage;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_new_with_strings(context: *mut GstGLContext, type_: c_uint, version: GstGLSLVersion, profile: GstGLSLProfile, n_strings: c_int, str: *mut *mut c_char) -> *mut GstGLSLStage;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_compile(stage: *mut GstGLSLStage, error: *mut *mut glib::GError) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_get_handle(stage: *mut GstGLSLStage) -> c_uint;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_get_profile(stage: *mut GstGLSLStage) -> GstGLSLProfile;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_get_shader_type(stage: *mut GstGLSLStage) -> c_uint;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_get_version(stage: *mut GstGLSLStage) -> GstGLSLVersion;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_stage_set_strings(stage: *mut GstGLSLStage, version: GstGLSLVersion, profile: GstGLSLProfile, n_strings: c_int, str: *mut *mut c_char) -> gboolean;
 
     //=========================================================================
@@ -1768,34 +1646,21 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_shader_get_type() -> GType;
     pub fn gst_gl_shader_new(context: *mut GstGLContext) -> *mut GstGLShader;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_new_default(context: *mut GstGLContext, error: *mut *mut glib::GError) -> *mut GstGLShader;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_new_link_with_stages(context: *mut GstGLContext, error: *mut *mut glib::GError, ...) -> *mut GstGLShader;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_new_with_stages(context: *mut GstGLContext, error: *mut *mut glib::GError, ...) -> *mut GstGLShader;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_attach(shader: *mut GstGLShader, stage: *mut GstGLSLStage) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_attach_unlocked(shader: *mut GstGLShader, stage: *mut GstGLSLStage) -> gboolean;
     pub fn gst_gl_shader_bind_attribute_location(shader: *mut GstGLShader, index: c_uint, name: *const c_char);
     pub fn gst_gl_shader_bind_frag_data_location(shader: *mut GstGLShader, index: c_uint, name: *const c_char);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_compile_attach_stage(shader: *mut GstGLShader, stage: *mut GstGLSLStage, error: *mut *mut glib::GError) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_detach(shader: *mut GstGLShader, stage: *mut GstGLSLStage);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_detach_unlocked(shader: *mut GstGLShader, stage: *mut GstGLSLStage);
     pub fn gst_gl_shader_get_attribute_location(shader: *mut GstGLShader, name: *const c_char) -> c_int;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_get_program_handle(shader: *mut GstGLShader) -> c_int;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_is_linked(shader: *mut GstGLShader) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_link(shader: *mut GstGLShader, error: *mut *mut glib::GError) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_release(shader: *mut GstGLShader);
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_shader_release_unlocked(shader: *mut GstGLShader);
     pub fn gst_gl_shader_set_uniform_1f(shader: *mut GstGLShader, name: *const c_char, value: c_float);
     pub fn gst_gl_shader_set_uniform_1fv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *mut c_float);
@@ -1841,81 +1706,52 @@ extern "C" {
     // GstGLViewConvert
     //=========================================================================
     pub fn gst_gl_view_convert_get_type() -> GType;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_new() -> *mut GstGLViewConvert;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_fixate_caps(viewconvert: *mut GstGLViewConvert, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, othercaps: *mut gst::GstCaps) -> *mut gst::GstCaps;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_get_output(viewconvert: *mut GstGLViewConvert, outbuf_ptr: *mut *mut gst::GstBuffer) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_perform(viewconvert: *mut GstGLViewConvert, inbuf: *mut gst::GstBuffer) -> *mut gst::GstBuffer;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_reset(viewconvert: *mut GstGLViewConvert);
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_set_caps(viewconvert: *mut GstGLViewConvert, in_caps: *mut gst::GstCaps, out_caps: *mut gst::GstCaps) -> gboolean;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_set_context(viewconvert: *mut GstGLViewConvert, context: *mut GstGLContext);
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_submit_input_buffer(viewconvert: *mut GstGLViewConvert, is_discont: gboolean, input: *mut gst::GstBuffer) -> gst::GstFlowReturn;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_view_convert_transform_caps(viewconvert: *mut GstGLViewConvert, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
 
     //=========================================================================
     // GstGLWindow
     //=========================================================================
     pub fn gst_gl_window_get_type() -> GType;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_new(display: *mut GstGLDisplay) -> *mut GstGLWindow;
     pub fn gst_gl_window_error_quark() -> glib::GQuark;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_draw(window: *mut GstGLWindow);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_get_context(window: *mut GstGLWindow) -> *mut GstGLContext;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_get_display(window: *mut GstGLWindow) -> uintptr_t;
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_window_get_surface_dimensions(window: *mut GstGLWindow, width: *mut c_uint, height: *mut c_uint);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_get_window_handle(window: *mut GstGLWindow) -> uintptr_t;
     pub fn gst_gl_window_handle_events(window: *mut GstGLWindow, handle_events: gboolean);
     pub fn gst_gl_window_queue_resize(window: *mut GstGLWindow);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_quit(window: *mut GstGLWindow);
     pub fn gst_gl_window_resize(window: *mut GstGLWindow, width: c_uint, height: c_uint);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_run(window: *mut GstGLWindow);
     pub fn gst_gl_window_send_key_event(window: *mut GstGLWindow, event_type: *const c_char, key_str: *const c_char);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_send_message(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_send_message_async(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer, destroy: glib::GDestroyNotify);
     pub fn gst_gl_window_send_mouse_event(window: *mut GstGLWindow, event_type: *const c_char, button: c_int, posx: c_double, posy: c_double);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_set_close_callback(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer, destroy_notify: glib::GDestroyNotify);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_set_draw_callback(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer, destroy_notify: glib::GDestroyNotify);
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_window_set_preferred_size(window: *mut GstGLWindow, width: c_int, height: c_int);
     pub fn gst_gl_window_set_render_rectangle(window: *mut GstGLWindow, x: c_int, y: c_int, width: c_int, height: c_int) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_set_resize_callback(window: *mut GstGLWindow, callback: GstGLWindowResizeCB, data: gpointer, destroy_notify: glib::GDestroyNotify);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_gl_window_set_window_handle(window: *mut GstGLWindow, handle: uintptr_t);
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_gl_window_show(window: *mut GstGLWindow);
 
     //=========================================================================
     // Other functions
     //=========================================================================
-    #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_buffer_add_gl_sync_meta(context: *mut GstGLContext, buffer: *mut gst::GstBuffer) -> *mut GstGLSyncMeta;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_buffer_add_gl_sync_meta_full(context: *mut GstGLContext, buffer: *mut gst::GstBuffer, data: gpointer) -> *mut GstGLSyncMeta;
     pub fn gst_buffer_pool_config_get_gl_allocation_params(config: *mut gst::GstStructure) -> *mut GstGLAllocationParams;
     pub fn gst_buffer_pool_config_set_gl_allocation_params(config: *mut gst::GstStructure, params: *mut GstGLAllocationParams);
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_context_get_gl_display(context: *mut gst::GstContext, display: *mut *mut GstGLDisplay) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_context_set_gl_display(context: *mut gst::GstContext, display: *mut GstGLDisplay);
     pub fn gst_gl_api_from_string(api_s: *const c_char) -> GstGLAPI;
     pub fn gst_gl_api_to_string(api: GstGLAPI) -> *mut c_char;
@@ -1928,54 +1764,32 @@ extern "C" {
     pub fn gst_gl_get_plane_start(info: *mut gst_video::GstVideoInfo, valign: *mut gst_video::GstVideoAlignment, plane: c_uint) -> size_t;
     pub fn gst_gl_handle_context_query(element: *mut gst::GstElement, query: *mut gst::GstQuery, display: *mut GstGLDisplay, context: *mut GstGLContext, other_context: *mut GstGLContext) -> gboolean;
     pub fn gst_gl_handle_set_context(element: *mut gst::GstElement, context: *mut gst::GstContext, display: *mut *mut GstGLDisplay, other_context: *mut *mut GstGLContext) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_insert_debug_marker(context: *mut GstGLContext, format: *const c_char, ...);
     pub fn gst_gl_platform_from_string(platform_s: *const c_char) -> GstGLPlatform;
     pub fn gst_gl_platform_to_string(platform: GstGLPlatform) -> *mut c_char;
     pub fn gst_gl_sized_gl_format_from_gl_format_type(context: *mut GstGLContext, format: c_uint, type_: c_uint) -> c_uint;
     pub fn gst_gl_sync_meta_api_get_type() -> GType;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_texture_target_from_gl(target: c_uint) -> GstGLTextureTarget;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_texture_target_from_string(str: *const c_char) -> GstGLTextureTarget;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_texture_target_to_buffer_pool_option(target: GstGLTextureTarget) -> *const c_char;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_texture_target_to_gl(target: GstGLTextureTarget) -> c_uint;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_texture_target_to_string(target: GstGLTextureTarget) -> *const c_char;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_value_get_texture_target_mask(value: *const gobject::GValue) -> GstGLTextureTarget;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_value_set_texture_target(value: *mut gobject::GValue, target: GstGLTextureTarget) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_value_set_texture_target_from_mask(value: *mut gobject::GValue, target_mask: GstGLTextureTarget) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_gl_version_to_glsl_version(gl_api: GstGLAPI, maj: c_int, min: c_int) -> GstGLSLVersion;
     pub fn gst_glsl_error_quark() -> glib::GQuark;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_profile_from_string(string: *const c_char) -> GstGLSLProfile;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_profile_to_string(profile: GstGLSLProfile) -> *const c_char;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_string_get_version_profile(s: *const c_char, version: *mut GstGLSLVersion, profile: *mut GstGLSLProfile) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_version_from_string(string: *const c_char) -> GstGLSLVersion;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_version_profile_from_string(string: *const c_char, version_ret: *mut GstGLSLVersion, profile_ret: *mut GstGLSLProfile) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_version_profile_to_string(version: GstGLSLVersion, profile: GstGLSLProfile) -> *mut c_char;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_glsl_version_to_string(version: GstGLSLVersion) -> *const c_char;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_is_gl_base_memory(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_is_gl_buffer(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_is_gl_memory(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_is_gl_memory_pbo(mem: *mut gst::GstMemory) -> gboolean;
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_is_gl_renderbuffer(mem: *mut gst::GstMemory) -> gboolean;
 
 }

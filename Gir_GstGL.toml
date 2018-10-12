@@ -2,7 +2,7 @@
 girs_dir = "gir-files"
 library = "GstGL"
 version = "1.0"
-min_cfg_version = "1.0"
+min_cfg_version = "1.14"
 target_path = "gstreamer-gl-sys"
 work_mode = "sys"
 
