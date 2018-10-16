@@ -42,6 +42,7 @@ mod auto;
 pub use auto::*;
 
 mod enums;
+mod gl_context;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
