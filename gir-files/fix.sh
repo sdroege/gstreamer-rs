@@ -49,3 +49,11 @@ xmlstarlet ed --pf --inplace \
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:method[@c:identifier="gst_gl_display_egl_from_gl_display"]' \
 	   GstGL-1.0.gir
+
+# Fix gst_gl_base_buffer_error_quark() and gst_glsl_error_quark()
+xmlstarlet ed --pf --inplace \
+	   --update '//*[@glib:error-domain="gst-gl-base-buffer-error-quark"]/@glib:error-domain' \
+	     --value gst-gl-base-memory-error-quark \
+	   --update '//*[@glib:error-domain="gst-glsl-error"]/@glib:error-domain' \
+	     --value  gst-glsl-error-quark \
+	   GstGL-1.0.gir
