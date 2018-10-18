@@ -6,6 +6,7 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/glib", features = ["subclassing"] }
 gstreamer = { path = "../gstreamer" }
+gstreamer-gl = { path = "../gstreamer-gl", optional = true }
 gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
@@ -25,6 +26,12 @@ failure_derive = "0.1"
 cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
 pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
+# Using my personal repository (vjaquez) for glutin until
+# https://github.com/tomaka/glutin/pull/1082 is merged
+glutin = { git = "https://github.com/ceyusa/glutin", branch="native-display", optional = true }
+
+[build-dependencies]
+gl_generator = { version = "0.9", optional = true }
 
 [features]
 gst-player = ["gstreamer-player"]
@@ -40,6 +47,7 @@ gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", 
 default-features = []
 v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
+gl = ["gstreamer-gl/egl", "gl_generator", "glutin"]
 
 [[bin]]
 name = "appsink"
@@ -127,3 +135,7 @@ required-features = ["pango-cairo"]
 [[bin]]
 name = "ges"
 required-features = ["ges"]
+
+[[bin]]
+name = "glupload"
+required-features = ["gl"]
