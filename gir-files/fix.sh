@@ -57,3 +57,19 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:callback[starts-with(@name, "Check")]' \
 	   --delete '//_:record[starts-with(@name, "Check")]' \
 	   GstCheck-1.0.gir
+
+# Fix gst_gl_base_buffer_error_quark() and gst_glsl_error_quark()
+xmlstarlet ed --pf --inplace \
+	   --update '//*[@glib:error-domain="gst-gl-base-buffer-error-quark"]/@glib:error-domain' \
+	     --value gst-gl-base-memory-error-quark \
+	   --update '//*[@glib:error-domain="gst-glsl-error"]/@glib:error-domain' \
+	     --value  gst-glsl-error-quark \
+	   GstGL-1.0.gir
+
+# Fix error domains for GstGLContext and GstGLWindow
+xmlstarlet ed --pf --inplace \
+	   --insert '//_:enumeration[@name="GLContextError"][not(@glib:error-domain)]' \
+	     --type attr -n 'glib:error-domain' --value gst-gl-context-error-quark \
+	   --insert '//_:enumeration[@name="GLWindowError"][not(@glib:error-domain)]' \
+	     --type attr -n 'glib:error-domain' --value gst-gl-window-error-quark \
+	   GstGL-1.0.gir

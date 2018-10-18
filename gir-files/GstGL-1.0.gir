@@ -927,7 +927,7 @@ function to allocate and OpenGL resources needed for your application</doc>
         </parameter>
       </parameters>
     </callback>
-    <enumeration name="GLBaseMemoryError" c:type="GstGLBaseMemoryError" glib:error-domain="gst-gl-base-buffer-error-quark">
+    <enumeration name="GLBaseMemoryError" c:type="GstGLBaseMemoryError" glib:error-domain="gst-gl-base-memory-error-quark">
       <member name="failed" value="0" c:identifier="GST_GL_BASE_MEMORY_ERROR_FAILED">
         <doc xml:space="preserve">generic faliure</doc>
       </member>
@@ -2212,7 +2212,7 @@ MT-safe</doc>
         </array>
       </field>
     </record>
-    <enumeration name="GLContextError" c:type="GstGLContextError">
+    <enumeration name="GLContextError" c:type="GstGLContextError" glib:error-domain="gst-gl-context-error-quark">
       <doc xml:space="preserve">OpenGL context errors.</doc>
       <member name="failed" value="0" c:identifier="GST_GL_CONTEXT_ERROR_FAILED">
         <doc xml:space="preserve">Failed for an unspecified reason</doc>
@@ -4242,7 +4242,7 @@ multiple times.  This must be called before any other GstGLRenderbuffer operatio
         </array>
       </field>
     </record>
-    <enumeration name="GLSLError" version="1.8" c:type="GstGLSLError" glib:error-domain="gst-glsl-error">
+    <enumeration name="GLSLError" version="1.8" c:type="GstGLSLError" glib:error-domain="gst-glsl-error-quark">
       <doc xml:space="preserve">Compilation stage that caused an error</doc>
       <member name="compile" value="0" c:identifier="GST_GLSL_ERROR_COMPILE">
         <doc xml:space="preserve">Compilation error occured</doc>
@@ -7526,7 +7526,7 @@ require this to be called with a valid handle before drawing can commence.</doc>
         </array>
       </field>
     </record>
-    <enumeration name="GLWindowError" c:type="GstGLWindowError">
+    <enumeration name="GLWindowError" c:type="GstGLWindowError" glib:error-domain="gst-gl-window-error-quark">
       <member name="failed" value="0" c:identifier="GST_GL_WINDOW_ERROR_FAILED">
         <doc xml:space="preserve">failed for a unspecified reason</doc>
       </member>
