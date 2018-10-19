@@ -831,7 +831,7 @@ gst_discoverer_stream_info_list_free().</doc>
 containing informations about how to install the various missing elements
 for @info to be usable. If you wish to use the strings after the life-time
 of @info, you will need to copy them.</doc>
-          <array c:type="gchar**">
+          <array c:type="const gchar**">
             <type name="utf8"/>
           </array>
         </return-value>
@@ -2747,7 +2747,7 @@ in debugging.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PLUGINS_BASE_VERSION_MICRO"
-              value="2"
+              value="4"
               c:type="GST_PLUGINS_BASE_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       <type name="gint" c:type="gint"/>
@@ -2785,7 +2785,7 @@ If mpegversion is 4, the "base-profile" field is also set in @caps.</doc>
           <doc xml:space="preserve">a pointer to the AudioSpecificConfig
                as specified in the Elementary Stream Descriptor (esds)
                in ISO/IEC 14496-1. (See below for more details)</doc>
-          <array length="2" zero-terminated="0" c:type="guint8*">
+          <array length="2" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -2809,7 +2809,7 @@ Since 1.10</doc>
           <doc xml:space="preserve">a pointer to the AudioSpecificConfig
                as specified in the Elementary Stream Descriptor (esds)
                in ISO/IEC 14496-1.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -2860,7 +2860,7 @@ determined.</doc>
           <doc xml:space="preserve">a pointer to the AudioSpecificConfig
                as specified in the Elementary Stream Descriptor (esds)
                in ISO/IEC 14496-1.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -2887,7 +2887,7 @@ determined.</doc>
           <doc xml:space="preserve">a pointer to the AudioSpecificConfig
                as specified in the Elementary Stream Descriptor (esds)
                in ISO/IEC 14496-1.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -2912,7 +2912,7 @@ Since 1.10</doc>
           <doc xml:space="preserve">a pointer to the AudioSpecificConfig
                as specified in the Elementary Stream Descriptor (esds)
                in ISO/IEC 14496-1.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -2954,7 +2954,7 @@ for more details on the parameters.</doc>
         </parameter>
         <parameter name="sps" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the sequence parameter set for the stream.</doc>
-          <array length="2" zero-terminated="0" c:type="guint8*">
+          <array length="2" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -2976,7 +2976,7 @@ same format as for gst_codec_utils_h264_get_profile().</doc>
       <parameters>
         <parameter name="sps" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the sequence parameter set for the stream.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3023,7 +3023,7 @@ byte.
       <parameters>
         <parameter name="sps" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the sequence parameter set for the stream.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3053,7 +3053,7 @@ Since 1.4</doc>
         <parameter name="profile_tier_level" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the profile_tier_level
   struct</doc>
-          <array length="2" zero-terminated="0" c:type="guint8*">
+          <array length="2" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3078,7 +3078,7 @@ Since 1.4</doc>
         <parameter name="profile_tier_level" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the profile_tier_level
   for the stream</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3132,7 +3132,7 @@ Since 1.4</doc>
         <parameter name="profile_tier_level" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the profile_tier_level
   structure for the stream.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3157,7 +3157,7 @@ Since 1.4</doc>
         <parameter name="profile_tier_level" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the profile_tier_level
   for the stream.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3185,7 +3185,7 @@ parameters.</doc>
         <parameter name="vis_obj_seq" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the visual object
   sequence for the stream.</doc>
-          <array length="2" zero-terminated="0" c:type="guint8*">
+          <array length="2" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3209,7 +3209,7 @@ object sequence start code. Only the first byte
         <parameter name="vis_obj_seq" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the visual object
   sequence for the stream.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3233,7 +3233,7 @@ object sequence start code. Only the first byte
         <parameter name="vis_obj_seq" transfer-ownership="none">
           <doc xml:space="preserve">Pointer to the visual object
   sequence for the stream.</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3278,7 +3278,7 @@ invalid Opus caps.</doc>
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <array zero-terminated="0" c:type="guint8*">
+          <array zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3341,7 +3341,7 @@ invalid Opus caps.</doc>
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <array zero-terminated="0" c:type="guint8*">
+          <array zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3408,7 +3408,7 @@ invalid Opus caps.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <array zero-terminated="0" c:type="guint8" fixed-size="256">
+          <array zero-terminated="0" c:type="guint8*" fixed-size="256">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3467,7 +3467,7 @@ invalid Opus caps.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:space="preserve">the mapping between the streams</doc>
-          <array zero-terminated="0" c:type="guint8" fixed-size="256">
+          <array zero-terminated="0" c:type="guint8*" fixed-size="256">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -3545,7 +3545,7 @@ installed but no suitable video decoder and no suitable audio decoder).</doc>
         <parameter name="details" transfer-ownership="none">
           <doc xml:space="preserve">NULL-terminated array
     of installer string details (see below)</doc>
-          <array c:type="gchar**">
+          <array c:type="const gchar* const*">
             <type name="utf8" c:type="gchar*"/>
           </array>
         </parameter>
@@ -3630,7 +3630,7 @@ gst_install_plugins_async() instead of this function.</doc>
         <parameter name="details" transfer-ownership="none">
           <doc xml:space="preserve">NULL-terminated array
     of installer string details</doc>
-          <array c:type="gchar**">
+          <array c:type="const gchar* const*">
             <type name="utf8" c:type="gchar*"/>
           </array>
         </parameter>
