@@ -292,7 +292,8 @@ impl Player {
         }
     }
 
-    pub fn set_property_suburi(&self, suburi: Option<&str>) {
+    pub fn set_property_suburi<'a, P: Into<Option<&'a str>>>(&self, suburi: P) {
+        let suburi = suburi.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "suburi".to_glib_none().0, Value::from(suburi).to_glib_none().0);
         }

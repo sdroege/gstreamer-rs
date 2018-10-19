@@ -63,7 +63,8 @@ impl StreamCollection {
         }
     }
 
-    pub fn set_property_upstream_id(&self, upstream_id: Option<&str>) {
+    pub fn set_property_upstream_id<'a, P: Into<Option<&'a str>>>(&self, upstream_id: P) {
+        let upstream_id = upstream_id.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "upstream-id".to_glib_none().0, Value::from(upstream_id).to_glib_none().0);
         }

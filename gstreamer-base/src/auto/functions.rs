@@ -39,3 +39,8 @@ pub fn type_find_helper_for_extension<'a, P: IsA<gst::Object> + 'a, Q: Into<Opti
 //pub fn type_find_helper_get_range<'a, P: IsA<gst::Object>, Q: IsA<gst::Object> + 'a, R: Into<Option<&'a Q>>>(obj: &P, parent: R, func: /*Unknown conversion*//*Unimplemented*/TypeFindHelperGetRangeFunction, size: u64, extension: &str) -> (Option<gst::Caps>, gst::TypeFindProbability) {
 //    unsafe { TODO: call ffi::gst_type_find_helper_get_range() }
 //}
+
+//#[cfg(any(feature = "v1_14_3", feature = "dox"))]
+//pub fn type_find_helper_get_range_full<'a, 'b, P: IsA<gst::Object>, Q: IsA<gst::Object> + 'a, R: Into<Option<&'a Q>>, S: Into<Option<&'b str>>>(obj: &P, parent: R, func: /*Unknown conversion*//*Unimplemented*/TypeFindHelperGetRangeFunction, size: u64, extension: S) -> (gst::FlowReturn, gst::Caps, gst::TypeFindProbability) {
+//    unsafe { TODO: call ffi::gst_type_find_helper_get_range_full() }
+//}

@@ -47,7 +47,8 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn set_property_certificate(&self, certificate: Option<&str>) {
+    pub fn set_property_certificate<'a, P: Into<Option<&'a str>>>(&self, certificate: P) {
+        let certificate = certificate.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "certificate".to_glib_none().0, Value::from(certificate).to_glib_none().0);
         }
