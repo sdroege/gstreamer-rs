@@ -37,7 +37,8 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_address(&self, address: Option<&str>) {
+    pub fn set_property_address<'a, P: Into<Option<&'a str>>>(&self, address: P) {
+        let address = address.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "address".to_glib_none().0, Value::from(address).to_glib_none().0);
         }
