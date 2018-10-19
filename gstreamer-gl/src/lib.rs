@@ -47,6 +47,8 @@ mod caps_features;
 pub use caps_features::{CAPS_FEATURES_MEMORY_GL_MEMORY, CAPS_FEATURE_MEMORY_GL_MEMORY};
 mod enums;
 mod gl_context;
+mod gl_display;
+pub use gl_display::GL_DISPLAY_CONTEXT_TYPE;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
