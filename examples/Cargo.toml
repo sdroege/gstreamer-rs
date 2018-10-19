@@ -13,7 +13,7 @@ gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
 gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"], optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
@@ -34,7 +34,7 @@ gtkvideooverlay-quartz = ["gtkvideooverlay"]
 generic-futures = ["gstreamer/futures", "futures-preview"]
 glib-futures = ["generic-futures", "glib/futures"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
-gst-rtsp-server-record = ["gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
+gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 default-features = []
 v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
