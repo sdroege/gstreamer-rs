@@ -39,12 +39,6 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[@name="GLDisplayX11Class"]' \
 	   GstGL-1.0.gir
 
-# Remove GstDisplayEGL
-xmlstarlet ed --pf --inplace \
-	   --delete '//_:class[@name="GLDisplayEGL"]' \
-	   --delete '//_:record[@name="GLDisplayEGLClass"]' \
-	   GstGL-1.0.gir
-
 # Remove GstMemoryEGL
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[@name="GLMemoryEGL"]' \

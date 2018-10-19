@@ -2558,8 +2558,70 @@ display's object lock held.</doc>
         </array>
       </field>
     </record>
-    
-    
+    <class name="GLDisplayEGL" c:symbol-prefix="gl_display_egl" c:type="GstGLDisplayEGL" parent="GLDisplay" glib:type-name="GstGLDisplayEGL" glib:get-type="gst_gl_display_egl_get_type" glib:type-struct="GLDisplayEGLClass">
+      <doc xml:space="preserve">the contents of a #GstGLDisplayEGL are private and should only be accessed
+through the provided API</doc>
+      <constructor name="new" c:identifier="gst_gl_display_egl_new">
+        <doc xml:space="preserve">Create a new #GstGLDisplayEGL using the default EGL_DEFAULT_DISPLAY.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">a new #GstGLDisplayEGL or %NULL</doc>
+          <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
+        </return-value>
+      </constructor>
+      <constructor name="new_with_egl_display" c:identifier="gst_gl_display_egl_new_with_egl_display">
+        <return-value transfer-ownership="none">
+          <type name="GLDisplayEGL" c:type="GstGLDisplayEGL*"/>
+        </return-value>
+        <parameters>
+          <parameter name="display" transfer-ownership="none" nullable="1" allow-none="1">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <function name="get_from_native" c:identifier="gst_gl_display_egl_get_from_native" version="1.12">
+        <doc xml:space="preserve">Attempts to create a new #EGLDisplay from @display.  If @type is
+%GST_GL_DISPLAY_TYPE_ANY, then @display must be 0. @type must not be
+%GST_GL_DISPLAY_TYPE_NONE.</doc>
+        <return-value transfer-ownership="none" nullable="1">
+          <doc xml:space="preserve">A #EGLDisplay or %EGL_NO_DISPLAY</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </return-value>
+        <parameters>
+          <parameter name="type" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstGLDisplayType</doc>
+            <type name="GLDisplayType" c:type="GstGLDisplayType"/>
+          </parameter>
+          <parameter name="display" transfer-ownership="none">
+            <doc xml:space="preserve">pointer to a display (or 0)</doc>
+            <type name="guintptr" c:type="guintptr"/>
+          </parameter>
+        </parameters>
+      </function>
+      <field name="parent">
+        <type name="GLDisplay" c:type="GstGLDisplay"/>
+      </field>
+      <field name="display" readable="0" private="1">
+        <type name="gpointer" c:type="gpointer"/>
+      </field>
+      <field name="foreign_display" readable="0" private="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="_padding" readable="0" private="1">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </class>
+    <record name="GLDisplayEGLClass" c:type="GstGLDisplayEGLClass" glib:is-gtype-struct-for="GLDisplayEGL">
+      <field name="object_class">
+        <type name="GLDisplayClass" c:type="GstGLDisplayClass"/>
+      </field>
+      <field name="_padding">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </record>
     <record name="GLDisplayPrivate" c:type="GstGLDisplayPrivate" disguised="1">
     </record>
     <bitfield name="GLDisplayType" c:type="GstGLDisplayType">

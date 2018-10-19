@@ -25,6 +25,7 @@ tempdir = "0.3"
 
 [features]
 dox = []
+egl = []
 
 [lib]
 name = "gstreamer_gl_sys"

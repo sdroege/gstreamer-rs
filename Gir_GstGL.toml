@@ -15,3 +15,24 @@ external_libraries = [
 gstreamer="Gst"
 gstreamer-base="GstBase"
 gstreamer-video="GstVideo"
+
+[[object]]
+name = "GstGL.GLDisplayEGL"
+status = "generate"
+cfg_condition = "feature = \"egl\""
+    [[object.function]]
+    pattern = ".*"
+    cfg_condition = "feature = \"egl\""
+
+[[object]]
+name = "GstGL.GLDisplayEGLClass"
+status = "generate"
+cfg_condition = "feature = \"egl\""
+
+[[object]]
+name = "GstGL.GL_DISPLAY_EGL_NAME"
+status = "generate"
+cfg_condition = "feature = \"egl\""
+    [[object.constant]]
+    pattern = ".*"
+    cfg_condition = "feature = \"egl\""
