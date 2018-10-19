@@ -4305,7 +4305,7 @@ multiple times.  This must be called before any other GstGLRenderbuffer operatio
           <parameter name="str" transfer-ownership="none">
             <doc xml:space="preserve">
     an array of strings concatted together to produce a shader</doc>
-            <array length="4" zero-terminated="0" c:type="gchar**">
+            <array length="4" zero-terminated="0" c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -4395,7 +4395,7 @@ multiple times.  This must be called before any other GstGLRenderbuffer operatio
           </parameter>
           <parameter name="str" transfer-ownership="none">
             <doc xml:space="preserve">a GLSL shader string</doc>
-            <array length="2" zero-terminated="0" c:type="gchar**">
+            <array length="2" zero-terminated="0" c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -4822,7 +4822,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gfloat*">
+            <array length="1" zero-terminated="0" c:type="const gfloat*">
               <type name="gfloat" c:type="gfloat"/>
             </array>
           </parameter>
@@ -4868,7 +4868,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gint*">
+            <array length="1" zero-terminated="0" c:type="const gint*">
               <type name="gint" c:type="gint"/>
             </array>
           </parameter>
@@ -4918,7 +4918,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gfloat*">
+            <array length="1" zero-terminated="0" c:type="const gfloat*">
               <type name="gfloat" c:type="gfloat"/>
             </array>
           </parameter>
@@ -4968,7 +4968,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gint*">
+            <array length="1" zero-terminated="0" c:type="const gint*">
               <type name="gint" c:type="gint"/>
             </array>
           </parameter>
@@ -5022,7 +5022,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gfloat*">
+            <array length="1" zero-terminated="0" c:type="const gfloat*">
               <type name="gfloat" c:type="gfloat"/>
             </array>
           </parameter>
@@ -5076,7 +5076,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gint*">
+            <array length="1" zero-terminated="0" c:type="const gint*">
               <type name="gint" c:type="gint"/>
             </array>
           </parameter>
@@ -5134,7 +5134,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gfloat*">
+            <array length="1" zero-terminated="0" c:type="const gfloat*">
               <type name="gfloat" c:type="gfloat"/>
             </array>
           </parameter>
@@ -5192,7 +5192,7 @@ Note: must be called in the GL thread</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">values to set</doc>
-            <array length="1" zero-terminated="0" c:type="gint*">
+            <array length="1" zero-terminated="0" c:type="const gint*">
               <type name="gint" c:type="gint"/>
             </array>
           </parameter>
