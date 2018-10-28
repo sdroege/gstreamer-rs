@@ -579,21 +579,19 @@ mod tests {
                 .as_ref()
             );
         }
-        assert!(
-            caps.get_features(0)
-                .unwrap()
-                .is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
-        );
+        assert!(caps
+            .get_features(0)
+            .unwrap()
+            .is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref()));
 
         {
             let caps = caps.get_mut().unwrap();
             caps.set_features(0, Some(CapsFeatures::new(&["foo:bla"])));
         }
-        assert!(
-            caps.get_features(0)
-                .unwrap()
-                .is_equal(CapsFeatures::new(&["foo:bla"]).as_ref())
-        );
+        assert!(caps
+            .get_features(0)
+            .unwrap()
+            .is_equal(CapsFeatures::new(&["foo:bla"]).as_ref()));
     }
 
     #[test]

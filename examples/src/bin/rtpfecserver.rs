@@ -32,9 +32,7 @@ struct UsageError(String);
 #[derive(Debug, Fail)]
 #[fail(
     display = "Received error from {}: {} (debug: {:?})",
-    src,
-    error,
-    debug
+    src, error, debug
 )]
 struct ErrorMessage {
     src: String,

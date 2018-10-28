@@ -56,8 +56,8 @@ impl<'a> Serialize for CapsForIterSe<'a> {
         if size > 0 {
             let mut seq = serializer.serialize_seq(Some(size))?;
             for (structure, features) in iter {
-                let features = if !features.is_any() && features
-                    .is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
+                let features = if !features.is_any()
+                    && features.is_equal(::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
                 {
                     None
                 } else {
@@ -118,11 +118,9 @@ impl<'de> Visitor<'de> for CapsItemVisitor {
         let structure = seq
             .next_element::<Structure>()?
             .ok_or_else(|| de::Error::custom("Expected a `Structure` for `Caps` item"))?;
-        let features_option =
-            seq.next_element::<Option<CapsFeatures>>()?
-                .ok_or_else(|| de::Error::custom(
-                    "Expected an `Option<CapsFeature>` for `Caps` item",
-                ))?;
+        let features_option = seq.next_element::<Option<CapsFeatures>>()?.ok_or_else(|| {
+            de::Error::custom("Expected an `Option<CapsFeature>` for `Caps` item")
+        })?;
 
         Ok(CapsItemDe(structure, features_option))
     }
