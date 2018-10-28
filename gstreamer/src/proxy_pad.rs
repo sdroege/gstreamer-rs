@@ -9,6 +9,7 @@
 use std::ptr;
 use Buffer;
 use BufferList;
+use FlowError;
 use FlowReturn;
 use Object;
 use Pad;
@@ -59,22 +60,18 @@ impl ProxyPad {
         parent: &Q,
         offset: u64,
         size: u32,
-    ) -> Result<Buffer, FlowReturn> {
+    ) -> Result<Buffer, FlowError> {
         skip_assert_initialized!();
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret = from_glib(ffi::gst_proxy_pad_getrange_default(
+            let ret: FlowReturn = from_glib(ffi::gst_proxy_pad_getrange_default(
                 pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
             ));
-            if ret == FlowReturn::Ok {
-                Ok(from_glib_full(buffer))
-            } else {
-                Err(ret)
-            }
+            ret.into_result_value(|| from_glib_full(buffer))
         }
     }
 

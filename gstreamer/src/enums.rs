@@ -95,6 +95,13 @@ impl FlowReturn {
         }
     }
 
+    pub fn into_result_value<T, F: FnOnce() -> T>(self, func: F) -> Result<T, FlowError> {
+        match self.into_result() {
+            Ok(_) => Ok(func()),
+            Err(err) => Err(err),
+        }
+    }
+
     pub fn from_error(v: FlowError) -> Self {
         match v {
             FlowError::NotLinked => FlowReturn::NotLinked,
