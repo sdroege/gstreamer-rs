@@ -49,6 +49,8 @@ pub use self::enums::DiscovererResult;
 mod flags;
 pub use self::flags::DiscovererSerializeFlags;
 
+pub mod functions;
+
 #[doc(hidden)]
 pub mod traits {
     pub use super::DiscovererInfoExt;

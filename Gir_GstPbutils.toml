@@ -234,3 +234,55 @@ trait = false
     pattern = "set_.*"
     ignore = true
 
+[[object]]
+name = "GstPbutils.*"
+status = "generate"
+    # We'll opt-in for constants at a later time
+    [[object.constant]]
+    pattern = ".+"
+    ignore = true
+
+    # Codec utils need some special care
+    [[object.function]]
+    pattern = "codec_utils.*"
+    ignore = true
+
+    # Plugin installer API needs some manual impls
+    [[object.function]]
+    pattern = "install_plugins.*"
+    ignore = true
+
+    # Plugin installer API needs some manual impls
+    [[object.function]]
+    pattern = "missing_.*"
+    ignore = true
+
+    # Plugin installer API needs some manual impls
+    [[object.function]]
+    name = "is_missing_plugin_message"
+    ignore = true
+
+    # Initialization is handled implicitely
+    [[object.function]]
+    name = "pb_utils_init"
+    ignore = true
+
+    # Needs special handling for mutable taglists
+    [[object.function]]
+    name = "pb_utils_add_codec_description_to_tag_list"
+    ignore = true
+
+    # Needs special handling for caps refs
+    [[object.function]]
+    name = "pb_utils_get_codec_description"
+    ignore = true
+
+    # Needs special handling for caps refs
+    [[object.function]]
+    name = "pb_utils_get_decoder_description"
+    ignore = true
+
+    # Needs special handling for caps refs
+    [[object.function]]
+    name = "pb_utils_get_encoder_description"
+    ignore = true

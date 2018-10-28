@@ -45,6 +45,7 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
 #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 mod auto;
+pub use auto::functions::*;
 pub use auto::*;
 
 mod discoverer;
@@ -58,6 +59,9 @@ pub use discoverer_video_info::*;
 mod encoding_profile;
 pub use encoding_profile::*;
 
+pub mod functions;
+pub use functions::*;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
@@ -66,4 +70,6 @@ pub mod prelude {
 
     pub use auto::traits::*;
     pub use encoding_profile::EncodingProfileBuilder;
+
+    pub use functions::CodecTag;
 }
