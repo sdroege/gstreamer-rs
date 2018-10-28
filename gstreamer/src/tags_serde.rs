@@ -97,7 +97,7 @@ impl Serialize for TagListRef {
         let tag_count = self.n_tags();
         if tag_count > 0 {
             let mut seq = serializer.serialize_seq(Some(tag_count as usize))?;
-            let tag_list_iter = self.iter_tag_list();
+            let tag_list_iter = self.iter_generic();
             for (tag_name, tag_iter) in tag_list_iter {
                 seq.serialize_element(&TagsSer::new(tag_name, tag_iter))?;
             }

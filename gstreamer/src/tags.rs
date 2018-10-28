@@ -464,20 +464,20 @@ impl TagListRef {
         unsafe { ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.to_glib_none().0) }
     }
 
-    pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIterator<'a, T> {
-        TagIterator::new(self)
+    pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIter<'a, T> {
+        TagIter::new(self)
     }
 
-    pub fn iter_tag_generic<'a>(&'a self, tag_name: &'a str) -> GenericTagIterator<'a> {
-        GenericTagIterator::new(self, tag_name)
+    pub fn iter_tag_generic<'a>(&'a self, tag_name: &'a str) -> GenericTagIter<'a> {
+        GenericTagIter::new(self, tag_name)
     }
 
-    pub fn iter_tag_list(&self) -> TagListIterator {
-        TagListIterator::new(self)
+    pub fn iter_generic(&self) -> GenericIter {
+        GenericIter::new(self)
     }
 
-    pub fn iter_tag_list_simple(&self) -> TagListSimpleIterator {
-        TagListSimpleIterator::new(self)
+    pub fn iter(&self) -> Iter {
+        Iter::new(self)
     }
 
     pub fn to_string(&self) -> String {
@@ -519,17 +519,17 @@ impl PartialEq for TagListRef {
 
 impl Eq for TagListRef {}
 
-pub struct TagIterator<'a, T: Tag<'a>> {
+pub struct TagIter<'a, T: Tag<'a>> {
     taglist: &'a TagListRef,
     idx: u32,
     size: u32,
     phantom: PhantomData<T>,
 }
 
-impl<'a, T: Tag<'a>> TagIterator<'a, T> {
-    fn new(taglist: &'a TagListRef) -> TagIterator<'a, T> {
+impl<'a, T: Tag<'a>> TagIter<'a, T> {
+    fn new(taglist: &'a TagListRef) -> TagIter<'a, T> {
         skip_assert_initialized!();
-        TagIterator {
+        TagIter {
             taglist,
             idx: 0,
             size: taglist.get_size::<T>(),
@@ -538,7 +538,7 @@ impl<'a, T: Tag<'a>> TagIterator<'a, T> {
     }
 }
 
-impl<'a, T: Tag<'a>> Iterator for TagIterator<'a, T>
+impl<'a, T: Tag<'a>> Iterator for TagIter<'a, T>
 where
     <T as Tag<'a>>::TagType: 'a,
     T: 'a,
@@ -567,7 +567,7 @@ where
     }
 }
 
-impl<'a, T: Tag<'a>> DoubleEndedIterator for TagIterator<'a, T>
+impl<'a, T: Tag<'a>> DoubleEndedIterator for TagIter<'a, T>
 where
     <T as Tag<'a>>::TagType: 'a,
     T: 'a,
@@ -582,24 +582,24 @@ where
     }
 }
 
-impl<'a, T: Tag<'a>> ExactSizeIterator for TagIterator<'a, T>
+impl<'a, T: Tag<'a>> ExactSizeIterator for TagIter<'a, T>
 where
     <T as Tag<'a>>::TagType: 'a,
     T: 'a,
 {
 }
 
-pub struct GenericTagIterator<'a> {
+pub struct GenericTagIter<'a> {
     taglist: &'a TagListRef,
     name: &'a str,
     idx: u32,
     size: u32,
 }
 
-impl<'a> GenericTagIterator<'a> {
-    fn new(taglist: &'a TagListRef, name: &'a str) -> GenericTagIterator<'a> {
+impl<'a> GenericTagIter<'a> {
+    fn new(taglist: &'a TagListRef, name: &'a str) -> GenericTagIter<'a> {
         skip_assert_initialized!();
-        GenericTagIterator {
+        GenericTagIter {
             taglist,
             name,
             idx: 0,
@@ -608,7 +608,7 @@ impl<'a> GenericTagIterator<'a> {
     }
 }
 
-impl<'a> Iterator for GenericTagIterator<'a> {
+impl<'a> Iterator for GenericTagIter<'a> {
     type Item = &'a SendValue;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -633,7 +633,7 @@ impl<'a> Iterator for GenericTagIterator<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for GenericTagIterator<'a> {
+impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -644,19 +644,19 @@ impl<'a> DoubleEndedIterator for GenericTagIterator<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for GenericTagIterator<'a> {}
+impl<'a> ExactSizeIterator for GenericTagIter<'a> {}
 
-pub struct TagListIterator<'a> {
+pub struct GenericIter<'a> {
     taglist: &'a TagListRef,
     idx: u32,
     size: u32,
 }
 
-impl<'a> TagListIterator<'a> {
-    fn new(taglist: &'a TagListRef) -> TagListIterator<'a> {
+impl<'a> GenericIter<'a> {
+    fn new(taglist: &'a TagListRef) -> GenericIter<'a> {
         skip_assert_initialized!();
         let size = taglist.n_tags();
-        TagListIterator {
+        GenericIter {
             taglist,
             idx: 0,
             size: if size > 0 { size as u32 } else { 0 },
@@ -664,8 +664,8 @@ impl<'a> TagListIterator<'a> {
     }
 }
 
-impl<'a> Iterator for TagListIterator<'a> {
-    type Item = (&'a str, GenericTagIterator<'a>);
+impl<'a> Iterator for GenericIter<'a> {
+    type Item = (&'a str, GenericTagIter<'a>);
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.size {
@@ -690,7 +690,7 @@ impl<'a> Iterator for TagListIterator<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for TagListIterator<'a> {
+impl<'a> DoubleEndedIterator for GenericIter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -702,19 +702,19 @@ impl<'a> DoubleEndedIterator for TagListIterator<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for TagListIterator<'a> {}
+impl<'a> ExactSizeIterator for GenericIter<'a> {}
 
-pub struct TagListSimpleIterator<'a> {
+pub struct Iter<'a> {
     taglist: &'a TagListRef,
     idx: u32,
     size: u32,
 }
 
-impl<'a> TagListSimpleIterator<'a> {
-    fn new(taglist: &'a TagListRef) -> TagListSimpleIterator<'a> {
+impl<'a> Iter<'a> {
+    fn new(taglist: &'a TagListRef) -> Iter<'a> {
         skip_assert_initialized!();
         let size = taglist.n_tags();
-        TagListSimpleIterator {
+        Iter {
             taglist,
             idx: 0,
             size: if size > 0 { size as u32 } else { 0 },
@@ -722,7 +722,7 @@ impl<'a> TagListSimpleIterator<'a> {
     }
 }
 
-impl<'a> Iterator for TagListSimpleIterator<'a> {
+impl<'a> Iterator for Iter<'a> {
     type Item = (&'a str, glib::SendValue);
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -748,7 +748,7 @@ impl<'a> Iterator for TagListSimpleIterator<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for TagListSimpleIterator<'a> {
+impl<'a> DoubleEndedIterator for Iter<'a> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -760,7 +760,7 @@ impl<'a> DoubleEndedIterator for TagListSimpleIterator<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for TagListSimpleIterator<'a> {}
+impl<'a> ExactSizeIterator for Iter<'a> {}
 
 #[cfg(test)]
 mod tests {
@@ -865,7 +865,7 @@ mod tests {
         assert_eq!(tags.nth_tag_name(1), *TAG_DURATION);
         assert_eq!(tags.get_size_by_name(&TAG_DURATION), 1);
 
-        // GenericTagIterator
+        // GenericTagIter
         let mut title_iter = tags.iter_tag_generic(&TAG_TITLE);
         assert_eq!(title_iter.size_hint(), (3, Some(3)));
         let first_title = title_iter.next().unwrap();
@@ -876,8 +876,8 @@ mod tests {
         assert_eq!(third_title.get(), Some("third title"));
         assert!(title_iter.next().is_none());
 
-        // TagListIterator
-        let mut tag_list_iter = tags.iter_tag_list();
+        // GenericIter
+        let mut tag_list_iter = tags.iter_generic();
         assert_eq!(tag_list_iter.size_hint(), (2, Some(2)));
 
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
@@ -896,8 +896,8 @@ mod tests {
         assert_eq!(first_duration.get(), Some(::SECOND * 120));
         assert!(tag_iter.next().is_none());
 
-        // TagListSimpleIterator
-        let mut tag_list_iter = tags.iter_tag_list_simple();
+        // Iter
+        let mut tag_list_iter = tags.iter();
         assert_eq!(tag_list_iter.size_hint(), (2, Some(2)));
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
