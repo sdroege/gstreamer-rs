@@ -35,7 +35,7 @@ macro_rules! ser_tag (
 );
 
 // serialize trait is only available for `&self`, but we need to mutate the iterator
-struct TagValuesSer<'a>(Rc<RefCell<GenericTagIterator<'a>>>);
+struct TagValuesSer<'a>(Rc<RefCell<GenericTagIter<'a>>>);
 impl<'a> TagValuesSer<'a> {
     fn from(tags_ser: &TagsSer<'a>) -> Self {
         TagValuesSer(Rc::clone(&tags_ser.1))
@@ -76,9 +76,9 @@ impl<'a> Serialize for TagValuesSer<'a> {
     }
 }
 
-struct TagsSer<'a>(&'a str, Rc<RefCell<GenericTagIterator<'a>>>);
+struct TagsSer<'a>(&'a str, Rc<RefCell<GenericTagIter<'a>>>);
 impl<'a> TagsSer<'a> {
-    fn new(name: &'a str, tag_iter: GenericTagIterator<'a>) -> Self {
+    fn new(name: &'a str, tag_iter: GenericTagIter<'a>) -> Self {
         TagsSer(name, Rc::new(RefCell::new(tag_iter)))
     }
 }
