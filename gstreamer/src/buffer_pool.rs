@@ -234,7 +234,7 @@ pub trait BufferPoolExtManual {
     fn acquire_buffer<'a, P: Into<Option<&'a BufferPoolAcquireParams>>>(
         &self,
         params: P,
-    ) -> Result<::Buffer, ::FlowReturn>;
+    ) -> Result<::Buffer, ::FlowError>;
     fn release_buffer(&self, buffer: ::Buffer);
 }
 
@@ -267,7 +267,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
     fn acquire_buffer<'a, P: Into<Option<&'a BufferPoolAcquireParams>>>(
         &self,
         params: P,
-    ) -> Result<::Buffer, ::FlowReturn> {
+    ) -> Result<::Buffer, ::FlowError> {
         let params = params.into();
         let params_ptr = match params {
             Some(params) => &params.0 as *const _ as *mut _,
@@ -276,17 +276,13 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret = from_glib(ffi::gst_buffer_pool_acquire_buffer(
+            let ret: ::FlowReturn = from_glib(ffi::gst_buffer_pool_acquire_buffer(
                 self.to_glib_none().0,
                 &mut buffer,
                 params_ptr,
             ));
 
-            if ret == ::FlowReturn::Ok {
-                Ok(from_glib_full(buffer))
-            } else {
-                Err(ret)
-            }
+            ret.into_result_value(|| from_glib_full(buffer))
         }
     }
 

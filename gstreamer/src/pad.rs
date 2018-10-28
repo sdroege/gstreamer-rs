@@ -10,6 +10,7 @@ use miniobject::MiniObject;
 use Buffer;
 use BufferList;
 use Event;
+use FlowError;
 use FlowReturn;
 use Format;
 use FormattedValue;
@@ -115,8 +116,8 @@ pub trait PadExtManual {
     fn chain_list(&self, list: BufferList) -> FlowReturn;
     fn push_list(&self, list: BufferList) -> FlowReturn;
 
-    fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
-    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn>;
+    fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
+    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
 
     fn peer_query(&self, query: &mut QueryRef) -> bool;
     fn query(&self, query: &mut QueryRef) -> bool;
@@ -170,7 +171,7 @@ pub trait PadExtManual {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
+        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
             + Send
             + Sync
             + 'static;
@@ -290,37 +291,29 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {
+    fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret = from_glib(ffi::gst_pad_get_range(
+            let ret: FlowReturn = from_glib(ffi::gst_pad_get_range(
                 self.to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
             ));
-            if ret == FlowReturn::Ok {
-                Ok(from_glib_full(buffer))
-            } else {
-                Err(ret)
-            }
+            ret.into_result_value(|| from_glib_full(buffer))
         }
     }
 
-    fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowReturn> {
+    fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError> {
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret = from_glib(ffi::gst_pad_pull_range(
+            let ret: FlowReturn = from_glib(ffi::gst_pad_pull_range(
                 self.to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
             ));
-            if ret == FlowReturn::Ok {
-                Ok(from_glib_full(buffer))
-            } else {
-                Err(ret)
-            }
+            ret.into_result_value(|| from_glib_full(buffer))
         }
     }
 
@@ -544,7 +537,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
+        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
             + Send
             + Sync
             + 'static,
@@ -552,7 +545,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
+                Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
                     + Send
                     + Sync
                     + 'static,
@@ -1109,7 +1102,7 @@ unsafe extern "C" fn trampoline_getrange_function(
     buffer: *mut *mut ffi::GstBuffer,
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
+    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
                          + Send
                          + Sync
                          + 'static) = transmute((*pad).getrangedata);
@@ -1124,7 +1117,7 @@ unsafe extern "C" fn trampoline_getrange_function(
             *buffer = new_buffer.into_ptr();
             ::FlowReturn::Ok.to_glib()
         }
-        Err(ret) => ret.to_glib(),
+        Err(ret) => ::FlowReturn::from_error(ret).to_glib(),
     }
 }
 
