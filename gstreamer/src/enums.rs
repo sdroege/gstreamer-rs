@@ -47,6 +47,12 @@ pub enum StateChangeSuccess {
     NoPreroll,
 }
 
+impl From<StateChangeSuccess> for StateChangeReturn {
+    fn from(value: StateChangeSuccess) -> Self {
+        StateChangeReturn::from_ok(value)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
 pub struct StateChangeError;
@@ -54,6 +60,12 @@ pub struct StateChangeError;
 impl fmt::Display for StateChangeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "State-change error")
+    }
+}
+
+impl From<StateChangeError> for StateChangeReturn {
+    fn from(value: StateChangeError) -> Self {
+        StateChangeReturn::from_error(value)
     }
 }
 
@@ -115,6 +127,12 @@ pub enum FlowSuccess {
     Ok,
 }
 
+impl From<FlowSuccess> for FlowReturn {
+    fn from(value: FlowSuccess) -> Self {
+        FlowReturn::from_ok(value)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
 pub enum FlowError {
@@ -132,6 +150,12 @@ pub enum FlowError {
 impl fmt::Display for FlowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Flow error: {}", self.description())
+    }
+}
+
+impl From<FlowError> for FlowReturn {
+    fn from(value: FlowError) -> Self {
+        FlowReturn::from_error(value)
     }
 }
 
@@ -188,6 +212,12 @@ impl PadLinkReturn {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct PadLinkSuccess;
 
+impl From<PadLinkSuccess> for PadLinkReturn {
+    fn from(value: PadLinkSuccess) -> Self {
+        PadLinkReturn::from_ok(value)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
 pub enum PadLinkError {
@@ -202,6 +232,12 @@ pub enum PadLinkError {
 impl fmt::Display for PadLinkError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Pad failed to link: {}", self.description())
+    }
+}
+
+impl From<PadLinkError> for PadLinkReturn {
+    fn from(value: PadLinkError) -> Self {
+        PadLinkReturn::from_error(value)
     }
 }
 
@@ -258,6 +294,12 @@ pub enum ClockSuccess {
     Done,
 }
 
+impl From<ClockSuccess> for ClockReturn {
+    fn from(value: ClockSuccess) -> Self {
+        ClockReturn::from_ok(value)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
 pub enum ClockError {
@@ -272,6 +314,12 @@ pub enum ClockError {
 impl fmt::Display for ClockError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Clock error: {}", self.description())
+    }
+}
+
+impl From<ClockError> for ClockReturn {
+    fn from(value: ClockError) -> Self {
+        ClockReturn::from_error(value)
     }
 }
 
