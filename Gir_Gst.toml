@@ -84,6 +84,7 @@ conversion_type = "scalar"
 [[object]]
 name = "Gst.Bin"
 status = "generate"
+trait_name = "GstBinExt"
     [[object.function]]
     name = "add"
         [object.function.return]

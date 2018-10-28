@@ -15,7 +15,7 @@ use glib::IsA;
 
 use ffi;
 
-pub trait BinExtManual {
+pub trait GstBinExtManual {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
 
@@ -28,7 +28,7 @@ pub trait BinExtManual {
     fn get_children(&self) -> Vec<Element>;
 }
 
-impl<O: IsA<Bin>> BinExtManual for O {
+impl<O: IsA<Bin>> GstBinExtManual for O {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {

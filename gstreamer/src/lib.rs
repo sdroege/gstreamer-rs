@@ -176,7 +176,7 @@ mod pad;
 mod parse_context;
 mod proxy_pad;
 mod tag_setter;
-pub use bin::BinExtManual;
+pub use bin::GstBinExtManual;
 pub use element::{ElementExtManual, ElementMessageType, NotifyWatchId};
 pub use element::{
     ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
@@ -294,7 +294,7 @@ pub mod prelude {
 
     pub use meta::MetaAPI;
 
-    pub use bin::BinExtManual;
+    pub use bin::GstBinExtManual;
     pub use element::ElementExtManual;
 
     // OS dependent Bus extensions (also import the other plateform trait for doc)

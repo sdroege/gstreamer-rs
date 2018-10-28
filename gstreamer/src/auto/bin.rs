@@ -47,7 +47,7 @@ impl Bin {
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
 
-pub trait BinExt {
+pub trait GstBinExt {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
     //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -111,7 +111,7 @@ pub trait BinExt {
     fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Bin> + IsA<glib::object::Object>> BinExt for O {
+impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0), "Failed to add element")

@@ -4,7 +4,7 @@
 
 mod bin;
 pub use self::bin::Bin;
-pub use self::bin::BinExt;
+pub use self::bin::GstBinExt;
 
 mod buffer_pool;
 pub use self::buffer_pool::BufferPool;
@@ -181,7 +181,7 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::BinExt;
+    pub use super::GstBinExt;
     pub use super::BufferPoolExt;
     pub use super::ChildProxyExt;
     pub use super::ClockExt;
