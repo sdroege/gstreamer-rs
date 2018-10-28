@@ -115,6 +115,12 @@ pub enum FlowSuccess {
     Ok,
 }
 
+impl From<FlowSuccess> for FlowReturn {
+    fn from(err: FlowSuccess) -> Self {
+        FlowReturn::from_ok(err)
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 #[must_use]
 pub enum FlowError {
@@ -132,6 +138,12 @@ pub enum FlowError {
 impl fmt::Display for FlowError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Flow error: {}", self.description())
+    }
+}
+
+impl From<FlowError> for FlowReturn {
+    fn from(err: FlowError) -> Self {
+        FlowReturn::from_error(err)
     }
 }
 
