@@ -414,7 +414,7 @@ Consult the relevant specifications for more details.</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="descriptors" writable="1">
-        <doc xml:space="preserve">descriptors</doc>
+        <doc xml:space="preserve">an array of #GstMpegtsDescriptor</doc>
         <array name="GLib.PtrArray" c:type="GPtrArray*">
           <type name="Descriptor"/>
         </array>
@@ -455,7 +455,10 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="CableDeliverySystemDescriptor"
-            c:type="GstMpegtsCableDeliverySystemDescriptor">
+            c:type="GstMpegtsCableDeliverySystemDescriptor"
+            glib:type-name="GstMpegtsCableDeliverySystemDescriptor"
+            glib:get-type="gst_mpegts_dvb_cable_delivery_system_descriptor_get_type"
+            c:symbol-prefix="dvb_cable_delivery_system_descriptor">
       <doc xml:space="preserve">Cable Delivery System Descriptor (EN 300 468 v.1.13.1)</doc>
       <field name="frequency" writable="1">
         <doc xml:space="preserve">the frequency in Hz (Hertz)</doc>
@@ -478,6 +481,18 @@ Consult the relevant specifications for more details.</doc>
         <doc xml:space="preserve">inner FEC scheme used</doc>
         <type name="DVBCodeRate" c:type="GstMpegtsDVBCodeRate"/>
       </field>
+      <method name="free"
+              c:identifier="gst_mpegts_dvb_cable_delivery_system_descriptor_free">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="source" transfer-ownership="none">
+            <type name="CableDeliverySystemDescriptor"
+                  c:type="GstMpegtsCableDeliverySystemDescriptor*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
     </record>
     <enumeration name="CableOuterFECScheme"
                  c:type="GstMpegtsCableOuterFECScheme">
@@ -1500,7 +1515,9 @@ two bytes are the @tag and @length.</doc>
                      optional="1"
                      allow-none="1">
             <doc xml:space="preserve">The private data</doc>
-            <type name="guint8" c:type="const guint8**"/>
+            <array length="3" zero-terminated="0" c:type="const guint8**">
+              <type name="guint8" c:type="guint8*"/>
+            </array>
           </parameter>
           <parameter name="private_data_size"
                      direction="out"
@@ -1673,7 +1690,9 @@ are found in http://www.dvbservices.com</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve">the selector bytes, if present</doc>
-            <type name="guint8" c:type="guint8**"/>
+            <array length="2" zero-terminated="0" c:type="guint8**">
+              <type name="guint8" c:type="guint8*"/>
+            </array>
           </parameter>
           <parameter name="len"
                      direction="out"
@@ -1797,7 +1816,10 @@ a #GstMpegtsDvbMultilingualBouquetNameItem</doc>
 #GstMpegtsDescriptor</doc>
             <type name="Descriptor" c:type="const GstMpegtsDescriptor*"/>
           </instance-parameter>
-          <parameter name="component_tag" transfer-ownership="none">
+          <parameter name="component_tag"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <doc xml:space="preserve">the component tag</doc>
             <type name="guint8" c:type="guint8*"/>
           </parameter>
@@ -1935,7 +1957,9 @@ registered by http://www.dvbservices.com/</doc>
                      optional="1"
                      allow-none="1">
             <doc xml:space="preserve">additional data or NULL</doc>
-            <type name="guint8" c:type="guint8**"/>
+            <array length="2" zero-terminated="0" c:type="guint8**">
+              <type name="guint8" c:type="guint8*"/>
+            </array>
           </parameter>
           <parameter name="length"
                      direction="out"
@@ -2433,7 +2457,9 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
           </parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">descriptor data (after tag and length field)</doc>
-            <type name="guint8" c:type="const guint8*"/>
+            <array length="2" zero-terminated="0" c:type="const guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:space="preserve">length of @data</doc>
@@ -2459,7 +2485,9 @@ ISO 639-1 language code from the returned ISO 639-2 one.</doc>
           </parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">descriptor data (after tag and length field)</doc>
-            <type name="guint8" c:type="const guint8*"/>
+            <array length="3" zero-terminated="0" c:type="const guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:space="preserve">length of @data</doc>
@@ -2569,7 +2597,9 @@ a single language</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve">pointer to optional additional info</doc>
-            <type name="guint8" c:type="guint8*"/>
+            <array length="2" zero-terminated="0" c:type="guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="additional_info_length" transfer-ownership="none">
             <doc xml:space="preserve">length of the optional @additional_info</doc>
@@ -3687,7 +3717,9 @@ else %NULL</doc>
           <parameter name="data" transfer-ownership="full">
             <doc xml:space="preserve">a pointer to the beginning of the section (i.e. the first byte
 should contain the table_id field).</doc>
-            <type name="guint8" c:type="guint8*"/>
+            <array length="2" zero-terminated="0" c:type="guint8*">
+              <type name="guint8" c:type="guint8"/>
+            </array>
           </parameter>
           <parameter name="data_size" transfer-ownership="none">
             <doc xml:space="preserve">size of the @data argument.</doc>
@@ -4929,7 +4961,9 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
         </parameter>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">descriptor data (after tag and length field)</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="2" zero-terminated="0" c:type="const guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="length" transfer-ownership="none">
           <doc xml:space="preserve">length of @data</doc>
@@ -4956,7 +4990,9 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
         </parameter>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">descriptor data (after tag and length field)</doc>
-          <type name="guint8" c:type="const guint8*"/>
+          <array length="3" zero-terminated="0" c:type="const guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="length" transfer-ownership="none">
           <doc xml:space="preserve">length of @data</doc>
@@ -5071,7 +5107,9 @@ a single language</doc>
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve">pointer to optional additional info</doc>
-          <type name="guint8" c:type="guint8*"/>
+          <array length="2" zero-terminated="0" c:type="guint8*">
+            <type name="guint8" c:type="guint8"/>
+          </array>
         </parameter>
         <parameter name="additional_info_length" transfer-ownership="none">
           <doc xml:space="preserve">length of the optional @additional_info</doc>
