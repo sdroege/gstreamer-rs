@@ -6,6 +6,13 @@ min_cfg_version = "1.0"
 target_path = "gstreamer-sys"
 work_mode = "sys"
 
+ignore = [
+    "Gst.VERSION_MAJOR",
+    "Gst.VERSION_MINOR",
+    "Gst.VERSION_MICRO",
+    "Gst.VERSION_NANO",
+]
+
 external_libraries = [
     "GLib",
     "GObject",

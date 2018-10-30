@@ -588,10 +588,6 @@ pub const GST_VALUE_EQUAL: c_int = 0;
 pub const GST_VALUE_GREATER_THAN: c_int = 1;
 pub const GST_VALUE_LESS_THAN: c_int = -1;
 pub const GST_VALUE_UNORDERED: c_int = 2;
-pub const GST_VERSION_MAJOR: c_int = 1;
-pub const GST_VERSION_MICRO: c_int = 1;
-pub const GST_VERSION_MINOR: c_int = 14;
-pub const GST_VERSION_NANO: c_int = 0;
 
 // Flags
 pub type GstAllocatorFlags = c_uint;

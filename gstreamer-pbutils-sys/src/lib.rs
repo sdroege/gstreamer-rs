@@ -69,10 +69,6 @@ pub const GST_ENCODING_CATEGORY_DEVICE: *const c_char = b"device\0" as *const u8
 pub const GST_ENCODING_CATEGORY_FILE_EXTENSION: *const c_char = b"file-extension\0" as *const u8 as *const c_char;
 pub const GST_ENCODING_CATEGORY_ONLINE_SERVICE: *const c_char = b"online-service\0" as *const u8 as *const c_char;
 pub const GST_ENCODING_CATEGORY_STORAGE_EDITING: *const c_char = b"storage-editing\0" as *const u8 as *const c_char;
-pub const GST_PLUGINS_BASE_VERSION_MAJOR: c_int = 1;
-pub const GST_PLUGINS_BASE_VERSION_MICRO: c_int = 2;
-pub const GST_PLUGINS_BASE_VERSION_MINOR: c_int = 14;
-pub const GST_PLUGINS_BASE_VERSION_NANO: c_int = 0;
 
 // Flags
 pub type GstDiscovererSerializeFlags = c_uint;

@@ -6,6 +6,13 @@ min_cfg_version = "1.0"
 target_path = "gstreamer-pbutils-sys"
 work_mode = "sys"
 
+ignore = [
+    "GstPbutils.PLUGINS_BASE_VERSION_MAJOR",
+    "GstPbutils.PLUGINS_BASE_VERSION_MINOR",
+    "GstPbutils.PLUGINS_BASE_VERSION_MICRO",
+    "GstPbutils.PLUGINS_BASE_VERSION_NANO"
+]
+
 external_libraries = [
     "GLib",
     "GObject",

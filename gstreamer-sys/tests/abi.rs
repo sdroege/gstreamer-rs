@@ -1115,10 +1115,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_VALUE_GREATER_THAN", "1"),
     ("GST_VALUE_LESS_THAN", "-1"),
     ("GST_VALUE_UNORDERED", "2"),
-    ("GST_VERSION_MAJOR", "1"),
-    ("GST_VERSION_MICRO", "1"),
-    ("GST_VERSION_MINOR", "14"),
-    ("GST_VERSION_NANO", "0"),
 ];
 
 
