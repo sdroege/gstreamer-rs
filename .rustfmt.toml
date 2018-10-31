@@ -12,4 +12,5 @@ ignore = [
     "gstreamer-sdp/src/auto",
     "gstreamer-video/src/auto",
     "gstreamer-webrtc/src/auto",
+    "gstreamer-editing-services/src/auto",
 ]
