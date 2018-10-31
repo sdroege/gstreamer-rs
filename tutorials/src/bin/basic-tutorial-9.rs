@@ -52,8 +52,6 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
                 tag = tag,
                 indent = 2 * (2 + depth) + tag.len()
             );
-            // reviewer: I'm intending to write something along the lines of
-            // println!("{}", values.iter().collect(send_value_as_str).join(",")
             let mut tag_num = 0;
             for value in values {
                 if let Some(s) = send_value_as_str(value) {
@@ -152,7 +150,7 @@ fn run_discoverer() -> Result<(), Error> {
     println!("Discovering {}", uri);
 
     let loop_ = glib::MainLoop::new(None, false);
-    let timeout = gst::ClockTime::from_seconds(5);
+    let timeout = 5 * gst::SECOND;
     let discoverer = gst_pbutils::Discoverer::new(timeout)?;
     discoverer.connect_discovered(on_connect_discovered);
     let loop_clone = loop_.clone();
