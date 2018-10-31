@@ -1,0 +1,56 @@
+[badges.travis-ci]
+branch = "master"
+repository = "sdroege/gstreamer-sys"
+
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.gio-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gobject-sys]
+git = "https://github.com/gtk-rs/sys"
+
+[dependencies.gstreamer-base-sys]
+path = "../gstreamer-base-sys"
+
+[dependencies.gstreamer-pbutils-sys]
+path = "../gstreamer-pbutils-sys"
+
+[dependencies.gstreamer-sys]
+path = "../gstreamer-sys"
+
+[dev-dependencies]
+shell-words = "0.1.0"
+tempdir = "0.3"
+
+[features]
+dox = []
+v1_6 = []
+v1_8 = ["v1_6"]
+v1_10 = ["v1_8"]
+v1_12 = ["v1_10"]
+v1_14 = ["v1_12"]
+v1_16 = ["v1_14"]
+
+[lib]
+name = "gstreamer_editing_services_sys"
+
+[package]
+authors = ["Thibault Saunier <tsaunier@igalia.com>", "Sebastian Dröge <sebastian@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libges-1.0"
+homepage = "https://gstreamer.freedesktop.org"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia", "nle"]
+license = "MIT"
+links = "ges-1.0"
+name = "gstreamer-editing-services-sys"
+readme = "README.md"
+repository = "https://github.com/sdroege/gstreamer-sys"
+version = "0.7.0"
