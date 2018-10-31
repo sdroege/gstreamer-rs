@@ -1,0 +1,111 @@
+[options]
+girs_dir = "gir-files"
+library = "GES"
+version = "1.0"
+min_cfg_version = "1.14"
+target_path = "gstreamer-editing-services"
+work_mode = "normal"
+# concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gio",
+    "Gst",
+    "GstPbutils",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.Source",
+    "GLib.DateTime",
+    "Gio.Cancellable",
+    "Gio.AsyncReadyCallback",
+    "GObject.Object",
+    "Gst.Segment",
+    "Gst.StaticCaps",
+    "Gst.StaticPadTemplate",
+    "GstPbutils.EncodingProfile",
+    "GstPbutils.DiscovererInfo",
+    "GstPbutils.DiscovererStreamInfo",
+    "Gst.Object",
+    "Gst.Element",
+    "Gst.Pad",
+    "Gst.Pipeline",
+]
+
+generate = [
+    "GES.EditMode",
+    "GES.PipelineFlags",
+    "GES.Edge",
+    "GES.Effect",
+    "GES.TrackType",
+    "GES.Pipeline",
+    "GES.BaseEffect",
+    "GES.TimelineElement",
+    "GES.Group",
+    "GES.TrackElement",
+    "GES.Track",
+    "GES.Layer",
+    "GES.Clip",
+    "GES.UriClip",
+    "GES.Asset",
+    "GES.UriClipAsset",
+    "GES.UriSourceAsset",
+    "GES.Extractable",
+    "GES.Project",
+]
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.BufferList"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Sample"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
+
+[[object]]
+name = "GES.Timeline"
+status = "generate"
+    [[object.function]]
+    name = "append_layer"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "GES.Container"
+status = "generate"
+trait_name = "GESContainerExt"
+    [[object.function]]
+    name = "add"
+        [object.function.return]
+        bool_return_is_error = "Failed to add element"
+
+    [[object.function]]
+    name = "remove"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove element"

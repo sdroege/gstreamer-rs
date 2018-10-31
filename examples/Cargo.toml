@@ -11,6 +11,7 @@ gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
+gstreamer-editing-services = { path = "../gstreamer-editing-services", optional = true }
 gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
 gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"], optional = true }
@@ -27,6 +28,7 @@ pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
 
 [features]
 gst-player = ["gstreamer-player"]
+ges = ["gstreamer-editing-services"]
 gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
@@ -121,3 +123,7 @@ name = "discoverer"
 [[bin]]
 name = "pango-cairo"
 required-features = ["pango-cairo"]
+
+[[bin]]
+name = "ges"
+required-features = ["ges"]
