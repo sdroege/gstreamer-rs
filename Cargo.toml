@@ -14,6 +14,7 @@ members = [
   "gstreamer-pbutils",
   "gstreamer-webrtc",
   "gstreamer-check",
+  "gstreamer-editing-services",
   "examples",
   "tutorials",
 ]
