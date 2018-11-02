@@ -8498,7 +8498,7 @@ is much more convenient for C programming.</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">the value</doc>
-            <type name="GObject.Value" c:type="GValue*"/>
+            <type name="GObject.Value" c:type="const GValue*"/>
           </parameter>
         </parameters>
       </method>
@@ -8519,7 +8519,7 @@ is much more convenient for C programming.</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">the value</doc>
-            <type name="GObject.Value" c:type="GValue*"/>
+            <type name="GObject.Value" c:type="const GValue*"/>
           </parameter>
         </parameters>
       </method>

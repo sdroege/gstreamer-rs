@@ -2976,8 +2976,8 @@ extern "C" {
     pub fn ges_timeline_element_roll_end(self_: *mut GESTimelineElement, end: gst::GstClockTime) -> gboolean;
     pub fn ges_timeline_element_roll_start(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
     pub fn ges_timeline_element_set_child_properties(self_: *mut GESTimelineElement, first_property_name: *const c_char, ...);
-    pub fn ges_timeline_element_set_child_property(self_: *mut GESTimelineElement, property_name: *const c_char, value: *mut gobject::GValue) -> gboolean;
-    pub fn ges_timeline_element_set_child_property_by_pspec(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec, value: *mut gobject::GValue);
+    pub fn ges_timeline_element_set_child_property(self_: *mut GESTimelineElement, property_name: *const c_char, value: *const gobject::GValue) -> gboolean;
+    pub fn ges_timeline_element_set_child_property_by_pspec(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec, value: *const gobject::GValue);
     //pub fn ges_timeline_element_set_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
     pub fn ges_timeline_element_set_duration(self_: *mut GESTimelineElement, duration: gst::GstClockTime);
     pub fn ges_timeline_element_set_inpoint(self_: *mut GESTimelineElement, inpoint: gst::GstClockTime);
