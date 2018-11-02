@@ -7,7 +7,6 @@
 // except according to those terms.
 
 use ffi;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
 use glib::translate::*;
 use gst;
 use std::ptr;
