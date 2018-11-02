@@ -15,6 +15,7 @@ use gst;
 use gst::prelude::*;
 use std::marker::PhantomData;
 use std::mem;
+use std::ops;
 use std::ptr;
 use TestClock;
 
@@ -622,6 +623,128 @@ impl Harness {
     //pub fn stress_thread_stop(t: /*Ignored*/&mut HarnessThread) -> u32 {
     //    unsafe { TODO: call ffi::gst_harness_stress_thread_stop() }
     //}
+
+    pub fn get_element(&self) -> Option<gst::Element> {
+        unsafe { from_glib_none((*self.0.as_ptr()).element) }
+    }
+
+    pub fn get_sinkpad(&self) -> Option<gst::Pad> {
+        unsafe { from_glib_none((*self.0.as_ptr()).sinkpad) }
+    }
+
+    pub fn get_srcpad(&self) -> Option<gst::Pad> {
+        unsafe { from_glib_none((*self.0.as_ptr()).srcpad) }
+    }
+
+    pub fn get_sink_harness<'a>(&'a self) -> Option<Ref<'a>> {
+        unsafe {
+            let sink_harness = (*self.0.as_ptr()).sink_harness;
+            if sink_harness.is_null() {
+                None
+            } else {
+                Some(Ref(
+                    Some(Harness(
+                        ptr::NonNull::new_unchecked(sink_harness),
+                        PhantomData,
+                    )),
+                    PhantomData,
+                ))
+            }
+        }
+    }
+
+    pub fn get_src_harness<'a>(&'a self) -> Option<Ref<'a>> {
+        unsafe {
+            let src_harness = (*self.0.as_ptr()).src_harness;
+            if src_harness.is_null() {
+                None
+            } else {
+                Some(Ref(
+                    Some(Harness(
+                        ptr::NonNull::new_unchecked(src_harness),
+                        PhantomData,
+                    )),
+                    PhantomData,
+                ))
+            }
+        }
+    }
+
+    pub fn get_mut_sink_harness<'a>(&'a mut self) -> Option<RefMut<'a>> {
+        unsafe {
+            let sink_harness = (*self.0.as_ptr()).sink_harness;
+            if sink_harness.is_null() {
+                None
+            } else {
+                Some(RefMut(
+                    Some(Harness(
+                        ptr::NonNull::new_unchecked(sink_harness),
+                        PhantomData,
+                    )),
+                    PhantomData,
+                ))
+            }
+        }
+    }
+
+    pub fn get_mut_src_harness<'a>(&'a mut self) -> Option<RefMut<'a>> {
+        unsafe {
+            let src_harness = (*self.0.as_ptr()).src_harness;
+            if src_harness.is_null() {
+                None
+            } else {
+                Some(RefMut(
+                    Some(Harness(
+                        ptr::NonNull::new_unchecked(src_harness),
+                        PhantomData,
+                    )),
+                    PhantomData,
+                ))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Ref<'a>(Option<Harness>, PhantomData<&'a ffi::GstHarness>);
+
+impl<'a> ops::Deref for Ref<'a> {
+    type Target = Harness;
+
+    fn deref(&self) -> &Harness {
+        self.0.as_ref().unwrap()
+    }
+}
+
+impl<'a> Drop for Ref<'a> {
+    fn drop(&mut self) {
+        // We only really borrow
+        mem::forget(self.0.take())
+    }
+}
+
+#[derive(Debug)]
+pub struct RefMut<'a>(Option<Harness>, PhantomData<&'a mut ffi::GstHarness>);
+
+impl<'a> ops::Deref for RefMut<'a> {
+    type Target = Harness;
+
+    fn deref(&self) -> &Harness {
+        self.0.as_ref().unwrap()
+    }
+}
+
+impl<'a> ops::DerefMut for RefMut<'a> {
+    fn deref_mut(&mut self) -> &mut Harness {
+        self.0.as_mut().unwrap()
+    }
+}
+
+impl<'a> Drop for RefMut<'a> {
+    fn drop(&mut self) {
+        // We only really borrow
+        mem::forget(self.0.take())
+    }
 }
 
 #[cfg(test)]
