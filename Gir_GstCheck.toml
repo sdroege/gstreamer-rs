@@ -1,0 +1,33 @@
+[options]
+girs_dir = "gir-files"
+library = "GstCheck"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-check"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstCheck.TestClock",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Object",
+    "Gst.Clock",
+    "Gst.ClockTimeDiff",
+    "Gst.ClockType",
+]
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
