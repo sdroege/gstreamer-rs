@@ -16,7 +16,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstCheck.TestClock",
 ]
 
 manual = [
@@ -31,3 +30,8 @@ manual = [
 name = "Gst.ClockTime"
 status = "manual"
 conversion_type = "scalar"
+
+[[object]]
+name = "GstCheck.TestClock"
+status = "generate"
+trait = false

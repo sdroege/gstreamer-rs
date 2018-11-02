@@ -13,6 +13,7 @@ members = [
   "gstreamer-video",
   "gstreamer-pbutils",
   "gstreamer-webrtc",
+  "gstreamer-check",
   "examples",
   "tutorials",
 ]

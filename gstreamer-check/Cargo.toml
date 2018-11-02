@@ -1,0 +1,39 @@
+[package]
+name = "gstreamer-check"
+version = "0.13.0"
+authors = ["Sebastian Dröge <sebastian@centricular.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer Check library"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+homepage = "https://gstreamer.freedesktop.org"
+documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer_check"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+build = "build.rs"
+
+[dependencies]
+bitflags = "1.0"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"]  }
+gstreamer-check-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gstreamer = { path = "../gstreamer" }
+
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
+
+[features]
+v1_10 = ["gstreamer-sys/v1_10", "gstreamer-check-sys/v1_10"]
+v1_12 = ["gstreamer-sys/v1_12", "gstreamer-check-sys/v1_12", "v1_10"]
+v1_14 = ["gstreamer-sys/v1_14", "gstreamer-check-sys/v1_14", "v1_12"]
+#v1_16 = ["gstreamer-sys/v1_16", "gstreamer-check-sys/v1_16", "v1_14"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
+dox = ["gstreamer-check-sys/dox", "glib/dox", "gstreamer/dox"]
+default-features = []
+
+[badges]
+travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
