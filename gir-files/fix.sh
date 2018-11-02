@@ -49,3 +49,11 @@ xmlstarlet ed --pf --inplace \
 xmlstarlet ed --pf --inplace \
 	   --delete '//_:method[@c:identifier="gst_gl_display_egl_from_gl_display"]' \
 	   GstGL-1.0.gir
+
+# Remove all libcheck related API
+xmlstarlet ed --pf --inplace \
+	   --delete '//_:function[starts-with(@name, "check_")]' \
+	   --delete '//_:function[starts-with(@name, "buffer_straw_")]' \
+	   --delete '//_:callback[starts-with(@name, "Check")]' \
+	   --delete '//_:record[starts-with(@name, "Check")]' \
+	   GstCheck-1.0.gir
