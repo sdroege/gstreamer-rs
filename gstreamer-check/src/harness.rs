@@ -17,6 +17,7 @@ use std::marker::PhantomData;
 use std::mem;
 use std::ops;
 use std::ptr;
+use std::path;
 use TestClock;
 
 #[derive(Debug)]
@@ -198,7 +199,7 @@ impl Harness {
         unsafe { from_glib_full(ffi::gst_harness_create_buffer(self.0.as_ptr(), size)) }
     }
 
-    pub fn dump_to_file<P: AsRef<std::path::Path>>(&mut self, filename: P) {
+    pub fn dump_to_file<P: AsRef<path::Path>>(&mut self, filename: P) {
         let filename = filename.as_ref();
         unsafe {
             ffi::gst_harness_dump_to_file(self.0.as_ptr(), filename.to_glib_none().0);
