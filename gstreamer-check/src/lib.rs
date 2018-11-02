@@ -35,8 +35,8 @@ pub use auto::*;
 
 mod test_clock;
 
-mod harness;
-pub use harness::*;
+pub mod harness;
+pub use harness::Harness;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
