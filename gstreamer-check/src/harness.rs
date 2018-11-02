@@ -109,8 +109,8 @@ impl Harness {
         params: P,
     ) {
         let params = params.into();
-        let params = params.map(|p| p.as_ptr()).unwrap_or(ptr::null_mut());
         unsafe {
+            let params = params.map(|p| p.as_ptr()).unwrap_or(ptr::null_mut());
             ffi::gst_harness_add_propose_allocation_meta(self.0.as_ptr(), api.to_glib(), params);
         }
     }
