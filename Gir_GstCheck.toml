@@ -1,0 +1,18 @@
+[options]
+girs_dir = "gir-files"
+library = "GstCheck"
+version = "1.0"
+min_cfg_version = "1.0"
+target_path = "gstreamer-check-sys"
+work_mode = "sys"
+
+ignore = [
+]
+
+external_libraries = [
+    "GLib",
+    "GObject",
+]
+
+[external_libraries]
+gstreamer="Gst"
