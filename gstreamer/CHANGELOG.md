@@ -345,20 +345,20 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://github.com/sdroege/gstreamer-rs/compare/0.12.1...HEAD
-[0.12.1]: https://github.com/sdroege/gstreamer-rs/compare/0.12.0...0.12.1
-[0.12.0]: https://github.com/sdroege/gstreamer-rs/compare/0.11.6...0.12.0
-[0.11.6]: https://github.com/sdroege/gstreamer-rs/compare/0.11.5...0.11.6
-[0.11.5]: https://github.com/sdroege/gstreamer-rs/compare/0.11.4...0.11.5
-[0.11.4]: https://github.com/sdroege/gstreamer-rs/compare/0.11.3...0.11.4
-[0.11.3]: https://github.com/sdroege/gstreamer-rs/compare/0.11.2...0.11.3
-[0.11.2]: https://github.com/sdroege/gstreamer-rs/compare/0.11.1...0.11.2
-[0.11.1]: https://github.com/sdroege/gstreamer-rs/compare/0.11.0...0.11.1
-[0.11.0]: https://github.com/sdroege/gstreamer-rs/compare/0.10.2...0.11.0
-[0.10.2]: https://github.com/sdroege/gstreamer-rs/compare/0.10.1...0.10.2
-[0.10.1]: https://github.com/sdroege/gstreamer-rs/compare/0.10.0...0.10.1
-[0.10.0]: https://github.com/sdroege/gstreamer-rs/compare/0.9.1...0.10.0
-[0.9.1]: https://github.com/sdroege/gstreamer-rs/compare/0.9.0...0.9.1
-[0.9.0]: https://github.com/sdroege/gstreamer-rs/compare/0.8.1...0.9.0
-[0.8.2]: https://github.com/sdroege/gstreamer-rs/compare/0.8.1...0.8.2
-[0.8.1]: https://github.com/sdroege/gstreamer-rs/compare/0.8.0...0.8.1
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.1...HEAD
+[0.12.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.0...0.12.1
+[0.12.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.6...0.12.0
+[0.11.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.5...0.11.6
+[0.11.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.4...0.11.5
+[0.11.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.3...0.11.4
+[0.11.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.2...0.11.3
+[0.11.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.1...0.11.2
+[0.11.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.0...0.11.1
+[0.11.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.10.2...0.11.0
+[0.10.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.10.1...0.10.2
+[0.10.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.10.0...0.10.1
+[0.10.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.9.1...0.10.0
+[0.9.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.9.0...0.9.1
+[0.9.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.8.1...0.9.0
+[0.8.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.8.1...0.8.2
+[0.8.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.8.0...0.8.1

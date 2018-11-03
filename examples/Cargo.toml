@@ -40,7 +40,7 @@ v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 
 [badges]
-travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
 
 [[bin]]
 name = "appsink"

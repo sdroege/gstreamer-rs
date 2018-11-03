@@ -14,7 +14,7 @@ gstreamer-app = { version = "0.12", path = "../gstreamer-app" }
 byte-slice-cast = "0.2"
 
 [badges]
-travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
 
 [features]
 tutorial5 = ["gtk", "gdk"]
