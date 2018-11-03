@@ -1,4 +1,4 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-player.svg)](https://crates.io/crates/gstreamer-player) [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-player.svg)](https://crates.io/crates/gstreamer-player) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Player library) bindings for Rust.
 Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
@@ -14,7 +14,7 @@ API metadata provided by the GStreamer project. Older versions before 0.8.0 were
 written and the repository can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
 The API of the two is incompatible.
 
-A crate for writing GStreamer plugins in Rust can be found here: https://github.com/sdroege/gst-plugin-rs
+A crate for writing GStreamer plugins in Rust can be found here: https://gitlab.freedesktop.org/gstreamer/gst-plugin-rs
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -134,12 +134,12 @@ In addition there are
 [tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
 GStreamer website. Many of them were ported to Rust already and the code can
 be found in the
-[tutorials](https://github.com/sdroege/gstreamer-rs/tree/master/tutorials)
+[tutorials](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/tutorials)
 directory.
 
 Some further examples for various aspects of GStreamer and how to use it from
 Rust can be found in the
-[examples](https://github.com/sdroege/gstreamer-rs/tree/master/examples)
+[examples](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/examples)
 directory.
 
 <a name="license"/>

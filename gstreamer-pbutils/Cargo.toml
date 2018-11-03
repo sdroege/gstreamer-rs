@@ -4,7 +4,7 @@ version = "0.13.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Base Utils library"
-repository = "https://github.com/sdroege/gstreamer-rs"
+repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT/Apache-2.0"
 readme = "README.md"
 homepage = "https://gstreamer.freedesktop.org"
@@ -17,8 +17,8 @@ bitflags = "1.0"
 libc = "0.2"
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-gstreamer-pbutils-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
+gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
+gstreamer-pbutils-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
 
@@ -36,4 +36,4 @@ dox = ["gstreamer-pbutils-sys/dox"]
 default-features = []
 
 [badges]
-travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }

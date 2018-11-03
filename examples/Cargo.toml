@@ -13,7 +13,7 @@ gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
 gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"], optional = true }
+gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"], optional = true }
 gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
@@ -40,7 +40,7 @@ v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 
 [badges]
-travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
 
 [[bin]]
 name = "appsink"

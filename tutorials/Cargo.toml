@@ -16,7 +16,7 @@ byte-slice-cast = "0.2"
 failure = "0.1.0"
 
 [badges]
-travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
 
 [features]
 tutorial5 = ["gtk", "gdk"]
