@@ -90,16 +90,20 @@ fn on_connect_discovered(
     match discoverer_info.get_result() {
         DiscovererResult::Ok => println!("Discovered {}", uri),
         DiscovererResult::UriInvalid => println!("Invalid uri {}", uri),
-        DiscovererResult::Error => if let Some(msg) = error {
-            println!("{}", msg);
-        } else {
-            println!("Unknown error")
-        },
+        DiscovererResult::Error => {
+            if let Some(msg) = error {
+                println!("{}", msg);
+            } else {
+                println!("Unknown error")
+            }
+        }
         DiscovererResult::Timeout => println!("Timeout"),
         DiscovererResult::Busy => println!("Busy"),
-        DiscovererResult::MissingPlugins => if let Some(s) = discoverer_info.get_misc() {
-            println!("{}", s);
-        },
+        DiscovererResult::MissingPlugins => {
+            if let Some(s) = discoverer_info.get_misc() {
+                println!("{}", s);
+            }
+        }
         _ => println!("Unknown result"),
     }
 
