@@ -2394,6 +2394,8 @@ mod tests {
     #[cfg(feature = "v1_14")]
     #[test]
     fn test_other_fields() {
+        ::init().unwrap();
+
         let eos_msg = Message::new_eos()
             .other_fields(&[("extra-field", &true)])
             .seqnum(Seqnum(1))
