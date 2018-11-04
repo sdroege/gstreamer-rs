@@ -12,6 +12,7 @@ use Plugin;
 use TypeFindFactory;
 use TypeFindProbability;
 
+use glib;
 use glib::translate::*;
 use glib_ffi;
 use std::marker::PhantomData;
@@ -46,7 +47,7 @@ impl<'a> TypeFind<'a> {
         extensions: R,
         possible_caps: S,
         func: F,
-    ) -> bool
+    ) -> Result<(), glib::error::BoolError>
     where
         F: Fn(&mut TypeFind) + Send + Sync + 'static,
     {
@@ -58,7 +59,7 @@ impl<'a> TypeFind<'a> {
                 Box::new(Box::new(func));
             let func = Box::into_raw(func);
 
-            from_glib(ffi::gst_type_find_register(
+            let res = ffi::gst_type_find_register(
                 plugin.to_glib_none().0,
                 name.to_glib_none().0,
                 rank,
@@ -67,7 +68,9 @@ impl<'a> TypeFind<'a> {
                 possible_caps.to_glib_none().0,
                 func as *mut _,
                 Some(type_find_closure_drop),
-            ))
+            );
+
+            glib::error::BoolError::from_glib(res, "Failed to register typefind factory")
         }
     }
 

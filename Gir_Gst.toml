@@ -459,6 +459,11 @@ status = "generate"
     # better manual function
     ignore = true
 
+    [[object.function]]
+    name = "register"
+        [object.function.return]
+        bool_return_is_error = "Failed to register element factory"
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
@@ -486,6 +491,11 @@ status = "generate"
     name = "start"
         [object.function.return]
         bool_return_is_error = "Failed to start"
+
+    [[object.function]]
+    name = "register"
+        [object.function.return]
+        bool_return_is_error = "Failed to register device provider factory"
 
     [[object.function]]
     name = "get_metadata"
