@@ -43,7 +43,7 @@ impl Track {
     }
 }
 
-pub trait TrackExt {
+pub trait GESTrackExt {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
     fn commit(&self) -> bool;
@@ -91,7 +91,7 @@ pub trait TrackExt {
     fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Track> + IsA<glib::object::Object>> TrackExt for O {
+impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::ges_track_add_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to add element")

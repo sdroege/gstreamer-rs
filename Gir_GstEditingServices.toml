@@ -141,7 +141,7 @@ trait_name = "GESContainerExt"
 [[object]]
 name = "GES.Pipeline"
 status = "generate"
-trait_name = "PipelineExt"
+trait_name = "GESPipelineExt"
     [[object.function]]
     name = "set_render_settings"
         [object.function.return]
@@ -160,7 +160,7 @@ trait_name = "PipelineExt"
 [[object]]
 name = "GES.Track"
 status = "generate"
-trait_name = "TrackExt"
+trait_name = "GESTrackExt"
     [[object.function]]
     name = "add_element"
         [object.function.return]
