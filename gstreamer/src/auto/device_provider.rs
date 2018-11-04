@@ -31,12 +31,12 @@ glib_wrapper! {
 }
 
 impl DeviceProvider {
-    pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> bool {
+    pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         let plugin = plugin.into();
         let plugin = plugin.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_device_provider_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()))
+            glib::error::BoolError::from_glib(ffi::gst_device_provider_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register device provider factory")
         }
     }
 }
