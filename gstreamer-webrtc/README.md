@@ -1,4 +1,4 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-app.svg)](https://crates.io/crates/gstreamer-app) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-webrtc.svg)](https://crates.io/crates/gstreamer-webrtc) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Base library) bindings for Rust.
 Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
