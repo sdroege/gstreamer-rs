@@ -52,6 +52,11 @@ stages:
     # https://github.com/sdroege/gstreamer-sys/issues/16
     # - cargo test --all --all-features --color=always
 
+test 1.28:
+  # 1.28 img
+  # https://hub.docker.com/_/rust/
+  image: "rust:1.28-slim"
+  <<: *cargo_test
 
 test stable:
   # Stable img
