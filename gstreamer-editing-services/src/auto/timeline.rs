@@ -70,9 +70,9 @@ impl Default for Timeline {
 }
 
 pub trait TimelineExt {
-    fn add_layer(&self, layer: &Layer) -> bool;
+    fn add_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError>;
 
-    fn add_track<P: IsA<Track>>(&self, track: &P) -> bool;
+    fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
 
     fn append_layer(&self) -> Layer;
 
@@ -104,11 +104,11 @@ pub trait TimelineExt {
 
     fn load_from_uri(&self, uri: &str) -> Result<(), Error>;
 
-    fn move_layer(&self, layer: &Layer, new_layer_priority: u32) -> bool;
+    fn move_layer(&self, layer: &Layer, new_layer_priority: u32) -> Result<(), glib::error::BoolError>;
 
     fn paste_element<P: IsA<TimelineElement>>(&self, element: &P, position: gst::ClockTime, layer_priority: i32) -> Option<TimelineElement>;
 
-    fn remove_layer(&self, layer: &Layer) -> bool;
+    fn remove_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError>;
 
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
@@ -146,15 +146,15 @@ pub trait TimelineExt {
 }
 
 impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
-    fn add_layer(&self, layer: &Layer) -> bool {
+    fn add_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_add_layer(self.to_glib_none().0, layer.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::ges_timeline_add_layer(self.to_glib_none().0, layer.to_glib_none().0), "Failed to add layer")
         }
     }
 
-    fn add_track<P: IsA<Track>>(&self, track: &P) -> bool {
+    fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_add_track(self.to_glib_none().0, track.to_glib_full()))
+            glib::error::BoolError::from_glib(ffi::ges_timeline_add_track(self.to_glib_none().0, track.to_glib_full()), "Failed to add track")
         }
     }
 
@@ -250,9 +250,9 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
         }
     }
 
-    fn move_layer(&self, layer: &Layer, new_layer_priority: u32) -> bool {
+    fn move_layer(&self, layer: &Layer, new_layer_priority: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_move_layer(self.to_glib_none().0, layer.to_glib_none().0, new_layer_priority))
+            glib::error::BoolError::from_glib(ffi::ges_timeline_move_layer(self.to_glib_none().0, layer.to_glib_none().0, new_layer_priority), "Failed to move layer")
         }
     }
 
@@ -262,9 +262,9 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
         }
     }
 
-    fn remove_layer(&self, layer: &Layer) -> bool {
+    fn remove_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_remove_layer(self.to_glib_none().0, layer.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::ges_timeline_remove_layer(self.to_glib_none().0, layer.to_glib_none().0), "Failed to remove layer")
         }
     }
 

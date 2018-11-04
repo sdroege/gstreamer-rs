@@ -41,12 +41,10 @@ generate = [
     "GES.Edge",
     "GES.Effect",
     "GES.TrackType",
-    "GES.Pipeline",
     "GES.BaseEffect",
     "GES.TimelineElement",
     "GES.Group",
     "GES.TrackElement",
-    "GES.Track",
     "GES.Layer",
     "GES.Clip",
     "GES.UriClip",
@@ -95,6 +93,32 @@ status = "generate"
         [object.function.return]
         nullable = false
 
+    [[object.function]]
+    name = "load_from_uri"
+        [object.function.return]
+        bool_return_is_error = "Failed to load from uri"
+
+    [[object.function]]
+    name = "add_layer"
+        [object.function.return]
+        bool_return_is_error = "Failed to add layer"
+
+    [[object.function]]
+    name = "remove_layer"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove layer"
+
+    [[object.function]]
+    name = "add_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to add track"
+
+    [[object.function]]
+    name = "move_layer"
+        [object.function.return]
+        bool_return_is_error = "Failed to move layer"
+
+
 [[object]]
 name = "GES.Container"
 status = "generate"
@@ -106,5 +130,43 @@ trait_name = "GESContainerExt"
 
     [[object.function]]
     name = "remove"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove element"
+
+    [[object.function]]
+    name = "edit"
+        [object.function.return]
+        bool_return_is_error = "Failed to edit container"
+
+[[object]]
+name = "GES.Pipeline"
+status = "generate"
+trait_name = "PipelineExt"
+    [[object.function]]
+    name = "set_render_settings"
+        [object.function.return]
+        bool_return_is_error = "Failed to set render settings"
+
+    [[object.function]]
+    name = "set_mode"
+        [object.function.return]
+        bool_return_is_error = "Failed to set mode"
+
+    [[object.function]]
+    name = "save_thumbnail"
+        [object.function.return]
+        bool_return_is_error = "Failed to save thumbnail"
+
+[[object]]
+name = "GES.Track"
+status = "generate"
+trait_name = "TrackExt"
+    [[object.function]]
+    name = "add_element"
+        [object.function.return]
+        bool_return_is_error = "Failed to add element"
+
+    [[object.function]]
+    name = "remove_element"
         [object.function.return]
         bool_return_is_error = "Failed to remove element"
