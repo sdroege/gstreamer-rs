@@ -51,7 +51,7 @@ impl Default for Pipeline {
     }
 }
 
-pub trait PipelineExt {
+pub trait GESPipelineExt {
     fn get_mode(&self) -> PipelineFlags;
 
     fn get_thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample>;
@@ -105,7 +105,7 @@ pub trait PipelineExt {
     fn connect_property_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
+impl<O: IsA<Pipeline> + IsA<glib::object::Object>> GESPipelineExt for O {
     fn get_mode(&self) -> PipelineFlags {
         unsafe {
             from_glib(ffi::ges_pipeline_get_mode(self.to_glib_none().0))

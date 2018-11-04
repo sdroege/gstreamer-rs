@@ -3,7 +3,6 @@ use gst::prelude::*;
 
 extern crate gstreamer_editing_services as ges;
 use ges::prelude::*;
-use ges::PipelineExt;
 
 use std::env;
 

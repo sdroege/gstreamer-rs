@@ -35,7 +35,7 @@ pub use self::layer::LayerExt;
 
 mod pipeline;
 pub use self::pipeline::Pipeline;
-pub use self::pipeline::PipelineExt;
+pub use self::pipeline::GESPipelineExt;
 
 mod project;
 pub use self::project::Project;
@@ -51,7 +51,7 @@ pub use self::timeline_element::TimelineElementExt;
 
 mod track;
 pub use self::track::Track;
-pub use self::track::TrackExt;
+pub use self::track::GESTrackExt;
 
 mod track_element;
 pub use self::track_element::TrackElement;
@@ -86,11 +86,11 @@ pub mod traits {
     pub use super::ExtractableExt;
     pub use super::GroupExt;
     pub use super::LayerExt;
-    pub use super::PipelineExt;
+    pub use super::GESPipelineExt;
     pub use super::ProjectExt;
     pub use super::TimelineExt;
     pub use super::TimelineElementExt;
-    pub use super::TrackExt;
+    pub use super::GESTrackExt;
     pub use super::TrackElementExt;
     pub use super::UriClipExt;
     pub use super::UriClipAssetExt;
