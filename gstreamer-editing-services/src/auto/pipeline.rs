@@ -68,9 +68,9 @@ pub trait PipelineExt {
 
     fn save_thumbnail(&self, width: i32, height: i32, format: &str, location: &str) -> Result<(), Error>;
 
-    fn set_mode(&self, mode: PipelineFlags) -> bool;
+    fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError>;
 
-    fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> bool;
+    fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> Result<(), glib::error::BoolError>;
 
     fn set_timeline(&self, timeline: &Timeline) -> bool;
 
@@ -156,15 +156,15 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
         }
     }
 
-    fn set_mode(&self, mode: PipelineFlags) -> bool {
+    fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_pipeline_set_mode(self.to_glib_none().0, mode.to_glib()))
+            glib::error::BoolError::from_glib(ffi::ges_pipeline_set_mode(self.to_glib_none().0, mode.to_glib()), "Failed to set mode")
         }
     }
 
-    fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> bool {
+    fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_pipeline_set_render_settings(self.to_glib_none().0, output_uri.to_glib_none().0, profile.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::ges_pipeline_set_render_settings(self.to_glib_none().0, output_uri.to_glib_none().0, profile.to_glib_none().0), "Failed to set render settings")
         }
     }
 

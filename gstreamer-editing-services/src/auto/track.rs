@@ -44,7 +44,7 @@ impl Track {
 }
 
 pub trait TrackExt {
-    fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> bool;
+    fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
     fn commit(&self) -> bool;
 
@@ -56,7 +56,7 @@ pub trait TrackExt {
 
     fn get_timeline(&self) -> Option<Timeline>;
 
-    fn remove_element<P: IsA<TrackElement>>(&self, object: &P) -> bool;
+    fn remove_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
     //fn set_create_element_for_gap_func(&self, func: /*Unknown conversion*//*Unimplemented*/CreateElementForGapFunc);
 
@@ -92,9 +92,9 @@ pub trait TrackExt {
 }
 
 impl<O: IsA<Track> + IsA<glib::object::Object>> TrackExt for O {
-    fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> bool {
+    fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_track_add_element(self.to_glib_none().0, object.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::ges_track_add_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to add element")
         }
     }
 
@@ -128,9 +128,9 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> TrackExt for O {
         }
     }
 
-    fn remove_element<P: IsA<TrackElement>>(&self, object: &P) -> bool {
+    fn remove_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_track_remove_element(self.to_glib_none().0, object.to_glib_none().0))
+            glib::error::BoolError::from_glib(ffi::ges_track_remove_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to remove element")
         }
     }
 

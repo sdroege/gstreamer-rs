@@ -43,7 +43,7 @@ impl Container {
 pub trait GESContainerExt {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
 
-    fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> bool;
+    fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError>;
 
     fn get_children(&self, recursive: bool) -> Vec<TimelineElement>;
 
@@ -67,9 +67,9 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> GESContainerExt for O {
         }
     }
 
-    fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> bool {
+    fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_container_edit(self.to_glib_none().0, layers.to_glib_none().0, new_layer_priority, mode.to_glib(), edge.to_glib(), position))
+            glib::error::BoolError::from_glib(ffi::ges_container_edit(self.to_glib_none().0, layers.to_glib_none().0, new_layer_priority, mode.to_glib(), edge.to_glib(), position), "Failed to edit container")
         }
     }
 
