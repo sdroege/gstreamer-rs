@@ -1,6 +1,6 @@
 stages:
-  - "test"
   - "lint"
+  - "test"
 
 .cargo_cache: &cache
   cache:
