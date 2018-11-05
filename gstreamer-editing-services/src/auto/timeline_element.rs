@@ -81,9 +81,9 @@ pub trait TimelineElementExt {
 
     //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&mut glib::Value) -> bool;
+    //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool;
 
-    //fn set_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/&mut glib::Value);
+    //fn set_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/&glib::Value);
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -267,11 +267,11 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     //    unsafe { TODO: call ffi::ges_timeline_element_set_child_properties() }
     //}
 
-    //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&mut glib::Value) -> bool {
+    //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool {
     //    unsafe { TODO: call ffi::ges_timeline_element_set_child_property() }
     //}
 
-    //fn set_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/&mut glib::Value) {
+    //fn set_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/&glib::Value) {
     //    unsafe { TODO: call ffi::ges_timeline_element_set_child_property_by_pspec() }
     //}
 

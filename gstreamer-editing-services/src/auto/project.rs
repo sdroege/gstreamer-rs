@@ -76,8 +76,6 @@ pub trait ProjectExt {
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<String> + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
@@ -212,14 +210,6 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
                 transmute(missing_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::uri",
-                transmute(notify_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe extern "C" fn asset_added_trampoline<P>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
@@ -256,10 +246,4 @@ unsafe extern "C" fn missing_uri_trampoline<P>(this: *mut ffi::GESProject, error
 where P: IsA<Project> {
     let f: &&(Fn(&P, &Error, &Asset) -> Option<String> + 'static) = transmute(f);
     f(&Project::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(error), &from_glib_borrow(wrong_asset)).to_glib_full()
-}
-
-unsafe extern "C" fn notify_uri_trampoline<P>(this: *mut ffi::GESProject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Project> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Project::from_glib_borrow(this).downcast_unchecked())
 }

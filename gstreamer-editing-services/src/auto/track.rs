@@ -80,15 +80,11 @@ pub trait GESTrackExt {
 
     fn connect_track_element_removed<F: Fn(&Self, &TrackElement) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
@@ -210,14 +206,6 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
         }
     }
 
-    fn connect_property_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::caps",
-                transmute(notify_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -241,14 +229,6 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
                 transmute(notify_restriction_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::track-type",
-                transmute(notify_track_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe extern "C" fn commited_trampoline<P>(this: *mut ffi::GESTrack, f: glib_ffi::gpointer)
@@ -269,12 +249,6 @@ where P: IsA<Track> {
     f(&Track::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(effect))
 }
 
-unsafe extern "C" fn notify_caps_trampoline<P>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Track> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Track::from_glib_borrow(this).downcast_unchecked())
-}
-
 unsafe extern "C" fn notify_duration_trampoline<P>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Track> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
@@ -288,12 +262,6 @@ where P: IsA<Track> {
 }
 
 unsafe extern "C" fn notify_restriction_caps_trampoline<P>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Track> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Track::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_track_type_trampoline<P>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Track> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Track::from_glib_borrow(this).downcast_unchecked())
