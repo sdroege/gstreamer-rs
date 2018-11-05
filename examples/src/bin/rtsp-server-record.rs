@@ -1,3 +1,9 @@
+// This example demonstrates how to set up a rtsp server using GStreamer.
+// While the "rtsp-server" example is about streaming media to connecting
+// clients, this example is mainly about recording media that clients
+// send to the server. For this, the launch syntax pipeline, that is passed
+// to this example's cli is spawned and the client's media is streamed into it.
+
 extern crate failure;
 extern crate gio;
 extern crate glib;
@@ -37,13 +43,26 @@ fn main_loop() -> Result<(), Error> {
         return Err(Error::from(UsageError(args[0].clone())));
     }
 
+    // Mostly analog to the rtsp-server example, the server is created
+    // and the factory for our test mount is configured.
     let main_loop = glib::MainLoop::new(None, false);
     let server = RTSPServer::new();
-    let factory = RTSPMediaFactory::new();
+    // Much like HTTP servers, RTSP servers have multiple endpoints that
+    // provide or take different streams. Here, we ask our server to give
+    // us a reference to its list of endpoints, so we can add our
+    // test endpoint.
     let mounts = server.get_mount_points().ok_or(NoMountPoints)?;
+    // Next, we create a factory for the endpoint we want to create.
+    // The job of the factory is to create a new pipeline for each client that
+    // connects, or (if configured to do so) to reuse an existing pipeline.
+    let factory = RTSPMediaFactory::new();
+    // Here we configure a method of authentication that we want the
+    // server to require from clients.
     let auth = RTSPAuth::new();
     let token = RTSPToken::new(&[(*RTSP_TOKEN_MEDIA_FACTORY_ROLE, &"user")]);
     let basic = RTSPAuth::make_basic("user", "password");
+    // For propery authentication, we want to use encryption. And there's no
+    // encryption without a certificate!
     let cert = gio::TlsCertificate::new_from_pem(
         "-----BEGIN CERTIFICATE-----\
          MIICJjCCAY+gAwIBAgIBBzANBgkqhkiG9w0BAQUFADCBhjETMBEGCgmSJomT8ixk\
@@ -71,6 +90,8 @@ fn main_loop() -> Result<(), Error> {
     )?;
 
     // Bindable versions were added in b1f515178a363df0322d7adbd5754e1f6e2083c9
+    // This declares that the user "user" (once authenticated) has a role that
+    // allows them to access and construct media factories.
     unsafe {
         ffi::gst_rtsp_media_factory_add_role(
             factory.to_glib_none().0,
@@ -87,13 +108,35 @@ fn main_loop() -> Result<(), Error> {
 
     auth.set_tls_certificate(&cert);
     auth.add_basic(basic.as_str(), &token);
+    // Here, we tell the RTSP server about the authentication method we
+    // configured above.
     server.set_auth(&auth);
+
     factory.set_launch(args[1].as_str());
+    // Tell the RTSP server that we want to work in RECORD mode (clients send)
+    // data to us.
     factory.set_transport_mode(RTSPTransportMode::RECORD);
+    // The RTSP protocol allows a couple of different profiles for the actually
+    // used protocol of data-transmission. With this, we can limit the selection
+    // from which connecting clients have to choose.
+    // SAVP/SAVPF are via SRTP (encrypted), that's what the S is for.
+    // The F in the end is for feedback (an extension that allows more bidirectional
+    // feedback between sender and receiver). AV is just Audio/Video, P is Profile :)
+    // The default, old RTP profile is AVP
     factory.set_profiles(RTSPProfile::SAVP | RTSPProfile::SAVPF);
 
+    // Now we add a new mount-point and tell the RTSP server to use the factory
+    // we configured beforehand. This factory will take on the job of creating
+    // a pipeline, which will take on the incoming data of connected clients.
     mounts.add_factory("/test", &factory);
 
+    // Attach the server to our main context.
+    // A main context is the thing where other stuff is registering itself for its
+    // events (e.g. sockets, GStreamer bus, ...) and the main loop is something that
+    // polls the main context for its events and dispatches them to whoever is
+    // interested in them. In this example, we only do have one, so we can
+    // leave the context parameter empty, it will automatically select
+    // the default one.
     let id = server.attach(None);
 
     println!(
@@ -101,6 +144,8 @@ fn main_loop() -> Result<(), Error> {
         server.get_bound_port()
     );
 
+    // Start the mainloop. From this point on, the server will start to take
+    // incoming connections from clients.
     main_loop.run();
 
     glib::source_remove(id);

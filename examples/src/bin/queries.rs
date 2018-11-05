@@ -1,3 +1,17 @@
+// This example demonstrates how to use GStreamer's query functionality.
+// These are a way to query information from either elements or pads.
+// Such information could for example be the current position within
+// the stream (i.e. the playing time). Queries can traverse the pipeline
+// (both up and downstream). This functionality is essential, since most
+// queries can only answered by specific elements in a pipeline (such as the
+// stream's duration, which often can only be answered by the demuxer).
+// Since gstreamer has many elements that itself contain other elements that
+// we don't know of, we can simply send a query for the duration into the
+// pipeline and the query is passed along until an element feels capable
+// of answering.
+// For convenience, the API has a set of pre-defined queries, but also
+// allows custom queries (which can be defined and used by your own elements).
+
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
@@ -9,22 +23,35 @@ use std::env;
 mod examples_common;
 
 fn example_main() {
+    // Get a string containing the passed pipeline launch syntax
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
     gst::init().unwrap();
 
     let main_loop = glib::MainLoop::new(None, false);
 
+    // Let GStreamer create a pipeline from the parsed launch syntax on the cli.
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    let main_loop_clone = main_loop.clone();
-
+    // Need to move a new reference into the closure.
+    // !!ATTENTION!!:
+    // It might seem appealing to use pipeline.clone() here, because that greatly
+    // simplifies the code within the callback. What this actually dose, however, is creating
+    // a memory leak. The clone of a pipeline is a new strong reference on the pipeline.
+    // Storing this strong reference of the pipeline within the callback (we are moving it in!),
+    // which is in turn stored in another strong reference on the pipeline is creating a
+    // reference cycle.
+    // DO NOT USE pipeline.clone() TO USE THE PIPELINE WITHIN A CALLBACK
     let pipeline_weak = pipeline.downgrade();
+    // Add a timeout to the main loop. This closure will be executed
+    // in an interval of 1 second.
     let timeout_id = glib::timeout_add_seconds(1, move || {
+        // Here we temporarily retrieve a strong reference on the pipeline from the weak one
+        // we moved into this callback.
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
             None => return glib::Continue(true),
@@ -33,6 +60,9 @@ fn example_main() {
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
         //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
         let pos = {
+            // Create a new position query and send it to the pipeline.
+            // This will traverse all elements in the pipeline, until one feels
+            // capable of answering the query.
             let mut q = gst::Query::new_position(gst::Format::Time);
             if pipeline.query(&mut q) {
                 Some(q.get_result())
@@ -44,6 +74,9 @@ fn example_main() {
         .unwrap();
 
         let dur = {
+            // Create a new duration query and send it to the pipeline.
+            // This will traverse all elements in the pipeline, until one feels
+            // capable of answering the query.
             let mut q = gst::Query::new_duration(gst::Format::Time);
             if pipeline.query(&mut q) {
                 Some(q.get_result())
@@ -59,6 +92,8 @@ fn example_main() {
         glib::Continue(true)
     });
 
+    // Need to move a new reference into the closure.
+    let main_loop_clone = main_loop.clone();
     //bus.add_signal_watch();
     //bus.connect_message(move |_, msg| {
     bus.add_watch(move |_, msg| {

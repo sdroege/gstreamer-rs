@@ -1,3 +1,8 @@
+// This example demonstrates how to use the gstreamer crate in conjunction
+// with the future trait. The example waits for either an error to occur,
+// or for an EOS message. When a message notifying about either of both
+// is received, the future is resolved.
+
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
@@ -11,20 +16,28 @@ use std::env;
 mod examples_common;
 
 fn example_main() {
+    // Read the pipeline to launch from the commandline, using the launch syntax.
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
     gst::init().unwrap();
 
+    // Create a pipeline from the launch-syntax given on the cli.
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
+    // BusStream implements the Stream trait, but Stream::for_each is
+    // calling a closure for each item and returns a Future that resolves
+    // when the stream is done or an error has happened
     let messages = gst::BusStream::new(&bus)
         .for_each(|msg| {
             use gst::MessageView;
 
+            // Determine whether we want to resolve the future, or we still have
+            // to wait. The future is resolved when either an error occurs, or the
+            // pipeline succeeded execution (got an EOS event).
             let quit = match msg.view() {
                 MessageView::Eos(..) => true,
                 MessageView::Error(err) => {
@@ -40,13 +53,16 @@ fn example_main() {
             };
 
             if quit {
-                Err(())
+                Err(()) // This resolves the future that is returned by for_each
+                        // FIXME: At the moment, EOS messages also result in the future to be resolved
+                        // by an error. This should probably be changed in the future.
             } else {
-                Ok(())
+                Ok(()) // Continue - do not resolve the future yet.
             }
         })
         .and_then(|_| Ok(()));
 
+    // Synchronously wait on the future we created above.
     let _ = block_on(messages);
 
     let ret = pipeline.set_state(gst::State::Null);

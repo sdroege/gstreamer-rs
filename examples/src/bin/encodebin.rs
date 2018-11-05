@@ -1,3 +1,17 @@
+// This example demonstrates the use of the encodebin element.
+// The example takes an arbitrary URI as input, which it will try to decode
+// and finally reencode using the encodebin element.
+// For more information about how the decodebin element works, have a look at
+// the decodebin-example.
+// Since we tell the encodebin what format we want to get out of it from the start,
+// it provides the correct caps and we can link it before starting the pipeline.
+// After the decodebin has found all streams and we piped them into the encodebin,
+// the operated pipeline looks as follows:
+
+//                  /-{queue}-{audioconvert}-{audioresample}-\
+// {uridecodebin} -|                                          {encodebin}-{filesink}
+//                  \-{queue}-{videoconvert}-{videoscale}----/
+
 #[macro_use]
 extern crate gstreamer as gst;
 use gst::prelude::*;
@@ -54,16 +68,24 @@ impl glib::subclass::boxed::BoxedType for ErrorValue {
 glib_boxed_derive_traits!(ErrorValue);
 
 fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
+    // To tell the encodebin what we want it to produce, we create an EncodingProfile
+    // https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-libs/html/GstEncodingProfile.html
+    // This profile consists of information about the contained audio and video formats
+    // as well as the container format we want everything to be combined into.
+
+    // Every audiostream piped into the encodebin should be encoded using vorbis.
     let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
         .format(&gst::Caps::new_simple("audio/x-vorbis", &[]))
         .presence(0)
         .build()?;
 
+    // Every videostream piped into the encodebin should be encoded using theora.
     let video_profile = gst_pbutils::EncodingVideoProfileBuilder::new()
         .format(&gst::Caps::new_simple("video/x-theora", &[]))
         .presence(0)
         .build()?;
 
+    // All streams are then finally combined into a matroska container.
     let container_profile = gst_pbutils::EncodingContainerProfileBuilder::new()
         .name("container")
         .format(&gst::Caps::new_simple("video/x-matroska", &[]))
@@ -71,6 +93,7 @@ fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
         .add_profile(&(audio_profile))
         .build()?;
 
+    // Finally, apply the EncodingProfile onto our encodebin element.
     encodebin
         .set_property("profile", &container_profile)
         .expect("set profile property failed");
@@ -105,17 +128,38 @@ fn example_main() -> Result<(), Error> {
     sink.set_property("location", &output_file)
         .expect("setting location property failed");
 
+    // Configure the encodebin.
+    // Here we tell the bin what format we expect it to create at its output.
     configure_encodebin(&encodebin)?;
 
     pipeline
         .add_many(&[&src, &encodebin, &sink])
         .expect("failed to add elements to pipeline");
+    // It is clear from the start, that encodebin has only one src pad, so we can
+    // directly link it to our filesink without problems.
+    // The caps of encodebin's src-pad are set after we configured the encoding-profile.
+    // (But filesink doesn't really care about the caps at its input anyway)
     gst::Element::link_many(&[&encodebin, &sink])?;
 
-    // Need to move a new reference into the closure
-    let pipeline_clone = pipeline.clone();
+    // Need to move a new reference into the closure.
+    // !!ATTENTION!!:
+    // It might seem appealing to use pipeline.clone() here, because that greatly
+    // simplifies the code within the callback. What this actually does, however, is creating
+    // a memory leak. The clone of a pipeline is a new strong reference on the pipeline.
+    // Storing this strong reference of the pipeline within the callback (we are moving it in!),
+    // which is in turn stored in another strong reference on the pipeline is creating a
+    // reference cycle.
+    // DO NOT USE pipeline.clone() TO USE THE PIPELINE WITHIN A CALLBACK
+    let pipeline_weak = pipeline.downgrade();
+    // Much of the following is the same code as in the decodebin example
+    // so if you want more information on that front, have a look there.
     src.connect_pad_added(move |dbin, dbin_src_pad| {
-        let pipeline = &pipeline_clone;
+        // Here we temporarily retrieve a strong reference on the pipeline from the weak one
+        // we moved into this callback.
+        let pipeline = match pipeline_weak.upgrade() {
+            Some(pipeline) => pipeline,
+            None => return,
+        };
 
         let (is_audio, is_video) = {
             let media_type = dbin_src_pad.get_current_caps().and_then(|caps| {
@@ -157,6 +201,9 @@ fn example_main() -> Result<(), Error> {
                     .expect("failed to add audio elements to pipeline");
                 gst::Element::link_many(elements)?;
 
+                // Request a sink pad from our encodebin, that can handle a raw audiostream.
+                // The encodebin will then automatically create an internal pipeline, that encodes
+                // the audio stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
                     .get_request_pad("audio_%u")
                     .expect("Could not get audio pad from encodebin");
@@ -169,6 +216,8 @@ fn example_main() -> Result<(), Error> {
                     e.sync_state_with_parent()?;
                 }
 
+                // Get the queue element's sink pad and link the decodebin's newly created
+                // src pad for the audio stream to it.
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
                 dbin_src_pad.link(&sink_pad).into_result()?;
             } else if is_video {
@@ -185,6 +234,9 @@ fn example_main() -> Result<(), Error> {
                     .expect("failed to add video elements to pipeline");
                 gst::Element::link_many(elements)?;
 
+                // Request a sink pad from our encodebin, that can handle a raw videostream.
+                // The encodebin will then automatically create an internal pipeline, that encodes
+                // the audio stream in the format we specified in the EncodingProfile.
                 let enc_sink_pad = encodebin
                     .get_request_pad("video_%u")
                     .expect("Could not get video pad from encodebin");
@@ -197,6 +249,8 @@ fn example_main() -> Result<(), Error> {
                     e.sync_state_with_parent()?
                 }
 
+                // Get the queue element's sink pad and link the decodebin's newly created
+                // src pad for the video stream to it.
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
                 dbin_src_pad.link(&sink_pad).into_result()?;
             }

@@ -1,3 +1,15 @@
+// This example shows how to use the appsrc element.
+// It operates the following pipeline:
+
+// {appsrc} - {videoconvert} - {autovideosink}
+
+// The application itself provides the video-data for the pipeline, by providing
+// it in the callback of the appsrc element. Videoconvert makes sure that the
+// format the application provides can be displayed by the autovideosink
+// at the end of the pipeline.
+// The application provides data of the following format:
+// Video / BGRx (4 bytes) / 2 fps
+
 extern crate gstreamer as gst;
 use gst::prelude::*;
 extern crate gstreamer_app as gst_app;
@@ -53,12 +65,15 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         .dynamic_cast::<gst_app::AppSrc>()
         .expect("Source element is expected to be an appsrc!");
 
-    let info = gst_video::VideoInfo::new(gst_video::VideoFormat::Bgrx, WIDTH as u32, HEIGHT as u32)
-        .fps(gst::Fraction::new(2, 1))
-        .build()
-        .expect("Failed to create video info");
+    // Specify the format we want to provide as application into the pipeline
+    // by creating a video info with the given format and creating caps from it for the appsrc element.
+    let video_info =
+        gst_video::VideoInfo::new(gst_video::VideoFormat::Bgrx, WIDTH as u32, HEIGHT as u32)
+            .fps(gst::Fraction::new(2, 1))
+            .build()
+            .expect("Failed to create video info");
 
-    appsrc.set_caps(&info.to_caps().unwrap());
+    appsrc.set_caps(&video_info.to_caps().unwrap());
     appsrc.set_property_format(gst::Format::Time);
 
     // Our frame counter, that is stored in the mutable environment
@@ -70,8 +85,15 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // need-data callback.
     let mut i = 0;
     appsrc.set_callbacks(
+        // Since our appsrc element operates in pull mode (it asks us to provide data),
+        // we add a handler for the need-data callback and provide new data from there.
+        // In our case, we told gstreamer that we do 2 frames per second. While the
+        // buffers of all elements of the pipeline are still empty, this will be called
+        // a couple of times until all of them are filled. After this initial period,
+        // this handler will be called (on average) twice per second.
         gst_app::AppSrcCallbacks::new()
             .need_data(move |appsrc, _| {
+                // We only produce 100 frames
                 if i == 100 {
                     let _ = appsrc.end_of_stream();
                     return;
@@ -83,11 +105,19 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 let g = if i % 3 == 0 { 0 } else { 255 };
                 let b = if i % 5 == 0 { 0 } else { 255 };
 
-                let mut buffer = gst::Buffer::with_size(WIDTH * HEIGHT * 4).unwrap();
+                // Create the buffer that can hold exactly one BGRx frame.
+                let mut buffer = gst::Buffer::with_size(video_info.size()).unwrap();
                 {
                     let buffer = buffer.get_mut().unwrap();
+                    // For each frame we produce, we set the timestamp when it should be displayed
+                    // (pts = presentation time stamp)
+                    // The autovideosink will use this information to display the frame at the right time.
                     buffer.set_pts(i * 500 * gst::MSECOND);
 
+                    // At this point, buffer is only a reference to an existing memory region somewhere.
+                    // When we want to access its content, we have to map it while requesting the required
+                    // mode of access (read, read/write).
+                    // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
                     let mut data = buffer.map_writable().unwrap();
 
                     for p in data.as_mut_slice().chunks_mut(4) {

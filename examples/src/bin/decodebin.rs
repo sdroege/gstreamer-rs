@@ -1,3 +1,34 @@
+// This example demonstrates the use of the decodebin element
+// The decodebin element tries to automatically detect the incoming
+// format and to autoplug the appropriate demuxers / decoders to handle it.
+// and decode it to raw audio, video or subtitles.
+// Before the pipeline hasn't been prerolled, the decodebin can't possibly know what
+// format it gets as its input. So at first, the pipeline looks like this:
+
+// {filesrc} - {decodebin}
+
+// As soon as the decodebin has detected the stream format, it will try to decode every
+// contained stream to its raw format.
+// The application connects a signal-handler to decodebin's pad-added signal, which tells us
+// whenever the decodebin provided us with another contained (raw) stream from the input file.
+
+// This application supports audio and video streams. Video streams are
+// displayed using an autovideosink, and audiostreams are played back using autoaudiosink.
+// So for a file that contains one audio and one video stream,
+// the pipeline looks like the following:
+
+//                        /-[audio]-{audioconvert}-{audioresample}-{autoaudiosink}
+// {filesrc}-{decodebin}-|
+//                        \-[video]-{viceoconvert}-{videoscale}-{autovideosink}
+
+// Both auto-sinks at the end automatically select the best available (actual) sink. Since the
+// selection of available actual sinks is platform specific
+// (like using pulseaudio for audio output on linux, e.g.),
+// we need to add the audioconvert and audioresample elements before handing the stream to the
+// autoaudiosink, because we need to make sure, that the stream is always supported by the actual sink.
+// Especially Windows APIs tend to be quite picky about samplerate and sample-format.
+// The same applies to videostreams.
+
 #[macro_use]
 extern crate gstreamer as gst;
 use gst::prelude::*;
@@ -66,18 +97,36 @@ fn example_main() -> Result<(), Error> {
     let decodebin =
         gst::ElementFactory::make("decodebin", None).ok_or(MissingElement("decodebin"))?;
 
+    // Tell the filesrc what file to load
     src.set_property("location", &uri)?;
 
     pipeline.add_many(&[&src, &decodebin])?;
     gst::Element::link_many(&[&src, &decodebin])?;
 
+    // Need to move a new reference into the closure.
+    // !!ATTENTION!!:
+    // It might seem appealing to use pipeline.clone() here, because that greatly
+    // simplifies the code within the callback. What this actually does, however, is creating
+    // a memory leak. The clone of a pipeline is a new strong reference on the pipeline.
+    // Storing this strong reference of the pipeline within the callback (we are moving it in!),
+    // which is in turn stored in another strong reference on the pipeline is creating a
+    // reference cycle.
+    // DO NOT USE pipeline.clone() TO USE THE PIPELINE WITHIN A CALLBACK
     let pipeline_weak = pipeline.downgrade();
+    // Connect to decodebin's pad-added signal, that is emitted whenever
+    // it found another stream from the input file and found a way to decode it to its raw format.
+    // decodebin automatically adds a src-pad for this raw stream, which
+    // we can use to build the follow-up pipeline.
     decodebin.connect_pad_added(move |dbin, src_pad| {
+        // Here we temporarily retrieve a strong reference on the pipeline from the weak one
+        // we moved into this callback.
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
             None => return,
         };
 
+        // Try to detect whether the raw stream decodebin provided us with
+        // just now is either audio or video (or none of both, e.g. subtitles).
         let (is_audio, is_video) = {
             let media_type = src_pad.get_current_caps().and_then(|caps| {
                 caps.get_structure(0).map(|s| {
@@ -100,8 +149,14 @@ fn example_main() -> Result<(), Error> {
             }
         };
 
+        // We create a closure here, calling it directly below it, because this greatly
+        // improves readability for error-handling. Like this, we can simply use the
+        // ?-operator within the closure, and handle the actual error down below where
+        // we call the insert_sink(..) closure.
         let insert_sink = |is_audio, is_video| -> Result<(), Error> {
             if is_audio {
+                // decodebin found a raw audiostream, so we build the follow-up pipeline to
+                // play it on the default audio playback device (using autoaudiosink).
                 let queue =
                     gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
                 let convert = gst::ElementFactory::make("audioconvert", None)
@@ -115,13 +170,21 @@ fn example_main() -> Result<(), Error> {
                 pipeline.add_many(elements)?;
                 gst::Element::link_many(elements)?;
 
+                // !!ATTENTION!!:
+                // This is quite important and people forget it often. Without making sure that
+                // the new elements have the same state as the pipeline, things will fail later.
+                // They would still be in Null state and can't process data.
                 for e in elements {
                     e.sync_state_with_parent()?;
                 }
 
+                // Get the queue element's sink pad and link the decodebin's newly created
+                // src pad for the audio stream to it.
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
                 src_pad.link(&sink_pad).into_result()?;
             } else if is_video {
+                // decodebin found a raw videostream, so we build the follow-up pipeline to
+                // display it using the autovideosink.
                 let queue =
                     gst::ElementFactory::make("queue", None).ok_or(MissingElement("queue"))?;
                 let convert = gst::ElementFactory::make("videoconvert", None)
@@ -139,6 +202,8 @@ fn example_main() -> Result<(), Error> {
                     e.sync_state_with_parent()?
                 }
 
+                // Get the queue element's sink pad and link the decodebin's newly created
+                // src pad for the video stream to it.
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
                 src_pad.link(&sink_pad).into_result()?;
             }
@@ -146,7 +211,17 @@ fn example_main() -> Result<(), Error> {
             Ok(())
         };
 
+        // When adding and linking new elements in a callback fails, error information is often sparse.
+        // GStreamer's built-in debugging can be hard to link back to the exact position within the code
+        // that failed. Since callbacks are called from random threads within the pipeline, it can get hard
+        // to get good error information. The macros used in the following can solve that. With the use
+        // of those, one can send arbitrary rust types (using the pipeline's bus) into the mainloop.
+        // What we send here is unpacked down below, in the iteration-code over sent bus-messages.
+        // Because we are using the failure crate for error details here, we even get a backtrace for
+        // where the error was constructed. (If RUST_BACKTRACE=1 is set)
         if let Err(err) = insert_sink(is_audio, is_video) {
+            // The following sends a message of type Error on the bus, containing our detailed
+            // error information.
             #[cfg(feature = "v1_10")]
             gst_element_error!(
                 dbin,
@@ -174,6 +249,10 @@ fn example_main() -> Result<(), Error> {
         .get_bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
+    // This code iterates over all messages that are sent across our pipeline's bus.
+    // In the callback ("pad-added" on the decodebin), we sent better error information
+    // using a bus message. This is the position where we get those messages and log
+    // the contained information.
     while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
@@ -185,6 +264,11 @@ fn example_main() -> Result<(), Error> {
                 #[cfg(feature = "v1_10")]
                 {
                     match err.get_details() {
+                        // This bus-message of type error contained our custom error-details struct
+                        // that we sent in the pad-added callback above. So we unpack it and log
+                        // the detailed error information here. details contains a glib::SendValue.
+                        // The unpacked error is the converted to a Result::Err, stopping the
+                        // application's execution.
                         Some(details) if details.get_name() == "error-details" => details
                             .get::<&ErrorValue>("error")
                             .and_then(|v| v.0.lock().unwrap().take())

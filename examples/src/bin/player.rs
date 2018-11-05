@@ -1,3 +1,10 @@
+// This example shows how to use the GstPlayer API.
+// The GstPlayer API is a convenience API to allow implement playback applications
+// without having to write too much code.
+// Most of the tasks a player needs to support (such as seeking and switching
+// audio / subtitle streams or changing the volume) are all supported by simple
+// one-line function calls on the GstPlayer.
+
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
@@ -28,11 +35,14 @@ fn main_loop(uri: &str) -> Result<(), Error> {
         Some(&dispatcher.upcast::<gst_player::PlayerSignalDispatcher>()),
     );
 
-    player.set_property("uri", &glib::Value::from(uri))?;
+    // Tell the player what uri to play.
+    player.set_uri(uri);
 
     let error = Arc::new(Mutex::new(Ok(())));
 
     let main_loop_clone = main_loop.clone();
+    // Connect to the player's "end-of-stream" signal, which will tell us when the
+    // currently played media stream reached its end.
     player.connect_end_of_stream(move |player| {
         let main_loop = &main_loop_clone;
         player.stop();
@@ -41,6 +51,8 @@ fn main_loop(uri: &str) -> Result<(), Error> {
 
     let main_loop_clone = main_loop.clone();
     let error_clone = Arc::clone(&error);
+    // Connect to the player's "error" signal, which will inform us about eventual
+    // errors (such as failing to retrieve a http stream).
     player.connect_error(move |player, err| {
         let main_loop = &main_loop_clone;
         let error = &error_clone;

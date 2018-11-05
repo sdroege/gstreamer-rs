@@ -1,3 +1,13 @@
+// This example uses gstreamer's discoverer api
+// https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-libs/html/GstDiscoverer.html
+// To detect as much information from a given URI.
+// The amount of time that the discoverer is allowed to use is limited by a timeout.
+// This allows to handle e.g. network problems gracefully. When the timeout hits before
+// discoverer was able to detect anything, discoverer will report an error.
+// In this example, we catch this error and stop the application.
+// Discovered information could for example contain the stream's duration or whether it is
+// seekable (filesystem) or not (some http servers).
+
 extern crate gstreamer as gst;
 
 extern crate gstreamer_pbutils as pbutils;

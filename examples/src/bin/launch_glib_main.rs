@@ -1,3 +1,12 @@
+// This is a simplified rust-reimplementation of the gst-launch-<version>
+// cli tool. It has no own parameters and simply parses the cli arguments
+// as launch syntax.
+// When the parsing succeeded, the pipeline is run until it exits.
+// Main difference between this example and the launch example is the use of
+// GLib's main loop to operate GStreamer's bus. This allows to also do other
+// things from the main loop (timeouts, UI events, socket events, ...) instead
+// of just handling messages from GStreamer's bus.
+
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
@@ -9,12 +18,15 @@ use std::env;
 mod examples_common;
 
 fn example_main() {
+    // Get a string containing the passed pipeline launch syntax
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
     gst::init().unwrap();
 
+    // Like teasered above, we use GLib's main loop to operate GStreamer's bus.
     let main_loop = glib::MainLoop::new(None, false);
 
+    // Let GStreamer create a pipeline from the parsed launch syntax on the cli.
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
@@ -51,6 +63,9 @@ fn example_main() {
     let ret = pipeline.set_state(gst::State::Null);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
+    // Here we remove the bus watch we added above. This avoids a memory leak, that might
+    // otherwise happen because we moved a strong reference (clone of main_loop) into the
+    // callback closure above.
     bus.remove_watch();
 }
 

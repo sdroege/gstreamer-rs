@@ -1,3 +1,15 @@
+// This example demonstrates the use of the appsink element.
+// It operates the following pipeline:
+
+// {audiotestsrc} - {appsink}
+
+// The application specifies what format it wants to handle. This format
+// is applied by calling set_caps on the appsink. Now it's the audiotestsrc's
+// task to provide this data format. If the element connected to the appsink's
+// sink-pad were not able to provide what we ask them to, this would fail.
+// This is the format we request:
+// Audio / Signed 16bit / 1 channel / arbitrary sample rate
+
 #[macro_use]
 extern crate gstreamer as gst;
 use gst::prelude::*;
@@ -54,6 +66,10 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         .dynamic_cast::<gst_app::AppSink>()
         .expect("Sink element is expected to be an appsink!");
 
+    // Tell the appsink what format we want. It will then be the audiotestsrc's job to
+    // provide the format we request.
+    // This can be set after linking the two objects, because format negotiation between
+    // both elements will happen during pre-rolling of the pipeline.
     appsink.set_caps(&gst::Caps::new_simple(
         "audio/x-raw",
         &[
@@ -64,9 +80,13 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
         ],
     ));
 
+    // Getting data out of the appsink is done by setting callbacks on it.
+    // The appsink will then call those handlers, as soon as data is available.
     appsink.set_callbacks(
         gst_app::AppSinkCallbacks::new()
+            // Add a handler to the "new-sample" signal.
             .new_sample(|appsink| {
+                // Pull the sample in question out of the appsink's buffer.
                 let sample = match appsink.pull_sample() {
                     None => return gst::FlowReturn::Eos,
                     Some(sample) => sample,
@@ -84,6 +104,13 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     return gst::FlowReturn::Error;
                 };
 
+                // At this point, buffer is only a reference to an existing memory region somewhere.
+                // When we want to access its content, we have to map it while requesting the required
+                // mode of access (read, read/write).
+                // This type of abstraction is necessary, because the buffer in question might not be
+                // on the machine's main memory itself, but rather in the GPU's memory.
+                // So mapping the buffer makes the underlying memory region accessible to us.
+                // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
                 let map = if let Some(map) = buffer.map_readable() {
                     map
                 } else {
@@ -96,6 +123,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     return gst::FlowReturn::Error;
                 };
 
+                // We know what format the data in the memory region has, since we requested
+                // it by setting the appsink's caps. So what we do here is interpret the
+                // memory region we mapped as an array of signed 16 bit integers.
                 let samples = if let Ok(samples) = map.as_slice_of::<i16>() {
                     samples
                 } else {
@@ -108,6 +138,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                     return gst::FlowReturn::Error;
                 };
 
+                // For buffer (= chunk of samples), we calculate the root mean square:
+                // (https://en.wikipedia.org/wiki/Root_mean_square)
                 let sum: f64 = samples
                     .iter()
                     .map(|sample| {
