@@ -11,7 +11,7 @@ and/or use gtk-doc annotations.  -->
   <include name="Gst" version="1.0"/>
   <include name="GstPbutils" version="1.0"/>
   <include name="GstVideo" version="1.0"/>
-  <package name="ges-1.0"/>
+  <package name="gst-editing-services-1.0"/>
   <c:include name="ges/ges.h"/>
   <namespace name="GES"
              version="1.0"
@@ -5841,69 +5841,6 @@ only to find out what the new location is.</doc>
     </record>
     <record name="ProjectPrivate" c:type="GESProjectPrivate" disguised="1">
     </record>
-    <class name="SmartAdder"
-           c:symbol-prefix="smart_adder"
-           c:type="GESSmartAdder"
-           parent="Gst.Bin"
-           glib:type-name="GESSmartAdder"
-           glib:get-type="ges_smart_adder_get_type"
-           glib:type-struct="SmartAdderClass">
-      <implements name="Gst.ChildProxy"/>
-      <constructor name="new" c:identifier="ges_smart_adder_new">
-        <return-value transfer-ownership="none">
-          <type name="Gst.Element" c:type="GstElement*"/>
-        </return-value>
-        <parameters>
-          <parameter name="track" transfer-ownership="none">
-            <type name="Track" c:type="GESTrack*"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <field name="parent_instance">
-        <type name="Gst.Bin" c:type="GstBin"/>
-      </field>
-      <field name="pads_infos">
-        <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="gpointer" c:type="gpointer"/>
-          <type name="gpointer" c:type="gpointer"/>
-        </type>
-      </field>
-      <field name="srcpad">
-        <type name="Gst.Pad" c:type="GstPad*"/>
-      </field>
-      <field name="adder">
-        <type name="Gst.Element" c:type="GstElement*"/>
-      </field>
-      <field name="capsfilter">
-        <type name="Gst.Element" c:type="GstElement*"/>
-      </field>
-      <field name="lock">
-        <type name="GLib.Mutex" c:type="GMutex"/>
-      </field>
-      <field name="caps">
-        <type name="Gst.Caps" c:type="GstCaps*"/>
-      </field>
-      <field name="track">
-        <type name="Track" c:type="GESTrack*"/>
-      </field>
-      <field name="_ges_reserved">
-        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </class>
-    <record name="SmartAdderClass"
-            c:type="GESSmartAdderClass"
-            glib:is-gtype-struct-for="SmartAdder">
-      <field name="parent_class">
-        <type name="Gst.BinClass" c:type="GstBinClass"/>
-      </field>
-      <field name="_ges_reserved">
-        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
-          <type name="gpointer" c:type="gpointer"/>
-        </array>
-      </field>
-    </record>
     <class name="Source"
            c:symbol-prefix="source"
            c:type="GESSource"
@@ -8561,7 +8498,7 @@ is much more convenient for C programming.</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">the value</doc>
-            <type name="GObject.Value" c:type="GValue*"/>
+            <type name="GObject.Value" c:type="const GValue*"/>
           </parameter>
         </parameters>
       </method>
@@ -8582,7 +8519,7 @@ is much more convenient for C programming.</doc>
           </parameter>
           <parameter name="value" transfer-ownership="none">
             <doc xml:space="preserve">the value</doc>
-            <type name="GObject.Value" c:type="GValue*"/>
+            <type name="GObject.Value" c:type="const GValue*"/>
           </parameter>
         </parameters>
       </method>

@@ -5714,7 +5714,7 @@ and will be packed into @data.</doc>
         </parameter>
         <parameter name="src" transfer-ownership="none">
           <doc xml:space="preserve">a source array</doc>
-          <array zero-terminated="0" c:type="const gpointer">
+          <array zero-terminated="0" c:type="gconstpointer">
             <type name="guint8"/>
           </array>
         </parameter>
@@ -5755,7 +5755,7 @@ channels * size(unpack_format) bytes.</doc>
         </parameter>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">pointer to the audio data</doc>
-          <array zero-terminated="0" c:type="const gpointer">
+          <array zero-terminated="0" c:type="gconstpointer">
             <type name="guint8"/>
           </array>
         </parameter>
