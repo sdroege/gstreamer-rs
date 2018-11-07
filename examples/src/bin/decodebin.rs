@@ -25,9 +25,7 @@ struct MissingElement(&'static str);
 #[derive(Debug, Fail)]
 #[fail(
     display = "Received error from {}: {} (debug: {:?})",
-    src,
-    error,
-    debug
+    src, error, debug
 )]
 struct ErrorMessage {
     src: String,
@@ -189,7 +187,8 @@ fn example_main() -> Result<(), Error> {
                             error: err.get_error().description().into(),
                             debug: err.get_debug(),
                             cause: err.get_error(),
-                        }.into()),
+                        }
+                        .into()),
                     }?;
                 }
                 #[cfg(not(feature = "v1_10"))]

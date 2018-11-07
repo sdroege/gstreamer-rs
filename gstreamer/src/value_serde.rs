@@ -348,7 +348,8 @@ mod tests {
                 "    (\"Fraction\", (1, 2)),",
                 "    (\"String\", \"test str\"),",
                 "]"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
 
@@ -374,7 +375,8 @@ mod tests {
                 "    (\"Fraction\", (1, 2)),",
                 "    (\"String\", \"test str\"),",
                 "]"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
     }

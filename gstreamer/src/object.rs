@@ -60,7 +60,8 @@ impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtM
             f(&obj, &prop_obj, &pspec);
 
             None
-        }).unwrap()
+        })
+        .unwrap()
     }
 }
 

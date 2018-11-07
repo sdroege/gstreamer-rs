@@ -40,7 +40,8 @@ impl GhostPad {
                 name.0,
                 target.to_glib_none().0,
                 templ.to_glib_none().0,
-            )).map(|o| Downcast::downcast_unchecked(o))
+            ))
+            .map(|o| Downcast::downcast_unchecked(o))
         }
     }
 

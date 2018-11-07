@@ -592,7 +592,8 @@ impl<'a, T: Tag<'a>> ExactSizeIterator for TagIterator<'a, T>
 where
     <T as Tag<'a>>::TagType: 'a,
     T: 'a,
-{}
+{
+}
 
 pub struct GenericTagIterator<'a> {
     taglist: &'a TagListRef,
@@ -761,22 +762,18 @@ mod tests {
         let mut tags = TagList::new();
         {
             let tags = tags.get_mut().unwrap();
-            assert!(
-                tags.add_generic(&TAG_TITLE, &"some title", TagMergeMode::Append)
-                    .is_ok()
-            );
-            assert!(
-                tags.add_generic(&TAG_TITLE, &"second title", TagMergeMode::Append)
-                    .is_ok()
-            );
-            assert!(
-                tags.add_generic(&TAG_DURATION, &(::SECOND * 120), TagMergeMode::Append)
-                    .is_ok()
-            );
-            assert!(
-                tags.add_generic(&TAG_TITLE, &"third title", TagMergeMode::Append)
-                    .is_ok()
-            );
+            assert!(tags
+                .add_generic(&TAG_TITLE, &"some title", TagMergeMode::Append)
+                .is_ok());
+            assert!(tags
+                .add_generic(&TAG_TITLE, &"second title", TagMergeMode::Append)
+                .is_ok());
+            assert!(tags
+                .add_generic(&TAG_DURATION, &(::SECOND * 120), TagMergeMode::Append)
+                .is_ok());
+            assert!(tags
+                .add_generic(&TAG_TITLE, &"third title", TagMergeMode::Append)
+                .is_ok());
 
             assert_eq!(
                 tags.add_generic(

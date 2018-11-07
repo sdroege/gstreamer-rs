@@ -43,7 +43,8 @@ unsafe extern "C" fn trampoline_wait_async(
         &from_glib_borrow(clock),
         from_glib(time),
         &from_glib_borrow(id),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn destroy_closure_wait_async(ptr: gpointer) {

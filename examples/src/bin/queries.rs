@@ -39,8 +39,9 @@ fn example_main() {
             } else {
                 None
             }
-        }.and_then(|pos| pos.try_into_time().ok())
-            .unwrap();
+        }
+        .and_then(|pos| pos.try_into_time().ok())
+        .unwrap();
 
         let dur = {
             let mut q = gst::Query::new_duration(gst::Format::Time);
@@ -49,8 +50,9 @@ fn example_main() {
             } else {
                 None
             }
-        }.and_then(|dur| dur.try_into_time().ok())
-            .unwrap();
+        }
+        .and_then(|dur| dur.try_into_time().ok())
+        .unwrap();
 
         println!("{} / {}", pos, dur);
 

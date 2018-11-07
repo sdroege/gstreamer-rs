@@ -35,9 +35,7 @@ struct UsageError(String);
 #[derive(Debug, Fail)]
 #[fail(
     display = "Received error from {}: {} (debug: {:?})",
-    src,
-    error,
-    debug
+    src, error, debug
 )]
 struct ErrorMessage {
     src: String,
@@ -172,7 +170,8 @@ fn example_main() -> Result<(), Error> {
                         ("clock-rate", &90000i32),
                         ("is-fec", &true),
                     ],
-                ).to_value(),
+                )
+                .to_value(),
             ),
             96 => Some(
                 gst::Caps::new_simple(
@@ -182,7 +181,8 @@ fn example_main() -> Result<(), Error> {
                         ("clock-rate", &90000i32),
                         ("encoding-name", &"VP8"),
                     ],
-                ).to_value(),
+                )
+                .to_value(),
             ),
             _ => None,
         }
@@ -266,17 +266,20 @@ fn example_main() -> Result<(), Error> {
                     error: err.get_error().description().into(),
                     debug: err.get_debug(),
                     cause: err.get_error(),
-                }.into());
+                }
+                .into());
             }
             MessageView::StateChanged(s) => match msg.get_src() {
-                Some(element) => if element == pipeline && s.get_current() == gst::State::Playing {
-                    eprintln!("PLAYING");
-                    gst::debug_bin_to_dot_file(
-                        &pipeline,
-                        gst::DebugGraphDetails::all(),
-                        "client-playing",
-                    );
-                },
+                Some(element) => {
+                    if element == pipeline && s.get_current() == gst::State::Playing {
+                        eprintln!("PLAYING");
+                        gst::debug_bin_to_dot_file(
+                            &pipeline,
+                            gst::DebugGraphDetails::all(),
+                            "client-playing",
+                        );
+                    }
+                }
                 None => (),
             },
             _ => (),

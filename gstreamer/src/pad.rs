@@ -1023,7 +1023,8 @@ unsafe extern "C" fn trampoline_activatemode_function(
         &from_glib_borrow(parent),
         from_glib(mode),
         from_glib(active),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_chain_function(
@@ -1041,7 +1042,8 @@ unsafe extern "C" fn trampoline_chain_function(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(buffer),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_chain_list_function(
@@ -1059,7 +1061,8 @@ unsafe extern "C" fn trampoline_chain_list_function(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(list),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_event_function(
@@ -1075,7 +1078,8 @@ unsafe extern "C" fn trampoline_event_function(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(event),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_event_full_function(
@@ -1093,7 +1097,8 @@ unsafe extern "C" fn trampoline_event_full_function(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(event),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_getrange_function(
@@ -1154,7 +1159,8 @@ unsafe extern "C" fn trampoline_link_function(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         &from_glib_borrow(peer),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_query_function(
@@ -1172,7 +1178,8 @@ unsafe extern "C" fn trampoline_query_function(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         ::QueryRef::from_mut_ptr(query),
-    ).to_glib()
+    )
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_unlink_function(
@@ -1276,7 +1283,8 @@ mod tests {
                 sender.send(i).unwrap();
                 pad_clone.pause_task().unwrap();
             }
-        }).unwrap();
+        })
+        .unwrap();
 
         assert_eq!(receiver.recv().unwrap(), 3);
     }

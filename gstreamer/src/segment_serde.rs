@@ -158,7 +158,8 @@ mod tests {
                 "    position: 256,",
                 "    duration: -1,",
                 ")"
-            ).to_owned()),
+            )
+            .to_owned()),
             res,
         );
     }

@@ -115,35 +115,37 @@ fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef
             // The duration has changed, mark the current one as invalid
             custom_data.duration = gst::CLOCK_TIME_NONE;
         }
-        MessageView::StateChanged(state_changed) => if state_changed
-            .get_src()
-            .map(|s| s == custom_data.playbin)
-            .unwrap_or(false)
-        {
-            let new_state = state_changed.get_current();
-            let old_state = state_changed.get_old();
+        MessageView::StateChanged(state_changed) => {
+            if state_changed
+                .get_src()
+                .map(|s| s == custom_data.playbin)
+                .unwrap_or(false)
+            {
+                let new_state = state_changed.get_current();
+                let old_state = state_changed.get_old();
 
-            println!(
-                "Pipeline state changed from {:?} to {:?}",
-                old_state, new_state
-            );
+                println!(
+                    "Pipeline state changed from {:?} to {:?}",
+                    old_state, new_state
+                );
 
-            custom_data.playing = new_state == gst::State::Playing;
-            if custom_data.playing {
-                let mut seeking = gst::Query::new_seeking(gst::Format::Time);
-                if custom_data.playbin.query(&mut seeking) {
-                    let (seekable, start, end) = seeking.get_result();
-                    custom_data.seek_enabled = seekable;
-                    if seekable {
-                        println!("Seeking is ENABLED from {:?} to {:?}", start, end)
+                custom_data.playing = new_state == gst::State::Playing;
+                if custom_data.playing {
+                    let mut seeking = gst::Query::new_seeking(gst::Format::Time);
+                    if custom_data.playbin.query(&mut seeking) {
+                        let (seekable, start, end) = seeking.get_result();
+                        custom_data.seek_enabled = seekable;
+                        if seekable {
+                            println!("Seeking is ENABLED from {:?} to {:?}", start, end)
+                        } else {
+                            println!("Seeking is DISABLED for this stream.")
+                        }
                     } else {
-                        println!("Seeking is DISABLED for this stream.")
+                        eprintln!("Seeking query failed.")
                     }
-                } else {
-                    eprintln!("Seeking query failed.")
                 }
             }
-        },
+        }
         _ => (),
     }
 }

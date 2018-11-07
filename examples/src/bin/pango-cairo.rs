@@ -29,9 +29,7 @@ struct MissingElement(&'static str);
 #[derive(Debug, Fail)]
 #[fail(
     display = "Received error from {}: {} (debug: {:?})",
-    src,
-    error,
-    debug
+    src, error, debug
 )]
 struct ErrorMessage {
     src: String,
@@ -146,7 +144,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             }
 
             None
-        }).unwrap();
+        })
+        .unwrap();
 
     let drawer_clone = drawer.clone();
     overlay
@@ -159,7 +158,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             drawer.info = Some(gst_video::VideoInfo::from_caps(&caps).unwrap());
 
             None
-        }).unwrap();
+        })
+        .unwrap();
 
     Ok(pipeline)
 }

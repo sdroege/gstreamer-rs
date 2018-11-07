@@ -16,7 +16,8 @@ fn example_main() {
     let pipeline = gst::parse_launch(&format!(
         "audiotestsrc name=src ! audio/x-raw,format={},channels=1 ! fakesink",
         gst_audio::AUDIO_FORMAT_S16.to_string()
-    )).unwrap();
+    ))
+    .unwrap();
     let pipeline = pipeline.dynamic_cast::<gst::Pipeline>().unwrap();
 
     let src = pipeline.get_by_name("src").unwrap();

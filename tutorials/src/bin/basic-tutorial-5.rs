@@ -50,35 +50,43 @@ mod tutorial5 {
         let signame: &str = &format!("get-{}-tags", stype);
 
         match playbin.get_property(propname).unwrap().get() {
-            Some(x) => for i in 0..x {
-                let tags = playbin.emit(signame, &[&i]).unwrap().unwrap();
+            Some(x) => {
+                for i in 0..x {
+                    let tags = playbin.emit(signame, &[&i]).unwrap().unwrap();
 
-                if let Some(tags) = tags.get::<gst::TagList>() {
-                    textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
+                    if let Some(tags) = tags.get::<gst::TagList>() {
+                        textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
 
-                    if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
-                        textbuf
-                            .insert_at_cursor(&format!("    codec: {} \n", codec.get().unwrap()));
-                    }
+                        if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
+                            textbuf.insert_at_cursor(&format!(
+                                "    codec: {} \n",
+                                codec.get().unwrap()
+                            ));
+                        }
 
-                    if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
-                        textbuf
-                            .insert_at_cursor(&format!("    codec: {} \n", codec.get().unwrap()));
-                    }
+                        if let Some(codec) = tags.get::<gst::tags::AudioCodec>() {
+                            textbuf.insert_at_cursor(&format!(
+                                "    codec: {} \n",
+                                codec.get().unwrap()
+                            ));
+                        }
 
-                    if let Some(lang) = tags.get::<gst::tags::LanguageCode>() {
-                        textbuf
-                            .insert_at_cursor(&format!("    language: {} \n", lang.get().unwrap()));
-                    }
+                        if let Some(lang) = tags.get::<gst::tags::LanguageCode>() {
+                            textbuf.insert_at_cursor(&format!(
+                                "    language: {} \n",
+                                lang.get().unwrap()
+                            ));
+                        }
 
-                    if let Some(bitrate) = tags.get::<gst::tags::Bitrate>() {
-                        textbuf.insert_at_cursor(&format!(
-                            "    bitrate: {} \n",
-                            bitrate.get().unwrap()
-                        ));
+                        if let Some(bitrate) = tags.get::<gst::tags::Bitrate>() {
+                            textbuf.insert_at_cursor(&format!(
+                                "    bitrate: {} \n",
+                                bitrate.get().unwrap()
+                            ));
+                        }
                     }
                 }
-            },
+            }
             None => {
                 eprintln!("Could not get {}!", propname);
             }
