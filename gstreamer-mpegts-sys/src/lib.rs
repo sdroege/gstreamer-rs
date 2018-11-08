@@ -1680,6 +1680,11 @@ extern "C" {
     pub fn gst_mpegts_component_descriptor_get_type() -> GType;
 
     //=========================================================================
+    // GstMpegtsContent
+    //=========================================================================
+    pub fn gst_mpegts_content_get_type() -> GType;
+
+    //=========================================================================
     // GstMpegtsDVBLinkageDescriptor
     //=========================================================================
     pub fn gst_mpegts_dvb_linkage_descriptor_get_type() -> GType;
@@ -1687,6 +1692,31 @@ extern "C" {
     pub fn gst_mpegts_dvb_linkage_descriptor_get_event(desc: *const GstMpegtsDVBLinkageDescriptor) -> *const GstMpegtsDVBLinkageEvent;
     pub fn gst_mpegts_dvb_linkage_descriptor_get_extended_event(desc: *const GstMpegtsDVBLinkageDescriptor) -> *const glib::GPtrArray;
     pub fn gst_mpegts_dvb_linkage_descriptor_get_mobile_hand_over(desc: *const GstMpegtsDVBLinkageDescriptor) -> *const GstMpegtsDVBLinkageMobileHandOver;
+
+    //=========================================================================
+    // GstMpegtsDVBLinkageEvent
+    //=========================================================================
+    pub fn gst_mpegts_dvb_linkage_event_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDVBLinkageExtendedEvent
+    //=========================================================================
+    pub fn gst_mpegts_dvb_linkage_extended_event_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDVBLinkageMobileHandOver
+    //=========================================================================
+    pub fn gst_mpegts_dvb_linkage_mobile_hand_over_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDVBParentalRatingItem
+    //=========================================================================
+    pub fn gst_mpegts_dvb_parental_rating_item_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDVBServiceListItem
+    //=========================================================================
+    pub fn gst_mpegts_dvb_service_list_item_get_type() -> GType;
 
     //=========================================================================
     // GstMpegtsDataBroadcastDescriptor
@@ -1743,6 +1773,26 @@ extern "C" {
     pub fn gst_mpegts_descriptor_from_registration(format_identifier: *const c_char, additional_info: *mut u8, additional_info_length: size_t) -> *mut GstMpegtsDescriptor;
 
     //=========================================================================
+    // GstMpegtsDvbMultilingualBouquetNameItem
+    //=========================================================================
+    pub fn gst_mpegts_dvb_multilingual_bouquet_name_item_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDvbMultilingualComponentItem
+    //=========================================================================
+    pub fn gst_mpegts_dvb_multilingual_component_item_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDvbMultilingualNetworkNameItem
+    //=========================================================================
+    pub fn gst_mpegts_dvb_multilingual_network_name_item_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsDvbMultilingualServiceNameItem
+    //=========================================================================
+    pub fn gst_mpegts_dvb_multilingual_service_name_item_get_type() -> GType;
+
+    //=========================================================================
     // GstMpegtsEIT
     //=========================================================================
     pub fn gst_mpegts_eit_get_type() -> GType;
@@ -1759,10 +1809,25 @@ extern "C" {
     pub fn gst_mpegts_extended_event_descriptor_free(source: *mut GstMpegtsExtendedEventDescriptor);
 
     //=========================================================================
+    // GstMpegtsExtendedEventItem
+    //=========================================================================
+    pub fn gst_mpegts_extended_event_item_get_type() -> GType;
+
+    //=========================================================================
     // GstMpegtsISO639LanguageDescriptor
     //=========================================================================
     pub fn gst_mpegts_iso_639_language_get_type() -> GType;
     pub fn gst_mpegts_iso_639_language_descriptor_free(desc: *mut GstMpegtsISO639LanguageDescriptor);
+
+    //=========================================================================
+    // GstMpegtsLogicalChannel
+    //=========================================================================
+    pub fn gst_mpegts_logical_channel_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsLogicalChannelDescriptor
+    //=========================================================================
+    pub fn gst_mpegts_logical_channel_descriptor_get_type() -> GType;
 
     //=========================================================================
     // GstMpegtsNIT
@@ -1807,6 +1872,11 @@ extern "C" {
     pub fn gst_mpegts_sdt_service_new() -> *mut GstMpegtsSDTService;
 
     //=========================================================================
+    // GstMpegtsSatelliteDeliverySystemDescriptor
+    //=========================================================================
+    pub fn gst_mpegts_satellite_delivery_system_descriptor_get_type() -> GType;
+
+    //=========================================================================
     // GstMpegtsSection
     //=========================================================================
     pub fn gst_mpegts_section_get_type() -> GType;
@@ -1836,6 +1906,16 @@ extern "C" {
     pub fn gst_mpegts_section_from_sdt(sdt: *mut GstMpegtsSDT) -> *mut GstMpegtsSection;
 
     //=========================================================================
+    // GstMpegtsT2DeliverySystemCell
+    //=========================================================================
+    pub fn gst_mpegts_t2_delivery_system_cell_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsT2DeliverySystemCellExtension
+    //=========================================================================
+    pub fn gst_mpegts_t2_delivery_system_cell_extension_get_type() -> GType;
+
+    //=========================================================================
     // GstMpegtsT2DeliverySystemDescriptor
     //=========================================================================
     pub fn gst_mpegts_t2_delivery_system_descriptor_get_type() -> GType;
@@ -1845,6 +1925,11 @@ extern "C" {
     // GstMpegtsTOT
     //=========================================================================
     pub fn gst_mpegts_tot_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsTerrestrialDeliverySystemDescriptor
+    //=========================================================================
+    pub fn gst_mpegts_terrestrial_delivery_system_descriptor_get_type() -> GType;
 
     //=========================================================================
     // Other functions

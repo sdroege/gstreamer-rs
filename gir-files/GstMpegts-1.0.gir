@@ -565,7 +565,11 @@ Consult the relevant specifications for more details.</doc>
               c:identifier="GST_MPEGTS_STREAM_CONTENT_SRM_CPCM">
       </member>
     </enumeration>
-    <record name="Content" c:type="GstMpegtsContent">
+    <record name="Content"
+            c:type="GstMpegtsContent"
+            glib:type-name="GstMpegtsContent"
+            glib:get-type="gst_mpegts_content_get_type"
+            c:symbol-prefix="content">
       <field name="content_nibble_1" writable="1">
         <type name="ContentNibbleHi" c:type="GstMpegtsContentNibbleHi"/>
       </field>
@@ -1070,7 +1074,11 @@ Consult the relevant specifications for more details.</doc>
         </parameters>
       </method>
     </record>
-    <record name="DVBLinkageEvent" c:type="GstMpegtsDVBLinkageEvent">
+    <record name="DVBLinkageEvent"
+            c:type="GstMpegtsDVBLinkageEvent"
+            glib:type-name="GstMpegtsDVBLinkageEvent"
+            glib:get-type="gst_mpegts_dvb_linkage_event_get_type"
+            c:symbol-prefix="dvb_linkage_event">
       <field name="target_event_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -1082,7 +1090,10 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="DVBLinkageExtendedEvent"
-            c:type="GstMpegtsDVBLinkageExtendedEvent">
+            c:type="GstMpegtsDVBLinkageExtendedEvent"
+            glib:type-name="GstMpegtsDVBLinkageExtendedEvent"
+            glib:get-type="gst_mpegts_dvb_linkage_extended_event_get_type"
+            c:symbol-prefix="dvb_linkage_extended_event">
       <field name="target_event_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -1137,7 +1148,10 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DVBLinkageMobileHandOver"
-            c:type="GstMpegtsDVBLinkageMobileHandOver">
+            c:type="GstMpegtsDVBLinkageMobileHandOver"
+            glib:type-name="GstMpegtsDVBLinkageMobileHandOver"
+            glib:get-type="gst_mpegts_dvb_linkage_mobile_hand_over_get_type"
+            c:symbol-prefix="dvb_linkage_mobile_hand_over">
       <field name="hand_over_type" writable="1">
         <type name="DVBLinkageHandOverType"
               c:type="GstMpegtsDVBLinkageHandOverType"/>
@@ -1214,7 +1228,10 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DVBParentalRatingItem"
-            c:type="GstMpegtsDVBParentalRatingItem">
+            c:type="GstMpegtsDVBParentalRatingItem"
+            glib:type-name="GstMpegtsDVBParentalRatingItem"
+            glib:get-type="gst_mpegts_dvb_parental_rating_item_get_type"
+            c:symbol-prefix="dvb_parental_rating_item">
       <field name="country_code" writable="1">
         <type name="utf8" c:type="gchar*"/>
       </field>
@@ -1261,7 +1278,11 @@ Consult the relevant specifications for more details.</doc>
               c:identifier="GST_MPEGTS_DVB_SCRAMBLING_MODE_ATIS_F">
       </member>
     </enumeration>
-    <record name="DVBServiceListItem" c:type="GstMpegtsDVBServiceListItem">
+    <record name="DVBServiceListItem"
+            c:type="GstMpegtsDVBServiceListItem"
+            glib:type-name="GstMpegtsDVBServiceListItem"
+            glib:get-type="gst_mpegts_dvb_service_list_item_get_type"
+            c:symbol-prefix="dvb_service_list_item">
       <field name="service_id" writable="1">
         <doc xml:space="preserve">the id of a service</doc>
         <type name="guint16" c:type="guint16"/>
@@ -2813,7 +2834,10 @@ Consult the relevant specifications for more details.</doc>
       </member>
     </enumeration>
     <record name="DvbMultilingualBouquetNameItem"
-            c:type="GstMpegtsDvbMultilingualBouquetNameItem">
+            c:type="GstMpegtsDvbMultilingualBouquetNameItem"
+            glib:type-name="GstMpegtsDvbMultilingualBouquetNameItem"
+            glib:get-type="gst_mpegts_dvb_multilingual_bouquet_name_item_get_type"
+            c:symbol-prefix="dvb_multilingual_bouquet_name_item">
       <doc xml:space="preserve">a multilingual bouquet name entry</doc>
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
@@ -2825,7 +2849,10 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="DvbMultilingualComponentItem"
-            c:type="GstMpegtsDvbMultilingualComponentItem">
+            c:type="GstMpegtsDvbMultilingualComponentItem"
+            glib:type-name="GstMpegtsDvbMultilingualComponentItem"
+            glib:get-type="gst_mpegts_dvb_multilingual_component_item_get_type"
+            c:symbol-prefix="dvb_multilingual_component_item">
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -2836,7 +2863,10 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="DvbMultilingualNetworkNameItem"
-            c:type="GstMpegtsDvbMultilingualNetworkNameItem">
+            c:type="GstMpegtsDvbMultilingualNetworkNameItem"
+            glib:type-name="GstMpegtsDvbMultilingualNetworkNameItem"
+            glib:get-type="gst_mpegts_dvb_multilingual_network_name_item_get_type"
+            c:symbol-prefix="dvb_multilingual_network_name_item">
       <doc xml:space="preserve">a multilingual network name entry</doc>
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
@@ -2848,7 +2878,10 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="DvbMultilingualServiceNameItem"
-            c:type="GstMpegtsDvbMultilingualServiceNameItem">
+            c:type="GstMpegtsDvbMultilingualServiceNameItem"
+            glib:type-name="GstMpegtsDvbMultilingualServiceNameItem"
+            glib:get-type="gst_mpegts_dvb_multilingual_service_name_item_get_type"
+            c:symbol-prefix="dvb_multilingual_service_name_item">
       <doc xml:space="preserve">a multilingual service name entry</doc>
       <field name="language_code" writable="1">
         <doc xml:space="preserve">the ISO 639 language code</doc>
@@ -2960,7 +2993,11 @@ Consult the relevant specifications for more details.</doc>
         </parameters>
       </method>
     </record>
-    <record name="ExtendedEventItem" c:type="GstMpegtsExtendedEventItem">
+    <record name="ExtendedEventItem"
+            c:type="GstMpegtsExtendedEventItem"
+            glib:type-name="GstMpegtsExtendedEventItem"
+            glib:get-type="gst_mpegts_extended_event_item_get_type"
+            c:symbol-prefix="extended_event_item">
       <field name="item_description" writable="1">
         <type name="utf8" c:type="gchar*"/>
       </field>
@@ -3154,7 +3191,11 @@ Consult the relevant specifications for more details.</doc>
               c:identifier="GST_MPEGTS_AUDIO_TYPE_VISUAL_IMPAIRED_COMMENTARY">
       </member>
     </enumeration>
-    <record name="LogicalChannel" c:type="GstMpegtsLogicalChannel">
+    <record name="LogicalChannel"
+            c:type="GstMpegtsLogicalChannel"
+            glib:type-name="GstMpegtsLogicalChannel"
+            glib:get-type="gst_mpegts_logical_channel_get_type"
+            c:symbol-prefix="logical_channel">
       <field name="service_id" writable="1">
         <type name="guint16" c:type="guint16"/>
       </field>
@@ -3166,7 +3207,10 @@ Consult the relevant specifications for more details.</doc>
       </field>
     </record>
     <record name="LogicalChannelDescriptor"
-            c:type="GstMpegtsLogicalChannelDescriptor">
+            c:type="GstMpegtsLogicalChannelDescriptor"
+            glib:type-name="GstMpegtsLogicalChannelDescriptor"
+            glib:get-type="gst_mpegts_logical_channel_descriptor_get_type"
+            c:symbol-prefix="logical_channel_descriptor">
       <field name="nb_channels" writable="1">
         <type name="guint" c:type="guint"/>
       </field>
@@ -3507,7 +3551,10 @@ Corresponds to table 6 of ETSI EN 300 468 (v1.13.0)</doc>
       </constructor>
     </record>
     <record name="SatelliteDeliverySystemDescriptor"
-            c:type="GstMpegtsSatelliteDeliverySystemDescriptor">
+            c:type="GstMpegtsSatelliteDeliverySystemDescriptor"
+            glib:type-name="GstMpegtsSatelliteDeliverySystemDescriptor"
+            glib:get-type="gst_mpegts_satellite_delivery_system_descriptor_get_type"
+            c:symbol-prefix="satellite_delivery_system_descriptor">
       <doc xml:space="preserve">Satellite Delivery System Descriptor (EN 300 468 v.1.13.1)</doc>
       <field name="frequency" writable="1">
         <doc xml:space="preserve">the frequency in kHz (kiloHertz)</doc>
@@ -4702,7 +4749,11 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
         <doc xml:space="preserve">IPMP stream</doc>
       </member>
     </enumeration>
-    <record name="T2DeliverySystemCell" c:type="GstMpegtsT2DeliverySystemCell">
+    <record name="T2DeliverySystemCell"
+            c:type="GstMpegtsT2DeliverySystemCell"
+            glib:type-name="GstMpegtsT2DeliverySystemCell"
+            glib:get-type="gst_mpegts_t2_delivery_system_cell_get_type"
+            c:symbol-prefix="t2_delivery_system_cell">
       <field name="cell_id" writable="1">
         <doc xml:space="preserve">id of the cell</doc>
         <type name="guint16" c:type="guint16"/>
@@ -4720,7 +4771,10 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </field>
     </record>
     <record name="T2DeliverySystemCellExtension"
-            c:type="GstMpegtsT2DeliverySystemCellExtension">
+            c:type="GstMpegtsT2DeliverySystemCellExtension"
+            glib:type-name="GstMpegtsT2DeliverySystemCellExtension"
+            glib:get-type="gst_mpegts_t2_delivery_system_cell_extension_get_type"
+            c:symbol-prefix="t2_delivery_system_cell_extension">
       <field name="cell_id_extension" writable="1">
         <doc xml:space="preserve">id of the sub cell</doc>
         <type name="guint8" c:type="guint8"/>
@@ -4797,7 +4851,10 @@ profiles defined in Annex A for service-compatible stereoscopic 3D services</doc
       </field>
     </record>
     <record name="TerrestrialDeliverySystemDescriptor"
-            c:type="GstMpegtsTerrestrialDeliverySystemDescriptor">
+            c:type="GstMpegtsTerrestrialDeliverySystemDescriptor"
+            glib:type-name="GstMpegtsTerrestrialDeliverySystemDescriptor"
+            glib:get-type="gst_mpegts_terrestrial_delivery_system_descriptor_get_type"
+            c:symbol-prefix="terrestrial_delivery_system_descriptor">
       <doc xml:space="preserve">Terrestrial Delivery System Descriptor (EN 300 468 v.1.13.1)</doc>
       <field name="frequency" writable="1">
         <doc xml:space="preserve">the frequency in Hz (Hertz)</doc>
