@@ -1,6 +1,7 @@
 stages:
   - "lint"
   - "test"
+  - "extras"
 
 .tarball_setup: &setup
   variables:
@@ -74,3 +75,12 @@ rustfmt:
     - rustup component add rustfmt
     - cargo fmt --version
     - cargo fmt -- --color=always --check
+
+clippy:
+  image: "rust:slim"
+  stage: 'extras'
+  <<: *setup
+  script:
+    - rustup component add clippy-preview
+    - cargo clippy --version
+    - cargo clippy --color=always --all --all-features
