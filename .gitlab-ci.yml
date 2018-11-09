@@ -2,15 +2,11 @@ stages:
   - "lint"
   - "test"
 
-.cargo_cache: &cache
-  cache:
-    key: "gst"
-    paths:
-      - ".cargo_cache/"
-
-.cargo_test_template: &cargo_test
-  stage: "test"
+.tarball_setup: &setup
   variables:
+    # Only stuff inside the repo directory can be cached
+    # Override the CARGO_HOME variable to force its location
+    CARGO_HOME: "${CI_PROJECT_DIR}/.cargo_home"
     DEPENDENCIES: |
       curl
       liborc-dev
@@ -22,15 +18,9 @@ stages:
       libgl1-mesa-dri
       libgl1-mesa-glx
       libwayland-egl1-mesa
-
-  <<: *cache
   before_script:
     - apt-get update -yqq
     - apt-get install -yqq --no-install-recommends $DEPENDENCIES
-
-    # Only stuff inside the repo directory can be cached
-    # Override the CARGO_HOME variable to force its location
-    - export CARGO_HOME="${PWD}/.cargo_cache"
 
     - mkdir -p precompiled-gst && cd precompiled-gst
 
@@ -41,6 +31,16 @@ stages:
     - export GST_PLUGIN_SCANNER=$PWD/gstreamer/libexec/gstreamer-1.0/gst-plugin-scanner
     - export PATH=$PATH:$PWD/gstreamer/bin
     - export LD_LIBRARY_PATH=$PWD/gstreamer/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+    - cd "${CI_PROJECT_DIR}"
+  cache:
+    key: "gst"
+    paths:
+      - "${CARGO_HOME}"
+
+.cargo_test_template: &cargo_test
+  stage: "test"
+  <<: *setup
   script:
     - rustc --version
     - cargo build --color=always --all
