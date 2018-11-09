@@ -311,3 +311,19 @@ outdated:
     - schedules
   script:
     - cargo outdated --root-deps-only --exit-code 1 -v
+
+pages:
+  extends: .img-stable
+  stage: 'deploy'
+  script:
+    - |
+      for crate in gstreamer*; do
+        cd $crate
+        cargo doc --features --features=dox,embed-lgpl-docs
+        cd ..
+      done
+    - mv target/doc public/
+  when: 'manual'
+  artifacts:
+    paths:
+      - 'public'
