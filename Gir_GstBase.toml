@@ -39,7 +39,7 @@ manual = [
 name = "GstBase.Adapter"
 status = "generate"
 trait = false
-concurrency = "none"
+concurrency = "send-unique"
 
     [[object.function]]
     name = "map"
