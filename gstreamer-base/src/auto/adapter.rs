@@ -4,6 +4,7 @@
 
 use ffi;
 use glib;
+use glib::ObjectExt;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -191,5 +192,11 @@ impl Adapter {
 impl Default for Adapter {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+unsafe impl glib::SendUnique for Adapter {
+    fn is_unique(&self) -> bool {
+        self.ref_count() == 1
     }
 }
