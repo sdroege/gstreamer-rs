@@ -11,6 +11,12 @@ ignore = [
     "Gst.VERSION_MINOR",
     "Gst.VERSION_MICRO",
     "Gst.VERSION_NANO",
+    "Gst.ERROR_SYSTEM",
+    "Gst.TIME_FORMAT",
+    "Gst.STIME_FORMAT",
+    "Gst.PTR_FORMAT",
+    "Gst.SEGMENT_FORMAT",
+    "Gst.FOURCC_FORMAT",
 ]
 
 external_libraries = [

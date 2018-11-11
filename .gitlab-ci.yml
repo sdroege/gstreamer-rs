@@ -40,6 +40,9 @@ stages:
     - export GST_PLUGIN_SYSTEM_PATH=$PWD/gstreamer/lib/x86_64-linux-gnu/gstreamer-1.0
     - export PATH=$PATH:$PWD/gstreamer/bin
 
+    # go back to the root build directory
+    - cd ..
+
     - rustc --version
     - cargo --version
   script:
@@ -51,6 +54,28 @@ stages:
     # FIXME: tests are broken
     # https://github.com/sdroege/gstreamer-sys/issues/16
     # - cargo test --all --all-features --color=always
+
+    # Run tests for crates we can currently run. The others
+    # need a new release of the C library first
+    - |
+        for crate in gstreamer-app-sys \
+                     gstreamer-audio-sys \
+                     gstreamer-base-sys \
+                     gstreamer-check-sys \
+                     gstreamer-gl-sys \
+                     gstreamer-mpegts-sys \
+                     gstreamer-net-sys \
+                     gstreamer-pbutils-sys \
+                     gstreamer-player-sys \
+                     gstreamer-rtsp-sys \
+                     gstreamer-sdp-sys \
+                     gstreamer-sys \
+                     gstreamer-tag-sys \
+                     gstreamer-video-sys \
+                     gstreamer-webrtc-sys; \
+            do \
+                cargo test -p $crate; \
+            done
 
 test 1.28:
   # 1.28 img

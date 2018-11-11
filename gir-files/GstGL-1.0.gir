@@ -4268,7 +4268,7 @@ multiple times.  This must be called before any other GstGLRenderbuffer operatio
       <member name="compatibility" value="4" c:identifier="GST_GLSL_PROFILE_COMPATIBILITY">
         <doc xml:space="preserve">OpenGL compatibility profile</doc>
       </member>
-      <member name="any" value="-1" c:identifier="GST_GLSL_PROFILE_ANY">
+      <member name="any" value="4294967295" c:identifier="GST_GLSL_PROFILE_ANY">
         <doc xml:space="preserve">any OpenGL/OpenGL|ES profile</doc>
       </member>
     </bitfield>

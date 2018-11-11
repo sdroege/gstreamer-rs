@@ -6,6 +6,11 @@ min_cfg_version = "1.14"
 target_path = "gstreamer-gl-sys"
 work_mode = "sys"
 
+ignore = [
+    "GstGL.GL_DISPLAY_EGL_NAME",
+    "GstGL.GL_COLOR_CONVERT_VIDEO_CAPS",
+]
+
 external_libraries = [
     "GLib",
     "GObject",
@@ -29,10 +34,14 @@ name = "GstGL.GLDisplayEGLClass"
 status = "generate"
 cfg_condition = "feature = \"egl\""
 
-[[object]]
-name = "GstGL.GL_DISPLAY_EGL_NAME"
-status = "generate"
-cfg_condition = "feature = \"egl\""
-    [[object.constant]]
-    pattern = ".*"
-    cfg_condition = "feature = \"egl\""
+#[[object]]
+#name = "GstGL.GL_DISPLAY_EGL_NAME"
+#status = "manual"
+#cfg_condition = "feature = \"egl\""
+#    [[object.constant]]
+#    pattern = ".*"
+#    cfg_condition = "feature = \"egl\""
+
+#[[object]]
+#name = "GstGL.GL_COLOR_CONVERT_VIDEO_CAPS"
+#status = "manual"
