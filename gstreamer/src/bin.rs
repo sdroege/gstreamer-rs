@@ -15,6 +15,8 @@ use glib::IsA;
 
 use ffi;
 
+use std::path;
+
 pub trait BinExtManual {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
@@ -26,6 +28,14 @@ pub trait BinExtManual {
     fn iterate_sorted(&self) -> ::Iterator<Element>;
     fn iterate_sources(&self) -> ::Iterator<Element>;
     fn get_children(&self) -> Vec<Element>;
+
+    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> String;
+    fn debug_to_dot_file<Q: AsRef<path::Path>>(&self, details: ::DebugGraphDetails, file_name: Q);
+    fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
+        &self,
+        details: ::DebugGraphDetails,
+        file_name: Q,
+    );
 }
 
 impl<O: IsA<Bin>> BinExtManual for O {
@@ -95,6 +105,22 @@ impl<O: IsA<Bin>> BinExtManual for O {
             ::utils::MutexGuard::lock(&bin.element.object.lock);
             FromGlibPtrContainer::from_glib_none(bin.children)
         }
+    }
+
+    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> String {
+        ::debug_bin_to_dot_data(self, details)
+    }
+
+    fn debug_to_dot_file<Q: AsRef<path::Path>>(&self, details: ::DebugGraphDetails, file_name: Q) {
+        ::debug_bin_to_dot_file(self, details, file_name)
+    }
+
+    fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
+        &self,
+        details: ::DebugGraphDetails,
+        file_name: Q,
+    ) {
+        ::debug_bin_to_dot_file_with_ts(self, details, file_name)
     }
 }
 
