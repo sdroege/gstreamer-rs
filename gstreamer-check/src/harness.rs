@@ -10,6 +10,8 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
+use glib_ffi;
+use gobject_ffi;
 use gst;
 use gst::prelude::*;
 use std::marker::PhantomData;
@@ -215,10 +217,19 @@ impl Harness {
 
     pub fn find_element(&mut self, element_name: &str) -> Option<gst::Element> {
         unsafe {
-            from_glib_full(ffi::gst_harness_find_element(
-                self.0.as_ptr(),
-                element_name.to_glib_none().0,
-            ))
+            // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
+            let ptr = ffi::gst_harness_find_element(self.0.as_ptr(), element_name.to_glib_none().0);
+
+            if ptr.is_null() {
+                return None;
+            }
+
+            // Clear floating flag if it is set
+            if gobject_ffi::g_object_is_floating(ptr as *mut _) != glib_ffi::GFALSE {
+                gobject_ffi::g_object_ref_sink(ptr as *mut _);
+            }
+
+            from_glib_full(ptr)
         }
     }
 
@@ -625,15 +636,57 @@ impl Harness {
     //}
 
     pub fn get_element(&self) -> Option<gst::Element> {
-        unsafe { from_glib_none((*self.0.as_ptr()).element) }
+        unsafe {
+            // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
+            let ptr = (*self.0.as_ptr()).element;
+
+            if ptr.is_null() {
+                return None;
+            }
+
+            // Clear floating flag if it is set
+            if gobject_ffi::g_object_is_floating(ptr as *mut _) != glib_ffi::GFALSE {
+                gobject_ffi::g_object_ref_sink(ptr as *mut _);
+            }
+
+            from_glib_none(ptr)
+        }
     }
 
     pub fn get_sinkpad(&self) -> Option<gst::Pad> {
-        unsafe { from_glib_none((*self.0.as_ptr()).sinkpad) }
+        unsafe {
+            // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
+            let ptr = (*self.0.as_ptr()).sinkpad;
+
+            if ptr.is_null() {
+                return None;
+            }
+
+            // Clear floating flag if it is set
+            if gobject_ffi::g_object_is_floating(ptr as *mut _) != glib_ffi::GFALSE {
+                gobject_ffi::g_object_ref_sink(ptr as *mut _);
+            }
+
+            from_glib_none(ptr)
+        }
     }
 
     pub fn get_srcpad(&self) -> Option<gst::Pad> {
-        unsafe { from_glib_none((*self.0.as_ptr()).srcpad) }
+        unsafe {
+            // Work around https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/31
+            let ptr = (*self.0.as_ptr()).srcpad;
+
+            if ptr.is_null() {
+                return None;
+            }
+
+            // Clear floating flag if it is set
+            if gobject_ffi::g_object_is_floating(ptr as *mut _) != glib_ffi::GFALSE {
+                gobject_ffi::g_object_ref_sink(ptr as *mut _);
+            }
+
+            from_glib_none(ptr)
+        }
     }
 
     pub fn get_sink_harness<'a>(&'a self) -> Option<Ref<'a>> {
