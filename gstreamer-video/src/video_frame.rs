@@ -157,6 +157,12 @@ impl<T> VideoFrame<T> {
             ))
         }
     }
+
+    pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
+        let info = ::VideoInfo(ptr::read(&frame.info));
+        let buffer = gst::Buffer::from_glib_none(frame.buffer);
+        VideoFrame(frame, Some(buffer), info, PhantomData)
+    }
 }
 
 impl<T> Drop for VideoFrame<T> {
