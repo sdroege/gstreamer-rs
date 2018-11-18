@@ -109,9 +109,7 @@ unsafe extern "C" fn uri_handler_init<T: ObjectSubclass>(
     uri_handler_iface.set_uri = Some(uri_handler_set_uri::<T>);
 }
 
-pub fn register<T: ObjectSubclass + URIHandlerImpl>(
-    type_: &glib::subclass::InitializingType<T>,
-) {
+pub fn register<T: ObjectSubclass + URIHandlerImpl>(type_: &glib::subclass::InitializingType<T>) {
     unsafe {
         let iface_info = gobject_ffi::GInterfaceInfo {
             interface_init: Some(uri_handler_init::<T>),
