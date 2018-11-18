@@ -17,6 +17,7 @@ pub mod element;
 
 pub mod prelude {
     pub use super::element::{ElementClassSubclassExt, ElementImpl, ElementImplExt};
+    pub use super::uri_handler::URIHandlerImpl;
     pub use super::PanicPoison;
     pub use glib::subclass::prelude::*;
 }
