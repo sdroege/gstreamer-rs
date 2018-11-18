@@ -16,12 +16,17 @@ extern crate cfg_if;
 extern crate lazy_static;
 extern crate libc;
 
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
-extern crate gstreamer_sys as ffi;
+// Re-exported for the subclass gst_plugin_define! macro
+#[doc(hidden)]
+pub extern crate glib_sys as glib_ffi;
+#[doc(hidden)]
+pub extern crate gobject_sys as gobject_ffi;
+#[doc(hidden)]
+pub extern crate gstreamer_sys as ffi;
 
 #[macro_use]
-extern crate glib;
+#[doc(hidden)]
+pub extern crate glib;
 
 extern crate num_rational;
 
@@ -143,6 +148,7 @@ pub use promise::*;
 mod bin;
 mod bus;
 mod element;
+pub use element::ElementClass;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -330,3 +336,7 @@ pub mod prelude {
 }
 
 mod utils;
+
+#[macro_use]
+#[cfg(feature = "subclassing")]
+pub mod subclass;

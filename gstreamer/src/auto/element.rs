@@ -33,8 +33,10 @@ use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
+use ElementClass;
+
 glib_wrapper! {
-    pub struct Element(Object<ffi::GstElement, ffi::GstElementClass>): Object;
+    pub struct Element(Object<ffi::GstElement, ffi::GstElementClass, ElementClass>): Object;
 
     match fn {
         get_type => || ffi::gst_element_get_type(),

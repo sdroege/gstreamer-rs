@@ -16,7 +16,7 @@ use glib::translate::FromGlibPtrBorrow;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
-use glib::IsA;
+use glib::{IsA, IsClassFor};
 use miniobject::MiniObject;
 use Event;
 use Format;
@@ -29,6 +29,7 @@ use SpecificFormattedValue;
 
 use std::ffi::CStr;
 use std::mem;
+use std::ops;
 
 use libc;
 
@@ -92,6 +93,8 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
 }
 
 pub trait ElementExtManual {
+    fn get_element_class(&self) -> &ElementClass;
+
     fn query(&self, query: &mut QueryRef) -> bool;
 
     fn send_event(&self, event: Event) -> bool;
@@ -192,6 +195,14 @@ pub trait ElementExtManual {
 }
 
 impl<O: IsA<Element>> ElementExtManual for O {
+    fn get_element_class(&self) -> &ElementClass {
+        unsafe {
+            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+                as *const ElementClass;
+            &*klass
+        }
+    }
+
     fn query(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_element_query(
@@ -211,41 +222,15 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
-        unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
-                as *mut ffi::GstElementClass;
-
-            let ptr = ffi::gst_element_class_get_metadata(klass, key.to_glib_none().0);
-
-            if ptr.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(ptr).to_str().unwrap())
-            }
-        }
+        self.get_element_class().get_metadata(key)
     }
 
     fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
-        unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
-                as *mut ffi::GstElementClass;
-
-            from_glib_none(ffi::gst_element_class_get_pad_template(
-                klass,
-                name.to_glib_none().0,
-            ))
-        }
+        self.get_element_class().get_pad_template(name)
     }
 
     fn get_pad_template_list(&self) -> Vec<PadTemplate> {
-        unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
-                as *mut ffi::GstElementClass;
-
-            FromGlibPtrContainer::from_glib_none(ffi::gst_element_class_get_pad_template_list(
-                klass,
-            ))
-        }
+        self.get_element_class().get_pad_template_list()
     }
 
     fn message_full<T: ::MessageErrorDomain>(
@@ -610,6 +595,67 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 Box::into_raw(user_data) as *mut _,
                 Some(free_user_data),
             );
+        }
+    }
+}
+
+#[repr(C)]
+pub struct ElementClass(ffi::GstElementClass);
+
+unsafe impl IsClassFor for ElementClass {
+    type Instance = ::Element;
+}
+
+unsafe impl Send for ElementClass {}
+unsafe impl Sync for ElementClass {}
+
+impl ops::Deref for ElementClass {
+    type Target = glib::ObjectClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for ElementClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
+    }
+}
+
+impl ElementClass {
+    pub fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
+        unsafe {
+            let klass = self as *const _ as *const ffi::GstElementClass;
+
+            let ptr = ffi::gst_element_class_get_metadata(klass as *mut _, key.to_glib_none().0);
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
+        }
+    }
+
+    pub fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
+        unsafe {
+            let klass = self as *const _ as *const ffi::GstElementClass;
+
+            from_glib_none(ffi::gst_element_class_get_pad_template(
+                klass as *mut _,
+                name.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn get_pad_template_list(&self) -> Vec<PadTemplate> {
+        unsafe {
+            let klass = self as *const _ as *const ffi::GstElementClass;
+
+            FromGlibPtrContainer::from_glib_none(ffi::gst_element_class_get_pad_template_list(
+                klass as *mut _,
+            ))
         }
     }
 }

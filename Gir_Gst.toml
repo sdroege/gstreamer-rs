@@ -312,6 +312,7 @@ status = "generate"
 
 [[object]]
 name = "Gst.Element"
+subclassing = true
 status = "generate"
     [[object.function]]
     name = "make_from_uri"
