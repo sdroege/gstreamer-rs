@@ -13,11 +13,13 @@ pub mod error;
 #[macro_use]
 pub mod plugin;
 
+pub mod bin;
 pub mod child_proxy;
 pub mod element;
 pub mod uri_handler;
 
 pub mod prelude {
+    pub use super::bin::BinImpl;
     pub use super::child_proxy::ChildProxyImpl;
     pub use super::element::{ElementClassSubclassExt, ElementImpl, ElementImplExt};
     pub use super::uri_handler::URIHandlerImpl;

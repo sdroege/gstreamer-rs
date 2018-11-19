@@ -83,6 +83,7 @@ conversion_type = "scalar"
 
 [[object]]
 name = "Gst.Bin"
+subclassing = true
 status = "generate"
 trait_name = "GstBinExt"
     [[object.function]]

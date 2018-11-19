@@ -145,10 +145,12 @@ mod promise;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use promise::*;
 
-mod bin;
 mod bus;
 mod element;
 pub use element::ElementClass;
+
+mod bin;
+pub use bin::BinClass;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]

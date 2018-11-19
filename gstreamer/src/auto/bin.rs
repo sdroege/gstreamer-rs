@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use BinClass;
 use ChildProxy;
 use Element;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -26,7 +27,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass>): Element, Object, ChildProxy;
+    pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass, BinClass>): Element, Object, ChildProxy;
 
     match fn {
         get_type => || ffi::gst_bin_get_type(),

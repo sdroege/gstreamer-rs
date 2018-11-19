@@ -11,10 +11,11 @@ use Element;
 
 use glib;
 use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
-use glib::IsA;
+use glib::{IsA, IsClassFor};
 
 use ffi;
 
+use std::ops;
 use std::path;
 
 pub trait GstBinExtManual {
@@ -121,6 +122,30 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         file_name: Q,
     ) {
         ::debug_bin_to_dot_file_with_ts(self, details, file_name)
+    }
+}
+
+#[repr(C)]
+pub struct BinClass(ffi::GstBinClass);
+
+unsafe impl IsClassFor for BinClass {
+    type Instance = ::Bin;
+}
+
+unsafe impl Send for BinClass {}
+unsafe impl Sync for BinClass {}
+
+impl ops::Deref for BinClass {
+    type Target = ::ElementClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for BinClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
     }
 }
 
