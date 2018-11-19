@@ -6,6 +6,19 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+pub const MAJOR_VERSION: i32 = 1;
+
+#[cfg(not(feature = "v1_10"))]
+pub const MINOR_VERSION: i32 = 8;
+#[cfg(all(feature = "v1_10", not(feature = "v1_12")))]
+pub const MINOR_VERSION: i32 = 10;
+#[cfg(all(feature = "v1_12", not(feature = "v1_14")))]
+pub const MINOR_VERSION: i32 = 12;
+#[cfg(all(feature = "v1_14", not(feature = "v1_16")))]
+pub const MINOR_VERSION: i32 = 14;
+#[cfg(all(feature = "v1_16", not(feature = "v1_18")))]
+pub const MINOR_VERSION: i32 = 16;
+
 #[macro_export]
 macro_rules! gst_plugin_define(
     ($name:expr, $description:expr, $plugin_init:ident,
@@ -14,8 +27,8 @@ macro_rules! gst_plugin_define(
         pub mod plugin_desc {
             use $crate::glib::translate::{from_glib_borrow, ToGlib, from_glib};
 
-            const MAJOR_VERSION: i32 = 1;
-            const MINOR_VERSION: i32 = 8;
+            const MAJOR_VERSION: i32 = $crate::subclass::MAJOR_VERSION;
+            const MINOR_VERSION: i32 = $crate::subclass::MINOR_VERSION;
 
             // Not using c_char here because it requires the libc crate
             #[allow(non_camel_case_types)]
