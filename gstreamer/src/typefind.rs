@@ -293,7 +293,8 @@ mod tests {
                     );
                 }
             },
-        );
+        )
+        .unwrap();
 
         let data = b"abcdefgh";
         let data = &data[..];
