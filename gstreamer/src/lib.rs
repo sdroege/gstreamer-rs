@@ -152,6 +152,9 @@ pub use element::ElementClass;
 mod bin;
 pub use bin::BinClass;
 
+mod pipeline;
+pub use pipeline::PipelineClass;
+
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 cfg_if! {

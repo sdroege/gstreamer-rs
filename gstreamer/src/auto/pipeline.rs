@@ -7,6 +7,7 @@ use ChildProxy;
 use Clock;
 use ClockTime;
 use Element;
+use PipelineClass;
 use Object;
 use ffi;
 use glib;
@@ -23,7 +24,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Pipeline(Object<ffi::GstPipeline, ffi::GstPipelineClass>): Bin, Element, Object, ChildProxy;
+    pub struct Pipeline(Object<ffi::GstPipeline, ffi::GstPipelineClass, PipelineClass>): Bin, Element, Object, ChildProxy;
 
     match fn {
         get_type => || ffi::gst_pipeline_get_type(),

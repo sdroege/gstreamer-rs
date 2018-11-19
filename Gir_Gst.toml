@@ -16,7 +16,6 @@ external_libraries = [
 
 generate = [
     "Gst.ClockTimeDiff",
-    "Gst.Pipeline",
     "Gst.State",
     "Gst.StateChange",
     "Gst.SeekFlags",
@@ -274,6 +273,11 @@ ref_mode = "ref"
 name = "Gst.TocEntry"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "Gst.Pipeline"
+subclassing = true
+status = "generate"
 
 [[object]]
 name = "Gst.Promise"
