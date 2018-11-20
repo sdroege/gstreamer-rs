@@ -46,6 +46,7 @@ mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
 mod base_sink;
+pub use base_sink::BaseSinkClass;
 mod base_src;
 pub use base_src::BaseSrcClass;
 mod base_transform;

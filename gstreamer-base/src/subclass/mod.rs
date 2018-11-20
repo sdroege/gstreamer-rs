@@ -8,8 +8,10 @@
 // except according to those terms.
 #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
 
+pub mod base_sink;
 pub mod base_src;
 
 pub mod prelude {
+    pub use super::base_sink::BaseSinkImpl;
     pub use super::base_src::BaseSrcImpl;
 }

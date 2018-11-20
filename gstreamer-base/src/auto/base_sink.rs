@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use BaseSinkClass;
 use ffi;
 use glib;
 use glib::StaticType;
@@ -21,7 +22,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass>): [
+    pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass, BaseSinkClass>): [
         gst::Element => gst_ffi::GstElement,
         gst::Object => gst_ffi::GstObject,
     ];

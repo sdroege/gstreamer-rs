@@ -16,7 +16,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstBase.BaseSink",
     "GstBase.BaseTransform",
     "GstBase.PushSrc",
 ]
@@ -72,6 +71,11 @@ name = "GstBase.FlowCombiner"
 status = "manual"
 trait = false
 concurrency = "none"
+
+[[object]]
+name = "GstBase.BaseSink"
+subclassing = true
+status = "generate"
 
 [[object]]
 name = "GstBase.BaseSrc"

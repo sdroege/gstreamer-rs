@@ -8,8 +8,9 @@
 
 use ffi;
 use glib::translate::*;
-use glib::IsA;
+use glib::{IsA, IsClassFor};
 use gst;
+use std::ops;
 use BaseSink;
 
 pub trait BaseSinkExtManual {
@@ -24,5 +25,29 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             ::utils::MutexGuard::lock(&sink.element.object.lock);
             from_glib_none(&sink.segment as *const _)
         }
+    }
+}
+
+#[repr(C)]
+pub struct BaseSinkClass(ffi::GstBaseSinkClass);
+
+unsafe impl IsClassFor for BaseSinkClass {
+    type Instance = BaseSink;
+}
+
+unsafe impl Send for BaseSinkClass {}
+unsafe impl Sync for BaseSinkClass {}
+
+impl ops::Deref for BaseSinkClass {
+    type Target = gst::ElementClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for BaseSinkClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
     }
 }
