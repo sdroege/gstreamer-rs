@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use BaseSrcClass;
 use ffi;
 use glib;
 use glib::StaticType;
@@ -21,7 +22,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass>): [
+    pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass, BaseSrcClass>): [
         gst::Element => gst_ffi::GstElement,
         gst::Object => gst_ffi::GstObject,
     ];

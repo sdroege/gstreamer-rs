@@ -75,6 +75,7 @@ concurrency = "none"
 
 [[object]]
 name = "GstBase.BaseSrc"
+subclassing = true
 status = "generate"
 
     [[object.function]]

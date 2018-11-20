@@ -8,8 +8,9 @@
 
 use ffi;
 use glib::translate::*;
-use glib::IsA;
+use glib::{IsA, IsClassFor};
 use gst;
+use std::ops;
 use BaseSrc;
 
 pub trait BaseSrcExtManual {
@@ -24,5 +25,29 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             ::utils::MutexGuard::lock(&src.element.object.lock);
             from_glib_none(&src.segment as *const _)
         }
+    }
+}
+
+#[repr(C)]
+pub struct BaseSrcClass(ffi::GstBaseSrcClass);
+
+unsafe impl IsClassFor for BaseSrcClass {
+    type Instance = BaseSrc;
+}
+
+unsafe impl Send for BaseSrcClass {}
+unsafe impl Sync for BaseSrcClass {}
+
+impl ops::Deref for BaseSrcClass {
+    type Target = gst::ElementClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for BaseSrcClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
     }
 }

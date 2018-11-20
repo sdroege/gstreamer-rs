@@ -33,6 +33,7 @@ v1_14_1 = ["gstreamer-sys/v1_14", "gstreamer-base-sys/v1_14_1", "v1_14"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-base-sys/dox", "glib/dox", "gstreamer/dox"]
+subclassing = ["gstreamer/subclassing"]
 default-features = []
 
 [badges]

@@ -8,6 +8,7 @@
 
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
+#[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_base_sys as ffi;
 extern crate gstreamer_sys as gst_ffi;
@@ -46,6 +47,7 @@ mod aggregator;
 mod aggregator_pad;
 mod base_sink;
 mod base_src;
+pub use base_src::BaseSrcClass;
 mod base_transform;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -65,3 +67,6 @@ pub mod prelude {
 }
 
 mod utils;
+
+#[cfg(feature = "subclassing")]
+pub mod subclass;
