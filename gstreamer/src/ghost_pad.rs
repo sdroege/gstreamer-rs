@@ -8,13 +8,15 @@
 
 use ffi;
 use glib::object::Downcast;
-use glib::object::IsA;
+use glib::object::{IsA, IsClassFor};
 use glib::translate::*;
 use GhostPad;
 use Object;
 use Pad;
 use PadMode;
 use PadTemplate;
+
+use std::ops;
 
 impl GhostPad {
     pub fn new<'a, P: Into<Option<&'a str>>, Q: IsA<Pad>>(name: P, target: &Q) -> Option<GhostPad> {
@@ -91,5 +93,29 @@ impl GhostPad {
                 active.to_glib(),
             ))
         }
+    }
+}
+
+#[repr(C)]
+pub struct GhostPadClass(ffi::GstGhostPadClass);
+
+unsafe impl IsClassFor for GhostPadClass {
+    type Instance = GhostPad;
+}
+
+unsafe impl Send for GhostPadClass {}
+unsafe impl Sync for GhostPadClass {}
+
+impl ops::Deref for GhostPadClass {
+    type Target = ::PadClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for GhostPadClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
     }
 }

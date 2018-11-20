@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use GhostPadClass;
 use Object;
 use Pad;
 use PadDirection;
@@ -18,7 +19,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass>): ProxyPad, Pad, Object;
+    pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass, GhostPadClass>): ProxyPad, Pad, Object;
 
     match fn {
         get_type => || ffi::gst_ghost_pad_get_type(),

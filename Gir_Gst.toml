@@ -735,6 +735,7 @@ trait = false
 
 [[object]]
 name = "Gst.GhostPad"
+subclassing = true
 status = "generate"
     [[object.function]]
     name = "set_target"

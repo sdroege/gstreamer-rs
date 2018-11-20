@@ -180,6 +180,7 @@ mod device_monitor;
 mod device_provider;
 mod enums;
 mod ghost_pad;
+pub use ghost_pad::GhostPadClass;
 mod gobject;
 mod iterator;
 mod object;
