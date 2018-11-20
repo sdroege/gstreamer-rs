@@ -50,6 +50,7 @@ pub use base_sink::BaseSinkClass;
 mod base_src;
 pub use base_src::BaseSrcClass;
 mod base_transform;
+pub use base_transform::BaseTransformClass;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

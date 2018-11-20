@@ -16,7 +16,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstBase.BaseTransform",
     "GstBase.PushSrc",
 ]
 
@@ -86,6 +85,11 @@ status = "generate"
     name = "submit_buffer_list"
     # Pass by value, to be added manually
     ignore = true
+
+[[object]]
+name = "GstBase.BaseTransform"
+subclassing = true
+status = "generate"
 
 [[object]]
 name = "GstBase.Aggregator"

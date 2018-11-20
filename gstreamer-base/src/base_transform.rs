@@ -8,8 +8,9 @@
 
 use ffi;
 use glib::translate::*;
-use glib::IsA;
+use glib::{IsA, IsClassFor};
 use gst;
+use std::ops;
 use BaseTransform;
 
 pub trait BaseTransformExtManual {
@@ -24,5 +25,29 @@ impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
             ::utils::MutexGuard::lock(&trans.element.object.lock);
             from_glib_none(&trans.segment as *const _)
         }
+    }
+}
+
+#[repr(C)]
+pub struct BaseTransformClass(ffi::GstBaseTransformClass);
+
+unsafe impl IsClassFor for BaseTransformClass {
+    type Instance = BaseTransform;
+}
+
+unsafe impl Send for BaseTransformClass {}
+unsafe impl Sync for BaseTransformClass {}
+
+impl ops::Deref for BaseTransformClass {
+    type Target = gst::ElementClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for BaseTransformClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
     }
 }

@@ -10,8 +10,12 @@
 
 pub mod base_sink;
 pub mod base_src;
+pub mod base_transform;
+
+pub use self::base_transform::BaseTransformMode;
 
 pub mod prelude {
     pub use super::base_sink::BaseSinkImpl;
     pub use super::base_src::BaseSrcImpl;
+    pub use super::base_transform::{BaseTransformClassSubclassExt, BaseTransformImpl};
 }
