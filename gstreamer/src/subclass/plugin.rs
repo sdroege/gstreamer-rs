@@ -27,13 +27,6 @@ macro_rules! gst_plugin_define(
         pub mod plugin_desc {
             use $crate::glib::translate::{from_glib_borrow, ToGlib, from_glib};
 
-            const MAJOR_VERSION: i32 = $crate::subclass::MAJOR_VERSION;
-            const MINOR_VERSION: i32 = $crate::subclass::MINOR_VERSION;
-
-            // Not using c_char here because it requires the libc crate
-            #[allow(non_camel_case_types)]
-            type c_char = i8;
-
             #[repr(C)]
             pub struct GstPluginDesc($crate::ffi::GstPluginDesc);
             unsafe impl Sync for GstPluginDesc {}
@@ -41,33 +34,33 @@ macro_rules! gst_plugin_define(
             #[no_mangle]
             #[allow(non_upper_case_globals)]
             pub static gst_plugin_desc: GstPluginDesc = GstPluginDesc($crate::ffi::GstPluginDesc {
-                major_version: MAJOR_VERSION,
-                minor_version: MINOR_VERSION,
-                name: $name as *const u8 as *const c_char,
-                description: $description as *const u8 as *const c_char,
+                major_version: $crate::subclass::plugin::MAJOR_VERSION,
+                minor_version: $crate::subclass::plugin::MINOR_VERSION,
+                name: concat!($name, "\0") as *const str as *const _,
+                description: concat!($description, "\0") as *const str as *const _,
                 plugin_init: Some(plugin_init_trampoline),
-                version: $version as *const u8 as *const c_char,
-                license: $license as *const u8 as *const c_char,
-                source: $source as *const u8 as *const c_char,
-                package: $package as *const u8 as *const c_char,
-                origin: $origin as *const u8 as *const c_char,
-                release_datetime: $release_datetime as *const u8 as *const c_char,
+                version: concat!($version, "\0") as *const str as *const _,
+                license: concat!($license, "\0") as *const str as *const _,
+                source: concat!($source, "\0") as *const str as *const _,
+                package: concat!($package, "\0") as *const str as *const _,
+                origin: concat!($origin, "\0") as *const str as *const _,
+                release_datetime: concat!($release_datetime, "\0") as *const str as *const _,
                 _gst_reserved: [0 as $crate::glib_ffi::gpointer; 4],
             });
 
             pub fn plugin_register_static() -> bool {
                 unsafe {
                     from_glib($crate::ffi::gst_plugin_register_static(
-                        MAJOR_VERSION,
-                        MINOR_VERSION,
-                        $name as *const u8 as *const c_char,
-                        $description as *const u8 as *const c_char,
+                        $crate::subclass::plugin::MAJOR_VERSION,
+                        $crate::subclass::plugin::MINOR_VERSION,
+                        concat!($name, "\0") as *const str as *const _,
+                        concat!($description, "\0") as *const str as _,
                         Some(plugin_init_trampoline),
-                        $version as *const u8 as *const c_char,
-                        $license as *const u8 as *const c_char,
-                        $source as *const u8 as *const c_char,
-                        $package as *const u8 as *const c_char,
-                        $origin as *const u8 as *const c_char,
+                        concat!($version, "\0") as *const str as *const _,
+                        concat!($license, "\0") as *const str as *const _,
+                        concat!($source, "\0") as *const str as *const _,
+                        concat!($package, "\0") as *const str as *const _,
+                        concat!($origin, "\0") as *const str as *const _,
                     ))
                 }
             }
