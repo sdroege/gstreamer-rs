@@ -184,6 +184,7 @@ mod gobject;
 mod iterator;
 mod object;
 mod pad;
+pub use pad::PadClass;
 mod parse_context;
 mod proxy_pad;
 mod tag_setter;

@@ -26,6 +26,7 @@ use StaticPadTemplate;
 use std::cell::RefCell;
 use std::mem;
 use std::mem::transmute;
+use std::ops;
 use std::ptr;
 
 use glib;
@@ -34,7 +35,7 @@ use glib::translate::{
     ToGlibPtr,
 };
 use glib::Object;
-use glib::{IsA, StaticType};
+use glib::{IsA, IsClassFor, StaticType};
 use glib_ffi;
 use glib_ffi::gpointer;
 
@@ -909,6 +910,30 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
             ffi::gst_pad_sticky_events_foreach(self.to_glib_none().0, Some(trampoline), func_ptr);
         }
+    }
+}
+
+#[repr(C)]
+pub struct PadClass(ffi::GstPadClass);
+
+unsafe impl IsClassFor for PadClass {
+    type Instance = Pad;
+}
+
+unsafe impl Send for PadClass {}
+unsafe impl Sync for PadClass {}
+
+impl ops::Deref for PadClass {
+    type Target = glib::ObjectClass;
+
+    fn deref(&self) -> &Self::Target {
+        self.upcast_ref()
+    }
+}
+
+impl ops::DerefMut for PadClass {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.upcast_ref_mut()
     }
 }
 

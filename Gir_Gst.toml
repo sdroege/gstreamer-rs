@@ -577,6 +577,7 @@ trait_name = "GstObjectExt"
 
 [[object]]
 name = "Gst.Pad"
+subclassing = true
 status = "generate"
     [[object.function]]
     name = "link_maybe_ghosting"

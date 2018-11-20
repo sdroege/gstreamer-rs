@@ -8,6 +8,7 @@ use Event;
 use EventType;
 use FlowReturn;
 use Object;
+use PadClass;
 use PadDirection;
 use PadLinkCheck;
 use PadLinkReturn;
@@ -34,7 +35,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Pad(Object<ffi::GstPad, ffi::GstPadClass>): Object;
+    pub struct Pad(Object<ffi::GstPad, ffi::GstPadClass, PadClass>): Object;
 
     match fn {
         get_type => || ffi::gst_pad_get_type(),
