@@ -108,6 +108,7 @@ version = "1.14"
 [[object]]
 name = "GstBase.AggregatorPad"
 status = "generate"
+subclassing = true
 version = "1.14"
 
 [[object]]

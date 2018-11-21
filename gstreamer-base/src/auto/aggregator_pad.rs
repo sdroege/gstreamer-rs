@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use AggregatorPadClass;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
@@ -13,7 +14,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct AggregatorPad(Object<ffi::GstAggregatorPad, ffi::GstAggregatorPadClass>): [
+    pub struct AggregatorPad(Object<ffi::GstAggregatorPad, ffi::GstAggregatorPadClass, AggregatorPadClass>): [
         gst::Pad => gst_ffi::GstPad,
         gst::Object => gst_ffi::GstObject,
     ];

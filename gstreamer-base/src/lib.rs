@@ -45,6 +45,8 @@ pub use flow_combiner::*;
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+pub use aggregator_pad::AggregatorPadClass;
 mod base_sink;
 pub use base_sink::BaseSinkClass;
 mod base_src;

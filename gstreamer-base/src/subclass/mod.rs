@@ -14,7 +14,12 @@ pub mod base_transform;
 
 pub use self::base_transform::BaseTransformMode;
 
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+pub mod aggregator_pad;
+
 pub mod prelude {
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    pub use super::aggregator_pad::AggregatorPadImpl;
     pub use super::base_sink::BaseSinkImpl;
     pub use super::base_src::BaseSrcImpl;
     pub use super::base_transform::{BaseTransformClassSubclassExt, BaseTransformImpl};
