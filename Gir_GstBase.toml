@@ -94,6 +94,7 @@ status = "generate"
 [[object]]
 name = "GstBase.Aggregator"
 status = "generate"
+subclassing = true
 version = "1.14"
 
     [[object.function]]

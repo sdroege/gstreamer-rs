@@ -13,6 +13,8 @@ extern crate gstreamer as gst;
 extern crate gstreamer_base_sys as ffi;
 extern crate gstreamer_sys as gst_ffi;
 
+extern crate libc;
+
 #[macro_use]
 extern crate glib;
 
@@ -43,6 +45,8 @@ mod flow_combiner;
 pub use flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+pub use aggregator::AggregatorClass;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
