@@ -1,7 +1,7 @@
-# gstreamer-pbutils-rs [![crates.io](https://img.shields.io/crates/v/gstreamer.svg)](https://crates.io/crates/gstreamer) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# gstreamer-pbutils-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-pbutils.svg)](https://crates.io/crates/gstreamer-pbutils) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Pbutils library) bindings for Rust.
-Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
+Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_pbutils/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications.
@@ -118,7 +118,7 @@ $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG
 ## Getting Started
 
 The API reference can be found
-[here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/), however it is
+[here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer/), however it is
 only the Rust API reference and does not explain any of the concepts.
 
 For getting started with GStreamer development, the best would be to follow

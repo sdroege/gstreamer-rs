@@ -1,7 +1,7 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-app.svg)](https://crates.io/crates/gstreamer-app) [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-check.svg)](https://crates.io/crates/gstreamer-check) [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Check library) bindings for Rust.
-Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
+Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_check/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications.
@@ -118,7 +118,7 @@ $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG
 ## Getting Started
 
 The API reference can be found
-[here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/), however it is
+[here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer/), however it is
 only the Rust API reference and does not explain any of the concepts.
 
 For getting started with GStreamer development, the best would be to follow
@@ -134,12 +134,12 @@ In addition there are
 [tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
 GStreamer website. Many of them were ported to Rust already and the code can
 be found in the
-[tutorials](https://github.com/sdroege/gstreamer-rs/tree/master/tutorials)
+[tutorials](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/tutorials)
 directory.
 
 Some further examples for various aspects of GStreamer and how to use it from
 Rust can be found in the
-[examples](https://github.com/sdroege/gstreamer-rs/tree/master/examples)
+[examples](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/examples)
 directory.
 
 <a name="license"/>

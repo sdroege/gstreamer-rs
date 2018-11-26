@@ -1,7 +1,7 @@
 # gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-editing-services.svg)](https://crates.io/crates/gstreamer-editing-services)  [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer Editing Services](https://gstreamer.freedesktop.org/) bindings for Rust.
-Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
+Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_editing_services/).
 
 NOTE: The GStreamer Editing Services API is not Thread Safe and before the 1.16
 release this was not properly expressed in the code, leading to possible data
@@ -122,7 +122,7 @@ $ export PKG_CONFIG_PATH="c:\\gstreamer\\1.0\\x86_64\\lib\\pkgconfig${PKG_CONFIG
 ## Getting Started
 
 The API reference can be found
-[here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/), however it is
+[here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer/), however it is
 only the Rust API reference and does not explain any of the concepts.
 
 For getting started with GStreamer development, the best would be to follow
