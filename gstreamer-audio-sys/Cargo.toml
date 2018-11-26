@@ -38,6 +38,7 @@ name = "gstreamer_audio_sys"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 build = "build.rs"
 description = "FFI bindings to libgstaudio-1.0"
+documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer-sys/gstreamer_audio_sys/"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"

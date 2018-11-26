@@ -38,6 +38,7 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>",
            "Víctor Manuel Jáquez Leal <vjaquez@igalia.com>"]
 build = "build.rs"
 description = "FFI bindings to libgstgl-1.0"
+documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer-sys/gstreamer_gl_sys/"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"

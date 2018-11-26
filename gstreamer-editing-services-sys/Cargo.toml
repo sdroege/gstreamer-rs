@@ -42,6 +42,7 @@ name = "gstreamer_editing_services_sys"
 authors = ["Thibault Saunier <tsaunier@igalia.com>", "Sebastian Dröge <sebastian@centricular.com>"]
 build = "build.rs"
 description = "FFI bindings to libges-1.0"
+documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer-sys/gstreamer_editing_services_sys/"
 homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia", "nle"]
 license = "MIT"
