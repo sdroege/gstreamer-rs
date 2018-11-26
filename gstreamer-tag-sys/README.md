@@ -1,4 +1,6 @@
-# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-sys.svg)](https://crates.io/crates/gstreamer-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/commits/master)
+# NOTE: The canonical repository for gstreamer-sys has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys)!
+
+# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-tag-sys.svg)](https://crates.io/crates/gstreamer-tag-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Tag library) FFI bindings for Rust.
 
