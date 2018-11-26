@@ -30,6 +30,9 @@ pub struct VideoFrame<T>(
     PhantomData<T>,
 );
 
+unsafe impl<T> Send for VideoFrame<T> {}
+unsafe impl<T> Sync for VideoFrame<T> {}
+
 impl<T> VideoFrame<T> {
     pub fn info(&self) -> &::VideoInfo {
         &self.2
