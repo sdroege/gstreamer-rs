@@ -14,7 +14,7 @@ gstreamer-player = { version = "0.12", path = "../gstreamer-player", optional = 
 gstreamer-rtsp = { version = "0.12", path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { version = "0.12", path = "../gstreamer-rtsp-server", optional = true }
 gstreamer-rtsp-server-sys = { version = "0.6", features = ["v1_8"], optional = true }
-gstreamer-editing-services = { version = "0.12", optional = true }
+gstreamer-editing-services = { version = "0.12", path = "../gstreamer-editing-services", optional = true }
 gtk = { version = "0.5", features = ["v3_6"], optional = true }
 gdk = { version = "0.9", optional = true }
 gio = { version = "0.5", optional = true }
