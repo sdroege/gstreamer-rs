@@ -693,7 +693,8 @@ Copy `size` bytes starting from `offset` in `self` to `dest`.
 ## `offset`
 the offset to extract
 ## `dest`
-the destination address
+
+ the destination address
 ## `size`
 the size to extract
 
@@ -12157,8 +12158,9 @@ outside of the segment is extrapolated.
 When 1 is returned, `running_time` resulted in a positive position returned
 in `position`.
 
-When this function returns -1, the returned `position` should be negated
-to get the real negative segment position.
+When this function returns -1, the returned `position` was < 0, and the value
+in the position variable should be negated to get the real negative segment
+position.
 ## `format`
 the format of the segment.
 ## `running_time`
