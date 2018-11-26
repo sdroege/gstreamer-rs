@@ -444,9 +444,8 @@ impl<O: IsA<Pad>> PadExtManual for O {
     {
         #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static,
-            > = Box::new(func);
+            let func_box: Box<Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static> =
+                Box::new(func);
             ffi::gst_pad_set_activate_function_full(
                 self.to_glib_none().0,
                 Some(trampoline_activate_function),
@@ -1013,10 +1012,8 @@ unsafe extern "C" fn trampoline_activatemode_function(
     active: glib_ffi::gboolean,
 ) -> glib_ffi::gboolean {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).activatemodedata);
+    let func: &&(Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static) =
+        transmute((*pad).activatemodedata);
 
     func(
         &from_glib_borrow(pad),
@@ -1034,9 +1031,9 @@ unsafe extern "C" fn trampoline_chain_function(
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::Buffer) -> ::FlowReturn
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).chaindata);
+           + Send
+           + Sync
+           + 'static) = transmute((*pad).chaindata);
 
     func(
         &from_glib_borrow(pad),
@@ -1053,9 +1050,9 @@ unsafe extern "C" fn trampoline_chain_list_function(
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, ::BufferList) -> ::FlowReturn
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).chainlistdata);
+           + Send
+           + Sync
+           + 'static) = transmute((*pad).chainlistdata);
 
     func(
         &from_glib_borrow(pad),
@@ -1088,10 +1085,8 @@ unsafe extern "C" fn trampoline_event_full_function(
     event: *mut ffi::GstEvent,
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).eventdata);
+    let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn + Send + Sync + 'static) =
+        transmute((*pad).eventdata);
 
     func(
         &from_glib_borrow(pad),
@@ -1110,9 +1105,9 @@ unsafe extern "C" fn trampoline_getrange_function(
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowReturn>
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).getrangedata);
+           + Send
+           + Sync
+           + 'static) = transmute((*pad).getrangedata);
 
     match func(
         &from_glib_borrow(pad),
@@ -1151,9 +1146,9 @@ unsafe extern "C" fn trampoline_link_function(
 ) -> ffi::GstPadLinkReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let func: &&(Fn(&Pad, &Option<::Object>, &::Pad) -> ::PadLinkReturn
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).linkdata);
+           + Send
+           + Sync
+           + 'static) = transmute((*pad).linkdata);
 
     func(
         &from_glib_borrow(pad),
@@ -1169,10 +1164,8 @@ unsafe extern "C" fn trampoline_query_function(
     query: *mut ffi::GstQuery,
 ) -> glib_ffi::gboolean {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool
-                         + Send
-                         + Sync
-                         + 'static) = transmute((*pad).querydata);
+    let func: &&(Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static) =
+        transmute((*pad).querydata);
 
     func(
         &from_glib_borrow(pad),
