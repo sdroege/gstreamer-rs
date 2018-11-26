@@ -3,12 +3,12 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::object::Downcast;
+use glib::signal::connect;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect;
-use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
@@ -32,15 +32,16 @@ glib_wrapper! {
 impl TestClock {
     pub fn new() -> TestClock {
         assert_initialized_main_thread!();
-        unsafe {
-            gst::Clock::from_glib_full(ffi::gst_test_clock_new()).downcast_unchecked()
-        }
+        unsafe { gst::Clock::from_glib_full(ffi::gst_test_clock_new()).downcast_unchecked() }
     }
 
     pub fn new_with_start_time(start_time: gst::ClockTime) -> TestClock {
         assert_initialized_main_thread!();
         unsafe {
-            gst::Clock::from_glib_full(ffi::gst_test_clock_new_with_start_time(start_time.to_glib())).downcast_unchecked()
+            gst::Clock::from_glib_full(ffi::gst_test_clock_new_with_start_time(
+                start_time.to_glib(),
+            ))
+            .downcast_unchecked()
         }
     }
 
@@ -51,14 +52,14 @@ impl TestClock {
     }
 
     pub fn crank(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gst_test_clock_crank(self.to_glib_none().0))
-        }
+        unsafe { from_glib(ffi::gst_test_clock_crank(self.to_glib_none().0)) }
     }
 
     pub fn get_next_entry_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_test_clock_get_next_entry_time(self.to_glib_none().0))
+            from_glib(ffi::gst_test_clock_get_next_entry_time(
+                self.to_glib_none().0,
+            ))
         }
     }
 
@@ -67,9 +68,7 @@ impl TestClock {
     //}
 
     pub fn peek_id_count(&self) -> u32 {
-        unsafe {
-            ffi::gst_test_clock_peek_id_count(self.to_glib_none().0)
-        }
+        unsafe { ffi::gst_test_clock_peek_id_count(self.to_glib_none().0) }
     }
 
     //pub fn peek_next_pending_id(&self, pending_id: /*Ignored*/&mut gst::ClockID) -> bool {
@@ -107,21 +106,33 @@ impl TestClock {
     pub fn get_property_clock_type(&self) -> gst::ClockType {
         unsafe {
             let mut value = Value::from_type(<gst::ClockType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "clock-type".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(
+                self.to_glib_none().0,
+                "clock-type".to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     pub fn set_property_clock_type(&self, clock_type: gst::ClockType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "clock-type".to_glib_none().0, Value::from(&clock_type).to_glib_none().0);
+            gobject_ffi::g_object_set_property(
+                self.to_glib_none().0,
+                "clock-type".to_glib_none().0,
+                Value::from(&clock_type).to_glib_none().0,
+            );
         }
     }
 
     pub fn get_property_start_time(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "start-time".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(
+                self.to_glib_none().0,
+                "start-time".to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -130,11 +141,18 @@ impl TestClock {
     //    unsafe { TODO: call ffi::gst_test_clock_id_list_get_latest_time() }
     //}
 
-    pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&TestClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::clock-type",
-                transmute(notify_clock_type_trampoline as usize), Box_::into_raw(f) as *mut _)
+            connect(
+                self.to_glib_none().0,
+                "notify::clock-type",
+                transmute(notify_clock_type_trampoline as usize),
+                Box_::into_raw(f) as *mut _,
+            )
         }
     }
 }
@@ -148,7 +166,11 @@ impl Default for TestClock {
 unsafe impl Send for TestClock {}
 unsafe impl Sync for TestClock {}
 
-unsafe extern "C" fn notify_clock_type_trampoline(this: *mut ffi::GstTestClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_clock_type_trampoline(
+    this: *mut ffi::GstTestClock,
+    _param_spec: glib_ffi::gpointer,
+    f: glib_ffi::gpointer,
+) {
     let f: &&(Fn(&TestClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

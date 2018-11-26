@@ -17,8 +17,8 @@ use gst::prelude::*;
 use std::marker::PhantomData;
 use std::mem;
 use std::ops;
-use std::ptr;
 use std::path;
+use std::ptr;
 use TestClock;
 
 #[derive(Debug)]
