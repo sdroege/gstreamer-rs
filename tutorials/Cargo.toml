@@ -15,9 +15,6 @@ gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 byte-slice-cast = "0.2"
 failure = "0.1.0"
 
-[badges]
-gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
-
 [features]
 tutorial5 = ["gtk", "gdk"]
 tutorial5-x11 = ["tutorial5"]

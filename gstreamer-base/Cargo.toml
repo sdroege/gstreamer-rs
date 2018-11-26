@@ -36,6 +36,3 @@ purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-base-sys/dox", "glib/dox", "gstreamer/dox"]
 subclassing = ["gstreamer/subclassing"]
 default-features = []
-
-[badges]
-gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
