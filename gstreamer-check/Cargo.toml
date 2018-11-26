@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-check"
-version = "0.13.0"
+version = "0.12.1"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Check library"
@@ -14,12 +14,12 @@ build = "build.rs"
 
 [dependencies]
 bitflags = "1.0"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"]  }
-gstreamer-check-sys = { git = "https://github.com/sdroege/gstreamer-sys", features = ["v1_8"] }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer" }
+glib-sys = "0.7"
+gobject-sys = "0.7"
+gstreamer-sys = { version = "0.6", features = ["v1_8"] }
+gstreamer-check-sys = { version = "0.6", features = ["v1_8"] }
+glib = "0.6"
+gstreamer = { version = "0.12", path = "../gstreamer" }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
@@ -36,4 +36,4 @@ dox = ["gstreamer-check-sys/dox", "glib/dox", "gstreamer/dox"]
 default-features = []
 
 [badges]
-travis-ci = { repository = "sdroege/gstreamer-rs", branch = "master" }
+gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
