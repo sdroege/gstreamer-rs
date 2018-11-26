@@ -1,6 +1,8 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-sdp.svg)](https://crates.io/crates/gstreamer-sdp) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# NOTE: The canonical repository for gstreamer-rs has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)!
 
-[GStreamer](https://gstreamer.freedesktop.org/) (Sdp library) bindings for Rust.
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-rtsp.svg)](https://crates.io/crates/gstreamer-rtsp) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+
+[GStreamer](https://gstreamer.freedesktop.org/) (RTSP library) bindings for Rust.
 Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
 
 These bindings are providing a safe API that can be used to interface with

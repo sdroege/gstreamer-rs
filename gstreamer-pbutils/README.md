@@ -1,4 +1,6 @@
-# gstreamer-pbutils-rs [![crates.io](https://img.shields.io/crates/v/gstreamer.svg)](https://crates.io/crates/gstreamer) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
+# NOTE: The canonical repository for gstreamer-rs has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)!
+
+# gstreamer-pbutils-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-pbutils.svg)](https://crates.io/crates/gstreamer-pbutils) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Pbutils library) bindings for Rust.
 Documentation can be found [here](https://sdroege.github.io/rustdoc/gstreamer/gstreamer/).
