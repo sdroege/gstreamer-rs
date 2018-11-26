@@ -5,6 +5,27 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.12.2] - 2018-11-26
+### Fixed
+- PTP clock constructor actually creates a PTP instead of NTP clock
+
+### Added
+- Bindings for GStreamer Editing Services
+- Bindings for GStreamer Check testing library
+- Bindings for the encoding profile API (encodebin)
+- VideoFrame, VideoInfo, AudioInfo, StructureRef implements Send and Sync now
+- VideoFrame has a function to get the raw FFI pointer
+- From impls from the Error/Success enums to the combined enums like
+  FlowReturn
+- Bin-to-dot file functions were added to the Bin trait
+- gst_base::Adapter implements SendUnique now
+
+### Changed
+- All references were updated from GitHub to freedesktop.org GitLab
+- Fix various links in the README.md
+- Link to the correct location for the documentation
+- Remove GitLab badge as that only works with gitlab.com currently
+
 ## [0.12.1] - 2018-09-21
 ### Added
 - More complete bindings for the gst_video::VideoOverlay interface, especially
@@ -345,7 +366,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.2...HEAD
+[0.12.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.1...0.12.2
 [0.12.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.0...0.12.1
 [0.12.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.6...0.12.0
 [0.11.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.11.5...0.11.6
