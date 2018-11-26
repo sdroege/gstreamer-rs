@@ -169,7 +169,7 @@ In addition there are
 [tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
 GStreamer website. Many of them were ported to Rust already and the code can
 be found in the
-[tutorials](https://github.com/sdroege/gstreamer-rs/tree/master/tutorials)
+[tutorials](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/tutorials)
 directory.
 
 Some further examples for various aspects of GStreamer and how to use it from
