@@ -14,7 +14,7 @@ API metadata provided by the GStreamer project. Older versions before 0.8.0 were
 written and the repository can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
 The API of the two is incompatible.
 
-A crate for writing GStreamer plugins in Rust can be found here: https://github.com/sdroege/gst-plugin-rs
+A crate for writing GStreamer plugins in Rust can be found here: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs
 
 ## Table of Contents
 1. [Installation](#installation)
