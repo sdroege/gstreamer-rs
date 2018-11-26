@@ -546,6 +546,187 @@ a `glib::List` of
  bytes are not available
 <!-- impl Adapter::fn unmap -->
 Releases the memory obtained with the last `Adapter::map`.
+<!-- struct Aggregator -->
+Manages a set of pads with the purpose of aggregating their buffers.
+Control is given to the subclass when all pads have data.
+
+ * Base class for mixers and muxers. Subclasses should at least implement
+ the `AggregatorClass.aggregate`() virtual method.
+
+ * Installs a `GstPadChainFunction`, a `GstPadEventFullFunction` and a
+ `GstPadQueryFunction` to queue all serialized data packets per sink pad.
+ Subclasses should not overwrite those, but instead implement
+ `AggregatorClass.sink_event`() and `AggregatorClass.sink_query`() as
+ needed.
+
+ * When data is queued on all pads, the aggregate vmethod is called.
+
+ * One can peek at the data on any given GstAggregatorPad with the
+ gst_aggregator_pad_peek_buffer () method, and remove it from the pad
+ with the gst_aggregator_pad_pop_buffer () method. When a buffer
+ has been taken with pop_buffer (), a new buffer can be queued
+ on that pad.
+
+ * If the subclass wishes to push a buffer downstream in its aggregate
+ implementation, it should do so through the
+ gst_aggregator_finish_buffer () method. This method will take care
+ of sending and ordering mandatory events such as stream start, caps
+ and segment.
+
+ * Same goes for EOS events, which should not be pushed directly by the
+ subclass, it should instead return GST_FLOW_EOS in its aggregate
+ implementation.
+
+ * Note that the aggregator logic regarding gap event handling is to turn
+ these into gap buffers with matching PTS and duration. It will also
+ flag these buffers with GST_BUFFER_FLAG_GAP and GST_BUFFER_FLAG_DROPPABLE
+ to ease their identification and subsequent processing.
+
+ * Subclasses must use (a subclass of) `AggregatorPad` for both their
+ sink and source pads.
+ See `gst::ElementClass::add_static_pad_template_with_gtype`.
+
+This class used to live in gst-plugins-bad and was moved to core.
+
+Feature: `v1_14`
+
+# Implements
+
+[`AggregatorExt`](trait.AggregatorExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait AggregatorExt -->
+Trait containing all `Aggregator` methods.
+
+Feature: `v1_14`
+
+# Implementors
+
+[`Aggregator`](struct.Aggregator.html)
+<!-- trait AggregatorExt::fn finish_buffer -->
+This method will push the provided output buffer downstream. If needed,
+mandatory events such as stream-start, caps, and segment events will be
+sent before pushing the buffer.
+
+Feature: `v1_14`
+
+## `buffer`
+the `gst::Buffer` to push.
+<!-- trait AggregatorExt::fn get_allocator -->
+Lets `Aggregator` sub-classes get the memory `allocator`
+acquired by the base class and its `params`.
+
+Unref the `allocator` after use it.
+
+Feature: `v1_14`
+
+## `allocator`
+the `gst::Allocator`
+used
+## `params`
+the
+`gst::AllocationParams` of `allocator`
+<!-- trait AggregatorExt::fn get_buffer_pool -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+the instance of the `gst::BufferPool` used
+by `trans`; free it after use it
+<!-- trait AggregatorExt::fn get_latency -->
+Retrieves the latency values reported by `self` in response to the latency
+query, or `GST_CLOCK_TIME_NONE` if there is not live source connected and the element
+will not wait for the clock.
+
+Typically only called by subclasses.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The latency or `GST_CLOCK_TIME_NONE` if the element does not sync
+<!-- trait AggregatorExt::fn set_latency -->
+Lets `Aggregator` sub-classes tell the baseclass what their internal
+latency is. Will also post a LATENCY message on the bus so the pipeline
+can reconfigure its global latency.
+
+Feature: `v1_14`
+
+## `min_latency`
+minimum latency
+## `max_latency`
+maximum latency
+<!-- trait AggregatorExt::fn set_src_caps -->
+Sets the caps to be used on the src pad.
+
+Feature: `v1_14`
+
+## `caps`
+The `gst::Caps` to set on the src pad.
+<!-- struct AggregatorPad -->
+Pads managed by a `GstAggregor` subclass.
+
+This class used to live in gst-plugins-bad and was moved to core.
+
+Feature: `v1_14`
+
+# Implements
+
+[`AggregatorPadExt`](trait.AggregatorPadExt.html), [`gst::PadExt`](../gst/trait.PadExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait AggregatorPadExt -->
+Trait containing all `AggregatorPad` methods.
+
+Feature: `v1_14`
+
+# Implementors
+
+[`AggregatorPad`](struct.AggregatorPad.html)
+<!-- trait AggregatorPadExt::fn drop_buffer -->
+Drop the buffer currently queued in `self`.
+
+Feature: `v1_14`
+
+
+# Returns
+
+TRUE if there was a buffer queued in `self`, or FALSE if not.
+<!-- trait AggregatorPadExt::fn has_buffer -->
+
+Feature: `v1_14_1`
+
+
+# Returns
+
+`true` if the pad has a buffer available as the next thing.
+<!-- trait AggregatorPadExt::fn is_eos -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+`true` if the pad is EOS, otherwise `false`.
+<!-- trait AggregatorPadExt::fn peek_buffer -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+A reference to the buffer in `self` or
+NULL if no buffer was queued. You should unref the buffer after
+usage.
+<!-- trait AggregatorPadExt::fn pop_buffer -->
+Steal the ref to the buffer currently queued in `self`.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The buffer in `self` or NULL if no buffer was
+ queued. You should unref the buffer after usage.
 <!-- struct BaseSink -->
 `BaseSink` is the base class for sink elements in GStreamer, such as
 xvimagesink or filesink. It is a layer on top of `gst::Element` that provides a
