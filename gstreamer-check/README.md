@@ -1,4 +1,6 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-check.svg)](https://crates.io/crates/gstreamer-check) [![Build Status](https://travis-ci.org/sdroege/gstreamer-rs.svg?branch=master)](https://travis-ci.org/sdroege/gstreamer-rs)
+# NOTE: The canonical repository for gstreamer-rs has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)!
+
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-check.svg)](https://crates.io/crates/gstreamer-check) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Check library) bindings for Rust.
 Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_check/).

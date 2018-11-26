@@ -1,3 +1,5 @@
+# NOTE: The canonical repository for gstreamer-rs has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)!
+
 # gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-audio.svg)](https://crates.io/crates/gstreamer-audio) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (Audio library) bindings for Rust.

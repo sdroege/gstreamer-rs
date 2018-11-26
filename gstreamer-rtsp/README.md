@@ -1,6 +1,8 @@
+# NOTE: The canonical repository for gstreamer-rs has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)!
+
 # gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-rtsp.svg)](https://crates.io/crates/gstreamer-rtsp) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
-[GStreamer](https://gstreamer.freedesktop.org/) (Rtsp library) bindings for Rust.
+[GStreamer](https://gstreamer.freedesktop.org/) (RTSP library) bindings for Rust.
 Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_rtsp/).
 
 These bindings are providing a safe API that can be used to interface with

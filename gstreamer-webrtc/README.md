@@ -1,3 +1,5 @@
+# NOTE: The canonical repository for gstreamer-rs has moved to [freedesktop.org GitLab](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)!
+
 # gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-webrtc.svg)](https://crates.io/crates/gstreamer-webrtc) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/master/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/master)
 
 [GStreamer](https://gstreamer.freedesktop.org/) (WebRTC library) bindings for Rust.
