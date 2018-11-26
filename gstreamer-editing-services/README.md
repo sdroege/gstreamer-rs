@@ -35,8 +35,10 @@ A crate for writing GStreamer plugins in Rust can be found here: https://gitlab.
 ## Installation
 
 To build the GStreamer bindings or anything depending on them, you need to
-have at least GStreamer 1.8, gst-plugins-base 1.8 and gstreamer-editing-services
-1.8 installed.
+have at least GStreamer 1.8 and gst-plugins-base 1.8 installed. In addition,
+some of the examples/tutorials require various GStreamer plugins to be
+available, which can be found in gst-plugins-base, gst-plugins-good,
+gst-plugins-bad, gst-plugins-ugly and/or gst-libav.
 
 <a name="installation-linux"/>
 
@@ -51,7 +53,20 @@ On Debian/Ubuntu they can be installed with
 $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
       gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-      gstreamer1.0-libav libges-1.0
+      gstreamer1.0-libav libgstrtspserver-1.0-dev
+```
+
+The minimum required version of the above libraries is >= 1.8. If you
+build the gstreamer-player sub-crate, or any of the examples that
+depend on gstreamer-player, you must ensure that in addition to the
+above packages, `libgstreamer-plugins-bad1.0-dev` is installed and
+that the version is >= 1.12. See the `Cargo.toml` files for the full
+details,
+
+```
+# Only if you wish to install gstreamer-player, make sure the version
+# of this package is >= 1.12.
+$ apt-get install libgstreamer-plugins-bad1.0-dev
 ```
 
 Package names on other distributions should be similar.
@@ -67,10 +82,20 @@ provided by the GStreamer project.
 
 #### Homebrew
 
+Homebrew only installs various plugins if explicitly enabled, so some extra
+`--with-*` flags may be required.
+
 ```
 $ brew install gstreamer gst-plugins-base gst-plugins-good \
-      gst-plugins-bad gst-plugins-ugly gst-libav gst-editing-services
+      gst-plugins-bad gst-plugins-ugly gst-libav gst-rtsp-server \
+      gst-editing-services --with-orc --with-libogg --with-opus \
+      --with-pango --with-theora --with-libvorbis --with-libvpx \
+      --enable-gtk3
 ```
+
+If you wish to install the gstreamer-player sub-crate, make sure the
+version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
+sufficient.
 
 #### GStreamer Binaries
 
@@ -82,7 +107,7 @@ After installation, you also need to install `pkg-config` (e.g. via Homebrew)
 and set the `PKG_CONFIG_PATH` environment variable
 
 ```
-$ export PKG_CONFIG_PATH="/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+$ export PKG_CONFIG_PATH="/Library/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 ```
 
 <a name="installation-windows"/>
@@ -100,8 +125,12 @@ the GStreamer project.
 $ pacman -S pkg-config mingw-w64-x86_64-gstreamer mingw-w64-x86_64-gst-plugins-base \
       mingw-w64-x86_64-gst-plugins-good mingw-w64-x86_64-gst-plugins-bad \
       mingw-w64-x86_64-gst-plugins-ugly mingw-w64-x86_64-gst-libav \
-      mingw-w64-x86_64-gst-editing-services
+      mingw-w64-x86_64-gst-rtsp-server
 ```
+
+If you wish to install the gstreamer-player sub-crate, make sure the
+version of these libraries is >= 1.12. Otherwise, a version >= 1.8 is
+sufficient.
 
 #### GStreamer Binaries
 
@@ -172,4 +201,3 @@ Any kinds of contributions are welcome as a pull request.
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in gstreamer-rs by you, as defined in the Apache-2.0 license, shall be
 dual licensed as above, without any additional terms or conditions.
-
