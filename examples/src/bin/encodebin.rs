@@ -26,7 +26,10 @@ mod examples_common;
 struct MissingElement(&'static str);
 
 #[derive(Debug, Fail)]
-#[fail(display = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[fail(
+    display = "Received error from {}: {} (debug: {:?})",
+    src, error, debug
+)]
 struct ErrorMessage {
     src: String,
     error: String,
@@ -37,32 +40,25 @@ struct ErrorMessage {
 
 fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
     let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
-        .format(&gst::Caps::new_simple(
-            "audio/x-vorbis",
-            &[],
-        ))
+        .format(&gst::Caps::new_simple("audio/x-vorbis", &[]))
         .presence(0)
         .build()?;
 
     let video_profile = gst_pbutils::EncodingVideoProfileBuilder::new()
-        .format(&gst::Caps::new_simple(
-            "video/x-theora",
-            &[],
-        ))
+        .format(&gst::Caps::new_simple("video/x-theora", &[]))
         .presence(0)
         .build()?;
 
     let container_profile = gst_pbutils::EncodingContainerProfileBuilder::new()
         .name("container")
-        .format(&gst::Caps::new_simple(
-            "video/x-matroska",
-            &[],
-        ))
+        .format(&gst::Caps::new_simple("video/x-matroska", &[]))
         .add_profile(&(video_profile))
         .add_profile(&(audio_profile))
         .build()?;
 
-    encodebin.set_property("profile", &container_profile).expect("set profile property failed");
+    encodebin
+        .set_property("profile", &container_profile)
+        .expect("set profile property failed");
 
     Ok(())
 }
@@ -83,16 +79,22 @@ fn example_main() -> Result<(), Error> {
     };
 
     let pipeline = gst::Pipeline::new(None);
-    let src = gst::ElementFactory::make("uridecodebin", None).ok_or(MissingElement("uridecodebin"))?;
-    let encodebin = gst::ElementFactory::make("encodebin", None).ok_or(MissingElement("encodebin"))?;
+    let src =
+        gst::ElementFactory::make("uridecodebin", None).ok_or(MissingElement("uridecodebin"))?;
+    let encodebin =
+        gst::ElementFactory::make("encodebin", None).ok_or(MissingElement("encodebin"))?;
     let sink = gst::ElementFactory::make("filesink", None).ok_or(MissingElement("filesink"))?;
 
-    src.set_property("uri", &uri).expect("setting URI Property failed");
-    sink.set_property("location", &output_file).expect("setting location property failed");
+    src.set_property("uri", &uri)
+        .expect("setting URI Property failed");
+    sink.set_property("location", &output_file)
+        .expect("setting location property failed");
 
     configure_encodebin(&encodebin)?;
 
-    pipeline.add_many(&[&src, &encodebin, &sink]).expect("failed to add elements to pipeline");
+    pipeline
+        .add_many(&[&src, &encodebin, &sink])
+        .expect("failed to add elements to pipeline");
     gst::Element::link_many(&[&encodebin, &sink])?;
 
     // Need to move a new reference into the closure
@@ -113,7 +115,10 @@ fn example_main() -> Result<(), Error> {
                     gst_element_warning!(
                         dbin,
                         gst::CoreError::Negotiation,
-                        ("Failed to get media type from pad {}", dbin_src_pad.get_name())
+                        (
+                            "Failed to get media type from pad {}",
+                            dbin_src_pad.get_name()
+                        )
                     );
 
                     return;
@@ -132,11 +137,17 @@ fn example_main() -> Result<(), Error> {
                     .ok_or(MissingElement("audioresample"))?;
 
                 let elements = &[&queue, &convert, &resample];
-                pipeline.add_many(elements).expect("failed to add audio elements to pipeline");
+                pipeline
+                    .add_many(elements)
+                    .expect("failed to add audio elements to pipeline");
                 gst::Element::link_many(elements)?;
 
-                let enc_sink_pad = encodebin.get_request_pad("audio_%u").expect("Could not get audio pad from encodebin");
-                let src_pad = resample.get_static_pad("src").expect("resample has no srcpad");
+                let enc_sink_pad = encodebin
+                    .get_request_pad("audio_%u")
+                    .expect("Could not get audio pad from encodebin");
+                let src_pad = resample
+                    .get_static_pad("src")
+                    .expect("resample has no srcpad");
                 src_pad.link(&enc_sink_pad).into_result()?;
 
                 for e in elements {
@@ -154,11 +165,17 @@ fn example_main() -> Result<(), Error> {
                     .ok_or(MissingElement("videoscale"))?;
 
                 let elements = &[&queue, &convert, &scale];
-                pipeline.add_many(elements).expect("failed to add video elements to pipeline");
+                pipeline
+                    .add_many(elements)
+                    .expect("failed to add video elements to pipeline");
                 gst::Element::link_many(elements)?;
 
-                let enc_sink_pad = encodebin.get_request_pad("video_%u").expect("Could not get video pad from encodebin");
-                let src_pad = scale.get_static_pad("src").expect("videoscale has no srcpad");
+                let enc_sink_pad = encodebin
+                    .get_request_pad("video_%u")
+                    .expect("Could not get video pad from encodebin");
+                let src_pad = scale
+                    .get_static_pad("src")
+                    .expect("videoscale has no srcpad");
                 src_pad.link(&enc_sink_pad).into_result()?;
 
                 for e in elements {
@@ -221,19 +238,22 @@ fn example_main() -> Result<(), Error> {
                             .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
-                            src: err.get_src()
+                            src: err
+                                .get_src()
                                 .map(|s| s.get_path_string())
                                 .unwrap_or_else(|| String::from("None")),
                             error: err.get_error().description().into(),
                             debug: err.get_debug(),
                             cause: err.get_error(),
-                        }.into()),
+                        }
+                        .into()),
                     }?;
                 }
                 #[cfg(not(feature = "v1_10"))]
                 {
                     Err(ErrorMessage {
-                        src: err.get_src()
+                        src: err
+                            .get_src()
                             .map(|s| s.get_path_string())
                             .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().description().into(),
