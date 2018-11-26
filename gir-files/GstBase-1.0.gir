@@ -1225,7 +1225,12 @@ sent before pushing the buffer.</doc>
           <parameter name="caps" transfer-ownership="none">
             <type name="Gst.Caps" c:type="GstCaps*"/>
           </parameter>
-          <parameter name="ret" transfer-ownership="none">
+          <parameter name="ret"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     optional="1"
+                     allow-none="1">
             <type name="Gst.Caps" c:type="GstCaps**"/>
           </parameter>
         </parameters>
@@ -1610,7 +1615,12 @@ _finish_buffer from inside that function.</doc>
             <parameter name="caps" transfer-ownership="none">
               <type name="Gst.Caps" c:type="GstCaps*"/>
             </parameter>
-            <parameter name="ret" transfer-ownership="none">
+            <parameter name="ret"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full"
+                       optional="1"
+                       allow-none="1">
               <type name="Gst.Caps" c:type="GstCaps**"/>
             </parameter>
           </parameters>
@@ -6816,7 +6826,7 @@ into 8, 16, 32 and 64 bit variables.</doc>
       <field name="data" writable="1">
         <doc xml:space="preserve">Data from which the bit reader will
   read</doc>
-        <array length="1" zero-terminated="0" c:type="guint8*">
+        <array length="1" zero-terminated="0" c:type="const guint8*">
           <type name="guint8" c:type="guint8"/>
         </array>
       </field>
@@ -7002,7 +7012,7 @@ can be called on already initialized instances.</doc>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">data from which the bit reader should read</doc>
-            <array length="1" zero-terminated="0" c:type="guint8*">
+            <array length="1" zero-terminated="0" c:type="const guint8*">
               <type name="guint8" c:type="guint8"/>
             </array>
           </parameter>
@@ -7174,7 +7184,7 @@ Free-function: gst_bit_reader_free</doc>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">Data from which the #GstBitReader
   should read</doc>
-            <array length="1" zero-terminated="0" c:type="guint8*">
+            <array length="1" zero-terminated="0" c:type="const guint8*">
               <type name="guint8" c:type="guint8"/>
             </array>
           </parameter>
@@ -7195,7 +7205,7 @@ in various character encodings.</doc>
       <field name="data" writable="1">
         <doc xml:space="preserve">Data from which the bit reader will
   read</doc>
-        <array length="1" zero-terminated="0" c:type="guint8*">
+        <array length="1" zero-terminated="0" c:type="const guint8*">
           <type name="guint8" c:type="guint8"/>
         </array>
       </field>
@@ -7393,7 +7403,7 @@ updates the current position.</doc>
                      transfer-ownership="none">
             <doc xml:space="preserve">address of a
     #guint8 pointer variable in which to store the result</doc>
-            <array length="0" zero-terminated="0" c:type="guint8**">
+            <array length="0" zero-terminated="0" c:type="const guint8**">
               <type name="guint8" c:type="guint8*"/>
             </array>
           </parameter>
@@ -7741,7 +7751,7 @@ This function will fail if no NUL-terminator was found in in the data.</doc>
                      transfer-ownership="none">
             <doc xml:space="preserve">address of a
     #gchar pointer variable in which to store the result</doc>
-            <array c:type="gchar**">
+            <array c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -7987,7 +7997,7 @@ can be called on already initialized instances.</doc>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">data from which
     the #GstByteReader should read</doc>
-            <array length="1" zero-terminated="0" c:type="guint8*">
+            <array length="1" zero-terminated="0" c:type="const guint8*">
               <type name="guint8" c:type="guint8"/>
             </array>
           </parameter>
@@ -8131,7 +8141,7 @@ keeps the current position.</doc>
                      transfer-ownership="none">
             <doc xml:space="preserve">address of a
     #guint8 pointer variable in which to store the result</doc>
-            <array length="0" zero-terminated="0" c:type="guint8**">
+            <array length="0" zero-terminated="0" c:type="const guint8**">
               <type name="guint8" c:type="guint8*"/>
             </array>
           </parameter>
@@ -8447,7 +8457,7 @@ This function will fail if no NUL-terminator was found in in the data.</doc>
                      transfer-ownership="none">
             <doc xml:space="preserve">address of a
     #gchar pointer variable in which to store the result</doc>
-            <array c:type="gchar**">
+            <array c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -8785,7 +8795,7 @@ Free-function: gst_byte_reader_free</doc>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">data from which the
     #GstByteReader should read</doc>
-            <array length="1" zero-terminated="0" c:type="guint8*">
+            <array length="1" zero-terminated="0" c:type="const guint8*">
               <type name="guint8" c:type="guint8"/>
             </array>
           </parameter>
@@ -9026,7 +9036,7 @@ read @size bytes from the #GstByteWriter from the beginning.</doc>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">Data to write</doc>
-            <array length="1" zero-terminated="0" c:type="guint8*">
+            <array length="1" zero-terminated="0" c:type="const guint8*">
               <type name="guint8" c:type="guint8"/>
             </array>
           </parameter>
@@ -9275,7 +9285,7 @@ read @size bytes from the #GstByteWriter from the beginning.</doc>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">UTF16 string to write</doc>
-            <array c:type="guint16*">
+            <array c:type="const guint16*">
               <type name="guint16" c:type="guint16"/>
             </array>
           </parameter>
@@ -9295,7 +9305,7 @@ read @size bytes from the #GstByteWriter from the beginning.</doc>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">UTF32 string to write</doc>
-            <array c:type="guint32*">
+            <array c:type="const guint32*">
               <type name="guint32" c:type="guint32"/>
             </array>
           </parameter>
@@ -11903,7 +11913,7 @@ Free-function: gst_bit_reader_free</doc>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">Data from which the #GstBitReader
   should read</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -11928,7 +11938,7 @@ Free-function: gst_byte_reader_free</doc>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">data from which the
     #GstByteReader should read</doc>
-          <array length="1" zero-terminated="0" c:type="guint8*">
+          <array length="1" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -12136,7 +12146,7 @@ Free-function: gst_caps_unref</doc>
         </parameter>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve">* a pointer with data to typefind</doc>
-          <array length="2" zero-terminated="0" c:type="guint8*">
+          <array length="2" zero-terminated="0" c:type="const guint8*">
             <type name="guint8" c:type="guint8"/>
           </array>
         </parameter>
@@ -12232,6 +12242,75 @@ Free-function: gst_caps_unref</doc>
         <parameter name="extension" transfer-ownership="none">
           <doc xml:space="preserve">extension of the media</doc>
           <type name="utf8" c:type="const gchar*"/>
+        </parameter>
+        <parameter name="prob"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   optional="1"
+                   allow-none="1">
+          <doc xml:space="preserve">location to store the probability of the found
+    caps, or %NULL</doc>
+          <type name="Gst.TypeFindProbability"
+                c:type="GstTypeFindProbability*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="type_find_helper_get_range_full"
+              c:identifier="gst_type_find_helper_get_range_full"
+              version="1.14.3">
+      <doc xml:space="preserve">Utility function to do pull-based typefinding. Unlike gst_type_find_helper()
+however, this function will use the specified function @func to obtain the
+data needed by the typefind functions, rather than operating on a given
+source pad. This is useful mostly for elements like tag demuxers which
+strip off data at the beginning and/or end of a file and want to typefind
+the stripped data stream before adding their own source pad (the specified
+callback can then call the upstream peer pad with offsets adjusted for the
+tag size, for example).
+
+When @extension is not %NULL, this function will first try the typefind
+functions for the given extension, which might speed up the typefinding
+in many cases.</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">the last %GstFlowReturn from pulling a buffer or %GST_FLOW_OK if
+         typefinding was successful.</doc>
+        <type name="Gst.FlowReturn" c:type="GstFlowReturn"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <doc xml:space="preserve">A #GstObject that will be passed as first argument to @func</doc>
+          <type name="Gst.Object" c:type="GstObject*"/>
+        </parameter>
+        <parameter name="parent"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
+          <doc xml:space="preserve">the parent of @obj or %NULL</doc>
+          <type name="Gst.Object" c:type="GstObject*"/>
+        </parameter>
+        <parameter name="func" transfer-ownership="none" scope="call">
+          <doc xml:space="preserve">A generic #GstTypeFindHelperGetRangeFunction that will
+       be used to access data at random offsets when doing the typefinding</doc>
+          <type name="TypeFindHelperGetRangeFunction"
+                c:type="GstTypeFindHelperGetRangeFunction"/>
+        </parameter>
+        <parameter name="size" transfer-ownership="none">
+          <doc xml:space="preserve">The length in bytes</doc>
+          <type name="guint64" c:type="guint64"/>
+        </parameter>
+        <parameter name="extension"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
+          <doc xml:space="preserve">extension of the media, or %NULL</doc>
+          <type name="utf8" c:type="const gchar*"/>
+        </parameter>
+        <parameter name="caps"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve">returned caps</doc>
+          <type name="Gst.Caps" c:type="GstCaps**"/>
         </parameter>
         <parameter name="prob"
                    direction="out"
