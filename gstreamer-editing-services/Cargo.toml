@@ -25,7 +25,7 @@ gstreamer-editing-services-sys = { version = "0.6", features = ["v1_8"] }
 glib = "0.6"
 gio = "0.5"
 gstreamer = { version = "0.12", path = "../gstreamer" }
-gstreamer-base = { version = "0.12", path = "../gstreamer-base" }
+gstreamer-base = { version = "0.12.2", path = "../gstreamer-base" }
 gstreamer-pbutils = { version = "0.12", path = "../gstreamer-pbutils" }
 
 [build-dependencies.rustdoc-stripper]
