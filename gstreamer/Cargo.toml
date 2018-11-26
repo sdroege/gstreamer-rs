@@ -47,6 +47,3 @@ dox = ["gstreamer-sys/dox", "glib/dox", "futures", "ser_de"]
 futures = ["futures-core-preview"]
 ser_de = ["num-rational/serde", "serde", "serde_bytes", "serde_derive"]
 default-features = []
-
-[badges]
-gitlab = { repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", branch = "master" }
