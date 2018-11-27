@@ -1,0 +1,367 @@
+[options]
+girs_dir = "gir-files"
+library = "GstGL"
+version = "1.0"
+min_cfg_version = "1.14"
+target_path = "gstreamer-gl"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+    "GstBase",
+    "GstVideo",
+]
+
+generate = [
+    # BitFlags
+    "GstGL.GLAPI",
+    "GstGL.GLDisplayType",
+    "GstGL.GLPlatform",
+    "GstGL.GLSLProfile",
+    # Enums
+    "GstGL.GLFormat",
+    "GstGL.GLQueryType",
+    "GstGL.GLSLVersion",
+    "GstGL.GLTextureTarget",
+    "GstGL.GLStereoDownmix",
+    "GstGL.GLUploadReturn",
+    # Enums Errors
+    #"GstGL.GLBaseMemoryError",
+    "GstGL.GLContextError",
+    "GstGL.GLSLError",
+    "GstGL.GLWindowError",
+    # Records
+    #"GstGL.GLAllocationParams",
+    #"GstGL.GLRenderbufferAllocationParams",
+    #"GstGL.GLVideoAllocationParams",
+    # Objects
+    "GstGL.GLBaseFilter",
+    #"GstGL.GLBufferPool",
+    "GstGL.GLFramebuffer",
+    #"GstGL.GLBaseMemory",
+    #"GstGL.GLBaseMemoryAllocator",
+    #"GstGL.GLMemoryPBOAllocator",
+    #"GstGL.GLRenderbufferAllocator",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.Thread",
+    "GObject.Object",
+    "Gst.Object",
+    "Gst.FlowReturn",
+    "Gst.PadDirection",
+    "GstVideo.VideoMultiviewFlags",
+    "GstVideo.VideoMultiviewMode",
+]
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref-mut"
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstGL.GLBuffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstGL.GLQuery"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstGL.GLContext"
+status = "generate"
+
+    [[object.function]]
+    name = "new_wrapped"
+    # input handle
+    ignore = true
+
+    [[object.function]]
+    name = "get_gl_context"
+    # return handle
+    ignore = true
+
+    [[object.function]]
+    name = "get_current_gl_context"
+    # return handle
+    ignore = true
+
+    [[object.function]]
+    name = "get_proc_address"
+    ignore = true
+
+    [[object.function]]
+    name = "default_get_proc_address"
+    ignore = true
+
+    [[object.function]]
+    name = "get_proc_address_with_platform"
+    ignore = true
+
+    [[object.function]]
+    name = "thread_add"
+    # unimplemented GLContextThreadFunc
+    ignore = true
+
+    [[object.function]]
+    name = "get_thread"
+    # glib::Thread not found in `glib`
+    ignore = true
+
+    [[object.function]]
+    name = "get_gl_context_for_thread"
+    # glib::Thread not found in `glib`
+    ignore = true
+
+    [[object.function]]
+    name = "error_quark"
+    # bad error domian definition in gir
+    ignore = true
+
+    [[object.function]]
+    name = "activate"
+       [object.function.return]
+       bool_return_is_error = "Failed to activate OpenGL context"
+
+    [[object.function]]
+    name = "get_display"
+       [object.function.return]
+       nullable = false
+
+
+[[object]]
+name = "GstGL.GLDisplay"
+status = "generate"
+
+    [[object.function]]
+    name = "find_window"
+    # unimplemented pointer
+    ignore = true
+
+    [[object.function]]
+    name = "get_handle"
+    # return handle
+    ignore = true
+
+    [[object.function]]
+    name = "get_gl_context_for_thread"
+    # glib::Thread not found in `glib`
+    ignore = true
+
+    [[object.function]]
+    name = "add_context"
+       [object.function.return]
+       bool_return_is_error = "Failed to add OpenGL context"
+
+    [[object.function]]
+    name = "remove_window"
+       [object.function.return]
+       bool_return_is_error = "Failed to remove window"
+
+[[object]]
+name = "GstGL.GLDisplayEGL"
+status = "generate"
+trait = false
+cfg_condition = "feature = \"egl\""
+
+[[object]]
+name = "GstGL.GLWindow"
+status = "generate"
+
+    [[object.function]]
+    name = "get_window_handle"
+    # return native handle
+    ignore = true
+
+    [[object.function]]
+    name = "send_message"
+        # callback
+    ignore = true
+
+    [[object.function]]
+    name = "send_message_async"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_close_callback"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_draw_callback"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_resize_callback"
+    # callback
+    ignore = true
+
+    [[object.function]]
+    name = "set_window_handle"
+    # handle
+    ignore = true
+
+    [[object.function]]
+    name = "get_display"
+    # handle
+    ignore = true
+
+    [[object.function]]
+    name = "error_quark"
+    # bad error domian definition in gir
+    ignore = true
+
+[[object]]
+name = "GstGL.GLColorConvert"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "decide_allocation"
+    # correct mutability
+    ignore = true
+
+    [[object.function]]
+    name = "fixate_caps"
+    # correct reference ownership
+    ignore = true
+
+    [[object.function]]
+    name = "perform"
+    # transfer gst::Buffer not reference
+    ignore = true
+
+[[object]]
+name = "GstGL.GLOverlayCompositor"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "upload_overlays"
+    # correct mutability
+    ignore = true
+
+[[object]]
+name = "GstGL.GLSLStage"
+status = "generate"
+trait = false
+
+[[object]]
+name = "GstGL.GLShader"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "set_uniform_matrix_2fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_2x3fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_2x4fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_3fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_3x2fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_3x4fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_4fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_4x2fv"
+    # array with size
+    ignore = true
+
+    [[object.function]]
+    name = "set_uniform_matrix_4x3fv"
+    # array with size
+    ignore = true
+
+[[object]]
+name = "GstGL.GLUpload"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "perform_with_buffer"
+    # Result<Buffer, GLUploadReturn>
+    ignore = true
+
+    [[object.function]]
+    name = "propose_allocation"
+    # fix mutability
+    ignore = true
+
+    [[object.function]]
+    name = "get_input_template_caps"
+       [object.function.return]
+       nullable = false
+
+[[object]]
+name = "GstGL.GLViewConvert"
+status = "generate"
+trait = false
+
+    [[object.function]]
+    name = "fixate_caps"
+    # correct reference ownership
+    ignore = true
+
+    [[object.function]]
+    name = "get_output"
+    # Result<Buffer, FlowReturn>
+    ignore = true
+
+    [[object.function]]
+    name = "tranform_caps"
+       [object.function.return]
+       nullable = false
+
+    [[object.function]]
+    name = "submit_input_buffer"
+    # Buffer ownership transfer
+    ignore = true

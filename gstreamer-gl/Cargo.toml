@@ -1,0 +1,41 @@
+[package]
+name = "gstreamer-gl"
+version = "0.13.0"
+authors = ["Sebastian Dröge <sebastian@centricular.com>",
+           "Víctor M. Jáquez L. <vjaquez@igalia.com>"]
+categories = ["api-bindings", "multimedia"]
+description = "Rust bindings for GStreamer GL library"
+repository = "https://github.com/sdroege/gstreamer-rs"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+homepage = "https://gstreamer.freedesktop.org"
+documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer_gl"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+build = "build.rs"
+
+[dependencies]
+bitflags = "1.0"
+byteorder = "1"
+libc = "0.2"
+lazy_static = "1.0"
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+gstreamer-base-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_14"] }
+gstreamer-video-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_14"] }
+gstreamer-gl-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gstreamer = { path = "../gstreamer", features = ["v1_14"] }
+gstreamer-base = { path = "../gstreamer-base", features = ["v1_14"] }
+gstreamer-video = { path = "../gstreamer-video", features = ["v1_14"] }
+
+[build-dependencies.rustdoc-stripper]
+version = "0.1"
+optional = true
+
+[features]
+default-features = []
+dox = ["gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox"]
+egl = ["gstreamer-gl-sys/egl"]
+embed-lgpl-docs = ["rustdoc-stripper"]
+purge-lgpl-docs = ["rustdoc-stripper"]
