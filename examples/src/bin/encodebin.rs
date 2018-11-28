@@ -5,6 +5,7 @@ use gst::prelude::*;
 extern crate gstreamer_pbutils as gst_pbutils;
 use gst_pbutils::prelude::*;
 
+#[macro_use]
 extern crate glib;
 
 use std::env;
@@ -37,6 +38,20 @@ struct ErrorMessage {
     #[cause]
     cause: glib::Error,
 }
+
+#[cfg(feature = "v1_10")]
+#[derive(Clone, Debug)]
+struct ErrorValue(Arc<Mutex<Option<Error>>>);
+
+#[cfg(feature = "v1_10")]
+impl glib::subclass::boxed::BoxedType for ErrorValue {
+    const NAME: &'static str = "ErrorValue";
+
+    glib_boxed_get_type!();
+}
+
+#[cfg(feature = "v1_10")]
+glib_boxed_derive_traits!(ErrorValue);
 
 fn configure_encodebin(encodebin: &gst::Element) -> Result<(), Error> {
     let audio_profile = gst_pbutils::EncodingAudioProfileBuilder::new()
@@ -197,7 +212,7 @@ fn example_main() -> Result<(), Error> {
                 ("Failed to insert sink"),
                 details: gst::Structure::builder("error-details")
                             .field("error",
-                                   &glib::AnySendValue::new(Arc::new(Mutex::new(Some(err)))))
+                                   &ErrorValue(Arc::new(Mutex::new(Some(err)))))
                             .build()
             );
 
@@ -229,12 +244,9 @@ fn example_main() -> Result<(), Error> {
                 {
                     match err.get_details() {
                         Some(details) if details.get_name() == "error-details" => details
-                            .get::<&glib::AnySendValue>("error")
+                            .get::<&ErrorValue>("error")
                             .cloned()
-                            .and_then(|v| {
-                                v.downcast_ref::<Arc<Mutex<Option<Error>>>>()
-                                    .and_then(|v| v.lock().unwrap().take())
-                            })
+                            .and_then(|v| v.0.lock().unwrap().take())
                             .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
