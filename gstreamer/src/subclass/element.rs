@@ -144,7 +144,7 @@ where
         f: F,
     ) -> R {
         unsafe {
-            assert!(element.get_type().is_a(&T::static_type()));
+            assert!(element.get_type().is_a(&T::get_type()));
             let ptr: *mut ffi::GstElement = element.to_glib_none().0;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
@@ -164,7 +164,7 @@ where
                 .unwrap()
                 .downcast_ref::<::Element>()
                 .unwrap();
-            assert!(wrap.get_type().is_a(&T::static_type()));
+            assert!(wrap.get_type().is_a(&T::get_type()));
             let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
