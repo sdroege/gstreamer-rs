@@ -44,7 +44,7 @@ struct ErrorValue(Arc<Mutex<Option<Error>>>);
 impl glib::subclass::boxed::BoxedType for ErrorValue {
     const NAME: &'static str = "ErrorValue";
 
-    glib_boxed_get_type!();
+    glib_boxed_type!();
 }
 
 #[cfg(feature = "v1_10")]
