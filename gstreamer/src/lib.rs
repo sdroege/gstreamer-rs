@@ -258,6 +258,9 @@ pub use buffer_pool::*;
 
 mod pad_template;
 
+mod param_spec;
+pub use param_spec::*;
+
 pub mod functions;
 pub use functions::*;
 
