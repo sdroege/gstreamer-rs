@@ -1,5 +1,3 @@
-// HELP: New to GES. Is everything here correct?
-
 // This example demonstrates how to use the gstreamer editing services.
 // This is gstreamer's framework to implement non-linear editing.
 // It provides a timeline API that internally manages a dynamically changing
