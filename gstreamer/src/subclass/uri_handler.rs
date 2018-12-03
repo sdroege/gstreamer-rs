@@ -26,7 +26,7 @@ use URIType;
 pub trait URIHandlerImpl: super::element::ElementImpl + Send + Sync + 'static {
     fn get_uri(&self, element: &URIHandler) -> Option<String>;
     fn set_uri(&self, element: &URIHandler, uri: Option<String>) -> Result<(), glib::Error>;
-    fn get_type() -> URIType;
+    fn get_uri_type() -> URIType;
     fn get_protocols() -> Vec<String>;
 }
 
@@ -36,7 +36,7 @@ unsafe extern "C" fn uri_handler_get_type<T: ObjectSubclass>(
 where
     T: URIHandlerImpl,
 {
-    <T as URIHandlerImpl>::get_type().to_glib()
+    <T as URIHandlerImpl>::get_uri_type().to_glib()
 }
 
 unsafe extern "C" fn uri_handler_get_protocols<T: ObjectSubclass>(
