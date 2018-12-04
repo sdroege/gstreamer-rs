@@ -1,11 +1,10 @@
-extern crate gstreamer as gst;
 extern crate glib;
+extern crate gstreamer as gst;
 use gst::prelude::*;
 use std::io::Write;
 
 extern crate failure;
 use failure::Error;
-
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;
@@ -19,19 +18,14 @@ fn tutorial_main() -> Result<(), Error> {
         "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
     let pipeline = gst::parse_launch(&format!("playbin uri={}", uri))?;
 
-    let mut is_live = false;
-
     // Start playing
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
-    if ret == gst::StateChangeReturn::NoPreroll {
-        is_live = true;
-    }
+    let ret = pipeline.set_state(gst::State::Playing).into_result()?;
+    let is_live = ret == gst::StateChangeSuccess::NoPreroll;
 
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();
     let pipeline_weak = pipeline.downgrade();
-    let bus = pipeline.get_bus().unwrap();
+    let bus = pipeline.get_bus().expect("Pipeline has no bus");
     bus.add_watch(move |_, msg| {
         let pipeline = match pipeline_weak.upgrade() {
             Some(pipeline) => pipeline,
@@ -63,7 +57,7 @@ fn tutorial_main() -> Result<(), Error> {
                 let percent = buffering.get_percent();
                 print!("Buffering ({}%)\r", percent);
                 match std::io::stdout().flush() {
-                    Ok(_) => {},
+                    Ok(_) => {}
                     Err(err) => eprintln!("Failed: {}", err),
                 };
 
@@ -87,15 +81,14 @@ fn tutorial_main() -> Result<(), Error> {
     main_loop.run();
 
     bus.remove_watch();
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    let _ = pipeline.set_state(gst::State::Null);
 
     Ok(())
 }
 
 fn main() {
     match tutorials_common::run(tutorial_main) {
-        Ok(_) => {},
+        Ok(_) => {}
         Err(err) => eprintln!("Failed: {}", err),
     }
 }
