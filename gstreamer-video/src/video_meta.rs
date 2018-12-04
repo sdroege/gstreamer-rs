@@ -154,6 +154,7 @@ impl VideoOverlayCompositionMeta {
     }
 
     pub fn set_overlay(&mut self, overlay: &::VideoOverlayComposition) {
+        #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe {
             gst_ffi::gst_mini_object_unref(self.0.overlay as *mut _);
             self.0.overlay = gst_ffi::gst_mini_object_ref(overlay.as_mut_ptr() as *mut _) as *mut _;
