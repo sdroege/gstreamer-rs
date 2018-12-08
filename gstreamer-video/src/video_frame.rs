@@ -345,6 +345,15 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         &self.0
     }
 
+    pub unsafe fn from_glib_borrow(frame: *const ffi::GstVideoFrame) -> Self {
+        assert!(!frame.is_null());
+
+        let frame = ptr::read(frame);
+        let info = ::VideoInfo(ptr::read(&frame.info));
+        let buffer = gst::BufferRef::from_ptr(frame.buffer);
+        VideoFrameRef(frame, Some(buffer), info, false)
+    }
+
     pub fn from_buffer_ref_readable<'b>(
         buffer: &'a gst::BufferRef,
         info: &'b ::VideoInfo,
@@ -523,6 +532,15 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 }
 
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
+    pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Self {
+        assert!(!frame.is_null());
+
+        let frame = ptr::read(frame);
+        let info = ::VideoInfo(ptr::read(&frame.info));
+        let buffer = gst::BufferRef::from_mut_ptr(frame.buffer);
+        VideoFrameRef(frame, Some(buffer), info, false)
+    }
+
     pub fn from_buffer_ref_writable<'b>(
         buffer: &'a mut gst::BufferRef,
         info: &'b ::VideoInfo,
