@@ -7,7 +7,7 @@ use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -17,9 +17,7 @@ use gst_base_ffi;
 use gst_ffi;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct AppSrc(Object<ffi::GstAppSrc, ffi::GstAppSrcClass>): [
@@ -136,105 +134,105 @@ impl AppSrc {
     pub fn get_property_block(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "block".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"block\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_block(&self, block: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "block".to_glib_none().0, Value::from(&block).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"block\0".as_ptr() as *const _, Value::from(&block).to_glib_none().0);
         }
     }
 
     pub fn get_property_duration(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "duration".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"duration\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_duration(&self, duration: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "duration".to_glib_none().0, Value::from(&duration).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"duration\0".as_ptr() as *const _, Value::from(&duration).to_glib_none().0);
         }
     }
 
     pub fn get_property_format(&self) -> gst::Format {
         unsafe {
             let mut value = Value::from_type(<gst::Format as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "format".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"format\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_format(&self, format: gst::Format) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "format".to_glib_none().0, Value::from(&format).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"format\0".as_ptr() as *const _, Value::from(&format).to_glib_none().0);
         }
     }
 
     pub fn get_property_is_live(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-live".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"is-live\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_is_live(&self, is_live: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "is-live".to_glib_none().0, Value::from(&is_live).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"is-live\0".as_ptr() as *const _, Value::from(&is_live).to_glib_none().0);
         }
     }
 
     pub fn get_property_max_latency(&self) -> i64 {
         unsafe {
             let mut value = Value::from_type(<i64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "max-latency".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"max-latency\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_max_latency(&self, max_latency: i64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "max-latency".to_glib_none().0, Value::from(&max_latency).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"max-latency\0".as_ptr() as *const _, Value::from(&max_latency).to_glib_none().0);
         }
     }
 
     pub fn get_property_min_latency(&self) -> i64 {
         unsafe {
             let mut value = Value::from_type(<i64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "min-latency".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"min-latency\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_min_latency(&self, min_latency: i64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "min-latency".to_glib_none().0, Value::from(&min_latency).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"min-latency\0".as_ptr() as *const _, Value::from(&min_latency).to_glib_none().0);
         }
     }
 
     pub fn get_property_min_percent(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "min-percent".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"min-percent\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_min_percent(&self, min_percent: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "min-percent".to_glib_none().0, Value::from(&min_percent).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"min-percent\0".as_ptr() as *const _, Value::from(&min_percent).to_glib_none().0);
         }
     }
 
     pub fn connect_enough_data<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "enough-data",
+            connect_raw(self.to_glib_none().0, b"enough-data\0".as_ptr() as *const _,
                 transmute(enough_data_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -242,7 +240,7 @@ impl AppSrc {
     pub fn connect_need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc, u32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "need-data",
+            connect_raw(self.to_glib_none().0, b"need-data\0".as_ptr() as *const _,
                 transmute(need_data_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -250,7 +248,7 @@ impl AppSrc {
     pub fn connect_seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "seek-data",
+            connect_raw(self.to_glib_none().0, b"seek-data\0".as_ptr() as *const _,
                 transmute(seek_data_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -258,7 +256,7 @@ impl AppSrc {
     pub fn connect_property_block_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::block",
+            connect_raw(self.to_glib_none().0, b"notify::block\0".as_ptr() as *const _,
                 transmute(notify_block_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -266,7 +264,7 @@ impl AppSrc {
     pub fn connect_property_caps_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::caps",
+            connect_raw(self.to_glib_none().0, b"notify::caps\0".as_ptr() as *const _,
                 transmute(notify_caps_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -274,7 +272,7 @@ impl AppSrc {
     pub fn connect_property_current_level_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::current-level-bytes",
+            connect_raw(self.to_glib_none().0, b"notify::current-level-bytes\0".as_ptr() as *const _,
                 transmute(notify_current_level_bytes_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -282,7 +280,7 @@ impl AppSrc {
     pub fn connect_property_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::duration",
+            connect_raw(self.to_glib_none().0, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -290,7 +288,7 @@ impl AppSrc {
     pub fn connect_property_emit_signals_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::emit-signals",
+            connect_raw(self.to_glib_none().0, b"notify::emit-signals\0".as_ptr() as *const _,
                 transmute(notify_emit_signals_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -298,7 +296,7 @@ impl AppSrc {
     pub fn connect_property_format_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::format",
+            connect_raw(self.to_glib_none().0, b"notify::format\0".as_ptr() as *const _,
                 transmute(notify_format_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -306,7 +304,7 @@ impl AppSrc {
     pub fn connect_property_is_live_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-live",
+            connect_raw(self.to_glib_none().0, b"notify::is-live\0".as_ptr() as *const _,
                 transmute(notify_is_live_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -314,7 +312,7 @@ impl AppSrc {
     pub fn connect_property_max_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-bytes",
+            connect_raw(self.to_glib_none().0, b"notify::max-bytes\0".as_ptr() as *const _,
                 transmute(notify_max_bytes_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -322,7 +320,7 @@ impl AppSrc {
     pub fn connect_property_max_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-latency",
+            connect_raw(self.to_glib_none().0, b"notify::max-latency\0".as_ptr() as *const _,
                 transmute(notify_max_latency_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -330,7 +328,7 @@ impl AppSrc {
     pub fn connect_property_min_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::min-latency",
+            connect_raw(self.to_glib_none().0, b"notify::min-latency\0".as_ptr() as *const _,
                 transmute(notify_min_latency_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -338,7 +336,7 @@ impl AppSrc {
     pub fn connect_property_min_percent_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::min-percent",
+            connect_raw(self.to_glib_none().0, b"notify::min-percent\0".as_ptr() as *const _,
                 transmute(notify_min_percent_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -346,7 +344,7 @@ impl AppSrc {
     pub fn connect_property_size_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size",
+            connect_raw(self.to_glib_none().0, b"notify::size\0".as_ptr() as *const _,
                 transmute(notify_size_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -354,7 +352,7 @@ impl AppSrc {
     pub fn connect_property_stream_type_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSrc) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stream-type",
+            connect_raw(self.to_glib_none().0, b"notify::stream-type\0".as_ptr() as *const _,
                 transmute(notify_stream_type_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

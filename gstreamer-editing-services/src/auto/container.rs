@@ -14,14 +14,12 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass>): TimelineElement, Extractable;
@@ -40,7 +38,7 @@ impl Container {
     }
 }
 
-pub trait GESContainerExt {
+pub trait GESContainerExt: 'static {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
 
     fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError>;
@@ -60,7 +58,7 @@ pub trait GESContainerExt {
     fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Container> + IsA<glib::object::Object>> GESContainerExt for O {
+impl<O: IsA<Container>> GESContainerExt for O {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::ges_container_add(self.to_glib_none().0, child.to_glib_none().0), "Failed to add element")
@@ -94,7 +92,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> GESContainerExt for O {
     fn get_property_height(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "height".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -102,7 +100,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> GESContainerExt for O {
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TimelineElement) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "child-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"child-added\0".as_ptr() as *const _,
                 transmute(child_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -110,7 +108,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> GESContainerExt for O {
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TimelineElement) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "child-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"child-removed\0".as_ptr() as *const _,
                 transmute(child_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -118,7 +116,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> GESContainerExt for O {
     fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::height",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::height\0".as_ptr() as *const _,
                 transmute(notify_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

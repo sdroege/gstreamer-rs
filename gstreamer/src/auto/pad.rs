@@ -25,14 +25,12 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Pad(Object<ffi::GstPad, ffi::GstPadClass, PadClass>): Object;
@@ -65,7 +63,7 @@ impl Pad {
 unsafe impl Send for Pad {}
 unsafe impl Sync for Pad {}
 
-pub trait PadExt {
+pub trait PadExt: 'static {
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError>;
 
     //fn add_probe(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong;
@@ -207,7 +205,7 @@ pub trait PadExt {
     fn connect_property_template_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
+impl<O: IsA<Pad>> PadExt for O {
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_pad_activate_mode(self.to_glib_none().0, mode.to_glib(), active.to_glib()), "Failed to activate mode pad")
@@ -539,7 +537,7 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn get_property_caps(&self) -> Option<Caps> {
         unsafe {
             let mut value = Value::from_type(<Caps as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "caps".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"caps\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -547,21 +545,21 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn get_property_template(&self) -> Option<PadTemplate> {
         unsafe {
             let mut value = Value::from_type(<PadTemplate as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "template".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"template\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_property_template(&self, template: Option<&PadTemplate>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "template".to_glib_none().0, Value::from(template).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"template\0".as_ptr() as *const _, Value::from(template).to_glib_none().0);
         }
     }
 
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "linked",
+            connect_raw(self.to_glib_none().0 as *mut _, b"linked\0".as_ptr() as *const _,
                 transmute(linked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -569,7 +567,7 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unlinked",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unlinked\0".as_ptr() as *const _,
                 transmute(unlinked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -577,7 +575,7 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn connect_property_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::caps",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::caps\0".as_ptr() as *const _,
                 transmute(notify_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -585,7 +583,7 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::offset",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::offset\0".as_ptr() as *const _,
                 transmute(notify_offset_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -593,7 +591,7 @@ impl<O: IsA<Pad> + IsA<glib::object::Object>> PadExt for O {
     fn connect_property_template_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::template",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::template\0".as_ptr() as *const _,
                 transmute(notify_template_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

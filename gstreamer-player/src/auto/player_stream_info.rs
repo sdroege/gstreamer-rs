@@ -5,11 +5,7 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PlayerStreamInfo(Object<ffi::GstPlayerStreamInfo, ffi::GstPlayerStreamInfoClass>);
@@ -22,7 +18,7 @@ glib_wrapper! {
 unsafe impl Send for PlayerStreamInfo {}
 unsafe impl Sync for PlayerStreamInfo {}
 
-pub trait PlayerStreamInfoExt {
+pub trait PlayerStreamInfoExt: 'static {
     fn get_caps(&self) -> Option<gst::Caps>;
 
     fn get_codec(&self) -> Option<String>;

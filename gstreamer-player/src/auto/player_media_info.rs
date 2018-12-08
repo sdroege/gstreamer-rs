@@ -8,11 +8,7 @@ use PlayerSubtitleInfo;
 use PlayerVideoInfo;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass>);

@@ -7,10 +7,6 @@ use TimelineElement;
 use TrackElement;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>): TrackElement, TimelineElement, Extractable;

@@ -7,6 +7,7 @@ use Caps;
 use Clock;
 use ClockTime;
 use Context;
+use ElementClass;
 use ElementFactory;
 use Error;
 use Message;
@@ -24,16 +25,13 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
-
-use ElementClass;
 
 glib_wrapper! {
     pub struct Element(Object<ffi::GstElement, ffi::GstElementClass, ElementClass>): Object;
@@ -68,7 +66,7 @@ impl Element {
 unsafe impl Send for Element {}
 unsafe impl Sync for Element {}
 
-pub trait ElementExt {
+pub trait ElementExt: 'static {
     fn abort_state(&self);
 
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
@@ -183,7 +181,7 @@ pub trait ElementExt {
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
+impl<O: IsA<Element>> ElementExt for O {
     fn abort_state(&self) {
         unsafe {
             ffi::gst_element_abort_state(self.to_glib_none().0);
@@ -505,7 +503,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "no-more-pads",
+            connect_raw(self.to_glib_none().0 as *mut _, b"no-more-pads\0".as_ptr() as *const _,
                 transmute(no_more_pads_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -513,7 +511,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pad-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pad-added\0".as_ptr() as *const _,
                 transmute(pad_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -521,7 +519,7 @@ impl<O: IsA<Element> + IsA<glib::object::Object>> ElementExt for O {
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pad-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pad-removed\0".as_ptr() as *const _,
                 transmute(pad_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

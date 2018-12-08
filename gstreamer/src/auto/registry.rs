@@ -9,15 +9,12 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Registry(Object<ffi::GstRegistry, ffi::GstRegistryClass>): Object;
@@ -130,7 +127,7 @@ impl Registry {
     pub fn connect_feature_added<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Registry, &PluginFeature) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "feature-added",
+            connect_raw(self.to_glib_none().0, b"feature-added\0".as_ptr() as *const _,
                 transmute(feature_added_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -138,7 +135,7 @@ impl Registry {
     pub fn connect_plugin_added<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Registry, &Plugin) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "plugin-added",
+            connect_raw(self.to_glib_none().0, b"plugin-added\0".as_ptr() as *const _,
                 transmute(plugin_added_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

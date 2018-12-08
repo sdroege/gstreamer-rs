@@ -9,10 +9,6 @@ use TagMergeMode;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TagSetter(Object<ffi::GstTagSetter, ffi::GstTagSetterInterface>): Element, Object;
@@ -25,7 +21,7 @@ glib_wrapper! {
 unsafe impl Send for TagSetter {}
 unsafe impl Sync for TagSetter {}
 
-pub trait TagSetterExt {
+pub trait TagSetterExt: 'static {
     //fn add_tag_valist(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     //fn add_tag_valist_values(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);

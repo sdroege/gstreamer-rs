@@ -3,18 +3,14 @@
 // DO NOT EDIT
 
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass>);
@@ -49,7 +45,7 @@ impl Default for RTSPThreadPool {
 unsafe impl Send for RTSPThreadPool {}
 unsafe impl Sync for RTSPThreadPool {}
 
-pub trait RTSPThreadPoolExt {
+pub trait RTSPThreadPoolExt: 'static {
     fn get_max_threads(&self) -> i32;
 
     //fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> /*Ignored*/Option<RTSPThread>;
@@ -59,7 +55,7 @@ pub trait RTSPThreadPoolExt {
     fn connect_property_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPThreadPool> + IsA<glib::object::Object>> RTSPThreadPoolExt for O {
+impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
     fn get_max_threads(&self) -> i32 {
         unsafe {
             ffi::gst_rtsp_thread_pool_get_max_threads(self.to_glib_none().0)
@@ -79,7 +75,7 @@ impl<O: IsA<RTSPThreadPool> + IsA<glib::object::Object>> RTSPThreadPoolExt for O
     fn connect_property_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-threads",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-threads\0".as_ptr() as *const _,
                 transmute(notify_max_threads_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

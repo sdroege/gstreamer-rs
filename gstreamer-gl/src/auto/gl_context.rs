@@ -13,8 +13,6 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::mem;
@@ -59,7 +57,7 @@ impl GLContext {
 unsafe impl Send for GLContext {}
 unsafe impl Sync for GLContext {}
 
-pub trait GLContextExt {
+pub trait GLContextExt: 'static {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError>;
 
     fn can_share(&self, other_context: &GLContext) -> bool;

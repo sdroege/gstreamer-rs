@@ -10,7 +10,6 @@ use ffi;
 use glib;
 use glib::translate::*;
 use glib::IsA;
-use glib_ffi;
 use glib_ffi::{gboolean, gpointer};
 use libc::c_void;
 use std::cmp;

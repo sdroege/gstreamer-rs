@@ -17,14 +17,12 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass, BinClass>): Element, Object, ChildProxy;
@@ -48,7 +46,7 @@ impl Bin {
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
 
-pub trait GstBinExt {
+pub trait GstBinExt: 'static {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
     //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -112,7 +110,7 @@ pub trait GstBinExt {
     fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
+impl<O: IsA<Bin>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0), "Failed to add element")
@@ -210,28 +208,28 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn get_property_async_handling(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "async-handling".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"async-handling\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_async_handling(&self, async_handling: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "async-handling".to_glib_none().0, Value::from(&async_handling).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"async-handling\0".as_ptr() as *const _, Value::from(&async_handling).to_glib_none().0);
         }
     }
 
     fn get_property_message_forward(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "message-forward".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"message-forward\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_message_forward(&self, message_forward: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "message-forward".to_glib_none().0, Value::from(&message_forward).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"message-forward\0".as_ptr() as *const _, Value::from(&message_forward).to_glib_none().0);
         }
     }
 
@@ -239,7 +237,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Bin, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "deep-element-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"deep-element-added\0".as_ptr() as *const _,
                 transmute(deep_element_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -248,7 +246,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Bin, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "deep-element-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"deep-element-removed\0".as_ptr() as *const _,
                 transmute(deep_element_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -256,7 +254,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_do_latency<F: Fn(&Self) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "do-latency",
+            connect_raw(self.to_glib_none().0 as *mut _, b"do-latency\0".as_ptr() as *const _,
                 transmute(do_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -264,7 +262,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "element-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"element-added\0".as_ptr() as *const _,
                 transmute(element_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -272,7 +270,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "element-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"element-removed\0".as_ptr() as *const _,
                 transmute(element_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -280,7 +278,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::async-handling",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::async-handling\0".as_ptr() as *const _,
                 transmute(notify_async_handling_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -288,7 +286,7 @@ impl<O: IsA<Bin> + IsA<glib::object::Object>> GstBinExt for O {
     fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::message-forward",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::message-forward\0".as_ptr() as *const _,
                 transmute(notify_message_forward_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

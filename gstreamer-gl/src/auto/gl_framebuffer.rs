@@ -6,12 +6,9 @@ use GLContext;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GLFramebuffer(Object<ffi::GstGLFramebuffer, ffi::GstGLFramebufferClass>): [
@@ -42,7 +39,7 @@ impl GLFramebuffer {
 unsafe impl Send for GLFramebuffer {}
 unsafe impl Sync for GLFramebuffer {}
 
-pub trait GLFramebufferExt {
+pub trait GLFramebufferExt: 'static {
     //fn attach(&self, attachment_point: u32, mem: /*Ignored*/&mut GLBaseMemory);
 
     fn bind(&self);

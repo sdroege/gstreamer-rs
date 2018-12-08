@@ -7,10 +7,7 @@ use Object;
 use PluginDependencyFlags;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {

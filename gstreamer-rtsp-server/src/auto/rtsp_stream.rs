@@ -12,17 +12,15 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use gst_rtsp;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPStream(Object<ffi::GstRTSPStream, ffi::GstRTSPStreamClass>);
@@ -44,7 +42,7 @@ impl RTSPStream {
 unsafe impl Send for RTSPStream {}
 unsafe impl Sync for RTSPStream {}
 
-pub trait RTSPStreamExt {
+pub trait RTSPStreamExt: 'static {
     fn add_transport(&self, trans: &RTSPStreamTransport) -> Result<(), glib::error::BoolError>;
 
     //fn allocate_udp_sockets(&self, family: gio::SocketFamily, transport: /*Ignored*/&mut gst_rtsp::RTSPTransport, use_client_settings: bool) -> bool;
@@ -184,7 +182,7 @@ pub trait RTSPStreamExt {
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPStream> + IsA<glib::object::Object>> RTSPStreamExt for O {
+impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     fn add_transport(&self, trans: &RTSPStreamTransport) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_add_transport(self.to_glib_none().0, trans.to_glib_none().0), "Failed to add transport")
@@ -579,7 +577,7 @@ impl<O: IsA<RTSPStream> + IsA<glib::object::Object>> RTSPStreamExt for O {
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gst::Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-rtcp-encoder",
+            connect_raw(self.to_glib_none().0 as *mut _, b"new-rtcp-encoder\0".as_ptr() as *const _,
                 transmute(new_rtcp_encoder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -587,7 +585,7 @@ impl<O: IsA<RTSPStream> + IsA<glib::object::Object>> RTSPStreamExt for O {
     fn connect_new_rtp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gst::Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-rtp-encoder",
+            connect_raw(self.to_glib_none().0 as *mut _, b"new-rtp-encoder\0".as_ptr() as *const _,
                 transmute(new_rtp_encoder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -595,7 +593,7 @@ impl<O: IsA<RTSPStream> + IsA<glib::object::Object>> RTSPStreamExt for O {
     fn connect_property_control_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::control",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::control\0".as_ptr() as *const _,
                 transmute(notify_control_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -603,7 +601,7 @@ impl<O: IsA<RTSPStream> + IsA<glib::object::Object>> RTSPStreamExt for O {
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::profiles",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::profiles\0".as_ptr() as *const _,
                 transmute(notify_profiles_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -611,7 +609,7 @@ impl<O: IsA<RTSPStream> + IsA<glib::object::Object>> RTSPStreamExt for O {
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::protocols",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::protocols\0".as_ptr() as *const _,
                 transmute(notify_protocols_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

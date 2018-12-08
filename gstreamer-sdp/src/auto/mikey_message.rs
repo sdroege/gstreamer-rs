@@ -10,11 +10,8 @@ use MIKEYPayloadType;
 use MIKEYType;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

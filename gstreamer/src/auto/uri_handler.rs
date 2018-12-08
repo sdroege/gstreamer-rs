@@ -7,9 +7,6 @@ use URIType;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {
@@ -23,7 +20,7 @@ glib_wrapper! {
 unsafe impl Send for URIHandler {}
 unsafe impl Sync for URIHandler {}
 
-pub trait URIHandlerExt {
+pub trait URIHandlerExt: 'static {
     fn get_protocols(&self) -> Vec<String>;
 
     fn get_uri(&self) -> Option<String>;

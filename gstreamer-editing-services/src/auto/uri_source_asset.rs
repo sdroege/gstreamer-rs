@@ -7,11 +7,7 @@ use UriClipAsset;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst_pbutils;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass>): Asset;
@@ -21,7 +17,7 @@ glib_wrapper! {
     }
 }
 
-pub trait UriSourceAssetExt {
+pub trait UriSourceAssetExt: 'static {
     fn get_filesource_asset(&self) -> Option<UriClipAsset>;
 
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo>;

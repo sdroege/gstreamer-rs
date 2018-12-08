@@ -5,10 +5,6 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PlayerSignalDispatcher(Object<ffi::GstPlayerSignalDispatcher, ffi::GstPlayerSignalDispatcherInterface>);
@@ -21,6 +17,6 @@ glib_wrapper! {
 unsafe impl Send for PlayerSignalDispatcher {}
 unsafe impl Sync for PlayerSignalDispatcher {}
 
-pub trait PlayerSignalDispatcherExt {}
+pub trait PlayerSignalDispatcherExt: 'static {}
 
 impl<O: IsA<PlayerSignalDispatcher>> PlayerSignalDispatcherExt for O {}

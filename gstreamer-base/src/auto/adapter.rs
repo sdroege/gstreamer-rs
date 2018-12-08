@@ -6,11 +6,8 @@ use ffi;
 use glib;
 use glib::ObjectExt;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Adapter(Object<ffi::GstAdapter, ffi::GstAdapterClass>);

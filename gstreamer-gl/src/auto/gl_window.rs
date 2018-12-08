@@ -5,21 +5,18 @@
 use GLContext;
 use GLDisplay;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GLWindow(Object<ffi::GstGLWindow, ffi::GstGLWindowClass>): [
@@ -43,7 +40,7 @@ impl GLWindow {
 unsafe impl Send for GLWindow {}
 unsafe impl Sync for GLWindow {}
 
-pub trait GLWindowExt {
+pub trait GLWindowExt: 'static {
     fn draw(&self);
 
     fn get_context(&self) -> Option<GLContext>;
@@ -75,7 +72,7 @@ pub trait GLWindowExt {
     fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GLWindow> + IsA<glib::object::Object>> GLWindowExt for O {
+impl<O: IsA<GLWindow>> GLWindowExt for O {
     fn draw(&self) {
         unsafe {
             ffi::gst_gl_window_draw(self.to_glib_none().0);
@@ -160,7 +157,7 @@ impl<O: IsA<GLWindow> + IsA<glib::object::Object>> GLWindowExt for O {
     fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "key-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"key-event\0".as_ptr() as *const _,
                 transmute(key_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -168,7 +165,7 @@ impl<O: IsA<GLWindow> + IsA<glib::object::Object>> GLWindowExt for O {
     fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "mouse-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"mouse-event\0".as_ptr() as *const _,
                 transmute(mouse_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

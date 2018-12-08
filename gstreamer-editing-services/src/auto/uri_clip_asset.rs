@@ -6,19 +6,17 @@ use Asset;
 use Error;
 use UriSourceAsset;
 use ffi;
-use glib;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_pbutils;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -45,7 +43,7 @@ impl UriClipAsset {
     }
 }
 
-pub trait UriClipAssetExt {
+pub trait UriClipAssetExt: 'static {
     fn get_duration(&self) -> gst::ClockTime;
 
     fn get_info(&self) -> Option<gst_pbutils::DiscovererInfo>;
@@ -59,7 +57,7 @@ pub trait UriClipAssetExt {
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<UriClipAsset> + IsA<glib::object::Object>> UriClipAssetExt for O {
+impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ffi::ges_uri_clip_asset_get_duration(self.to_glib_none().0))
@@ -86,14 +84,14 @@ impl<O: IsA<UriClipAsset> + IsA<glib::object::Object>> UriClipAssetExt for O {
 
     fn set_property_duration(&self, duration: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "duration".to_glib_none().0, Value::from(&duration).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"duration\0".as_ptr() as *const _, Value::from(&duration).to_glib_none().0);
         }
     }
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::duration",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

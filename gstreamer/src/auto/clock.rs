@@ -11,14 +11,13 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Clock(Object<ffi::GstClock, ffi::GstClockClass>): Object;
@@ -61,7 +60,7 @@ impl Clock {
 unsafe impl Send for Clock {}
 unsafe impl Sync for Clock {}
 
-pub trait ClockExt {
+pub trait ClockExt: 'static {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64>;
 
     fn add_observation_unapplied(&self, slave: ClockTime, master: ClockTime) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
@@ -121,7 +120,7 @@ pub trait ClockExt {
     fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
+impl<O: IsA<Clock>> ClockExt for O {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {
             let mut r_squared = mem::uninitialized();
@@ -258,35 +257,35 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn get_property_window_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "window-size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_window_size(&self, window_size: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "window-size".to_glib_none().0, Value::from(&window_size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-size\0".as_ptr() as *const _, Value::from(&window_size).to_glib_none().0);
         }
     }
 
     fn get_property_window_threshold(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "window-threshold".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-threshold\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_window_threshold(&self, window_threshold: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "window-threshold".to_glib_none().0, Value::from(&window_threshold).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-threshold\0".as_ptr() as *const _, Value::from(&window_threshold).to_glib_none().0);
         }
     }
 
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "synced",
+            connect_raw(self.to_glib_none().0 as *mut _, b"synced\0".as_ptr() as *const _,
                 transmute(synced_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -294,7 +293,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::timeout",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::timeout\0".as_ptr() as *const _,
                 transmute(notify_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -302,7 +301,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::window-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::window-size\0".as_ptr() as *const _,
                 transmute(notify_window_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -310,7 +309,7 @@ impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExt for O {
     fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::window-threshold",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::window-threshold\0".as_ptr() as *const _,
                 transmute(notify_window_threshold_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

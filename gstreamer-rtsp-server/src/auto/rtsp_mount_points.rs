@@ -6,11 +6,8 @@ use RTSPMediaFactory;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst_rtsp;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass>);
@@ -38,7 +35,7 @@ impl Default for RTSPMountPoints {
 unsafe impl Send for RTSPMountPoints {}
 unsafe impl Sync for RTSPMountPoints {}
 
-pub trait RTSPMountPointsExt {
+pub trait RTSPMountPointsExt: 'static {
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P);
 
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<String>;

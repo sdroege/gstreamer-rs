@@ -8,6 +8,7 @@
 
 use std::ffi::CStr;
 use std::mem;
+#[cfg(any(feature = "v1_8_1", feature = "dox"))]
 use std::ptr;
 
 use ffi;

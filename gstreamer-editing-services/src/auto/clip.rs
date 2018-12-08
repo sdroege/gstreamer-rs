@@ -16,14 +16,11 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>): Container, TimelineElement, Extractable;
@@ -33,7 +30,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ClipExt {
+pub trait ClipExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Option<TrackElement>;
 
     fn find_track_element<'a, P: IsA<Track> + 'a, Q: Into<Option<&'a P>>>(&self, track: Q, type_: glib::types::Type) -> Option<TrackElement>;
@@ -65,7 +62,7 @@ pub trait ClipExt {
     fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Clip> + IsA<glib::object::Object>> ClipExt for O {
+impl<O: IsA<Clip>> ClipExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Option<TrackElement> {
         unsafe {
             from_glib_none(ffi::ges_clip_add_asset(self.to_glib_none().0, asset.to_glib_none().0))
@@ -151,7 +148,7 @@ impl<O: IsA<Clip> + IsA<glib::object::Object>> ClipExt for O {
     fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::layer",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::layer\0".as_ptr() as *const _,
                 transmute(notify_layer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -159,7 +156,7 @@ impl<O: IsA<Clip> + IsA<glib::object::Object>> ClipExt for O {
     fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::supported-formats",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::supported-formats\0".as_ptr() as *const _,
                 transmute(notify_supported_formats_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

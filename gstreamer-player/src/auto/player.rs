@@ -16,7 +16,7 @@ use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -25,9 +25,7 @@ use gst_ffi;
 use gst_video;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Player(Object<ffi::GstPlayer, ffi::GstPlayerClass>): [
@@ -287,7 +285,7 @@ impl Player {
     pub fn get_property_suburi(&self) -> Option<String> {
         unsafe {
             let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "suburi".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"suburi\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -295,35 +293,35 @@ impl Player {
     pub fn set_property_suburi<'a, P: Into<Option<&'a str>>>(&self, suburi: P) {
         let suburi = suburi.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "suburi".to_glib_none().0, Value::from(suburi).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"suburi\0".as_ptr() as *const _, Value::from(suburi).to_glib_none().0);
         }
     }
 
     pub fn get_property_video_multiview_flags(&self) -> gst_video::VideoMultiviewFlags {
         unsafe {
             let mut value = Value::from_type(<gst_video::VideoMultiviewFlags as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "video-multiview-flags".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"video-multiview-flags\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_video_multiview_flags(&self, video_multiview_flags: gst_video::VideoMultiviewFlags) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "video-multiview-flags".to_glib_none().0, Value::from(&video_multiview_flags).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"video-multiview-flags\0".as_ptr() as *const _, Value::from(&video_multiview_flags).to_glib_none().0);
         }
     }
 
     pub fn get_property_video_multiview_mode(&self) -> gst_video::VideoMultiviewFramePacking {
         unsafe {
             let mut value = Value::from_type(<gst_video::VideoMultiviewFramePacking as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "video-multiview-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"video-multiview-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_video_multiview_mode(&self, video_multiview_mode: gst_video::VideoMultiviewFramePacking) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "video-multiview-mode".to_glib_none().0, Value::from(&video_multiview_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"video-multiview-mode\0".as_ptr() as *const _, Value::from(&video_multiview_mode).to_glib_none().0);
         }
     }
 
@@ -358,7 +356,7 @@ impl Player {
     pub fn connect_buffering<F: Fn(&Player, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, i32) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "buffering",
+            connect_raw(self.to_glib_none().0, b"buffering\0".as_ptr() as *const _,
                 transmute(buffering_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -366,7 +364,7 @@ impl Player {
     pub fn connect_end_of_stream<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "end-of-stream",
+            connect_raw(self.to_glib_none().0, b"end-of-stream\0".as_ptr() as *const _,
                 transmute(end_of_stream_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -374,7 +372,7 @@ impl Player {
     pub fn connect_error<F: Fn(&Player, &Error) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, &Error) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "error",
+            connect_raw(self.to_glib_none().0, b"error\0".as_ptr() as *const _,
                 transmute(error_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -382,7 +380,7 @@ impl Player {
     pub fn connect_media_info_updated<F: Fn(&Player, &PlayerMediaInfo) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, &PlayerMediaInfo) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "media-info-updated",
+            connect_raw(self.to_glib_none().0, b"media-info-updated\0".as_ptr() as *const _,
                 transmute(media_info_updated_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -390,7 +388,7 @@ impl Player {
     pub fn connect_mute_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "mute-changed",
+            connect_raw(self.to_glib_none().0, b"mute-changed\0".as_ptr() as *const _,
                 transmute(mute_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -398,7 +396,7 @@ impl Player {
     pub fn connect_state_changed<F: Fn(&Player, PlayerState) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, PlayerState) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "state-changed",
+            connect_raw(self.to_glib_none().0, b"state-changed\0".as_ptr() as *const _,
                 transmute(state_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -406,7 +404,7 @@ impl Player {
     pub fn connect_uri_loaded<F: Fn(&Player, &str) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, &str) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "uri-loaded",
+            connect_raw(self.to_glib_none().0, b"uri-loaded\0".as_ptr() as *const _,
                 transmute(uri_loaded_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -414,7 +412,7 @@ impl Player {
     pub fn connect_video_dimensions_changed<F: Fn(&Player, i32, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, i32, i32) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "video-dimensions-changed",
+            connect_raw(self.to_glib_none().0, b"video-dimensions-changed\0".as_ptr() as *const _,
                 transmute(video_dimensions_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -422,7 +420,7 @@ impl Player {
     pub fn connect_volume_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "volume-changed",
+            connect_raw(self.to_glib_none().0, b"volume-changed\0".as_ptr() as *const _,
                 transmute(volume_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -430,7 +428,7 @@ impl Player {
     pub fn connect_warning<F: Fn(&Player, &Error) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player, &Error) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "warning",
+            connect_raw(self.to_glib_none().0, b"warning\0".as_ptr() as *const _,
                 transmute(warning_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -438,7 +436,7 @@ impl Player {
     pub fn connect_property_audio_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::audio-video-offset",
+            connect_raw(self.to_glib_none().0, b"notify::audio-video-offset\0".as_ptr() as *const _,
                 transmute(notify_audio_video_offset_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -446,7 +444,7 @@ impl Player {
     pub fn connect_property_current_audio_track_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::current-audio-track",
+            connect_raw(self.to_glib_none().0, b"notify::current-audio-track\0".as_ptr() as *const _,
                 transmute(notify_current_audio_track_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -454,7 +452,7 @@ impl Player {
     pub fn connect_property_current_subtitle_track_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::current-subtitle-track",
+            connect_raw(self.to_glib_none().0, b"notify::current-subtitle-track\0".as_ptr() as *const _,
                 transmute(notify_current_subtitle_track_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -462,7 +460,7 @@ impl Player {
     pub fn connect_property_current_video_track_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::current-video-track",
+            connect_raw(self.to_glib_none().0, b"notify::current-video-track\0".as_ptr() as *const _,
                 transmute(notify_current_video_track_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -470,7 +468,7 @@ impl Player {
     pub fn connect_property_duration_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::duration",
+            connect_raw(self.to_glib_none().0, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -478,7 +476,7 @@ impl Player {
     pub fn connect_property_media_info_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::media-info",
+            connect_raw(self.to_glib_none().0, b"notify::media-info\0".as_ptr() as *const _,
                 transmute(notify_media_info_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -486,7 +484,7 @@ impl Player {
     pub fn connect_property_mute_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mute",
+            connect_raw(self.to_glib_none().0, b"notify::mute\0".as_ptr() as *const _,
                 transmute(notify_mute_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -494,7 +492,7 @@ impl Player {
     pub fn connect_property_pipeline_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pipeline",
+            connect_raw(self.to_glib_none().0, b"notify::pipeline\0".as_ptr() as *const _,
                 transmute(notify_pipeline_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -502,7 +500,7 @@ impl Player {
     pub fn connect_property_position_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::position",
+            connect_raw(self.to_glib_none().0, b"notify::position\0".as_ptr() as *const _,
                 transmute(notify_position_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -510,7 +508,7 @@ impl Player {
     pub fn connect_property_rate_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rate",
+            connect_raw(self.to_glib_none().0, b"notify::rate\0".as_ptr() as *const _,
                 transmute(notify_rate_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -518,7 +516,7 @@ impl Player {
     pub fn connect_property_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::suburi",
+            connect_raw(self.to_glib_none().0, b"notify::suburi\0".as_ptr() as *const _,
                 transmute(notify_suburi_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -526,7 +524,7 @@ impl Player {
     pub fn connect_property_uri_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::uri",
+            connect_raw(self.to_glib_none().0, b"notify::uri\0".as_ptr() as *const _,
                 transmute(notify_uri_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -534,7 +532,7 @@ impl Player {
     pub fn connect_property_video_multiview_flags_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::video-multiview-flags",
+            connect_raw(self.to_glib_none().0, b"notify::video-multiview-flags\0".as_ptr() as *const _,
                 transmute(notify_video_multiview_flags_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -542,7 +540,7 @@ impl Player {
     pub fn connect_property_video_multiview_mode_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::video-multiview-mode",
+            connect_raw(self.to_glib_none().0, b"notify::video-multiview-mode\0".as_ptr() as *const _,
                 transmute(notify_video_multiview_mode_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -550,7 +548,7 @@ impl Player {
     pub fn connect_property_volume_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::volume",
+            connect_raw(self.to_glib_none().0, b"notify::volume\0".as_ptr() as *const _,
                 transmute(notify_volume_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

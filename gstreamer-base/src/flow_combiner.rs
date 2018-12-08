@@ -9,11 +9,8 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FlowCombiner(Shared<ffi::GstFlowCombiner>);

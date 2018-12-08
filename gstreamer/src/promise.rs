@@ -9,9 +9,6 @@
 use ffi;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 use PromiseResult;
 use Structure;
 use StructureRef;

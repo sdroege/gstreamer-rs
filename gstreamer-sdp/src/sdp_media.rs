@@ -12,7 +12,6 @@ use std::ptr;
 
 use ffi;
 use glib::translate::*;
-use glib_ffi;
 use gst;
 
 use sdp_attribute::SDPAttribute;

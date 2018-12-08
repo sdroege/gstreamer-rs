@@ -4,22 +4,19 @@
 
 use AggregatorClass;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Aggregator(Object<ffi::GstAggregator, ffi::GstAggregatorClass, AggregatorClass>): [
@@ -35,7 +32,7 @@ glib_wrapper! {
 unsafe impl Send for Aggregator {}
 unsafe impl Sync for Aggregator {}
 
-pub trait AggregatorExt {
+pub trait AggregatorExt: 'static {
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
 
@@ -61,7 +58,7 @@ pub trait AggregatorExt {
     fn connect_property_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
+impl<O: IsA<Aggregator>> AggregatorExt for O {
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi::gst_aggregator_get_allocator() }
@@ -98,14 +95,14 @@ impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
     fn get_property_start_time(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "start-time".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"start-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_start_time(&self, start_time: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "start-time".to_glib_none().0, Value::from(&start_time).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"start-time\0".as_ptr() as *const _, Value::from(&start_time).to_glib_none().0);
         }
     }
 
@@ -113,7 +110,7 @@ impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::latency",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::latency\0".as_ptr() as *const _,
                 transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -121,7 +118,7 @@ impl<O: IsA<Aggregator> + IsA<glib::object::Object>> AggregatorExt for O {
     fn connect_property_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::start-time",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::start-time\0".as_ptr() as *const _,
                 transmute(notify_start_time_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

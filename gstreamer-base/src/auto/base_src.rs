@@ -4,13 +4,12 @@
 
 use BaseSrcClass;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -19,7 +18,6 @@ use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass, BaseSrcClass>): [
@@ -35,7 +33,7 @@ glib_wrapper! {
 unsafe impl Send for BaseSrc {}
 unsafe impl Sync for BaseSrc {}
 
-pub trait BaseSrcExt {
+pub trait BaseSrcExt: 'static {
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
 
     fn get_blocksize(&self) -> u32;
@@ -91,7 +89,7 @@ pub trait BaseSrcExt {
     fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
+impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams) {
     //    unsafe { TODO: call ffi::gst_base_src_get_allocator() }
     //}
@@ -211,35 +209,35 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
     fn get_property_num_buffers(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "num-buffers".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"num-buffers\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_num_buffers(&self, num_buffers: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "num-buffers".to_glib_none().0, Value::from(&num_buffers).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"num-buffers\0".as_ptr() as *const _, Value::from(&num_buffers).to_glib_none().0);
         }
     }
 
     fn get_property_typefind(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "typefind".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"typefind\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_typefind(&self, typefind: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "typefind".to_glib_none().0, Value::from(&typefind).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"typefind\0".as_ptr() as *const _, Value::from(&typefind).to_glib_none().0);
         }
     }
 
     fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::blocksize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::blocksize\0".as_ptr() as *const _,
                 transmute(notify_blocksize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -247,7 +245,7 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
     fn connect_property_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::do-timestamp",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::do-timestamp\0".as_ptr() as *const _,
                 transmute(notify_do_timestamp_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -255,7 +253,7 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
     fn connect_property_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::num-buffers",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::num-buffers\0".as_ptr() as *const _,
                 transmute(notify_num_buffers_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -263,7 +261,7 @@ impl<O: IsA<BaseSrc> + IsA<glib::object::Object>> BaseSrcExt for O {
     fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::typefind",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::typefind\0".as_ptr() as *const _,
                 transmute(notify_typefind_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

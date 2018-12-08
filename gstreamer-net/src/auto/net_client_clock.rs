@@ -6,16 +6,14 @@ use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct NetClientClock(Object<ffi::GstNetClientClock, ffi::GstNetClientClockClass>): [
@@ -32,7 +30,7 @@ impl NetClientClock {
     pub fn get_property_address(&self) -> Option<String> {
         unsafe {
             let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "address".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"address\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -40,14 +38,14 @@ impl NetClientClock {
     pub fn set_property_address<'a, P: Into<Option<&'a str>>>(&self, address: P) {
         let address = address.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "address".to_glib_none().0, Value::from(address).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"address\0".as_ptr() as *const _, Value::from(address).to_glib_none().0);
         }
     }
 
     pub fn get_property_base_time(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "base-time".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"base-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -55,21 +53,21 @@ impl NetClientClock {
     pub fn get_property_bus(&self) -> Option<gst::Bus> {
         unsafe {
             let mut value = Value::from_type(<gst::Bus as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "bus".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"bus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     pub fn set_property_bus(&self, bus: Option<&gst::Bus>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "bus".to_glib_none().0, Value::from(bus).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"bus\0".as_ptr() as *const _, Value::from(bus).to_glib_none().0);
         }
     }
 
     pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "internal-clock".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -77,63 +75,63 @@ impl NetClientClock {
     pub fn get_property_minimum_update_interval(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "minimum-update-interval".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"minimum-update-interval\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_minimum_update_interval(&self, minimum_update_interval: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "minimum-update-interval".to_glib_none().0, Value::from(&minimum_update_interval).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"minimum-update-interval\0".as_ptr() as *const _, Value::from(&minimum_update_interval).to_glib_none().0);
         }
     }
 
     pub fn get_property_port(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "port".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"port\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_port(&self, port: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "port".to_glib_none().0, Value::from(&port).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"port\0".as_ptr() as *const _, Value::from(&port).to_glib_none().0);
         }
     }
 
     pub fn get_property_qos_dscp(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "qos-dscp".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"qos-dscp\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_qos_dscp(&self, qos_dscp: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "qos-dscp".to_glib_none().0, Value::from(&qos_dscp).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"qos-dscp\0".as_ptr() as *const _, Value::from(&qos_dscp).to_glib_none().0);
         }
     }
 
     pub fn get_property_round_trip_limit(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "round-trip-limit".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"round-trip-limit\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_round_trip_limit(&self, round_trip_limit: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "round-trip-limit".to_glib_none().0, Value::from(&round_trip_limit).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"round-trip-limit\0".as_ptr() as *const _, Value::from(&round_trip_limit).to_glib_none().0);
         }
     }
 
     pub fn connect_property_address_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::address",
+            connect_raw(self.to_glib_none().0, b"notify::address\0".as_ptr() as *const _,
                 transmute(notify_address_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -141,7 +139,7 @@ impl NetClientClock {
     pub fn connect_property_bus_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::bus",
+            connect_raw(self.to_glib_none().0, b"notify::bus\0".as_ptr() as *const _,
                 transmute(notify_bus_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -149,7 +147,7 @@ impl NetClientClock {
     pub fn connect_property_internal_clock_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::internal-clock",
+            connect_raw(self.to_glib_none().0, b"notify::internal-clock\0".as_ptr() as *const _,
                 transmute(notify_internal_clock_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -157,7 +155,7 @@ impl NetClientClock {
     pub fn connect_property_minimum_update_interval_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::minimum-update-interval",
+            connect_raw(self.to_glib_none().0, b"notify::minimum-update-interval\0".as_ptr() as *const _,
                 transmute(notify_minimum_update_interval_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -165,7 +163,7 @@ impl NetClientClock {
     pub fn connect_property_port_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::port",
+            connect_raw(self.to_glib_none().0, b"notify::port\0".as_ptr() as *const _,
                 transmute(notify_port_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -173,7 +171,7 @@ impl NetClientClock {
     pub fn connect_property_qos_dscp_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::qos-dscp",
+            connect_raw(self.to_glib_none().0, b"notify::qos-dscp\0".as_ptr() as *const _,
                 transmute(notify_qos_dscp_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -181,7 +179,7 @@ impl NetClientClock {
     pub fn connect_property_round_trip_limit_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::round-trip-limit",
+            connect_raw(self.to_glib_none().0, b"notify::round-trip-limit\0".as_ptr() as *const _,
                 transmute(notify_round_trip_limit_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

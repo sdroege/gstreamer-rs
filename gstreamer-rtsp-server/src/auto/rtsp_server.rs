@@ -14,12 +14,10 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -56,7 +54,7 @@ impl Default for RTSPServer {
 unsafe impl Send for RTSPServer {}
 unsafe impl Sync for RTSPServer {}
 
-pub trait RTSPServerExt {
+pub trait RTSPServerExt: 'static {
     //fn client_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPServerClientFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPClient>;
 
     fn create_socket<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P) -> Result<gio::Socket, Error>;
@@ -110,7 +108,7 @@ pub trait RTSPServerExt {
     fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
+impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     //fn client_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPServerClientFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPClient> {
     //    unsafe { TODO: call ffi::gst_rtsp_server_client_filter() }
     //}
@@ -244,7 +242,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPClient) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "client-connected",
+            connect_raw(self.to_glib_none().0 as *mut _, b"client-connected\0".as_ptr() as *const _,
                 transmute(client_connected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -252,7 +250,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::address",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::address\0".as_ptr() as *const _,
                 transmute(notify_address_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -260,7 +258,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::backlog",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::backlog\0".as_ptr() as *const _,
                 transmute(notify_backlog_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -268,7 +266,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::bound-port",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::bound-port\0".as_ptr() as *const _,
                 transmute(notify_bound_port_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -276,7 +274,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mount-points",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mount-points\0".as_ptr() as *const _,
                 transmute(notify_mount_points_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -284,7 +282,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::service",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::service\0".as_ptr() as *const _,
                 transmute(notify_service_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -292,7 +290,7 @@ impl<O: IsA<RTSPServer> + IsA<glib::object::Object>> RTSPServerExt for O {
     fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::session-pool",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::session-pool\0".as_ptr() as *const _,
                 transmute(notify_session_pool_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -13,10 +13,6 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass, GhostPadClass>): ProxyPad, Pad, Object;
@@ -49,7 +45,7 @@ impl GhostPad {
 unsafe impl Send for GhostPad {}
 unsafe impl Sync for GhostPad {}
 
-pub trait GhostPadExt {
+pub trait GhostPadExt: 'static {
     fn get_target(&self) -> Option<Pad>;
 
     fn set_target<'a, P: IsA<Pad> + 'a, Q: Into<Option<&'a P>>>(&self, newtarget: Q) -> Result<(), glib::error::BoolError>;

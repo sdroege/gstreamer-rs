@@ -10,21 +10,18 @@ use TimelineElement;
 use Track;
 use TrackType;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass>): TimelineElement, Extractable;
@@ -34,7 +31,7 @@ glib_wrapper! {
     }
 }
 
-pub trait TrackElementExt {
+pub trait TrackElementExt: 'static {
     fn add_children_props<P: IsA<gst::Element>>(&self, element: &P, wanted_categories: &[&str], blacklist: &[&str], whitelist: &[&str]);
 
     fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> bool;
@@ -78,7 +75,7 @@ pub trait TrackElementExt {
     fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TrackElement> + IsA<glib::object::Object>> TrackElementExt for O {
+impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn add_children_props<P: IsA<gst::Element>>(&self, element: &P, wanted_categories: &[&str], blacklist: &[&str], whitelist: &[&str]) {
         unsafe {
             ffi::ges_track_element_add_children_props(self.to_glib_none().0, element.to_glib_none().0, wanted_categories.to_glib_none().0, blacklist.to_glib_none().0, whitelist.to_glib_none().0);
@@ -164,7 +161,7 @@ impl<O: IsA<TrackElement> + IsA<glib::object::Object>> TrackElementExt for O {
     fn get_property_active(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -180,7 +177,7 @@ impl<O: IsA<TrackElement> + IsA<glib::object::Object>> TrackElementExt for O {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -188,7 +185,7 @@ impl<O: IsA<TrackElement> + IsA<glib::object::Object>> TrackElementExt for O {
     fn connect_property_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::track",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::track\0".as_ptr() as *const _,
                 transmute(notify_track_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -196,7 +193,7 @@ impl<O: IsA<TrackElement> + IsA<glib::object::Object>> TrackElementExt for O {
     fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::track-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::track-type\0".as_ptr() as *const _,
                 transmute(notify_track_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

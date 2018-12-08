@@ -7,10 +7,6 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct BufferPool(Object<ffi::GstBufferPool, ffi::GstBufferPoolClass>): Object;
@@ -23,7 +19,7 @@ glib_wrapper! {
 unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
 
-pub trait BufferPoolExt {
+pub trait BufferPoolExt: 'static {
     fn get_options(&self) -> Vec<String>;
 
     fn has_option(&self, option: &str) -> bool;

@@ -6,16 +6,14 @@ use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct NetTimeProvider(Object<ffi::GstNetTimeProvider, ffi::GstNetTimeProviderClass>): [
@@ -31,21 +29,21 @@ impl NetTimeProvider {
     pub fn get_property_active(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_active(&self, active: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "active".to_glib_none().0, Value::from(&active).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"active\0".as_ptr() as *const _, Value::from(&active).to_glib_none().0);
         }
     }
 
     pub fn get_property_address(&self) -> Option<String> {
         unsafe {
             let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "address".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"address\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -53,7 +51,7 @@ impl NetTimeProvider {
     pub fn get_property_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "clock".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -61,7 +59,7 @@ impl NetTimeProvider {
     pub fn get_property_port(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "port".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"port\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -69,21 +67,21 @@ impl NetTimeProvider {
     pub fn get_property_qos_dscp(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "qos-dscp".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"qos-dscp\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_qos_dscp(&self, qos_dscp: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "qos-dscp".to_glib_none().0, Value::from(&qos_dscp).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"qos-dscp\0".as_ptr() as *const _, Value::from(&qos_dscp).to_glib_none().0);
         }
     }
 
     pub fn connect_property_active_notify<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetTimeProvider) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -91,7 +89,7 @@ impl NetTimeProvider {
     pub fn connect_property_qos_dscp_notify<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&NetTimeProvider) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::qos-dscp",
+            connect_raw(self.to_glib_none().0, b"notify::qos-dscp\0".as_ptr() as *const _,
                 transmute(notify_qos_dscp_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

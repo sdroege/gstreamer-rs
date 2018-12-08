@@ -12,14 +12,12 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -51,7 +49,7 @@ impl Default for GLDisplay {
 unsafe impl Send for GLDisplay {}
 unsafe impl Sync for GLDisplay {}
 
-pub trait GLDisplayExt {
+pub trait GLDisplayExt: 'static {
     fn add_context(&self, context: &GLContext) -> Result<(), glib::error::BoolError>;
 
     fn create_context(&self, other_context: &GLContext) -> Result<GLContext, Error>;
@@ -71,7 +69,7 @@ pub trait GLDisplayExt {
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GLDisplay> + IsA<glib::object::Object>> GLDisplayExt for O {
+impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     fn add_context(&self, context: &GLContext) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::gst_gl_display_add_context(self.to_glib_none().0, context.to_glib_none().0), "Failed to add OpenGL context")
@@ -126,7 +124,7 @@ impl<O: IsA<GLDisplay> + IsA<glib::object::Object>> GLDisplayExt for O {
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "create-context",
+            connect_raw(self.to_glib_none().0 as *mut _, b"create-context\0".as_ptr() as *const _,
                 transmute(create_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

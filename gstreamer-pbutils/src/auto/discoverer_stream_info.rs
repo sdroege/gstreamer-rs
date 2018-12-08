@@ -5,11 +5,7 @@
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct DiscovererStreamInfo(Object<ffi::GstDiscovererStreamInfo>);
@@ -22,7 +18,7 @@ glib_wrapper! {
 unsafe impl Send for DiscovererStreamInfo {}
 unsafe impl Sync for DiscovererStreamInfo {}
 
-pub trait DiscovererStreamInfoExt {
+pub trait DiscovererStreamInfoExt: 'static {
     fn get_caps(&self) -> Option<gst::Caps>;
 
     fn get_misc(&self) -> Option<gst::Structure>;

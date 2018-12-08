@@ -9,13 +9,12 @@ use RTSPSession;
 use RTSPSessionPool;
 use RTSPThreadPool;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -24,9 +23,7 @@ use gst_rtsp;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use gst_rtsp_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPClient(Object<ffi::GstRTSPClient, ffi::GstRTSPClientClass>);
@@ -54,7 +51,7 @@ impl Default for RTSPClient {
 unsafe impl Send for RTSPClient {}
 unsafe impl Sync for RTSPClient {}
 
-pub trait RTSPClientExt {
+pub trait RTSPClientExt: 'static {
     fn close(&self);
 
     fn get_auth(&self) -> Option<RTSPAuth>;
@@ -156,7 +153,7 @@ pub trait RTSPClientExt {
     fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
+impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     fn close(&self) {
         unsafe {
             ffi::gst_rtsp_client_close(self.to_glib_none().0);
@@ -246,21 +243,21 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn get_property_drop_backlog(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "drop-backlog".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"drop-backlog\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_drop_backlog(&self, drop_backlog: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "drop-backlog".to_glib_none().0, Value::from(&drop_backlog).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"drop-backlog\0".as_ptr() as *const _, Value::from(&drop_backlog).to_glib_none().0);
         }
     }
 
     fn connect_announce_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "announce-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"announce-request\0".as_ptr() as *const _,
                 transmute(announce_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -272,7 +269,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_closed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "closed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"closed\0".as_ptr() as *const _,
                 transmute(closed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -280,7 +277,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_describe_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "describe-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"describe-request\0".as_ptr() as *const _,
                 transmute(describe_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -288,7 +285,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_get_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "get-parameter-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"get-parameter-request\0".as_ptr() as *const _,
                 transmute(get_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -296,7 +293,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_handle_response<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "handle-response",
+            connect_raw(self.to_glib_none().0 as *mut _, b"handle-response\0".as_ptr() as *const _,
                 transmute(handle_response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -304,7 +301,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_new_session<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPSession) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-session",
+            connect_raw(self.to_glib_none().0 as *mut _, b"new-session\0".as_ptr() as *const _,
                 transmute(new_session_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -312,7 +309,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_options_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "options-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"options-request\0".as_ptr() as *const _,
                 transmute(options_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -320,7 +317,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pause_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pause-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pause-request\0".as_ptr() as *const _,
                 transmute(pause_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -328,7 +325,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_play_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "play-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"play-request\0".as_ptr() as *const _,
                 transmute(play_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -337,7 +334,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_announce_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-announce-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-announce-request\0".as_ptr() as *const _,
                 transmute(pre_announce_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -346,7 +343,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_describe_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-describe-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-describe-request\0".as_ptr() as *const _,
                 transmute(pre_describe_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -355,7 +352,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_get_parameter_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-get-parameter-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-get-parameter-request\0".as_ptr() as *const _,
                 transmute(pre_get_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -364,7 +361,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_options_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-options-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-options-request\0".as_ptr() as *const _,
                 transmute(pre_options_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -373,7 +370,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_pause_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-pause-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-pause-request\0".as_ptr() as *const _,
                 transmute(pre_pause_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -382,7 +379,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_play_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-play-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-play-request\0".as_ptr() as *const _,
                 transmute(pre_play_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -391,7 +388,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_record_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-record-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-record-request\0".as_ptr() as *const _,
                 transmute(pre_record_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -400,7 +397,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_set_parameter_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-set-parameter-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-set-parameter-request\0".as_ptr() as *const _,
                 transmute(pre_set_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -409,7 +406,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_setup_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-setup-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-setup-request\0".as_ptr() as *const _,
                 transmute(pre_setup_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -418,7 +415,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_pre_teardown_request<F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pre-teardown-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pre-teardown-request\0".as_ptr() as *const _,
                 transmute(pre_teardown_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -426,7 +423,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_record_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "record-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"record-request\0".as_ptr() as *const _,
                 transmute(record_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -438,7 +435,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_set_parameter_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "set-parameter-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"set-parameter-request\0".as_ptr() as *const _,
                 transmute(set_parameter_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -446,7 +443,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_setup_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "setup-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"setup-request\0".as_ptr() as *const _,
                 transmute(setup_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -454,7 +451,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_teardown_request<F: Fn(&Self, &RTSPContext) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPContext) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "teardown-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"teardown-request\0".as_ptr() as *const _,
                 transmute(teardown_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -462,7 +459,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_property_drop_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::drop-backlog",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::drop-backlog\0".as_ptr() as *const _,
                 transmute(notify_drop_backlog_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -470,7 +467,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mount-points",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mount-points\0".as_ptr() as *const _,
                 transmute(notify_mount_points_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -478,7 +475,7 @@ impl<O: IsA<RTSPClient> + IsA<glib::object::Object>> RTSPClientExt for O {
     fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::session-pool",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::session-pool\0".as_ptr() as *const _,
                 transmute(notify_session_pool_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

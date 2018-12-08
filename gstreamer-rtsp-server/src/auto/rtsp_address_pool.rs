@@ -8,10 +8,6 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPAddressPool(Object<ffi::GstRTSPAddressPool, ffi::GstRTSPAddressPoolClass>);
@@ -39,7 +35,7 @@ impl Default for RTSPAddressPool {
 unsafe impl Send for RTSPAddressPool {}
 unsafe impl Sync for RTSPAddressPool {}
 
-pub trait RTSPAddressPoolExt {
+pub trait RTSPAddressPoolExt: 'static {
     fn acquire_address(&self, flags: RTSPAddressFlags, n_ports: i32) -> Option<RTSPAddress>;
 
     fn add_range(&self, min_address: &str, max_address: &str, min_port: u16, max_port: u16, ttl: u8) -> Result<(), glib::error::BoolError>;

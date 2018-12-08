@@ -7,16 +7,14 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TestClock(Object<ffi::GstTestClock, ffi::GstTestClockClass>): [
@@ -107,21 +105,21 @@ impl TestClock {
     pub fn get_property_clock_type(&self) -> gst::ClockType {
         unsafe {
             let mut value = Value::from_type(<gst::ClockType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "clock-type".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"clock-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_clock_type(&self, clock_type: gst::ClockType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "clock-type".to_glib_none().0, Value::from(&clock_type).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"clock-type\0".as_ptr() as *const _, Value::from(&clock_type).to_glib_none().0);
         }
     }
 
     pub fn get_property_start_time(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "start-time".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"start-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -133,7 +131,7 @@ impl TestClock {
     pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&TestClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::clock-type",
+            connect_raw(self.to_glib_none().0, b"notify::clock-type\0".as_ptr() as *const _,
                 transmute(notify_clock_type_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

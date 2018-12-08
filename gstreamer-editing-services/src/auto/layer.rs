@@ -8,19 +8,15 @@ use Extractable;
 use Timeline;
 use TrackType;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass>): Extractable;
@@ -45,7 +41,7 @@ impl Default for Layer {
     }
 }
 
-pub trait LayerExt {
+pub trait LayerExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P, start: gst::ClockTime, inpoint: gst::ClockTime, duration: gst::ClockTime, track_types: TrackType) -> Option<Clip>;
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> bool;
@@ -83,7 +79,7 @@ pub trait LayerExt {
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Layer> + IsA<glib::object::Object>> LayerExt for O {
+impl<O: IsA<Layer>> LayerExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P, start: gst::ClockTime, inpoint: gst::ClockTime, duration: gst::ClockTime, track_types: TrackType) -> Option<Clip> {
         unsafe {
             from_glib_none(ffi::ges_layer_add_asset(self.to_glib_none().0, asset.to_glib_none().0, start.to_glib(), inpoint.to_glib(), duration.to_glib(), track_types.to_glib()))
@@ -165,7 +161,7 @@ impl<O: IsA<Layer> + IsA<glib::object::Object>> LayerExt for O {
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Clip) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "clip-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"clip-added\0".as_ptr() as *const _,
                 transmute(clip_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -173,7 +169,7 @@ impl<O: IsA<Layer> + IsA<glib::object::Object>> LayerExt for O {
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Clip) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "clip-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"clip-removed\0".as_ptr() as *const _,
                 transmute(clip_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -181,7 +177,7 @@ impl<O: IsA<Layer> + IsA<glib::object::Object>> LayerExt for O {
     fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::auto-transition",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::auto-transition\0".as_ptr() as *const _,
                 transmute(notify_auto_transition_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -189,7 +185,7 @@ impl<O: IsA<Layer> + IsA<glib::object::Object>> LayerExt for O {
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::priority",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::priority\0".as_ptr() as *const _,
                 transmute(notify_priority_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

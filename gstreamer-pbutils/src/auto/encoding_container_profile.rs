@@ -6,10 +6,6 @@ use EncodingProfile;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct EncodingContainerProfile(Object<ffi::GstEncodingContainerProfile, ffi::GstEncodingContainerProfileClass>): EncodingProfile;
@@ -22,7 +18,7 @@ glib_wrapper! {
 unsafe impl Send for EncodingContainerProfile {}
 unsafe impl Sync for EncodingContainerProfile {}
 
-pub trait EncodingContainerProfileExt {
+pub trait EncodingContainerProfileExt: 'static {
     fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool;
 
     fn get_profiles(&self) -> Vec<EncodingProfile>;

@@ -13,14 +13,12 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct DeviceMonitor(Object<ffi::GstDeviceMonitor, ffi::GstDeviceMonitorClass>): Object;
@@ -33,7 +31,7 @@ glib_wrapper! {
 unsafe impl Send for DeviceMonitor {}
 unsafe impl Sync for DeviceMonitor {}
 
-pub trait DeviceMonitorExt {
+pub trait DeviceMonitorExt: 'static {
     fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, classes: P, caps: Q) -> u32;
 
     fn get_bus(&self) -> Bus;
@@ -59,7 +57,7 @@ pub trait DeviceMonitorExt {
     fn connect_property_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
+impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
     fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, classes: P, caps: Q) -> u32 {
         let classes = classes.into();
         let classes = classes.to_glib_none();
@@ -121,21 +119,21 @@ impl<O: IsA<DeviceMonitor> + IsA<glib::object::Object>> DeviceMonitorExt for O {
     fn get_property_show_all(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "show-all".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-all\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_show_all(&self, show_all: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "show-all".to_glib_none().0, Value::from(&show_all).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-all\0".as_ptr() as *const _, Value::from(&show_all).to_glib_none().0);
         }
     }
 
     fn connect_property_show_all_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-all\0".as_ptr() as *const _,
                 transmute(notify_show_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

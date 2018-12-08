@@ -14,12 +14,11 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -92,7 +91,7 @@ impl Asset {
     }
 }
 
-pub trait AssetExt {
+pub trait AssetExt: 'static {
     fn extract(&self) -> Result<Option<Extractable>, Error>;
 
     fn get_error(&self) -> Option<Error>;
@@ -111,14 +110,14 @@ pub trait AssetExt {
 
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> bool;
 
-    fn set_property_proxy_target<P: IsA<Asset> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, proxy_target: Option<&P>);
+    fn set_property_proxy_target<P: IsA<Asset> + glib::value::SetValueOptional>(&self, proxy_target: Option<&P>);
 
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Asset> + IsA<glib::object::Object>> AssetExt for O {
+impl<O: IsA<Asset>> AssetExt for O {
     fn extract(&self) -> Result<Option<Extractable>, Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -177,16 +176,16 @@ impl<O: IsA<Asset> + IsA<glib::object::Object>> AssetExt for O {
         }
     }
 
-    fn set_property_proxy_target<P: IsA<Asset> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, proxy_target: Option<&P>) {
+    fn set_property_proxy_target<P: IsA<Asset> + glib::value::SetValueOptional>(&self, proxy_target: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "proxy-target".to_glib_none().0, Value::from(proxy_target).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"proxy-target\0".as_ptr() as *const _, Value::from(proxy_target).to_glib_none().0);
         }
     }
 
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::proxy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::proxy\0".as_ptr() as *const _,
                 transmute(notify_proxy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -194,7 +193,7 @@ impl<O: IsA<Asset> + IsA<glib::object::Object>> AssetExt for O {
     fn connect_property_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::proxy-target",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::proxy-target\0".as_ptr() as *const _,
                 transmute(notify_proxy_target_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

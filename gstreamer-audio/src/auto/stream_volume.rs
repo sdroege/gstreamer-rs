@@ -4,18 +4,14 @@
 
 use StreamVolumeFormat;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct StreamVolume(Object<ffi::GstStreamVolume, ffi::GstStreamVolumeInterface>);
@@ -37,7 +33,7 @@ impl StreamVolume {
 unsafe impl Send for StreamVolume {}
 unsafe impl Sync for StreamVolume {}
 
-pub trait StreamVolumeExt {
+pub trait StreamVolumeExt: 'static {
     fn get_mute(&self) -> bool;
 
     fn get_volume(&self, format: StreamVolumeFormat) -> f64;
@@ -51,7 +47,7 @@ pub trait StreamVolumeExt {
     fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<StreamVolume> + IsA<glib::object::Object>> StreamVolumeExt for O {
+impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
     fn get_mute(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_stream_volume_get_mute(self.to_glib_none().0))
@@ -79,7 +75,7 @@ impl<O: IsA<StreamVolume> + IsA<glib::object::Object>> StreamVolumeExt for O {
     fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mute",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mute\0".as_ptr() as *const _,
                 transmute(notify_mute_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -87,7 +83,7 @@ impl<O: IsA<StreamVolume> + IsA<glib::object::Object>> StreamVolumeExt for O {
     fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::volume",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::volume\0".as_ptr() as *const _,
                 transmute(notify_volume_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

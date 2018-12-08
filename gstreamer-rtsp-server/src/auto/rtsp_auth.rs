@@ -6,20 +6,16 @@ use RTSPToken;
 use ffi;
 use gio;
 use gio_ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use gst_rtsp;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPAuth(Object<ffi::GstRTSPAuth, ffi::GstRTSPAuthClass>);
@@ -61,7 +57,7 @@ impl Default for RTSPAuth {
 unsafe impl Send for RTSPAuth {}
 unsafe impl Sync for RTSPAuth {}
 
-pub trait RTSPAuthExt {
+pub trait RTSPAuthExt: 'static {
     fn add_basic(&self, basic: &str, token: &RTSPToken);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
@@ -95,7 +91,7 @@ pub trait RTSPAuthExt {
     fn connect_accept_certificate<F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPAuth> + IsA<glib::object::Object>> RTSPAuthExt for O {
+impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     fn add_basic(&self, basic: &str, token: &RTSPToken) {
         unsafe {
             ffi::gst_rtsp_auth_add_basic(self.to_glib_none().0, basic.to_glib_none().0, token.to_glib_none().0);
@@ -185,7 +181,7 @@ impl<O: IsA<RTSPAuth> + IsA<glib::object::Object>> RTSPAuthExt for O {
     fn connect_accept_certificate<F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "accept-certificate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"accept-certificate\0".as_ptr() as *const _,
                 transmute(accept_certificate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

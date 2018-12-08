@@ -9,14 +9,13 @@ use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -250,7 +249,7 @@ impl GLShader {
     pub fn get_property_linked(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "linked".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"linked\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -258,7 +257,7 @@ impl GLShader {
     pub fn connect_property_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&GLShader) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::linked",
+            connect_raw(self.to_glib_none().0, b"notify::linked\0".as_ptr() as *const _,
                 transmute(notify_linked_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -6,11 +6,7 @@ use DiscovererInfo;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct EncodingProfile(Object<ffi::GstEncodingProfile, ffi::GstEncodingProfileClass>);
@@ -43,7 +39,7 @@ impl EncodingProfile {
 unsafe impl Send for EncodingProfile {}
 unsafe impl Sync for EncodingProfile {}
 
-pub trait EncodingProfileExt {
+pub trait EncodingProfileExt: 'static {
     fn copy(&self) -> EncodingProfile;
 
     fn get_allow_dynamic_output(&self) -> bool;

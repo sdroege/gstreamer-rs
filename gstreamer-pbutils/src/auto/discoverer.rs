@@ -7,14 +7,12 @@ use Error;
 use ffi;
 use glib;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -65,7 +63,7 @@ impl Discoverer {
     pub fn connect_discovered<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "discovered",
+            connect_raw(self.to_glib_none().0, b"discovered\0".as_ptr() as *const _,
                 transmute(discovered_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -73,7 +71,7 @@ impl Discoverer {
     pub fn connect_finished<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Discoverer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "finished",
+            connect_raw(self.to_glib_none().0, b"finished\0".as_ptr() as *const _,
                 transmute(finished_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -81,7 +79,7 @@ impl Discoverer {
     pub fn connect_source_setup<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "source-setup",
+            connect_raw(self.to_glib_none().0, b"source-setup\0".as_ptr() as *const _,
                 transmute(source_setup_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -89,7 +87,7 @@ impl Discoverer {
     pub fn connect_starting<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Discoverer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "starting",
+            connect_raw(self.to_glib_none().0, b"starting\0".as_ptr() as *const _,
                 transmute(starting_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

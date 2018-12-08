@@ -9,11 +9,7 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct DiscovererInfo(Object<ffi::GstDiscovererInfo>);
@@ -35,7 +31,7 @@ impl DiscovererInfo {
 unsafe impl Send for DiscovererInfo {}
 unsafe impl Sync for DiscovererInfo {}
 
-pub trait DiscovererInfoExt {
+pub trait DiscovererInfoExt: 'static {
     fn copy(&self) -> DiscovererInfo;
 
     fn get_audio_streams(&self) -> Vec<DiscovererStreamInfo>;

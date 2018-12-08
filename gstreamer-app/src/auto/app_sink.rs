@@ -6,7 +6,7 @@ use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -15,9 +15,7 @@ use gst_base;
 use gst_base_ffi;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct AppSink(Object<ffi::GstAppSink, ffi::GstAppSinkClass>): [
@@ -148,21 +146,21 @@ impl AppSink {
     pub fn get_property_buffer_list(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "buffer-list".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"buffer-list\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_buffer_list(&self, buffer_list: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "buffer-list".to_glib_none().0, Value::from(&buffer_list).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"buffer-list\0".as_ptr() as *const _, Value::from(&buffer_list).to_glib_none().0);
         }
     }
 
     pub fn get_property_eos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "eos".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"eos\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -170,7 +168,7 @@ impl AppSink {
     pub fn connect_eos<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "eos",
+            connect_raw(self.to_glib_none().0, b"eos\0".as_ptr() as *const _,
                 transmute(eos_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -178,7 +176,7 @@ impl AppSink {
     pub fn connect_new_preroll<F: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-preroll",
+            connect_raw(self.to_glib_none().0, b"new-preroll\0".as_ptr() as *const _,
                 transmute(new_preroll_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -186,7 +184,7 @@ impl AppSink {
     pub fn connect_new_sample<F: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-sample",
+            connect_raw(self.to_glib_none().0, b"new-sample\0".as_ptr() as *const _,
                 transmute(new_sample_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -194,7 +192,7 @@ impl AppSink {
     pub fn connect_property_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::buffer-list",
+            connect_raw(self.to_glib_none().0, b"notify::buffer-list\0".as_ptr() as *const _,
                 transmute(notify_buffer_list_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -202,7 +200,7 @@ impl AppSink {
     pub fn connect_property_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::caps",
+            connect_raw(self.to_glib_none().0, b"notify::caps\0".as_ptr() as *const _,
                 transmute(notify_caps_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -210,7 +208,7 @@ impl AppSink {
     pub fn connect_property_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::drop",
+            connect_raw(self.to_glib_none().0, b"notify::drop\0".as_ptr() as *const _,
                 transmute(notify_drop_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -218,7 +216,7 @@ impl AppSink {
     pub fn connect_property_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::emit-signals",
+            connect_raw(self.to_glib_none().0, b"notify::emit-signals\0".as_ptr() as *const _,
                 transmute(notify_emit_signals_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -226,7 +224,7 @@ impl AppSink {
     pub fn connect_property_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::eos",
+            connect_raw(self.to_glib_none().0, b"notify::eos\0".as_ptr() as *const _,
                 transmute(notify_eos_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -234,7 +232,7 @@ impl AppSink {
     pub fn connect_property_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-buffers",
+            connect_raw(self.to_glib_none().0, b"notify::max-buffers\0".as_ptr() as *const _,
                 transmute(notify_max_buffers_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -242,7 +240,7 @@ impl AppSink {
     pub fn connect_property_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wait-on-eos",
+            connect_raw(self.to_glib_none().0, b"notify::wait-on-eos\0".as_ptr() as *const _,
                 transmute(notify_wait_on_eos_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

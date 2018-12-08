@@ -7,12 +7,8 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_rtsp;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPStreamTransport(Object<ffi::GstRTSPStreamTransport, ffi::GstRTSPStreamTransportClass>);
@@ -28,7 +24,7 @@ impl RTSPStreamTransport {
     //}
 }
 
-pub trait RTSPStreamTransportExt {
+pub trait RTSPStreamTransportExt: 'static {
     fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<String>;
 
     fn get_stream(&self) -> Option<RTSPStream>;

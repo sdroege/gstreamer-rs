@@ -14,10 +14,6 @@ use URIType;
 use ffi;
 use glib;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>): PluginFeature, Object;

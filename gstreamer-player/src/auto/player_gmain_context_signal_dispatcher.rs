@@ -8,10 +8,7 @@ use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>): PlayerSignalDispatcher;
@@ -25,7 +22,7 @@ impl PlayerGMainContextSignalDispatcher {
     pub fn get_property_application_context(&self) -> Option<glib::MainContext> {
         unsafe {
             let mut value = Value::from_type(<glib::MainContext as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "application-context".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"application-context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }

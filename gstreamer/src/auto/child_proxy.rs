@@ -7,15 +7,13 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ChildProxy(Object<ffi::GstChildProxy, ffi::GstChildProxyInterface>);
@@ -28,7 +26,7 @@ glib_wrapper! {
 unsafe impl Send for ChildProxy {}
 unsafe impl Sync for ChildProxy {}
 
-pub trait ChildProxyExt {
+pub trait ChildProxyExt: 'static {
     fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str);
 
     fn child_removed<P: IsA<glib::Object>>(&self, child: &P, name: &str);
@@ -58,7 +56,7 @@ pub trait ChildProxyExt {
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ChildProxy> + IsA<glib::object::Object>> ChildProxyExt for O {
+impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
         unsafe {
             ffi::gst_child_proxy_child_added(self.to_glib_none().0, child.to_glib_none().0, name.to_glib_none().0);
@@ -120,7 +118,7 @@ impl<O: IsA<ChildProxy> + IsA<glib::object::Object>> ChildProxyExt for O {
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "child-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"child-added\0".as_ptr() as *const _,
                 transmute(child_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -128,7 +126,7 @@ impl<O: IsA<ChildProxy> + IsA<glib::object::Object>> ChildProxyExt for O {
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "child-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"child-removed\0".as_ptr() as *const _,
                 transmute(child_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

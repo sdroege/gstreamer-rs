@@ -3,13 +3,10 @@
 // DO NOT EDIT
 
 use ffi;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use gst;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

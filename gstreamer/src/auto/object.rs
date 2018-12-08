@@ -9,14 +9,11 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Object(Object<ffi::GstObject, ffi::GstObjectClass>);
@@ -50,7 +47,7 @@ impl Object {
 unsafe impl Send for Object {}
 unsafe impl Sync for Object {}
 
-pub trait GstObjectExt {
+pub trait GstObjectExt: 'static {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
 
     fn default_error<'a, P: Into<Option<&'a str>>>(&self, error: &Error, debug: P);
@@ -104,7 +101,7 @@ pub trait GstObjectExt {
     fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
+impl<O: IsA<Object>> GstObjectExt for O {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool {
     //    unsafe { TODO: call ffi::gst_object_add_control_binding() }
     //}
@@ -240,7 +237,7 @@ impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
     fn connect_property_name_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::name\0".as_ptr() as *const _,
                 transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -248,7 +245,7 @@ impl<O: IsA<Object> + IsA<glib::object::Object>> GstObjectExt for O {
     fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::parent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::parent\0".as_ptr() as *const _,
                 transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

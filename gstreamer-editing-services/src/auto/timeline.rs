@@ -15,14 +15,12 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -69,7 +67,7 @@ impl Default for Timeline {
     }
 }
 
-pub trait TimelineExt {
+pub trait TimelineExt: 'static {
     fn add_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError>;
 
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
@@ -145,7 +143,7 @@ pub trait TimelineExt {
     fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
+impl<O: IsA<Timeline>> TimelineExt for O {
     fn add_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::ges_timeline_add_layer(self.to_glib_none().0, layer.to_glib_none().0), "Failed to add layer")
@@ -299,7 +297,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "commited",
+            connect_raw(self.to_glib_none().0 as *mut _, b"commited\0".as_ptr() as *const _,
                 transmute(commited_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -307,7 +305,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Group) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "group-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"group-added\0".as_ptr() as *const _,
                 transmute(group_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -319,7 +317,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Layer) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "layer-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"layer-added\0".as_ptr() as *const _,
                 transmute(layer_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -327,7 +325,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Layer) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "layer-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"layer-removed\0".as_ptr() as *const _,
                 transmute(layer_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -339,7 +337,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "snapping-ended",
+            connect_raw(self.to_glib_none().0 as *mut _, b"snapping-ended\0".as_ptr() as *const _,
                 transmute(snapping_ended_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -347,7 +345,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "snapping-started",
+            connect_raw(self.to_glib_none().0 as *mut _, b"snapping-started\0".as_ptr() as *const _,
                 transmute(snapping_started_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -355,7 +353,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Track) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "track-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"track-added\0".as_ptr() as *const _,
                 transmute(track_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -363,7 +361,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Track) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "track-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"track-removed\0".as_ptr() as *const _,
                 transmute(track_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -371,7 +369,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::auto-transition",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::auto-transition\0".as_ptr() as *const _,
                 transmute(notify_auto_transition_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -379,7 +377,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::duration",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -387,7 +385,7 @@ impl<O: IsA<Timeline> + IsA<glib::object::Object>> TimelineExt for O {
     fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::snapping-distance",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::snapping-distance\0".as_ptr() as *const _,
                 transmute(notify_snapping_distance_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

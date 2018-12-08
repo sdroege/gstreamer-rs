@@ -6,10 +6,7 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {
@@ -39,7 +36,7 @@ impl Preset {
 unsafe impl Send for Preset {}
 unsafe impl Sync for Preset {}
 
-pub trait PresetExt {
+pub trait PresetExt: 'static {
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
     fn get_meta(&self, name: &str, tag: &str) -> Option<String>;

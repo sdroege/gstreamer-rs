@@ -7,15 +7,11 @@ use Extractable;
 use TimelineElement;
 use TrackElement;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>): BaseEffect, TrackElement, TimelineElement, Extractable;
@@ -34,15 +30,15 @@ impl Effect {
     }
 }
 
-pub trait EffectExt {
+pub trait EffectExt: 'static {
     fn get_property_bin_description(&self) -> Option<String>;
 }
 
-impl<O: IsA<Effect> + IsA<glib::object::Object>> EffectExt for O {
+impl<O: IsA<Effect>> EffectExt for O {
     fn get_property_bin_description(&self) -> Option<String> {
         unsafe {
             let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "bin-description".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"bin-description\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }

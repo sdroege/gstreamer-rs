@@ -15,7 +15,7 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -23,9 +23,7 @@ use gst;
 use gst_rtsp;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPMedia(Object<ffi::GstRTSPMedia, ffi::GstRTSPMediaClass>);
@@ -47,7 +45,7 @@ impl RTSPMedia {
 unsafe impl Send for RTSPMedia {}
 unsafe impl Sync for RTSPMedia {}
 
-pub trait RTSPMediaExt {
+pub trait RTSPMediaExt: 'static {
     fn collect_streams(&self);
 
     //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 9, id: 31 }) -> bool;
@@ -209,7 +207,7 @@ pub trait RTSPMediaExt {
     fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
+impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn collect_streams(&self) {
         unsafe {
             ffi::gst_rtsp_media_collect_streams(self.to_glib_none().0);
@@ -539,7 +537,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn get_property_eos_shutdown(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "eos-shutdown".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"eos-shutdown\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -547,7 +545,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn get_property_reusable(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "reusable".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"reusable\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -555,7 +553,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn get_property_shared(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "shared".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"shared\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -563,21 +561,21 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn get_property_stop_on_disconnect(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stop-on-disconnect".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stop-on-disconnect\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_time_provider(&self, time_provider: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "time-provider".to_glib_none().0, Value::from(&time_provider).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"time-provider\0".as_ptr() as *const _, Value::from(&time_provider).to_glib_none().0);
         }
     }
 
     fn connect_new_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-state",
+            connect_raw(self.to_glib_none().0 as *mut _, b"new-state\0".as_ptr() as *const _,
                 transmute(new_state_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -585,7 +583,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_new_stream<F: Fn(&Self, &RTSPStream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPStream) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "new-stream",
+            connect_raw(self.to_glib_none().0 as *mut _, b"new-stream\0".as_ptr() as *const _,
                 transmute(new_stream_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -593,7 +591,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_prepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "prepared",
+            connect_raw(self.to_glib_none().0 as *mut _, b"prepared\0".as_ptr() as *const _,
                 transmute(prepared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -601,7 +599,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_removed_stream<F: Fn(&Self, &RTSPStream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPStream) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "removed-stream",
+            connect_raw(self.to_glib_none().0 as *mut _, b"removed-stream\0".as_ptr() as *const _,
                 transmute(removed_stream_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -609,7 +607,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_target_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "target-state",
+            connect_raw(self.to_glib_none().0 as *mut _, b"target-state\0".as_ptr() as *const _,
                 transmute(target_state_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -617,7 +615,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_unprepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unprepared",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unprepared\0".as_ptr() as *const _,
                 transmute(unprepared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -625,7 +623,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::buffer-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::buffer-size\0".as_ptr() as *const _,
                 transmute(notify_buffer_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -633,7 +631,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::clock",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::clock\0".as_ptr() as *const _,
                 transmute(notify_clock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -641,7 +639,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::eos-shutdown",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::eos-shutdown\0".as_ptr() as *const _,
                 transmute(notify_eos_shutdown_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -649,7 +647,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::latency",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::latency\0".as_ptr() as *const _,
                 transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -657,7 +655,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::profiles",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::profiles\0".as_ptr() as *const _,
                 transmute(notify_profiles_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -665,7 +663,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::protocols",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::protocols\0".as_ptr() as *const _,
                 transmute(notify_protocols_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -673,7 +671,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_reusable_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::reusable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::reusable\0".as_ptr() as *const _,
                 transmute(notify_reusable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -681,7 +679,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::shared",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::shared\0".as_ptr() as *const _,
                 transmute(notify_shared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -689,7 +687,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stop-on-disconnect",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::stop-on-disconnect\0".as_ptr() as *const _,
                 transmute(notify_stop_on_disconnect_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -697,7 +695,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::suspend-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::suspend-mode\0".as_ptr() as *const _,
                 transmute(notify_suspend_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -705,7 +703,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_time_provider_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::time-provider",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::time-provider\0".as_ptr() as *const _,
                 transmute(notify_time_provider_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -713,7 +711,7 @@ impl<O: IsA<RTSPMedia> + IsA<glib::object::Object>> RTSPMediaExt for O {
     fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::transport-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::transport-mode\0".as_ptr() as *const _,
                 transmute(notify_transport_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -9,6 +9,7 @@ concurrency = "send+sync"
 generate_safety_asserts = true
 single_version_file = true
 doc_target_path = "docs/gstreamer-rtsp/docs.md"
+generate_display_trait = false
 
 external_libraries = [
     "GLib",

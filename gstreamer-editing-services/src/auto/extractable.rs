@@ -6,10 +6,6 @@ use Asset;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Extractable(Object<ffi::GESExtractable, ffi::GESExtractableInterface>);
@@ -19,7 +15,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ExtractableExt {
+pub trait ExtractableExt: 'static {
     fn get_asset(&self) -> Option<Asset>;
 
     fn get_id(&self) -> Option<String>;

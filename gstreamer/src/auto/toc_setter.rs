@@ -8,10 +8,6 @@ use Toc;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TocSetter(Object<ffi::GstTocSetter, ffi::GstTocSetterInterface>): Element, Object;
@@ -24,7 +20,7 @@ glib_wrapper! {
 unsafe impl Send for TocSetter {}
 unsafe impl Sync for TocSetter {}
 
-pub trait TocSetterExt {
+pub trait TocSetterExt: 'static {
     fn get_toc(&self) -> Option<Toc>;
 
     fn reset(&self);

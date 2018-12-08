@@ -7,10 +7,7 @@ use Error;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {
@@ -53,7 +50,7 @@ impl EncodingTarget {
 unsafe impl Send for EncodingTarget {}
 unsafe impl Sync for EncodingTarget {}
 
-pub trait EncodingTargetExt {
+pub trait EncodingTargetExt: 'static {
     fn get_category(&self) -> String;
 
     fn get_description(&self) -> String;

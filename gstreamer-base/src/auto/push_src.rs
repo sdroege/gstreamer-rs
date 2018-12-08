@@ -5,12 +5,8 @@
 use BaseSrc;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>): [

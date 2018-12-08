@@ -4,22 +4,19 @@
 
 use GLContext;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GLBaseFilter(Object<ffi::GstGLBaseFilter, ffi::GstGLBaseFilterClass>): [
@@ -34,17 +31,17 @@ glib_wrapper! {
 unsafe impl Send for GLBaseFilter {}
 unsafe impl Sync for GLBaseFilter {}
 
-pub trait GLBaseFilterExt {
+pub trait GLBaseFilterExt: 'static {
     fn get_property_context(&self) -> Option<GLContext>;
 
     fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GLBaseFilter> + IsA<glib::object::Object>> GLBaseFilterExt for O {
+impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     fn get_property_context(&self) -> Option<GLContext> {
         unsafe {
             let mut value = Value::from_type(<GLContext as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "context".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -52,7 +49,7 @@ impl<O: IsA<GLBaseFilter> + IsA<glib::object::Object>> GLBaseFilterExt for O {
     fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::context",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::context\0".as_ptr() as *const _,
                 transmute(notify_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -7,21 +7,17 @@ use ChildProxy;
 use Clock;
 use ClockTime;
 use Element;
-use PipelineClass;
 use Object;
+use PipelineClass;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Pipeline(Object<ffi::GstPipeline, ffi::GstPipelineClass, PipelineClass>): Bin, Element, Object, ChildProxy;
@@ -45,7 +41,7 @@ impl Pipeline {
 unsafe impl Send for Pipeline {}
 unsafe impl Sync for Pipeline {}
 
-pub trait PipelineExt {
+pub trait PipelineExt: 'static {
     fn auto_clock(&self);
 
     fn get_auto_flush_bus(&self) -> bool;
@@ -71,7 +67,7 @@ pub trait PipelineExt {
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
+impl<O: IsA<Pipeline>> PipelineExt for O {
     fn auto_clock(&self) {
         unsafe {
             ffi::gst_pipeline_auto_clock(self.to_glib_none().0);
@@ -131,7 +127,7 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
     fn connect_property_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::auto-flush-bus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::auto-flush-bus\0".as_ptr() as *const _,
                 transmute(notify_auto_flush_bus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -139,7 +135,7 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
     fn connect_property_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::delay",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::delay\0".as_ptr() as *const _,
                 transmute(notify_delay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -147,7 +143,7 @@ impl<O: IsA<Pipeline> + IsA<glib::object::Object>> PipelineExt for O {
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::latency",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::latency\0".as_ptr() as *const _,
                 transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

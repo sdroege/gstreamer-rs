@@ -10,14 +10,12 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use gst_pbutils;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -40,7 +38,7 @@ impl Project {
     }
 }
 
-pub trait ProjectExt {
+pub trait ProjectExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool;
 
     fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> bool;
@@ -78,7 +76,7 @@ pub trait ProjectExt {
     fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<String> + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
+impl<O: IsA<Project>> ProjectExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool {
         unsafe {
             from_glib(ffi::ges_project_add_asset(self.to_glib_none().0, asset.to_glib_none().0))
@@ -166,7 +164,7 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Asset) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "asset-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"asset-added\0".as_ptr() as *const _,
                 transmute(asset_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -174,7 +172,7 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Asset) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "asset-loading",
+            connect_raw(self.to_glib_none().0 as *mut _, b"asset-loading\0".as_ptr() as *const _,
                 transmute(asset_loading_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -182,7 +180,7 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Asset) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "asset-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"asset-removed\0".as_ptr() as *const _,
                 transmute(asset_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -190,7 +188,7 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
     fn connect_error_loading_asset<F: Fn(&Self, &Error, &str, glib::types::Type) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Error, &str, glib::types::Type) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "error-loading-asset",
+            connect_raw(self.to_glib_none().0 as *mut _, b"error-loading-asset\0".as_ptr() as *const _,
                 transmute(error_loading_asset_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -198,7 +196,7 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Timeline) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "loaded",
+            connect_raw(self.to_glib_none().0 as *mut _, b"loaded\0".as_ptr() as *const _,
                 transmute(loaded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -206,7 +204,7 @@ impl<O: IsA<Project> + IsA<glib::object::Object>> ProjectExt for O {
     fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<String> + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Error, &Asset) -> Option<String> + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "missing-uri",
+            connect_raw(self.to_glib_none().0 as *mut _, b"missing-uri\0".as_ptr() as *const _,
                 transmute(missing_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

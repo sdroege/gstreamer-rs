@@ -8,11 +8,8 @@ use GLSLProfile;
 use GLSLVersion;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use gst_ffi;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {

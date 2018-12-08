@@ -7,10 +7,6 @@ use Plugin;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PluginFeature(Object<ffi::GstPluginFeature, ffi::GstPluginFeatureClass>): Object;
@@ -23,7 +19,7 @@ glib_wrapper! {
 unsafe impl Send for PluginFeature {}
 unsafe impl Sync for PluginFeature {}
 
-pub trait PluginFeatureExt {
+pub trait PluginFeatureExt: 'static {
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool;
 
     fn get_plugin(&self) -> Option<Plugin>;

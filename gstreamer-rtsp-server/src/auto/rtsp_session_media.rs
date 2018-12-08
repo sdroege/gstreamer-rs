@@ -8,11 +8,8 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use gst;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPSessionMedia(Object<ffi::GstRTSPSessionMedia, ffi::GstRTSPSessionMediaClass>);
@@ -34,7 +31,7 @@ impl RTSPSessionMedia {
 unsafe impl Send for RTSPSessionMedia {}
 unsafe impl Sync for RTSPSessionMedia {}
 
-pub trait RTSPSessionMediaExt {
+pub trait RTSPSessionMediaExt: 'static {
     //fn alloc_channels(&self, range: /*Ignored*/gst_rtsp::RTSPRange) -> bool;
 
     fn get_base_time(&self) -> gst::ClockTime;

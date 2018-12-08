@@ -7,10 +7,6 @@ use Pad;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass>): Pad, Object;
@@ -29,7 +25,7 @@ impl ProxyPad {
 unsafe impl Send for ProxyPad {}
 unsafe impl Sync for ProxyPad {}
 
-pub trait ProxyPadExt {
+pub trait ProxyPadExt: 'static {
     fn get_internal(&self) -> Option<ProxyPad>;
 }
 

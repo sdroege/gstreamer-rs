@@ -12,16 +12,14 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Track(Object<ffi::GESTrack, ffi::GESTrackClass>): [
@@ -43,7 +41,7 @@ impl Track {
     }
 }
 
-pub trait GESTrackExt {
+pub trait GESTrackExt: 'static {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError>;
 
     fn commit(&self) -> bool;
@@ -87,7 +85,7 @@ pub trait GESTrackExt {
     fn connect_property_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
+impl<O: IsA<Track>> GESTrackExt for O {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::error::BoolError::from_glib(ffi::ges_track_add_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to add element")
@@ -161,7 +159,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn get_property_duration(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "duration".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"duration\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -169,7 +167,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn get_property_restriction_caps(&self) -> Option<gst::Caps> {
         unsafe {
             let mut value = Value::from_type(<gst::Caps as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "restriction-caps".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"restriction-caps\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -177,7 +175,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn get_property_track_type(&self) -> TrackType {
         unsafe {
             let mut value = Value::from_type(<TrackType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "track-type".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"track-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -185,7 +183,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "commited",
+            connect_raw(self.to_glib_none().0 as *mut _, b"commited\0".as_ptr() as *const _,
                 transmute(commited_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -193,7 +191,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn connect_track_element_added<F: Fn(&Self, &TrackElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TrackElement) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "track-element-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"track-element-added\0".as_ptr() as *const _,
                 transmute(track_element_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -201,7 +199,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn connect_track_element_removed<F: Fn(&Self, &TrackElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TrackElement) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "track-element-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"track-element-removed\0".as_ptr() as *const _,
                 transmute(track_element_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -209,7 +207,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::duration",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -217,7 +215,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn connect_property_mixing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mixing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mixing\0".as_ptr() as *const _,
                 transmute(notify_mixing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -225,7 +223,7 @@ impl<O: IsA<Track> + IsA<glib::object::Object>> GESTrackExt for O {
     fn connect_property_restriction_caps_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::restriction-caps",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::restriction-caps\0".as_ptr() as *const _,
                 transmute(notify_restriction_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -4,20 +4,17 @@
 
 use RTSPMediaFactory;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPMediaFactoryURI(Object<ffi::GstRTSPMediaFactoryURI, ffi::GstRTSPMediaFactoryURIClass>): RTSPMediaFactory;
@@ -45,7 +42,7 @@ impl Default for RTSPMediaFactoryURI {
 unsafe impl Send for RTSPMediaFactoryURI {}
 unsafe impl Sync for RTSPMediaFactoryURI {}
 
-pub trait RTSPMediaFactoryURIExt {
+pub trait RTSPMediaFactoryURIExt: 'static {
     fn get_uri(&self) -> Option<String>;
 
     fn set_uri(&self, uri: &str);
@@ -59,7 +56,7 @@ pub trait RTSPMediaFactoryURIExt {
     fn connect_property_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RTSPMediaFactoryURI> + IsA<glib::object::Object>> RTSPMediaFactoryURIExt for O {
+impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
     fn get_uri(&self) -> Option<String> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_factory_uri_get_uri(self.to_glib_none().0))
@@ -75,21 +72,21 @@ impl<O: IsA<RTSPMediaFactoryURI> + IsA<glib::object::Object>> RTSPMediaFactoryUR
     fn get_property_use_gstpay(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "use-gstpay".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-gstpay\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_use_gstpay(&self, use_gstpay: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "use-gstpay".to_glib_none().0, Value::from(&use_gstpay).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-gstpay\0".as_ptr() as *const _, Value::from(&use_gstpay).to_glib_none().0);
         }
     }
 
     fn connect_property_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::uri",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::uri\0".as_ptr() as *const _,
                 transmute(notify_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -97,7 +94,7 @@ impl<O: IsA<RTSPMediaFactoryURI> + IsA<glib::object::Object>> RTSPMediaFactoryUR
     fn connect_property_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-gstpay",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-gstpay\0".as_ptr() as *const _,
                 transmute(notify_use_gstpay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

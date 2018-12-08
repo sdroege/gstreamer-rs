@@ -6,21 +6,18 @@ use Extractable;
 use Timeline;
 use TrackType;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TimelineElement(Object<ffi::GESTimelineElement, ffi::GESTimelineElementClass>): Extractable;
@@ -30,7 +27,7 @@ glib_wrapper! {
     }
 }
 
-pub trait TimelineElementExt {
+pub trait TimelineElementExt: 'static {
     //fn add_child_property<P: IsA</*Ignored*/glib::ParamSpec>, Q: IsA<glib::Object>>(&self, pspec: &P, child: &Q) -> bool;
 
     fn copy(&self, deep: bool) -> Option<TimelineElement>;
@@ -134,7 +131,7 @@ pub trait TimelineElementExt {
     fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for O {
+impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //fn add_child_property<P: IsA</*Ignored*/glib::ParamSpec>, Q: IsA<glib::Object>>(&self, pspec: &P, child: &Q) -> bool {
     //    unsafe { TODO: call ffi::ges_timeline_element_add_child_property() }
     //}
@@ -338,28 +335,28 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn get_property_in_point(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "in-point".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"in-point\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_in_point(&self, in_point: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "in-point".to_glib_none().0, Value::from(&in_point).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"in-point\0".as_ptr() as *const _, Value::from(&in_point).to_glib_none().0);
         }
     }
 
     fn get_property_serialize(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "serialize".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"serialize\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_serialize(&self, serialize: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "serialize".to_glib_none().0, Value::from(&serialize).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"serialize\0".as_ptr() as *const _, Value::from(&serialize).to_glib_none().0);
         }
     }
 
@@ -370,7 +367,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::duration",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -378,7 +375,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::in-point",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::in-point\0".as_ptr() as *const _,
                 transmute(notify_in_point_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -386,7 +383,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-duration",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-duration\0".as_ptr() as *const _,
                 transmute(notify_max_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -394,7 +391,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::name\0".as_ptr() as *const _,
                 transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -402,7 +399,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::parent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::parent\0".as_ptr() as *const _,
                 transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -410,7 +407,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::priority",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::priority\0".as_ptr() as *const _,
                 transmute(notify_priority_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -418,7 +415,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::serialize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::serialize\0".as_ptr() as *const _,
                 transmute(notify_serialize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -426,7 +423,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::start",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::start\0".as_ptr() as *const _,
                 transmute(notify_start_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -434,7 +431,7 @@ impl<O: IsA<TimelineElement> + IsA<glib::object::Object>> TimelineElementExt for
     fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::timeline",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::timeline\0".as_ptr() as *const _,
                 transmute(notify_timeline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

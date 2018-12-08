@@ -12,15 +12,12 @@ use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct DeviceProvider(Object<ffi::GstDeviceProvider, ffi::GstDeviceProviderClass>): Object;
@@ -44,7 +41,7 @@ impl DeviceProvider {
 unsafe impl Send for DeviceProvider {}
 unsafe impl Sync for DeviceProvider {}
 
-pub trait DeviceProviderExt {
+pub trait DeviceProviderExt: 'static {
     fn can_monitor(&self) -> bool;
 
     fn device_add(&self, device: &Device);
@@ -72,7 +69,7 @@ pub trait DeviceProviderExt {
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<DeviceProvider> + IsA<glib::object::Object>> DeviceProviderExt for O {
+impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
     fn can_monitor(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_provider_can_monitor(self.to_glib_none().0))
@@ -142,7 +139,7 @@ impl<O: IsA<DeviceProvider> + IsA<glib::object::Object>> DeviceProviderExt for O
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "provider-hidden",
+            connect_raw(self.to_glib_none().0 as *mut _, b"provider-hidden\0".as_ptr() as *const _,
                 transmute(provider_hidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -150,7 +147,7 @@ impl<O: IsA<DeviceProvider> + IsA<glib::object::Object>> DeviceProviderExt for O
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "provider-unhidden",
+            connect_raw(self.to_glib_none().0 as *mut _, b"provider-unhidden\0".as_ptr() as *const _,
                 transmute(provider_unhidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
