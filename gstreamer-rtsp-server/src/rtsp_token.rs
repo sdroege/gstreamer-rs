@@ -2,31 +2,22 @@ use ffi;
 use glib;
 use glib::translate::*;
 use glib::value::ToSendValue;
-use glib::StaticType;
 use gst;
-use gst_ffi;
+use gst::miniobject::*;
 
-use gst::miniobject::{GstRc, MiniObject};
+use std::fmt;
 
-pub trait GstRcRTSPTokenExt<T: MiniObject> {
-    fn new_empty() -> Self;
-    fn new(values: &[(&str, &ToSendValue)]) -> Self;
-}
+gst_define_mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, [Debug,], || {
+    ffi::gst_rtsp_token_get_type()
+});
 
-pub type RTSPToken = GstRc<RTSPTokenRef>;
-pub struct RTSPTokenRef(ffi::GstRTSPToken);
-
-unsafe impl MiniObject for RTSPTokenRef {
-    type GstType = ffi::GstRTSPToken;
-}
-
-impl GstRcRTSPTokenExt<RTSPTokenRef> for GstRc<RTSPTokenRef> {
-    fn new_empty() -> Self {
+impl RTSPToken {
+    pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gst_rtsp_token_new_empty()) }
     }
 
-    fn new(values: &[(&str, &ToSendValue)]) -> Self {
+    pub fn new(values: &[(&str, &ToSendValue)]) -> Self {
         let mut token = RTSPToken::new_empty();
 
         {
@@ -77,18 +68,10 @@ impl RTSPTokenRef {
     }
 }
 
-impl ToOwned for RTSPTokenRef {
-    type Owned = GstRc<RTSPTokenRef>;
-
-    fn to_owned(&self) -> GstRc<RTSPTokenRef> {
-        unsafe {
-            from_glib_full(gst_ffi::gst_mini_object_copy(self.as_ptr() as *const _) as *mut _)
-        }
-    }
-}
-
-impl StaticType for RTSPTokenRef {
-    fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_rtsp_token_get_type()) }
+impl fmt::Debug for RTSPTokenRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("RTSPToken")
+            .field("structure", &self.get_structure())
+            .finish()
     }
 }

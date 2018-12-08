@@ -19,6 +19,7 @@ use std::ffi::CStr;
 extern crate glib;
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
+#[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_net as gst_net;
 extern crate gstreamer_net_sys as gst_net_ffi;
@@ -140,5 +141,4 @@ pub mod prelude {
     pub use rtsp_media_factory::RTSPMediaFactoryExtManual;
     pub use rtsp_server::RTSPServerExtManual;
     pub use rtsp_session_pool::RTSPSessionPoolExtManual;
-    pub use rtsp_token::GstRcRTSPTokenExt;
 }
