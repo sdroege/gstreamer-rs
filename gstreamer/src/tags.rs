@@ -13,9 +13,8 @@ use std::mem;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue};
-use glib_ffi;
 
 use miniobject::*;
 

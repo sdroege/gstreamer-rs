@@ -16,7 +16,6 @@ use glib;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
-use glib_ffi;
 
 use miniobject::*;
 use TagList;

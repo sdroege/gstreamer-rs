@@ -8,8 +8,7 @@
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlibPtr};
-use glib_ffi;
+use glib::translate::from_glib_full;
 use std::fmt;
 
 use miniobject::*;

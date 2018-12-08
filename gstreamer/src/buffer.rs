@@ -22,7 +22,7 @@ use ClockTime;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib};
 use glib_ffi;
 
 pub enum Readable {}

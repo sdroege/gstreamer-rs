@@ -27,7 +27,6 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, T
 use glib::value::ToSendValue;
 use glib::Cast;
 use glib::IsA;
-use glib_ffi;
 
 gst_define_mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, [Debug,], || {
     ffi::gst_message_get_type()

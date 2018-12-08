@@ -12,8 +12,7 @@ use std::ptr;
 use ffi;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, mut_override, ToGlibPtr};
-use glib_ffi;
+use glib::translate::{from_glib_full, from_glib_none, mut_override, ToGlibPtr};
 
 use miniobject::*;
 use Buffer;

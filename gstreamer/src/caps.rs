@@ -17,9 +17,8 @@ use CapsIntersectMode;
 
 use ffi;
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
-use glib_ffi;
 
 gst_define_mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, [Debug, PartialEq, Eq,], || {
     ffi::gst_caps_get_type()

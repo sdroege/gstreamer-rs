@@ -13,8 +13,7 @@ use gst;
 use gst::miniobject::*;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr};
-use glib_ffi;
+use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib};
 
 gst_define_mini_object_wrapper!(
     VideoOverlayRectangle,

@@ -19,9 +19,8 @@ use std::ops::Deref;
 use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
-use glib_ffi;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrContainer;
