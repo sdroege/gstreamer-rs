@@ -501,15 +501,15 @@ macro_rules! gst_define_mini_object_wrapper(
 
         impl $name {
             pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
-                $name(glib::translate::from_glib_none(ptr))
+                $name($crate::glib::translate::from_glib_none(ptr))
             }
 
             pub unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
-                $name(glib::translate::from_glib_full(ptr))
+                $name($crate::glib::translate::from_glib_full(ptr))
             }
 
             pub unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> Self {
-                $name(glib::translate::from_glib_borrow(ptr))
+                $name($crate::glib::translate::from_glib_borrow(ptr))
             }
 
             pub unsafe fn into_ptr(self) -> *mut $ffi_name {
@@ -565,57 +565,57 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
-        impl glib::types::StaticType for $name {
-            fn static_type() -> glib::types::Type {
+        impl $crate::glib::types::StaticType for $name {
+            fn static_type() -> $crate::glib::types::Type {
                 $ref_name::static_type()
             }
         }
 
-        impl<'a> glib::translate::ToGlibPtr<'a, *const $ffi_name> for $name {
-            type Storage = glib::translate::Stash<'a, *const $ffi_name, $crate::GstRc<$ref_name>>;
+        impl<'a> $crate::glib::translate::ToGlibPtr<'a, *const $ffi_name> for $name {
+            type Storage = $crate::glib::translate::Stash<'a, *const $ffi_name, $crate::GstRc<$ref_name>>;
 
-            fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const $ffi_name, Self> {
-                let stash = self.0.to_glib_none();
-                glib::translate::Stash(stash.0, stash)
+            fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *const $ffi_name, Self> {
+                let stash = $crate::glib::translate::ToGlibPtr::to_glib_none(&self.0);
+                $crate::glib::translate::Stash(stash.0, stash)
             }
 
             fn to_glib_full(&self) -> *const $ffi_name {
-                self.0.to_glib_full()
+                $crate::glib::translate::ToGlibPtr::to_glib_full(&self.0)
             }
         }
 
-        impl<'a> glib::translate::ToGlibPtr<'a, *mut $ffi_name> for $name {
-            type Storage = glib::translate::Stash<'a, *mut $ffi_name, $crate::GstRc<$ref_name>>;
+        impl<'a> $crate::glib::translate::ToGlibPtr<'a, *mut $ffi_name> for $name {
+            type Storage = $crate::glib::translate::Stash<'a, *mut $ffi_name, $crate::GstRc<$ref_name>>;
 
-            fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *mut $ffi_name, Self> {
-                let stash = self.0.to_glib_none();
-                glib::translate::Stash(stash.0, stash)
+            fn to_glib_none(&'a self) -> $crate::glib::translate::Stash<'a, *mut $ffi_name, Self> {
+                let stash = $crate::glib::translate::ToGlibPtr::to_glib_none(&self.0);
+                $crate::glib::translate::Stash(stash.0, stash)
             }
 
             fn to_glib_full(&self) -> *mut $ffi_name {
-                self.0.to_glib_full()
+                $crate::glib::translate::ToGlibPtr::to_glib_full(&self.0)
             }
         }
 
-        impl<'a> glib::translate::ToGlibPtrMut<'a, *mut $ffi_name> for $name {
-            type Storage = glib::translate::StashMut<'a, *mut $ffi_name, $crate::GstRc<$ref_name>>;
+        impl<'a> $crate::glib::translate::ToGlibPtrMut<'a, *mut $ffi_name> for $name {
+            type Storage = $crate::glib::translate::StashMut<'a, *mut $ffi_name, $crate::GstRc<$ref_name>>;
 
-            fn to_glib_none_mut(&'a mut self) -> glib::translate::StashMut<*mut $ffi_name, Self> {
-                let stash = self.0.to_glib_none_mut();
-                glib::translate::StashMut(stash.0, stash)
+            fn to_glib_none_mut(&'a mut self) -> $crate::glib::translate::StashMut<*mut $ffi_name, Self> {
+                let stash = $crate::glib::translate::ToGlibPtrMut::to_glib_none_mut(&mut self.0);
+                $crate::glib::translate::StashMut(stash.0, stash)
             }
         }
 
-        impl<'a> glib::translate::ToGlibContainerFromSlice<'a, *mut *mut $ffi_name> for $name {
+        impl<'a> $crate::glib::translate::ToGlibContainerFromSlice<'a, *mut *mut $ffi_name> for $name {
             #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
             type Storage = (
-                Vec<glib::translate::Stash<'a, *mut $ffi_name, $name>>,
+                Vec<$crate::glib::translate::Stash<'a, *mut $ffi_name, $name>>,
                 Option<Vec<*mut $ffi_name>>,
             );
 
             fn to_glib_none_from_slice(t: &'a [$name]) -> (*mut *mut $ffi_name, Self::Storage) {
                 skip_assert_initialized!();
-                let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
+                let v: Vec<_> = t.iter().map(|s| $crate::glib::translate::ToGlibPtr::to_glib_none(s)).collect();
                 let mut v_ptr: Vec<_> = v.iter().map(|s| s.0).collect();
                 v_ptr.push(::std::ptr::null_mut() as *mut $ffi_name);
 
@@ -624,10 +624,10 @@ macro_rules! gst_define_mini_object_wrapper(
 
             fn to_glib_container_from_slice(t: &'a [$name]) -> (*mut *mut $ffi_name, Self::Storage) {
                 skip_assert_initialized!();
-                let v: Vec<_> = t.iter().map(|s| s.to_glib_none()).collect();
+                let v: Vec<_> = t.iter().map(|s| $crate::glib::translate::ToGlibPtr::to_glib_none(s)).collect();
 
                 let v_ptr = unsafe {
-                    let v_ptr = glib_ffi::g_malloc0(::std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
+                    let v_ptr = $crate::glib_ffi::g_malloc0(::std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
                     for (i, s) in v.iter().enumerate() {
@@ -643,11 +643,11 @@ macro_rules! gst_define_mini_object_wrapper(
             fn to_glib_full_from_slice(t: &[$name]) -> *mut *mut $ffi_name {
                 skip_assert_initialized!();
                 unsafe {
-                    let v_ptr = glib_ffi::g_malloc0(::std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
+                    let v_ptr = $crate::glib_ffi::g_malloc0(::std::mem::size_of::<*mut $ffi_name>() * t.len() + 1)
                         as *mut *mut $ffi_name;
 
                     for (i, s) in t.iter().enumerate() {
-                        ::std::ptr::write(v_ptr.add(i), s.to_glib_full());
+                        ::std::ptr::write(v_ptr.add(i), $crate::glib::translate::ToGlibPtr::to_glib_full(&s));
                     }
 
                     v_ptr
@@ -655,19 +655,19 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
-        impl<'a> glib::translate::ToGlibContainerFromSlice<'a, *const *mut $ffi_name>
+        impl<'a> $crate::glib::translate::ToGlibContainerFromSlice<'a, *const *mut $ffi_name>
             for $name
         {
             #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
             type Storage = (
-                Vec<glib::translate::Stash<'a, *mut $ffi_name, $name>>,
+                Vec<$crate::glib::translate::Stash<'a, *mut $ffi_name, $name>>,
                 Option<Vec<*mut $ffi_name>>,
             );
 
             fn to_glib_none_from_slice(t: &'a [$name]) -> (*const *mut $ffi_name, Self::Storage) {
                 skip_assert_initialized!();
                 let (ptr, stash) =
-                    glib::translate::ToGlibContainerFromSlice::<'a, *mut *mut $ffi_name>::to_glib_none_from_slice(t);
+                    $crate::glib::translate::ToGlibContainerFromSlice::<'a, *mut *mut $ffi_name>::to_glib_none_from_slice(t);
                 (ptr as *const *mut $ffi_name, stash)
             }
 
@@ -684,43 +684,43 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
-        impl glib::translate::FromGlibPtrNone<*const $ffi_name> for $name {
+        impl $crate::glib::translate::FromGlibPtrNone<*const $ffi_name> for $name {
             unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
                 Self::from_glib_none(ptr)
             }
         }
 
-        impl glib::translate::FromGlibPtrNone<*mut $ffi_name> for $name {
+        impl $crate::glib::translate::FromGlibPtrNone<*mut $ffi_name> for $name {
             unsafe fn from_glib_none(ptr: *mut $ffi_name) -> Self {
                 Self::from_glib_none(ptr)
             }
         }
 
-        impl glib::translate::FromGlibPtrFull<*const $ffi_name> for $name {
+        impl $crate::glib::translate::FromGlibPtrFull<*const $ffi_name> for $name {
             unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
                 Self::from_glib_full(ptr)
             }
         }
 
-        impl glib::translate::FromGlibPtrFull<*mut $ffi_name> for $name {
+        impl $crate::glib::translate::FromGlibPtrFull<*mut $ffi_name> for $name {
             unsafe fn from_glib_full(ptr: *mut $ffi_name) -> Self {
                 Self::from_glib_full(ptr)
             }
         }
 
-        impl glib::translate::FromGlibPtrBorrow<*const $ffi_name> for $name {
+        impl $crate::glib::translate::FromGlibPtrBorrow<*const $ffi_name> for $name {
             unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> Self {
                 Self::from_glib_borrow(ptr)
             }
         }
 
-        impl glib::translate::FromGlibPtrBorrow<*mut $ffi_name> for $name {
+        impl $crate::glib::translate::FromGlibPtrBorrow<*mut $ffi_name> for $name {
             unsafe fn from_glib_borrow(ptr: *mut $ffi_name) -> Self {
                 Self::from_glib_borrow(ptr)
             }
         }
 
-        impl glib::translate::FromGlibContainerAsVec<*mut $ffi_name, *mut *mut $ffi_name>
+        impl $crate::glib::translate::FromGlibContainerAsVec<*mut $ffi_name, *mut *mut $ffi_name>
             for $name
         {
             unsafe fn from_glib_none_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> {
@@ -730,14 +730,14 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 let mut res = Vec::with_capacity(num);
                 for i in 0..num {
-                    res.push(from_glib_none(::std::ptr::read(ptr.add(i))));
+                    res.push($crate::glib::translate::from_glib_none(::std::ptr::read(ptr.add(i))));
                 }
                 res
             }
 
             unsafe fn from_glib_container_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> {
-                let res = glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, num);
-                glib_ffi::g_free(ptr as *mut _);
+                let res = $crate::glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, num);
+                $crate::glib_ffi::g_free(ptr as *mut _);
                 res
             }
 
@@ -748,34 +748,34 @@ macro_rules! gst_define_mini_object_wrapper(
 
                 let mut res = Vec::with_capacity(num);
                 for i in 0..num {
-                    res.push(from_glib_full(::std::ptr::read(ptr.add(i))));
+                    res.push($crate::glib::translate::from_glib_full(::std::ptr::read(ptr.add(i))));
                 }
-                glib_ffi::g_free(ptr as *mut _);
+                $crate::glib_ffi::g_free(ptr as *mut _);
                 res
             }
         }
 
-        impl glib::translate::FromGlibPtrArrayContainerAsVec<*mut $ffi_name, *mut *mut $ffi_name>
+        impl $crate::glib::translate::FromGlibPtrArrayContainerAsVec<*mut $ffi_name, *mut *mut $ffi_name>
             for $name
         {
             unsafe fn from_glib_none_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> {
-                glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
+                $crate::glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
             }
 
             unsafe fn from_glib_container_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> {
-                glib::translate::FromGlibContainerAsVec::from_glib_container_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
+                $crate::glib::translate::FromGlibContainerAsVec::from_glib_container_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
             }
 
             unsafe fn from_glib_full_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> {
-                glib::translate::FromGlibContainerAsVec::from_glib_full_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
+                $crate::glib::translate::FromGlibContainerAsVec::from_glib_full_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
             }
         }
 
-        impl glib::translate::FromGlibContainerAsVec<*mut $ffi_name, *const *mut $ffi_name>
+        impl $crate::glib::translate::FromGlibContainerAsVec<*mut $ffi_name, *const *mut $ffi_name>
             for $name
         {
             unsafe fn from_glib_none_num_as_vec(ptr: *const *mut $ffi_name, num: usize) -> Vec<Self> {
-                glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr as *mut *mut _, num)
+                $crate::glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr as *mut *mut _, num)
             }
 
             unsafe fn from_glib_container_num_as_vec(_: *const *mut $ffi_name, _: usize) -> Vec<Self> {
@@ -789,10 +789,10 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
-        impl glib::translate::FromGlibPtrArrayContainerAsVec<*mut $ffi_name, *const *mut $ffi_name> for $name
+        impl $crate::glib::translate::FromGlibPtrArrayContainerAsVec<*mut $ffi_name, *const *mut $ffi_name> for $name
         {
             unsafe fn from_glib_none_as_vec(ptr: *const *mut $ffi_name) -> Vec<Self> {
-                glib::translate::FromGlibPtrArrayContainerAsVec::from_glib_none_as_vec(ptr as *mut *mut _)
+                $crate::glib::translate::FromGlibPtrArrayContainerAsVec::from_glib_none_as_vec(ptr as *mut *mut _)
             }
 
             unsafe fn from_glib_container_as_vec(_: *const *mut $ffi_name) -> Vec<Self> {
@@ -806,27 +806,27 @@ macro_rules! gst_define_mini_object_wrapper(
             }
         }
 
-        impl<'a> glib::value::FromValueOptional<'a>
+        impl<'a> $crate::glib::value::FromValueOptional<'a>
             for $name
         {
             unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-                <$crate::GstRc<$ref_name> as glib::value::FromValueOptional>::from_value_optional(v).map($name)
+                <$crate::GstRc<$ref_name> as $crate::glib::value::FromValueOptional>::from_value_optional(v).map($name)
             }
         }
 
-        impl glib::value::SetValue for $name {
+        impl $crate::glib::value::SetValue for $name {
             unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-                <$crate::GstRc<$ref_name> as glib::value::SetValue>::set_value(v, &s.0)
+                <$crate::GstRc<$ref_name> as $crate::glib::value::SetValue>::set_value(v, &s.0)
             }
         }
 
-        impl glib::value::SetValueOptional for $name {
+        impl $crate::glib::value::SetValueOptional for $name {
             unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
-                <$crate::GstRc<$ref_name> as glib::value::SetValueOptional>::set_value_optional(v, s.map(|s| &s.0))
+                <$crate::GstRc<$ref_name> as $crate::glib::value::SetValueOptional>::set_value_optional(v, s.map(|s| &s.0))
             }
         }
 
-        impl glib::translate::GlibPtrDefault for $name {
+        impl $crate::glib::translate::GlibPtrDefault for $name {
             type GlibType = *mut $ffi_name;
         }
 
@@ -834,9 +834,9 @@ macro_rules! gst_define_mini_object_wrapper(
             type GstType = $ffi_name;
         }
 
-        impl glib::types::StaticType for $ref_name {
-            fn static_type() -> glib::types::Type {
-                unsafe { from_glib($get_type()) }
+        impl $crate::glib::types::StaticType for $ref_name {
+            fn static_type() -> $crate::glib::types::Type {
+                unsafe { $crate::glib::translate::from_glib($get_type()) }
             }
         }
 
@@ -846,7 +846,7 @@ macro_rules! gst_define_mini_object_wrapper(
             fn to_owned(&self) -> $name {
                 #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
                 unsafe {
-                    $name(from_glib_none(self.as_ptr()))
+                    $name($crate::glib::translate::from_glib_none($crate::miniobject::MiniObject::as_ptr(self)))
                 }
             }
         }
