@@ -4,7 +4,7 @@ use glib::IsA;
 
 use ffi;
 
-pub trait GObjectExtManualGst {
+pub trait GObjectExtManualGst: 'static {
     fn set_property_from_str(&self, name: &str, value: &str);
 }
 

@@ -15,7 +15,7 @@ use VideoOverlay;
 
 use glib::IsA;
 
-pub trait VideoOverlayExtManual {
+pub trait VideoOverlayExtManual: 'static {
     unsafe fn set_window_handle(&self, handle: uintptr_t);
     unsafe fn got_window_handle(&self, handle: uintptr_t);
 }

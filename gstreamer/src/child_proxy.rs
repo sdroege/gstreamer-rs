@@ -13,7 +13,7 @@ use glib::translate::*;
 use std::ptr;
 use ChildProxy;
 
-pub trait ChildProxyExtManual {
+pub trait ChildProxyExtManual: 'static {
     fn get_child_property(&self, name: &str) -> Option<glib::Value>;
     fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError>;
 }

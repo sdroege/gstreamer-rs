@@ -105,7 +105,7 @@ impl Drop for StreamLock {
     }
 }
 
-pub trait PadExtManual {
+pub trait PadExtManual: 'static {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
         F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;

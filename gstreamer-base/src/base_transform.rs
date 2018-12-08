@@ -13,7 +13,7 @@ use gst;
 use std::ops;
 use BaseTransform;
 
-pub trait BaseTransformExtManual {
+pub trait BaseTransformExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
 }
 

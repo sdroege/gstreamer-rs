@@ -13,7 +13,7 @@ use glib::translate::*;
 use std::ptr;
 use TimelineElement;
 
-pub trait TimelineElementExtManual {
+pub trait TimelineElementExtManual: 'static {
     fn get_child_property(&self, name: &str) -> Option<glib::Value>;
     fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError>;
 }

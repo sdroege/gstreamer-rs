@@ -225,7 +225,7 @@ impl Default for BufferPool {
     }
 }
 
-pub trait BufferPoolExtManual {
+pub trait BufferPoolExtManual: 'static {
     fn get_config(&self) -> BufferPoolConfig;
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError>;
 

@@ -14,7 +14,7 @@ use glib::IsA;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use gst;
 
-pub trait RTSPMediaFactoryExtManual {
+pub trait RTSPMediaFactoryExtManual: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn add_role_from_structure(&self, structure: &gst::StructureRef);
 }

@@ -4,7 +4,7 @@ use glib::translate::*;
 use RTSPAuth;
 use RTSPToken;
 
-pub trait RTSPAuthExtManual {
+pub trait RTSPAuthExtManual: 'static {
     fn set_default_token<'a, P: Into<Option<&'a mut RTSPToken>>>(&self, token: P);
 }
 

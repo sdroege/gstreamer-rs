@@ -16,7 +16,7 @@ use std::ffi::CStr;
 use ffi;
 use gobject_ffi;
 
-pub trait DeviceProviderExtManual {
+pub trait DeviceProviderExtManual: 'static {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
 }
 

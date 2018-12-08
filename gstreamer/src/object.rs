@@ -9,12 +9,12 @@
 use glib;
 use glib::object::{Downcast, ObjectExt};
 use glib::signal::SignalHandlerId;
-use glib::translate::{from_glib_none, ToGlibPtr};
+use glib::translate::{from_glib_borrow, from_glib_none, ToGlibPtr};
 use glib::IsA;
 
 use gobject_ffi;
 
-pub trait GstObjectExtManual {
+pub trait GstObjectExtManual: 'static {
     fn connect_deep_notify<
         'a,
         P: Into<Option<&'a str>>,
@@ -26,7 +26,7 @@ pub trait GstObjectExtManual {
     ) -> SignalHandlerId;
 }
 
-impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtManual for O {
+impl<O: IsA<::Object>> GstObjectExtManual for O {
     fn connect_deep_notify<
         'a,
         P: Into<Option<&'a str>>,
@@ -43,13 +43,11 @@ impl<O: IsA<::Object> + IsA<glib::Object> + glib::value::SetValue> GstObjectExtM
             "deep-notify".into()
         };
 
-        self.connect(signal_name.as_str(), false, move |values| {
-            let obj: O = unsafe {
-                values[0]
-                    .get::<glib::Object>()
-                    .unwrap()
-                    .downcast_unchecked()
-            };
+        let obj: glib::Object =
+            unsafe { from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject) };
+
+        obj.connect(signal_name.as_str(), false, move |values| {
+            let obj: O = unsafe { values[0].get::<::Object>().unwrap().downcast_unchecked() };
             let prop_obj: ::Object = values[1].get().unwrap();
 
             let pspec = unsafe {

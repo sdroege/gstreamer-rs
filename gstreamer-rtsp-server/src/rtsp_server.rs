@@ -5,7 +5,7 @@ use glib::source::SourceId;
 use glib::translate::*;
 use RTSPServer;
 
-pub trait RTSPServerExtManual {
+pub trait RTSPServerExtManual: 'static {
     fn attach<'a, P: Into<Option<&'a glib::MainContext>>>(&self, context: P) -> SourceId;
 }
 

@@ -27,7 +27,7 @@ cfg_if! {
 
 use super::Bus;
 
-pub trait WindowsBusExtManual {
+pub trait WindowsBusExtManual: 'static {
     fn get_pollfd(&self) -> windows::io::RawHandle;
 }
 

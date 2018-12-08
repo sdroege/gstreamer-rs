@@ -31,7 +31,7 @@ fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func:
     Box::into_raw(func) as gpointer
 }
 
-pub trait RTSPSessionPoolExtManual {
+pub trait RTSPSessionPoolExtManual: 'static {
     fn create_watch<'a, N: Into<Option<&'a str>>, F>(
         &self,
         name: N,

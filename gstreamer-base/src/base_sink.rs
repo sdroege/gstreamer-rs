@@ -13,7 +13,7 @@ use gst;
 use std::ops;
 use BaseSink;
 
-pub trait BaseSinkExtManual {
+pub trait BaseSinkExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
 }
 

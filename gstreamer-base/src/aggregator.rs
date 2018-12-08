@@ -14,7 +14,7 @@ use Aggregator;
 
 use std::ops;
 
-pub trait AggregatorExtManual {
+pub trait AggregatorExtManual: 'static {
     fn finish_buffer(&self, buffer: gst::Buffer) -> gst::FlowReturn;
 }
 

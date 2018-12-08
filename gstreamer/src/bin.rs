@@ -18,7 +18,7 @@ use ffi;
 use std::ops;
 use std::path;
 
-pub trait GstBinExtManual {
+pub trait GstBinExtManual: 'static {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
 

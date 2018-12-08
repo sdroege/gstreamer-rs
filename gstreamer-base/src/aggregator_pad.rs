@@ -15,7 +15,7 @@ use AggregatorPad;
 
 use std::ops;
 
-pub trait AggregatorPadExtManual {
+pub trait AggregatorPadExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
 }
 

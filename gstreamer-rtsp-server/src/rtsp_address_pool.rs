@@ -6,7 +6,7 @@ use RTSPAddress;
 use RTSPAddressPool;
 use RTSPAddressPoolResult;
 
-pub trait RTSPAddressPoolExtManual {
+pub trait RTSPAddressPoolExtManual: 'static {
     fn reserve_address(
         &self,
         ip_address: &str,

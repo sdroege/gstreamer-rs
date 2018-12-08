@@ -14,7 +14,7 @@ use tags::*;
 use TagMergeMode;
 use TagSetter;
 
-pub trait TagSetterExtManual {
+pub trait TagSetterExtManual: 'static {
     fn add<'a, T: Tag<'a>>(&self, value: T::TagType, mode: TagMergeMode)
     where
         T::TagType: ToSendValue;

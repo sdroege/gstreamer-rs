@@ -163,7 +163,7 @@ impl Clock {
     }
 }
 
-pub trait ClockExtManual {
+pub trait ClockExtManual: 'static {
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId>;
 
     fn periodic_id_reinit(
@@ -178,7 +178,7 @@ pub trait ClockExtManual {
     fn single_shot_id_reinit(&self, id: &ClockId, time: ClockTime) -> Result<(), glib::BoolError>;
 }
 
-impl<O: IsA<Clock> + IsA<glib::object::Object>> ClockExtManual for O {
+impl<O: IsA<Clock>> ClockExtManual for O {
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId> {
         unsafe {
             from_glib_full(ffi::gst_clock_new_periodic_id(

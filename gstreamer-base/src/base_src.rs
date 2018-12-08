@@ -13,7 +13,7 @@ use gst;
 use std::ops;
 use BaseSrc;
 
-pub trait BaseSrcExtManual {
+pub trait BaseSrcExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
 }
 

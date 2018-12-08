@@ -31,7 +31,7 @@ impl GLContext {
     }
 }
 
-pub trait GLContextExtManual {
+pub trait GLContextExtManual: 'static {
     fn get_gl_context(&self) -> uintptr_t;
 
     fn get_proc_address(&self, name: &str) -> uintptr_t;

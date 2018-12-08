@@ -92,7 +92,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
     }
 }
 
-pub trait ElementExtManual {
+pub trait ElementExtManual: 'static {
     fn get_element_class(&self) -> &ElementClass;
 
     fn query(&self, query: &mut QueryRef) -> bool;
