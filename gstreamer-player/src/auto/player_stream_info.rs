@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -21,11 +22,11 @@ unsafe impl Sync for PlayerStreamInfo {}
 pub trait PlayerStreamInfoExt: 'static {
     fn get_caps(&self) -> Option<gst::Caps>;
 
-    fn get_codec(&self) -> Option<String>;
+    fn get_codec(&self) -> Option<GString>;
 
     fn get_index(&self) -> i32;
 
-    fn get_stream_type(&self) -> String;
+    fn get_stream_type(&self) -> GString;
 
     fn get_tags(&self) -> Option<gst::TagList>;
 }
@@ -37,7 +38,7 @@ impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
         }
     }
 
-    fn get_codec(&self) -> Option<String> {
+    fn get_codec(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_codec(const_override(self.to_glib_none().0)))
         }
@@ -49,7 +50,7 @@ impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
         }
     }
 
-    fn get_stream_type(&self) -> String {
+    fn get_stream_type(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_player_stream_info_get_stream_type(const_override(self.to_glib_none().0)))
         }

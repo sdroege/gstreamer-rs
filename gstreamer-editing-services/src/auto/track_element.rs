@@ -10,6 +10,7 @@ use TimelineElement;
 use Track;
 use TrackType;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;

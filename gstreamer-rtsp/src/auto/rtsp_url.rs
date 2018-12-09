@@ -4,6 +4,7 @@
 
 use RTSPResult;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 use std::ptr;
 
@@ -19,13 +20,13 @@ glib_wrapper! {
 }
 
 impl RTSPUrl {
-    pub fn decode_path_components(&self) -> Vec<String> {
+    pub fn decode_path_components(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_url_decode_path_components(self.to_glib_none().0))
         }
     }
 
-    pub fn get_request_uri(&self) -> Option<String> {
+    pub fn get_request_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_url_get_request_uri(self.to_glib_none().0))
         }

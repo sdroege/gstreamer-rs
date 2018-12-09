@@ -20,6 +20,7 @@ use Stream;
 use TaskState;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -72,11 +73,11 @@ pub trait PadExt: 'static {
 
     fn check_reconfigure(&self) -> bool;
 
-    fn create_stream_id<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q) -> Option<String>;
+    fn create_stream_id<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q) -> Option<GString>;
 
-    //fn create_stream_id_printf<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<String>;
+    //fn create_stream_id_printf<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<GString>;
 
-    //fn create_stream_id_printf_valist<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<String>;
+    //fn create_stream_id_printf_valist<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<GString>;
 
     //fn forward<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, forward: /*Unknown conversion*//*Unimplemented*/PadForwardFunction, user_data: P) -> bool;
 
@@ -105,7 +106,7 @@ pub trait PadExt: 'static {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn get_stream(&self) -> Option<Stream>;
 
-    fn get_stream_id(&self) -> Option<String>;
+    fn get_stream_id(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn get_task_state(&self) -> TaskState;
@@ -228,7 +229,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn create_stream_id<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q) -> Option<String> {
+    fn create_stream_id<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q) -> Option<GString> {
         let stream_id = stream_id.into();
         let stream_id = stream_id.to_glib_none();
         unsafe {
@@ -236,11 +237,11 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn create_stream_id_printf<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<String> {
+    //fn create_stream_id_printf<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<GString> {
     //    unsafe { TODO: call ffi::gst_pad_create_stream_id_printf() }
     //}
 
-    //fn create_stream_id_printf_valist<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<String> {
+    //fn create_stream_id_printf_valist<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<GString> {
     //    unsafe { TODO: call ffi::gst_pad_create_stream_id_printf_valist() }
     //}
 
@@ -319,7 +320,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn get_stream_id(&self) -> Option<String> {
+    fn get_stream_id(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_pad_get_stream_id(self.to_glib_none().0))
         }

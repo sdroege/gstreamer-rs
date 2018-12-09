@@ -9,6 +9,7 @@ use RTSPStreamTransport;
 use ffi;
 use gio;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -55,7 +56,7 @@ pub trait RTSPStreamExt: 'static {
 
     fn get_caps(&self) -> Option<gst::Caps>;
 
-    fn get_control(&self) -> Option<String>;
+    fn get_control(&self) -> Option<GString>;
 
     fn get_current_seqnum(&self) -> u16;
 
@@ -69,7 +70,7 @@ pub trait RTSPStreamExt: 'static {
 
     fn get_multicast_address(&self, family: gio::SocketFamily) -> Option<RTSPAddress>;
 
-    fn get_multicast_iface(&self) -> Option<String>;
+    fn get_multicast_iface(&self) -> Option<GString>;
 
     fn get_profiles(&self) -> gst_rtsp::RTSPProfile;
 
@@ -215,7 +216,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_control(&self) -> Option<String> {
+    fn get_control(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_control(self.to_glib_none().0))
         }
@@ -257,7 +258,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn get_multicast_iface(&self) -> Option<String> {
+    fn get_multicast_iface(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_get_multicast_iface(self.to_glib_none().0))
         }

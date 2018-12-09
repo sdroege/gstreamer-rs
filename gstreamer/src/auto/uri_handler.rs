@@ -5,6 +5,7 @@
 use Error;
 use URIType;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use std::ptr;
@@ -21,9 +22,9 @@ unsafe impl Send for URIHandler {}
 unsafe impl Sync for URIHandler {}
 
 pub trait URIHandlerExt: 'static {
-    fn get_protocols(&self) -> Vec<String>;
+    fn get_protocols(&self) -> Vec<GString>;
 
-    fn get_uri(&self) -> Option<String>;
+    fn get_uri(&self) -> Option<GString>;
 
     fn get_uri_type(&self) -> URIType;
 
@@ -31,13 +32,13 @@ pub trait URIHandlerExt: 'static {
 }
 
 impl<O: IsA<URIHandler>> URIHandlerExt for O {
-    fn get_protocols(&self) -> Vec<String> {
+    fn get_protocols(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_uri_handler_get_protocols(self.to_glib_none().0))
         }
     }
 
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_uri_handler_get_uri(self.to_glib_none().0))
         }

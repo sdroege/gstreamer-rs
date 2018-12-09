@@ -7,6 +7,7 @@ use Element;
 use Object;
 use Structure;
 use ffi;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -32,9 +33,9 @@ pub trait DeviceExt: 'static {
 
     fn get_caps(&self) -> Option<Caps>;
 
-    fn get_device_class(&self) -> String;
+    fn get_device_class(&self) -> GString;
 
-    fn get_display_name(&self) -> String;
+    fn get_display_name(&self) -> GString;
 
     fn get_properties(&self) -> Option<Structure>;
 
@@ -62,13 +63,13 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    fn get_device_class(&self) -> String {
+    fn get_device_class(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_device_class(self.to_glib_none().0))
         }
     }
 
-    fn get_display_name(&self) -> String {
+    fn get_display_name(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_display_name(self.to_glib_none().0))
         }

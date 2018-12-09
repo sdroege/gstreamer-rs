@@ -13,6 +13,7 @@ use PlayerVideoInfo;
 use PlayerVisualization;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
@@ -68,7 +69,7 @@ impl Player {
         }
     }
 
-    pub fn get_current_visualization(&self) -> Option<String> {
+    pub fn get_current_visualization(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_player_get_current_visualization(self.to_glib_none().0))
         }
@@ -122,13 +123,13 @@ impl Player {
         }
     }
 
-    pub fn get_subtitle_uri(&self) -> Option<String> {
+    pub fn get_subtitle_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_player_get_subtitle_uri(self.to_glib_none().0))
         }
     }
 
-    pub fn get_uri(&self) -> Option<String> {
+    pub fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_player_get_uri(self.to_glib_none().0))
         }
@@ -282,9 +283,9 @@ impl Player {
         }
     }
 
-    pub fn get_property_suburi(&self) -> Option<String> {
+    pub fn get_property_suburi(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0, b"suburi\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
@@ -589,7 +590,7 @@ unsafe extern "C" fn state_changed_trampoline(this: *mut ffi::GstPlayer, object:
 
 unsafe extern "C" fn uri_loaded_trampoline(this: *mut ffi::GstPlayer, object: *mut libc::c_char, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Player, &str) + Send + 'static) = transmute(f);
-    f(&from_glib_borrow(this), &String::from_glib_none(object))
+    f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
 }
 
 unsafe extern "C" fn video_dimensions_changed_trampoline(this: *mut ffi::GstPlayer, object: libc::c_int, p0: libc::c_int, f: glib_ffi::gpointer) {

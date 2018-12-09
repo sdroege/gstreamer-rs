@@ -6,6 +6,7 @@ use Object;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use Stream;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
@@ -47,15 +48,15 @@ impl StreamCollection {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn get_upstream_id(&self) -> Option<String> {
+    pub fn get_upstream_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_upstream_id(self.to_glib_none().0))
         }
     }
 
-    pub fn get_property_upstream_id(&self) -> Option<String> {
+    pub fn get_property_upstream_id(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0, b"upstream-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }

@@ -4,6 +4,7 @@
 
 use RTSPMediaFactory;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_rtsp;
@@ -38,7 +39,7 @@ unsafe impl Sync for RTSPMountPoints {}
 pub trait RTSPMountPointsExt: 'static {
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P);
 
-    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<String>;
+    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<GString>;
 
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32);
 
@@ -52,7 +53,7 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
         }
     }
 
-    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<String> {
+    fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_mount_points_make_path(self.to_glib_none().0, url.to_glib_none().0))
         }

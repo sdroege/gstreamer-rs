@@ -6,6 +6,7 @@ use RTSPToken;
 use ffi;
 use gio;
 use gio_ffi;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -40,7 +41,7 @@ impl RTSPAuth {
         }
     }
 
-    pub fn make_basic(user: &str, pass: &str) -> String {
+    pub fn make_basic(user: &str, pass: &str) -> GString {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_rtsp_auth_make_basic(user.to_glib_none().0, pass.to_glib_none().0))

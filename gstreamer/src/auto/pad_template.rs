@@ -10,6 +10,7 @@ use PadPresence;
 use ffi;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
@@ -74,9 +75,9 @@ impl PadTemplate {
         }
     }
 
-    pub fn get_property_name_template(&self) -> Option<String> {
+    pub fn get_property_name_template(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0, b"name-template\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }

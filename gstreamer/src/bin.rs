@@ -11,7 +11,7 @@ use Element;
 
 use glib;
 use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
-use glib::{IsA, IsClassFor};
+use glib::{GString, IsA, IsClassFor};
 
 use ffi;
 
@@ -30,7 +30,7 @@ pub trait GstBinExtManual: 'static {
     fn iterate_sources(&self) -> ::Iterator<Element>;
     fn get_children(&self) -> Vec<Element>;
 
-    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> String;
+    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> GString;
     fn debug_to_dot_file<Q: AsRef<path::Path>>(&self, details: ::DebugGraphDetails, file_name: Q);
     fn debug_to_dot_file_with_ts<Q: AsRef<path::Path>>(
         &self,
@@ -108,7 +108,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         }
     }
 
-    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> String {
+    fn debug_to_dot_data(&self, details: ::DebugGraphDetails) -> GString {
         ::debug_bin_to_dot_data(self, details)
     }
 
@@ -168,7 +168,7 @@ mod tests {
             .get_children()
             .iter()
             .map(|c| c.get_name())
-            .collect::<Vec<String>>();
+            .collect::<Vec<GString>>();
         child_names.sort();
         assert_eq!(
             child_names,

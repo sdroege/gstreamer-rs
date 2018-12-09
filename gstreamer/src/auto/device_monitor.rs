@@ -8,6 +8,7 @@ use Device;
 use Object;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -38,7 +39,7 @@ pub trait DeviceMonitorExt: 'static {
 
     fn get_devices(&self) -> Vec<Device>;
 
-    fn get_providers(&self) -> Vec<String>;
+    fn get_providers(&self) -> Vec<GString>;
 
     fn get_show_all_devices(&self) -> bool;
 
@@ -80,7 +81,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn get_providers(&self) -> Vec<String> {
+    fn get_providers(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_monitor_get_providers(self.to_glib_none().0))
         }

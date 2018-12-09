@@ -4,6 +4,7 @@
 
 use EncodingTarget;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 use std::mem;
 
@@ -17,28 +18,28 @@ pub fn encoding_list_all_targets<'a, P: Into<Option<&'a str>>>(categoryname: P) 
     }
 }
 
-pub fn encoding_list_available_categories() -> Vec<String> {
+pub fn encoding_list_available_categories() -> Vec<GString> {
     assert_initialized_main_thread!();
     unsafe {
         FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_available_categories())
     }
 }
 
-pub fn pb_utils_get_element_description(factory_name: &str) -> Option<String> {
+pub fn pb_utils_get_element_description(factory_name: &str) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_pb_utils_get_element_description(factory_name.to_glib_none().0))
     }
 }
 
-pub fn pb_utils_get_sink_description(protocol: &str) -> Option<String> {
+pub fn pb_utils_get_sink_description(protocol: &str) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_pb_utils_get_sink_description(protocol.to_glib_none().0))
     }
 }
 
-pub fn pb_utils_get_source_description(protocol: &str) -> Option<String> {
+pub fn pb_utils_get_source_description(protocol: &str) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_pb_utils_get_source_description(protocol.to_glib_none().0))
@@ -57,7 +58,7 @@ pub fn plugins_base_version() -> (u32, u32, u32, u32) {
     }
 }
 
-pub fn plugins_base_version_string() -> Option<String> {
+pub fn plugins_base_version_string() -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_plugins_base_version_string())

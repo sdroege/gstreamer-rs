@@ -5,6 +5,7 @@
 use EncodingProfile;
 use Error;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use std;
@@ -51,11 +52,11 @@ unsafe impl Send for EncodingTarget {}
 unsafe impl Sync for EncodingTarget {}
 
 pub trait EncodingTargetExt: 'static {
-    fn get_category(&self) -> String;
+    fn get_category(&self) -> GString;
 
-    fn get_description(&self) -> String;
+    fn get_description(&self) -> GString;
 
-    fn get_name(&self) -> String;
+    fn get_name(&self) -> GString;
 
     fn get_profile(&self, name: &str) -> Option<EncodingProfile>;
 
@@ -67,19 +68,19 @@ pub trait EncodingTargetExt: 'static {
 }
 
 impl<O: IsA<EncodingTarget>> EncodingTargetExt for O {
-    fn get_category(&self) -> String {
+    fn get_category(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_category(self.to_glib_none().0))
         }
     }
 
-    fn get_description(&self) -> String {
+    fn get_description(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_description(self.to_glib_none().0))
         }
     }
 
-    fn get_name(&self) -> String {
+    fn get_name(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_encoding_target_get_name(self.to_glib_none().0))
         }

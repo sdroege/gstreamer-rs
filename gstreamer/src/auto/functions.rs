@@ -11,6 +11,7 @@ use Error;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use StackTraceFlags;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use std;
@@ -26,7 +27,7 @@ pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u3
     }
 }
 
-pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> String {
+pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> GString {
     skip_assert_initialized!();
     unsafe {
         from_glib_full(ffi::gst_debug_bin_to_dot_data(bin.to_glib_none().0, details.to_glib()))
@@ -55,7 +56,7 @@ pub fn debug_get_default_threshold() -> DebugLevel {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Option<String> {
+pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_debug_get_stack_trace(flags.to_glib()))
@@ -92,7 +93,7 @@ pub fn debug_remove_ring_buffer_logger() {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub fn debug_ring_buffer_logger_get_logs() -> Vec<String> {
+pub fn debug_ring_buffer_logger_get_logs() -> Vec<GString> {
     assert_initialized_main_thread!();
     unsafe {
         FromGlibPtrContainer::from_glib_full(ffi::gst_debug_ring_buffer_logger_get_logs())
@@ -142,7 +143,7 @@ pub fn debug_unset_threshold_for_name(name: &str) {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub fn get_main_executable_path() -> Option<String> {
+pub fn get_main_executable_path() -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_none(ffi::gst_get_main_executable_path())
@@ -202,7 +203,7 @@ pub fn version() -> (u32, u32, u32, u32) {
     }
 }
 
-pub fn version_string() -> String {
+pub fn version_string() -> GString {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gst_version_string())

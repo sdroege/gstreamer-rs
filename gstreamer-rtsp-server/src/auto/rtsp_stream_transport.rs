@@ -5,6 +5,7 @@
 use RTSPStream;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -25,7 +26,7 @@ impl RTSPStreamTransport {
 }
 
 pub trait RTSPStreamTransportExt: 'static {
-    fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<String>;
+    fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<GString>;
 
     fn get_stream(&self) -> Option<RTSPStream>;
 
@@ -57,7 +58,7 @@ pub trait RTSPStreamTransportExt: 'static {
 }
 
 impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
-    fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<String> {
+    fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_stream_transport_get_rtpinfo(self.to_glib_none().0, start_time.to_glib()))
         }

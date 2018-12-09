@@ -13,7 +13,7 @@ impl fmt::Display for DateTime {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(
             self.to_iso8601_string()
-                .unwrap_or_else(|| String::from("None"))
+                .unwrap_or_else(|| "None".into())
                 .as_str(),
         )
     }

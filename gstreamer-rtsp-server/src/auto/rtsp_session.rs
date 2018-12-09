@@ -5,6 +5,7 @@
 use RTSPMedia;
 use RTSPSessionMedia;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -43,11 +44,11 @@ pub trait RTSPSessionExt: 'static {
 
     //fn filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPSessionFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPSessionMedia>;
 
-    fn get_header(&self) -> Option<String>;
+    fn get_header(&self) -> Option<GString>;
 
     fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32);
 
-    fn get_sessionid(&self) -> Option<String>;
+    fn get_sessionid(&self) -> Option<GString>;
 
     fn get_timeout(&self) -> u32;
 
@@ -89,7 +90,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
     //    unsafe { TODO: call ffi::gst_rtsp_session_filter() }
     //}
 
-    fn get_header(&self) -> Option<String> {
+    fn get_header(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_get_header(self.to_glib_none().0))
         }
@@ -103,7 +104,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    fn get_sessionid(&self) -> Option<String> {
+    fn get_sessionid(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_rtsp_session_get_sessionid(self.to_glib_none().0))
         }

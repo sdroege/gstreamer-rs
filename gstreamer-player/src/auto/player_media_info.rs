@@ -7,6 +7,7 @@ use PlayerStreamInfo;
 use PlayerSubtitleInfo;
 use PlayerVideoInfo;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 use gst;
 
@@ -25,7 +26,7 @@ impl PlayerMediaInfo {
         }
     }
 
-    pub fn get_container_format(&self) -> Option<String> {
+    pub fn get_container_format(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_player_media_info_get_container_format(self.to_glib_none().0))
         }
@@ -85,13 +86,13 @@ impl PlayerMediaInfo {
         }
     }
 
-    pub fn get_title(&self) -> Option<String> {
+    pub fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_player_media_info_get_title(self.to_glib_none().0))
         }
     }
 
-    pub fn get_uri(&self) -> String {
+    pub fn get_uri(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_player_media_info_get_uri(self.to_glib_none().0))
         }

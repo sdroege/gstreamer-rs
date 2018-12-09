@@ -5,6 +5,7 @@
 use Object;
 use Plugin;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 
@@ -24,7 +25,7 @@ pub trait PluginFeatureExt: 'static {
 
     fn get_plugin(&self) -> Option<Plugin>;
 
-    fn get_plugin_name(&self) -> Option<String>;
+    fn get_plugin_name(&self) -> Option<GString>;
 
     fn get_rank(&self) -> u32;
 
@@ -46,7 +47,7 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
-    fn get_plugin_name(&self) -> Option<String> {
+    fn get_plugin_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_feature_get_plugin_name(self.to_glib_none().0))
         }

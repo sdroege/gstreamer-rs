@@ -1161,6 +1161,7 @@ macro_rules! gst_element_info(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use glib::GString;
     use prelude::*;
     #[cfg(feature = "v1_10")]
     use std::sync::mpsc::channel;
@@ -1175,7 +1176,7 @@ mod tests {
             .get_pads()
             .iter()
             .map(|p| p.get_name())
-            .collect::<Vec<String>>();
+            .collect::<Vec<GString>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("sink"), String::from("src")]);
 
@@ -1183,7 +1184,7 @@ mod tests {
             .get_sink_pads()
             .iter()
             .map(|p| p.get_name())
-            .collect::<Vec<String>>();
+            .collect::<Vec<GString>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("sink")]);
 
@@ -1191,7 +1192,7 @@ mod tests {
             .get_src_pads()
             .iter()
             .map(|p| p.get_name())
-            .collect::<Vec<String>>();
+            .collect::<Vec<GString>>();
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("src")]);
     }

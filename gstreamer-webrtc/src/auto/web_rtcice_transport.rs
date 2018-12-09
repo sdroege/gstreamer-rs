@@ -6,6 +6,7 @@ use WebRTCICEComponent;
 use WebRTCICEConnectionState;
 use WebRTCICEGatheringState;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::signal::SignalHandlerId;
@@ -112,7 +113,7 @@ unsafe impl Sync for WebRTCICETransport {}
 
 unsafe extern "C" fn on_new_candidate_trampoline(this: *mut ffi::GstWebRTCICETransport, object: *mut libc::c_char, f: glib_ffi::gpointer) {
     let f: &&(Fn(&WebRTCICETransport, &str) + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this), &String::from_glib_none(object))
+    f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
 }
 
 unsafe extern "C" fn on_selected_candidate_pair_change_trampoline(this: *mut ffi::GstWebRTCICETransport, f: glib_ffi::gpointer) {

@@ -6,6 +6,7 @@ use Caps;
 use Object;
 use PluginFeature;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -27,7 +28,7 @@ impl TypeFindFactory {
         }
     }
 
-    pub fn get_extensions(&self) -> Vec<String> {
+    pub fn get_extensions(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_type_find_factory_get_extensions(self.to_glib_none().0))
         }

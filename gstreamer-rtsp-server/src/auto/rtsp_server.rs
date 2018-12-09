@@ -11,6 +11,7 @@ use RTSPThreadPool;
 use ffi;
 use gio;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -61,7 +62,7 @@ pub trait RTSPServerExt: 'static {
 
     fn create_source<'a, P: Into<Option<&'a gio::Cancellable>>>(&self, cancellable: P) -> Result<glib::Source, Error>;
 
-    fn get_address(&self) -> Option<String>;
+    fn get_address(&self) -> Option<GString>;
 
     fn get_auth(&self) -> Option<RTSPAuth>;
 
@@ -71,7 +72,7 @@ pub trait RTSPServerExt: 'static {
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints>;
 
-    fn get_service(&self) -> Option<String>;
+    fn get_service(&self) -> Option<GString>;
 
     fn get_session_pool(&self) -> Option<RTSPSessionPool>;
 
@@ -133,7 +134,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_address(&self) -> Option<String> {
+    fn get_address(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_address(self.to_glib_none().0))
         }
@@ -163,7 +164,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn get_service(&self) -> Option<String> {
+    fn get_service(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_service(self.to_glib_none().0))
         }

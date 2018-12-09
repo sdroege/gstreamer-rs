@@ -4,6 +4,7 @@
 
 use DiscovererInfo;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -44,25 +45,25 @@ pub trait EncodingProfileExt: 'static {
 
     fn get_allow_dynamic_output(&self) -> bool;
 
-    fn get_description(&self) -> Option<String>;
+    fn get_description(&self) -> Option<GString>;
 
-    fn get_file_extension(&self) -> Option<String>;
+    fn get_file_extension(&self) -> Option<GString>;
 
     fn get_format(&self) -> gst::Caps;
 
     fn get_input_caps(&self) -> gst::Caps;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> Option<GString>;
 
     fn get_presence(&self) -> u32;
 
-    fn get_preset(&self) -> Option<String>;
+    fn get_preset(&self) -> Option<GString>;
 
-    fn get_preset_name(&self) -> Option<String>;
+    fn get_preset_name(&self) -> Option<GString>;
 
     fn get_restriction(&self) -> Option<gst::Caps>;
 
-    fn get_type_nick(&self) -> Option<String>;
+    fn get_type_nick(&self) -> Option<GString>;
 
     fn is_enabled(&self) -> bool;
 
@@ -82,13 +83,13 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_description(&self) -> Option<String> {
+    fn get_description(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_description(self.to_glib_none().0))
         }
     }
 
-    fn get_file_extension(&self) -> Option<String> {
+    fn get_file_extension(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_file_extension(self.to_glib_none().0))
         }
@@ -106,7 +107,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_name(self.to_glib_none().0))
         }
@@ -118,13 +119,13 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_preset(&self) -> Option<String> {
+    fn get_preset(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_preset(self.to_glib_none().0))
         }
     }
 
-    fn get_preset_name(&self) -> Option<String> {
+    fn get_preset_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_preset_name(self.to_glib_none().0))
         }
@@ -136,7 +137,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
         }
     }
 
-    fn get_type_nick(&self) -> Option<String> {
+    fn get_type_nick(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_encoding_profile_get_type_nick(self.to_glib_none().0))
         }

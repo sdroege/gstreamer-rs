@@ -6,6 +6,7 @@ use ClockTime;
 use Error;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -58,11 +59,11 @@ pub trait GstObjectExt: 'static {
 
     //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, values: /*Ignored*/&[&glib::Value]) -> bool;
 
-    fn get_name(&self) -> String;
+    fn get_name(&self) -> GString;
 
     fn get_parent(&self) -> Option<Object>;
 
-    fn get_path_string(&self) -> String;
+    fn get_path_string(&self) -> GString;
 
     //fn get_value(&self, property_name: &str, timestamp: ClockTime) -> /*Ignored*/Option<glib::Value>;
 
@@ -128,7 +129,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
     //    unsafe { TODO: call ffi::gst_object_get_g_value_array() }
     //}
 
-    fn get_name(&self) -> String {
+    fn get_name(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gst_object_get_name(self.to_glib_none().0))
         }
@@ -140,7 +141,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    fn get_path_string(&self) -> String {
+    fn get_path_string(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gst_object_get_path_string(self.to_glib_none().0))
         }

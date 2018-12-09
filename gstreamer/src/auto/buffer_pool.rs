@@ -5,6 +5,7 @@
 use Object;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 
@@ -20,7 +21,7 @@ unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
 
 pub trait BufferPoolExt: 'static {
-    fn get_options(&self) -> Vec<String>;
+    fn get_options(&self) -> Vec<GString>;
 
     fn has_option(&self, option: &str) -> bool;
 
@@ -32,7 +33,7 @@ pub trait BufferPoolExt: 'static {
 }
 
 impl<O: IsA<BufferPool>> BufferPoolExt for O {
-    fn get_options(&self) -> Vec<String> {
+    fn get_options(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_buffer_pool_get_options(self.to_glib_none().0))
         }

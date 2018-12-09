@@ -7,6 +7,7 @@ use Container;
 use Extractable;
 use TimelineElement;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -37,7 +38,7 @@ impl UriClip {
 }
 
 pub trait UriClipExt: 'static {
-    fn get_uri(&self) -> Option<String>;
+    fn get_uri(&self) -> Option<GString>;
 
     fn is_image(&self) -> bool;
 
@@ -59,7 +60,7 @@ pub trait UriClipExt: 'static {
 }
 
 impl<O: IsA<UriClip>> UriClipExt for O {
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::ges_uri_clip_get_uri(self.to_glib_none().0))
         }

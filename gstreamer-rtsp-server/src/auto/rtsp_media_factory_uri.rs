@@ -4,6 +4,7 @@
 
 use RTSPMediaFactory;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -43,7 +44,7 @@ unsafe impl Send for RTSPMediaFactoryURI {}
 unsafe impl Sync for RTSPMediaFactoryURI {}
 
 pub trait RTSPMediaFactoryURIExt: 'static {
-    fn get_uri(&self) -> Option<String>;
+    fn get_uri(&self) -> Option<GString>;
 
     fn set_uri(&self, uri: &str);
 
@@ -57,7 +58,7 @@ pub trait RTSPMediaFactoryURIExt: 'static {
 }
 
 impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_factory_uri_get_uri(self.to_glib_none().0))
         }

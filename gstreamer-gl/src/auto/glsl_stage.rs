@@ -7,6 +7,7 @@ use GLContext;
 use GLSLProfile;
 use GLSLVersion;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 use gst;
 use gst_ffi;

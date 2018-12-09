@@ -6,6 +6,7 @@ use RTSPMedia;
 use RTSPStreamTransport;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -38,7 +39,7 @@ pub trait RTSPSessionMediaExt: 'static {
 
     fn get_media(&self) -> Option<RTSPMedia>;
 
-    fn get_rtpinfo(&self) -> Option<String>;
+    fn get_rtpinfo(&self) -> Option<GString>;
 
     //fn get_rtsp_state(&self) -> /*Ignored*/gst_rtsp::RTSPState;
 
@@ -72,7 +73,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    fn get_rtpinfo(&self) -> Option<String> {
+    fn get_rtpinfo(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_session_media_get_rtpinfo(self.to_glib_none().0))
         }

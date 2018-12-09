@@ -4,6 +4,7 @@
 
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use std;
@@ -39,11 +40,11 @@ unsafe impl Sync for Preset {}
 pub trait PresetExt: 'static {
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
-    fn get_meta(&self, name: &str, tag: &str) -> Option<String>;
+    fn get_meta(&self, name: &str, tag: &str) -> Option<GString>;
 
-    fn get_preset_names(&self) -> Vec<String>;
+    fn get_preset_names(&self) -> Vec<GString>;
 
-    fn get_property_names(&self) -> Vec<String>;
+    fn get_property_names(&self) -> Vec<GString>;
 
     fn is_editable(&self) -> bool;
 
@@ -63,7 +64,7 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
-    fn get_meta(&self, name: &str, tag: &str) -> Option<String> {
+    fn get_meta(&self, name: &str, tag: &str) -> Option<GString> {
         unsafe {
             let mut value = ptr::null_mut();
             let ret = from_glib(ffi::gst_preset_get_meta(self.to_glib_none().0, name.to_glib_none().0, tag.to_glib_none().0, &mut value));
@@ -71,13 +72,13 @@ impl<O: IsA<Preset>> PresetExt for O {
         }
     }
 
-    fn get_preset_names(&self) -> Vec<String> {
+    fn get_preset_names(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_preset_names(self.to_glib_none().0))
         }
     }
 
-    fn get_property_names(&self) -> Vec<String> {
+    fn get_property_names(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_property_names(self.to_glib_none().0))
         }

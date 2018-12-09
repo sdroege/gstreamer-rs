@@ -7,6 +7,7 @@ use DiscovererSerializeFlags;
 use DiscovererStreamInfo;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -45,7 +46,7 @@ pub trait DiscovererInfoExt: 'static {
 
     fn get_misc(&self) -> Option<gst::Structure>;
 
-    fn get_missing_elements_installer_details(&self) -> Vec<String>;
+    fn get_missing_elements_installer_details(&self) -> Vec<GString>;
 
     fn get_result(&self) -> DiscovererResult;
 
@@ -63,7 +64,7 @@ pub trait DiscovererInfoExt: 'static {
 
     fn get_toc(&self) -> Option<gst::Toc>;
 
-    fn get_uri(&self) -> Option<String>;
+    fn get_uri(&self) -> Option<GString>;
 
     fn get_video_streams(&self) -> Vec<DiscovererStreamInfo>;
 
@@ -108,7 +109,7 @@ impl<O: IsA<DiscovererInfo>> DiscovererInfoExt for O {
         }
     }
 
-    fn get_missing_elements_installer_details(&self) -> Vec<String> {
+    fn get_missing_elements_installer_details(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gst_discoverer_info_get_missing_elements_installer_details(const_override(self.to_glib_none().0)))
         }
@@ -162,7 +163,7 @@ impl<O: IsA<DiscovererInfo>> DiscovererInfoExt for O {
         }
     }
 
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_info_get_uri(const_override(self.to_glib_none().0)))
         }

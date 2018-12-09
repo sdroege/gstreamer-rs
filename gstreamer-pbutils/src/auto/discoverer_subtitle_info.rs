@@ -4,6 +4,7 @@
 
 use DiscovererStreamInfo;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -15,7 +16,7 @@ glib_wrapper! {
 }
 
 impl DiscovererSubtitleInfo {
-    pub fn get_language(&self) -> Option<String> {
+    pub fn get_language(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_subtitle_info_get_language(self.to_glib_none().0))
         }

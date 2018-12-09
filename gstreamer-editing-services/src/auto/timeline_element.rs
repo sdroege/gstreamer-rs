@@ -6,6 +6,7 @@ use Extractable;
 use Timeline;
 use TrackType;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -46,7 +47,7 @@ pub trait TimelineElementExt: 'static {
 
     fn get_max_duration(&self) -> gst::ClockTime;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> Option<GString>;
 
     fn get_parent(&self) -> Option<TimelineElement>;
 
@@ -176,7 +177,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::ges_timeline_element_get_name(self.to_glib_none().0))
         }

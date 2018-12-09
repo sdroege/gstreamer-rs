@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -27,9 +28,9 @@ pub trait DiscovererStreamInfoExt: 'static {
 
     fn get_previous(&self) -> Option<DiscovererStreamInfo>;
 
-    fn get_stream_id(&self) -> Option<String>;
+    fn get_stream_id(&self) -> Option<GString>;
 
-    fn get_stream_type_nick(&self) -> String;
+    fn get_stream_type_nick(&self) -> GString;
 
     fn get_tags(&self) -> Option<gst::TagList>;
 
@@ -61,13 +62,13 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
         }
     }
 
-    fn get_stream_id(&self) -> Option<String> {
+    fn get_stream_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_stream_id(self.to_glib_none().0))
         }
     }
 
-    fn get_stream_type_nick(&self) -> String {
+    fn get_stream_type_nick(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_discoverer_stream_info_get_stream_type_nick(self.to_glib_none().0))
         }

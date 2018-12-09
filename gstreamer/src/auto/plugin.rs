@@ -6,6 +6,7 @@ use Error;
 use Object;
 use PluginDependencyFlags;
 use ffi;
+use glib::GString;
 use glib::translate::*;
 use std;
 use std::ptr;
@@ -37,7 +38,7 @@ impl Plugin {
         }
     }
 
-    pub fn get_description(&self) -> String {
+    pub fn get_description(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_description(self.to_glib_none().0))
         }
@@ -49,37 +50,37 @@ impl Plugin {
         }
     }
 
-    pub fn get_license(&self) -> String {
+    pub fn get_license(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_license(self.to_glib_none().0))
         }
     }
 
-    pub fn get_origin(&self) -> String {
+    pub fn get_origin(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_origin(self.to_glib_none().0))
         }
     }
 
-    pub fn get_package(&self) -> String {
+    pub fn get_package(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_package(self.to_glib_none().0))
         }
     }
 
-    pub fn get_release_date_string(&self) -> Option<String> {
+    pub fn get_release_date_string(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_release_date_string(self.to_glib_none().0))
         }
     }
 
-    pub fn get_source(&self) -> String {
+    pub fn get_source(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_source(self.to_glib_none().0))
         }
     }
 
-    pub fn get_version(&self) -> String {
+    pub fn get_version(&self) -> GString {
         unsafe {
             from_glib_none(ffi::gst_plugin_get_version(self.to_glib_none().0))
         }

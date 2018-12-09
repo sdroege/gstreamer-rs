@@ -10,6 +10,7 @@ use futures_core;
 use gio;
 use gio_ffi;
 use glib;
+use glib::GString;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
@@ -98,7 +99,7 @@ pub trait AssetExt: 'static {
 
     fn get_extractable_type(&self) -> glib::types::Type;
 
-    fn get_id(&self) -> Option<String>;
+    fn get_id(&self) -> Option<GString>;
 
     fn get_proxy(&self) -> Option<Asset>;
 
@@ -138,7 +139,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn get_id(&self) -> Option<String> {
+    fn get_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::ges_asset_get_id(self.to_glib_none().0))
         }

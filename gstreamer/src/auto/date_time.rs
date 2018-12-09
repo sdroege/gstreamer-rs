@@ -4,6 +4,7 @@
 
 use ffi;
 use glib;
+use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -179,7 +180,7 @@ impl DateTime {
         }
     }
 
-    pub fn to_iso8601_string(&self) -> Option<String> {
+    pub fn to_iso8601_string(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_date_time_to_iso8601_string(self.to_glib_none().0))
         }

@@ -5,6 +5,7 @@
 use GLContext;
 use GLDisplay;
 use ffi;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -174,11 +175,11 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 unsafe extern "C" fn key_event_trampoline<P>(this: *mut ffi::GstGLWindow, id: *mut libc::c_char, key: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<GLWindow> {
     let f: &&(Fn(&P, &str, &str) + Send + Sync + 'static) = transmute(f);
-    f(&GLWindow::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(id), &String::from_glib_none(key))
+    f(&GLWindow::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(id), &GString::from_glib_borrow(key))
 }
 
 unsafe extern "C" fn mouse_event_trampoline<P>(this: *mut ffi::GstGLWindow, id: *mut libc::c_char, button: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GLWindow> {
     let f: &&(Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static) = transmute(f);
-    f(&GLWindow::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(id), button, x, y)
+    f(&GLWindow::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(id), button, x, y)
 }

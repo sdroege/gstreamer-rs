@@ -8,6 +8,7 @@ use PluginFeature;
 use Rank;
 use ffi;
 use glib;
+use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -31,13 +32,13 @@ impl DeviceProviderFactory {
         }
     }
 
-    pub fn get_metadata(&self, key: &str) -> Option<String> {
+    pub fn get_metadata(&self, key: &str) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gst_device_provider_factory_get_metadata(self.to_glib_none().0, key.to_glib_none().0))
         }
     }
 
-    pub fn get_metadata_keys(&self) -> Vec<String> {
+    pub fn get_metadata_keys(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_factory_get_metadata_keys(self.to_glib_none().0))
         }

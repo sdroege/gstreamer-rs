@@ -9,6 +9,7 @@ use RTSPSuspendMode;
 use RTSPTransportMode;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
@@ -64,11 +65,11 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn get_latency(&self) -> u32;
 
-    fn get_launch(&self) -> Option<String>;
+    fn get_launch(&self) -> Option<GString>;
 
     fn get_media_gtype(&self) -> glib::types::Type;
 
-    fn get_multicast_iface(&self) -> Option<String>;
+    fn get_multicast_iface(&self) -> Option<GString>;
 
     //fn get_permissions(&self) -> /*Ignored*/Option<RTSPPermissions>;
 
@@ -198,7 +199,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn get_launch(&self) -> Option<String> {
+    fn get_launch(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_factory_get_launch(self.to_glib_none().0))
         }
@@ -210,7 +211,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
         }
     }
 
-    fn get_multicast_iface(&self) -> Option<String> {
+    fn get_multicast_iface(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_factory_get_multicast_iface(self.to_glib_none().0))
         }

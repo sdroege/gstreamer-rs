@@ -9,6 +9,7 @@ use Object;
 use Plugin;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -54,7 +55,7 @@ pub trait DeviceProviderExt: 'static {
 
     fn get_factory(&self) -> Option<DeviceProviderFactory>;
 
-    fn get_hidden_providers(&self) -> Vec<String>;
+    fn get_hidden_providers(&self) -> Vec<GString>;
 
     fn hide_provider(&self, name: &str);
 
@@ -106,7 +107,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
         }
     }
 
-    fn get_hidden_providers(&self) -> Vec<String> {
+    fn get_hidden_providers(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_hidden_providers(self.to_glib_none().0))
         }
@@ -156,11 +157,11 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 unsafe extern "C" fn provider_hidden_trampoline<P>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<DeviceProvider> {
     let f: &&(Fn(&P, &str) + Send + Sync + 'static) = transmute(f);
-    f(&DeviceProvider::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(object))
+    f(&DeviceProvider::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(object))
 }
 
 unsafe extern "C" fn provider_unhidden_trampoline<P>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<DeviceProvider> {
     let f: &&(Fn(&P, &str) + Send + Sync + 'static) = transmute(f);
-    f(&DeviceProvider::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(object))
+    f(&DeviceProvider::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(object))
 }
