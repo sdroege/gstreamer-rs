@@ -29,6 +29,8 @@ use std::sync::{Arc, Mutex};
 extern crate failure;
 use failure::Error;
 
+use glib::GString;
+
 #[macro_use]
 extern crate failure_derive;
 
@@ -249,12 +251,12 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
             MessageView::Error(err) => {
                 pipeline.set_state(gst::State::Null).into_result()?;
                 Err(ErrorMessage {
-                    src: err
+                    src: msg
                         .get_src()
-                        .map(|s| s.get_path_string())
+                        .map(|s| String::from(s.get_path_string()))
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
-                    debug: err.get_debug(),
+                    debug: Some(err.get_debug().unwrap().to_string()),
                     cause: err.get_error(),
                 })?;
             }

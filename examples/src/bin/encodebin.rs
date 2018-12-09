@@ -19,7 +19,6 @@ use gst::prelude::*;
 extern crate gstreamer_pbutils as gst_pbutils;
 use gst_pbutils::prelude::*;
 
-#[macro_use]
 extern crate glib;
 
 use std::env;
@@ -304,12 +303,12 @@ fn example_main() -> Result<(), Error> {
                             .map(Result::Err)
                             .expect("error-details message without actual error"),
                         _ => Err(ErrorMessage {
-                            src: err
+                            src: msg
                                 .get_src()
-                                .map(|s| s.get_path_string())
+                                .map(|s| String::from(s.get_path_string()))
                                 .unwrap_or_else(|| String::from("None")),
                             error: err.get_error().description().into(),
-                            debug: err.get_debug(),
+                            debug: Some(err.get_debug().unwrap().to_string()),
                             cause: err.get_error(),
                         }
                         .into()),
@@ -318,12 +317,12 @@ fn example_main() -> Result<(), Error> {
                 #[cfg(not(feature = "v1_10"))]
                 {
                     Err(ErrorMessage {
-                        src: err
+                        src: msg
                             .get_src()
-                            .map(|s| s.get_path_string())
+                            .map(|s| String::from(s.get_path_string()))
                             .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().description().into(),
-                        debug: err.get_debug(),
+                        debug: Some(err.get_debug().unwrap().to_string()),
                         cause: err.get_error(),
                     })?;
                 }

@@ -18,7 +18,7 @@ fn send_value_as_str(v: &glib::SendValue) -> Option<String> {
     if let Some(s) = v.get::<&str>() {
         Some(s.to_string())
     } else if let Some(serialized) = v.serialize() {
-        Some(serialized)
+        Some(serialized.into())
     } else {
         None
     }

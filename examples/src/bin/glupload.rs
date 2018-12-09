@@ -509,10 +509,10 @@ impl App {
                     Err(ErrorMessage {
                         src: msg
                             .get_src()
-                            .map(|s| s.get_path_string())
+                            .map(|s| String::from(s.get_path_string()))
                             .unwrap_or_else(|| String::from("None")),
                         error: err.get_error().description().into(),
-                        debug: err.get_debug(),
+                        debug: Some(err.get_debug().unwrap().to_string()),
                         cause: err.get_error(),
                     })?;
                 }

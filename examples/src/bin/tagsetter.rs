@@ -64,7 +64,7 @@ fn example_main() -> Result<(), Error> {
         Ok(pipeline) => pipeline,
         Err(err) => {
             if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
-                return Err(MissingElement(context.get_missing_elements().join(",")).into());
+                return Err(MissingElement(context.get_missing_elements().join(",".into())).into());
             } else {
                 return Err(err.into());
             }
@@ -106,9 +106,10 @@ fn example_main() -> Result<(), Error> {
                     src: err
                         .get_src()
                         .map(|s| s.get_path_string())
-                        .unwrap_or_else(|| String::from("None")),
+                        .unwrap_or_else(|| "None".into())
+                        .to_string(),
                     error: err.get_error().description().into(),
-                    debug: err.get_debug(),
+                    debug: Some(err.get_debug().unwrap().to_string()),
                     cause: err.get_error(),
                 })?;
                 break;

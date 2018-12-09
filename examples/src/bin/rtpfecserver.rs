@@ -57,7 +57,7 @@ fn get_static_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst:
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.get_name();
-            Err(Error::from(NoSuchPad(pad_name, element_name)))
+            Err(Error::from(NoSuchPad(pad_name, element_name.to_string())))
         }
     }
 }
@@ -67,7 +67,7 @@ fn get_request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst
         Some(pad) => Ok(pad),
         None => {
             let element_name = element.get_name();
-            Err(Error::from(NoSuchPad(pad_name, element_name)))
+            Err(Error::from(NoSuchPad(pad_name, element_name.to_string())))
         }
     }
 }
@@ -192,10 +192,10 @@ fn example_main() -> Result<(), Error> {
                 return Err(ErrorMessage {
                     src: msg
                         .get_src()
-                        .map(|s| s.get_path_string())
+                        .map(|s| String::from(s.get_path_string()))
                         .unwrap_or_else(|| String::from("None")),
                     error: err.get_error().description().into(),
-                    debug: err.get_debug(),
+                    debug: Some(err.get_debug().unwrap().to_string()),
                     cause: err.get_error(),
                 }
                 .into());
