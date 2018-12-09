@@ -71,6 +71,6 @@ rustfmt:
   image: "rustlang/rust:nightly-slim"
   stage: "lint"
   script:
-    - rustup component add rustfmt-preview
+    - rustup component add rustfmt
     - cargo fmt --version
     - cargo fmt -- --color=always --check
