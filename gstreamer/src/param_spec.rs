@@ -10,11 +10,30 @@ use ffi;
 use glib;
 use glib::translate::*;
 
-pub struct ParamSpec(());
-
-impl ParamSpec {
+pub trait GstParamSpecExt {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn array(
+    fn array(
+        name: &str,
+        nick: &str,
+        blurb: &str,
+        element_spec: &glib::ParamSpec,
+        flags: glib::ParamFlags,
+    ) -> Self;
+
+    fn fraction(
+        name: &str,
+        nick: &str,
+        blurb: &str,
+        min: ::Fraction,
+        max: ::Fraction,
+        default: ::Fraction,
+        flags: glib::ParamFlags,
+    ) -> Self;
+}
+
+impl GstParamSpecExt for glib::ParamSpec {
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn array(
         name: &str,
         nick: &str,
         blurb: &str,
@@ -32,7 +51,7 @@ impl ParamSpec {
         }
     }
 
-    pub fn fraction(
+    fn fraction(
         name: &str,
         nick: &str,
         blurb: &str,
@@ -55,5 +74,26 @@ impl ParamSpec {
                 flags.to_glib(),
             ))
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use glib;
+    use prelude::*;
+
+    #[test]
+    fn test_trait() {
+        ::init().unwrap();
+
+        let _pspec = glib::ParamSpec::fraction(
+            "foo",
+            "Foo",
+            "Foo Bar",
+            (0, 1).into(),
+            (100, 1).into(),
+            (1, 1).into(),
+            glib::ParamFlags::READWRITE,
+        );
     }
 }

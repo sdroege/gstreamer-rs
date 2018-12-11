@@ -334,6 +334,7 @@ pub mod prelude {
     pub use gobject::GObjectExtManualGst;
     pub use object::GstObjectExtManual;
     pub use pad::PadExtManual;
+    pub use param_spec::GstParamSpecExt;
     pub use tag_setter::TagSetterExtManual;
     pub use value::GstValueExt;
 
