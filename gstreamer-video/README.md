@@ -6,7 +6,7 @@
 Documentation can be found [here](https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_video/).
 
 These bindings are providing a safe API that can be used to interface with
-GStreamer, e.g. for writing GStreamer-based applications.
+GStreamer, e.g. for writing GStreamer-based applications and GStreamer plugins.
 
 For background and motivation, see the [announcement blogpost](https://coaxion.net/blog/2017/07/writing-gstreamer-applications-in-rust/).
 
@@ -15,8 +15,6 @@ based on the [GObject-Introspection](https://wiki.gnome.org/Projects/GObjectIntr
 API metadata provided by the GStreamer project. Older versions before 0.8.0 were manually
 written and the repository can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
 The API of the two is incompatible.
-
-A crate for writing GStreamer plugins in Rust can be found here: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -171,6 +169,10 @@ Some further examples for various aspects of GStreamer and how to use it from
 Rust can be found in the
 [examples](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/tree/master/examples)
 directory.
+
+Various GStreamer plugins written in Rust can be found in the
+[gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
+repository.
 
 <a name="license"/>
 
