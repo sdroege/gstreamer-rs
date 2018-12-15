@@ -303,3 +303,31 @@ impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
     }
 }
 
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+bitflags! {
+    pub struct VideoTimeCodeFlags: u32 {
+        const NONE = 0;
+        const DROP_FRAME = 1;
+        const INTERLACED = 2;
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for VideoTimeCodeFlags {
+    type GlibType = ffi::GstVideoTimeCodeFlags;
+
+    fn to_glib(&self) -> ffi::GstVideoTimeCodeFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
+    fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
+        skip_assert_initialized!();
+        VideoTimeCodeFlags::from_bits_truncate(value)
+    }
+}
+

@@ -62,6 +62,14 @@ mod video_overlay_composition;
 pub use video_overlay_composition::*;
 mod video_meta;
 pub use video_meta::*;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+mod video_time_code;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+pub use video_time_code::{ValidVideoTimeCode, VideoTimeCode};
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+mod video_time_code_interval;
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+pub use video_time_code_interval::VideoTimeCodeInterval;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

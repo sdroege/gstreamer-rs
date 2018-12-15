@@ -28,6 +28,8 @@ pub use self::flags::VideoFormatFlags;
 pub use self::flags::VideoFrameFlags;
 pub use self::flags::VideoMultiviewFlags;
 pub use self::flags::VideoOverlayFormatFlags;
+#[cfg(any(feature = "v1_10", feature = "dox"))]
+pub use self::flags::VideoTimeCodeFlags;
 
 #[doc(hidden)]
 pub mod traits {

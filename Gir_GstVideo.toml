@@ -34,9 +34,11 @@ generate = [
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoFilter",
     "GstVideo.VideoOverlayFormatFlags",
+    "GstVideo.VideoTimeCodeFlags",
 ]
 
 manual = [
+    "GLib.DateTime",
     "GObject.Object",
     "Gst.Object",
     "Gst.Element",
@@ -46,6 +48,8 @@ manual = [
     "GstVideo.VideoColorimetry",
     "GstVideo.VideoColorRange",
     "GstVideo.VideoFrame",
+    "GstVideo.VideoTimeCode",
+    "GstVideo.VideoTimeCodeInterval",
 ]
 
 [[object]]
