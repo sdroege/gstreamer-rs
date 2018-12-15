@@ -65,7 +65,7 @@ pub use video_meta::*;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 mod video_time_code;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-pub use video_time_code::{ValidVideoTimeCode, VideoTimeCode};
+pub use video_time_code::{ValidVideoTimeCode, VideoTimeCode, VideoTimeCodeMeta};
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 mod video_time_code_interval;
 #[cfg(any(feature = "v1_12", feature = "dox"))]

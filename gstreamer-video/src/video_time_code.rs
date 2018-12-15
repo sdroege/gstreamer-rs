@@ -490,3 +490,53 @@ impl From<ValidVideoTimeCode> for VideoTimeCode {
         VideoTimeCode(v.0)
     }
 }
+
+#[repr(C)]
+pub struct VideoTimeCodeMeta(ffi::GstVideoTimeCodeMeta);
+
+impl VideoTimeCodeMeta {
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        tc: &ValidVideoTimeCode,
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        unsafe {
+            let meta = ffi::gst_buffer_add_video_time_code_meta(
+                buffer.as_mut_ptr(),
+                tc.to_glib_none().0 as *mut _,
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_tc(&self) -> ValidVideoTimeCode {
+        unsafe { ValidVideoTimeCode::from_glib_none(&self.0.tc as *const _) }
+    }
+
+    pub fn set_tc(&mut self, tc: ValidVideoTimeCode) {
+        #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        unsafe {
+            ffi::gst_video_time_code_clear(&mut self.0.tc);
+            self.0.tc = tc.0;
+            if !self.0.tc.config.latest_daily_jam.is_null() {
+                glib_ffi::g_date_time_ref(self.0.tc.config.latest_daily_jam);
+            }
+        }
+    }
+}
+
+unsafe impl MetaAPI for VideoTimeCodeMeta {
+    type GstType = ffi::GstVideoTimeCodeMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(ffi::gst_video_time_code_meta_api_get_type()) }
+    }
+}
+
+impl fmt::Debug for VideoTimeCodeMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoTimeCodeMeta")
+            .field("tc", &self.get_tc())
+            .finish()
+    }
+}
