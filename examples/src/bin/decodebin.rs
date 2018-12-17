@@ -33,6 +33,7 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
+#[macro_use]
 extern crate glib;
 
 use std::env;
