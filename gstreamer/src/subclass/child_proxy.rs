@@ -16,8 +16,6 @@ use glib::translate::*;
 
 use libc;
 
-use std::ptr;
-
 use ChildProxy;
 
 pub trait ChildProxyImpl: super::element::ElementImpl + Send + Sync + 'static {
@@ -44,6 +42,21 @@ pub trait ChildProxyImpl: super::element::ElementImpl + Send + Sync + 'static {
 
     fn child_added(&self, object: &ChildProxy, child: &glib::Object, name: &str);
     fn child_removed(&self, object: &ChildProxy, child: &glib::Object, name: &str);
+}
+
+unsafe impl<T: ObjectSubclass + ChildProxyImpl> IsImplementable<T> for ChildProxy {
+    unsafe extern "C" fn interface_init(
+        iface: glib_ffi::gpointer,
+        _iface_data: glib_ffi::gpointer,
+    ) {
+        let child_proxy_iface = &mut *(iface as *mut ffi::GstChildProxyInterface);
+
+        child_proxy_iface.get_child_by_name = Some(child_proxy_get_child_by_name::<T>);
+        child_proxy_iface.get_child_by_index = Some(child_proxy_get_child_by_index::<T>);
+        child_proxy_iface.get_children_count = Some(child_proxy_get_children_count::<T>);
+        child_proxy_iface.child_added = Some(child_proxy_child_added::<T>);
+        child_proxy_iface.child_removed = Some(child_proxy_child_removed::<T>);
+    }
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_name<T: ObjectSubclass>(
@@ -126,34 +139,4 @@ unsafe extern "C" fn child_proxy_child_removed<T: ObjectSubclass>(
         &from_glib_borrow(child),
         String::from_glib_none(name).as_str(),
     )
-}
-
-unsafe extern "C" fn child_proxy_init<T: ObjectSubclass>(
-    iface: glib_ffi::gpointer,
-    _iface_data: glib_ffi::gpointer,
-) where
-    T: ChildProxyImpl,
-{
-    let child_proxy_iface = &mut *(iface as *mut ffi::GstChildProxyInterface);
-
-    child_proxy_iface.get_child_by_name = Some(child_proxy_get_child_by_name::<T>);
-    child_proxy_iface.get_child_by_index = Some(child_proxy_get_child_by_index::<T>);
-    child_proxy_iface.get_children_count = Some(child_proxy_get_children_count::<T>);
-    child_proxy_iface.child_added = Some(child_proxy_child_added::<T>);
-    child_proxy_iface.child_removed = Some(child_proxy_child_removed::<T>);
-}
-
-pub fn register<T: ObjectSubclass + ChildProxyImpl>(type_: glib::subclass::InitializingType<T>) {
-    unsafe {
-        let iface_info = gobject_ffi::GInterfaceInfo {
-            interface_init: Some(child_proxy_init::<T>),
-            interface_finalize: None,
-            interface_data: ptr::null_mut(),
-        };
-        gobject_ffi::g_type_add_interface_static(
-            type_.to_glib(),
-            ffi::gst_child_proxy_get_type(),
-            &iface_info,
-        );
-    }
 }
