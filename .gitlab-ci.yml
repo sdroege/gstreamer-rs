@@ -95,3 +95,31 @@ test nightly:
   image: "rustlang/rust:nightly-slim"
   allow_failure: true
   <<: *cargo_test
+
+.cargo_cross_check_template: &cargo_cross_check
+  # Stable img
+  # https://hub.docker.com/_/rust/
+  image: "rust:slim"
+  stage: "test"
+  variables:
+    PKG_CONFIG: "true"
+    PKG_CONFIG_ALLOW_CROSS: "1"
+
+  before_script:
+    - rustup target add $CROSS_TARGET_TRIPLET
+    - rustc --version
+    - cargo --version
+
+  script:
+    - cargo check --target $CROSS_TARGET_TRIPLET --all --color=always
+    - cargo check --target $CROSS_TARGET_TRIPLET --all --all-features --color=always
+
+test stable-armv7-unknown-linux-gnueabihf:
+  extends: .cargo_cross_check_template
+  variables:
+      CROSS_TARGET_TRIPLET: "armv7-unknown-linux-gnueabihf"
+
+test stable-x86_64-pc-windows-gnu:
+  extends: .cargo_cross_check_template
+  variables:
+      CROSS_TARGET_TRIPLET: "x86_64-pc-windows-gnu"
