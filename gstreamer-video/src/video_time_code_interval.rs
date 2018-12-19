@@ -13,7 +13,6 @@ use glib::translate::*;
 use glib::value;
 use glib_ffi;
 use gobject_ffi;
-use gst;
 use std::cmp;
 use std::fmt;
 use std::mem;
