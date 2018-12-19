@@ -14,9 +14,6 @@ gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 byte-slice-cast = "0.2"
 failure = "0.1.0"
-# Newer versions do not compile with rustc 1.28 so pin it for the time being
-# This dependency comes from backtrace, which comes from failure
-rustc-demangle = "0.1.10"
 
 [features]
 tutorial5 = ["gtk", "gdk"]
