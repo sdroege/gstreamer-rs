@@ -18,6 +18,7 @@ use serde::ser::{Serialize, SerializeTuple, Serializer};
 
 use std::{fmt, mem};
 
+use Buffer;
 use DateTime;
 use Sample;
 
@@ -41,6 +42,7 @@ lazy_static! {
     pub(crate) static ref INT_RANGE_I64_OTHER_TYPE_ID: usize = get_other_type_id::<IntRange<i64>>();
     pub(crate) static ref LIST_OTHER_TYPE_ID: usize = get_other_type_id::<List>();
     pub(crate) static ref SAMPLE_OTHER_TYPE_ID: usize = get_other_type_id::<Sample>();
+    pub(crate) static ref BUFFER_OTHER_TYPE_ID: usize = get_other_type_id::<Buffer>();
 }
 
 impl<'a> Serialize for Fraction {
@@ -94,6 +96,8 @@ macro_rules! ser_value (
                     ser_value!($value, List, $ser_closure)
                 } else if *SAMPLE_OTHER_TYPE_ID == type_id {
                     ser_value!($value, Sample, $ser_closure)
+                } else if *BUFFER_OTHER_TYPE_ID == type_id {
+                    ser_value!($value, Buffer, $ser_closure)
                 } else {
                     Err(
                         ser::Error::custom(
@@ -208,6 +212,7 @@ macro_rules! de_send_value(
             "IntRange<i32>" => de_send_value!($type_name, $seq, IntRange<i32>),
             "IntRange<i64>" => de_send_value!($type_name, $seq, IntRange<i64>),
             "Sample" => de_send_value!($type_name, $seq, Sample),
+            "Buffer" => de_send_value!($type_name, $seq, Buffer),
             _ => return Err(
                 de::Error::custom(
                     format!(

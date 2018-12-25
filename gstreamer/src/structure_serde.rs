@@ -16,6 +16,7 @@ use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
 
 use std::fmt;
 
+use Buffer;
 use DateTime;
 use Sample;
 
