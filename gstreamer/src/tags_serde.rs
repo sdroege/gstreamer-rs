@@ -270,7 +270,7 @@ mod tests {
             tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
 
             let sample = {
-                let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+                let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
                 {
                     let buffer = buffer.get_mut().unwrap();
                     buffer.set_offset(0);
@@ -452,7 +452,7 @@ mod tests {
             tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
 
             let sample = {
-                let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+                let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
                 {
                     let buffer = buffer.get_mut().unwrap();
                     buffer.set_offset(0);

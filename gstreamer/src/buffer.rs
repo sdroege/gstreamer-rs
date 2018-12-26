@@ -72,7 +72,7 @@ impl Buffer {
         drop(slice);
     }
 
-    pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Option<Self> {
+    pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -94,7 +94,7 @@ impl Buffer {
         }
     }
 
-    pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Option<Self> {
+    pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -684,7 +684,7 @@ mod tests {
     fn test_writability() {
         ::init().unwrap();
 
-        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());

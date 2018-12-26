@@ -57,7 +57,7 @@ struct BufferDe {
 
 impl From<BufferDe> for Buffer {
     fn from(buf_de: BufferDe) -> Self {
-        let mut buffer = Buffer::from_mut_slice(buf_de.buffer.to_vec()).unwrap();
+        let mut buffer = Buffer::from_mut_slice(buf_de.buffer.to_vec());
         {
             let buffer = buffer.get_mut().unwrap();
             buffer.set_pts(buf_de.pts);
@@ -90,7 +90,7 @@ mod tests {
     fn test_serialize() {
         ::init().unwrap();
 
-        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
             let buffer = buffer.get_mut().unwrap();
             buffer.set_pts(1.into());
@@ -230,7 +230,7 @@ mod tests {
     fn test_serde_roundtrip() {
         ::init().unwrap();
 
-        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+        let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
         {
             let buffer = buffer.get_mut().unwrap();
             buffer.set_pts(1.into());

@@ -93,7 +93,7 @@ mod tests {
         pretty_config.new_line = "".to_string();
 
         let sample = {
-            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(1.into());
@@ -179,7 +179,7 @@ mod tests {
         );
 
         let sample = {
-            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(1.into());
@@ -323,7 +323,7 @@ mod tests {
 
         // Segment present
         let sample = {
-            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(1.into());

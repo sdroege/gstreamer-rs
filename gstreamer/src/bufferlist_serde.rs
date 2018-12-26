@@ -80,7 +80,7 @@ mod tests {
         {
             let buffer_list = buffer_list.get_mut().unwrap();
 
-            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(1.into());
@@ -90,7 +90,7 @@ mod tests {
             }
             buffer_list.add(buffer);
 
-            let mut buffer = Buffer::from_slice(vec![5, 6]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![5, 6]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(5.into());
@@ -196,7 +196,7 @@ mod tests {
         {
             let buffer_list = buffer_list.get_mut().unwrap();
 
-            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![1, 2, 3, 4]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(1.into());
@@ -206,7 +206,7 @@ mod tests {
             }
             buffer_list.add(buffer);
 
-            let mut buffer = Buffer::from_slice(vec![5, 6]).unwrap();
+            let mut buffer = Buffer::from_slice(vec![5, 6]);
             {
                 let buffer = buffer.get_mut().unwrap();
                 buffer.set_pts(5.into());
