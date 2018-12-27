@@ -121,7 +121,7 @@ fn tutorial_main() {
     // Wait until error, EOS or State Change
     let bus = pipeline.get_bus().unwrap();
 
-    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         match msg.view() {
             MessageView::Error(err) => {
                 println!(

@@ -140,6 +140,27 @@ impl Bus {
     pub fn unset_sync_handler(&self) {
         unsafe { ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None) }
     }
+
+    pub fn iter(&self) -> Iter {
+        self.iter_timed(0.into())
+    }
+
+    pub fn iter_timed(&self, timeout: ::ClockTime) -> Iter {
+        Iter { bus: self, timeout }
+    }
+}
+
+pub struct Iter<'a> {
+    bus: &'a Bus,
+    timeout: ::ClockTime,
+}
+
+impl<'a> Iterator for Iter<'a> {
+    type Item = Message;
+
+    fn next(&mut self) -> Option<Message> {
+        self.bus.timed_pop(self.timeout)
+    }
 }
 
 #[cfg(any(feature = "futures", feature = "dox"))]

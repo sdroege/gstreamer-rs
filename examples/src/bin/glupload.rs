@@ -502,7 +502,7 @@ impl App {
     fn gst_loop(bus: gst::Bus) -> Result<(), Error> {
         use gst::MessageView;
 
-        while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+        for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
             match msg.view() {
                 MessageView::Eos(..) => break,
                 MessageView::Error(err) => {

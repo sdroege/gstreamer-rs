@@ -253,7 +253,7 @@ fn example_main() -> Result<(), Error> {
     // In the callback ("pad-added" on the decodebin), we sent better error information
     // using a bus message. This is the position where we get those messages and log
     // the contained information.
-    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
         match msg.view() {

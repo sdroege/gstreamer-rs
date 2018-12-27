@@ -90,7 +90,7 @@ fn example_main() {
     // functionality like timeouts or GLib socket notifications, so this is sufficient.
     // The bus is manually operated by repeatedly calling timed_pop on the bus with
     // the desired timeout for when to stop waiting for new messages. (None = Wait forever)
-    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
         match msg.view() {

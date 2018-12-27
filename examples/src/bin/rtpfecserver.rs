@@ -180,7 +180,7 @@ fn example_main() -> Result<(), Error> {
     let ret = pipeline.set_state(gst::State::Playing);
     assert_ne!(ret, gst::StateChangeReturn::Failure);
 
-    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
         match msg.view() {

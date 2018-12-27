@@ -165,7 +165,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         .get_bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
-    while let Some(msg) = bus.timed_pop(gst::CLOCK_TIME_NONE) {
+    for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
 
         match msg.view() {
