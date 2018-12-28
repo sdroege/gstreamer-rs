@@ -58,7 +58,7 @@ impl_tag!(
     TAG_ARTIST_SORTNAME,
     GST_TAG_ARTIST_SORTNAME
 );
-impl_tag!(Album, &'a str, TAG_ALBUM, GST_TAG_ARTIST_SORTNAME);
+impl_tag!(Album, &'a str, TAG_ALBUM, GST_TAG_ALBUM);
 impl_tag!(
     AlbumSortname,
     &'a str,
