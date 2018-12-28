@@ -19,6 +19,7 @@ use std::cmp;
 use std::fmt;
 use std::mem;
 use std::ptr;
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 use std::str;
 
 use VideoTimeCodeFlags;
@@ -453,6 +454,7 @@ macro_rules! generic_impl {
 generic_impl!(VideoTimeCode);
 generic_impl!(ValidVideoTimeCode);
 
+#[cfg(any(feature = "v1_12", feature = "dox"))]
 impl str::FromStr for VideoTimeCode {
     type Err = ();
 
