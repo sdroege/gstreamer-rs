@@ -25,6 +25,7 @@ manual = [
     "Gst.Clock",
     "Gst.ClockTimeDiff",
     "Gst.ClockType",
+    "GstCheck.Harness",
 ]
 
 [[object]]
