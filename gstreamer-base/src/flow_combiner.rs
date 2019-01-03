@@ -13,6 +13,7 @@ use gobject_ffi;
 use gst;
 
 glib_wrapper! {
+    #[derive(Debug)]
     pub struct FlowCombiner(Shared<ffi::GstFlowCombiner>);
 
     match fn {
@@ -81,6 +82,52 @@ impl FlowCombiner {
 }
 
 impl Default for FlowCombiner {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[derive(Debug)]
+pub struct UniqueFlowCombiner(FlowCombiner);
+
+unsafe impl Sync for UniqueFlowCombiner {}
+unsafe impl Send for UniqueFlowCombiner {}
+
+impl UniqueFlowCombiner {
+    pub fn new() -> UniqueFlowCombiner {
+        UniqueFlowCombiner(FlowCombiner::new())
+    }
+
+    pub fn add_pad<P: IsA<gst::Pad>>(&mut self, pad: &P) {
+        self.0.add_pad(pad);
+    }
+
+    pub fn clear(&self) {
+        self.0.clear();
+    }
+
+    pub fn remove_pad<P: IsA<gst::Pad>>(&mut self, pad: &P) {
+        self.0.remove_pad(pad);
+    }
+
+    pub fn reset(&mut self) {
+        self.0.reset();
+    }
+
+    pub fn update_flow(&mut self, fret: gst::FlowReturn) -> gst::FlowReturn {
+        self.0.update_flow(fret)
+    }
+
+    pub fn update_pad_flow<P: IsA<gst::Pad>>(
+        &mut self,
+        pad: &P,
+        fret: gst::FlowReturn,
+    ) -> gst::FlowReturn {
+        self.0.update_pad_flow(pad, fret)
+    }
+}
+
+impl Default for UniqueFlowCombiner {
     fn default() -> Self {
         Self::new()
     }
