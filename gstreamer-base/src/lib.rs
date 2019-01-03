@@ -41,6 +41,7 @@ pub mod functions;
 pub use functions::*;
 
 mod adapter;
+pub use adapter::*;
 mod flow_combiner;
 pub use flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
