@@ -99,7 +99,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
 
     fn remove(&self, sess: &RTSPSession) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_session_pool_remove(self.to_glib_none().0, sess.to_glib_none().0), "Failed to remove session from pool")
+            glib_result_from_gboolean!(ffi::gst_rtsp_session_pool_remove(self.to_glib_none().0, sess.to_glib_none().0), "Failed to remove session from pool")
         }
     }
 

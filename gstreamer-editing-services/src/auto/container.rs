@@ -61,13 +61,13 @@ pub trait GESContainerExt: 'static {
 impl<O: IsA<Container>> GESContainerExt for O {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_container_add(self.to_glib_none().0, child.to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(ffi::ges_container_add(self.to_glib_none().0, child.to_glib_none().0), "Failed to add element")
         }
     }
 
     fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_container_edit(self.to_glib_none().0, layers.to_glib_none().0, new_layer_priority, mode.to_glib(), edge.to_glib(), position), "Failed to edit container")
+            glib_result_from_gboolean!(ffi::ges_container_edit(self.to_glib_none().0, layers.to_glib_none().0, new_layer_priority, mode.to_glib(), edge.to_glib(), position), "Failed to edit container")
         }
     }
 
@@ -79,7 +79,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
 
     fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_container_remove(self.to_glib_none().0, child.to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(ffi::ges_container_remove(self.to_glib_none().0, child.to_glib_none().0), "Failed to remove element")
         }
     }
 

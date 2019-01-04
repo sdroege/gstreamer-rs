@@ -44,7 +44,7 @@ impl Discoverer {
 
     pub fn discover_uri_async(&self, uri: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_discoverer_discover_uri_async(self.to_glib_none().0, uri.to_glib_none().0), "Failed to add URI to list of discovers")
+            glib_result_from_gboolean!(ffi::gst_discoverer_discover_uri_async(self.to_glib_none().0, uri.to_glib_none().0), "Failed to add URI to list of discovers")
         }
     }
 

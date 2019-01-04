@@ -27,13 +27,13 @@ glib_wrapper! {
 impl Registry {
     pub fn add_feature<P: IsA<PluginFeature>>(&self, feature: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_registry_add_feature(self.to_glib_none().0, feature.to_glib_none().0), "Failed to add feature")
+            glib_result_from_gboolean!(ffi::gst_registry_add_feature(self.to_glib_none().0, feature.to_glib_none().0), "Failed to add feature")
         }
     }
 
     pub fn add_plugin(&self, plugin: &Plugin) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.to_glib_none().0), "Failed to add plugin")
+            glib_result_from_gboolean!(ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.to_glib_none().0), "Failed to add plugin")
         }
     }
 

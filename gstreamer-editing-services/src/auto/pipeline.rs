@@ -157,13 +157,13 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_pipeline_set_mode(self.to_glib_none().0, mode.to_glib()), "Failed to set mode")
+            glib_result_from_gboolean!(ffi::ges_pipeline_set_mode(self.to_glib_none().0, mode.to_glib()), "Failed to set mode")
         }
     }
 
     fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_pipeline_set_render_settings(self.to_glib_none().0, output_uri.to_glib_none().0, profile.to_glib_none().0), "Failed to set render settings")
+            glib_result_from_gboolean!(ffi::ges_pipeline_set_render_settings(self.to_glib_none().0, output_uri.to_glib_none().0, profile.to_glib_none().0), "Failed to set render settings")
         }
     }
 

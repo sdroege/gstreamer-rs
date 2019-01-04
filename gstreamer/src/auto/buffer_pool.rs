@@ -53,7 +53,7 @@ impl<O: IsA<BufferPool>> BufferPoolExt for O {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_buffer_pool_set_active(self.to_glib_none().0, active.to_glib()), "Failed to activate buffer pool")
+            glib_result_from_gboolean!(ffi::gst_buffer_pool_set_active(self.to_glib_none().0, active.to_glib()), "Failed to activate buffer pool")
         }
     }
 

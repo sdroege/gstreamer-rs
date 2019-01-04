@@ -34,7 +34,7 @@ impl DeviceProvider {
         let plugin = plugin.into();
         let plugin = plugin.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_device_provider_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register device provider factory")
+            glib_result_from_gboolean!(ffi::gst_device_provider_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register device provider factory")
         }
     }
 }
@@ -121,7 +121,7 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_device_provider_start(self.to_glib_none().0), "Failed to start")
+            glib_result_from_gboolean!(ffi::gst_device_provider_start(self.to_glib_none().0), "Failed to start")
         }
     }
 

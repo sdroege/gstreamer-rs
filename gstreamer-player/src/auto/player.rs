@@ -175,7 +175,7 @@ impl Player {
 
     pub fn set_audio_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_player_set_audio_track(self.to_glib_none().0, stream_index), "Failed to set audio track")
+            glib_result_from_gboolean!(ffi::gst_player_set_audio_track(self.to_glib_none().0, stream_index), "Failed to set audio track")
         }
     }
 
@@ -223,7 +223,7 @@ impl Player {
 
     pub fn set_subtitle_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_player_set_subtitle_track(self.to_glib_none().0, stream_index), "Failed to set subtitle track")
+            glib_result_from_gboolean!(ffi::gst_player_set_subtitle_track(self.to_glib_none().0, stream_index), "Failed to set subtitle track")
         }
     }
 
@@ -247,7 +247,7 @@ impl Player {
 
     pub fn set_video_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_player_set_video_track(self.to_glib_none().0, stream_index), "Failed to set video track")
+            glib_result_from_gboolean!(ffi::gst_player_set_video_track(self.to_glib_none().0, stream_index), "Failed to set video track")
         }
     }
 
@@ -261,7 +261,7 @@ impl Player {
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_player_set_visualization(self.to_glib_none().0, name.0), "Failed to set visualization")
+            glib_result_from_gboolean!(ffi::gst_player_set_visualization(self.to_glib_none().0, name.0), "Failed to set visualization")
         }
     }
 

@@ -100,19 +100,19 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_transport_send_rtcp(self.to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtcp")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_transport_send_rtcp(self.to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtcp")
         }
     }
 
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_transport_send_rtp(self.to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtp")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_transport_send_rtp(self.to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtp")
         }
     }
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_transport_set_active(self.to_glib_none().0, active.to_glib()), "Failed to set active")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_transport_set_active(self.to_glib_none().0, active.to_glib()), "Failed to set active")
         }
     }
 

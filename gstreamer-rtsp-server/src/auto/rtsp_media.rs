@@ -507,7 +507,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn suspend(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_media_suspend(self.to_glib_none().0), "Failed to suspend media")
+            glib_result_from_gboolean!(ffi::gst_rtsp_media_suspend(self.to_glib_none().0), "Failed to suspend media")
         }
     }
 
@@ -519,13 +519,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn unprepare(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_media_unprepare(self.to_glib_none().0), "Failed to unprepare media")
+            glib_result_from_gboolean!(ffi::gst_rtsp_media_unprepare(self.to_glib_none().0), "Failed to unprepare media")
         }
     }
 
     fn unsuspend(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_media_unsuspend(self.to_glib_none().0), "Failed to unsuspend media")
+            glib_result_from_gboolean!(ffi::gst_rtsp_media_unsuspend(self.to_glib_none().0), "Failed to unsuspend media")
         }
     }
 

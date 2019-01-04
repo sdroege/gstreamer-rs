@@ -88,7 +88,7 @@ pub trait GESTrackExt: 'static {
 impl<O: IsA<Track>> GESTrackExt for O {
     fn add_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_track_add_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(ffi::ges_track_add_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to add element")
         }
     }
 
@@ -124,7 +124,7 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
     fn remove_element<P: IsA<TrackElement>>(&self, object: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::ges_track_remove_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(ffi::ges_track_remove_element(self.to_glib_none().0, object.to_glib_none().0), "Failed to remove element")
         }
     }
 

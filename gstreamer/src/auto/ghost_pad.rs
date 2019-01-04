@@ -62,7 +62,7 @@ impl<O: IsA<GhostPad>> GhostPadExt for O {
         let newtarget = newtarget.into();
         let newtarget = newtarget.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_ghost_pad_set_target(self.to_glib_none().0, newtarget.0), "Failed to set target")
+            glib_result_from_gboolean!(ffi::gst_ghost_pad_set_target(self.to_glib_none().0, newtarget.0), "Failed to set target")
         }
     }
 }

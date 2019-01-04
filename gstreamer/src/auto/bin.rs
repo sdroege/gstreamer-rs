@@ -113,7 +113,7 @@ pub trait GstBinExt: 'static {
 impl<O: IsA<Bin>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0), "Failed to add element")
         }
     }
 
@@ -178,13 +178,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_bin_recalculate_latency(self.to_glib_none().0), "Failed to recalculate latency")
+            glib_result_from_gboolean!(ffi::gst_bin_recalculate_latency(self.to_glib_none().0), "Failed to recalculate latency")
         }
     }
 
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_bin_remove(self.to_glib_none().0, element.to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(ffi::gst_bin_remove(self.to_glib_none().0, element.to_glib_none().0), "Failed to remove element")
         }
     }
 
@@ -201,7 +201,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_bin_sync_children_states(self.to_glib_none().0), "Failed to sync children states")
+            glib_result_from_gboolean!(ffi::gst_bin_sync_children_states(self.to_glib_none().0), "Failed to sync children states")
         }
     }
 

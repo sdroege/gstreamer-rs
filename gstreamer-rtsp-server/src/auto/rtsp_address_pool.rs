@@ -56,7 +56,7 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
 
     fn add_range(&self, min_address: &str, max_address: &str, min_port: u16, max_port: u16, ttl: u8) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_address_pool_add_range(self.to_glib_none().0, min_address.to_glib_none().0, max_address.to_glib_none().0, min_port, max_port, ttl), "Failed to add address range")
+            glib_result_from_gboolean!(ffi::gst_rtsp_address_pool_add_range(self.to_glib_none().0, min_address.to_glib_none().0, max_address.to_glib_none().0, min_port, max_port, ttl), "Failed to add address range")
         }
     }
 

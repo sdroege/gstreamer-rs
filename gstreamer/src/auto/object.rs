@@ -203,13 +203,13 @@ impl<O: IsA<Object>> GstObjectExt for O {
 
     fn set_name(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_object_set_name(self.to_glib_none().0, name.to_glib_none().0), "Failed to set object name")
+            glib_result_from_gboolean!(ffi::gst_object_set_name(self.to_glib_none().0, name.to_glib_none().0), "Failed to set object name")
         }
     }
 
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_object_set_parent(self.to_glib_none().0, parent.to_glib_none().0), "Failed to set parent object")
+            glib_result_from_gboolean!(ffi::gst_object_set_parent(self.to_glib_none().0, parent.to_glib_none().0), "Failed to set parent object")
         }
     }
 
@@ -221,7 +221,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
 
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_object_sync_values(self.to_glib_none().0, timestamp.to_glib()), "Failed to sync values")
+            glib_result_from_gboolean!(ffi::gst_object_sync_values(self.to_glib_none().0, timestamp.to_glib()), "Failed to sync values")
         }
     }
 

@@ -107,7 +107,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
 
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_device_monitor_start(self.to_glib_none().0), "Failed to start")
+            glib_result_from_gboolean!(ffi::gst_device_monitor_start(self.to_glib_none().0), "Failed to start")
         }
     }
 

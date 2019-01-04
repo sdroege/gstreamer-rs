@@ -58,7 +58,7 @@ impl Element {
         let plugin = plugin.into();
         let plugin = plugin.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register element factory")
+            glib_result_from_gboolean!(ffi::gst_element_register(plugin.0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register element factory")
         }
     }
 }
@@ -190,7 +190,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_add_pad(self.to_glib_none().0, pad.to_glib_none().0), "Failed to add pad")
+            glib_result_from_gboolean!(ffi::gst_element_add_pad(self.to_glib_none().0, pad.to_glib_none().0), "Failed to add pad")
         }
     }
 
@@ -329,7 +329,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn link<P: IsA<Element>>(&self, dest: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_link(self.to_glib_none().0, dest.to_glib_none().0), "Failed to link elements")
+            glib_result_from_gboolean!(ffi::gst_element_link(self.to_glib_none().0, dest.to_glib_none().0), "Failed to link elements")
         }
     }
 
@@ -337,7 +337,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let filter = filter.into();
         let filter = filter.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_link_filtered(self.to_glib_none().0, dest.to_glib_none().0, filter.0), "Failed to link elements")
+            glib_result_from_gboolean!(ffi::gst_element_link_filtered(self.to_glib_none().0, dest.to_glib_none().0, filter.0), "Failed to link elements")
         }
     }
 
@@ -351,7 +351,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let destpadname = destpadname.into();
         let destpadname = destpadname.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_link_pads(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0), "Failed to link pads")
+            glib_result_from_gboolean!(ffi::gst_element_link_pads(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0), "Failed to link pads")
         }
     }
 
@@ -363,7 +363,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let filter = filter.into();
         let filter = filter.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_link_pads_filtered(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0, filter.0), "Failed to link pads")
+            glib_result_from_gboolean!(ffi::gst_element_link_pads_filtered(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0, filter.0), "Failed to link pads")
         }
     }
 
@@ -373,7 +373,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let destpadname = destpadname.into();
         let destpadname = destpadname.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_link_pads_full(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0, flags.to_glib()), "Failed to link pads")
+            glib_result_from_gboolean!(ffi::gst_element_link_pads_full(self.to_glib_none().0, srcpadname.0, dest.to_glib_none().0, destpadname.0, flags.to_glib()), "Failed to link pads")
         }
     }
 
@@ -400,7 +400,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn post_message(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_post_message(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
+            glib_result_from_gboolean!(ffi::gst_element_post_message(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
         }
     }
 
@@ -418,7 +418,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_remove_pad(self.to_glib_none().0, pad.to_glib_none().0), "Failed to remove pad")
+            glib_result_from_gboolean!(ffi::gst_element_remove_pad(self.to_glib_none().0, pad.to_glib_none().0), "Failed to remove pad")
         }
     }
 
@@ -450,7 +450,7 @@ impl<O: IsA<Element>> ElementExt for O {
         let clock = clock.into();
         let clock = clock.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_set_clock(self.to_glib_none().0, clock.0), "Failed to set clock")
+            glib_result_from_gboolean!(ffi::gst_element_set_clock(self.to_glib_none().0, clock.0), "Failed to set clock")
         }
     }
 
@@ -480,7 +480,7 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_element_sync_state_with_parent(self.to_glib_none().0), "Failed to sync state with parent")
+            glib_result_from_gboolean!(ffi::gst_element_sync_state_with_parent(self.to_glib_none().0), "Failed to sync state with parent")
         }
     }
 

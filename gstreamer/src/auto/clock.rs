@@ -216,7 +216,7 @@ impl<O: IsA<Clock>> ClockExt for O {
         let master = master.into();
         let master = master.to_glib_none();
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_clock_set_master(self.to_glib_none().0, master.0), "Failed to set master clock")
+            glib_result_from_gboolean!(ffi::gst_clock_set_master(self.to_glib_none().0, master.0), "Failed to set master clock")
         }
     }
 
@@ -250,7 +250,7 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout.to_glib()), "Timed out waiting for sync")
+            glib_result_from_gboolean!(ffi::gst_clock_wait_for_sync(self.to_glib_none().0, timeout.to_glib()), "Timed out waiting for sync")
         }
     }
 

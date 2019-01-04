@@ -209,7 +209,7 @@ pub trait PadExt: 'static {
 impl<O: IsA<Pad>> PadExt for O {
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_pad_activate_mode(self.to_glib_none().0, mode.to_glib(), active.to_glib()), "Failed to activate mode pad")
+            glib_result_from_gboolean!(ffi::gst_pad_activate_mode(self.to_glib_none().0, mode.to_glib(), active.to_glib()), "Failed to activate mode pad")
         }
     }
 
@@ -386,7 +386,7 @@ impl<O: IsA<Pad>> PadExt for O {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_pad_link_maybe_ghosting(self.to_glib_none().0, sink.to_glib_none().0), "Failed to link pad, possibly ghosting")
+            glib_result_from_gboolean!(ffi::gst_pad_link_maybe_ghosting(self.to_glib_none().0, sink.to_glib_none().0), "Failed to link pad, possibly ghosting")
         }
     }
 
@@ -411,7 +411,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn pause_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_pad_pause_task(self.to_glib_none().0), "Failed to pause pad task")
+            glib_result_from_gboolean!(ffi::gst_pad_pause_task(self.to_glib_none().0), "Failed to pause pad task")
         }
     }
 
@@ -453,7 +453,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_pad_set_active(self.to_glib_none().0, active.to_glib()), "Failed to activate pad")
+            glib_result_from_gboolean!(ffi::gst_pad_set_active(self.to_glib_none().0, active.to_glib()), "Failed to activate pad")
         }
     }
 
@@ -513,7 +513,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn stop_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_pad_stop_task(self.to_glib_none().0), "Failed to stop pad task")
+            glib_result_from_gboolean!(ffi::gst_pad_stop_task(self.to_glib_none().0), "Failed to stop pad task")
         }
     }
 
@@ -525,7 +525,7 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn unlink<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_pad_unlink(self.to_glib_none().0, sinkpad.to_glib_none().0), "Failed to unlink pad")
+            glib_result_from_gboolean!(ffi::gst_pad_unlink(self.to_glib_none().0, sinkpad.to_glib_none().0), "Failed to unlink pad")
         }
     }
 

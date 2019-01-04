@@ -104,7 +104,7 @@ pub trait GLContextExt: 'static {
 impl<O: IsA<GLContext>> GLContextExt for O {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_gl_context_activate(self.to_glib_none().0, activate.to_glib()), "Failed to activate OpenGL context")
+            glib_result_from_gboolean!(ffi::gst_gl_context_activate(self.to_glib_none().0, activate.to_glib()), "Failed to activate OpenGL context")
         }
     }
 

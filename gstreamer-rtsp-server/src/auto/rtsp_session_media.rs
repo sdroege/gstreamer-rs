@@ -107,7 +107,7 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_session_media_set_state(self.to_glib_none().0, state.to_glib()), "Failed to set state of session media")
+            glib_result_from_gboolean!(ffi::gst_rtsp_session_media_set_state(self.to_glib_none().0, state.to_glib()), "Failed to set state of session media")
         }
     }
 

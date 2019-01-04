@@ -72,7 +72,7 @@ pub trait GLDisplayExt: 'static {
 impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     fn add_context(&self, context: &GLContext) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_gl_display_add_context(self.to_glib_none().0, context.to_glib_none().0), "Failed to add OpenGL context")
+            glib_result_from_gboolean!(ffi::gst_gl_display_add_context(self.to_glib_none().0, context.to_glib_none().0), "Failed to add OpenGL context")
         }
     }
 
@@ -117,7 +117,7 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
     fn remove_window(&self, window: &GLWindow) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_gl_display_remove_window(self.to_glib_none().0, window.to_glib_none().0), "Failed to remove window")
+            glib_result_from_gboolean!(ffi::gst_gl_display_remove_window(self.to_glib_none().0, window.to_glib_none().0), "Failed to remove window")
         }
     }
 

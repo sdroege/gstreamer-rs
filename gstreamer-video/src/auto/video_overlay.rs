@@ -67,7 +67,7 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
 
     fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_video_overlay_set_render_rectangle(self.to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
+            glib_result_from_gboolean!(ffi::gst_video_overlay_set_render_rectangle(self.to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
         }
     }
 

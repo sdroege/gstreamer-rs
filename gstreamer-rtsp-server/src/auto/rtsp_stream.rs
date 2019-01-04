@@ -186,7 +186,7 @@ pub trait RTSPStreamExt: 'static {
 impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     fn add_transport(&self, trans: &RTSPStreamTransport) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_add_transport(self.to_glib_none().0, trans.to_glib_none().0), "Failed to add transport")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_add_transport(self.to_glib_none().0, trans.to_glib_none().0), "Failed to add transport")
         }
     }
 
@@ -415,13 +415,13 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     fn join_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(&self, bin: &P, rtpbin: &Q, state: gst::State) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_join_bin(self.to_glib_none().0, bin.to_glib_none().0, rtpbin.to_glib_none().0, state.to_glib()), "Failed to join bin")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_join_bin(self.to_glib_none().0, bin.to_glib_none().0, rtpbin.to_glib_none().0, state.to_glib()), "Failed to join bin")
         }
     }
 
     fn leave_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(&self, bin: &P, rtpbin: &Q) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_leave_bin(self.to_glib_none().0, bin.to_glib_none().0, rtpbin.to_glib_none().0), "Failed to leave bin")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_leave_bin(self.to_glib_none().0, bin.to_glib_none().0, rtpbin.to_glib_none().0), "Failed to leave bin")
         }
     }
 
@@ -439,7 +439,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     fn remove_transport(&self, trans: &RTSPStreamTransport) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(ffi::gst_rtsp_stream_remove_transport(self.to_glib_none().0, trans.to_glib_none().0), "Failed to remove transport")
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_remove_transport(self.to_glib_none().0, trans.to_glib_none().0), "Failed to remove transport")
         }
     }
 
