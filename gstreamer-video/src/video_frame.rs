@@ -56,7 +56,7 @@ impl<T> VideoFrame<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib::BoolError("Failed to copy video frame"))
+                Err(glib_bool_error!("Failed to copy video frame"))
             }
         }
     }
@@ -73,7 +73,7 @@ impl<T> VideoFrame<T> {
             if res {
                 Ok(())
             } else {
-                Err(glib::BoolError("Failed to copy video frame plane"))
+                Err(glib_bool_error!("Failed to copy video frame plane"))
             }
         }
     }
@@ -425,7 +425,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             if res {
                 Ok(())
             } else {
-                Err(glib::BoolError("Failed to copy video frame"))
+                Err(glib_bool_error!("Failed to copy video frame"))
             }
         }
     }
@@ -442,7 +442,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             if res {
                 Ok(())
             } else {
-                Err(glib::BoolError("Failed to copy video frame plane"))
+                Err(glib_bool_error!("Failed to copy video frame plane"))
             }
         }
     }

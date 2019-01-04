@@ -48,7 +48,7 @@ impl Element {
                     e2.to_glib_none().0,
                 ));
                 if !ret {
-                    return Err(glib::BoolError("Failed to link elements"));
+                    return Err(glib_bool_error!("Failed to link elements"));
                 }
             }
         }
@@ -528,7 +528,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         assert_eq!(stop.get_format(), start.get_format());
 
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_element_seek(
                     self.to_glib_none().0,
                     rate,
@@ -551,7 +551,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) -> Result<(), glib::error::BoolError> {
         let seek_pos = seek_pos.into();
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_element_seek_simple(
                     self.to_glib_none().0,
                     seek_pos.get_format().to_glib(),

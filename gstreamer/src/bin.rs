@@ -46,7 +46,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
                 let ret: bool =
                     from_glib(ffi::gst_bin_add(self.to_glib_none().0, e.to_glib_none().0));
                 if !ret {
-                    return Err(glib::BoolError("Failed to add elements"));
+                    return Err(glib_bool_error!("Failed to add elements"));
                 }
             }
         }
@@ -62,7 +62,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
                     e.to_glib_none().0,
                 ));
                 if !ret {
-                    return Err(glib::BoolError("Failed to add elements"));
+                    return Err(glib_bool_error!("Failed to add elements"));
                 }
             }
         }

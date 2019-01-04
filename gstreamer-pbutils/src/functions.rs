@@ -28,7 +28,7 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     assert_initialized_main_thread!();
     let codec_tag = T::tag_name();
     unsafe {
-        glib::BoolError::from_glib(
+        glib_result_from_gboolean!(
             ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 codec_tag.to_glib_none().0,
@@ -45,7 +45,7 @@ pub fn pb_utils_add_codec_description_to_tag_list(
 ) -> Result<(), glib::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        glib::BoolError::from_glib(
+        glib_result_from_gboolean!(
             ffi::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 ptr::null_mut(),

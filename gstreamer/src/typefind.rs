@@ -70,7 +70,7 @@ impl<'a> TypeFind<'a> {
                 Some(type_find_closure_drop),
             );
 
-            glib::error::BoolError::from_glib(res, "Failed to register typefind factory")
+            glib_result_from_gboolean!(res, "Failed to register typefind factory")
         }
     }
 

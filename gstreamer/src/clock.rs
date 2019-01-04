@@ -206,7 +206,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             if res {
                 Ok(())
             } else {
-                Err(glib::BoolError("Failed to reinit periodic clock id"))
+                Err(glib_bool_error!("Failed to reinit periodic clock id"))
             }
         }
     }
@@ -230,7 +230,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             if res {
                 Ok(())
             } else {
-                Err(glib::BoolError("Failed to reinit single shot clock id"))
+                Err(glib_bool_error!("Failed to reinit single shot clock id"))
             }
         }
     }

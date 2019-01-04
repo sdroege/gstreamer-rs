@@ -213,7 +213,7 @@ impl EncodingContainerProfile {
         profile: &P,
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_encoding_container_profile_add_profile(
                     self.to_glib_none().0,
                     profile.to_glib_full(),

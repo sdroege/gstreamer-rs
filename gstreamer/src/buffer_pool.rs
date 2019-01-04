@@ -248,7 +248,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_buffer_pool_set_config(self.to_glib_none().0, config.0.into_ptr()),
                 "Failed to set config",
             )

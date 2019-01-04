@@ -180,7 +180,7 @@ impl Harness {
 
     pub fn crank_multiple_clock_waits(&mut self, waits: u32) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_harness_crank_multiple_clock_waits(self.0.as_ptr(), waits),
                 "Failed to crank multiple clock waits",
             )
@@ -189,7 +189,7 @@ impl Harness {
 
     pub fn crank_single_clock_wait(&mut self) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_harness_crank_single_clock_wait(self.0.as_ptr()),
                 "Failed to crank single clock wait",
             )
@@ -378,7 +378,7 @@ impl Harness {
 
     pub fn set_time(&mut self, time: gst::ClockTime) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_harness_set_time(self.0.as_ptr(), time.to_glib()),
                 "Failed to set time",
             )
@@ -502,7 +502,7 @@ impl Harness {
         timeout: u32,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_harness_wait_for_clock_id_waits(self.0.as_ptr(), waits, timeout),
                 "Failed to wait for clock id waits",
             )

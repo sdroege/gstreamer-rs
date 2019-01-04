@@ -35,14 +35,14 @@ pub use glib::{
 
 pub fn init() -> Result<(), BoolError> {
     if gst::init().is_err() {
-        return Err(BoolError("Could not initialize GStreamer."));
+        return Err(glib_bool_error!("Could not initialize GStreamer."));
     }
 
     unsafe {
         if from_glib(ffi::ges_init()) {
             Ok(())
         } else {
-            Err(BoolError("Could not initialize GES."))
+            Err(glib_bool_error!("Could not initialize GES."))
         }
     }
 }

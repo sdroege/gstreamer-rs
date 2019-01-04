@@ -44,7 +44,7 @@ impl Player {
 
     pub fn set_config(&self, config: ::PlayerConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_player_set_config(self.to_glib_none().0, config.into_ptr()),
                 "Failed to set config",
             )

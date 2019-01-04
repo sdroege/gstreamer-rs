@@ -50,7 +50,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
                 ptr::null_mut(),
             ));
             if !found {
-                return Err(glib::BoolError("Child property not found"));
+                return Err(glib_bool_error!("Child property not found"));
             }
 
             let value = value.to_value();

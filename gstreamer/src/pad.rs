@@ -627,7 +627,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::error::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_pad_start_task(
                     self.to_glib_none().0,
                     Some(trampoline_pad_task),

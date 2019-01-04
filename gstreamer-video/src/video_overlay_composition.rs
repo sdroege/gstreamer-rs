@@ -235,7 +235,7 @@ impl VideoOverlayCompositionRef {
         frame: &mut ::VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            glib::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_video_overlay_composition_blend(self.as_mut_ptr(), frame.as_mut_ptr()),
                 "Failed to blend overlay composition",
             )

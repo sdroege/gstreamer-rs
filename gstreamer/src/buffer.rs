@@ -226,7 +226,7 @@ impl BufferRef {
     ) -> Result<(), glib::BoolError> {
         let size_real = size.unwrap_or(usize::MAX);
         unsafe {
-            glib::BoolError::from_glib(
+            glib_result_from_gboolean!(
                 ffi::gst_buffer_copy_into(
                     dest.as_mut_ptr(),
                     self.as_mut_ptr(),
