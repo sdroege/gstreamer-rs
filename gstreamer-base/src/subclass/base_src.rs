@@ -45,7 +45,7 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
         _offset: u64,
         _length: u32,
         _buffer: &mut gst::BufferRef,
-    ) -> gst::FlowReturn {
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unimplemented!()
     }
 
@@ -325,7 +325,7 @@ where
     let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.fill(&wrap, offset, length, buffer)
+        imp.fill(&wrap, offset, length, buffer).into()
     })
     .to_glib()
 }

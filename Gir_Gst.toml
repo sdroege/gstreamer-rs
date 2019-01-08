@@ -387,6 +387,26 @@ status = "generate"
         bool_return_is_error = "Failed to sync state with parent"
 
     [[object.function]]
+    name = "change_state"
+    # Use Result<StateChangeSuccess, StateChangeError>
+    ignore = true
+
+    [[object.function]]
+    name = "continue_state"
+    # Use Result<StateChangeSuccess, StateChangeError>
+    ignore = true
+
+    [[object.function]]
+    name = "get_state"
+    # Use Result<StateChangeSuccess, StateChangeError>
+    ignore = true
+
+    [[object.function]]
+    name = "set_state"
+    # Use Result<StateChangeSuccess, StateChangeError>
+    ignore = true
+
+    [[object.function]]
     name = "query"
     # correct mutability
     ignore = true
@@ -646,6 +666,11 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "get_last_flow_return"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
     name = "query"
     # Correct mutability
     ignore = true
@@ -683,6 +708,21 @@ status = "generate"
     [[object.function]]
     name = "send_event"
     # Pass by value
+    ignore = true
+
+    [[object.function]]
+    name = "link"
+    # Use Result<PadLinkSuccess, PadLinkError>
+    ignore = true
+
+    [[object.function]]
+    name = "link_full"
+    # Use Result<PadLinkSuccess, PadLinkError>
+    ignore = true
+
+    [[object.function]]
+    name = "store_sticky_event"
+    # Use Result<FlowSuccess, FlowError>
     ignore = true
 
     [[object.function]]

@@ -57,6 +57,8 @@ mod rtsp_context;
 mod rtsp_media_factory;
 mod rtsp_server;
 mod rtsp_session_pool;
+mod rtsp_stream;
+mod rtsp_stream_transport;
 mod rtsp_token;
 
 pub use rtsp_address_pool::RTSPAddressPoolExtManual;
@@ -141,4 +143,6 @@ pub mod prelude {
     pub use rtsp_media_factory::RTSPMediaFactoryExtManual;
     pub use rtsp_server::RTSPServerExtManual;
     pub use rtsp_session_pool::RTSPSessionPoolExtManual;
+    pub use rtsp_stream::RTSPStreamExtManual;
+    pub use rtsp_stream_transport::RTSPStreamTransportExtManual;
 }

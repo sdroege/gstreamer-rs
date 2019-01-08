@@ -94,7 +94,7 @@ fn example_main() -> Result<(), Error> {
 
     let bus = pipeline.get_bus().unwrap();
 
-    pipeline.set_state(gst::State::Playing).into_result()?;
+    pipeline.set_state(gst::State::Playing)?;
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -118,7 +118,7 @@ fn example_main() -> Result<(), Error> {
         }
     }
 
-    pipeline.set_state(gst::State::Null).into_result()?;
+    pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }

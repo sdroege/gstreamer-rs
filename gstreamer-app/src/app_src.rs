@@ -147,23 +147,44 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 }
 
 impl AppSrc {
-    pub fn push_buffer(&self, buffer: gst::Buffer) -> gst::FlowReturn {
-        unsafe {
+    pub fn end_of_stream(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn =
+            unsafe { from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0)) };
+        ret.into_result()
+    }
+
+    pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_app_src_push_buffer(
                 self.to_glib_none().0,
                 buffer.into_ptr(),
             ))
-        }
+        };
+        ret.into_result()
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn push_buffer_list(&self, list: gst::BufferList) -> gst::FlowReturn {
-        unsafe {
+    pub fn push_buffer_list(
+        &self,
+        list: gst::BufferList,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_app_src_push_buffer_list(
                 self.to_glib_none().0,
                 list.into_ptr(),
             ))
-        }
+        };
+        ret.into_result()
+    }
+
+    pub fn push_sample(&self, sample: &gst::Sample) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(ffi::gst_app_src_push_sample(
+                self.to_glib_none().0,
+                sample.to_glib_none().0,
+            ))
+        };
+        ret.into_result()
     }
 
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {

@@ -14,8 +14,9 @@ fn tutorial_main() {
     let pipeline = gst::parse_launch(&format!("playbin uri={}", uri)).unwrap();
 
     // Start playing
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     // Wait until error or EOS
     let bus = pipeline.get_bus().unwrap();
@@ -38,8 +39,9 @@ fn tutorial_main() {
     }
 
     // Shutdown pipeline
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 }
 
 fn main() {

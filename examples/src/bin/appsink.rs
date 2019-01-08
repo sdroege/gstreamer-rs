@@ -87,22 +87,16 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             // Add a handler to the "new-sample" signal.
             .new_sample(|appsink| {
                 // Pull the sample in question out of the appsink's buffer.
-                let sample = match appsink.pull_sample() {
-                    None => return gst::FlowReturn::Eos,
-                    Some(sample) => sample,
-                };
-
-                let buffer = if let Some(buffer) = sample.get_buffer() {
-                    buffer
-                } else {
+                let sample = appsink.pull_sample().ok_or(gst::FlowError::Eos)?;
+                let buffer = sample.get_buffer().ok_or_else(|| {
                     gst_element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to get buffer from appsink")
                     );
 
-                    return gst::FlowReturn::Error;
-                };
+                    gst::FlowError::Error
+                })?;
 
                 // At this point, buffer is only a reference to an existing memory region somewhere.
                 // When we want to access its content, we have to map it while requesting the required
@@ -111,32 +105,28 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // on the machine's main memory itself, but rather in the GPU's memory.
                 // So mapping the buffer makes the underlying memory region accessible to us.
                 // See: https://gstreamer.freedesktop.org/documentation/plugin-development/advanced/allocation.html
-                let map = if let Some(map) = buffer.map_readable() {
-                    map
-                } else {
+                let map = buffer.map_readable().ok_or_else(|| {
                     gst_element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to map buffer readable")
                     );
 
-                    return gst::FlowReturn::Error;
-                };
+                    gst::FlowError::Error
+                })?;
 
                 // We know what format the data in the memory region has, since we requested
                 // it by setting the appsink's caps. So what we do here is interpret the
                 // memory region we mapped as an array of signed 16 bit integers.
-                let samples = if let Ok(samples) = map.as_slice_of::<i16>() {
-                    samples
-                } else {
+                let samples = map.as_slice_of::<i16>().map_err(|_| {
                     gst_element_error!(
                         appsink,
                         gst::ResourceError::Failed,
                         ("Failed to interprete buffer as S16 PCM")
                     );
 
-                    return gst::FlowReturn::Error;
-                };
+                    gst::FlowError::Error
+                })?;
 
                 // For buffer (= chunk of samples), we calculate the root mean square:
                 // (https://en.wikipedia.org/wiki/Root_mean_square)
@@ -150,7 +140,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 let rms = (sum / (samples.len() as f64)).sqrt();
                 println!("rms: {}", rms);
 
-                gst::FlowReturn::Ok
+                Ok(gst::FlowSuccess::Ok)
             })
             .build(),
     );
@@ -159,7 +149,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 }
 
 fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
-    pipeline.set_state(gst::State::Playing).into_result()?;
+    pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
         .get_bus()
@@ -171,7 +161,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                pipeline.set_state(gst::State::Null).into_result()?;
+                pipeline.set_state(gst::State::Null)?;
                 Err(ErrorMessage {
                     src: msg
                         .get_src()
@@ -186,7 +176,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         }
     }
 
-    pipeline.set_state(gst::State::Null).into_result()?;
+    pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }

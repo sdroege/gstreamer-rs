@@ -32,8 +32,9 @@ fn tutorial_main() {
         .expect("Can't set uri property on playbin");
 
     // Start playing
-    let ret = playbin.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    playbin
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the playbin to the `Playing` state");
 
     // Listen to the bus
     let bus = playbin.get_bus().unwrap();
@@ -92,8 +93,10 @@ fn tutorial_main() {
     }
 
     // Shutdown pipeline
-    let ret = custom_data.playbin.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    custom_data
+        .playbin
+        .set_state(gst::State::Null)
+        .expect("Unable to set the playbin to the `Null` state");
 }
 
 fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef>) {

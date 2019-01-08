@@ -237,7 +237,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 }
 
 fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
-    pipeline.set_state(gst::State::Playing).into_result()?;
+    pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
         .get_bus()
@@ -249,7 +249,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                pipeline.set_state(gst::State::Null).into_result()?;
+                pipeline.set_state(gst::State::Null)?;
                 Err(ErrorMessage {
                     src: msg
                         .get_src()
@@ -264,7 +264,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
         }
     }
 
-    pipeline.set_state(gst::State::Null).into_result()?;
+    pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }

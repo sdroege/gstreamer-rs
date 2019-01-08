@@ -11,6 +11,7 @@ use Buffer;
 use BufferList;
 use FlowError;
 use FlowReturn;
+use FlowSuccess;
 use Object;
 use Pad;
 use ProxyPad;
@@ -25,34 +26,36 @@ impl ProxyPad {
         pad: &P,
         parent: R,
         buffer: Buffer,
-    ) -> FlowReturn {
+    ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
         let parent = parent.into();
         let parent = parent.to_glib_none();
-        unsafe {
+        let ret: FlowReturn = unsafe {
             from_glib(ffi::gst_proxy_pad_chain_default(
                 pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.0,
                 buffer.into_ptr(),
             ))
-        }
+        };
+        ret.into_result()
     }
 
     pub fn chain_list_default<'a, P: IsA<ProxyPad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
         pad: &P,
         parent: R,
         list: BufferList,
-    ) -> FlowReturn {
+    ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
         let parent = parent.into();
         let parent = parent.to_glib_none();
-        unsafe {
+        let ret: FlowReturn = unsafe {
             from_glib(ffi::gst_proxy_pad_chain_list_default(
                 pad.to_glib_none().0 as *mut ffi::GstPad,
                 parent.0,
                 list.into_ptr(),
             ))
-        }
+        };
+        ret.into_result()
     }
 
     pub fn getrange_default<P: IsA<ProxyPad>, Q: IsA<Object>>(

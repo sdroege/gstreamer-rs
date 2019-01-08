@@ -84,7 +84,7 @@ fn connect_rtpbin_srcpad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), 
     match pt {
         96 => {
             let sinkpad = get_static_pad(sink, "sink")?;
-            src_pad.link(&sinkpad).into_result()?;
+            src_pad.link(&sinkpad)?;
             Ok(())
         }
         _ => Err(Error::from(UnknownPT(pt))),
@@ -208,7 +208,7 @@ fn example_main() -> Result<(), Error> {
 
     let srcpad = get_static_pad(&netsim, "src")?;
     let sinkpad = get_request_pad(&rtpbin, "recv_rtp_sink_0")?;
-    srcpad.link(&sinkpad).into_result()?;
+    srcpad.link(&sinkpad)?;
 
     let depay_weak = depay.downgrade();
     rtpbin.connect_pad_added(move |rtpbin, src_pad| {
@@ -246,8 +246,9 @@ fn example_main() -> Result<(), Error> {
         .get_bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -255,8 +256,9 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                let ret = pipeline.set_state(gst::State::Null);
-                assert_ne!(ret, gst::StateChangeReturn::Failure);
+                pipeline
+                    .set_state(gst::State::Null)
+                    .expect("Unable to set the pipeline to the `Null` state");
 
                 return Err(ErrorMessage {
                     src: msg
@@ -286,8 +288,9 @@ fn example_main() -> Result<(), Error> {
         }
     }
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 
     Ok(())
 }

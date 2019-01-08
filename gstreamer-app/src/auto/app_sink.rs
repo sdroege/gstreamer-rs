@@ -173,22 +173,6 @@ impl AppSink {
         }
     }
 
-    pub fn connect_new_preroll<F: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"new-preroll\0".as_ptr() as *const _,
-                transmute(new_preroll_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    pub fn connect_new_sample<F: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"new-sample\0".as_ptr() as *const _,
-                transmute(new_sample_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     pub fn connect_property_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&AppSink) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -252,16 +236,6 @@ unsafe impl Sync for AppSink {}
 unsafe extern "C" fn eos_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) {
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn new_preroll_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
-    let f: &&(Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this)).to_glib()
-}
-
-unsafe extern "C" fn new_sample_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) -> gst_ffi::GstFlowReturn {
-    let f: &&(Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static) = transmute(f);
-    f(&from_glib_borrow(this)).to_glib()
 }
 
 unsafe extern "C" fn notify_buffer_list_trampoline(this: *mut ffi::GstAppSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {

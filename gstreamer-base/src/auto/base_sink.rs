@@ -88,11 +88,7 @@ pub trait BaseSinkExt: 'static {
 
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff);
 
-    fn wait(&self, time: gst::ClockTime) -> (gst::FlowReturn, gst::ClockTimeDiff);
-
     fn wait_clock(&self, time: gst::ClockTime) -> (gst::ClockReturn, gst::ClockTimeDiff);
-
-    fn wait_preroll(&self) -> gst::FlowReturn;
 
     fn get_property_async(&self) -> bool;
 
@@ -291,25 +287,11 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
         }
     }
 
-    fn wait(&self, time: gst::ClockTime) -> (gst::FlowReturn, gst::ClockTimeDiff) {
-        unsafe {
-            let mut jitter = mem::uninitialized();
-            let ret = from_glib(ffi::gst_base_sink_wait(self.to_glib_none().0, time.to_glib(), &mut jitter));
-            (ret, jitter)
-        }
-    }
-
     fn wait_clock(&self, time: gst::ClockTime) -> (gst::ClockReturn, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::uninitialized();
             let ret = from_glib(ffi::gst_base_sink_wait_clock(self.to_glib_none().0, time.to_glib(), &mut jitter));
             (ret, jitter)
-        }
-    }
-
-    fn wait_preroll(&self) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_base_sink_wait_preroll(self.to_glib_none().0))
         }
     }
 

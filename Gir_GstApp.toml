@@ -57,6 +57,16 @@ trait = false
     # Action signal
     ignore = true
 
+    [[object.signal]]
+    name = "new-sample"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.signal]]
+    name = "new-preroll"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
     [[object.function]]
     name = "set_caps"
         [[object.function.parameter]]
@@ -96,6 +106,16 @@ trait = false
     [[object.signal]]
     name = "push-sample"
     # Action signal
+    ignore = true
+
+    [[object.function]]
+    name = "end_of_stream"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
+    name = "push_sample"
+    # Use Result<FlowSuccess, FlowError>
     ignore = true
 
     [[object.function]]

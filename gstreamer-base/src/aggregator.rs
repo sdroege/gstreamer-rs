@@ -15,17 +15,18 @@ use Aggregator;
 use std::ops;
 
 pub trait AggregatorExtManual: 'static {
-    fn finish_buffer(&self, buffer: gst::Buffer) -> gst::FlowReturn;
+    fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
-    fn finish_buffer(&self, buffer: gst::Buffer) -> gst::FlowReturn {
-        unsafe {
+    fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_aggregator_finish_buffer(
                 self.to_glib_none().0,
                 buffer.into_ptr(),
             ))
-        }
+        };
+        ret.into_result()
     }
 }
 

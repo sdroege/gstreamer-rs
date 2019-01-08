@@ -428,34 +428,42 @@ impl App {
         self.appsink.set_callbacks(
             gst_app::AppSinkCallbacks::new()
                 .new_sample(move |appsink| {
-                    let sample = match appsink.pull_sample() {
-                        None => return gst::FlowReturn::Eos,
-                        Some(sample) => sample,
-                    };
+                    let sample = appsink.pull_sample().ok_or(gst::FlowError::Eos)?;
 
-                    let buffer = sample.get_buffer();
-                    let info = sample
-                        .get_caps()
-                        .and_then(|caps| gst_video::VideoInfo::from_caps(caps.as_ref()));
-                    if buffer.is_none() || info.is_none() {
+                    let _buffer = sample.get_buffer().ok_or_else(|| {
                         gst_element_error!(
                             appsink,
                             gst::ResourceError::Failed,
                             ("Failed to get buffer from appsink")
                         );
 
-                        return gst::FlowReturn::Error;
-                    };
+                        gst::FlowError::Error
+                    })?;
 
-                    match sender_clone.lock().unwrap().send(sample) {
-                        Ok(_) => return gst::FlowReturn::Ok,
-                        Err(_) => return gst::FlowReturn::Error,
-                    }
+                    let _info = sample
+                        .get_caps()
+                        .and_then(|caps| gst_video::VideoInfo::from_caps(caps.as_ref()))
+                        .ok_or_else(|| {
+                            gst_element_error!(
+                                appsink,
+                                gst::ResourceError::Failed,
+                                ("Failed to get video info from sample")
+                            );
+
+                            gst::FlowError::Error
+                        })?;
+
+                    sender_clone
+                        .lock()
+                        .unwrap()
+                        .send(sample)
+                        .map(|_| gst::FlowSuccess::Ok)
+                        .map_err(|_| gst::FlowError::Error)
                 })
                 .build(),
         );
 
-        self.pipeline.set_state(gst::State::Playing).into_result()?;
+        self.pipeline.set_state(gst::State::Playing)?;
 
         Ok((bus_handler, receiver))
     }
@@ -576,7 +584,7 @@ fn main_loop(mut app: App) -> Result<(), Error> {
 
     app.pipeline.send_event(gst::Event::new_eos().build());
     bus_handler.join().expect("Could join bus handler thread");
-    app.pipeline.set_state(gst::State::Null).into_result()?;
+    app.pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }

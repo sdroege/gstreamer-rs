@@ -26,7 +26,7 @@ use AggregatorClass;
 use AggregatorPad;
 
 pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
-    fn flush(&self, aggregator: &Aggregator) -> gst::FlowReturn {
+    fn flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_flush(aggregator)
     }
 
@@ -39,7 +39,11 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         self.parent_clip(aggregator, aggregator_pad, buffer)
     }
 
-    fn finish_buffer(&self, aggregator: &Aggregator, buffer: gst::Buffer) -> gst::FlowReturn {
+    fn finish_buffer(
+        &self,
+        aggregator: &Aggregator,
+        buffer: gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_finish_buffer(aggregator, buffer)
     }
 
@@ -73,7 +77,11 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         self.parent_src_activate(aggregator, mode, active)
     }
 
-    fn aggregate(&self, aggregator: &Aggregator, timeout: bool) -> gst::FlowReturn;
+    fn aggregate(
+        &self,
+        aggregator: &Aggregator,
+        timeout: bool,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn start(&self, aggregator: &Aggregator) -> bool {
         self.parent_start(aggregator)
@@ -113,7 +121,7 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         self.parent_negotiated_src_caps(aggregator, caps)
     }
 
-    fn parent_flush(&self, aggregator: &Aggregator) -> gst::FlowReturn {
+    fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
@@ -121,6 +129,7 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
                 .flush
                 .map(|f| from_glib(f(aggregator.to_glib_none().0)))
                 .unwrap_or(gst::FlowReturn::Ok)
+                .into_result()
         }
     }
 
@@ -148,7 +157,7 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         &self,
         aggregator: &Aggregator,
         buffer: gst::Buffer,
-    ) -> gst::FlowReturn {
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
@@ -156,6 +165,7 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
                 .finish_buffer
                 .map(|f| from_glib(f(aggregator.to_glib_none().0, buffer.into_ptr())))
                 .unwrap_or(gst::FlowReturn::Ok)
+                .into_result()
         }
     }
 
@@ -247,7 +257,11 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         }
     }
 
-    fn parent_aggregate(&self, aggregator: &Aggregator, timeout: bool) -> gst::FlowReturn {
+    fn parent_aggregate(
+        &self,
+        aggregator: &Aggregator,
+        timeout: bool,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
@@ -255,6 +269,7 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
                 .aggregate
                 .map(|f| from_glib(f(aggregator.to_glib_none().0, timeout.to_glib())))
                 .unwrap_or(gst::FlowReturn::Error)
+                .into_result()
         }
     }
 
@@ -403,7 +418,7 @@ where
     let wrap: Aggregator = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.flush(&wrap)
+        imp.flush(&wrap).into()
     })
     .to_glib()
 }
@@ -447,7 +462,7 @@ where
     let wrap: Aggregator = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.finish_buffer(&wrap, from_glib_full(buffer))
+        imp.finish_buffer(&wrap, from_glib_full(buffer)).into()
     })
     .to_glib()
 }
@@ -572,7 +587,7 @@ where
     let wrap: Aggregator = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.aggregate(&wrap, from_glib(timeout))
+        imp.aggregate(&wrap, from_glib(timeout)).into()
     })
     .to_glib()
 }

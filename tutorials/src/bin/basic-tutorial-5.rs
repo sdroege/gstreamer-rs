@@ -121,8 +121,7 @@ mod tutorial5 {
             let pipeline = &pipeline;
             pipeline
                 .set_state(gst::State::Playing)
-                .into_result()
-                .unwrap();
+                .expect("Unable to set the pipeline to the `Playing` state");
         });
 
         let pause_button = gtk::Button::new_from_icon_name(
@@ -134,8 +133,7 @@ mod tutorial5 {
             let pipeline = &pipeline;
             pipeline
                 .set_state(gst::State::Paused)
-                .into_result()
-                .unwrap();
+                .expect("Unable to set the pipeline to the `Paused` state");
         });
 
         let stop_button = gtk::Button::new_from_icon_name(
@@ -145,7 +143,9 @@ mod tutorial5 {
         let pipeline = playbin.clone();
         stop_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
-            pipeline.set_state(gst::State::Ready).into_result().unwrap();
+            pipeline
+                .set_state(gst::State::Ready)
+                .expect("Unable to set the pipeline to the `Ready` state");
         });
 
         let slider = gtk::Scale::new_with_range(
@@ -372,7 +372,9 @@ mod tutorial5 {
                 // We just set the pipeline to READY (which stops playback).
                 gst::MessageView::Eos(..) => {
                     println!("End-Of-Stream reached.");
-                    pipeline.set_state(gst::State::Ready).into_result().unwrap();
+                    pipeline
+                        .set_state(gst::State::Ready)
+                        .expect("Unable to set the pipeline to the `Ready` state");
                 }
 
                 // This is called when an error message is posted on the bus
@@ -401,12 +403,13 @@ mod tutorial5 {
 
         playbin
             .set_state(gst::State::Playing)
-            .into_result()
-            .unwrap();
+            .expect("Unable to set the playbin to the `Playing` state");
 
         gtk::main();
         window.hide();
-        playbin.set_state(gst::State::Null).into_result().unwrap();
+        playbin
+            .set_state(gst::State::Null)
+            .expect("Unable to set the playbin to the `Null` state");
 
         bus.remove_signal_watch();
     }

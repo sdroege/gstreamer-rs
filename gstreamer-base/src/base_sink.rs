@@ -10,11 +10,19 @@ use ffi;
 use glib::translate::*;
 use glib::{IsA, IsClassFor};
 use gst;
+use std::mem;
 use std::ops;
 use BaseSink;
 
 pub trait BaseSinkExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
+
+    fn wait(
+        &self,
+        time: gst::ClockTime,
+    ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff);
+
+    fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
@@ -25,6 +33,27 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             ::utils::MutexGuard::lock(&sink.element.object.lock);
             from_glib_none(&sink.segment as *const _)
         }
+    }
+
+    fn wait(
+        &self,
+        time: gst::ClockTime,
+    ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
+        unsafe {
+            let mut jitter = mem::uninitialized();
+            let ret: gst::FlowReturn = from_glib(ffi::gst_base_sink_wait(
+                self.to_glib_none().0,
+                time.to_glib(),
+                &mut jitter,
+            ));
+            (ret.into_result(), jitter)
+        }
+    }
+
+    fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn =
+            unsafe { from_glib(ffi::gst_base_sink_wait_preroll(self.to_glib_none().0)) };
+        ret.into_result()
     }
 }
 

@@ -38,8 +38,6 @@ pub trait RTSPStreamTransportExt: 'static {
 
     fn keep_alive(&self);
 
-    fn recv_data(&self, channel: u32, buffer: &gst::Buffer) -> gst::FlowReturn;
-
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
@@ -89,12 +87,6 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     fn keep_alive(&self) {
         unsafe {
             ffi::gst_rtsp_stream_transport_keep_alive(self.to_glib_none().0);
-        }
-    }
-
-    fn recv_data(&self, channel: u32, buffer: &gst::Buffer) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_rtsp_stream_transport_recv_data(self.to_glib_none().0, channel, buffer.to_glib_full()))
         }
     }
 

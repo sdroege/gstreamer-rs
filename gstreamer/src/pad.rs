@@ -12,10 +12,15 @@ use BufferList;
 use Event;
 use FlowError;
 use FlowReturn;
+use FlowSuccess;
 use Format;
 use FormattedValue;
 use GenericFormattedValue;
 use Pad;
+use PadLinkCheck;
+use PadLinkError;
+use PadLinkReturn;
+use PadLinkSuccess;
 use PadProbeReturn;
 use PadProbeType;
 use Query;
@@ -111,11 +116,11 @@ pub trait PadExtManual: 'static {
         F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     fn remove_probe(&self, id: PadProbeId);
 
-    fn chain(&self, buffer: Buffer) -> FlowReturn;
-    fn push(&self, buffer: Buffer) -> FlowReturn;
+    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
+    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
 
-    fn chain_list(&self, list: BufferList) -> FlowReturn;
-    fn push_list(&self, list: BufferList) -> FlowReturn;
+    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
+    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError>;
 
     fn pull_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
     fn get_range(&self, offset: u64, size: u32) -> Result<Buffer, FlowError>;
@@ -138,11 +143,20 @@ pub trait PadExtManual: 'static {
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
+    fn get_last_flow_return(&self) -> Result<FlowSuccess, FlowError>;
+
     fn iterate_internal_links(&self) -> ::Iterator<Pad>;
     fn iterate_internal_links_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
         &self,
         parent: Q,
     ) -> ::Iterator<Pad>;
+
+    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError>;
+    fn link_full<P: IsA<Pad>>(
+        &self,
+        sinkpad: &P,
+        flags: PadLinkCheck,
+    ) -> Result<PadLinkSuccess, PadLinkError>;
 
     fn stream_lock(&self) -> StreamLock;
 
@@ -156,11 +170,17 @@ pub trait PadExtManual: 'static {
 
     fn set_chain_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Buffer) -> ::FlowReturn + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static;
 
     fn set_chain_list_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::BufferList) -> ::FlowReturn + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static;
 
     fn set_event_function<F>(&self, func: F)
     where
@@ -168,7 +188,10 @@ pub trait PadExtManual: 'static {
 
     fn set_event_full_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static;
 
     fn set_getrange_function<F>(&self, func: F)
     where
@@ -183,7 +206,10 @@ pub trait PadExtManual: 'static {
 
     fn set_link_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &Pad) -> ::PadLinkReturn + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+            + Send
+            + Sync
+            + 'static;
 
     fn set_query_function<F>(&self, func: F)
     where
@@ -233,6 +259,8 @@ pub trait PadExtManual: 'static {
         &self,
         func: F,
     );
+
+    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError>;
 }
 
 impl<O: IsA<Pad>> PadExtManual for O {
@@ -266,29 +294,37 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn chain(&self, buffer: Buffer) -> FlowReturn {
-        unsafe { from_glib(ffi::gst_pad_chain(self.to_glib_none().0, buffer.into_ptr())) }
-    }
-
-    fn push(&self, buffer: Buffer) -> FlowReturn {
-        unsafe { from_glib(ffi::gst_pad_push(self.to_glib_none().0, buffer.into_ptr())) }
-    }
-
-    fn chain_list(&self, list: BufferList) -> FlowReturn {
+    fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            from_glib(ffi::gst_pad_chain_list(
-                self.to_glib_none().0,
-                list.into_ptr(),
-            ))
+            FlowReturn::from_glib(ffi::gst_pad_chain(self.to_glib_none().0, buffer.into_ptr()))
+                .into_result()
         }
     }
 
-    fn push_list(&self, list: BufferList) -> FlowReturn {
+    fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            from_glib(ffi::gst_pad_push_list(
+            FlowReturn::from_glib(ffi::gst_pad_push(self.to_glib_none().0, buffer.into_ptr()))
+                .into_result()
+        }
+    }
+
+    fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            FlowReturn::from_glib(ffi::gst_pad_chain_list(
                 self.to_glib_none().0,
                 list.into_ptr(),
             ))
+            .into_result()
+        }
+    }
+
+    fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
+        unsafe {
+            FlowReturn::from_glib(ffi::gst_pad_push_list(
+                self.to_glib_none().0,
+                list.into_ptr(),
+            ))
+            .into_result()
         }
     }
 
@@ -406,6 +442,12 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
+    fn get_last_flow_return(&self) -> Result<FlowSuccess, FlowError> {
+        let ret: FlowReturn =
+            unsafe { from_glib(ffi::gst_pad_get_last_flow_return(self.to_glib_none().0)) };
+        ret.into_result()
+    }
+
     fn iterate_internal_links(&self) -> ::Iterator<Pad> {
         unsafe { from_glib_full(ffi::gst_pad_iterate_internal_links(self.to_glib_none().0)) }
     }
@@ -422,6 +464,31 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 parent.0,
             ))
         }
+    }
+
+    fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError> {
+        let ret: PadLinkReturn = unsafe {
+            from_glib(ffi::gst_pad_link(
+                self.to_glib_none().0,
+                sinkpad.to_glib_none().0,
+            ))
+        };
+        ret.into_result()
+    }
+
+    fn link_full<P: IsA<Pad>>(
+        &self,
+        sinkpad: &P,
+        flags: PadLinkCheck,
+    ) -> Result<PadLinkSuccess, PadLinkError> {
+        let ret: PadLinkReturn = unsafe {
+            from_glib(ffi::gst_pad_link_full(
+                self.to_glib_none().0,
+                sinkpad.to_glib_none().0,
+                flags.to_glib(),
+            ))
+        };
+        ret.into_result()
     }
 
     fn stream_lock(&self) -> StreamLock {
@@ -469,11 +536,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_chain_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Buffer) -> ::FlowReturn + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::Buffer) -> ::FlowReturn + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+                    + Send
+                    + Sync
+                    + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_chain_function_full(
                 self.to_glib_none().0,
@@ -486,11 +559,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_chain_list_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::BufferList) -> ::FlowReturn + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::BufferList) -> ::FlowReturn + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+                    + Send
+                    + Sync
+                    + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_chain_list_function_full(
                 self.to_glib_none().0,
@@ -520,11 +599,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_event_full_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+                    + Send
+                    + Sync
+                    + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_event_full_function_full(
                 self.to_glib_none().0,
@@ -537,7 +622,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
+        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
             + Send
             + Sync
             + 'static,
@@ -545,7 +630,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
+                Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
                     + Send
                     + Sync
                     + 'static,
@@ -578,11 +663,17 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_link_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &Pad) -> ::PadLinkReturn + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+            + Send
+            + Sync
+            + 'static,
     {
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, &Pad) -> ::PadLinkReturn + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+                    + Send
+                    + Sync
+                    + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_link_function_full(
                 self.to_glib_none().0,
@@ -910,6 +1001,16 @@ impl<O: IsA<Pad>> PadExtManual for O {
             ffi::gst_pad_sticky_events_foreach(self.to_glib_none().0, Some(trampoline), func_ptr);
         }
     }
+
+    fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError> {
+        let ret: FlowReturn = unsafe {
+            from_glib(ffi::gst_pad_store_sticky_event(
+                self.to_glib_none().0,
+                event.to_glib_none().0,
+            ))
+        };
+        ret.into_result()
+    }
 }
 
 #[repr(C)]
@@ -1048,17 +1149,18 @@ unsafe extern "C" fn trampoline_chain_function(
     buffer: *mut ffi::GstBuffer,
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::Buffer) -> ::FlowReturn
+    let func: &&(Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
            + Send
            + Sync
            + 'static) = transmute((*pad).chaindata);
 
-    func(
+    let res: FlowReturn = func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(buffer),
     )
-    .to_glib()
+    .into();
+    res.to_glib()
 }
 
 unsafe extern "C" fn trampoline_chain_list_function(
@@ -1067,17 +1169,18 @@ unsafe extern "C" fn trampoline_chain_list_function(
     list: *mut ffi::GstBufferList,
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::BufferList) -> ::FlowReturn
+    let func: &&(Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
            + Send
            + Sync
            + 'static) = transmute((*pad).chainlistdata);
 
-    func(
+    let res: FlowReturn = func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(list),
     )
-    .to_glib()
+    .into();
+    res.to_glib()
 }
 
 unsafe extern "C" fn trampoline_event_function(
@@ -1103,15 +1206,18 @@ unsafe extern "C" fn trampoline_event_full_function(
     event: *mut ffi::GstEvent,
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> ::FlowReturn + Send + Sync + 'static) =
-        transmute((*pad).eventdata);
+    let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+           + Send
+           + Sync
+           + 'static) = transmute((*pad).eventdata);
 
-    func(
+    let res: FlowReturn = func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         from_glib_full(event),
     )
-    .to_glib()
+    .into();
+    res.to_glib()
 }
 
 unsafe extern "C" fn trampoline_getrange_function(
@@ -1122,7 +1228,7 @@ unsafe extern "C" fn trampoline_getrange_function(
     buffer: *mut *mut ffi::GstBuffer,
 ) -> ffi::GstFlowReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
+    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
            + Send
            + Sync
            + 'static) = transmute((*pad).getrangedata);
@@ -1135,9 +1241,9 @@ unsafe extern "C" fn trampoline_getrange_function(
     ) {
         Ok(new_buffer) => {
             *buffer = new_buffer.into_ptr();
-            ::FlowReturn::Ok.to_glib()
+            FlowReturn::Ok.to_glib()
         }
-        Err(ret) => ::FlowReturn::from_error(ret).to_glib(),
+        Err(ret) => FlowReturn::from_error(ret).to_glib(),
     }
 }
 
@@ -1163,17 +1269,22 @@ unsafe extern "C" fn trampoline_link_function(
     peer: *mut ffi::GstPad,
 ) -> ffi::GstPadLinkReturn {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, &::Pad) -> ::PadLinkReturn
+    let func: &&(Fn(
+        &Pad,
+        &Option<::Object>,
+        &::Pad,
+    ) -> Result<::PadLinkSuccess, ::PadLinkError>
            + Send
            + Sync
            + 'static) = transmute((*pad).linkdata);
 
-    func(
+    let res: ::PadLinkReturn = func(
         &from_glib_borrow(pad),
         &from_glib_borrow(parent),
         &from_glib_borrow(peer),
     )
-    .to_glib()
+    .into();
+    res.to_glib()
 }
 
 unsafe extern "C" fn trampoline_query_function(
@@ -1252,7 +1363,7 @@ mod tests {
             let mut buffers = buffers_clone.lock().unwrap();
             buffers.push(buffer);
 
-            ::FlowReturn::Ok
+            Ok(FlowSuccess::Ok)
         });
 
         pad.set_active(true).unwrap();
@@ -1261,7 +1372,7 @@ mod tests {
         let segment = ::FormattedSegment::<::ClockTime>::new();
         assert!(pad.send_event(::Event::new_segment(segment.as_ref()).build()));
 
-        assert_eq!(pad.chain(::Buffer::new()), ::FlowReturn::Ok);
+        assert_eq!(pad.chain(::Buffer::new()), Ok(FlowSuccess::Ok));
 
         let events = events.lock().unwrap();
         let buffers = buffers.lock().unwrap();

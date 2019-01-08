@@ -30,8 +30,9 @@ fn example_main() {
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     let main_loop_clone = main_loop.clone();
 
@@ -60,8 +61,9 @@ fn example_main() {
 
     main_loop.run();
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 
     // Here we remove the bus watch we added above. This avoids a memory leak, that might
     // otherwise happen because we moved a strong reference (clone of main_loop) into the

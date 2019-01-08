@@ -66,12 +66,6 @@ pub trait BaseSrcExt: 'static {
 
     fn set_live(&self, live: bool);
 
-    fn start_complete(&self, ret: gst::FlowReturn);
-
-    fn start_wait(&self) -> gst::FlowReturn;
-
-    fn wait_playing(&self) -> gst::FlowReturn;
-
     fn get_property_num_buffers(&self) -> i32;
 
     fn set_property_num_buffers(&self, num_buffers: i32);
@@ -185,24 +179,6 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn set_live(&self, live: bool) {
         unsafe {
             ffi::gst_base_src_set_live(self.to_glib_none().0, live.to_glib());
-        }
-    }
-
-    fn start_complete(&self, ret: gst::FlowReturn) {
-        unsafe {
-            ffi::gst_base_src_start_complete(self.to_glib_none().0, ret.to_glib());
-        }
-    }
-
-    fn start_wait(&self) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_base_src_start_wait(self.to_glib_none().0))
-        }
-    }
-
-    fn wait_playing(&self) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_base_src_wait_playing(self.to_glib_none().0))
         }
     }
 

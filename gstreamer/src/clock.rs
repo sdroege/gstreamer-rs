@@ -17,7 +17,9 @@ use std::mem;
 use std::mem::transmute;
 use std::ptr;
 use Clock;
+use ClockError;
 use ClockReturn;
+use ClockSuccess;
 use ClockTime;
 use ClockTimeDiff;
 
@@ -68,26 +70,28 @@ impl ClockId {
         unsafe { ffi::gst_clock_id_unschedule(self.to_glib_none().0) }
     }
 
-    pub fn wait(&self) -> (ClockReturn, ClockTimeDiff) {
+    pub fn wait(&self) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::uninitialized();
-            let res = ffi::gst_clock_id_wait(self.to_glib_none().0, &mut jitter);
-            (from_glib(res), jitter)
+            let res: ClockReturn =
+                from_glib(ffi::gst_clock_id_wait(self.to_glib_none().0, &mut jitter));
+            (res.into_result(), jitter)
         }
     }
 
-    pub fn wait_async<F>(&self, func: F) -> ClockReturn
+    pub fn wait_async<F>(&self, func: F) -> Result<ClockSuccess, ClockError>
     where
         F: Fn(&Clock, ClockTime, &ClockId) -> bool + Send + 'static,
     {
-        unsafe {
+        let ret: ClockReturn = unsafe {
             from_glib(ffi::gst_clock_id_wait_async(
                 self.to_glib_none().0,
                 Some(trampoline_wait_async),
                 into_raw_wait_async(func),
                 Some(destroy_closure_wait_async),
             ))
-        }
+        };
+        ret.into_result()
     }
 }
 
@@ -251,7 +255,7 @@ mod tests {
         let id = clock.new_single_shot_id(now + 20 * ::MSECOND).unwrap();
         let (res, _) = id.wait();
 
-        assert!(res == ClockReturn::Ok || res == ClockReturn::Early);
+        assert!(res == Ok(ClockSuccess::Ok) || res == Err(ClockError::Early));
     }
 
     #[test]
@@ -269,7 +273,7 @@ mod tests {
             true
         });
 
-        assert!(res == ClockReturn::Ok);
+        assert!(res == Ok(ClockSuccess::Ok));
 
         assert_eq!(receiver.recv(), Ok(()));
     }

@@ -74,7 +74,7 @@ fn get_request_pad(element: &gst::Element, pad_name: &'static str) -> Result<gst
 
 fn connect_decodebin_pad(src_pad: &gst::Pad, sink: &gst::Element) -> Result<(), Error> {
     let sinkpad = get_static_pad(&sink, "sink")?;
-    src_pad.link(&sinkpad).into_result()?;
+    src_pad.link(&sinkpad)?;
 
     Ok(())
 }
@@ -137,11 +137,11 @@ fn example_main() -> Result<(), Error> {
 
     let srcpad = get_static_pad(&q2, "src")?;
     let sinkpad = get_request_pad(&rtpbin, "send_rtp_sink_0")?;
-    srcpad.link(&sinkpad).into_result()?;
+    srcpad.link(&sinkpad)?;
 
     let srcpad = get_static_pad(&rtpbin, "send_rtp_src_0")?;
     let sinkpad = get_static_pad(&sink, "sink")?;
-    srcpad.link(&sinkpad).into_result()?;
+    srcpad.link(&sinkpad)?;
 
     let convclone = conv.clone();
     src.connect_pad_added(move |decodebin, src_pad| {
@@ -177,8 +177,9 @@ fn example_main() -> Result<(), Error> {
         .get_bus()
         .expect("Pipeline without bus. Shouldn't happen!");
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -186,8 +187,9 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                let ret = pipeline.set_state(gst::State::Null);
-                assert_ne!(ret, gst::StateChangeReturn::Failure);
+                pipeline
+                    .set_state(gst::State::Null)
+                    .expect("Unable to set the pipeline to the `Null` state");
 
                 return Err(ErrorMessage {
                     src: msg
@@ -217,8 +219,9 @@ fn example_main() -> Result<(), Error> {
         }
     }
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 
     Ok(())
 }

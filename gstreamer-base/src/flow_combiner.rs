@@ -57,27 +57,34 @@ impl FlowCombiner {
         }
     }
 
-    pub fn update_flow(&self, fret: gst::FlowReturn) -> gst::FlowReturn {
-        unsafe {
+    pub fn update_flow<FRet: Into<gst::FlowReturn>>(
+        &self,
+        fret: FRet,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let fret: gst::FlowReturn = fret.into();
+        let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_flow_combiner_update_flow(
                 self.to_glib_none().0,
                 fret.to_glib(),
             ))
-        }
+        };
+        ret.into_result()
     }
 
-    pub fn update_pad_flow<P: IsA<gst::Pad>>(
+    pub fn update_pad_flow<P: IsA<gst::Pad>, FRet: Into<gst::FlowReturn>>(
         &self,
         pad: &P,
-        fret: gst::FlowReturn,
-    ) -> gst::FlowReturn {
-        unsafe {
+        fret: FRet,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let fret: gst::FlowReturn = fret.into();
+        let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_flow_combiner_update_pad_flow(
                 self.to_glib_none().0,
                 pad.to_glib_none().0,
                 fret.to_glib(),
             ))
-        }
+        };
+        ret.into_result()
     }
 }
 
@@ -114,15 +121,18 @@ impl UniqueFlowCombiner {
         self.0.reset();
     }
 
-    pub fn update_flow(&mut self, fret: gst::FlowReturn) -> gst::FlowReturn {
+    pub fn update_flow(
+        &mut self,
+        fret: Result<gst::FlowSuccess, gst::FlowError>,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.0.update_flow(fret)
     }
 
     pub fn update_pad_flow<P: IsA<gst::Pad>>(
         &mut self,
         pad: &P,
-        fret: gst::FlowReturn,
-    ) -> gst::FlowReturn {
+        fret: Result<gst::FlowSuccess, gst::FlowError>,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.0.update_pad_flow(pad, fret)
     }
 }

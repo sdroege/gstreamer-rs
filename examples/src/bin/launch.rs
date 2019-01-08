@@ -43,8 +43,9 @@ fn example_main() {
         };
     let bus = pipeline.get_bus().unwrap();
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -64,8 +65,9 @@ fn example_main() {
         }
     }
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 }
 
 fn main() {

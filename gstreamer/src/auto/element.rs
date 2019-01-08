@@ -16,9 +16,6 @@ use Pad;
 use PadLinkCheck;
 use PadTemplate;
 use Plugin;
-use State;
-use StateChange;
-use StateChangeReturn;
 use URIType;
 use ffi;
 use glib;
@@ -29,7 +26,6 @@ use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -74,10 +70,6 @@ pub trait ElementExt: 'static {
     //#[cfg(any(feature = "v1_10", feature = "dox"))]
     //fn call_async(&self, func: /*Unknown conversion*//*Unimplemented*/ElementCallAsyncFunc, destroy_notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
-    fn change_state(&self, transition: StateChange) -> StateChangeReturn;
-
-    fn continue_state(&self, ret: StateChangeReturn) -> StateChangeReturn;
-
     fn create_all_pads(&self);
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -108,8 +100,6 @@ pub trait ElementExt: 'static {
     fn get_request_pad(&self, name: &str) -> Option<Pad>;
 
     fn get_start_time(&self) -> ClockTime;
-
-    fn get_state(&self, timeout: ClockTime) -> (StateChangeReturn, State, State);
 
     fn get_static_pad(&self, name: &str) -> Option<Pad>;
 
@@ -164,8 +154,6 @@ pub trait ElementExt: 'static {
 
     fn set_start_time(&self, time: ClockTime);
 
-    fn set_state(&self, state: State) -> StateChangeReturn;
-
     fn sync_state_with_parent(&self) -> Result<(), glib::error::BoolError>;
 
     fn unlink<P: IsA<Element>>(&self, dest: &P);
@@ -198,18 +186,6 @@ impl<O: IsA<Element>> ElementExt for O {
     //fn call_async(&self, func: /*Unknown conversion*//*Unimplemented*/ElementCallAsyncFunc, destroy_notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gst_element_call_async() }
     //}
-
-    fn change_state(&self, transition: StateChange) -> StateChangeReturn {
-        unsafe {
-            from_glib(ffi::gst_element_change_state(self.to_glib_none().0, transition.to_glib()))
-        }
-    }
-
-    fn continue_state(&self, ret: StateChangeReturn) -> StateChangeReturn {
-        unsafe {
-            from_glib(ffi::gst_element_continue_state(self.to_glib_none().0, ret.to_glib()))
-        }
-    }
 
     fn create_all_pads(&self) {
         unsafe {
@@ -291,15 +267,6 @@ impl<O: IsA<Element>> ElementExt for O {
     fn get_start_time(&self) -> ClockTime {
         unsafe {
             from_glib(ffi::gst_element_get_start_time(self.to_glib_none().0))
-        }
-    }
-
-    fn get_state(&self, timeout: ClockTime) -> (StateChangeReturn, State, State) {
-        unsafe {
-            let mut state = mem::uninitialized();
-            let mut pending = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_get_state(self.to_glib_none().0, &mut state, &mut pending, timeout.to_glib()));
-            (ret, from_glib(state), from_glib(pending))
         }
     }
 
@@ -469,12 +436,6 @@ impl<O: IsA<Element>> ElementExt for O {
     fn set_start_time(&self, time: ClockTime) {
         unsafe {
             ffi::gst_element_set_start_time(self.to_glib_none().0, time.to_glib());
-        }
-    }
-
-    fn set_state(&self, state: State) -> StateChangeReturn {
-        unsafe {
-            from_glib(ffi::gst_element_set_state(self.to_glib_none().0, state.to_glib()))
         }
     }
 

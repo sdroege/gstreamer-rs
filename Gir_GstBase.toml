@@ -77,14 +77,39 @@ name = "GstBase.BaseSink"
 subclassing = true
 status = "generate"
 
+    [[object.function]]
+    name = "wait"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
+    name = "wait_preroll"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
 [[object]]
 name = "GstBase.BaseSrc"
 subclassing = true
 status = "generate"
 
     [[object.function]]
+    name = "start_complete"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
+    name = "start_wait"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
     name = "submit_buffer_list"
     # Pass by value, to be added manually
+    ignore = true
+
+    [[object.function]]
+    name = "wait_playing"
+    # Use Result<FlowSuccess, FlowError>
     ignore = true
 
 [[object]]

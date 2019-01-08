@@ -111,10 +111,10 @@ fn tutorial_main() {
     print_pad_capabilities(&sink, "sink");
 
     // Start playing
-    let ret = pipeline.set_state(gst::State::Playing);
-    if ret == gst::StateChangeReturn::Failure {
+    let res = pipeline.set_state(gst::State::Playing);
+    if res.is_err() {
         eprintln!(
-            "Unable to set the pipeline to the playing state (check the bus for error messages)."
+            "Unable to set the pipeline to the `Playing` state (check the bus for error messages)."
         )
     }
 
@@ -159,8 +159,9 @@ fn tutorial_main() {
     }
 
     // Shutdown pipeline
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 }
 
 fn main() {

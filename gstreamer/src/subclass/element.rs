@@ -24,10 +24,16 @@ use Event;
 use PadTemplate;
 use QueryRef;
 use StateChange;
+use StateChangeError;
 use StateChangeReturn;
+use StateChangeSuccess;
 
 pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
-    fn change_state(&self, element: &::Element, transition: StateChange) -> StateChangeReturn {
+    fn change_state(
+        &self,
+        element: &::Element,
+        transition: StateChange,
+    ) -> Result<StateChangeSuccess, StateChangeError> {
         self.parent_change_state(element, transition)
     }
 
@@ -59,7 +65,7 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
         &self,
         element: &::Element,
         transition: StateChange,
-    ) -> StateChangeReturn {
+    ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
@@ -68,6 +74,7 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
                 .change_state
                 .map(|f| from_glib(f(element.to_glib_none().0, transition.to_glib())))
                 .unwrap_or(::StateChangeReturn::Success)
+                .into_result()
         }
     }
 
@@ -248,7 +255,7 @@ where
     };
 
     gst_panic_to_error!(&wrap, &instance.panicked(), fallback, {
-        imp.change_state(&wrap, transition)
+        imp.change_state(&wrap, transition).into()
     })
     .to_glib()
 }

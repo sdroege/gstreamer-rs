@@ -75,13 +75,14 @@ fn example_main() {
         }
 
         let sink_pad = queue.get_static_pad("sink").unwrap();
-        assert_eq!(src_pad.link(&sink_pad), gst::PadLinkReturn::Ok);
+        src_pad
+            .link(&sink_pad)
+            .expect("Unable to link src pad to sink pad");
     });
 
-    assert_ne!(
-        pipeline.set_state(gst::State::Paused),
-        gst::StateChangeReturn::Failure
-    );
+    pipeline
+        .set_state(gst::State::Paused)
+        .expect("Unable to set the pipeline to the `Paused` state");
 
     let bus = pipeline.get_bus().unwrap();
 
@@ -161,10 +162,9 @@ fn example_main() {
         }
     }
 
-    assert_ne!(
-        pipeline.set_state(gst::State::Null),
-        gst::StateChangeReturn::Failure
-    );
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 }
 
 fn main() {

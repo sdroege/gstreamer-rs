@@ -34,8 +34,9 @@ fn example_main() {
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     // Need to move a new reference into the closure.
     // !!ATTENTION!!:
@@ -119,8 +120,9 @@ fn example_main() {
 
     main_loop.run();
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 
     bus.remove_watch();
     glib::source_remove(timeout_id);

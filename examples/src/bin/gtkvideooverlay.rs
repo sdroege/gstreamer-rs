@@ -211,8 +211,9 @@ fn create_ui(app: &gtk::Application) {
 
     let bus = pipeline.get_bus().unwrap();
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     let app_weak = glib::SendWeakRef::from(app.downgrade());
     bus.add_watch(move |_, msg| {
@@ -244,8 +245,9 @@ fn create_ui(app: &gtk::Application) {
     // destroyed once the app is destroyed
     let timeout_id = RefCell::new(Some(timeout_id));
     app.connect_shutdown(move |_| {
-        let ret = pipeline.set_state(gst::State::Null);
-        assert_ne!(ret, gst::StateChangeReturn::Failure);
+        pipeline
+            .set_state(gst::State::Null)
+            .expect("Unable to set the pipeline to the `Null` state");
 
         bus.remove_watch();
         if let Some(timeout_id) = timeout_id.borrow_mut().take() {

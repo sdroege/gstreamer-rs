@@ -181,7 +181,7 @@ fn example_main() -> Result<(), Error> {
                 // Get the queue element's sink pad and link the decodebin's newly created
                 // src pad for the audio stream to it.
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
-                src_pad.link(&sink_pad).into_result()?;
+                src_pad.link(&sink_pad)?;
             } else if is_video {
                 // decodebin found a raw videostream, so we build the follow-up pipeline to
                 // display it using the autovideosink.
@@ -205,7 +205,7 @@ fn example_main() -> Result<(), Error> {
                 // Get the queue element's sink pad and link the decodebin's newly created
                 // src pad for the video stream to it.
                 let sink_pad = queue.get_static_pad("sink").expect("queue has no sinkpad");
-                src_pad.link(&sink_pad).into_result()?;
+                src_pad.link(&sink_pad)?;
             }
 
             Ok(())
@@ -243,7 +243,7 @@ fn example_main() -> Result<(), Error> {
         }
     });
 
-    pipeline.set_state(gst::State::Playing).into_result()?;
+    pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
         .get_bus()
@@ -259,7 +259,7 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                pipeline.set_state(gst::State::Null).into_result()?;
+                pipeline.set_state(gst::State::Null)?;
 
                 #[cfg(feature = "v1_10")]
                 {
@@ -313,7 +313,7 @@ fn example_main() -> Result<(), Error> {
         }
     }
 
-    pipeline.set_state(gst::State::Null).into_result()?;
+    pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }

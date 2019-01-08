@@ -53,7 +53,7 @@ fn tutorial_main() {
         tee_audio_pad.get_name()
     );
     let queue_audio_pad = audio_queue.get_static_pad("sink").unwrap();
-    tee_audio_pad.link(&queue_audio_pad).into_result().unwrap();
+    tee_audio_pad.link(&queue_audio_pad).unwrap();
 
     let tee_video_pad = tee.get_request_pad("src_%u").unwrap();
     println!(
@@ -61,12 +61,11 @@ fn tutorial_main() {
         tee_video_pad.get_name()
     );
     let queue_video_pad = video_queue.get_static_pad("sink").unwrap();
-    tee_video_pad.link(&queue_video_pad).into_result().unwrap();
+    tee_video_pad.link(&queue_video_pad).unwrap();
 
     pipeline
         .set_state(gst::State::Playing)
-        .into_result()
-        .expect("Unable to set the pipeline to the Playing state.");
+        .expect("Unable to set the pipeline to the `Playing` state");
     let bus = pipeline.get_bus().unwrap();
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
         use gst::MessageView;
@@ -87,8 +86,7 @@ fn tutorial_main() {
 
     pipeline
         .set_state(gst::State::Null)
-        .into_result()
-        .expect("Unable to set the pipeline to the Null state.");
+        .expect("Unable to set the pipeline to the `Null` state");
 }
 
 fn main() {

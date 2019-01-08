@@ -7,19 +7,27 @@
 // except according to those terms.
 
 use ffi;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_ffi::gpointer;
 use gst;
 use gst_ffi;
+use std::boxed::Box as Box_;
 use std::cell::RefCell;
+use std::mem::transmute;
 use std::ptr;
 use AppSink;
 
 #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 pub struct AppSinkCallbacks {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
-    new_preroll: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
-    new_sample: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
+    new_preroll: Option<
+        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+    >,
+    new_sample: Option<
+        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+    >,
     callbacks: ffi::GstAppSinkCallbacks,
 }
 
@@ -40,8 +48,12 @@ impl AppSinkCallbacks {
 #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 pub struct AppSinkCallbacksBuilder {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
-    new_preroll: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
-    new_sample: Option<RefCell<Box<FnMut(&AppSink) -> gst::FlowReturn + Send + 'static>>>,
+    new_preroll: Option<
+        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+    >,
+    new_sample: Option<
+        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+    >,
 }
 
 impl AppSinkCallbacksBuilder {
@@ -52,7 +64,9 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
-    pub fn new_preroll<F: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>(
+    pub fn new_preroll<
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    >(
         self,
         new_preroll: F,
     ) -> Self {
@@ -62,7 +76,9 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
-    pub fn new_sample<F: Fn(&AppSink) -> gst::FlowReturn + Send + Sync + 'static>(
+    pub fn new_sample<
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    >(
         self,
         new_sample: F,
     ) -> Self {
@@ -119,7 +135,7 @@ unsafe extern "C" fn trampoline_new_preroll(
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     let ret = if let Some(ref new_preroll) = callbacks.new_preroll {
-        (&mut *new_preroll.borrow_mut())(&from_glib_borrow(appsink))
+        (&mut *new_preroll.borrow_mut())(&from_glib_borrow(appsink)).into()
     } else {
         gst::FlowReturn::Error
     };
@@ -134,7 +150,7 @@ unsafe extern "C" fn trampoline_new_sample(
     let callbacks = &*(callbacks as *const AppSinkCallbacks);
 
     let ret = if let Some(ref new_sample) = callbacks.new_sample {
-        (&mut *new_sample.borrow_mut())(&from_glib_borrow(appsink))
+        (&mut *new_sample.borrow_mut())(&from_glib_borrow(appsink)).into()
     } else {
         gst::FlowReturn::Error
     };
@@ -157,4 +173,72 @@ impl AppSink {
             );
         }
     }
+
+    pub fn connect_new_sample<
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<
+                Box_<
+                    Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError>
+                        + Send
+                        + Sync
+                        + 'static,
+                >,
+            > = Box_::new(Box_::new(f));
+            connect_raw(
+                self.to_glib_none().0,
+                b"new-sample\0".as_ptr() as *const _,
+                transmute(new_sample_trampoline as usize),
+                Box_::into_raw(f) as *mut _,
+            )
+        }
+    }
+
+    pub fn connect_new_preroll<
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<
+                Box_<
+                    Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError>
+                        + Send
+                        + Sync
+                        + 'static,
+                >,
+            > = Box_::new(Box_::new(f));
+            connect_raw(
+                self.to_glib_none().0,
+                b"new-preroll\0".as_ptr() as *const _,
+                transmute(new_preroll_trampoline as usize),
+                Box_::into_raw(f) as *mut _,
+            )
+        }
+    }
+}
+
+unsafe extern "C" fn new_sample_trampoline(
+    this: *mut ffi::GstAppSink,
+    f: glib_ffi::gpointer,
+) -> gst_ffi::GstFlowReturn {
+    let f: &&(Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static) =
+        transmute(f);
+    let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
+    ret.to_glib()
+}
+
+unsafe extern "C" fn new_preroll_trampoline(
+    this: *mut ffi::GstAppSink,
+    f: glib_ffi::gpointer,
+) -> gst_ffi::GstFlowReturn {
+    let f: &&(Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static) =
+        transmute(f);
+    let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
+    ret.to_glib()
 }

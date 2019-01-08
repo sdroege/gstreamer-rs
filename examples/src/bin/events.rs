@@ -36,8 +36,9 @@ fn example_main() {
     let pipeline = gst::parse_launch("audiotestsrc ! fakesink").unwrap();
     let bus = pipeline.get_bus().unwrap();
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     // Need to move a new reference into the closure.
     // !!ATTENTION!!:
@@ -122,8 +123,9 @@ fn example_main() {
     // (see above for how to do this).
     main_loop.run();
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 
     // Remove the watch function from the bus.
     // Again: There can always only be one watch function.

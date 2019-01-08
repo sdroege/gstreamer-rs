@@ -108,7 +108,7 @@ fn main() {
         tee_audio_pad.get_name()
     );
     let queue_audio_pad = audio_queue.get_static_pad("sink").unwrap();
-    tee_audio_pad.link(&queue_audio_pad).into_result().unwrap();
+    tee_audio_pad.link(&queue_audio_pad).unwrap();
 
     let tee_video_pad = tee.get_request_pad("src_%u").unwrap();
     println!(
@@ -116,10 +116,10 @@ fn main() {
         tee_video_pad.get_name()
     );
     let queue_video_pad = video_queue.get_static_pad("sink").unwrap();
-    tee_video_pad.link(&queue_video_pad).into_result().unwrap();
+    tee_video_pad.link(&queue_video_pad).unwrap();
     let tee_app_pad = tee.get_request_pad("src_%u").unwrap();
     let queue_app_pad = app_queue.get_static_pad("sink").unwrap();
-    tee_app_pad.link(&queue_app_pad).into_result().unwrap();
+    tee_app_pad.link(&queue_app_pad).unwrap();
 
     // configure appsrc
     let info = AudioInfo::new(gst_audio::AudioFormat::S16le, SAMPLE_RATE, 1)
@@ -195,10 +195,7 @@ fn main() {
                     (data.appsrc.clone(), buffer)
                 };
 
-                match appsrc.push_buffer(buffer) {
-                    gst::FlowReturn::Ok => glib::Continue(true),
-                    _ => glib::Continue(false),
-                }
+                glib::Continue(appsrc.push_buffer(buffer).is_ok())
             }));
         }
     });
@@ -225,7 +222,7 @@ fn main() {
     appsink.connect_new_sample(move |_| {
         let data = match data_weak.upgrade() {
             Some(data) => data,
-            None => return gst::FlowReturn::Ok,
+            None => return Ok(gst::FlowSuccess::Ok),
         };
 
         let appsink = {
@@ -240,7 +237,7 @@ fn main() {
             let _ = io::stdout().flush();
         }
 
-        gst::FlowReturn::Ok
+        Ok(gst::FlowSuccess::Ok)
     });
 
     let main_loop = glib::MainLoop::new(None, false);
@@ -263,15 +260,13 @@ fn main() {
 
     pipeline
         .set_state(gst::State::Playing)
-        .into_result()
-        .expect("Unable to set the pipeline to the Playing state.");
+        .expect("Unable to set the pipeline to the `Playing` state.");
 
     main_loop.run();
 
     pipeline
         .set_state(gst::State::Null)
-        .into_result()
-        .expect("Unable to set the pipeline to the Null state.");
+        .expect("Unable to set the pipeline to the `Null` state.");
 
     bus.remove_signal_watch();
 }

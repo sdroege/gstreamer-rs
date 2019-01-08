@@ -104,11 +104,15 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         _element: &BaseTransform,
         _inbuf: &gst::Buffer,
         _outbuf: &mut gst::BufferRef,
-    ) -> gst::FlowReturn {
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unimplemented!();
     }
 
-    fn transform_ip(&self, _element: &BaseTransform, _buf: &mut gst::BufferRef) -> gst::FlowReturn {
+    fn transform_ip(
+        &self,
+        _element: &BaseTransform,
+        _buf: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unimplemented!();
     }
 
@@ -116,7 +120,7 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         &self,
         _element: &BaseTransform,
         _buf: &gst::BufferRef,
-    ) -> gst::FlowReturn {
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unimplemented!();
     }
 
@@ -605,6 +609,7 @@ where
             &from_glib_borrow(inbuf),
             gst::BufferRef::from_mut_ptr(outbuf),
         )
+        .into()
     })
     .to_glib()
 }
@@ -628,8 +633,10 @@ where
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         if from_glib(ffi::gst_base_transform_is_passthrough(ptr)) {
             imp.transform_ip_passthrough(&wrap, gst::BufferRef::from_ptr(buf))
+                .into()
         } else {
             imp.transform_ip(&wrap, gst::BufferRef::from_mut_ptr(buf))
+                .into()
         }
     })
     .to_glib()

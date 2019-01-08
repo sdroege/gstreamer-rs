@@ -100,8 +100,9 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
     clip.set_inpoint(duration / 2);
     clip.set_duration(duration / 4);
 
-    let ret = pipeline.set_state(gst::State::Playing);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Playing)
+        .expect("Unable to set the pipeline to the `Playing` state");
 
     let bus = pipeline.get_bus().unwrap();
     for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
@@ -122,8 +123,9 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
         }
     }
 
-    let ret = pipeline.set_state(gst::State::Null);
-    assert_ne!(ret, gst::StateChangeReturn::Failure);
+    pipeline
+        .set_state(gst::State::Null)
+        .expect("Unable to set the pipeline to the `Null` state");
 
     Ok(())
 }

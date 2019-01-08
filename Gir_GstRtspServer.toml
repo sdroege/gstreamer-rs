@@ -123,6 +123,16 @@ name = "GstRtspServer.RTSPStream"
 status = "generate"
 
     [[object.function]]
+    name = "recv_rtcp"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
+    name = "recv_rtp"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
+
+    [[object.function]]
     name = "query_position"
     ignore = true
     
@@ -159,6 +169,11 @@ concurrency = "send"
 name = "GstRtspServer.RTSPStreamTransport"
 status = "generate"
 concurrency = "none"
+
+    [[object.function]]
+    name = "recv_data"
+    # Use Result<FlowSuccess, FlowError>
+    ignore = true
 
     [[object.function]]
     name = "send_rtcp"

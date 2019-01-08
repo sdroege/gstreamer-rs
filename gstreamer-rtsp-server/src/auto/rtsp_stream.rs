@@ -124,10 +124,6 @@ pub trait RTSPStreamExt: 'static {
 
     fn leave_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(&self, bin: &P, rtpbin: &Q) -> Result<(), glib::error::BoolError>;
 
-    fn recv_rtcp(&self, buffer: &gst::Buffer) -> gst::FlowReturn;
-
-    fn recv_rtp(&self, buffer: &gst::Buffer) -> gst::FlowReturn;
-
     fn remove_transport(&self, trans: &RTSPStreamTransport) -> Result<(), glib::error::BoolError>;
 
     fn request_aux_sender(&self, sessid: u32) -> Option<gst::Element>;
@@ -422,18 +418,6 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     fn leave_bin<P: IsA<gst::Bin>, Q: IsA<gst::Element>>(&self, bin: &P, rtpbin: &Q) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(ffi::gst_rtsp_stream_leave_bin(self.to_glib_none().0, bin.to_glib_none().0, rtpbin.to_glib_none().0), "Failed to leave bin")
-        }
-    }
-
-    fn recv_rtcp(&self, buffer: &gst::Buffer) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_rtsp_stream_recv_rtcp(self.to_glib_none().0, buffer.to_glib_full()))
-        }
-    }
-
-    fn recv_rtp(&self, buffer: &gst::Buffer) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_rtsp_stream_recv_rtp(self.to_glib_none().0, buffer.to_glib_full()))
         }
     }
 

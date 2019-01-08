@@ -75,6 +75,15 @@ impl Error for StateChangeError {
     }
 }
 
+impl From<Result<StateChangeSuccess, StateChangeError>> for StateChangeReturn {
+    fn from(res: Result<StateChangeSuccess, StateChangeError>) -> Self {
+        match res {
+            Ok(success) => StateChangeReturn::from_ok(success),
+            Err(error) => StateChangeReturn::from_error(error),
+        }
+    }
+}
+
 impl FlowReturn {
     pub fn into_result(self) -> Result<FlowSuccess, FlowError> {
         match self {
@@ -186,6 +195,15 @@ impl Error for FlowError {
     }
 }
 
+impl From<Result<FlowSuccess, FlowError>> for FlowReturn {
+    fn from(res: Result<FlowSuccess, FlowError>) -> Self {
+        match res {
+            Ok(success) => FlowReturn::from_ok(success),
+            Err(error) => FlowReturn::from_error(error),
+        }
+    }
+}
+
 impl PadLinkReturn {
     pub fn into_result(self) -> Result<PadLinkSuccess, PadLinkError> {
         match self {
@@ -257,6 +275,15 @@ impl Error for PadLinkError {
             PadLinkError::Noformat => "Pads do not have common format",
             PadLinkError::Nosched => "Pads cannot cooperate in scheduling",
             PadLinkError::Refused => "Refused for some other reason",
+        }
+    }
+}
+
+impl From<Result<PadLinkSuccess, PadLinkError>> for PadLinkReturn {
+    fn from(res: Result<PadLinkSuccess, PadLinkError>) -> Self {
+        match res {
+            Ok(success) => PadLinkReturn::from_ok(success),
+            Err(error) => PadLinkReturn::from_error(error),
         }
     }
 }
@@ -339,6 +366,15 @@ impl Error for ClockError {
             ClockError::Badtime => "A bad time was provided to a function",
             ClockError::Error => "An error occurred",
             ClockError::Unsupported => "Operation is not supported",
+        }
+    }
+}
+
+impl From<Result<ClockSuccess, ClockError>> for ClockReturn {
+    fn from(res: Result<ClockSuccess, ClockError>) -> Self {
+        match res {
+            Ok(success) => ClockReturn::from_ok(success),
+            Err(error) => ClockReturn::from_error(error),
         }
     }
 }

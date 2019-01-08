@@ -15,6 +15,12 @@ use BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
+
+    fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>);
+
+    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
@@ -25,6 +31,25 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             ::utils::MutexGuard::lock(&src.element.object.lock);
             from_glib_none(&src.segment as *const _)
         }
+    }
+
+    fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>) {
+        let ret: gst::FlowReturn = ret.into();
+        unsafe {
+            ffi::gst_base_src_start_complete(self.to_glib_none().0, ret.to_glib());
+        }
+    }
+
+    fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn =
+            unsafe { from_glib(ffi::gst_base_src_start_wait(self.to_glib_none().0)) };
+        ret.into_result()
+    }
+
+    fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn =
+            unsafe { from_glib(ffi::gst_base_src_wait_playing(self.to_glib_none().0)) };
+        ret.into_result()
     }
 }
 

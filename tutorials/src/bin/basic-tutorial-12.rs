@@ -19,8 +19,8 @@ fn tutorial_main() -> Result<(), Error> {
     let pipeline = gst::parse_launch(&format!("playbin uri={}", uri))?;
 
     // Start playing
-    let ret = pipeline.set_state(gst::State::Playing).into_result()?;
-    let is_live = ret == gst::StateChangeSuccess::NoPreroll;
+    let res = pipeline.set_state(gst::State::Playing)?;
+    let is_live = res == gst::StateChangeSuccess::NoPreroll;
 
     let main_loop = glib::MainLoop::new(None, false);
     let main_loop_clone = main_loop.clone();

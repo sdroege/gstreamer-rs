@@ -153,7 +153,7 @@ fn example_main() -> Result<(), Error> {
         })
         .expect("Failed to register have-type signal of typefind");
 
-    pipeline.set_state(gst::State::Playing).into_result()?;
+    pipeline.set_state(gst::State::Playing)?;
 
     let bus = pipeline
         .get_bus()
@@ -165,7 +165,7 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                pipeline.set_state(gst::State::Null).into_result()?;
+                pipeline.set_state(gst::State::Null)?;
 
                 Err(ErrorMessage {
                     src: msg
@@ -191,7 +191,7 @@ fn example_main() -> Result<(), Error> {
         }
     }
 
-    pipeline.set_state(gst::State::Null).into_result()?;
+    pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }
@@ -209,7 +209,7 @@ fn handle_demux_pad_added(
         let queue_sink_pad = queue
             .get_request_pad("sink_%u")
             .expect("If this happened, something is terribly wrong");
-        demux_src_pad.link(&queue_sink_pad).into_result()?;
+        demux_src_pad.link(&queue_sink_pad)?;
         // Now that we requested a sink pad fitting our needs from the multiqueue,
         // the multiqueue automatically created a fitting src pad on the other side.
         // sink and src pad are linked internally, so we can iterate this internal link chain
@@ -224,7 +224,7 @@ fn handle_demux_pad_added(
         let muxer_sink_pad = muxer
             .get_compatible_pad(&queue_src_pad, None)
             .expect("Aww, you found a format that matroska doesn't support!");
-        queue_src_pad.link(&muxer_sink_pad).into_result()?;
+        queue_src_pad.link(&muxer_sink_pad)?;
 
         Ok(())
     };

@@ -31,32 +31,40 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
         true
     }
 
-    fn render(&self, element: &BaseSink, buffer: &gst::BufferRef) -> gst::FlowReturn;
+    fn render(
+        &self,
+        element: &BaseSink,
+        buffer: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn prepare(&self, _element: &BaseSink, _buffer: &gst::BufferRef) -> gst::FlowReturn {
-        gst::FlowReturn::Ok
+    fn prepare(
+        &self,
+        _element: &BaseSink,
+        _buffer: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        Ok(gst::FlowSuccess::Ok)
     }
 
-    fn render_list(&self, element: &BaseSink, list: &gst::BufferListRef) -> gst::FlowReturn {
+    fn render_list(
+        &self,
+        element: &BaseSink,
+        list: &gst::BufferListRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         for buffer in list.iter() {
-            let ret = self.render(element, buffer);
-            if ret != gst::FlowReturn::Ok {
-                return ret;
-            }
+            self.render(element, buffer)?;
         }
-
-        gst::FlowReturn::Ok
+        Ok(gst::FlowSuccess::Ok)
     }
 
-    fn prepare_list(&self, element: &BaseSink, list: &gst::BufferListRef) -> gst::FlowReturn {
+    fn prepare_list(
+        &self,
+        element: &BaseSink,
+        list: &gst::BufferListRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         for buffer in list.iter() {
-            let ret = self.prepare(element, buffer);
-            if ret != gst::FlowReturn::Ok {
-                return ret;
-            }
+            self.prepare(element, buffer)?;
         }
-
-        gst::FlowReturn::Ok
+        Ok(gst::FlowSuccess::Ok)
     }
 
     fn query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool {
@@ -224,7 +232,7 @@ where
     let buffer = gst::BufferRef::from_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.render(&wrap, buffer)
+        imp.render(&wrap, buffer).into()
     })
     .to_glib()
 }
@@ -244,7 +252,7 @@ where
     let buffer = gst::BufferRef::from_ptr(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.prepare(&wrap, buffer)
+        imp.prepare(&wrap, buffer).into()
     })
     .to_glib()
 }
@@ -264,7 +272,7 @@ where
     let list = gst::BufferListRef::from_ptr(list);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.render_list(&wrap, list)
+        imp.render_list(&wrap, list).into()
     })
     .to_glib()
 }
@@ -284,7 +292,7 @@ where
     let list = gst::BufferListRef::from_ptr(list);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.prepare_list(&wrap, list)
+        imp.prepare_list(&wrap, list).into()
     })
     .to_glib()
 }

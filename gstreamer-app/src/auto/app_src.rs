@@ -33,12 +33,6 @@ glib_wrapper! {
 }
 
 impl AppSrc {
-    pub fn end_of_stream(&self) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0))
-        }
-    }
-
     pub fn get_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::gst_app_src_get_caps(self.to_glib_none().0))
@@ -79,12 +73,6 @@ impl AppSrc {
     pub fn get_stream_type(&self) -> AppStreamType {
         unsafe {
             from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0))
-        }
-    }
-
-    pub fn push_sample(&self, sample: &gst::Sample) -> gst::FlowReturn {
-        unsafe {
-            from_glib(ffi::gst_app_src_push_sample(self.to_glib_none().0, sample.to_glib_none().0))
         }
     }
 

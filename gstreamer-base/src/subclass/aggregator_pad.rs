@@ -22,7 +22,11 @@ use AggregatorPad;
 use AggregatorPadClass;
 
 pub trait AggregatorPadImpl: PadImpl + Send + Sync + 'static {
-    fn flush(&self, aggregator_pad: &AggregatorPad, aggregator: &Aggregator) -> gst::FlowReturn {
+    fn flush(
+        &self,
+        aggregator_pad: &AggregatorPad,
+        aggregator: &Aggregator,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_flush(aggregator_pad, aggregator)
     }
 
@@ -39,7 +43,7 @@ pub trait AggregatorPadImpl: PadImpl + Send + Sync + 'static {
         &self,
         aggregator_pad: &AggregatorPad,
         aggregator: &Aggregator,
-    ) -> gst::FlowReturn {
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorPadClass;
@@ -52,6 +56,7 @@ pub trait AggregatorPadImpl: PadImpl + Send + Sync + 'static {
                     ))
                 })
                 .unwrap_or(gst::FlowReturn::Ok)
+                .into_result()
         }
     }
 
@@ -101,7 +106,8 @@ where
     let imp = instance.get_impl();
     let wrap: AggregatorPad = from_glib_borrow(ptr);
 
-    imp.flush(&wrap, &from_glib_borrow(aggregator)).to_glib()
+    let res: gst::FlowReturn = imp.flush(&wrap, &from_glib_borrow(aggregator)).into();
+    res.to_glib()
 }
 
 unsafe extern "C" fn aggregator_pad_skip_buffer<T: ObjectSubclass>(
