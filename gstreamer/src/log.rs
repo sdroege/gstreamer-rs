@@ -146,6 +146,56 @@ impl fmt::Debug for DebugCategory {
     }
 }
 
+lazy_static! {
+    pub static ref CAT_RUST: DebugCategory = DebugCategory::new(
+        "GST_RUST",
+        ::DebugColorFlags::UNDERLINE,
+        "GStreamer's Rust binding core",
+    );
+}
+
+macro_rules! declare_debug_category_from_name(
+    ($cat:ident, $cat_name:expr) => (
+        lazy_static! {
+            pub static ref $cat: DebugCategory = DebugCategory::get($cat_name)
+                .expect(&format!("Unable to find `DebugCategory` with name {}", $cat_name));
+        }
+    );
+);
+
+declare_debug_category_from_name!(CAT_DEFAULT, "default");
+declare_debug_category_from_name!(CAT_GST_INIT, "GST_INIT");
+declare_debug_category_from_name!(CAT_MEMORY, "GST_MEMORY");
+declare_debug_category_from_name!(CAT_PARENTAGE, "GST_PARENTAGE");
+declare_debug_category_from_name!(CAT_STATES, "GST_STATES");
+declare_debug_category_from_name!(CAT_SCHEDULING, "GST_SCHEDULING");
+declare_debug_category_from_name!(CAT_BUFFER, "GST_BUFFER");
+declare_debug_category_from_name!(CAT_BUFFER_LIST, "GST_BUFFER_LIST");
+declare_debug_category_from_name!(CAT_BUS, "GST_BUS");
+declare_debug_category_from_name!(CAT_CAPS, "GST_CAPS");
+declare_debug_category_from_name!(CAT_CLOCK, "GST_CLOCK");
+declare_debug_category_from_name!(CAT_ELEMENT_PADS, "GST_ELEMENT_PADS");
+declare_debug_category_from_name!(CAT_PADS, "GST_PADS");
+declare_debug_category_from_name!(CAT_PERFORMANCE, "GST_PERFORMANCE");
+declare_debug_category_from_name!(CAT_PIPELINE, "GST_PIPELINE");
+declare_debug_category_from_name!(CAT_PLUGIN_LOADING, "GST_PLUGIN_LOADING");
+declare_debug_category_from_name!(CAT_PLUGIN_INFO, "GST_PLUGIN_INFO");
+declare_debug_category_from_name!(CAT_PROPERTIES, "GST_PROPERTIES");
+declare_debug_category_from_name!(CAT_NEGOTIATION, "GST_NEGOTIATION");
+declare_debug_category_from_name!(CAT_REFCOUNTING, "GST_REFCOUNTING");
+declare_debug_category_from_name!(CAT_ERROR_SYSTEM, "GST_ERROR_SYSTEM");
+declare_debug_category_from_name!(CAT_EVENT, "GST_EVENT");
+declare_debug_category_from_name!(CAT_MESSAGE, "GST_MESSAGE");
+declare_debug_category_from_name!(CAT_PARAMS, "GST_PARAMS");
+declare_debug_category_from_name!(CAT_CALL_TRACE, "GST_CALL_TRACE");
+declare_debug_category_from_name!(CAT_SIGNAL, "GST_SIGNAL");
+declare_debug_category_from_name!(CAT_PROBE, "GST_PROBE");
+declare_debug_category_from_name!(CAT_REGISTRY, "GST_REGISTRY");
+declare_debug_category_from_name!(CAT_QOS, "GST_QOS");
+declare_debug_category_from_name!(CAT_META, "GST_META");
+declare_debug_category_from_name!(CAT_LOCKING, "GST_LOCKING");
+declare_debug_category_from_name!(CAT_CONTEXT, "GST_CONTEXT");
+
 #[macro_export]
 macro_rules! gst_error(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
@@ -246,7 +296,9 @@ mod tests {
     fn get_existing() {
         ::init().unwrap();
 
-        assert_ne!(DebugCategory::get("GST_PERFORMANCE"), None);
+        let perf_cat = DebugCategory::get("GST_PERFORMANCE")
+            .expect("Unable to find `DebugCategory` with name \"GST_PERFORMANCE\"");
+        assert_eq!(perf_cat.get_name(), CAT_PERFORMANCE.get_name());
     }
 
     #[test]
