@@ -47,17 +47,10 @@ pub use flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-pub use aggregator::AggregatorClass;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
-#[cfg(any(feature = "v1_14", feature = "dox"))]
-pub use aggregator_pad::AggregatorPadClass;
 mod base_sink;
-pub use base_sink::BaseSinkClass;
 mod base_src;
-pub use base_src::BaseSrcClass;
 mod base_transform;
-pub use base_transform::BaseTransformClass;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

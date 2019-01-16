@@ -7,11 +7,12 @@
 // except according to those terms.
 
 use Element;
+use ElementClass;
 
 use glib;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::object::Cast;
-use glib::object::{IsA, IsClassFor};
+use glib::object::IsA;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrBorrow;
 use glib::translate::{
@@ -35,7 +36,6 @@ use StateChangeSuccess;
 
 use std::ffi::CStr;
 use std::mem;
-use std::ops;
 
 use libc;
 
@@ -680,30 +680,6 @@ impl<O: IsA<Element>> ElementExtManual for O {
                 Some(free_user_data),
             );
         }
-    }
-}
-
-#[repr(C)]
-pub struct ElementClass(ffi::GstElementClass);
-
-unsafe impl IsClassFor for ElementClass {
-    type Instance = ::Element;
-}
-
-unsafe impl Send for ElementClass {}
-unsafe impl Sync for ElementClass {}
-
-impl ops::Deref for ElementClass {
-    type Target = glib::ObjectClass;
-
-    fn deref(&self) -> &Self::Target {
-        self.upcast_ref()
-    }
-}
-
-impl ops::DerefMut for ElementClass {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.upcast_ref_mut()
     }
 }
 

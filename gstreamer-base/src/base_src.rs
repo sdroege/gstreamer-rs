@@ -7,10 +7,9 @@
 // except according to those terms.
 
 use ffi;
-use glib::object::{IsA, IsClassFor};
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use std::ops;
 use BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
@@ -52,29 +51,5 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
             ))
         };
         ret.into_result()
-    }
-}
-
-#[repr(C)]
-pub struct BaseSrcClass(ffi::GstBaseSrcClass);
-
-unsafe impl IsClassFor for BaseSrcClass {
-    type Instance = BaseSrc;
-}
-
-unsafe impl Send for BaseSrcClass {}
-unsafe impl Sync for BaseSrcClass {}
-
-impl ops::Deref for BaseSrcClass {
-    type Target = gst::ElementClass;
-
-    fn deref(&self) -> &Self::Target {
-        self.upcast_ref()
-    }
-}
-
-impl ops::DerefMut for BaseSrcClass {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.upcast_ref_mut()
     }
 }

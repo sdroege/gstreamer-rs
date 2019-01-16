@@ -31,11 +31,10 @@ use StaticPadTemplate;
 use std::cell::RefCell;
 use std::mem;
 use std::mem::transmute;
-use std::ops;
 use std::ptr;
 
 use glib;
-use glib::object::{IsA, IsClassFor};
+use glib::object::IsA;
 use glib::translate::{
     from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override, FromGlib, ToGlib,
     ToGlibPtr,
@@ -1023,30 +1022,6 @@ impl<O: IsA<Pad>> PadExtManual for O {
             ))
         };
         ret.into_result()
-    }
-}
-
-#[repr(C)]
-pub struct PadClass(ffi::GstPadClass);
-
-unsafe impl IsClassFor for PadClass {
-    type Instance = Pad;
-}
-
-unsafe impl Send for PadClass {}
-unsafe impl Sync for PadClass {}
-
-impl ops::Deref for PadClass {
-    type Target = glib::ObjectClass;
-
-    fn deref(&self) -> &Self::Target {
-        self.upcast_ref()
-    }
-}
-
-impl ops::DerefMut for PadClass {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.upcast_ref_mut()
     }
 }
 

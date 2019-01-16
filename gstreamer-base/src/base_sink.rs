@@ -7,11 +7,10 @@
 // except according to those terms.
 
 use ffi;
-use glib::object::{IsA, IsClassFor};
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use std::mem;
-use std::ops;
 use BaseSink;
 
 pub trait BaseSinkExtManual: 'static {
@@ -56,29 +55,5 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             ))
         };
         ret.into_result()
-    }
-}
-
-#[repr(C)]
-pub struct BaseSinkClass(ffi::GstBaseSinkClass);
-
-unsafe impl IsClassFor for BaseSinkClass {
-    type Instance = BaseSink;
-}
-
-unsafe impl Send for BaseSinkClass {}
-unsafe impl Sync for BaseSinkClass {}
-
-impl ops::Deref for BaseSinkClass {
-    type Target = gst::ElementClass;
-
-    fn deref(&self) -> &Self::Target {
-        self.upcast_ref()
-    }
-}
-
-impl ops::DerefMut for BaseSinkClass {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.upcast_ref_mut()
     }
 }

@@ -147,13 +147,8 @@ pub use promise::*;
 
 mod bus;
 mod element;
-pub use element::ElementClass;
 
 mod bin;
-pub use bin::BinClass;
-
-mod pipeline;
-pub use pipeline::PipelineClass;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -180,12 +175,10 @@ mod device_monitor;
 mod device_provider;
 mod enums;
 mod ghost_pad;
-pub use ghost_pad::GhostPadClass;
 mod gobject;
 mod iterator;
 mod object;
 mod pad;
-pub use pad::PadClass;
 mod parse_context;
 mod proxy_pad;
 mod tag_setter;

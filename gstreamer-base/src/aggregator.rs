@@ -8,11 +8,9 @@
 
 use ffi;
 use glib::translate::*;
-use glib::{IsA, IsClassFor};
+use glib::IsA;
 use gst;
 use Aggregator;
-
-use std::ops;
 
 pub trait AggregatorExtManual: 'static {
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError>;
@@ -27,29 +25,5 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
             ))
         };
         ret.into_result()
-    }
-}
-
-#[repr(C)]
-pub struct AggregatorClass(ffi::GstAggregatorClass);
-
-unsafe impl IsClassFor for AggregatorClass {
-    type Instance = Aggregator;
-}
-
-unsafe impl Send for AggregatorClass {}
-unsafe impl Sync for AggregatorClass {}
-
-impl ops::Deref for AggregatorClass {
-    type Target = gst::ElementClass;
-
-    fn deref(&self) -> &Self::Target {
-        self.upcast_ref()
-    }
-}
-
-impl ops::DerefMut for AggregatorClass {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.upcast_ref_mut()
     }
 }

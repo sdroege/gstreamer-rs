@@ -7,13 +7,11 @@
 // except according to those terms.
 
 use ffi;
-use glib::object::{IsA, IsClassFor};
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_ffi;
 use AggregatorPad;
-
-use std::ops;
 
 pub trait AggregatorPadExtManual: 'static {
     fn get_segment(&self) -> gst::Segment;
@@ -26,29 +24,5 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExtManual for O {
             ::utils::MutexGuard::lock(&ptr.parent.object.lock);
             from_glib_none(&ptr.segment as *const gst_ffi::GstSegment)
         }
-    }
-}
-
-#[repr(C)]
-pub struct AggregatorPadClass(ffi::GstAggregatorPadClass);
-
-unsafe impl IsClassFor for AggregatorPadClass {
-    type Instance = ::AggregatorPad;
-}
-
-unsafe impl Send for AggregatorPadClass {}
-unsafe impl Sync for AggregatorPadClass {}
-
-impl ops::Deref for AggregatorPadClass {
-    type Target = gst::PadClass;
-
-    fn deref(&self) -> &Self::Target {
-        self.upcast_ref()
-    }
-}
-
-impl ops::DerefMut for AggregatorPadClass {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.upcast_ref_mut()
     }
 }
