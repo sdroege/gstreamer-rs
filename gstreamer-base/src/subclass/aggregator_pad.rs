@@ -87,7 +87,7 @@ unsafe impl<T: ObjectSubclass + AggregatorPadImpl> IsSubclassable<T> for Aggrega
     fn override_vfuncs(&mut self) {
         <gst::PadClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstAggregatorPadClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstAggregatorPadClass);
             klass.flush = Some(aggregator_pad_flush::<T>);
             klass.skip_buffer = Some(aggregator_pad_skip_buffer::<T>);
         }

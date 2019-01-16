@@ -72,7 +72,7 @@ where
     fn override_vfuncs(&mut self) {
         <::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstBinClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstBinClass);
             klass.add_element = Some(bin_add_element::<T>);
             klass.remove_element = Some(bin_remove_element::<T>);
             klass.handle_message = Some(bin_handle_message::<T>);

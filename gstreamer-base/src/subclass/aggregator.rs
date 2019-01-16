@@ -384,7 +384,7 @@ where
     fn override_vfuncs(&mut self) {
         <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstAggregatorClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstAggregatorClass);
             klass.flush = Some(aggregator_flush::<T>);
             klass.clip = Some(aggregator_clip::<T>);
             klass.finish_buffer = Some(aggregator_finish_buffer::<T>);

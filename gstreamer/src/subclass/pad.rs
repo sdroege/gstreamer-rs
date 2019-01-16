@@ -55,7 +55,7 @@ unsafe impl<T: ObjectSubclass + PadImpl> IsSubclassable<T> for PadClass {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
 
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstPadClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstPadClass);
             klass.linked = Some(pad_linked::<T>);
             klass.unlinked = Some(pad_unlinked::<T>);
         }

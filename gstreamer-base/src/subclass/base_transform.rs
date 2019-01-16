@@ -282,7 +282,7 @@ where
     fn override_vfuncs(&mut self) {
         <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstBaseTransformClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstBaseTransformClass);
             klass.start = Some(base_transform_start::<T>);
             klass.stop = Some(base_transform_stop::<T>);
             klass.transform_caps = Some(base_transform_transform_caps::<T>);
@@ -309,7 +309,7 @@ pub unsafe trait BaseTransformClassSubclassExt: Sized + 'static {
         <T as ObjectSubclass>::Instance: PanicPoison,
     {
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstBaseTransformClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstBaseTransformClass);
 
             klass.passthrough_on_same_caps = passthrough_on_same_caps.to_glib();
             klass.transform_ip_on_passthrough = transform_ip_on_passthrough.to_glib();

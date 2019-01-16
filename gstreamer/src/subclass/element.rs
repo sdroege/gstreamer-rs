@@ -185,7 +185,7 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
     fn add_pad_template(&mut self, pad_template: PadTemplate) {
         unsafe {
             ffi::gst_element_class_add_pad_template(
-                self as *const Self as *mut ffi::GstElementClass,
+                self as *mut Self as *mut ffi::GstElementClass,
                 pad_template.to_glib_none().0,
             );
         }
@@ -200,7 +200,7 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
     ) {
         unsafe {
             ffi::gst_element_class_set_metadata(
-                self as *const Self as *mut ffi::GstElementClass,
+                self as *mut Self as *mut ffi::GstElementClass,
                 long_name.to_glib_none().0,
                 classification.to_glib_none().0,
                 description.to_glib_none().0,
@@ -220,7 +220,7 @@ where
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
 
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstElementClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstElementClass);
             klass.change_state = Some(element_change_state::<T>);
             klass.request_new_pad = Some(element_request_new_pad::<T>);
             klass.release_pad = Some(element_release_pad::<T>);

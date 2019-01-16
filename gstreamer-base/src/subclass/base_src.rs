@@ -215,7 +215,7 @@ where
     fn override_vfuncs(&mut self) {
         <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstBaseSrcClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstBaseSrcClass);
             klass.start = Some(base_src_start::<T>);
             klass.stop = Some(base_src_stop::<T>);
             klass.is_seekable = Some(base_src_is_seekable::<T>);

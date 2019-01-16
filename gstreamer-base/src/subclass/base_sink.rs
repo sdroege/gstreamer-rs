@@ -169,7 +169,7 @@ where
     fn override_vfuncs(&mut self) {
         <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *const Self as *mut ffi::GstBaseSinkClass);
+            let klass = &mut *(self as *mut Self as *mut ffi::GstBaseSinkClass);
             klass.start = Some(base_sink_start::<T>);
             klass.stop = Some(base_sink_stop::<T>);
             klass.render = Some(base_sink_render::<T>);

@@ -22,7 +22,7 @@ where
     fn override_vfuncs(&mut self) {
         <::BinClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let _klass = &mut *(self as *const Self as *mut ffi::GstPipelineClass);
+            let _klass = &mut *(self as *mut Self as *mut ffi::GstPipelineClass);
             // Nothing to do here
         }
     }

@@ -19,7 +19,7 @@ unsafe impl<T: ObjectSubclass + GhostPadImpl> IsSubclassable<T> for GhostPadClas
     fn override_vfuncs(&mut self) {
         <::PadClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let _klass = &mut *(self as *const Self as *mut ffi::GstGhostPadClass);
+            let _klass = &mut *(self as *mut Self as *mut ffi::GstGhostPadClass);
             // Nothing to do here
         }
     }
