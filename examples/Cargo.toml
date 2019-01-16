@@ -26,9 +26,7 @@ failure_derive = "0.1"
 cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
 pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
-# Using my personal repository (vjaquez) for glutin until
-# https://github.com/tomaka/glutin/pull/1082 is merged
-glutin = { git = "https://github.com/ceyusa/glutin", branch="native-display", optional = true }
+glutin = { git = "https://github.com/tomaka/glutin", optional = true }
 
 [build-dependencies]
 gl_generator = { version = "0.10", optional = true }
