@@ -34,6 +34,7 @@ glutin = { git = "https://github.com/ceyusa/glutin", branch="native-display", op
 gl_generator = { version = "0.10", optional = true }
 
 [features]
+default = []
 gst-player = ["gstreamer-player"]
 ges = ["gstreamer-editing-services"]
 gtksink = ["gtk", "gio"]
@@ -44,7 +45,6 @@ generic-futures = ["gstreamer/futures", "futures-preview"]
 glib-futures = ["generic-futures", "glib/futures"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
-default-features = []
 v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 gl = ["gstreamer-gl/egl", "gl_generator", "glutin"]

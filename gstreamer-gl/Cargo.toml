@@ -34,7 +34,7 @@ version = "0.1"
 optional = true
 
 [features]
-default-features = []
+default = []
 dox = ["gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox"]
 egl = ["gstreamer-gl-sys/egl"]
 embed-lgpl-docs = ["rustdoc-stripper"]

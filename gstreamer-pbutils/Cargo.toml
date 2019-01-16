@@ -27,10 +27,10 @@ version = "0.1"
 optional = true
 
 [features]
+default = []
 v1_10 = ["gstreamer-sys/v1_10", "gstreamer-pbutils-sys/v1_10"]
 v1_12 = ["gstreamer-sys/v1_12", "gstreamer-pbutils-sys/v1_12", "v1_10"]
 v1_14 = ["gstreamer-sys/v1_14", "gstreamer-pbutils-sys/v1_14", "v1_12"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-pbutils-sys/dox"]
-default-features = []
