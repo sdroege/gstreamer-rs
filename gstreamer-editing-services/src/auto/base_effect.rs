@@ -9,7 +9,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass>): TrackElement, TimelineElement, Extractable;
+    pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass, BaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ffi::ges_base_effect_get_type(),
@@ -17,3 +17,5 @@ glib_wrapper! {
 }
 
 impl BaseEffect {}
+
+pub const NONE_BASE_EFFECT: Option<&BaseEffect> = None;

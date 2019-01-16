@@ -12,7 +12,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass>): PluginFeature, Object;
+    pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass, DeviceProviderFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
         get_type => || ffi::gst_device_provider_factory_get_type(),
@@ -46,9 +46,8 @@ impl DeviceProviderFactory {
 
     pub fn has_classes<'a, P: Into<Option<&'a str>>>(&self, classes: P) -> bool {
         let classes = classes.into();
-        let classes = classes.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_device_provider_factory_has_classes(self.to_glib_none().0, classes.0))
+            from_glib(ffi::gst_device_provider_factory_has_classes(self.to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
@@ -82,3 +81,5 @@ impl DeviceProviderFactory {
 
 unsafe impl Send for DeviceProviderFactory {}
 unsafe impl Sync for DeviceProviderFactory {}
+
+pub const NONE_DEVICE_PROVIDER_FACTORY: Option<&DeviceProviderFactory> = None;

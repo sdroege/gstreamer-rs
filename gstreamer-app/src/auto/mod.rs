@@ -3,10 +3,10 @@
 // DO NOT EDIT
 
 mod app_sink;
-pub use self::app_sink::AppSink;
+pub use self::app_sink::{AppSink, AppSinkClass, NONE_APP_SINK};
 
 mod app_src;
-pub use self::app_src::AppSrc;
+pub use self::app_src::{AppSrc, AppSrcClass, NONE_APP_SRC};
 
 mod enums;
 pub use self::enums::AppStreamType;

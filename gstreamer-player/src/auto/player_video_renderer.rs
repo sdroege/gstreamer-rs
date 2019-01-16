@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PlayerVideoRenderer(Object<ffi::GstPlayerVideoRenderer, ffi::GstPlayerVideoRendererInterface>);
+    pub struct PlayerVideoRenderer(Interface<ffi::GstPlayerVideoRenderer>);
 
     match fn {
         get_type => || ffi::gst_player_video_renderer_get_type(),
@@ -16,6 +16,8 @@ glib_wrapper! {
 
 unsafe impl Send for PlayerVideoRenderer {}
 unsafe impl Sync for PlayerVideoRenderer {}
+
+pub const NONE_PLAYER_VIDEO_RENDERER: Option<&PlayerVideoRenderer> = None;
 
 pub trait PlayerVideoRendererExt: 'static {}
 

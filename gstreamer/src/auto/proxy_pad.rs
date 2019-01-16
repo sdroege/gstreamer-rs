@@ -9,7 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass>): Pad, Object;
+    pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass, ProxyPadClass>) @extends Pad, Object;
 
     match fn {
         get_type => || ffi::gst_proxy_pad_get_type(),
@@ -25,6 +25,8 @@ impl ProxyPad {
 unsafe impl Send for ProxyPad {}
 unsafe impl Sync for ProxyPad {}
 
+pub const NONE_PROXY_PAD: Option<&ProxyPad> = None;
+
 pub trait ProxyPadExt: 'static {
     fn get_internal(&self) -> Option<ProxyPad>;
 }
@@ -32,7 +34,7 @@ pub trait ProxyPadExt: 'static {
 impl<O: IsA<ProxyPad>> ProxyPadExt for O {
     fn get_internal(&self) -> Option<ProxyPad> {
         unsafe {
-            from_glib_full(ffi::gst_proxy_pad_get_internal(self.to_glib_none().0))
+            from_glib_full(ffi::gst_proxy_pad_get_internal(self.as_ref().to_glib_none().0))
         }
     }
 }

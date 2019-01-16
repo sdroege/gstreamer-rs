@@ -12,7 +12,7 @@ use glib::translate::*;
 use gst;
 
 glib_wrapper! {
-    pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass>);
+    pub struct PlayerMediaInfo(Object<ffi::GstPlayerMediaInfo, ffi::GstPlayerMediaInfoClass, PlayerMediaInfoClass>);
 
     match fn {
         get_type => || ffi::gst_player_media_info_get_type(),
@@ -119,3 +119,5 @@ impl PlayerMediaInfo {
 
 unsafe impl Send for PlayerMediaInfo {}
 unsafe impl Sync for PlayerMediaInfo {}
+
+pub const NONE_PLAYER_MEDIA_INFO: Option<&PlayerMediaInfo> = None;

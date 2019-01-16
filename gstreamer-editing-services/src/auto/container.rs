@@ -11,7 +11,7 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -22,7 +22,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass>): TimelineElement, Extractable;
+    pub struct Container(Object<ffi::GESContainer, ffi::GESContainerClass, ContainerClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ffi::ges_container_get_type(),
@@ -37,6 +37,8 @@ impl Container {
         }
     }
 }
+
+pub const NONE_CONTAINER: Option<&Container> = None;
 
 pub trait GESContainerExt: 'static {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError>;
@@ -61,31 +63,31 @@ pub trait GESContainerExt: 'static {
 impl<O: IsA<Container>> GESContainerExt for O {
     fn add<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_container_add(self.to_glib_none().0, child.to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(ffi::ges_container_add(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0), "Failed to add element")
         }
     }
 
     fn edit(&self, layers: &[Layer], new_layer_priority: i32, mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_container_edit(self.to_glib_none().0, layers.to_glib_none().0, new_layer_priority, mode.to_glib(), edge.to_glib(), position), "Failed to edit container")
+            glib_result_from_gboolean!(ffi::ges_container_edit(self.as_ref().to_glib_none().0, layers.to_glib_none().0, new_layer_priority, mode.to_glib(), edge.to_glib(), position), "Failed to edit container")
         }
     }
 
     fn get_children(&self, recursive: bool) -> Vec<TimelineElement> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_container_get_children(self.to_glib_none().0, recursive.to_glib()))
+            FromGlibPtrContainer::from_glib_full(ffi::ges_container_get_children(self.as_ref().to_glib_none().0, recursive.to_glib()))
         }
     }
 
     fn remove<P: IsA<TimelineElement>>(&self, child: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_container_remove(self.to_glib_none().0, child.to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(ffi::ges_container_remove(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0), "Failed to remove element")
         }
     }
 
     fn ungroup(&self, recursive: bool) -> Vec<Container> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_container_ungroup(self.to_glib_full(), recursive.to_glib()))
+            FromGlibPtrContainer::from_glib_full(ffi::ges_container_ungroup(self.as_ref().to_glib_full(), recursive.to_glib()))
         }
     }
 
@@ -100,7 +102,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TimelineElement) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"child-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"child-added\0".as_ptr() as *const _,
                 transmute(child_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -108,7 +110,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TimelineElement) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"child-removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"child-removed\0".as_ptr() as *const _,
                 transmute(child_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -116,7 +118,7 @@ impl<O: IsA<Container>> GESContainerExt for O {
     fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::height\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::height\0".as_ptr() as *const _,
                 transmute(notify_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -125,17 +127,17 @@ impl<O: IsA<Container>> GESContainerExt for O {
 unsafe extern "C" fn child_added_trampoline<P>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
 where P: IsA<Container> {
     let f: &&(Fn(&P, &TimelineElement) + 'static) = transmute(f);
-    f(&Container::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(element))
+    f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn child_removed_trampoline<P>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
 where P: IsA<Container> {
     let f: &&(Fn(&P, &TimelineElement) + 'static) = transmute(f);
-    f(&Container::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(element))
+    f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn notify_height_trampoline<P>(this: *mut ffi::GESContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Container::from_glib_borrow(this).downcast_unchecked())
+    f(&Container::from_glib_borrow(this).unsafe_cast())
 }

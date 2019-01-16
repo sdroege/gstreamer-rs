@@ -7,7 +7,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PlayerVideoInfo(Object<ffi::GstPlayerVideoInfo, ffi::GstPlayerVideoInfoClass>): PlayerStreamInfo;
+    pub struct PlayerVideoInfo(Object<ffi::GstPlayerVideoInfo, ffi::GstPlayerVideoInfoClass, PlayerVideoInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
         get_type => || ffi::gst_player_video_info_get_type(),
@@ -42,3 +42,5 @@ impl PlayerVideoInfo {
 
 unsafe impl Send for PlayerVideoInfo {}
 unsafe impl Sync for PlayerVideoInfo {}
+
+pub const NONE_PLAYER_VIDEO_INFO: Option<&PlayerVideoInfo> = None;

@@ -6,7 +6,7 @@ use GLContext;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -14,14 +14,11 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GLBaseFilter(Object<ffi::GstGLBaseFilter, ffi::GstGLBaseFilterClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLBaseFilter(Object<ffi::GstGLBaseFilter, ffi::GstGLBaseFilterClass, GLBaseFilterClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_base_filter_get_type(),
@@ -30,6 +27,8 @@ glib_wrapper! {
 
 unsafe impl Send for GLBaseFilter {}
 unsafe impl Sync for GLBaseFilter {}
+
+pub const NONE_GL_BASE_FILTER: Option<&GLBaseFilter> = None;
 
 pub trait GLBaseFilterExt: 'static {
     fn get_property_context(&self) -> Option<GLContext>;
@@ -49,7 +48,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     fn connect_property_context_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::context\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::context\0".as_ptr() as *const _,
                 transmute(notify_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -58,5 +57,5 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
 unsafe extern "C" fn notify_context_trampoline<P>(this: *mut ffi::GstGLBaseFilter, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLBaseFilter> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&GLBaseFilter::from_glib_borrow(this).downcast_unchecked())
+    f(&GLBaseFilter::from_glib_borrow(this).unsafe_cast())
 }

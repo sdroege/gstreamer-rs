@@ -13,7 +13,7 @@ use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -25,12 +25,14 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass>): TimelineElement, Extractable;
+    pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass, TrackElementClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ffi::ges_track_element_get_type(),
     }
 }
+
+pub const NONE_TRACK_ELEMENT: Option<&TrackElement> = None;
 
 pub trait TrackElementExt: 'static {
     fn add_children_props<P: IsA<gst::Element>>(&self, element: &P, wanted_categories: &[&str], blacklist: &[&str], whitelist: &[&str]);
@@ -59,7 +61,7 @@ pub trait TrackElementExt: 'static {
 
     fn set_active(&self, active: bool) -> bool;
 
-    //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool;
+    //fn set_control_source<P: IsA</*Ignored*/gst::ControlSource>>(&self, source: &P, property_name: &str, binding_type: &str) -> bool;
 
     fn set_track_type(&self, type_: TrackType);
 
@@ -79,13 +81,13 @@ pub trait TrackElementExt: 'static {
 impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn add_children_props<P: IsA<gst::Element>>(&self, element: &P, wanted_categories: &[&str], blacklist: &[&str], whitelist: &[&str]) {
         unsafe {
-            ffi::ges_track_element_add_children_props(self.to_glib_none().0, element.to_glib_none().0, wanted_categories.to_glib_none().0, blacklist.to_glib_none().0, whitelist.to_glib_none().0);
+            ffi::ges_track_element_add_children_props(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0, wanted_categories.to_glib_none().0, blacklist.to_glib_none().0, whitelist.to_glib_none().0);
         }
     }
 
     fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> bool {
         unsafe {
-            from_glib(ffi::ges_track_element_edit(self.to_glib_none().0, layers.to_glib_none().0, mode.to_glib(), edge.to_glib(), position))
+            from_glib(ffi::ges_track_element_edit(self.as_ref().to_glib_none().0, layers.to_glib_none().0, mode.to_glib(), edge.to_glib(), position))
         }
     }
 
@@ -99,37 +101,37 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     fn get_element(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_element(self.to_glib_none().0))
+            from_glib_none(ffi::ges_track_element_get_element(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_gnlobject(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_gnlobject(self.to_glib_none().0))
+            from_glib_none(ffi::ges_track_element_get_gnlobject(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_nleobject(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_nleobject(self.to_glib_none().0))
+            from_glib_none(ffi::ges_track_element_get_nleobject(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_track(&self) -> Option<Track> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_track(self.to_glib_none().0))
+            from_glib_none(ffi::ges_track_element_get_track(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_track_type(&self) -> TrackType {
         unsafe {
-            from_glib(ffi::ges_track_element_get_track_type(self.to_glib_none().0))
+            from_glib(ffi::ges_track_element_get_track_type(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_active(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_track_element_is_active(self.to_glib_none().0))
+            from_glib(ffi::ges_track_element_is_active(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -139,23 +141,23 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 
     fn remove_control_binding(&self, property_name: &str) -> bool {
         unsafe {
-            from_glib(ffi::ges_track_element_remove_control_binding(self.to_glib_none().0, property_name.to_glib_none().0))
+            from_glib(ffi::ges_track_element_remove_control_binding(self.as_ref().to_glib_none().0, property_name.to_glib_none().0))
         }
     }
 
     fn set_active(&self, active: bool) -> bool {
         unsafe {
-            from_glib(ffi::ges_track_element_set_active(self.to_glib_none().0, active.to_glib()))
+            from_glib(ffi::ges_track_element_set_active(self.as_ref().to_glib_none().0, active.to_glib()))
         }
     }
 
-    //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool {
+    //fn set_control_source<P: IsA</*Ignored*/gst::ControlSource>>(&self, source: &P, property_name: &str, binding_type: &str) -> bool {
     //    unsafe { TODO: call ffi::ges_track_element_set_control_source() }
     //}
 
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
-            ffi::ges_track_element_set_track_type(self.to_glib_none().0, type_.to_glib());
+            ffi::ges_track_element_set_track_type(self.as_ref().to_glib_none().0, type_.to_glib());
         }
     }
 
@@ -178,7 +180,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -186,7 +188,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn connect_property_track_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::track\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::track\0".as_ptr() as *const _,
                 transmute(notify_track_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -194,7 +196,7 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn connect_property_track_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::track-type\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::track-type\0".as_ptr() as *const _,
                 transmute(notify_track_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -203,17 +205,17 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GESTrackElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TrackElement> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TrackElement::from_glib_borrow(this).downcast_unchecked())
+    f(&TrackElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_track_trampoline<P>(this: *mut ffi::GESTrackElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TrackElement> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TrackElement::from_glib_borrow(this).downcast_unchecked())
+    f(&TrackElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_track_type_trampoline<P>(this: *mut ffi::GESTrackElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TrackElement> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TrackElement::from_glib_borrow(this).downcast_unchecked())
+    f(&TrackElement::from_glib_borrow(this).unsafe_cast())
 }

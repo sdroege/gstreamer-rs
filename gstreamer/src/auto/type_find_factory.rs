@@ -10,7 +10,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct TypeFindFactory(Object<ffi::GstTypeFindFactory, ffi::GstTypeFindFactoryClass>): PluginFeature, Object;
+    pub struct TypeFindFactory(Object<ffi::GstTypeFindFactory, ffi::GstTypeFindFactoryClass, TypeFindFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
         get_type => || ffi::gst_type_find_factory_get_type(),
@@ -50,3 +50,5 @@ impl TypeFindFactory {
 
 unsafe impl Send for TypeFindFactory {}
 unsafe impl Sync for TypeFindFactory {}
+
+pub const NONE_TYPE_FIND_FACTORY: Option<&TypeFindFactory> = None;

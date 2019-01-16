@@ -17,7 +17,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass>): PluginFeature, Object;
+    pub struct ElementFactory(Object<ffi::GstElementFactory, ffi::GstElementFactoryClass, ElementFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
         get_type => || ffi::gst_element_factory_get_type(),
@@ -51,9 +51,8 @@ impl ElementFactory {
 
     pub fn create<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element> {
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            from_glib_none(ffi::gst_element_factory_create(self.to_glib_none().0, name.0))
+            from_glib_none(ffi::gst_element_factory_create(self.to_glib_none().0, name.to_glib_none().0))
         }
     }
 
@@ -135,12 +134,13 @@ impl ElementFactory {
     pub fn make<'a, P: Into<Option<&'a str>>>(factoryname: &str, name: P) -> Option<Element> {
         assert_initialized_main_thread!();
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            from_glib_none(ffi::gst_element_factory_make(factoryname.to_glib_none().0, name.0))
+            from_glib_none(ffi::gst_element_factory_make(factoryname.to_glib_none().0, name.to_glib_none().0))
         }
     }
 }
 
 unsafe impl Send for ElementFactory {}
 unsafe impl Sync for ElementFactory {}
+
+pub const NONE_ELEMENT_FACTORY: Option<&ElementFactory> = None;

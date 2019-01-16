@@ -8,7 +8,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PlayerSubtitleInfo(Object<ffi::GstPlayerSubtitleInfo, ffi::GstPlayerSubtitleInfoClass>): PlayerStreamInfo;
+    pub struct PlayerSubtitleInfo(Object<ffi::GstPlayerSubtitleInfo, ffi::GstPlayerSubtitleInfoClass, PlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
         get_type => || ffi::gst_player_subtitle_info_get_type(),
@@ -25,3 +25,5 @@ impl PlayerSubtitleInfo {
 
 unsafe impl Send for PlayerSubtitleInfo {}
 unsafe impl Sync for PlayerSubtitleInfo {}
+
+pub const NONE_PLAYER_SUBTITLE_INFO: Option<&PlayerSubtitleInfo> = None;

@@ -12,7 +12,7 @@ use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -25,7 +25,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RTSPMediaFactory(Object<ffi::GstRTSPMediaFactory, ffi::GstRTSPMediaFactoryClass>);
+    pub struct RTSPMediaFactory(Object<ffi::GstRTSPMediaFactory, ffi::GstRTSPMediaFactoryClass, RTSPMediaFactoryClass>);
 
     match fn {
         get_type => || ffi::gst_rtsp_media_factory_get_type(),
@@ -49,6 +49,8 @@ impl Default for RTSPMediaFactory {
 
 unsafe impl Send for RTSPMediaFactory {}
 unsafe impl Sync for RTSPMediaFactory {}
+
+pub const NONE_RTSP_MEDIA_FACTORY: Option<&RTSPMediaFactory> = None;
 
 pub trait RTSPMediaFactoryExt: 'static {
     //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -91,7 +93,7 @@ pub trait RTSPMediaFactoryExt: 'static {
 
     fn is_stop_on_disonnect(&self) -> bool;
 
-    fn set_address_pool<'a, P: Into<Option<&'a RTSPAddressPool>>>(&self, pool: P);
+    fn set_address_pool<'a, P: IsA<RTSPAddressPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q);
 
     fn set_buffer_size(&self, size: u32);
 
@@ -165,55 +167,55 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     fn construct(&self, url: &gst_rtsp::RTSPUrl) -> Option<RTSPMedia> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_media_factory_construct(self.to_glib_none().0, url.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_media_factory_construct(self.as_ref().to_glib_none().0, url.to_glib_none().0))
         }
     }
 
     fn create_element(&self, url: &gst_rtsp::RTSPUrl) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::gst_rtsp_media_factory_create_element(self.to_glib_none().0, url.to_glib_none().0))
+            from_glib_none(ffi::gst_rtsp_media_factory_create_element(self.as_ref().to_glib_none().0, url.to_glib_none().0))
         }
     }
 
     fn get_address_pool(&self) -> Option<RTSPAddressPool> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_media_factory_get_address_pool(self.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_media_factory_get_address_pool(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_buffer_size(&self) -> u32 {
         unsafe {
-            ffi::gst_rtsp_media_factory_get_buffer_size(self.to_glib_none().0)
+            ffi::gst_rtsp_media_factory_get_buffer_size(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_clock(&self) -> Option<gst::Clock> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_media_factory_get_clock(self.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_media_factory_get_clock(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_latency(&self) -> u32 {
         unsafe {
-            ffi::gst_rtsp_media_factory_get_latency(self.to_glib_none().0)
+            ffi::gst_rtsp_media_factory_get_latency(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_launch(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_media_factory_get_launch(self.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_media_factory_get_launch(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_media_gtype(&self) -> glib::types::Type {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_media_gtype(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_media_gtype(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_multicast_iface(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_media_factory_get_multicast_iface(self.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_media_factory_get_multicast_iface(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -223,109 +225,106 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     fn get_profiles(&self) -> gst_rtsp::RTSPProfile {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_profiles(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_profiles(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_protocols(&self) -> gst_rtsp::RTSPLowerTrans {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_protocols(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_protocols(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_publish_clock_mode(&self) -> RTSPPublishClockMode {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_publish_clock_mode(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_publish_clock_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_retransmission_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_retransmission_time(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_retransmission_time(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_suspend_mode(&self) -> RTSPSuspendMode {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_suspend_mode(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_suspend_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_transport_mode(&self) -> RTSPTransportMode {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_get_transport_mode(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_get_transport_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_is_eos_shutdown(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_is_eos_shutdown(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_shared(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_is_shared(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_is_shared(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_stop_on_disonnect(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_media_factory_is_stop_on_disonnect(self.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_media_factory_is_stop_on_disonnect(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn set_address_pool<'a, P: Into<Option<&'a RTSPAddressPool>>>(&self, pool: P) {
+    fn set_address_pool<'a, P: IsA<RTSPAddressPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q) {
         let pool = pool.into();
-        let pool = pool.to_glib_none();
         unsafe {
-            ffi::gst_rtsp_media_factory_set_address_pool(self.to_glib_none().0, pool.0);
+            ffi::gst_rtsp_media_factory_set_address_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_buffer_size(&self, size: u32) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_buffer_size(self.to_glib_none().0, size);
+            ffi::gst_rtsp_media_factory_set_buffer_size(self.as_ref().to_glib_none().0, size);
         }
     }
 
     fn set_clock<'a, P: IsA<gst::Clock> + 'a, Q: Into<Option<&'a P>>>(&self, clock: Q) {
         let clock = clock.into();
-        let clock = clock.to_glib_none();
         unsafe {
-            ffi::gst_rtsp_media_factory_set_clock(self.to_glib_none().0, clock.0);
+            ffi::gst_rtsp_media_factory_set_clock(self.as_ref().to_glib_none().0, clock.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_eos_shutdown(&self, eos_shutdown: bool) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_eos_shutdown(self.to_glib_none().0, eos_shutdown.to_glib());
+            ffi::gst_rtsp_media_factory_set_eos_shutdown(self.as_ref().to_glib_none().0, eos_shutdown.to_glib());
         }
     }
 
     fn set_latency(&self, latency: u32) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_latency(self.to_glib_none().0, latency);
+            ffi::gst_rtsp_media_factory_set_latency(self.as_ref().to_glib_none().0, latency);
         }
     }
 
     fn set_launch(&self, launch: &str) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_launch(self.to_glib_none().0, launch.to_glib_none().0);
+            ffi::gst_rtsp_media_factory_set_launch(self.as_ref().to_glib_none().0, launch.to_glib_none().0);
         }
     }
 
     fn set_media_gtype(&self, media_gtype: glib::types::Type) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_media_gtype(self.to_glib_none().0, media_gtype.to_glib());
+            ffi::gst_rtsp_media_factory_set_media_gtype(self.as_ref().to_glib_none().0, media_gtype.to_glib());
         }
     }
 
     fn set_multicast_iface<'a, P: Into<Option<&'a str>>>(&self, multicast_iface: P) {
         let multicast_iface = multicast_iface.into();
-        let multicast_iface = multicast_iface.to_glib_none();
         unsafe {
-            ffi::gst_rtsp_media_factory_set_multicast_iface(self.to_glib_none().0, multicast_iface.0);
+            ffi::gst_rtsp_media_factory_set_multicast_iface(self.as_ref().to_glib_none().0, multicast_iface.to_glib_none().0);
         }
     }
 
@@ -335,49 +334,49 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_profiles(self.to_glib_none().0, profiles.to_glib());
+            ffi::gst_rtsp_media_factory_set_profiles(self.as_ref().to_glib_none().0, profiles.to_glib());
         }
     }
 
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_protocols(self.to_glib_none().0, protocols.to_glib());
+            ffi::gst_rtsp_media_factory_set_protocols(self.as_ref().to_glib_none().0, protocols.to_glib());
         }
     }
 
     fn set_publish_clock_mode(&self, mode: RTSPPublishClockMode) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_publish_clock_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gst_rtsp_media_factory_set_publish_clock_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     fn set_retransmission_time(&self, time: gst::ClockTime) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_retransmission_time(self.to_glib_none().0, time.to_glib());
+            ffi::gst_rtsp_media_factory_set_retransmission_time(self.as_ref().to_glib_none().0, time.to_glib());
         }
     }
 
     fn set_shared(&self, shared: bool) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_shared(self.to_glib_none().0, shared.to_glib());
+            ffi::gst_rtsp_media_factory_set_shared(self.as_ref().to_glib_none().0, shared.to_glib());
         }
     }
 
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_stop_on_disconnect(self.to_glib_none().0, stop_on_disconnect.to_glib());
+            ffi::gst_rtsp_media_factory_set_stop_on_disconnect(self.as_ref().to_glib_none().0, stop_on_disconnect.to_glib());
         }
     }
 
     fn set_suspend_mode(&self, mode: RTSPSuspendMode) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_suspend_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gst_rtsp_media_factory_set_suspend_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     fn set_transport_mode(&self, mode: RTSPTransportMode) {
         unsafe {
-            ffi::gst_rtsp_media_factory_set_transport_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gst_rtsp_media_factory_set_transport_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
@@ -408,7 +407,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_media_configure<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPMedia) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"media-configure\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"media-configure\0".as_ptr() as *const _,
                 transmute(media_configure_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -416,7 +415,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_media_constructed<F: Fn(&Self, &RTSPMedia) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &RTSPMedia) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"media-constructed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"media-constructed\0".as_ptr() as *const _,
                 transmute(media_constructed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -424,7 +423,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::buffer-size\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::buffer-size\0".as_ptr() as *const _,
                 transmute(notify_buffer_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -432,7 +431,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::clock\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::clock\0".as_ptr() as *const _,
                 transmute(notify_clock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -440,7 +439,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::eos-shutdown\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::eos-shutdown\0".as_ptr() as *const _,
                 transmute(notify_eos_shutdown_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -448,7 +447,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::latency\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::latency\0".as_ptr() as *const _,
                 transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -456,7 +455,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_launch_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::launch\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::launch\0".as_ptr() as *const _,
                 transmute(notify_launch_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -464,7 +463,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::profiles\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::profiles\0".as_ptr() as *const _,
                 transmute(notify_profiles_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -472,7 +471,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::protocols\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::protocols\0".as_ptr() as *const _,
                 transmute(notify_protocols_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -480,7 +479,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::shared\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::shared\0".as_ptr() as *const _,
                 transmute(notify_shared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -488,7 +487,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::stop-on-disconnect\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::stop-on-disconnect\0".as_ptr() as *const _,
                 transmute(notify_stop_on_disconnect_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -496,7 +495,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::suspend-mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::suspend-mode\0".as_ptr() as *const _,
                 transmute(notify_suspend_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -504,7 +503,7 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
     fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::transport-mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::transport-mode\0".as_ptr() as *const _,
                 transmute(notify_transport_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -513,77 +512,77 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
 unsafe extern "C" fn media_configure_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, object: *mut ffi::GstRTSPMedia, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P, &RTSPMedia) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn media_constructed_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, object: *mut ffi::GstRTSPMedia, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P, &RTSPMedia) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_buffer_size_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_clock_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_eos_shutdown_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_latency_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_launch_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_profiles_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_protocols_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_shared_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_stop_on_disconnect_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_suspend_mode_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_transport_mode_trampoline<P>(this: *mut ffi::GstRTSPMediaFactory, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactory> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPMediaFactory::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPMediaFactory::from_glib_borrow(this).unsafe_cast())
 }

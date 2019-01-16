@@ -9,6 +9,7 @@ use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -19,7 +20,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct WebRTCICETransport(Object<ffi::GstWebRTCICETransport, ffi::GstWebRTCICETransportClass>);
+    pub struct WebRTCICETransport(Object<ffi::GstWebRTCICETransport, ffi::GstWebRTCICETransportClass, WebRTCICETransportClass>);
 
     match fn {
         get_type => || ffi::gst_webrtc_ice_transport_get_type(),
@@ -54,7 +55,7 @@ impl WebRTCICETransport {
     pub fn get_property_component(&self) -> WebRTCICEComponent {
         unsafe {
             let mut value = Value::from_type(<WebRTCICEComponent as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"component\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"component\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -62,7 +63,7 @@ impl WebRTCICETransport {
     pub fn get_property_gathering_state(&self) -> WebRTCICEGatheringState {
         unsafe {
             let mut value = Value::from_type(<WebRTCICEGatheringState as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"gathering-state\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"gathering-state\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -70,7 +71,7 @@ impl WebRTCICETransport {
     pub fn get_property_state(&self) -> WebRTCICEConnectionState {
         unsafe {
             let mut value = Value::from_type(<WebRTCICEConnectionState as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"state\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"state\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -78,7 +79,7 @@ impl WebRTCICETransport {
     pub fn connect_on_new_candidate<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"on-new-candidate\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"on-new-candidate\0".as_ptr() as *const _,
                 transmute(on_new_candidate_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -86,7 +87,7 @@ impl WebRTCICETransport {
     pub fn connect_on_selected_candidate_pair_change<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCICETransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"on-selected-candidate-pair-change\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"on-selected-candidate-pair-change\0".as_ptr() as *const _,
                 transmute(on_selected_candidate_pair_change_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -94,7 +95,7 @@ impl WebRTCICETransport {
     pub fn connect_property_gathering_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCICETransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::gathering-state\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::gathering-state\0".as_ptr() as *const _,
                 transmute(notify_gathering_state_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -102,7 +103,7 @@ impl WebRTCICETransport {
     pub fn connect_property_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCICETransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::state\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::state\0".as_ptr() as *const _,
                 transmute(notify_state_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -110,6 +111,8 @@ impl WebRTCICETransport {
 
 unsafe impl Send for WebRTCICETransport {}
 unsafe impl Sync for WebRTCICETransport {}
+
+pub const NONE_WEB_RTCICE_TRANSPORT: Option<&WebRTCICETransport> = None;
 
 unsafe extern "C" fn on_new_candidate_trampoline(this: *mut ffi::GstWebRTCICETransport, object: *mut libc::c_char, f: glib_ffi::gpointer) {
     let f: &&(Fn(&WebRTCICETransport, &str) + Send + Sync + 'static) = transmute(f);

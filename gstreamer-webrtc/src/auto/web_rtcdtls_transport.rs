@@ -8,6 +8,8 @@ use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
+use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -17,7 +19,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct WebRTCDTLSTransport(Object<ffi::GstWebRTCDTLSTransport, ffi::GstWebRTCDTLSTransportClass>);
+    pub struct WebRTCDTLSTransport(Object<ffi::GstWebRTCDTLSTransport, ffi::GstWebRTCDTLSTransportClass, WebRTCDTLSTransportClass>);
 
     match fn {
         get_type => || ffi::gst_webrtc_dtls_transport_get_type(),
@@ -32,16 +34,16 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn set_transport(&self, ice: &WebRTCICETransport) {
+    pub fn set_transport<P: IsA<WebRTCICETransport>>(&self, ice: &P) {
         unsafe {
-            ffi::gst_webrtc_dtls_transport_set_transport(self.to_glib_none().0, ice.to_glib_none().0);
+            ffi::gst_webrtc_dtls_transport_set_transport(self.to_glib_none().0, ice.as_ref().to_glib_none().0);
         }
     }
 
     pub fn get_property_certificate(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"certificate\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"certificate\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -49,28 +51,28 @@ impl WebRTCDTLSTransport {
     pub fn set_property_certificate<'a, P: Into<Option<&'a str>>>(&self, certificate: P) {
         let certificate = certificate.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"certificate\0".as_ptr() as *const _, Value::from(certificate).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"certificate\0".as_ptr() as *const _, Value::from(certificate).to_glib_none().0);
         }
     }
 
     pub fn get_property_client(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"client\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"client\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_client(&self, client: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"client\0".as_ptr() as *const _, Value::from(&client).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"client\0".as_ptr() as *const _, Value::from(&client).to_glib_none().0);
         }
     }
 
     pub fn get_property_remote_certificate(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"remote-certificate\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"remote-certificate\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -78,7 +80,7 @@ impl WebRTCDTLSTransport {
     pub fn get_property_rtcp(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"rtcp\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"rtcp\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -86,7 +88,7 @@ impl WebRTCDTLSTransport {
     pub fn get_property_session_id(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"session-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"session-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -94,7 +96,7 @@ impl WebRTCDTLSTransport {
     pub fn get_property_state(&self) -> WebRTCDTLSTransportState {
         unsafe {
             let mut value = Value::from_type(<WebRTCDTLSTransportState as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"state\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"state\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -102,7 +104,7 @@ impl WebRTCDTLSTransport {
     pub fn get_property_transport(&self) -> Option<WebRTCICETransport> {
         unsafe {
             let mut value = Value::from_type(<WebRTCICETransport as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"transport\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"transport\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -110,7 +112,7 @@ impl WebRTCDTLSTransport {
     pub fn connect_property_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::certificate\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::certificate\0".as_ptr() as *const _,
                 transmute(notify_certificate_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -118,7 +120,7 @@ impl WebRTCDTLSTransport {
     pub fn connect_property_client_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::client\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::client\0".as_ptr() as *const _,
                 transmute(notify_client_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -126,7 +128,7 @@ impl WebRTCDTLSTransport {
     pub fn connect_property_remote_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::remote-certificate\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::remote-certificate\0".as_ptr() as *const _,
                 transmute(notify_remote_certificate_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -134,7 +136,7 @@ impl WebRTCDTLSTransport {
     pub fn connect_property_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::state\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::state\0".as_ptr() as *const _,
                 transmute(notify_state_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -142,7 +144,7 @@ impl WebRTCDTLSTransport {
     pub fn connect_property_transport_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::transport\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::transport\0".as_ptr() as *const _,
                 transmute(notify_transport_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -150,6 +152,8 @@ impl WebRTCDTLSTransport {
 
 unsafe impl Send for WebRTCDTLSTransport {}
 unsafe impl Sync for WebRTCDTLSTransport {}
+
+pub const NONE_WEB_RTCDTLS_TRANSPORT: Option<&WebRTCDTLSTransport> = None;
 
 unsafe extern "C" fn notify_certificate_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);

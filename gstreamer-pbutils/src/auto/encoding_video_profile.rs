@@ -7,7 +7,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct EncodingVideoProfile(Object<ffi::GstEncodingVideoProfile, ffi::GstEncodingVideoProfileClass>): EncodingProfile;
+    pub struct EncodingVideoProfile(Object<ffi::GstEncodingVideoProfile, ffi::GstEncodingVideoProfileClass, EncodingVideoProfileClass>) @extends EncodingProfile;
 
     match fn {
         get_type => || ffi::gst_encoding_video_profile_get_type(),
@@ -30,3 +30,5 @@ impl EncodingVideoProfile {
 
 unsafe impl Send for EncodingVideoProfile {}
 unsafe impl Sync for EncodingVideoProfile {}
+
+pub const NONE_ENCODING_VIDEO_PROFILE: Option<&EncodingVideoProfile> = None;

@@ -5,7 +5,7 @@
 use ffi;
 use glib;
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -17,7 +17,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct ChildProxy(Object<ffi::GstChildProxy, ffi::GstChildProxyInterface>);
+    pub struct ChildProxy(Interface<ffi::GstChildProxy>);
 
     match fn {
         get_type => || ffi::gst_child_proxy_get_type(),
@@ -26,6 +26,8 @@ glib_wrapper! {
 
 unsafe impl Send for ChildProxy {}
 unsafe impl Sync for ChildProxy {}
+
+pub const NONE_CHILD_PROXY: Option<&ChildProxy> = None;
 
 pub trait ChildProxyExt: 'static {
     fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str);
@@ -60,13 +62,13 @@ pub trait ChildProxyExt: 'static {
 impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     fn child_added<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
         unsafe {
-            ffi::gst_child_proxy_child_added(self.to_glib_none().0, child.to_glib_none().0, name.to_glib_none().0);
+            ffi::gst_child_proxy_child_added(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     fn child_removed<P: IsA<glib::Object>>(&self, child: &P, name: &str) {
         unsafe {
-            ffi::gst_child_proxy_child_removed(self.to_glib_none().0, child.to_glib_none().0, name.to_glib_none().0);
+            ffi::gst_child_proxy_child_removed(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
@@ -76,19 +78,19 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
 
     fn get_child_by_index(&self, index: u32) -> Option<glib::Object> {
         unsafe {
-            from_glib_full(ffi::gst_child_proxy_get_child_by_index(self.to_glib_none().0, index))
+            from_glib_full(ffi::gst_child_proxy_get_child_by_index(self.as_ref().to_glib_none().0, index))
         }
     }
 
     fn get_child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
-            from_glib_full(ffi::gst_child_proxy_get_child_by_name(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(ffi::gst_child_proxy_get_child_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn get_children_count(&self) -> u32 {
         unsafe {
-            ffi::gst_child_proxy_get_children_count(self.to_glib_none().0)
+            ffi::gst_child_proxy_get_children_count(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -119,7 +121,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"child-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"child-added\0".as_ptr() as *const _,
                 transmute(child_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -127,7 +129,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"child-removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"child-removed\0".as_ptr() as *const _,
                 transmute(child_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -136,11 +138,11 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
 unsafe extern "C" fn child_added_trampoline<P>(this: *mut ffi::GstChildProxy, object: *mut gobject_ffi::GObject, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<ChildProxy> {
     let f: &&(Fn(&P, &glib::Object, &str) + Send + Sync + 'static) = transmute(f);
-    f(&ChildProxy::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
+    f(&ChildProxy::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
 }
 
 unsafe extern "C" fn child_removed_trampoline<P>(this: *mut ffi::GstChildProxy, object: *mut gobject_ffi::GObject, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<ChildProxy> {
     let f: &&(Fn(&P, &glib::Object, &str) + Send + Sync + 'static) = transmute(f);
-    f(&ChildProxy::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
+    f(&ChildProxy::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
 }

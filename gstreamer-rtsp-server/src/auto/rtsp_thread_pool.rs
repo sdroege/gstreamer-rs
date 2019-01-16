@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass>);
+    pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass, RTSPThreadPoolClass>);
 
     match fn {
         get_type => || ffi::gst_rtsp_thread_pool_get_type(),
@@ -45,6 +45,8 @@ impl Default for RTSPThreadPool {
 unsafe impl Send for RTSPThreadPool {}
 unsafe impl Sync for RTSPThreadPool {}
 
+pub const NONE_RTSP_THREAD_POOL: Option<&RTSPThreadPool> = None;
+
 pub trait RTSPThreadPoolExt: 'static {
     fn get_max_threads(&self) -> i32;
 
@@ -58,7 +60,7 @@ pub trait RTSPThreadPoolExt: 'static {
 impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
     fn get_max_threads(&self) -> i32 {
         unsafe {
-            ffi::gst_rtsp_thread_pool_get_max_threads(self.to_glib_none().0)
+            ffi::gst_rtsp_thread_pool_get_max_threads(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -68,14 +70,14 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
 
     fn set_max_threads(&self, max_threads: i32) {
         unsafe {
-            ffi::gst_rtsp_thread_pool_set_max_threads(self.to_glib_none().0, max_threads);
+            ffi::gst_rtsp_thread_pool_set_max_threads(self.as_ref().to_glib_none().0, max_threads);
         }
     }
 
     fn connect_property_max_threads_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-threads\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::max-threads\0".as_ptr() as *const _,
                 transmute(notify_max_threads_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -84,5 +86,5 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
 unsafe extern "C" fn notify_max_threads_trampoline<P>(this: *mut ffi::GstRTSPThreadPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPThreadPool> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPThreadPool::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPThreadPool::from_glib_borrow(this).unsafe_cast())
 }

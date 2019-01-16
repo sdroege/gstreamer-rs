@@ -8,6 +8,7 @@ use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -19,7 +20,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct PlayerVideoOverlayVideoRenderer(Object<ffi::GstPlayerVideoOverlayVideoRenderer, ffi::GstPlayerVideoOverlayVideoRendererClass>): PlayerVideoRenderer;
+    pub struct PlayerVideoOverlayVideoRenderer(Object<ffi::GstPlayerVideoOverlayVideoRenderer, ffi::GstPlayerVideoOverlayVideoRendererClass, PlayerVideoOverlayVideoRendererClass>) @implements PlayerVideoRenderer;
 
     match fn {
         get_type => || ffi::gst_player_video_overlay_video_renderer_get_type(),
@@ -61,14 +62,14 @@ impl PlayerVideoOverlayVideoRenderer {
     pub fn get_property_video_sink(&self) -> Option<gst::Element> {
         unsafe {
             let mut value = Value::from_type(<gst::Element as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"video-sink\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"video-sink\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     pub fn set_property_video_sink<P: IsA<gst::Element> + glib::value::SetValueOptional>(&self, video_sink: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"video-sink\0".as_ptr() as *const _, Value::from(video_sink).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"video-sink\0".as_ptr() as *const _, Value::from(video_sink).to_glib_none().0);
         }
     }
 
@@ -83,7 +84,7 @@ impl PlayerVideoOverlayVideoRenderer {
     pub fn connect_property_video_sink_notify<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::video-sink\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::video-sink\0".as_ptr() as *const _,
                 transmute(notify_video_sink_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -91,7 +92,7 @@ impl PlayerVideoOverlayVideoRenderer {
     pub fn connect_property_window_handle_notify<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::window-handle\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::window-handle\0".as_ptr() as *const _,
                 transmute(notify_window_handle_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -99,6 +100,8 @@ impl PlayerVideoOverlayVideoRenderer {
 
 unsafe impl Send for PlayerVideoOverlayVideoRenderer {}
 unsafe impl Sync for PlayerVideoOverlayVideoRenderer {}
+
+pub const NONE_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER: Option<&PlayerVideoOverlayVideoRenderer> = None;
 
 unsafe extern "C" fn notify_video_sink_trampoline(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static) = transmute(f);

@@ -10,7 +10,7 @@ use glib::translate::*;
 use gst;
 
 glib_wrapper! {
-    pub struct EncodingProfile(Object<ffi::GstEncodingProfile, ffi::GstEncodingProfileClass>);
+    pub struct EncodingProfile(Object<ffi::GstEncodingProfile, ffi::GstEncodingProfileClass, EncodingProfileClass>);
 
     match fn {
         get_type => || ffi::gst_encoding_profile_get_type(),
@@ -21,24 +21,24 @@ impl EncodingProfile {
     pub fn find<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(targetname: &str, profilename: P, category: Q) -> Option<EncodingProfile> {
         assert_initialized_main_thread!();
         let profilename = profilename.into();
-        let profilename = profilename.to_glib_none();
         let category = category.into();
-        let category = category.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_find(targetname.to_glib_none().0, profilename.0, category.0))
+            from_glib_full(ffi::gst_encoding_profile_find(targetname.to_glib_none().0, profilename.to_glib_none().0, category.to_glib_none().0))
         }
     }
 
-    pub fn from_discoverer(info: &DiscovererInfo) -> Option<EncodingProfile> {
+    pub fn from_discoverer<P: IsA<DiscovererInfo>>(info: &P) -> Option<EncodingProfile> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_from_discoverer(info.to_glib_none().0))
+            from_glib_full(ffi::gst_encoding_profile_from_discoverer(info.as_ref().to_glib_none().0))
         }
     }
 }
 
 unsafe impl Send for EncodingProfile {}
 unsafe impl Sync for EncodingProfile {}
+
+pub const NONE_ENCODING_PROFILE: Option<&EncodingProfile> = None;
 
 pub trait EncodingProfileExt: 'static {
     fn copy(&self) -> EncodingProfile;
@@ -73,85 +73,85 @@ pub trait EncodingProfileExt: 'static {
 impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
     fn copy(&self) -> EncodingProfile {
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_copy(self.to_glib_none().0))
+            from_glib_full(ffi::gst_encoding_profile_copy(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_allow_dynamic_output(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_encoding_profile_get_allow_dynamic_output(self.to_glib_none().0))
+            from_glib(ffi::gst_encoding_profile_get_allow_dynamic_output(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_description(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_encoding_profile_get_description(self.to_glib_none().0))
+            from_glib_none(ffi::gst_encoding_profile_get_description(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_file_extension(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_encoding_profile_get_file_extension(self.to_glib_none().0))
+            from_glib_none(ffi::gst_encoding_profile_get_file_extension(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_format(&self) -> gst::Caps {
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_get_format(self.to_glib_none().0))
+            from_glib_full(ffi::gst_encoding_profile_get_format(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_input_caps(&self) -> gst::Caps {
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_get_input_caps(self.to_glib_none().0))
+            from_glib_full(ffi::gst_encoding_profile_get_input_caps(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_encoding_profile_get_name(self.to_glib_none().0))
+            from_glib_none(ffi::gst_encoding_profile_get_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_presence(&self) -> u32 {
         unsafe {
-            ffi::gst_encoding_profile_get_presence(self.to_glib_none().0)
+            ffi::gst_encoding_profile_get_presence(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_preset(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_encoding_profile_get_preset(self.to_glib_none().0))
+            from_glib_none(ffi::gst_encoding_profile_get_preset(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_preset_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_encoding_profile_get_preset_name(self.to_glib_none().0))
+            from_glib_none(ffi::gst_encoding_profile_get_preset_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_restriction(&self) -> Option<gst::Caps> {
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_get_restriction(self.to_glib_none().0))
+            from_glib_full(ffi::gst_encoding_profile_get_restriction(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_type_nick(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_encoding_profile_get_type_nick(self.to_glib_none().0))
+            from_glib_none(ffi::gst_encoding_profile_get_type_nick(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_encoding_profile_is_enabled(self.to_glib_none().0))
+            from_glib(ffi::gst_encoding_profile_is_enabled(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_equal<P: IsA<EncodingProfile>>(&self, b: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_encoding_profile_is_equal(self.to_glib_none().0, b.to_glib_none().0))
+            from_glib(ffi::gst_encoding_profile_is_equal(self.as_ref().to_glib_none().0, b.as_ref().to_glib_none().0))
         }
     }
 }

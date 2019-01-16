@@ -5,22 +5,19 @@
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct TestClock(Object<ffi::GstTestClock, ffi::GstTestClockClass>): [
-        gst::Clock => gst_ffi::GstClock,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct TestClock(Object<ffi::GstTestClock, ffi::GstTestClockClass, TestClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
         get_type => || ffi::gst_test_clock_get_type(),
@@ -31,14 +28,14 @@ impl TestClock {
     pub fn new() -> TestClock {
         assert_initialized_main_thread!();
         unsafe {
-            gst::Clock::from_glib_full(ffi::gst_test_clock_new()).downcast_unchecked()
+            gst::Clock::from_glib_full(ffi::gst_test_clock_new()).unsafe_cast()
         }
     }
 
     pub fn new_with_start_time(start_time: gst::ClockTime) -> TestClock {
         assert_initialized_main_thread!();
         unsafe {
-            gst::Clock::from_glib_full(ffi::gst_test_clock_new_with_start_time(start_time.to_glib())).downcast_unchecked()
+            gst::Clock::from_glib_full(ffi::gst_test_clock_new_with_start_time(start_time.to_glib())).unsafe_cast()
         }
     }
 
@@ -105,21 +102,21 @@ impl TestClock {
     pub fn get_property_clock_type(&self) -> gst::ClockType {
         unsafe {
             let mut value = Value::from_type(<gst::ClockType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"clock-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"clock-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_clock_type(&self, clock_type: gst::ClockType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, b"clock-type\0".as_ptr() as *const _, Value::from(&clock_type).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"clock-type\0".as_ptr() as *const _, Value::from(&clock_type).to_glib_none().0);
         }
     }
 
     pub fn get_property_start_time(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"start-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"start-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -131,7 +128,7 @@ impl TestClock {
     pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&TestClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::clock-type\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::clock-type\0".as_ptr() as *const _,
                 transmute(notify_clock_type_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -145,6 +142,8 @@ impl Default for TestClock {
 
 unsafe impl Send for TestClock {}
 unsafe impl Sync for TestClock {}
+
+pub const NONE_TEST_CLOCK: Option<&TestClock> = None;
 
 unsafe extern "C" fn notify_clock_type_trampoline(this: *mut ffi::GstTestClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&TestClock) + Send + Sync + 'static) = transmute(f);

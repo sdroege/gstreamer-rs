@@ -7,7 +7,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct DiscovererVideoInfo(Object<ffi::GstDiscovererVideoInfo>): DiscovererStreamInfo;
+    pub struct DiscovererVideoInfo(Object<ffi::GstDiscovererVideoInfo, DiscovererVideoInfoClass>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || ffi::gst_discoverer_video_info_get_type(),
@@ -60,3 +60,5 @@ impl DiscovererVideoInfo {
 
 unsafe impl Send for DiscovererVideoInfo {}
 unsafe impl Sync for DiscovererVideoInfo {}
+
+pub const NONE_DISCOVERER_VIDEO_INFO: Option<&DiscovererVideoInfo> = None;

@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PlayerSignalDispatcher(Object<ffi::GstPlayerSignalDispatcher, ffi::GstPlayerSignalDispatcherInterface>);
+    pub struct PlayerSignalDispatcher(Interface<ffi::GstPlayerSignalDispatcher>);
 
     match fn {
         get_type => || ffi::gst_player_signal_dispatcher_get_type(),
@@ -16,6 +16,8 @@ glib_wrapper! {
 
 unsafe impl Send for PlayerSignalDispatcher {}
 unsafe impl Sync for PlayerSignalDispatcher {}
+
+pub const NONE_PLAYER_SIGNAL_DISPATCHER: Option<&PlayerSignalDispatcher> = None;
 
 pub trait PlayerSignalDispatcherExt: 'static {}
 

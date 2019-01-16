@@ -7,11 +7,12 @@ use WebRTCRTPSender;
 use ffi;
 use glib::StaticType;
 use glib::Value;
+use glib::object::ObjectType;
 use glib::translate::*;
 use gobject_ffi;
 
 glib_wrapper! {
-    pub struct WebRTCRTPTransceiver(Object<ffi::GstWebRTCRTPTransceiver, ffi::GstWebRTCRTPTransceiverClass>);
+    pub struct WebRTCRTPTransceiver(Object<ffi::GstWebRTCRTPTransceiver, ffi::GstWebRTCRTPTransceiverClass, WebRTCRTPTransceiverClass>);
 
     match fn {
         get_type => || ffi::gst_webrtc_rtp_transceiver_get_type(),
@@ -22,7 +23,7 @@ impl WebRTCRTPTransceiver {
     pub fn get_property_mlineindex(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"mlineindex\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"mlineindex\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -30,7 +31,7 @@ impl WebRTCRTPTransceiver {
     pub fn get_property_receiver(&self) -> Option<WebRTCRTPReceiver> {
         unsafe {
             let mut value = Value::from_type(<WebRTCRTPReceiver as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"receiver\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"receiver\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -38,7 +39,7 @@ impl WebRTCRTPTransceiver {
     pub fn get_property_sender(&self) -> Option<WebRTCRTPSender> {
         unsafe {
             let mut value = Value::from_type(<WebRTCRTPSender as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"sender\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"sender\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -46,3 +47,5 @@ impl WebRTCRTPTransceiver {
 
 unsafe impl Send for WebRTCRTPTransceiver {}
 unsafe impl Sync for WebRTCRTPTransceiver {}
+
+pub const NONE_WEB_RTCRTP_TRANSCEIVER: Option<&WebRTCRTPTransceiver> = None;

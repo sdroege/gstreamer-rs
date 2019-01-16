@@ -8,7 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct VideoOverlay(Object<ffi::GstVideoOverlay, ffi::GstVideoOverlayInterface>);
+    pub struct VideoOverlay(Interface<ffi::GstVideoOverlay>);
 
     match fn {
         get_type => || ffi::gst_video_overlay_get_type(),
@@ -28,6 +28,8 @@ impl VideoOverlay {
 unsafe impl Send for VideoOverlay {}
 unsafe impl Sync for VideoOverlay {}
 
+pub const NONE_VIDEO_OVERLAY: Option<&VideoOverlay> = None;
+
 pub trait VideoOverlayExt: 'static {
     fn expose(&self);
 
@@ -45,7 +47,7 @@ pub trait VideoOverlayExt: 'static {
 impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
     fn expose(&self) {
         unsafe {
-            ffi::gst_video_overlay_expose(self.to_glib_none().0);
+            ffi::gst_video_overlay_expose(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -55,19 +57,19 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
 
     fn handle_events(&self, handle_events: bool) {
         unsafe {
-            ffi::gst_video_overlay_handle_events(self.to_glib_none().0, handle_events.to_glib());
+            ffi::gst_video_overlay_handle_events(self.as_ref().to_glib_none().0, handle_events.to_glib());
         }
     }
 
     fn prepare_window_handle(&self) {
         unsafe {
-            ffi::gst_video_overlay_prepare_window_handle(self.to_glib_none().0);
+            ffi::gst_video_overlay_prepare_window_handle(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_video_overlay_set_render_rectangle(self.to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
+            glib_result_from_gboolean!(ffi::gst_video_overlay_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
         }
     }
 

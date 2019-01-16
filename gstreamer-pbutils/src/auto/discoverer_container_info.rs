@@ -7,7 +7,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct DiscovererContainerInfo(Object<ffi::GstDiscovererContainerInfo>): DiscovererStreamInfo;
+    pub struct DiscovererContainerInfo(Object<ffi::GstDiscovererContainerInfo, DiscovererContainerInfoClass>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || ffi::gst_discoverer_container_info_get_type(),
@@ -24,3 +24,5 @@ impl DiscovererContainerInfo {
 
 unsafe impl Send for DiscovererContainerInfo {}
 unsafe impl Sync for DiscovererContainerInfo {}
+
+pub const NONE_DISCOVERER_CONTAINER_INFO: Option<&DiscovererContainerInfo> = None;

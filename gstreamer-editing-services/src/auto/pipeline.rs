@@ -9,7 +9,7 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -17,18 +17,13 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use gst_ffi;
 use gst_pbutils;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass>): [
-        gst::Pipeline => gst_ffi::GstPipeline,
-        gst::Element => gst_ffi::GstElement,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct Pipeline(Object<ffi::GESPipeline, ffi::GESPipelineClass, PipelineClass>) @extends gst::Pipeline, gst::Element, gst::Object;
 
     match fn {
         get_type => || ffi::ges_pipeline_get_type(),
@@ -49,6 +44,8 @@ impl Default for Pipeline {
         Self::new()
     }
 }
+
+pub const NONE_PIPELINE: Option<&Pipeline> = None;
 
 pub trait GESPipelineExt: 'static {
     fn get_mode(&self) -> PipelineFlags;
@@ -71,7 +68,7 @@ pub trait GESPipelineExt: 'static {
 
     fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> Result<(), glib::error::BoolError>;
 
-    fn set_timeline(&self, timeline: &Timeline) -> bool;
+    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> bool;
 
     fn get_property_audio_filter(&self) -> Option<gst::Element>;
 
@@ -107,69 +104,69 @@ pub trait GESPipelineExt: 'static {
 impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn get_mode(&self) -> PipelineFlags {
         unsafe {
-            from_glib(ffi::ges_pipeline_get_mode(self.to_glib_none().0))
+            from_glib(ffi::ges_pipeline_get_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_thumbnail(&self, caps: &gst::Caps) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(ffi::ges_pipeline_get_thumbnail(self.to_glib_none().0, caps.to_glib_none().0))
+            from_glib_full(ffi::ges_pipeline_get_thumbnail(self.as_ref().to_glib_none().0, caps.to_glib_none().0))
         }
     }
 
     fn get_thumbnail_rgb24(&self, width: i32, height: i32) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(ffi::ges_pipeline_get_thumbnail_rgb24(self.to_glib_none().0, width, height))
+            from_glib_full(ffi::ges_pipeline_get_thumbnail_rgb24(self.as_ref().to_glib_none().0, width, height))
         }
     }
 
     fn preview_get_audio_sink(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_full(ffi::ges_pipeline_preview_get_audio_sink(self.to_glib_none().0))
+            from_glib_full(ffi::ges_pipeline_preview_get_audio_sink(self.as_ref().to_glib_none().0))
         }
     }
 
     fn preview_get_video_sink(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_full(ffi::ges_pipeline_preview_get_video_sink(self.to_glib_none().0))
+            from_glib_full(ffi::ges_pipeline_preview_get_video_sink(self.as_ref().to_glib_none().0))
         }
     }
 
     fn preview_set_audio_sink<P: IsA<gst::Element>>(&self, sink: &P) {
         unsafe {
-            ffi::ges_pipeline_preview_set_audio_sink(self.to_glib_none().0, sink.to_glib_none().0);
+            ffi::ges_pipeline_preview_set_audio_sink(self.as_ref().to_glib_none().0, sink.as_ref().to_glib_none().0);
         }
     }
 
     fn preview_set_video_sink<P: IsA<gst::Element>>(&self, sink: &P) {
         unsafe {
-            ffi::ges_pipeline_preview_set_video_sink(self.to_glib_none().0, sink.to_glib_none().0);
+            ffi::ges_pipeline_preview_set_video_sink(self.as_ref().to_glib_none().0, sink.as_ref().to_glib_none().0);
         }
     }
 
     fn save_thumbnail(&self, width: i32, height: i32, format: &str, location: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_pipeline_save_thumbnail(self.to_glib_none().0, width, height, format.to_glib_none().0, location.to_glib_none().0, &mut error);
+            let _ = ffi::ges_pipeline_save_thumbnail(self.as_ref().to_glib_none().0, width, height, format.to_glib_none().0, location.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_pipeline_set_mode(self.to_glib_none().0, mode.to_glib()), "Failed to set mode")
+            glib_result_from_gboolean!(ffi::ges_pipeline_set_mode(self.as_ref().to_glib_none().0, mode.to_glib()), "Failed to set mode")
         }
     }
 
     fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_pipeline_set_render_settings(self.to_glib_none().0, output_uri.to_glib_none().0, profile.to_glib_none().0), "Failed to set render settings")
+            glib_result_from_gboolean!(ffi::ges_pipeline_set_render_settings(self.as_ref().to_glib_none().0, output_uri.to_glib_none().0, profile.as_ref().to_glib_none().0), "Failed to set render settings")
         }
     }
 
-    fn set_timeline(&self, timeline: &Timeline) -> bool {
+    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> bool {
         unsafe {
-            from_glib(ffi::ges_pipeline_set_timeline(self.to_glib_none().0, timeline.to_glib_full()))
+            from_glib(ffi::ges_pipeline_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_full()))
         }
     }
 
@@ -240,7 +237,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn connect_property_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::audio-filter\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::audio-filter\0".as_ptr() as *const _,
                 transmute(notify_audio_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -248,7 +245,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn connect_property_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::audio-sink\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::audio-sink\0".as_ptr() as *const _,
                 transmute(notify_audio_sink_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -256,7 +253,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
                 transmute(notify_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -264,7 +261,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::timeline\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::timeline\0".as_ptr() as *const _,
                 transmute(notify_timeline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -272,7 +269,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn connect_property_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::video-filter\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::video-filter\0".as_ptr() as *const _,
                 transmute(notify_video_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -280,7 +277,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     fn connect_property_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::video-sink\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::video-sink\0".as_ptr() as *const _,
                 transmute(notify_video_sink_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -289,35 +286,35 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 unsafe extern "C" fn notify_audio_filter_trampoline<P>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_audio_sink_trampoline<P>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mode_trampoline<P>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_timeline_trampoline<P>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_video_filter_trampoline<P>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_video_sink_trampoline<P>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Pipeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }

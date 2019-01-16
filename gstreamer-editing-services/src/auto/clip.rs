@@ -13,7 +13,7 @@ use TrackElement;
 use TrackType;
 use ffi;
 use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -23,12 +23,14 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass>): Container, TimelineElement, Extractable;
+    pub struct Clip(Object<ffi::GESClip, ffi::GESClipClass, ClipClass>) @extends Container, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ffi::ges_clip_get_type(),
     }
 }
+
+pub const NONE_CLIP: Option<&Clip> = None;
 
 pub trait ClipExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Option<TrackElement>;
@@ -47,7 +49,7 @@ pub trait ClipExt: 'static {
 
     fn get_top_effects(&self) -> Vec<TrackElement>;
 
-    fn move_to_layer(&self, layer: &Layer) -> bool;
+    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> bool;
 
     fn set_supported_formats(&self, supportedformats: TrackType);
 
@@ -65,90 +67,88 @@ pub trait ClipExt: 'static {
 impl<O: IsA<Clip>> ClipExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> Option<TrackElement> {
         unsafe {
-            from_glib_none(ffi::ges_clip_add_asset(self.to_glib_none().0, asset.to_glib_none().0))
+            from_glib_none(ffi::ges_clip_add_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0))
         }
     }
 
     fn find_track_element<'a, P: IsA<Track> + 'a, Q: Into<Option<&'a P>>>(&self, track: Q, type_: glib::types::Type) -> Option<TrackElement> {
         let track = track.into();
-        let track = track.to_glib_none();
         unsafe {
-            from_glib_full(ffi::ges_clip_find_track_element(self.to_glib_none().0, track.0, type_.to_glib()))
+            from_glib_full(ffi::ges_clip_find_track_element(self.as_ref().to_glib_none().0, track.map(|p| p.as_ref()).to_glib_none().0, type_.to_glib()))
         }
     }
 
     fn find_track_elements<'a, P: IsA<Track> + 'a, Q: Into<Option<&'a P>>>(&self, track: Q, track_type: TrackType, type_: glib::types::Type) -> Vec<TrackElement> {
         let track = track.into();
-        let track = track.to_glib_none();
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_clip_find_track_elements(self.to_glib_none().0, track.0, track_type.to_glib(), type_.to_glib()))
+            FromGlibPtrContainer::from_glib_full(ffi::ges_clip_find_track_elements(self.as_ref().to_glib_none().0, track.map(|p| p.as_ref()).to_glib_none().0, track_type.to_glib(), type_.to_glib()))
         }
     }
 
     fn get_layer(&self) -> Option<Layer> {
         unsafe {
-            from_glib_full(ffi::ges_clip_get_layer(self.to_glib_none().0))
+            from_glib_full(ffi::ges_clip_get_layer(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_supported_formats(&self) -> TrackType {
         unsafe {
-            from_glib(ffi::ges_clip_get_supported_formats(self.to_glib_none().0))
+            from_glib(ffi::ges_clip_get_supported_formats(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
         unsafe {
-            ffi::ges_clip_get_top_effect_index(self.to_glib_none().0, effect.to_glib_none().0)
+            ffi::ges_clip_get_top_effect_index(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0)
         }
     }
 
     fn get_top_effect_position<P: IsA<BaseEffect>>(&self, effect: &P) -> i32 {
         unsafe {
-            ffi::ges_clip_get_top_effect_position(self.to_glib_none().0, effect.to_glib_none().0)
+            ffi::ges_clip_get_top_effect_position(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0)
         }
     }
 
     fn get_top_effects(&self) -> Vec<TrackElement> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_clip_get_top_effects(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::ges_clip_get_top_effects(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn move_to_layer(&self, layer: &Layer) -> bool {
+    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> bool {
         unsafe {
-            from_glib(ffi::ges_clip_move_to_layer(self.to_glib_none().0, layer.to_glib_none().0))
+            from_glib(ffi::ges_clip_move_to_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0))
         }
     }
 
     fn set_supported_formats(&self, supportedformats: TrackType) {
         unsafe {
-            ffi::ges_clip_set_supported_formats(self.to_glib_none().0, supportedformats.to_glib());
+            ffi::ges_clip_set_supported_formats(self.as_ref().to_glib_none().0, supportedformats.to_glib());
         }
     }
 
     fn set_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P, newindex: u32) -> bool {
         unsafe {
-            from_glib(ffi::ges_clip_set_top_effect_index(self.to_glib_none().0, effect.to_glib_none().0, newindex))
+            from_glib(ffi::ges_clip_set_top_effect_index(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0, newindex))
         }
     }
 
     fn set_top_effect_priority<P: IsA<BaseEffect>>(&self, effect: &P, newpriority: u32) -> bool {
         unsafe {
-            from_glib(ffi::ges_clip_set_top_effect_priority(self.to_glib_none().0, effect.to_glib_none().0, newpriority))
+            from_glib(ffi::ges_clip_set_top_effect_priority(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0, newpriority))
         }
     }
 
     fn split(&self, position: u64) -> Option<Clip> {
         unsafe {
-            from_glib_none(ffi::ges_clip_split(self.to_glib_none().0, position))
+            from_glib_none(ffi::ges_clip_split(self.as_ref().to_glib_none().0, position))
         }
     }
 
     fn connect_property_layer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::layer\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::layer\0".as_ptr() as *const _,
                 transmute(notify_layer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -156,7 +156,7 @@ impl<O: IsA<Clip>> ClipExt for O {
     fn connect_property_supported_formats_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::supported-formats\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::supported-formats\0".as_ptr() as *const _,
                 transmute(notify_supported_formats_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -165,11 +165,11 @@ impl<O: IsA<Clip>> ClipExt for O {
 unsafe extern "C" fn notify_layer_trampoline<P>(this: *mut ffi::GESClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clip> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Clip::from_glib_borrow(this).downcast_unchecked())
+    f(&Clip::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_supported_formats_trampoline<P>(this: *mut ffi::GESClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clip> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Clip::from_glib_borrow(this).downcast_unchecked())
+    f(&Clip::from_glib_borrow(this).unsafe_cast())
 }

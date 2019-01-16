@@ -12,24 +12,19 @@ use Track;
 use TrackElement;
 use ffi;
 use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gst;
-use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass>): [
-        gst::Element => gst_ffi::GstElement,
-        gst::Object => gst_ffi::GstObject,
-        Extractable,
-    ];
+    pub struct Timeline(Object<ffi::GESTimeline, ffi::GESTimelineClass, TimelineClass>) @extends gst::Element, gst::Object, @implements Extractable;
 
     match fn {
         get_type => || ffi::ges_timeline_get_type(),
@@ -67,8 +62,10 @@ impl Default for Timeline {
     }
 }
 
+pub const NONE_TIMELINE: Option<&Timeline> = None;
+
 pub trait TimelineExt: 'static {
-    fn add_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError>;
+    fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
 
@@ -102,11 +99,11 @@ pub trait TimelineExt: 'static {
 
     fn load_from_uri(&self, uri: &str) -> Result<(), Error>;
 
-    fn move_layer(&self, layer: &Layer, new_layer_priority: u32) -> Result<(), glib::error::BoolError>;
+    fn move_layer<P: IsA<Layer>>(&self, layer: &P, new_layer_priority: u32) -> Result<(), glib::error::BoolError>;
 
     fn paste_element<P: IsA<TimelineElement>>(&self, element: &P, position: gst::ClockTime, layer_priority: i32) -> Option<TimelineElement>;
 
-    fn remove_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError>;
+    fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> bool;
 
@@ -144,160 +141,159 @@ pub trait TimelineExt: 'static {
 }
 
 impl<O: IsA<Timeline>> TimelineExt for O {
-    fn add_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError> {
+    fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_timeline_add_layer(self.to_glib_none().0, layer.to_glib_none().0), "Failed to add layer")
+            glib_result_from_gboolean!(ffi::ges_timeline_add_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0), "Failed to add layer")
         }
     }
 
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_timeline_add_track(self.to_glib_none().0, track.to_glib_full()), "Failed to add track")
+            glib_result_from_gboolean!(ffi::ges_timeline_add_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_full()), "Failed to add track")
         }
     }
 
     fn append_layer(&self) -> Layer {
         unsafe {
-            from_glib_none(ffi::ges_timeline_append_layer(self.to_glib_none().0))
+            from_glib_none(ffi::ges_timeline_append_layer(self.as_ref().to_glib_none().0))
         }
     }
 
     fn commit(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_timeline_commit(self.to_glib_none().0))
+            from_glib(ffi::ges_timeline_commit(self.as_ref().to_glib_none().0))
         }
     }
 
     fn commit_sync(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_timeline_commit_sync(self.to_glib_none().0))
+            from_glib(ffi::ges_timeline_commit_sync(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_auto_transition(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_timeline_get_auto_transition(self.to_glib_none().0))
+            from_glib(ffi::ges_timeline_get_auto_transition(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_timeline_get_duration(self.to_glib_none().0))
+            from_glib(ffi::ges_timeline_get_duration(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_element(&self, name: &str) -> Option<TimelineElement> {
         unsafe {
-            from_glib_full(ffi::ges_timeline_get_element(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(ffi::ges_timeline_get_element(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn get_groups(&self) -> Vec<Group> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::ges_timeline_get_groups(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::ges_timeline_get_groups(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_layer(&self, priority: u32) -> Option<Layer> {
         unsafe {
-            from_glib_full(ffi::ges_timeline_get_layer(self.to_glib_none().0, priority))
+            from_glib_full(ffi::ges_timeline_get_layer(self.as_ref().to_glib_none().0, priority))
         }
     }
 
     fn get_layers(&self) -> Vec<Layer> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_layers(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_layers(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad> {
         unsafe {
-            from_glib_none(ffi::ges_timeline_get_pad_for_track(self.to_glib_none().0, track.to_glib_none().0))
+            from_glib_none(ffi::ges_timeline_get_pad_for_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_none().0))
         }
     }
 
     fn get_snapping_distance(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_timeline_get_snapping_distance(self.to_glib_none().0))
+            from_glib(ffi::ges_timeline_get_snapping_distance(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track> {
         unsafe {
-            from_glib_none(ffi::ges_timeline_get_track_for_pad(self.to_glib_none().0, pad.to_glib_none().0))
+            from_glib_none(ffi::ges_timeline_get_track_for_pad(self.as_ref().to_glib_none().0, pad.as_ref().to_glib_none().0))
         }
     }
 
     fn get_tracks(&self) -> Vec<Track> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_tracks(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_tracks(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_empty(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_timeline_is_empty(self.to_glib_none().0))
+            from_glib(ffi::ges_timeline_is_empty(self.as_ref().to_glib_none().0))
         }
     }
 
     fn load_from_uri(&self, uri: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_timeline_load_from_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let _ = ffi::ges_timeline_load_from_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
-    fn move_layer(&self, layer: &Layer, new_layer_priority: u32) -> Result<(), glib::error::BoolError> {
+    fn move_layer<P: IsA<Layer>>(&self, layer: &P, new_layer_priority: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_timeline_move_layer(self.to_glib_none().0, layer.to_glib_none().0, new_layer_priority), "Failed to move layer")
+            glib_result_from_gboolean!(ffi::ges_timeline_move_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0, new_layer_priority), "Failed to move layer")
         }
     }
 
     fn paste_element<P: IsA<TimelineElement>>(&self, element: &P, position: gst::ClockTime, layer_priority: i32) -> Option<TimelineElement> {
         unsafe {
-            from_glib_none(ffi::ges_timeline_paste_element(self.to_glib_none().0, element.to_glib_none().0, position.to_glib(), layer_priority))
+            from_glib_none(ffi::ges_timeline_paste_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0, position.to_glib(), layer_priority))
         }
     }
 
-    fn remove_layer(&self, layer: &Layer) -> Result<(), glib::error::BoolError> {
+    fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_timeline_remove_layer(self.to_glib_none().0, layer.to_glib_none().0), "Failed to remove layer")
+            glib_result_from_gboolean!(ffi::ges_timeline_remove_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0), "Failed to remove layer")
         }
     }
 
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> bool {
         unsafe {
-            from_glib(ffi::ges_timeline_remove_track(self.to_glib_none().0, track.to_glib_none().0))
+            from_glib(ffi::ges_timeline_remove_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_none().0))
         }
     }
 
     fn save_to_uri<'a, P: IsA<Asset> + 'a, Q: Into<Option<&'a P>>>(&self, uri: &str, formatter_asset: Q, overwrite: bool) -> Result<(), Error> {
         let formatter_asset = formatter_asset.into();
-        let formatter_asset = formatter_asset.to_glib_none();
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_timeline_save_to_uri(self.to_glib_none().0, uri.to_glib_none().0, formatter_asset.0, overwrite.to_glib(), &mut error);
+            let _ = ffi::ges_timeline_save_to_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, formatter_asset.map(|p| p.as_ref()).to_glib_none().0, overwrite.to_glib(), &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
-            ffi::ges_timeline_set_auto_transition(self.to_glib_none().0, auto_transition.to_glib());
+            ffi::ges_timeline_set_auto_transition(self.as_ref().to_glib_none().0, auto_transition.to_glib());
         }
     }
 
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime) {
         unsafe {
-            ffi::ges_timeline_set_snapping_distance(self.to_glib_none().0, snapping_distance.to_glib());
+            ffi::ges_timeline_set_snapping_distance(self.as_ref().to_glib_none().0, snapping_distance.to_glib());
         }
     }
 
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"commited\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"commited\0".as_ptr() as *const _,
                 transmute(commited_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -305,7 +301,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Group) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"group-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"group-added\0".as_ptr() as *const _,
                 transmute(group_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -317,7 +313,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Layer) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"layer-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"layer-added\0".as_ptr() as *const _,
                 transmute(layer_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -325,7 +321,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Layer) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"layer-removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"layer-removed\0".as_ptr() as *const _,
                 transmute(layer_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -337,7 +333,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"snapping-ended\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"snapping-ended\0".as_ptr() as *const _,
                 transmute(snapping_ended_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -345,7 +341,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"snapping-started\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"snapping-started\0".as_ptr() as *const _,
                 transmute(snapping_started_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -353,7 +349,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Track) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"track-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"track-added\0".as_ptr() as *const _,
                 transmute(track_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -361,7 +357,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Track) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"track-removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"track-removed\0".as_ptr() as *const _,
                 transmute(track_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -369,7 +365,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::auto-transition\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::auto-transition\0".as_ptr() as *const _,
                 transmute(notify_auto_transition_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -377,7 +373,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::duration\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -385,7 +381,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::snapping-distance\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::snapping-distance\0".as_ptr() as *const _,
                 transmute(notify_snapping_distance_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -394,65 +390,65 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 unsafe extern "C" fn commited_trampoline<P>(this: *mut ffi::GESTimeline, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn group_added_trampoline<P>(this: *mut ffi::GESTimeline, group: *mut ffi::GESGroup, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &Group) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(group))
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(group))
 }
 
 unsafe extern "C" fn layer_added_trampoline<P>(this: *mut ffi::GESTimeline, layer: *mut ffi::GESLayer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &Layer) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(layer))
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
 }
 
 unsafe extern "C" fn layer_removed_trampoline<P>(this: *mut ffi::GESTimeline, layer: *mut ffi::GESLayer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &Layer) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(layer))
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
 }
 
 unsafe extern "C" fn snapping_ended_trampoline<P>(this: *mut ffi::GESTimeline, object: *mut ffi::GESTrackElement, p0: *mut ffi::GESTrackElement, p1: u64, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &TrackElement, &TrackElement, u64) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
 }
 
 unsafe extern "C" fn snapping_started_trampoline<P>(this: *mut ffi::GESTimeline, object: *mut ffi::GESTrackElement, p0: *mut ffi::GESTrackElement, p1: u64, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &TrackElement, &TrackElement, u64) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
 }
 
 unsafe extern "C" fn track_added_trampoline<P>(this: *mut ffi::GESTimeline, track: *mut ffi::GESTrack, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &Track) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(track))
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(track))
 }
 
 unsafe extern "C" fn track_removed_trampoline<P>(this: *mut ffi::GESTimeline, track: *mut ffi::GESTrack, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P, &Track) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(track))
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(track))
 }
 
 unsafe extern "C" fn notify_auto_transition_trampoline<P>(this: *mut ffi::GESTimeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_duration_trampoline<P>(this: *mut ffi::GESTimeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_snapping_distance_trampoline<P>(this: *mut ffi::GESTimeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Timeline::from_glib_borrow(this).downcast_unchecked())
+    f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }

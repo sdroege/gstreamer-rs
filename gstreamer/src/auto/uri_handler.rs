@@ -11,7 +11,7 @@ use glib::translate::*;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct URIHandler(Object<ffi::GstURIHandler, ffi::GstURIHandlerInterface>);
+    pub struct URIHandler(Interface<ffi::GstURIHandler>);
 
     match fn {
         get_type => || ffi::gst_uri_handler_get_type(),
@@ -20,6 +20,8 @@ glib_wrapper! {
 
 unsafe impl Send for URIHandler {}
 unsafe impl Sync for URIHandler {}
+
+pub const NONE_URI_HANDLER: Option<&URIHandler> = None;
 
 pub trait URIHandlerExt: 'static {
     fn get_protocols(&self) -> Vec<GString>;
@@ -34,26 +36,26 @@ pub trait URIHandlerExt: 'static {
 impl<O: IsA<URIHandler>> URIHandlerExt for O {
     fn get_protocols(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_uri_handler_get_protocols(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_uri_handler_get_protocols(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_uri_handler_get_uri(self.to_glib_none().0))
+            from_glib_full(ffi::gst_uri_handler_get_uri(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_uri_type(&self) -> URIType {
         unsafe {
-            from_glib(ffi::gst_uri_handler_get_uri_type(self.to_glib_none().0))
+            from_glib(ffi::gst_uri_handler_get_uri_type(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_uri(&self, uri: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_uri_handler_set_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let _ = ffi::gst_uri_handler_set_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }

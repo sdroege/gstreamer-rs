@@ -3,36 +3,36 @@
 // DO NOT EDIT
 
 mod player;
-pub use self::player::Player;
+pub use self::player::{Player, PlayerClass, NONE_PLAYER};
 
 mod player_audio_info;
-pub use self::player_audio_info::PlayerAudioInfo;
+pub use self::player_audio_info::{PlayerAudioInfo, PlayerAudioInfoClass, NONE_PLAYER_AUDIO_INFO};
 
 mod player_gmain_context_signal_dispatcher;
-pub use self::player_gmain_context_signal_dispatcher::PlayerGMainContextSignalDispatcher;
+pub use self::player_gmain_context_signal_dispatcher::{PlayerGMainContextSignalDispatcher, PlayerGMainContextSignalDispatcherClass, NONE_PLAYER_GMAIN_CONTEXT_SIGNAL_DISPATCHER};
 
 mod player_media_info;
-pub use self::player_media_info::PlayerMediaInfo;
+pub use self::player_media_info::{PlayerMediaInfo, PlayerMediaInfoClass, NONE_PLAYER_MEDIA_INFO};
 
 mod player_signal_dispatcher;
-pub use self::player_signal_dispatcher::PlayerSignalDispatcher;
+pub use self::player_signal_dispatcher::{PlayerSignalDispatcher, NONE_PLAYER_SIGNAL_DISPATCHER};
 pub use self::player_signal_dispatcher::PlayerSignalDispatcherExt;
 
 mod player_stream_info;
-pub use self::player_stream_info::PlayerStreamInfo;
+pub use self::player_stream_info::{PlayerStreamInfo, PlayerStreamInfoClass, NONE_PLAYER_STREAM_INFO};
 pub use self::player_stream_info::PlayerStreamInfoExt;
 
 mod player_subtitle_info;
-pub use self::player_subtitle_info::PlayerSubtitleInfo;
+pub use self::player_subtitle_info::{PlayerSubtitleInfo, PlayerSubtitleInfoClass, NONE_PLAYER_SUBTITLE_INFO};
 
 mod player_video_info;
-pub use self::player_video_info::PlayerVideoInfo;
+pub use self::player_video_info::{PlayerVideoInfo, PlayerVideoInfoClass, NONE_PLAYER_VIDEO_INFO};
 
 mod player_video_overlay_video_renderer;
-pub use self::player_video_overlay_video_renderer::PlayerVideoOverlayVideoRenderer;
+pub use self::player_video_overlay_video_renderer::{PlayerVideoOverlayVideoRenderer, PlayerVideoOverlayVideoRendererClass, NONE_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER};
 
 mod player_video_renderer;
-pub use self::player_video_renderer::PlayerVideoRenderer;
+pub use self::player_video_renderer::{PlayerVideoRenderer, NONE_PLAYER_VIDEO_RENDERER};
 pub use self::player_video_renderer::PlayerVideoRendererExt;
 
 mod player_visualization;

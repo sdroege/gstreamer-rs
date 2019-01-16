@@ -3,70 +3,70 @@
 // DO NOT EDIT
 
 mod asset;
-pub use self::asset::Asset;
+pub use self::asset::{Asset, AssetClass, NONE_ASSET};
 pub use self::asset::AssetExt;
 
 mod base_effect;
-pub use self::base_effect::BaseEffect;
+pub use self::base_effect::{BaseEffect, BaseEffectClass, NONE_BASE_EFFECT};
 
 mod clip;
-pub use self::clip::Clip;
+pub use self::clip::{Clip, ClipClass, NONE_CLIP};
 pub use self::clip::ClipExt;
 
 mod container;
-pub use self::container::Container;
+pub use self::container::{Container, ContainerClass, NONE_CONTAINER};
 pub use self::container::GESContainerExt;
 
 mod effect;
-pub use self::effect::Effect;
+pub use self::effect::{Effect, EffectClass, NONE_EFFECT};
 pub use self::effect::EffectExt;
 
 mod extractable;
-pub use self::extractable::Extractable;
+pub use self::extractable::{Extractable, NONE_EXTRACTABLE};
 pub use self::extractable::ExtractableExt;
 
 mod group;
-pub use self::group::Group;
+pub use self::group::{Group, GroupClass, NONE_GROUP};
 pub use self::group::GroupExt;
 
 mod layer;
-pub use self::layer::Layer;
+pub use self::layer::{Layer, LayerClass, NONE_LAYER};
 pub use self::layer::LayerExt;
 
 mod pipeline;
-pub use self::pipeline::Pipeline;
+pub use self::pipeline::{Pipeline, PipelineClass, NONE_PIPELINE};
 pub use self::pipeline::GESPipelineExt;
 
 mod project;
-pub use self::project::Project;
+pub use self::project::{Project, ProjectClass, NONE_PROJECT};
 pub use self::project::ProjectExt;
 
 mod timeline;
-pub use self::timeline::Timeline;
+pub use self::timeline::{Timeline, TimelineClass, NONE_TIMELINE};
 pub use self::timeline::TimelineExt;
 
 mod timeline_element;
-pub use self::timeline_element::TimelineElement;
+pub use self::timeline_element::{TimelineElement, TimelineElementClass, NONE_TIMELINE_ELEMENT};
 pub use self::timeline_element::TimelineElementExt;
 
 mod track;
-pub use self::track::Track;
+pub use self::track::{Track, TrackClass, NONE_TRACK};
 pub use self::track::GESTrackExt;
 
 mod track_element;
-pub use self::track_element::TrackElement;
+pub use self::track_element::{TrackElement, TrackElementClass, NONE_TRACK_ELEMENT};
 pub use self::track_element::TrackElementExt;
 
 mod uri_clip;
-pub use self::uri_clip::UriClip;
+pub use self::uri_clip::{UriClip, UriClipClass, NONE_URI_CLIP};
 pub use self::uri_clip::UriClipExt;
 
 mod uri_clip_asset;
-pub use self::uri_clip_asset::UriClipAsset;
+pub use self::uri_clip_asset::{UriClipAsset, UriClipAssetClass, NONE_URI_CLIP_ASSET};
 pub use self::uri_clip_asset::UriClipAssetExt;
 
 mod uri_source_asset;
-pub use self::uri_source_asset::UriSourceAsset;
+pub use self::uri_source_asset::{UriSourceAsset, UriSourceAssetClass, NONE_URI_SOURCE_ASSET};
 pub use self::uri_source_asset::UriSourceAssetExt;
 
 mod enums;

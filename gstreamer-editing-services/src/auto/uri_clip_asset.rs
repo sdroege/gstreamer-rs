@@ -7,7 +7,7 @@ use Error;
 use UriSourceAsset;
 use ffi;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -21,7 +21,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>): Asset;
+    pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass, UriClipAssetClass>) @extends Asset;
 
     match fn {
         get_type => || ffi::ges_uri_clip_asset_get_type(),
@@ -29,7 +29,7 @@ glib_wrapper! {
 }
 
 impl UriClipAsset {
-    //pub fn new<'a, P: Into<Option<&'a gio::Cancellable>>, Q: /*Unimplemented*/gio::AsyncReadyCallback>(uri: &str, cancellable: P, callback: Q) {
+    //pub fn new<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: /*Unimplemented*/gio::AsyncReadyCallback>(uri: &str, cancellable: Q, callback: R) {
     //    unsafe { TODO: call ffi::ges_uri_clip_asset_new() }
     //}
 
@@ -42,6 +42,8 @@ impl UriClipAsset {
         }
     }
 }
+
+pub const NONE_URI_CLIP_ASSET: Option<&UriClipAsset> = None;
 
 pub trait UriClipAssetExt: 'static {
     fn get_duration(&self) -> gst::ClockTime;
@@ -60,25 +62,25 @@ pub trait UriClipAssetExt: 'static {
 impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_uri_clip_asset_get_duration(self.to_glib_none().0))
+            from_glib(ffi::ges_uri_clip_asset_get_duration(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_info(&self) -> Option<gst_pbutils::DiscovererInfo> {
         unsafe {
-            from_glib_none(ffi::ges_uri_clip_asset_get_info(const_override(self.to_glib_none().0)))
+            from_glib_none(ffi::ges_uri_clip_asset_get_info(const_override(self.as_ref().to_glib_none().0)))
         }
     }
 
     fn get_stream_assets(&self) -> Vec<UriSourceAsset> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::ges_uri_clip_asset_get_stream_assets(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::ges_uri_clip_asset_get_stream_assets(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_image(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_uri_clip_asset_is_image(self.to_glib_none().0))
+            from_glib(ffi::ges_uri_clip_asset_is_image(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -91,7 +93,7 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::duration\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
                 transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -100,5 +102,5 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 unsafe extern "C" fn notify_duration_trampoline<P>(this: *mut ffi::GESUriClipAsset, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UriClipAsset> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&UriClipAsset::from_glib_borrow(this).downcast_unchecked())
+    f(&UriClipAsset::from_glib_borrow(this).unsafe_cast())
 }

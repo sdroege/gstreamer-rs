@@ -12,9 +12,8 @@ use std::mem;
 pub fn encoding_list_all_targets<'a, P: Into<Option<&'a str>>>(categoryname: P) -> Vec<EncodingTarget> {
     assert_initialized_main_thread!();
     let categoryname = categoryname.into();
-    let categoryname = categoryname.to_glib_none();
     unsafe {
-        FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_all_targets(categoryname.0))
+        FromGlibPtrContainer::from_glib_full(ffi::gst_encoding_list_all_targets(categoryname.to_glib_none().0))
     }
 }
 

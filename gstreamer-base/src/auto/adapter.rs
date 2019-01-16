@@ -10,7 +10,7 @@ use gst;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Adapter(Object<ffi::GstAdapter, ffi::GstAdapterClass>);
+    pub struct Adapter(Object<ffi::GstAdapter, ffi::GstAdapterClass, AdapterClass>);
 
     match fn {
         get_type => || ffi::gst_adapter_get_type(),
@@ -197,3 +197,5 @@ unsafe impl glib::SendUnique for Adapter {
         self.ref_count() == 1
     }
 }
+
+pub const NONE_ADAPTER: Option<&Adapter> = None;

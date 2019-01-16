@@ -15,7 +15,7 @@ use glib::translate::*;
 use gobject_ffi;
 
 glib_wrapper! {
-    pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass>): BaseEffect, TrackElement, TimelineElement, Extractable;
+    pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass, EffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
         get_type => || ffi::ges_effect_get_type(),
@@ -30,6 +30,8 @@ impl Effect {
         }
     }
 }
+
+pub const NONE_EFFECT: Option<&Effect> = None;
 
 pub trait EffectExt: 'static {
     fn get_property_bin_description(&self) -> Option<GString>;

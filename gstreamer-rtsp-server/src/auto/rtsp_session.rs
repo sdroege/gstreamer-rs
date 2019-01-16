@@ -8,7 +8,7 @@ use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -20,7 +20,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RTSPSession(Object<ffi::GstRTSPSession, ffi::GstRTSPSessionClass>);
+    pub struct RTSPSession(Object<ffi::GstRTSPSession, ffi::GstRTSPSessionClass, RTSPSessionClass>);
 
     match fn {
         get_type => || ffi::gst_rtsp_session_get_type(),
@@ -38,6 +38,8 @@ impl RTSPSession {
 
 unsafe impl Send for RTSPSession {}
 unsafe impl Sync for RTSPSession {}
+
+pub const NONE_RTSP_SESSION: Option<&RTSPSession> = None;
 
 pub trait RTSPSessionExt: 'static {
     fn allow_expire(&self);
@@ -64,7 +66,7 @@ pub trait RTSPSessionExt: 'static {
 
     fn prevent_expire(&self);
 
-    fn release_media(&self, media: &RTSPSessionMedia) -> bool;
+    fn release_media<P: IsA<RTSPSessionMedia>>(&self, media: &P) -> bool;
 
     fn set_timeout(&self, timeout: u32);
 
@@ -82,7 +84,7 @@ pub trait RTSPSessionExt: 'static {
 impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
     fn allow_expire(&self) {
         unsafe {
-            ffi::gst_rtsp_session_allow_expire(self.to_glib_none().0);
+            ffi::gst_rtsp_session_allow_expire(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -92,27 +94,27 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 
     fn get_header(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_session_get_header(self.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_session_get_header(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
         unsafe {
             let mut matched = mem::uninitialized();
-            let ret = from_glib_none(ffi::gst_rtsp_session_get_media(self.to_glib_none().0, path.to_glib_none().0, &mut matched));
+            let ret = from_glib_none(ffi::gst_rtsp_session_get_media(self.as_ref().to_glib_none().0, path.to_glib_none().0, &mut matched));
             (ret, matched)
         }
     }
 
     fn get_sessionid(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_rtsp_session_get_sessionid(self.to_glib_none().0))
+            from_glib_none(ffi::gst_rtsp_session_get_sessionid(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_timeout(&self) -> u32 {
         unsafe {
-            ffi::gst_rtsp_session_get_timeout(self.to_glib_none().0)
+            ffi::gst_rtsp_session_get_timeout(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -122,13 +124,13 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 
     fn is_expired_usec(&self, now: i64) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_session_is_expired_usec(self.to_glib_none().0, now))
+            from_glib(ffi::gst_rtsp_session_is_expired_usec(self.as_ref().to_glib_none().0, now))
         }
     }
 
     fn manage_media<P: IsA<RTSPMedia>>(&self, path: &str, media: &P) -> Option<RTSPSessionMedia> {
         unsafe {
-            from_glib_none(ffi::gst_rtsp_session_manage_media(self.to_glib_none().0, path.to_glib_none().0, media.to_glib_full()))
+            from_glib_none(ffi::gst_rtsp_session_manage_media(self.as_ref().to_glib_none().0, path.to_glib_none().0, media.as_ref().to_glib_full()))
         }
     }
 
@@ -138,31 +140,31 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 
     fn next_timeout_usec(&self, now: i64) -> i32 {
         unsafe {
-            ffi::gst_rtsp_session_next_timeout_usec(self.to_glib_none().0, now)
+            ffi::gst_rtsp_session_next_timeout_usec(self.as_ref().to_glib_none().0, now)
         }
     }
 
     fn prevent_expire(&self) {
         unsafe {
-            ffi::gst_rtsp_session_prevent_expire(self.to_glib_none().0);
+            ffi::gst_rtsp_session_prevent_expire(self.as_ref().to_glib_none().0);
         }
     }
 
-    fn release_media(&self, media: &RTSPSessionMedia) -> bool {
+    fn release_media<P: IsA<RTSPSessionMedia>>(&self, media: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_session_release_media(self.to_glib_none().0, media.to_glib_none().0))
+            from_glib(ffi::gst_rtsp_session_release_media(self.as_ref().to_glib_none().0, media.as_ref().to_glib_none().0))
         }
     }
 
     fn set_timeout(&self, timeout: u32) {
         unsafe {
-            ffi::gst_rtsp_session_set_timeout(self.to_glib_none().0, timeout);
+            ffi::gst_rtsp_session_set_timeout(self.as_ref().to_glib_none().0, timeout);
         }
     }
 
     fn touch(&self) {
         unsafe {
-            ffi::gst_rtsp_session_touch(self.to_glib_none().0);
+            ffi::gst_rtsp_session_touch(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -183,7 +185,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
     fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::timeout\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::timeout\0".as_ptr() as *const _,
                 transmute(notify_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -191,7 +193,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
     fn connect_property_timeout_always_visible_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::timeout-always-visible\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::timeout-always-visible\0".as_ptr() as *const _,
                 transmute(notify_timeout_always_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -200,11 +202,11 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 unsafe extern "C" fn notify_timeout_trampoline<P>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPSession::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPSession::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_timeout_always_visible_trampoline<P>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&RTSPSession::from_glib_borrow(this).downcast_unchecked())
+    f(&RTSPSession::from_glib_borrow(this).unsafe_cast())
 }

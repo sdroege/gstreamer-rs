@@ -8,7 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct EncodingContainerProfile(Object<ffi::GstEncodingContainerProfile, ffi::GstEncodingContainerProfileClass>): EncodingProfile;
+    pub struct EncodingContainerProfile(Object<ffi::GstEncodingContainerProfile, ffi::GstEncodingContainerProfileClass, EncodingContainerProfileClass>) @extends EncodingProfile;
 
     match fn {
         get_type => || ffi::gst_encoding_container_profile_get_type(),
@@ -17,6 +17,8 @@ glib_wrapper! {
 
 unsafe impl Send for EncodingContainerProfile {}
 unsafe impl Sync for EncodingContainerProfile {}
+
+pub const NONE_ENCODING_CONTAINER_PROFILE: Option<&EncodingContainerProfile> = None;
 
 pub trait EncodingContainerProfileExt: 'static {
     fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool;
@@ -27,13 +29,13 @@ pub trait EncodingContainerProfileExt: 'static {
 impl<O: IsA<EncodingContainerProfile>> EncodingContainerProfileExt for O {
     fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_encoding_container_profile_contains_profile(self.to_glib_none().0, profile.to_glib_none().0))
+            from_glib(ffi::gst_encoding_container_profile_contains_profile(self.as_ref().to_glib_none().0, profile.as_ref().to_glib_none().0))
         }
     }
 
     fn get_profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_container_profile_get_profiles(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_encoding_container_profile_get_profiles(self.as_ref().to_glib_none().0))
         }
     }
 }

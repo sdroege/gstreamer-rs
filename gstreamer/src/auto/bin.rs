@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use BinClass;
 use ChildProxy;
 use Element;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -14,7 +13,7 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -25,7 +24,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass, BinClass>): Element, Object, ChildProxy;
+    pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass, BinClass>) @extends Element, Object, @implements ChildProxy;
 
     match fn {
         get_type => || ffi::gst_bin_get_type(),
@@ -36,15 +35,16 @@ impl Bin {
     pub fn new<'a, P: Into<Option<&'a str>>>(name: P) -> Bin {
         assert_initialized_main_thread!();
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            Element::from_glib_none(ffi::gst_bin_new(name.0)).downcast_unchecked()
+            Element::from_glib_none(ffi::gst_bin_new(name.to_glib_none().0)).unsafe_cast()
         }
     }
 }
 
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
+
+pub const NONE_BIN: Option<&Bin> = None;
 
 pub trait GstBinExt: 'static {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
@@ -113,7 +113,7 @@ pub trait GstBinExt: 'static {
 impl<O: IsA<Bin>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_add(self.to_glib_none().0, element.to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(ffi::gst_bin_add(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to add element")
         }
     }
 
@@ -123,32 +123,32 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_bin_find_unlinked_pad(self.to_glib_none().0, direction.to_glib()))
+            from_glib_full(ffi::gst_bin_find_unlinked_pad(self.as_ref().to_glib_none().0, direction.to_glib()))
         }
     }
 
     fn get_by_interface(&self, iface: glib::types::Type) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_get_by_interface(self.to_glib_none().0, iface.to_glib()))
+            from_glib_full(ffi::gst_bin_get_by_interface(self.as_ref().to_glib_none().0, iface.to_glib()))
         }
     }
 
     fn get_by_name(&self, name: &str) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_get_by_name(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(ffi::gst_bin_get_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn get_by_name_recurse_up(&self, name: &str) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_get_by_name_recurse_up(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(ffi::gst_bin_get_by_name_recurse_up(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn get_suppressed_flags(&self) -> ElementFlags {
         unsafe {
-            from_glib(ffi::gst_bin_get_suppressed_flags(self.to_glib_none().0))
+            from_glib(ffi::gst_bin_get_suppressed_flags(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -178,13 +178,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_recalculate_latency(self.to_glib_none().0), "Failed to recalculate latency")
+            glib_result_from_gboolean!(ffi::gst_bin_recalculate_latency(self.as_ref().to_glib_none().0), "Failed to recalculate latency")
         }
     }
 
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_remove(self.to_glib_none().0, element.to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(ffi::gst_bin_remove(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to remove element")
         }
     }
 
@@ -195,13 +195,13 @@ impl<O: IsA<Bin>> GstBinExt for O {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn set_suppressed_flags(&self, flags: ElementFlags) {
         unsafe {
-            ffi::gst_bin_set_suppressed_flags(self.to_glib_none().0, flags.to_glib());
+            ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.to_glib());
         }
     }
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_sync_children_states(self.to_glib_none().0), "Failed to sync children states")
+            glib_result_from_gboolean!(ffi::gst_bin_sync_children_states(self.as_ref().to_glib_none().0), "Failed to sync children states")
         }
     }
 
@@ -237,7 +237,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Bin, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"deep-element-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"deep-element-added\0".as_ptr() as *const _,
                 transmute(deep_element_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -246,7 +246,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Bin, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"deep-element-removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"deep-element-removed\0".as_ptr() as *const _,
                 transmute(deep_element_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -254,7 +254,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_do_latency<F: Fn(&Self) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"do-latency\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"do-latency\0".as_ptr() as *const _,
                 transmute(do_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -262,7 +262,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"element-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"element-added\0".as_ptr() as *const _,
                 transmute(element_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -270,7 +270,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"element-removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"element-removed\0".as_ptr() as *const _,
                 transmute(element_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -278,7 +278,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::async-handling\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::async-handling\0".as_ptr() as *const _,
                 transmute(notify_async_handling_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -286,7 +286,7 @@ impl<O: IsA<Bin>> GstBinExt for O {
     fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::message-forward\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::message-forward\0".as_ptr() as *const _,
                 transmute(notify_message_forward_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -296,42 +296,42 @@ impl<O: IsA<Bin>> GstBinExt for O {
 unsafe extern "C" fn deep_element_added_trampoline<P>(this: *mut ffi::GstBin, sub_bin: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<Bin> {
     let f: &&(Fn(&P, &Bin, &Element) + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
+    f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 unsafe extern "C" fn deep_element_removed_trampoline<P>(this: *mut ffi::GstBin, sub_bin: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<Bin> {
     let f: &&(Fn(&P, &Bin, &Element) + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
+    f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn do_latency_trampoline<P>(this: *mut ffi::GstBin, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Bin> {
     let f: &&(Fn(&P) -> bool + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked()).to_glib()
+    f(&Bin::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn element_added_trampoline<P>(this: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<Bin> {
     let f: &&(Fn(&P, &Element) + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(element))
+    f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn element_removed_trampoline<P>(this: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<Bin> {
     let f: &&(Fn(&P, &Element) + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(element))
+    f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn notify_async_handling_trampoline<P>(this: *mut ffi::GstBin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Bin> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked())
+    f(&Bin::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_message_forward_trampoline<P>(this: *mut ffi::GstBin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Bin> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).downcast_unchecked())
+    f(&Bin::from_glib_borrow(this).unsafe_cast())
 }

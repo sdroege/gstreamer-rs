@@ -8,7 +8,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct DiscovererAudioInfo(Object<ffi::GstDiscovererAudioInfo>): DiscovererStreamInfo;
+    pub struct DiscovererAudioInfo(Object<ffi::GstDiscovererAudioInfo, DiscovererAudioInfoClass>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || ffi::gst_discoverer_audio_info_get_type(),
@@ -62,3 +62,5 @@ impl DiscovererAudioInfo {
 
 unsafe impl Send for DiscovererAudioInfo {}
 unsafe impl Sync for DiscovererAudioInfo {}
+
+pub const NONE_DISCOVERER_AUDIO_INFO: Option<&DiscovererAudioInfo> = None;

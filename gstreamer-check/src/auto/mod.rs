@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 mod test_clock;
-pub use self::test_clock::TestClock;
+pub use self::test_clock::{TestClock, TestClockClass, NONE_TEST_CLOCK};
 
 #[doc(hidden)]
 pub mod traits {

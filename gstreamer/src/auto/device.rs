@@ -8,7 +8,7 @@ use Object;
 use Structure;
 use ffi;
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -18,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Device(Object<ffi::GstDevice, ffi::GstDeviceClass>): Object;
+    pub struct Device(Object<ffi::GstDevice, ffi::GstDeviceClass, DeviceClass>) @extends Object;
 
     match fn {
         get_type => || ffi::gst_device_get_type(),
@@ -27,6 +27,8 @@ glib_wrapper! {
 
 unsafe impl Send for Device {}
 unsafe impl Sync for Device {}
+
+pub const NONE_DEVICE: Option<&Device> = None;
 
 pub trait DeviceExt: 'static {
     fn create_element<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element>;
@@ -51,58 +53,57 @@ pub trait DeviceExt: 'static {
 impl<O: IsA<Device>> DeviceExt for O {
     fn create_element<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element> {
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_device_create_element(self.to_glib_none().0, name.0))
+            from_glib_full(ffi::gst_device_create_element(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn get_caps(&self) -> Option<Caps> {
         unsafe {
-            from_glib_full(ffi::gst_device_get_caps(self.to_glib_none().0))
+            from_glib_full(ffi::gst_device_get_caps(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_device_class(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gst_device_get_device_class(self.to_glib_none().0))
+            from_glib_full(ffi::gst_device_get_device_class(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_display_name(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gst_device_get_display_name(self.to_glib_none().0))
+            from_glib_full(ffi::gst_device_get_display_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_properties(&self) -> Option<Structure> {
         unsafe {
-            from_glib_full(ffi::gst_device_get_properties(self.to_glib_none().0))
+            from_glib_full(ffi::gst_device_get_properties(self.as_ref().to_glib_none().0))
         }
     }
 
     fn has_classes(&self, classes: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_has_classes(self.to_glib_none().0, classes.to_glib_none().0))
+            from_glib(ffi::gst_device_has_classes(self.as_ref().to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
     fn has_classesv(&self, classes: &[&str]) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_has_classesv(self.to_glib_none().0, classes.to_glib_none().0))
+            from_glib(ffi::gst_device_has_classesv(self.as_ref().to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
     fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_reconfigure_element(self.to_glib_none().0, element.to_glib_none().0))
+            from_glib(ffi::gst_device_reconfigure_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0))
         }
     }
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"removed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"removed\0".as_ptr() as *const _,
                 transmute(removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -111,5 +112,5 @@ impl<O: IsA<Device>> DeviceExt for O {
 unsafe extern "C" fn removed_trampoline<P>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
 where P: IsA<Device> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Device::from_glib_borrow(this).downcast_unchecked())
+    f(&Device::from_glib_borrow(this).unsafe_cast())
 }

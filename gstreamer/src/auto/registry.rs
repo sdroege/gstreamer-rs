@@ -8,6 +8,7 @@ use PluginFeature;
 use ffi;
 use glib;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -17,7 +18,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Registry(Object<ffi::GstRegistry, ffi::GstRegistryClass>): Object;
+    pub struct Registry(Object<ffi::GstRegistry, ffi::GstRegistryClass, RegistryClass>) @extends Object;
 
     match fn {
         get_type => || ffi::gst_registry_get_type(),
@@ -27,13 +28,13 @@ glib_wrapper! {
 impl Registry {
     pub fn add_feature<P: IsA<PluginFeature>>(&self, feature: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_registry_add_feature(self.to_glib_none().0, feature.to_glib_none().0), "Failed to add feature")
+            glib_result_from_gboolean!(ffi::gst_registry_add_feature(self.to_glib_none().0, feature.as_ref().to_glib_none().0), "Failed to add feature")
         }
     }
 
-    pub fn add_plugin(&self, plugin: &Plugin) -> Result<(), glib::error::BoolError> {
+    pub fn add_plugin<P: IsA<Plugin>>(&self, plugin: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.to_glib_none().0), "Failed to add plugin")
+            glib_result_from_gboolean!(ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.as_ref().to_glib_none().0), "Failed to add plugin")
         }
     }
 
@@ -101,13 +102,13 @@ impl Registry {
 
     pub fn remove_feature<P: IsA<PluginFeature>>(&self, feature: &P) {
         unsafe {
-            ffi::gst_registry_remove_feature(self.to_glib_none().0, feature.to_glib_none().0);
+            ffi::gst_registry_remove_feature(self.to_glib_none().0, feature.as_ref().to_glib_none().0);
         }
     }
 
-    pub fn remove_plugin(&self, plugin: &Plugin) {
+    pub fn remove_plugin<P: IsA<Plugin>>(&self, plugin: &P) {
         unsafe {
-            ffi::gst_registry_remove_plugin(self.to_glib_none().0, plugin.to_glib_none().0);
+            ffi::gst_registry_remove_plugin(self.to_glib_none().0, plugin.as_ref().to_glib_none().0);
         }
     }
 
@@ -127,7 +128,7 @@ impl Registry {
     pub fn connect_feature_added<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Registry, &PluginFeature) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"feature-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"feature-added\0".as_ptr() as *const _,
                 transmute(feature_added_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -135,7 +136,7 @@ impl Registry {
     pub fn connect_plugin_added<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Registry, &Plugin) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"plugin-added\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"plugin-added\0".as_ptr() as *const _,
                 transmute(plugin_added_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -143,6 +144,8 @@ impl Registry {
 
 unsafe impl Send for Registry {}
 unsafe impl Sync for Registry {}
+
+pub const NONE_REGISTRY: Option<&Registry> = None;
 
 unsafe extern "C" fn feature_added_trampoline(this: *mut ffi::GstRegistry, feature: *mut ffi::GstPluginFeature, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Registry, &PluginFeature) + Send + Sync + 'static) = transmute(f);

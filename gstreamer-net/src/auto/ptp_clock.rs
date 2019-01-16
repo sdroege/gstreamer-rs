@@ -5,21 +5,18 @@
 use ffi;
 use glib::StaticType;
 use glib::Value;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct PtpClock(Object<ffi::GstPtpClock, ffi::GstPtpClockClass>): [
-        gst::Clock => gst_ffi::GstClock,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct PtpClock(Object<ffi::GstPtpClock, ffi::GstPtpClockClass, PtpClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
         get_type => || ffi::gst_ptp_clock_get_type(),
@@ -30,7 +27,7 @@ impl PtpClock {
     pub fn get_property_domain(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"domain\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"domain\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -38,7 +35,7 @@ impl PtpClock {
     pub fn get_property_grandmaster_clock_id(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"grandmaster-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"grandmaster-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -46,7 +43,7 @@ impl PtpClock {
     pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -54,7 +51,7 @@ impl PtpClock {
     pub fn get_property_master_clock_id(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"master-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"master-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -62,7 +59,7 @@ impl PtpClock {
     pub fn connect_property_grandmaster_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::grandmaster-clock-id\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::grandmaster-clock-id\0".as_ptr() as *const _,
                 transmute(notify_grandmaster_clock_id_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -70,7 +67,7 @@ impl PtpClock {
     pub fn connect_property_internal_clock_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::internal-clock\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::internal-clock\0".as_ptr() as *const _,
                 transmute(notify_internal_clock_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -78,7 +75,7 @@ impl PtpClock {
     pub fn connect_property_master_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::master-clock-id\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::master-clock-id\0".as_ptr() as *const _,
                 transmute(notify_master_clock_id_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -86,6 +83,8 @@ impl PtpClock {
 
 unsafe impl Send for PtpClock {}
 unsafe impl Sync for PtpClock {}
+
+pub const NONE_PTP_CLOCK: Option<&PtpClock> = None;
 
 unsafe extern "C" fn notify_grandmaster_clock_id_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);

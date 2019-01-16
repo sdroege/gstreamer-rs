@@ -4,15 +4,13 @@
 
 use GLContext;
 use ffi;
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct GLUpload(Object<ffi::GstGLUpload, ffi::GstGLUploadClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLUpload(Object<ffi::GstGLUpload, ffi::GstGLUploadClass, GLUploadClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_upload_get_type(),
@@ -20,10 +18,10 @@ glib_wrapper! {
 }
 
 impl GLUpload {
-    pub fn new(context: &GLContext) -> GLUpload {
+    pub fn new<P: IsA<GLContext>>(context: &P) -> GLUpload {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_gl_upload_new(context.to_glib_none().0))
+            from_glib_full(ffi::gst_gl_upload_new(context.as_ref().to_glib_none().0))
         }
     }
 
@@ -42,15 +40,15 @@ impl GLUpload {
         }
     }
 
-    pub fn set_context(&self, context: &GLContext) {
+    pub fn set_context<P: IsA<GLContext>>(&self, context: &P) {
         unsafe {
-            ffi::gst_gl_upload_set_context(self.to_glib_none().0, context.to_glib_none().0);
+            ffi::gst_gl_upload_set_context(self.to_glib_none().0, context.as_ref().to_glib_none().0);
         }
     }
 
-    pub fn transform_caps(&self, context: &GLContext, direction: gst::PadDirection, caps: &gst::Caps, filter: &gst::Caps) -> Option<gst::Caps> {
+    pub fn transform_caps<P: IsA<GLContext>>(&self, context: &P, direction: gst::PadDirection, caps: &gst::Caps, filter: &gst::Caps) -> Option<gst::Caps> {
         unsafe {
-            from_glib_full(ffi::gst_gl_upload_transform_caps(self.to_glib_none().0, context.to_glib_none().0, direction.to_glib(), caps.to_glib_none().0, filter.to_glib_none().0))
+            from_glib_full(ffi::gst_gl_upload_transform_caps(self.to_glib_none().0, context.as_ref().to_glib_none().0, direction.to_glib(), caps.to_glib_none().0, filter.to_glib_none().0))
         }
     }
 
@@ -64,3 +62,5 @@ impl GLUpload {
 
 unsafe impl Send for GLUpload {}
 unsafe impl Sync for GLUpload {}
+
+pub const NONE_GL_UPLOAD: Option<&GLUpload> = None;

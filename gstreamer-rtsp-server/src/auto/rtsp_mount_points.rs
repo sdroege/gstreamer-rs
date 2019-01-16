@@ -11,7 +11,7 @@ use gst_rtsp;
 use std::mem;
 
 glib_wrapper! {
-    pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass>);
+    pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass, RTSPMountPointsClass>);
 
     match fn {
         get_type => || ffi::gst_rtsp_mount_points_get_type(),
@@ -36,6 +36,8 @@ impl Default for RTSPMountPoints {
 unsafe impl Send for RTSPMountPoints {}
 unsafe impl Sync for RTSPMountPoints {}
 
+pub const NONE_RTSP_MOUNT_POINTS: Option<&RTSPMountPoints> = None;
+
 pub trait RTSPMountPointsExt: 'static {
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P);
 
@@ -49,27 +51,27 @@ pub trait RTSPMountPointsExt: 'static {
 impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P) {
         unsafe {
-            ffi::gst_rtsp_mount_points_add_factory(self.to_glib_none().0, path.to_glib_none().0, factory.to_glib_full());
+            ffi::gst_rtsp_mount_points_add_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0, factory.as_ref().to_glib_full());
         }
     }
 
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_mount_points_make_path(self.to_glib_none().0, url.to_glib_none().0))
+            from_glib_full(ffi::gst_rtsp_mount_points_make_path(self.as_ref().to_glib_none().0, url.to_glib_none().0))
         }
     }
 
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32) {
         unsafe {
             let mut matched = mem::uninitialized();
-            let ret = from_glib_full(ffi::gst_rtsp_mount_points_match(self.to_glib_none().0, path.to_glib_none().0, &mut matched));
+            let ret = from_glib_full(ffi::gst_rtsp_mount_points_match(self.as_ref().to_glib_none().0, path.to_glib_none().0, &mut matched));
             (ret, matched)
         }
     }
 
     fn remove_factory(&self, path: &str) {
         unsafe {
-            ffi::gst_rtsp_mount_points_remove_factory(self.to_glib_none().0, path.to_glib_none().0);
+            ffi::gst_rtsp_mount_points_remove_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
         }
     }
 }

@@ -7,6 +7,7 @@ use Message;
 use Object;
 use ffi;
 use glib;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -15,7 +16,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Bus(Object<ffi::GstBus, ffi::GstBusClass>): Object;
+    pub struct Bus(Object<ffi::GstBus, ffi::GstBusClass, BusClass>) @extends Object;
 
     match fn {
         get_type => || ffi::gst_bus_get_type(),
@@ -124,7 +125,7 @@ impl Bus {
     pub fn connect_message<F: Fn(&Bus, &Message) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Bus, &Message) + Send + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"message\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"message\0".as_ptr() as *const _,
                 transmute(message_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -132,7 +133,7 @@ impl Bus {
     pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Bus, &Message) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"sync-message\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"sync-message\0".as_ptr() as *const _,
                 transmute(sync_message_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -146,6 +147,8 @@ impl Default for Bus {
 
 unsafe impl Send for Bus {}
 unsafe impl Sync for Bus {}
+
+pub const NONE_BUS: Option<&Bus> = None;
 
 unsafe extern "C" fn message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Bus, &Message) + Send + 'static) = transmute(f);

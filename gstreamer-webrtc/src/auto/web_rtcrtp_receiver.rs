@@ -4,10 +4,11 @@
 
 use WebRTCDTLSTransport;
 use ffi;
+use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct WebRTCRTPReceiver(Object<ffi::GstWebRTCRTPReceiver, ffi::GstWebRTCRTPReceiverClass>);
+    pub struct WebRTCRTPReceiver(Object<ffi::GstWebRTCRTPReceiver, ffi::GstWebRTCRTPReceiverClass, WebRTCRTPReceiverClass>);
 
     match fn {
         get_type => || ffi::gst_webrtc_rtp_receiver_get_type(),
@@ -22,15 +23,15 @@ impl WebRTCRTPReceiver {
         }
     }
 
-    pub fn set_rtcp_transport(&self, transport: &WebRTCDTLSTransport) {
+    pub fn set_rtcp_transport<P: IsA<WebRTCDTLSTransport>>(&self, transport: &P) {
         unsafe {
-            ffi::gst_webrtc_rtp_receiver_set_rtcp_transport(self.to_glib_none().0, transport.to_glib_none().0);
+            ffi::gst_webrtc_rtp_receiver_set_rtcp_transport(self.to_glib_none().0, transport.as_ref().to_glib_none().0);
         }
     }
 
-    pub fn set_transport(&self, transport: &WebRTCDTLSTransport) {
+    pub fn set_transport<P: IsA<WebRTCDTLSTransport>>(&self, transport: &P) {
         unsafe {
-            ffi::gst_webrtc_rtp_receiver_set_transport(self.to_glib_none().0, transport.to_glib_none().0);
+            ffi::gst_webrtc_rtp_receiver_set_transport(self.to_glib_none().0, transport.as_ref().to_glib_none().0);
         }
     }
 }
@@ -43,3 +44,5 @@ impl Default for WebRTCRTPReceiver {
 
 unsafe impl Send for WebRTCRTPReceiver {}
 unsafe impl Sync for WebRTCRTPReceiver {}
+
+pub const NONE_WEB_RTCRTP_RECEIVER: Option<&WebRTCRTPReceiver> = None;

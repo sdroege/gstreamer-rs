@@ -8,7 +8,7 @@ use Object;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -19,7 +19,7 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct SystemClock(Object<ffi::GstSystemClock, ffi::GstSystemClockClass>): Clock, Object;
+    pub struct SystemClock(Object<ffi::GstSystemClock, ffi::GstSystemClockClass, SystemClockClass>) @extends Clock, Object;
 
     match fn {
         get_type => || ffi::gst_system_clock_get_type(),
@@ -37,15 +37,16 @@ impl SystemClock {
     pub fn set_default<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(new_clock: Q) {
         assert_initialized_main_thread!();
         let new_clock = new_clock.into();
-        let new_clock = new_clock.to_glib_none();
         unsafe {
-            ffi::gst_system_clock_set_default(new_clock.0);
+            ffi::gst_system_clock_set_default(new_clock.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 }
 
 unsafe impl Send for SystemClock {}
 unsafe impl Sync for SystemClock {}
+
+pub const NONE_SYSTEM_CLOCK: Option<&SystemClock> = None;
 
 pub trait SystemClockExt: 'static {
     fn get_property_clock_type(&self) -> ClockType;
@@ -73,7 +74,7 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
     fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::clock-type\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::clock-type\0".as_ptr() as *const _,
                 transmute(notify_clock_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -82,5 +83,5 @@ impl<O: IsA<SystemClock>> SystemClockExt for O {
 unsafe extern "C" fn notify_clock_type_trampoline<P>(this: *mut ffi::GstSystemClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SystemClock> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&SystemClock::from_glib_borrow(this).downcast_unchecked())
+    f(&SystemClock::from_glib_borrow(this).unsafe_cast())
 }

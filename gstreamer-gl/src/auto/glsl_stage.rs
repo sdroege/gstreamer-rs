@@ -8,15 +8,13 @@ use GLSLProfile;
 use GLSLVersion;
 use ffi;
 use glib::GString;
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct GLSLStage(Object<ffi::GstGLSLStage, ffi::GstGLSLStageClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLSLStage(Object<ffi::GstGLSLStage, ffi::GstGLSLStageClass, GLSLStageClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_glsl_stage_get_type(),
@@ -24,39 +22,39 @@ glib_wrapper! {
 }
 
 impl GLSLStage {
-    pub fn new(context: &GLContext, type_: u32) -> GLSLStage {
+    pub fn new<P: IsA<GLContext>>(context: &P, type_: u32) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_glsl_stage_new(context.to_glib_none().0, type_))
+            from_glib_none(ffi::gst_glsl_stage_new(context.as_ref().to_glib_none().0, type_))
         }
     }
 
-    pub fn new_default_fragment(context: &GLContext) -> GLSLStage {
+    pub fn new_default_fragment<P: IsA<GLContext>>(context: &P) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_glsl_stage_new_default_fragment(context.to_glib_none().0))
+            from_glib_none(ffi::gst_glsl_stage_new_default_fragment(context.as_ref().to_glib_none().0))
         }
     }
 
-    pub fn new_default_vertex(context: &GLContext) -> GLSLStage {
+    pub fn new_default_vertex<P: IsA<GLContext>>(context: &P) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_glsl_stage_new_default_vertex(context.to_glib_none().0))
+            from_glib_none(ffi::gst_glsl_stage_new_default_vertex(context.as_ref().to_glib_none().0))
         }
     }
 
-    pub fn new_with_string(context: &GLContext, type_: u32, version: GLSLVersion, profile: GLSLProfile, str: &str) -> GLSLStage {
+    pub fn new_with_string<P: IsA<GLContext>>(context: &P, type_: u32, version: GLSLVersion, profile: GLSLProfile, str: &str) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_glsl_stage_new_with_string(context.to_glib_none().0, type_, version.to_glib(), profile.to_glib(), str.to_glib_none().0))
+            from_glib_none(ffi::gst_glsl_stage_new_with_string(context.as_ref().to_glib_none().0, type_, version.to_glib(), profile.to_glib(), str.to_glib_none().0))
         }
     }
 
-    pub fn new_with_strings(context: &GLContext, type_: u32, version: GLSLVersion, profile: GLSLProfile, str: &[&str]) -> GLSLStage {
+    pub fn new_with_strings<P: IsA<GLContext>>(context: &P, type_: u32, version: GLSLVersion, profile: GLSLProfile, str: &[&str]) -> GLSLStage {
         skip_assert_initialized!();
         let n_strings = str.len() as i32;
         unsafe {
-            from_glib_none(ffi::gst_glsl_stage_new_with_strings(context.to_glib_none().0, type_, version.to_glib(), profile.to_glib(), n_strings, str.to_glib_none().0))
+            from_glib_none(ffi::gst_glsl_stage_new_with_strings(context.as_ref().to_glib_none().0, type_, version.to_glib(), profile.to_glib(), n_strings, str.to_glib_none().0))
         }
     }
 
@@ -102,3 +100,5 @@ impl GLSLStage {
 
 unsafe impl Send for GLSLStage {}
 unsafe impl Sync for GLSLStage {}
+
+pub const NONE_GLSL_STAGE: Option<&GLSLStage> = None;

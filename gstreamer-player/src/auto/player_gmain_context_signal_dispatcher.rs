@@ -7,11 +7,12 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
+use glib::object::ObjectType;
 use glib::translate::*;
 use gobject_ffi;
 
 glib_wrapper! {
-    pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass>): PlayerSignalDispatcher;
+    pub struct PlayerGMainContextSignalDispatcher(Object<ffi::GstPlayerGMainContextSignalDispatcher, ffi::GstPlayerGMainContextSignalDispatcherClass, PlayerGMainContextSignalDispatcherClass>) @implements PlayerSignalDispatcher;
 
     match fn {
         get_type => || ffi::gst_player_g_main_context_signal_dispatcher_get_type(),
@@ -22,7 +23,7 @@ impl PlayerGMainContextSignalDispatcher {
     pub fn get_property_application_context(&self) -> Option<glib::MainContext> {
         unsafe {
             let mut value = Value::from_type(<glib::MainContext as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"application-context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"application-context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -30,3 +31,5 @@ impl PlayerGMainContextSignalDispatcher {
 
 unsafe impl Send for PlayerGMainContextSignalDispatcher {}
 unsafe impl Sync for PlayerGMainContextSignalDispatcher {}
+
+pub const NONE_PLAYER_GMAIN_CONTEXT_SIGNAL_DISPATCHER: Option<&PlayerGMainContextSignalDispatcher> = None;

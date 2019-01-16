@@ -2,11 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use BaseSrcClass;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -14,16 +13,12 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass, BaseSrcClass>): [
-        gst::Element => gst_ffi::GstElement,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct BaseSrc(Object<ffi::GstBaseSrc, ffi::GstBaseSrcClass, BaseSrcClass>) @extends gst::Element, gst::Object;
 
     match fn {
         get_type => || ffi::gst_base_src_get_type(),
@@ -32,6 +27,8 @@ glib_wrapper! {
 
 unsafe impl Send for BaseSrc {}
 unsafe impl Sync for BaseSrc {}
+
+pub const NONE_BASE_SRC: Option<&BaseSrc> = None;
 
 pub trait BaseSrcExt: 'static {
     //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
@@ -90,37 +87,37 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn get_blocksize(&self) -> u32 {
         unsafe {
-            ffi::gst_base_src_get_blocksize(self.to_glib_none().0)
+            ffi::gst_base_src_get_blocksize(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
-            from_glib_full(ffi::gst_base_src_get_buffer_pool(self.to_glib_none().0))
+            from_glib_full(ffi::gst_base_src_get_buffer_pool(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_do_timestamp(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_src_get_do_timestamp(self.to_glib_none().0))
+            from_glib(ffi::gst_base_src_get_do_timestamp(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_async(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_src_is_async(self.to_glib_none().0))
+            from_glib(ffi::gst_base_src_is_async(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_live(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_src_is_live(self.to_glib_none().0))
+            from_glib(ffi::gst_base_src_is_live(self.as_ref().to_glib_none().0))
         }
     }
 
     fn new_seamless_segment(&self, start: i64, stop: i64, time: i64) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_src_new_seamless_segment(self.to_glib_none().0, start, stop, time))
+            from_glib(ffi::gst_base_src_new_seamless_segment(self.as_ref().to_glib_none().0, start, stop, time))
         }
     }
 
@@ -129,56 +126,56 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
             let mut live = mem::uninitialized();
             let mut min_latency = mem::uninitialized();
             let mut max_latency = mem::uninitialized();
-            let ret = from_glib(ffi::gst_base_src_query_latency(self.to_glib_none().0, &mut live, &mut min_latency, &mut max_latency));
+            let ret = from_glib(ffi::gst_base_src_query_latency(self.as_ref().to_glib_none().0, &mut live, &mut min_latency, &mut max_latency));
             if ret { Some((from_glib(live), from_glib(min_latency), from_glib(max_latency))) } else { None }
         }
     }
 
     fn set_async(&self, async: bool) {
         unsafe {
-            ffi::gst_base_src_set_async(self.to_glib_none().0, async.to_glib());
+            ffi::gst_base_src_set_async(self.as_ref().to_glib_none().0, async.to_glib());
         }
     }
 
     fn set_automatic_eos(&self, automatic_eos: bool) {
         unsafe {
-            ffi::gst_base_src_set_automatic_eos(self.to_glib_none().0, automatic_eos.to_glib());
+            ffi::gst_base_src_set_automatic_eos(self.as_ref().to_glib_none().0, automatic_eos.to_glib());
         }
     }
 
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
-            ffi::gst_base_src_set_blocksize(self.to_glib_none().0, blocksize);
+            ffi::gst_base_src_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
         }
     }
 
     fn set_caps(&self, caps: &gst::Caps) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_src_set_caps(self.to_glib_none().0, caps.to_glib_none().0))
+            from_glib(ffi::gst_base_src_set_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0))
         }
     }
 
     fn set_do_timestamp(&self, timestamp: bool) {
         unsafe {
-            ffi::gst_base_src_set_do_timestamp(self.to_glib_none().0, timestamp.to_glib());
+            ffi::gst_base_src_set_do_timestamp(self.as_ref().to_glib_none().0, timestamp.to_glib());
         }
     }
 
     fn set_dynamic_size(&self, dynamic: bool) {
         unsafe {
-            ffi::gst_base_src_set_dynamic_size(self.to_glib_none().0, dynamic.to_glib());
+            ffi::gst_base_src_set_dynamic_size(self.as_ref().to_glib_none().0, dynamic.to_glib());
         }
     }
 
     fn set_format(&self, format: gst::Format) {
         unsafe {
-            ffi::gst_base_src_set_format(self.to_glib_none().0, format.to_glib());
+            ffi::gst_base_src_set_format(self.as_ref().to_glib_none().0, format.to_glib());
         }
     }
 
     fn set_live(&self, live: bool) {
         unsafe {
-            ffi::gst_base_src_set_live(self.to_glib_none().0, live.to_glib());
+            ffi::gst_base_src_set_live(self.as_ref().to_glib_none().0, live.to_glib());
         }
     }
 
@@ -213,7 +210,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::blocksize\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::blocksize\0".as_ptr() as *const _,
                 transmute(notify_blocksize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -221,7 +218,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn connect_property_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::do-timestamp\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::do-timestamp\0".as_ptr() as *const _,
                 transmute(notify_do_timestamp_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -229,7 +226,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn connect_property_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::num-buffers\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::num-buffers\0".as_ptr() as *const _,
                 transmute(notify_num_buffers_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -237,7 +234,7 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::typefind\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::typefind\0".as_ptr() as *const _,
                 transmute(notify_typefind_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -246,23 +243,23 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 unsafe extern "C" fn notify_blocksize_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
+    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_do_timestamp_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
+    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_num_buffers_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
+    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_typefind_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&BaseSrc::from_glib_borrow(this).downcast_unchecked())
+    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }

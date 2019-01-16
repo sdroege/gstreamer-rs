@@ -8,7 +8,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PlayerAudioInfo(Object<ffi::GstPlayerAudioInfo, ffi::GstPlayerAudioInfoClass>): PlayerStreamInfo;
+    pub struct PlayerAudioInfo(Object<ffi::GstPlayerAudioInfo, ffi::GstPlayerAudioInfoClass, PlayerAudioInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
         get_type => || ffi::gst_player_audio_info_get_type(),
@@ -49,3 +49,5 @@ impl PlayerAudioInfo {
 
 unsafe impl Send for PlayerAudioInfo {}
 unsafe impl Sync for PlayerAudioInfo {}
+
+pub const NONE_PLAYER_AUDIO_INFO: Option<&PlayerAudioInfo> = None;

@@ -10,7 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct BufferPool(Object<ffi::GstBufferPool, ffi::GstBufferPoolClass>): Object;
+    pub struct BufferPool(Object<ffi::GstBufferPool, ffi::GstBufferPoolClass, BufferPoolClass>) @extends Object;
 
     match fn {
         get_type => || ffi::gst_buffer_pool_get_type(),
@@ -19,6 +19,8 @@ glib_wrapper! {
 
 unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
+
+pub const NONE_BUFFER_POOL: Option<&BufferPool> = None;
 
 pub trait BufferPoolExt: 'static {
     fn get_options(&self) -> Vec<GString>;
@@ -35,31 +37,31 @@ pub trait BufferPoolExt: 'static {
 impl<O: IsA<BufferPool>> BufferPoolExt for O {
     fn get_options(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_buffer_pool_get_options(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_buffer_pool_get_options(self.as_ref().to_glib_none().0))
         }
     }
 
     fn has_option(&self, option: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_buffer_pool_has_option(self.to_glib_none().0, option.to_glib_none().0))
+            from_glib(ffi::gst_buffer_pool_has_option(self.as_ref().to_glib_none().0, option.to_glib_none().0))
         }
     }
 
     fn is_active(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_buffer_pool_is_active(self.to_glib_none().0))
+            from_glib(ffi::gst_buffer_pool_is_active(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_buffer_pool_set_active(self.to_glib_none().0, active.to_glib()), "Failed to activate buffer pool")
+            glib_result_from_gboolean!(ffi::gst_buffer_pool_set_active(self.as_ref().to_glib_none().0, active.to_glib()), "Failed to activate buffer pool")
         }
     }
 
     fn set_flushing(&self, flushing: bool) {
         unsafe {
-            ffi::gst_buffer_pool_set_flushing(self.to_glib_none().0, flushing.to_glib());
+            ffi::gst_buffer_pool_set_flushing(self.as_ref().to_glib_none().0, flushing.to_glib());
         }
     }
 }

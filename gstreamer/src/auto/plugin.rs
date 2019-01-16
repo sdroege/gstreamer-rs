@@ -12,7 +12,7 @@ use std;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Plugin(Object<ffi::GstPlugin, ffi::GstPluginClass>): Object;
+    pub struct Plugin(Object<ffi::GstPlugin, ffi::GstPluginClass, PluginClass>) @extends Object;
 
     match fn {
         get_type => || ffi::gst_plugin_get_type(),
@@ -28,13 +28,10 @@ impl Plugin {
 
     pub fn add_dependency_simple<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>, R: Into<Option<&'c str>>>(&self, env_vars: P, paths: Q, names: R, flags: PluginDependencyFlags) {
         let env_vars = env_vars.into();
-        let env_vars = env_vars.to_glib_none();
         let paths = paths.into();
-        let paths = paths.to_glib_none();
         let names = names.into();
-        let names = names.to_glib_none();
         unsafe {
-            ffi::gst_plugin_add_dependency_simple(self.to_glib_none().0, env_vars.0, paths.0, names.0, flags.to_glib());
+            ffi::gst_plugin_add_dependency_simple(self.to_glib_none().0, env_vars.to_glib_none().0, paths.to_glib_none().0, names.to_glib_none().0, flags.to_glib());
         }
     }
 
@@ -125,3 +122,5 @@ impl Plugin {
 
 unsafe impl Send for Plugin {}
 unsafe impl Sync for Plugin {}
+
+pub const NONE_PLUGIN: Option<&Plugin> = None;

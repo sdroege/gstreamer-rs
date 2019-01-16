@@ -7,13 +7,10 @@ use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 use std::mem;
 
 glib_wrapper! {
-    pub struct GLFramebuffer(Object<ffi::GstGLFramebuffer, ffi::GstGLFramebufferClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLFramebuffer(Object<ffi::GstGLFramebuffer, ffi::GstGLFramebufferClass, GLFramebufferClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_framebuffer_get_type(),
@@ -21,23 +18,25 @@ glib_wrapper! {
 }
 
 impl GLFramebuffer {
-    pub fn new(context: &GLContext) -> GLFramebuffer {
+    pub fn new<P: IsA<GLContext>>(context: &P) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_gl_framebuffer_new(context.to_glib_none().0))
+            from_glib_full(ffi::gst_gl_framebuffer_new(context.as_ref().to_glib_none().0))
         }
     }
 
-    pub fn new_with_default_depth(context: &GLContext, width: u32, height: u32) -> GLFramebuffer {
+    pub fn new_with_default_depth<P: IsA<GLContext>>(context: &P, width: u32, height: u32) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_gl_framebuffer_new_with_default_depth(context.to_glib_none().0, width, height))
+            from_glib_none(ffi::gst_gl_framebuffer_new_with_default_depth(context.as_ref().to_glib_none().0, width, height))
         }
     }
 }
 
 unsafe impl Send for GLFramebuffer {}
 unsafe impl Sync for GLFramebuffer {}
+
+pub const NONE_GL_FRAMEBUFFER: Option<&GLFramebuffer> = None;
 
 pub trait GLFramebufferExt: 'static {
     //fn attach(&self, attachment_point: u32, mem: /*Ignored*/&mut GLBaseMemory);
@@ -58,7 +57,7 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
 
     fn bind(&self) {
         unsafe {
-            ffi::gst_gl_framebuffer_bind(self.to_glib_none().0);
+            ffi::gst_gl_framebuffer_bind(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -70,14 +69,14 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
         unsafe {
             let mut width = mem::uninitialized();
             let mut height = mem::uninitialized();
-            ffi::gst_gl_framebuffer_get_effective_dimensions(self.to_glib_none().0, &mut width, &mut height);
+            ffi::gst_gl_framebuffer_get_effective_dimensions(self.as_ref().to_glib_none().0, &mut width, &mut height);
             (width, height)
         }
     }
 
     fn get_id(&self) -> u32 {
         unsafe {
-            ffi::gst_gl_framebuffer_get_id(self.to_glib_none().0)
+            ffi::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0)
         }
     }
 }

@@ -6,14 +6,9 @@ use BaseSrc;
 use ffi;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 
 glib_wrapper! {
-    pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass>): [
-        BaseSrc,
-        gst::Element => gst_ffi::GstElement,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass, PushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {
         get_type => || ffi::gst_push_src_get_type(),
@@ -24,3 +19,5 @@ impl PushSrc {}
 
 unsafe impl Send for PushSrc {}
 unsafe impl Sync for PushSrc {}
+
+pub const NONE_PUSH_SRC: Option<&PushSrc> = None;

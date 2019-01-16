@@ -6,14 +6,9 @@ use NetClientClock;
 use ffi;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 
 glib_wrapper! {
-    pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass>): [
-        NetClientClock,
-        gst::Clock => gst_ffi::GstClock,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct NtpClock(Object<ffi::GstNtpClock, ffi::GstNtpClockClass, NtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;
 
     match fn {
         get_type => || ffi::gst_ntp_clock_get_type(),
@@ -24,3 +19,5 @@ impl NtpClock {}
 
 unsafe impl Send for NtpClock {}
 unsafe impl Sync for NtpClock {}
+
+pub const NONE_NTP_CLOCK: Option<&NtpClock> = None;

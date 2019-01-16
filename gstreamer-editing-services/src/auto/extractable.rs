@@ -9,12 +9,14 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Extractable(Object<ffi::GESExtractable, ffi::GESExtractableInterface>);
+    pub struct Extractable(Interface<ffi::GESExtractable>);
 
     match fn {
         get_type => || ffi::ges_extractable_get_type(),
     }
 }
+
+pub const NONE_EXTRACTABLE: Option<&Extractable> = None;
 
 pub trait ExtractableExt: 'static {
     fn get_asset(&self) -> Option<Asset>;
@@ -27,19 +29,19 @@ pub trait ExtractableExt: 'static {
 impl<O: IsA<Extractable>> ExtractableExt for O {
     fn get_asset(&self) -> Option<Asset> {
         unsafe {
-            from_glib_none(ffi::ges_extractable_get_asset(self.to_glib_none().0))
+            from_glib_none(ffi::ges_extractable_get_asset(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_id(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::ges_extractable_get_id(self.to_glib_none().0))
+            from_glib_full(ffi::ges_extractable_get_id(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> bool {
         unsafe {
-            from_glib(ffi::ges_extractable_set_asset(self.to_glib_none().0, asset.to_glib_none().0))
+            from_glib(ffi::ges_extractable_set_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0))
         }
     }
 }

@@ -14,14 +14,11 @@ use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct GLContext(Object<ffi::GstGLContext, ffi::GstGLContextClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLContext(Object<ffi::GstGLContext, ffi::GstGLContextClass, GLContextClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_context_get_type(),
@@ -32,7 +29,7 @@ impl GLContext {
     pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLContext {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_gl_context_new(display.to_glib_none().0))
+            from_glib_none(ffi::gst_gl_context_new(display.as_ref().to_glib_none().0))
         }
     }
 
@@ -57,10 +54,12 @@ impl GLContext {
 unsafe impl Send for GLContext {}
 unsafe impl Sync for GLContext {}
 
+pub const NONE_GL_CONTEXT: Option<&GLContext> = None;
+
 pub trait GLContextExt: 'static {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError>;
 
-    fn can_share(&self, other_context: &GLContext) -> bool;
+    fn can_share<P: IsA<GLContext>>(&self, other_context: &P) -> bool;
 
     fn check_feature(&self, feature: &str) -> bool;
 
@@ -72,7 +71,7 @@ pub trait GLContextExt: 'static {
 
     fn clear_shader(&self);
 
-    fn create<'a, P: Into<Option<&'a GLContext>>>(&self, other_context: P) -> Result<(), Error>;
+    fn create<'a, P: IsA<GLContext> + 'a, Q: Into<Option<&'a P>>>(&self, other_context: Q) -> Result<(), Error>;
 
     fn destroy(&self);
 
@@ -92,9 +91,9 @@ pub trait GLContextExt: 'static {
 
     fn is_shared(&self) -> bool;
 
-    fn set_shared_with(&self, share: &GLContext);
+    fn set_shared_with<P: IsA<GLContext>>(&self, share: &P);
 
-    fn set_window(&self, window: &GLWindow) -> bool;
+    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> bool;
 
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
@@ -104,85 +103,84 @@ pub trait GLContextExt: 'static {
 impl<O: IsA<GLContext>> GLContextExt for O {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_gl_context_activate(self.to_glib_none().0, activate.to_glib()), "Failed to activate OpenGL context")
+            glib_result_from_gboolean!(ffi::gst_gl_context_activate(self.as_ref().to_glib_none().0, activate.to_glib()), "Failed to activate OpenGL context")
         }
     }
 
-    fn can_share(&self, other_context: &GLContext) -> bool {
+    fn can_share<P: IsA<GLContext>>(&self, other_context: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_can_share(self.to_glib_none().0, other_context.to_glib_none().0))
+            from_glib(ffi::gst_gl_context_can_share(self.as_ref().to_glib_none().0, other_context.as_ref().to_glib_none().0))
         }
     }
 
     fn check_feature(&self, feature: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_check_feature(self.to_glib_none().0, feature.to_glib_none().0))
+            from_glib(ffi::gst_gl_context_check_feature(self.as_ref().to_glib_none().0, feature.to_glib_none().0))
         }
     }
 
     fn check_framebuffer_status(&self, fbo_target: u32) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_check_framebuffer_status(self.to_glib_none().0, fbo_target))
+            from_glib(ffi::gst_gl_context_check_framebuffer_status(self.as_ref().to_glib_none().0, fbo_target))
         }
     }
 
     fn check_gl_version(&self, api: GLAPI, maj: i32, min: i32) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_check_gl_version(self.to_glib_none().0, api.to_glib(), maj, min))
+            from_glib(ffi::gst_gl_context_check_gl_version(self.as_ref().to_glib_none().0, api.to_glib(), maj, min))
         }
     }
 
     fn clear_framebuffer(&self) {
         unsafe {
-            ffi::gst_gl_context_clear_framebuffer(self.to_glib_none().0);
+            ffi::gst_gl_context_clear_framebuffer(self.as_ref().to_glib_none().0);
         }
     }
 
     fn clear_shader(&self) {
         unsafe {
-            ffi::gst_gl_context_clear_shader(self.to_glib_none().0);
+            ffi::gst_gl_context_clear_shader(self.as_ref().to_glib_none().0);
         }
     }
 
-    fn create<'a, P: Into<Option<&'a GLContext>>>(&self, other_context: P) -> Result<(), Error> {
+    fn create<'a, P: IsA<GLContext> + 'a, Q: Into<Option<&'a P>>>(&self, other_context: Q) -> Result<(), Error> {
         let other_context = other_context.into();
-        let other_context = other_context.to_glib_none();
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_context_create(self.to_glib_none().0, other_context.0, &mut error);
+            let _ = ffi::gst_gl_context_create(self.as_ref().to_glib_none().0, other_context.map(|p| p.as_ref()).to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn destroy(&self) {
         unsafe {
-            ffi::gst_gl_context_destroy(self.to_glib_none().0);
+            ffi::gst_gl_context_destroy(self.as_ref().to_glib_none().0);
         }
     }
 
     fn fill_info(&self) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_context_fill_info(self.to_glib_none().0, &mut error);
+            let _ = ffi::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn get_display(&self) -> GLDisplay {
         unsafe {
-            from_glib_full(ffi::gst_gl_context_get_display(self.to_glib_none().0))
+            from_glib_full(ffi::gst_gl_context_get_display(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_gl_api(&self) -> GLAPI {
         unsafe {
-            from_glib(ffi::gst_gl_context_get_gl_api(self.to_glib_none().0))
+            from_glib(ffi::gst_gl_context_get_gl_api(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_gl_platform(&self) -> GLPlatform {
         unsafe {
-            from_glib(ffi::gst_gl_context_get_gl_platform(self.to_glib_none().0))
+            from_glib(ffi::gst_gl_context_get_gl_platform(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -190,7 +188,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             let mut major = mem::uninitialized();
             let mut minor = mem::uninitialized();
-            ffi::gst_gl_context_get_gl_platform_version(self.to_glib_none().0, &mut major, &mut minor);
+            ffi::gst_gl_context_get_gl_platform_version(self.as_ref().to_glib_none().0, &mut major, &mut minor);
             (major, minor)
         }
     }
@@ -199,44 +197,44 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             let mut maj = mem::uninitialized();
             let mut min = mem::uninitialized();
-            ffi::gst_gl_context_get_gl_version(self.to_glib_none().0, &mut maj, &mut min);
+            ffi::gst_gl_context_get_gl_version(self.as_ref().to_glib_none().0, &mut maj, &mut min);
             (maj, min)
         }
     }
 
     fn get_window(&self) -> Option<GLWindow> {
         unsafe {
-            from_glib_full(ffi::gst_gl_context_get_window(self.to_glib_none().0))
+            from_glib_full(ffi::gst_gl_context_get_window(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_shared(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_is_shared(self.to_glib_none().0))
+            from_glib(ffi::gst_gl_context_is_shared(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn set_shared_with(&self, share: &GLContext) {
+    fn set_shared_with<P: IsA<GLContext>>(&self, share: &P) {
         unsafe {
-            ffi::gst_gl_context_set_shared_with(self.to_glib_none().0, share.to_glib_none().0);
+            ffi::gst_gl_context_set_shared_with(self.as_ref().to_glib_none().0, share.as_ref().to_glib_none().0);
         }
     }
 
-    fn set_window(&self, window: &GLWindow) -> bool {
+    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_set_window(self.to_glib_none().0, window.to_glib_full()))
+            from_glib(ffi::gst_gl_context_set_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_full()))
         }
     }
 
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_context_supports_glsl_profile_version(self.to_glib_none().0, version.to_glib(), profile.to_glib()))
+            from_glib(ffi::gst_gl_context_supports_glsl_profile_version(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
         }
     }
 
     fn swap_buffers(&self) {
         unsafe {
-            ffi::gst_gl_context_swap_buffers(self.to_glib_none().0);
+            ffi::gst_gl_context_swap_buffers(self.as_ref().to_glib_none().0);
         }
     }
 }

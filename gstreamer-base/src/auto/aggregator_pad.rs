@@ -2,18 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use AggregatorPadClass;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 
 glib_wrapper! {
-    pub struct AggregatorPad(Object<ffi::GstAggregatorPad, ffi::GstAggregatorPadClass, AggregatorPadClass>): [
-        gst::Pad => gst_ffi::GstPad,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct AggregatorPad(Object<ffi::GstAggregatorPad, ffi::GstAggregatorPadClass, AggregatorPadClass>) @extends gst::Pad, gst::Object;
 
     match fn {
         get_type => || ffi::gst_aggregator_pad_get_type(),
@@ -22,6 +17,8 @@ glib_wrapper! {
 
 unsafe impl Send for AggregatorPad {}
 unsafe impl Sync for AggregatorPad {}
+
+pub const NONE_AGGREGATOR_PAD: Option<&AggregatorPad> = None;
 
 pub trait AggregatorPadExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -44,35 +41,35 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn drop_buffer(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_aggregator_pad_drop_buffer(self.to_glib_none().0))
+            from_glib(ffi::gst_aggregator_pad_drop_buffer(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_14_1", feature = "dox"))]
     fn has_buffer(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_aggregator_pad_has_buffer(self.to_glib_none().0))
+            from_glib(ffi::gst_aggregator_pad_has_buffer(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn is_eos(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_aggregator_pad_is_eos(self.to_glib_none().0))
+            from_glib(ffi::gst_aggregator_pad_is_eos(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn peek_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
-            from_glib_full(ffi::gst_aggregator_pad_peek_buffer(self.to_glib_none().0))
+            from_glib_full(ffi::gst_aggregator_pad_peek_buffer(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn pop_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
-            from_glib_full(ffi::gst_aggregator_pad_pop_buffer(self.to_glib_none().0))
+            from_glib_full(ffi::gst_aggregator_pad_pop_buffer(self.as_ref().to_glib_none().0))
         }
     }
 }

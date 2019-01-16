@@ -8,7 +8,7 @@ use glib::GString;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct DiscovererSubtitleInfo(Object<ffi::GstDiscovererSubtitleInfo>): DiscovererStreamInfo;
+    pub struct DiscovererSubtitleInfo(Object<ffi::GstDiscovererSubtitleInfo, DiscovererSubtitleInfoClass>) @extends DiscovererStreamInfo;
 
     match fn {
         get_type => || ffi::gst_discoverer_subtitle_info_get_type(),
@@ -25,3 +25,5 @@ impl DiscovererSubtitleInfo {
 
 unsafe impl Send for DiscovererSubtitleInfo {}
 unsafe impl Sync for DiscovererSubtitleInfo {}
+
+pub const NONE_DISCOVERER_SUBTITLE_INFO: Option<&DiscovererSubtitleInfo> = None;

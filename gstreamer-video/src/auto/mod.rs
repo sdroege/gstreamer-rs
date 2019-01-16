@@ -3,10 +3,10 @@
 // DO NOT EDIT
 
 mod video_filter;
-pub use self::video_filter::VideoFilter;
+pub use self::video_filter::{VideoFilter, VideoFilterClass, NONE_VIDEO_FILTER};
 
 mod video_overlay;
-pub use self::video_overlay::VideoOverlay;
+pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
 pub use self::video_overlay::VideoOverlayExt;
 
 mod enums;

@@ -4,14 +4,12 @@
 
 use GLContext;
 use ffi;
+use glib::object::IsA;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 
 glib_wrapper! {
-    pub struct GLOverlayCompositor(Object<ffi::GstGLOverlayCompositor, ffi::GstGLOverlayCompositorClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLOverlayCompositor(Object<ffi::GstGLOverlayCompositor, ffi::GstGLOverlayCompositorClass, GLOverlayCompositorClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_overlay_compositor_get_type(),
@@ -19,10 +17,10 @@ glib_wrapper! {
 }
 
 impl GLOverlayCompositor {
-    pub fn new(context: &GLContext) -> GLOverlayCompositor {
+    pub fn new<P: IsA<GLContext>>(context: &P) -> GLOverlayCompositor {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_gl_overlay_compositor_new(context.to_glib_none().0))
+            from_glib_none(ffi::gst_gl_overlay_compositor_new(context.as_ref().to_glib_none().0))
         }
     }
 
@@ -48,3 +46,5 @@ impl GLOverlayCompositor {
 
 unsafe impl Send for GLOverlayCompositor {}
 unsafe impl Sync for GLOverlayCompositor {}
+
+pub const NONE_GL_OVERLAY_COMPOSITOR: Option<&GLOverlayCompositor> = None;

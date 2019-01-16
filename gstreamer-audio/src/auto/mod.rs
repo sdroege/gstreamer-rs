@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 mod stream_volume;
-pub use self::stream_volume::StreamVolume;
+pub use self::stream_volume::{StreamVolume, NONE_STREAM_VOLUME};
 pub use self::stream_volume::StreamVolumeExt;
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]

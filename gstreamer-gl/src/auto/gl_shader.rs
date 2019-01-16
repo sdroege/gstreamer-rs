@@ -8,21 +8,20 @@ use GLSLStage;
 use ffi;
 use glib::StaticType;
 use glib::Value;
+use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use gst;
-use gst_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct GLShader(Object<ffi::GstGLShader, ffi::GstGLShaderClass>): [
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLShader(Object<ffi::GstGLShader, ffi::GstGLShaderClass, GLShaderClass>) @extends gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_shader_get_type(),
@@ -30,39 +29,39 @@ glib_wrapper! {
 }
 
 impl GLShader {
-    pub fn new(context: &GLContext) -> GLShader {
+    pub fn new<P: IsA<GLContext>>(context: &P) -> GLShader {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_gl_shader_new(context.to_glib_none().0))
+            from_glib_full(ffi::gst_gl_shader_new(context.as_ref().to_glib_none().0))
         }
     }
 
-    pub fn new_default(context: &GLContext) -> Result<GLShader, Error> {
+    pub fn new_default<P: IsA<GLContext>>(context: &P) -> Result<GLShader, Error> {
         skip_assert_initialized!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gst_gl_shader_new_default(context.to_glib_none().0, &mut error);
+            let ret = ffi::gst_gl_shader_new_default(context.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
 
-    //pub fn new_link_with_stages(context: &GLContext, error: &mut Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn new_link_with_stages<P: IsA<GLContext>>(context: &P, error: &mut Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi::gst_gl_shader_new_link_with_stages() }
     //}
 
-    //pub fn new_with_stages(context: &GLContext, error: &mut Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn new_with_stages<P: IsA<GLContext>>(context: &P, error: &mut Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call ffi::gst_gl_shader_new_with_stages() }
     //}
 
-    pub fn attach(&self, stage: &GLSLStage) -> bool {
+    pub fn attach<P: IsA<GLSLStage>>(&self, stage: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.to_glib_none().0))
+            from_glib(ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.as_ref().to_glib_none().0))
         }
     }
 
-    pub fn attach_unlocked(&self, stage: &GLSLStage) -> bool {
+    pub fn attach_unlocked<P: IsA<GLSLStage>>(&self, stage: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.to_glib_none().0))
+            from_glib(ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.as_ref().to_glib_none().0))
         }
     }
 
@@ -78,23 +77,23 @@ impl GLShader {
         }
     }
 
-    pub fn compile_attach_stage(&self, stage: &GLSLStage) -> Result<(), Error> {
+    pub fn compile_attach_stage<P: IsA<GLSLStage>>(&self, stage: &P) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_shader_compile_attach_stage(self.to_glib_none().0, stage.to_glib_none().0, &mut error);
+            let _ = ffi::gst_gl_shader_compile_attach_stage(self.to_glib_none().0, stage.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
-    pub fn detach(&self, stage: &GLSLStage) {
+    pub fn detach<P: IsA<GLSLStage>>(&self, stage: &P) {
         unsafe {
-            ffi::gst_gl_shader_detach(self.to_glib_none().0, stage.to_glib_none().0);
+            ffi::gst_gl_shader_detach(self.to_glib_none().0, stage.as_ref().to_glib_none().0);
         }
     }
 
-    pub fn detach_unlocked(&self, stage: &GLSLStage) {
+    pub fn detach_unlocked<P: IsA<GLSLStage>>(&self, stage: &P) {
         unsafe {
-            ffi::gst_gl_shader_detach_unlocked(self.to_glib_none().0, stage.to_glib_none().0);
+            ffi::gst_gl_shader_detach_unlocked(self.to_glib_none().0, stage.as_ref().to_glib_none().0);
         }
     }
 
@@ -249,7 +248,7 @@ impl GLShader {
     pub fn get_property_linked(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, b"linked\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"linked\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -257,7 +256,7 @@ impl GLShader {
     pub fn connect_property_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&GLShader) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0, b"notify::linked\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::linked\0".as_ptr() as *const _,
                 transmute(notify_linked_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -265,6 +264,8 @@ impl GLShader {
 
 unsafe impl Send for GLShader {}
 unsafe impl Sync for GLShader {}
+
+pub const NONE_GL_SHADER: Option<&GLShader> = None;
 
 unsafe extern "C" fn notify_linked_trampoline(this: *mut ffi::GstGLShader, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&GLShader) + Send + Sync + 'static) = transmute(f);

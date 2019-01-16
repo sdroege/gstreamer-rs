@@ -11,7 +11,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct TagSetter(Object<ffi::GstTagSetter, ffi::GstTagSetterInterface>): Element, Object;
+    pub struct TagSetter(Interface<ffi::GstTagSetter>) @requires Element, Object;
 
     match fn {
         get_type => || ffi::gst_tag_setter_get_type(),
@@ -20,6 +20,8 @@ glib_wrapper! {
 
 unsafe impl Send for TagSetter {}
 unsafe impl Sync for TagSetter {}
+
+pub const NONE_TAG_SETTER: Option<&TagSetter> = None;
 
 pub trait TagSetterExt: 'static {
     //fn add_tag_valist(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
@@ -66,31 +68,31 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
 
     fn get_tag_list(&self) -> Option<TagList> {
         unsafe {
-            from_glib_none(ffi::gst_tag_setter_get_tag_list(self.to_glib_none().0))
+            from_glib_none(ffi::gst_tag_setter_get_tag_list(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_tag_merge_mode(&self) -> TagMergeMode {
         unsafe {
-            from_glib(ffi::gst_tag_setter_get_tag_merge_mode(self.to_glib_none().0))
+            from_glib(ffi::gst_tag_setter_get_tag_merge_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn merge_tags(&self, list: &TagList, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_tag_setter_merge_tags(self.to_glib_none().0, list.to_glib_none().0, mode.to_glib());
+            ffi::gst_tag_setter_merge_tags(self.as_ref().to_glib_none().0, list.to_glib_none().0, mode.to_glib());
         }
     }
 
     fn reset_tags(&self) {
         unsafe {
-            ffi::gst_tag_setter_reset_tags(self.to_glib_none().0);
+            ffi::gst_tag_setter_reset_tags(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_tag_merge_mode(&self, mode: TagMergeMode) {
         unsafe {
-            ffi::gst_tag_setter_set_tag_merge_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gst_tag_setter_set_tag_merge_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 }

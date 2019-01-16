@@ -6,13 +6,9 @@ use GLDisplay;
 use ffi;
 use glib::translate::*;
 use gst;
-use gst_ffi;
 
 glib_wrapper! {
-    pub struct GLDisplayEGL(Object<ffi::GstGLDisplayEGL, ffi::GstGLDisplayEGLClass>): [
-        GLDisplay,
-        gst::Object => gst_ffi::GstObject,
-    ];
+    pub struct GLDisplayEGL(Object<ffi::GstGLDisplayEGL, ffi::GstGLDisplayEGLClass, GLDisplayEGLClass>) @extends GLDisplay, gst::Object;
 
     match fn {
         get_type => || ffi::gst_gl_display_egl_get_type(),
@@ -44,3 +40,5 @@ impl Default for GLDisplayEGL {
 
 unsafe impl Send for GLDisplayEGL {}
 unsafe impl Sync for GLDisplayEGL {}
+
+pub const NONE_GL_DISPLAY_EGL: Option<&GLDisplayEGL> = None;

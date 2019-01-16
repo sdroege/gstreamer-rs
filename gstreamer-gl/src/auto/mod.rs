@@ -3,46 +3,46 @@
 // DO NOT EDIT
 
 mod gl_base_filter;
-pub use self::gl_base_filter::GLBaseFilter;
+pub use self::gl_base_filter::{GLBaseFilter, GLBaseFilterClass, NONE_GL_BASE_FILTER};
 pub use self::gl_base_filter::GLBaseFilterExt;
 
 mod gl_color_convert;
-pub use self::gl_color_convert::GLColorConvert;
+pub use self::gl_color_convert::{GLColorConvert, GLColorConvertClass, NONE_GL_COLOR_CONVERT};
 
 mod gl_context;
-pub use self::gl_context::GLContext;
+pub use self::gl_context::{GLContext, GLContextClass, NONE_GL_CONTEXT};
 pub use self::gl_context::GLContextExt;
 
 mod gl_display;
-pub use self::gl_display::GLDisplay;
+pub use self::gl_display::{GLDisplay, GLDisplayClass, NONE_GL_DISPLAY};
 pub use self::gl_display::GLDisplayExt;
 
 #[cfg(any(feature = "egl", feature = "dox"))]
 mod gl_display_egl;
 #[cfg(any(feature = "egl", feature = "dox"))]
-pub use self::gl_display_egl::GLDisplayEGL;
+pub use self::gl_display_egl::{GLDisplayEGL, GLDisplayEGLClass, NONE_GL_DISPLAY_EGL};
 
 mod gl_framebuffer;
-pub use self::gl_framebuffer::GLFramebuffer;
+pub use self::gl_framebuffer::{GLFramebuffer, GLFramebufferClass, NONE_GL_FRAMEBUFFER};
 pub use self::gl_framebuffer::GLFramebufferExt;
 
 mod gl_overlay_compositor;
-pub use self::gl_overlay_compositor::GLOverlayCompositor;
+pub use self::gl_overlay_compositor::{GLOverlayCompositor, GLOverlayCompositorClass, NONE_GL_OVERLAY_COMPOSITOR};
 
 mod glsl_stage;
-pub use self::glsl_stage::GLSLStage;
+pub use self::glsl_stage::{GLSLStage, GLSLStageClass, NONE_GLSL_STAGE};
 
 mod gl_shader;
-pub use self::gl_shader::GLShader;
+pub use self::gl_shader::{GLShader, GLShaderClass, NONE_GL_SHADER};
 
 mod gl_upload;
-pub use self::gl_upload::GLUpload;
+pub use self::gl_upload::{GLUpload, GLUploadClass, NONE_GL_UPLOAD};
 
 mod gl_view_convert;
-pub use self::gl_view_convert::GLViewConvert;
+pub use self::gl_view_convert::{GLViewConvert, GLViewConvertClass, NONE_GL_VIEW_CONVERT};
 
 mod gl_window;
-pub use self::gl_window::GLWindow;
+pub use self::gl_window::{GLWindow, GLWindowClass, NONE_GL_WINDOW};
 pub use self::gl_window::GLWindowExt;
 
 mod enums;
