@@ -44,6 +44,7 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
 #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[rustfmt::skip]
 mod auto;
 pub use auto::functions::*;
 pub use auto::*;

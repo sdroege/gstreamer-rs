@@ -68,7 +68,7 @@ test nightly:
   <<: *cargo_test
 
 rustfmt:
-  image: "rustlang/rust:nightly-slim"
+  image: "rust:slim"
   stage: "lint"
   script:
     - rustup component add rustfmt
