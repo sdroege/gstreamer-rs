@@ -96,9 +96,9 @@ impl Bus {
         }
     }
 
-    pub fn remove_watch(&self) -> bool {
+    pub fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_bus_remove_watch(self.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_bus_remove_watch(self.to_glib_none().0), "Bus has no event source")
         }
     }
 

@@ -58,16 +58,19 @@ impl GhostPad {
         parent: R,
         mode: PadMode,
         active: bool,
-    ) -> bool {
+    ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         let parent = parent.into();
         unsafe {
-            from_glib(ffi::gst_ghost_pad_activate_mode_default(
-                pad.to_glib_none().0 as *mut ffi::GstPad,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
-                mode.to_glib(),
-                active.to_glib(),
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_ghost_pad_activate_mode_default(
+                    pad.to_glib_none().0 as *mut ffi::GstPad,
+                    parent.map(|p| p.as_ref()).to_glib_none().0,
+                    mode.to_glib(),
+                    active.to_glib(),
+                ),
+                "Failed to invoke the default activate mode function of the ghost pad"
+            )
         }
     }
 
@@ -81,16 +84,22 @@ impl GhostPad {
         parent: R,
         mode: PadMode,
         active: bool,
-    ) -> bool {
+    ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         let parent = parent.into();
         unsafe {
-            from_glib(ffi::gst_ghost_pad_internal_activate_mode_default(
-                pad.to_glib_none().0 as *mut ffi::GstPad,
-                parent.map(|p| p.as_ref()).to_glib_none().0,
-                mode.to_glib(),
-                active.to_glib(),
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_ghost_pad_internal_activate_mode_default(
+                    pad.to_glib_none().0 as *mut ffi::GstPad,
+                    parent.map(|p| p.as_ref()).to_glib_none().0,
+                    mode.to_glib(),
+                    active.to_glib(),
+                ),
+                concat!(
+                    "Failed to invoke the default activate mode function of a proxy pad ",
+                    "that is owned by the ghost pad"
+                )
+            )
         }
     }
 }

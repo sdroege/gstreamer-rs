@@ -7,6 +7,7 @@ use Element;
 use Object;
 use Structure;
 use ffi;
+use glib;
 use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -45,7 +46,7 @@ pub trait DeviceExt: 'static {
 
     fn has_classesv(&self, classes: &[&str]) -> bool;
 
-    fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> bool;
+    fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError>;
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -94,9 +95,9 @@ impl<O: IsA<Device>> DeviceExt for O {
         }
     }
 
-    fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> bool {
+    fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_device_reconfigure_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_device_reconfigure_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to reconfigure the element to use this device")
         }
     }
 

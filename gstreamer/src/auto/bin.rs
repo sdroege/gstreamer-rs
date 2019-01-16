@@ -99,8 +99,6 @@ pub trait GstBinExt: 'static {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_do_latency<F: Fn(&Self) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
@@ -251,14 +249,6 @@ impl<O: IsA<Bin>> GstBinExt for O {
         }
     }
 
-    fn connect_do_latency<F: Fn(&Self) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"do-latency\0".as_ptr() as *const _,
-                transmute(do_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
@@ -304,12 +294,6 @@ unsafe extern "C" fn deep_element_removed_trampoline<P>(this: *mut ffi::GstBin, 
 where P: IsA<Bin> {
     let f: &&(Fn(&P, &Bin, &Element) + Send + Sync + 'static) = transmute(f);
     f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
-}
-
-unsafe extern "C" fn do_latency_trampoline<P>(this: *mut ffi::GstBin, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<Bin> {
-    let f: &&(Fn(&P) -> bool + Send + Sync + 'static) = transmute(f);
-    f(&Bin::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn element_added_trampoline<P>(this: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)

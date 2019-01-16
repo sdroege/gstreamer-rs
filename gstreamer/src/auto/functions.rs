@@ -11,6 +11,7 @@ use Error;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use StackTraceFlags;
 use ffi;
+use glib;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
@@ -177,10 +178,10 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
     }
 }
 
-pub fn update_registry() -> bool {
+pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib(ffi::gst_update_registry())
+        glib_result_from_gboolean!(ffi::gst_update_registry(), "Failed to update the registry")
     }
 }
 

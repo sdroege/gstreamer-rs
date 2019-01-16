@@ -249,7 +249,7 @@ fn create_ui(app: &gtk::Application) {
             .set_state(gst::State::Null)
             .expect("Unable to set the pipeline to the `Null` state");
 
-        bus.remove_watch();
+        bus.remove_watch().unwrap();
         if let Some(timeout_id) = timeout_id.borrow_mut().take() {
             glib::source_remove(timeout_id);
         }

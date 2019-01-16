@@ -125,7 +125,7 @@ pub trait PadExt: 'static {
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: PadLinkCheck) -> bool;
+    fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: PadLinkCheck) -> Result<(), glib::error::BoolError>;
 
     fn mark_reconfigure(&self);
 
@@ -357,14 +357,14 @@ impl<O: IsA<Pad>> PadExt for O {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn link_maybe_ghosting<P: IsA<Pad>>(&self, sink: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_pad_link_maybe_ghosting(self.as_ref().to_glib_none().0, sink.as_ref().to_glib_none().0), "Failed to link pad, possibly ghosting")
+            glib_result_from_gboolean!(ffi::gst_pad_link_maybe_ghosting(self.as_ref().to_glib_none().0, sink.as_ref().to_glib_none().0), "Failed to link pads, possibly ghosting")
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: PadLinkCheck) -> bool {
+    fn link_maybe_ghosting_full<P: IsA<Pad>>(&self, sink: &P, flags: PadLinkCheck) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_pad_link_maybe_ghosting_full(self.as_ref().to_glib_none().0, sink.as_ref().to_glib_none().0, flags.to_glib()))
+            glib_result_from_gboolean!(ffi::gst_pad_link_maybe_ghosting_full(self.as_ref().to_glib_none().0, sink.as_ref().to_glib_none().0, flags.to_glib()), "Failed to link pads, possibly ghosting")
         }
     }
 

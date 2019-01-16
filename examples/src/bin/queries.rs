@@ -124,7 +124,7 @@ fn example_main() {
         .set_state(gst::State::Null)
         .expect("Unable to set the pipeline to the `Null` state");
 
-    bus.remove_watch();
+    bus.remove_watch().unwrap();
     glib::source_remove(timeout_id);
 }
 

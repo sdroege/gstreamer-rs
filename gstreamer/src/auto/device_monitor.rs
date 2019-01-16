@@ -45,7 +45,7 @@ pub trait DeviceMonitorExt: 'static {
 
     fn get_show_all_devices(&self) -> bool;
 
-    fn remove_filter(&self, filter_id: u32) -> bool;
+    fn remove_filter(&self, filter_id: u32) -> Result<(), glib::error::BoolError>;
 
     fn set_show_all_devices(&self, show_all: bool);
 
@@ -93,9 +93,9 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
         }
     }
 
-    fn remove_filter(&self, filter_id: u32) -> bool {
+    fn remove_filter(&self, filter_id: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_device_monitor_remove_filter(self.as_ref().to_glib_none().0, filter_id))
+            glib_result_from_gboolean!(ffi::gst_device_monitor_remove_filter(self.as_ref().to_glib_none().0, filter_id), "Failed to remove the filter")
         }
     }
 

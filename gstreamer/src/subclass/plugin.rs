@@ -48,20 +48,23 @@ macro_rules! gst_plugin_define(
                 _gst_reserved: [0 as $crate::glib_ffi::gpointer; 4],
             });
 
-            pub fn plugin_register_static() -> bool {
+            pub fn plugin_register_static() -> Result<(), glib::BoolError> {
                 unsafe {
-                    from_glib($crate::ffi::gst_plugin_register_static(
-                        $crate::subclass::plugin::MAJOR_VERSION,
-                        $crate::subclass::plugin::MINOR_VERSION,
-                        concat!($name, "\0") as *const str as *const _,
-                        concat!($description, "\0") as *const str as _,
-                        Some(plugin_init_trampoline),
-                        concat!($version, "\0") as *const str as *const _,
-                        concat!($license, "\0") as *const str as *const _,
-                        concat!($source, "\0") as *const str as *const _,
-                        concat!($package, "\0") as *const str as *const _,
-                        concat!($origin, "\0") as *const str as *const _,
-                    ))
+                    glib_result_from_gboolean!(
+                        $crate::ffi::gst_plugin_register_static(
+                            $crate::subclass::plugin::MAJOR_VERSION,
+                            $crate::subclass::plugin::MINOR_VERSION,
+                            concat!($name, "\0") as *const str as *const _,
+                            concat!($description, "\0") as *const str as _,
+                            Some(plugin_init_trampoline),
+                            concat!($version, "\0") as *const str as *const _,
+                            concat!($license, "\0") as *const str as *const _,
+                            concat!($source, "\0") as *const str as *const _,
+                            concat!($package, "\0") as *const str as *const _,
+                            concat!($origin, "\0") as *const str as *const _,
+                        ),
+                        "Failed to register the plugin"
+                    )
                 }
             }
 

@@ -80,8 +80,8 @@ fn tutorial_main() -> Result<(), Error> {
 
     main_loop.run();
 
-    bus.remove_watch();
-    let _ = pipeline.set_state(gst::State::Null);
+    bus.remove_watch()?;
+    pipeline.set_state(gst::State::Null)?;
 
     Ok(())
 }

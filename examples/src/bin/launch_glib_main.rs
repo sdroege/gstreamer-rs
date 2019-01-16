@@ -68,7 +68,7 @@ fn example_main() {
     // Here we remove the bus watch we added above. This avoids a memory leak, that might
     // otherwise happen because we moved a strong reference (clone of main_loop) into the
     // callback closure above.
-    bus.remove_watch();
+    bus.remove_watch().unwrap();
 }
 
 fn main() {

@@ -171,13 +171,16 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
-    pub fn offset_running_time(&mut self, offset: i64) -> bool {
+    pub fn offset_running_time(&mut self, offset: i64) -> Result<(), glib::BoolError> {
         unsafe {
-            from_glib(ffi::gst_segment_offset_running_time(
-                &mut self.0,
-                self.get_format().to_glib(),
-                offset,
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_segment_offset_running_time(
+                    &mut self.0,
+                    self.get_format().to_glib(),
+                    offset,
+                ),
+                "Offset is not in the segment"
+            )
         }
     }
 
@@ -257,7 +260,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
-    pub fn set_running_time<V: Into<T>>(&mut self, running_time: V) -> bool {
+    pub fn set_running_time<V: Into<T>>(&mut self, running_time: V) -> Result<(), glib::BoolError> {
         let running_time = running_time.into();
 
         if T::get_default_format() == Format::Undefined {
@@ -265,11 +268,14 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            from_glib(ffi::gst_segment_set_running_time(
-                &mut self.0,
-                self.get_format().to_glib(),
-                running_time.to_raw_value() as u64,
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_segment_set_running_time(
+                    &mut self.0,
+                    self.get_format().to_glib(),
+                    running_time.to_raw_value() as u64,
+                ),
+                "Running time is not in the segment"
+            )
         }
     }
 

@@ -131,17 +131,20 @@ impl BufferPoolConfig {
         size: u32,
         min_buffers: u32,
         max_buffers: u32,
-    ) -> bool {
+    ) -> Result<(), glib::BoolError> {
         let caps = caps.into();
 
         unsafe {
-            from_glib(ffi::gst_buffer_pool_config_validate_params(
-                self.0.to_glib_none().0,
-                caps.to_glib_none().0,
-                size,
-                min_buffers,
-                max_buffers,
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_buffer_pool_config_validate_params(
+                    self.0.to_glib_none().0,
+                    caps.to_glib_none().0,
+                    size,
+                    min_buffers,
+                    max_buffers,
+                ),
+                "Parameters are not valid in this context"
+            )
         }
     }
 

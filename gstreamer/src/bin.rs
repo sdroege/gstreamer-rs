@@ -10,17 +10,27 @@ use Bin;
 use Element;
 
 use glib;
+use glib::object::Cast;
 use glib::object::IsA;
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 use glib::GString;
 
 use ffi;
 
+use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::path;
 
 pub trait GstBinExtManual: 'static {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
+
+    fn connect_do_latency<F: Fn(&Self) -> Result<(), glib::BoolError> + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element>;
     fn iterate_elements(&self) -> ::Iterator<Element>;
@@ -64,12 +74,28 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
                     e.as_ref().to_glib_none().0,
                 ));
                 if !ret {
-                    return Err(glib_bool_error!("Failed to add elements"));
+                    return Err(glib_bool_error!("Failed to remove elements"));
                 }
             }
         }
 
         Ok(())
+    }
+
+    fn connect_do_latency<F: Fn(&Self) -> Result<(), glib::BoolError> + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self) -> Result<(), glib::BoolError> + Send + Sync + 'static>> =
+                Box_::new(Box_::new(f));
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"do-latency\0".as_ptr() as *const _,
+                transmute(do_latency_trampoline::<Self> as usize),
+                Box_::into_raw(f) as *mut _,
+            )
+        }
     }
 
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element> {
@@ -128,6 +154,24 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     ) {
         ::debug_bin_to_dot_file_with_ts(self, details, file_name)
     }
+}
+
+unsafe extern "C" fn do_latency_trampoline<P>(
+    this: *mut ffi::GstBin,
+    f: glib_ffi::gpointer,
+) -> glib_ffi::gboolean
+where
+    P: IsA<Bin>,
+{
+    let f: &&(Fn(&P) -> Result<(), glib::BoolError> + Send + Sync + 'static) = transmute(f);
+    match f(&Bin::from_glib_borrow(this).unsafe_cast()) {
+        Ok(()) => true,
+        Err(err) => {
+            gst_error!(::CAT_RUST, obj: &Bin::from_glib_borrow(this), "{}", err);
+            false
+        }
+    }
+    .to_glib()
 }
 
 #[cfg(test)]

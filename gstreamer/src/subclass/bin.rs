@@ -20,11 +20,11 @@ use Element;
 use Message;
 
 pub trait BinImpl: ElementImpl + Send + Sync + 'static {
-    fn add_element(&self, bin: &Bin, element: &Element) -> bool {
+    fn add_element(&self, bin: &Bin, element: &Element) -> Result<(), glib::BoolError> {
         self.parent_add_element(bin, element)
     }
 
-    fn remove_element(&self, bin: &Bin, element: &Element) -> bool {
+    fn remove_element(&self, bin: &Bin, element: &Element) -> Result<(), glib::BoolError> {
         self.parent_remove_element(bin, element)
     }
 
@@ -32,25 +32,31 @@ pub trait BinImpl: ElementImpl + Send + Sync + 'static {
         self.parent_handle_message(bin, message)
     }
 
-    fn parent_add_element(&self, bin: &Bin, element: &Element) -> bool {
+    fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), glib::BoolError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .add_element
-                .map(|f| from_glib(f(bin.to_glib_none().0, element.to_glib_none().0)))
-                .unwrap_or(false)
+                .ok_or_else(|| glib_bool_error!("Parent function `add_element` is not defined"))?;
+            glib_result_from_gboolean!(
+                f(bin.to_glib_none().0, element.to_glib_none().0),
+                "Failed to add the element using the parent function"
+            )
         }
     }
 
-    fn parent_remove_element(&self, bin: &Bin, element: &Element) -> bool {
+    fn parent_remove_element(&self, bin: &Bin, element: &Element) -> Result<(), glib::BoolError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
-            (*parent_class)
-                .remove_element
-                .map(|f| from_glib(f(bin.to_glib_none().0, element.to_glib_none().0)))
-                .unwrap_or(false)
+            let f = (*parent_class).remove_element.ok_or_else(|| {
+                glib_bool_error!("Parent function `remove_element` is not defined")
+            })?;
+            glib_result_from_gboolean!(
+                f(bin.to_glib_none().0, element.to_glib_none().0),
+                "Failed to remove the element using the parent function"
+            )
         }
     }
 
@@ -94,7 +100,13 @@ where
     let wrap: Bin = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.add_element(&wrap, &from_glib_borrow(element))
+        match imp.add_element(&wrap, &from_glib_borrow(element)) {
+            Ok(()) => true,
+            Err(err) => {
+                gst_error!(::CAT_RUST, obj: &wrap, "{}", err);
+                false
+            }
+        }
     })
     .to_glib()
 }
@@ -113,7 +125,13 @@ where
     let wrap: Bin = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.remove_element(&wrap, &from_glib_borrow(element))
+        match imp.remove_element(&wrap, &from_glib_borrow(element)) {
+            Ok(()) => true,
+            Err(err) => {
+                gst_error!(::CAT_RUST, obj: &wrap, "{}", err);
+                false
+            }
+        }
     })
     .to_glib()
 }

@@ -130,7 +130,7 @@ fn example_main() {
     // Remove the watch function from the bus.
     // Again: There can always only be one watch function.
     // Thus we don't have to tell him which function to remove.
-    bus.remove_watch();
+    bus.remove_watch().unwrap();
 }
 
 fn main() {

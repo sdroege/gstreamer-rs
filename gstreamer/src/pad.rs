@@ -161,11 +161,14 @@ pub trait PadExtManual: 'static {
 
     fn set_activate_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>) -> Result<(), glib::BoolError> + Send + Sync + 'static;
 
     fn set_activatemode_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static;
+        F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), glib::BoolError>
+            + Send
+            + Sync
+            + 'static;
 
     fn set_chain_function<F>(&self, func: F)
     where
@@ -510,12 +513,13 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_activate_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>) -> Result<(), glib::BoolError> + Send + Sync + 'static,
     {
         #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
-            let func_box: Box<Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static> =
-                Box::new(func);
+            let func_box: Box<
+                Fn(&Pad, &Option<::Object>) -> Result<(), glib::BoolError> + Send + Sync + 'static,
+            > = Box::new(func);
             ffi::gst_pad_set_activate_function_full(
                 self.as_ref().to_glib_none().0,
                 Some(trampoline_activate_function),
@@ -527,12 +531,18 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_activatemode_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static,
+        F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), glib::BoolError>
+            + Send
+            + Sync
+            + 'static,
     {
         #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
             let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static,
+                Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), glib::BoolError>
+                    + Send
+                    + Sync
+                    + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_activatemode_function_full(
                 self.as_ref().to_glib_none().0,
@@ -1106,10 +1116,20 @@ unsafe extern "C" fn trampoline_activate_function(
     parent: *mut ffi::GstObject,
 ) -> glib_ffi::gboolean {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static) =
-        transmute((*pad).activatedata);
+    let func: &&(Fn(&Pad, &Option<::Object>) -> Result<(), glib::BoolError>
+           + Send
+           + Sync
+           + 'static) = transmute((*pad).activatedata);
 
-    func(&from_glib_borrow(pad), &from_glib_borrow(parent)).to_glib()
+    let pad: Pad = from_glib_borrow(pad);
+    match func(&pad, &from_glib_borrow(parent)) {
+        Ok(()) => true,
+        Err(err) => {
+            gst_error!(::CAT_RUST, obj: &pad, "{}", err);
+            false
+        }
+    }
+    .to_glib()
 }
 
 unsafe extern "C" fn trampoline_activatemode_function(
