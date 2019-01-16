@@ -27,7 +27,7 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExtManual for O {
         unsafe {
             let mut address = ptr::null_mut();
             let ret = from_glib(ffi::gst_rtsp_address_pool_reserve_address(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 ip_address.to_glib_none().0,
                 port,
                 n_ports,

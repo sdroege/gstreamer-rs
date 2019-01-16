@@ -54,7 +54,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
     {
         skip_assert_initialized!();
         unsafe {
-            let source = ffi::gst_rtsp_session_pool_create_watch(self.to_glib_none().0);
+            let source = ffi::gst_rtsp_session_pool_create_watch(self.as_ref().to_glib_none().0);
             let trampoline = trampoline_watch as gpointer;
             glib_ffi::g_source_set_callback(
                 source,

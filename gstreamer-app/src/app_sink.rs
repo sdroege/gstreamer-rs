@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use ffi;
+use glib::object::ObjectType;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
@@ -190,7 +191,7 @@ impl AppSink {
                 >,
             > = Box_::new(Box_::new(f));
             connect_raw(
-                self.to_glib_none().0,
+                self.as_ptr() as *mut _,
                 b"new-sample\0".as_ptr() as *const _,
                 transmute(new_sample_trampoline as usize),
                 Box_::into_raw(f) as *mut _,
@@ -214,7 +215,7 @@ impl AppSink {
                 >,
             > = Box_::new(Box_::new(f));
             connect_raw(
-                self.to_glib_none().0,
+                self.as_ptr() as *mut _,
                 b"new-preroll\0".as_ptr() as *const _,
                 transmute(new_preroll_trampoline as usize),
                 Box_::into_raw(f) as *mut _,

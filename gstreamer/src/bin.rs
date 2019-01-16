@@ -10,8 +10,9 @@ use Bin;
 use Element;
 
 use glib;
+use glib::object::{IsA, IsClassFor};
 use glib::translate::{from_glib, from_glib_full, FromGlibPtrContainer, ToGlib, ToGlibPtr};
-use glib::{GString, IsA, IsClassFor};
+use glib::GString;
 
 use ffi;
 
@@ -43,8 +44,10 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
-                let ret: bool =
-                    from_glib(ffi::gst_bin_add(self.to_glib_none().0, e.to_glib_none().0));
+                let ret: bool = from_glib(ffi::gst_bin_add(
+                    self.as_ref().to_glib_none().0,
+                    e.as_ref().to_glib_none().0,
+                ));
                 if !ret {
                     return Err(glib_bool_error!("Failed to add elements"));
                 }
@@ -58,8 +61,8 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         for e in elements {
             unsafe {
                 let ret: bool = from_glib(ffi::gst_bin_remove(
-                    self.to_glib_none().0,
-                    e.to_glib_none().0,
+                    self.as_ref().to_glib_none().0,
+                    e.as_ref().to_glib_none().0,
                 ));
                 if !ret {
                     return Err(glib_bool_error!("Failed to add elements"));
@@ -73,36 +76,39 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element> {
         unsafe {
             from_glib_full(ffi::gst_bin_iterate_all_by_interface(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 iface.to_glib(),
             ))
         }
     }
 
     fn iterate_elements(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_elements(self.to_glib_none().0)) }
+        unsafe {
+            from_glib_full(ffi::gst_bin_iterate_elements(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_recurse(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_recurse(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_recurse(self.as_ref().to_glib_none().0)) }
     }
 
     fn iterate_sinks(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_sinks(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sinks(self.as_ref().to_glib_none().0)) }
     }
 
     fn iterate_sorted(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_sorted(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sorted(self.as_ref().to_glib_none().0)) }
     }
 
     fn iterate_sources(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_children(&self) -> Vec<Element> {
         unsafe {
-            let stash = self.to_glib_none();
-            let bin: &ffi::GstBin = &*stash.0;
+            let bin: &ffi::GstBin = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&bin.element.object.lock);
             FromGlibPtrContainer::from_glib_none(bin.children)
         }

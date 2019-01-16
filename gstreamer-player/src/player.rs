@@ -8,7 +8,8 @@
 
 use ffi;
 use glib;
-use glib::signal::connect;
+use glib::object::ObjectType;
+use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_ffi;
@@ -58,9 +59,9 @@ impl Player {
         unsafe {
             let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> =
                 Box_::new(Box_::new(f));
-            connect(
-                self.to_glib_none().0,
-                "duration-changed",
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"duration-changed\0".as_ptr() as *const _,
                 transmute(duration_changed_trampoline as usize),
                 Box_::into_raw(f) as *mut _,
             )
@@ -74,9 +75,9 @@ impl Player {
         unsafe {
             let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> =
                 Box_::new(Box_::new(f));
-            connect(
-                self.to_glib_none().0,
-                "position-updated",
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"position-updated\0".as_ptr() as *const _,
                 transmute(position_updated_trampoline as usize),
                 Box_::into_raw(f) as *mut _,
             )
@@ -90,9 +91,9 @@ impl Player {
         unsafe {
             let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> =
                 Box_::new(Box_::new(f));
-            connect(
-                self.to_glib_none().0,
-                "seek-done",
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"seek-done\0".as_ptr() as *const _,
                 transmute(seek_done_trampoline as usize),
                 Box_::into_raw(f) as *mut _,
             )

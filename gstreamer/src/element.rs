@@ -10,13 +10,13 @@ use Element;
 
 use glib;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-use glib::object::Downcast;
+use glib::object::Cast;
+use glib::object::{IsA, IsClassFor};
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use glib::translate::FromGlibPtrBorrow;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrContainer, ToGlib, ToGlibPtr,
 };
-use glib::{IsA, IsClassFor};
 use miniobject::MiniObject;
 use ClockTime;
 use Event;
@@ -50,8 +50,8 @@ impl Element {
         for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
             unsafe {
                 let ret: bool = from_glib(ffi::gst_element_link(
-                    e1.to_glib_none().0,
-                    e2.to_glib_none().0,
+                    e1.as_ref().to_glib_none().0,
+                    e2.as_ref().to_glib_none().0,
                 ));
                 if !ret {
                     return Err(glib_bool_error!("Failed to link elements"));
@@ -66,7 +66,7 @@ impl Element {
         skip_assert_initialized!();
         for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
             unsafe {
-                ffi::gst_element_unlink(e1.to_glib_none().0, e2.to_glib_none().0);
+                ffi::gst_element_unlink(e1.as_ref().to_glib_none().0, e2.as_ref().to_glib_none().0);
             }
         }
     }
@@ -216,7 +216,7 @@ pub trait ElementExtManual: 'static {
 impl<O: IsA<Element>> ElementExtManual for O {
     fn get_element_class(&self) -> &ElementClass {
         unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+            let klass = (*(self.as_ptr() as *mut gobject_ffi::GTypeInstance)).g_class
                 as *const ElementClass;
             &*klass
         }
@@ -228,7 +228,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) -> Result<StateChangeSuccess, StateChangeError> {
         let ret: StateChangeReturn = unsafe {
             from_glib(ffi::gst_element_change_state(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 transition.to_glib(),
             ))
         };
@@ -241,7 +241,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) -> Result<StateChangeSuccess, StateChangeError> {
         let ret: StateChangeReturn = unsafe {
             from_glib(ffi::gst_element_continue_state(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 ret.to_glib(),
             ))
         };
@@ -256,7 +256,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let mut state = mem::uninitialized();
             let mut pending = mem::uninitialized();
             let ret: StateChangeReturn = from_glib(ffi::gst_element_get_state(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 &mut state,
                 &mut pending,
                 timeout.to_glib(),
@@ -268,7 +268,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError> {
         let ret: StateChangeReturn = unsafe {
             from_glib(ffi::gst_element_set_state(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 state.to_glib(),
             ))
         };
@@ -278,7 +278,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn query(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_element_query(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
@@ -287,7 +287,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn send_event(&self, event: Event) -> bool {
         unsafe {
             from_glib(ffi::gst_element_send_event(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 event.into_ptr(),
             ))
         }
@@ -323,7 +323,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             };
 
             ffi::gst_element_message_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 type_,
                 T::domain().to_glib(),
                 code.code(),
@@ -356,7 +356,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             };
 
             ffi::gst_element_message_full_with_details(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 type_,
                 T::domain().to_glib(),
                 code.code(),
@@ -383,7 +383,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
         unsafe {
             ffi::gst_element_message_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 ffi::GST_MESSAGE_ERROR,
                 error_domain.to_glib(),
                 error_code,
@@ -397,21 +397,32 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     fn iterate_pads(&self) -> ::Iterator<Pad> {
-        unsafe { from_glib_full(ffi::gst_element_iterate_pads(self.to_glib_none().0)) }
+        unsafe {
+            from_glib_full(ffi::gst_element_iterate_pads(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_sink_pads(&self) -> ::Iterator<Pad> {
-        unsafe { from_glib_full(ffi::gst_element_iterate_sink_pads(self.to_glib_none().0)) }
+        unsafe {
+            from_glib_full(ffi::gst_element_iterate_sink_pads(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_src_pads(&self) -> ::Iterator<Pad> {
-        unsafe { from_glib_full(ffi::gst_element_iterate_src_pads(self.to_glib_none().0)) }
+        unsafe {
+            from_glib_full(ffi::gst_element_iterate_src_pads(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn get_pads(&self) -> Vec<Pad> {
         unsafe {
-            let stash = self.to_glib_none();
-            let elt: &ffi::GstElement = &*stash.0;
+            let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.pads)
         }
@@ -419,8 +430,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_sink_pads(&self) -> Vec<Pad> {
         unsafe {
-            let stash = self.to_glib_none();
-            let elt: &ffi::GstElement = &*stash.0;
+            let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.sinkpads)
         }
@@ -428,8 +438,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_src_pads(&self) -> Vec<Pad> {
         unsafe {
-            let stash = self.to_glib_none();
-            let elt: &ffi::GstElement = &*stash.0;
+            let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
         }
@@ -445,7 +454,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let property_name = property_name.to_glib_none();
         unsafe {
             from_glib(ffi::gst_element_add_property_deep_notify_watch(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 property_name.0,
                 include_value.to_glib(),
             ))
@@ -462,7 +471,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let property_name = property_name.to_glib_none();
         unsafe {
             from_glib(ffi::gst_element_add_property_notify_watch(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 property_name.0,
                 include_value.to_glib(),
             ))
@@ -472,7 +481,10 @@ impl<O: IsA<Element>> ElementExtManual for O {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
         unsafe {
-            ffi::gst_element_remove_property_notify_watch(self.to_glib_none().0, watch_id.0);
+            ffi::gst_element_remove_property_notify_watch(
+                self.as_ref().to_glib_none().0,
+                watch_id.0,
+            );
         }
     }
 
@@ -484,7 +496,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_convert(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
@@ -507,7 +519,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_convert(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.get_value(),
                 dest_format.to_glib(),
@@ -525,7 +537,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_duration(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut duration,
             ));
@@ -541,7 +553,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_duration(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut duration,
             ));
@@ -557,7 +569,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_position(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut cur,
             ));
@@ -573,7 +585,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_element_query_position(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut cur,
             ));
@@ -602,7 +614,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             glib_result_from_gboolean!(
                 ffi::gst_element_seek(
-                    self.to_glib_none().0,
+                    self.as_ref().to_glib_none().0,
                     rate,
                     start.get_format().to_glib(),
                     flags.to_glib(),
@@ -625,7 +637,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             glib_result_from_gboolean!(
                 ffi::gst_element_seek_simple(
-                    self.to_glib_none().0,
+                    self.as_ref().to_glib_none().0,
                     seek_pos.get_format().to_glib(),
                     seek_flags.to_glib(),
                     seek_pos.get_value(),
@@ -649,7 +661,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let user_data: &mut Option<Box<F>> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
-            callback(&Element::from_glib_borrow(element).downcast_unchecked());
+            callback(&Element::from_glib_borrow(element).unsafe_cast());
         }
 
         unsafe extern "C" fn free_user_data<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
@@ -662,7 +674,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let free_user_data = free_user_data::<Self, F>;
         unsafe {
             ffi::gst_element_call_async(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline),
                 Box::into_raw(user_data) as *mut _,
                 Some(free_user_data),

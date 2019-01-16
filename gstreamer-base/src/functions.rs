@@ -23,13 +23,12 @@ pub fn type_find_helper_for_data<
 ) -> (Option<gst::Caps>, gst::TypeFindProbability) {
     assert_initialized_main_thread!();
     let obj = obj.into();
-    let obj = obj.to_glib_none();
     unsafe {
         let mut prob = mem::uninitialized();
         let data = data.as_ref();
         let (ptr, len) = (data.as_ptr(), data.len());
         let ret = from_glib_full(ffi::gst_type_find_helper_for_data(
-            obj.0,
+            obj.map(|p| p.as_ref()).to_glib_none().0,
             mut_override(ptr),
             len,
             &mut prob,

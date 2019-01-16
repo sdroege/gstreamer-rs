@@ -43,11 +43,11 @@ trait EncodingProfileBuilderCommon {
     fn set_restriction<'a, P: Into<Option<&'a gst::Caps>>>(&self, restriction: P);
 }
 
-impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilderCommon for O {
+impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool) {
         unsafe {
             ffi::gst_encoding_profile_set_allow_dynamic_output(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 allow_dynamic_output.to_glib(),
             );
         }
@@ -57,19 +57,28 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilder
         let description = description.into();
         let description = description.to_glib_none();
         unsafe {
-            ffi::gst_encoding_profile_set_description(self.to_glib_none().0, description.0);
+            ffi::gst_encoding_profile_set_description(
+                self.as_ref().to_glib_none().0,
+                description.0,
+            );
         }
     }
 
     fn set_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_encoding_profile_set_enabled(self.to_glib_none().0, enabled.to_glib());
+            ffi::gst_encoding_profile_set_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 
     fn set_format(&self, format: &gst::Caps) {
         unsafe {
-            ffi::gst_encoding_profile_set_format(self.to_glib_none().0, format.to_glib_none().0);
+            ffi::gst_encoding_profile_set_format(
+                self.as_ref().to_glib_none().0,
+                format.to_glib_none().0,
+            );
         }
     }
 
@@ -77,13 +86,13 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilder
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
-            ffi::gst_encoding_profile_set_name(self.to_glib_none().0, name.0);
+            ffi::gst_encoding_profile_set_name(self.as_ref().to_glib_none().0, name.0);
         }
     }
 
     fn set_presence(&self, presence: u32) {
         unsafe {
-            ffi::gst_encoding_profile_set_presence(self.to_glib_none().0, presence);
+            ffi::gst_encoding_profile_set_presence(self.as_ref().to_glib_none().0, presence);
         }
     }
 
@@ -91,7 +100,7 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilder
         let preset = preset.into();
         let preset = preset.to_glib_none();
         unsafe {
-            ffi::gst_encoding_profile_set_preset(self.to_glib_none().0, preset.0);
+            ffi::gst_encoding_profile_set_preset(self.as_ref().to_glib_none().0, preset.0);
         }
     }
 
@@ -99,7 +108,10 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilder
         let preset_name = preset_name.into();
         let preset_name = preset_name.to_glib_none();
         unsafe {
-            ffi::gst_encoding_profile_set_preset_name(self.to_glib_none().0, preset_name.0);
+            ffi::gst_encoding_profile_set_preset_name(
+                self.as_ref().to_glib_none().0,
+                preset_name.0,
+            );
         }
     }
 
@@ -111,7 +123,7 @@ impl<O: IsA<EncodingProfile> + IsA<glib::object::Object>> EncodingProfileBuilder
                 None => gst_ffi::gst_caps_new_any(),
             };
 
-            ffi::gst_encoding_profile_set_restriction(self.to_glib_none().0, restriction);
+            ffi::gst_encoding_profile_set_restriction(self.as_ref().to_glib_none().0, restriction);
         }
     }
 }
@@ -216,7 +228,7 @@ impl EncodingContainerProfile {
             glib_result_from_gboolean!(
                 ffi::gst_encoding_container_profile_add_profile(
                     self.to_glib_none().0,
-                    profile.to_glib_full(),
+                    profile.as_ref().to_glib_full(),
                 ),
                 "Failed to add profile",
             )
@@ -463,9 +475,7 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
     }
 
     pub fn add_profile<P: IsA<EncodingProfile>>(mut self, profile: &P) -> Self {
-        unsafe {
-            self.profiles.push(from_glib_none(profile.to_glib_none().0));
-        }
+        self.profiles.push(profile.as_ref().clone());
         self
     }
 }
@@ -574,9 +584,8 @@ mod tests {
         );
         assert_eq!(video_profile.is_enabled(), ENABLED);
 
-        let video_profile: EncodingVideoProfile = glib::object::Downcast::downcast(video_profile)
-            .ok()
-            .unwrap();
+        let video_profile: EncodingVideoProfile =
+            glib::object::Cast::downcast(video_profile).ok().unwrap();
         assert_eq!(video_profile.get_variableframerate(), VARIABLE_FRAMERATE);
         assert_eq!(video_profile.get_pass(), PASS);
     }
@@ -632,7 +641,7 @@ mod tests {
         assert_eq!(profile.is_enabled(), ENABLED);
 
         let container_profile: EncodingContainerProfile =
-            glib::object::Downcast::downcast(profile).ok().unwrap();
+            glib::object::Cast::downcast(profile).ok().unwrap();
 
         assert!(container_profile.contains_profile(&video_profile));
         assert!(container_profile.contains_profile(&audio_profile));

@@ -27,7 +27,7 @@ impl NetTimeProvider {
         if (major, minor) > (1, 12) {
             unsafe {
                 from_glib_full(ffi::gst_net_time_provider_new(
-                    clock.to_glib_none().0,
+                    clock.as_ref().to_glib_none().0,
                     address.0,
                     port,
                 ))
@@ -36,7 +36,7 @@ impl NetTimeProvider {
             // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13
             unsafe {
                 from_glib_none(ffi::gst_net_time_provider_new(
-                    clock.to_glib_none().0,
+                    clock.as_ref().to_glib_none().0,
                     address.0,
                     port,
                 ))

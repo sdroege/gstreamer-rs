@@ -39,7 +39,7 @@ use std::sync::atomic::AtomicBool;
 
 #[repr(C)]
 pub struct ElementInstanceStruct<T: ObjectSubclass> {
-    parent: <T::ParentType as glib::wrapper::Wrapper>::GlibType,
+    parent: <T::ParentType as glib::object::ObjectType>::GlibType,
     panicked: AtomicBool,
 }
 

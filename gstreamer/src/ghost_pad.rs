@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::{IsA, IsClassFor};
 use glib::translate::*;
 use GhostPad;
@@ -24,8 +24,11 @@ impl GhostPad {
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
-            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new(name.0, target.to_glib_none().0))
-                .map(|o| Downcast::downcast_unchecked(o))
+            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new(
+                name.0,
+                target.as_ref().to_glib_none().0,
+            ))
+            .map(|o| Cast::unsafe_cast(o))
         }
     }
 
@@ -40,10 +43,10 @@ impl GhostPad {
         unsafe {
             Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new_from_template(
                 name.0,
-                target.to_glib_none().0,
+                target.as_ref().to_glib_none().0,
                 templ.to_glib_none().0,
             ))
-            .map(|o| Downcast::downcast_unchecked(o))
+            .map(|o| Cast::unsafe_cast(o))
         }
     }
 
@@ -60,11 +63,10 @@ impl GhostPad {
     ) -> bool {
         skip_assert_initialized!();
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
             from_glib(ffi::gst_ghost_pad_activate_mode_default(
                 pad.to_glib_none().0 as *mut ffi::GstPad,
-                parent.0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
                 mode.to_glib(),
                 active.to_glib(),
             ))
@@ -84,11 +86,10 @@ impl GhostPad {
     ) -> bool {
         skip_assert_initialized!();
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
             from_glib(ffi::gst_ghost_pad_internal_activate_mode_default(
                 pad.to_glib_none().0 as *mut ffi::GstPad,
-                parent.0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
                 mode.to_glib(),
                 active.to_glib(),
             ))

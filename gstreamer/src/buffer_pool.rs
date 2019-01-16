@@ -241,7 +241,7 @@ pub trait BufferPoolExtManual: 'static {
 impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
     fn get_config(&self) -> BufferPoolConfig {
         unsafe {
-            let ptr = ffi::gst_buffer_pool_get_config(self.to_glib_none().0);
+            let ptr = ffi::gst_buffer_pool_get_config(self.as_ref().to_glib_none().0);
             BufferPoolConfig(from_glib_full(ptr))
         }
     }
@@ -249,7 +249,10 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_buffer_pool_set_config(self.to_glib_none().0, config.0.into_ptr()),
+                ffi::gst_buffer_pool_set_config(
+                    self.as_ref().to_glib_none().0,
+                    config.0.into_ptr()
+                ),
                 "Failed to set config",
             )
         }
@@ -257,7 +260,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
     fn is_flushing(&self) -> bool {
         unsafe {
-            let stash = self.to_glib_none();
+            let stash = self.as_ref().to_glib_none();
             let ptr: *mut ffi::GstBufferPool = stash.0;
 
             from_glib((*ptr).flushing)
@@ -277,7 +280,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
         unsafe {
             let mut buffer = ptr::null_mut();
             let ret: ::FlowReturn = from_glib(ffi::gst_buffer_pool_acquire_buffer(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 &mut buffer,
                 params_ptr,
             ));
@@ -288,7 +291,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
     fn release_buffer(&self, buffer: ::Buffer) {
         unsafe {
-            ffi::gst_buffer_pool_release_buffer(self.to_glib_none().0, buffer.into_ptr());
+            ffi::gst_buffer_pool_release_buffer(self.as_ref().to_glib_none().0, buffer.into_ptr());
         }
     }
 }

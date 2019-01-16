@@ -11,8 +11,8 @@ use gst;
 
 use auto::Discoverer;
 
-use glib::object::Downcast;
-use glib::signal::connect;
+use glib::object::{Cast, ObjectType};
+use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::IsA;
@@ -29,7 +29,7 @@ impl Discoverer {
     pub fn set_property_timeout(&self, timeout: gst::ClockTime) {
         unsafe {
             gobject_ffi::g_object_set_property(
-                self.to_glib_none().0,
+                self.as_ptr() as *mut _,
                 "timeout".to_glib_none().0,
                 Value::from(&timeout).to_glib_none().0,
             );
@@ -40,7 +40,7 @@ impl Discoverer {
         let mut value = Value::from(&0u64);
         unsafe {
             gobject_ffi::g_object_get_property(
-                self.to_glib_none().0,
+                self.as_ptr() as *mut _,
                 "timeout".to_glib_none().0,
                 value.to_glib_none_mut().0,
             );
@@ -54,9 +54,9 @@ impl Discoverer {
     ) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
-            connect(
-                self.to_glib_none().0,
-                "notify::timeout",
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::timeout\0".as_ptr() as *const _,
                 transmute(notify_timeout_trampoline::<Self> as usize),
                 Box_::into_raw(f) as *mut _,
             )
@@ -73,5 +73,5 @@ unsafe extern "C" fn notify_timeout_trampoline<P>(
 {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
     let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
-    f(&Discoverer::from_glib_borrow(this).downcast_unchecked())
+    f(&Discoverer::from_glib_borrow(this).unsafe_cast())
 }

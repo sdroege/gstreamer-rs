@@ -186,7 +186,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId> {
         unsafe {
             from_glib_full(ffi::gst_clock_new_periodic_id(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 start_time.to_glib(),
                 interval.to_glib(),
             ))
@@ -202,7 +202,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
         skip_assert_initialized!();
         unsafe {
             let res: bool = from_glib(ffi::gst_clock_periodic_id_reinit(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
                 start_time.to_glib(),
                 interval.to_glib(),
@@ -218,7 +218,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     fn new_single_shot_id(&self, time: ClockTime) -> Option<ClockId> {
         unsafe {
             from_glib_full(ffi::gst_clock_new_single_shot_id(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 time.to_glib(),
             ))
         }
@@ -227,7 +227,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     fn single_shot_id_reinit(&self, id: &ClockId, time: ClockTime) -> Result<(), glib::BoolError> {
         unsafe {
             let res: bool = from_glib(ffi::gst_clock_single_shot_id_reinit(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
                 time.to_glib(),
             ));

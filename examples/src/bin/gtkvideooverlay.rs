@@ -24,7 +24,7 @@ extern crate gstreamer_video as gst_video;
 use gst_video::prelude::*;
 
 extern crate glib;
-use glib::translate::ToGlibPtr;
+use glib::object::ObjectType;
 
 extern crate gio;
 use gio::prelude::*;
@@ -133,7 +133,7 @@ fn create_ui(app: &gtk::Application) {
                     // our video region from the window system, and then we will
                     // pass this unique identifier to the overlay provided by our
                     // sink - so the sink can then arrange the overlay.
-                    let xid = gdk_x11_window_get_xid(gdk_window.to_glib_none().0);
+                    let xid = gdk_x11_window_get_xid(gdk_window.as_ptr() as *mut _);
                     video_overlay.set_window_handle(xid as usize);
                 }
             } else {
@@ -156,7 +156,7 @@ fn create_ui(app: &gtk::Application) {
                     // our video region from the windowing system, and then we will
                     // pass this unique identifier to the overlay provided by our
                     // sink - so the sink can then arrange the overlay.
-                    let window = gdk_quartz_window_get_nsview(gdk_window.to_glib_none().0);
+                    let window = gdk_quartz_window_get_nsview(gdk_window.as_ptr() as *mut _);
                     video_overlay.set_window_handle(window as usize);
                 }
             } else {

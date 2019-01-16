@@ -33,7 +33,7 @@ impl PlayerVideoOverlayVideoRenderer {
 
         from_glib_full(ffi::gst_player_video_overlay_video_renderer_new_with_sink(
             window_handle as *mut _,
-            video_sink.to_glib_none().0,
+            video_sink.as_ref().to_glib_none().0,
         ) as *mut _)
     }
 
@@ -43,7 +43,7 @@ impl PlayerVideoOverlayVideoRenderer {
         unsafe {
             from_glib_full(ffi::gst_player_video_overlay_video_renderer_new_with_sink(
                 ptr::null_mut(),
-                video_sink.to_glib_none().0,
+                video_sink.as_ref().to_glib_none().0,
             ) as *mut _)
         }
     }

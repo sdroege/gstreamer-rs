@@ -20,7 +20,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExtManual for O {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_rtsp_stream_transport_recv_data(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 channel,
                 buffer.to_glib_full(),
             ))

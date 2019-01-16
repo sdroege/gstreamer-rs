@@ -29,8 +29,6 @@ use std::sync::{Arc, Mutex};
 extern crate failure;
 use failure::Error;
 
-use glib::GString;
-
 #[macro_use]
 extern crate failure_derive;
 
@@ -191,7 +189,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // Update the text layout. This function is only updating pango's internal state.
                 // So e.g. that after a 90 degree rotation it knows that what was previously going
                 // to end up as a 200x100 rectangle would now be 100x200.
-                pangocairo::functions::update_layout(&cr, &layout);
+                pangocairo::functions::update_layout(&cr, &**layout);
                 let (width, _height) = layout.get_size();
                 // Using width and height of the text, we can properly possition it within
                 // our canvas.
@@ -201,7 +199,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 );
                 // After telling the layout object where to draw itself, we actually tell
                 // it to draw itself into our cairo context.
-                pangocairo::functions::show_layout(&cr, &layout);
+                pangocairo::functions::show_layout(&cr, &**layout);
 
                 // Here we go one step up in our stack of transformations, removing any
                 // changes we did to them since the last call to cr.save();

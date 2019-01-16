@@ -4,7 +4,7 @@ mod tutorial5 {
     use std::process;
 
     extern crate glib;
-    use self::glib::translate::*;
+    use self::glib::object::ObjectType;
     use self::glib::*;
 
     extern crate gdk;
@@ -223,7 +223,7 @@ mod tutorial5 {
                     }
 
                     unsafe {
-                        let xid = gdk_x11_window_get_xid(gdk_window.to_glib_none().0);
+                        let xid = gdk_x11_window_get_xid(gdk_window.as_ptr() as *mut _);
                         video_overlay.set_window_handle(xid as usize);
                     }
                 } else {
@@ -239,7 +239,7 @@ mod tutorial5 {
                     }
 
                     unsafe {
-                        let window = gdk_quartz_window_get_nsview(gdk_window.to_glib_none().0);
+                        let window = gdk_quartz_window_get_nsview(gdk_window.as_ptr() as *mut _);
                         video_overlay.set_window_handle(window as usize);
                     }
                 } else {

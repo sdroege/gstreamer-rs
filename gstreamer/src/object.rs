@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use glib;
-use glib::object::{Downcast, ObjectExt};
+use glib::object::{Cast, ObjectExt};
 use glib::signal::SignalHandlerId;
 use glib::translate::{from_glib_borrow, from_glib_none, ToGlibPtr};
 use glib::IsA;
@@ -44,10 +44,10 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
         };
 
         let obj: glib::Object =
-            unsafe { from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject) };
+            unsafe { from_glib_borrow(self.as_ptr() as *mut gobject_ffi::GObject) };
 
         obj.connect(signal_name.as_str(), false, move |values| {
-            let obj: O = unsafe { values[0].get::<::Object>().unwrap().downcast_unchecked() };
+            let obj: O = unsafe { values[0].get::<::Object>().unwrap().unsafe_cast() };
             let prop_obj: ::Object = values[1].get().unwrap();
 
             let pspec = unsafe {

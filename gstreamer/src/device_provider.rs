@@ -8,8 +8,8 @@
 
 use DeviceProvider;
 
+use glib::object::IsA;
 use glib::translate::ToGlibPtr;
-use glib::IsA;
 
 use std::ffi::CStr;
 
@@ -23,7 +23,7 @@ pub trait DeviceProviderExtManual: 'static {
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = (*(self.to_glib_none().0 as *mut gobject_ffi::GTypeInstance)).g_class
+            let klass = (*(self.as_ptr() as *mut gobject_ffi::GTypeInstance)).g_class
                 as *mut ffi::GstDeviceProviderClass;
 
             let ptr = ffi::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);

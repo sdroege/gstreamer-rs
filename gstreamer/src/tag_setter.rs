@@ -29,7 +29,7 @@ impl<O: IsA<TagSetter>> TagSetterExtManual for O {
             let v = value.to_send_value();
 
             ffi::gst_tag_setter_add_tag_value(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 mode.to_glib(),
                 T::tag_name().to_glib_none().0,
                 v.to_glib_none().0,

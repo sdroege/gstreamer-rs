@@ -22,11 +22,11 @@ pub trait VideoOverlayExtManual: 'static {
 
 impl<O: IsA<VideoOverlay>> VideoOverlayExtManual for O {
     unsafe fn set_window_handle(&self, handle: uintptr_t) {
-        ffi::gst_video_overlay_set_window_handle(self.to_glib_none().0, handle)
+        ffi::gst_video_overlay_set_window_handle(self.as_ref().to_glib_none().0, handle)
     }
 
     unsafe fn got_window_handle(&self, handle: uintptr_t) {
-        ffi::gst_video_overlay_got_window_handle(self.to_glib_none().0, handle)
+        ffi::gst_video_overlay_got_window_handle(self.as_ref().to_glib_none().0, handle)
     }
 }
 

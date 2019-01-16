@@ -62,7 +62,7 @@ impl Harness {
         unsafe {
             ffi::gst_harness_add_element_full(
                 self.0.as_ptr(),
-                element.to_glib_none().0,
+                element.as_ref().to_glib_none().0,
                 hsrc.to_glib_none().0 as *mut _,
                 element_sinkpad_name.0,
                 hsink.to_glib_none().0 as *mut _,
@@ -73,13 +73,16 @@ impl Harness {
 
     pub fn add_element_sink_pad<P: IsA<gst::Pad>>(&mut self, sinkpad: &P) {
         unsafe {
-            ffi::gst_harness_add_element_sink_pad(self.0.as_ptr(), sinkpad.to_glib_none().0);
+            ffi::gst_harness_add_element_sink_pad(
+                self.0.as_ptr(),
+                sinkpad.as_ref().to_glib_none().0,
+            );
         }
     }
 
     pub fn add_element_src_pad<P: IsA<gst::Pad>>(&mut self, srcpad: &P) {
         unsafe {
-            ffi::gst_harness_add_element_src_pad(self.0.as_ptr(), srcpad.to_glib_none().0);
+            ffi::gst_harness_add_element_src_pad(self.0.as_ptr(), srcpad.as_ref().to_glib_none().0);
         }
     }
 
@@ -563,7 +566,7 @@ impl Harness {
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {
             Self::from_glib_full(ffi::gst_harness_new_full(
-                element.to_glib_none().0,
+                element.as_ref().to_glib_none().0,
                 hsrc.to_glib_none().0 as *mut _,
                 element_sinkpad_name.0,
                 hsink.to_glib_none().0 as *mut _,
@@ -595,7 +598,7 @@ impl Harness {
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {
             Self::from_glib_full(ffi::gst_harness_new_with_element(
-                element.to_glib_none().0,
+                element.as_ref().to_glib_none().0,
                 element_sinkpad_name.0,
                 element_srcpad_name.0,
             ))

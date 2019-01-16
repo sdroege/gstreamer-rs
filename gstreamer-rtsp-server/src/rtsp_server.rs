@@ -12,11 +12,10 @@ pub trait RTSPServerExtManual: 'static {
 impl<O: IsA<RTSPServer>> RTSPServerExtManual for O {
     fn attach<'a, P: Into<Option<&'a glib::MainContext>>>(&self, context: P) -> SourceId {
         let context = context.into();
-        let context = context.to_glib_none();
         unsafe {
             from_glib(ffi::gst_rtsp_server_attach(
-                self.to_glib_none().0,
-                context.0,
+                self.as_ref().to_glib_none().0,
+                context.to_glib_none().0,
             ))
         }
     }

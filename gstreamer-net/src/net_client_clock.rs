@@ -9,7 +9,7 @@
 use ffi;
 use NetClientClock;
 
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::translate::*;
 use gst;
 
@@ -32,7 +32,7 @@ impl NetClientClock {
                     remote_port,
                     base_time.to_glib(),
                 ))
-                .downcast_unchecked()
+                .unsafe_cast()
             }
         } else {
             // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13
@@ -43,7 +43,7 @@ impl NetClientClock {
                     remote_port,
                     base_time.to_glib(),
                 ))
-                .downcast_unchecked()
+                .unsafe_cast()
             }
         }
     }

@@ -35,7 +35,7 @@ impl ContextGLExt for ContextRef {
 
     fn set_gl_display<T: IsA<GLDisplay>>(&self, display: &T) {
         unsafe {
-            ffi::gst_context_set_gl_display(self.as_mut_ptr(), display.to_glib_none().0);
+            ffi::gst_context_set_gl_display(self.as_mut_ptr(), display.as_ref().to_glib_none().0);
         }
     }
 }

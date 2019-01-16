@@ -7,8 +7,8 @@
 // except according to those terms.
 
 use ffi;
+use glib::object::{IsA, IsClassFor};
 use glib::translate::*;
-use glib::{IsA, IsClassFor};
 use gst;
 use std::mem;
 use std::ops;
@@ -28,8 +28,7 @@ pub trait BaseSinkExtManual: 'static {
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
-            let stash = self.to_glib_none();
-            let sink: &ffi::GstBaseSink = &*stash.0;
+            let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&sink.element.object.lock);
             from_glib_none(&sink.segment as *const _)
         }
@@ -42,7 +41,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
         unsafe {
             let mut jitter = mem::uninitialized();
             let ret: gst::FlowReturn = from_glib(ffi::gst_base_sink_wait(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 time.to_glib(),
                 &mut jitter,
             ));
@@ -51,8 +50,11 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
     }
 
     fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_base_sink_wait_preroll(self.to_glib_none().0)) };
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(ffi::gst_base_sink_wait_preroll(
+                self.as_ref().to_glib_none().0,
+            ))
+        };
         ret.into_result()
     }
 }

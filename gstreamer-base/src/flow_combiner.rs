@@ -35,7 +35,7 @@ impl FlowCombiner {
 
     pub fn add_pad<P: IsA<gst::Pad>>(&self, pad: &P) {
         unsafe {
-            ffi::gst_flow_combiner_add_pad(self.to_glib_none().0, pad.to_glib_none().0);
+            ffi::gst_flow_combiner_add_pad(self.to_glib_none().0, pad.as_ref().to_glib_none().0);
         }
     }
 
@@ -47,7 +47,7 @@ impl FlowCombiner {
 
     pub fn remove_pad<P: IsA<gst::Pad>>(&self, pad: &P) {
         unsafe {
-            ffi::gst_flow_combiner_remove_pad(self.to_glib_none().0, pad.to_glib_none().0);
+            ffi::gst_flow_combiner_remove_pad(self.to_glib_none().0, pad.as_ref().to_glib_none().0);
         }
     }
 
@@ -80,7 +80,7 @@ impl FlowCombiner {
         let ret: gst::FlowReturn = unsafe {
             from_glib(ffi::gst_flow_combiner_update_pad_flow(
                 self.to_glib_none().0,
-                pad.to_glib_none().0,
+                pad.as_ref().to_glib_none().0,
                 fret.to_glib(),
             ))
         };

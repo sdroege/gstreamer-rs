@@ -35,12 +35,12 @@ use std::ops;
 use std::ptr;
 
 use glib;
+use glib::object::{IsA, IsClassFor};
 use glib::translate::{
     from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override, FromGlib, ToGlib,
     ToGlibPtr,
 };
-use glib::Object;
-use glib::{IsA, IsClassFor, StaticType};
+use glib::StaticType;
 use glib_ffi;
 use glib_ffi::gpointer;
 
@@ -127,7 +127,7 @@ pub trait PadExtManual: 'static {
 
     fn peer_query(&self, query: &mut QueryRef) -> bool;
     fn query(&self, query: &mut QueryRef) -> bool;
-    fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(
+    fn query_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
         &self,
         parent: Q,
         query: &mut QueryRef,
@@ -273,7 +273,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
             > = Box::new(func);
             let id = ffi::gst_pad_add_probe(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 mask.to_glib(),
                 Some(trampoline_pad_probe),
                 Box::into_raw(Box::new(func_box)) as gpointer,
@@ -290,28 +290,34 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn remove_probe(&self, id: PadProbeId) {
         unsafe {
-            ffi::gst_pad_remove_probe(self.to_glib_none().0, id.to_glib());
+            ffi::gst_pad_remove_probe(self.as_ref().to_glib_none().0, id.to_glib());
         }
     }
 
     fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowReturn::from_glib(ffi::gst_pad_chain(self.to_glib_none().0, buffer.into_ptr()))
-                .into_result()
+            FlowReturn::from_glib(ffi::gst_pad_chain(
+                self.as_ref().to_glib_none().0,
+                buffer.into_ptr(),
+            ))
+            .into_result()
         }
     }
 
     fn push(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError> {
         unsafe {
-            FlowReturn::from_glib(ffi::gst_pad_push(self.to_glib_none().0, buffer.into_ptr()))
-                .into_result()
+            FlowReturn::from_glib(ffi::gst_pad_push(
+                self.as_ref().to_glib_none().0,
+                buffer.into_ptr(),
+            ))
+            .into_result()
         }
     }
 
     fn chain_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
             FlowReturn::from_glib(ffi::gst_pad_chain_list(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
             .into_result()
@@ -321,7 +327,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn push_list(&self, list: BufferList) -> Result<FlowSuccess, FlowError> {
         unsafe {
             FlowReturn::from_glib(ffi::gst_pad_push_list(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 list.into_ptr(),
             ))
             .into_result()
@@ -332,7 +338,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut buffer = ptr::null_mut();
             let ret: FlowReturn = from_glib(ffi::gst_pad_get_range(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
@@ -345,7 +351,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut buffer = ptr::null_mut();
             let ret: FlowReturn = from_glib(ffi::gst_pad_pull_range(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 offset,
                 size,
                 &mut buffer,
@@ -357,7 +363,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn query(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_query(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
@@ -366,24 +372,23 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn peer_query(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_peer_query(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
     }
 
-    fn query_default<'a, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>>(
+    fn query_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
         &self,
         parent: Q,
         query: &mut QueryRef,
     ) -> bool {
         skip_assert_initialized!();
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
             from_glib(ffi::gst_pad_query_default(
-                self.to_glib_none().0,
-                parent.0 as *mut _,
+                self.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
@@ -392,7 +397,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_proxy_query_accept_caps(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
@@ -401,7 +406,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_proxy_query_accept_caps(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
         }
@@ -414,11 +419,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
     ) -> bool {
         skip_assert_initialized!();
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
             from_glib(ffi::gst_pad_event_default(
-                self.to_glib_none().0,
-                parent.0,
+                self.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
                 event.into_ptr(),
             ))
         }
@@ -427,7 +431,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn push_event(&self, event: Event) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_push_event(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 event.into_ptr(),
             ))
         }
@@ -436,20 +440,27 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn send_event(&self, event: Event) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_send_event(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 event.into_ptr(),
             ))
         }
     }
 
     fn get_last_flow_return(&self) -> Result<FlowSuccess, FlowError> {
-        let ret: FlowReturn =
-            unsafe { from_glib(ffi::gst_pad_get_last_flow_return(self.to_glib_none().0)) };
+        let ret: FlowReturn = unsafe {
+            from_glib(ffi::gst_pad_get_last_flow_return(
+                self.as_ref().to_glib_none().0,
+            ))
+        };
         ret.into_result()
     }
 
     fn iterate_internal_links(&self) -> ::Iterator<Pad> {
-        unsafe { from_glib_full(ffi::gst_pad_iterate_internal_links(self.to_glib_none().0)) }
+        unsafe {
+            from_glib_full(ffi::gst_pad_iterate_internal_links(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_internal_links_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
@@ -457,11 +468,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
         parent: Q,
     ) -> ::Iterator<Pad> {
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
             from_glib_full(ffi::gst_pad_iterate_internal_links_default(
-                self.to_glib_none().0,
-                parent.0,
+                self.as_ref().to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }
     }
@@ -469,8 +479,8 @@ impl<O: IsA<Pad>> PadExtManual for O {
     fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError> {
         let ret: PadLinkReturn = unsafe {
             from_glib(ffi::gst_pad_link(
-                self.to_glib_none().0,
-                sinkpad.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
+                sinkpad.as_ref().to_glib_none().0,
             ))
         };
         ret.into_result()
@@ -483,8 +493,8 @@ impl<O: IsA<Pad>> PadExtManual for O {
     ) -> Result<PadLinkSuccess, PadLinkError> {
         let ret: PadLinkReturn = unsafe {
             from_glib(ffi::gst_pad_link_full(
-                self.to_glib_none().0,
-                sinkpad.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
+                sinkpad.as_ref().to_glib_none().0,
                 flags.to_glib(),
             ))
         };
@@ -493,9 +503,9 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn stream_lock(&self) -> StreamLock {
         unsafe {
-            let pad = self.to_glib_none().0;
-            glib_ffi::g_rec_mutex_lock(&mut (*pad).stream_rec_lock);
-            StreamLock(from_glib_none(pad))
+            let ptr: &mut ffi::GstPad = &mut *(self.as_ptr() as *mut _);
+            glib_ffi::g_rec_mutex_lock(&mut ptr.stream_rec_lock);
+            StreamLock(from_glib_none(ptr as *mut ffi::GstPad))
         }
     }
 
@@ -508,7 +518,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let func_box: Box<Fn(&Pad, &Option<::Object>) -> bool + Send + Sync + 'static> =
                 Box::new(func);
             ffi::gst_pad_set_activate_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_activate_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -526,7 +536,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> bool + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_activatemode_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_activatemode_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -549,7 +559,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_chain_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_chain_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -572,7 +582,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_chain_list_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_chain_list_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -589,7 +599,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_event_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_event_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -612,7 +622,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_event_full_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_event_full_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -636,7 +646,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_getrange_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_getrange_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -653,7 +663,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Fn(&Pad, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_iterate_internal_links_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_iterate_internal_links_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -676,7 +686,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_link_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_link_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -693,7 +703,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
             > = Box::new(func);
             ffi::gst_pad_set_query_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_query_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -708,7 +718,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let func_box: Box<Fn(&Pad, &Option<::Object>) + Send + Sync + 'static> = Box::new(func);
             ffi::gst_pad_set_unlink_function_full(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(trampoline_unlink_function),
                 Box::into_raw(Box::new(func_box)) as gpointer,
                 Some(destroy_closure),
@@ -720,7 +730,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             glib_result_from_gboolean!(
                 ffi::gst_pad_start_task(
-                    self.to_glib_none().0,
+                    self.as_ref().to_glib_none().0,
                     Some(trampoline_pad_task),
                     into_raw_pad_task(func),
                     Some(destroy_closure_pad_task),
@@ -738,7 +748,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
@@ -761,7 +771,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_convert(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 dest_format.to_glib(),
@@ -779,7 +789,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut duration,
             ));
@@ -795,7 +805,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_duration(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut duration,
             ));
@@ -811,7 +821,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut cur,
             ));
@@ -827,7 +837,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_peer_query_position(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut cur,
             ));
@@ -848,7 +858,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_convert(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
@@ -872,7 +882,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut dest_val = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_convert(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.get_value(),
                 dest_format.to_glib(),
@@ -890,7 +900,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_duration(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut duration,
             ));
@@ -906,7 +916,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut duration = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_duration(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut duration,
             ));
@@ -922,7 +932,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_position(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut cur,
             ));
@@ -938,7 +948,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
         unsafe {
             let mut cur = mem::uninitialized();
             let ret = from_glib(ffi::gst_pad_query_position(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut cur,
             ));
@@ -952,8 +962,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn get_mode(&self) -> ::PadMode {
         unsafe {
-            let stash = self.to_glib_none();
-            let ptr: &ffi::GstPad = &*stash.0;
+            let ptr: &ffi::GstPad = &*(self.as_ptr() as *const _);
             from_glib(ptr.mode)
         }
     }
@@ -998,14 +1007,18 @@ impl<O: IsA<Pad>> PadExtManual for O {
                 as *const &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>)
                 as glib_ffi::gpointer;
 
-            ffi::gst_pad_sticky_events_foreach(self.to_glib_none().0, Some(trampoline), func_ptr);
+            ffi::gst_pad_sticky_events_foreach(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline),
+                func_ptr,
+            );
         }
     }
 
     fn store_sticky_event(&self, event: &Event) -> Result<FlowSuccess, FlowError> {
         let ret: FlowReturn = unsafe {
             from_glib(ffi::gst_pad_store_sticky_event(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 event.to_glib_none().0,
             ))
         };
