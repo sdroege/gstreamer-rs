@@ -867,6 +867,11 @@ trait = false
     # Work-around for 1.14 switch from transfer-floating to transfer-full
     ignore = true
 
+    [[object.function]]
+    name = "add_stream"
+    # Ignore return value which is always `true`
+    ignore = true
+
 [[object]]
 name = "Gst.Plugin"
 status = "generate"

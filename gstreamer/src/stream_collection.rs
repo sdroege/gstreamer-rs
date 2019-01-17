@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use ffi;
+use glib::object::IsA;
 use glib::translate::*;
 use Stream;
 use StreamCollection;
@@ -77,6 +78,16 @@ impl StreamCollection {
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
             unsafe { from_glib_none(ffi::gst_stream_collection_new(upstream_id.0)) }
+        }
+    }
+
+    #[cfg(any(feature = "v1_10", feature = "dox"))]
+    pub fn add_stream<P: IsA<Stream>>(&self, stream: &P) {
+        unsafe {
+            ffi::gst_stream_collection_add_stream(
+                self.to_glib_none().0,
+                stream.as_ref().to_glib_full(),
+            );
         }
     }
 

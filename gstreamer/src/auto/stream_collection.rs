@@ -9,7 +9,6 @@ use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::IsA;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -28,13 +27,6 @@ glib_wrapper! {
 }
 
 impl StreamCollection {
-    #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn add_stream<P: IsA<Stream>>(&self, stream: &P) -> bool {
-        unsafe {
-            from_glib(ffi::gst_stream_collection_add_stream(self.to_glib_none().0, stream.as_ref().to_glib_full()))
-        }
-    }
-
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_size(&self) -> u32 {
         unsafe {
