@@ -48,7 +48,7 @@ stages:
     - cargo build --color=always --all --all-features
     - G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
 
-.test 1.31:
+test 1.31:
   # 1.31 img
   # https://hub.docker.com/_/rust/
   image: "rust:1.31-slim"
