@@ -210,6 +210,7 @@ pub use self::iterator::{Iterator, IteratorError, IteratorImpl};
 pub use bus::BusStream;
 pub use child_proxy::ChildProxyExtManual;
 pub use clock_time::ClockTime;
+pub use device_monitor::{DeviceMonitorExtManual, DeviceMonitorFilterId};
 pub use device_provider::DeviceProviderExtManual;
 pub use enums::{
     ClockError, ClockSuccess, FlowError, FlowSuccess, PadLinkError, PadLinkSuccess,
@@ -324,6 +325,7 @@ pub mod prelude {
     pub use buffer_pool::BufferPoolExtManual;
     pub use child_proxy::ChildProxyExtManual;
     pub use clock::ClockExtManual;
+    pub use device_monitor::DeviceMonitorExtManual;
     pub use device_provider::DeviceProviderExtManual;
     pub use gobject::GObjectExtManualGst;
     pub use object::GstObjectExtManual;

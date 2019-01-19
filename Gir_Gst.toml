@@ -548,6 +548,11 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "add_filter"
+    # Return Option<DeviceMonitorFilterId>
+    ignore = true
+
+    [[object.function]]
     name = "get_bus"
         [object.function.return]
         nullable = false
@@ -559,8 +564,8 @@ status = "generate"
 
     [[object.function]]
     name = "remove_filter"
-        [object.function.return]
-        bool_return_is_error = "Failed to remove the filter"
+    # Use DeviceMonitorFilterId and return Result<(), glib::BoolError>
+    ignore = true
 
 [[object]]
 name = "Gst.Device"

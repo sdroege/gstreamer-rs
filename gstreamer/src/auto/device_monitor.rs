@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use Bus;
-use Caps;
 use Device;
 use Object;
 use ffi;
@@ -35,8 +34,6 @@ unsafe impl Sync for DeviceMonitor {}
 pub const NONE_DEVICE_MONITOR: Option<&DeviceMonitor> = None;
 
 pub trait DeviceMonitorExt: 'static {
-    fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, classes: P, caps: Q) -> u32;
-
     fn get_bus(&self) -> Bus;
 
     fn get_devices(&self) -> Vec<Device>;
@@ -44,8 +41,6 @@ pub trait DeviceMonitorExt: 'static {
     fn get_providers(&self) -> Vec<GString>;
 
     fn get_show_all_devices(&self) -> bool;
-
-    fn remove_filter(&self, filter_id: u32) -> Result<(), glib::error::BoolError>;
 
     fn set_show_all_devices(&self, show_all: bool);
 
@@ -61,14 +56,6 @@ pub trait DeviceMonitorExt: 'static {
 }
 
 impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
-    fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, classes: P, caps: Q) -> u32 {
-        let classes = classes.into();
-        let caps = caps.into();
-        unsafe {
-            ffi::gst_device_monitor_add_filter(self.as_ref().to_glib_none().0, classes.to_glib_none().0, caps.to_glib_none().0)
-        }
-    }
-
     fn get_bus(&self) -> Bus {
         unsafe {
             from_glib_full(ffi::gst_device_monitor_get_bus(self.as_ref().to_glib_none().0))
@@ -90,12 +77,6 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
     fn get_show_all_devices(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_device_monitor_get_show_all_devices(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn remove_filter(&self, filter_id: u32) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib_result_from_gboolean!(ffi::gst_device_monitor_remove_filter(self.as_ref().to_glib_none().0, filter_id), "Failed to remove the filter")
         }
     }
 
