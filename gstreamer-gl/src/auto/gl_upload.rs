@@ -62,5 +62,3 @@ impl GLUpload {
 
 unsafe impl Send for GLUpload {}
 unsafe impl Sync for GLUpload {}
-
-pub const NONE_GL_UPLOAD: Option<&GLUpload> = None;

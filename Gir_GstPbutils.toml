@@ -74,7 +74,7 @@ conversion_type = "scalar"
 [[object]]
 name = "GstPbutils.Discoverer"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "discover_uri_async"
@@ -98,6 +98,7 @@ status = "generate"
 [[object]]
 name = "GstPbutils.DiscovererStreamInfo"
 status = "generate"
+final_type = false
 
     # Not useful
     [[object.function]]
@@ -112,12 +113,12 @@ status = "generate"
 [[object]]
 name = "GstPbutils.DiscovererAudioInfo"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstPbutils.DiscovererVideoInfo"
 status = "generate"
-trait = false
+final_type = true
 
     # Implement manually to expose as gst::Fraction
     [[object.function]]
@@ -136,12 +137,12 @@ trait = false
 [[object]]
 name = "GstPbutils.DiscovererSubtitleInfo"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstPbutils.DiscovererContainerInfo"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstPbutils.EncodingProfile"
@@ -214,7 +215,7 @@ status = "generate"
 [[object]]
 name = "GstPbutils.EncodingAudioProfile"
 status = "generate"
-trait = false
+final_type = true
     # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"
@@ -226,7 +227,7 @@ trait = false
 [[object]]
 name = "GstPbutils.EncodingVideoProfile"
 status = "generate"
-trait = false
+final_type = true
     # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]
     name = "new"

@@ -4,7 +4,6 @@
 
 use WebRTCDTLSTransport;
 use ffi;
-use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -23,15 +22,15 @@ impl WebRTCRTPSender {
         }
     }
 
-    pub fn set_rtcp_transport<P: IsA<WebRTCDTLSTransport>>(&self, transport: &P) {
+    pub fn set_rtcp_transport(&self, transport: &WebRTCDTLSTransport) {
         unsafe {
-            ffi::gst_webrtc_rtp_sender_set_rtcp_transport(self.to_glib_none().0, transport.as_ref().to_glib_none().0);
+            ffi::gst_webrtc_rtp_sender_set_rtcp_transport(self.to_glib_none().0, transport.to_glib_none().0);
         }
     }
 
-    pub fn set_transport<P: IsA<WebRTCDTLSTransport>>(&self, transport: &P) {
+    pub fn set_transport(&self, transport: &WebRTCDTLSTransport) {
         unsafe {
-            ffi::gst_webrtc_rtp_sender_set_transport(self.to_glib_none().0, transport.as_ref().to_glib_none().0);
+            ffi::gst_webrtc_rtp_sender_set_transport(self.to_glib_none().0, transport.to_glib_none().0);
         }
     }
 }
@@ -44,5 +43,3 @@ impl Default for WebRTCRTPSender {
 
 unsafe impl Send for WebRTCRTPSender {}
 unsafe impl Sync for WebRTCRTPSender {}
-
-pub const NONE_WEB_RTCRTP_SENDER: Option<&WebRTCRTPSender> = None;

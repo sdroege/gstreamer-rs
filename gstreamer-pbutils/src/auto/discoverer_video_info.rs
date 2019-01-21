@@ -60,5 +60,3 @@ impl DiscovererVideoInfo {
 
 unsafe impl Send for DiscovererVideoInfo {}
 unsafe impl Sync for DiscovererVideoInfo {}
-
-pub const NONE_DISCOVERER_VIDEO_INFO: Option<&DiscovererVideoInfo> = None;

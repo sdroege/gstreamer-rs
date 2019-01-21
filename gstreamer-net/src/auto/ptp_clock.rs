@@ -84,8 +84,6 @@ impl PtpClock {
 unsafe impl Send for PtpClock {}
 unsafe impl Sync for PtpClock {}
 
-pub const NONE_PTP_CLOCK: Option<&PtpClock> = None;
-
 unsafe extern "C" fn notify_grandmaster_clock_id_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

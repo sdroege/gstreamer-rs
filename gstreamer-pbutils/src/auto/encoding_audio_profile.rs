@@ -18,5 +18,3 @@ impl EncodingAudioProfile {}
 
 unsafe impl Send for EncodingAudioProfile {}
 unsafe impl Sync for EncodingAudioProfile {}
-
-pub const NONE_ENCODING_AUDIO_PROFILE: Option<&EncodingAudioProfile> = None;

@@ -48,11 +48,11 @@ impl Pad {
         }
     }
 
-    pub fn new_from_template<'a, P: IsA<PadTemplate>, Q: Into<Option<&'a str>>>(templ: &P, name: Q) -> Pad {
+    pub fn new_from_template<'a, P: Into<Option<&'a str>>>(templ: &PadTemplate, name: P) -> Pad {
         skip_assert_initialized!();
         let name = name.into();
         unsafe {
-            from_glib_none(ffi::gst_pad_new_from_template(templ.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_none(ffi::gst_pad_new_from_template(templ.to_glib_none().0, name.to_glib_none().0))
         }
     }
 }
@@ -183,7 +183,7 @@ pub trait PadExt: 'static {
 
     fn get_property_template(&self) -> Option<PadTemplate>;
 
-    fn set_property_template<P: IsA<PadTemplate> + glib::value::SetValueOptional>(&self, template: Option<&P>);
+    fn set_property_template(&self, template: Option<&PadTemplate>);
 
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -514,7 +514,7 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    fn set_property_template<P: IsA<PadTemplate> + glib::value::SetValueOptional>(&self, template: Option<&P>) {
+    fn set_property_template(&self, template: Option<&PadTemplate>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"template\0".as_ptr() as *const _, Value::from(template).to_glib_none().0);
         }

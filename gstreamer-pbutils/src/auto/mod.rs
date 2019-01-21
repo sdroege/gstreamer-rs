@@ -3,30 +3,29 @@
 // DO NOT EDIT
 
 mod discoverer;
-pub use self::discoverer::{Discoverer, DiscovererClass, NONE_DISCOVERER};
+pub use self::discoverer::{Discoverer, DiscovererClass};
 
 mod discoverer_audio_info;
-pub use self::discoverer_audio_info::{DiscovererAudioInfo, DiscovererAudioInfoClass, NONE_DISCOVERER_AUDIO_INFO};
+pub use self::discoverer_audio_info::{DiscovererAudioInfo, DiscovererAudioInfoClass};
 
 mod discoverer_container_info;
-pub use self::discoverer_container_info::{DiscovererContainerInfo, DiscovererContainerInfoClass, NONE_DISCOVERER_CONTAINER_INFO};
+pub use self::discoverer_container_info::{DiscovererContainerInfo, DiscovererContainerInfoClass};
 
 mod discoverer_info;
-pub use self::discoverer_info::{DiscovererInfo, DiscovererInfoClass, NONE_DISCOVERER_INFO};
-pub use self::discoverer_info::DiscovererInfoExt;
+pub use self::discoverer_info::{DiscovererInfo, DiscovererInfoClass};
 
 mod discoverer_stream_info;
 pub use self::discoverer_stream_info::{DiscovererStreamInfo, DiscovererStreamInfoClass, NONE_DISCOVERER_STREAM_INFO};
 pub use self::discoverer_stream_info::DiscovererStreamInfoExt;
 
 mod discoverer_subtitle_info;
-pub use self::discoverer_subtitle_info::{DiscovererSubtitleInfo, DiscovererSubtitleInfoClass, NONE_DISCOVERER_SUBTITLE_INFO};
+pub use self::discoverer_subtitle_info::{DiscovererSubtitleInfo, DiscovererSubtitleInfoClass};
 
 mod discoverer_video_info;
-pub use self::discoverer_video_info::{DiscovererVideoInfo, DiscovererVideoInfoClass, NONE_DISCOVERER_VIDEO_INFO};
+pub use self::discoverer_video_info::{DiscovererVideoInfo, DiscovererVideoInfoClass};
 
 mod encoding_audio_profile;
-pub use self::encoding_audio_profile::{EncodingAudioProfile, EncodingAudioProfileClass, NONE_ENCODING_AUDIO_PROFILE};
+pub use self::encoding_audio_profile::{EncodingAudioProfile, EncodingAudioProfileClass};
 
 mod encoding_container_profile;
 pub use self::encoding_container_profile::{EncodingContainerProfile, EncodingContainerProfileClass, NONE_ENCODING_CONTAINER_PROFILE};
@@ -37,11 +36,10 @@ pub use self::encoding_profile::{EncodingProfile, EncodingProfileClass, NONE_ENC
 pub use self::encoding_profile::EncodingProfileExt;
 
 mod encoding_target;
-pub use self::encoding_target::{EncodingTarget, EncodingTargetClass, NONE_ENCODING_TARGET};
-pub use self::encoding_target::EncodingTargetExt;
+pub use self::encoding_target::{EncodingTarget, EncodingTargetClass};
 
 mod encoding_video_profile;
-pub use self::encoding_video_profile::{EncodingVideoProfile, EncodingVideoProfileClass, NONE_ENCODING_VIDEO_PROFILE};
+pub use self::encoding_video_profile::{EncodingVideoProfile, EncodingVideoProfileClass};
 
 mod enums;
 pub use self::enums::DiscovererResult;
@@ -53,9 +51,7 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::DiscovererInfoExt;
     pub use super::DiscovererStreamInfoExt;
     pub use super::EncodingContainerProfileExt;
     pub use super::EncodingProfileExt;
-    pub use super::EncodingTargetExt;
 }

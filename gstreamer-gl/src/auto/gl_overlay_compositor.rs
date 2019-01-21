@@ -46,5 +46,3 @@ impl GLOverlayCompositor {
 
 unsafe impl Send for GLOverlayCompositor {}
 unsafe impl Sync for GLOverlayCompositor {}
-
-pub const NONE_GL_OVERLAY_COMPOSITOR: Option<&GLOverlayCompositor> = None;

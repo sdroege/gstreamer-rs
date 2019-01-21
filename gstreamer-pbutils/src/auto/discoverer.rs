@@ -97,8 +97,6 @@ impl Discoverer {
 unsafe impl Send for Discoverer {}
 unsafe impl Sync for Discoverer {}
 
-pub const NONE_DISCOVERER: Option<&Discoverer> = None;
-
 unsafe extern "C" fn discovered_trampoline(this: *mut ffi::GstDiscoverer, info: *mut ffi::GstDiscovererInfo, error: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(info), &from_glib_borrow(error))

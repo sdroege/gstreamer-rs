@@ -8,7 +8,6 @@ use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::IsA;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -34,9 +33,9 @@ impl WebRTCDTLSTransport {
         }
     }
 
-    pub fn set_transport<P: IsA<WebRTCICETransport>>(&self, ice: &P) {
+    pub fn set_transport(&self, ice: &WebRTCICETransport) {
         unsafe {
-            ffi::gst_webrtc_dtls_transport_set_transport(self.to_glib_none().0, ice.as_ref().to_glib_none().0);
+            ffi::gst_webrtc_dtls_transport_set_transport(self.to_glib_none().0, ice.to_glib_none().0);
         }
     }
 
@@ -152,8 +151,6 @@ impl WebRTCDTLSTransport {
 
 unsafe impl Send for WebRTCDTLSTransport {}
 unsafe impl Sync for WebRTCDTLSTransport {}
-
-pub const NONE_WEB_RTCDTLS_TRANSPORT: Option<&WebRTCDTLSTransport> = None;
 
 unsafe extern "C" fn notify_certificate_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);

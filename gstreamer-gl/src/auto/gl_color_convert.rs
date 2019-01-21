@@ -40,5 +40,3 @@ impl GLColorConvert {
 
 unsafe impl Send for GLColorConvert {}
 unsafe impl Sync for GLColorConvert {}
-
-pub const NONE_GL_COLOR_CONVERT: Option<&GLColorConvert> = None;

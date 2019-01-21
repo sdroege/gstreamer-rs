@@ -226,8 +226,6 @@ impl AppSink {
 unsafe impl Send for AppSink {}
 unsafe impl Sync for AppSink {}
 
-pub const NONE_APP_SINK: Option<&AppSink> = None;
-
 unsafe extern "C" fn eos_trampoline(this: *mut ffi::GstAppSink, f: glib_ffi::gpointer) {
     let f: &&(Fn(&AppSink) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

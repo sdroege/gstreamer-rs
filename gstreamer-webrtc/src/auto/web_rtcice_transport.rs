@@ -112,8 +112,6 @@ impl WebRTCICETransport {
 unsafe impl Send for WebRTCICETransport {}
 unsafe impl Sync for WebRTCICETransport {}
 
-pub const NONE_WEB_RTCICE_TRANSPORT: Option<&WebRTCICETransport> = None;
-
 unsafe extern "C" fn on_new_candidate_trampoline(this: *mut ffi::GstWebRTCICETransport, object: *mut libc::c_char, f: glib_ffi::gpointer) {
     let f: &&(Fn(&WebRTCICETransport, &str) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this), &GString::from_glib_borrow(object))

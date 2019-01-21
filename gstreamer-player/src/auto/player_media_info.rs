@@ -119,5 +119,3 @@ impl PlayerMediaInfo {
 
 unsafe impl Send for PlayerMediaInfo {}
 unsafe impl Sync for PlayerMediaInfo {}
-
-pub const NONE_PLAYER_MEDIA_INFO: Option<&PlayerMediaInfo> = None;

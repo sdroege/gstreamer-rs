@@ -114,7 +114,7 @@ trait_name = "GstBinExt"
 [[object]]
 name = "Gst.Bus"
 status = "generate"
-trait = false
+final_type = true
     [[object.function]]
     name = "add_signal_watch_full"
     # Priority
@@ -504,17 +504,17 @@ status = "generate"
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "Gst.TypeFindFactory"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "Gst.DeviceProviderFactory"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "Gst.DeviceProvider"
@@ -798,7 +798,7 @@ status = "generate"
 [[object]]
 name = "Gst.PadTemplate"
 status = "generate"
-trait = false
+final_type = true
     [[object.function]]
     name = "new_from_static_pad_template_with_gtype"
     # static pad template manual
@@ -857,7 +857,7 @@ status = "generate"
 [[object]]
 name = "Gst.Stream"
 status = "generate"
-trait = false
+final_type = true
     [[object.function]]
     name = "new"
     # Work-around for 1.14 switch from transfer-floating to transfer-full
@@ -866,7 +866,7 @@ trait = false
 [[object]]
 name = "Gst.StreamCollection"
 status = "generate"
-trait = false
+final_type = true
     [[object.function]]
     name = "new"
     # Work-around for 1.14 switch from transfer-floating to transfer-full
@@ -880,7 +880,7 @@ trait = false
 [[object]]
 name = "Gst.Plugin"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "list_free"
@@ -946,7 +946,7 @@ status = "generate"
 [[object]]
 name = "Gst.Registry"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     pattern = "fork_.*"

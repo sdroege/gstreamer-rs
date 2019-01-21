@@ -100,5 +100,3 @@ impl GLSLStage {
 
 unsafe impl Send for GLSLStage {}
 unsafe impl Sync for GLSLStage {}
-
-pub const NONE_GLSL_STAGE: Option<&GLSLStage> = None;

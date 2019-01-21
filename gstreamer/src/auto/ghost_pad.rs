@@ -30,11 +30,11 @@ impl GhostPad {
         }
     }
 
-    pub fn new_no_target_from_template<'a, P: Into<Option<&'a str>>, Q: IsA<PadTemplate>>(name: P, templ: &Q) -> GhostPad {
+    pub fn new_no_target_from_template<'a, P: Into<Option<&'a str>>>(name: P, templ: &PadTemplate) -> GhostPad {
         skip_assert_initialized!();
         let name = name.into();
         unsafe {
-            Pad::from_glib_none(ffi::gst_ghost_pad_new_no_target_from_template(name.to_glib_none().0, templ.as_ref().to_glib_none().0)).unsafe_cast()
+            Pad::from_glib_none(ffi::gst_ghost_pad_new_no_target_from_template(name.to_glib_none().0, templ.to_glib_none().0)).unsafe_cast()
         }
     }
 }

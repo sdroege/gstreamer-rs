@@ -62,5 +62,3 @@ impl DiscovererAudioInfo {
 
 unsafe impl Send for DiscovererAudioInfo {}
 unsafe impl Sync for DiscovererAudioInfo {}
-
-pub const NONE_DISCOVERER_AUDIO_INFO: Option<&DiscovererAudioInfo> = None;

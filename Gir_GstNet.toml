@@ -35,7 +35,7 @@ conversion_type = "scalar"
 [[object]]
 name = "GstNet.NtpClock"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "new"
@@ -45,7 +45,7 @@ trait = false
 [[object]]
 name = "GstNet.PtpClock"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "new"
@@ -55,7 +55,7 @@ trait = false
 [[object]]
 name = "GstNet.NetClientClock"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "new"
@@ -65,7 +65,7 @@ trait = false
 [[object]]
 name = "GstNet.NetTimeProvider"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "new"

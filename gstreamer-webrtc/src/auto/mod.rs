@@ -3,19 +3,19 @@
 // DO NOT EDIT
 
 mod web_rtcdtls_transport;
-pub use self::web_rtcdtls_transport::{WebRTCDTLSTransport, WebRTCDTLSTransportClass, NONE_WEB_RTCDTLS_TRANSPORT};
+pub use self::web_rtcdtls_transport::{WebRTCDTLSTransport, WebRTCDTLSTransportClass};
 
 mod web_rtcice_transport;
-pub use self::web_rtcice_transport::{WebRTCICETransport, WebRTCICETransportClass, NONE_WEB_RTCICE_TRANSPORT};
+pub use self::web_rtcice_transport::{WebRTCICETransport, WebRTCICETransportClass};
 
 mod web_rtcrtp_receiver;
-pub use self::web_rtcrtp_receiver::{WebRTCRTPReceiver, WebRTCRTPReceiverClass, NONE_WEB_RTCRTP_RECEIVER};
+pub use self::web_rtcrtp_receiver::{WebRTCRTPReceiver, WebRTCRTPReceiverClass};
 
 mod web_rtcrtp_sender;
-pub use self::web_rtcrtp_sender::{WebRTCRTPSender, WebRTCRTPSenderClass, NONE_WEB_RTCRTP_SENDER};
+pub use self::web_rtcrtp_sender::{WebRTCRTPSender, WebRTCRTPSenderClass};
 
 mod web_rtcrtp_transceiver;
-pub use self::web_rtcrtp_transceiver::{WebRTCRTPTransceiver, WebRTCRTPTransceiverClass, NONE_WEB_RTCRTP_TRANSCEIVER};
+pub use self::web_rtcrtp_transceiver::{WebRTCRTPTransceiver, WebRTCRTPTransceiverClass};
 
 mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;

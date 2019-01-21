@@ -31,5 +31,3 @@ impl PlayerGMainContextSignalDispatcher {
 
 unsafe impl Send for PlayerGMainContextSignalDispatcher {}
 unsafe impl Sync for PlayerGMainContextSignalDispatcher {}
-
-pub const NONE_PLAYER_GMAIN_CONTEXT_SIGNAL_DISPATCHER: Option<&PlayerGMainContextSignalDispatcher> = None;

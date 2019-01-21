@@ -50,5 +50,3 @@ impl TypeFindFactory {
 
 unsafe impl Send for TypeFindFactory {}
 unsafe impl Sync for TypeFindFactory {}
-
-pub const NONE_TYPE_FIND_FACTORY: Option<&TypeFindFactory> = None;

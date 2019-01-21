@@ -101,8 +101,6 @@ impl PlayerVideoOverlayVideoRenderer {
 unsafe impl Send for PlayerVideoOverlayVideoRenderer {}
 unsafe impl Sync for PlayerVideoOverlayVideoRenderer {}
 
-pub const NONE_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER: Option<&PlayerVideoOverlayVideoRenderer> = None;
-
 unsafe extern "C" fn notify_video_sink_trampoline(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

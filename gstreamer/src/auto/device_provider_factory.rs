@@ -81,5 +81,3 @@ impl DeviceProviderFactory {
 
 unsafe impl Send for DeviceProviderFactory {}
 unsafe impl Sync for DeviceProviderFactory {}
-
-pub const NONE_DEVICE_PROVIDER_FACTORY: Option<&DeviceProviderFactory> = None;

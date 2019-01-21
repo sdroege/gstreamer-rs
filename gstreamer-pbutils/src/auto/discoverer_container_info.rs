@@ -24,5 +24,3 @@ impl DiscovererContainerInfo {
 
 unsafe impl Send for DiscovererContainerInfo {}
 unsafe impl Sync for DiscovererContainerInfo {}
-
-pub const NONE_DISCOVERER_CONTAINER_INFO: Option<&DiscovererContainerInfo> = None;

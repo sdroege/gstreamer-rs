@@ -97,8 +97,6 @@ impl NetTimeProvider {
 unsafe impl Send for NetTimeProvider {}
 unsafe impl Sync for NetTimeProvider {}
 
-pub const NONE_NET_TIME_PROVIDER: Option<&NetTimeProvider> = None;
-
 unsafe extern "C" fn notify_active_trampoline(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&NetTimeProvider) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

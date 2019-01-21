@@ -143,8 +143,6 @@ impl Default for TestClock {
 unsafe impl Send for TestClock {}
 unsafe impl Sync for TestClock {}
 
-pub const NONE_TEST_CLOCK: Option<&TestClock> = None;
-
 unsafe extern "C" fn notify_clock_type_trampoline(this: *mut ffi::GstTestClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&TestClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

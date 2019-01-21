@@ -19,5 +19,3 @@ impl NtpClock {}
 
 unsafe impl Send for NtpClock {}
 unsafe impl Sync for NtpClock {}
-
-pub const NONE_NTP_CLOCK: Option<&NtpClock> = None;

@@ -16,7 +16,6 @@ use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::IsA;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -323,24 +322,24 @@ impl Player {
         }
     }
 
-    pub fn get_audio_streams<P: IsA<PlayerMediaInfo>>(info: &P) -> Vec<PlayerAudioInfo> {
+    pub fn get_audio_streams(info: &PlayerMediaInfo) -> Vec<PlayerAudioInfo> {
         skip_assert_initialized!();
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_audio_streams(info.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_audio_streams(info.to_glib_none().0))
         }
     }
 
-    pub fn get_subtitle_streams<P: IsA<PlayerMediaInfo>>(info: &P) -> Vec<PlayerSubtitleInfo> {
+    pub fn get_subtitle_streams(info: &PlayerMediaInfo) -> Vec<PlayerSubtitleInfo> {
         skip_assert_initialized!();
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_subtitle_streams(info.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_subtitle_streams(info.to_glib_none().0))
         }
     }
 
-    pub fn get_video_streams<P: IsA<PlayerMediaInfo>>(info: &P) -> Vec<PlayerVideoInfo> {
+    pub fn get_video_streams(info: &PlayerMediaInfo) -> Vec<PlayerVideoInfo> {
         skip_assert_initialized!();
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_video_streams(info.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gst_player_get_video_streams(info.to_glib_none().0))
         }
     }
 
@@ -554,8 +553,6 @@ impl Player {
 
 unsafe impl Send for Player {}
 unsafe impl Sync for Player {}
-
-pub const NONE_PLAYER: Option<&Player> = None;
 
 unsafe extern "C" fn buffering_trampoline(this: *mut ffi::GstPlayer, object: libc::c_int, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Player, i32) + Send + 'static) = transmute(f);

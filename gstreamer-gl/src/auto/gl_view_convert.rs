@@ -185,8 +185,6 @@ impl Default for GLViewConvert {
 unsafe impl Send for GLViewConvert {}
 unsafe impl Sync for GLViewConvert {}
 
-pub const NONE_GL_VIEW_CONVERT: Option<&GLViewConvert> = None;
-
 unsafe extern "C" fn notify_downmix_mode_trampoline(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&GLViewConvert) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

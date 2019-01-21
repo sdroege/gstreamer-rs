@@ -142,5 +142,3 @@ impl ElementFactory {
 
 unsafe impl Send for ElementFactory {}
 unsafe impl Sync for ElementFactory {}
-
-pub const NONE_ELEMENT_FACTORY: Option<&ElementFactory> = None;

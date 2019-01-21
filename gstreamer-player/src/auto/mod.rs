@@ -3,16 +3,16 @@
 // DO NOT EDIT
 
 mod player;
-pub use self::player::{Player, PlayerClass, NONE_PLAYER};
+pub use self::player::{Player, PlayerClass};
 
 mod player_audio_info;
-pub use self::player_audio_info::{PlayerAudioInfo, PlayerAudioInfoClass, NONE_PLAYER_AUDIO_INFO};
+pub use self::player_audio_info::{PlayerAudioInfo, PlayerAudioInfoClass};
 
 mod player_gmain_context_signal_dispatcher;
-pub use self::player_gmain_context_signal_dispatcher::{PlayerGMainContextSignalDispatcher, PlayerGMainContextSignalDispatcherClass, NONE_PLAYER_GMAIN_CONTEXT_SIGNAL_DISPATCHER};
+pub use self::player_gmain_context_signal_dispatcher::{PlayerGMainContextSignalDispatcher, PlayerGMainContextSignalDispatcherClass};
 
 mod player_media_info;
-pub use self::player_media_info::{PlayerMediaInfo, PlayerMediaInfoClass, NONE_PLAYER_MEDIA_INFO};
+pub use self::player_media_info::{PlayerMediaInfo, PlayerMediaInfoClass};
 
 mod player_signal_dispatcher;
 pub use self::player_signal_dispatcher::{PlayerSignalDispatcher, NONE_PLAYER_SIGNAL_DISPATCHER};
@@ -23,13 +23,13 @@ pub use self::player_stream_info::{PlayerStreamInfo, PlayerStreamInfoClass, NONE
 pub use self::player_stream_info::PlayerStreamInfoExt;
 
 mod player_subtitle_info;
-pub use self::player_subtitle_info::{PlayerSubtitleInfo, PlayerSubtitleInfoClass, NONE_PLAYER_SUBTITLE_INFO};
+pub use self::player_subtitle_info::{PlayerSubtitleInfo, PlayerSubtitleInfoClass};
 
 mod player_video_info;
-pub use self::player_video_info::{PlayerVideoInfo, PlayerVideoInfoClass, NONE_PLAYER_VIDEO_INFO};
+pub use self::player_video_info::{PlayerVideoInfo, PlayerVideoInfoClass};
 
 mod player_video_overlay_video_renderer;
-pub use self::player_video_overlay_video_renderer::{PlayerVideoOverlayVideoRenderer, PlayerVideoOverlayVideoRendererClass, NONE_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER};
+pub use self::player_video_overlay_video_renderer::{PlayerVideoOverlayVideoRenderer, PlayerVideoOverlayVideoRendererClass};
 
 mod player_video_renderer;
 pub use self::player_video_renderer::{PlayerVideoRenderer, NONE_PLAYER_VIDEO_RENDERER};

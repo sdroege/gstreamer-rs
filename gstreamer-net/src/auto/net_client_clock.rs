@@ -188,8 +188,6 @@ impl NetClientClock {
 unsafe impl Send for NetClientClock {}
 unsafe impl Sync for NetClientClock {}
 
-pub const NONE_NET_CLIENT_CLOCK: Option<&NetClientClock> = None;
-
 unsafe extern "C" fn notify_address_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

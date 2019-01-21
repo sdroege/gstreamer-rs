@@ -25,5 +25,3 @@ impl PlayerSubtitleInfo {
 
 unsafe impl Send for PlayerSubtitleInfo {}
 unsafe impl Sync for PlayerSubtitleInfo {}
-
-pub const NONE_PLAYER_SUBTITLE_INFO: Option<&PlayerSubtitleInfo> = None;

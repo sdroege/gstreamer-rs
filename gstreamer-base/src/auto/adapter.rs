@@ -197,5 +197,3 @@ unsafe impl glib::SendUnique for Adapter {
         self.ref_count() == 1
     }
 }
-
-pub const NONE_ADAPTER: Option<&Adapter> = None;

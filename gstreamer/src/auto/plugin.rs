@@ -122,5 +122,3 @@ impl Plugin {
 
 unsafe impl Send for Plugin {}
 unsafe impl Sync for Plugin {}
-
-pub const NONE_PLUGIN: Option<&Plugin> = None;

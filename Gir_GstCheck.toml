@@ -36,4 +36,4 @@ conversion_type = "scalar"
 [[object]]
 name = "GstCheck.TestClock"
 status = "generate"
-trait = false
+final_type = true

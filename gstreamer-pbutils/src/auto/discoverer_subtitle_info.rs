@@ -25,5 +25,3 @@ impl DiscovererSubtitleInfo {
 
 unsafe impl Send for DiscovererSubtitleInfo {}
 unsafe impl Sync for DiscovererSubtitleInfo {}
-
-pub const NONE_DISCOVERER_SUBTITLE_INFO: Option<&DiscovererSubtitleInfo> = None;

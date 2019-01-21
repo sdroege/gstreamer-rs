@@ -47,5 +47,3 @@ impl WebRTCRTPTransceiver {
 
 unsafe impl Send for WebRTCRTPTransceiver {}
 unsafe impl Sync for WebRTCRTPTransceiver {}
-
-pub const NONE_WEB_RTCRTP_TRANSCEIVER: Option<&WebRTCRTPTransceiver> = None;

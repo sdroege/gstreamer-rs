@@ -60,7 +60,7 @@ ref_mode = "ref-mut"
 [[object]]
 name = "GstPlayer.Player"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "visualizations_free"
@@ -186,12 +186,12 @@ status = "generate"
 [[object]]
 name = "GstPlayer.PlayerAudioInfo"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstPlayer.PlayerVideoInfo"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "get_framerate"
@@ -206,12 +206,12 @@ trait = false
 [[object]]
 name = "GstPlayer.PlayerSubtitleInfo"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstPlayer.PlayerMediaInfo"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "get_uri"
@@ -221,12 +221,12 @@ trait = false
 [[object]]
 name = "GstPlayer.PlayerVideoOverlayVideoRenderer"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstPlayer.PlayerGMainContextSignalDispatcher"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "new"

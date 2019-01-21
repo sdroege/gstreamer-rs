@@ -194,8 +194,6 @@ impl Stream {
 unsafe impl Send for Stream {}
 unsafe impl Sync for Stream {}
 
-pub const NONE_STREAM: Option<&Stream> = None;
-
 unsafe extern "C" fn notify_caps_trampoline(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Stream) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

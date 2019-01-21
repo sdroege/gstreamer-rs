@@ -342,8 +342,6 @@ impl AppSrc {
 unsafe impl Send for AppSrc {}
 unsafe impl Sync for AppSrc {}
 
-pub const NONE_APP_SRC: Option<&AppSrc> = None;
-
 unsafe extern "C" fn enough_data_trampoline(this: *mut ffi::GstAppSrc, f: glib_ffi::gpointer) {
     let f: &&(Fn(&AppSrc) + Send + Sync + 'static) = transmute(f);
     f(&from_glib_borrow(this))

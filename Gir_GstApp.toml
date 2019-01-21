@@ -35,7 +35,7 @@ manual = [
 [[object]]
 name = "GstApp.AppSink"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.signal]]
     name = "pull-sample"
@@ -76,7 +76,7 @@ trait = false
 [[object]]
 name = "GstApp.AppSrc"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "push_buffer"

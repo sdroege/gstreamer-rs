@@ -47,11 +47,11 @@ impl Element {
         }
     }
 
-    pub fn register<'a, P: IsA<Plugin> + 'a, Q: Into<Option<&'a P>>>(plugin: Q, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
+    pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         let plugin = plugin.into();
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_element_register(plugin.map(|p| p.as_ref()).to_glib_none().0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register element factory")
+            glib_result_from_gboolean!(ffi::gst_element_register(plugin.to_glib_none().0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register element factory")
         }
     }
 }
@@ -88,7 +88,7 @@ pub trait ElementExt: 'static {
 
     fn get_compatible_pad<'a, P: IsA<Pad>, Q: Into<Option<&'a Caps>>>(&self, pad: &P, caps: Q) -> Option<Pad>;
 
-    fn get_compatible_pad_template<P: IsA<PadTemplate>>(&self, compattempl: &P) -> Option<PadTemplate>;
+    fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate>;
 
     fn get_context(&self, context_type: &str) -> Option<Context>;
 
@@ -139,11 +139,11 @@ pub trait ElementExt: 'static {
 
     fn remove_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
-    fn request_pad<'a, 'b, P: IsA<PadTemplate>, Q: Into<Option<&'a str>>, R: Into<Option<&'b Caps>>>(&self, templ: &P, name: Q, caps: R) -> Option<Pad>;
+    fn request_pad<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, templ: &PadTemplate, name: P, caps: Q) -> Option<Pad>;
 
     fn set_base_time(&self, time: ClockTime);
 
-    fn set_bus<'a, P: IsA<Bus> + 'a, Q: Into<Option<&'a P>>>(&self, bus: Q);
+    fn set_bus<'a, P: Into<Option<&'a Bus>>>(&self, bus: P);
 
     fn set_clock<'a, P: IsA<Clock> + 'a, Q: Into<Option<&'a P>>>(&self, clock: Q) -> Result<(), glib::error::BoolError>;
 
@@ -232,9 +232,9 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn get_compatible_pad_template<P: IsA<PadTemplate>>(&self, compattempl: &P) -> Option<PadTemplate> {
+    fn get_compatible_pad_template(&self, compattempl: &PadTemplate) -> Option<PadTemplate> {
         unsafe {
-            from_glib_none(ffi::gst_element_get_compatible_pad_template(self.as_ref().to_glib_none().0, compattempl.as_ref().to_glib_none().0))
+            from_glib_none(ffi::gst_element_get_compatible_pad_template(self.as_ref().to_glib_none().0, compattempl.to_glib_none().0))
         }
     }
 
@@ -379,11 +379,11 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn request_pad<'a, 'b, P: IsA<PadTemplate>, Q: Into<Option<&'a str>>, R: Into<Option<&'b Caps>>>(&self, templ: &P, name: Q, caps: R) -> Option<Pad> {
+    fn request_pad<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(&self, templ: &PadTemplate, name: P, caps: Q) -> Option<Pad> {
         let name = name.into();
         let caps = caps.into();
         unsafe {
-            from_glib_full(ffi::gst_element_request_pad(self.as_ref().to_glib_none().0, templ.as_ref().to_glib_none().0, name.to_glib_none().0, caps.to_glib_none().0))
+            from_glib_full(ffi::gst_element_request_pad(self.as_ref().to_glib_none().0, templ.to_glib_none().0, name.to_glib_none().0, caps.to_glib_none().0))
         }
     }
 
@@ -393,10 +393,10 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    fn set_bus<'a, P: IsA<Bus> + 'a, Q: Into<Option<&'a P>>>(&self, bus: Q) {
+    fn set_bus<'a, P: Into<Option<&'a Bus>>>(&self, bus: P) {
         let bus = bus.into();
         unsafe {
-            ffi::gst_element_set_bus(self.as_ref().to_glib_none().0, bus.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gst_element_set_bus(self.as_ref().to_glib_none().0, bus.to_glib_none().0);
         }
     }
 

@@ -3,7 +3,7 @@
 // DO NOT EDIT
 
 mod adapter;
-pub use self::adapter::{Adapter, AdapterClass, NONE_ADAPTER};
+pub use self::adapter::{Adapter, AdapterClass};
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;

@@ -40,5 +40,3 @@ impl Default for GLDisplayEGL {
 
 unsafe impl Send for GLDisplayEGL {}
 unsafe impl Sync for GLDisplayEGL {}
-
-pub const NONE_GL_DISPLAY_EGL: Option<&GLDisplayEGL> = None;

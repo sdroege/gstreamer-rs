@@ -11,7 +11,7 @@ pub use self::buffer_pool::{BufferPool, BufferPoolClass, NONE_BUFFER_POOL};
 pub use self::buffer_pool::BufferPoolExt;
 
 mod bus;
-pub use self::bus::{Bus, BusClass, NONE_BUS};
+pub use self::bus::{Bus, BusClass};
 
 mod child_proxy;
 pub use self::child_proxy::{ChildProxy, NONE_CHILD_PROXY};
@@ -34,14 +34,14 @@ pub use self::device_provider::{DeviceProvider, DeviceProviderClass, NONE_DEVICE
 pub use self::device_provider::DeviceProviderExt;
 
 mod device_provider_factory;
-pub use self::device_provider_factory::{DeviceProviderFactory, DeviceProviderFactoryClass, NONE_DEVICE_PROVIDER_FACTORY};
+pub use self::device_provider_factory::{DeviceProviderFactory, DeviceProviderFactoryClass};
 
 mod element;
 pub use self::element::{Element, ElementClass, NONE_ELEMENT};
 pub use self::element::ElementExt;
 
 mod element_factory;
-pub use self::element_factory::{ElementFactory, ElementFactoryClass, NONE_ELEMENT_FACTORY};
+pub use self::element_factory::{ElementFactory, ElementFactoryClass};
 
 mod ghost_pad;
 pub use self::ghost_pad::{GhostPad, GhostPadClass, NONE_GHOST_PAD};
@@ -56,14 +56,14 @@ pub use self::pad::{Pad, PadClass, NONE_PAD};
 pub use self::pad::PadExt;
 
 mod pad_template;
-pub use self::pad_template::{PadTemplate, PadTemplateClass, NONE_PAD_TEMPLATE};
+pub use self::pad_template::{PadTemplate, PadTemplateClass};
 
 mod pipeline;
 pub use self::pipeline::{Pipeline, PipelineClass, NONE_PIPELINE};
 pub use self::pipeline::PipelineExt;
 
 mod plugin;
-pub use self::plugin::{Plugin, PluginClass, NONE_PLUGIN};
+pub use self::plugin::{Plugin, PluginClass};
 
 mod plugin_feature;
 pub use self::plugin_feature::{PluginFeature, PluginFeatureClass, NONE_PLUGIN_FEATURE};
@@ -78,17 +78,17 @@ pub use self::proxy_pad::{ProxyPad, ProxyPadClass, NONE_PROXY_PAD};
 pub use self::proxy_pad::ProxyPadExt;
 
 mod registry;
-pub use self::registry::{Registry, RegistryClass, NONE_REGISTRY};
+pub use self::registry::{Registry, RegistryClass};
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 mod stream;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-pub use self::stream::{Stream, StreamClass, NONE_STREAM};
+pub use self::stream::{Stream, StreamClass};
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 mod stream_collection;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-pub use self::stream_collection::{StreamCollection, StreamCollectionClass, NONE_STREAM_COLLECTION};
+pub use self::stream_collection::{StreamCollection, StreamCollectionClass};
 
 mod system_clock;
 pub use self::system_clock::{SystemClock, SystemClockClass, NONE_SYSTEM_CLOCK};
@@ -103,7 +103,7 @@ pub use self::toc_setter::{TocSetter, NONE_TOC_SETTER};
 pub use self::toc_setter::TocSetterExt;
 
 mod type_find_factory;
-pub use self::type_find_factory::{TypeFindFactory, TypeFindFactoryClass, NONE_TYPE_FIND_FACTORY};
+pub use self::type_find_factory::{TypeFindFactory, TypeFindFactoryClass};
 
 mod uri_handler;
 pub use self::uri_handler::{URIHandler, NONE_URI_HANDLER};

@@ -37,7 +37,7 @@ manual = [
 [[object]]
 name = "GstBase.Adapter"
 status = "generate"
-trait = false
+final_type = true
 concurrency = "send-unique"
 
     [[object.function]]
@@ -69,7 +69,7 @@ concurrency = "send-unique"
 name = "GstBase.FlowCombiner"
 # Manual because ref/unref functions were added much later
 status = "manual"
-trait = false
+final_type = true
 concurrency = "none"
 
 [[object]]

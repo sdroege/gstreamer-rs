@@ -7,7 +7,7 @@ pub use self::gl_base_filter::{GLBaseFilter, GLBaseFilterClass, NONE_GL_BASE_FIL
 pub use self::gl_base_filter::GLBaseFilterExt;
 
 mod gl_color_convert;
-pub use self::gl_color_convert::{GLColorConvert, GLColorConvertClass, NONE_GL_COLOR_CONVERT};
+pub use self::gl_color_convert::{GLColorConvert, GLColorConvertClass};
 
 mod gl_context;
 pub use self::gl_context::{GLContext, GLContextClass, NONE_GL_CONTEXT};
@@ -20,26 +20,26 @@ pub use self::gl_display::GLDisplayExt;
 #[cfg(any(feature = "egl", feature = "dox"))]
 mod gl_display_egl;
 #[cfg(any(feature = "egl", feature = "dox"))]
-pub use self::gl_display_egl::{GLDisplayEGL, GLDisplayEGLClass, NONE_GL_DISPLAY_EGL};
+pub use self::gl_display_egl::{GLDisplayEGL, GLDisplayEGLClass};
 
 mod gl_framebuffer;
 pub use self::gl_framebuffer::{GLFramebuffer, GLFramebufferClass, NONE_GL_FRAMEBUFFER};
 pub use self::gl_framebuffer::GLFramebufferExt;
 
 mod gl_overlay_compositor;
-pub use self::gl_overlay_compositor::{GLOverlayCompositor, GLOverlayCompositorClass, NONE_GL_OVERLAY_COMPOSITOR};
+pub use self::gl_overlay_compositor::{GLOverlayCompositor, GLOverlayCompositorClass};
 
 mod glsl_stage;
-pub use self::glsl_stage::{GLSLStage, GLSLStageClass, NONE_GLSL_STAGE};
+pub use self::glsl_stage::{GLSLStage, GLSLStageClass};
 
 mod gl_shader;
-pub use self::gl_shader::{GLShader, GLShaderClass, NONE_GL_SHADER};
+pub use self::gl_shader::{GLShader, GLShaderClass};
 
 mod gl_upload;
-pub use self::gl_upload::{GLUpload, GLUploadClass, NONE_GL_UPLOAD};
+pub use self::gl_upload::{GLUpload, GLUploadClass};
 
 mod gl_view_convert;
-pub use self::gl_view_convert::{GLViewConvert, GLViewConvertClass, NONE_GL_VIEW_CONVERT};
+pub use self::gl_view_convert::{GLViewConvert, GLViewConvertClass};
 
 mod gl_window;
 pub use self::gl_window::{GLWindow, GLWindowClass, NONE_GL_WINDOW};

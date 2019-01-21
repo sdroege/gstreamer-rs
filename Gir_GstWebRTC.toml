@@ -40,32 +40,32 @@ manual = [
 [[object]]
 name = "GstWebRTC.WebRTCDTLSTransport"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstWebRTC.WebRTCICETransport"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstWebRTC.WebRTCRTPReceiver"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstWebRTC.WebRTCRTPSender"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstWebRTC.WebRTCRTPTransceiver"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstWebRTC.WebRTCSessionDescription"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "new"

@@ -42,5 +42,3 @@ impl PlayerVideoInfo {
 
 unsafe impl Send for PlayerVideoInfo {}
 unsafe impl Sync for PlayerVideoInfo {}
-
-pub const NONE_PLAYER_VIDEO_INFO: Option<&PlayerVideoInfo> = None;

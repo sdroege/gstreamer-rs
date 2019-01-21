@@ -49,5 +49,3 @@ impl PlayerAudioInfo {
 
 unsafe impl Send for PlayerAudioInfo {}
 unsafe impl Sync for PlayerAudioInfo {}
-
-pub const NONE_PLAYER_AUDIO_INFO: Option<&PlayerAudioInfo> = None;

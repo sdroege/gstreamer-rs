@@ -185,7 +185,7 @@ status = "generate"
 [[object]]
 name = "GstGL.GLDisplayEGL"
 status = "generate"
-trait = false
+final_type = true
 cfg_condition = "feature = \"egl\""
 
 [[object]]
@@ -240,7 +240,7 @@ status = "generate"
 [[object]]
 name = "GstGL.GLColorConvert"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "decide_allocation"
@@ -260,7 +260,7 @@ trait = false
 [[object]]
 name = "GstGL.GLOverlayCompositor"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "upload_overlays"
@@ -270,12 +270,12 @@ trait = false
 [[object]]
 name = "GstGL.GLSLStage"
 status = "generate"
-trait = false
+final_type = true
 
 [[object]]
 name = "GstGL.GLShader"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "set_uniform_matrix_2fv"
@@ -325,7 +325,7 @@ trait = false
 [[object]]
 name = "GstGL.GLUpload"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "perform_with_buffer"
@@ -345,7 +345,7 @@ trait = false
 [[object]]
 name = "GstGL.GLViewConvert"
 status = "generate"
-trait = false
+final_type = true
 
     [[object.function]]
     name = "fixate_caps"

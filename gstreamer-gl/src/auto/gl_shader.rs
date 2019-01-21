@@ -53,15 +53,15 @@ impl GLShader {
     //    unsafe { TODO: call ffi::gst_gl_shader_new_with_stages() }
     //}
 
-    pub fn attach<P: IsA<GLSLStage>>(&self, stage: &P) -> bool {
+    pub fn attach(&self, stage: &GLSLStage) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.as_ref().to_glib_none().0))
+            from_glib(ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.to_glib_none().0))
         }
     }
 
-    pub fn attach_unlocked<P: IsA<GLSLStage>>(&self, stage: &P) -> bool {
+    pub fn attach_unlocked(&self, stage: &GLSLStage) -> bool {
         unsafe {
-            from_glib(ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.as_ref().to_glib_none().0))
+            from_glib(ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.to_glib_none().0))
         }
     }
 
@@ -77,23 +77,23 @@ impl GLShader {
         }
     }
 
-    pub fn compile_attach_stage<P: IsA<GLSLStage>>(&self, stage: &P) -> Result<(), Error> {
+    pub fn compile_attach_stage(&self, stage: &GLSLStage) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gst_gl_shader_compile_attach_stage(self.to_glib_none().0, stage.as_ref().to_glib_none().0, &mut error);
+            let _ = ffi::gst_gl_shader_compile_attach_stage(self.to_glib_none().0, stage.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
-    pub fn detach<P: IsA<GLSLStage>>(&self, stage: &P) {
+    pub fn detach(&self, stage: &GLSLStage) {
         unsafe {
-            ffi::gst_gl_shader_detach(self.to_glib_none().0, stage.as_ref().to_glib_none().0);
+            ffi::gst_gl_shader_detach(self.to_glib_none().0, stage.to_glib_none().0);
         }
     }
 
-    pub fn detach_unlocked<P: IsA<GLSLStage>>(&self, stage: &P) {
+    pub fn detach_unlocked(&self, stage: &GLSLStage) {
         unsafe {
-            ffi::gst_gl_shader_detach_unlocked(self.to_glib_none().0, stage.as_ref().to_glib_none().0);
+            ffi::gst_gl_shader_detach_unlocked(self.to_glib_none().0, stage.to_glib_none().0);
         }
     }
 
@@ -264,8 +264,6 @@ impl GLShader {
 
 unsafe impl Send for GLShader {}
 unsafe impl Sync for GLShader {}
-
-pub const NONE_GL_SHADER: Option<&GLShader> = None;
 
 unsafe extern "C" fn notify_linked_trampoline(this: *mut ffi::GstGLShader, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &&(Fn(&GLShader) + Send + Sync + 'static) = transmute(f);

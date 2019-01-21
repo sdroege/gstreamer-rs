@@ -30,5 +30,3 @@ impl EncodingVideoProfile {
 
 unsafe impl Send for EncodingVideoProfile {}
 unsafe impl Sync for EncodingVideoProfile {}
-
-pub const NONE_ENCODING_VIDEO_PROFILE: Option<&EncodingVideoProfile> = None;

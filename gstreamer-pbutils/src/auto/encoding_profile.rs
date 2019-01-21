@@ -27,10 +27,10 @@ impl EncodingProfile {
         }
     }
 
-    pub fn from_discoverer<P: IsA<DiscovererInfo>>(info: &P) -> Option<EncodingProfile> {
+    pub fn from_discoverer(info: &DiscovererInfo) -> Option<EncodingProfile> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_encoding_profile_from_discoverer(info.as_ref().to_glib_none().0))
+            from_glib_full(ffi::gst_encoding_profile_from_discoverer(info.to_glib_none().0))
         }
     }
 }

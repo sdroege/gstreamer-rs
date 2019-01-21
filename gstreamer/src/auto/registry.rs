@@ -32,9 +32,9 @@ impl Registry {
         }
     }
 
-    pub fn add_plugin<P: IsA<Plugin>>(&self, plugin: &P) -> Result<(), glib::error::BoolError> {
+    pub fn add_plugin(&self, plugin: &Plugin) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.as_ref().to_glib_none().0), "Failed to add plugin")
+            glib_result_from_gboolean!(ffi::gst_registry_add_plugin(self.to_glib_none().0, plugin.to_glib_none().0), "Failed to add plugin")
         }
     }
 
@@ -106,9 +106,9 @@ impl Registry {
         }
     }
 
-    pub fn remove_plugin<P: IsA<Plugin>>(&self, plugin: &P) {
+    pub fn remove_plugin(&self, plugin: &Plugin) {
         unsafe {
-            ffi::gst_registry_remove_plugin(self.to_glib_none().0, plugin.as_ref().to_glib_none().0);
+            ffi::gst_registry_remove_plugin(self.to_glib_none().0, plugin.to_glib_none().0);
         }
     }
 
@@ -144,8 +144,6 @@ impl Registry {
 
 unsafe impl Send for Registry {}
 unsafe impl Sync for Registry {}
-
-pub const NONE_REGISTRY: Option<&Registry> = None;
 
 unsafe extern "C" fn feature_added_trampoline(this: *mut ffi::GstRegistry, feature: *mut ffi::GstPluginFeature, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Registry, &PluginFeature) + Send + Sync + 'static) = transmute(f);

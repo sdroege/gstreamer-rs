@@ -3,16 +3,16 @@
 // DO NOT EDIT
 
 mod net_client_clock;
-pub use self::net_client_clock::{NetClientClock, NetClientClockClass, NONE_NET_CLIENT_CLOCK};
+pub use self::net_client_clock::{NetClientClock, NetClientClockClass};
 
 mod net_time_provider;
-pub use self::net_time_provider::{NetTimeProvider, NetTimeProviderClass, NONE_NET_TIME_PROVIDER};
+pub use self::net_time_provider::{NetTimeProvider, NetTimeProviderClass};
 
 mod ntp_clock;
-pub use self::ntp_clock::{NtpClock, NtpClockClass, NONE_NTP_CLOCK};
+pub use self::ntp_clock::{NtpClock, NtpClockClass};
 
 mod ptp_clock;
-pub use self::ptp_clock::{PtpClock, PtpClockClass, NONE_PTP_CLOCK};
+pub use self::ptp_clock::{PtpClock, PtpClockClass};
 
 #[doc(hidden)]
 pub mod traits {

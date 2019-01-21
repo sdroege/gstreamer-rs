@@ -148,8 +148,6 @@ impl Default for Bus {
 unsafe impl Send for Bus {}
 unsafe impl Sync for Bus {}
 
-pub const NONE_BUS: Option<&Bus> = None;
-
 unsafe extern "C" fn message_trampoline(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
     let f: &&(Fn(&Bus, &Message) + Send + 'static) = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
