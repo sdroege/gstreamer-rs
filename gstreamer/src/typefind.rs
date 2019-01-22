@@ -21,6 +21,7 @@ use std::ptr;
 use std::slice;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct TypeFind<'a>(ffi::GstTypeFind, PhantomData<&'a ()>);
 
 pub trait TypeFindImpl {
@@ -152,6 +153,7 @@ unsafe extern "C" fn type_find_get_length(data: glib_ffi::gpointer) -> u64 {
     find.get_length().unwrap_or(u64::MAX)
 }
 
+#[derive(Debug)]
 pub struct SliceTypeFind<T: AsRef<[u8]>> {
     pub probability: Option<TypeFindProbability>,
     pub caps: Option<Caps>,

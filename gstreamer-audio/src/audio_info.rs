@@ -37,6 +37,7 @@ impl fmt::Debug for AudioInfo {
     }
 }
 
+#[derive(Debug)]
 pub struct AudioInfoBuilder<'a> {
     format: ::AudioFormat,
     rate: u32,

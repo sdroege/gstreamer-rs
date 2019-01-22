@@ -11,6 +11,7 @@ use glib::translate::*;
 use gobject_ffi;
 
 glib_wrapper! {
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct ParseContext(Boxed<ffi::GstParseContext>);
 
     match fn {

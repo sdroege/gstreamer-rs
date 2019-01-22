@@ -119,6 +119,7 @@ impl fmt::Debug for BufferListRef {
     }
 }
 
+#[derive(Debug)]
 pub struct Iter<'a> {
     list: &'a BufferListRef,
     idx: u32,

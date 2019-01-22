@@ -402,6 +402,7 @@ impl BufferRef {
 
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
+    #[derive(Debug)]
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
         state: glib_ffi::gpointer,

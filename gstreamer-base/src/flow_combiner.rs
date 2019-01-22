@@ -13,7 +13,7 @@ use gobject_ffi;
 use gst;
 
 glib_wrapper! {
-    #[derive(Debug)]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct FlowCombiner(Shared<ffi::GstFlowCombiner>);
 
     match fn {

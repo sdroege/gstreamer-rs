@@ -13,6 +13,7 @@ use ffi;
 use glib::translate::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
 
 impl SDPAttribute {

@@ -14,6 +14,7 @@ use Structure;
 use StructureRef;
 
 glib_wrapper! {
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct Promise(Shared<ffi::GstPromise>);
 
     match fn {

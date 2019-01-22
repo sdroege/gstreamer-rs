@@ -11,6 +11,7 @@ use std::slice;
 use ffi;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct MIKEYPayloadSPParam(ffi::GstMIKEYPayloadSPParam);
 
 impl MIKEYPayloadSPParam {

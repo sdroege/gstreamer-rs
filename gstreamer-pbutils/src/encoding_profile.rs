@@ -255,6 +255,7 @@ impl error::Error for EncodingProfileBuilderError {
     }
 }
 
+#[derive(Debug)]
 struct EncodingProfileBuilderCommonData<'a> {
     name: Option<&'a str>,
     description: Option<&'a str>,
@@ -360,6 +361,7 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
     profile.set_presence(base_data.presence);
 }
 
+#[derive(Debug)]
 pub struct EncodingAudioProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
 }
@@ -390,6 +392,7 @@ impl<'a> EncodingAudioProfileBuilder<'a> {
     }
 }
 
+#[derive(Debug)]
 pub struct EncodingVideoProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
     pass: u32,
@@ -437,6 +440,7 @@ impl<'a> EncodingVideoProfileBuilder<'a> {
     }
 }
 
+#[derive(Debug)]
 pub struct EncodingContainerProfileBuilder<'a> {
     base: EncodingProfileBuilderCommonData<'a>,
     profiles: Vec<EncodingProfile>,

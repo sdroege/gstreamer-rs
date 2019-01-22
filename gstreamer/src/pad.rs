@@ -82,6 +82,7 @@ impl FromGlib<libc::c_ulong> for PadProbeId {
     }
 }
 
+#[derive(Debug)]
 pub struct PadProbeInfo<'a> {
     pub mask: PadProbeType,
     pub id: PadProbeId,
@@ -90,6 +91,7 @@ pub struct PadProbeInfo<'a> {
     pub data: Option<PadProbeData<'a>>,
 }
 
+#[derive(Debug)]
 pub enum PadProbeData<'a> {
     Buffer(Buffer),
     BufferList(BufferList),
@@ -99,6 +101,7 @@ pub enum PadProbeData<'a> {
     __Unknown(*mut ffi::GstMiniObject),
 }
 
+#[derive(Debug)]
 pub struct StreamLock(Pad);
 impl Drop for StreamLock {
     fn drop(&mut self) {

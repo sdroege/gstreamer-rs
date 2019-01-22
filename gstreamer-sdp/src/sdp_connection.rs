@@ -13,6 +13,7 @@ use ffi;
 use glib::translate::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
 
 impl SDPConnection {

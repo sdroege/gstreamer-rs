@@ -14,9 +14,12 @@ use glib_ffi;
 use gobject_ffi;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    from_glib, from_glib_full, from_glib_none, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut,
+};
 use std::ffi::CStr;
 
+use std::fmt;
 use std::ptr;
 
 #[repr(C)]
@@ -50,6 +53,25 @@ impl StaticPadTemplate {
 
 unsafe impl Send for StaticPadTemplate {}
 unsafe impl Sync for StaticPadTemplate {}
+
+impl fmt::Debug for StaticPadTemplate {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("StaticPadTemplate")
+            .field("name_template", &unsafe {
+                CStr::from_ptr(self.0.as_ref().name_template).to_str()
+            })
+            .field("direction", &unsafe {
+                from_glib::<_, ::PadDirection>(self.0.as_ref().direction)
+            })
+            .field("presence", &unsafe {
+                from_glib::<_, ::PadPresence>(self.0.as_ref().presence)
+            })
+            .field("static_caps", &unsafe {
+                from_glib_none::<_, ::StaticCaps>(&self.0.as_ref().static_caps as *const _)
+            })
+            .finish()
+    }
+}
 
 impl glib::types::StaticType for StaticPadTemplate {
     fn static_type() -> glib::types::Type {

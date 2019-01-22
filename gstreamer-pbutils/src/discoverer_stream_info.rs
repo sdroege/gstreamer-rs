@@ -10,6 +10,7 @@
 use DiscovererStreamInfo;
 use DiscovererStreamInfoExt;
 
+#[derive(Debug)]
 pub struct Iter {
     stream_info: Option<DiscovererStreamInfo>,
     direction_forward: bool,

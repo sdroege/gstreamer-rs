@@ -10,6 +10,8 @@ use std::ffi::CStr;
 
 use ffi;
 
+#[repr(C)]
+#[derive(Debug)]
 pub struct SDPKey(ffi::GstSDPKey);
 
 impl SDPKey {

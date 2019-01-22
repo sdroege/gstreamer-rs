@@ -11,6 +11,7 @@ use std::ffi::CStr;
 use ffi;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
 
 impl SDPOrigin {

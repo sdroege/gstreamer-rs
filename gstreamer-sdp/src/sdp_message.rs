@@ -31,6 +31,7 @@ use sdp_zone::SDPZone;
 use MIKEYMessage;
 
 glib_wrapper! {
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
 
     match fn {

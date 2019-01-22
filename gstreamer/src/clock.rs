@@ -24,6 +24,7 @@ use ClockTime;
 use ClockTimeDiff;
 
 glib_wrapper! {
+    #[derive(Debug, Hash)]
     pub struct ClockId(Shared<c_void>);
 
     match fn {

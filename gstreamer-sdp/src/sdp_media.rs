@@ -23,6 +23,7 @@ use sdp_key::SDPKey;
 use MIKEYMessage;
 
 glib_wrapper! {
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMedia(Boxed<ffi::GstSDPMedia>);
 
     match fn {

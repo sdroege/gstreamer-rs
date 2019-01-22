@@ -8,9 +8,10 @@
 
 use ffi;
 use glib;
+use std::ptr;
 
-#[derive(PartialEq, Eq)]
-pub struct RTSPContext(*mut ffi::GstRTSPContext);
+#[derive(Debug, PartialEq, Eq)]
+pub struct RTSPContext(ptr::NonNull<ffi::GstRTSPContext>);
 
 impl RTSPContext {
     pub fn with_current_context<F: FnOnce(&RTSPContext) -> T, T>(func: F) -> Option<T> {
@@ -20,7 +21,7 @@ impl RTSPContext {
                 return None;
             }
 
-            let ctx = RTSPContext(ptr);
+            let ctx = RTSPContext(ptr::NonNull::new_unchecked(ptr));
             Some(func(&ctx))
         }
     }
@@ -32,6 +33,7 @@ impl RTSPContext {
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstRTSPContext> for RTSPContext {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstRTSPContext) -> Self {
-        RTSPContext(ptr)
+        assert!(!ptr.is_null());
+        RTSPContext(ptr::NonNull::new_unchecked(ptr))
     }
 }

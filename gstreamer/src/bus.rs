@@ -150,6 +150,7 @@ impl Bus {
     }
 }
 
+#[derive(Debug)]
 pub struct Iter<'a> {
     bus: &'a Bus,
     timeout: ::ClockTime,
@@ -171,6 +172,7 @@ mod futures {
     use futures_core::{Async, Poll};
     use std::sync::{Arc, Mutex};
 
+    #[derive(Debug)]
     pub struct BusStream(Bus, Arc<Mutex<Option<Waker>>>);
 
     impl BusStream {

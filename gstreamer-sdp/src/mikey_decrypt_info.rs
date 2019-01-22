@@ -8,4 +8,6 @@
 
 use ffi;
 
+#[repr(C)]
+#[derive(Debug)]
 pub struct MIKEYDecryptInfo(ffi::GstMIKEYDecryptInfo);

@@ -343,6 +343,7 @@ impl CapsRef {
 
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $styp:ty, $get_item:expr) => {
+    #[derive(Debug)]
     pub struct $name<'a> {
         caps: $typ,
         idx: u32,
@@ -491,6 +492,7 @@ impl PartialEq for CapsRef {
 
 impl Eq for CapsRef {}
 
+#[derive(Debug)]
 pub struct Builder<'a> {
     s: ::Structure,
     features: Option<&'a [&'a str]>,

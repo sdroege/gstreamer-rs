@@ -15,6 +15,8 @@ use gobject_ffi;
 use glib;
 use glib::translate::{from_glib_full, FromGlibPtrNone, ToGlibPtr, ToGlibPtrMut};
 
+use std::ffi::CStr;
+use std::fmt;
 use std::ptr;
 
 #[repr(C)]
@@ -28,6 +30,16 @@ impl StaticCaps {
 
 unsafe impl Send for StaticCaps {}
 unsafe impl Sync for StaticCaps {}
+
+impl fmt::Debug for StaticCaps {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("StaticCaps")
+            .field("str", &unsafe {
+                CStr::from_ptr(self.0.as_ref().string).to_str()
+            })
+            .finish()
+    }
+}
 
 impl glib::types::StaticType for StaticCaps {
     fn static_type() -> glib::types::Type {

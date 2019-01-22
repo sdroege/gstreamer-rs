@@ -12,6 +12,7 @@ use glib::translate::*;
 use Stream;
 use StreamCollection;
 
+#[derive(Debug)]
 pub struct Iter<'a> {
     collection: &'a StreamCollection,
     idx: u32,

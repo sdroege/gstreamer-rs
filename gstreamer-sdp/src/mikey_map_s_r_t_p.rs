@@ -9,6 +9,7 @@
 use ffi;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct MIKEYMapSRTP(ffi::GstMIKEYMapSRTP);
 
 impl MIKEYMapSRTP {

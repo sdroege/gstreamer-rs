@@ -13,6 +13,7 @@ use ffi;
 use glib::translate::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct SDPBandwidth(pub(crate) ffi::GstSDPBandwidth);
 
 impl SDPBandwidth {

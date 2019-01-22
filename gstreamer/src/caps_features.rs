@@ -364,6 +364,7 @@ impl CapsFeaturesRef {
     }
 }
 
+#[derive(Debug)]
 pub struct Iter<'a> {
     caps_features: &'a CapsFeaturesRef,
     idx: u32,

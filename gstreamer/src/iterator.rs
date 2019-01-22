@@ -48,6 +48,7 @@ impl Error for IteratorError {
 }
 
 // Implemented manually so that we can use generics for the item
+#[derive(Debug)]
 pub struct Iterator<T> {
     iter: ptr::NonNull<ffi::GstIterator>,
     borrowed: bool,

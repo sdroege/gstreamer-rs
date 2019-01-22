@@ -14,6 +14,7 @@ use ffi;
 use glib::translate::*;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct SDPTime(pub(crate) ffi::GstSDPTime);
 
 impl SDPTime {

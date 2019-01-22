@@ -532,6 +532,7 @@ impl PartialEq for StructureRef {
 
 impl Eq for StructureRef {}
 
+#[derive(Debug)]
 pub struct FieldIterator<'a> {
     structure: &'a StructureRef,
     idx: u32,
@@ -595,6 +596,7 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
 
 impl<'a> ExactSizeIterator for FieldIterator<'a> {}
 
+#[derive(Debug)]
 pub struct Iter<'a> {
     iter: FieldIterator<'a>,
 }
@@ -638,6 +640,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+#[derive(Debug)]
 pub struct Builder {
     s: Structure,
 }

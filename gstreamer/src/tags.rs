@@ -518,6 +518,7 @@ impl PartialEq for TagListRef {
 
 impl Eq for TagListRef {}
 
+#[derive(Debug)]
 pub struct TagIter<'a, T: Tag<'a>> {
     taglist: &'a TagListRef,
     idx: u32,
@@ -588,6 +589,7 @@ where
 {
 }
 
+#[derive(Debug)]
 pub struct GenericTagIter<'a> {
     taglist: &'a TagListRef,
     name: &'a str,
@@ -645,6 +647,7 @@ impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
 
 impl<'a> ExactSizeIterator for GenericTagIter<'a> {}
 
+#[derive(Debug)]
 pub struct GenericIter<'a> {
     taglist: &'a TagListRef,
     idx: u32,
@@ -703,6 +706,7 @@ impl<'a> DoubleEndedIterator for GenericIter<'a> {
 
 impl<'a> ExactSizeIterator for GenericIter<'a> {}
 
+#[derive(Debug)]
 pub struct Iter<'a> {
     taglist: &'a TagListRef,
     idx: u32,

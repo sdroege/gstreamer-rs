@@ -23,6 +23,7 @@ use std::slice;
 pub enum Readable {}
 pub enum Writable {}
 
+#[derive(Debug)]
 pub struct VideoFrame<T>(
     ffi::GstVideoFrame,
     Option<gst::Buffer>,
@@ -338,6 +339,7 @@ impl VideoFrame<Writable> {
     }
 }
 
+#[derive(Debug)]
 pub struct VideoFrameRef<T>(ffi::GstVideoFrame, Option<T>, ::VideoInfo, bool);
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {

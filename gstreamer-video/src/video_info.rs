@@ -221,6 +221,7 @@ impl fmt::Debug for VideoInfo {
     }
 }
 
+#[derive(Debug)]
 pub struct VideoInfoBuilder<'a> {
     format: ::VideoFormat,
     width: u32,
