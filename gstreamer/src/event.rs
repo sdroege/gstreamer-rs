@@ -458,6 +458,7 @@ impl fmt::Debug for EventRef {
     }
 }
 
+#[derive(Debug)]
 pub enum EventView<'a> {
     FlushStart(FlushStart<'a>),
     FlushStop(FlushStop<'a>),
@@ -494,6 +495,7 @@ pub enum EventView<'a> {
 
 macro_rules! declare_concrete_event(
     ($name:ident) => {
+        #[derive(Debug)]
         pub struct $name<'a>(&'a EventRef);
 
         impl<'a> Deref for $name<'a> {

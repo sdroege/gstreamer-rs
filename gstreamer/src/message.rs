@@ -355,6 +355,7 @@ impl fmt::Debug for MessageRef {
     }
 }
 
+#[derive(Debug)]
 pub enum MessageView<'a> {
     Eos(Eos<'a>),
     Error(Error<'a>),
@@ -399,6 +400,7 @@ pub enum MessageView<'a> {
 
 macro_rules! declare_concrete_message(
     ($name:ident) => {
+        #[derive(Debug)]
         pub struct $name<'a>(&'a MessageRef);
 
         impl<'a> Deref for $name<'a> {
