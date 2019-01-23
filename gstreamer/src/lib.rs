@@ -335,7 +335,7 @@ pub mod prelude {
     pub use value::GstValueExt;
 
     pub use miniobject::MiniObject;
-    pub use tags::Tag;
+    pub use tags::{CustomTag, Tag};
 
     pub use muldiv::MulDiv;
 

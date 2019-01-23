@@ -1,4 +1,4 @@
-// Copyright (C) 2016-2017 Sebastian Dröge <sebastian@centricular.com>
+// Copyright (C) 2016-2018 Sebastian Dröge <sebastian@centricular.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
@@ -14,7 +14,9 @@ use std::mem;
 use ffi;
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
-use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue};
+use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue, Value};
+use glib::StaticType;
+use gobject_ffi;
 
 use miniobject::*;
 
@@ -765,6 +767,60 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+pub trait CustomTag<'a>: Tag<'a> {
+    const FLAG: ::TagFlag;
+    const NICK: &'static str;
+    const DESCRIPTION: &'static str;
+
+    fn merge_func(src: &Value) -> Value {
+        merge_use_first(src)
+    }
+}
+
+pub fn register<T: for<'a> CustomTag<'a>>() {
+    unsafe extern "C" fn merge_func_trampoline<T: for<'a> CustomTag<'a>>(
+        dest: *mut gobject_ffi::GValue,
+        src: *const gobject_ffi::GValue,
+    ) {
+        *dest = T::merge_func(&*(src as *const Value)).into_raw();
+    }
+
+    unsafe {
+        ffi::gst_tag_register(
+            T::tag_name().to_glib_none().0,
+            T::FLAG.to_glib(),
+            T::TagType::static_type().to_glib(),
+            T::NICK.to_glib_none().0,
+            T::DESCRIPTION.to_glib_none().0,
+            Some(merge_func_trampoline::<T>),
+        )
+    }
+}
+
+pub fn merge_use_first(src: &Value) -> Value {
+    assert_eq!(src.type_(), ::List::static_type());
+
+    unsafe {
+        use glib::translate::Uninitialized;
+
+        let mut res = Value::uninitialized();
+        ffi::gst_tag_merge_use_first(res.to_glib_none_mut().0, src.to_glib_none().0);
+        res
+    }
+}
+
+pub fn merge_strings_with_comma(src: &Value) -> Value {
+    assert_eq!(src.type_(), ::List::static_type());
+
+    unsafe {
+        use glib::translate::Uninitialized;
+
+        let mut res = Value::uninitialized();
+        ffi::gst_tag_merge_strings_with_comma(res.to_glib_none_mut().0, src.to_glib_none().0);
+        res
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -914,5 +970,49 @@ mod tests {
         assert_eq!(tag_name, *TAG_DURATION);
         assert_eq!(tag_value.get(), Some(::SECOND * 120));
         assert!(tag_iter.next().is_none());
+    }
+
+    #[test]
+    fn test_custom_tags() {
+        ::init().unwrap();
+
+        struct MyCustomTag;
+
+        impl<'a> Tag<'a> for MyCustomTag {
+            type TagType = &'a str;
+            fn tag_name<'b>() -> &'b str {
+                "my-custom-tag"
+            }
+        }
+
+        impl<'a> CustomTag<'a> for MyCustomTag {
+            const FLAG: ::TagFlag = ::TagFlag::Meta;
+            const NICK: &'static str = "my custom tag";
+            const DESCRIPTION: &'static str = "My own custom tag type for testing";
+
+            fn merge_func(src: &Value) -> Value {
+                merge_strings_with_comma(src)
+            }
+        }
+
+        register::<MyCustomTag>();
+
+        let mut tags = TagList::new();
+        {
+            let tags = tags.get_mut().unwrap();
+            tags.add::<MyCustomTag>(&"first one", TagMergeMode::Append);
+        }
+
+        assert_eq!(tags.get::<MyCustomTag>().unwrap().get(), Some("first one"));
+
+        {
+            let tags = tags.get_mut().unwrap();
+            tags.add::<MyCustomTag>(&"second one", TagMergeMode::Append);
+        }
+
+        assert_eq!(
+            tags.get::<MyCustomTag>().unwrap().get(),
+            Some("first one, second one")
+        );
     }
 }

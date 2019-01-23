@@ -40,6 +40,7 @@ generate = [
     "Gst.StreamFlags",
     "Gst.ProgressType",
     "Gst.BusSyncReply",
+    "Gst.TagFlag",
     "Gst.TagMergeMode",
     "Gst.PadProbeType",
     "Gst.PadProbeReturn",

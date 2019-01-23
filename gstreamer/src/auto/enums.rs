@@ -2389,6 +2389,73 @@ impl SetValue for StructureChangeType {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+pub enum TagFlag {
+    Undefined,
+    Meta,
+    Encoded,
+    Decoded,
+    Count,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TagFlag {
+    type GlibType = ffi::GstTagFlag;
+
+    fn to_glib(&self) -> ffi::GstTagFlag {
+        match *self {
+            TagFlag::Undefined => ffi::GST_TAG_FLAG_UNDEFINED,
+            TagFlag::Meta => ffi::GST_TAG_FLAG_META,
+            TagFlag::Encoded => ffi::GST_TAG_FLAG_ENCODED,
+            TagFlag::Decoded => ffi::GST_TAG_FLAG_DECODED,
+            TagFlag::Count => ffi::GST_TAG_FLAG_COUNT,
+            TagFlag::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTagFlag> for TagFlag {
+    fn from_glib(value: ffi::GstTagFlag) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => TagFlag::Undefined,
+            1 => TagFlag::Meta,
+            2 => TagFlag::Encoded,
+            3 => TagFlag::Decoded,
+            4 => TagFlag::Count,
+            value => TagFlag::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TagFlag {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_tag_flag_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TagFlag {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TagFlag {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for TagFlag {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum TagMergeMode {
     Undefined,
     ReplaceAll,
