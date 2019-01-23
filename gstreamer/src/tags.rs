@@ -767,6 +767,42 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
+pub fn tag_exists(name: &str) -> bool {
+    unsafe { from_glib(ffi::gst_tag_exists(name.to_glib_none().0)) }
+}
+
+pub fn tag_get_type(name: &str) -> glib::Type {
+    unsafe { from_glib(ffi::gst_tag_get_type(name.to_glib_none().0)) }
+}
+
+pub fn tag_get_nick(name: &str) -> Option<&'static str> {
+    unsafe {
+        let ptr = ffi::gst_tag_get_nick(name.to_glib_none().0);
+
+        if ptr.is_null() {
+            None
+        } else {
+            Some(CStr::from_ptr(ptr).to_str().unwrap())
+        }
+    }
+}
+
+pub fn tag_get_description(name: &str) -> Option<&'static str> {
+    unsafe {
+        let ptr = ffi::gst_tag_get_description(name.to_glib_none().0);
+
+        if ptr.is_null() {
+            None
+        } else {
+            Some(CStr::from_ptr(ptr).to_str().unwrap())
+        }
+    }
+}
+
+pub fn tag_get_flag(name: &str) -> ::TagFlag {
+    unsafe { from_glib(ffi::gst_tag_get_flag(name.to_glib_none().0)) }
+}
+
 pub trait CustomTag<'a>: Tag<'a> {
     const FLAG: ::TagFlag;
     const NICK: &'static str;
@@ -778,6 +814,8 @@ pub trait CustomTag<'a>: Tag<'a> {
 }
 
 pub fn register<T: for<'a> CustomTag<'a>>() {
+    assert!(!tag_exists(T::tag_name()));
+
     unsafe extern "C" fn merge_func_trampoline<T: for<'a> CustomTag<'a>>(
         dest: *mut gobject_ffi::GValue,
         src: *const gobject_ffi::GValue,
@@ -996,6 +1034,21 @@ mod tests {
         }
 
         register::<MyCustomTag>();
+
+        assert!(tag_exists(MyCustomTag::tag_name()));
+        assert_eq!(
+            tag_get_type(MyCustomTag::tag_name()),
+            <MyCustomTag as Tag>::TagType::static_type()
+        );
+        assert_eq!(
+            tag_get_nick(MyCustomTag::tag_name()),
+            Some(MyCustomTag::NICK)
+        );
+        assert_eq!(
+            tag_get_description(MyCustomTag::tag_name()),
+            Some(MyCustomTag::DESCRIPTION)
+        );
+        assert_eq!(tag_get_flag(MyCustomTag::tag_name()), MyCustomTag::FLAG);
 
         let mut tags = TagList::new();
         {

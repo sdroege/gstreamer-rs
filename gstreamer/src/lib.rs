@@ -107,7 +107,10 @@ pub use caps_features::{
 mod caps_features_serde;
 
 pub mod tags;
-pub use tags::{Tag, TagList, TagListRef};
+pub use tags::{
+    tag_exists, tag_get_description, tag_get_flag, tag_get_nick, tag_get_type, Tag, TagList,
+    TagListRef,
+};
 #[cfg(feature = "ser_de")]
 mod tags_serde;
 
