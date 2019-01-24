@@ -8,6 +8,7 @@
 
 use Bin;
 use Element;
+use LoggableError;
 
 use glib;
 use glib::object::Cast;
@@ -27,7 +28,7 @@ pub trait GstBinExtManual: 'static {
     fn add_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
     fn remove_many<E: IsA<Element>>(&self, elements: &[&E]) -> Result<(), glib::BoolError>;
 
-    fn connect_do_latency<F: Fn(&Self) -> Result<(), glib::BoolError> + Send + Sync + 'static>(
+    fn connect_do_latency<F: Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -82,12 +83,12 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         Ok(())
     }
 
-    fn connect_do_latency<F: Fn(&Self) -> Result<(), glib::BoolError> + Send + Sync + 'static>(
+    fn connect_do_latency<F: Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> Result<(), glib::BoolError> + Send + Sync + 'static>> =
+            let f: Box_<Box_<Fn(&Self) -> Result<(), LoggableError> + Send + Sync + 'static>> =
                 Box_::new(Box_::new(f));
             connect_raw(
                 self.as_ptr() as *mut _,
@@ -163,11 +164,11 @@ unsafe extern "C" fn do_latency_trampoline<P>(
 where
     P: IsA<Bin>,
 {
-    let f: &&(Fn(&P) -> Result<(), glib::BoolError> + Send + Sync + 'static) = transmute(f);
+    let f: &&(Fn(&P) -> Result<(), LoggableError> + Send + Sync + 'static) = transmute(f);
     match f(&Bin::from_glib_borrow(this).unsafe_cast()) {
         Ok(()) => true,
         Err(err) => {
-            gst_error!(::CAT_RUST, obj: &Bin::from_glib_borrow(this), "{}", err);
+            err.log_with_object(&Bin::from_glib_borrow(this));
             false
         }
     }
