@@ -10,6 +10,7 @@ use std::error::Error;
 use std::fmt;
 
 use glib;
+use glib::IsA;
 
 #[macro_export]
 macro_rules! gst_error_msg(
@@ -105,5 +106,102 @@ impl fmt::Display for ErrorMessage {
 impl Error for ErrorMessage {
     fn description(&self) -> &str {
         "ErrorMessage"
+    }
+}
+
+#[macro_export]
+macro_rules! gst_loggable_error(
+// Plain strings
+    ($cat:expr, $msg:expr) => {
+        $crate::LoggableError::new(&$cat, glib_bool_error!($msg))
+    };
+
+// Format strings
+    ($cat:expr, $($msg:tt)*) =>  { {
+        $crate::LoggableError::new(&$cat, glib_bool_error!($($msg)*))
+    }};
+);
+
+#[macro_export]
+macro_rules! gst_result_from_gboolean(
+// Plain strings
+    ($ffi_bool:expr, $cat:expr, $msg:expr) =>  {
+        glib_result_from_gboolean!($ffi_bool, $msg)
+            .map_err(|bool_err| $crate::LoggableError::new(&$cat, bool_err))
+    };
+
+// Format strings
+    ($ffi_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
+        glib_result_from_gboolean!($ffi_bool, $($msg)*)
+            .map_err(|bool_err| $crate::LoggableError::new(&$cat, bool_err))
+    }};
+);
+
+#[derive(Debug, Clone)]
+pub struct LoggableError {
+    category: ::DebugCategory,
+    bool_error: glib::BoolError,
+}
+
+impl LoggableError {
+    pub fn new(category: &::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
+        LoggableError {
+            category: *category,
+            bool_error,
+        }
+    }
+
+    pub fn log(&self) {
+        self.category.log(
+            None as Option<&::Object>,
+            ::DebugLevel::Error,
+            self.bool_error.filename,
+            self.bool_error.function,
+            self.bool_error.line,
+            format_args!("{}", self.bool_error.message),
+        );
+    }
+
+    pub fn log_with_object<O: IsA<::Object>>(&self, obj: &O) {
+        self.category.log(
+            Some(obj),
+            ::DebugLevel::Error,
+            self.bool_error.filename,
+            self.bool_error.function,
+            self.bool_error.line,
+            format_args!("{}", self.bool_error.message),
+        );
+    }
+
+    pub fn category(&self) -> ::DebugCategory {
+        self.category
+    }
+}
+
+impl From<glib::BoolError> for LoggableError {
+    fn from(bool_error: glib::BoolError) -> Self {
+        LoggableError {
+            category: *::CAT_RUST,
+            bool_error,
+        }
+    }
+}
+
+impl fmt::Display for LoggableError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        write!(
+            f,
+            "Error {:?}: {:?} at {}:{}",
+            self.category.get_name(),
+            self.bool_error.message,
+            self.bool_error.filename,
+            self.bool_error.line
+        )
+    }
+}
+
+impl Error for LoggableError {
+    fn description(&self) -> &str {
+        self.bool_error.message.as_ref()
     }
 }
