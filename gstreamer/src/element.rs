@@ -49,13 +49,13 @@ impl Element {
         skip_assert_initialized!();
         for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
             unsafe {
-                let ret: bool = from_glib(ffi::gst_element_link(
-                    e1.as_ref().to_glib_none().0,
-                    e2.as_ref().to_glib_none().0,
-                ));
-                if !ret {
-                    return Err(glib_bool_error!("Failed to link elements"));
-                }
+                glib_result_from_gboolean!(
+                    ffi::gst_element_link(
+                        e1.as_ref().to_glib_none().0,
+                        e2.as_ref().to_glib_none().0,
+                    ),
+                    "Failed to link elements"
+                )?;
             }
         }
 
