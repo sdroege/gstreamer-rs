@@ -88,11 +88,11 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         timeout: bool,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
-    fn start(&self, aggregator: &Aggregator) -> bool {
+    fn start(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage> {
         self.parent_start(aggregator)
     }
 
-    fn stop(&self, aggregator: &Aggregator) -> bool {
+    fn stop(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage> {
         self.parent_stop(aggregator)
     }
 
@@ -287,25 +287,45 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         }
     }
 
-    fn parent_start(&self, aggregator: &Aggregator) -> bool {
+    fn parent_start(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
-                .start
-                .map(|f| from_glib(f(aggregator.to_glib_none().0)))
-                .unwrap_or(false)
+            let f = (*parent_class).start.ok_or_else(|| {
+                gst_error_msg!(
+                    gst::CoreError::Failed,
+                    ["Parent function `start` is not defined"]
+                )
+            })?;
+            if from_glib(f(aggregator.to_glib_none().0)) {
+                Ok(())
+            } else {
+                Err(gst_error_msg!(
+                    gst::CoreError::Failed,
+                    ["Parent function `start` failed"]
+                ))
+            }
         }
     }
 
-    fn parent_stop(&self, aggregator: &Aggregator) -> bool {
+    fn parent_stop(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
-                .stop
-                .map(|f| from_glib(f(aggregator.to_glib_none().0)))
-                .unwrap_or(false)
+            let f = (*parent_class).stop.ok_or_else(|| {
+                gst_error_msg!(
+                    gst::CoreError::Failed,
+                    ["Parent function `stop` is not defined"]
+                )
+            })?;
+            if from_glib(f(aggregator.to_glib_none().0)) {
+                Ok(())
+            } else {
+                Err(gst_error_msg!(
+                    gst::CoreError::Failed,
+                    ["Parent function `stop` failed"]
+                ))
+            }
         }
     }
 
@@ -635,7 +655,16 @@ where
     let imp = instance.get_impl();
     let wrap: Aggregator = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.start(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.start(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn aggregator_stop<T: ObjectSubclass>(
@@ -650,7 +679,16 @@ where
     let imp = instance.get_impl();
     let wrap: Aggregator = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.stop(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.stop(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn aggregator_get_next_time<T: ObjectSubclass>(

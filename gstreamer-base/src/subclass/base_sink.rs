@@ -23,12 +23,12 @@ use BaseSink;
 use BaseSinkClass;
 
 pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
-    fn start(&self, _element: &BaseSink) -> bool {
-        true
+    fn start(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
-    fn stop(&self, _element: &BaseSink) -> bool {
-        true
+    fn stop(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
     fn render(
@@ -87,12 +87,12 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
         self.parent_fixate(element, caps)
     }
 
-    fn unlock(&self, _element: &BaseSink) -> bool {
-        true
+    fn unlock(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
-    fn unlock_stop(&self, _element: &BaseSink) -> bool {
-        true
+    fn unlock_stop(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
     fn parent_query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool {
@@ -207,7 +207,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.start(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.start(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_sink_stop<T: ObjectSubclass>(
@@ -222,7 +231,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.stop(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.stop(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_sink_render<T: ObjectSubclass>(
@@ -427,7 +445,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.unlock(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.unlock(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_sink_unlock_stop<T: ObjectSubclass>(
@@ -443,7 +470,13 @@ where
     let wrap: BaseSink = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.unlock_stop(&wrap)
+        match imp.unlock_stop(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
     })
     .to_glib()
 }

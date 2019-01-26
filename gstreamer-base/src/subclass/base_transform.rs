@@ -21,12 +21,12 @@ use BaseTransform;
 use BaseTransformClass;
 
 pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
-    fn start(&self, _element: &BaseTransform) -> bool {
-        true
+    fn start(&self, _element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
-    fn stop(&self, _element: &BaseTransform) -> bool {
-        true
+    fn stop(&self, _element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
     fn transform_caps(
@@ -349,7 +349,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseTransform = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.start(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.start(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_transform_stop<T: ObjectSubclass>(
@@ -364,7 +373,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseTransform = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.stop(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.stop(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_transform_transform_caps<T: ObjectSubclass>(

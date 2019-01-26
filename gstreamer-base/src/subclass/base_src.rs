@@ -23,12 +23,12 @@ use BaseSrc;
 use BaseSrcClass;
 
 pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
-    fn start(&self, _element: &BaseSrc) -> bool {
-        true
+    fn start(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
-    fn stop(&self, _element: &BaseSrc) -> bool {
-        true
+    fn stop(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
     fn is_seekable(&self, _element: &BaseSrc) -> bool {
@@ -86,12 +86,12 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
         self.parent_fixate(element, caps)
     }
 
-    fn unlock(&self, _element: &BaseSrc) -> bool {
-        true
+    fn unlock(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
-    fn unlock_stop(&self, _element: &BaseSrc) -> bool {
-        true
+    fn unlock_stop(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        Ok(())
     }
 
     fn parent_create(
@@ -259,7 +259,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.start(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.start(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_src_stop<T: ObjectSubclass>(
@@ -274,7 +283,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.stop(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.stop(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_src_is_seekable<T: ObjectSubclass>(
@@ -537,7 +555,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.unlock(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.unlock(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_src_unlock_stop<T: ObjectSubclass>(
@@ -553,7 +580,13 @@ where
     let wrap: BaseSrc = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.unlock_stop(&wrap)
+        match imp.unlock_stop(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                wrap.post_error_message(&err);
+                false
+            }
+        }
     })
     .to_glib()
 }
