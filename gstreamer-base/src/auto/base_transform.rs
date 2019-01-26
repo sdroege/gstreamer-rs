@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -56,7 +57,7 @@ pub trait BaseTransformExt: 'static {
 
     fn update_qos(&self, proportion: f64, diff: gst::ClockTimeDiff, timestamp: gst::ClockTime);
 
-    fn update_src_caps(&self, updated_caps: &gst::Caps) -> bool;
+    fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
 
     fn get_property_qos(&self) -> bool;
 
@@ -142,9 +143,9 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
         }
     }
 
-    fn update_src_caps(&self, updated_caps: &gst::Caps) -> bool {
+    fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_base_transform_update_src_caps(self.as_ref().to_glib_none().0, updated_caps.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_base_transform_update_src_caps(self.as_ref().to_glib_none().0, updated_caps.to_glib_none().0), "Failed to update src caps")
         }
     }
 

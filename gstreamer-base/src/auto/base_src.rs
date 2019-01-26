@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -53,7 +54,7 @@ pub trait BaseSrcExt: 'static {
 
     fn set_blocksize(&self, blocksize: u32);
 
-    fn set_caps(&self, caps: &gst::Caps) -> bool;
+    fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError>;
 
     fn set_do_timestamp(&self, timestamp: bool);
 
@@ -149,9 +150,9 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
         }
     }
 
-    fn set_caps(&self, caps: &gst::Caps) -> bool {
+    fn set_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_base_src_set_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_base_src_set_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0), "Failed to set caps")
         }
     }
 

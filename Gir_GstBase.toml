@@ -93,6 +93,11 @@ subclassing = true
 status = "generate"
 
     [[object.function]]
+    name = "set_caps"
+        [object.function.return]
+        bool_return_is_error = "Failed to set caps"
+
+    [[object.function]]
     name = "start_complete"
     # Use Result<FlowSuccess, FlowError>
     ignore = true
@@ -116,6 +121,12 @@ status = "generate"
 name = "GstBase.BaseTransform"
 subclassing = true
 status = "generate"
+
+    [[object.function]]
+    name = "update_src_caps"
+        [object.function.return]
+        bool_return_is_error = "Failed to update src caps"
+
 
 [[object]]
 name = "GstBase.Aggregator"
