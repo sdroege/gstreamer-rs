@@ -73,7 +73,12 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         self.parent_src_query(aggregator, query)
     }
 
-    fn src_activate(&self, aggregator: &Aggregator, mode: gst::PadMode, active: bool) -> bool {
+    fn src_activate(
+        &self,
+        aggregator: &Aggregator,
+        mode: gst::PadMode,
+        active: bool,
+    ) -> Result<(), gst::LoggableError> {
         self.parent_src_activate(aggregator, mode, active)
     }
 
@@ -117,7 +122,11 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         self.parent_fixate_src_caps(aggregator, caps)
     }
 
-    fn negotiated_src_caps(&self, aggregator: &Aggregator, caps: &gst::CapsRef) -> bool {
+    fn negotiated_src_caps(
+        &self,
+        aggregator: &Aggregator,
+        caps: &gst::CapsRef,
+    ) -> Result<(), gst::LoggableError> {
         self.parent_negotiated_src_caps(aggregator, caps)
     }
 
@@ -240,20 +249,25 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         aggregator: &Aggregator,
         mode: gst::PadMode,
         active: bool,
-    ) -> bool {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
-                .src_activate
-                .map(|f| {
-                    from_glib(f(
-                        aggregator.to_glib_none().0,
-                        mode.to_glib(),
-                        active.to_glib(),
-                    ))
-                })
-                .unwrap_or(false)
+            let f = (*parent_class).src_activate.ok_or_else(|| {
+                gst_loggable_error!(
+                    gst::CAT_RUST,
+                    "Parent function `src_activate` is not defined"
+                )
+            })?;
+            gst_result_from_gboolean!(
+                f(
+                    aggregator.to_glib_none().0,
+                    mode.to_glib(),
+                    active.to_glib()
+                ),
+                gst::CAT_RUST,
+                "Parent function `src_activate` failed"
+            )
         }
     }
 
@@ -365,14 +379,25 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         }
     }
 
-    fn parent_negotiated_src_caps(&self, aggregator: &Aggregator, caps: &gst::CapsRef) -> bool {
+    fn parent_negotiated_src_caps(
+        &self,
+        aggregator: &Aggregator,
+        caps: &gst::CapsRef,
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
-                .negotiated_src_caps
-                .map(|f| from_glib(f(aggregator.to_glib_none().0, caps.as_mut_ptr())))
-                .unwrap_or(false)
+            let f = (*parent_class).negotiated_src_caps.ok_or_else(|| {
+                gst_loggable_error!(
+                    gst::CAT_RUST,
+                    "Parent function `negotiated_src_caps` is not defined"
+                )
+            })?;
+            gst_result_from_gboolean!(
+                f(aggregator.to_glib_none().0, caps.as_mut_ptr()),
+                gst::CAT_RUST,
+                "Parent function `negotiated_src_caps` failed"
+            )
         }
     }
 }
@@ -568,7 +593,13 @@ where
     let wrap: Aggregator = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.src_activate(&wrap, from_glib(mode), from_glib(active))
+        match imp.src_activate(&wrap, from_glib(mode), from_glib(active)) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
     })
     .to_glib()
 }
@@ -743,7 +774,13 @@ where
     let wrap: Aggregator = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.negotiated_src_caps(&wrap, gst::CapsRef::from_ptr(caps))
+        match imp.negotiated_src_caps(&wrap, gst::CapsRef::from_ptr(caps)) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
     })
     .to_glib()
 }

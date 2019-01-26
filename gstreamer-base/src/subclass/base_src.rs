@@ -74,11 +74,11 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
         self.parent_get_caps(element, filter)
     }
 
-    fn negotiate(&self, element: &BaseSrc) -> bool {
+    fn negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError> {
         self.parent_negotiate(element)
     }
 
-    fn set_caps(&self, element: &BaseSrc, caps: &gst::CapsRef) -> bool {
+    fn set_caps(&self, element: &BaseSrc, caps: &gst::CapsRef) -> Result<(), gst::LoggableError> {
         self.parent_set_caps(element, caps)
     }
 
@@ -173,25 +173,37 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
         }
     }
 
-    fn parent_negotiate(&self, element: &BaseSrc) -> bool {
+    fn parent_negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
-            (*parent_class)
-                .negotiate
-                .map(|f| from_glib(f(element.to_glib_none().0)))
-                .unwrap_or(false)
+            let f = (*parent_class).negotiate.ok_or_else(|| {
+                gst_loggable_error!(gst::CAT_RUST, "Parent function `negotiate` is not defined")
+            })?;
+            gst_result_from_gboolean!(
+                f(element.to_glib_none().0),
+                gst::CAT_RUST,
+                "Parent function `negotiate` failed"
+            )
         }
     }
 
-    fn parent_set_caps(&self, element: &BaseSrc, caps: &gst::CapsRef) -> bool {
+    fn parent_set_caps(
+        &self,
+        element: &BaseSrc,
+        caps: &gst::CapsRef,
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
-            (*parent_class)
-                .set_caps
-                .map(|f| from_glib(f(element.to_glib_none().0, caps.as_mut_ptr())))
-                .unwrap_or(true)
+            let f = (*parent_class).set_caps.ok_or_else(|| {
+                gst_loggable_error!(gst::CAT_RUST, "Parent function `set_caps` is not defined")
+            })?;
+            gst_result_from_gboolean!(
+                f(element.to_glib_none().0, caps.as_mut_ptr()),
+                gst::CAT_RUST,
+                "Parent function `set_caps` failed"
+            )
         }
     }
 
@@ -455,7 +467,16 @@ where
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), false, { imp.negotiate(&wrap) }).to_glib()
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.negotiate(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
+    })
+    .to_glib()
 }
 
 unsafe extern "C" fn base_src_set_caps<T: ObjectSubclass>(
@@ -473,7 +494,13 @@ where
     let caps = gst::CapsRef::from_ptr(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.set_caps(&wrap, caps)
+        match imp.set_caps(&wrap, caps) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
     })
     .to_glib()
 }
