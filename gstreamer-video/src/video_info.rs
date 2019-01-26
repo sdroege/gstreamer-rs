@@ -128,6 +128,22 @@ impl VideoColorimetry {
             }
         }
     }
+
+    pub fn range(&self) -> ::VideoColorRange {
+        from_glib(self.0.range)
+    }
+
+    pub fn matrix(&self) -> ::VideoColorMatrix {
+        from_glib(self.0.matrix)
+    }
+
+    pub fn transfer(&self) -> ::VideoTransferFunction {
+        from_glib(self.0.transfer)
+    }
+
+    pub fn primaries(&self) -> ::VideoColorPrimaries {
+        from_glib(self.0.primaries)
+    }
 }
 
 impl Clone for VideoColorimetry {
