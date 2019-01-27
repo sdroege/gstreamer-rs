@@ -714,6 +714,8 @@ mod tests {
 
     #[test]
     fn test_string_conversion() {
+        ::init().unwrap();
+
         let a = "Test, f1=(string)abc, f2=(uint)123;";
 
         let s = Structure::from_string(&a).unwrap();
