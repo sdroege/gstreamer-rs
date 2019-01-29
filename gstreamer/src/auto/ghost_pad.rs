@@ -22,19 +22,19 @@ glib_wrapper! {
 }
 
 impl GhostPad {
-    pub fn new_no_target<'a, P: Into<Option<&'a str>>>(name: P, dir: PadDirection) -> GhostPad {
+    pub fn new_no_target<'a, P: Into<Option<&'a str>>>(name: P, dir: PadDirection) -> Option<GhostPad> {
         assert_initialized_main_thread!();
         let name = name.into();
         unsafe {
-            Pad::from_glib_none(ffi::gst_ghost_pad_new_no_target(name.to_glib_none().0, dir.to_glib())).unsafe_cast()
+            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new_no_target(name.to_glib_none().0, dir.to_glib())).map(|o| o.unsafe_cast())
         }
     }
 
-    pub fn new_no_target_from_template<'a, P: Into<Option<&'a str>>>(name: P, templ: &PadTemplate) -> GhostPad {
+    pub fn new_no_target_from_template<'a, P: Into<Option<&'a str>>>(name: P, templ: &PadTemplate) -> Option<GhostPad> {
         skip_assert_initialized!();
         let name = name.into();
         unsafe {
-            Pad::from_glib_none(ffi::gst_ghost_pad_new_no_target_from_template(name.to_glib_none().0, templ.to_glib_none().0)).unsafe_cast()
+            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new_no_target_from_template(name.to_glib_none().0, templ.to_glib_none().0)).map(|o| o.unsafe_cast())
         }
     }
 }

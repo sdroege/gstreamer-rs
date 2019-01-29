@@ -352,201 +352,201 @@ impl Player {
 
     pub fn connect_buffering<F: Fn(&Player, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, i32) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"buffering\0".as_ptr() as *const _,
-                transmute(buffering_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(buffering_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_end_of_stream<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"end-of-stream\0".as_ptr() as *const _,
-                transmute(end_of_stream_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(end_of_stream_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_error<F: Fn(&Player, &Error) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, &Error) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"error\0".as_ptr() as *const _,
-                transmute(error_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(error_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_media_info_updated<F: Fn(&Player, &PlayerMediaInfo) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, &PlayerMediaInfo) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"media-info-updated\0".as_ptr() as *const _,
-                transmute(media_info_updated_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(media_info_updated_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_mute_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"mute-changed\0".as_ptr() as *const _,
-                transmute(mute_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(mute_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_state_changed<F: Fn(&Player, PlayerState) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, PlayerState) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"state-changed\0".as_ptr() as *const _,
-                transmute(state_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(state_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_uri_loaded<F: Fn(&Player, &str) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, &str) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"uri-loaded\0".as_ptr() as *const _,
-                transmute(uri_loaded_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(uri_loaded_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_video_dimensions_changed<F: Fn(&Player, i32, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, i32, i32) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"video-dimensions-changed\0".as_ptr() as *const _,
-                transmute(video_dimensions_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(video_dimensions_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_volume_changed<F: Fn(&Player) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"volume-changed\0".as_ptr() as *const _,
-                transmute(volume_changed_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(volume_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_warning<F: Fn(&Player, &Error) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, &Error) + Send + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"warning\0".as_ptr() as *const _,
-                transmute(warning_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(warning_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_audio_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::audio-video-offset\0".as_ptr() as *const _,
-                transmute(notify_audio_video_offset_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_audio_video_offset_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_current_audio_track_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::current-audio-track\0".as_ptr() as *const _,
-                transmute(notify_current_audio_track_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_current_audio_track_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_current_subtitle_track_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::current-subtitle-track\0".as_ptr() as *const _,
-                transmute(notify_current_subtitle_track_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_current_subtitle_track_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_current_video_track_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::current-video-track\0".as_ptr() as *const _,
-                transmute(notify_current_video_track_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_current_video_track_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_duration_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
-                transmute(notify_duration_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_duration_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_media_info_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::media-info\0".as_ptr() as *const _,
-                transmute(notify_media_info_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_media_info_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_mute_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mute\0".as_ptr() as *const _,
-                transmute(notify_mute_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_mute_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_pipeline_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pipeline\0".as_ptr() as *const _,
-                transmute(notify_pipeline_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_pipeline_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_position_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::position\0".as_ptr() as *const _,
-                transmute(notify_position_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_position_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_rate_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::rate\0".as_ptr() as *const _,
-                transmute(notify_rate_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_rate_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::suburi\0".as_ptr() as *const _,
-                transmute(notify_suburi_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_suburi_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_uri_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::uri\0".as_ptr() as *const _,
-                transmute(notify_uri_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_uri_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_video_multiview_flags_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::video-multiview-flags\0".as_ptr() as *const _,
-                transmute(notify_video_multiview_flags_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_video_multiview_flags_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_video_multiview_mode_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::video-multiview-mode\0".as_ptr() as *const _,
-                transmute(notify_video_multiview_mode_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_video_multiview_mode_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_volume_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::volume\0".as_ptr() as *const _,
-                transmute(notify_volume_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_volume_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -554,127 +554,127 @@ impl Player {
 unsafe impl Send for Player {}
 unsafe impl Sync for Player {}
 
-unsafe extern "C" fn buffering_trampoline(this: *mut ffi::GstPlayer, object: libc::c_int, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, i32) + Send + 'static) = transmute(f);
+unsafe extern "C" fn buffering_trampoline<F: Fn(&Player, i32) + Send + 'static>(this: *mut ffi::GstPlayer, object: libc::c_int, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), object)
 }
 
-unsafe extern "C" fn end_of_stream_trampoline(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + 'static) = transmute(f);
+unsafe extern "C" fn end_of_stream_trampoline<F: Fn(&Player) + Send + 'static>(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn error_trampoline(this: *mut ffi::GstPlayer, object: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, &Error) + Send + 'static) = transmute(f);
+unsafe extern "C" fn error_trampoline<F: Fn(&Player, &Error) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn media_info_updated_trampoline(this: *mut ffi::GstPlayer, object: *mut ffi::GstPlayerMediaInfo, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, &PlayerMediaInfo) + Send + 'static) = transmute(f);
+unsafe extern "C" fn media_info_updated_trampoline<F: Fn(&Player, &PlayerMediaInfo) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut ffi::GstPlayerMediaInfo, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn mute_changed_trampoline(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + 'static) = transmute(f);
+unsafe extern "C" fn mute_changed_trampoline<F: Fn(&Player) + Send + 'static>(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn state_changed_trampoline(this: *mut ffi::GstPlayer, object: ffi::GstPlayerState, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, PlayerState) + Send + 'static) = transmute(f);
+unsafe extern "C" fn state_changed_trampoline<F: Fn(&Player, PlayerState) + Send + 'static>(this: *mut ffi::GstPlayer, object: ffi::GstPlayerState, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), from_glib(object))
 }
 
-unsafe extern "C" fn uri_loaded_trampoline(this: *mut ffi::GstPlayer, object: *mut libc::c_char, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, &str) + Send + 'static) = transmute(f);
+unsafe extern "C" fn uri_loaded_trampoline<F: Fn(&Player, &str) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut libc::c_char, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
 }
 
-unsafe extern "C" fn video_dimensions_changed_trampoline(this: *mut ffi::GstPlayer, object: libc::c_int, p0: libc::c_int, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, i32, i32) + Send + 'static) = transmute(f);
+unsafe extern "C" fn video_dimensions_changed_trampoline<F: Fn(&Player, i32, i32) + Send + 'static>(this: *mut ffi::GstPlayer, object: libc::c_int, p0: libc::c_int, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), object, p0)
 }
 
-unsafe extern "C" fn volume_changed_trampoline(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + 'static) = transmute(f);
+unsafe extern "C" fn volume_changed_trampoline<F: Fn(&Player) + Send + 'static>(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn warning_trampoline(this: *mut ffi::GstPlayer, object: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player, &Error) + Send + 'static) = transmute(f);
+unsafe extern "C" fn warning_trampoline<F: Fn(&Player, &Error) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn notify_audio_video_offset_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_audio_video_offset_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_current_audio_track_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_current_audio_track_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_current_subtitle_track_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_current_subtitle_track_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_current_video_track_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_current_video_track_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_duration_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_duration_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_media_info_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_media_info_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_mute_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_mute_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_pipeline_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_pipeline_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_position_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_position_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_rate_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_rate_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_suburi_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_suburi_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_uri_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_uri_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_video_multiview_flags_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_video_multiview_flags_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_video_multiview_mode_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_video_multiview_mode_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_volume_trampoline(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Player) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_volume_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

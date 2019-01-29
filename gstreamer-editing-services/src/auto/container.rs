@@ -101,43 +101,43 @@ impl<O: IsA<Container>> GESContainerExt for O {
 
     fn connect_child_added<F: Fn(&Self, &TimelineElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TimelineElement) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"child-added\0".as_ptr() as *const _,
-                transmute(child_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(child_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_child_removed<F: Fn(&Self, &TimelineElement) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TimelineElement) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"child-removed\0".as_ptr() as *const _,
-                transmute(child_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(child_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::height\0".as_ptr() as *const _,
-                transmute(notify_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_height_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn child_added_trampoline<P>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn child_added_trampoline<P, F: Fn(&P, &TimelineElement) + 'static>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P, &TimelineElement) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
-unsafe extern "C" fn child_removed_trampoline<P>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn child_removed_trampoline<P, F: Fn(&P, &TimelineElement) + 'static>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P, &TimelineElement) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
-unsafe extern "C" fn notify_height_trampoline<P>(this: *mut ffi::GESContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }

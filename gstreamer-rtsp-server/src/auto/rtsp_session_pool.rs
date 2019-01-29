@@ -47,7 +47,7 @@ pub trait RTSPSessionPoolExt: 'static {
 
     fn create(&self) -> Option<RTSPSession>;
 
-    //fn filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPSessionPoolFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPSession>;
+    //fn filter(&self, func: /*Unimplemented*/Fn(&RTSPSessionPool, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession>;
 
     fn find(&self, sessionid: &str) -> Option<RTSPSession>;
 
@@ -77,7 +77,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
-    //fn filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPSessionPoolFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPSession> {
+    //fn filter(&self, func: /*Unimplemented*/Fn(&RTSPSessionPool, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession> {
     //    unsafe { TODO: call ffi::gst_rtsp_session_pool_filter() }
     //}
 
@@ -113,29 +113,29 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
 
     fn connect_session_removed<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &RTSPSession) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"session-removed\0".as_ptr() as *const _,
-                transmute(session_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(session_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-sessions\0".as_ptr() as *const _,
-                transmute(notify_max_sessions_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_sessions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn session_removed_trampoline<P>(this: *mut ffi::GstRTSPSessionPool, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
+unsafe extern "C" fn session_removed_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSessionPool, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
 where P: IsA<RTSPSessionPool> {
-    let f: &&(Fn(&P, &RTSPSession) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn notify_max_sessions_trampoline<P>(this: *mut ffi::GstRTSPSessionPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSessionPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSessionPool> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast())
 }

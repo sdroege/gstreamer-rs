@@ -43,7 +43,7 @@ pub trait GLFramebufferExt: 'static {
 
     fn bind(&self);
 
-    //fn draw_to_texture<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unknown conversion*//*Unimplemented*/GLFramebufferFunc, user_data: P) -> bool;
+    //fn draw_to_texture(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unimplemented*/Fn(/*Unimplemented*/Fundamental: Pointer) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     fn get_effective_dimensions(&self) -> (u32, u32);
 
@@ -61,7 +61,7 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
         }
     }
 
-    //fn draw_to_texture<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unknown conversion*//*Unimplemented*/GLFramebufferFunc, user_data: P) -> bool {
+    //fn draw_to_texture(&self, mem: /*Ignored*/&mut GLMemory, func: /*Unimplemented*/Fn(/*Unimplemented*/Fundamental: Pointer) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi::gst_gl_framebuffer_draw_to_texture() }
     //}
 

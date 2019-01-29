@@ -23,7 +23,7 @@ impl GLDisplayEGL {
         }
     }
 
-    //pub fn new_with_egl_display<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(display: P) -> GLDisplayEGL {
+    //pub fn new_with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {
     //    unsafe { TODO: call ffi::gst_gl_display_egl_new_with_egl_display() }
     //}
 

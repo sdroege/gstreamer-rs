@@ -110,41 +110,41 @@ impl WebRTCDTLSTransport {
 
     pub fn connect_property_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::certificate\0".as_ptr() as *const _,
-                transmute(notify_certificate_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_certificate_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_client_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::client\0".as_ptr() as *const _,
-                transmute(notify_client_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_client_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_remote_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::remote-certificate\0".as_ptr() as *const _,
-                transmute(notify_remote_certificate_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_remote_certificate_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::state\0".as_ptr() as *const _,
-                transmute(notify_state_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_state_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_transport_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transport\0".as_ptr() as *const _,
-                transmute(notify_transport_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_transport_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -152,27 +152,27 @@ impl WebRTCDTLSTransport {
 unsafe impl Send for WebRTCDTLSTransport {}
 unsafe impl Sync for WebRTCDTLSTransport {}
 
-unsafe extern "C" fn notify_certificate_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_client_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_client_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_remote_certificate_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_remote_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_state_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_transport_trampoline(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&WebRTCDTLSTransport) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_transport_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

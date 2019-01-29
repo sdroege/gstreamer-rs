@@ -31,7 +31,7 @@ glib_wrapper! {
 pub const NONE_TIMELINE_ELEMENT: Option<&TimelineElement> = None;
 
 pub trait TimelineElementExt: 'static {
-    //fn add_child_property<P: IsA</*Ignored*/glib::ParamSpec>, Q: IsA<glib::Object>>(&self, pspec: &P, child: &Q) -> bool;
+    //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool;
 
     fn copy(&self, deep: bool) -> Option<TimelineElement>;
 
@@ -39,7 +39,7 @@ pub trait TimelineElementExt: 'static {
 
     //fn get_child_property(&self, property_name: &str, value: /*Ignored*/glib::Value) -> bool;
 
-    //fn get_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/glib::Value);
+    //fn get_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value);
 
     //fn get_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -69,7 +69,7 @@ pub trait TimelineElementExt: 'static {
 
     fn paste(&self, paste_position: gst::ClockTime) -> Option<TimelineElement>;
 
-    //fn remove_child_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P) -> bool;
+    //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool;
 
     fn ripple(&self, start: gst::ClockTime) -> bool;
 
@@ -83,7 +83,7 @@ pub trait TimelineElementExt: 'static {
 
     //fn set_child_property(&self, property_name: &str, value: /*Ignored*/&glib::Value) -> bool;
 
-    //fn set_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/&glib::Value);
+    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value);
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -135,7 +135,7 @@ pub trait TimelineElementExt: 'static {
 }
 
 impl<O: IsA<TimelineElement>> TimelineElementExt for O {
-    //fn add_child_property<P: IsA</*Ignored*/glib::ParamSpec>, Q: IsA<glib::Object>>(&self, pspec: &P, child: &Q) -> bool {
+    //fn add_child_property<P: IsA<glib::Object>>(&self, pspec: /*Ignored*/&glib::ParamSpec, child: &P) -> bool {
     //    unsafe { TODO: call ffi::ges_timeline_element_add_child_property() }
     //}
 
@@ -153,7 +153,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi::ges_timeline_element_get_child_property() }
     //}
 
-    //fn get_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/glib::Value) {
+    //fn get_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/glib::Value) {
     //    unsafe { TODO: call ffi::ges_timeline_element_get_child_property_by_pspec() }
     //}
 
@@ -235,7 +235,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    //fn remove_child_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P) -> bool {
+    //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool {
     //    unsafe { TODO: call ffi::ges_timeline_element_remove_child_property() }
     //}
 
@@ -271,7 +271,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi::ges_timeline_element_set_child_property() }
     //}
 
-    //fn set_child_property_by_pspec<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, value: /*Ignored*/&glib::Value) {
+    //fn set_child_property_by_pspec(&self, pspec: /*Ignored*/&glib::ParamSpec, value: /*Ignored*/&glib::Value) {
     //    unsafe { TODO: call ffi::ges_timeline_element_set_child_property_by_pspec() }
     //}
 
@@ -368,127 +368,127 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
-                transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_duration_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_in_point_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::in-point\0".as_ptr() as *const _,
-                transmute(notify_in_point_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_in_point_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_max_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-duration\0".as_ptr() as *const _,
-                transmute(notify_max_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_duration_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::name\0".as_ptr() as *const _,
-                transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::parent\0".as_ptr() as *const _,
-                transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_parent_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::priority\0".as_ptr() as *const _,
-                transmute(notify_priority_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_priority_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_serialize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::serialize\0".as_ptr() as *const _,
-                transmute(notify_serialize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_serialize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::start\0".as_ptr() as *const _,
-                transmute(notify_start_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_start_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::timeline\0".as_ptr() as *const _,
-                transmute(notify_timeline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_timeline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_duration_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_in_point_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_in_point_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_duration_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_name_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_parent_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_priority_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_serialize_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_serialize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_start_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_start_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_timeline_trampoline<P>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }

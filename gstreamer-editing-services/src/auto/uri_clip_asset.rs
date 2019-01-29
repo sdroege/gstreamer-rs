@@ -29,7 +29,7 @@ glib_wrapper! {
 }
 
 impl UriClipAsset {
-    //pub fn new<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: /*Unimplemented*/gio::AsyncReadyCallback>(uri: &str, cancellable: Q, callback: R) {
+    //pub fn new<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<(), Error>) + 'static>(uri: &str, cancellable: Q, callback: R) {
     //    unsafe { TODO: call ffi::ges_uri_clip_asset_new() }
     //}
 
@@ -92,15 +92,15 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
-                transmute(notify_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_duration_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_duration_trampoline<P>(this: *mut ffi::GESUriClipAsset, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClipAsset, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UriClipAsset> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&UriClipAsset::from_glib_borrow(this).unsafe_cast())
 }

@@ -55,7 +55,7 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    //pub fn set_window_handle<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, window_handle: P) {
+    //pub fn set_window_handle(&self, window_handle: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gst_player_video_overlay_video_renderer_set_window_handle() }
     //}
 
@@ -73,27 +73,27 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    //pub fn new<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(window_handle: P) -> Option<PlayerVideoRenderer> {
+    //pub fn new(window_handle: /*Unimplemented*/Option<Fundamental: Pointer>) -> Option<PlayerVideoRenderer> {
     //    unsafe { TODO: call ffi::gst_player_video_overlay_video_renderer_new() }
     //}
 
-    //pub fn new_with_sink<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: IsA<gst::Element>>(window_handle: P, video_sink: &Q) -> Option<PlayerVideoRenderer> {
+    //pub fn new_with_sink<P: IsA<gst::Element>>(window_handle: /*Unimplemented*/Option<Fundamental: Pointer>, video_sink: &P) -> Option<PlayerVideoRenderer> {
     //    unsafe { TODO: call ffi::gst_player_video_overlay_video_renderer_new_with_sink() }
     //}
 
     pub fn connect_property_video_sink_notify<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::video-sink\0".as_ptr() as *const _,
-                transmute(notify_video_sink_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_video_sink_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_window_handle_notify<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window-handle\0".as_ptr() as *const _,
-                transmute(notify_window_handle_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_handle_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -101,12 +101,12 @@ impl PlayerVideoOverlayVideoRenderer {
 unsafe impl Send for PlayerVideoOverlayVideoRenderer {}
 unsafe impl Sync for PlayerVideoOverlayVideoRenderer {}
 
-unsafe extern "C" fn notify_video_sink_trampoline(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_video_sink_trampoline<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_window_handle_trampoline(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_window_handle_trampoline<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(this: *mut ffi::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

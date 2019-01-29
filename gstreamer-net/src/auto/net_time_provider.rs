@@ -79,17 +79,17 @@ impl NetTimeProvider {
 
     pub fn connect_property_active_notify<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetTimeProvider) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
-                transmute(notify_active_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_active_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_qos_dscp_notify<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetTimeProvider) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::qos-dscp\0".as_ptr() as *const _,
-                transmute(notify_qos_dscp_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_qos_dscp_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -97,12 +97,12 @@ impl NetTimeProvider {
 unsafe impl Send for NetTimeProvider {}
 unsafe impl Sync for NetTimeProvider {}
 
-unsafe extern "C" fn notify_active_trampoline(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetTimeProvider) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_active_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_qos_dscp_trampoline(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetTimeProvider) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

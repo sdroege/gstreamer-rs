@@ -130,57 +130,57 @@ impl NetClientClock {
 
     pub fn connect_property_address_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::address\0".as_ptr() as *const _,
-                transmute(notify_address_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_address_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_bus_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::bus\0".as_ptr() as *const _,
-                transmute(notify_bus_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_bus_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_internal_clock_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::internal-clock\0".as_ptr() as *const _,
-                transmute(notify_internal_clock_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_internal_clock_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_minimum_update_interval_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::minimum-update-interval\0".as_ptr() as *const _,
-                transmute(notify_minimum_update_interval_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_minimum_update_interval_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_port_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::port\0".as_ptr() as *const _,
-                transmute(notify_port_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_port_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_qos_dscp_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::qos-dscp\0".as_ptr() as *const _,
-                transmute(notify_qos_dscp_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_qos_dscp_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_round_trip_limit_notify<F: Fn(&NetClientClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&NetClientClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::round-trip-limit\0".as_ptr() as *const _,
-                transmute(notify_round_trip_limit_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_round_trip_limit_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -188,37 +188,37 @@ impl NetClientClock {
 unsafe impl Send for NetClientClock {}
 unsafe impl Sync for NetClientClock {}
 
-unsafe extern "C" fn notify_address_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_address_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_bus_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_bus_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_internal_clock_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_minimum_update_interval_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_minimum_update_interval_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_port_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_port_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_qos_dscp_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_round_trip_limit_trampoline(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&NetClientClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_round_trip_limit_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

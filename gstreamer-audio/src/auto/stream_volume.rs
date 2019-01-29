@@ -76,29 +76,29 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
 
     fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mute\0".as_ptr() as *const _,
-                transmute(notify_mute_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_mute_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::volume\0".as_ptr() as *const _,
-                transmute(notify_volume_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_volume_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_mute_trampoline<P>(this: *mut ffi::GstStreamVolume, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstStreamVolume, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StreamVolume> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_volume_trampoline<P>(this: *mut ffi::GstStreamVolume, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstStreamVolume, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StreamVolume> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
 }

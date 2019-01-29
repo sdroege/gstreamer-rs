@@ -28,7 +28,7 @@ glib_wrapper! {
 }
 
 impl Clock {
-    //pub fn id_compare_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(id1: P, id2: Q) -> i32 {
+    //pub fn id_compare_func(id1: /*Unimplemented*/Option<Fundamental: Pointer>, id2: /*Unimplemented*/Option<Fundamental: Pointer>) -> i32 {
     //    unsafe { TODO: call ffi::gst_clock_id_compare_func() }
     //}
 
@@ -52,7 +52,7 @@ impl Clock {
     //    unsafe { TODO: call ffi::gst_clock_id_wait() }
     //}
 
-    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unknown conversion*//*Unimplemented*/ClockCallback, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> ClockReturn {
+    //pub fn id_wait_async(id: /*Unimplemented*/ClockID, func: /*Unimplemented*/Fn(&Clock, ClockTime, /*Unimplemented*/ClockID) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> ClockReturn {
     //    unsafe { TODO: call ffi::gst_clock_id_wait_async() }
     //}
 }
@@ -285,57 +285,57 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"synced\0".as_ptr() as *const _,
-                transmute(synced_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(synced_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::timeout\0".as_ptr() as *const _,
-                transmute(notify_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window-size\0".as_ptr() as *const _,
-                transmute(notify_window_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window-threshold\0".as_ptr() as *const _,
-                transmute(notify_window_threshold_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_threshold_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn synced_trampoline<P>(this: *mut ffi::GstClock, synced: glib_ffi::gboolean, f: glib_ffi::gpointer)
+unsafe extern "C" fn synced_trampoline<P, F: Fn(&P, bool) + Send + Sync + 'static>(this: *mut ffi::GstClock, synced: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<Clock> {
-    let f: &&(Fn(&P, bool) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Clock::from_glib_borrow(this).unsafe_cast(), from_glib(synced))
 }
 
-unsafe extern "C" fn notify_timeout_trampoline<P>(this: *mut ffi::GstClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clock> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Clock::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_window_size_trampoline<P>(this: *mut ffi::GstClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clock> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Clock::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_window_threshold_trampoline<P>(this: *mut ffi::GstClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_threshold_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clock> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Clock::from_glib_borrow(this).unsafe_cast())
 }

@@ -107,7 +107,7 @@ pub trait RTSPMediaExt: 'static {
 
     fn n_streams(&self) -> u32;
 
-    //fn prepare<'a, P: Into<Option<&'a /*Ignored*/RTSPThread>>>(&self, thread: P) -> bool;
+    //fn prepare(&self, thread: /*Ignored*/Option<&mut RTSPThread>) -> bool;
 
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool;
 
@@ -127,7 +127,7 @@ pub trait RTSPMediaExt: 'static {
 
     fn set_multicast_iface<'a, P: Into<Option<&'a str>>>(&self, multicast_iface: P);
 
-    //fn set_permissions<'a, P: Into<Option<&'a /*Ignored*/RTSPPermissions>>>(&self, permissions: P);
+    //fn set_permissions(&self, permissions: /*Ignored*/Option<&mut RTSPPermissions>);
 
     fn set_pipeline_state(&self, state: gst::State);
 
@@ -377,7 +377,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn prepare<'a, P: Into<Option<&'a /*Ignored*/RTSPThread>>>(&self, thread: P) -> bool {
+    //fn prepare(&self, thread: /*Ignored*/Option<&mut RTSPThread>) -> bool {
     //    unsafe { TODO: call ffi::gst_rtsp_media_prepare() }
     //}
 
@@ -432,7 +432,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn set_permissions<'a, P: Into<Option<&'a /*Ignored*/RTSPPermissions>>>(&self, permissions: P) {
+    //fn set_permissions(&self, permissions: /*Ignored*/Option<&mut RTSPPermissions>) {
     //    unsafe { TODO: call ffi::gst_rtsp_media_set_permissions() }
     //}
 
@@ -574,253 +574,253 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
 
     fn connect_new_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-state\0".as_ptr() as *const _,
-                transmute(new_state_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(new_state_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_new_stream<F: Fn(&Self, &RTSPStream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &RTSPStream) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-stream\0".as_ptr() as *const _,
-                transmute(new_stream_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(new_stream_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_prepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"prepared\0".as_ptr() as *const _,
-                transmute(prepared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(prepared_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_removed_stream<F: Fn(&Self, &RTSPStream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &RTSPStream) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"removed-stream\0".as_ptr() as *const _,
-                transmute(removed_stream_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(removed_stream_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_target_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"target-state\0".as_ptr() as *const _,
-                transmute(target_state_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(target_state_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_unprepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unprepared\0".as_ptr() as *const _,
-                transmute(unprepared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unprepared_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::buffer-size\0".as_ptr() as *const _,
-                transmute(notify_buffer_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_buffer_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::clock\0".as_ptr() as *const _,
-                transmute(notify_clock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_clock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::eos-shutdown\0".as_ptr() as *const _,
-                transmute(notify_eos_shutdown_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_eos_shutdown_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::latency\0".as_ptr() as *const _,
-                transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_latency_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::profiles\0".as_ptr() as *const _,
-                transmute(notify_profiles_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_profiles_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::protocols\0".as_ptr() as *const _,
-                transmute(notify_protocols_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_protocols_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_reusable_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::reusable\0".as_ptr() as *const _,
-                transmute(notify_reusable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_reusable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::shared\0".as_ptr() as *const _,
-                transmute(notify_shared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_shared_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stop-on-disconnect\0".as_ptr() as *const _,
-                transmute(notify_stop_on_disconnect_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_stop_on_disconnect_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::suspend-mode\0".as_ptr() as *const _,
-                transmute(notify_suspend_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_suspend_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_time_provider_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::time-provider\0".as_ptr() as *const _,
-                transmute(notify_time_provider_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_time_provider_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transport-mode\0".as_ptr() as *const _,
-                transmute(notify_transport_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_transport_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn new_state_trampoline<P>(this: *mut ffi::GstRTSPMedia, object: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn new_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, object: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P, i32) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
 }
 
-unsafe extern "C" fn new_stream_trampoline<P>(this: *mut ffi::GstRTSPMedia, object: *mut ffi::GstRTSPStream, f: glib_ffi::gpointer)
+unsafe extern "C" fn new_stream_trampoline<P, F: Fn(&P, &RTSPStream) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, object: *mut ffi::GstRTSPStream, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P, &RTSPStream) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn prepared_trampoline<P>(this: *mut ffi::GstRTSPMedia, f: glib_ffi::gpointer)
+unsafe extern "C" fn prepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn removed_stream_trampoline<P>(this: *mut ffi::GstRTSPMedia, object: *mut ffi::GstRTSPStream, f: glib_ffi::gpointer)
+unsafe extern "C" fn removed_stream_trampoline<P, F: Fn(&P, &RTSPStream) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, object: *mut ffi::GstRTSPStream, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P, &RTSPStream) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn target_state_trampoline<P>(this: *mut ffi::GstRTSPMedia, object: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn target_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, object: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P, i32) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
 }
 
-unsafe extern "C" fn unprepared_trampoline<P>(this: *mut ffi::GstRTSPMedia, f: glib_ffi::gpointer)
+unsafe extern "C" fn unprepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_buffer_size_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_buffer_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_clock_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_eos_shutdown_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_eos_shutdown_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_latency_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_profiles_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_protocols_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_reusable_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_reusable_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_shared_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_shared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_stop_on_disconnect_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_stop_on_disconnect_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_suspend_mode_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_suspend_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_time_provider_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_time_provider_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_transport_mode_trampoline<P>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transport_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMedia, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMedia> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }

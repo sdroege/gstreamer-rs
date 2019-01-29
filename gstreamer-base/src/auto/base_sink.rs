@@ -336,155 +336,155 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
     fn connect_property_async_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::async\0".as_ptr() as *const _,
-                transmute(notify_async_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_async_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::blocksize\0".as_ptr() as *const _,
-                transmute(notify_blocksize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_blocksize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_enable_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-last-sample\0".as_ptr() as *const _,
-                transmute(notify_enable_last_sample_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_enable_last_sample_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_last_sample_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::last-sample\0".as_ptr() as *const _,
-                transmute(notify_last_sample_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_last_sample_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_max_bitrate_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-bitrate\0".as_ptr() as *const _,
-                transmute(notify_max_bitrate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_bitrate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_max_lateness_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-lateness\0".as_ptr() as *const _,
-                transmute(notify_max_lateness_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_lateness_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::qos\0".as_ptr() as *const _,
-                transmute(notify_qos_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_qos_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_render_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::render-delay\0".as_ptr() as *const _,
-                transmute(notify_render_delay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_render_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_sync_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::sync\0".as_ptr() as *const _,
-                transmute(notify_sync_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_sync_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_throttle_time_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::throttle-time\0".as_ptr() as *const _,
-                transmute(notify_throttle_time_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_throttle_time_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_ts_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::ts-offset\0".as_ptr() as *const _,
-                transmute(notify_ts_offset_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_ts_offset_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_async_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_blocksize_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_enable_last_sample_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_enable_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_last_sample_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_bitrate_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_bitrate_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_lateness_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_lateness_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_qos_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_render_delay_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_render_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_sync_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_throttle_time_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_throttle_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ts_offset_trampoline<P>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ts_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }

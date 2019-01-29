@@ -164,7 +164,7 @@ pub trait RTSPStreamExt: 'static {
 
     fn set_seqnum_offset(&self, seqnum: u16);
 
-    //fn transport_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPStreamTransportFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPStreamTransport>;
+    //fn transport_filter(&self, func: /*Unimplemented*/Fn(&RTSPStream, &RTSPStreamTransport) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPStreamTransport>;
 
     fn unblock_linked(&self) -> bool;
 
@@ -539,7 +539,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    //fn transport_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPStreamTransportFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPStreamTransport> {
+    //fn transport_filter(&self, func: /*Unimplemented*/Fn(&RTSPStream, &RTSPStreamTransport) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPStreamTransport> {
     //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_filter() }
     //}
 
@@ -558,71 +558,71 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gst::Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-rtcp-encoder\0".as_ptr() as *const _,
-                transmute(new_rtcp_encoder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(new_rtcp_encoder_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_new_rtp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gst::Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-rtp-encoder\0".as_ptr() as *const _,
-                transmute(new_rtp_encoder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(new_rtp_encoder_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_control_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::control\0".as_ptr() as *const _,
-                transmute(notify_control_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_control_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::profiles\0".as_ptr() as *const _,
-                transmute(notify_profiles_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_profiles_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::protocols\0".as_ptr() as *const _,
-                transmute(notify_protocols_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_protocols_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn new_rtcp_encoder_trampoline<P>(this: *mut ffi::GstRTSPStream, object: *mut gst_ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn new_rtcp_encoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut ffi::GstRTSPStream, object: *mut gst_ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<RTSPStream> {
-    let f: &&(Fn(&P, &gst::Element) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn new_rtp_encoder_trampoline<P>(this: *mut ffi::GstRTSPStream, object: *mut gst_ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn new_rtp_encoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut ffi::GstRTSPStream, object: *mut gst_ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<RTSPStream> {
-    let f: &&(Fn(&P, &gst::Element) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn notify_control_trampoline<P>(this: *mut ffi::GstRTSPStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_control_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPStream> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_profiles_trampoline<P>(this: *mut ffi::GstRTSPStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPStream> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_protocols_trampoline<P>(this: *mut ffi::GstRTSPStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPStream> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
 }

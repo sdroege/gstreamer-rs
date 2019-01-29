@@ -65,8 +65,6 @@ pub const NONE_PAD: Option<&Pad> = None;
 pub trait PadExt: 'static {
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError>;
 
-    //fn add_probe(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong;
-
     fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool;
 
     fn check_reconfigure(&self) -> bool;
@@ -77,7 +75,7 @@ pub trait PadExt: 'static {
 
     //fn create_stream_id_printf_valist<'a, P: IsA<Element>, Q: Into<Option<&'a str>>>(&self, parent: &P, stream_id: Q, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) -> Option<GString>;
 
-    //fn forward<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, forward: /*Unknown conversion*//*Unimplemented*/PadForwardFunction, user_data: P) -> bool;
+    fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool;
 
     fn get_allowed_caps(&self) -> Option<Caps>;
 
@@ -141,37 +139,11 @@ pub trait PadExt: 'static {
 
     fn query_caps<'a, P: Into<Option<&'a Caps>>>(&self, filter: P) -> Option<Caps>;
 
-    //fn set_activate_function_full(&self, activate: /*Unknown conversion*//*Unimplemented*/PadActivateFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_activatemode_function_full(&self, activatemode: /*Unknown conversion*//*Unimplemented*/PadActivateModeFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
-    //fn set_chain_function_full(&self, chain: /*Unknown conversion*//*Unimplemented*/PadChainFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_chain_list_function_full(&self, chainlist: /*Unknown conversion*//*Unimplemented*/PadChainListFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_element_private<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, priv_: P);
-
-    //fn set_event_full_function_full(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFullFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_event_function_full(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_getrange_function_full(&self, get: /*Unknown conversion*//*Unimplemented*/PadGetRangeFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_iterate_internal_links_function_full(&self, iterintlink: /*Unknown conversion*//*Unimplemented*/PadIterIntLinkFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_link_function_full(&self, link: /*Unknown conversion*//*Unimplemented*/PadLinkFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     fn set_offset(&self, offset: i64);
-
-    //fn set_query_function_full(&self, query: /*Unknown conversion*//*Unimplemented*/PadQueryFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn set_unlink_function_full(&self, unlink: /*Unknown conversion*//*Unimplemented*/PadUnlinkFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
-    //fn start_task(&self, func: /*Unknown conversion*//*Unimplemented*/TaskFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> bool;
-
-    //fn sticky_events_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, foreach_func: /*Unknown conversion*//*Unimplemented*/PadStickyEventsForeachFunction, user_data: P);
 
     fn stop_task(&self) -> Result<(), glib::error::BoolError>;
 
@@ -203,10 +175,6 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn add_probe(&self, mask: PadProbeType, callback: /*Unknown conversion*//*Unimplemented*/PadProbeCallback, destroy_data: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> libc::c_ulong {
-    //    unsafe { TODO: call ffi::gst_pad_add_probe() }
-    //}
-
     fn can_link<P: IsA<Pad>>(&self, sinkpad: &P) -> bool {
         unsafe {
             from_glib(ffi::gst_pad_can_link(self.as_ref().to_glib_none().0, sinkpad.as_ref().to_glib_none().0))
@@ -234,9 +202,20 @@ impl<O: IsA<Pad>> PadExt for O {
     //    unsafe { TODO: call ffi::gst_pad_create_stream_id_printf_valist() }
     //}
 
-    //fn forward<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, forward: /*Unknown conversion*//*Unimplemented*/PadForwardFunction, user_data: P) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_forward() }
-    //}
+    fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool {
+        let forward_data: P = forward;
+        unsafe extern "C" fn forward_func<P: FnMut(&Pad) -> bool>(pad: *mut ffi::GstPad, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let pad = from_glib_borrow(pad);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(&pad);
+            res.to_glib()
+        }
+        let forward = Some(forward_func::<P> as _);
+        let super_callback0: &P = &forward_data;
+        unsafe {
+            from_glib(ffi::gst_pad_forward(self.as_ref().to_glib_none().0, forward, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     fn get_allowed_caps(&self) -> Option<Caps> {
         unsafe {
@@ -412,50 +391,14 @@ impl<O: IsA<Pad>> PadExt for O {
         }
     }
 
-    //fn set_activate_function_full(&self, activate: /*Unknown conversion*//*Unimplemented*/PadActivateFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_activate_function_full() }
-    //}
-
-    //fn set_activatemode_function_full(&self, activatemode: /*Unknown conversion*//*Unimplemented*/PadActivateModeFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_activatemode_function_full() }
-    //}
-
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(ffi::gst_pad_set_active(self.as_ref().to_glib_none().0, active.to_glib()), "Failed to activate pad")
         }
     }
 
-    //fn set_chain_function_full(&self, chain: /*Unknown conversion*//*Unimplemented*/PadChainFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_chain_function_full() }
-    //}
-
-    //fn set_chain_list_function_full(&self, chainlist: /*Unknown conversion*//*Unimplemented*/PadChainListFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_chain_list_function_full() }
-    //}
-
-    //fn set_element_private<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, priv_: P) {
+    //fn set_element_private(&self, priv_: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gst_pad_set_element_private() }
-    //}
-
-    //fn set_event_full_function_full(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFullFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_event_full_function_full() }
-    //}
-
-    //fn set_event_function_full(&self, event: /*Unknown conversion*//*Unimplemented*/PadEventFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_event_function_full() }
-    //}
-
-    //fn set_getrange_function_full(&self, get: /*Unknown conversion*//*Unimplemented*/PadGetRangeFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_getrange_function_full() }
-    //}
-
-    //fn set_iterate_internal_links_function_full(&self, iterintlink: /*Unknown conversion*//*Unimplemented*/PadIterIntLinkFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_iterate_internal_links_function_full() }
-    //}
-
-    //fn set_link_function_full(&self, link: /*Unknown conversion*//*Unimplemented*/PadLinkFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_link_function_full() }
     //}
 
     fn set_offset(&self, offset: i64) {
@@ -463,22 +406,6 @@ impl<O: IsA<Pad>> PadExt for O {
             ffi::gst_pad_set_offset(self.as_ref().to_glib_none().0, offset);
         }
     }
-
-    //fn set_query_function_full(&self, query: /*Unknown conversion*//*Unimplemented*/PadQueryFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_query_function_full() }
-    //}
-
-    //fn set_unlink_function_full(&self, unlink: /*Unknown conversion*//*Unimplemented*/PadUnlinkFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_pad_set_unlink_function_full() }
-    //}
-
-    //fn start_task(&self, func: /*Unknown conversion*//*Unimplemented*/TaskFunction, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> bool {
-    //    unsafe { TODO: call ffi::gst_pad_start_task() }
-    //}
-
-    //fn sticky_events_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, foreach_func: /*Unknown conversion*//*Unimplemented*/PadStickyEventsForeachFunction, user_data: P) {
-    //    unsafe { TODO: call ffi::gst_pad_sticky_events_foreach() }
-    //}
 
     fn stop_task(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -522,71 +449,71 @@ impl<O: IsA<Pad>> PadExt for O {
 
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"linked\0".as_ptr() as *const _,
-                transmute(linked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(linked_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_unlinked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unlinked\0".as_ptr() as *const _,
-                transmute(unlinked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unlinked_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_caps_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::caps\0".as_ptr() as *const _,
-                transmute(notify_caps_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_caps_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_offset_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::offset\0".as_ptr() as *const _,
-                transmute(notify_offset_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_offset_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_template_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::template\0".as_ptr() as *const _,
-                transmute(notify_template_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_template_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn linked_trampoline<P>(this: *mut ffi::GstPad, peer: *mut ffi::GstPad, f: glib_ffi::gpointer)
+unsafe extern "C" fn linked_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstPad, peer: *mut ffi::GstPad, f: glib_ffi::gpointer)
 where P: IsA<Pad> {
-    let f: &&(Fn(&P, &Pad) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pad::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(peer))
 }
 
-unsafe extern "C" fn unlinked_trampoline<P>(this: *mut ffi::GstPad, peer: *mut ffi::GstPad, f: glib_ffi::gpointer)
+unsafe extern "C" fn unlinked_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstPad, peer: *mut ffi::GstPad, f: glib_ffi::gpointer)
 where P: IsA<Pad> {
-    let f: &&(Fn(&P, &Pad) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pad::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(peer))
 }
 
-unsafe extern "C" fn notify_caps_trampoline<P>(this: *mut ffi::GstPad, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_caps_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstPad, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pad> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pad::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_offset_trampoline<P>(this: *mut ffi::GstPad, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstPad, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pad> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pad::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_template_trampoline<P>(this: *mut ffi::GstPad, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_template_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstPad, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pad> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pad::from_glib_borrow(this).unsafe_cast())
 }

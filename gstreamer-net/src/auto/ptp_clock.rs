@@ -58,25 +58,25 @@ impl PtpClock {
 
     pub fn connect_property_grandmaster_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::grandmaster-clock-id\0".as_ptr() as *const _,
-                transmute(notify_grandmaster_clock_id_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_grandmaster_clock_id_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_internal_clock_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::internal-clock\0".as_ptr() as *const _,
-                transmute(notify_internal_clock_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_internal_clock_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_master_clock_id_notify<F: Fn(&PtpClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&PtpClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::master-clock-id\0".as_ptr() as *const _,
-                transmute(notify_master_clock_id_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_master_clock_id_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -84,17 +84,17 @@ impl PtpClock {
 unsafe impl Send for PtpClock {}
 unsafe impl Sync for PtpClock {}
 
-unsafe extern "C" fn notify_grandmaster_clock_id_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_grandmaster_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_internal_clock_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_master_clock_id_trampoline(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PtpClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_master_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

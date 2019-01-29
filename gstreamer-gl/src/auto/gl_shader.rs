@@ -255,9 +255,9 @@ impl GLShader {
 
     pub fn connect_property_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&GLShader) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::linked\0".as_ptr() as *const _,
-                transmute(notify_linked_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_linked_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -265,7 +265,7 @@ impl GLShader {
 unsafe impl Send for GLShader {}
 unsafe impl Sync for GLShader {}
 
-unsafe extern "C" fn notify_linked_trampoline(this: *mut ffi::GstGLShader, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&GLShader) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_linked_trampoline<F: Fn(&GLShader) + Send + Sync + 'static>(this: *mut ffi::GstGLShader, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

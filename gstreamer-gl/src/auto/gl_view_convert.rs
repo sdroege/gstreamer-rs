@@ -137,41 +137,41 @@ impl GLViewConvert {
 
     pub fn connect_property_downmix_mode_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&GLViewConvert) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::downmix-mode\0".as_ptr() as *const _,
-                transmute(notify_downmix_mode_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_downmix_mode_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_input_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&GLViewConvert) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-flags-override\0".as_ptr() as *const _,
-                transmute(notify_input_flags_override_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_input_flags_override_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_input_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&GLViewConvert) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-mode-override\0".as_ptr() as *const _,
-                transmute(notify_input_mode_override_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_input_mode_override_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_output_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&GLViewConvert) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::output-flags-override\0".as_ptr() as *const _,
-                transmute(notify_output_flags_override_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_output_flags_override_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_property_output_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&GLViewConvert) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::output-mode-override\0".as_ptr() as *const _,
-                transmute(notify_output_mode_override_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_output_mode_override_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -185,27 +185,27 @@ impl Default for GLViewConvert {
 unsafe impl Send for GLViewConvert {}
 unsafe impl Sync for GLViewConvert {}
 
-unsafe extern "C" fn notify_downmix_mode_trampoline(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&GLViewConvert) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_downmix_mode_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_input_flags_override_trampoline(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&GLViewConvert) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_input_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_input_mode_override_trampoline(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&GLViewConvert) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_input_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_output_flags_override_trampoline(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&GLViewConvert) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_output_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_output_mode_override_trampoline(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&GLViewConvert) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_output_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

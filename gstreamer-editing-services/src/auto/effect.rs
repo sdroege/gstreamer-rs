@@ -23,7 +23,7 @@ glib_wrapper! {
 }
 
 impl Effect {
-    pub fn new(bin_description: &str) -> Effect {
+    pub fn new(bin_description: &str) -> Option<Effect> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::ges_effect_new(bin_description.to_glib_none().0))

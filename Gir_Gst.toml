@@ -117,6 +117,11 @@ name = "Gst.Bus"
 status = "generate"
 final_type = true
     [[object.function]]
+    name = "set_sync_handler"
+    # Into<Option<_>> makes this hard to use
+    ignore = true
+
+    [[object.function]]
     name = "add_signal_watch_full"
     # Priority
     ignore = true
@@ -137,6 +142,16 @@ final_type = true
     [[object.function]]
     name = "create_watch"
     # More convenient manual implementation
+    ignore = true
+
+    [[object.function]]
+    name = "add_watch"
+    # More specific trait bounds possible for the closure
+    ignore = true
+
+    [[object.function]]
+    name = "add_watch_full"
+    # More specific trait bounds possible for the closure
     ignore = true
 
     [[object.function]]
@@ -336,6 +351,11 @@ status = "generate"
         [object.function.return]
         # It is already a Result
         nullable = false
+
+    [[object.function]]
+    name = "call_async"
+    # more specific closure type possible
+    ignore = true
 
     [[object.function]]
     name = "add_pad"
@@ -796,6 +816,26 @@ status = "generate"
     # Wrong place
     ignore = true
 
+    [[object.function]]
+    pattern = "set_.*_function_full"
+    # More specific closure trait bounds possible
+    ignore = true
+
+    [[object.function]]
+    name = "start_task"
+    # More specific closure trait bounds possible
+    ignore = true
+
+    [[object.function]]
+    name = "sticky_events_foreach"
+    # Complex closure argument handling
+    ignore = true
+
+    [[object.function]]
+    name = "add_probe"
+    # Complex closure argument handling
+    ignore = true
+
 [[object]]
 name = "Gst.PadTemplate"
 status = "generate"
@@ -882,6 +922,11 @@ final_type = true
 name = "Gst.Plugin"
 status = "generate"
 final_type = true
+
+    [[object.function]]
+    pattern = "register_static.*"
+    # Needs manual implementation
+    ignore = true
 
     [[object.function]]
     name = "list_free"

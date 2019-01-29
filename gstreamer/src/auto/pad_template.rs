@@ -32,7 +32,7 @@ glib_wrapper! {
 }
 
 impl PadTemplate {
-    pub fn new(name_template: &str, direction: PadDirection, presence: PadPresence, caps: &Caps) -> PadTemplate {
+    pub fn new(name_template: &str, direction: PadDirection, presence: PadPresence, caps: &Caps) -> Option<PadTemplate> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_pad_template_new(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0))
@@ -40,7 +40,7 @@ impl PadTemplate {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn new_with_gtype(name_template: &str, direction: PadDirection, presence: PadPresence, caps: &Caps, pad_type: glib::types::Type) -> PadTemplate {
+    pub fn new_with_gtype(name_template: &str, direction: PadDirection, presence: PadPresence, caps: &Caps, pad_type: glib::types::Type) -> Option<PadTemplate> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gst_pad_template_new_with_gtype(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0, pad_type.to_glib()))
@@ -94,9 +94,9 @@ impl PadTemplate {
 
     pub fn connect_pad_created<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&PadTemplate, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pad-created\0".as_ptr() as *const _,
-                transmute(pad_created_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(pad_created_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -104,7 +104,7 @@ impl PadTemplate {
 unsafe impl Send for PadTemplate {}
 unsafe impl Sync for PadTemplate {}
 
-unsafe extern "C" fn pad_created_trampoline(this: *mut ffi::GstPadTemplate, pad: *mut ffi::GstPad, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&PadTemplate, &Pad) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn pad_created_trampoline<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstPadTemplate, pad: *mut ffi::GstPad, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(pad))
 }

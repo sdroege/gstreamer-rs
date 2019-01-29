@@ -110,14 +110,6 @@ impl Plugin {
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
-
-    //pub fn register_static(major_version: i32, minor_version: i32, name: &str, description: &str, init_func: /*Unknown conversion*//*Unimplemented*/PluginInitFunc, version: &str, license: &str, source: &str, package: &str, origin: &str) -> bool {
-    //    unsafe { TODO: call ffi::gst_plugin_register_static() }
-    //}
-
-    //pub fn register_static_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(major_version: i32, minor_version: i32, name: &str, description: &str, init_full_func: /*Unknown conversion*//*Unimplemented*/PluginInitFullFunc, version: &str, license: &str, source: &str, package: &str, origin: &str, user_data: P) -> bool {
-    //    unsafe { TODO: call ffi::gst_plugin_register_static_full() }
-    //}
 }
 
 unsafe impl Send for Plugin {}

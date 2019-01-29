@@ -162,85 +162,85 @@ impl<O: IsA<Project>> ProjectExt for O {
 
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Asset) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"asset-added\0".as_ptr() as *const _,
-                transmute(asset_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(asset_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Asset) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"asset-loading\0".as_ptr() as *const _,
-                transmute(asset_loading_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(asset_loading_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Asset) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"asset-removed\0".as_ptr() as *const _,
-                transmute(asset_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(asset_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_error_loading_asset<F: Fn(&Self, &Error, &str, glib::types::Type) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Error, &str, glib::types::Type) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"error-loading-asset\0".as_ptr() as *const _,
-                transmute(error_loading_asset_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(error_loading_asset_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Timeline) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"loaded\0".as_ptr() as *const _,
-                transmute(loaded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(loaded_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<GString> + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Error, &Asset) -> Option<GString> + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"missing-uri\0".as_ptr() as *const _,
-                transmute(missing_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(missing_uri_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn asset_added_trampoline<P>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
+unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &&(Fn(&P, &Asset) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
-unsafe extern "C" fn asset_loading_trampoline<P>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
+unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &&(Fn(&P, &Asset) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
-unsafe extern "C" fn asset_removed_trampoline<P>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
+unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &&(Fn(&P, &Asset) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
-unsafe extern "C" fn error_loading_asset_trampoline<P>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, id: *mut libc::c_char, extractable_type: glib_ffi::GType, f: glib_ffi::gpointer)
+unsafe extern "C" fn error_loading_asset_trampoline<P, F: Fn(&P, &Error, &str, glib::types::Type) + 'static>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, id: *mut libc::c_char, extractable_type: glib_ffi::GType, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &&(Fn(&P, &Error, &str, glib::types::Type) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &GString::from_glib_borrow(id), from_glib(extractable_type))
 }
 
-unsafe extern "C" fn loaded_trampoline<P>(this: *mut ffi::GESProject, timeline: *mut ffi::GESTimeline, f: glib_ffi::gpointer)
+unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(this: *mut ffi::GESProject, timeline: *mut ffi::GESTimeline, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &&(Fn(&P, &Timeline) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(timeline))
 }
 
-unsafe extern "C" fn missing_uri_trampoline<P>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, wrong_asset: *mut ffi::GESAsset, f: glib_ffi::gpointer) -> *mut libc::c_char
+unsafe extern "C" fn missing_uri_trampoline<P, F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, wrong_asset: *mut ffi::GESAsset, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<Project> {
-    let f: &&(Fn(&P, &Error, &Asset) -> Option<GString> + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &from_glib_borrow(wrong_asset)).to_glib_full()
 }

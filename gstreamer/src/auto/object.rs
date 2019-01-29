@@ -32,11 +32,11 @@ impl Object {
         }
     }
 
-    //pub fn default_deep_notify<P: IsA<glib::Object>, Q: IsA<Object>, R: IsA</*Ignored*/glib::ParamSpec>>(object: &P, orig: &Q, pspec: &R, excluded_props: &[&str]) {
+    //pub fn default_deep_notify<P: IsA<glib::Object>, Q: IsA<Object>>(object: &P, orig: &Q, pspec: /*Ignored*/&glib::ParamSpec, excluded_props: &[&str]) {
     //    unsafe { TODO: call ffi::gst_object_default_deep_notify() }
     //}
 
-    //pub fn ref_sink<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(object: P) -> /*Unimplemented*/Option<Fundamental: Pointer> {
+    //pub fn ref_sink(object: /*Unimplemented*/Option<Fundamental: Pointer>) -> /*Unimplemented*/Option<Fundamental: Pointer> {
     //    unsafe { TODO: call ffi::gst_object_ref_sink() }
     //}
 
@@ -51,7 +51,7 @@ unsafe impl Sync for Object {}
 pub const NONE_OBJECT: Option<&Object> = None;
 
 pub trait GstObjectExt: 'static {
-    //fn add_control_binding<P: IsA</*Ignored*/ControlBinding>>(&self, binding: &P) -> bool;
+    //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
 
     fn default_error<'a, P: Into<Option<&'a str>>>(&self, error: &Error, debug: P);
 
@@ -69,7 +69,7 @@ pub trait GstObjectExt: 'static {
 
     //fn get_value(&self, property_name: &str, timestamp: ClockTime) -> /*Ignored*/Option<glib::Value>;
 
-    //fn get_value_array<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: P) -> bool;
+    //fn get_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool;
 
     fn has_active_control_bindings(&self) -> bool;
 
@@ -79,7 +79,7 @@ pub trait GstObjectExt: 'static {
 
     fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool;
 
-    //fn remove_control_binding<P: IsA</*Ignored*/ControlBinding>>(&self, binding: &P) -> bool;
+    //fn remove_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
 
     fn set_control_binding_disabled(&self, property_name: &str, disabled: bool);
 
@@ -105,7 +105,7 @@ pub trait GstObjectExt: 'static {
 }
 
 impl<O: IsA<Object>> GstObjectExt for O {
-    //fn add_control_binding<P: IsA</*Ignored*/ControlBinding>>(&self, binding: &P) -> bool {
+    //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool {
     //    unsafe { TODO: call ffi::gst_object_add_control_binding() }
     //}
 
@@ -152,7 +152,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
     //    unsafe { TODO: call ffi::gst_object_get_value() }
     //}
 
-    //fn get_value_array<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: P) -> bool {
+    //fn get_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi::gst_object_get_value_array() }
     //}
 
@@ -180,7 +180,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
         }
     }
 
-    //fn remove_control_binding<P: IsA</*Ignored*/ControlBinding>>(&self, binding: &P) -> bool {
+    //fn remove_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool {
     //    unsafe { TODO: call ffi::gst_object_remove_control_binding() }
     //}
 
@@ -238,29 +238,29 @@ impl<O: IsA<Object>> GstObjectExt for O {
 
     fn connect_property_name_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::name\0".as_ptr() as *const _,
-                transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_parent_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::parent\0".as_ptr() as *const _,
-                transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_parent_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_name_trampoline<P>(this: *mut ffi::GstObject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstObject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Object> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Object::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_parent_trampoline<P>(this: *mut ffi::GstObject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstObject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Object> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Object::from_glib_borrow(this).unsafe_cast())
 }

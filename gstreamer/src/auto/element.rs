@@ -66,19 +66,16 @@ pub trait ElementExt: 'static {
 
     fn add_pad<P: IsA<Pad>>(&self, pad: &P) -> Result<(), glib::error::BoolError>;
 
-    //#[cfg(any(feature = "v1_10", feature = "dox"))]
-    //fn call_async(&self, func: /*Unknown conversion*//*Unimplemented*/ElementCallAsyncFunc, destroy_notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
     fn create_all_pads(&self);
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn foreach_pad<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ElementForeachPadFunc, user_data: P) -> bool;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn foreach_sink_pad<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ElementForeachPadFunc, user_data: P) -> bool;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn foreach_src_pad<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ElementForeachPadFunc, user_data: P) -> bool;
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool;
 
     fn get_base_time(&self) -> ClockTime;
 
@@ -181,31 +178,62 @@ impl<O: IsA<Element>> ElementExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v1_10", feature = "dox"))]
-    //fn call_async(&self, func: /*Unknown conversion*//*Unimplemented*/ElementCallAsyncFunc, destroy_notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gst_element_call_async() }
-    //}
-
     fn create_all_pads(&self) {
         unsafe {
             ffi::gst_element_create_all_pads(self.as_ref().to_glib_none().0);
         }
     }
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn foreach_pad<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ElementForeachPadFunc, user_data: P) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_foreach_pad() }
-    //}
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(element: *mut ffi::GstElement, pad: *mut ffi::GstPad, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let element = from_glib_borrow(element);
+            let pad = from_glib_borrow(pad);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(&element, &pad);
+            res.to_glib()
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            from_glib(ffi::gst_element_foreach_pad(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn foreach_sink_pad<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ElementForeachPadFunc, user_data: P) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_foreach_sink_pad() }
-    //}
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(element: *mut ffi::GstElement, pad: *mut ffi::GstPad, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let element = from_glib_borrow(element);
+            let pad = from_glib_borrow(pad);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(&element, &pad);
+            res.to_glib()
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            from_glib(ffi::gst_element_foreach_sink_pad(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
-    //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //fn foreach_src_pad<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ElementForeachPadFunc, user_data: P) -> bool {
-    //    unsafe { TODO: call ffi::gst_element_foreach_src_pad() }
-    //}
+    #[cfg(any(feature = "v1_14", feature = "dox"))]
+    fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(element: *mut ffi::GstElement, pad: *mut ffi::GstPad, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let element = from_glib_borrow(element);
+            let pad = from_glib_borrow(pad);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(&element, &pad);
+            res.to_glib()
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            from_glib(ffi::gst_element_foreach_src_pad(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     fn get_base_time(&self) -> ClockTime {
         unsafe {
@@ -449,43 +477,43 @@ impl<O: IsA<Element>> ElementExt for O {
 
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"no-more-pads\0".as_ptr() as *const _,
-                transmute(no_more_pads_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(no_more_pads_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pad-added\0".as_ptr() as *const _,
-                transmute(pad_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(pad_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Pad) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pad-removed\0".as_ptr() as *const _,
-                transmute(pad_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(pad_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn no_more_pads_trampoline<P>(this: *mut ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<Element> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Element::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn pad_added_trampoline<P>(this: *mut ffi::GstElement, new_pad: *mut ffi::GstPad, f: glib_ffi::gpointer)
+unsafe extern "C" fn pad_added_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstElement, new_pad: *mut ffi::GstPad, f: glib_ffi::gpointer)
 where P: IsA<Element> {
-    let f: &&(Fn(&P, &Pad) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(new_pad))
 }
 
-unsafe extern "C" fn pad_removed_trampoline<P>(this: *mut ffi::GstElement, old_pad: *mut ffi::GstPad, f: glib_ffi::gpointer)
+unsafe extern "C" fn pad_removed_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstElement, old_pad: *mut ffi::GstPad, f: glib_ffi::gpointer)
 where P: IsA<Element> {
-    let f: &&(Fn(&P, &Pad) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_pad))
 }

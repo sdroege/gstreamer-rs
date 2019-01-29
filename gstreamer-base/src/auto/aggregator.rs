@@ -106,30 +106,30 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::latency\0".as_ptr() as *const _,
-                transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_latency_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_start_time_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::start-time\0".as_ptr() as *const _,
-                transmute(notify_start_time_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_start_time_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-unsafe extern "C" fn notify_latency_trampoline<P>(this: *mut ffi::GstAggregator, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstAggregator, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Aggregator> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Aggregator::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_start_time_trampoline<P>(this: *mut ffi::GstAggregator, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_start_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstAggregator, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Aggregator> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Aggregator::from_glib_borrow(this).unsafe_cast())
 }

@@ -26,14 +26,14 @@ impl DateTime {
         }
     }
 
-    pub fn new_from_g_date_time(dt: &glib::DateTime) -> DateTime {
+    pub fn new_from_g_date_time(dt: &glib::DateTime) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_date_time_new_from_g_date_time(dt.to_glib_full()))
         }
     }
 
-    pub fn new_from_iso8601_string(string: &str) -> DateTime {
+    pub fn new_from_iso8601_string(string: &str) -> Option<DateTime> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_date_time_new_from_iso8601_string(string.to_glib_none().0))

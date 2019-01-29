@@ -125,43 +125,43 @@ impl<O: IsA<Pipeline>> PipelineExt for O {
 
     fn connect_property_auto_flush_bus_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::auto-flush-bus\0".as_ptr() as *const _,
-                transmute(notify_auto_flush_bus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_auto_flush_bus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_delay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::delay\0".as_ptr() as *const _,
-                transmute(notify_delay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::latency\0".as_ptr() as *const _,
-                transmute(notify_latency_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_latency_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_auto_flush_bus_trampoline<P>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_auto_flush_bus_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_delay_trampoline<P>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_latency_trampoline<P>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }

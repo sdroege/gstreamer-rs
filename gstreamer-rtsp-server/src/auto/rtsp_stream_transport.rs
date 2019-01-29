@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_rtsp;
+use std::boxed::Box as Box_;
 
 glib_wrapper! {
     pub struct RTSPStreamTransport(Object<ffi::GstRTSPStreamTransport, ffi::GstRTSPStreamTransportClass, RTSPStreamTransportClass>);
@@ -46,9 +47,9 @@ pub trait RTSPStreamTransportExt: 'static {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
-    //fn set_callbacks<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, send_rtp: /*Unknown conversion*//*Unimplemented*/RTSPSendFunc, send_rtcp: /*Unknown conversion*//*Unimplemented*/RTSPSendFunc, notify: P);
+    //fn set_callbacks<P: Fn(&gst::Buffer, u8) -> bool + 'static, Q: Fn(&gst::Buffer, u8) -> bool + 'static>(&self, send_rtp: P, send_rtcp: Q);
 
-    //fn set_keepalive<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, keep_alive: /*Unknown conversion*//*Unimplemented*/RTSPKeepAliveFunc, notify: P);
+    fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P);
 
     fn set_timed_out(&self, timedout: bool);
 
@@ -110,13 +111,26 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         }
     }
 
-    //fn set_callbacks<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, send_rtp: /*Unknown conversion*//*Unimplemented*/RTSPSendFunc, send_rtcp: /*Unknown conversion*//*Unimplemented*/RTSPSendFunc, notify: P) {
+    //fn set_callbacks<P: Fn(&gst::Buffer, u8) -> bool + 'static, Q: Fn(&gst::Buffer, u8) -> bool + 'static>(&self, send_rtp: P, send_rtcp: Q) {
     //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_set_callbacks() }
     //}
 
-    //fn set_keepalive<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, keep_alive: /*Unknown conversion*//*Unimplemented*/RTSPKeepAliveFunc, notify: P) {
-    //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_set_keepalive() }
-    //}
+    fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P) {
+        let keep_alive_data: Box_<P> = Box::new(keep_alive);
+        unsafe extern "C" fn keep_alive_func<P: Fn() + 'static>(user_data: glib_ffi::gpointer) {
+            let callback: &P = &*(user_data as *mut _);
+            (*callback)();
+        }
+        let keep_alive = Some(keep_alive_func::<P> as _);
+        unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(notify_func::<P> as _);
+        let super_callback0: Box_<P> = keep_alive_data;
+        unsafe {
+            ffi::gst_rtsp_stream_transport_set_keepalive(self.as_ref().to_glib_none().0, keep_alive, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     fn set_timed_out(&self, timedout: bool) {
         unsafe {

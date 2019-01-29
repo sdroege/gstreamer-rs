@@ -88,29 +88,29 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
 
     fn connect_property_uri_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::uri\0".as_ptr() as *const _,
-                transmute(notify_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_uri_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_use_gstpay_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-gstpay\0".as_ptr() as *const _,
-                transmute(notify_use_gstpay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_use_gstpay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_uri_trampoline<P>(this: *mut ffi::GstRTSPMediaFactoryURI, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMediaFactoryURI, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactoryURI> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMediaFactoryURI::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_gstpay_trampoline<P>(this: *mut ffi::GstRTSPMediaFactoryURI, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_gstpay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMediaFactoryURI, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactoryURI> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPMediaFactoryURI::from_glib_borrow(this).unsafe_cast())
 }

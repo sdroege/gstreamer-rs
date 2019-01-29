@@ -140,29 +140,29 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
 
     fn connect_provider_hidden<F: Fn(&Self, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"provider-hidden\0".as_ptr() as *const _,
-                transmute(provider_hidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(provider_hidden_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_provider_unhidden<F: Fn(&Self, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"provider-unhidden\0".as_ptr() as *const _,
-                transmute(provider_unhidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(provider_unhidden_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn provider_hidden_trampoline<P>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn provider_hidden_trampoline<P, F: Fn(&P, &str) + Send + Sync + 'static>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<DeviceProvider> {
-    let f: &&(Fn(&P, &str) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&DeviceProvider::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(object))
 }
 
-unsafe extern "C" fn provider_unhidden_trampoline<P>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn provider_unhidden_trampoline<P, F: Fn(&P, &str) + Send + Sync + 'static>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<DeviceProvider> {
-    let f: &&(Fn(&P, &str) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&DeviceProvider::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(object))
 }

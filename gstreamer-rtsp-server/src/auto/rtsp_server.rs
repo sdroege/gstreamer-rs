@@ -58,7 +58,7 @@ unsafe impl Sync for RTSPServer {}
 pub const NONE_RTSP_SERVER: Option<&RTSPServer> = None;
 
 pub trait RTSPServerExt: 'static {
-    //fn client_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPServerClientFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPClient>;
+    //fn client_filter(&self, func: /*Unimplemented*/Fn(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient>;
 
     fn create_socket<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>>(&self, cancellable: Q) -> Result<gio::Socket, Error>;
 
@@ -112,7 +112,7 @@ pub trait RTSPServerExt: 'static {
 }
 
 impl<O: IsA<RTSPServer>> RTSPServerExt for O {
-    //fn client_filter<'a, P: Into<Option<&'a /*Unimplemented*/RTSPServerClientFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: P, user_data: Q) -> Vec<RTSPClient> {
+    //fn client_filter(&self, func: /*Unimplemented*/Fn(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient> {
     //    unsafe { TODO: call ffi::gst_rtsp_server_client_filter() }
     //}
 
@@ -237,99 +237,99 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
 
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &RTSPClient) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"client-connected\0".as_ptr() as *const _,
-                transmute(client_connected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(client_connected_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::address\0".as_ptr() as *const _,
-                transmute(notify_address_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_address_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::backlog\0".as_ptr() as *const _,
-                transmute(notify_backlog_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_backlog_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::bound-port\0".as_ptr() as *const _,
-                transmute(notify_bound_port_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_bound_port_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mount-points\0".as_ptr() as *const _,
-                transmute(notify_mount_points_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_mount_points_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::service\0".as_ptr() as *const _,
-                transmute(notify_service_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_service_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::session-pool\0".as_ptr() as *const _,
-                transmute(notify_session_pool_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_session_pool_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn client_connected_trampoline<P>(this: *mut ffi::GstRTSPServer, object: *mut ffi::GstRTSPClient, f: glib_ffi::gpointer)
+unsafe extern "C" fn client_connected_trampoline<P, F: Fn(&P, &RTSPClient) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, object: *mut ffi::GstRTSPClient, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P, &RTSPClient) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn notify_address_trampoline<P>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_backlog_trampoline<P>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_bound_port_trampoline<P>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_bound_port_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_mount_points_trampoline<P>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_service_trampoline<P>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_service_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_session_pool_trampoline<P>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }

@@ -103,15 +103,15 @@ impl<O: IsA<Device>> DeviceExt for O {
 
     fn connect_removed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"removed\0".as_ptr() as *const _,
-                transmute(removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn removed_trampoline<P>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
+unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Device::from_glib_borrow(this).unsafe_cast())
 }

@@ -24,7 +24,7 @@ glib_wrapper! {
 }
 
 impl MIKEYPayload {
-    pub fn new(type_: MIKEYPayloadType) -> MIKEYPayload {
+    pub fn new(type_: MIKEYPayloadType) -> Option<MIKEYPayload> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gst_mikey_payload_new(type_.to_glib()))

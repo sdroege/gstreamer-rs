@@ -127,9 +127,9 @@ impl TestClock {
 
     pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&TestClock) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::clock-type\0".as_ptr() as *const _,
-                transmute(notify_clock_type_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_clock_type_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -143,7 +143,7 @@ impl Default for TestClock {
 unsafe impl Send for TestClock {}
 unsafe impl Sync for TestClock {}
 
-unsafe extern "C" fn notify_clock_type_trampoline(this: *mut ffi::GstTestClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&TestClock) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_clock_type_trampoline<F: Fn(&TestClock) + Send + Sync + 'static>(this: *mut ffi::GstTestClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

@@ -210,57 +210,57 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
 
     fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::blocksize\0".as_ptr() as *const _,
-                transmute(notify_blocksize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_blocksize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::do-timestamp\0".as_ptr() as *const _,
-                transmute(notify_do_timestamp_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_do_timestamp_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::num-buffers\0".as_ptr() as *const _,
-                transmute(notify_num_buffers_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_num_buffers_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::typefind\0".as_ptr() as *const _,
-                transmute(notify_typefind_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_typefind_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_blocksize_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_do_timestamp_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_do_timestamp_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_num_buffers_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_num_buffers_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_typefind_trampoline<P>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_typefind_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSrc, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSrc> {
-    let f: &&(Fn(&P) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }

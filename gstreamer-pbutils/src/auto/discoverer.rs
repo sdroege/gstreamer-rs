@@ -63,33 +63,33 @@ impl Discoverer {
 
     pub fn connect_discovered<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"discovered\0".as_ptr() as *const _,
-                transmute(discovered_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(discovered_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_finished<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Discoverer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                transmute(finished_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(finished_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_source_setup<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"source-setup\0".as_ptr() as *const _,
-                transmute(source_setup_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(source_setup_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_starting<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Discoverer) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"starting\0".as_ptr() as *const _,
-                transmute(starting_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(starting_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -97,22 +97,22 @@ impl Discoverer {
 unsafe impl Send for Discoverer {}
 unsafe impl Sync for Discoverer {}
 
-unsafe extern "C" fn discovered_trampoline(this: *mut ffi::GstDiscoverer, info: *mut ffi::GstDiscovererInfo, error: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, info: *mut ffi::GstDiscovererInfo, error: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(info), &from_glib_borrow(error))
 }
 
-unsafe extern "C" fn finished_trampoline(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Discoverer) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn source_setup_trampoline(this: *mut ffi::GstDiscoverer, source: *mut gst_ffi::GstElement, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Discoverer, &gst::Element) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn source_setup_trampoline<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, source: *mut gst_ffi::GstElement, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(source))
 }
 
-unsafe extern "C" fn starting_trampoline(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Discoverer) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

@@ -44,9 +44,20 @@ impl Registry {
         }
     }
 
-    //pub fn feature_filter<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter: /*Unknown conversion*//*Unimplemented*/PluginFeatureFilter, first: bool, user_data: P) -> Vec<PluginFeature> {
-    //    unsafe { TODO: call ffi::gst_registry_feature_filter() }
-    //}
+    pub fn feature_filter<P: FnMut(&PluginFeature) -> bool>(&self, filter: P, first: bool) -> Vec<PluginFeature> {
+        let filter_data: P = filter;
+        unsafe extern "C" fn filter_func<P: FnMut(&PluginFeature) -> bool>(feature: *mut ffi::GstPluginFeature, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let feature = from_glib_borrow(feature);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(&feature);
+            res.to_glib()
+        }
+        let filter = Some(filter_func::<P> as _);
+        let super_callback0: &P = &filter_data;
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_feature_filter(self.to_glib_none().0, filter, first.to_glib(), super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     pub fn find_feature(&self, name: &str, type_: glib::types::Type) -> Option<PluginFeature> {
         unsafe {
@@ -96,9 +107,20 @@ impl Registry {
         }
     }
 
-    //pub fn plugin_filter<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter: /*Unknown conversion*//*Unimplemented*/PluginFilter, first: bool, user_data: P) -> Vec<Plugin> {
-    //    unsafe { TODO: call ffi::gst_registry_plugin_filter() }
-    //}
+    pub fn plugin_filter<P: FnMut(&Plugin) -> bool>(&self, filter: P, first: bool) -> Vec<Plugin> {
+        let filter_data: P = filter;
+        unsafe extern "C" fn filter_func<P: FnMut(&Plugin) -> bool>(plugin: *mut ffi::GstPlugin, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let plugin = from_glib_borrow(plugin);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(&plugin);
+            res.to_glib()
+        }
+        let filter = Some(filter_func::<P> as _);
+        let super_callback0: &P = &filter_data;
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_registry_plugin_filter(self.to_glib_none().0, filter, first.to_glib(), super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     pub fn remove_feature<P: IsA<PluginFeature>>(&self, feature: &P) {
         unsafe {
@@ -127,17 +149,17 @@ impl Registry {
 
     pub fn connect_feature_added<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Registry, &PluginFeature) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"feature-added\0".as_ptr() as *const _,
-                transmute(feature_added_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(feature_added_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     pub fn connect_plugin_added<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Registry, &Plugin) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"plugin-added\0".as_ptr() as *const _,
-                transmute(plugin_added_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(plugin_added_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -145,12 +167,12 @@ impl Registry {
 unsafe impl Send for Registry {}
 unsafe impl Sync for Registry {}
 
-unsafe extern "C" fn feature_added_trampoline(this: *mut ffi::GstRegistry, feature: *mut ffi::GstPluginFeature, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Registry, &PluginFeature) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn feature_added_trampoline<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(this: *mut ffi::GstRegistry, feature: *mut ffi::GstPluginFeature, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(feature))
 }
 
-unsafe extern "C" fn plugin_added_trampoline(this: *mut ffi::GstRegistry, plugin: *mut ffi::GstPlugin, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&Registry, &Plugin) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn plugin_added_trampoline<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(this: *mut ffi::GstRegistry, plugin: *mut ffi::GstPlugin, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), &from_glib_borrow(plugin))
 }

@@ -69,9 +69,9 @@ impl StreamCollection {
 
     pub fn connect_property_upstream_id_notify<F: Fn(&StreamCollection) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&StreamCollection) + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::upstream-id\0".as_ptr() as *const _,
-                transmute(notify_upstream_id_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_upstream_id_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -79,7 +79,7 @@ impl StreamCollection {
 unsafe impl Send for StreamCollection {}
 unsafe impl Sync for StreamCollection {}
 
-unsafe extern "C" fn notify_upstream_id_trampoline(this: *mut ffi::GstStreamCollection, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&StreamCollection) + Send + Sync + 'static) = transmute(f);
+unsafe extern "C" fn notify_upstream_id_trampoline<F: Fn(&StreamCollection) + Send + Sync + 'static>(this: *mut ffi::GstStreamCollection, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }

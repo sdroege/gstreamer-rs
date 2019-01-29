@@ -181,15 +181,15 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
 
     fn connect_accept_certificate<F: Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"accept-certificate\0".as_ptr() as *const _,
-                transmute(accept_certificate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(accept_certificate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn accept_certificate_trampoline<P>(this: *mut ffi::GstRTSPAuth, connection: *mut gio_ffi::GTlsConnection, peer_cert: *mut gio_ffi::GTlsCertificate, errors: gio_ffi::GTlsCertificateFlags, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn accept_certificate_trampoline<P, F: Fn(&P, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static>(this: *mut ffi::GstRTSPAuth, connection: *mut gio_ffi::GTlsConnection, peer_cert: *mut gio_ffi::GTlsCertificate, errors: gio_ffi::GTlsCertificateFlags, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<RTSPAuth> {
-    let f: &&(Fn(&P, &gio::TlsConnection, &gio::TlsCertificate, gio::TlsCertificateFlags) -> bool + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RTSPAuth::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(connection), &from_glib_borrow(peer_cert), from_glib(errors)).to_glib()
 }
