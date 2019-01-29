@@ -64,11 +64,11 @@ fn main_loop(uri: &str) -> Result<(), glib::BoolError> {
     pipeline.set_timeline(&timeline);
 
     // Load a clip from the given uri and add it to the layer.
-    let clip = ges::UriClip::new(uri);
+    let clip = ges::UriClip::new(uri).expect("Failed to create clip");
     layer.add_clip(&clip);
 
     // Add an effect to the clip's video stream.
-    let effect = ges::Effect::new("agingtv");
+    let effect = ges::Effect::new("agingtv").expect("Failed to create effect");
     clip.add(&effect).unwrap();
 
     println!(
