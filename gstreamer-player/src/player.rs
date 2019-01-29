@@ -57,13 +57,12 @@ impl Player {
         f: F,
     ) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> =
-                Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"duration-changed\0".as_ptr() as *const _,
-                transmute(duration_changed_trampoline as usize),
-                Box_::into_raw(f) as *mut _,
+                Some(transmute(duration_changed_trampoline::<F> as usize)),
+                Box_::into_raw(f),
             )
         }
     }
@@ -73,13 +72,12 @@ impl Player {
         f: F,
     ) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> =
-                Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"position-updated\0".as_ptr() as *const _,
-                transmute(position_updated_trampoline as usize),
-                Box_::into_raw(f) as *mut _,
+                Some(transmute(position_updated_trampoline::<F> as usize)),
+                Box_::into_raw(f),
             )
         }
     }
@@ -89,44 +87,47 @@ impl Player {
         f: F,
     ) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Player, gst::ClockTime) + Send + 'static>> =
-                Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"seek-done\0".as_ptr() as *const _,
-                transmute(seek_done_trampoline as usize),
-                Box_::into_raw(f) as *mut _,
+                Some(transmute(seek_done_trampoline::<F> as usize)),
+                Box_::into_raw(f),
             )
         }
     }
 }
 
-unsafe extern "C" fn duration_changed_trampoline(
+unsafe extern "C" fn duration_changed_trampoline<
+    F: Fn(&Player, gst::ClockTime) + Send + 'static,
+>(
     this: *mut ffi::GstPlayer,
     object: u64,
     f: glib_ffi::gpointer,
 ) {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &&(Fn(&Player, gst::ClockTime) + Send + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
 
-unsafe extern "C" fn position_updated_trampoline(
+unsafe extern "C" fn position_updated_trampoline<
+    F: Fn(&Player, gst::ClockTime) + Send + 'static,
+>(
     this: *mut ffi::GstPlayer,
     object: u64,
     f: glib_ffi::gpointer,
 ) {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &&(Fn(&Player, gst::ClockTime) + Send + Sync + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
 
-unsafe extern "C" fn seek_done_trampoline(
+unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
     this: *mut ffi::GstPlayer,
     object: u64,
     f: glib_ffi::gpointer,
 ) {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &&(Fn(&Player, gst::ClockTime) + Send + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }

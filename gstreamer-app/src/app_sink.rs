@@ -182,19 +182,12 @@ impl AppSink {
         f: F,
     ) -> SignalHandlerId {
         unsafe {
-            let f: Box_<
-                Box_<
-                    Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError>
-                        + Send
-                        + Sync
-                        + 'static,
-                >,
-            > = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-sample\0".as_ptr() as *const _,
-                transmute(new_sample_trampoline as usize),
-                Box_::into_raw(f) as *mut _,
+                Some(transmute(new_sample_trampoline::<F> as usize)),
+                Box_::into_raw(f),
             )
         }
     }
@@ -206,40 +199,35 @@ impl AppSink {
         f: F,
     ) -> SignalHandlerId {
         unsafe {
-            let f: Box_<
-                Box_<
-                    Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError>
-                        + Send
-                        + Sync
-                        + 'static,
-                >,
-            > = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-preroll\0".as_ptr() as *const _,
-                transmute(new_preroll_trampoline as usize),
-                Box_::into_raw(f) as *mut _,
+                Some(transmute(new_preroll_trampoline::<F> as usize)),
+                Box_::into_raw(f),
             )
         }
     }
 }
 
-unsafe extern "C" fn new_sample_trampoline(
+unsafe extern "C" fn new_sample_trampoline<
+    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+>(
     this: *mut ffi::GstAppSink,
     f: glib_ffi::gpointer,
 ) -> gst_ffi::GstFlowReturn {
-    let f: &&(Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static) =
-        transmute(f);
+    let f: &F = transmute(f);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()
 }
 
-unsafe extern "C" fn new_preroll_trampoline(
+unsafe extern "C" fn new_preroll_trampoline<
+    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+>(
     this: *mut ffi::GstAppSink,
     f: glib_ffi::gpointer,
 ) -> gst_ffi::GstFlowReturn {
-    let f: &&(Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static) =
-        transmute(f);
+    let f: &F = transmute(f);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()
 }
