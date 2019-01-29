@@ -9770,7 +9770,7 @@ if @month == -1, then #GstDateTime will created only for @year. If
 so on.
 
 Free-function: gst_date_time_unref</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -9899,7 +9899,7 @@ If @hour is -1, then the #GstDateTime created will only contain @year and
 case @minute and @seconds should also be -1.
 
 Free-function: gst_date_time_unref</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">the newly created #GstDateTime</doc>
           <type name="DateTime" c:type="GstDateTime*"/>
         </return-value>
@@ -25043,9 +25043,8 @@ respectively.</doc>
 If name is %NULL, a guaranteed unique name (across all pads)
 will be assigned.
 This function makes a copy of the name so you can safely free the name.</doc>
-        <return-value transfer-ownership="none" nullable="1">
-          <doc xml:space="preserve">a new #GstPad, or %NULL in
-case of an error.
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">a new #GstPad.
 
 MT safe.</doc>
           <type name="Pad" c:type="GstPad*"/>
@@ -25070,9 +25069,8 @@ MT safe.</doc>
 If name is %NULL, a guaranteed unique name (across all pads)
 will be assigned.
 This function makes a copy of the name so you can safely free the name.</doc>
-        <return-value transfer-ownership="none" nullable="1">
-          <doc xml:space="preserve">a new #GstPad, or %NULL in
-case of an error.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">a new #GstPad.</doc>
           <type name="Pad" c:type="GstPad*"/>
         </return-value>
         <parameters>
@@ -25092,9 +25090,8 @@ case of an error.</doc>
 If name is %NULL, a guaranteed unique name (across all pads)
 will be assigned.
 This function makes a copy of the name so you can safely free the name.</doc>
-        <return-value transfer-ownership="none" nullable="1">
-          <doc xml:space="preserve">a new #GstPad, or %NULL in
-case of an error.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">a new #GstPad.</doc>
           <type name="Pad" c:type="GstPad*"/>
         </return-value>
         <parameters>
@@ -28596,7 +28593,7 @@ and with the given arguments.</doc>
                    c:identifier="gst_pad_template_new_from_static_pad_template_with_gtype"
                    version="1.14">
         <doc xml:space="preserve">Converts a #GstStaticPadTemplate into a #GstPadTemplate with a type.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstPadTemplate.</doc>
           <type name="PadTemplate" c:type="GstPadTemplate*"/>
         </return-value>
@@ -28616,7 +28613,7 @@ and with the given arguments.</doc>
                    version="1.14">
         <doc xml:space="preserve">Creates a new pad template with a name according to the given template
 and with the given arguments.</doc>
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstPadTemplate.</doc>
           <type name="PadTemplate" c:type="GstPadTemplate*"/>
         </return-value>
