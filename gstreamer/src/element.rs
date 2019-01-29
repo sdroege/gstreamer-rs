@@ -1257,6 +1257,22 @@ mod tests {
         assert_eq!(pad_names, vec![String::from("src")]);
     }
 
+    #[test]
+    fn test_foreach_pad() {
+        ::init().unwrap();
+
+        let identity = ::ElementFactory::make("identity", None).unwrap();
+
+        let mut pad_names = Vec::new();
+        identity.foreach_pad(|_element, pad| {
+            pad_names.push(pad.get_name());
+
+            true
+        });
+        pad_names.sort();
+        assert_eq!(pad_names, vec![String::from("sink"), String::from("src")]);
+    }
+
     #[cfg(feature = "v1_10")]
     #[test]
     fn test_call_async() {

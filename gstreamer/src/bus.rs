@@ -223,3 +223,31 @@ mod futures {
 
 #[cfg(any(feature = "futures", feature = "dox"))]
 pub use bus::futures::BusStream;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::{Arc, Mutex};
+
+    #[test]
+    fn test_sync_handler() {
+        ::init().unwrap();
+
+        let bus = Bus::new();
+        let msgs = Arc::new(Mutex::new(Vec::new()));
+        let msgs_clone = msgs.clone();
+        bus.set_sync_handler(move |_, msg| {
+            msgs_clone.lock().unwrap().push(msg.clone());
+            BusSyncReply::Pass
+        });
+
+        bus.post(&::Message::new_eos().build()).unwrap();
+
+        let msgs = msgs.lock().unwrap();
+        assert_eq!(msgs.len(), 1);
+        match msgs[0].view() {
+            ::MessageView::Eos(_) => (),
+            _ => unreachable!(),
+        }
+    }
+}
