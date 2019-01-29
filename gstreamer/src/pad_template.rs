@@ -22,7 +22,7 @@ impl PadTemplate {
     pub fn new_from_static_pad_template_with_gtype(
         pad_template: &StaticPadTemplate,
         pad_type: glib::types::Type,
-    ) -> PadTemplate {
+    ) -> Option<PadTemplate> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(
