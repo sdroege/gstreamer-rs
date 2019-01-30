@@ -35,10 +35,10 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib;
-use glib::object::IsA;
+use glib::object::{Cast, IsA};
 use glib::translate::{
-    from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override, FromGlib, ToGlib,
-    ToGlibPtr,
+    from_glib, from_glib_borrow, from_glib_full, from_glib_none, mut_override, FromGlib,
+    FromGlibPtrBorrow, ToGlib, ToGlibPtr,
 };
 use glib::StaticType;
 use glib_ffi;
@@ -116,7 +116,7 @@ impl Drop for StreamLock {
 pub trait PadExtManual: 'static {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
-        F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
+        F: Fn(&Self, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static;
     fn remove_probe(&self, id: PadProbeId);
 
     fn chain(&self, buffer: Buffer) -> Result<FlowSuccess, FlowError>;
@@ -165,65 +165,65 @@ pub trait PadExtManual: 'static {
 
     fn set_activate_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static;
+        F: Fn(&Self, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static;
 
     fn set_activatemode_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
+        F: Fn(&Self, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
             + Send
             + Sync
             + 'static;
 
     fn set_chain_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_chain_list_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_event_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static;
+        F: Fn(&Self, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static;
 
     fn set_event_full_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
+        F: Fn(&Self, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_iterate_internal_links_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static;
+        F: Fn(&Self, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static;
 
     fn set_link_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+        F: Fn(&Self, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
             + Send
             + Sync
             + 'static;
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static;
+        F: Fn(&Self, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static;
 
     fn set_unlink_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) + Send + Sync + 'static;
+        F: Fn(&Self, &Option<::Object>) + Send + Sync + 'static;
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
 
@@ -272,18 +272,16 @@ pub trait PadExtManual: 'static {
 impl<O: IsA<Pad>> PadExtManual for O {
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where
-        F: Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
+        F: Fn(&Self, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             let id = ffi::gst_pad_add_probe(
                 self.as_ref().to_glib_none().0,
                 mask.to_glib(),
-                Some(trampoline_pad_probe),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_pad_probe::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
 
             if id == 0 {
@@ -517,224 +515,185 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_activate_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+        F: Fn(&Self, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
     {
         #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_activate_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_activate_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_activate_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_activatemode_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
+        F: Fn(&Self, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
             + Send
             + Sync
             + 'static,
     {
         #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
-                    + Send
-                    + Sync
-                    + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_activatemode_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_activatemode_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_activatemode_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_chain_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
-                    + Send
-                    + Sync
-                    + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_chain_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_chain_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_chain_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_chain_list_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
-                    + Send
-                    + Sync
-                    + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_chain_list_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_chain_list_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_chain_list_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_event_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
+        F: Fn(&Self, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_event_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_event_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_event_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_event_full_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
-                    + Send
-                    + Sync
-                    + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_event_full_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_event_full_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_event_full_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
+        F: Fn(&Self, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
             + Send
             + Sync
             + 'static,
     {
         unsafe {
-            #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
-                    + Send
-                    + Sync
-                    + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_getrange_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_getrange_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_getrange_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_iterate_internal_links_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
+        F: Fn(&Self, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_iterate_internal_links_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_iterate_internal_links_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_iterate_internal_links_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_link_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+        F: Fn(&Self, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
             + Send
             + Sync
             + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
-                    + Send
-                    + Sync
-                    + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_link_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_link_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_link_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+        F: Fn(&Self, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
     {
         unsafe {
-            let func_box: Box<
-                Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
-            > = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_query_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_query_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_query_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
 
     fn set_unlink_function<F>(&self, func: F)
     where
-        F: Fn(&Pad, &Option<::Object>) + Send + Sync + 'static,
+        F: Fn(&Self, &Option<::Object>) + Send + Sync + 'static,
     {
         unsafe {
-            let func_box: Box<Fn(&Pad, &Option<::Object>) + Send + Sync + 'static> = Box::new(func);
+            let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_unlink_function_full(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline_unlink_function),
-                Box::into_raw(Box::new(func_box)) as gpointer,
-                Some(destroy_closure),
+                Some(trampoline_unlink_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
             );
         }
     }
@@ -744,9 +703,9 @@ impl<O: IsA<Pad>> PadExtManual for O {
             glib_result_from_gboolean!(
                 ffi::gst_pad_start_task(
                     self.as_ref().to_glib_none().0,
-                    Some(trampoline_pad_task),
+                    Some(trampoline_pad_task::<F>),
                     into_raw_pad_task(func),
-                    Some(destroy_closure_pad_task),
+                    Some(destroy_closure::<F>),
                 ),
                 "Failed to start pad task",
             )
@@ -1039,14 +998,19 @@ impl<O: IsA<Pad>> PadExtManual for O {
     }
 }
 
-unsafe extern "C" fn trampoline_pad_probe(
+unsafe extern "C" fn trampoline_pad_probe<
+    T,
+    F: Fn(&T, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     info: *mut ffi::GstPadProbeInfo,
     func: gpointer,
-) -> ffi::GstPadProbeReturn {
+) -> ffi::GstPadProbeReturn
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &mut PadProbeInfo) -> PadProbeReturn + Send + Sync + 'static) =
-        transmute(func);
+    let func: &F = transmute(func);
     let mut data_type = None;
 
     let mut probe_info = PadProbeInfo {
@@ -1085,7 +1049,7 @@ unsafe extern "C" fn trampoline_pad_probe(
         },
     };
 
-    let ret = func(&from_glib_borrow(pad), &mut probe_info).to_glib();
+    let ret = func(&Pad::from_glib_borrow(pad).unsafe_cast(), &mut probe_info).to_glib();
 
     match probe_info.data {
         Some(PadProbeData::Buffer(buffer)) => {
@@ -1115,68 +1079,78 @@ unsafe extern "C" fn trampoline_pad_probe(
     ret
 }
 
-unsafe extern "C" fn trampoline_activate_function(
+unsafe extern "C" fn trampoline_activate_function<
+    T,
+    F: Fn(&T, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
-) -> glib_ffi::gboolean {
+) -> glib_ffi::gboolean
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>) -> Result<(), LoggableError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).activatedata);
+    let func: &F = transmute((*pad).activatedata);
 
-    let pad: Pad = from_glib_borrow(pad);
-    match func(&pad, &from_glib_borrow(parent)) {
+    match func(
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
+        &from_glib_borrow(parent),
+    ) {
         Ok(()) => true,
         Err(err) => {
-            err.log_with_object(&pad);
+            err.log_with_object(&Pad::from_glib_borrow(pad));
             false
         }
     }
     .to_glib()
 }
 
-unsafe extern "C" fn trampoline_activatemode_function(
+unsafe extern "C" fn trampoline_activatemode_function<
+    T,
+    F: Fn(&T, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError> + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     mode: ffi::GstPadMode,
     active: glib_ffi::gboolean,
-) -> glib_ffi::gboolean {
+) -> glib_ffi::gboolean
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).activatemodedata);
+    let func: &F = transmute((*pad).activatemodedata);
 
-    let pad: Pad = from_glib_borrow(pad);
     match func(
-        &pad,
+        &&Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         from_glib(mode),
         from_glib(active),
     ) {
         Ok(()) => true,
         Err(err) => {
-            err.log_with_object(&pad);
+            err.log_with_object(&Pad::from_glib_borrow(pad));
             false
         }
     }
     .to_glib()
 }
 
-unsafe extern "C" fn trampoline_chain_function(
+unsafe extern "C" fn trampoline_chain_function<
+    T,
+    F: Fn(&T, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError> + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     buffer: *mut ffi::GstBuffer,
-) -> ffi::GstFlowReturn {
+) -> ffi::GstFlowReturn
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).chaindata);
+    let func: &F = transmute((*pad).chaindata);
 
     let res: FlowReturn = func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         from_glib_full(buffer),
     )
@@ -1184,19 +1158,25 @@ unsafe extern "C" fn trampoline_chain_function(
     res.to_glib()
 }
 
-unsafe extern "C" fn trampoline_chain_list_function(
+unsafe extern "C" fn trampoline_chain_list_function<
+    T,
+    F: Fn(&T, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+        + Send
+        + Sync
+        + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     list: *mut ffi::GstBufferList,
-) -> ffi::GstFlowReturn {
+) -> ffi::GstFlowReturn
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).chainlistdata);
+    let func: &F = transmute((*pad).chainlistdata);
 
     let res: FlowReturn = func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         from_glib_full(list),
     )
@@ -1204,36 +1184,44 @@ unsafe extern "C" fn trampoline_chain_list_function(
     res.to_glib()
 }
 
-unsafe extern "C" fn trampoline_event_function(
+unsafe extern "C" fn trampoline_event_function<
+    T,
+    F: Fn(&T, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     event: *mut ffi::GstEvent,
-) -> glib_ffi::gboolean {
+) -> glib_ffi::gboolean
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static) =
-        transmute((*pad).eventdata);
+    let func: &F = transmute((*pad).eventdata);
 
     func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         from_glib_full(event),
     )
     .to_glib()
 }
 
-unsafe extern "C" fn trampoline_event_full_function(
+unsafe extern "C" fn trampoline_event_full_function<
+    T,
+    F: Fn(&T, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError> + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     event: *mut ffi::GstEvent,
-) -> ffi::GstFlowReturn {
+) -> ffi::GstFlowReturn
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).eventdata);
+    let func: &F = transmute((*pad).eventdata);
 
     let res: FlowReturn = func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         from_glib_full(event),
     )
@@ -1241,21 +1229,24 @@ unsafe extern "C" fn trampoline_event_full_function(
     res.to_glib()
 }
 
-unsafe extern "C" fn trampoline_getrange_function(
+unsafe extern "C" fn trampoline_getrange_function<
+    T,
+    F: Fn(&T, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError> + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     offset: u64,
     length: u32,
     buffer: *mut *mut ffi::GstBuffer,
-) -> ffi::GstFlowReturn {
+) -> ffi::GstFlowReturn
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).getrangedata);
+    let func: &F = transmute((*pad).getrangedata);
 
     match func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         offset,
         length,
@@ -1268,39 +1259,49 @@ unsafe extern "C" fn trampoline_getrange_function(
     }
 }
 
-unsafe extern "C" fn trampoline_iterate_internal_links_function(
+unsafe extern "C" fn trampoline_iterate_internal_links_function<
+    T,
+    F: Fn(&T, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
-) -> *mut ffi::GstIterator {
+) -> *mut ffi::GstIterator
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static) =
-        transmute((*pad).iterintlinkdata);
+    let func: &F = transmute((*pad).iterintlinkdata);
 
     // Steal the iterator and return it
-    let ret = func(&from_glib_borrow(pad), &from_glib_borrow(parent));
+    let ret = func(
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
+        &from_glib_borrow(parent),
+    );
     let ptr = ret.to_glib_none().0;
     mem::forget(ret);
 
     ptr as *mut _
 }
 
-unsafe extern "C" fn trampoline_link_function(
+unsafe extern "C" fn trampoline_link_function<
+    T,
+    F: Fn(&T, &Option<::Object>, &::Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+        + Send
+        + Sync
+        + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     peer: *mut ffi::GstPad,
-) -> ffi::GstPadLinkReturn {
+) -> ffi::GstPadLinkReturn
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(
-        &Pad,
-        &Option<::Object>,
-        &::Pad,
-    ) -> Result<::PadLinkSuccess, ::PadLinkError>
-           + Send
-           + Sync
-           + 'static) = transmute((*pad).linkdata);
+    let func: &F = transmute((*pad).linkdata);
 
     let res: ::PadLinkReturn = func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         &from_glib_borrow(peer),
     )
@@ -1308,51 +1309,59 @@ unsafe extern "C" fn trampoline_link_function(
     res.to_glib()
 }
 
-unsafe extern "C" fn trampoline_query_function(
+unsafe extern "C" fn trampoline_query_function<
+    T,
+    F: Fn(&T, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
     query: *mut ffi::GstQuery,
-) -> glib_ffi::gboolean {
+) -> glib_ffi::gboolean
+where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static) =
-        transmute((*pad).querydata);
+    let func: &F = transmute((*pad).querydata);
 
     func(
-        &from_glib_borrow(pad),
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
         &from_glib_borrow(parent),
         ::QueryRef::from_mut_ptr(query),
     )
     .to_glib()
 }
 
-unsafe extern "C" fn trampoline_unlink_function(
+unsafe extern "C" fn trampoline_unlink_function<
+    T,
+    F: Fn(&T, &Option<::Object>) + Send + Sync + 'static,
+>(
     pad: *mut ffi::GstPad,
     parent: *mut ffi::GstObject,
-) {
+) where
+    T: IsA<Pad>,
+{
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&Pad, &Option<::Object>) + Send + Sync + 'static) =
-        transmute((*pad).unlinkdata);
+    let func: &F = transmute((*pad).unlinkdata);
 
-    func(&from_glib_borrow(pad), &from_glib_borrow(parent))
+    func(
+        &Pad::from_glib_borrow(pad).unsafe_cast(),
+        &from_glib_borrow(parent),
+    )
 }
 
-unsafe extern "C" fn destroy_closure(ptr: gpointer) {
-    Box::<Box<Fn()>>::from_raw(ptr as *mut _);
+unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
-unsafe extern "C" fn trampoline_pad_task(func: gpointer) {
+unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &RefCell<Box<FnMut() + Send + 'static>> = transmute(func);
+    let func: &RefCell<F> = transmute(func);
     (&mut *func.borrow_mut())()
-}
-
-unsafe extern "C" fn destroy_closure_pad_task(ptr: gpointer) {
-    Box::<RefCell<Box<FnMut() + Send + 'static>>>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-    let func: Box<RefCell<Box<FnMut() + Send + 'static>>> = Box::new(RefCell::new(Box::new(func)));
+    let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
     Box::into_raw(func) as gpointer
 }
 

@@ -20,36 +20,39 @@ use Bus;
 use BusSyncReply;
 use Message;
 
-unsafe extern "C" fn trampoline_watch(
+unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(
     bus: *mut ffi::GstBus,
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>> = transmute(func);
+    let func: &RefCell<F> = transmute(func);
     (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
 
-unsafe extern "C" fn destroy_closure_watch(ptr: gpointer) {
-    Box::<RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>>>::from_raw(
-        ptr as *mut _,
-    );
+unsafe extern "C" fn destroy_closure_watch<
+    F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
+>(
+    ptr: gpointer,
+) {
+    Box::<RefCell<F>>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-    let func: Box<RefCell<Box<FnMut(&Bus, &Message) -> Continue + Send + 'static>>> =
-        Box::new(RefCell::new(Box::new(func)));
+    let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
     Box::into_raw(func) as gpointer
 }
 
-unsafe extern "C" fn trampoline_sync(
+unsafe extern "C" fn trampoline_sync<
+    F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
+>(
     bus: *mut ffi::GstBus,
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &&(Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static) = transmute(func);
+    let f: &F = transmute(func);
     let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib();
 
     if res == ffi::GST_BUS_DROP {
@@ -59,15 +62,18 @@ unsafe extern "C" fn trampoline_sync(
     res
 }
 
-unsafe extern "C" fn destroy_closure_sync(ptr: gpointer) {
-    Box::<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>>::from_raw(ptr as *mut _);
+unsafe extern "C" fn destroy_closure_sync<
+    F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
+>(
+    ptr: gpointer,
+) {
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
     func: F,
 ) -> gpointer {
-    let func: Box<Box<Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>> =
-        Box::new(Box::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
@@ -90,12 +96,11 @@ impl Bus {
         skip_assert_initialized!();
         unsafe {
             let source = ffi::gst_bus_create_watch(self.to_glib_none().0);
-            let trampoline = trampoline_watch as gpointer;
             glib_ffi::g_source_set_callback(
                 source,
-                Some(transmute(trampoline)),
+                Some(transmute(trampoline_watch::<F> as usize)),
                 into_raw_watch(func),
-                Some(destroy_closure_watch),
+                Some(destroy_closure_watch::<F>),
             );
             glib_ffi::g_source_set_priority(source, priority.to_glib());
 
@@ -116,9 +121,9 @@ impl Bus {
             from_glib(ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
                 glib_ffi::G_PRIORITY_DEFAULT,
-                Some(trampoline_watch),
+                Some(trampoline_watch::<F>),
                 into_raw_watch(func),
-                Some(destroy_closure_watch),
+                Some(destroy_closure_watch::<F>),
             ))
         }
     }
@@ -130,9 +135,9 @@ impl Bus {
         unsafe {
             ffi::gst_bus_set_sync_handler(
                 self.to_glib_none().0,
-                Some(trampoline_sync),
+                Some(trampoline_sync::<F>),
                 into_raw_sync(func),
-                Some(destroy_closure_sync),
+                Some(destroy_closure_sync::<F>),
             )
         }
     }

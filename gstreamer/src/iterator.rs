@@ -90,12 +90,7 @@ where
             mem::forget(self);
 
             let func_box: Box<Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
-            // FIXME: Use Value::from_type once we depend on new enough GLib
-            let mut closure_value = glib::Value::uninitialized();
-            gobject_ffi::g_value_init(
-                closure_value.to_glib_none_mut().0,
-                filter_boxed_get_type::<T>(),
-            );
+            let mut closure_value = glib::Value::from_type(from_glib(filter_boxed_get_type::<T>()));
             gobject_ffi::g_value_set_boxed(
                 closure_value.to_glib_none_mut().0,
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
@@ -117,12 +112,11 @@ where
             let mut elem = glib::Value::uninitialized();
 
             let mut func = func;
-            let func_obj: &mut (FnMut(T) -> bool) = &mut func;
-            let func_ptr = &func_obj as *const &mut (FnMut(T) -> bool) as gpointer;
+            let func_ptr = &mut func as *mut F as gpointer;
 
             let res = from_glib(ffi::gst_iterator_find_custom(
                 self.to_glib_none_mut().0,
-                Some(find_trampoline::<T>),
+                Some(find_trampoline::<T, F>),
                 elem.to_glib_none_mut().0,
                 func_ptr,
             ));
@@ -140,12 +134,11 @@ where
     {
         unsafe {
             let mut func = func;
-            let func_obj: &mut (FnMut(T)) = &mut func;
-            let func_ptr = &func_obj as *const &mut (FnMut(T)) as gpointer;
+            let func_ptr = &mut func as *mut F as gpointer;
 
             let res = ffi::gst_iterator_foreach(
                 self.to_glib_none_mut().0,
-                Some(foreach_trampoline::<T>),
+                Some(foreach_trampoline::<T, F>),
                 func_ptr,
             );
 
@@ -163,13 +156,10 @@ where
     {
         unsafe {
             let mut func = func;
-            let func_obj: &mut (FnMut(U, T) -> Result<U, U>) = &mut func;
-            let func_ptr = &func_obj as *const &mut (FnMut(U, T) -> Result<U, U>) as gpointer;
+            let func_ptr = &mut func as *mut F as gpointer;
 
             let mut accum = Some(init);
-            // FIXME: Use Value::from_type once we depend on new enough GLib
-            let mut ret = glib::Value::uninitialized();
-            gobject_ffi::g_value_init(ret.to_glib_none_mut().0, gobject_ffi::G_TYPE_POINTER);
+            let mut ret = glib::Value::from_type(glib::Type::Pointer);
             gobject_ffi::g_value_set_pointer(
                 ret.to_glib_none_mut().0,
                 &mut accum as *mut _ as gpointer,
@@ -177,7 +167,7 @@ where
 
             let res = ffi::gst_iterator_fold(
                 self.to_glib_none_mut().0,
-                Some(fold_trampoline::<T, U>),
+                Some(fold_trampoline::<T, U, F>),
                 ret.to_glib_none_mut().0,
                 func_ptr,
             );
@@ -405,13 +395,16 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_ff
     TYPE
 }
 
-unsafe extern "C" fn find_trampoline<T>(value: gconstpointer, func: gconstpointer) -> i32
+unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(
+    value: gconstpointer,
+    func: gconstpointer,
+) -> i32
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
     let value = value as *const gobject_ffi::GValue;
 
-    let func = func as *mut &mut (FnMut(T) -> bool);
+    let func = func as *mut F;
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
@@ -422,18 +415,20 @@ where
     }
 }
 
-unsafe extern "C" fn foreach_trampoline<T>(value: *const gobject_ffi::GValue, func: gpointer)
-where
+unsafe extern "C" fn foreach_trampoline<T, F: FnMut(T)>(
+    value: *const gobject_ffi::GValue,
+    func: gpointer,
+) where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
-    let func = func as *mut &mut (FnMut(T));
+    let func = func as *mut F;
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
     (*func)(value);
 }
 
-unsafe extern "C" fn fold_trampoline<T, U>(
+unsafe extern "C" fn fold_trampoline<T, U, F: FnMut(U, T) -> Result<U, U>>(
     value: *const gobject_ffi::GValue,
     ret: *mut gobject_ffi::GValue,
     func: gpointer,
@@ -441,7 +436,7 @@ unsafe extern "C" fn fold_trampoline<T, U>(
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
-    let func = func as *mut &mut (FnMut(U, T) -> Result<U, U>);
+    let func = func as *mut F;
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 

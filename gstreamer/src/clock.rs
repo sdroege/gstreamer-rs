@@ -33,14 +33,14 @@ glib_wrapper! {
     }
 }
 
-unsafe extern "C" fn trampoline_wait_async(
+unsafe extern "C" fn trampoline_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(
     clock: *mut ffi::GstClock,
     time: ffi::GstClockTime,
     id: gpointer,
     func: gpointer,
 ) -> gboolean {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &&(Fn(&Clock, ClockTime, &ClockId) + Send + 'static) = transmute(func);
+    let f: &F = transmute(func);
     f(
         &from_glib_borrow(clock),
         from_glib(time),
@@ -49,13 +49,17 @@ unsafe extern "C" fn trampoline_wait_async(
     glib_ffi::GTRUE
 }
 
-unsafe extern "C" fn destroy_closure_wait_async(ptr: gpointer) {
-    Box::<Box<Fn(&Clock, ClockTime, &ClockId) + Send + 'static>>::from_raw(ptr as *mut _);
+unsafe extern "C" fn destroy_closure_wait_async<
+    F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static,
+>(
+    ptr: gpointer,
+) {
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(func: F) -> gpointer {
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-    let func: Box<Box<Fn(&Clock, ClockTime, &ClockId) + Send + 'static>> = Box::new(Box::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
@@ -84,9 +88,9 @@ impl ClockId {
         let ret: ClockReturn = unsafe {
             from_glib(ffi::gst_clock_id_wait_async(
                 self.to_glib_none().0,
-                Some(trampoline_wait_async),
+                Some(trampoline_wait_async::<F>),
                 into_raw_wait_async(func),
-                Some(destroy_closure_wait_async),
+                Some(destroy_closure_wait_async::<F>),
             ))
         };
         ret.into_result()

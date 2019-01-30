@@ -36,13 +36,13 @@ impl Promise {
     where
         F: FnOnce(&Promise) + Send + 'static,
     {
-        let user_data: Box<Option<Box<F>>> = Box::new(Some(Box::new(func)));
+        let user_data: Box<Option<F>> = Box::new(Some(func));
 
         unsafe extern "C" fn trampoline<F: FnOnce(&Promise) + Send + 'static>(
             promise: *mut ffi::GstPromise,
             user_data: glib_ffi::gpointer,
         ) {
-            let user_data: &mut Option<Box<F>> = &mut *(user_data as *mut _);
+            let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
             callback(&from_glib_borrow(promise));
@@ -51,16 +51,14 @@ impl Promise {
         unsafe extern "C" fn free_user_data<F: FnOnce(&Promise) + Send + 'static>(
             user_data: glib_ffi::gpointer,
         ) {
-            let _: Box<Option<Box<F>>> = Box::from_raw(user_data as *mut _);
+            let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
         }
 
-        let trampoline = trampoline::<F>;
-        let free_user_data = free_user_data::<F>;
         unsafe {
             from_glib_full(ffi::gst_promise_new_with_change_func(
-                Some(trampoline),
+                Some(trampoline::<F>),
                 Box::into_raw(user_data) as *mut _,
-                Some(free_user_data),
+                Some(free_user_data::<F>),
             ))
         }
     }

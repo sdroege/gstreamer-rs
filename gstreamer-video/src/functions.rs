@@ -55,7 +55,7 @@ pub fn convert_sample_async<F>(
         F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
     {
         #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-        let callback: &mut Option<Box<F>> = mem::transmute(user_data);
+        let callback: &mut Option<F> = mem::transmute(user_data);
         let callback = callback.take().unwrap();
 
         if error.is_null() {
@@ -68,11 +68,11 @@ pub fn convert_sample_async<F>(
     where
         F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
     {
-        let _: Box<Option<Box<F>>> = Box::from_raw(user_data as *mut _);
+        let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
     }
 
     unsafe {
-        let user_data: Box<Option<Box<F>>> = Box::new(Some(Box::new(func)));
+        let user_data: Box<Option<F>> = Box::new(Some(func));
 
         ffi::gst_video_convert_sample_async(
             sample.to_glib_none().0,

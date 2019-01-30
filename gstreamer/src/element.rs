@@ -652,13 +652,13 @@ impl<O: IsA<Element>> ElementExtManual for O {
     where
         F: FnOnce(&Self) + Send + 'static,
     {
-        let user_data: Box<Option<Box<F>>> = Box::new(Some(Box::new(func)));
+        let user_data: Box<Option<F>> = Box::new(Some(func));
 
         unsafe extern "C" fn trampoline<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
             element: *mut ffi::GstElement,
             user_data: glib_ffi::gpointer,
         ) {
-            let user_data: &mut Option<Box<F>> = &mut *(user_data as *mut _);
+            let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
             callback(&Element::from_glib_borrow(element).unsafe_cast());
@@ -667,17 +667,15 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe extern "C" fn free_user_data<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
             user_data: glib_ffi::gpointer,
         ) {
-            let _: Box<Option<Box<F>>> = Box::from_raw(user_data as *mut _);
+            let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
         }
 
-        let trampoline = trampoline::<Self, F>;
-        let free_user_data = free_user_data::<Self, F>;
         unsafe {
             ffi::gst_element_call_async(
                 self.as_ref().to_glib_none().0,
-                Some(trampoline),
+                Some(trampoline::<Self, F>),
                 Box::into_raw(user_data) as *mut _,
-                Some(free_user_data),
+                Some(free_user_data::<Self, F>),
             );
         }
     }

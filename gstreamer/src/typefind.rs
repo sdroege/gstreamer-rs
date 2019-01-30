@@ -56,19 +56,18 @@ impl<'a> TypeFind<'a> {
         let extensions = extensions.into();
         let possible_caps = possible_caps.into();
         unsafe {
-            let func: Box<Box<Fn(&mut TypeFind) + Send + Sync + 'static>> =
-                Box::new(Box::new(func));
+            let func: Box<F> = Box::new(func);
             let func = Box::into_raw(func);
 
             let res = ffi::gst_type_find_register(
                 plugin.to_glib_none().0,
                 name.to_glib_none().0,
                 rank,
-                Some(type_find_trampoline),
+                Some(type_find_trampoline::<F>),
                 extensions.to_glib_none().0,
                 possible_caps.to_glib_none().0,
                 func as *mut _,
-                Some(type_find_closure_drop),
+                Some(type_find_closure_drop::<F>),
             );
 
             glib_result_from_gboolean!(res, "Failed to register typefind factory")
@@ -116,17 +115,19 @@ impl TypeFindFactory {
     }
 }
 
-unsafe extern "C" fn type_find_trampoline(
+unsafe extern "C" fn type_find_trampoline<F: Fn(&mut TypeFind) + Send + Sync + 'static>(
     find: *mut ffi::GstTypeFind,
     user_data: glib_ffi::gpointer,
 ) {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &&(Fn(&mut TypeFind) + Send + Sync + 'static) = mem::transmute(user_data);
+    let func: &F = mem::transmute(user_data);
     func(&mut *(find as *mut TypeFind));
 }
 
-unsafe extern "C" fn type_find_closure_drop(data: glib_ffi::gpointer) {
-    Box::<Box<Fn(&mut TypeFind) + Send + Sync + 'static>>::from_raw(data as *mut _);
+unsafe extern "C" fn type_find_closure_drop<F: Fn(&mut TypeFind) + Send + Sync + 'static>(
+    data: glib_ffi::gpointer,
+) {
+    Box::<F>::from_raw(data as *mut _);
 }
 
 unsafe extern "C" fn type_find_peek(data: glib_ffi::gpointer, offset: i64, size: u32) -> *const u8 {
