@@ -1256,6 +1256,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "v1_14")]
     fn test_foreach_pad() {
         ::init().unwrap();
 
