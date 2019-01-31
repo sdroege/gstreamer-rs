@@ -1,4 +1,4 @@
-// Copyright (C) 2017,2018 Sebastian Dröge <sebastian@centricular.com>
+// Copyright (C) 2017-2019 Sebastian Dröge <sebastian@centricular.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
@@ -70,10 +70,10 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
 
-            (*parent_class)
+            let f = (*parent_class)
                 .change_state
-                .map(|f| from_glib(f(element.to_glib_none().0, transition.to_glib())))
-                .unwrap_or(::StateChangeReturn::Success)
+                .expect("Missing parent function `change_state`");
+            StateChangeReturn::from_glib(f(element.to_glib_none().0, transition.to_glib()))
                 .into_result()
         }
     }
