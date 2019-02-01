@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+extern crate gio;
 extern crate glib_sys as glib_ffi;
 extern crate gobject_sys as gobject_ffi;
 extern crate gstreamer as gst;
@@ -36,6 +37,9 @@ mod net_client_clock;
 mod net_time_provider;
 mod ntp_clock;
 mod ptp_clock;
+
+pub use net_address_meta::*;
+mod net_address_meta;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

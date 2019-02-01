@@ -19,6 +19,7 @@ gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-s
 gstreamer-net-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
 glib = { git = "https://github.com/gtk-rs/glib" }
 gstreamer = { path = "../gstreamer" }
+gio = { git = "https://github.com/gtk-rs/gio" }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"

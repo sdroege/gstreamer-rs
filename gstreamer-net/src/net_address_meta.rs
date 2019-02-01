@@ -1,0 +1,106 @@
+use std::fmt;
+
+use ffi;
+use gio;
+use glib;
+use glib::translate::*;
+use gst;
+use gst::prelude::*;
+
+#[repr(C)]
+pub struct NetAddressMeta(ffi::GstNetAddressMeta);
+
+impl NetAddressMeta {
+    pub fn add<'a, A: IsA<gio::SocketAddress>>(
+        buffer: &'a mut gst::BufferRef,
+        addr: &A,
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        unsafe {
+            let meta = ffi::gst_buffer_add_net_address_meta(
+                buffer.as_mut_ptr(),
+                addr.as_ref().to_glib_none().0,
+            );
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_addr(&self) -> gio::SocketAddress {
+        unsafe { from_glib_none(self.0.addr) }
+    }
+
+    pub fn set_addr<T: IsA<gio::SocketAddress>>(&mut self, addr: &T) {
+        #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        unsafe {
+            gobject_ffi::g_object_unref(self.0.addr as *mut _);
+            self.0.addr = addr.as_ref().to_glib_full();
+        }
+    }
+}
+
+unsafe impl MetaAPI for NetAddressMeta {
+    type GstType = ffi::GstNetAddressMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(ffi::gst_net_address_meta_api_get_type()) }
+    }
+}
+
+impl fmt::Debug for NetAddressMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("NetAddressMeta")
+            .field("addr", &self.get_addr())
+            .finish()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use gio::InetAddressExt;
+    use gio::InetSocketAddressExt;
+
+    #[test]
+    fn test_add_get_meta() {
+        gst::init().unwrap();
+
+        let mut buffer = gst::Buffer::new();
+        let port = 5000;
+        let inet_addr = gio::InetAddress::new_from_string("127.0.0.1");
+
+        let expected_addr = &gio::InetSocketAddress::new(&inet_addr, port);
+
+        let expected_inet_addr = expected_addr.get_address().unwrap();
+
+        {
+            let meta = NetAddressMeta::add(
+                buffer.get_mut().unwrap(),
+                &gio::InetSocketAddress::new(&inet_addr, port),
+            );
+
+            let actual_addr = meta
+                .get_addr()
+                .downcast::<gio::InetSocketAddress>()
+                .unwrap();
+
+            assert_eq!(actual_addr.get_port(), expected_addr.get_port());
+
+            let actual_inet_addr = actual_addr.get_address().unwrap();
+
+            assert!(actual_inet_addr.equal(&expected_inet_addr));
+        }
+
+        {
+            let meta = buffer.get_meta::<NetAddressMeta>().unwrap();
+            let actual_addr = meta
+                .get_addr()
+                .downcast::<gio::InetSocketAddress>()
+                .unwrap();
+
+            assert_eq!(actual_addr.get_port(), expected_addr.get_port());
+
+            let actual_inet_addr = actual_addr.get_address().unwrap();
+
+            assert!(actual_inet_addr.equal(&expected_inet_addr));
+        }
+    }
+}
