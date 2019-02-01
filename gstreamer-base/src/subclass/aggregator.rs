@@ -1,4 +1,4 @@
-// Copyright (C) 2017,2018 Sebastian Dröge <sebastian@centricular.com>
+// Copyright (C) 2017-2019 Sebastian Dröge <sebastian@centricular.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
@@ -170,10 +170,10 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .finish_buffer
-                .map(|f| from_glib(f(aggregator.to_glib_none().0, buffer.into_ptr())))
-                .unwrap_or(gst::FlowReturn::Ok)
+                .expect("Missing parent function `finish_buffer`");
+            gst::FlowReturn::from_glib(f(aggregator.to_glib_none().0, buffer.into_ptr()))
                 .into_result()
         }
     }
@@ -187,16 +187,14 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .sink_event
-                .map(|f| {
-                    from_glib(f(
-                        aggregator.to_glib_none().0,
-                        aggregator_pad.to_glib_none().0,
-                        event.into_ptr(),
-                    ))
-                })
-                .unwrap_or(false)
+                .expect("Missing parent function `sink_event`");
+            from_glib(f(
+                aggregator.to_glib_none().0,
+                aggregator_pad.to_glib_none().0,
+                event.into_ptr(),
+            ))
         }
     }
 
@@ -209,16 +207,14 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .sink_query
-                .map(|f| {
-                    from_glib(f(
-                        aggregator.to_glib_none().0,
-                        aggregator_pad.to_glib_none().0,
-                        query.as_mut_ptr(),
-                    ))
-                })
-                .unwrap_or(false)
+                .expect("Missing parent function `sink_query`");
+            from_glib(f(
+                aggregator.to_glib_none().0,
+                aggregator_pad.to_glib_none().0,
+                query.as_mut_ptr(),
+            ))
         }
     }
 
@@ -226,10 +222,10 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .src_event
-                .map(|f| from_glib(f(aggregator.to_glib_none().0, event.into_ptr())))
-                .unwrap_or(false)
+                .expect("Missing parent function `src_event`");
+            from_glib(f(aggregator.to_glib_none().0, event.into_ptr()))
         }
     }
 
@@ -237,10 +233,10 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .src_query
-                .map(|f| from_glib(f(aggregator.to_glib_none().0, query.as_mut_ptr())))
-                .unwrap_or(false)
+                .expect("Missing parent function `src_query`");
+            from_glib(f(aggregator.to_glib_none().0, query.as_mut_ptr()))
         }
     }
 
@@ -253,21 +249,18 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            let f = (*parent_class).src_activate.ok_or_else(|| {
-                gst_loggable_error!(
+            match (*parent_class).src_activate {
+                None => Ok(()),
+                Some(f) => gst_result_from_gboolean!(
+                    f(
+                        aggregator.to_glib_none().0,
+                        mode.to_glib(),
+                        active.to_glib()
+                    ),
                     gst::CAT_RUST,
-                    "Parent function `src_activate` is not defined"
-                )
-            })?;
-            gst_result_from_gboolean!(
-                f(
-                    aggregator.to_glib_none().0,
-                    mode.to_glib(),
-                    active.to_glib()
+                    "Parent function `src_activate` failed"
                 ),
-                gst::CAT_RUST,
-                "Parent function `src_activate` failed"
-            )
+            }
         }
     }
 
@@ -279,10 +272,10 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .aggregate
-                .map(|f| from_glib(f(aggregator.to_glib_none().0, timeout.to_glib())))
-                .unwrap_or(gst::FlowReturn::Error)
+                .expect("Missing parent function `aggregate`");
+            gst::FlowReturn::from_glib(f(aggregator.to_glib_none().0, timeout.to_glib()))
                 .into_result()
         }
     }
@@ -291,20 +284,19 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            let f = (*parent_class).start.ok_or_else(|| {
-                gst_error_msg!(
-                    gst::CoreError::Failed,
-                    ["Parent function `start` is not defined"]
-                )
-            })?;
-            if from_glib(f(aggregator.to_glib_none().0)) {
-                Ok(())
-            } else {
-                Err(gst_error_msg!(
-                    gst::CoreError::Failed,
-                    ["Parent function `start` failed"]
-                ))
-            }
+            (*parent_class)
+                .start
+                .map(|f| {
+                    if from_glib(f(aggregator.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::Failed,
+                            ["Parent function `start` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
         }
     }
 
@@ -312,20 +304,19 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            let f = (*parent_class).stop.ok_or_else(|| {
-                gst_error_msg!(
-                    gst::CoreError::Failed,
-                    ["Parent function `stop` is not defined"]
-                )
-            })?;
-            if from_glib(f(aggregator.to_glib_none().0)) {
-                Ok(())
-            } else {
-                Err(gst_error_msg!(
-                    gst::CoreError::Failed,
-                    ["Parent function `stop` failed"]
-                ))
-            }
+            (*parent_class)
+                .stop
+                .map(|f| {
+                    if from_glib(f(aggregator.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::Failed,
+                            ["Parent function `stop` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
         }
     }
 
@@ -350,17 +341,15 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .create_new_pad
-                .map(|f| {
-                    from_glib_full(f(
-                        aggregator.to_glib_none().0,
-                        templ.to_glib_none().0,
-                        req_name.to_glib_none().0,
-                        caps.map(|c| c.as_ptr()).unwrap_or(ptr::null()),
-                    ))
-                })
-                .unwrap_or(None)
+                .expect("Missing parent function `create_new_pad`");
+            from_glib_full(f(
+                aggregator.to_glib_none().0,
+                templ.to_glib_none().0,
+                req_name.to_glib_none().0,
+                caps.map(|c| c.as_ptr()).unwrap_or(ptr::null()),
+            ))
         }
     }
 
@@ -372,18 +361,17 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            (*parent_class)
+            let f = (*parent_class)
                 .update_src_caps
-                .map(|f| {
-                    let mut out_caps = ptr::null_mut();
-                    let flow_ret: gst::FlowReturn = from_glib(f(
-                        aggregator.to_glib_none().0,
-                        caps.as_mut_ptr(),
-                        &mut out_caps,
-                    ));
-                    flow_ret.into_result_value(|| from_glib_full(out_caps))
-                })
-                .unwrap_or(Err(gst::FlowError::Error))
+                .expect("Missing parent function `update_src_caps`");
+
+            let mut out_caps = ptr::null_mut();
+            gst::FlowReturn::from_glib(f(
+                aggregator.to_glib_none().0,
+                caps.as_mut_ptr(),
+                &mut out_caps,
+            ))
+            .into_result_value(|| from_glib_full(out_caps))
         }
     }
 
@@ -392,10 +380,10 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
 
-            match (*parent_class).fixate_src_caps {
-                Some(ref f) => from_glib_full(f(aggregator.to_glib_none().0, caps.into_ptr())),
-                None => caps,
-            }
+            let f = (*parent_class)
+                .fixate_src_caps
+                .expect("Missing parent function `fixate_src_caps`");
+            from_glib_full(f(aggregator.to_glib_none().0, caps.into_ptr()))
         }
     }
 
@@ -407,17 +395,16 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorClass;
-            let f = (*parent_class).negotiated_src_caps.ok_or_else(|| {
-                gst_loggable_error!(
-                    gst::CAT_RUST,
-                    "Parent function `negotiated_src_caps` is not defined"
-                )
-            })?;
-            gst_result_from_gboolean!(
-                f(aggregator.to_glib_none().0, caps.as_mut_ptr()),
-                gst::CAT_RUST,
-                "Parent function `negotiated_src_caps` failed"
-            )
+            (*parent_class)
+                .negotiated_src_caps
+                .map(|f| {
+                    gst_result_from_gboolean!(
+                        f(aggregator.to_glib_none().0, caps.as_mut_ptr()),
+                        gst::CAT_RUST,
+                        "Parent function `negotiated_src_caps` failed"
+                    )
+                })
+                .unwrap_or(Ok(()))
         }
     }
 }

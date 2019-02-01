@@ -1,4 +1,4 @@
-// Copyright (C) 2017,2018 Sebastian Dröge <sebastian@centricular.com>
+// Copyright (C) 2017-2019 Sebastian Dröge <sebastian@centricular.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
@@ -35,7 +35,7 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: Option<&gst::Caps>,
-    ) -> gst::Caps {
+    ) -> Option<gst::Caps> {
         self.parent_transform_caps(element, direction, caps, filter)
     }
 
@@ -130,19 +130,21 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         direction: gst::PadDirection,
         caps: &gst::Caps,
         filter: Option<&gst::Caps>,
-    ) -> gst::Caps {
+    ) -> Option<gst::Caps> {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
-            match (*parent_class).transform_caps {
-                Some(f) => from_glib_full(f(
-                    element.to_glib_none().0,
-                    direction.to_glib(),
-                    caps.to_glib_none().0,
-                    filter.to_glib_none().0,
-                )),
-                None => caps.clone(),
-            }
+            (*parent_class)
+                .transform_caps
+                .map(|f| {
+                    from_glib_full(f(
+                        element.to_glib_none().0,
+                        direction.to_glib(),
+                        caps.to_glib_none().0,
+                        filter.to_glib_none().0,
+                    ))
+                })
+                .unwrap_or(None)
         }
     }
 
@@ -252,7 +254,7 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
             (*parent_class)
                 .sink_event
                 .map(|f| from_glib(f(element.to_glib_none().0, event.into_ptr())))
-                .unwrap_or(false)
+                .unwrap_or(true)
         }
     }
 
@@ -263,7 +265,7 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
             (*parent_class)
                 .src_event
                 .map(|f| from_glib(f(element.to_glib_none().0, event.into_ptr())))
-                .unwrap_or(false)
+                .unwrap_or(true)
         }
     }
 }
@@ -400,7 +402,7 @@ where
     let imp = instance.get_impl();
     let wrap: BaseTransform = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
+    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
         let filter = if filter.is_null() {
             None
         } else {
@@ -414,7 +416,8 @@ where
             filter.as_ref(),
         )
     })
-    .into_ptr()
+    .map(|caps| caps.into_ptr())
+    .unwrap_or(std::ptr::null_mut())
 }
 
 unsafe extern "C" fn base_transform_fixate_caps<T: ObjectSubclass>(

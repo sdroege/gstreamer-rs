@@ -1,4 +1,4 @@
-// Copyright (C) 2017,2018 Sebastian Dröge <sebastian@centricular.com>
+// Copyright (C) 2017-2019 Sebastian Dröge <sebastian@centricular.com>
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
@@ -113,7 +113,7 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
             (*parent_class)
                 .event
                 .map(|f| from_glib(f(element.to_glib_none().0, event.into_ptr())))
-                .unwrap_or(false)
+                .unwrap_or(true)
         }
     }
 
@@ -146,14 +146,16 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
-            let f = (*parent_class).set_caps.ok_or_else(|| {
-                gst_loggable_error!(gst::CAT_RUST, "Parent function `set_caps` is not defined")
-            })?;
-            gst_result_from_gboolean!(
-                f(element.to_glib_none().0, caps.as_mut_ptr()),
-                gst::CAT_RUST,
-                "Parent function `set_caps` failed"
-            )
+            (*parent_class)
+                .set_caps
+                .map(|f| {
+                    gst_result_from_gboolean!(
+                        f(element.to_glib_none().0, caps.as_mut_ptr()),
+                        gst::CAT_RUST,
+                        "Parent function `set_caps` failed"
+                    )
+                })
+                .unwrap_or(Ok(()))
         }
     }
 
