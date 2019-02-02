@@ -39,15 +39,17 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
 
     fn request_new_pad(
         &self,
-        _element: &::Element,
-        _templ: &::PadTemplate,
-        _name: Option<String>,
-        _caps: Option<&::CapsRef>,
+        element: &::Element,
+        templ: &::PadTemplate,
+        name: Option<String>,
+        caps: Option<&::CapsRef>,
     ) -> Option<::Pad> {
-        None
+        self.parent_request_new_pad(element, templ, name, caps)
     }
 
-    fn release_pad(&self, _element: &::Element, _pad: &::Pad) {}
+    fn release_pad(&self, element: &::Element, pad: &::Pad) {
+        self.parent_release_pad(element, pad)
+    }
 
     fn send_event(&self, element: &::Element, event: Event) -> bool {
         self.parent_send_event(element, event)
@@ -75,6 +77,43 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
                 .expect("Missing parent function `change_state`");
             StateChangeReturn::from_glib(f(element.to_glib_none().0, transition.to_glib()))
                 .into_result()
+        }
+    }
+
+    fn parent_request_new_pad(
+        &self,
+        element: &::Element,
+        templ: &::PadTemplate,
+        name: Option<String>,
+        caps: Option<&::CapsRef>,
+    ) -> Option<::Pad> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+
+            (*parent_class)
+                .request_new_pad
+                .map(|f| {
+                    from_glib_none(f(
+                        element.to_glib_none().0,
+                        templ.to_glib_none().0,
+                        name.to_glib_full(),
+                        caps.map(|caps| caps.as_ptr()).unwrap_or(std::ptr::null()),
+                    ))
+                })
+                .unwrap_or(None)
+        }
+    }
+
+    fn parent_release_pad(&self, element: &::Element, pad: &::Pad) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+
+            (*parent_class)
+                .release_pad
+                .map(|f| f(element.to_glib_none().0, pad.to_glib_none().0))
+                .unwrap_or(())
         }
     }
 
