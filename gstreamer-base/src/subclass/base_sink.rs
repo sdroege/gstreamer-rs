@@ -23,12 +23,12 @@ use BaseSink;
 use BaseSinkClass;
 
 pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
-    fn start(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn start(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        self.parent_start(element)
     }
 
-    fn stop(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        self.parent_stop(element)
     }
 
     fn render(
@@ -39,10 +39,10 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
 
     fn prepare(
         &self,
-        _element: &BaseSink,
-        _buffer: &gst::BufferRef,
+        element: &BaseSink,
+        buffer: &gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        Ok(gst::FlowSuccess::Ok)
+        self.parent_prepare(element, buffer)
     }
 
     fn render_list(
@@ -50,10 +50,7 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
         element: &BaseSink,
         list: &gst::BufferListRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        for buffer in list.iter() {
-            self.render(element, buffer)?;
-        }
-        Ok(gst::FlowSuccess::Ok)
+        self.parent_render_list(element, list)
     }
 
     fn prepare_list(
@@ -61,10 +58,7 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
         element: &BaseSink,
         list: &gst::BufferListRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        for buffer in list.iter() {
-            self.prepare(element, buffer)?;
-        }
-        Ok(gst::FlowSuccess::Ok)
+        self.parent_prepare_list(element, list)
     }
 
     fn query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool {
@@ -87,12 +81,132 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
         self.parent_fixate(element, caps)
     }
 
-    fn unlock(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn unlock(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        self.parent_unlock(element)
     }
 
-    fn unlock_stop(&self, _element: &BaseSink) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn unlock_stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        self.parent_unlock_stop(element)
+    }
+
+    fn parent_start(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .start
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `start` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .stop
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `stop` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_render(
+        &self,
+        element: &BaseSink,
+        buffer: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .render
+                .map(|f| {
+                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer.as_mut_ptr()))
+                })
+                .unwrap_or(gst::FlowReturn::Ok)
+                .into_result()
+        }
+    }
+
+    fn parent_prepare(
+        &self,
+        element: &BaseSink,
+        buffer: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .prepare
+                .map(|f| from_glib(f(element.to_glib_none().0, buffer.as_mut_ptr())))
+                .unwrap_or(gst::FlowReturn::Ok)
+                .into_result()
+        }
+    }
+
+    fn parent_render_list(
+        &self,
+        element: &BaseSink,
+        list: &gst::BufferListRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .render_list
+                .map(|f| {
+                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, list.as_mut_ptr()))
+                        .into_result()
+                })
+                .unwrap_or_else(|| {
+                    for buffer in list.iter() {
+                        self.render(element, buffer)?;
+                    }
+                    Ok(gst::FlowSuccess::Ok)
+                })
+        }
+    }
+
+    fn parent_prepare_list(
+        &self,
+        element: &BaseSink,
+        list: &gst::BufferListRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .prepare_list
+                .map(|f| {
+                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, list.as_mut_ptr()))
+                        .into_result()
+                })
+                .unwrap_or_else(|| {
+                    for buffer in list.iter() {
+                        self.prepare(element, buffer)?;
+                    }
+                    Ok(gst::FlowSuccess::Ok)
+                })
+        }
     }
 
     fn parent_query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool {
@@ -168,6 +282,46 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
                 Some(fixate) => from_glib_full(fixate(element.to_glib_none().0, caps.into_ptr())),
                 None => caps,
             }
+        }
+    }
+
+    fn parent_unlock(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .unlock
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::Failed,
+                            ["Parent function `unlock` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_unlock_stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSinkClass;
+            (*parent_class)
+                .unlock_stop
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::Failed,
+                            ["Parent function `unlock_stop` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
         }
     }
 }

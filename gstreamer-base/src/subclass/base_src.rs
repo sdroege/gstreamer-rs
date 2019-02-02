@@ -23,30 +23,30 @@ use BaseSrc;
 use BaseSrcClass;
 
 pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
-    fn start(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        self.parent_start(element)
     }
 
-    fn stop(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        self.parent_stop(element)
     }
 
-    fn is_seekable(&self, _element: &BaseSrc) -> bool {
-        false
+    fn is_seekable(&self, element: &BaseSrc) -> bool {
+        self.parent_is_seekable(element)
     }
 
-    fn get_size(&self, _element: &BaseSrc) -> Option<u64> {
-        None
+    fn get_size(&self, element: &BaseSrc) -> Option<u64> {
+        self.parent_get_size(element)
     }
 
     fn fill(
         &self,
-        _element: &BaseSrc,
-        _offset: u64,
-        _length: u32,
-        _buffer: &mut gst::BufferRef,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+        buffer: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unimplemented!()
+        self.parent_fill(element, offset, length, buffer)
     }
 
     fn create(
@@ -86,12 +86,106 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
         self.parent_fixate(element, caps)
     }
 
-    fn unlock(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        self.parent_unlock(element)
     }
 
-    fn unlock_stop(&self, _element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        self.parent_unlock_stop(element)
+    }
+
+    fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .start
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `start` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .stop
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `stop` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_is_seekable(&self, element: &BaseSrc) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .is_seekable
+                .map(|f| from_glib(f(element.to_glib_none().0)))
+                .unwrap_or(false)
+        }
+    }
+
+    fn parent_get_size(&self, element: &BaseSrc) -> Option<u64> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .get_size
+                .map(|f| {
+                    let mut size = 0;
+                    if from_glib(f(element.to_glib_none().0, &mut size)) {
+                        Some(size)
+                    } else {
+                        None
+                    }
+                })
+                .unwrap_or(None)
+        }
+    }
+
+    fn parent_fill(
+        &self,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+        buffer: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .fill
+                .map(|f| {
+                    gst::FlowReturn::from_glib(f(
+                        element.to_glib_none().0,
+                        offset,
+                        length,
+                        buffer.as_mut_ptr(),
+                    ))
+                })
+                .unwrap_or(gst::FlowReturn::NotSupported)
+                .into_result()
+        }
     }
 
     fn parent_create(
@@ -220,6 +314,46 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
                 Some(fixate) => from_glib_full(fixate(element.to_glib_none().0, caps.into_ptr())),
                 None => caps,
             }
+        }
+    }
+
+    fn parent_unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .unlock
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::Failed,
+                            ["Parent function `unlock` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .unlock_stop
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::Failed,
+                            ["Parent function `unlock_stop` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
         }
     }
 }

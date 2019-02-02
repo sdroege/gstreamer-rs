@@ -21,12 +21,12 @@ use BaseTransform;
 use BaseTransformClass;
 
 pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
-    fn start(&self, _element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+        self.parent_start(element)
     }
 
-    fn stop(&self, _element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
-        Ok(())
+    fn stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+        self.parent_stop(element)
     }
 
     fn transform_caps(
@@ -49,13 +49,8 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         self.parent_fixate_caps(element, direction, caps, othercaps)
     }
 
-    fn set_caps(
-        &self,
-        _element: &BaseTransform,
-        _incaps: &gst::Caps,
-        _outcaps: &gst::Caps,
-    ) -> bool {
-        true
+    fn set_caps(&self, element: &BaseTransform, incaps: &gst::Caps, outcaps: &gst::Caps) -> bool {
+        self.parent_set_caps(element, incaps, outcaps)
     }
 
     fn accept_caps(
@@ -87,8 +82,8 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         self.parent_transform_size(element, direction, caps, size, othercaps)
     }
 
-    fn get_unit_size(&self, _element: &BaseTransform, _caps: &gst::Caps) -> Option<usize> {
-        unimplemented!();
+    fn get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize> {
+        self.parent_get_unit_size(element, caps)
     }
 
     fn sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
@@ -101,27 +96,67 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
 
     fn transform(
         &self,
-        _element: &BaseTransform,
-        _inbuf: &gst::Buffer,
-        _outbuf: &mut gst::BufferRef,
+        element: &BaseTransform,
+        inbuf: &gst::Buffer,
+        outbuf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unimplemented!();
+        self.parent_transform(element, inbuf, outbuf)
     }
 
     fn transform_ip(
         &self,
-        _element: &BaseTransform,
-        _buf: &mut gst::BufferRef,
+        element: &BaseTransform,
+        buf: &mut gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unimplemented!();
+        self.parent_transform_ip(element, buf)
     }
 
     fn transform_ip_passthrough(
         &self,
-        _element: &BaseTransform,
-        _buf: &gst::BufferRef,
+        element: &BaseTransform,
+        buf: &gst::BufferRef,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
-        unimplemented!();
+        self.parent_transform_ip_passthrough(element, buf)
+    }
+
+    fn parent_start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .start
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `start` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .stop
+                .map(|f| {
+                    if from_glib(f(element.to_glib_none().0)) {
+                        Ok(())
+                    } else {
+                        Err(gst_error_msg!(
+                            gst::CoreError::StateChange,
+                            ["Parent function `stop` failed"]
+                        ))
+                    }
+                })
+                .unwrap_or(Ok(()))
+        }
     }
 
     fn parent_transform_caps(
@@ -167,6 +202,28 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
                 )),
                 None => othercaps,
             }
+        }
+    }
+
+    fn parent_set_caps(
+        &self,
+        element: &BaseTransform,
+        incaps: &gst::Caps,
+        outcaps: &gst::Caps,
+    ) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .set_caps
+                .map(|f| {
+                    from_glib(f(
+                        element.to_glib_none().0,
+                        incaps.to_glib_none().0,
+                        outcaps.to_glib_none().0,
+                    ))
+                })
+                .unwrap_or(true)
         }
     }
 
@@ -247,6 +304,37 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         }
     }
 
+    fn parent_get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            let f = (*parent_class).get_unit_size.unwrap_or_else(|| {
+                if !element.is_in_place() {
+                    unimplemented!(concat!(
+                        "Missing parent function `get_unit_size`. Required because ",
+                        "transform element doesn't operate in-place"
+                    ))
+                } else {
+                    unreachable!(concat!(
+                        "parent `get_unit_size` called ",
+                        "while transform element operates in-place"
+                    ))
+                }
+            });
+
+            let mut size = 0;
+            if from_glib(f(
+                element.to_glib_none().0,
+                caps.to_glib_none().0,
+                &mut size,
+            )) {
+                Some(size)
+            } else {
+                None
+            }
+        }
+    }
+
     fn parent_sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool {
         unsafe {
             let data = self.get_type_data();
@@ -266,6 +354,92 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
                 .src_event
                 .map(|f| from_glib(f(element.to_glib_none().0, event.into_ptr())))
                 .unwrap_or(true)
+        }
+    }
+
+    fn parent_transform(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::Buffer,
+        outbuf: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .transform
+                .map(|f| {
+                    from_glib(f(
+                        element.to_glib_none().0,
+                        inbuf.to_glib_none().0,
+                        outbuf.as_mut_ptr(),
+                    ))
+                })
+                .unwrap_or_else(|| {
+                    if !element.is_in_place() {
+                        gst::FlowReturn::NotSupported
+                    } else {
+                        unreachable!(concat!(
+                            "parent `transform` called ",
+                            "while transform element operates in-place"
+                        ));
+                    }
+                })
+                .into_result()
+        }
+    }
+
+    fn parent_transform_ip(
+        &self,
+        element: &BaseTransform,
+        buf: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            let f = (*parent_class).transform_ip.unwrap_or_else(|| {
+                if element.is_in_place() {
+                    panic!(concat!(
+                        "Missing parent function `transform_ip`. Required because ",
+                        "transform element operates in-place"
+                    ));
+                } else {
+                    unreachable!(concat!(
+                        "parent `transform` called ",
+                        "while transform element doesn't operate in-place"
+                    ));
+                }
+            });
+
+            gst::FlowReturn::from_glib(f(element.to_glib_none().0, &mut buf.as_mut_ptr()))
+                .into_result()
+        }
+    }
+
+    fn parent_transform_ip_passthrough(
+        &self,
+        element: &BaseTransform,
+        buf: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseTransformClass;
+            let f = (*parent_class).transform_ip.unwrap_or_else(|| {
+                if element.is_in_place() {
+                    panic!(concat!(
+                        "Missing parent function `transform_ip`. Required because ",
+                        "transform element operates in-place (passthrough mode)"
+                    ));
+                } else {
+                    unreachable!(concat!(
+                        "parent `transform_ip` called ",
+                        "while transform element doesn't operate in-place (passthrough mode)"
+                    ));
+                }
+            });
+
+            gst::FlowReturn::from_glib(f(element.to_glib_none().0, &mut buf.as_mut_ptr()))
+                .into_result()
         }
     }
 }
