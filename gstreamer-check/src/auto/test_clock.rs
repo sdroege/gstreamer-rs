@@ -45,9 +45,12 @@ impl TestClock {
         }
     }
 
-    pub fn crank(&self) -> bool {
+    pub fn crank(&self) -> Result<(), glib::BoolError> {
         unsafe {
-            from_glib(ffi::gst_test_clock_crank(self.to_glib_none().0))
+            glib_result_from_gboolean!(
+                ffi::gst_test_clock_crank(self.to_glib_none().0),
+                "Failed to crank"
+            )
         }
     }
 

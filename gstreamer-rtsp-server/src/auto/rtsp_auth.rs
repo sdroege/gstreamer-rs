@@ -6,6 +6,7 @@ use RTSPToken;
 use ffi;
 use gio;
 use gio_ffi;
+use glib;
 use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -34,10 +35,10 @@ impl RTSPAuth {
         }
     }
 
-    pub fn check(check: &str) -> bool {
+    pub fn check(check: &str) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib(ffi::gst_rtsp_auth_check(check.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_rtsp_auth_check(check.to_glib_none().0), "Check failed")
         }
     }
 

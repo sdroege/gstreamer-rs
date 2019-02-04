@@ -110,6 +110,16 @@ status = "generate"
     name = "attach"
     ignore = true
 
+    [[object.function]]
+    name = "io_func"
+        [object.function.return]
+        bool_return_is_error = "Failed to connect the source"
+
+    [[object.function]]
+    name = "transfer_connection"
+        [object.function.return]
+        bool_return_is_error = "Failed to transfer to the connection"
+
 [[object]]
 name = "GstRtspServer.RTSPClient"
 status = "generate"
@@ -159,6 +169,21 @@ status = "generate"
     name = "leave_bin"
         [object.function.return]
         bool_return_is_error = "Failed to leave bin"
+
+    [[object.function]]
+    name = "set_blocked"
+        [object.function.return]
+        bool_return_is_error = "Failed to block/unblock the dataflow"
+
+    [[object.function]]
+    name = "unblock_linked"
+        [object.function.return]
+        bool_return_is_error = "Failed to unblock the dataflow"
+
+    [[object.function]]
+    name = "update_crypto"
+        [object.function.return]
+        bool_return_is_error = "Failed to update crypto"
 
 [[object]]
 name = "GstRtspServer.RTSPAddress"
@@ -257,6 +282,16 @@ status = "generate"
 [[object]]
 name="GstRtspServer.RTSPAuth"
 status="generate"
+
+    [[object.function]]
+    name = "check"
+        [object.function.return]
+        bool_return_is_error = "Check failed"
+
+    [[object.function]]
+    name = "connect_accept_certificate"
+    # Use Result<(), LoggableError>
+    ignore = true
 
     [[object.function]]
     name = "make_basic"

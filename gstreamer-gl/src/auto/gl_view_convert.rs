@@ -5,6 +5,7 @@
 use GLContext;
 use GLStereoDownmix;
 use ffi;
+use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
@@ -47,9 +48,9 @@ impl GLViewConvert {
         }
     }
 
-    pub fn set_caps(&self, in_caps: &gst::Caps, out_caps: &gst::Caps) -> bool {
+    pub fn set_caps(&self, in_caps: &gst::Caps, out_caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_gl_view_convert_set_caps(self.to_glib_none().0, in_caps.to_glib_none().0, out_caps.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_gl_view_convert_set_caps(self.to_glib_none().0, in_caps.to_glib_none().0, out_caps.to_glib_none().0), "Failed to set caps")
         }
     }
 

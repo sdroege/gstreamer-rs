@@ -7,6 +7,7 @@ use GLContext;
 use GLSLProfile;
 use GLSLVersion;
 use ffi;
+use glib;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
@@ -90,10 +91,10 @@ impl GLSLStage {
         }
     }
 
-    pub fn set_strings(&self, version: GLSLVersion, profile: GLSLProfile, str: &[&str]) -> bool {
+    pub fn set_strings(&self, version: GLSLVersion, profile: GLSLProfile, str: &[&str]) -> Result<(), glib::error::BoolError> {
         let n_strings = str.len() as i32;
         unsafe {
-            from_glib(ffi::gst_glsl_stage_set_strings(self.to_glib_none().0, version.to_glib(), profile.to_glib(), n_strings, str.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_glsl_stage_set_strings(self.to_glib_none().0, version.to_glib(), profile.to_glib(), n_strings, str.to_glib_none().0), "Failed to attach stage to set strings")
         }
     }
 }

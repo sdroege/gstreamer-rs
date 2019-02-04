@@ -4,6 +4,7 @@
 
 use GLContext;
 use ffi;
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
@@ -24,9 +25,9 @@ impl GLColorConvert {
         }
     }
 
-    pub fn set_caps(&self, in_caps: &gst::Caps, out_caps: &gst::Caps) -> bool {
+    pub fn set_caps(&self, in_caps: &gst::Caps, out_caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_gl_color_convert_set_caps(self.to_glib_none().0, in_caps.to_glib_none().0, out_caps.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_gl_color_convert_set_caps(self.to_glib_none().0, in_caps.to_glib_none().0, out_caps.to_glib_none().0), "Failed to set caps")
         }
     }
 

@@ -5,6 +5,7 @@
 use GLContext;
 use GLDisplay;
 use ffi;
+use glib;
 use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -63,7 +64,7 @@ pub trait GLWindowExt: 'static {
 
     fn set_preferred_size(&self, width: i32, height: i32);
 
-    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> bool;
+    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError>;
 
     fn show(&self);
 
@@ -142,9 +143,9 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> bool {
+    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_gl_window_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height))
+            glib_result_from_gboolean!(ffi::gst_gl_window_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height), "Failed to set the specified region")
         }
     }
 

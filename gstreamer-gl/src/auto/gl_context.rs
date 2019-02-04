@@ -93,7 +93,7 @@ pub trait GLContextExt: 'static {
 
     fn set_shared_with<P: IsA<GLContext>>(&self, share: &P);
 
-    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> bool;
+    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError>;
 
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
@@ -220,9 +220,9 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> bool {
+    fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_gl_context_set_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_full()))
+            glib_result_from_gboolean!(ffi::gst_gl_context_set_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_full()), "Failed to set window")
         }
     }
 

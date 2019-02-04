@@ -6,6 +6,7 @@ use Error;
 use GLContext;
 use GLSLStage;
 use ffi;
+use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
@@ -53,15 +54,15 @@ impl GLShader {
     //    unsafe { TODO: call ffi::gst_gl_shader_new_with_stages() }
     //}
 
-    pub fn attach(&self, stage: &GLSLStage) -> bool {
+    pub fn attach(&self, stage: &GLSLStage) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_gl_shader_attach(self.to_glib_none().0, stage.to_glib_none().0), "Failed to attach stage to shader")
         }
     }
 
-    pub fn attach_unlocked(&self, stage: &GLSLStage) -> bool {
+    pub fn attach_unlocked(&self, stage: &GLSLStage) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_gl_shader_attach_unlocked(self.to_glib_none().0, stage.to_glib_none().0), "Failed to attach stage to shader")
         }
     }
 

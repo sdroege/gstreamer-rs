@@ -152,6 +152,10 @@ status = "generate"
        [object.function.return]
        nullable = false
 
+    [[object.function]]
+    name = "set_window"
+        [object.function.return]
+        bool_return_is_error = "Failed to set window"
 
 [[object]]
 name = "GstGL.GLDisplay"
@@ -218,6 +222,11 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "set_render_rectangle"
+        [object.function.return]
+        bool_return_is_error = "Failed to set the specified region"
+
+    [[object.function]]
     name = "set_resize_callback"
     # callback
     ignore = true
@@ -241,6 +250,11 @@ status = "generate"
 name = "GstGL.GLColorConvert"
 status = "generate"
 final_type = true
+
+    [[object.function]]
+    name = "set_caps"
+        [object.function.return]
+        bool_return_is_error = "Failed to set caps"
 
     [[object.function]]
     name = "decide_allocation"
@@ -272,10 +286,25 @@ name = "GstGL.GLSLStage"
 status = "generate"
 final_type = true
 
+    [[object.function]]
+    name = "set_strings"
+        [object.function.return]
+        bool_return_is_error = "Failed to attach stage to set strings"
+
 [[object]]
 name = "GstGL.GLShader"
 status = "generate"
 final_type = true
+
+    [[object.function]]
+    name = "attach"
+        [object.function.return]
+        bool_return_is_error = "Failed to attach stage to shader"
+
+    [[object.function]]
+    name = "attach_unlocked"
+        [object.function.return]
+        bool_return_is_error = "Failed to attach stage to shader"
 
     [[object.function]]
     name = "set_uniform_matrix_2fv"
@@ -328,6 +357,11 @@ status = "generate"
 final_type = true
 
     [[object.function]]
+    name = "set_caps"
+        [object.function.return]
+        bool_return_is_error = "Failed to set caps"
+
+    [[object.function]]
     name = "perform_with_buffer"
     # Result<Buffer, GLUploadReturn>
     ignore = true
@@ -346,6 +380,11 @@ final_type = true
 name = "GstGL.GLViewConvert"
 status = "generate"
 final_type = true
+
+    [[object.function]]
+    name = "set_caps"
+        [object.function.return]
+        bool_return_is_error = "Failed to set caps"
 
     [[object.function]]
     name = "fixate_caps"

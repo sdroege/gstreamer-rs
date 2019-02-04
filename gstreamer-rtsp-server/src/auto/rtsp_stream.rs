@@ -136,7 +136,7 @@ pub trait RTSPStreamExt: 'static {
 
     fn set_address_pool<'a, P: IsA<RTSPAddressPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q);
 
-    fn set_blocked(&self, blocked: bool) -> bool;
+    fn set_blocked(&self, blocked: bool) -> Result<(), glib::error::BoolError>;
 
     fn set_buffer_size(&self, size: u32);
 
@@ -166,9 +166,9 @@ pub trait RTSPStreamExt: 'static {
 
     //fn transport_filter(&self, func: /*Unimplemented*/Fn(&RTSPStream, &RTSPStreamTransport) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPStreamTransport>;
 
-    fn unblock_linked(&self) -> bool;
+    fn unblock_linked(&self) -> Result<(), glib::error::BoolError>;
 
-    fn update_crypto<'a, P: Into<Option<&'a gst::Caps>>>(&self, ssrc: u32, crypto: P) -> bool;
+    fn update_crypto<'a, P: Into<Option<&'a gst::Caps>>>(&self, ssrc: u32, crypto: P) -> Result<(), glib::error::BoolError>;
 
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -453,9 +453,9 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    fn set_blocked(&self, blocked: bool) -> bool {
+    fn set_blocked(&self, blocked: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_rtsp_stream_set_blocked(self.as_ref().to_glib_none().0, blocked.to_glib()))
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_set_blocked(self.as_ref().to_glib_none().0, blocked.to_glib()), "Failed to block/unblock the dataflow")
         }
     }
 
@@ -543,16 +543,16 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_filter() }
     //}
 
-    fn unblock_linked(&self) -> bool {
+    fn unblock_linked(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_rtsp_stream_unblock_linked(self.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_unblock_linked(self.as_ref().to_glib_none().0), "Failed to unblock the dataflow")
         }
     }
 
-    fn update_crypto<'a, P: Into<Option<&'a gst::Caps>>>(&self, ssrc: u32, crypto: P) -> bool {
+    fn update_crypto<'a, P: Into<Option<&'a gst::Caps>>>(&self, ssrc: u32, crypto: P) -> Result<(), glib::error::BoolError> {
         let crypto = crypto.into();
         unsafe {
-            from_glib(ffi::gst_rtsp_stream_update_crypto(self.as_ref().to_glib_none().0, ssrc, crypto.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_rtsp_stream_update_crypto(self.as_ref().to_glib_none().0, ssrc, crypto.to_glib_none().0), "Failed to update crypto")
         }
     }
 

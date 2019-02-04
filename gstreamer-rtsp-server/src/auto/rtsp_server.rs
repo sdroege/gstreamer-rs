@@ -38,10 +38,10 @@ impl RTSPServer {
         }
     }
 
-    pub fn io_func<P: IsA<gio::Socket>, Q: IsA<RTSPServer>>(socket: &P, condition: glib::IOCondition, server: &Q) -> bool {
+    pub fn io_func<P: IsA<gio::Socket>, Q: IsA<RTSPServer>>(socket: &P, condition: glib::IOCondition, server: &Q) -> Result<(), glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            from_glib(ffi::gst_rtsp_server_io_func(socket.as_ref().to_glib_none().0, condition.to_glib(), server.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_rtsp_server_io_func(socket.as_ref().to_glib_none().0, condition.to_glib(), server.as_ref().to_glib_none().0), "Failed to connect the source")
         }
     }
 }
@@ -94,7 +94,7 @@ pub trait RTSPServerExt: 'static {
 
     fn set_thread_pool<'a, P: IsA<RTSPThreadPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q);
 
-    fn transfer_connection<'a, P: IsA<gio::Socket>, Q: Into<Option<&'a str>>>(&self, socket: &P, ip: &str, port: i32, initial_buffer: Q) -> bool;
+    fn transfer_connection<'a, P: IsA<gio::Socket>, Q: Into<Option<&'a str>>>(&self, socket: &P, ip: &str, port: i32, initial_buffer: Q) -> Result<(), glib::error::BoolError>;
 
     fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -228,10 +228,10 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
         }
     }
 
-    fn transfer_connection<'a, P: IsA<gio::Socket>, Q: Into<Option<&'a str>>>(&self, socket: &P, ip: &str, port: i32, initial_buffer: Q) -> bool {
+    fn transfer_connection<'a, P: IsA<gio::Socket>, Q: Into<Option<&'a str>>>(&self, socket: &P, ip: &str, port: i32, initial_buffer: Q) -> Result<(), glib::error::BoolError> {
         let initial_buffer = initial_buffer.into();
         unsafe {
-            from_glib(ffi::gst_rtsp_server_transfer_connection(self.as_ref().to_glib_none().0, socket.as_ref().to_glib_full(), ip.to_glib_none().0, port, initial_buffer.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_rtsp_server_transfer_connection(self.as_ref().to_glib_none().0, socket.as_ref().to_glib_full(), ip.to_glib_none().0, port, initial_buffer.to_glib_none().0), "Failed to transfer to the connection")
         }
     }
 
