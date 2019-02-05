@@ -64,13 +64,20 @@ impl MIKEYMessage {
         }
     }
 
-    pub fn add_t(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> bool {
+    pub fn add_t(
+        &mut self,
+        type_: MIKEYTSType,
+        ts_value: &[u8],
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_add_t(
-                self.to_glib_none_mut().0,
-                type_.to_glib(),
-                ts_value.to_glib_none().0,
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_mikey_message_add_t(
+                    self.to_glib_none_mut().0,
+                    type_.to_glib(),
+                    ts_value.to_glib_none().0,
+                ),
+                "Failed to add the T payload"
+            )
         }
     }
 
@@ -83,15 +90,22 @@ impl MIKEYMessage {
         }
     }
 
-    pub fn insert_cs_srtp(&mut self, idx: i32, map: MIKEYMapSRTP) -> bool {
+    pub fn insert_cs_srtp(
+        &mut self,
+        idx: i32,
+        map: MIKEYMapSRTP,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_message_insert_cs_srtp(
-                self.to_glib_none_mut().0,
-                idx,
-                map.to_glib_full(),
-            ));
+            let res = glib_result_from_gboolean!(
+                ffi::gst_mikey_message_insert_cs_srtp(
+                    self.to_glib_none_mut().0,
+                    idx,
+                    map.to_glib_full(),
+                ),
+                "Failed to insert the Crypto Session map for SRTP"
+            );
             mem::forget(map);
-            ret
+            res
         }
     }
 
@@ -104,50 +118,77 @@ impl MIKEYMessage {
         }
     }
 
-    pub fn add_payload(&mut self, payload: MIKEYPayload) -> bool {
+    pub fn add_payload(
+        &mut self,
+        payload: MIKEYPayload,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_message_add_payload(
-                self.to_glib_none_mut().0,
-                payload.to_glib_full(),
-            ));
+            let res = glib_result_from_gboolean!(
+                ffi::gst_mikey_message_add_payload(
+                    self.to_glib_none_mut().0,
+                    payload.to_glib_full(),
+                ),
+                "Failed to add the payload"
+            );
             mem::forget(payload);
-            ret
+            res
         }
     }
 
-    pub fn insert_payload(&mut self, idx: u32, payload: MIKEYPayload) -> bool {
+    pub fn insert_payload(
+        &mut self,
+        idx: u32,
+        payload: MIKEYPayload,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_message_insert_payload(
-                self.to_glib_none_mut().0,
-                idx,
-                payload.to_glib_full(),
-            ));
+            let res = glib_result_from_gboolean!(
+                ffi::gst_mikey_message_insert_payload(
+                    self.to_glib_none_mut().0,
+                    idx,
+                    payload.to_glib_full(),
+                ),
+                "Failed to insert the payload"
+            );
             mem::forget(payload);
-            ret
+            res
         }
     }
 
-    pub fn replace_cs_srtp(&mut self, idx: i32, map: MIKEYMapSRTP) -> bool {
+    pub fn replace_cs_srtp(
+        &mut self,
+        idx: i32,
+        map: MIKEYMapSRTP,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_message_replace_cs_srtp(
-                self.to_glib_none_mut().0,
-                idx,
-                map.to_glib_full(),
-            ));
+            let res = glib_result_from_gboolean!(
+                ffi::gst_mikey_message_replace_cs_srtp(
+                    self.to_glib_none_mut().0,
+                    idx,
+                    map.to_glib_full(),
+                ),
+                "Failed to replace the Crypto Session map for SRTP"
+            );
             mem::forget(map);
-            ret
+            res
         }
     }
 
-    pub fn replace_payload(&mut self, idx: u32, payload: MIKEYPayload) -> bool {
+    pub fn replace_payload(
+        &mut self,
+        idx: u32,
+        payload: MIKEYPayload,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_message_replace_payload(
-                self.to_glib_none_mut().0,
-                idx,
-                payload.to_glib_full(),
-            ));
+            let res = glib_result_from_gboolean!(
+                ffi::gst_mikey_message_replace_payload(
+                    self.to_glib_none_mut().0,
+                    idx,
+                    payload.to_glib_full(),
+                ),
+                "Failed to replace the payload"
+            );
             mem::forget(payload);
-            ret
+            res
         }
     }
 

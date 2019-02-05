@@ -18,14 +18,17 @@ use auto::MIKEYPayload;
 use m_i_k_e_y_map_s_r_t_p::MIKEYPayloadSPParam;
 
 impl MIKEYPayload {
-    pub fn kemac_add_sub(&mut self, newpay: MIKEYPayload) -> bool {
+    pub fn kemac_add_sub(&mut self, newpay: MIKEYPayload) -> Result<(), glib::error::BoolError> {
         unsafe {
-            let ret = from_glib(ffi::gst_mikey_payload_kemac_add_sub(
-                self.to_glib_none_mut().0,
-                newpay.to_glib_full(),
-            ));
+            let res = glib_result_from_gboolean!(
+                ffi::gst_mikey_payload_kemac_add_sub(
+                    self.to_glib_none_mut().0,
+                    newpay.to_glib_full(),
+                ),
+                "Failed to add the sub payload"
+            );
             mem::forget(newpay);
-            ret
+            res
         }
     }
 
@@ -47,27 +50,41 @@ impl MIKEYPayload {
         }
     }
 
-    pub fn t_set(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> bool {
+    pub fn t_set(
+        &mut self,
+        type_: MIKEYTSType,
+        ts_value: &[u8],
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_payload_t_set(
-                self.to_glib_none_mut().0,
-                type_.to_glib(),
-                ts_value.to_glib_none().0,
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_mikey_payload_t_set(
+                    self.to_glib_none_mut().0,
+                    type_.to_glib(),
+                    ts_value.to_glib_none().0,
+                ),
+                "Failed to set the timestamp"
+            )
         }
     }
 
-    pub fn key_data_set_interval(&mut self, vf_data: &[u8], vt_data: &[u8]) -> bool {
+    pub fn key_data_set_interval(
+        &mut self,
+        vf_data: &[u8],
+        vt_data: &[u8],
+    ) -> Result<(), glib::error::BoolError> {
         let vf_len = vf_data.len() as u8;
         let vt_len = vt_data.len() as u8;
         unsafe {
-            from_glib(ffi::gst_mikey_payload_key_data_set_interval(
-                self.to_glib_none_mut().0,
-                vf_len,
-                vf_data.to_glib_none().0,
-                vt_len,
-                vt_data.to_glib_none().0,
-            ))
+            glib_result_from_gboolean!(
+                ffi::gst_mikey_payload_key_data_set_interval(
+                    self.to_glib_none_mut().0,
+                    vf_len,
+                    vf_data.to_glib_none().0,
+                    vt_len,
+                    vt_data.to_glib_none().0,
+                ),
+                "Failed to set the key validity period"
+            )
         }
     }
 }

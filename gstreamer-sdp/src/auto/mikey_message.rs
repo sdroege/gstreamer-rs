@@ -9,6 +9,7 @@ use MIKEYPayload;
 use MIKEYPayloadType;
 use MIKEYType;
 use ffi;
+use glib;
 use glib::translate::*;
 use gobject_ffi;
 use gst;
@@ -47,39 +48,39 @@ impl MIKEYMessage {
     //    unsafe { TODO: call ffi::gst_mikey_message_new_from_data() }
     //}
 
-    pub fn add_cs_srtp(&mut self, policy: u8, ssrc: u32, roc: u32) -> bool {
+    pub fn add_cs_srtp(&mut self, policy: u8, ssrc: u32, roc: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_add_cs_srtp(self.to_glib_none_mut().0, policy, ssrc, roc))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_add_cs_srtp(self.to_glib_none_mut().0, policy, ssrc, roc), "Failed to add the Crypto policy for SRTP")
         }
     }
 
-    pub fn add_pke(&mut self, C: MIKEYCacheType, data: &[u8]) -> bool {
+    pub fn add_pke(&mut self, C: MIKEYCacheType, data: &[u8]) -> Result<(), glib::error::BoolError> {
         let data_len = data.len() as u16;
         unsafe {
-            from_glib(ffi::gst_mikey_message_add_pke(self.to_glib_none_mut().0, C.to_glib(), data_len, data.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_add_pke(self.to_glib_none_mut().0, C.to_glib(), data_len, data.to_glib_none().0), "Failed to add the PKE payload")
         }
     }
 
-    pub fn add_rand(&mut self, rand: &[u8]) -> bool {
+    pub fn add_rand(&mut self, rand: &[u8]) -> Result<(), glib::error::BoolError> {
         let len = rand.len() as u8;
         unsafe {
-            from_glib(ffi::gst_mikey_message_add_rand(self.to_glib_none_mut().0, len, rand.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_add_rand(self.to_glib_none_mut().0, len, rand.to_glib_none().0), "Failed to add the RAND payload")
         }
     }
 
-    pub fn add_rand_len(&mut self, len: u8) -> bool {
+    pub fn add_rand_len(&mut self, len: u8) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_add_rand_len(self.to_glib_none_mut().0, len))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_add_rand_len(self.to_glib_none_mut().0, len), "Failed to add the RAND payload with random bytes")
         }
     }
 
-    //pub fn add_t(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> bool {
+    //pub fn add_t(&mut self, type_: MIKEYTSType, ts_value: &[u8]) -> Result<(), glib::error::BoolError> {
     //    unsafe { TODO: call ffi::gst_mikey_message_add_t() }
     //}
 
-    pub fn add_t_now_ntp_utc(&mut self) -> bool {
+    pub fn add_t_now_ntp_utc(&mut self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_add_t_now_ntp_utc(self.to_glib_none_mut().0))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_add_t_now_ntp_utc(self.to_glib_none_mut().0), "Failed to add the T payload with current time")
         }
     }
 
@@ -109,15 +110,15 @@ impl MIKEYMessage {
     //    unsafe { TODO: call ffi::gst_mikey_message_insert_cs_srtp() }
     //}
 
-    pub fn remove_cs_srtp(&mut self, idx: i32) -> bool {
+    pub fn remove_cs_srtp(&mut self, idx: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_remove_cs_srtp(self.to_glib_none_mut().0, idx))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_remove_cs_srtp(self.to_glib_none_mut().0, idx), "Failed to remove the SRTP policy")
         }
     }
 
-    pub fn remove_payload(&mut self, idx: u32) -> bool {
+    pub fn remove_payload(&mut self, idx: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_remove_payload(self.to_glib_none_mut().0, idx))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_remove_payload(self.to_glib_none_mut().0, idx), "Failed to remove the payload")
         }
     }
 
@@ -125,9 +126,9 @@ impl MIKEYMessage {
     //    unsafe { TODO: call ffi::gst_mikey_message_replace_cs_srtp() }
     //}
 
-    pub fn set_info(&mut self, version: u8, type_: MIKEYType, V: bool, prf_func: MIKEYPRFFunc, CSB_id: u32, map_type: MIKEYMapType) -> bool {
+    pub fn set_info(&mut self, version: u8, type_: MIKEYType, V: bool, prf_func: MIKEYPRFFunc, CSB_id: u32, map_type: MIKEYMapType) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_set_info(self.to_glib_none_mut().0, version, type_.to_glib(), V.to_glib(), prf_func.to_glib(), CSB_id, map_type.to_glib()))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_set_info(self.to_glib_none_mut().0, version, type_.to_glib(), V.to_glib(), prf_func.to_glib(), CSB_id, map_type.to_glib()), "Failed to set the information")
         }
     }
 
@@ -136,9 +137,9 @@ impl MIKEYMessage {
     //}
 
     #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn to_caps(&self, caps: &gst::Caps) -> bool {
+    pub fn to_caps(&self, caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_mikey_message_to_caps(self.to_glib_none().0, caps.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::gst_mikey_message_to_caps(self.to_glib_none().0, caps.to_glib_none().0), "Failed to fill caps with SRTP parameters")
         }
     }
 }
