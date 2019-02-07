@@ -196,7 +196,6 @@ mod tutorial5 {
         controls.pack_start(&slider, true, true, 2);
 
         let video_window = DrawingArea::new();
-        video_window.set_double_buffered(false);
 
         let video_overlay = playbin
             .clone()
