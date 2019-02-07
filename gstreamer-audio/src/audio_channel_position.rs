@@ -20,8 +20,12 @@ use array_init;
 
 impl AudioChannelPosition {
     pub fn to_mask(self) -> u64 {
+        let pos = self.to_glib();
+        if pos < 0 {
+            return 0;
+        }
         unsafe {
-            let val = mem::transmute::<ffi::GstAudioChannelPosition, u32>(self.to_glib());
+            let val = mem::transmute::<ffi::GstAudioChannelPosition, u32>(pos);
             1 << val
         }
     }
