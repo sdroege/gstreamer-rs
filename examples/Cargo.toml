@@ -16,7 +16,7 @@ gstreamer-editing-services = { path = "../gstreamer-editing-services", optional 
 gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
 gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
 gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"], optional = true }
-gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_6"], optional = true }
+gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
 futures-preview = { version = "0.2", optional = true }

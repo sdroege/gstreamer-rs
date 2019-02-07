@@ -6,7 +6,7 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/glib" }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
-gtk = { git = "https://github.com/gtk-rs/gtk", features = ["v3_10"], optional = true }
+gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gstreamer = { path = "../gstreamer" }
 gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
