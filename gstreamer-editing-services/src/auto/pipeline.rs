@@ -68,7 +68,7 @@ pub trait GESPipelineExt: 'static {
 
     fn set_render_settings<P: IsA<gst_pbutils::EncodingProfile>>(&self, output_uri: &str, profile: &P) -> Result<(), glib::error::BoolError>;
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> bool;
+    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
     fn get_property_audio_filter(&self) -> Option<gst::Element>;
 
@@ -164,9 +164,9 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> bool {
+    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_pipeline_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_full()))
+            glib_result_from_gboolean!(ffi::ges_pipeline_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_full()), "Failed to set timeline")
         }
     }
 

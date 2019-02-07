@@ -106,9 +106,9 @@ pub trait AssetExt: 'static {
 
     fn list_proxies(&self) -> Vec<Asset>;
 
-    fn set_proxy<'a, P: IsA<Asset> + 'a, Q: Into<Option<&'a P>>>(&self, proxy: Q) -> bool;
+    fn set_proxy<'a, P: IsA<Asset> + 'a, Q: Into<Option<&'a P>>>(&self, proxy: Q) -> Result<(), glib::error::BoolError>;
 
-    fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> bool;
+    fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError>;
 
     fn set_property_proxy_target<P: IsA<Asset> + glib::value::SetValueOptional>(&self, proxy_target: Option<&P>);
 
@@ -162,16 +162,16 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn set_proxy<'a, P: IsA<Asset> + 'a, Q: Into<Option<&'a P>>>(&self, proxy: Q) -> bool {
+    fn set_proxy<'a, P: IsA<Asset> + 'a, Q: Into<Option<&'a P>>>(&self, proxy: Q) -> Result<(), glib::error::BoolError> {
         let proxy = proxy.into();
         unsafe {
-            from_glib(ffi::ges_asset_set_proxy(self.as_ref().to_glib_none().0, proxy.map(|p| p.as_ref()).to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_asset_set_proxy(self.as_ref().to_glib_none().0, proxy.map(|p| p.as_ref()).to_glib_none().0), "Failed to set proxy")
         }
     }
 
-    fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> bool {
+    fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_asset_unproxy(self.as_ref().to_glib_none().0, proxy.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_asset_unproxy(self.as_ref().to_glib_none().0, proxy.as_ref().to_glib_none().0), "Failed to unproxy asset")
         }
     }
 

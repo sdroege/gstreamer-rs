@@ -6,6 +6,7 @@ use Extractable;
 use Timeline;
 use TrackType;
 use ffi;
+use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -71,13 +72,13 @@ pub trait TimelineElementExt: 'static {
 
     //fn remove_child_property(&self, pspec: /*Ignored*/&glib::ParamSpec) -> bool;
 
-    fn ripple(&self, start: gst::ClockTime) -> bool;
+    fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
-    fn ripple_end(&self, end: gst::ClockTime) -> bool;
+    fn ripple_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
-    fn roll_end(&self, end: gst::ClockTime) -> bool;
+    fn roll_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
-    fn roll_start(&self, start: gst::ClockTime) -> bool;
+    fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
     //fn set_child_properties(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -93,17 +94,17 @@ pub trait TimelineElementExt: 'static {
 
     fn set_max_duration(&self, maxduration: gst::ClockTime);
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> bool;
+    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError>;
 
-    fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P) -> bool;
+    fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
     fn set_priority(&self, priority: u32);
 
     fn set_start(&self, start: gst::ClockTime);
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> bool;
+    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
-    fn trim(&self, start: gst::ClockTime) -> bool;
+    fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError>;
 
     fn get_property_in_point(&self) -> u64;
 
@@ -239,27 +240,27 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ffi::ges_timeline_element_remove_child_property() }
     //}
 
-    fn ripple(&self, start: gst::ClockTime) -> bool {
+    fn ripple(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_ripple(self.as_ref().to_glib_none().0, start.to_glib()))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_ripple(self.as_ref().to_glib_none().0, start.to_glib()), "Failed to ripple")
         }
     }
 
-    fn ripple_end(&self, end: gst::ClockTime) -> bool {
+    fn ripple_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_ripple_end(self.as_ref().to_glib_none().0, end.to_glib()))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_ripple_end(self.as_ref().to_glib_none().0, end.to_glib()), "Failed to ripple")
         }
     }
 
-    fn roll_end(&self, end: gst::ClockTime) -> bool {
+    fn roll_end(&self, end: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_roll_end(self.as_ref().to_glib_none().0, end.to_glib()))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_roll_end(self.as_ref().to_glib_none().0, end.to_glib()), "Failed to roll")
         }
     }
 
-    fn roll_start(&self, start: gst::ClockTime) -> bool {
+    fn roll_start(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_roll_start(self.as_ref().to_glib_none().0, start.to_glib()))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_roll_start(self.as_ref().to_glib_none().0, start.to_glib()), "Failed to roll")
         }
     }
 
@@ -297,16 +298,16 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> bool {
+    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Result<(), glib::error::BoolError> {
         let name = name.into();
         unsafe {
-            from_glib(ffi::ges_timeline_element_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0), "Failed to set name")
         }
     }
 
-    fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P) -> bool {
+    fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_set_parent(self.as_ref().to_glib_none().0, parent.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_set_parent(self.as_ref().to_glib_none().0, parent.as_ref().to_glib_none().0), "`TimelineElement` already had a parent or its parent was the same as specified")
         }
     }
 
@@ -322,15 +323,15 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> bool {
+    fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0), "`Failed to set timeline")
         }
     }
 
-    fn trim(&self, start: gst::ClockTime) -> bool {
+    fn trim(&self, start: gst::ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_element_trim(self.as_ref().to_glib_none().0, start.to_glib()))
+            glib_result_from_gboolean!(ffi::ges_timeline_element_trim(self.as_ref().to_glib_none().0, start.to_glib()), "`Failed to trim")
         }
     }
 

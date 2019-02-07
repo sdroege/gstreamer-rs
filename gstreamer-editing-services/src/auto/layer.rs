@@ -8,6 +8,7 @@ use Extractable;
 use Timeline;
 use TrackType;
 use ffi;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
@@ -46,7 +47,7 @@ pub const NONE_LAYER: Option<&Layer> = None;
 pub trait LayerExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P, start: gst::ClockTime, inpoint: gst::ClockTime, duration: gst::ClockTime, track_types: TrackType) -> Option<Clip>;
 
-    fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> bool;
+    fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
     fn get_auto_transition(&self) -> bool;
 
@@ -62,7 +63,7 @@ pub trait LayerExt: 'static {
 
     fn is_empty(&self) -> bool;
 
-    fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> bool;
+    fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
     fn set_auto_transition(&self, auto_transition: bool);
 
@@ -88,9 +89,9 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> bool {
+    fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_layer_add_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_layer_add_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to add clip")
         }
     }
 
@@ -136,9 +137,9 @@ impl<O: IsA<Layer>> LayerExt for O {
         }
     }
 
-    fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> bool {
+    fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_layer_remove_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_layer_remove_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to remove clip")
         }
     }
 

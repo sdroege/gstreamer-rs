@@ -43,7 +43,7 @@ pub const NONE_PROJECT: Option<&Project> = None;
 pub trait ProjectExt: 'static {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool;
 
-    fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> bool;
+    fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError>;
 
     fn create_asset<'a, P: Into<Option<&'a str>>>(&self, id: P, extractable_type: glib::types::Type) -> bool;
 
@@ -61,7 +61,7 @@ pub trait ProjectExt: 'static {
 
     fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), Error>;
 
-    fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> bool;
+    fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 
     fn save<'a, P: IsA<Timeline>, Q: IsA<Asset> + 'a, R: Into<Option<&'a Q>>>(&self, timeline: &P, uri: &str, formatter_asset: R, overwrite: bool) -> Result<(), Error>;
 
@@ -85,9 +85,9 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> bool {
+    fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_project_add_encoding_profile(self.as_ref().to_glib_none().0, profile.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_project_add_encoding_profile(self.as_ref().to_glib_none().0, profile.as_ref().to_glib_none().0), "Failed to add profile")
         }
     }
 
@@ -145,9 +145,9 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> bool {
+    fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_project_remove_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_project_remove_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0), "Failed to remove asset")
         }
     }
 

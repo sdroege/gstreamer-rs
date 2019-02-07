@@ -49,13 +49,13 @@ pub trait ClipExt: 'static {
 
     fn get_top_effects(&self) -> Vec<TrackElement>;
 
-    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> bool;
+    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
     fn set_supported_formats(&self, supportedformats: TrackType);
 
-    fn set_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P, newindex: u32) -> bool;
+    fn set_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P, newindex: u32) -> Result<(), glib::error::BoolError>;
 
-    fn set_top_effect_priority<P: IsA<BaseEffect>>(&self, effect: &P, newpriority: u32) -> bool;
+    fn set_top_effect_priority<P: IsA<BaseEffect>>(&self, effect: &P, newpriority: u32) -> Result<(), glib::error::BoolError>;
 
     fn split(&self, position: u64) -> Option<Clip>;
 
@@ -115,9 +115,9 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> bool {
+    fn move_to_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_clip_move_to_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_clip_move_to_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0), "Failed to move clip to specified layer")
         }
     }
 
@@ -127,15 +127,15 @@ impl<O: IsA<Clip>> ClipExt for O {
         }
     }
 
-    fn set_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P, newindex: u32) -> bool {
+    fn set_top_effect_index<P: IsA<BaseEffect>>(&self, effect: &P, newindex: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_clip_set_top_effect_index(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0, newindex))
+            glib_result_from_gboolean!(ffi::ges_clip_set_top_effect_index(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0, newindex), "Failed to move effect")
         }
     }
 
-    fn set_top_effect_priority<P: IsA<BaseEffect>>(&self, effect: &P, newpriority: u32) -> bool {
+    fn set_top_effect_priority<P: IsA<BaseEffect>>(&self, effect: &P, newpriority: u32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_clip_set_top_effect_priority(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0, newpriority))
+            glib_result_from_gboolean!(ffi::ges_clip_set_top_effect_priority(self.as_ref().to_glib_none().0, effect.as_ref().to_glib_none().0, newpriority), "Failed to the set top effect priority")
         }
     }
 

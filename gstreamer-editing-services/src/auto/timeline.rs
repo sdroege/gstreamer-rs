@@ -105,7 +105,7 @@ pub trait TimelineExt: 'static {
 
     fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
-    fn remove_track<P: IsA<Track>>(&self, track: &P) -> bool;
+    fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
 
     fn save_to_uri<'a, P: IsA<Asset> + 'a, Q: Into<Option<&'a P>>>(&self, uri: &str, formatter_asset: Q, overwrite: bool) -> Result<(), Error>;
 
@@ -263,9 +263,9 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn remove_track<P: IsA<Track>>(&self, track: &P) -> bool {
+    fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_timeline_remove_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_timeline_remove_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_none().0), "Failed to remove track")
         }
     }
 

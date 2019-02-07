@@ -10,6 +10,7 @@ use TimelineElement;
 use Track;
 use TrackType;
 use ffi;
+use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -37,7 +38,7 @@ pub const NONE_TRACK_ELEMENT: Option<&TrackElement> = None;
 pub trait TrackElementExt: 'static {
     fn add_children_props<P: IsA<gst::Element>>(&self, element: &P, wanted_categories: &[&str], blacklist: &[&str], whitelist: &[&str]);
 
-    fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> bool;
+    fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError>;
 
     //fn get_all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 };
 
@@ -57,7 +58,7 @@ pub trait TrackElementExt: 'static {
 
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element>;
 
-    fn remove_control_binding(&self, property_name: &str) -> bool;
+    fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError>;
 
     fn set_active(&self, active: bool) -> bool;
 
@@ -85,9 +86,9 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
         }
     }
 
-    fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> bool {
+    fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_track_element_edit(self.as_ref().to_glib_none().0, layers.to_glib_none().0, mode.to_glib(), edge.to_glib(), position))
+            glib_result_from_gboolean!(ffi::ges_track_element_edit(self.as_ref().to_glib_none().0, layers.to_glib_none().0, mode.to_glib(), edge.to_glib(), position), "Failed to edit")
         }
     }
 
@@ -139,9 +140,9 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     //    unsafe { TODO: call ffi::ges_track_element_lookup_child() }
     //}
 
-    fn remove_control_binding(&self, property_name: &str) -> bool {
+    fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_track_element_remove_control_binding(self.as_ref().to_glib_none().0, property_name.to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_track_element_remove_control_binding(self.as_ref().to_glib_none().0, property_name.to_glib_none().0), "Failed to remove control binding")
         }
     }
 

@@ -4,6 +4,7 @@
 
 use Asset;
 use ffi;
+use glib;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
@@ -23,7 +24,7 @@ pub trait ExtractableExt: 'static {
 
     fn get_id(&self) -> Option<GString>;
 
-    fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> bool;
+    fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Extractable>> ExtractableExt for O {
@@ -39,9 +40,9 @@ impl<O: IsA<Extractable>> ExtractableExt for O {
         }
     }
 
-    fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> bool {
+    fn set_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::ges_extractable_set_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0))
+            glib_result_from_gboolean!(ffi::ges_extractable_set_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0), "Failed to set asset")
         }
     }
 }

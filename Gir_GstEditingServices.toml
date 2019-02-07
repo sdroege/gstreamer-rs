@@ -43,17 +43,10 @@ generate = [
     "GES.Effect",
     "GES.TrackType",
     "GES.BaseEffect",
-    "GES.TimelineElement",
     "GES.Group",
-    "GES.TrackElement",
-    "GES.Layer",
-    "GES.Clip",
     "GES.UriClip",
-    "GES.Asset",
     "GES.UriClipAsset",
     "GES.UriSourceAsset",
-    "GES.Extractable",
-    "GES.Project",
 ]
 
 [[object]]
@@ -119,6 +112,10 @@ status = "generate"
         [object.function.return]
         bool_return_is_error = "Failed to move layer"
 
+    [[object.function]]
+    name = "remove_track"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove track"
 
 [[object]]
 name = "GES.Container"
@@ -158,6 +155,11 @@ trait_name = "GESPipelineExt"
         [object.function.return]
         bool_return_is_error = "Failed to save thumbnail"
 
+    [[object.function]]
+    name = "set_timeline"
+        [object.function.return]
+        bool_return_is_error = "Failed to set timeline"
+
 [[object]]
 name = "GES.Track"
 status = "generate"
@@ -171,3 +173,125 @@ trait_name = "GESTrackExt"
     name = "remove_element"
         [object.function.return]
         bool_return_is_error = "Failed to remove element"
+
+[[object]]
+name = "GES.Asset"
+status = "generate"
+    [[object.function]]
+    name = "set_proxy"
+        [object.function.return]
+        bool_return_is_error = "Failed to set proxy"
+
+    [[object.function]]
+    name = "unproxy"
+        [object.function.return]
+        bool_return_is_error = "Failed to unproxy asset"
+
+[[object]]
+name = "GES.Clip"
+status = "generate"
+    [[object.function]]
+    name = "move_to_layer"
+        [object.function.return]
+        bool_return_is_error = "Failed to move clip to specified layer"
+
+    [[object.function]]
+    name = "set_top_effect_index"
+        [object.function.return]
+        bool_return_is_error = "Failed to move effect"
+
+    [[object.function]]
+    name = "set_top_effect_priority"
+        [object.function.return]
+        bool_return_is_error = "Failed to the set top effect priority"
+
+[[object]]
+name = "GES.Extractable"
+status = "generate"
+    [[object.function]]
+    name = "set_asset"
+        [object.function.return]
+        bool_return_is_error = "Failed to set asset"
+
+
+[[object]]
+name = "GES.Layer"
+status = "generate"
+    [[object.function]]
+    name = "add_clip"
+        [object.function.return]
+        bool_return_is_error = "Failed to add clip"
+
+    [[object.function]]
+    name = "remove_clip"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove clip"
+
+[[object]]
+name = "GES.Project"
+status = "generate"
+    [[object.function]]
+    name = "add_encoding_profile"
+        [object.function.return]
+        bool_return_is_error = "Failed to add profile"
+
+    [[object.function]]
+    name = "remove_asset"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove asset"
+
+[[object]]
+name = "GES.TimelineElement"
+status = "generate"
+    [[object.function]]
+    name = "ripple"
+        [object.function.return]
+        bool_return_is_error = "Failed to ripple"
+
+    [[object.function]]
+    name = "ripple_end"
+        [object.function.return]
+        bool_return_is_error = "Failed to ripple"
+
+    [[object.function]]
+    name = "roll_end"
+        [object.function.return]
+        bool_return_is_error = "Failed to roll"
+
+    [[object.function]]
+    name = "roll_start"
+        [object.function.return]
+        bool_return_is_error = "Failed to roll"
+
+    [[object.function]]
+    name = "set_name"
+        [object.function.return]
+        bool_return_is_error = "Failed to set name"
+
+    [[object.function]]
+    name = "set_parent"
+        [object.function.return]
+        bool_return_is_error = "`TimelineElement` already had a parent or its parent was the same as specified"
+
+    [[object.function]]
+    name = "set_timeline"
+        [object.function.return]
+        bool_return_is_error = "`Failed to set timeline"
+
+    [[object.function]]
+    name = "trim"
+        [object.function.return]
+        bool_return_is_error = "`Failed to trim"
+
+[[object]]
+name = "GES.TrackElement"
+status = "generate"
+    [[object.function]]
+    name = "edit"
+        [object.function.return]
+        bool_return_is_error = "Failed to edit"
+
+    [[object.function]]
+    name = "remove_control_binding"
+        [object.function.return]
+        bool_return_is_error = "Failed to remove control binding"
