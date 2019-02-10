@@ -215,8 +215,8 @@ fn create_ui(app: &gtk::Application) {
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");
 
-    let app_weak = glib::SendWeakRef::from(app.downgrade());
-    bus.add_watch(move |_, msg| {
+    let app_weak = app.downgrade();
+    bus.add_watch_local(move |_, msg| {
         use gst::MessageView;
 
         let app = match app_weak.upgrade() {
