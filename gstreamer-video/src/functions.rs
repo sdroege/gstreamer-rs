@@ -47,15 +47,40 @@ pub fn convert_sample_async<F>(
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
 {
+    unsafe { convert_sample_async_unsafe(sample, caps, timeout, func) }
+}
+
+pub fn convert_sample_async_local<F>(
+    sample: &gst::Sample,
+    caps: &gst::Caps,
+    timeout: gst::ClockTime,
+    func: F,
+) where
+    F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
+{
+    unsafe {
+        assert!(glib::MainContext::ref_thread_default().is_owner());
+        convert_sample_async_unsafe(sample, caps, timeout, func)
+    }
+}
+
+unsafe fn convert_sample_async_unsafe<F>(
+    sample: &gst::Sample,
+    caps: &gst::Caps,
+    timeout: gst::ClockTime,
+    func: F,
+) where
+    F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
+{
     unsafe extern "C" fn convert_sample_async_trampoline<F>(
         sample: *mut gst_ffi::GstSample,
         error: *mut glib_ffi::GError,
         user_data: glib_ffi::gpointer,
     ) where
-        F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
+        F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
         #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-        let callback: &mut Option<F> = mem::transmute(user_data);
+        let callback: &mut Option<F> = &mut *(user_data as *mut Option<F>);
         let callback = callback.take().unwrap();
 
         if error.is_null() {
@@ -66,23 +91,21 @@ pub fn convert_sample_async<F>(
     }
     unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib_ffi::gpointer)
     where
-        F: FnOnce(Result<gst::Sample, glib::Error>) + Send + 'static,
+        F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
         let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
     }
 
-    unsafe {
-        let user_data: Box<Option<F>> = Box::new(Some(func));
+    let user_data: Box<Option<F>> = Box::new(Some(func));
 
-        ffi::gst_video_convert_sample_async(
-            sample.to_glib_none().0,
-            caps.to_glib_none().0,
-            timeout.to_glib(),
-            Some(convert_sample_async_trampoline::<F>),
-            Box::into_raw(user_data) as glib_ffi::gpointer,
-            Some(convert_sample_async_free::<F>),
-        );
-    }
+    ffi::gst_video_convert_sample_async(
+        sample.to_glib_none().0,
+        caps.to_glib_none().0,
+        timeout.to_glib(),
+        Some(convert_sample_async_trampoline::<F>),
+        Box::into_raw(user_data) as glib_ffi::gpointer,
+        Some(mem::transmute(convert_sample_async_free::<F> as usize)),
+    );
 }
 
 #[cfg(test)]
