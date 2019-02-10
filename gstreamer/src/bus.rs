@@ -20,25 +20,23 @@ use Bus;
 use BusSyncReply;
 use Message;
 
-unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(
+unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     bus: *mut ffi::GstBus,
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &RefCell<F> = transmute(func);
+    let func: &RefCell<F> = &*(func as *const RefCell<F>);
     (&mut *func.borrow_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib()
 }
 
-unsafe extern "C" fn destroy_closure_watch<
-    F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
->(
+unsafe extern "C" fn destroy_closure_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     ptr: gpointer,
 ) {
     Box::<RefCell<F>>::from_raw(ptr as *mut _);
 }
 
-fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + Send + 'static>(func: F) -> gpointer {
+fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
     Box::into_raw(func) as gpointer
@@ -52,7 +50,7 @@ unsafe extern "C" fn trampoline_sync<
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
     #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &F = transmute(func);
+    let f: &F = &*(func as *const F);
     let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib();
 
     if res == ffi::GST_BUS_DROP {
@@ -118,6 +116,23 @@ impl Bus {
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
         unsafe {
+            from_glib(ffi::gst_bus_add_watch_full(
+                self.to_glib_none().0,
+                glib_ffi::G_PRIORITY_DEFAULT,
+                Some(trampoline_watch::<F>),
+                into_raw_watch(func),
+                Some(destroy_closure_watch::<F>),
+            ))
+        }
+    }
+
+    pub fn add_watch_local<F>(&self, func: F) -> SourceId
+    where
+        F: FnMut(&Bus, &Message) -> Continue + 'static,
+    {
+        unsafe {
+            assert!(glib::MainContext::ref_thread_default().is_owner());
+
             from_glib(ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
                 glib_ffi::G_PRIORITY_DEFAULT,
