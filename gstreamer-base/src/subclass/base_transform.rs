@@ -20,7 +20,7 @@ use gst::subclass::prelude::*;
 use BaseTransform;
 use BaseTransformClass;
 
-pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
+pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 'static {
     fn start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -68,7 +68,7 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
         direction: gst::PadDirection,
         query: &mut gst::QueryRef,
     ) -> bool {
-        BaseTransformImpl::parent_query(self, element, direction, query)
+        BaseTransformImplExt::parent_query(self, element, direction, query)
     }
 
     fn transform_size(
@@ -118,7 +118,86 @@ pub trait BaseTransformImpl: ElementImpl + Send + Sync + 'static {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_transform_ip_passthrough(element, buf)
     }
+}
 
+pub trait BaseTransformImplExt {
+    fn parent_start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_stop(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_transform_caps(
+        &self,
+        element: &BaseTransform,
+        direction: gst::PadDirection,
+        caps: &gst::Caps,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps>;
+
+    fn parent_fixate_caps(
+        &self,
+        element: &BaseTransform,
+        direction: gst::PadDirection,
+        caps: &gst::Caps,
+        othercaps: gst::Caps,
+    ) -> gst::Caps;
+
+    fn parent_set_caps(
+        &self,
+        element: &BaseTransform,
+        incaps: &gst::Caps,
+        outcaps: &gst::Caps,
+    ) -> bool;
+
+    fn parent_accept_caps(
+        &self,
+        element: &BaseTransform,
+        direction: gst::PadDirection,
+        caps: &gst::Caps,
+    ) -> bool;
+
+    fn parent_query(
+        &self,
+        element: &BaseTransform,
+        direction: gst::PadDirection,
+        query: &mut gst::QueryRef,
+    ) -> bool;
+
+    fn parent_transform_size(
+        &self,
+        element: &BaseTransform,
+        direction: gst::PadDirection,
+        caps: &gst::Caps,
+        size: usize,
+        othercaps: &gst::Caps,
+    ) -> Option<usize>;
+
+    fn parent_get_unit_size(&self, element: &BaseTransform, caps: &gst::Caps) -> Option<usize>;
+
+    fn parent_sink_event(&self, element: &BaseTransform, event: gst::Event) -> bool;
+
+    fn parent_src_event(&self, element: &BaseTransform, event: gst::Event) -> bool;
+
+    fn parent_transform(
+        &self,
+        element: &BaseTransform,
+        inbuf: &gst::Buffer,
+        outbuf: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_transform_ip(
+        &self,
+        element: &BaseTransform,
+        buf: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_transform_ip_passthrough(
+        &self,
+        element: &BaseTransform,
+        buf: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+}
+
+impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
     fn parent_start(&self, element: &BaseTransform) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();

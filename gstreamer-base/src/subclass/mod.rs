@@ -21,10 +21,12 @@ pub mod aggregator_pad;
 
 pub mod prelude {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub use super::aggregator::AggregatorImpl;
+    pub use super::aggregator::{AggregatorImpl, AggregatorImplExt};
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub use super::aggregator_pad::AggregatorPadImpl;
-    pub use super::base_sink::BaseSinkImpl;
-    pub use super::base_src::BaseSrcImpl;
-    pub use super::base_transform::{BaseTransformClassSubclassExt, BaseTransformImpl};
+    pub use super::aggregator_pad::{AggregatorPadImpl, AggregatorPadImplExt};
+    pub use super::base_sink::{BaseSinkImpl, BaseSinkImplExt};
+    pub use super::base_src::{BaseSrcImpl, BaseSrcImplExt};
+    pub use super::base_transform::{
+        BaseTransformClassSubclassExt, BaseTransformImpl, BaseTransformImplExt,
+    };
 }

@@ -21,7 +21,7 @@ use Aggregator;
 use AggregatorPad;
 use AggregatorPadClass;
 
-pub trait AggregatorPadImpl: PadImpl + Send + Sync + 'static {
+pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl + Send + Sync + 'static {
     fn flush(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -38,7 +38,24 @@ pub trait AggregatorPadImpl: PadImpl + Send + Sync + 'static {
     ) -> bool {
         self.parent_skip_buffer(aggregator_pad, aggregator, buffer)
     }
+}
 
+pub trait AggregatorPadImplExt {
+    fn parent_flush(
+        &self,
+        aggregator_pad: &AggregatorPad,
+        aggregator: &Aggregator,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_skip_buffer(
+        &self,
+        aggregator_pad: &AggregatorPad,
+        aggregator: &Aggregator,
+        buffer: &gst::BufferRef,
+    ) -> bool;
+}
+
+impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
     fn parent_flush(
         &self,
         aggregator_pad: &AggregatorPad,
@@ -82,7 +99,6 @@ pub trait AggregatorPadImpl: PadImpl + Send + Sync + 'static {
         }
     }
 }
-
 unsafe impl<T: ObjectSubclass + AggregatorPadImpl> IsSubclassable<T> for AggregatorPadClass {
     fn override_vfuncs(&mut self) {
         <gst::PadClass as IsSubclassable<T>>::override_vfuncs(self);

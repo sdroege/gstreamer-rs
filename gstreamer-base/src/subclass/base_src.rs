@@ -22,7 +22,7 @@ use std::ptr;
 use BaseSrc;
 use BaseSrcClass;
 
-pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
+pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl + Send + Sync + 'static {
     fn start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -63,7 +63,7 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
     }
 
     fn query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool {
-        BaseSrcImpl::parent_query(self, element, query)
+        BaseSrcImplExt::parent_query(self, element, query)
     }
 
     fn event(&self, element: &BaseSrc, event: &gst::Event) -> bool {
@@ -93,7 +93,60 @@ pub trait BaseSrcImpl: ElementImpl + Send + Sync + 'static {
     fn unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         self.parent_unlock_stop(element)
     }
+}
 
+pub trait BaseSrcImplExt {
+    fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_is_seekable(&self, element: &BaseSrc) -> bool;
+
+    fn parent_get_size(&self, element: &BaseSrc) -> Option<u64>;
+
+    fn parent_fill(
+        &self,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+        buffer: &mut gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_create(
+        &self,
+        element: &BaseSrc,
+        offset: u64,
+        length: u32,
+    ) -> Result<gst::Buffer, gst::FlowError>;
+
+    fn parent_do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool;
+
+    fn parent_query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool;
+
+    fn parent_event(&self, element: &BaseSrc, event: &gst::Event) -> bool;
+
+    fn parent_get_caps(
+        &self,
+        element: &BaseSrc,
+        filter: Option<&gst::CapsRef>,
+    ) -> Option<gst::Caps>;
+
+    fn parent_negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError>;
+
+    fn parent_set_caps(
+        &self,
+        element: &BaseSrc,
+        caps: &gst::CapsRef,
+    ) -> Result<(), gst::LoggableError>;
+
+    fn parent_fixate(&self, element: &BaseSrc, caps: gst::Caps) -> gst::Caps;
+
+    fn parent_unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage>;
+}
+
+impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();

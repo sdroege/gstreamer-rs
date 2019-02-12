@@ -22,7 +22,7 @@ use std::ptr;
 use BaseSink;
 use BaseSinkClass;
 
-pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
+pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl + Send + Sync + 'static {
     fn start(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
         self.parent_start(element)
     }
@@ -62,7 +62,7 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
     }
 
     fn query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool {
-        BaseSinkImpl::parent_query(self, element, query)
+        BaseSinkImplExt::parent_query(self, element, query)
     }
 
     fn event(&self, element: &BaseSink, event: gst::Event) -> bool {
@@ -88,7 +88,61 @@ pub trait BaseSinkImpl: ElementImpl + Send + Sync + 'static {
     fn unlock_stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
         self.parent_unlock_stop(element)
     }
+}
 
+pub trait BaseSinkImplExt {
+    fn parent_start(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_render(
+        &self,
+        element: &BaseSink,
+        buffer: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_prepare(
+        &self,
+        element: &BaseSink,
+        buffer: &gst::BufferRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_render_list(
+        &self,
+        element: &BaseSink,
+        list: &gst::BufferListRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_prepare_list(
+        &self,
+        element: &BaseSink,
+        list: &gst::BufferListRef,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool;
+
+    fn parent_event(&self, element: &BaseSink, event: gst::Event) -> bool;
+
+    fn parent_get_caps(
+        &self,
+        element: &BaseSink,
+        filter: Option<&gst::CapsRef>,
+    ) -> Option<gst::Caps>;
+
+    fn parent_set_caps(
+        &self,
+        element: &BaseSink,
+        caps: &gst::CapsRef,
+    ) -> Result<(), gst::LoggableError>;
+
+    fn parent_fixate(&self, element: &BaseSink, caps: gst::Caps) -> gst::Caps;
+
+    fn parent_unlock(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_unlock_stop(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage>;
+}
+
+impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
     fn parent_start(&self, element: &BaseSink) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();

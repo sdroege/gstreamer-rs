@@ -25,7 +25,7 @@ use Aggregator;
 use AggregatorClass;
 use AggregatorPad;
 
-pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
+pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'static {
     fn flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_flush(aggregator)
     }
@@ -129,7 +129,85 @@ pub trait AggregatorImpl: ElementImpl + Send + Sync + 'static {
     ) -> Result<(), gst::LoggableError> {
         self.parent_negotiated_src_caps(aggregator, caps)
     }
+}
 
+pub trait AggregatorImplExt {
+    fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_clip(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        buffer: gst::Buffer,
+    ) -> Option<gst::Buffer>;
+
+    fn parent_finish_buffer(
+        &self,
+        aggregator: &Aggregator,
+        buffer: gst::Buffer,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_sink_event(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        event: gst::Event,
+    ) -> bool;
+
+    fn parent_sink_query(
+        &self,
+        aggregator: &Aggregator,
+        aggregator_pad: &AggregatorPad,
+        query: &mut gst::QueryRef,
+    ) -> bool;
+
+    fn parent_src_event(&self, aggregator: &Aggregator, event: gst::Event) -> bool;
+
+    fn parent_src_query(&self, aggregator: &Aggregator, query: &mut gst::QueryRef) -> bool;
+
+    fn parent_src_activate(
+        &self,
+        aggregator: &Aggregator,
+        mode: gst::PadMode,
+        active: bool,
+    ) -> Result<(), gst::LoggableError>;
+
+    fn parent_aggregate(
+        &self,
+        aggregator: &Aggregator,
+        timeout: bool,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
+
+    fn parent_start(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_stop(&self, aggregator: &Aggregator) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_get_next_time(&self, aggregator: &Aggregator) -> gst::ClockTime;
+
+    fn parent_create_new_pad(
+        &self,
+        aggregator: &Aggregator,
+        templ: &gst::PadTemplate,
+        req_name: Option<&str>,
+        caps: Option<&gst::CapsRef>,
+    ) -> Option<AggregatorPad>;
+
+    fn parent_update_src_caps(
+        &self,
+        aggregator: &Aggregator,
+        caps: &gst::CapsRef,
+    ) -> Result<gst::Caps, gst::FlowError>;
+
+    fn parent_fixate_src_caps(&self, aggregator: &Aggregator, caps: gst::Caps) -> gst::Caps;
+
+    fn parent_negotiated_src_caps(
+        &self,
+        aggregator: &Aggregator,
+        caps: &gst::CapsRef,
+    ) -> Result<(), gst::LoggableError>;
+}
+
+impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
     fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
