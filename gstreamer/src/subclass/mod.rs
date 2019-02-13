@@ -22,11 +22,11 @@ pub mod pipeline;
 pub mod uri_handler;
 
 pub mod prelude {
-    pub use super::bin::BinImpl;
+    pub use super::bin::{BinImpl, BinImplExt};
     pub use super::child_proxy::ChildProxyImpl;
     pub use super::element::{ElementClassSubclassExt, ElementImpl, ElementImplExt};
     pub use super::ghost_pad::GhostPadImpl;
-    pub use super::pad::PadImpl;
+    pub use super::pad::{PadImpl, PadImplExt};
     pub use super::pipeline::PipelineImpl;
     pub use super::uri_handler::URIHandlerImpl;
     pub use super::PanicPoison;

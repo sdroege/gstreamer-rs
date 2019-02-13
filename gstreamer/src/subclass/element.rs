@@ -28,7 +28,7 @@ use StateChangeError;
 use StateChangeReturn;
 use StateChangeSuccess;
 
-pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
+pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync + 'static {
     fn change_state(
         &self,
         element: &::Element,
@@ -62,7 +62,54 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
     fn set_context(&self, element: &::Element, context: &::Context) {
         self.parent_set_context(element, context)
     }
+}
 
+pub trait ElementImplExt {
+    fn parent_change_state(
+        &self,
+        element: &::Element,
+        transition: StateChange,
+    ) -> Result<StateChangeSuccess, StateChangeError>;
+
+    fn parent_request_new_pad(
+        &self,
+        element: &::Element,
+        templ: &::PadTemplate,
+        name: Option<String>,
+        caps: Option<&::CapsRef>,
+    ) -> Option<::Pad>;
+
+    fn parent_release_pad(&self, element: &::Element, pad: &::Pad);
+
+    fn parent_send_event(&self, element: &::Element, event: Event) -> bool;
+
+    fn parent_query(&self, element: &::Element, query: &mut QueryRef) -> bool;
+
+    fn parent_set_context(&self, element: &::Element, context: &::Context);
+
+    fn catch_panic<
+        R,
+        F: FnOnce(&Self) -> R,
+        G: FnOnce() -> R,
+        P: IsA<::Element> + IsA<glib::Object> + glib::value::SetValue,
+    >(
+        &self,
+        element: &P,
+        fallback: G,
+        f: F,
+    ) -> R;
+
+    fn catch_panic_pad_function<R, F: FnOnce(&Self, &::Element) -> R, G: FnOnce() -> R>(
+        parent: &Option<::Object>,
+        fallback: G,
+        f: F,
+    ) -> R;
+}
+
+impl<T: ElementImpl + ObjectSubclass> ElementImplExt for T
+where
+    T::Instance: PanicPoison,
+{
     fn parent_change_state(
         &self,
         element: &::Element,
@@ -152,32 +199,7 @@ pub trait ElementImpl: ObjectImpl + Send + Sync + 'static {
                 .unwrap_or(())
         }
     }
-}
 
-pub trait ElementImplExt {
-    fn catch_panic<
-        R,
-        F: FnOnce(&Self) -> R,
-        G: FnOnce() -> R,
-        P: IsA<::Element> + IsA<glib::Object> + glib::value::SetValue,
-    >(
-        &self,
-        element: &P,
-        fallback: G,
-        f: F,
-    ) -> R;
-
-    fn catch_panic_pad_function<R, F: FnOnce(&Self, &::Element) -> R, G: FnOnce() -> R>(
-        parent: &Option<::Object>,
-        fallback: G,
-        f: F,
-    ) -> R;
-}
-
-impl<T: ElementImpl + ObjectSubclass> ElementImplExt for T
-where
-    T::Instance: PanicPoison,
-{
     fn catch_panic<
         R,
         F: FnOnce(&Self) -> R,

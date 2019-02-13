@@ -16,7 +16,7 @@ use glib::subclass::prelude::*;
 use Pad;
 use PadClass;
 
-pub trait PadImpl: ObjectImpl + Send + Sync + 'static {
+pub trait PadImpl: PadImplExt + ObjectImpl + Send + Sync + 'static {
     fn linked(&self, pad: &Pad, peer: &Pad) {
         self.parent_linked(pad, peer)
     }
@@ -24,7 +24,15 @@ pub trait PadImpl: ObjectImpl + Send + Sync + 'static {
     fn unlinked(&self, pad: &Pad, peer: &Pad) {
         self.parent_unlinked(pad, peer)
     }
+}
 
+pub trait PadImplExt {
+    fn parent_linked(&self, pad: &Pad, peer: &Pad);
+
+    fn parent_unlinked(&self, pad: &Pad, peer: &Pad);
+}
+
+impl<T: PadImpl + ObjectImpl> PadImplExt for T {
     fn parent_linked(&self, pad: &Pad, peer: &Pad) {
         unsafe {
             let data = self.get_type_data();

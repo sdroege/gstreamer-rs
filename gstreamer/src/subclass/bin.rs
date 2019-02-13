@@ -20,7 +20,7 @@ use Element;
 use LoggableError;
 use Message;
 
-pub trait BinImpl: ElementImpl + Send + Sync + 'static {
+pub trait BinImpl: BinImplExt + ElementImpl + Send + Sync + 'static {
     fn add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         self.parent_add_element(bin, element)
     }
@@ -32,7 +32,17 @@ pub trait BinImpl: ElementImpl + Send + Sync + 'static {
     fn handle_message(&self, bin: &Bin, message: Message) {
         self.parent_handle_message(bin, message)
     }
+}
 
+pub trait BinImplExt {
+    fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError>;
+
+    fn parent_remove_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError>;
+
+    fn parent_handle_message(&self, bin: &Bin, message: Message);
+}
+
+impl<T: BinImpl + ObjectImpl> BinImplExt for T {
     fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = self.get_type_data();
