@@ -111,35 +111,47 @@ impl Bus {
         }
     }
 
-    pub fn add_watch<F>(&self, func: F) -> SourceId
+    pub fn add_watch<F>(&self, func: F) -> Option<SourceId>
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
         unsafe {
-            from_glib(ffi::gst_bus_add_watch_full(
+            let res = ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
                 glib_ffi::G_PRIORITY_DEFAULT,
                 Some(trampoline_watch::<F>),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
-            ))
+            );
+
+            if res == 0 {
+                None
+            } else {
+                Some(from_glib(res))
+            }
         }
     }
 
-    pub fn add_watch_local<F>(&self, func: F) -> SourceId
+    pub fn add_watch_local<F>(&self, func: F) -> Option<SourceId>
     where
         F: FnMut(&Bus, &Message) -> Continue + 'static,
     {
         unsafe {
             assert!(glib::MainContext::ref_thread_default().is_owner());
 
-            from_glib(ffi::gst_bus_add_watch_full(
+            let res = ffi::gst_bus_add_watch_full(
                 self.to_glib_none().0,
                 glib_ffi::G_PRIORITY_DEFAULT,
                 Some(trampoline_watch::<F>),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
-            ))
+            );
+
+            if res == 0 {
+                None
+            } else {
+                Some(from_glib(res))
+            }
         }
     }
 
