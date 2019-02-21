@@ -31,7 +31,7 @@ impl VideoTimeCodeInterval {
         }
     }
 
-    pub fn new(&mut self, hours: u32, minutes: u32, seconds: u32, frames: u32) -> Self {
+    pub fn new(hours: u32, minutes: u32, seconds: u32, frames: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut v = mem::zeroed();
