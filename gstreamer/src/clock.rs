@@ -24,7 +24,7 @@ use ClockTime;
 use ClockTimeDiff;
 
 glib_wrapper! {
-    #[derive(Debug, Hash)]
+    #[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
     pub struct ClockId(Shared<c_void>);
 
     match fn {
@@ -95,16 +95,8 @@ impl ClockId {
         };
         ret.into_result()
     }
-}
 
-impl PartialOrd for ClockId {
-    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for ClockId {
-    fn cmp(&self, other: &Self) -> cmp::Ordering {
+    pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         unsafe {
             let res = ffi::gst_clock_id_compare_func(self.to_glib_none().0, other.to_glib_none().0);
             if res < 0 {
@@ -117,14 +109,6 @@ impl Ord for ClockId {
         }
     }
 }
-
-impl PartialEq for ClockId {
-    fn eq(&self, other: &Self) -> bool {
-        self.cmp(other) == cmp::Ordering::Equal
-    }
-}
-
-impl Eq for ClockId {}
 
 unsafe impl Send for ClockId {}
 unsafe impl Sync for ClockId {}
