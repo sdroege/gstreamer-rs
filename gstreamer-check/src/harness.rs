@@ -824,6 +824,7 @@ mod tests {
         gst::init().unwrap();
 
         let mut h = Harness::new("identity");
+        h.set_src_caps_str("application/test");
         let buf = gst::Buffer::new();
         let buf = h.push_and_pull(buf);
         assert!(buf.is_some());
