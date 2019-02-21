@@ -88,7 +88,7 @@ unsafe extern "C" fn accept_certificate_trampoline<
 where
     P: IsA<RTSPAuth>,
 {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     match f(
         &RTSPAuth::from_glib_borrow(this).unsafe_cast(),
         &from_glib_borrow(connection),

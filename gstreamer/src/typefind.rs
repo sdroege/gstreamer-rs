@@ -16,7 +16,6 @@ use glib;
 use glib::translate::*;
 use glib_ffi;
 use std::marker::PhantomData;
-use std::mem;
 use std::ptr;
 use std::slice;
 
@@ -119,8 +118,7 @@ unsafe extern "C" fn type_find_trampoline<F: Fn(&mut TypeFind) + Send + Sync + '
     find: *mut ffi::GstTypeFind,
     user_data: glib_ffi::gpointer,
 ) {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = mem::transmute(user_data);
+    let func: &F = &*(user_data as *const F);
     func(&mut *(find as *mut TypeFind));
 }
 

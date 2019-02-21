@@ -77,7 +77,7 @@ fn tutorial_main() {
         }
 
         let res = src_pad.link(&sink_pad);
-        if !res.is_ok() {
+        if res.is_err() {
             println!("Type is {} but link failed.", new_pad_type);
         } else {
             println!("Link succeeded (type {}).", new_pad_type);

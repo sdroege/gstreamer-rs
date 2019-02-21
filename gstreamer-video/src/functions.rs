@@ -79,7 +79,6 @@ unsafe fn convert_sample_async_unsafe<F>(
     ) where
         F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
-        #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
         let callback: &mut Option<F> = &mut *(user_data as *mut Option<F>);
         let callback = callback.take().unwrap();
 

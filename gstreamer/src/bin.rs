@@ -163,7 +163,7 @@ unsafe extern "C" fn do_latency_trampoline<
 where
     P: IsA<Bin>,
 {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     match f(&Bin::from_glib_borrow(this).unsafe_cast()) {
         Ok(()) => true,
         Err(err) => {

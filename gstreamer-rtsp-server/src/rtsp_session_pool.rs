@@ -13,8 +13,7 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&RTSPSessionPool) -> Continue + S
     pool: *mut ffi::GstRTSPSessionPool,
     func: gpointer,
 ) -> gboolean {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &RefCell<F> = transmute(func);
+    let func: &RefCell<F> = &*(func as *const RefCell<F>);
     (&mut *func.borrow_mut())(&from_glib_borrow(pool)).to_glib()
 }
 

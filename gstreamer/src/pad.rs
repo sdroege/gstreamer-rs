@@ -31,7 +31,6 @@ use StaticPadTemplate;
 
 use std::cell::RefCell;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 
 use glib;
@@ -1009,8 +1008,7 @@ unsafe extern "C" fn trampoline_pad_probe<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute(func);
+    let func: &F = &*(func as *const F);
     let mut data_type = None;
 
     let mut probe_info = PadProbeInfo {
@@ -1089,8 +1087,7 @@ unsafe extern "C" fn trampoline_activate_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).activatedata);
+    let func: &F = &*((*pad).activatedata as *const F);
 
     match func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1117,8 +1114,7 @@ unsafe extern "C" fn trampoline_activatemode_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).activatemodedata);
+    let func: &F = &*((*pad).activatemodedata as *const F);
 
     match func(
         &&Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1146,8 +1142,7 @@ unsafe extern "C" fn trampoline_chain_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).chaindata);
+    let func: &F = &*((*pad).chaindata as *const F);
 
     let res: FlowReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1172,8 +1167,7 @@ unsafe extern "C" fn trampoline_chain_list_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).chainlistdata);
+    let func: &F = &*((*pad).chainlistdata as *const F);
 
     let res: FlowReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1195,8 +1189,7 @@ unsafe extern "C" fn trampoline_event_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).eventdata);
+    let func: &F = &*((*pad).eventdata as *const F);
 
     func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1217,8 +1210,7 @@ unsafe extern "C" fn trampoline_event_full_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).eventdata);
+    let func: &F = &*((*pad).eventdata as *const F);
 
     let res: FlowReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1242,8 +1234,7 @@ unsafe extern "C" fn trampoline_getrange_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).getrangedata);
+    let func: &F = &*((*pad).getrangedata as *const F);
 
     match func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1269,8 +1260,7 @@ unsafe extern "C" fn trampoline_iterate_internal_links_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).iterintlinkdata);
+    let func: &F = &*((*pad).iterintlinkdata as *const F);
 
     // Steal the iterator and return it
     let ret = func(
@@ -1297,8 +1287,7 @@ unsafe extern "C" fn trampoline_link_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).linkdata);
+    let func: &F = &*((*pad).linkdata as *const F);
 
     let res: ::PadLinkReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1320,8 +1309,7 @@ unsafe extern "C" fn trampoline_query_function<
 where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).querydata);
+    let func: &F = &*((*pad).querydata as *const F);
 
     func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1340,8 +1328,7 @@ unsafe extern "C" fn trampoline_unlink_function<
 ) where
     T: IsA<Pad>,
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &F = transmute((*pad).unlinkdata);
+    let func: &F = &*((*pad).unlinkdata as *const F);
 
     func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
@@ -1354,8 +1341,7 @@ unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
 }
 
 unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let func: &RefCell<F> = transmute(func);
+    let func: &RefCell<F> = &*(func as *const RefCell<F>);
     (&mut *func.borrow_mut())()
 }
 

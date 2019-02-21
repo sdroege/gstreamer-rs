@@ -20,24 +20,27 @@ macro_rules! gst_panic_to_error(
         use std::sync::atomic::Ordering;
         use $crate::ElementExtManual;
 
-        if $panicked.load(Ordering::Relaxed) {
-            $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));
-            $ret
-        } else {
-            let result = panic::catch_unwind(AssertUnwindSafe(|| $code));
+        #[cfg_attr(feature = "cargo-clippy", allow(unused_unit))]
+        {
+            if $panicked.load(Ordering::Relaxed) {
+                $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));
+                $ret
+            } else {
+                let result = panic::catch_unwind(AssertUnwindSafe(|| $code));
 
-            match result {
-                Ok(result) => result,
-                Err(err) => {
-                    $panicked.store(true, Ordering::Relaxed);
-                    if let Some(cause) = err.downcast_ref::<&str>() {
-                        $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
-                    } else if let Some(cause) = err.downcast_ref::<String>() {
-                        $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
-                    } else {
-                        $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));
+                match result {
+                    Ok(result) => result,
+                    Err(err) => {
+                        $panicked.store(true, Ordering::Relaxed);
+                        if let Some(cause) = err.downcast_ref::<&str>() {
+                            $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
+                        } else if let Some(cause) = err.downcast_ref::<String>() {
+                            $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked: {}", cause]));
+                        } else {
+                            $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));
+                        }
+                        $ret
                     }
-                    $ret
                 }
             }
         }

@@ -64,7 +64,7 @@ fn example_main() -> Result<(), Error> {
         Ok(pipeline) => pipeline,
         Err(err) => {
             if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
-                return Err(MissingElement(context.get_missing_elements().join(",".into())).into());
+                return Err(MissingElement(context.get_missing_elements().join(",")).into());
             } else {
                 return Err(err.into());
             }

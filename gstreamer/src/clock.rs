@@ -14,7 +14,6 @@ use glib_ffi::{gboolean, gpointer};
 use libc::c_void;
 use std::cmp;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 use Clock;
 use ClockError;
@@ -39,8 +38,7 @@ unsafe extern "C" fn trampoline_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + 
     id: gpointer,
     func: gpointer,
 ) -> gboolean {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &F = transmute(func);
+    let f: &F = &*(func as *const F);
     f(
         &from_glib_borrow(clock),
         from_glib(time),

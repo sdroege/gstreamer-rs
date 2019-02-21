@@ -17,11 +17,11 @@ use BufferListRef;
 
 impl Serialize for BufferListRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let mut iter = self.iter();
+        let iter = self.iter();
         let (remaining, _) = iter.size_hint();
         if remaining > 0 {
             let mut seq = serializer.serialize_seq(Some(remaining))?;
-            while let Some(ref buffer) = iter.next() {
+            for buffer in iter {
                 seq.serialize_element(buffer)?;
             }
             seq.end()

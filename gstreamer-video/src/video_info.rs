@@ -449,9 +449,9 @@ impl VideoInfo {
         #[cfg(not(any(feature = "v1_12", feature = "dox")))]
         {
             VideoInfoBuilder {
-                format: format,
-                width: width,
-                height: height,
+                format,
+                width,
+                height,
                 interlace_mode: None,
                 flags: None,
                 size: None,

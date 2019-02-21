@@ -216,7 +216,7 @@ unsafe extern "C" fn new_sample_trampoline<
     this: *mut ffi::GstAppSink,
     f: glib_ffi::gpointer,
 ) -> gst_ffi::GstFlowReturn {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()
 }
@@ -227,7 +227,7 @@ unsafe extern "C" fn new_preroll_trampoline<
     this: *mut ffi::GstAppSink,
     f: glib_ffi::gpointer,
 ) -> gst_ffi::GstFlowReturn {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let ret: gst::FlowReturn = f(&from_glib_borrow(this)).into();
     ret.to_glib()
 }

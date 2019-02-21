@@ -56,6 +56,7 @@ impl Player {
         &self,
         f: F,
     ) -> SignalHandlerId {
+        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
@@ -71,6 +72,7 @@ impl Player {
         &self,
         f: F,
     ) -> SignalHandlerId {
+        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
@@ -86,6 +88,7 @@ impl Player {
         &self,
         f: F,
     ) -> SignalHandlerId {
+        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
@@ -105,8 +108,7 @@ unsafe extern "C" fn duration_changed_trampoline<
     object: u64,
     f: glib_ffi::gpointer,
 ) {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
 
@@ -117,8 +119,7 @@ unsafe extern "C" fn position_updated_trampoline<
     object: u64,
     f: glib_ffi::gpointer,
 ) {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
 
@@ -127,7 +128,6 @@ unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send 
     object: u64,
     f: glib_ffi::gpointer,
 ) {
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }

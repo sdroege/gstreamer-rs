@@ -226,7 +226,6 @@ fn example_main() -> Result<(), Error> {
                     ("Failed to link srcpad"),
                     ["{}", err]
                 );
-                ()
             }
         }
     });

@@ -112,10 +112,8 @@ mod tutorial5 {
             Inhibit(false)
         });
 
-        let play_button = gtk::Button::new_from_icon_name(
-            "media-playback-start",
-            gtk::IconSize::SmallToolbar.into(),
-        );
+        let play_button =
+            gtk::Button::new_from_icon_name("media-playback-start", gtk::IconSize::SmallToolbar);
         let pipeline = playbin.clone();
         play_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
@@ -124,10 +122,8 @@ mod tutorial5 {
                 .expect("Unable to set the pipeline to the `Playing` state");
         });
 
-        let pause_button = gtk::Button::new_from_icon_name(
-            "media-playback-pause",
-            gtk::IconSize::SmallToolbar.into(),
-        );
+        let pause_button =
+            gtk::Button::new_from_icon_name("media-playback-pause", gtk::IconSize::SmallToolbar);
         let pipeline = playbin.clone();
         pause_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
@@ -136,10 +132,8 @@ mod tutorial5 {
                 .expect("Unable to set the pipeline to the `Paused` state");
         });
 
-        let stop_button = gtk::Button::new_from_icon_name(
-            "media-playback-stop",
-            gtk::IconSize::SmallToolbar.into(),
-        );
+        let stop_button =
+            gtk::Button::new_from_icon_name("media-playback-stop", gtk::IconSize::SmallToolbar);
         let pipeline = playbin.clone();
         stop_button.connect_clicked(move |_| {
             let pipeline = &pipeline;
@@ -221,6 +215,7 @@ mod tutorial5 {
                         ) -> *mut c_void;
                     }
 
+                    #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
                     unsafe {
                         let xid = gdk_x11_window_get_xid(gdk_window.as_ptr() as *mut _);
                         video_overlay.set_window_handle(xid as usize);
@@ -237,6 +232,7 @@ mod tutorial5 {
                         ) -> *mut c_void;
                     }
 
+                    #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
                     unsafe {
                         let window = gdk_quartz_window_get_nsview(gdk_window.as_ptr() as *mut _);
                         video_overlay.set_window_handle(window as usize);
