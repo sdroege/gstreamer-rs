@@ -211,36 +211,36 @@ impl<O: IsA<Project>> ProjectExt for O {
 
 unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
 unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
 unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
 unsafe extern "C" fn error_loading_asset_trampoline<P, F: Fn(&P, &Error, &str, glib::types::Type) + 'static>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, id: *mut libc::c_char, extractable_type: glib_ffi::GType, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &GString::from_glib_borrow(id), from_glib(extractable_type))
 }
 
 unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(this: *mut ffi::GESProject, timeline: *mut ffi::GESTimeline, f: glib_ffi::gpointer)
 where P: IsA<Project> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(timeline))
 }
 
 unsafe extern "C" fn missing_uri_trampoline<P, F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, wrong_asset: *mut ffi::GESAsset, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<Project> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &from_glib_borrow(wrong_asset)).to_glib_full()
 }

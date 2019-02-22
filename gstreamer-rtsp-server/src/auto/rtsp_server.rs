@@ -58,7 +58,7 @@ unsafe impl Sync for RTSPServer {}
 pub const NONE_RTSP_SERVER: Option<&RTSPServer> = None;
 
 pub trait RTSPServerExt: 'static {
-    //fn client_filter(&self, func: /*Unimplemented*/Fn(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient>;
+    //fn client_filter(&self, func: /*Unimplemented*/FnMut(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient>;
 
     fn create_socket<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>>(&self, cancellable: Q) -> Result<gio::Socket, Error>;
 
@@ -112,7 +112,7 @@ pub trait RTSPServerExt: 'static {
 }
 
 impl<O: IsA<RTSPServer>> RTSPServerExt for O {
-    //fn client_filter(&self, func: /*Unimplemented*/Fn(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient> {
+    //fn client_filter(&self, func: /*Unimplemented*/FnMut(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient> {
     //    unsafe { TODO: call ffi::gst_rtsp_server_client_filter() }
     //}
 
@@ -294,42 +294,42 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
 
 unsafe extern "C" fn client_connected_trampoline<P, F: Fn(&P, &RTSPClient) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, object: *mut ffi::GstRTSPClient, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_bound_port_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_service_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPServer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPServer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
 }

@@ -112,6 +112,6 @@ impl<O: IsA<Device>> DeviceExt for O {
 
 unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
 where P: IsA<Device> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Device::from_glib_borrow(this).unsafe_cast())
 }

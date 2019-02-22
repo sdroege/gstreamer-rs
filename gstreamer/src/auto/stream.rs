@@ -195,21 +195,21 @@ unsafe impl Send for Stream {}
 unsafe impl Sync for Stream {}
 
 unsafe extern "C" fn notify_caps_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_stream_flags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_tags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

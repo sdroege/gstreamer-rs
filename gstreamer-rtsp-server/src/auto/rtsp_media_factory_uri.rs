@@ -105,12 +105,12 @@ impl<O: IsA<RTSPMediaFactoryURI>> RTSPMediaFactoryURIExt for O {
 
 unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMediaFactoryURI, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactoryURI> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPMediaFactoryURI::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_gstpay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPMediaFactoryURI, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPMediaFactoryURI> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPMediaFactoryURI::from_glib_borrow(this).unsafe_cast())
 }

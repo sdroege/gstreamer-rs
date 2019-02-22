@@ -200,12 +200,12 @@ impl<O: IsA<Asset>> AssetExt for O {
 
 unsafe extern "C" fn notify_proxy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESAsset, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Asset> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Asset::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_proxy_target_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESAsset, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Asset> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Asset::from_glib_borrow(this).unsafe_cast())
 }

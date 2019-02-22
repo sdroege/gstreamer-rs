@@ -126,18 +126,18 @@ impl<O: IsA<Container>> GESContainerExt for O {
 
 unsafe extern "C" fn child_added_trampoline<P, F: Fn(&P, &TimelineElement) + 'static>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn child_removed_trampoline<P, F: Fn(&P, &TimelineElement) + 'static>(this: *mut ffi::GESContainer, element: *mut ffi::GESTimelineElement, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
 unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }

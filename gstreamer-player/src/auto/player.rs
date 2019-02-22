@@ -555,126 +555,126 @@ unsafe impl Send for Player {}
 unsafe impl Sync for Player {}
 
 unsafe extern "C" fn buffering_trampoline<F: Fn(&Player, i32) + Send + 'static>(this: *mut ffi::GstPlayer, object: libc::c_int, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), object)
 }
 
 unsafe extern "C" fn end_of_stream_trampoline<F: Fn(&Player) + Send + 'static>(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn error_trampoline<F: Fn(&Player, &Error) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn media_info_updated_trampoline<F: Fn(&Player, &PlayerMediaInfo) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut ffi::GstPlayerMediaInfo, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn mute_changed_trampoline<F: Fn(&Player) + Send + 'static>(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn state_changed_trampoline<F: Fn(&Player, PlayerState) + Send + 'static>(this: *mut ffi::GstPlayer, object: ffi::GstPlayerState, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), from_glib(object))
 }
 
 unsafe extern "C" fn uri_loaded_trampoline<F: Fn(&Player, &str) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut libc::c_char, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
 }
 
 unsafe extern "C" fn video_dimensions_changed_trampoline<F: Fn(&Player, i32, i32) + Send + 'static>(this: *mut ffi::GstPlayer, object: libc::c_int, p0: libc::c_int, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), object, p0)
 }
 
 unsafe extern "C" fn volume_changed_trampoline<F: Fn(&Player) + Send + 'static>(this: *mut ffi::GstPlayer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn warning_trampoline<F: Fn(&Player, &Error) + Send + 'static>(this: *mut ffi::GstPlayer, object: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_audio_video_offset_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_current_audio_track_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_current_subtitle_track_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_current_video_track_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_duration_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_media_info_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_mute_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_pipeline_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_position_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_rate_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_suburi_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_uri_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_video_multiview_flags_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_video_multiview_mode_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_volume_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut ffi::GstPlayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

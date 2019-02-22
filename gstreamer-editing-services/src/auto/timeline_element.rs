@@ -442,54 +442,54 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
 unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_in_point_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_serialize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_start_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimelineElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TimelineElement> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TimelineElement::from_glib_borrow(this).unsafe_cast())
 }

@@ -174,12 +174,12 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
 unsafe extern "C" fn key_event_trampoline<P, F: Fn(&P, &str, &str) + Send + Sync + 'static>(this: *mut ffi::GstGLWindow, id: *mut libc::c_char, key: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<GLWindow> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), &GString::from_glib_borrow(key))
 }
 
 unsafe extern "C" fn mouse_event_trampoline<P, F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static>(this: *mut ffi::GstGLWindow, id: *mut libc::c_char, button: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GLWindow> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), button, x, y)
 }

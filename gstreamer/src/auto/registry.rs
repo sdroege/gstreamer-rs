@@ -168,11 +168,11 @@ unsafe impl Send for Registry {}
 unsafe impl Sync for Registry {}
 
 unsafe extern "C" fn feature_added_trampoline<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(this: *mut ffi::GstRegistry, feature: *mut ffi::GstPluginFeature, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(feature))
 }
 
 unsafe extern "C" fn plugin_added_trampoline<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(this: *mut ffi::GstRegistry, plugin: *mut ffi::GstPlugin, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(plugin))
 }

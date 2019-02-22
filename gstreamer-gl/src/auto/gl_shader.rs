@@ -267,6 +267,6 @@ unsafe impl Send for GLShader {}
 unsafe impl Sync for GLShader {}
 
 unsafe extern "C" fn notify_linked_trampoline<F: Fn(&GLShader) + Send + Sync + 'static>(this: *mut ffi::GstGLShader, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

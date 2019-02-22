@@ -389,66 +389,66 @@ impl<O: IsA<Timeline>> TimelineExt for O {
 
 unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimeline, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn group_added_trampoline<P, F: Fn(&P, &Group) + 'static>(this: *mut ffi::GESTimeline, group: *mut ffi::GESGroup, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(group))
 }
 
 unsafe extern "C" fn layer_added_trampoline<P, F: Fn(&P, &Layer) + 'static>(this: *mut ffi::GESTimeline, layer: *mut ffi::GESLayer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
 }
 
 unsafe extern "C" fn layer_removed_trampoline<P, F: Fn(&P, &Layer) + 'static>(this: *mut ffi::GESTimeline, layer: *mut ffi::GESLayer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
 }
 
 unsafe extern "C" fn snapping_ended_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ffi::GESTimeline, object: *mut ffi::GESTrackElement, p0: *mut ffi::GESTrackElement, p1: u64, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
 }
 
 unsafe extern "C" fn snapping_started_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ffi::GESTimeline, object: *mut ffi::GESTrackElement, p0: *mut ffi::GESTrackElement, p1: u64, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
 }
 
 unsafe extern "C" fn track_added_trampoline<P, F: Fn(&P, &Track) + 'static>(this: *mut ffi::GESTimeline, track: *mut ffi::GESTrack, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(track))
 }
 
 unsafe extern "C" fn track_removed_trampoline<P, F: Fn(&P, &Track) + 'static>(this: *mut ffi::GESTimeline, track: *mut ffi::GESTrack, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(track))
 }
 
 unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_snapping_distance_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTimeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Timeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Timeline::from_glib_borrow(this).unsafe_cast())
 }

@@ -113,21 +113,21 @@ unsafe impl Send for WebRTCICETransport {}
 unsafe impl Sync for WebRTCICETransport {}
 
 unsafe extern "C" fn on_new_candidate_trampoline<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCICETransport, object: *mut libc::c_char, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
 }
 
 unsafe extern "C" fn on_selected_candidate_pair_change_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCICETransport, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_gathering_state_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCICETransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCICETransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

@@ -56,6 +56,6 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
 
 unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstGLBaseFilter, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLBaseFilter> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLBaseFilter::from_glib_borrow(this).unsafe_cast())
 }

@@ -98,11 +98,11 @@ unsafe impl Send for NetTimeProvider {}
 unsafe impl Sync for NetTimeProvider {}
 
 unsafe extern "C" fn notify_active_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut ffi::GstNetTimeProvider, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

@@ -101,6 +101,6 @@ impl<O: IsA<UriClipAsset>> UriClipAssetExt for O {
 
 unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClipAsset, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UriClipAsset> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&UriClipAsset::from_glib_borrow(this).unsafe_cast())
 }

@@ -229,36 +229,36 @@ impl<O: IsA<Track>> GESTrackExt for O {
 
 unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrack, f: glib_ffi::gpointer)
 where P: IsA<Track> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Track::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn track_element_added_trampoline<P, F: Fn(&P, &TrackElement) + 'static>(this: *mut ffi::GESTrack, effect: *mut ffi::GESTrackElement, f: glib_ffi::gpointer)
 where P: IsA<Track> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Track::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(effect))
 }
 
 unsafe extern "C" fn track_element_removed_trampoline<P, F: Fn(&P, &TrackElement) + 'static>(this: *mut ffi::GESTrack, effect: *mut ffi::GESTrackElement, f: glib_ffi::gpointer)
 where P: IsA<Track> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Track::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(effect))
 }
 
 unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Track> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Track::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mixing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Track> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Track::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_restriction_caps_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Track> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Track::from_glib_borrow(this).unsafe_cast())
 }

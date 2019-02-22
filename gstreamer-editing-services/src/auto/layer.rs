@@ -196,24 +196,24 @@ impl<O: IsA<Layer>> LayerExt for O {
 
 unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ffi::GESLayer, clip: *mut ffi::GESClip, f: glib_ffi::gpointer)
 where P: IsA<Layer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clip))
 }
 
 unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ffi::GESLayer, clip: *mut ffi::GESClip, f: glib_ffi::gpointer)
 where P: IsA<Layer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clip))
 }
 
 unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESLayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Layer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESLayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Layer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast())
 }

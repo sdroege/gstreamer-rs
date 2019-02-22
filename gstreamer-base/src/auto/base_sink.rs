@@ -425,66 +425,66 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
 
 unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_enable_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_bitrate_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_lateness_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_render_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_throttle_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_ts_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<BaseSink> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }

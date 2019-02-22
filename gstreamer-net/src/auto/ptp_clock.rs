@@ -85,16 +85,16 @@ unsafe impl Send for PtpClock {}
 unsafe impl Sync for PtpClock {}
 
 unsafe extern "C" fn notify_grandmaster_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_master_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

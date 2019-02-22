@@ -105,6 +105,6 @@ unsafe impl Send for PadTemplate {}
 unsafe impl Sync for PadTemplate {}
 
 unsafe extern "C" fn pad_created_trampoline<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstPadTemplate, pad: *mut ffi::GstPad, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(pad))
 }

@@ -502,18 +502,18 @@ impl<O: IsA<Element>> ElementExt for O {
 
 unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstElement, f: glib_ffi::gpointer)
 where P: IsA<Element> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Element::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn pad_added_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstElement, new_pad: *mut ffi::GstPad, f: glib_ffi::gpointer)
 where P: IsA<Element> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(new_pad))
 }
 
 unsafe extern "C" fn pad_removed_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstElement, old_pad: *mut ffi::GstPad, f: glib_ffi::gpointer)
 where P: IsA<Element> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_pad))
 }

@@ -131,6 +131,6 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
 
 unsafe extern "C" fn create_context_trampoline<P, F: Fn(&P, &GLContext) -> GLContext + Send + Sync + 'static>(this: *mut ffi::GstGLDisplay, context: *mut ffi::GstGLContext, f: glib_ffi::gpointer) -> *mut ffi::GstGLContext
 where P: IsA<GLDisplay> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLDisplay::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib_full()
 }

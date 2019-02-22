@@ -98,21 +98,21 @@ unsafe impl Send for Discoverer {}
 unsafe impl Sync for Discoverer {}
 
 unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, info: *mut ffi::GstDiscovererInfo, error: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(info), &from_glib_borrow(error))
 }
 
 unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn source_setup_trampoline<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, source: *mut gst_ffi::GstElement, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(source))
 }
 
 unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

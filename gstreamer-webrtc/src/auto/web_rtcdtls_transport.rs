@@ -153,26 +153,26 @@ unsafe impl Send for WebRTCDTLSTransport {}
 unsafe impl Sync for WebRTCDTLSTransport {}
 
 unsafe extern "C" fn notify_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_client_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_remote_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_transport_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut ffi::GstWebRTCDTLSTransport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

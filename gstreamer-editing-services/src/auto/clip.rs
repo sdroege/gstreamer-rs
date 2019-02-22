@@ -164,12 +164,12 @@ impl<O: IsA<Clip>> ClipExt for O {
 
 unsafe extern "C" fn notify_layer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clip> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Clip::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Clip> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Clip::from_glib_borrow(this).unsafe_cast())
 }

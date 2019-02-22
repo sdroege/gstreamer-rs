@@ -137,11 +137,11 @@ unsafe impl Send for Bus {}
 unsafe impl Sync for Bus {}
 
 unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
 }
 
 unsafe extern "C" fn sync_message_trampoline<F: Fn(&Bus, &Message) + Send + Sync + 'static>(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
 }

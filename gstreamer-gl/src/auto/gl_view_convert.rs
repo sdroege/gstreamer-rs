@@ -187,26 +187,26 @@ unsafe impl Send for GLViewConvert {}
 unsafe impl Sync for GLViewConvert {}
 
 unsafe extern "C" fn notify_downmix_mode_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_input_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_input_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_output_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 unsafe extern "C" fn notify_output_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut ffi::GstGLViewConvert, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

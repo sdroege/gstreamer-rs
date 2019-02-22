@@ -44,7 +44,7 @@ pub const NONE_RTSP_SESSION: Option<&RTSPSession> = None;
 pub trait RTSPSessionExt: 'static {
     fn allow_expire(&self);
 
-    //fn filter(&self, func: /*Unimplemented*/Fn(&RTSPSession, &RTSPSessionMedia) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSessionMedia>;
+    //fn filter(&self, func: /*Unimplemented*/FnMut(&RTSPSession, &RTSPSessionMedia) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSessionMedia>;
 
     fn get_header(&self) -> Option<GString>;
 
@@ -88,7 +88,7 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    //fn filter(&self, func: /*Unimplemented*/Fn(&RTSPSession, &RTSPSessionMedia) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSessionMedia> {
+    //fn filter(&self, func: /*Unimplemented*/FnMut(&RTSPSession, &RTSPSessionMedia) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSessionMedia> {
     //    unsafe { TODO: call ffi::gst_rtsp_session_filter() }
     //}
 
@@ -201,12 +201,12 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 
 unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPSession::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_timeout_always_visible_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSession, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSession> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPSession::from_glib_borrow(this).unsafe_cast())
 }

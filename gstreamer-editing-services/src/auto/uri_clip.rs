@@ -135,18 +135,18 @@ impl<O: IsA<UriClip>> UriClipExt for O {
 
 unsafe extern "C" fn notify_is_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UriClip> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&UriClip::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UriClip> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&UriClip::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<UriClip> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&UriClip::from_glib_borrow(this).unsafe_cast())
 }

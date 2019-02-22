@@ -45,12 +45,9 @@ impl TestClock {
         }
     }
 
-    pub fn crank(&self) -> Result<(), glib::BoolError> {
+    pub fn crank(&self) -> bool {
         unsafe {
-            glib_result_from_gboolean!(
-                ffi::gst_test_clock_crank(self.to_glib_none().0),
-                "Failed to crank"
-            )
+            from_glib(ffi::gst_test_clock_crank(self.to_glib_none().0))
         }
     }
 
@@ -147,6 +144,6 @@ unsafe impl Send for TestClock {}
 unsafe impl Sync for TestClock {}
 
 unsafe extern "C" fn notify_clock_type_trampoline<F: Fn(&TestClock) + Send + Sync + 'static>(this: *mut ffi::GstTestClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

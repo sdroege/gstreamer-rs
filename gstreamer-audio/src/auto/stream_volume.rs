@@ -93,12 +93,12 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
 
 unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstStreamVolume, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StreamVolume> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstStreamVolume, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StreamVolume> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
 }

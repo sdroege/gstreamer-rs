@@ -47,7 +47,7 @@ pub trait RTSPSessionPoolExt: 'static {
 
     fn create(&self) -> Option<RTSPSession>;
 
-    //fn filter(&self, func: /*Unimplemented*/Fn(&RTSPSessionPool, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession>;
+    //fn filter(&self, func: /*Unimplemented*/FnMut(&RTSPSessionPool, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession>;
 
     fn find(&self, sessionid: &str) -> Option<RTSPSession>;
 
@@ -77,7 +77,7 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
         }
     }
 
-    //fn filter(&self, func: /*Unimplemented*/Fn(&RTSPSessionPool, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession> {
+    //fn filter(&self, func: /*Unimplemented*/FnMut(&RTSPSessionPool, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession> {
     //    unsafe { TODO: call ffi::gst_rtsp_session_pool_filter() }
     //}
 
@@ -130,12 +130,12 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
 
 unsafe extern "C" fn session_removed_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSessionPool, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
 where P: IsA<RTSPSessionPool> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSessionPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RTSPSessionPool> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast())
 }

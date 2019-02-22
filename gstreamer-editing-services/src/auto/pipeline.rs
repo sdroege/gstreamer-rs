@@ -285,36 +285,36 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
 
 unsafe extern "C" fn notify_audio_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_audio_sink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_video_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_video_sink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESPipeline, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Pipeline> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }
