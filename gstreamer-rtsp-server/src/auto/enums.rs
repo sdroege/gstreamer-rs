@@ -57,6 +57,43 @@ impl FromGlib<ffi::GstRTSPAddressPoolResult> for RTSPAddressPoolResult {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
+pub enum RTSPFilterResult {
+    Remove,
+    Keep,
+    Ref,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for RTSPFilterResult {
+    type GlibType = ffi::GstRTSPFilterResult;
+
+    fn to_glib(&self) -> ffi::GstRTSPFilterResult {
+        match *self {
+            RTSPFilterResult::Remove => ffi::GST_RTSP_FILTER_REMOVE,
+            RTSPFilterResult::Keep => ffi::GST_RTSP_FILTER_KEEP,
+            RTSPFilterResult::Ref => ffi::GST_RTSP_FILTER_REF,
+            RTSPFilterResult::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstRTSPFilterResult> for RTSPFilterResult {
+    fn from_glib(value: ffi::GstRTSPFilterResult) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => RTSPFilterResult::Remove,
+            1 => RTSPFilterResult::Keep,
+            2 => RTSPFilterResult::Ref,
+            value => RTSPFilterResult::__Unknown(value),
+        }
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
 pub enum RTSPMediaStatus {
     Unprepared,
     Unpreparing,

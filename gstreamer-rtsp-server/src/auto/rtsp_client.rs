@@ -4,6 +4,7 @@
 
 use RTSPAuth;
 use RTSPContext;
+use RTSPFilterResult;
 use RTSPMountPoints;
 use RTSPSession;
 use RTSPSessionPool;
@@ -70,7 +71,7 @@ pub trait RTSPClientExt: 'static {
 
     //fn send_message<'a, P: IsA<RTSPSession> + 'a, Q: Into<Option<&'a P>>>(&self, session: Q, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
-    //fn session_filter(&self, func: /*Unimplemented*/FnMut(&RTSPClient, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession>;
+    fn session_filter(&self, func: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>) -> Vec<RTSPSession>;
 
     fn set_auth<'a, P: IsA<RTSPAuth> + 'a, Q: Into<Option<&'a P>>>(&self, auth: Q);
 
@@ -198,9 +199,25 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     //    unsafe { TODO: call ffi::gst_rtsp_client_send_message() }
     //}
 
-    //fn session_filter(&self, func: /*Unimplemented*/FnMut(&RTSPClient, &RTSPSession) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSession> {
-    //    unsafe { TODO: call ffi::gst_rtsp_client_session_filter() }
-    //}
+    fn session_filter(&self, func: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>) -> Vec<RTSPSession> {
+        let func_data: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> = func;
+        unsafe extern "C" fn func_func(client: *mut ffi::GstRTSPClient, sess: *mut ffi::GstRTSPSession, user_data: glib_ffi::gpointer) -> ffi::GstRTSPFilterResult {
+            let client = from_glib_borrow(client);
+            let sess = from_glib_borrow(sess);
+            let callback: *mut Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>;
+            let res = if let Some(ref mut callback) = *callback {
+                callback(&client, &sess)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let func = Some(func_func as _);
+        let super_callback0: &Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> = &func_data;
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_client_session_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     fn set_auth<'a, P: IsA<RTSPAuth> + 'a, Q: Into<Option<&'a P>>>(&self, auth: Q) {
         let auth = auth.into();

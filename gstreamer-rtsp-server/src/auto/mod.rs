@@ -63,6 +63,7 @@ pub use self::rtsp_address::RTSPAddress;
 
 mod enums;
 pub use self::enums::RTSPAddressPoolResult;
+pub use self::enums::RTSPFilterResult;
 pub use self::enums::RTSPMediaStatus;
 pub use self::enums::RTSPPublishClockMode;
 pub use self::enums::RTSPSuspendMode;

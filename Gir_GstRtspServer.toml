@@ -32,7 +32,8 @@ generate = [
     "GstRtspServer.RTSPSuspendMode",
     "GstRtspServer.RTSPThreadPool",
     "GstRtspServer.RTSPThreadType",
-    "GstRtspServer.RTSPTransportMode"
+    "GstRtspServer.RTSPTransportMode",
+    "GstRtspServer.RTSPFilterResult"
 ]
 
 manual = [

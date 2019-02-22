@@ -4,6 +4,7 @@
 
 use RTSPAddress;
 use RTSPAddressPool;
+use RTSPFilterResult;
 use RTSPPublishClockMode;
 use RTSPStreamTransport;
 use ffi;
@@ -164,7 +165,7 @@ pub trait RTSPStreamExt: 'static {
 
     fn set_seqnum_offset(&self, seqnum: u16);
 
-    //fn transport_filter(&self, func: /*Unimplemented*/FnMut(&RTSPStream, &RTSPStreamTransport) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPStreamTransport>;
+    fn transport_filter(&self, func: Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)>) -> Vec<RTSPStreamTransport>;
 
     fn unblock_linked(&self) -> Result<(), glib::error::BoolError>;
 
@@ -539,9 +540,25 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
         }
     }
 
-    //fn transport_filter(&self, func: /*Unimplemented*/FnMut(&RTSPStream, &RTSPStreamTransport) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPStreamTransport> {
-    //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_filter() }
-    //}
+    fn transport_filter(&self, func: Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)>) -> Vec<RTSPStreamTransport> {
+        let func_data: Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)> = func;
+        unsafe extern "C" fn func_func(stream: *mut ffi::GstRTSPStream, trans: *mut ffi::GstRTSPStreamTransport, user_data: glib_ffi::gpointer) -> ffi::GstRTSPFilterResult {
+            let stream = from_glib_borrow(stream);
+            let trans = from_glib_borrow(trans);
+            let callback: *mut Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)>;
+            let res = if let Some(ref mut callback) = *callback {
+                callback(&stream, &trans)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let func = Some(func_func as _);
+        let super_callback0: &Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)> = &func_data;
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_stream_transport_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     fn unblock_linked(&self) -> Result<(), glib::error::BoolError> {
         unsafe {

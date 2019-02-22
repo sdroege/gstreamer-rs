@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use RTSPFilterResult;
 use RTSPMedia;
 use RTSPSessionMedia;
 use ffi;
@@ -44,7 +45,7 @@ pub const NONE_RTSP_SESSION: Option<&RTSPSession> = None;
 pub trait RTSPSessionExt: 'static {
     fn allow_expire(&self);
 
-    //fn filter(&self, func: /*Unimplemented*/FnMut(&RTSPSession, &RTSPSessionMedia) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSessionMedia>;
+    fn filter(&self, func: Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)>) -> Vec<RTSPSessionMedia>;
 
     fn get_header(&self) -> Option<GString>;
 
@@ -88,9 +89,25 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
         }
     }
 
-    //fn filter(&self, func: /*Unimplemented*/FnMut(&RTSPSession, &RTSPSessionMedia) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPSessionMedia> {
-    //    unsafe { TODO: call ffi::gst_rtsp_session_filter() }
-    //}
+    fn filter(&self, func: Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)>) -> Vec<RTSPSessionMedia> {
+        let func_data: Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)> = func;
+        unsafe extern "C" fn func_func(sess: *mut ffi::GstRTSPSession, media: *mut ffi::GstRTSPSessionMedia, user_data: glib_ffi::gpointer) -> ffi::GstRTSPFilterResult {
+            let sess = from_glib_borrow(sess);
+            let media = from_glib_borrow(media);
+            let callback: *mut Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)>;
+            let res = if let Some(ref mut callback) = *callback {
+                callback(&sess, &media)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let func = Some(func_func as _);
+        let super_callback0: &Option<&mut dyn (FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult)> = &func_data;
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     fn get_header(&self) -> Option<GString> {
         unsafe {

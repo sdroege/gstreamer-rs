@@ -5,6 +5,7 @@
 use Error;
 use RTSPAuth;
 use RTSPClient;
+use RTSPFilterResult;
 use RTSPMountPoints;
 use RTSPSessionPool;
 use RTSPThreadPool;
@@ -58,7 +59,7 @@ unsafe impl Sync for RTSPServer {}
 pub const NONE_RTSP_SERVER: Option<&RTSPServer> = None;
 
 pub trait RTSPServerExt: 'static {
-    //fn client_filter(&self, func: /*Unimplemented*/FnMut(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient>;
+    fn client_filter(&self, func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>) -> Vec<RTSPClient>;
 
     fn create_socket<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>>(&self, cancellable: Q) -> Result<gio::Socket, Error>;
 
@@ -112,9 +113,25 @@ pub trait RTSPServerExt: 'static {
 }
 
 impl<O: IsA<RTSPServer>> RTSPServerExt for O {
-    //fn client_filter(&self, func: /*Unimplemented*/FnMut(&RTSPServer, &RTSPClient) -> /*Ignored*/RTSPFilterResult, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> Vec<RTSPClient> {
-    //    unsafe { TODO: call ffi::gst_rtsp_server_client_filter() }
-    //}
+    fn client_filter(&self, func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>) -> Vec<RTSPClient> {
+        let func_data: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> = func;
+        unsafe extern "C" fn func_func(server: *mut ffi::GstRTSPServer, client: *mut ffi::GstRTSPClient, user_data: glib_ffi::gpointer) -> ffi::GstRTSPFilterResult {
+            let server = from_glib_borrow(server);
+            let client = from_glib_borrow(client);
+            let callback: *mut Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>;
+            let res = if let Some(ref mut callback) = *callback {
+                callback(&server, &client)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let func = Some(func_func as _);
+        let super_callback0: &Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> = &func_data;
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_server_client_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+        }
+    }
 
     fn create_socket<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>>(&self, cancellable: Q) -> Result<gio::Socket, Error> {
         let cancellable = cancellable.into();
