@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-check"
-version = "0.13.0"
+version = "0.14.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Check library"
