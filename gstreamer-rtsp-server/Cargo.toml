@@ -16,18 +16,18 @@ build = "build.rs"
 bitflags = "1.0"
 libc = "0.2"
 lazy_static = "1.0"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gio-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-gstreamer-rtsp-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-gstreamer-net-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"] }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gio = { git = "https://github.com/gtk-rs/gio" }
-gstreamer = { path = "../gstreamer" }
-gstreamer-rtsp = { path = "../gstreamer-rtsp" }
-gstreamer-net = { path = "../gstreamer-net" }
+glib-sys = { version = "0.8" }
+gio-sys = { version = "0.8" }
+gobject-sys = { version = "0.8" }
+gstreamer-sys = { version = "0.7", features = ["v1_8"] }
+gstreamer-rtsp-sys = { version = "0.7", features = ["v1_8"] }
+gstreamer-rtsp-server-sys = { version = "0.7", features = ["v1_8"] }
+gstreamer-net-sys = { version = "0.7", features = ["v1_8"] }
+glib = { version = "0.7" }
+gio = { version = "0.6" }
+gstreamer = { version = "0.13", path = "../gstreamer" }
+gstreamer-rtsp = { version = "0.13", path = "../gstreamer-rtsp" }
+gstreamer-net = { version = "0.13", path = "../gstreamer-net" }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
