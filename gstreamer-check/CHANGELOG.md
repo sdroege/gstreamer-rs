@@ -5,6 +5,83 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.13.0] - 2019-02-22
+### Added
+- Subclassing infrastructure was moved directly into the bindings,
+  making the `gst-plugin` crate deprecated. This involves many API
+  changes but generally cleans up code and makes it more flexible.
+  Take a look at the `gst-plugins-rs` crate for various examples.
+
+- Bindings for GStreamer GL library
+
+- Bindings for `CapsFeatures` and `Meta`
+- Bindings for `ParentBufferMeta, `VideoMeta` and `VideoOverlayCompositionMeta`
+- Bindings for `VideoOverlayComposition` and `VideoOverlayRectangle`
+- Bindings for `VideoTimeCode`
+- Bindings for `NetAddressMeta`
+- Bindings for registering custom tags
+
+- `UniqueFlowCombiner` and `UniqueAdapter` wrappers that make use of
+  the Rust compile-time mutability checks and expose more API in a safe
+  way, and as a side-effect implement `Sync` and `Send` now
+
+- `Bus::add_watch_local()` and `gst_video::convert_frame_async_local()` that
+  allows to use a closure that does not implement `Send` but can only be
+  called from the thread owning the main context.
+
+- More complete bindings for `Allocation` `Query`
+- `pbutils` functions for codec descriptions
+- `TagList::iter()` for iterating over all tags while getting a single
+   value per tag. The old `::iter_tag_list()` function was renamed to
+   `::iter_generic()` and still provides access to each value for a tag
+- `Bus::iter()` and `Bus::iter_timed()` iterators around the
+  corresponding `::pop*()` functions
+- Getters for `VideoColorimetry` to access its fields
+
+- `Debug` impls for various missing types.
+
+- serde serialization of `Value` can also handle `Buffer` now
+
+- Extensive comments to all examples with explanations
+- Transmuxing example showing how to use `typefind`, `multiqueue` and
+  dynamic pads
+- basic-tutorial-12 was ported and added
+
+### Changed
+- Rust 1.31 is the minimum supported Rust version now
+- Update to latest gir code generator and glib bindings
+
+- Functions returning e.g. `gst::FlowReturn` or other "combined" enums
+  were changed to return split enums like `Result<gst::FlowSuccess,
+  gst::FlowError>` to allow usage of the standard Rust error handling.
+- Various functions and callbacks returning `bool` or `Option<_>` were
+  changed to return a `Result<_, glib::BoolError>` or
+  `Result<_, gst::LoggableError>` or `Result<_, gst::ErrorMessage>` for
+  better integration with Rust's error handling infrastructure.
+- Some infallible functions returning `bool` were changed to return `()`.
+
+- `MiniObject` subclasses are now newtype wrappers around the
+   underlying `GstRc<FooRef>` wrapper. This does not change the
+   API in any breaking way for the current usages, but allows
+   `MiniObject`s to also be implemented in other crates and
+   makes sure `rustdoc` places the documentation in the right places.
+
+- `BinExt` extension trait was renamed to `GstBinExt` to prevent
+  conflicts with `gtk::Bin` if both are imported
+
+- `Buffer::from_slice()` can't possible return `None`
+
+### Fixed
+- `gst::tag::Album` is the album tag now instead of artist sortname
+- Return `0` for the channel mask corresponding to negative
+  `AudioChannelPosition`s.
+- `PartialOrd` and related traits are implemented via pointer equality on
+  `ClockId` instead of using the compare function. Two clock ids with the same
+  timestamp are not necessarily the same.
+- Various functions that are actually fallible are now returning an
+  `Option<_>`.
+- Various `clippy` warnings
+
 ## [0.12.2] - 2018-11-26
 ### Fixed
 - PTP clock constructor actually creates a PTP instead of NTP clock
