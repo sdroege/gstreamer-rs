@@ -1,747 +1,909 @@
 <!-- file * -->
-<!-- struct Player -->
-
-
-# Implements
-
-[`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl Player::fn new -->
-Creates a new `Player` instance that uses `signal_dispatcher` to dispatch
-signals to some event loop system, or emits signals directly if NULL is
-passed. See `PlayerGMainContextSignalDispatcher::new`.
-
-Video is going to be rendered by `video_renderer`, or if `None` is provided
-no special video set up will be done and some default handling will be
-performed.
-## `video_renderer`
-GstPlayerVideoRenderer to use
-## `signal_dispatcher`
-GstPlayerSignalDispatcher to use
-
-# Returns
-
-a new `Player` instance
-<!-- impl Player::fn config_get_position_update_interval -->
-## `config`
-a `Player` configuration
-
-# Returns
-
-current position update interval in milliseconds
-
-Since 1.10
-<!-- impl Player::fn config_get_seek_accurate -->
-## `config`
-a `Player` configuration
-
-# Returns
-
-`true` if accurate seeking is enabled
-
-Since 1.12
-<!-- impl Player::fn config_get_user_agent -->
-Return the user agent which has been configured using
-`Player::config_set_user_agent` if any.
-## `config`
-a `Player` configuration
-
-# Returns
-
-the configured agent, or `None`
-Since 1.10
-<!-- impl Player::fn config_set_position_update_interval -->
-set interval in milliseconds between two position-updated signals.
-pass 0 to stop updating the position.
-Since 1.10
-## `config`
-a `Player` configuration
-## `interval`
-interval in ms
-<!-- impl Player::fn config_set_seek_accurate -->
-Enable or disable accurate seeking. When enabled, elements will try harder
-to seek as accurately as possible to the requested seek position. Generally
-it will be slower especially for formats that don't have any indexes or
-timestamp markers in the stream.
-
-If accurate seeking is disabled, elements will seek as close as the request
-position without slowing down seeking too much.
-
-Accurate seeking is disabled by default.
-## `config`
-a `Player` configuration
-## `accurate`
-accurate seek or not
-<!-- impl Player::fn config_set_user_agent -->
-Set the user agent to pass to the server if `player` needs to connect
-to a server during playback. This is typically used when playing HTTP
-or RTSP streams.
-
-Since 1.10
-## `config`
-a `Player` configuration
-## `agent`
-the string to use as user agent
-<!-- impl Player::fn get_audio_streams -->
-## `info`
-a `PlayerMediaInfo`
-
-# Returns
-
-A `glib::List` of
-matching `PlayerAudioInfo`.
-<!-- impl Player::fn get_subtitle_streams -->
-## `info`
-a `PlayerMediaInfo`
-
-# Returns
-
-A `glib::List` of
-matching `PlayerSubtitleInfo`.
-<!-- impl Player::fn get_video_streams -->
-## `info`
-a `PlayerMediaInfo`
-
-# Returns
-
-A `glib::List` of
-matching `PlayerVideoInfo`.
-<!-- impl Player::fn visualizations_free -->
-Frees a `None` terminated array of `PlayerVisualization`.
-## `viss`
-a `None` terminated array of `PlayerVisualization` to free
-<!-- impl Player::fn visualizations_get -->
-
-# Returns
-
-
- a `None` terminated array containing all available
- visualizations. Use `Player::visualizations_free` after
- usage.
-<!-- impl Player::fn get_audio_video_offset -->
-Retrieve the current value of audio-video-offset property
-
-# Returns
-
-The current value of audio-video-offset in nanoseconds
-
-Since 1.10
-<!-- impl Player::fn get_color_balance -->
-Retrieve the current value of the indicated `type_`.
-## `type_`
-`PlayerColorBalanceType`
-
-# Returns
-
-The current value of `type_`, between [0,1]. In case of
- error -1 is returned.
-<!-- impl Player::fn get_config -->
-Get a copy of the current configuration of the player. This configuration
-can either be modified and used for the `Player::set_config` call
-or it must be freed after usage.
-
-# Returns
-
-a copy of the current configuration of `self`. Use
-`gst::Structure::free` after usage or `Player::set_config`.
-
-Since 1.10
-<!-- impl Player::fn get_current_audio_track -->
-A Function to get current audio `PlayerAudioInfo` instance.
-
-# Returns
-
-current audio track.
-
-The caller should free it with `gobject::ObjectExt::unref`
-<!-- impl Player::fn get_current_subtitle_track -->
-A Function to get current subtitle `PlayerSubtitleInfo` instance.
-
-# Returns
-
-current subtitle track.
-
-The caller should free it with `gobject::ObjectExt::unref`
-<!-- impl Player::fn get_current_video_track -->
-A Function to get current video `PlayerVideoInfo` instance.
-
-# Returns
-
-current video track.
-
-The caller should free it with `gobject::ObjectExt::unref`
-<!-- impl Player::fn get_current_visualization -->
-
-# Returns
-
-Name of the currently enabled visualization.
- `g_free` after usage.
-<!-- impl Player::fn get_duration -->
-Retrieves the duration of the media stream that self represents.
-
-# Returns
-
-the duration of the currently-playing media stream, in
-nanoseconds.
-<!-- impl Player::fn get_media_info -->
-A Function to get the current media info `PlayerMediaInfo` instance.
-
-# Returns
-
-media info instance.
-
-The caller should free it with `gobject::ObjectExt::unref`
-<!-- impl Player::fn get_multiview_flags -->
-Retrieve the current value of the indicated `type_`.
-
-# Returns
-
-The current value of `type_`, Default: 0x00000000 "none
-<!-- impl Player::fn get_multiview_mode -->
-Retrieve the current value of the indicated `type_`.
-
-# Returns
-
-The current value of `type_`, Default: -1 "none"
-<!-- impl Player::fn get_mute -->
-
-# Returns
-
-`true` if the currently-playing stream is muted.
-<!-- impl Player::fn get_pipeline -->
-
-# Returns
-
-The internal playbin instance
-<!-- impl Player::fn get_position -->
-
-# Returns
-
-the absolute position time, in nanoseconds, of the
-currently-playing stream.
-<!-- impl Player::fn get_rate -->
-
-# Returns
-
-current playback rate
-<!-- impl Player::fn get_subtitle_uri -->
-current subtitle URI
-
-# Returns
-
-URI of the current external subtitle.
- `g_free` after usage.
-<!-- impl Player::fn get_uri -->
-Gets the URI of the currently-playing stream.
-
-# Returns
-
-a string containing the URI of the
-currently-playing stream. `g_free` after usage.
-<!-- impl Player::fn get_video_snapshot -->
-Get a snapshot of the currently selected video stream, if any. The format can be
-selected with `format` and optional configuration is possible with `config`
-Currently supported settings are:
-- width, height of type G_TYPE_INT
-- pixel-aspect-ratio of type GST_TYPE_FRACTION
- Except for GST_PLAYER_THUMBNAIL_RAW_NATIVE format, if no config is set, pixel-aspect-ratio would be 1/1
-## `format`
-output format of the video snapshot
-## `config`
-Additional configuration
-
-# Returns
-
-Current video snapshot sample or `None` on failure
-
-Since 1.12
-<!-- impl Player::fn get_volume -->
-Returns the current volume level, as a percentage between 0 and 1.
-
-# Returns
-
-the volume as percentage between 0 and 1.
-<!-- impl Player::fn has_color_balance -->
-Checks whether the `self` has color balance support available.
-
-# Returns
-
-`true` if `self` has color balance support. Otherwise,
- `false`.
-<!-- impl Player::fn pause -->
-Pauses the current stream.
-<!-- impl Player::fn play -->
-Request to play the loaded stream.
-<!-- impl Player::fn seek -->
-Seeks the currently-playing stream to the absolute `position` time
-in nanoseconds.
-## `position`
-position to seek in nanoseconds
-<!-- impl Player::fn set_audio_track -->
-## `stream_index`
-stream index
-
-# Returns
-
-`true` or `false`
-
-Sets the audio track `stream_idex`.
-<!-- impl Player::fn set_audio_track_enabled -->
-Enable or disable the current audio track.
-## `enabled`
-TRUE or FALSE
-<!-- impl Player::fn set_audio_video_offset -->
-Sets audio-video-offset property by value of `offset`
-
-Since 1.10
-## `offset`
-`gint64` in nanoseconds
-<!-- impl Player::fn set_color_balance -->
-Sets the current value of the indicated channel `type_` to the passed
-value.
-## `type_`
-`PlayerColorBalanceType`
-## `value`
-The new value for the `type_`, ranged [0,1]
-<!-- impl Player::fn set_config -->
-Set the configuration of the player. If the player is already configured, and
-the configuration haven't change, this function will return `true`. If the
-player is not in the GST_PLAYER_STATE_STOPPED, this method will return `false`
-and active configuration will remain.
-
-`config` is a `gst::Structure` that contains the configuration parameters for
-the player.
-
-This function takes ownership of `config`.
-## `config`
-a `gst::Structure`
-
-# Returns
-
-`true` when the configuration could be set.
-Since 1.10
-<!-- impl Player::fn set_multiview_flags -->
-Sets the current value of the indicated mode `type_` to the passed
-value.
-## `flags`
-The new value for the `type_`
-<!-- impl Player::fn set_multiview_mode -->
-Sets the current value of the indicated mode `type_` to the passed
-value.
-## `mode`
-The new value for the `type_`
-<!-- impl Player::fn set_mute -->
-`true` if the currently-playing stream should be muted.
-## `val`
-Mute state the should be set
-<!-- impl Player::fn set_rate -->
-Playback at specified rate
-## `rate`
-playback rate
-<!-- impl Player::fn set_subtitle_track -->
-## `stream_index`
-stream index
-
-# Returns
-
-`true` or `false`
-
-Sets the subtitle strack `stream_index`.
-<!-- impl Player::fn set_subtitle_track_enabled -->
-Enable or disable the current subtitle track.
-## `enabled`
-TRUE or FALSE
-<!-- impl Player::fn set_subtitle_uri -->
-Sets the external subtitle URI. This should be combined with a call to
-gst_player_set_subtitle_track_enabled(`self`, TRUE) so the subtitles are actually
-rendered.
-## `uri`
-subtitle URI
-<!-- impl Player::fn set_uri -->
-Sets the next URI to play.
-## `uri`
-next URI to play.
-<!-- impl Player::fn set_video_track -->
-## `stream_index`
-stream index
-
-# Returns
-
-`true` or `false`
-
-Sets the video track `stream_index`.
-<!-- impl Player::fn set_video_track_enabled -->
-Enable or disable the current video track.
-## `enabled`
-TRUE or FALSE
-<!-- impl Player::fn set_visualization -->
-## `name`
-visualization element obtained from
-`Player::visualizations_get`()
-
-# Returns
-
-`true` if the visualizations was set correctly. Otherwise,
-`false`.
-<!-- impl Player::fn set_visualization_enabled -->
-Enable or disable the visualization.
-## `enabled`
-TRUE or FALSE
-<!-- impl Player::fn set_volume -->
-Sets the volume level of the stream as a percentage between 0 and 1.
-## `val`
-the new volume level, as a percentage between 0 and 1
-<!-- impl Player::fn stop -->
-Stops playing the current stream and resets to the first position
-in the stream.
-<!-- struct PlayerAudioInfo -->
-`PlayerStreamInfo` specific to audio streams.
-
-# Implements
-
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerAudioInfo::fn get_bitrate -->
-
-# Returns
-
-the audio bitrate in `PlayerAudioInfo`.
-<!-- impl PlayerAudioInfo::fn get_channels -->
-
-# Returns
-
-the number of audio channels in `PlayerAudioInfo`.
-<!-- impl PlayerAudioInfo::fn get_language -->
-
-# Returns
-
-the language of the stream, or NULL if unknown.
-<!-- impl PlayerAudioInfo::fn get_max_bitrate -->
-
-# Returns
-
-the audio maximum bitrate in `PlayerAudioInfo`.
-<!-- impl PlayerAudioInfo::fn get_sample_rate -->
-
-# Returns
-
-the audio sample rate in `PlayerAudioInfo`.
-<!-- enum PlayerColorBalanceType -->
-<!-- enum PlayerColorBalanceType::variant Hue -->
-hue or color balance.
-<!-- enum PlayerColorBalanceType::variant Brightness -->
-brightness or black level.
-<!-- enum PlayerColorBalanceType::variant Saturation -->
-color saturation or chroma
-gain.
-<!-- enum PlayerColorBalanceType::variant Contrast -->
-contrast or luma gain.
-<!-- enum PlayerError -->
-<!-- enum PlayerError::variant Failed -->
-generic error.
-<!-- struct PlayerGMainContextSignalDispatcher -->
-
-
-# Implements
-
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
-<!-- impl PlayerGMainContextSignalDispatcher::fn new -->
-Creates a new GstPlayerSignalDispatcher that uses `application_context`,
-or the thread default one if `None` is used. See `gst_player_new_full`.
-## `application_context`
-GMainContext to use or `None`
-
-# Returns
-
-the new GstPlayerSignalDispatcher
-<!-- struct PlayerMediaInfo -->
-Structure containing the media information of a URI.
+<!-- struct Discoverer -->
+The `Discoverer` is a utility object which allows to get as much
+information as possible from one or many URIs.
+
+It provides two APIs, allowing usage in blocking or non-blocking mode.
+
+The blocking mode just requires calling `Discoverer::discover_uri`
+with the URI one wishes to discover.
+
+The non-blocking mode requires a running `glib::MainLoop` iterating a
+`glib::MainContext`, where one connects to the various signals, appends the
+URIs to be processed (through `Discoverer::discover_uri_async`) and then
+asks for the discovery to begin (through `Discoverer::start`).
+By default this will use the GLib default main context unless you have
+set a custom context using `glib::MainContext::push_thread_default`.
+
+All the information is returned in a `DiscovererInfo` structure.
 
 # Implements
 
 [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerMediaInfo::fn get_audio_streams -->
+<!-- impl Discoverer::fn new -->
+Creates a new `Discoverer` with the provided timeout.
+## `timeout`
+timeout per file, in nanoseconds. Allowed are values between
+ one second (`GST_SECOND`) and one hour (3600 * `GST_SECOND`)
 
 # Returns
 
-A `glib::List` of
-matching `PlayerAudioInfo`.
-<!-- impl PlayerMediaInfo::fn get_container_format -->
+The new `Discoverer`.
+If an error occurred when creating the discoverer, `err` will be set
+accordingly and `None` will be returned. If `err` is set, the caller must
+free it when no longer needed using `glib::Error::free`.
+<!-- impl Discoverer::fn discover_uri -->
+Synchronously discovers the given `uri`.
+
+A copy of `uri` will be made internally, so the caller can safely `g_free`
+afterwards.
+## `uri`
+The URI to run on.
 
 # Returns
 
-the container format.
-<!-- impl PlayerMediaInfo::fn get_duration -->
+the result of the scanning. Can be `None` if an
+error occurred.
+<!-- impl Discoverer::fn discover_uri_async -->
+Appends the given `uri` to the list of URIs to discoverer. The actual
+discovery of the `uri` will only take place if `Discoverer::start` has
+been called.
+
+A copy of `uri` will be made internally, so the caller can safely `g_free`
+afterwards.
+## `uri`
+the URI to add.
 
 # Returns
 
-duration of the media.
-<!-- impl PlayerMediaInfo::fn get_image_sample -->
-Function to get the image (or preview-image) stored in taglist.
-Application can use gst_sample_*`_` API's to get caps, buffer etc.
+`true` if the `uri` was successfully appended to the list of pending
+uris, else `false`
+<!-- impl Discoverer::fn start -->
+Allow asynchronous discovering of URIs to take place.
+A `glib::MainLoop` must be available for `Discoverer` to properly work in
+asynchronous mode.
+<!-- impl Discoverer::fn stop -->
+Stop the discovery of any pending URIs and clears the list of
+pending URIS (if any).
+<!-- trait DiscovererExt::fn connect_discovered -->
+Will be emitted in async mode when all information on a URI could be
+discovered, or an error occurred.
 
-# Returns
+When an error occurs, `info` might still contain some partial information,
+depending on the circumstances of the error.
+## `info`
+the results `DiscovererInfo`
+## `error`
+`glib::Error`, which will be non-NULL
+ if an error occurred during
+ discovery. You must not free
+ this `glib::Error`, it will be freed by
+ the discoverer.
+<!-- trait DiscovererExt::fn connect_finished -->
+Will be emitted in async mode when all pending URIs have been processed.
+<!-- trait DiscovererExt::fn connect_source_setup -->
+This signal is emitted after the source element has been created for, so
+the URI being discovered, so it can be configured by setting additional
+properties (e.g. set a proxy server for an http source, or set the device
+and read speed for an audio cd source).
 
-GstSample or NULL.
-<!-- impl PlayerMediaInfo::fn get_number_of_audio_streams -->
+This signal is usually emitted from the context of a GStreamer streaming
+thread.
+## `source`
+source element
+<!-- trait DiscovererExt::fn connect_starting -->
+Will be emitted when the discover starts analyzing the pending URIs
+<!-- trait DiscovererExt::fn get_property_timeout -->
+The duration (in nanoseconds) after which the discovery of an individual
+URI will timeout.
 
-# Returns
+If the discovery of a URI times out, the `DiscovererResult::Timeout` will be
+set on the result flags.
+<!-- trait DiscovererExt::fn set_property_timeout -->
+The duration (in nanoseconds) after which the discovery of an individual
+URI will timeout.
 
-number of audio streams.
-<!-- impl PlayerMediaInfo::fn get_number_of_streams -->
-
-# Returns
-
-number of total streams.
-<!-- impl PlayerMediaInfo::fn get_number_of_subtitle_streams -->
-
-# Returns
-
-number of subtitle streams.
-<!-- impl PlayerMediaInfo::fn get_number_of_video_streams -->
-
-# Returns
-
-number of video streams.
-<!-- impl PlayerMediaInfo::fn get_stream_list -->
-
-# Returns
-
-A `glib::List` of
-matching `PlayerStreamInfo`.
-<!-- impl PlayerMediaInfo::fn get_subtitle_streams -->
-
-# Returns
-
-A `glib::List` of
-matching `PlayerSubtitleInfo`.
-<!-- impl PlayerMediaInfo::fn get_tags -->
-
-# Returns
-
-the tags contained in media info.
-<!-- impl PlayerMediaInfo::fn get_title -->
-
-# Returns
-
-the media title.
-<!-- impl PlayerMediaInfo::fn get_uri -->
-
-# Returns
-
-the URI associated with `PlayerMediaInfo`.
-<!-- impl PlayerMediaInfo::fn get_video_streams -->
-
-# Returns
-
-A `glib::List` of
-matching `PlayerVideoInfo`.
-<!-- impl PlayerMediaInfo::fn is_live -->
-
-# Returns
-
-`true` if the media is live.
-<!-- impl PlayerMediaInfo::fn is_seekable -->
-
-# Returns
-
-`true` if the media is seekable.
-<!-- struct PlayerSignalDispatcher -->
-
+If the discovery of a URI times out, the `DiscovererResult::Timeout` will be
+set on the result flags.
+<!-- struct DiscovererAudioInfo -->
+`DiscovererStreamInfo` specific to audio streams.
 
 # Implements
 
-[`PlayerSignalDispatcherExt`](trait.PlayerSignalDispatcherExt.html)
-<!-- trait PlayerSignalDispatcherExt -->
-Trait containing all `PlayerSignalDispatcher` methods.
-
-# Implementors
-
-[`PlayerGMainContextSignalDispatcher`](struct.PlayerGMainContextSignalDispatcher.html), [`PlayerSignalDispatcher`](struct.PlayerSignalDispatcher.html)
-<!-- enum PlayerSnapshotFormat -->
-<!-- enum PlayerState -->
-<!-- enum PlayerState::variant Stopped -->
-the player is stopped.
-<!-- enum PlayerState::variant Buffering -->
-the player is buffering.
-<!-- enum PlayerState::variant Paused -->
-the player is paused.
-<!-- enum PlayerState::variant Playing -->
-the player is currently playing a
-stream.
-<!-- struct PlayerStreamInfo -->
-Base structure for information concering a media stream. Depending on
-the stream type, one can find more media-specific information in
-`PlayerVideoInfo`, `PlayerAudioInfo`, `PlayerSubtitleInfo`.
-
-# Implements
-
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- trait PlayerStreamInfoExt -->
-Trait containing all `PlayerStreamInfo` methods.
-
-# Implementors
-
-[`PlayerAudioInfo`](struct.PlayerAudioInfo.html), [`PlayerStreamInfo`](struct.PlayerStreamInfo.html), [`PlayerSubtitleInfo`](struct.PlayerSubtitleInfo.html), [`PlayerVideoInfo`](struct.PlayerVideoInfo.html)
-<!-- trait PlayerStreamInfoExt::fn get_caps -->
+[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl DiscovererAudioInfo::fn get_bitrate -->
 
 # Returns
 
-the `gst::Caps` of the stream.
-<!-- trait PlayerStreamInfoExt::fn get_codec -->
-A string describing codec used in `PlayerStreamInfo`.
+the average or nominal bitrate of the stream in bits/second.
+<!-- impl DiscovererAudioInfo::fn get_channel_mask -->
+
+Feature: `v1_14`
+
 
 # Returns
 
-codec string or NULL on unknown.
-<!-- trait PlayerStreamInfoExt::fn get_index -->
-Function to get stream index from `PlayerStreamInfo` instance.
+the channel-mask of the stream, refer to
+`gst_audio_channel_positions_from_mask` for more
+information.
+<!-- impl DiscovererAudioInfo::fn get_channels -->
 
 # Returns
 
-the stream index of this stream.
-<!-- trait PlayerStreamInfoExt::fn get_stream_type -->
-Function to return human readable name for the stream type
-of the given `self` (ex: "audio", "video", "subtitle")
+the number of channels in the stream.
+<!-- impl DiscovererAudioInfo::fn get_depth -->
 
 # Returns
 
-a human readable name
-<!-- trait PlayerStreamInfoExt::fn get_tags -->
-
-# Returns
-
-the tags contained in this stream.
-<!-- struct PlayerSubtitleInfo -->
-`PlayerStreamInfo` specific to subtitle streams.
-
-# Implements
-
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerSubtitleInfo::fn get_language -->
+the number of bits used per sample in each channel.
+<!-- impl DiscovererAudioInfo::fn get_language -->
 
 # Returns
 
 the language of the stream, or NULL if unknown.
-<!-- struct PlayerVideoInfo -->
-`PlayerStreamInfo` specific to video streams.
+<!-- impl DiscovererAudioInfo::fn get_max_bitrate -->
+
+# Returns
+
+the maximum bitrate of the stream in bits/second.
+<!-- impl DiscovererAudioInfo::fn get_sample_rate -->
+
+# Returns
+
+the sample rate of the stream in Hertz.
+<!-- struct DiscovererContainerInfo -->
+`DiscovererStreamInfo` specific to container streams.
 
 # Implements
 
-[`PlayerStreamInfoExt`](trait.PlayerStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- impl PlayerVideoInfo::fn get_bitrate -->
+[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl DiscovererContainerInfo::fn get_streams -->
 
 # Returns
 
-the current bitrate of video in `PlayerVideoInfo`.
-<!-- impl PlayerVideoInfo::fn get_framerate -->
-## `fps_n`
-Numerator of frame rate
-## `fps_d`
-Denominator of frame rate
-<!-- impl PlayerVideoInfo::fn get_height -->
-
-# Returns
-
-the height of video in `PlayerVideoInfo`.
-<!-- impl PlayerVideoInfo::fn get_max_bitrate -->
-
-# Returns
-
-the maximum bitrate of video in `PlayerVideoInfo`.
-<!-- impl PlayerVideoInfo::fn get_pixel_aspect_ratio -->
-Returns the pixel aspect ratio in `par_n` and `par_d`
-## `par_n`
-numerator
-## `par_d`
-denominator
-<!-- impl PlayerVideoInfo::fn get_width -->
-
-# Returns
-
-the width of video in `PlayerVideoInfo`.
-<!-- struct PlayerVideoOverlayVideoRenderer -->
-
+the list of
+`DiscovererStreamInfo` this container stream offers.
+Free with `DiscovererStreamInfo::list_free` after usage.
+<!-- struct DiscovererInfo -->
+Structure containing the information of a URI analyzed by `Discoverer`.
 
 # Implements
 
-[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
-<!-- impl PlayerVideoOverlayVideoRenderer::fn new -->
-## `window_handle`
-Window handle to use or `None`
-<!-- impl PlayerVideoOverlayVideoRenderer::fn new_with_sink -->
-## `window_handle`
-Window handle to use or `None`
-## `video_sink`
-the custom video_sink element to be set for the video renderer
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl DiscovererInfo::fn from_variant -->
+Parses a `glib::Variant` as produced by `DiscovererInfo::to_variant`
+back to a `DiscovererInfo`.
+## `variant`
+A `glib::Variant` to deserialize into a `DiscovererInfo`.
 
 # Returns
 
-
-
-Since 1.12
-<!-- impl PlayerVideoOverlayVideoRenderer::fn expose -->
-Tell an overlay that it has been exposed. This will redraw the current frame
-in the drawable even if the pipeline is PAUSED.
-<!-- impl PlayerVideoOverlayVideoRenderer::fn get_render_rectangle -->
-Return the currently configured render rectangle. See `PlayerVideoOverlayVideoRenderer::set_render_rectangle`
-for details.
-## `x`
-the horizontal offset of the render area inside the window
-## `y`
-the vertical offset of the render area inside the window
-## `width`
-the width of the render area inside the window
-## `height`
-the height of the render area inside the window
-<!-- impl PlayerVideoOverlayVideoRenderer::fn get_window_handle -->
+A newly-allocated `DiscovererInfo`.
+<!-- impl DiscovererInfo::fn copy -->
 
 # Returns
 
-The currently set, platform specific window
-handle
-<!-- impl PlayerVideoOverlayVideoRenderer::fn set_render_rectangle -->
-Configure a subregion as a video target within the window set by
-`PlayerVideoOverlayVideoRenderer::set_window_handle`. If this is not
-used or not supported the video will fill the area of the window set as the
-overlay to 100%. By specifying the rectangle, the video can be overlaid to
-a specific region of that window only. After setting the new rectangle one
-should call `PlayerVideoOverlayVideoRenderer::expose` to force a
-redraw. To unset the region pass -1 for the `width` and `height` parameters.
+A copy of the `DiscovererInfo`
+<!-- impl DiscovererInfo::fn get_audio_streams -->
+Finds all the `DiscovererAudioInfo` contained in `self`
 
-This method is needed for non fullscreen video overlay in UI toolkits that
-do not support subwindows.
-## `x`
-the horizontal offset of the render area inside the window
-## `y`
-the vertical offset of the render area inside the window
-## `width`
-the width of the render area inside the window
-## `height`
-the height of the render area inside the window
-<!-- impl PlayerVideoOverlayVideoRenderer::fn set_window_handle -->
-Sets the platform specific window handle into which the video
-should be rendered
-## `window_handle`
-handle referencing to the platform specific window
-<!-- struct PlayerVideoRenderer -->
+# Returns
 
+A `glib::List` of
+matching `DiscovererStreamInfo`. The caller should free it with
+`DiscovererStreamInfo::list_free`.
+<!-- impl DiscovererInfo::fn get_container_streams -->
+Finds all the `DiscovererContainerInfo` contained in `self`
+
+# Returns
+
+A `glib::List` of
+matching `DiscovererStreamInfo`. The caller should free it with
+`DiscovererStreamInfo::list_free`.
+<!-- impl DiscovererInfo::fn get_duration -->
+
+# Returns
+
+the duration of the URI in `gst::ClockTime` (nanoseconds).
+<!-- impl DiscovererInfo::fn get_live -->
+
+Feature: `v1_14`
+
+
+# Returns
+
+whether the URI is live.
+<!-- impl DiscovererInfo::fn get_misc -->
+
+# Deprecated
+
+This functions is deprecated since version 1.4, use
+`DiscovererInfo::get_missing_elements_installer_details`
+
+# Returns
+
+Miscellaneous information stored as a `gst::Structure`
+(for example: information about missing plugins). If you wish to use the
+`gst::Structure` after the life-time of `self`, you will need to copy it.
+<!-- impl DiscovererInfo::fn get_missing_elements_installer_details -->
+Get the installer details for missing elements
+
+# Returns
+
+An array of strings
+containing informations about how to install the various missing elements
+for `self` to be usable. If you wish to use the strings after the life-time
+of `self`, you will need to copy them.
+<!-- impl DiscovererInfo::fn get_result -->
+
+# Returns
+
+the result of the discovery as a `DiscovererResult`.
+<!-- impl DiscovererInfo::fn get_seekable -->
+
+# Returns
+
+the whether the URI is seekable.
+<!-- impl DiscovererInfo::fn get_stream_info -->
+
+# Returns
+
+the structure (or topology) of the URI as a
+`DiscovererStreamInfo`.
+This structure can be traversed to see the original hierarchy. Unref with
+`gst_discoverer_stream_info_unref` after usage.
+<!-- impl DiscovererInfo::fn get_stream_list -->
+
+# Returns
+
+the list of
+all streams contained in the `info`. Free after usage
+with `DiscovererStreamInfo::list_free`.
+<!-- impl DiscovererInfo::fn get_streams -->
+Finds the `DiscovererStreamInfo` contained in `self` that match the
+given `streamtype`.
+## `streamtype`
+a `glib::Type` derived from `DiscovererStreamInfo`
+
+# Returns
+
+A `glib::List` of
+matching `DiscovererStreamInfo`. The caller should free it with
+`DiscovererStreamInfo::list_free`.
+<!-- impl DiscovererInfo::fn get_subtitle_streams -->
+Finds all the `DiscovererSubtitleInfo` contained in `self`
+
+# Returns
+
+A `glib::List` of
+matching `DiscovererStreamInfo`. The caller should free it with
+`DiscovererStreamInfo::list_free`.
+<!-- impl DiscovererInfo::fn get_tags -->
+
+# Returns
+
+all tags contained in the URI. If you wish to use
+the tags after the life-time of `self`, you will need to copy them.
+<!-- impl DiscovererInfo::fn get_toc -->
+
+# Returns
+
+TOC contained in the URI. If you wish to use
+the TOC after the life-time of `self`, you will need to copy it.
+<!-- impl DiscovererInfo::fn get_uri -->
+
+# Returns
+
+the URI to which this information corresponds to.
+Copy it if you wish to use it after the life-time of `self`.
+<!-- impl DiscovererInfo::fn get_video_streams -->
+Finds all the `DiscovererVideoInfo` contained in `self`
+
+# Returns
+
+A `glib::List` of
+matching `DiscovererStreamInfo`. The caller should free it with
+`DiscovererStreamInfo::list_free`.
+<!-- impl DiscovererInfo::fn to_variant -->
+Serializes `self` to a `glib::Variant` that can be parsed again
+through `DiscovererInfo::from_variant`.
+
+Note that any `gst::Toc` (s) that might have been discovered will not be serialized
+for now.
+## `flags`
+A combination of `DiscovererSerializeFlags` to specify
+what needs to be serialized.
+
+# Returns
+
+A newly-allocated `glib::Variant` representing `self`.
+<!-- enum DiscovererResult -->
+Result values for the discovery process.
+<!-- enum DiscovererResult::variant Ok -->
+The discovery was successful
+<!-- enum DiscovererResult::variant UriInvalid -->
+the URI is invalid
+<!-- enum DiscovererResult::variant Error -->
+an error happened and the GError is set
+<!-- enum DiscovererResult::variant Timeout -->
+the discovery timed-out
+<!-- enum DiscovererResult::variant Busy -->
+the discoverer was already discovering a file
+<!-- enum DiscovererResult::variant MissingPlugins -->
+Some plugins are missing for full discovery
+<!-- struct DiscovererStreamInfo -->
+Base structure for information concerning a media stream. Depending on the
+stream type, one can find more media-specific information in
+`DiscovererAudioInfo`, `DiscovererVideoInfo`, and
+`DiscovererContainerInfo`.
+
+The `DiscovererStreamInfo` represents the topology of the stream. Siblings
+can be iterated over with `DiscovererStreamInfoExt::get_next` and
+`DiscovererStreamInfoExt::get_previous`. Children (sub-streams) of a
+stream can be accessed using the `DiscovererContainerInfo` API.
+
+As a simple example, if you run `Discoverer` on an AVI file with one audio
+and one video stream, you will get a `DiscovererContainerInfo`
+corresponding to the AVI container, which in turn will have a
+`DiscovererAudioInfo` sub-stream and a `DiscovererVideoInfo` sub-stream
+for the audio and video streams respectively.
 
 # Implements
 
-[`PlayerVideoRendererExt`](trait.PlayerVideoRendererExt.html)
-<!-- trait PlayerVideoRendererExt -->
-Trait containing all `PlayerVideoRenderer` methods.
+[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait DiscovererStreamInfoExt -->
+Trait containing all `DiscovererStreamInfo` methods.
 
 # Implementors
 
-[`PlayerVideoOverlayVideoRenderer`](struct.PlayerVideoOverlayVideoRenderer.html), [`PlayerVideoRenderer`](struct.PlayerVideoRenderer.html)
-<!-- struct PlayerVisualization -->
-A `PlayerVisualization` descriptor.
-<!-- impl PlayerVisualization::fn copy -->
-Makes a copy of the `PlayerVisualization`. The result must be
-freed using `PlayerVisualization::free`.
+[`DiscovererAudioInfo`](struct.DiscovererAudioInfo.html), [`DiscovererContainerInfo`](struct.DiscovererContainerInfo.html), [`DiscovererStreamInfo`](struct.DiscovererStreamInfo.html), [`DiscovererSubtitleInfo`](struct.DiscovererSubtitleInfo.html), [`DiscovererVideoInfo`](struct.DiscovererVideoInfo.html)
+<!-- impl DiscovererStreamInfo::fn list_free -->
+Decrements the reference count of all contained `DiscovererStreamInfo`
+and fress the `glib::List`.
+## `infos`
+a `glib::List` of `DiscovererStreamInfo`
+<!-- trait DiscovererStreamInfoExt::fn get_caps -->
 
 # Returns
 
-an allocated copy of `self`.
-<!-- impl PlayerVisualization::fn free -->
-Frees a `PlayerVisualization`.
+the `gst::Caps` of the stream. Unref with
+`gst_caps_unref` after usage.
+<!-- trait DiscovererStreamInfoExt::fn get_misc -->
+
+# Deprecated
+
+This functions is deprecated since version 1.4, use
+`DiscovererInfo::get_missing_elements_installer_details`
+
+# Returns
+
+additional information regarding the stream (for
+example codec version, profile, etc..). If you wish to use the `gst::Structure`
+after the life-time of `self` you will need to copy it.
+<!-- trait DiscovererStreamInfoExt::fn get_next -->
+
+# Returns
+
+the next `DiscovererStreamInfo` in a chain. `None`
+for final streams.
+Unref with `gst_discoverer_stream_info_unref` after usage.
+<!-- trait DiscovererStreamInfoExt::fn get_previous -->
+
+# Returns
+
+the previous `DiscovererStreamInfo` in a chain.
+`None` for starting points. Unref with `gst_discoverer_stream_info_unref`
+after usage.
+<!-- trait DiscovererStreamInfoExt::fn get_stream_id -->
+
+# Returns
+
+the stream ID of this stream. If you wish to
+use the stream ID after the life-time of `self` you will need to copy it.
+<!-- trait DiscovererStreamInfoExt::fn get_stream_type_nick -->
+
+# Returns
+
+a human readable name for the stream type of the given `self` (ex : "audio",
+"container",...).
+<!-- trait DiscovererStreamInfoExt::fn get_tags -->
+
+# Returns
+
+the tags contained in this stream. If you wish to
+use the tags after the life-time of `self` you will need to copy them.
+<!-- trait DiscovererStreamInfoExt::fn get_toc -->
+
+# Returns
+
+the TOC contained in this stream. If you wish to
+use the TOC after the life-time of `self` you will need to copy it.
+<!-- struct DiscovererSubtitleInfo -->
+`DiscovererStreamInfo` specific to subtitle streams (this includes text and
+image based ones).
+
+# Implements
+
+[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl DiscovererSubtitleInfo::fn get_language -->
+
+# Returns
+
+the language of the stream, or NULL if unknown.
+<!-- struct DiscovererVideoInfo -->
+`DiscovererStreamInfo` specific to video streams (this includes images).
+
+# Implements
+
+[`DiscovererStreamInfoExt`](trait.DiscovererStreamInfoExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl DiscovererVideoInfo::fn get_bitrate -->
+
+# Returns
+
+the average or nominal bitrate of the video stream in bits/second.
+<!-- impl DiscovererVideoInfo::fn get_depth -->
+
+# Returns
+
+the depth in bits of the video stream.
+<!-- impl DiscovererVideoInfo::fn get_framerate_denom -->
+
+# Returns
+
+the framerate of the video stream (denominator).
+<!-- impl DiscovererVideoInfo::fn get_framerate_num -->
+
+# Returns
+
+the framerate of the video stream (numerator).
+<!-- impl DiscovererVideoInfo::fn get_height -->
+
+# Returns
+
+the height of the video stream in pixels.
+<!-- impl DiscovererVideoInfo::fn get_max_bitrate -->
+
+# Returns
+
+the maximum bitrate of the video stream in bits/second.
+<!-- impl DiscovererVideoInfo::fn get_par_denom -->
+
+# Returns
+
+the Pixel Aspect Ratio (PAR) of the video stream (denominator).
+<!-- impl DiscovererVideoInfo::fn get_par_num -->
+
+# Returns
+
+the Pixel Aspect Ratio (PAR) of the video stream (numerator).
+<!-- impl DiscovererVideoInfo::fn get_width -->
+
+# Returns
+
+the width of the video stream in pixels.
+<!-- impl DiscovererVideoInfo::fn is_image -->
+
+# Returns
+
+`true` if the video stream corresponds to an image (i.e. only contains
+one frame).
+<!-- impl DiscovererVideoInfo::fn is_interlaced -->
+
+# Returns
+
+`true` if the stream is interlaced, else `false`.
+<!-- struct EncodingAudioProfile -->
+Variant of `EncodingProfile` for audio streams.
+
+# Implements
+
+[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl EncodingAudioProfile::fn new -->
+Creates a new `EncodingAudioProfile`
+
+All provided allocatable arguments will be internally copied, so can be
+safely freed/unreferenced after calling this method.
+## `format`
+the `gst::Caps`
+## `preset`
+the preset(s) to use on the encoder, can be `None`
+## `restriction`
+the `gst::Caps` used to restrict the input to the encoder, can be
+NULL. See `EncodingProfileExt::get_restriction` for more details.
+## `presence`
+the number of time this stream must be used. 0 means any number of
+ times (including never)
+
+# Returns
+
+the newly created `EncodingAudioProfile`.
+<!-- struct EncodingContainerProfile -->
+Encoding profiles for containers. Keeps track of a list of `EncodingProfile`
+
+# Implements
+
+[`EncodingContainerProfileExt`](trait.EncodingContainerProfileExt.html), [`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait EncodingContainerProfileExt -->
+Trait containing all `EncodingContainerProfile` methods.
+
+# Implementors
+
+[`EncodingContainerProfile`](struct.EncodingContainerProfile.html)
+<!-- impl EncodingContainerProfile::fn new -->
+Creates a new `EncodingContainerProfile`.
+## `name`
+The name of the container profile, can be `None`
+## `description`
+The description of the container profile,
+ can be `None`
+## `format`
+The format to use for this profile
+## `preset`
+The preset to use for this profile.
+
+# Returns
+
+The newly created `EncodingContainerProfile`.
+<!-- trait EncodingContainerProfileExt::fn add_profile -->
+Add a `EncodingProfile` to the list of profiles handled by `self`.
+
+No copy of `profile` will be made, if you wish to use it elsewhere after this
+method you should increment its reference count.
+## `profile`
+the `EncodingProfile` to add.
+
+# Returns
+
+`true` if the `stream` was properly added, else `false`.
+<!-- trait EncodingContainerProfileExt::fn contains_profile -->
+Checks if `self` contains a `EncodingProfile` identical to
+`profile`.
+## `profile`
+a `EncodingProfile`
+
+# Returns
+
+`true` if `self` contains a `EncodingProfile` identical
+to `profile`, else `false`.
+<!-- trait EncodingContainerProfileExt::fn get_profiles -->
+
+# Returns
+
+
+the list of contained `EncodingProfile`.
+<!-- struct EncodingProfile -->
+The opaque base class object for all encoding profiles. This contains generic
+information like name, description, format and preset.
+
+# Implements
+
+[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait EncodingProfileExt -->
+Trait containing all `EncodingProfile` methods.
+
+# Implementors
+
+[`EncodingAudioProfile`](struct.EncodingAudioProfile.html), [`EncodingContainerProfile`](struct.EncodingContainerProfile.html), [`EncodingProfile`](struct.EncodingProfile.html), [`EncodingVideoProfile`](struct.EncodingVideoProfile.html)
+<!-- impl EncodingProfile::fn find -->
+Find the `EncodingProfile` with the specified name and category.
+## `targetname`
+The name of the target
+## `profilename`
+The name of the profile, if `None`
+provided, it will default to the encoding profile called `default`.
+## `category`
+The target category. Can be `None`
+
+# Returns
+
+The matching `EncodingProfile` or `None`.
+<!-- impl EncodingProfile::fn from_discoverer -->
+Creates a `EncodingProfile` matching the formats from the given
+`DiscovererInfo`. Streams other than audio or video (eg,
+subtitles), are currently ignored.
+## `info`
+The `DiscovererInfo` to read from
+
+# Returns
+
+The new `EncodingProfile` or `None`.
+<!-- trait EncodingProfileExt::fn copy -->
+Makes a deep copy of `self`
+
+# Returns
+
+The copy of `self`
+
+Since 1.12
+<!-- trait EncodingProfileExt::fn get_allow_dynamic_output -->
+Get whether the format that has been negotiated in at some point can be renegotiated
+later during the encoding.
+<!-- trait EncodingProfileExt::fn get_description -->
+
+# Returns
+
+the description of the profile, can be `None`.
+<!-- trait EncodingProfileExt::fn get_file_extension -->
+
+# Returns
+
+a suitable file extension for `self`, or NULL.
+<!-- trait EncodingProfileExt::fn get_format -->
+
+# Returns
+
+the `gst::Caps` corresponding to the media format used
+in the profile. Unref after usage.
+<!-- trait EncodingProfileExt::fn get_input_caps -->
+Computes the full output caps that this `self` will be able to consume.
+
+# Returns
+
+The full caps the given `self` can consume. Call
+`gst_caps_unref` when you are done with the caps.
+<!-- trait EncodingProfileExt::fn get_name -->
+
+# Returns
+
+the name of the profile, can be `None`.
+<!-- trait EncodingProfileExt::fn get_presence -->
+
+# Returns
+
+The number of times the profile is used in its parent
+container profile. If 0, it is not a mandatory stream.
+<!-- trait EncodingProfileExt::fn get_preset -->
+
+# Returns
+
+the name of the `gst::Preset` to be used in the profile.
+This is the name that has been set when saving the preset.
+<!-- trait EncodingProfileExt::fn get_preset_name -->
+
+# Returns
+
+the name of the `gst::Preset` factory to be used in the profile.
+<!-- trait EncodingProfileExt::fn get_restriction -->
+
+# Returns
+
+The restriction `gst::Caps` to apply before the encoder
+that will be used in the profile. The fields present in restriction caps are
+properties of the raw stream (that is before encoding), such as height and
+width for video and depth and sampling rate for audio. Does not apply to
+`EncodingContainerProfile` (since there is no corresponding raw stream).
+Can be `None`. Unref after usage.
+<!-- trait EncodingProfileExt::fn get_type_nick -->
+
+# Returns
+
+the human-readable name of the type of `self`.
+<!-- trait EncodingProfileExt::fn is_equal -->
+Checks whether the two `EncodingProfile` are equal
+## `b`
+a `EncodingProfile`
+
+# Returns
+
+`true` if `self` and `b` are equal, else `false`.
+<!-- trait EncodingProfileExt::fn set_allow_dynamic_output -->
+Sets whether the format that has been negotiated in at some point can be renegotiated
+later during the encoding.
+## `allow_dynamic_output`
+Whether the format that has been negotiated first can be renegotiated
+during the encoding
+<!-- trait EncodingProfileExt::fn set_description -->
+Set `description` as the given description for the `self`. A copy of
+`description` will be made internally.
+## `description`
+the description to set on the profile
+<!-- trait EncodingProfileExt::fn set_enabled -->
+Set whether the profile should be used or not.
+
+Since 1.6
+## `enabled`
+`false` to disable `profile`, `true` to enable it
+<!-- trait EncodingProfileExt::fn set_format -->
+Sets the media format used in the profile.
+## `format`
+the media format to use in the profile.
+<!-- trait EncodingProfileExt::fn set_name -->
+Set `name` as the given name for the `self`. A copy of `name` will be made
+internally.
+## `name`
+the name to set on the profile
+<!-- trait EncodingProfileExt::fn set_presence -->
+Set the number of time the profile is used in its parent
+container profile. If 0, it is not a mandatory stream
+## `presence`
+the number of time the profile can be used
+<!-- trait EncodingProfileExt::fn set_preset -->
+Sets the name of the `gst::Element` that implements the `gst::Preset` interface
+to use for the profile.
+This is the name that has been set when saving the preset.
+## `preset`
+the element preset to use
+<!-- trait EncodingProfileExt::fn set_preset_name -->
+Sets the name of the `gst::Preset`'s factory to be used in the profile.
+## `preset_name`
+The name of the preset to use in this `self`.
+<!-- trait EncodingProfileExt::fn set_restriction -->
+Set the restriction `gst::Caps` to apply before the encoder
+that will be used in the profile. See `EncodingProfileExt::get_restriction`
+for more about restrictions. Does not apply to `EncodingContainerProfile`.
+## `restriction`
+the restriction to apply
+<!-- struct EncodingTarget -->
+Collection of `EncodingProfile` for a specific target or use-case.
+
+When being stored/loaded, targets come from a specific category, like
+`GST_ENCODING_CATEGORY_DEVICE`.
+
+# Implements
+
+[`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl EncodingTarget::fn new -->
+Creates a new `EncodingTarget`.
+
+The name and category can only consist of lowercase ASCII letters for the
+first character, followed by either lowercase ASCII letters, digits or
+hyphens ('-').
+
+The `category` `<emphasis>`should`</emphasis>` be one of the existing
+well-defined categories, like `GST_ENCODING_CATEGORY_DEVICE`, but it
+`<emphasis>`can`</emphasis>` be a application or user specific category if
+needed.
+## `name`
+The name of the target.
+## `category`
+The name of the category to which this `target`
+belongs. For example: `GST_ENCODING_CATEGORY_DEVICE`.
+## `description`
+A description of `EncodingTarget` in the
+current locale.
+## `profiles`
+A `glib::List` of
+`EncodingProfile`.
+
+# Returns
+
+The newly created `EncodingTarget` or `None` if
+there was an error.
+<!-- impl EncodingTarget::fn load -->
+Searches for the `EncodingTarget` with the given name, loads it
+and returns it.
+
+If the category name is specified only targets from that category will be
+searched for.
+## `name`
+the name of the `EncodingTarget` to load (automatically
+converted to lower case internally as capital letters are not
+valid for target names).
+## `category`
+the name of the target category, like
+`GST_ENCODING_CATEGORY_DEVICE`. Can be `None`
+
+# Returns
+
+The `EncodingTarget` if available, else `None`.
+<!-- impl EncodingTarget::fn load_from_file -->
+Opens the provided file and returns the contained `EncodingTarget`.
+## `filepath`
+The file location to load the `EncodingTarget` from
+
+# Returns
+
+The `EncodingTarget` contained in the file, else
+`None`
+<!-- impl EncodingTarget::fn add_profile -->
+Adds the given `profile` to the `self`. Each added profile must have
+a unique name within the profile.
+
+The `self` will steal a reference to the `profile`. If you wish to use
+the profile after calling this method, you should increase its reference
+count.
+## `profile`
+the `EncodingProfile` to add
+
+# Returns
+
+`true` if the profile was added, else `false`.
+<!-- impl EncodingTarget::fn get_category -->
+
+# Returns
+
+The category of the `self`. For example:
+`GST_ENCODING_CATEGORY_DEVICE`.
+<!-- impl EncodingTarget::fn get_description -->
+
+# Returns
+
+The description of the `self`.
+<!-- impl EncodingTarget::fn get_name -->
+
+# Returns
+
+The name of the `self`.
+<!-- impl EncodingTarget::fn get_profile -->
+## `name`
+the name of the profile to retrieve
+
+# Returns
+
+The matching `EncodingProfile`, or `None`.
+<!-- impl EncodingTarget::fn get_profiles -->
+
+# Returns
+
+A list of
+`EncodingProfile`(s) this `self` handles.
+<!-- impl EncodingTarget::fn save -->
+Saves the `self` to a default user-local directory.
+
+# Returns
+
+`true` if the target was correctly saved, else `false`.
+<!-- impl EncodingTarget::fn save_to_file -->
+Saves the `self` to the provided file location.
+## `filepath`
+the location to store the `self` at.
+
+# Returns
+
+`true` if the target was correctly saved, else `false`.
+<!-- struct EncodingVideoProfile -->
+Variant of `EncodingProfile` for video streams, allows specifying the `pass`.
+
+# Implements
+
+[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl EncodingVideoProfile::fn new -->
+Creates a new `EncodingVideoProfile`
+
+All provided allocatable arguments will be internally copied, so can be
+safely freed/unreferenced after calling this method.
+
+If you wish to control the pass number (in case of multi-pass scenarios),
+please refer to the `EncodingVideoProfile::set_pass` documentation.
+
+If you wish to use/force a constant framerate please refer to the
+`EncodingVideoProfile::set_variableframerate` documentation.
+## `format`
+the `gst::Caps`
+## `preset`
+the preset(s) to use on the encoder, can be `None`
+## `restriction`
+the `gst::Caps` used to restrict the input to the encoder, can be
+NULL. See `EncodingProfileExt::get_restriction` for more details.
+## `presence`
+the number of time this stream must be used. 0 means any number of
+ times (including never)
+
+# Returns
+
+the newly created `EncodingVideoProfile`.
+<!-- impl EncodingVideoProfile::fn get_pass -->
+Get the pass number if this is part of a multi-pass profile.
+
+# Returns
+
+The pass number. Starts at 1 for multi-pass. 0 if this is
+not a multi-pass profile
+<!-- impl EncodingVideoProfile::fn get_variableframerate -->
+
+# Returns
+
+Whether non-constant video framerate is allowed for encoding.
+<!-- impl EncodingVideoProfile::fn set_pass -->
+Sets the pass number of this video profile. The first pass profile should have
+this value set to 1. If this video profile isn't part of a multi-pass profile,
+you may set it to 0 (the default value).
+## `pass`
+the pass number for this profile
+<!-- impl EncodingVideoProfile::fn set_variableframerate -->
+If set to `true`, then the incoming stream will be allowed to have non-constant
+framerate. If set to `false` (default value), then the incoming stream will
+be normalized by dropping/duplicating frames in order to produce a
+constance framerate.
+## `variableframerate`
+a boolean

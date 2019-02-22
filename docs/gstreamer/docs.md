@@ -11,15 +11,15 @@ want to create a toplevel bin because a normal bin doesn't have a bus or
 handle clock distribution of its own.
 
 After the bin has been created you will typically add elements to it with
-`BinExt::add`. You can remove elements with `BinExt::remove`.
+`GstBinExt::add`. You can remove elements with `GstBinExt::remove`.
 
-An element can be retrieved from a bin with `BinExt::get_by_name`, using the
-elements name. `BinExt::get_by_name_recurse_up` is mainly used for internal
+An element can be retrieved from a bin with `GstBinExt::get_by_name`, using the
+elements name. `GstBinExt::get_by_name_recurse_up` is mainly used for internal
 purposes and will query the parent bins when the element is not found in the
 current bin.
 
 An iterator of elements in a bin can be retrieved with
-`BinExt::iterate_elements`. Various other iterators exist to retrieve the
+`GstBinExt::iterate_elements`. Various other iterators exist to retrieve the
 elements in a bin.
 
 `GstObjectExt::unref` is used to drop your reference to the bin.
@@ -99,8 +99,8 @@ handler will return `true`.
 
 # Implements
 
-[`BinExt`](trait.BinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
-<!-- trait BinExt -->
+[`GstBinExt`](trait.GstBinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
+<!-- trait GstBinExt -->
 Trait containing all `Bin` methods.
 
 # Implementors
@@ -114,7 +114,7 @@ the name of the new bin
 # Returns
 
 a new `Bin`
-<!-- trait BinExt::fn add -->
+<!-- trait GstBinExt::fn add -->
 Adds the given element to the bin. Sets the element's parent, and thus
 takes ownership of the element. An element can only be added to one bin.
 
@@ -124,7 +124,7 @@ before the element is added to the bin.
 > When you add an element to an already-running pipeline, you will have to
 > take care to set the state of the newly-added element to the desired
 > state (usually PLAYING or PAUSED, same you set the pipeline to originally)
-> with `ElementExt::set_state`, or use `ElementExt::sync_state_with_parent`.
+> with `Element::set_state`, or use `ElementExt::sync_state_with_parent`.
 > The bin or pipeline will not take care of this for you.
 
 MT safe.
@@ -135,13 +135,13 @@ the `Element` to add
 
 `true` if the element could be added, `false` if
 the bin does not want to accept the element.
-<!-- trait BinExt::fn add_many -->
+<!-- trait GstBinExt::fn add_many -->
 Adds a `None`-terminated list of elements to a bin. This function is
-equivalent to calling `BinExt::add` for each member of the list. The return
-value of each `BinExt::add` is ignored.
+equivalent to calling `GstBinExt::add` for each member of the list. The return
+value of each `GstBinExt::add` is ignored.
 ## `element_1`
 the `Element` element to add to the bin
-<!-- trait BinExt::fn find_unlinked_pad -->
+<!-- trait GstBinExt::fn find_unlinked_pad -->
 Recursively looks for elements with an unlinked pad of the given
 direction within the specified bin and returns an unlinked pad
 if one is found, or `None` otherwise. If a pad is found, the caller
@@ -154,12 +154,12 @@ whether to look for an unlinked source or sink pad
 
 unlinked pad of the given
 direction, `None`.
-<!-- trait BinExt::fn get_by_interface -->
+<!-- trait GstBinExt::fn get_by_interface -->
 Looks for an element inside the bin that implements the given
 interface. If such an element is found, it returns the element.
 You can cast this element to the given interface afterwards. If you want
 all elements that implement the interface, use
-`BinExt::iterate_all_by_interface`. This function recurses into child bins.
+`GstBinExt::iterate_all_by_interface`. This function recurses into child bins.
 
 MT safe. Caller owns returned reference.
 ## `iface`
@@ -169,7 +169,7 @@ the `glib::Type` of an interface
 
 A `Element` inside the bin
 implementing the interface
-<!-- trait BinExt::fn get_by_name -->
+<!-- trait GstBinExt::fn get_by_name -->
 Gets the element with the given name from a bin. This
 function recurses into child bins.
 
@@ -183,7 +183,7 @@ the element name to search for
 
 the `Element` with the given
 name, or `None`
-<!-- trait BinExt::fn get_by_name_recurse_up -->
+<!-- trait GstBinExt::fn get_by_name_recurse_up -->
 Gets the element with the given name from this bin. If the
 element is not found, a recursion is performed on the parent bin.
 
@@ -198,7 +198,7 @@ the element name to search for
 
 the `Element` with the given
 name, or `None`
-<!-- trait BinExt::fn get_suppressed_flags -->
+<!-- trait GstBinExt::fn get_suppressed_flags -->
 Return the suppressed flags of the bin.
 
 MT safe.
@@ -209,7 +209,7 @@ Feature: `v1_10`
 # Returns
 
 the bin's suppressed `ElementFlags`.
-<!-- trait BinExt::fn iterate_all_by_interface -->
+<!-- trait GstBinExt::fn iterate_all_by_interface -->
 Looks for all elements inside the bin that implements the given
 interface. You can safely cast all returned elements to the given interface.
 The function recurses inside child bins. The iterator will yield a series
@@ -224,7 +224,7 @@ the `glib::Type` of an interface
 a `Iterator` of `Element`
  for all elements in the bin implementing the given interface,
  or `None`
-<!-- trait BinExt::fn iterate_elements -->
+<!-- trait GstBinExt::fn iterate_elements -->
 Gets an iterator for the elements in this bin.
 
 MT safe. Caller owns returned value.
@@ -233,7 +233,7 @@ MT safe. Caller owns returned value.
 
 a `Iterator` of `Element`,
 or `None`
-<!-- trait BinExt::fn iterate_recurse -->
+<!-- trait GstBinExt::fn iterate_recurse -->
 Gets an iterator for the elements in this bin.
 This iterator recurses into GstBin children.
 
@@ -243,7 +243,7 @@ MT safe. Caller owns returned value.
 
 a `Iterator` of `Element`,
 or `None`
-<!-- trait BinExt::fn iterate_sinks -->
+<!-- trait GstBinExt::fn iterate_sinks -->
 Gets an iterator for all elements in the bin that have the
 `ElementFlags::Sink` flag set.
 
@@ -253,7 +253,7 @@ MT safe. Caller owns returned value.
 
 a `Iterator` of `Element`,
 or `None`
-<!-- trait BinExt::fn iterate_sorted -->
+<!-- trait GstBinExt::fn iterate_sorted -->
 Gets an iterator for the elements in this bin in topologically
 sorted order. This means that the elements are returned from
 the most downstream elements (sinks) to the sources.
@@ -267,7 +267,7 @@ MT safe. Caller owns returned value.
 
 a `Iterator` of `Element`,
 or `None`
-<!-- trait BinExt::fn iterate_sources -->
+<!-- trait GstBinExt::fn iterate_sources -->
 Gets an iterator for all elements in the bin that have the
 `ElementFlags::Source` flag set.
 
@@ -277,7 +277,7 @@ MT safe. Caller owns returned value.
 
 a `Iterator` of `Element`,
 or `None`
-<!-- trait BinExt::fn recalculate_latency -->
+<!-- trait GstBinExt::fn recalculate_latency -->
 Query `self` for the current latency using and reconfigures this latency to all the
 elements with a LATENCY event.
 
@@ -290,7 +290,7 @@ calculations will be performed.
 # Returns
 
 `true` if the latency could be queried and reconfigured.
-<!-- trait BinExt::fn remove -->
+<!-- trait GstBinExt::fn remove -->
 Removes the element from the bin, unparenting it as well.
 Unparenting the element means that the element will be dereferenced,
 so if the bin holds the only reference to the element, the element
@@ -309,12 +309,12 @@ the `Element` to remove
 
 `true` if the element could be removed, `false` if
 the bin does not want to remove the element.
-<!-- trait BinExt::fn remove_many -->
+<!-- trait GstBinExt::fn remove_many -->
 Remove a list of elements from a bin. This function is equivalent
-to calling `BinExt::remove` with each member of the list.
+to calling `GstBinExt::remove` with each member of the list.
 ## `element_1`
 the first `Element` to remove from the bin
-<!-- trait BinExt::fn set_suppressed_flags -->
+<!-- trait GstBinExt::fn set_suppressed_flags -->
 Suppress the given flags on the bin. `ElementFlags` of a
 child element are propagated when it is added to the bin.
 When suppressed flags are set, those specified flags will
@@ -326,7 +326,7 @@ Feature: `v1_10`
 
 ## `flags`
 the `ElementFlags` to suppress
-<!-- trait BinExt::fn sync_children_states -->
+<!-- trait GstBinExt::fn sync_children_states -->
 Synchronizes the state of every child of `self` with the state
 of `self`. See also `ElementExt::sync_state_with_parent`.
 
@@ -334,7 +334,7 @@ of `self`. See also `ElementExt::sync_state_with_parent`.
 
 `true` if syncing the state was successful for all children,
  otherwise `false`.
-<!-- trait BinExt::fn connect_deep_element_added -->
+<!-- trait GstBinExt::fn connect_deep_element_added -->
 Will be emitted after the element was added to sub_bin.
 
 Feature: `v1_10`
@@ -343,7 +343,7 @@ Feature: `v1_10`
 the `Bin` the element was added to
 ## `element`
 the `Element` that was added to `sub_bin`
-<!-- trait BinExt::fn connect_deep_element_removed -->
+<!-- trait GstBinExt::fn connect_deep_element_removed -->
 Will be emitted after the element was removed from sub_bin.
 
 Feature: `v1_10`
@@ -352,7 +352,7 @@ Feature: `v1_10`
 the `Bin` the element was removed from
 ## `element`
 the `Element` that was removed from `sub_bin`
-<!-- trait BinExt::fn connect_do_latency -->
+<!-- trait GstBinExt::fn connect_do_latency -->
 Will be emitted when the bin needs to perform latency calculations. This
 signal is only emitted for toplevel bins or when async-handling is
 enabled.
@@ -364,23 +364,23 @@ possible latency to all sinks.
 Connect to this signal if the default latency calculations are not
 sufficient, like when you need different latencies for different sinks in
 the same pipeline.
-<!-- trait BinExt::fn connect_element_added -->
+<!-- trait GstBinExt::fn connect_element_added -->
 Will be emitted after the element was added to the bin.
 ## `element`
 the `Element` that was added to the bin
-<!-- trait BinExt::fn connect_element_removed -->
+<!-- trait GstBinExt::fn connect_element_removed -->
 Will be emitted after the element was removed from the bin.
 ## `element`
 the `Element` that was removed from the bin
-<!-- trait BinExt::fn get_property_async-handling -->
+<!-- trait GstBinExt::fn get_property_async-handling -->
 If set to `true`, the bin will handle asynchronous state changes.
 This should be used only if the bin subclass is modifying the state
 of its children on its own.
-<!-- trait BinExt::fn set_property_async-handling -->
+<!-- trait GstBinExt::fn set_property_async-handling -->
 If set to `true`, the bin will handle asynchronous state changes.
 This should be used only if the bin subclass is modifying the state
 of its children on its own.
-<!-- trait BinExt::fn get_property_message-forward -->
+<!-- trait GstBinExt::fn get_property_message-forward -->
 Forward all children messages, even those that would normally be filtered by
 the bin. This can be interesting when one wants to be notified of the EOS
 state of individual elements, for example.
@@ -389,7 +389,7 @@ The messages are converted to an ELEMENT message with the bin as the
 source. The structure of the message is named 'GstBinForwarded' and contains
 a field named 'message' of type GST_TYPE_MESSAGE that contains the original
 forwarded message.
-<!-- trait BinExt::fn set_property_message-forward -->
+<!-- trait GstBinExt::fn set_property_message-forward -->
 Forward all children messages, even those that would normally be filtered by
 the bin. This can be interesting when one wants to be notified of the EOS
 state of individual elements, for example.
@@ -3887,7 +3887,7 @@ providers.
 `true` when all devices will be shown.
 <!-- trait DeviceMonitorExt::fn remove_filter -->
 Removes a filter from the `DeviceMonitor` using the id that was returned
-by `DeviceMonitorExt::add_filter`.
+by `DeviceMonitor::add_filter`.
 ## `filter_id`
 the id of the filter
 
@@ -4165,7 +4165,7 @@ For finer control, use `ElementExt::link_pads` and
 each element by name.
 
 Each element has a state (see `State`). You can get and set the state
-of an element with `ElementExt::get_state` and `ElementExt::set_state`.
+of an element with `Element::get_state` and `Element::set_state`.
 Setting a state triggers a `StateChange`. To get a string representation
 of a `State`, use `Element::state_get_name`.
 
@@ -4298,7 +4298,7 @@ a watch id, which can be used in connection with
 <!-- trait ElementExt::fn call_async -->
 Calls `func` from another thread and passes `user_data` to it. This is to be
 used for cases when a state change has to be performed from a streaming
-thread, directly via `ElementExt::set_state` or indirectly e.g. via SEEK
+thread, directly via `Element::set_state` or indirectly e.g. via SEEK
 events.
 
 Calling those functions directly from the streaming thread will cause
@@ -4570,7 +4570,7 @@ the start time of the element.
 Gets the state of the element.
 
 For elements that performed an ASYNC state change, as reported by
-`ElementExt::set_state`, this function will block up to the
+`Element::set_state`, this function will block up to the
 specified timeout value for the state change to complete.
 If the element completes the state change or goes into
 an error, this function returns immediately with a return value of
@@ -4672,7 +4672,7 @@ Such pads need to be released manually when unlinking.
 If multiple links are possible, only one is established.
 
 Make sure you have added your elements to a bin or pipeline with
-`BinExt::add` before trying to link them.
+`GstBinExt::add` before trying to link them.
 ## `dest`
 the `Element` containing the destination pad.
 
@@ -4687,7 +4687,7 @@ existing pads that aren't linked yet. It will request new pads if necessary.
 If multiple links are possible, only one is established.
 
 Make sure you have added your elements to a bin or pipeline with
-`BinExt::add` before trying to link them.
+`GstBinExt::add` before trying to link them.
 ## `dest`
 the `Element` containing the destination pad.
 ## `filter`
@@ -4700,7 +4700,7 @@ the `Caps` to filter the link,
 <!-- trait ElementExt::fn link_many -->
 Chain together a series of elements. Uses `ElementExt::link`.
 Make sure you have added your elements to a bin or pipeline with
-`BinExt::add` before trying to link them.
+`GstBinExt::add` before trying to link them.
 ## `element_2`
 the second `Element` in the link chain.
 
@@ -4754,7 +4754,7 @@ Calling `ElementExt::link_pads_full` with `flags` == `PadLinkCheck::Default`
 is the same as calling `ElementExt::link_pads` and the recommended way of
 linking pads with safety checks applied.
 
-This is a convenience function for `PadExt::link_full`.
+This is a convenience function for `Pad::link_full`.
 ## `srcpadname`
 the name of the `Pad` in source element
  or `None` for any pad.
@@ -4772,7 +4772,7 @@ the `PadLinkCheck` to be performed when linking pads.
 <!-- trait ElementExt::fn lost_state -->
 Brings the element to the lost state. The current state of the
 element is copied to the pending state so that any call to
-`ElementExt::get_state` will return `StateChangeReturn::Async`.
+`Element::get_state` will return `StateChangeReturn::Async`.
 
 An ASYNC_START message is posted. If the element was PLAYING, it will
 go to PAUSED. The element will be restored to its PLAYING state by
@@ -5144,7 +5144,7 @@ the class's state change function for each.
 This function can return `StateChangeReturn::Async`, in which case the
 element will perform the remainder of the state change asynchronously in
 another thread.
-An application can use `ElementExt::get_state` to wait for the completion
+An application can use `Element::get_state` to wait for the completion
 of the state change or it can wait for a `MessageType::AsyncDone` or
 `MessageType::StateChanged` on the bus.
 
@@ -5198,7 +5198,7 @@ a new `Pad` has been added to the element. Note that this signal will
 usually be emitted from the context of the streaming thread. Also keep in
 mind that if you add new elements to the pipeline in the signal handler
 you will need to set them to the desired target state with
-`ElementExt::set_state` or `ElementExt::sync_state_with_parent`.
+`Element::set_state` or `ElementExt::sync_state_with_parent`.
 ## `new_pad`
 the pad that has been added
 <!-- trait ElementExt::fn connect_pad_removed -->
@@ -7883,7 +7883,7 @@ found under the same name in the base class of `Object` which is `gobject::Objec
 (e.g. `gobject::ObjectExt::ref` becomes `GstObjectExt::ref`).
 
 Since `Object` derives from `gobject::InitiallyUnowned`, it also inherits the
-floating reference. Be aware that functions such as `BinExt::add` and
+floating reference. Be aware that functions such as `GstBinExt::add` and
 `ElementExt::add_pad` take ownership of the floating reference.
 
 In contrast to `gobject::Object` instances, `Object` adds a name property. The functions
@@ -8332,7 +8332,7 @@ dataflow on the pads.
 `gst_pad_get_parent` will retrieve the `Element` that owns the pad.
 
 After two pads are retrieved from an element by `ElementExt::get_static_pad`,
-the pads can be linked with `PadExt::link`. (For quick links,
+the pads can be linked with `Pad::link`. (For quick links,
 you can also use `ElementExt::link`, which will make the obvious
 link for you if it's straightforward.). Pads can be unlinked again with
 `PadExt::unlink`. `PadExt::get_peer` can be used to check what the pad is
@@ -8347,7 +8347,7 @@ properties of the pad and the stream.
 To send a `Event` on a pad, use `Pad::send_event` and
 `Pad::push_event`. Some events will be sticky on the pad, meaning that
 after they pass on the pad they can be queried later with
-`PadExt::get_sticky_event` and `PadExt::sticky_events_foreach`.
+`PadExt::get_sticky_event` and `Pad::sticky_events_foreach`.
 `PadExt::get_current_caps` and `PadExt::has_current_caps` are convenience
 functions to query the current sticky CAPS event on a pad.
 
@@ -8355,7 +8355,7 @@ GstElements will use `Pad::push` and `Pad::pull_range` to push out
 or pull in a buffer.
 
 The dataflow, events and queries that happen on a pad can be monitored with
-probes that can be installed with `PadExt::add_probe`. `PadExt::is_blocked`
+probes that can be installed with `Pad::add_probe`. `PadExt::is_blocked`
 can be used to check if a block probe is installed on the pad.
 `PadExt::is_blocking` checks if the blocking probe is currently blocking the
 pad. `Pad::remove_probe` is used to remove a previously installed probe
@@ -8366,7 +8366,7 @@ offset will be applied to the running_time of all data passing over the pad.
 `PadExt::set_offset` can be used to change the offset.
 
 Convenience functions exist to start, pause and stop the task on a pad with
-`PadExt::start_task`, `PadExt::pause_task` and `PadExt::stop_task`
+`Pad::start_task`, `PadExt::pause_task` and `PadExt::stop_task`
 respectively.
 
 # Implements
@@ -8390,8 +8390,7 @@ the `PadDirection` of the pad.
 
 # Returns
 
-a new `Pad`, or `None` in
-case of an error.
+a new `Pad`.
 
 MT safe.
 <!-- impl Pad::fn new_from_static_template -->
@@ -8406,8 +8405,7 @@ the name of the pad
 
 # Returns
 
-a new `Pad`, or `None` in
-case of an error.
+a new `Pad`.
 <!-- impl Pad::fn new_from_template -->
 Creates a new pad with the given name from the given template.
 If name is `None`, a guaranteed unique name (across all pads)
@@ -8420,8 +8418,7 @@ the name of the pad
 
 # Returns
 
-a new `Pad`, or `None` in
-case of an error.
+a new `Pad`.
 <!-- impl Pad::fn link_get_name -->
 Gets a string representing the given pad-link return.
 ## `ret`
@@ -8452,7 +8449,7 @@ every state that matches `mask`.
 Probes are called in groups: First GST_PAD_PROBE_TYPE_BLOCK probes are
 called, then others, then finally GST_PAD_PROBE_TYPE_IDLE. The only
 exception here are GST_PAD_PROBE_TYPE_IDLE probes that are called
-immediately if the pad is already idle while calling `PadExt::add_probe`.
+immediately if the pad is already idle while calling `Pad::add_probe`.
 In each of the groups, probes are called in the order in which they were
 added.
 ## `mask`
@@ -8899,7 +8896,7 @@ MT Safe.
 <!-- trait PadExt::fn link_full -->
 Links the source pad and the sink pad.
 
-This variant of `PadExt::link` provides a more granular control on the
+This variant of `Pad::link` provides a more granular control on the
 checks being done when linking. While providing some considerable speedups
 the caller of this method must be aware that wrong usage of those flags
 can cause severe issues. Refer to the documentation of `PadLinkCheck`
@@ -9803,7 +9800,7 @@ the pipeline, use `GstObjectExt::unref` to free its resources including all
 added `Element` objects (if not otherwise referenced).
 
 Elements are added and removed from the pipeline using the `Bin`
-methods like `BinExt::add` and `BinExt::remove` (see `Bin`).
+methods like `GstBinExt::add` and `GstBinExt::remove` (see `Bin`).
 
 Before changing the state of the `Pipeline` (see `Element`) a `Bus`
 can be retrieved with `Pipeline::get_bus`. This bus can then be
@@ -9818,7 +9815,7 @@ When the `Pipeline` performs the PAUSED to PLAYING state change it will
 select a clock for the elements. The clock selection algorithm will by
 default select a clock provided by an element that is most upstream
 (closest to the source). For live pipelines (ones that return
-`StateChangeReturn::NoPreroll` from the `ElementExt::set_state` call) this
+`StateChangeReturn::NoPreroll` from the `Element::set_state` call) this
 will select the clock provided by the live source. For normal pipelines
 this will select a clock provided by the sinks (most likely the audio
 sink). If no element provides a clock, a default `SystemClock` is used.
@@ -9841,7 +9838,7 @@ in the PLAYING state. This default behaviour can be changed with the
 
 # Implements
 
-[`PipelineExt`](trait.PipelineExt.html), [`BinExt`](trait.BinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
+[`PipelineExt`](trait.PipelineExt.html), [`GstBinExt`](trait.GstBinExt.html), [`ElementExt`](trait.ElementExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html), [`ChildProxyExt`](trait.ChildProxyExt.html)
 <!-- trait PipelineExt -->
 Trait containing all `Pipeline` methods.
 
@@ -12330,7 +12327,7 @@ result stream-time
 a 1 or -1 on success, 0 on failure.
 <!-- enum State -->
 The possible states an element can be in. States can be changed using
-`ElementExt::set_state` and checked using `ElementExt::get_state`.
+`Element::set_state` and checked using `Element::get_state`.
 <!-- enum State::variant VoidPending -->
 no pending state.
 <!-- enum State::variant Null -->
@@ -12422,7 +12419,7 @@ they should make sure to go back to real 'PAUSED' state (prerolling for example)
 state change from PLAYING to PLAYING. (Since 1.14)
 <!-- enum StateChangeReturn -->
 The possible return values from a state change function such as
-`ElementExt::set_state`. Only `StateChangeReturn::Failure` is a real failure.
+`Element::set_state`. Only `StateChangeReturn::Failure` is a real failure.
 <!-- enum StateChangeReturn::variant Failure -->
 the state change failed
 <!-- enum StateChangeReturn::variant Success -->
@@ -13595,6 +13592,18 @@ clock.
 MT safe.
 ## `new_clock`
 a `Clock`
+<!-- enum TagFlag -->
+Extra tag flags used when registering tags.
+<!-- enum TagFlag::variant Undefined -->
+undefined flag
+<!-- enum TagFlag::variant Meta -->
+tag is meta data
+<!-- enum TagFlag::variant Encoded -->
+tag is encoded
+<!-- enum TagFlag::variant Decoded -->
+tag is decoded
+<!-- enum TagFlag::variant Count -->
+number of tag flags
 <!-- struct TagList -->
 List of tags and values used to describe media metadata.
 

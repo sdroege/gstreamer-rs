@@ -779,7 +779,7 @@ Subclasses that synchronise on the clock in the `BaseSinkClass.render`()
 method are supported as well. These classes typically receive a buffer in
 the render method and can then potentially block on the clock while
 rendering. A typical example is an audiosink.
-These subclasses can use `BaseSinkExt::wait_preroll` to perform the
+These subclasses can use `BaseSink::wait_preroll` to perform the
 blocking wait.
 
 Upon receiving the EOS event in the PLAYING state, `BaseSink` will wait
@@ -1245,7 +1245,7 @@ can only produce data in the PLAYING state, when the clock is actually
 distributed and running.
 
 Live sources that synchronize and block on the clock (an audio source, for
-example) can use `BaseSrcExt::wait_playing` when the
+example) can use `BaseSrc::wait_playing` when the
 `BaseSrcClass.create`() function was interrupted by a state change to
 PAUSED.
 
@@ -1451,7 +1451,7 @@ be GST_STATE_CHANGE_NO_PREROLL.
 new live-mode
 <!-- trait BaseSrcExt::fn start_complete -->
 Complete an asynchronous start operation. When the subclass overrides the
-start method, it should call `BaseSrcExt::start_complete` when the start
+start method, it should call `BaseSrc::start_complete` when the start
 operation completes either from the same thread or from an asynchronous
 helper thread.
 ## `ret`

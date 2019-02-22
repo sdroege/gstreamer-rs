@@ -941,6 +941,307 @@ Every four adjacent blocks - two
  horizontally and two vertically are grouped together and are located
  in memory in Z or flipped Z order. In case of odd rows, the last row
  of blocks is arranged in linear order.
+<!-- struct VideoTimeCode -->
+`field_count` must be 0 for progressive video and 1 or 2 for interlaced.
+
+A representation of a SMPTE time code.
+
+`hours` must be positive and less than 24. Will wrap around otherwise.
+`minutes` and `seconds` must be positive and less than 60.
+`frames` must be less than or equal to `config.fps_n` / `config.fps_d`
+These values are *NOT* automatically normalized.
+
+Feature: `v1_10`
+<!-- impl VideoTimeCode::fn new -->
+`field_count` is 0 for progressive, 1 or 2 for interlaced.
+`latest_daiy_jam` reference is stolen from caller.
+
+Feature: `v1_10`
+
+## `fps_n`
+Numerator of the frame rate
+## `fps_d`
+Denominator of the frame rate
+## `latest_daily_jam`
+The latest daily jam of the `VideoTimeCode`
+## `flags`
+`VideoTimeCodeFlags`
+## `hours`
+the hours field of `VideoTimeCode`
+## `minutes`
+the minutes field of `VideoTimeCode`
+## `seconds`
+the seconds field of `VideoTimeCode`
+## `frames`
+the frames field of `VideoTimeCode`
+## `field_count`
+Interlaced video field count
+
+# Returns
+
+a new `VideoTimeCode` with the given values.
+The values are not checked for being in a valid range. To see if your
+timecode actually has valid content, use `VideoTimeCode::is_valid`.
+<!-- impl VideoTimeCode::fn new_empty -->
+
+Feature: `v1_10`
+
+
+# Returns
+
+a new empty `VideoTimeCode`
+<!-- impl VideoTimeCode::fn new_from_date_time -->
+The resulting config->latest_daily_jam is set to
+midnight, and timecode is set to the given time.
+
+Feature: `v1_12`
+
+## `fps_n`
+Numerator of the frame rate
+## `fps_d`
+Denominator of the frame rate
+## `dt`
+`glib::DateTime` to convert
+## `flags`
+`VideoTimeCodeFlags`
+## `field_count`
+Interlaced video field count
+
+# Returns
+
+the `GVideoTimeCode` representation of `dt`.
+<!-- impl VideoTimeCode::fn new_from_string -->
+
+Feature: `v1_12`
+
+## `tc_str`
+The string that represents the `VideoTimeCode`
+
+# Returns
+
+a new `VideoTimeCode` from the given string
+<!-- impl VideoTimeCode::fn add_frames -->
+Adds or subtracts `frames` amount of frames to `self`. tc needs to
+contain valid data, as verified by `VideoTimeCode::is_valid`.
+
+Feature: `v1_10`
+
+## `frames`
+How many frames to add or subtract
+<!-- impl VideoTimeCode::fn add_interval -->
+This makes a component-wise addition of `tc_inter` to `self`. For example,
+adding ("01:02:03:04", "00:01:00:00") will return "01:03:03:04".
+When it comes to drop-frame timecodes,
+adding ("00:00:00;00", "00:01:00:00") will return "00:01:00;02"
+because of drop-frame oddities. However,
+adding ("00:09:00;02", "00:01:00:00") will return "00:10:00;00"
+because this time we can have an exact minute.
+
+Feature: `v1_12`
+
+## `tc_inter`
+The `VideoTimeCodeInterval` to add to `self`.
+The interval must contain valid values, except that for drop-frame
+timecode, it may also contain timecodes which would normally
+be dropped. These are then corrected to the next reasonable timecode.
+
+# Returns
+
+A new `VideoTimeCode` with `tc_inter` added.
+<!-- impl VideoTimeCode::fn clear -->
+Initializes `self` with empty/zero/NULL values.
+
+Feature: `v1_10`
+
+<!-- impl VideoTimeCode::fn compare -->
+Compares `self` and `tc2` . If both have latest daily jam information, it is
+taken into account. Otherwise, it is assumed that the daily jam of both
+`self` and `tc2` was at the same time. Both time codes must be valid.
+
+Feature: `v1_10`
+
+## `tc2`
+another `VideoTimeCode`
+
+# Returns
+
+1 if `self` is after `tc2`, -1 if `self` is before `tc2`, 0 otherwise.
+<!-- impl VideoTimeCode::fn copy -->
+
+Feature: `v1_10`
+
+
+# Returns
+
+a new `VideoTimeCode` with the same values as `self` .
+<!-- impl VideoTimeCode::fn frames_since_daily_jam -->
+
+Feature: `v1_10`
+
+
+# Returns
+
+how many frames have passed since the daily jam of `self` .
+<!-- impl VideoTimeCode::fn free -->
+Frees `self` .
+
+Feature: `v1_10`
+
+<!-- impl VideoTimeCode::fn increment_frame -->
+Adds one frame to `self` .
+
+Feature: `v1_10`
+
+<!-- impl VideoTimeCode::fn init -->
+`field_count` is 0 for progressive, 1 or 2 for interlaced.
+`latest_daiy_jam` reference is stolen from caller.
+
+Initializes `self` with the given values.
+The values are not checked for being in a valid range. To see if your
+timecode actually has valid content, use `VideoTimeCode::is_valid`.
+
+Feature: `v1_10`
+
+## `fps_n`
+Numerator of the frame rate
+## `fps_d`
+Denominator of the frame rate
+## `latest_daily_jam`
+The latest daily jam of the `VideoTimeCode`
+## `flags`
+`VideoTimeCodeFlags`
+## `hours`
+the hours field of `VideoTimeCode`
+## `minutes`
+the minutes field of `VideoTimeCode`
+## `seconds`
+the seconds field of `VideoTimeCode`
+## `frames`
+the frames field of `VideoTimeCode`
+## `field_count`
+Interlaced video field count
+<!-- impl VideoTimeCode::fn init_from_date_time -->
+The resulting config->latest_daily_jam is set to
+midnight, and timecode is set to the given time.
+
+Feature: `v1_12`
+
+## `fps_n`
+Numerator of the frame rate
+## `fps_d`
+Denominator of the frame rate
+## `dt`
+`glib::DateTime` to convert
+## `flags`
+`VideoTimeCodeFlags`
+## `field_count`
+Interlaced video field count
+<!-- impl VideoTimeCode::fn is_valid -->
+
+Feature: `v1_10`
+
+
+# Returns
+
+whether `self` is a valid timecode (supported frame rate,
+hours/minutes/seconds/frames not overflowing)
+<!-- impl VideoTimeCode::fn nsec_since_daily_jam -->
+
+Feature: `v1_10`
+
+
+# Returns
+
+how many nsec have passed since the daily jam of `self` .
+<!-- impl VideoTimeCode::fn to_date_time -->
+The `self.config`->latest_daily_jam is required to be non-NULL.
+
+Feature: `v1_10`
+
+
+# Returns
+
+the `glib::DateTime` representation of `self`.
+<!-- impl VideoTimeCode::fn to_string -->
+
+Feature: `v1_10`
+
+
+# Returns
+
+the SMPTE ST 2059-1:2015 string representation of `self`. That will
+take the form hh:mm:ss:ff . The last separator (between seconds and frames)
+may vary:
+
+';' for drop-frame, non-interlaced content and for drop-frame interlaced
+field 2
+',' for drop-frame interlaced field 1
+':' for non-drop-frame, non-interlaced content and for non-drop-frame
+interlaced field 2
+'.' for non-drop-frame interlaced field 1
+<!-- struct VideoTimeCodeInterval -->
+A representation of a difference between two `VideoTimeCode` instances.
+Will not necessarily correspond to a real timecode (e.g. 00:00:10;00)
+
+Feature: `v1_12`
+<!-- impl VideoTimeCodeInterval::fn new -->
+
+Feature: `v1_12`
+
+## `hours`
+the hours field of `VideoTimeCodeInterval`
+## `minutes`
+the minutes field of `VideoTimeCodeInterval`
+## `seconds`
+the seconds field of `VideoTimeCodeInterval`
+## `frames`
+the frames field of `VideoTimeCodeInterval`
+
+# Returns
+
+a new `VideoTimeCodeInterval` with the given values.
+<!-- impl VideoTimeCodeInterval::fn new_from_string -->
+`tc_inter_str` must only have ":" as separators.
+
+Feature: `v1_12`
+
+## `tc_inter_str`
+The string that represents the `VideoTimeCodeInterval`
+
+# Returns
+
+a new `VideoTimeCodeInterval` from the given string
+<!-- impl VideoTimeCodeInterval::fn clear -->
+Initializes `self` with empty/zero/NULL values.
+
+Feature: `v1_12`
+
+<!-- impl VideoTimeCodeInterval::fn copy -->
+
+Feature: `v1_12`
+
+
+# Returns
+
+a new `VideoTimeCodeInterval` with the same values as `self` .
+<!-- impl VideoTimeCodeInterval::fn free -->
+Frees `self` .
+
+Feature: `v1_12`
+
+<!-- impl VideoTimeCodeInterval::fn init -->
+Initializes `self` with the given values.
+
+Feature: `v1_12`
+
+## `hours`
+the hours field of `VideoTimeCodeInterval`
+## `minutes`
+the minutes field of `VideoTimeCodeInterval`
+## `seconds`
+the seconds field of `VideoTimeCodeInterval`
+## `frames`
+the frames field of `VideoTimeCodeInterval`
 <!-- enum VideoTransferFunction -->
 The video transfer function defines the formula for converting between
 non-linear RGB (R'G'B') and linear RGB
