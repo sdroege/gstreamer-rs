@@ -30,8 +30,8 @@ extern crate failure_derive;
 
 extern crate glutin;
 use glutin::os::unix::RawHandle;
-use glutin::os::GlContextExt;
-use glutin::GlContext;
+use glutin::os::ContextTraitExt;
+use glutin::ContextTrait;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
@@ -52,10 +52,6 @@ struct ErrorMessage {
     #[cause]
     cause: glib::Error,
 }
-
-#[derive(Debug, Fail)]
-#[fail(display = "Glutin error")]
-struct GlutinError();
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
 static VERTICES: [f32; 20] = [
@@ -332,7 +328,7 @@ struct App {
     appsink: gst_app::AppSink,
     bus: gst::Bus,
     events_loop: Arc<glutin::EventsLoop>,
-    gl_window: Arc<glutin::GlWindow>,
+    combined_context: Arc<glutin::CombinedContext>,
 }
 
 impl App {
@@ -346,13 +342,14 @@ impl App {
 
         let events_loop = glutin::EventsLoop::new();
         let window = glutin::WindowBuilder::new().with_title("GL rendering");
-        let context = glutin::ContextBuilder::new();
-        let gl_window = Arc::new(
-            glutin::GlWindow::new(window, context, &events_loop).or_else(|_| Err(GlutinError()))?,
+        let combined_context = Arc::new(
+            glutin::ContextBuilder::new()
+                .with_vsync(true)
+                .build_combined(window, &events_loop)?,
         );
 
-        let window_ = gl_window.clone();
-        let context = window_.context();
+        let combined_context_ = combined_context.clone();
+        let context = combined_context_.context();
         let egl_context = match unsafe { context.raw_handle() } {
             RawHandle::Egl(egl_context) => egl_context as usize,
             _ => panic!("Invalid platform"),
@@ -410,7 +407,7 @@ impl App {
             appsink,
             bus,
             events_loop: Arc::new(events_loop),
-            gl_window,
+            combined_context: combined_context,
         })
     }
 
@@ -533,28 +530,28 @@ impl App {
 }
 
 fn main_loop(mut app: App) -> Result<(), Error> {
-    let _ = unsafe { app.gl_window.make_current() };
+    unsafe { app.combined_context.make_current()? };
 
     println!(
         "Pixel format of the window's GL context {:?}",
-        app.gl_window.get_pixel_format()
+        app.combined_context.get_pixel_format()
     );
 
-    let gl = load(&app.gl_window.context());
+    let gl = load(&app.combined_context.context());
 
     let (bus_handler, receiver) = app.setup()?;
 
     let mut curr_frame: Option<Arc<gst_video::VideoFrame<gst_video::video_frame::Readable>>> = None;
     let mut running = true;
     let events_loop = Arc::get_mut(&mut app.events_loop).unwrap();
-    let gl_window = app.gl_window.clone();
+    let combined_context = app.combined_context.clone();
     while running {
         events_loop.poll_events(|event| match event {
             glutin::Event::WindowEvent { event, .. } => match event {
                 glutin::WindowEvent::CloseRequested => running = false,
                 glutin::WindowEvent::Resized(logical_size) => {
-                    let dpi_factor = gl_window.get_hidpi_factor();
-                    gl_window.resize(logical_size.to_physical(dpi_factor));
+                    let dpi_factor = combined_context.get_hidpi_factor();
+                    combined_context.resize(logical_size.to_physical(dpi_factor));
                     gl.resize(logical_size.to_physical(dpi_factor));
                 }
                 _ => (),
@@ -579,7 +576,7 @@ fn main_loop(mut app: App) -> Result<(), Error> {
                 gl.draw_frame(texture as gl::types::GLuint);
             }
         }
-        let _ = app.gl_window.swap_buffers();
+        app.combined_context.swap_buffers()?;
     }
 
     app.pipeline.send_event(gst::Event::new_eos().build());
