@@ -89,8 +89,29 @@ pub struct SDPMediaRef(ffi::GstSDPMedia);
 
 impl fmt::Debug for SDPMediaRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_tuple("SDPMedia")
-            // TODO
+        use std::cell::RefCell;
+
+        struct DebugIter<I>(RefCell<I>);
+        impl<I: Iterator> fmt::Debug for DebugIter<I>
+        where
+            I::Item: fmt::Debug,
+        {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                f.debug_list().entries(&mut *self.0.borrow_mut()).finish()
+            }
+        }
+
+        f.debug_struct("SDPMedia")
+            .field("formats", &DebugIter(RefCell::new(self.formats())))
+            .field("connections", &DebugIter(RefCell::new(self.connections())))
+            .field("bandwidths", &DebugIter(RefCell::new(self.bandwidths())))
+            .field("attributes", &DebugIter(RefCell::new(self.attributes())))
+            .field("information", &self.get_information())
+            .field("key", &self.get_key())
+            .field("media", &self.get_media())
+            .field("port", &self.get_port())
+            .field("num-ports", &self.get_num_ports())
+            .field("proto", &self.get_proto())
             .finish()
     }
 }
