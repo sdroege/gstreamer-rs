@@ -23,6 +23,7 @@ use sdp_bandwidth::SDPBandwidth;
 use sdp_connection::SDPConnection;
 use sdp_key::SDPKey;
 use sdp_media::SDPMedia;
+use sdp_media::SDPMediaRef;
 use sdp_origin::SDPOrigin;
 use sdp_time::SDPTime;
 use sdp_zone::SDPZone;
@@ -275,13 +276,13 @@ impl SDPMessage {
         }
     }
 
-    pub fn get_media(&self, idx: u32) -> Option<&SDPMedia> {
+    pub fn get_media(&self, idx: u32) -> Option<&SDPMediaRef> {
         unsafe {
             let ptr = ffi::gst_sdp_message_get_media(self.to_glib_none().0, idx);
             if ptr.is_null() {
                 None
             } else {
-                Some(&*(ptr as *mut SDPMedia))
+                Some(&*(ptr as *const SDPMediaRef))
             }
         }
     }
@@ -762,3 +763,24 @@ impl Default for SDPMessage {
 }
 
 unsafe impl Send for SDPMessage {}
+unsafe impl Sync for SDPMessage {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use SDPMessage;
+
+    fn init() {
+        gst::init().unwrap();
+    }
+
+    #[test]
+    fn media_from_message() {
+        init();
+
+        let sdp = "v=0\r\no=- 1938737043334325940 0 IN IP4 0.0.0.0\r\ns=-\r\nt=0 0\r\na=ice-options:trickle\r\nm=video 9 UDP/TLS/RTP/SAVPF 96\r\nc=IN IP4 0.0.0.0\r\na=setup:actpass\r\na=ice-ufrag:YZxU9JlWHzHcF6O2U09/q3PvBhbTPdZW\r\na=ice-pwd:fyrt730GWo5mFGc9m2z/vbUu3z1lewla\r\na=sendrecv\r\na=rtcp-mux\r\na=rtcp-rsize\r\na=rtpmap:96 VP8/90000\r\na=rtcp-fb:96 nack\r\na=rtcp-fb:96 nack pli\r\na=framerate:30\r\na=mid:video0\r\na=fingerprint:sha-256 DB:48:8F:18:13:F3:AA:13:31:B3:75:3D:1A:D3:BA:88:4A:ED:1B:56:14:C3:09:CD:BC:4D:18:42:B9:6A:5F:98\r\nm=audio 9 UDP/TLS/RTP/SAVPF 97\r\nc=IN IP4 0.0.0.0\r\na=setup:actpass\r\na=ice-ufrag:04KZM9qE2S4r06AN6A9CeXOM6mzO0LZY\r\na=ice-pwd:cJTSfHF6hHDAcsTJXZVJeuYCC6rKqBvW\r\na=sendrecv\r\na=rtcp-mux\r\na=rtcp-rsize\r\na=rtpmap:97 OPUS/48000/2\r\na=rtcp-fb:97 nack\r\na=rtcp-fb:97 nack pli\r\na=mid:audio1\r\na=fingerprint:sha-256 DB:48:8F:18:13:F3:AA:13:31:B3:75:3D:1A:D3:BA:88:4A:ED:1B:56:14:C3:09:CD:BC:4D:18:42:B9:6A:5F:98\r\n";
+        let sdp = SDPMessage::parse_buffer(sdp.as_bytes()).unwrap();
+        let media = sdp.get_media(0).unwrap();
+        assert_eq!(media.formats_len(), 1);
+    }
+}
