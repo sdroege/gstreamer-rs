@@ -57,7 +57,7 @@ pub use sdp_connection::*;
 mod sdp_key;
 pub use sdp_key::*;
 mod sdp_media;
-pub use sdp_media::*;
+pub use sdp_media::{SDPMedia, SDPMediaRef};
 mod sdp_message;
 pub use sdp_message::*;
 mod sdp_origin;

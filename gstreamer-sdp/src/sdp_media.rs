@@ -169,6 +169,22 @@ impl SDPMediaRef {
         unsafe { from_glib_full(ffi::gst_sdp_media_as_text(&self.0)) }
     }
 
+    pub fn attributes(&self) -> AttributesIter {
+        AttributesIter::new(self)
+    }
+
+    pub fn formats(&self) -> FormatsIter {
+        FormatsIter::new(self)
+    }
+
+    pub fn bandwidths(&self) -> BandwidthsIter {
+        BandwidthsIter::new(self)
+    }
+
+    pub fn connections(&self) -> ConnectionsIter {
+        ConnectionsIter::new(self)
+    }
+
     pub fn attributes_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_media_attributes_len(&self.0) }
     }
@@ -514,3 +530,90 @@ impl SDPMediaRef {
         }
     }
 }
+
+macro_rules! define_iter(
+    ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
+    #[derive(Debug)]
+    pub struct $name<'a> {
+        media: &'a SDPMediaRef,
+        idx: u32,
+        len: u32,
+    }
+
+    impl<'a> $name<'a> {
+        fn new(media: &'a SDPMediaRef) -> $name<'a> {
+            skip_assert_initialized!();
+            let len = $get_len(media);
+
+            $name {
+                media,
+                idx: 0,
+                len,
+            }
+        }
+    }
+
+    impl<'a> Iterator for $name<'a> {
+        type Item = $typ;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.idx >= self.len {
+                return None;
+            }
+
+            let item = $get_item(self.media, self.idx)?;
+            self.idx += 1;
+            Some(item)
+        }
+
+        fn size_hint(&self) -> (usize, Option<usize>) {
+            if self.idx == self.len {
+                return (0, Some(0))
+            }
+
+            let remaining = (self.len - self.idx) as usize;
+
+            (remaining, Some(remaining))
+        }
+    }
+
+    impl<'a> DoubleEndedIterator for $name<'a> {
+        fn next_back(&mut self) -> Option<Self::Item> {
+            if self.idx == self.len {
+                return None;
+            }
+
+            self.len -= 1;
+
+            $get_item(self.media, self.len)
+        }
+    }
+
+    impl<'a> ExactSizeIterator for $name<'a> {}
+    }
+);
+
+define_iter!(
+    BandwidthsIter,
+    &'a SDPBandwidth,
+    |media: &'a SDPMediaRef, idx| media.get_bandwidth(idx),
+    |media: &SDPMediaRef| media.bandwidths_len()
+);
+define_iter!(
+    FormatsIter,
+    &'a str,
+    |media: &'a SDPMediaRef, idx| media.get_format(idx),
+    |media: &SDPMediaRef| media.formats_len()
+);
+define_iter!(
+    ConnectionsIter,
+    &'a SDPConnection,
+    |media: &'a SDPMediaRef, idx| media.get_connection(idx),
+    |media: &SDPMediaRef| media.connections_len()
+);
+define_iter!(
+    AttributesIter,
+    &'a SDPAttribute,
+    |media: &'a SDPMediaRef, idx| media.get_attribute(idx),
+    |media: &SDPMediaRef| media.attributes_len()
+);
