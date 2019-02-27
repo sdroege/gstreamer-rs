@@ -173,10 +173,8 @@ impl SDPMediaRef {
         unsafe { ffi::gst_sdp_media_attributes_len(&self.0) }
     }
 
-    pub fn attributes_to_caps(&self, caps: &gst::Caps) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_media_attributes_to_caps(&self.0, caps.to_glib_none().0)
-        };
+    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_media_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
             _ => Err(()),
