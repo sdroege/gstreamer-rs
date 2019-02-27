@@ -114,7 +114,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
 
     // Select the text content and the font we want to use for the piece of text.
     let font_desc = pango::FontDescription::from_string("Sans Bold 26");
-    layout.set_font_description(&font_desc);
+    layout.set_font_description(Some(&font_desc));
     layout.set_text("GStreamer");
 
     // The following is a context struct (containing the pango layout and the configured video info).

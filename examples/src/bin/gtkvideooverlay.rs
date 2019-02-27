@@ -170,7 +170,7 @@ fn create_ui(app: &gtk::Application) {
 
     vbox.pack_start(&video_window, true, true, 0);
 
-    let label = gtk::Label::new("Position: 00:00:00");
+    let label = gtk::Label::new(Some("Position: 00:00:00"));
     vbox.pack_start(&label, true, true, 5);
     window.add(&vbox);
 

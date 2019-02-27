@@ -66,7 +66,7 @@ fn create_ui(app: &gtk::Application) {
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
     // Add our widget to the gui
     vbox.pack_start(&widget, true, true, 0);
-    let label = gtk::Label::new("Position: 00:00:00");
+    let label = gtk::Label::new(Some("Position: 00:00:00"));
     vbox.pack_start(&label, true, true, 5);
     window.add(&vbox);
     window.show_all();
