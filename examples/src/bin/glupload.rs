@@ -29,8 +29,6 @@ use failure::Error;
 extern crate failure_derive;
 
 extern crate glutin;
-use glutin::os::unix::RawHandle;
-use glutin::os::ContextTraitExt;
 use glutin::ContextTrait;
 
 #[path = "../examples-common.rs"]
@@ -350,57 +348,65 @@ impl App {
 
         let combined_context_ = combined_context.clone();
         let context = combined_context_.context();
-        let egl_context = match unsafe { context.raw_handle() } {
-            RawHandle::Egl(egl_context) => egl_context as usize,
-            _ => panic!("Invalid platform"),
-        };
-        let egl_display = match unsafe { context.get_egl_display() } {
-            Some(display) => display as usize,
-            _ => panic!("Invalid platform"),
-        };
-        let api = App::map_gl_api(context.get_api());
-        let platform = gst_gl::GLPlatform::EGL;
 
-        let gl_display =
-            unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(egl_display) }.unwrap();
-        let gl_context =
-            unsafe { gst_gl::GLContext::new_wrapped(&gl_display, egl_context, platform, api) }
-                .unwrap();
+        if cfg!(target_os = "linux") {
+            use glutin::os::unix::RawHandle;
+            use glutin::os::ContextTraitExt;
 
-        bus.set_sync_handler(move |_, msg| {
-            use gst::MessageView;
+            let egl_context = match unsafe { context.raw_handle() } {
+                RawHandle::Egl(egl_context) => egl_context as usize,
+                _ => panic!("Invalid platform"),
+            };
+            let egl_display = match unsafe { context.get_egl_display() } {
+                Some(display) => display as usize,
+                _ => panic!("Invalid platform"),
+            };
+            let api = App::map_gl_api(context.get_api());
+            let platform = gst_gl::GLPlatform::EGL;
 
-            match msg.view() {
-                MessageView::NeedContext(ctxt) => {
-                    let context_type = ctxt.get_context_type();
-                    if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
-                        if let Some(el) =
-                            msg.get_src().map(|s| s.downcast::<gst::Element>().unwrap())
-                        {
-                            let context = gst::Context::new(context_type, true);
-                            context.set_gl_display(&gl_display);
-                            el.set_context(&context);
-                        }
-                    }
-                    if context_type == "gst.gl.app_context" {
-                        if let Some(el) =
-                            msg.get_src().map(|s| s.downcast::<gst::Element>().unwrap())
-                        {
-                            let mut context = gst::Context::new(context_type, true);
+            let gl_display =
+                unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(egl_display) }.unwrap();
+            let gl_context =
+                unsafe { gst_gl::GLContext::new_wrapped(&gl_display, egl_context, platform, api) }
+                    .unwrap();
+
+            bus.set_sync_handler(move |_, msg| {
+                use gst::MessageView;
+
+                match msg.view() {
+                    MessageView::NeedContext(ctxt) => {
+                        let context_type = ctxt.get_context_type();
+                        if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
+                            if let Some(el) =
+                                msg.get_src().map(|s| s.downcast::<gst::Element>().unwrap())
                             {
-                                let context = context.get_mut().unwrap();
-                                let mut s = context.get_mut_structure();
-                                s.set_value("context", gl_context.to_send_value());
+                                let context = gst::Context::new(context_type, true);
+                                context.set_gl_display(&gl_display);
+                                el.set_context(&context);
                             }
-                            el.set_context(&context);
+                        }
+                        if context_type == "gst.gl.app_context" {
+                            if let Some(el) =
+                                msg.get_src().map(|s| s.downcast::<gst::Element>().unwrap())
+                            {
+                                let mut context = gst::Context::new(context_type, true);
+                                {
+                                    let context = context.get_mut().unwrap();
+                                    let mut s = context.get_mut_structure();
+                                    s.set_value("context", gl_context.to_send_value());
+                                }
+                                el.set_context(&context);
+                            }
                         }
                     }
+                    _ => (),
                 }
-                _ => (),
-            }
 
-            gst::BusSyncReply::Pass
-        });
+                gst::BusSyncReply::Pass
+            });
+        } else {
+            panic!("This example only has Linux support");
+        }
 
         Ok(App {
             pipeline,
