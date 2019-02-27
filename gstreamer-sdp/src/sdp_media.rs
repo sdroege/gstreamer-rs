@@ -210,6 +210,10 @@ impl SDPMediaRef {
     }
 
     pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
+        if idx >= self.attributes_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_media_get_attribute(&self.0, idx);
             if ptr.is_null() {
@@ -251,6 +255,10 @@ impl SDPMediaRef {
     }
 
     pub fn get_bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
+        if idx >= self.bandwidths_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_media_get_bandwidth(&self.0, idx);
             if ptr.is_null() {
@@ -266,6 +274,10 @@ impl SDPMediaRef {
     }
 
     pub fn get_connection(&self, idx: u32) -> Option<&SDPConnection> {
+        if idx >= self.connections_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_media_get_connection(&self.0, idx);
             if ptr.is_null() {
@@ -277,6 +289,10 @@ impl SDPMediaRef {
     }
 
     pub fn get_format(&self, idx: u32) -> Option<&str> {
+        if idx >= self.formats_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_media_get_format(&self.0, idx);
             if ptr.is_null() {
@@ -355,7 +371,14 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn insert_attribute(&mut self, idx: i32, mut attr: SDPAttribute) -> Result<(), ()> {
+    pub fn insert_attribute(&mut self, idx: Option<u32>, mut attr: SDPAttribute) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.attributes_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result = unsafe { ffi::gst_sdp_media_insert_attribute(&mut self.0, idx, &mut attr.0) };
         mem::forget(attr);
         match result {
@@ -364,7 +387,14 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn insert_bandwidth(&mut self, idx: i32, mut bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn insert_bandwidth(&mut self, idx: Option<u32>, mut bw: SDPBandwidth) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.bandwidths_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result = unsafe { ffi::gst_sdp_media_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
         mem::forget(bw);
         match result {
@@ -373,7 +403,18 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn insert_connection(&mut self, idx: i32, mut conn: SDPConnection) -> Result<(), ()> {
+    pub fn insert_connection(
+        &mut self,
+        idx: Option<u32>,
+        mut conn: SDPConnection,
+    ) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.connections_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result = unsafe { ffi::gst_sdp_media_insert_connection(&mut self.0, idx, &mut conn.0) };
         mem::forget(conn);
         match result {
@@ -382,7 +423,14 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn insert_format(&mut self, idx: i32, format: &str) -> Result<(), ()> {
+    pub fn insert_format(&mut self, idx: Option<u32>, format: &str) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.formats_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result =
             unsafe { ffi::gst_sdp_media_insert_format(&mut self.0, idx, format.to_glib_none().0) };
         match result {
@@ -404,6 +452,10 @@ impl SDPMediaRef {
     }
 
     pub fn remove_attribute(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.attributes_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_media_remove_attribute(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -412,6 +464,10 @@ impl SDPMediaRef {
     }
 
     pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.bandwidths_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_media_remove_bandwidth(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -420,6 +476,10 @@ impl SDPMediaRef {
     }
 
     pub fn remove_connection(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.connections_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_media_remove_connection(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -428,6 +488,10 @@ impl SDPMediaRef {
     }
 
     pub fn remove_format(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.formats_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_media_remove_format(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -436,6 +500,10 @@ impl SDPMediaRef {
     }
 
     pub fn replace_attribute(&mut self, idx: u32, mut attr: SDPAttribute) -> Result<(), ()> {
+        if idx >= self.attributes_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_media_replace_attribute(&mut self.0, idx, &mut attr.0) };
         mem::forget(attr);
         match result {
@@ -445,6 +513,10 @@ impl SDPMediaRef {
     }
 
     pub fn replace_bandwidth(&mut self, idx: u32, mut bw: SDPBandwidth) -> Result<(), ()> {
+        if idx >= self.bandwidths_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_media_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
         mem::forget(bw);
         match result {
@@ -454,6 +526,10 @@ impl SDPMediaRef {
     }
 
     pub fn replace_connection(&mut self, idx: u32, mut conn: SDPConnection) -> Result<(), ()> {
+        if idx >= self.connections_len() {
+            return Err(());
+        }
+
         let result =
             unsafe { ffi::gst_sdp_media_replace_connection(&mut self.0, idx, &mut conn.0) };
         mem::forget(conn);
@@ -464,6 +540,10 @@ impl SDPMediaRef {
     }
 
     pub fn replace_format(&mut self, idx: u32, format: &str) -> Result<(), ()> {
+        if idx >= self.formats_len() {
+            return Err(());
+        }
+
         let result =
             unsafe { ffi::gst_sdp_media_replace_format(&mut self.0, idx, format.to_glib_none().0) };
         match result {
