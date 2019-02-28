@@ -7,7 +7,9 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 use std::mem;
+use std::ops;
 #[cfg(any(feature = "v1_8_1", feature = "dox"))]
 use std::ptr;
 
@@ -32,13 +34,48 @@ use sdp_zone::SDPZone;
 use MIKEYMessage;
 
 glib_wrapper! {
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
 
     match fn {
         copy => |ptr| gobject_ffi::g_boxed_copy(ffi::gst_sdp_message_get_type(), ptr as *mut _) as *mut ffi::GstSDPMessage,
         free => |ptr| gobject_ffi::g_boxed_free(ffi::gst_sdp_message_get_type(), ptr as *mut _),
         get_type => || ffi::gst_sdp_message_get_type(),
+    }
+}
+
+unsafe impl Send for SDPMessage {}
+unsafe impl Sync for SDPMessage {}
+
+impl Default for SDPMessage {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ops::Deref for SDPMessage {
+    type Target = SDPMessageRef;
+
+    fn deref(&self) -> &SDPMessageRef {
+        unsafe { &*(self.to_glib_none().0 as *const SDPMessageRef) }
+    }
+}
+
+impl ops::DerefMut for SDPMessage {
+    fn deref_mut(&mut self) -> &mut SDPMessageRef {
+        unsafe { &mut *(self.to_glib_none_mut().0 as *mut SDPMessageRef) }
+    }
+}
+
+impl fmt::Debug for SDPMessage {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <SDPMessageRef as fmt::Debug>::fmt(&*self, f)
+    }
+}
+
+impl fmt::Display for SDPMessage {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        <SDPMessageRef as fmt::Display>::fmt(&*self, f)
     }
 }
 
@@ -49,676 +86,6 @@ impl SDPMessage {
             let mut msg = mem::zeroed();
             ffi::gst_sdp_message_new(&mut msg);
             from_glib_full(msg)
-        }
-    }
-
-    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(
-        &mut self,
-        key: &str,
-        value: P,
-    ) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_add_attribute(
-                self.to_glib_none_mut().0,
-                key.to_glib_none().0,
-                value.into().to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn add_email(&mut self, email: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_add_email(self.to_glib_none_mut().0, email.to_glib_none().0)
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn add_media(&mut self, media: SDPMedia) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_add_media(
-                self.to_glib_none_mut().0,
-                media.to_glib_full() as *mut ffi::GstSDPMedia,
-            )
-        };
-        mem::forget(media);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn add_phone(&mut self, phone: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_add_phone(self.to_glib_none_mut().0, phone.to_glib_none().0)
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn add_time(&mut self, start: &str, stop: &str, repeat: &[&str]) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_add_time(
-                self.to_glib_none_mut().0,
-                start.to_glib_none().0,
-                stop.to_glib_none().0,
-                repeat.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn add_zone(&mut self, adj_time: &str, typed_time: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_add_zone(
-                self.to_glib_none_mut().0,
-                adj_time.to_glib_none().0,
-                typed_time.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn as_text(&self) -> Option<String> {
-        unsafe { from_glib_full(ffi::gst_sdp_message_as_text(self.to_glib_none().0)) }
-    }
-
-    pub fn attributes_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_attributes_len(self.to_glib_none().0) }
-    }
-
-    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_attributes_to_caps(self.to_glib_none().0, caps.as_mut_ptr())
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn bandwidths_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_bandwidths_len(self.to_glib_none().0) }
-    }
-
-    pub fn dump(&self) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_dump(self.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn emails_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_emails_len(self.to_glib_none().0) }
-    }
-
-    pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_attribute(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPAttribute))
-            }
-        }
-    }
-
-    pub fn get_attribute_val(&self, key: &str) -> Option<&str> {
-        unsafe {
-            let ptr =
-                ffi::gst_sdp_message_get_attribute_val(self.to_glib_none().0, key.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_attribute_val_n(
-                self.to_glib_none().0,
-                key.to_glib_none().0,
-                nth,
-            );
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_bandwidth(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPBandwidth))
-            }
-        }
-    }
-
-    pub fn get_connection(&self) -> Option<&SDPConnection> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_connection(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPConnection))
-            }
-        }
-    }
-
-    pub fn get_email(&self, idx: u32) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_email(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_information(&self) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_information(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_key(&self) -> Option<&SDPKey> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_key(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPKey))
-            }
-        }
-    }
-
-    pub fn get_media(&self, idx: u32) -> Option<&SDPMediaRef> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_media(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *const SDPMediaRef))
-            }
-        }
-    }
-
-    pub fn get_origin(&self) -> Option<&SDPOrigin> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_origin(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPOrigin))
-            }
-        }
-    }
-
-    pub fn get_phone(&self, idx: u32) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_phone(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_session_name(&self) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_session_name(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_time(&self, idx: u32) -> Option<&SDPTime> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_time(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPTime))
-            }
-        }
-    }
-
-    pub fn get_uri(&self) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_uri(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_version(&self) -> Option<&str> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_version(self.to_glib_none().0);
-            if ptr.is_null() {
-                None
-            } else {
-                let result = CStr::from_ptr(ptr).to_str();
-                match result {
-                    Ok(attr) => Some(attr),
-                    Err(_) => None,
-                }
-            }
-        }
-    }
-
-    pub fn get_zone(&self, idx: u32) -> Option<&SDPZone> {
-        unsafe {
-            let ptr = ffi::gst_sdp_message_get_zone(self.to_glib_none().0, idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(&*(ptr as *mut SDPZone))
-            }
-        }
-    }
-
-    pub fn insert_attribute(&mut self, idx: i32, mut attr: SDPAttribute) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_insert_attribute(self.to_glib_none_mut().0, idx, &mut attr.0)
-        };
-        mem::forget(attr);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn insert_bandwidth(&mut self, idx: i32, mut bw: SDPBandwidth) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_insert_bandwidth(self.to_glib_none_mut().0, idx, &mut bw.0)
-        };
-        mem::forget(bw);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn insert_email(&mut self, idx: i32, email: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_insert_email(
-                self.to_glib_none_mut().0,
-                idx,
-                email.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn insert_phone(&mut self, idx: i32, phone: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_insert_phone(
-                self.to_glib_none_mut().0,
-                idx,
-                phone.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn insert_time(&mut self, idx: i32, mut time: SDPTime) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_insert_time(self.to_glib_none_mut().0, idx, &mut time.0)
-        };
-        mem::forget(time);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn insert_zone(&mut self, idx: i32, mut zone: SDPZone) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_insert_zone(self.to_glib_none_mut().0, idx, &mut zone.0)
-        };
-        mem::forget(zone);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn medias_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_medias_len(self.to_glib_none().0) }
-    }
-
-    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn parse_keymgmt(&self) -> Result<MIKEYMessage, ()> {
-        unsafe {
-            let mut mikey = ptr::null_mut();
-            let result = ffi::gst_sdp_message_parse_keymgmt(self.to_glib_none().0, &mut mikey);
-            match result {
-                ffi::GST_SDP_OK => Ok(from_glib_full(mikey)),
-                _ => Err(()),
-            }
-        }
-    }
-
-    pub fn phones_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_phones_len(self.to_glib_none().0) }
-    }
-
-    pub fn remove_attribute(&mut self, idx: u32) -> Result<(), ()> {
-        let result =
-            unsafe { ffi::gst_sdp_message_remove_attribute(self.to_glib_none_mut().0, idx) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), ()> {
-        let result =
-            unsafe { ffi::gst_sdp_message_remove_bandwidth(self.to_glib_none_mut().0, idx) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn remove_email(&mut self, idx: u32) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_remove_email(self.to_glib_none_mut().0, idx) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn remove_phone(&mut self, idx: u32) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_remove_phone(self.to_glib_none_mut().0, idx) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn remove_time(&mut self, idx: u32) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_remove_time(self.to_glib_none_mut().0, idx) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn remove_zone(&mut self, idx: u32) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_remove_zone(self.to_glib_none_mut().0, idx) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn replace_attribute(&mut self, idx: u32, mut attr: SDPAttribute) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_replace_attribute(self.to_glib_none_mut().0, idx, &mut attr.0)
-        };
-        mem::forget(attr);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn replace_bandwidth(&mut self, idx: u32, mut bw: SDPBandwidth) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_replace_bandwidth(self.to_glib_none_mut().0, idx, &mut bw.0)
-        };
-        mem::forget(bw);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn replace_email(&mut self, idx: u32, email: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_replace_email(
-                self.to_glib_none_mut().0,
-                idx,
-                email.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn replace_phone(&mut self, idx: u32, phone: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_replace_phone(
-                self.to_glib_none_mut().0,
-                idx,
-                phone.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn replace_time(&mut self, idx: u32, mut time: SDPTime) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_replace_time(self.to_glib_none_mut().0, idx, &mut time.0)
-        };
-        mem::forget(time);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn replace_zone(&mut self, idx: u32, mut zone: SDPZone) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_replace_zone(self.to_glib_none_mut().0, idx, &mut zone.0)
-        };
-        mem::forget(zone);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_connection(
-        &mut self,
-        nettype: &str,
-        addrtype: &str,
-        address: &str,
-        ttl: u32,
-        addr_number: u32,
-    ) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_connection(
-                self.to_glib_none_mut().0,
-                nettype.to_glib_none().0,
-                addrtype.to_glib_none().0,
-                address.to_glib_none().0,
-                ttl,
-                addr_number,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_information(&mut self, information: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_information(
-                self.to_glib_none_mut().0,
-                information.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_key(&mut self, type_: &str, data: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_key(
-                self.to_glib_none_mut().0,
-                type_.to_glib_none().0,
-                data.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_origin(
-        &mut self,
-        username: &str,
-        sess_id: &str,
-        sess_version: &str,
-        nettype: &str,
-        addrtype: &str,
-        addr: &str,
-    ) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_origin(
-                self.to_glib_none_mut().0,
-                username.to_glib_none().0,
-                sess_id.to_glib_none().0,
-                sess_version.to_glib_none().0,
-                nettype.to_glib_none().0,
-                addrtype.to_glib_none().0,
-                addr.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_session_name(&mut self, session_name: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_session_name(
-                self.to_glib_none_mut().0,
-                session_name.to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_uri(&mut self, uri: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_uri(self.to_glib_none_mut().0, uri.to_glib_none().0)
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn set_version(&mut self, version: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_version(self.to_glib_none_mut().0, version.to_glib_none().0)
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
-    }
-
-    pub fn times_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_times_len(self.to_glib_none().0) }
-    }
-
-    pub fn zones_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_message_zones_len(self.to_glib_none().0) }
-    }
-
-    pub fn as_uri(&self, scheme: &str) -> Option<String> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gst_sdp_message_as_uri(
-                scheme.to_glib_none().0,
-                self.to_glib_none().0,
-            ))
         }
     }
 
@@ -756,14 +123,650 @@ impl SDPMessage {
     }
 }
 
-impl Default for SDPMessage {
-    fn default() -> Self {
-        Self::new()
+#[repr(C)]
+pub struct SDPMessageRef(ffi::GstSDPMessage);
+
+impl fmt::Debug for SDPMessageRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use std::cell::RefCell;
+
+        struct DebugIter<I>(RefCell<I>);
+        impl<I: Iterator> fmt::Debug for DebugIter<I>
+        where
+            I::Item: fmt::Debug,
+        {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                f.debug_list().entries(&mut *self.0.borrow_mut()).finish()
+            }
+        }
+
+        f.debug_struct("SDPMessage").finish()
     }
 }
 
-unsafe impl Send for SDPMessage {}
-unsafe impl Sync for SDPMessage {}
+impl fmt::Display for SDPMessageRef {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.as_text() {
+            Some(text) => f.write_str(text.as_str()),
+            None => Err(fmt::Error),
+        }
+    }
+}
+
+unsafe impl Send for SDPMessageRef {}
+unsafe impl Sync for SDPMessageRef {}
+
+impl SDPMessageRef {
+    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(
+        &mut self,
+        key: &str,
+        value: P,
+    ) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_add_attribute(
+                &mut self.0,
+                key.to_glib_none().0,
+                value.into().to_glib_none().0,
+            )
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn add_email(&mut self, email: &str) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_add_email(&mut self.0, email.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn add_media(&mut self, media: SDPMedia) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_add_media(
+                &mut self.0,
+                media.to_glib_full() as *mut ffi::GstSDPMedia,
+            )
+        };
+        mem::forget(media);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn add_phone(&mut self, phone: &str) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_add_phone(&mut self.0, phone.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn add_time(&mut self, start: &str, stop: &str, repeat: &[&str]) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_add_time(
+                &mut self.0,
+                start.to_glib_none().0,
+                stop.to_glib_none().0,
+                repeat.to_glib_none().0,
+            )
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn add_zone(&mut self, adj_time: &str, typed_time: &str) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_add_zone(
+                &mut self.0,
+                adj_time.to_glib_none().0,
+                typed_time.to_glib_none().0,
+            )
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn as_text(&self) -> Option<String> {
+        unsafe { from_glib_full(ffi::gst_sdp_message_as_text(&self.0)) }
+    }
+
+    pub fn attributes_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_attributes_len(&self.0) }
+    }
+
+    pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn bandwidths_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_bandwidths_len(&self.0) }
+    }
+
+    pub fn dump(&self) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_dump(&self.0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn emails_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_emails_len(&self.0) }
+    }
+
+    pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_attribute(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPAttribute))
+            }
+        }
+    }
+
+    pub fn get_attribute_val(&self, key: &str) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_attribute_val(&self.0, key.to_glib_none().0);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_bandwidth(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPBandwidth))
+            }
+        }
+    }
+
+    pub fn get_connection(&self) -> Option<&SDPConnection> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_connection(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPConnection))
+            }
+        }
+    }
+
+    pub fn get_email(&self, idx: u32) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_email(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_information(&self) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_information(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_key(&self) -> Option<&SDPKey> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_key(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPKey))
+            }
+        }
+    }
+
+    pub fn get_media(&self, idx: u32) -> Option<&SDPMediaRef> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_media(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *const SDPMediaRef))
+            }
+        }
+    }
+
+    pub fn get_origin(&self) -> Option<&SDPOrigin> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_origin(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPOrigin))
+            }
+        }
+    }
+
+    pub fn get_phone(&self, idx: u32) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_phone(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_session_name(&self) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_session_name(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_time(&self, idx: u32) -> Option<&SDPTime> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_time(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPTime))
+            }
+        }
+    }
+
+    pub fn get_uri(&self) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_uri(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_version(&self) -> Option<&str> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_version(&self.0);
+            if ptr.is_null() {
+                None
+            } else {
+                let result = CStr::from_ptr(ptr).to_str();
+                match result {
+                    Ok(attr) => Some(attr),
+                    Err(_) => None,
+                }
+            }
+        }
+    }
+
+    pub fn get_zone(&self, idx: u32) -> Option<&SDPZone> {
+        unsafe {
+            let ptr = ffi::gst_sdp_message_get_zone(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&*(ptr as *mut SDPZone))
+            }
+        }
+    }
+
+    pub fn insert_attribute(&mut self, idx: i32, mut attr: SDPAttribute) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_insert_attribute(&mut self.0, idx, &mut attr.0) };
+        mem::forget(attr);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn insert_bandwidth(&mut self, idx: i32, mut bw: SDPBandwidth) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
+        mem::forget(bw);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn insert_email(&mut self, idx: i32, email: &str) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_insert_email(&mut self.0, idx, email.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn insert_phone(&mut self, idx: i32, phone: &str) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_insert_phone(&mut self.0, idx, phone.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn insert_time(&mut self, idx: i32, mut time: SDPTime) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_insert_time(&mut self.0, idx, &mut time.0) };
+        mem::forget(time);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn insert_zone(&mut self, idx: i32, mut zone: SDPZone) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_insert_zone(&mut self.0, idx, &mut zone.0) };
+        mem::forget(zone);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn medias_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_medias_len(&self.0) }
+    }
+
+    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
+    pub fn parse_keymgmt(&self) -> Result<MIKEYMessage, ()> {
+        unsafe {
+            let mut mikey = ptr::null_mut();
+            let result = ffi::gst_sdp_message_parse_keymgmt(&self.0, &mut mikey);
+            match result {
+                ffi::GST_SDP_OK => Ok(from_glib_full(mikey)),
+                _ => Err(()),
+            }
+        }
+    }
+
+    pub fn phones_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_phones_len(&self.0) }
+    }
+
+    pub fn remove_attribute(&mut self, idx: u32) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_remove_attribute(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_remove_bandwidth(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn remove_email(&mut self, idx: u32) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_remove_email(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn remove_phone(&mut self, idx: u32) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_remove_phone(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn remove_time(&mut self, idx: u32) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_remove_time(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn remove_zone(&mut self, idx: u32) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_remove_zone(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn replace_attribute(&mut self, idx: u32, mut attr: SDPAttribute) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_replace_attribute(&mut self.0, idx, &mut attr.0) };
+        mem::forget(attr);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn replace_bandwidth(&mut self, idx: u32, mut bw: SDPBandwidth) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
+        mem::forget(bw);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn replace_email(&mut self, idx: u32, email: &str) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_replace_email(&mut self.0, idx, email.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn replace_phone(&mut self, idx: u32, phone: &str) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_replace_phone(&mut self.0, idx, phone.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn replace_time(&mut self, idx: u32, mut time: SDPTime) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_replace_time(&mut self.0, idx, &mut time.0) };
+        mem::forget(time);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn replace_zone(&mut self, idx: u32, mut zone: SDPZone) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_replace_zone(&mut self.0, idx, &mut zone.0) };
+        mem::forget(zone);
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_connection(
+        &mut self,
+        nettype: &str,
+        addrtype: &str,
+        address: &str,
+        ttl: u32,
+        addr_number: u32,
+    ) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_set_connection(
+                &mut self.0,
+                nettype.to_glib_none().0,
+                addrtype.to_glib_none().0,
+                address.to_glib_none().0,
+                ttl,
+                addr_number,
+            )
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_information(&mut self, information: &str) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_set_information(&mut self.0, information.to_glib_none().0)
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_key(&mut self, type_: &str, data: &str) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_set_key(&mut self.0, type_.to_glib_none().0, data.to_glib_none().0)
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_origin(
+        &mut self,
+        username: &str,
+        sess_id: &str,
+        sess_version: &str,
+        nettype: &str,
+        addrtype: &str,
+        addr: &str,
+    ) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_set_origin(
+                &mut self.0,
+                username.to_glib_none().0,
+                sess_id.to_glib_none().0,
+                sess_version.to_glib_none().0,
+                nettype.to_glib_none().0,
+                addrtype.to_glib_none().0,
+                addr.to_glib_none().0,
+            )
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_session_name(&mut self, session_name: &str) -> Result<(), ()> {
+        let result = unsafe {
+            ffi::gst_sdp_message_set_session_name(&mut self.0, session_name.to_glib_none().0)
+        };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_uri(&mut self, uri: &str) -> Result<(), ()> {
+        let result = unsafe { ffi::gst_sdp_message_set_uri(&mut self.0, uri.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn set_version(&mut self, version: &str) -> Result<(), ()> {
+        let result =
+            unsafe { ffi::gst_sdp_message_set_version(&mut self.0, version.to_glib_none().0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(()),
+        }
+    }
+
+    pub fn times_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_times_len(&self.0) }
+    }
+
+    pub fn zones_len(&self) -> u32 {
+        unsafe { ffi::gst_sdp_message_zones_len(&self.0) }
+    }
+
+    pub fn as_uri(&self, scheme: &str) -> Option<String> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gst_sdp_message_as_uri(
+                scheme.to_glib_none().0,
+                &self.0,
+            ))
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
