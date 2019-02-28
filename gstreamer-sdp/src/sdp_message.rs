@@ -766,7 +766,140 @@ impl SDPMessageRef {
             ))
         }
     }
+
+    pub fn attributes(&self) -> AttributesIter {
+        AttributesIter::new(self)
+    }
+
+    pub fn bandwidths(&self) -> BandwidthsIter {
+        BandwidthsIter::new(self)
+    }
+
+    pub fn emails(&self) -> EmailsIter {
+        EmailsIter::new(self)
+    }
+
+    pub fn medias(&self) -> MediasIter {
+        MediasIter::new(self)
+    }
+
+    pub fn phones(&self) -> PhonesIter {
+        PhonesIter::new(self)
+    }
+
+    pub fn times(&self) -> TimesIter {
+        TimesIter::new(self)
+    }
+
+    pub fn zones(&self) -> ZonesIter {
+        ZonesIter::new(self)
+    }
 }
+
+macro_rules! define_iter(
+    ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
+    #[derive(Debug)]
+    pub struct $name<'a> {
+        message: &'a SDPMessageRef,
+        idx: u32,
+        len: u32,
+    }
+
+    impl<'a> $name<'a> {
+        fn new(message: &'a SDPMessageRef) -> $name<'a> {
+            skip_assert_initialized!();
+            let len = $get_len(message);
+
+            $name {
+                message,
+                idx: 0,
+                len,
+            }
+        }
+    }
+
+    impl<'a> Iterator for $name<'a> {
+        type Item = $typ;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.idx >= self.len {
+                return None;
+            }
+
+            let item = $get_item(self.message, self.idx)?;
+            self.idx += 1;
+            Some(item)
+        }
+
+        fn size_hint(&self) -> (usize, Option<usize>) {
+            if self.idx == self.len {
+                return (0, Some(0))
+            }
+
+            let remaining = (self.len - self.idx) as usize;
+
+            (remaining, Some(remaining))
+        }
+    }
+
+    impl<'a> DoubleEndedIterator for $name<'a> {
+        fn next_back(&mut self) -> Option<Self::Item> {
+            if self.idx == self.len {
+                return None;
+            }
+
+            self.len -= 1;
+
+            $get_item(self.message, self.len)
+        }
+    }
+
+    impl<'a> ExactSizeIterator for $name<'a> {}
+    }
+);
+
+define_iter!(
+    AttributesIter,
+    &'a SDPAttribute,
+    |message: &'a SDPMessageRef, idx| message.get_attribute(idx),
+    |message: &SDPMessageRef| message.attributes_len()
+);
+define_iter!(
+    BandwidthsIter,
+    &'a SDPBandwidth,
+    |message: &'a SDPMessageRef, idx| message.get_bandwidth(idx),
+    |message: &SDPMessageRef| message.bandwidths_len()
+);
+define_iter!(
+    EmailsIter,
+    &'a str,
+    |message: &'a SDPMessageRef, idx| message.get_email(idx),
+    |message: &SDPMessageRef| message.emails_len()
+);
+define_iter!(
+    MediasIter,
+    &'a SDPMediaRef,
+    |message: &'a SDPMessageRef, idx| message.get_media(idx),
+    |message: &SDPMessageRef| message.medias_len()
+);
+define_iter!(
+    PhonesIter,
+    &'a str,
+    |message: &'a SDPMessageRef, idx| message.get_phone(idx),
+    |message: &SDPMessageRef| message.phones_len()
+);
+define_iter!(
+    TimesIter,
+    &'a SDPTime,
+    |message: &'a SDPMessageRef, idx| message.get_time(idx),
+    |message: &SDPMessageRef| message.times_len()
+);
+define_iter!(
+    ZonesIter,
+    &'a SDPZone,
+    |message: &'a SDPMessageRef, idx| message.get_zone(idx),
+    |message: &SDPMessageRef| message.zones_len()
+);
 
 #[cfg(test)]
 mod tests {
