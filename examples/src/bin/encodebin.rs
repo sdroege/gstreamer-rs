@@ -19,7 +19,7 @@ use gst::prelude::*;
 extern crate gstreamer_pbutils as gst_pbutils;
 use gst_pbutils::prelude::*;
 
-#[macro_use]
+#[cfg_attr(feature = "v1_10", macro_use)]
 extern crate glib;
 
 use std::env;

@@ -27,6 +27,7 @@ unsafe impl Send for AppSrcCallbacks {}
 unsafe impl Sync for AppSrcCallbacks {}
 
 impl AppSrcCallbacks {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new() -> AppSrcCallbacksBuilder {
         skip_assert_initialized!();
 

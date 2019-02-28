@@ -113,12 +113,12 @@ impl Error for ErrorMessage {
 macro_rules! gst_loggable_error(
 // Plain strings
     ($cat:expr, $msg:expr) => {
-        $crate::LoggableError::new(&$cat, glib_bool_error!($msg))
+        $crate::LoggableError::new($cat.clone(), glib_bool_error!($msg))
     };
 
 // Format strings
     ($cat:expr, $($msg:tt)*) =>  { {
-        $crate::LoggableError::new(&$cat, glib_bool_error!($($msg)*))
+        $crate::LoggableError::new($cat.clone(), glib_bool_error!($($msg)*))
     }};
 );
 
@@ -127,13 +127,13 @@ macro_rules! gst_result_from_gboolean(
 // Plain strings
     ($ffi_bool:expr, $cat:expr, $msg:expr) =>  {
         glib_result_from_gboolean!($ffi_bool, $msg)
-            .map_err(|bool_err| $crate::LoggableError::new(&$cat, bool_err))
+            .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     };
 
 // Format strings
     ($ffi_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
         glib_result_from_gboolean!($ffi_bool, $($msg)*)
-            .map_err(|bool_err| $crate::LoggableError::new(&$cat, bool_err))
+            .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     }};
 );
 
@@ -144,9 +144,9 @@ pub struct LoggableError {
 }
 
 impl LoggableError {
-    pub fn new(category: &::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
+    pub fn new(category: ::DebugCategory, bool_error: glib::BoolError) -> LoggableError {
         LoggableError {
-            category: *category,
+            category,
             bool_error,
         }
     }

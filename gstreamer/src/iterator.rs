@@ -59,6 +59,7 @@ impl<T> Iterator<T>
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
+    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> Result<Option<T>, IteratorError> {
         unsafe {
             let mut value = Value::uninitialized();

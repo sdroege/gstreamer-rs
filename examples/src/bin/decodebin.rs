@@ -33,7 +33,7 @@
 extern crate gstreamer as gst;
 use gst::prelude::*;
 
-#[macro_use]
+#[cfg_attr(feature = "v1_10", macro_use)]
 extern crate glib;
 
 use std::env;

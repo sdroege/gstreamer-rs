@@ -298,6 +298,12 @@ pub trait EncodingProfileBuilder<'a>: Sized {
 
 macro_rules! declare_encoding_profile_builder_common(
     ($name:ident) => {
+        impl<'a> Default for $name<'a> {
+            fn default() -> Self {
+                Self::new()
+            }
+        }
+
         impl<'a> EncodingProfileBuilder<'a> for $name<'a> {
             fn name(mut self, name: &'a str) -> $name<'a> {
                 self.base.name = Some(name);

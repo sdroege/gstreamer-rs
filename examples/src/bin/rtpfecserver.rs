@@ -201,8 +201,8 @@ fn example_main() -> Result<(), Error> {
                 }
                 .into());
             }
-            MessageView::StateChanged(s) => match msg.get_src() {
-                Some(element) => {
+            MessageView::StateChanged(s) => {
+                if let Some(element) = msg.get_src() {
                     if element == pipeline && s.get_current() == gst::State::Playing {
                         eprintln!("PLAYING");
                         gst::debug_bin_to_dot_file(
@@ -212,8 +212,7 @@ fn example_main() -> Result<(), Error> {
                         );
                     }
                 }
-                None => (),
-            },
+            }
             _ => (),
         }
     }

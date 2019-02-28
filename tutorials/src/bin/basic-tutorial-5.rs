@@ -158,10 +158,13 @@ mod tutorial5 {
         let slider_update_signal_id = slider.connect_value_changed(move |slider| {
             let pipeline = &pipeline;
             let value = slider.get_value() as u64;
-            if let Err(_) = pipeline.seek_simple(
-                gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
-                value * gst::SECOND,
-            ) {
+            if pipeline
+                .seek_simple(
+                    gst::SeekFlags::FLUSH | gst::SeekFlags::KEY_UNIT,
+                    value * gst::SECOND,
+                )
+                .is_err()
+            {
                 eprintln!("Seeking to {} failed", value);
             }
         });
@@ -257,30 +260,30 @@ mod tutorial5 {
         streams_list.set_editable(false);
         let pipeline_weak = playbin.downgrade();
         let streams_list_weak = glib::SendWeakRef::from(streams_list.downgrade());
-        playbin
-            .get_bus()
-            .unwrap()
-            .connect_message(move |_, msg| match msg.view() {
-                gst::MessageView::Application(application) => {
-                    let pipeline = match pipeline_weak.upgrade() {
-                        Some(pipeline) => pipeline,
-                        None => return,
-                    };
+        let bus = playbin.get_bus().unwrap();
 
-                    let streams_list = match streams_list_weak.upgrade() {
-                        Some(streams_list) => streams_list,
-                        None => return,
-                    };
+        #[allow(clippy::single_match)]
+        bus.connect_message(move |_, msg| match msg.view() {
+            gst::MessageView::Application(application) => {
+                let pipeline = match pipeline_weak.upgrade() {
+                    Some(pipeline) => pipeline,
+                    None => return,
+                };
 
-                    if application.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
-                        let textbuf = streams_list
-                            .get_buffer()
-                            .expect("Couldn't get buffer from text_view");
-                        analyze_streams(&pipeline, &textbuf);
-                    }
+                let streams_list = match streams_list_weak.upgrade() {
+                    Some(streams_list) => streams_list,
+                    None => return,
+                };
+
+                if application.get_structure().map(|s| s.get_name()) == Some("tags-changed") {
+                    let textbuf = streams_list
+                        .get_buffer()
+                        .expect("Couldn't get buffer from text_view");
+                    analyze_streams(&pipeline, &textbuf);
                 }
-                _ => (),
-            });
+            }
+            _ => (),
+        });
 
         let vbox = Box::new(Orientation::Horizontal, 0);
         vbox.pack_start(&video_window, true, true, 0);
@@ -309,10 +312,15 @@ mod tutorial5 {
 
     pub fn run() {
         // Make sure the right features were activated
-        if !cfg!(feature = "tutorial5-x11") && !cfg!(feature = "tutorial5-quartz") {
-            eprintln!("No Gdk backend selected, compile with --features tutorial5[-x11][-quartz].");
+        #[allow(clippy::eq_op)]
+        {
+            if !cfg!(feature = "tutorial5-x11") && !cfg!(feature = "tutorial5-quartz") {
+                eprintln!(
+                    "No Gdk backend selected, compile with --features tutorial5[-x11][-quartz]."
+                );
 
-            return;
+                return;
+            }
         }
 
         // Initialize GTK

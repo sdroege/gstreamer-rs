@@ -29,7 +29,7 @@ impl<'a> Serialize for DateTime {
                 self.get_day(),
                 self.get_hour(),
                 self.get_minute(),
-                (self.get_second() as f64) + (self.get_microsecond() as f64) / 1_000_000f64,
+                f64::from(self.get_second()) + f64::from(self.get_microsecond()) / 1_000_000f64,
                 self.get_time_zone_offset(),
             )
         } else if self.has_time() {
@@ -58,6 +58,7 @@ impl<'a> Serialize for DateTime {
     }
 }
 
+#[allow(clippy::many_single_char_names)]
 impl From<DateTimeVariants> for DateTime {
     fn from(dt_variant: DateTimeVariants) -> Self {
         match dt_variant {

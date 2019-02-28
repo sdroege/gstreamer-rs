@@ -36,6 +36,7 @@ unsafe impl Send for AppSinkCallbacks {}
 unsafe impl Sync for AppSinkCallbacks {}
 
 impl AppSinkCallbacks {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new() -> AppSinkCallbacksBuilder {
         skip_assert_initialized!();
         AppSinkCallbacksBuilder {

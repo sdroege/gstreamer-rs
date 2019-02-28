@@ -49,9 +49,8 @@ fn print_tags(info: &DiscovererInfo) {
 
 fn print_stream_info(stream: &DiscovererStreamInfo) {
     println!("Stream: ");
-    match stream.get_stream_id() {
-        Some(id) => println!("  Stream id: {}", id),
-        None => {}
+    if let Some(id) = stream.get_stream_id() {
+        println!("  Stream id: {}", id);
     }
     let caps_str = match stream.get_caps() {
         Some(caps) => caps.to_string(),

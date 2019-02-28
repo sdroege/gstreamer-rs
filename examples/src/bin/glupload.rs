@@ -51,10 +51,6 @@ struct ErrorMessage {
     cause: glib::Error,
 }
 
-#[derive(Debug, Fail)]
-#[fail(display = "Glutin error")]
-struct GlutinError();
-
 #[rustfmt::skip]
 static VERTICES: [f32; 20] = [
      1.0,  1.0, 0.0, 1.0, 0.0,
@@ -73,7 +69,7 @@ static IDENTITY: [f32; 16] = [
     0.0, 0.0, 0.0, 1.0,
 ];
 
-const VS_SRC: &'static [u8] = b"
+const VS_SRC: &[u8] = b"
 uniform mat4 u_transformation;
 attribute vec4 a_position;
 attribute vec2 a_texcoord;
@@ -85,7 +81,7 @@ void main() {
 }
 \0";
 
-const FS_SRC: &'static [u8] = b"
+const FS_SRC: &[u8] = b"
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -97,6 +93,9 @@ void main() {
 }
 \0";
 
+#[allow(clippy::unreadable_literal)]
+#[allow(clippy::unused_unit)]
+#[allow(clippy::too_many_arguments)]
 mod gl {
     pub use self::Gles2 as Gl;
     include!(concat!(env!("OUT_DIR"), "/test_gl_bindings.rs"));
@@ -315,7 +314,7 @@ fn load(gl_context: &glutin::Context) -> Gl {
     };
 
     Gl {
-        gl: gl,
+        gl,
         program,
         attr_position,
         attr_texture,
@@ -374,6 +373,7 @@ impl App {
                 unsafe { gst_gl::GLContext::new_wrapped(&gl_display, egl_context, platform, api) }
                     .unwrap();
 
+            #[allow(clippy::single_match)]
             bus.set_sync_handler(move |_, msg| {
                 use gst::MessageView;
 
@@ -417,7 +417,7 @@ impl App {
             appsink,
             bus,
             events_loop: Arc::new(events_loop),
-            combined_context: combined_context,
+            combined_context,
         })
     }
 
@@ -556,6 +556,7 @@ fn main_loop(mut app: App) -> Result<(), Error> {
     let events_loop = Arc::get_mut(&mut app.events_loop).unwrap();
     let combined_context = app.combined_context.clone();
     while running {
+        #[allow(clippy::single_match)]
         events_loop.poll_events(|event| match event {
             glutin::Event::WindowEvent { event, .. } => match event {
                 glutin::WindowEvent::CloseRequested => running = false,

@@ -80,9 +80,9 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
-            (*parent_class)
-                .handle_message
-                .map(move |f| f(bin.to_glib_none().0, message.into_ptr()));
+            if let Some(ref f) = (*parent_class).handle_message {
+                f(bin.to_glib_none().0, message.into_ptr());
+            }
         }
     }
 }

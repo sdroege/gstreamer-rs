@@ -39,6 +39,7 @@ impl VideoTimeCode {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         fps: gst::Fraction,
         latest_daily_jam: Option<&glib::DateTime>,
@@ -153,6 +154,7 @@ impl VideoTimeCode {
 }
 
 impl ValidVideoTimeCode {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         fps: gst::Fraction,
         latest_daily_jam: Option<&glib::DateTime>,

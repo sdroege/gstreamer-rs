@@ -42,6 +42,7 @@ impl VideoMeta {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn add_full<'a>(
         buffer: &'a mut gst::BufferRef,
         flags: ::VideoFrameFlags,

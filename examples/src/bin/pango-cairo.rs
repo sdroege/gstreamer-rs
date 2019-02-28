@@ -170,7 +170,10 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             // Calling multiple transformation methods after each other will apply the
             // new transformation on top. If you repeat the cr.rotate(angle) line below
             // this a second time, everything in the canvas will rotate twice as fast.
-            cr.translate(info.width() as f64 / 2.0, info.height() as f64 / 2.0);
+            cr.translate(
+                f64::from(info.width()) / 2.0,
+                f64::from(info.height()) / 2.0,
+            );
             cr.rotate(angle);
 
             // This loop will render 10 times the string "GStreamer" in a circle
@@ -181,7 +184,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // previous transformations.
                 cr.save();
 
-                let angle = (360. * i as f64) / 10.0;
+                let angle = (360. * f64::from(i)) / 10.0;
                 let red = (1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0;
                 cr.set_source_rgb(red, 0.0, 1.0 - red);
                 cr.rotate(angle * PI / 180.0);
@@ -194,8 +197,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                 // Using width and height of the text, we can properly possition it within
                 // our canvas.
                 cr.move_to(
-                    -(width as f64 / pango::SCALE as f64) / 2.0,
-                    -(info.height() as f64) / 2.0,
+                    -(f64::from(width) / f64::from(pango::SCALE)) / 2.0,
+                    -(f64::from(info.height())) / 2.0,
                 );
                 // After telling the layout object where to draw itself, we actually tell
                 // it to draw itself into our cairo context.

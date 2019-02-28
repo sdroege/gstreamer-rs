@@ -20,7 +20,6 @@ use glib::IsA;
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
 
-#[allow(clippy::trivially_copy_pass_by_ref)]
 impl DebugCategory {
     pub fn new<'a, P: Into<Option<&'a str>>>(
         name: &str,
@@ -64,23 +63,23 @@ impl DebugCategory {
         }
     }
 
-    pub fn get_threshold(&self) -> ::DebugLevel {
+    pub fn get_threshold(self) -> ::DebugLevel {
         from_glib(unsafe { ffi::gst_debug_category_get_threshold(self.0.as_ptr()) })
     }
 
-    pub fn set_threshold(&self, threshold: ::DebugLevel) {
+    pub fn set_threshold(self, threshold: ::DebugLevel) {
         unsafe { ffi::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
     }
 
-    pub fn reset_threshold(&self) {
+    pub fn reset_threshold(self) {
         unsafe { ffi::gst_debug_category_reset_threshold(self.0.as_ptr()) }
     }
 
-    pub fn get_color(&self) -> ::DebugColorFlags {
+    pub fn get_color(self) -> ::DebugColorFlags {
         unsafe { from_glib(ffi::gst_debug_category_get_color(self.0.as_ptr())) }
     }
 
-    pub fn get_name(&self) -> &str {
+    pub fn get_name<'a>(self) -> &'a str {
         unsafe {
             CStr::from_ptr(ffi::gst_debug_category_get_name(self.0.as_ptr()))
                 .to_str()
@@ -88,9 +87,9 @@ impl DebugCategory {
         }
     }
 
-    pub fn get_description(&self) -> Option<&str> {
+    pub fn get_description<'a>(self) -> Option<&'a str> {
         unsafe {
-            let ptr = ffi::gst_debug_category_get_name(self.0.as_ptr());
+            let ptr = ffi::gst_debug_category_get_description(self.0.as_ptr());
 
             if ptr.is_null() {
                 None
@@ -102,7 +101,7 @@ impl DebugCategory {
 
     #[inline]
     pub fn log<O: IsA<::Object>>(
-        &self,
+        self,
         obj: Option<&O>,
         level: ::DebugLevel,
         file: &str,
@@ -199,91 +198,91 @@ declare_debug_category_from_name!(CAT_CONTEXT, "GST_CONTEXT");
 #[macro_export]
 macro_rules! gst_error(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Error, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Error, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Error, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_warning(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Warning, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Warning, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Warning, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_fixme(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Fixme, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Fixme, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Fixme, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_info(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Info, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Info, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Info, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_debug(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Debug, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Debug, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Debug, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_log(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Log, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Log, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Log, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_trace(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Trace, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Trace, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Trace, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_memdump(
     ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Memdump, obj: $obj, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, obj: $obj, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
-        gst_log_with_level!($cat, level: $crate::DebugLevel::Memdump, $($args)*)
+        gst_log_with_level!($cat.clone(), level: $crate::DebugLevel::Memdump, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! gst_log_with_level(
     ($cat:expr, level: $level:expr, obj: $obj:expr, $($args:tt)*) => { {
-        $crate::DebugCategory::log(&$cat, Some($obj), $level, file!(),
+        $crate::DebugCategory::log($cat.clone(), Some($obj), $level, file!(),
             module_path!(), line!(), format_args!($($args)*))
     }};
     ($cat:expr, level: $level:expr, $($args:tt)*) => { {
-        $crate::DebugCategory::log(&$cat, None as Option<&$crate::Object>, $level, file!(),
+        $crate::DebugCategory::log($cat.clone(), None as Option<&$crate::Object>, $level, file!(),
             module_path!(), line!(), format_args!($($args)*))
     }};
 );

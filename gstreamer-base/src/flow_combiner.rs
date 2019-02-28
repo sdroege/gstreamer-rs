@@ -17,12 +17,8 @@ glib_wrapper! {
     pub struct FlowCombiner(Shared<ffi::GstFlowCombiner>);
 
     match fn {
-        ref => |ptr| {
-            gobject_ffi::g_boxed_copy(ffi::gst_flow_combiner_get_type(), ptr as *mut _)
-        },
-        unref => |ptr| {
-            gobject_ffi::g_boxed_free(ffi::gst_flow_combiner_get_type(), ptr as *mut _)
-        },
+        ref => |ptr| gobject_ffi::g_boxed_copy(ffi::gst_flow_combiner_get_type(), ptr as *mut _),
+        unref => |ptr| gobject_ffi::g_boxed_free(ffi::gst_flow_combiner_get_type(), ptr as *mut _),
         get_type => || ffi::gst_flow_combiner_get_type(),
     }
 }

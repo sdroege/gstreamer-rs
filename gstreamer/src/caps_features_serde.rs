@@ -111,7 +111,7 @@ impl<'de> Visitor<'de> for CapsFeaturesVariantKindsVisitor {
             CAPS_FEATURES_VARIANT_ANY_ID => Ok(CapsFeaturesVariantKinds::Any),
             CAPS_FEATURES_VARIANT_SOME_ID => Ok(CapsFeaturesVariantKinds::Some),
             _ => Err(de::Error::invalid_value(
-                de::Unexpected::Unsigned(value as u64),
+                de::Unexpected::Unsigned(u64::from(value)),
                 &self,
             )),
         }
