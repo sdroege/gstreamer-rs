@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 use std::mem;
 use std::os::raw::c_char;
 
@@ -14,24 +15,20 @@ use ffi;
 use glib::translate::*;
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct SDPTime(pub(crate) ffi::GstSDPTime);
 
 impl SDPTime {
-    pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Result<Self, ()> {
+    pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut time = mem::zeroed();
-            let result = ffi::gst_sdp_time_set(
+            ffi::gst_sdp_time_set(
                 &mut time,
                 start.to_glib_none().0,
                 stop.to_glib_none().0,
                 repeat.to_glib_none().0,
             );
-            match result {
-                ffi::GST_SDP_OK => Ok(SDPTime(time)),
-                _ => Err(()),
-            }
+            SDPTime(time)
         }
     }
 
@@ -57,10 +54,26 @@ impl SDPTime {
     }
 }
 
+impl Clone for SDPTime {
+    fn clone(&self) -> Self {
+        SDPTime::new(self.start(), self.stop(), self.repeat().as_slice())
+    }
+}
+
 impl Drop for SDPTime {
     fn drop(&mut self) {
         unsafe {
             ffi::gst_sdp_time_clear(&mut self.0);
         }
+    }
+}
+
+impl fmt::Debug for SDPTime {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("SDPTime")
+            .field("start", &self.start())
+            .field("stop", &self.stop())
+            .field("repeat", &self.repeat())
+            .finish()
     }
 }

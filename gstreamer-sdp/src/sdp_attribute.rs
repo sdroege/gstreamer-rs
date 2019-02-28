@@ -7,26 +7,22 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 use std::mem;
 
 use ffi;
 use glib::translate::*;
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
 
 impl SDPAttribute {
-    pub fn new(key: &str, value: &str) -> Result<Self, ()> {
+    pub fn new(key: &str, value: Option<&str>) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut attr = mem::zeroed();
-            let result =
-                ffi::gst_sdp_attribute_set(&mut attr, key.to_glib_none().0, value.to_glib_none().0);
-            match result {
-                ffi::GST_SDP_OK => Ok(SDPAttribute(attr)),
-                _ => Err(()),
-            }
+            ffi::gst_sdp_attribute_set(&mut attr, key.to_glib_none().0, value.to_glib_none().0);
+            SDPAttribute(attr)
         }
     }
 
@@ -34,8 +30,22 @@ impl SDPAttribute {
         unsafe { CStr::from_ptr(self.0.key).to_str().unwrap() }
     }
 
-    pub fn value(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.value).to_str().unwrap() }
+    pub fn value(&self) -> Option<&str> {
+        unsafe {
+            let ptr = self.0.value;
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
+        }
+    }
+}
+
+impl Clone for SDPAttribute {
+    fn clone(&self) -> Self {
+        SDPAttribute::new(self.key(), self.value())
     }
 }
 
@@ -44,5 +54,14 @@ impl Drop for SDPAttribute {
         unsafe {
             ffi::gst_sdp_attribute_clear(&mut self.0);
         }
+    }
+}
+
+impl fmt::Debug for SDPAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("SDPAttribute")
+            .field("key", &self.key())
+            .field("value", &self.value())
+            .finish()
     }
 }

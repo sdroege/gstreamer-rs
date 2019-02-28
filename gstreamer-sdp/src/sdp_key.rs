@@ -7,11 +7,11 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 
 use ffi;
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct SDPKey(ffi::GstSDPKey);
 
 impl SDPKey {
@@ -21,5 +21,14 @@ impl SDPKey {
 
     pub fn data(&self) -> &str {
         unsafe { CStr::from_ptr(self.0.data).to_str().unwrap() }
+    }
+}
+
+impl fmt::Debug for SDPKey {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("SDPKey")
+            .field("type", &self.type_())
+            .field("data", &self.data())
+            .finish()
     }
 }

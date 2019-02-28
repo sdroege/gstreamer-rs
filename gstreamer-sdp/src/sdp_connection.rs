@@ -7,27 +7,21 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 use std::mem;
 
 use ffi;
 use glib::translate::*;
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
 
 impl SDPConnection {
-    pub fn new(
-        nettype: &str,
-        addrtype: &str,
-        address: &str,
-        ttl: u32,
-        addr_number: u32,
-    ) -> Result<Self, ()> {
+    pub fn new(nettype: &str, addrtype: &str, address: &str, ttl: u32, addr_number: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut conn = mem::zeroed();
-            let result = ffi::gst_sdp_connection_set(
+            ffi::gst_sdp_connection_set(
                 &mut conn,
                 nettype.to_glib_none().0,
                 addrtype.to_glib_none().0,
@@ -35,10 +29,7 @@ impl SDPConnection {
                 ttl,
                 addr_number,
             );
-            match result {
-                ffi::GST_SDP_OK => Ok(SDPConnection(conn)),
-                _ => Err(()),
-            }
+            SDPConnection(conn)
         }
     }
 
@@ -63,10 +54,34 @@ impl SDPConnection {
     }
 }
 
+impl Clone for SDPConnection {
+    fn clone(&self) -> Self {
+        SDPConnection::new(
+            self.nettype(),
+            self.addrtype(),
+            self.address(),
+            self.ttl(),
+            self.addr_number(),
+        )
+    }
+}
+
 impl Drop for SDPConnection {
     fn drop(&mut self) {
         unsafe {
             ffi::gst_sdp_connection_clear(&mut self.0);
         }
+    }
+}
+
+impl fmt::Debug for SDPConnection {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("SDPConnection")
+            .field("nettype", &self.nettype())
+            .field("addrtype", &self.addrtype())
+            .field("address", &self.address())
+            .field("ttl", &self.ttl())
+            .field("addr_number", &self.addr_number())
+            .finish()
     }
 }

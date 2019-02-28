@@ -7,11 +7,11 @@
 // except according to those terms.
 
 use std::ffi::CStr;
+use std::fmt;
 
 use ffi;
 
 #[repr(C)]
-#[derive(Debug)]
 pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
 
 impl SDPOrigin {
@@ -37,5 +37,18 @@ impl SDPOrigin {
 
     pub fn addr(&self) -> &str {
         unsafe { CStr::from_ptr(self.0.addr).to_str().unwrap() }
+    }
+}
+
+impl fmt::Debug for SDPOrigin {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("SDPOrigin")
+            .field("username", &self.username())
+            .field("sess_id", &self.sess_id())
+            .field("sess_version", &self.sess_version())
+            .field("nettype", &self.nettype())
+            .field("addrtype", &self.addrtype())
+            .field("addr", &self.addr())
+            .finish()
     }
 }
