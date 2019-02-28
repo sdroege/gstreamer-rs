@@ -40,15 +40,12 @@ glib_wrapper! {
 }
 
 impl SDPMedia {
-    pub fn new() -> Result<Self, ()> {
+    pub fn new() -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut media = ptr::null_mut();
-            let result = ffi::gst_sdp_media_new(&mut media);
-            match result {
-                ffi::GST_SDP_OK => Ok(from_glib_full(media)),
-                _ => Err(()),
-            }
+            ffi::gst_sdp_media_new(&mut media);
+            from_glib_full(media)
         }
     }
 }
