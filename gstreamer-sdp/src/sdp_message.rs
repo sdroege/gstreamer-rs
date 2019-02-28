@@ -168,56 +168,35 @@ unsafe impl Send for SDPMessageRef {}
 unsafe impl Sync for SDPMessageRef {}
 
 impl SDPMessageRef {
-    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(
-        &mut self,
-        key: &str,
-        value: P,
-    ) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(&mut self, key: &str, value: P) {
+        unsafe {
             ffi::gst_sdp_message_add_attribute(
                 &mut self.0,
                 key.to_glib_none().0,
                 value.into().to_glib_none().0,
-            )
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            );
         }
     }
 
-    pub fn add_email(&mut self, email: &str) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_add_email(&mut self.0, email.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn add_email(&mut self, email: &str) {
+        unsafe { ffi::gst_sdp_message_add_email(&mut self.0, email.to_glib_none().0) };
     }
 
-    pub fn add_media(&mut self, media: SDPMedia) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn add_media(&mut self, media: SDPMedia) {
+        unsafe {
             ffi::gst_sdp_message_add_media(
                 &mut self.0,
                 media.to_glib_full() as *mut ffi::GstSDPMedia,
-            )
-        };
-        mem::forget(media);
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
+            );
         }
     }
 
-    pub fn add_phone(&mut self, phone: &str) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_add_phone(&mut self.0, phone.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn add_phone(&mut self, phone: &str) {
+        unsafe { ffi::gst_sdp_message_add_phone(&mut self.0, phone.to_glib_none().0) };
     }
 
-    pub fn add_time(&mut self, start: &str, stop: &str, repeat: &[&str]) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn add_time(&mut self, start: &str, stop: &str, repeat: &[&str]) {
+        unsafe {
             ffi::gst_sdp_message_add_time(
                 &mut self.0,
                 start.to_glib_none().0,
@@ -225,24 +204,16 @@ impl SDPMessageRef {
                 repeat.to_glib_none().0,
             )
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
-    pub fn add_zone(&mut self, adj_time: &str, typed_time: &str) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn add_zone(&mut self, adj_time: &str, typed_time: &str) {
+        unsafe {
             ffi::gst_sdp_message_add_zone(
                 &mut self.0,
                 adj_time.to_glib_none().0,
                 typed_time.to_glib_none().0,
             )
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
     pub fn as_text(&self) -> Option<String> {
@@ -265,12 +236,8 @@ impl SDPMessageRef {
         unsafe { ffi::gst_sdp_message_bandwidths_len(&self.0) }
     }
 
-    pub fn dump(&self) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_dump(&self.0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn dump(&self) {
+        unsafe { ffi::gst_sdp_message_dump(&self.0) };
     }
 
     pub fn emails_len(&self) -> u32 {
@@ -776,8 +743,8 @@ impl SDPMessageRef {
         address: &str,
         ttl: u32,
         addr_number: u32,
-    ) -> Result<(), ()> {
-        let result = unsafe {
+    ) {
+        unsafe {
             ffi::gst_sdp_message_set_connection(
                 &mut self.0,
                 nettype.to_glib_none().0,
@@ -787,30 +754,16 @@ impl SDPMessageRef {
                 addr_number,
             )
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
-    pub fn set_information(&mut self, information: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_message_set_information(&mut self.0, information.to_glib_none().0)
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_information(&mut self, information: &str) {
+        unsafe { ffi::gst_sdp_message_set_information(&mut self.0, information.to_glib_none().0) };
     }
 
-    pub fn set_key(&mut self, type_: &str, data: &str) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn set_key(&mut self, type_: &str, data: &str) {
+        unsafe {
             ffi::gst_sdp_message_set_key(&mut self.0, type_.to_glib_none().0, data.to_glib_none().0)
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
     pub fn set_origin(
@@ -821,8 +774,8 @@ impl SDPMessageRef {
         nettype: &str,
         addrtype: &str,
         addr: &str,
-    ) -> Result<(), ()> {
-        let result = unsafe {
+    ) {
+        unsafe {
             ffi::gst_sdp_message_set_origin(
                 &mut self.0,
                 username.to_glib_none().0,
@@ -833,37 +786,20 @@ impl SDPMessageRef {
                 addr.to_glib_none().0,
             )
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
-    pub fn set_session_name(&mut self, session_name: &str) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn set_session_name(&mut self, session_name: &str) {
+        unsafe {
             ffi::gst_sdp_message_set_session_name(&mut self.0, session_name.to_glib_none().0)
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
-    pub fn set_uri(&mut self, uri: &str) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_message_set_uri(&mut self.0, uri.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_uri(&mut self, uri: &str) {
+        unsafe { ffi::gst_sdp_message_set_uri(&mut self.0, uri.to_glib_none().0) };
     }
 
-    pub fn set_version(&mut self, version: &str) -> Result<(), ()> {
-        let result =
-            unsafe { ffi::gst_sdp_message_set_version(&mut self.0, version.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_version(&mut self, version: &str) {
+        unsafe { ffi::gst_sdp_message_set_version(&mut self.0, version.to_glib_none().0) };
     }
 
     pub fn times_len(&self) -> u32 {
