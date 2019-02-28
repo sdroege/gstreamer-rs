@@ -6,6 +6,7 @@
 // // option. This file may not be copied, modified, or distributed
 // // except according to those terms.
 
+use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::ffi::CStr;
 use std::fmt;
 use std::mem;
@@ -628,6 +629,30 @@ impl SDPMediaRef {
         match result {
             ffi::GST_SDP_OK => Ok(()),
             _ => Err(()),
+        }
+    }
+}
+
+impl Borrow<SDPMediaRef> for SDPMedia {
+    fn borrow(&self) -> &SDPMediaRef {
+        &*self
+    }
+}
+
+impl BorrowMut<SDPMediaRef> for SDPMedia {
+    fn borrow_mut(&mut self) -> &mut SDPMediaRef {
+        &mut *self
+    }
+}
+
+impl ToOwned for SDPMediaRef {
+    type Owned = SDPMedia;
+
+    fn to_owned(&self) -> SDPMedia {
+        unsafe {
+            let mut ptr = ptr::null_mut();
+            ffi::gst_sdp_media_copy(&self.0, &mut ptr);
+            from_glib_full(ptr)
         }
     }
 }
