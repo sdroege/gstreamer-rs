@@ -140,7 +140,22 @@ impl fmt::Debug for SDPMessageRef {
             }
         }
 
-        f.debug_struct("SDPMessage").finish()
+        f.debug_struct("SDPMessage")
+            .field("connection", &self.get_connection())
+            .field("information", &self.get_information())
+            .field("key", &self.get_key())
+            .field("origin", &self.get_origin())
+            .field("session-name", &self.get_session_name())
+            .field("uri", &self.get_uri())
+            .field("version", &self.get_version())
+            .field("attributes", &DebugIter(RefCell::new(self.attributes())))
+            .field("bandwidths", &DebugIter(RefCell::new(self.bandwidths())))
+            .field("emails", &DebugIter(RefCell::new(self.emails())))
+            .field("medias", &DebugIter(RefCell::new(self.medias())))
+            .field("phones", &DebugIter(RefCell::new(self.phones())))
+            .field("times", &DebugIter(RefCell::new(self.times())))
+            .field("zones", &DebugIter(RefCell::new(self.zones())))
+            .finish()
     }
 }
 
