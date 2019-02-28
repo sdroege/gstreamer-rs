@@ -186,7 +186,7 @@ impl SDPMessageRef {
         unsafe {
             ffi::gst_sdp_message_add_media(
                 &mut self.0,
-                media.to_glib_full() as *mut ffi::GstSDPMedia,
+                media.to_glib_none().0 as *mut ffi::GstSDPMedia,
             );
         }
     }
