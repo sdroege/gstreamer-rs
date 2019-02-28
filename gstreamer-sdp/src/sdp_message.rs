@@ -15,7 +15,6 @@ use std::ptr;
 
 use ffi;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
 use gst;
 use gst::MiniObject;
@@ -96,7 +95,7 @@ impl SDPMessage {
             match result {
                 ffi::GST_SDP_OK => Ok(from_glib_full(msg)),
                 _ => {
-                    glib_ffi::g_free(msg as *mut _);
+                    ffi::gst_sdp_message_uninit(msg);
                     Err(())
                 }
             }
@@ -112,7 +111,7 @@ impl SDPMessage {
             match result {
                 ffi::GST_SDP_OK => Ok(from_glib_full(msg)),
                 _ => {
-                    glib_ffi::g_free(msg as *mut _);
+                    ffi::gst_sdp_message_uninit(msg);
                     Err(())
                 }
             }
