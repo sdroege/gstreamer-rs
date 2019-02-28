@@ -124,29 +124,16 @@ unsafe impl Send for SDPMediaRef {}
 unsafe impl Sync for SDPMediaRef {}
 
 impl SDPMediaRef {
-    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(
-        &mut self,
-        key: &str,
-        value: P,
-    ) -> Result<(), ()> {
+    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(&mut self, key: &str, value: P) {
         let value = value.into();
         let value = value.to_glib_none();
-        let result =
-            unsafe { ffi::gst_sdp_media_add_attribute(&mut self.0, key.to_glib_none().0, value.0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+        unsafe { ffi::gst_sdp_media_add_attribute(&mut self.0, key.to_glib_none().0, value.0) };
     }
 
-    pub fn add_bandwidth(&mut self, bwtype: &str, bandwidth: u32) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn add_bandwidth(&mut self, bwtype: &str, bandwidth: u32) {
+        unsafe {
             ffi::gst_sdp_media_add_bandwidth(&mut self.0, bwtype.to_glib_none().0, bandwidth)
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
     pub fn add_connection(
@@ -156,8 +143,8 @@ impl SDPMediaRef {
         address: &str,
         ttl: u32,
         addr_number: u32,
-    ) -> Result<(), ()> {
-        let result = unsafe {
+    ) {
+        unsafe {
             ffi::gst_sdp_media_add_connection(
                 &mut self.0,
                 nettype.to_glib_none().0,
@@ -167,18 +154,10 @@ impl SDPMediaRef {
                 addr_number,
             )
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
-    pub fn add_format(&mut self, format: &str) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_media_add_format(&mut self.0, format.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn add_format(&mut self, format: &str) {
+        unsafe { ffi::gst_sdp_media_add_format(&mut self.0, format.to_glib_none().0) };
     }
 
     pub fn as_text(&self) -> Option<String> {
@@ -556,48 +535,26 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn set_information(&mut self, information: &str) -> Result<(), ()> {
-        let result = unsafe {
-            ffi::gst_sdp_media_set_information(&mut self.0, information.to_glib_none().0)
-        };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_information(&mut self, information: &str) {
+        unsafe { ffi::gst_sdp_media_set_information(&mut self.0, information.to_glib_none().0) };
     }
 
-    pub fn set_key(&mut self, type_: &str, data: &str) -> Result<(), ()> {
-        let result = unsafe {
+    pub fn set_key(&mut self, type_: &str, data: &str) {
+        unsafe {
             ffi::gst_sdp_media_set_key(&mut self.0, type_.to_glib_none().0, data.to_glib_none().0)
         };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
     }
 
-    pub fn set_media(&mut self, med: &str) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_media_set_media(&mut self.0, med.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_media(&mut self, med: &str) {
+        unsafe { ffi::gst_sdp_media_set_media(&mut self.0, med.to_glib_none().0) };
     }
 
-    pub fn set_port_info(&mut self, port: u32, num_ports: u32) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_media_set_port_info(&mut self.0, port, num_ports) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_port_info(&mut self, port: u32, num_ports: u32) {
+        unsafe { ffi::gst_sdp_media_set_port_info(&mut self.0, port, num_ports) };
     }
 
-    pub fn set_proto(&mut self, proto: &str) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_media_set_proto(&mut self.0, proto.to_glib_none().0) };
-        match result {
-            ffi::GST_SDP_OK => Ok(()),
-            _ => Err(()),
-        }
+    pub fn set_proto(&mut self, proto: &str) {
+        unsafe { ffi::gst_sdp_media_set_proto(&mut self.0, proto.to_glib_none().0) };
     }
 
     pub fn set_media_from_caps(caps: &gst::Caps, media: &mut SDPMedia) -> Result<(), ()> {
