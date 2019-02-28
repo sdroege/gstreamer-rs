@@ -30,9 +30,6 @@ use sdp_origin::SDPOrigin;
 use sdp_time::SDPTime;
 use sdp_zone::SDPZone;
 
-#[cfg(any(feature = "v1_8_1", feature = "dox"))]
-use MIKEYMessage;
-
 glib_wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMessage(Boxed<ffi::GstSDPMessage>);
@@ -616,18 +613,6 @@ impl SDPMessageRef {
 
     pub fn medias_len(&self) -> u32 {
         unsafe { ffi::gst_sdp_message_medias_len(&self.0) }
-    }
-
-    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn parse_keymgmt(&self) -> Result<MIKEYMessage, ()> {
-        unsafe {
-            let mut mikey = ptr::null_mut();
-            let result = ffi::gst_sdp_message_parse_keymgmt(&self.0, &mut mikey);
-            match result {
-                ffi::GST_SDP_OK => Ok(from_glib_full(mikey)),
-                _ => Err(()),
-            }
-        }
     }
 
     pub fn phones_len(&self) -> u32 {

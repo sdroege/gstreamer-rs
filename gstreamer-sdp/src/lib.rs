@@ -40,14 +40,6 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
-mod mikey_decrypt_info;
-pub use mikey_decrypt_info::*;
-mod mikey_encrypt_info;
-pub use mikey_encrypt_info::*;
-mod mikey_map_s_r_t_p;
-pub use mikey_map_s_r_t_p::*;
-mod mikey_payload_s_p_param;
-pub use mikey_payload_s_p_param::*;
 mod sdp_attribute;
 pub use sdp_attribute::*;
 mod sdp_bandwidth;

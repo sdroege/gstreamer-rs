@@ -23,9 +23,6 @@ use sdp_bandwidth::SDPBandwidth;
 use sdp_connection::SDPConnection;
 use sdp_key::SDPKey;
 
-#[cfg(any(feature = "v1_8_1", feature = "dox"))]
-use MIKEYMessage;
-
 glib_wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct SDPMedia(Boxed<ffi::GstSDPMedia>);
@@ -458,18 +455,6 @@ impl SDPMediaRef {
         match result {
             ffi::GST_SDP_OK => Ok(()),
             _ => Err(()),
-        }
-    }
-
-    #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn parse_keymgmt(&self) -> Result<MIKEYMessage, ()> {
-        unsafe {
-            let mut mikey = ptr::null_mut();
-            let result = ffi::gst_sdp_media_parse_keymgmt(&self.0, &mut mikey);
-            match result {
-                ffi::GST_SDP_OK => Ok(from_glib_full(mikey)),
-                _ => Err(()),
-            }
         }
     }
 
