@@ -267,6 +267,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
+        if idx >= self.attributes_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_attribute(&self.0, idx);
             if ptr.is_null() {
@@ -308,6 +312,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_bandwidth(&self, idx: u32) -> Option<&SDPBandwidth> {
+        if idx >= self.bandwidths_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_bandwidth(&self.0, idx);
             if ptr.is_null() {
@@ -330,6 +338,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_email(&self, idx: u32) -> Option<&str> {
+        if idx >= self.emails_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_email(&self.0, idx);
             if ptr.is_null() {
@@ -371,6 +383,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_media(&self, idx: u32) -> Option<&SDPMediaRef> {
+        if idx >= self.medias_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_media(&self.0, idx);
             if ptr.is_null() {
@@ -393,6 +409,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_phone(&self, idx: u32) -> Option<&str> {
+        if idx >= self.phones_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_phone(&self.0, idx);
             if ptr.is_null() {
@@ -423,6 +443,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_time(&self, idx: u32) -> Option<&SDPTime> {
+        if idx >= self.times_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_time(&self.0, idx);
             if ptr.is_null() {
@@ -464,6 +488,10 @@ impl SDPMessageRef {
     }
 
     pub fn get_zone(&self, idx: u32) -> Option<&SDPZone> {
+        if idx >= self.zones_len() {
+            return None;
+        }
+
         unsafe {
             let ptr = ffi::gst_sdp_message_get_zone(&self.0, idx);
             if ptr.is_null() {
@@ -474,7 +502,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_attribute(&mut self, idx: i32, mut attr: SDPAttribute) -> Result<(), ()> {
+    pub fn insert_attribute(&mut self, idx: Option<u32>, mut attr: SDPAttribute) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.attributes_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result =
             unsafe { ffi::gst_sdp_message_insert_attribute(&mut self.0, idx, &mut attr.0) };
         mem::forget(attr);
@@ -484,7 +519,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_bandwidth(&mut self, idx: i32, mut bw: SDPBandwidth) -> Result<(), ()> {
+    pub fn insert_bandwidth(&mut self, idx: Option<u32>, mut bw: SDPBandwidth) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.bandwidths_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result = unsafe { ffi::gst_sdp_message_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
         mem::forget(bw);
         match result {
@@ -493,7 +535,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_email(&mut self, idx: i32, email: &str) -> Result<(), ()> {
+    pub fn insert_email(&mut self, idx: Option<u32>, email: &str) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.emails_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result =
             unsafe { ffi::gst_sdp_message_insert_email(&mut self.0, idx, email.to_glib_none().0) };
         match result {
@@ -502,7 +551,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_phone(&mut self, idx: i32, phone: &str) -> Result<(), ()> {
+    pub fn insert_phone(&mut self, idx: Option<u32>, phone: &str) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.phones_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result =
             unsafe { ffi::gst_sdp_message_insert_phone(&mut self.0, idx, phone.to_glib_none().0) };
         match result {
@@ -511,7 +567,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_time(&mut self, idx: i32, mut time: SDPTime) -> Result<(), ()> {
+    pub fn insert_time(&mut self, idx: Option<u32>, mut time: SDPTime) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.times_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result = unsafe { ffi::gst_sdp_message_insert_time(&mut self.0, idx, &mut time.0) };
         mem::forget(time);
         match result {
@@ -520,7 +583,14 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn insert_zone(&mut self, idx: i32, mut zone: SDPZone) -> Result<(), ()> {
+    pub fn insert_zone(&mut self, idx: Option<u32>, mut zone: SDPZone) -> Result<(), ()> {
+        if let Some(idx) = idx {
+            if idx >= self.zones_len() {
+                return Err(());
+            }
+        }
+
+        let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
         let result = unsafe { ffi::gst_sdp_message_insert_zone(&mut self.0, idx, &mut zone.0) };
         mem::forget(zone);
         match result {
@@ -550,6 +620,10 @@ impl SDPMessageRef {
     }
 
     pub fn remove_attribute(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.attributes_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_remove_attribute(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -558,6 +632,10 @@ impl SDPMessageRef {
     }
 
     pub fn remove_bandwidth(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.bandwidths_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_remove_bandwidth(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -566,6 +644,10 @@ impl SDPMessageRef {
     }
 
     pub fn remove_email(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.emails_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_remove_email(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -574,6 +656,10 @@ impl SDPMessageRef {
     }
 
     pub fn remove_phone(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.phones_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_remove_phone(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -582,6 +668,10 @@ impl SDPMessageRef {
     }
 
     pub fn remove_time(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.times_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_remove_time(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -590,6 +680,10 @@ impl SDPMessageRef {
     }
 
     pub fn remove_zone(&mut self, idx: u32) -> Result<(), ()> {
+        if idx >= self.zones_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_remove_zone(&mut self.0, idx) };
         match result {
             ffi::GST_SDP_OK => Ok(()),
@@ -598,6 +692,10 @@ impl SDPMessageRef {
     }
 
     pub fn replace_attribute(&mut self, idx: u32, mut attr: SDPAttribute) -> Result<(), ()> {
+        if idx >= self.attributes_len() {
+            return Err(());
+        }
+
         let result =
             unsafe { ffi::gst_sdp_message_replace_attribute(&mut self.0, idx, &mut attr.0) };
         mem::forget(attr);
@@ -608,6 +706,10 @@ impl SDPMessageRef {
     }
 
     pub fn replace_bandwidth(&mut self, idx: u32, mut bw: SDPBandwidth) -> Result<(), ()> {
+        if idx >= self.bandwidths_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
         mem::forget(bw);
         match result {
@@ -617,6 +719,10 @@ impl SDPMessageRef {
     }
 
     pub fn replace_email(&mut self, idx: u32, email: &str) -> Result<(), ()> {
+        if idx >= self.emails_len() {
+            return Err(());
+        }
+
         let result =
             unsafe { ffi::gst_sdp_message_replace_email(&mut self.0, idx, email.to_glib_none().0) };
         match result {
@@ -626,6 +732,10 @@ impl SDPMessageRef {
     }
 
     pub fn replace_phone(&mut self, idx: u32, phone: &str) -> Result<(), ()> {
+        if idx >= self.phones_len() {
+            return Err(());
+        }
+
         let result =
             unsafe { ffi::gst_sdp_message_replace_phone(&mut self.0, idx, phone.to_glib_none().0) };
         match result {
@@ -635,6 +745,10 @@ impl SDPMessageRef {
     }
 
     pub fn replace_time(&mut self, idx: u32, mut time: SDPTime) -> Result<(), ()> {
+        if idx >= self.times_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_replace_time(&mut self.0, idx, &mut time.0) };
         mem::forget(time);
         match result {
@@ -644,6 +758,10 @@ impl SDPMessageRef {
     }
 
     pub fn replace_zone(&mut self, idx: u32, mut zone: SDPZone) -> Result<(), ()> {
+        if idx >= self.zones_len() {
+            return Err(());
+        }
+
         let result = unsafe { ffi::gst_sdp_message_replace_zone(&mut self.0, idx, &mut zone.0) };
         mem::forget(zone);
         match result {
