@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use std::borrow::{Borrow, BorrowMut, ToOwned};
 use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 use std::ops;
-#[cfg(any(feature = "v1_8_1", feature = "dox"))]
 use std::ptr;
 
 use ffi;
@@ -926,6 +926,30 @@ impl SDPMessageRef {
 
     pub fn zones(&self) -> ZonesIter {
         ZonesIter::new(self)
+    }
+}
+
+impl Borrow<SDPMessageRef> for SDPMessage {
+    fn borrow(&self) -> &SDPMessageRef {
+        &*self
+    }
+}
+
+impl BorrowMut<SDPMessageRef> for SDPMessage {
+    fn borrow_mut(&mut self) -> &mut SDPMessageRef {
+        &mut *self
+    }
+}
+
+impl ToOwned for SDPMessageRef {
+    type Owned = SDPMessage;
+
+    fn to_owned(&self) -> SDPMessage {
+        unsafe {
+            let mut ptr = ptr::null_mut();
+            ffi::gst_sdp_message_copy(&self.0, &mut ptr);
+            from_glib_full(ptr)
+        }
     }
 }
 
