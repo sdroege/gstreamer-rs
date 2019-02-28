@@ -15,7 +15,7 @@ use std::mem;
 use std::ptr;
 use AppSrc;
 
-#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {
     need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
@@ -38,7 +38,7 @@ impl AppSrcCallbacks {
     }
 }
 
-#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacksBuilder {
     need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,

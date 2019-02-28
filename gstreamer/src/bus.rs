@@ -36,7 +36,7 @@ unsafe extern "C" fn destroy_closure_watch<F: FnMut(&Bus, &Message) -> Continue 
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gpointer {
-    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    #[allow(clippy::type_complexity)]
     let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
     Box::into_raw(func) as gpointer
 }

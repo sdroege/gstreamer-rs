@@ -20,7 +20,7 @@ macro_rules! gst_panic_to_error(
         use std::sync::atomic::Ordering;
         use $crate::ElementExtManual;
 
-        #[cfg_attr(feature = "cargo-clippy", allow(unused_unit))]
+        #[allow(clippy::unused_unit)]
         {
             if $panicked.load(Ordering::Relaxed) {
                 $element.post_error_message(&gst_error_msg!($crate::LibraryError::Failed, ["Panicked"]));

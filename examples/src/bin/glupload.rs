@@ -51,7 +51,11 @@ struct ErrorMessage {
     cause: glib::Error,
 }
 
-#[cfg_attr(rustfmt, rustfmt_skip)]
+#[derive(Debug, Fail)]
+#[fail(display = "Glutin error")]
+struct GlutinError();
+
+#[rustfmt::skip]
 static VERTICES: [f32; 20] = [
      1.0,  1.0, 0.0, 1.0, 0.0,
     -1.0,  1.0, 0.0, 0.0, 0.0,
@@ -61,7 +65,7 @@ static VERTICES: [f32; 20] = [
 
 static INDICES: [u16; 6] = [0, 1, 2, 0, 2, 3];
 
-#[cfg_attr(rustfmt, rustfmt_skip)]
+#[rustfmt::skip]
 static IDENTITY: [f32; 16] = [
     1.0, 0.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 0.0,

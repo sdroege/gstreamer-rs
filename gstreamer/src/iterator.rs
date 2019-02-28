@@ -333,7 +333,7 @@ where
 
     let func = func as *const gobject_ffi::GValue;
     let func = gobject_ffi::g_value_get_boxed(func);
-    #[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+    #[allow(clippy::transmute_ptr_to_ref)]
     let func: &&(Fn(T) -> bool + Send + Sync + 'static) = mem::transmute(func);
 
     let value = &*(value as *const glib::Value);

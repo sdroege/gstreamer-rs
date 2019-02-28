@@ -20,7 +20,7 @@ use glib::IsA;
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
 
-#[cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
+#[allow(clippy::trivially_copy_pass_by_ref)]
 impl DebugCategory {
     pub fn new<'a, P: Into<Option<&'a str>>>(
         name: &str,

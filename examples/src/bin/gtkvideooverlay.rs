@@ -128,7 +128,7 @@ fn create_ui(app: &gtk::Application) {
                 // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
                 // If a wrong value were to be passed here (and you can pass any integer), then the window
                 // system will most likely cause the application to crash.
-                #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+                #[allow(clippy::cast_ptr_alignment)]
                 unsafe {
                     // Here we ask gdk what native window handle we got assigned for
                     // our video region from the window system, and then we will
@@ -152,7 +152,7 @@ fn create_ui(app: &gtk::Application) {
                 // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
                 // If a wrong value were to be passed here (and you can pass any integer), then the window
                 // system will most likely cause the application to crash.
-                #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+                #[allow(clippy::cast_ptr_alignment)]
                 unsafe {
                     // Here we ask gdk what native window handle we got assigned for
                     // our video region from the windowing system, and then we will

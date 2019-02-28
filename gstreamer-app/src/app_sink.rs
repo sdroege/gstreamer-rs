@@ -20,7 +20,7 @@ use std::mem::transmute;
 use std::ptr;
 use AppSink;
 
-#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<
@@ -46,7 +46,7 @@ impl AppSinkCallbacks {
     }
 }
 
-#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacksBuilder {
     eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<

@@ -131,7 +131,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
     }
 
-    #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
+    #[allow(clippy::too_many_arguments)]
     pub fn do_seek<V: Into<T>>(
         &mut self,
         rate: f64,
@@ -367,7 +367,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.rate
     }
 
-    #[cfg_attr(feature = "cargo-clippy", allow(float_cmp))]
+    #[allow(clippy::float_cmp)]
     pub fn set_rate(&mut self, rate: f64) {
         assert_ne!(rate, 0.0);
         self.0.rate = rate;
@@ -377,7 +377,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         self.0.applied_rate
     }
 
-    #[cfg_attr(feature = "cargo-clippy", allow(float_cmp))]
+    #[allow(clippy::float_cmp)]
     pub fn set_applied_rate(&mut self, applied_rate: f64) {
         assert_ne!(applied_rate, 0.0);
         self.0.applied_rate = applied_rate;

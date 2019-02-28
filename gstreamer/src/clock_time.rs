@@ -65,7 +65,7 @@ impl ClockTime {
 }
 
 impl fmt::Display for ClockTime {
-    #[cfg_attr(feature = "cargo-clippy", allow(many_single_char_names))]
+    #[allow(clippy::many_single_char_names)]
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         let precision = f.precision().unwrap_or(9);
         // TODO: Could also check width and pad the hours as needed

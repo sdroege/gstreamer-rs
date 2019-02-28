@@ -6,7 +6,7 @@
 // <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
-#![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+#![allow(clippy::cast_ptr_alignment)]
 
 pub mod base_sink;
 pub mod base_src;

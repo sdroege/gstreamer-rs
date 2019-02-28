@@ -916,7 +916,7 @@ impl<'a> EventBuilder<'a> {
 
 macro_rules! event_builder_generic_impl {
     ($new_fn:expr) => {
-        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
+        #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 builder: self.builder.seqnum(seqnum),
@@ -924,7 +924,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
+        #[allow(clippy::needless_update)]
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {
                 builder: self.builder.running_time_offset(running_time_offset),
@@ -932,7 +932,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
+        #[allow(clippy::needless_update)]
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),

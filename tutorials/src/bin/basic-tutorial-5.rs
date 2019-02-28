@@ -221,7 +221,7 @@ mod tutorial5 {
                         ) -> *mut c_void;
                     }
 
-                    #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+                    #[allow(clippy::cast_ptr_alignment)]
                     unsafe {
                         let xid = gdk_x11_window_get_xid(gdk_window.as_ptr() as *mut _);
                         video_overlay.set_window_handle(xid as usize);
@@ -238,7 +238,7 @@ mod tutorial5 {
                         ) -> *mut c_void;
                     }
 
-                    #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+                    #[allow(clippy::cast_ptr_alignment)]
                     unsafe {
                         let window = gdk_quartz_window_get_nsview(gdk_window.as_ptr() as *mut _);
                         video_overlay.set_window_handle(window as usize);

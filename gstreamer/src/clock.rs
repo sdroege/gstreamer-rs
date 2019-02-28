@@ -56,7 +56,7 @@ unsafe extern "C" fn destroy_closure_wait_async<
 }
 
 fn into_raw_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(func: F) -> gpointer {
-    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    #[allow(clippy::type_complexity)]
     let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }

@@ -28,11 +28,10 @@ macro_rules! assert_initialized_main_thread {
 
 pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
 
-#[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
-#[cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-#[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
-#[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
-#[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#[allow(clippy::unreadable_literal)]
+#[allow(clippy::too_many_arguments)]
+#[allow(clippy::match_same_arms)]
+#[allow(clippy::type_complexity)]
 #[rustfmt::skip]
 mod auto;
 pub use auto::functions::*;

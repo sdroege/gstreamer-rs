@@ -565,7 +565,7 @@ impl<'a> FromValue<'a> for Array<'a> {
         if arr.is_null() {
             Array(Cow::Borrowed(&[]))
         } else {
-            #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+            #[allow(clippy::cast_ptr_alignment)]
             Array(Cow::Borrowed(slice::from_raw_parts(
                 (*arr).data as *const glib::SendValue,
                 (*arr).len as usize,
@@ -643,7 +643,7 @@ impl<'a> FromValue<'a> for List<'a> {
         if arr.is_null() {
             List(Cow::Borrowed(&[]))
         } else {
-            #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+            #[allow(clippy::cast_ptr_alignment)]
             List(Cow::Borrowed(slice::from_raw_parts(
                 (*arr).data as *const glib::SendValue,
                 (*arr).len as usize,

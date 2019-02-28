@@ -56,7 +56,7 @@ impl Player {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        #[allow(clippy::cast_ptr_alignment)]
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
@@ -72,7 +72,7 @@ impl Player {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        #[allow(clippy::cast_ptr_alignment)]
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
@@ -88,7 +88,7 @@ impl Player {
         &self,
         f: F,
     ) -> SignalHandlerId {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        #[allow(clippy::cast_ptr_alignment)]
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(

@@ -442,7 +442,7 @@ impl<'a> VideoInfoBuilder<'a> {
 }
 
 impl VideoInfo {
-    #[cfg_attr(feature = "cargo-clippy", allow(new_ret_no_self))]
+    #[allow(clippy::new_ret_no_self)]
     pub fn new<'a>(format: ::VideoFormat, width: u32, height: u32) -> VideoInfoBuilder<'a> {
         assert_initialized_main_thread!();
 

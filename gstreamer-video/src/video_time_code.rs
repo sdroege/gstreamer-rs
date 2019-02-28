@@ -516,7 +516,7 @@ impl VideoTimeCodeMeta {
     }
 
     pub fn set_tc(&mut self, tc: ValidVideoTimeCode) {
-        #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        #![allow(clippy::cast_ptr_alignment)]
         unsafe {
             ffi::gst_video_time_code_clear(&mut self.0.tc);
             self.0.tc = tc.0;

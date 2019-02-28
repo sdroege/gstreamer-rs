@@ -516,7 +516,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
     where
         F: Fn(&Self, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
     {
-        #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+        #[allow(clippy::type_complexity)]
         unsafe {
             let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_activate_function_full(
@@ -535,7 +535,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             + Sync
             + 'static,
     {
-        #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+        #[allow(clippy::type_complexity)]
         unsafe {
             let func_box: Box<F> = Box::new(func);
             ffi::gst_pad_set_activatemode_function_full(
@@ -1346,7 +1346,7 @@ unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpoi
 }
 
 fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
-    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    #[allow(clippy::type_complexity)]
     let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
     Box::into_raw(func) as gpointer
 }

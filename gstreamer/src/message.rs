@@ -1187,7 +1187,7 @@ impl<'a> MessageBuilder<'a> {
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {
-        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
+        #[allow(clippy::needless_update)]
         pub fn src<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             Self {
                 builder: self.builder.src(src),
@@ -1195,7 +1195,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
+        #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
             Self {
                 builder: self.builder.seqnum(seqnum),
@@ -1204,7 +1204,7 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[cfg(any(feature = "v1_14", feature = "dox"))]
-        #[cfg_attr(feature = "cargo-clippy", allow(needless_update))]
+        #[allow(clippy::needless_update)]
         pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
@@ -2268,7 +2268,7 @@ pub struct RedirectBuilder<'a> {
     location: &'a str,
     tag_list: Option<&'a TagList>,
     entry_struct: Option<Structure>,
-    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    #[allow(clippy::type_complexity)]
     entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]

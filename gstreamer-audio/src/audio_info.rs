@@ -133,7 +133,7 @@ impl<'a> AudioInfoBuilder<'a> {
 }
 
 impl AudioInfo {
-    #[cfg_attr(feature = "cargo-clippy", allow(new_ret_no_self))]
+    #[allow(clippy::new_ret_no_self)]
     pub fn new<'a>(format: ::AudioFormat, rate: u32, channels: u32) -> AudioInfoBuilder<'a> {
         assert_initialized_main_thread!();
 

@@ -29,7 +29,7 @@ impl NetAddressMeta {
     }
 
     pub fn set_addr<T: IsA<gio::SocketAddress>>(&mut self, addr: &T) {
-        #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        #![allow(clippy::cast_ptr_alignment)]
         unsafe {
             gobject_ffi::g_object_unref(self.0.addr as *mut _);
             self.0.addr = addr.as_ref().to_glib_full();

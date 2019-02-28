@@ -245,7 +245,7 @@ impl<'a, T: MiniObject + 'static> ToGlibPtrMut<'a, *mut T::GstType> for GstRc<T>
 }
 
 impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstType> for GstRc<T> {
-    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    #[allow(clippy::type_complexity)]
     type Storage = (
         Vec<Stash<'a, *mut T::GstType, GstRc<T>>>,
         Option<Vec<*mut T::GstType>>,
@@ -296,7 +296,7 @@ impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *mut *mut T::GstT
 impl<'a, T: MiniObject + 'static> ToGlibContainerFromSlice<'a, *const *mut T::GstType>
     for GstRc<T>
 {
-    #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+    #[allow(clippy::type_complexity)]
     type Storage = (
         Vec<Stash<'a, *mut T::GstType, GstRc<T>>>,
         Option<Vec<*mut T::GstType>>,
@@ -607,7 +607,7 @@ macro_rules! gst_define_mini_object_wrapper(
         }
 
         impl<'a> $crate::glib::translate::ToGlibContainerFromSlice<'a, *mut *mut $ffi_name> for $name {
-            #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+            #[allow(clippy::type_complexity)]
             type Storage = (
                 Vec<$crate::glib::translate::Stash<'a, *mut $ffi_name, $name>>,
                 Option<Vec<*mut $ffi_name>>,
@@ -658,7 +658,7 @@ macro_rules! gst_define_mini_object_wrapper(
         impl<'a> $crate::glib::translate::ToGlibContainerFromSlice<'a, *const *mut $ffi_name>
             for $name
         {
-            #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+            #[allow(clippy::type_complexity)]
             type Storage = (
                 Vec<$crate::glib::translate::Stash<'a, *mut $ffi_name, $name>>,
                 Option<Vec<*mut $ffi_name>>,
@@ -844,7 +844,7 @@ macro_rules! gst_define_mini_object_wrapper(
             type Owned = $name;
 
             fn to_owned(&self) -> $name {
-                #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+                #[allow(clippy::cast_ptr_alignment)]
                 unsafe {
                     $name($crate::glib::translate::from_glib_none($crate::miniobject::MiniObject::as_ptr(self)))
                 }

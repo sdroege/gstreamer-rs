@@ -41,7 +41,7 @@ impl SDPTime {
     }
 
     pub fn repeat(&self) -> Vec<&str> {
-        #[cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
+        #[allow(clippy::cast_ptr_alignment)]
         unsafe {
             let arr = (*self.0.repeat).data as *const *const c_char;
             let len = (*self.0.repeat).len as usize;
