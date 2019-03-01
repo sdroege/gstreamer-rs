@@ -704,7 +704,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
                     self.as_ref().to_glib_none().0,
                     Some(trampoline_pad_task::<F>),
                     into_raw_pad_task(func),
-                    Some(destroy_closure::<F>),
+                    Some(destroy_closure_pad_task::<F>),
                 ),
                 "Failed to start pad task",
             )
@@ -1349,6 +1349,10 @@ fn into_raw_pad_task<F: FnMut() + Send + 'static>(func: F) -> gpointer {
     #[cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
     let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
     Box::into_raw(func) as gpointer
+}
+
+unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
+    Box::<RefCell<F>>::from_raw(ptr as *mut _);
 }
 
 #[cfg(test)]
