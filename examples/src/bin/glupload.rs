@@ -329,7 +329,7 @@ struct App {
     appsink: gst_app::AppSink,
     bus: gst::Bus,
     events_loop: Arc<glutin::EventsLoop>,
-    combined_context: Arc<glutin::CombinedContext>,
+    combined_context: Arc<glutin::WindowedContext>,
 }
 
 impl App {
