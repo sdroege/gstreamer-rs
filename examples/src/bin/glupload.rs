@@ -329,7 +329,7 @@ struct App {
     appsink: gst_app::AppSink,
     bus: gst::Bus,
     events_loop: Arc<glutin::EventsLoop>,
-    combined_context: Arc<glutin::WindowedContext>,
+    windowed_context: Arc<glutin::WindowedContext>,
 }
 
 impl App {
@@ -343,14 +343,14 @@ impl App {
 
         let events_loop = glutin::EventsLoop::new();
         let window = glutin::WindowBuilder::new().with_title("GL rendering");
-        let combined_context = Arc::new(
+        let windowed_context = Arc::new(
             glutin::ContextBuilder::new()
                 .with_vsync(true)
-                .build_combined(window, &events_loop)?,
+                .build_windowed(window, &events_loop)?,
         );
 
-        let combined_context_ = combined_context.clone();
-        let context = combined_context_.context();
+        let windowed_context_ = windowed_context.clone();
+        let context = windowed_context_.context();
 
         if cfg!(target_os = "linux") {
             use glutin::os::unix::RawHandle;
@@ -417,7 +417,7 @@ impl App {
             appsink,
             bus,
             events_loop: Arc::new(events_loop),
-            combined_context,
+            windowed_context,
         })
     }
 
@@ -540,29 +540,29 @@ impl App {
 }
 
 fn main_loop(mut app: App) -> Result<(), Error> {
-    unsafe { app.combined_context.make_current()? };
+    unsafe { app.windowed_context.make_current()? };
 
     println!(
         "Pixel format of the window's GL context {:?}",
-        app.combined_context.get_pixel_format()
+        app.windowed_context.get_pixel_format()
     );
 
-    let gl = load(&app.combined_context.context());
+    let gl = load(&app.windowed_context.context());
 
     let (bus_handler, receiver) = app.setup()?;
 
     let mut curr_frame: Option<Arc<gst_video::VideoFrame<gst_video::video_frame::Readable>>> = None;
     let mut running = true;
     let events_loop = Arc::get_mut(&mut app.events_loop).unwrap();
-    let combined_context = app.combined_context.clone();
+    let windowed_context = app.windowed_context.clone();
     while running {
         #[allow(clippy::single_match)]
         events_loop.poll_events(|event| match event {
             glutin::Event::WindowEvent { event, .. } => match event {
                 glutin::WindowEvent::CloseRequested => running = false,
                 glutin::WindowEvent::Resized(logical_size) => {
-                    let dpi_factor = combined_context.get_hidpi_factor();
-                    combined_context.resize(logical_size.to_physical(dpi_factor));
+                    let dpi_factor = windowed_context.get_hidpi_factor();
+                    windowed_context.resize(logical_size.to_physical(dpi_factor));
                     gl.resize(logical_size.to_physical(dpi_factor));
                 }
                 _ => (),
@@ -587,7 +587,7 @@ fn main_loop(mut app: App) -> Result<(), Error> {
                 gl.draw_frame(texture as gl::types::GLuint);
             }
         }
-        app.combined_context.swap_buffers()?;
+        app.windowed_context.swap_buffers()?;
     }
 
     app.pipeline.send_event(gst::Event::new_eos().build());
