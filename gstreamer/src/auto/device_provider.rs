@@ -7,7 +7,6 @@ use Device;
 use DeviceProviderFactory;
 use Object;
 use Plugin;
-use ffi;
 use glib;
 use glib::GString;
 use glib::object::Cast;
@@ -15,25 +14,25 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct DeviceProvider(Object<ffi::GstDeviceProvider, ffi::GstDeviceProviderClass, DeviceProviderClass>) @extends Object;
+    pub struct DeviceProvider(Object<gst_sys::GstDeviceProvider, gst_sys::GstDeviceProviderClass, DeviceProviderClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_device_provider_get_type(),
+        get_type => || gst_sys::gst_device_provider_get_type(),
     }
 }
 
 impl DeviceProvider {
-    pub fn register<'a, P: Into<Option<&'a Plugin>>>(plugin: P, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
+    pub fn register(plugin: Option<&Plugin>, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
-        let plugin = plugin.into();
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_device_provider_register(plugin.to_glib_none().0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register device provider factory")
+            glib_result_from_gboolean!(gst_sys::gst_device_provider_register(plugin.to_glib_none().0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register device provider factory")
         }
     }
 }
@@ -74,67 +73,67 @@ pub trait DeviceProviderExt: 'static {
 impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
     fn can_monitor(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_provider_can_monitor(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_device_provider_can_monitor(self.as_ref().to_glib_none().0))
         }
     }
 
     fn device_add<P: IsA<Device>>(&self, device: &P) {
         unsafe {
-            ffi::gst_device_provider_device_add(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0);
+            gst_sys::gst_device_provider_device_add(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0);
         }
     }
 
     fn device_remove<P: IsA<Device>>(&self, device: &P) {
         unsafe {
-            ffi::gst_device_provider_device_remove(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0);
+            gst_sys::gst_device_provider_device_remove(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0);
         }
     }
 
     fn get_bus(&self) -> Bus {
         unsafe {
-            from_glib_full(ffi::gst_device_provider_get_bus(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_provider_get_bus(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_devices(&self) -> Vec<Device> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_devices(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_device_provider_get_devices(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_factory(&self) -> Option<DeviceProviderFactory> {
         unsafe {
-            from_glib_none(ffi::gst_device_provider_get_factory(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_sys::gst_device_provider_get_factory(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_hidden_providers(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_get_hidden_providers(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_device_provider_get_hidden_providers(self.as_ref().to_glib_none().0))
         }
     }
 
     fn hide_provider(&self, name: &str) {
         unsafe {
-            ffi::gst_device_provider_hide_provider(self.as_ref().to_glib_none().0, name.to_glib_none().0);
+            gst_sys::gst_device_provider_hide_provider(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     fn start(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_device_provider_start(self.as_ref().to_glib_none().0), "Failed to start")
+            glib_result_from_gboolean!(gst_sys::gst_device_provider_start(self.as_ref().to_glib_none().0), "Failed to start")
         }
     }
 
     fn stop(&self) {
         unsafe {
-            ffi::gst_device_provider_stop(self.as_ref().to_glib_none().0);
+            gst_sys::gst_device_provider_stop(self.as_ref().to_glib_none().0);
         }
     }
 
     fn unhide_provider(&self, name: &str) {
         unsafe {
-            ffi::gst_device_provider_unhide_provider(self.as_ref().to_glib_none().0, name.to_glib_none().0);
+            gst_sys::gst_device_provider_unhide_provider(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
@@ -155,13 +154,13 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
     }
 }
 
-unsafe extern "C" fn provider_hidden_trampoline<P, F: Fn(&P, &str) + Send + Sync + 'static>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn provider_hidden_trampoline<P, F: Fn(&P, &str) + Send + Sync + 'static>(this: *mut gst_sys::GstDeviceProvider, object: *mut libc::c_char, f: glib_sys::gpointer)
 where P: IsA<DeviceProvider> {
     let f: &F = &*(f as *const F);
     f(&DeviceProvider::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(object))
 }
 
-unsafe extern "C" fn provider_unhidden_trampoline<P, F: Fn(&P, &str) + Send + Sync + 'static>(this: *mut ffi::GstDeviceProvider, object: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn provider_unhidden_trampoline<P, F: Fn(&P, &str) + Send + Sync + 'static>(this: *mut gst_sys::GstDeviceProvider, object: *mut libc::c_char, f: glib_sys::gpointer)
 where P: IsA<DeviceProvider> {
     let f: &F = &*(f as *const F);
     f(&DeviceProvider::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(object))

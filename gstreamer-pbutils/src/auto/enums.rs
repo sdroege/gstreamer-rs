@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_pbutils_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
@@ -27,24 +27,24 @@ pub enum DiscovererResult {
 
 #[doc(hidden)]
 impl ToGlib for DiscovererResult {
-    type GlibType = ffi::GstDiscovererResult;
+    type GlibType = gst_pbutils_sys::GstDiscovererResult;
 
-    fn to_glib(&self) -> ffi::GstDiscovererResult {
+    fn to_glib(&self) -> gst_pbutils_sys::GstDiscovererResult {
         match *self {
-            DiscovererResult::Ok => ffi::GST_DISCOVERER_OK,
-            DiscovererResult::UriInvalid => ffi::GST_DISCOVERER_URI_INVALID,
-            DiscovererResult::Error => ffi::GST_DISCOVERER_ERROR,
-            DiscovererResult::Timeout => ffi::GST_DISCOVERER_TIMEOUT,
-            DiscovererResult::Busy => ffi::GST_DISCOVERER_BUSY,
-            DiscovererResult::MissingPlugins => ffi::GST_DISCOVERER_MISSING_PLUGINS,
+            DiscovererResult::Ok => gst_pbutils_sys::GST_DISCOVERER_OK,
+            DiscovererResult::UriInvalid => gst_pbutils_sys::GST_DISCOVERER_URI_INVALID,
+            DiscovererResult::Error => gst_pbutils_sys::GST_DISCOVERER_ERROR,
+            DiscovererResult::Timeout => gst_pbutils_sys::GST_DISCOVERER_TIMEOUT,
+            DiscovererResult::Busy => gst_pbutils_sys::GST_DISCOVERER_BUSY,
+            DiscovererResult::MissingPlugins => gst_pbutils_sys::GST_DISCOVERER_MISSING_PLUGINS,
             DiscovererResult::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
-    fn from_glib(value: ffi::GstDiscovererResult) -> Self {
+impl FromGlib<gst_pbutils_sys::GstDiscovererResult> for DiscovererResult {
+    fn from_glib(value: gst_pbutils_sys::GstDiscovererResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => DiscovererResult::Ok,
@@ -60,7 +60,7 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
 
 impl StaticType for DiscovererResult {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_discoverer_result_get_type()) }
+        unsafe { from_glib(gst_pbutils_sys::gst_discoverer_result_get_type()) }
     }
 }
 
@@ -72,13 +72,13 @@ impl<'a> FromValueOptional<'a> for DiscovererResult {
 
 impl<'a> FromValue<'a> for DiscovererResult {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DiscovererResult {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_sys;
 
 bitflags! {
     pub struct BufferCopyFlags: u32 {
@@ -26,16 +26,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for BufferCopyFlags {
-    type GlibType = ffi::GstBufferCopyFlags;
+    type GlibType = gst_sys::GstBufferCopyFlags;
 
-    fn to_glib(&self) -> ffi::GstBufferCopyFlags {
+    fn to_glib(&self) -> gst_sys::GstBufferCopyFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstBufferCopyFlags> for BufferCopyFlags {
-    fn from_glib(value: ffi::GstBufferCopyFlags) -> BufferCopyFlags {
+impl FromGlib<gst_sys::GstBufferCopyFlags> for BufferCopyFlags {
+    fn from_glib(value: gst_sys::GstBufferCopyFlags) -> BufferCopyFlags {
         skip_assert_initialized!();
         BufferCopyFlags::from_bits_truncate(value)
     }
@@ -43,7 +43,7 @@ impl FromGlib<ffi::GstBufferCopyFlags> for BufferCopyFlags {
 
 impl StaticType for BufferCopyFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_buffer_copy_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_buffer_copy_flags_get_type()) }
     }
 }
 
@@ -55,13 +55,13 @@ impl<'a> FromValueOptional<'a> for BufferCopyFlags {
 
 impl<'a> FromValue<'a> for BufferCopyFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferCopyFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -87,16 +87,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for BufferFlags {
-    type GlibType = ffi::GstBufferFlags;
+    type GlibType = gst_sys::GstBufferFlags;
 
-    fn to_glib(&self) -> ffi::GstBufferFlags {
+    fn to_glib(&self) -> gst_sys::GstBufferFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstBufferFlags> for BufferFlags {
-    fn from_glib(value: ffi::GstBufferFlags) -> BufferFlags {
+impl FromGlib<gst_sys::GstBufferFlags> for BufferFlags {
+    fn from_glib(value: gst_sys::GstBufferFlags) -> BufferFlags {
         skip_assert_initialized!();
         BufferFlags::from_bits_truncate(value)
     }
@@ -104,7 +104,7 @@ impl FromGlib<ffi::GstBufferFlags> for BufferFlags {
 
 impl StaticType for BufferFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_buffer_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_buffer_flags_get_type()) }
     }
 }
 
@@ -116,13 +116,13 @@ impl<'a> FromValueOptional<'a> for BufferFlags {
 
 impl<'a> FromValue<'a> for BufferFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -138,16 +138,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for BufferPoolAcquireFlags {
-    type GlibType = ffi::GstBufferPoolAcquireFlags;
+    type GlibType = gst_sys::GstBufferPoolAcquireFlags;
 
-    fn to_glib(&self) -> ffi::GstBufferPoolAcquireFlags {
+    fn to_glib(&self) -> gst_sys::GstBufferPoolAcquireFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstBufferPoolAcquireFlags> for BufferPoolAcquireFlags {
-    fn from_glib(value: ffi::GstBufferPoolAcquireFlags) -> BufferPoolAcquireFlags {
+impl FromGlib<gst_sys::GstBufferPoolAcquireFlags> for BufferPoolAcquireFlags {
+    fn from_glib(value: gst_sys::GstBufferPoolAcquireFlags) -> BufferPoolAcquireFlags {
         skip_assert_initialized!();
         BufferPoolAcquireFlags::from_bits_truncate(value)
     }
@@ -155,7 +155,7 @@ impl FromGlib<ffi::GstBufferPoolAcquireFlags> for BufferPoolAcquireFlags {
 
 impl StaticType for BufferPoolAcquireFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_buffer_pool_acquire_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_buffer_pool_acquire_flags_get_type()) }
     }
 }
 
@@ -167,13 +167,13 @@ impl<'a> FromValueOptional<'a> for BufferPoolAcquireFlags {
 
 impl<'a> FromValue<'a> for BufferPoolAcquireFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferPoolAcquireFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -202,16 +202,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for DebugColorFlags {
-    type GlibType = ffi::GstDebugColorFlags;
+    type GlibType = gst_sys::GstDebugColorFlags;
 
-    fn to_glib(&self) -> ffi::GstDebugColorFlags {
+    fn to_glib(&self) -> gst_sys::GstDebugColorFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstDebugColorFlags> for DebugColorFlags {
-    fn from_glib(value: ffi::GstDebugColorFlags) -> DebugColorFlags {
+impl FromGlib<gst_sys::GstDebugColorFlags> for DebugColorFlags {
+    fn from_glib(value: gst_sys::GstDebugColorFlags) -> DebugColorFlags {
         skip_assert_initialized!();
         DebugColorFlags::from_bits_truncate(value)
     }
@@ -219,7 +219,7 @@ impl FromGlib<ffi::GstDebugColorFlags> for DebugColorFlags {
 
 impl StaticType for DebugColorFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_debug_color_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_debug_color_flags_get_type()) }
     }
 }
 
@@ -231,13 +231,13 @@ impl<'a> FromValueOptional<'a> for DebugColorFlags {
 
 impl<'a> FromValue<'a> for DebugColorFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DebugColorFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -255,16 +255,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for DebugGraphDetails {
-    type GlibType = ffi::GstDebugGraphDetails;
+    type GlibType = gst_sys::GstDebugGraphDetails;
 
-    fn to_glib(&self) -> ffi::GstDebugGraphDetails {
+    fn to_glib(&self) -> gst_sys::GstDebugGraphDetails {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstDebugGraphDetails> for DebugGraphDetails {
-    fn from_glib(value: ffi::GstDebugGraphDetails) -> DebugGraphDetails {
+impl FromGlib<gst_sys::GstDebugGraphDetails> for DebugGraphDetails {
+    fn from_glib(value: gst_sys::GstDebugGraphDetails) -> DebugGraphDetails {
         skip_assert_initialized!();
         DebugGraphDetails::from_bits_truncate(value)
     }
@@ -272,7 +272,7 @@ impl FromGlib<ffi::GstDebugGraphDetails> for DebugGraphDetails {
 
 impl StaticType for DebugGraphDetails {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_debug_graph_details_get_type()) }
+        unsafe { from_glib(gst_sys::gst_debug_graph_details_get_type()) }
     }
 }
 
@@ -284,13 +284,13 @@ impl<'a> FromValueOptional<'a> for DebugGraphDetails {
 
 impl<'a> FromValue<'a> for DebugGraphDetails {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DebugGraphDetails {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -308,16 +308,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for ElementFlags {
-    type GlibType = ffi::GstElementFlags;
+    type GlibType = gst_sys::GstElementFlags;
 
-    fn to_glib(&self) -> ffi::GstElementFlags {
+    fn to_glib(&self) -> gst_sys::GstElementFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstElementFlags> for ElementFlags {
-    fn from_glib(value: ffi::GstElementFlags) -> ElementFlags {
+impl FromGlib<gst_sys::GstElementFlags> for ElementFlags {
+    fn from_glib(value: gst_sys::GstElementFlags) -> ElementFlags {
         skip_assert_initialized!();
         ElementFlags::from_bits_truncate(value)
     }
@@ -325,7 +325,7 @@ impl FromGlib<ffi::GstElementFlags> for ElementFlags {
 
 impl StaticType for ElementFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_element_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_element_flags_get_type()) }
     }
 }
 
@@ -337,13 +337,13 @@ impl<'a> FromValueOptional<'a> for ElementFlags {
 
 impl<'a> FromValue<'a> for ElementFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ElementFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -360,16 +360,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for PadLinkCheck {
-    type GlibType = ffi::GstPadLinkCheck;
+    type GlibType = gst_sys::GstPadLinkCheck;
 
-    fn to_glib(&self) -> ffi::GstPadLinkCheck {
+    fn to_glib(&self) -> gst_sys::GstPadLinkCheck {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadLinkCheck> for PadLinkCheck {
-    fn from_glib(value: ffi::GstPadLinkCheck) -> PadLinkCheck {
+impl FromGlib<gst_sys::GstPadLinkCheck> for PadLinkCheck {
+    fn from_glib(value: gst_sys::GstPadLinkCheck) -> PadLinkCheck {
         skip_assert_initialized!();
         PadLinkCheck::from_bits_truncate(value)
     }
@@ -377,7 +377,7 @@ impl FromGlib<ffi::GstPadLinkCheck> for PadLinkCheck {
 
 impl StaticType for PadLinkCheck {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_link_check_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_link_check_get_type()) }
     }
 }
 
@@ -389,13 +389,13 @@ impl<'a> FromValueOptional<'a> for PadLinkCheck {
 
 impl<'a> FromValue<'a> for PadLinkCheck {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadLinkCheck {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -428,16 +428,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for PadProbeType {
-    type GlibType = ffi::GstPadProbeType;
+    type GlibType = gst_sys::GstPadProbeType;
 
-    fn to_glib(&self) -> ffi::GstPadProbeType {
+    fn to_glib(&self) -> gst_sys::GstPadProbeType {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadProbeType> for PadProbeType {
-    fn from_glib(value: ffi::GstPadProbeType) -> PadProbeType {
+impl FromGlib<gst_sys::GstPadProbeType> for PadProbeType {
+    fn from_glib(value: gst_sys::GstPadProbeType) -> PadProbeType {
         skip_assert_initialized!();
         PadProbeType::from_bits_truncate(value)
     }
@@ -445,7 +445,7 @@ impl FromGlib<ffi::GstPadProbeType> for PadProbeType {
 
 impl StaticType for PadProbeType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_probe_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_probe_type_get_type()) }
     }
 }
 
@@ -457,13 +457,13 @@ impl<'a> FromValueOptional<'a> for PadProbeType {
 
 impl<'a> FromValue<'a> for PadProbeType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadProbeType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -478,16 +478,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for ParseFlags {
-    type GlibType = ffi::GstParseFlags;
+    type GlibType = gst_sys::GstParseFlags;
 
-    fn to_glib(&self) -> ffi::GstParseFlags {
+    fn to_glib(&self) -> gst_sys::GstParseFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstParseFlags> for ParseFlags {
-    fn from_glib(value: ffi::GstParseFlags) -> ParseFlags {
+impl FromGlib<gst_sys::GstParseFlags> for ParseFlags {
+    fn from_glib(value: gst_sys::GstParseFlags) -> ParseFlags {
         skip_assert_initialized!();
         ParseFlags::from_bits_truncate(value)
     }
@@ -495,7 +495,7 @@ impl FromGlib<ffi::GstParseFlags> for ParseFlags {
 
 impl StaticType for ParseFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_parse_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_parse_flags_get_type()) }
     }
 }
 
@@ -507,13 +507,13 @@ impl<'a> FromValueOptional<'a> for ParseFlags {
 
 impl<'a> FromValue<'a> for ParseFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ParseFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -530,16 +530,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for PluginDependencyFlags {
-    type GlibType = ffi::GstPluginDependencyFlags;
+    type GlibType = gst_sys::GstPluginDependencyFlags;
 
-    fn to_glib(&self) -> ffi::GstPluginDependencyFlags {
+    fn to_glib(&self) -> gst_sys::GstPluginDependencyFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPluginDependencyFlags> for PluginDependencyFlags {
-    fn from_glib(value: ffi::GstPluginDependencyFlags) -> PluginDependencyFlags {
+impl FromGlib<gst_sys::GstPluginDependencyFlags> for PluginDependencyFlags {
+    fn from_glib(value: gst_sys::GstPluginDependencyFlags) -> PluginDependencyFlags {
         skip_assert_initialized!();
         PluginDependencyFlags::from_bits_truncate(value)
     }
@@ -547,7 +547,7 @@ impl FromGlib<ffi::GstPluginDependencyFlags> for PluginDependencyFlags {
 
 impl StaticType for PluginDependencyFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_plugin_dependency_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_plugin_dependency_flags_get_type()) }
     }
 }
 
@@ -559,13 +559,13 @@ impl<'a> FromValueOptional<'a> for PluginDependencyFlags {
 
 impl<'a> FromValue<'a> for PluginDependencyFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PluginDependencyFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -579,16 +579,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for SchedulingFlags {
-    type GlibType = ffi::GstSchedulingFlags;
+    type GlibType = gst_sys::GstSchedulingFlags;
 
-    fn to_glib(&self) -> ffi::GstSchedulingFlags {
+    fn to_glib(&self) -> gst_sys::GstSchedulingFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstSchedulingFlags> for SchedulingFlags {
-    fn from_glib(value: ffi::GstSchedulingFlags) -> SchedulingFlags {
+impl FromGlib<gst_sys::GstSchedulingFlags> for SchedulingFlags {
+    fn from_glib(value: gst_sys::GstSchedulingFlags) -> SchedulingFlags {
         skip_assert_initialized!();
         SchedulingFlags::from_bits_truncate(value)
     }
@@ -596,7 +596,7 @@ impl FromGlib<ffi::GstSchedulingFlags> for SchedulingFlags {
 
 impl StaticType for SchedulingFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_scheduling_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_scheduling_flags_get_type()) }
     }
 }
 
@@ -608,13 +608,13 @@ impl<'a> FromValueOptional<'a> for SchedulingFlags {
 
 impl<'a> FromValue<'a> for SchedulingFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SchedulingFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -637,16 +637,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for SeekFlags {
-    type GlibType = ffi::GstSeekFlags;
+    type GlibType = gst_sys::GstSeekFlags;
 
-    fn to_glib(&self) -> ffi::GstSeekFlags {
+    fn to_glib(&self) -> gst_sys::GstSeekFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstSeekFlags> for SeekFlags {
-    fn from_glib(value: ffi::GstSeekFlags) -> SeekFlags {
+impl FromGlib<gst_sys::GstSeekFlags> for SeekFlags {
+    fn from_glib(value: gst_sys::GstSeekFlags) -> SeekFlags {
         skip_assert_initialized!();
         SeekFlags::from_bits_truncate(value)
     }
@@ -654,7 +654,7 @@ impl FromGlib<ffi::GstSeekFlags> for SeekFlags {
 
 impl StaticType for SeekFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_seek_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_seek_flags_get_type()) }
     }
 }
 
@@ -666,13 +666,13 @@ impl<'a> FromValueOptional<'a> for SeekFlags {
 
 impl<'a> FromValue<'a> for SeekFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SeekFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -691,16 +691,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for SegmentFlags {
-    type GlibType = ffi::GstSegmentFlags;
+    type GlibType = gst_sys::GstSegmentFlags;
 
-    fn to_glib(&self) -> ffi::GstSegmentFlags {
+    fn to_glib(&self) -> gst_sys::GstSegmentFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstSegmentFlags> for SegmentFlags {
-    fn from_glib(value: ffi::GstSegmentFlags) -> SegmentFlags {
+impl FromGlib<gst_sys::GstSegmentFlags> for SegmentFlags {
+    fn from_glib(value: gst_sys::GstSegmentFlags) -> SegmentFlags {
         skip_assert_initialized!();
         SegmentFlags::from_bits_truncate(value)
     }
@@ -708,7 +708,7 @@ impl FromGlib<ffi::GstSegmentFlags> for SegmentFlags {
 
 impl StaticType for SegmentFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_segment_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_segment_flags_get_type()) }
     }
 }
 
@@ -720,13 +720,13 @@ impl<'a> FromValueOptional<'a> for SegmentFlags {
 
 impl<'a> FromValue<'a> for SegmentFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SegmentFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -740,17 +740,17 @@ bitflags! {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for StackTraceFlags {
-    type GlibType = ffi::GstStackTraceFlags;
+    type GlibType = gst_sys::GstStackTraceFlags;
 
-    fn to_glib(&self) -> ffi::GstStackTraceFlags {
+    fn to_glib(&self) -> gst_sys::GstStackTraceFlags {
         self.bits()
     }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
-    fn from_glib(value: ffi::GstStackTraceFlags) -> StackTraceFlags {
+impl FromGlib<gst_sys::GstStackTraceFlags> for StackTraceFlags {
+    fn from_glib(value: gst_sys::GstStackTraceFlags) -> StackTraceFlags {
         skip_assert_initialized!();
         StackTraceFlags::from_bits_truncate(value)
     }
@@ -759,7 +759,7 @@ impl FromGlib<ffi::GstStackTraceFlags> for StackTraceFlags {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl StaticType for StackTraceFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_stack_trace_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_stack_trace_flags_get_type()) }
     }
 }
 
@@ -773,14 +773,14 @@ impl<'a> FromValueOptional<'a> for StackTraceFlags {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl<'a> FromValue<'a> for StackTraceFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl SetValue for StackTraceFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -795,16 +795,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for StreamFlags {
-    type GlibType = ffi::GstStreamFlags;
+    type GlibType = gst_sys::GstStreamFlags;
 
-    fn to_glib(&self) -> ffi::GstStreamFlags {
+    fn to_glib(&self) -> gst_sys::GstStreamFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstStreamFlags> for StreamFlags {
-    fn from_glib(value: ffi::GstStreamFlags) -> StreamFlags {
+impl FromGlib<gst_sys::GstStreamFlags> for StreamFlags {
+    fn from_glib(value: gst_sys::GstStreamFlags) -> StreamFlags {
         skip_assert_initialized!();
         StreamFlags::from_bits_truncate(value)
     }
@@ -812,7 +812,7 @@ impl FromGlib<ffi::GstStreamFlags> for StreamFlags {
 
 impl StaticType for StreamFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_stream_flags_get_type()) }
+        unsafe { from_glib(gst_sys::gst_stream_flags_get_type()) }
     }
 }
 
@@ -824,13 +824,13 @@ impl<'a> FromValueOptional<'a> for StreamFlags {
 
 impl<'a> FromValue<'a> for StreamFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StreamFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -848,17 +848,17 @@ bitflags! {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for StreamType {
-    type GlibType = ffi::GstStreamType;
+    type GlibType = gst_sys::GstStreamType;
 
-    fn to_glib(&self) -> ffi::GstStreamType {
+    fn to_glib(&self) -> gst_sys::GstStreamType {
         self.bits()
     }
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::GstStreamType> for StreamType {
-    fn from_glib(value: ffi::GstStreamType) -> StreamType {
+impl FromGlib<gst_sys::GstStreamType> for StreamType {
+    fn from_glib(value: gst_sys::GstStreamType) -> StreamType {
         skip_assert_initialized!();
         StreamType::from_bits_truncate(value)
     }
@@ -867,7 +867,7 @@ impl FromGlib<ffi::GstStreamType> for StreamType {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl StaticType for StreamType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_stream_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_stream_type_get_type()) }
     }
 }
 
@@ -881,14 +881,14 @@ impl<'a> FromValueOptional<'a> for StreamType {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> FromValue<'a> for StreamType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl SetValue for StreamType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

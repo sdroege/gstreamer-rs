@@ -3,21 +3,21 @@
 // DO NOT EDIT
 
 use DiscovererStreamInfo;
-use ffi;
 use glib::translate::*;
+use gst_pbutils_sys;
 
 glib_wrapper! {
-    pub struct DiscovererContainerInfo(Object<ffi::GstDiscovererContainerInfo, DiscovererContainerInfoClass>) @extends DiscovererStreamInfo;
+    pub struct DiscovererContainerInfo(Object<gst_pbutils_sys::GstDiscovererContainerInfo, DiscovererContainerInfoClass>) @extends DiscovererStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_discoverer_container_info_get_type(),
+        get_type => || gst_pbutils_sys::gst_discoverer_container_info_get_type(),
     }
 }
 
 impl DiscovererContainerInfo {
     pub fn get_streams(&self) -> Vec<DiscovererStreamInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_discoverer_container_info_get_streams(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_pbutils_sys::gst_discoverer_container_info_get_streams(self.to_glib_none().0))
         }
     }
 }

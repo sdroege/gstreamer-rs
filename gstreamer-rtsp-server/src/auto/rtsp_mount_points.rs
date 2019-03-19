@@ -3,18 +3,18 @@
 // DO NOT EDIT
 
 use RTSPMediaFactory;
-use ffi;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_rtsp;
+use gst_rtsp_server_sys;
 use std::mem;
 
 glib_wrapper! {
-    pub struct RTSPMountPoints(Object<ffi::GstRTSPMountPoints, ffi::GstRTSPMountPointsClass, RTSPMountPointsClass>);
+    pub struct RTSPMountPoints(Object<gst_rtsp_server_sys::GstRTSPMountPoints, gst_rtsp_server_sys::GstRTSPMountPointsClass, RTSPMountPointsClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_mount_points_get_type(),
+        get_type => || gst_rtsp_server_sys::gst_rtsp_mount_points_get_type(),
     }
 }
 
@@ -22,7 +22,7 @@ impl RTSPMountPoints {
     pub fn new() -> RTSPMountPoints {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_rtsp_mount_points_new())
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_mount_points_new())
         }
     }
 }
@@ -51,27 +51,27 @@ pub trait RTSPMountPointsExt: 'static {
 impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
     fn add_factory<P: IsA<RTSPMediaFactory>>(&self, path: &str, factory: &P) {
         unsafe {
-            ffi::gst_rtsp_mount_points_add_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0, factory.as_ref().to_glib_full());
+            gst_rtsp_server_sys::gst_rtsp_mount_points_add_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0, factory.as_ref().to_glib_full());
         }
     }
 
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_mount_points_make_path(self.as_ref().to_glib_none().0, url.to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_mount_points_make_path(self.as_ref().to_glib_none().0, url.to_glib_none().0))
         }
     }
 
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32) {
         unsafe {
             let mut matched = mem::uninitialized();
-            let ret = from_glib_full(ffi::gst_rtsp_mount_points_match(self.as_ref().to_glib_none().0, path.to_glib_none().0, &mut matched));
+            let ret = from_glib_full(gst_rtsp_server_sys::gst_rtsp_mount_points_match(self.as_ref().to_glib_none().0, path.to_glib_none().0, &mut matched));
             (ret, matched)
         }
     }
 
     fn remove_factory(&self, path: &str) {
         unsafe {
-            ffi::gst_rtsp_mount_points_remove_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_mount_points_remove_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0);
         }
     }
 }

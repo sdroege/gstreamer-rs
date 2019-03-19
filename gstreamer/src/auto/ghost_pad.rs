@@ -7,34 +7,32 @@ use Pad;
 use PadDirection;
 use PadTemplate;
 use ProxyPad;
-use ffi;
 use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_sys;
 
 glib_wrapper! {
-    pub struct GhostPad(Object<ffi::GstGhostPad, ffi::GstGhostPadClass, GhostPadClass>) @extends ProxyPad, Pad, Object;
+    pub struct GhostPad(Object<gst_sys::GstGhostPad, gst_sys::GstGhostPadClass, GhostPadClass>) @extends ProxyPad, Pad, Object;
 
     match fn {
-        get_type => || ffi::gst_ghost_pad_get_type(),
+        get_type => || gst_sys::gst_ghost_pad_get_type(),
     }
 }
 
 impl GhostPad {
-    pub fn new_no_target<'a, P: Into<Option<&'a str>>>(name: P, dir: PadDirection) -> Option<GhostPad> {
+    pub fn new_no_target(name: Option<&str>, dir: PadDirection) -> Option<GhostPad> {
         assert_initialized_main_thread!();
-        let name = name.into();
         unsafe {
-            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new_no_target(name.to_glib_none().0, dir.to_glib())).map(|o| o.unsafe_cast())
+            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_no_target(name.to_glib_none().0, dir.to_glib())).map(|o| o.unsafe_cast())
         }
     }
 
-    pub fn new_no_target_from_template<'a, P: Into<Option<&'a str>>>(name: P, templ: &PadTemplate) -> Option<GhostPad> {
+    pub fn new_no_target_from_template(name: Option<&str>, templ: &PadTemplate) -> Option<GhostPad> {
         skip_assert_initialized!();
-        let name = name.into();
         unsafe {
-            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new_no_target_from_template(name.to_glib_none().0, templ.to_glib_none().0)).map(|o| o.unsafe_cast())
+            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_no_target_from_template(name.to_glib_none().0, templ.to_glib_none().0)).map(|o| o.unsafe_cast())
         }
     }
 }
@@ -47,20 +45,19 @@ pub const NONE_GHOST_PAD: Option<&GhostPad> = None;
 pub trait GhostPadExt: 'static {
     fn get_target(&self) -> Option<Pad>;
 
-    fn set_target<'a, P: IsA<Pad> + 'a, Q: Into<Option<&'a P>>>(&self, newtarget: Q) -> Result<(), glib::error::BoolError>;
+    fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<GhostPad>> GhostPadExt for O {
     fn get_target(&self) -> Option<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_ghost_pad_get_target(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_ghost_pad_get_target(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn set_target<'a, P: IsA<Pad> + 'a, Q: Into<Option<&'a P>>>(&self, newtarget: Q) -> Result<(), glib::error::BoolError> {
-        let newtarget = newtarget.into();
+    fn set_target<P: IsA<Pad>>(&self, newtarget: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_ghost_pad_set_target(self.as_ref().to_glib_none().0, newtarget.map(|p| p.as_ref()).to_glib_none().0), "Failed to set target")
+            glib_result_from_gboolean!(gst_sys::gst_ghost_pad_set_target(self.as_ref().to_glib_none().0, newtarget.map(|p| p.as_ref()).to_glib_none().0), "Failed to set target")
         }
     }
 }

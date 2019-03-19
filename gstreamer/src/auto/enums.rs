@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
@@ -12,7 +11,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
@@ -27,22 +27,22 @@ pub enum BufferingMode {
 
 #[doc(hidden)]
 impl ToGlib for BufferingMode {
-    type GlibType = ffi::GstBufferingMode;
+    type GlibType = gst_sys::GstBufferingMode;
 
-    fn to_glib(&self) -> ffi::GstBufferingMode {
+    fn to_glib(&self) -> gst_sys::GstBufferingMode {
         match *self {
-            BufferingMode::Stream => ffi::GST_BUFFERING_STREAM,
-            BufferingMode::Download => ffi::GST_BUFFERING_DOWNLOAD,
-            BufferingMode::Timeshift => ffi::GST_BUFFERING_TIMESHIFT,
-            BufferingMode::Live => ffi::GST_BUFFERING_LIVE,
+            BufferingMode::Stream => gst_sys::GST_BUFFERING_STREAM,
+            BufferingMode::Download => gst_sys::GST_BUFFERING_DOWNLOAD,
+            BufferingMode::Timeshift => gst_sys::GST_BUFFERING_TIMESHIFT,
+            BufferingMode::Live => gst_sys::GST_BUFFERING_LIVE,
             BufferingMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
-    fn from_glib(value: ffi::GstBufferingMode) -> Self {
+impl FromGlib<gst_sys::GstBufferingMode> for BufferingMode {
+    fn from_glib(value: gst_sys::GstBufferingMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => BufferingMode::Stream,
@@ -56,7 +56,7 @@ impl FromGlib<ffi::GstBufferingMode> for BufferingMode {
 
 impl StaticType for BufferingMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_buffering_mode_get_type()) }
+        unsafe { from_glib(gst_sys::gst_buffering_mode_get_type()) }
     }
 }
 
@@ -68,13 +68,13 @@ impl<'a> FromValueOptional<'a> for BufferingMode {
 
 impl<'a> FromValue<'a> for BufferingMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BufferingMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -90,21 +90,21 @@ pub enum BusSyncReply {
 
 #[doc(hidden)]
 impl ToGlib for BusSyncReply {
-    type GlibType = ffi::GstBusSyncReply;
+    type GlibType = gst_sys::GstBusSyncReply;
 
-    fn to_glib(&self) -> ffi::GstBusSyncReply {
+    fn to_glib(&self) -> gst_sys::GstBusSyncReply {
         match *self {
-            BusSyncReply::Drop => ffi::GST_BUS_DROP,
-            BusSyncReply::Pass => ffi::GST_BUS_PASS,
-            BusSyncReply::Async => ffi::GST_BUS_ASYNC,
+            BusSyncReply::Drop => gst_sys::GST_BUS_DROP,
+            BusSyncReply::Pass => gst_sys::GST_BUS_PASS,
+            BusSyncReply::Async => gst_sys::GST_BUS_ASYNC,
             BusSyncReply::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
-    fn from_glib(value: ffi::GstBusSyncReply) -> Self {
+impl FromGlib<gst_sys::GstBusSyncReply> for BusSyncReply {
+    fn from_glib(value: gst_sys::GstBusSyncReply) -> Self {
         skip_assert_initialized!();
         match value {
             0 => BusSyncReply::Drop,
@@ -117,7 +117,7 @@ impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
 
 impl StaticType for BusSyncReply {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_bus_sync_reply_get_type()) }
+        unsafe { from_glib(gst_sys::gst_bus_sync_reply_get_type()) }
     }
 }
 
@@ -129,13 +129,13 @@ impl<'a> FromValueOptional<'a> for BusSyncReply {
 
 impl<'a> FromValue<'a> for BusSyncReply {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for BusSyncReply {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -150,20 +150,20 @@ pub enum CapsIntersectMode {
 
 #[doc(hidden)]
 impl ToGlib for CapsIntersectMode {
-    type GlibType = ffi::GstCapsIntersectMode;
+    type GlibType = gst_sys::GstCapsIntersectMode;
 
-    fn to_glib(&self) -> ffi::GstCapsIntersectMode {
+    fn to_glib(&self) -> gst_sys::GstCapsIntersectMode {
         match *self {
-            CapsIntersectMode::ZigZag => ffi::GST_CAPS_INTERSECT_ZIG_ZAG,
-            CapsIntersectMode::First => ffi::GST_CAPS_INTERSECT_FIRST,
+            CapsIntersectMode::ZigZag => gst_sys::GST_CAPS_INTERSECT_ZIG_ZAG,
+            CapsIntersectMode::First => gst_sys::GST_CAPS_INTERSECT_FIRST,
             CapsIntersectMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
-    fn from_glib(value: ffi::GstCapsIntersectMode) -> Self {
+impl FromGlib<gst_sys::GstCapsIntersectMode> for CapsIntersectMode {
+    fn from_glib(value: gst_sys::GstCapsIntersectMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => CapsIntersectMode::ZigZag,
@@ -175,7 +175,7 @@ impl FromGlib<ffi::GstCapsIntersectMode> for CapsIntersectMode {
 
 impl StaticType for CapsIntersectMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_caps_intersect_mode_get_type()) }
+        unsafe { from_glib(gst_sys::gst_caps_intersect_mode_get_type()) }
     }
 }
 
@@ -187,13 +187,13 @@ impl<'a> FromValueOptional<'a> for CapsIntersectMode {
 
 impl<'a> FromValue<'a> for CapsIntersectMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for CapsIntersectMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -215,26 +215,26 @@ pub enum ClockReturn {
 
 #[doc(hidden)]
 impl ToGlib for ClockReturn {
-    type GlibType = ffi::GstClockReturn;
+    type GlibType = gst_sys::GstClockReturn;
 
-    fn to_glib(&self) -> ffi::GstClockReturn {
+    fn to_glib(&self) -> gst_sys::GstClockReturn {
         match *self {
-            ClockReturn::Ok => ffi::GST_CLOCK_OK,
-            ClockReturn::Early => ffi::GST_CLOCK_EARLY,
-            ClockReturn::Unscheduled => ffi::GST_CLOCK_UNSCHEDULED,
-            ClockReturn::Busy => ffi::GST_CLOCK_BUSY,
-            ClockReturn::Badtime => ffi::GST_CLOCK_BADTIME,
-            ClockReturn::Error => ffi::GST_CLOCK_ERROR,
-            ClockReturn::Unsupported => ffi::GST_CLOCK_UNSUPPORTED,
-            ClockReturn::Done => ffi::GST_CLOCK_DONE,
+            ClockReturn::Ok => gst_sys::GST_CLOCK_OK,
+            ClockReturn::Early => gst_sys::GST_CLOCK_EARLY,
+            ClockReturn::Unscheduled => gst_sys::GST_CLOCK_UNSCHEDULED,
+            ClockReturn::Busy => gst_sys::GST_CLOCK_BUSY,
+            ClockReturn::Badtime => gst_sys::GST_CLOCK_BADTIME,
+            ClockReturn::Error => gst_sys::GST_CLOCK_ERROR,
+            ClockReturn::Unsupported => gst_sys::GST_CLOCK_UNSUPPORTED,
+            ClockReturn::Done => gst_sys::GST_CLOCK_DONE,
             ClockReturn::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstClockReturn> for ClockReturn {
-    fn from_glib(value: ffi::GstClockReturn) -> Self {
+impl FromGlib<gst_sys::GstClockReturn> for ClockReturn {
+    fn from_glib(value: gst_sys::GstClockReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ClockReturn::Ok,
@@ -252,7 +252,7 @@ impl FromGlib<ffi::GstClockReturn> for ClockReturn {
 
 impl StaticType for ClockReturn {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_clock_return_get_type()) }
+        unsafe { from_glib(gst_sys::gst_clock_return_get_type()) }
     }
 }
 
@@ -264,13 +264,13 @@ impl<'a> FromValueOptional<'a> for ClockReturn {
 
 impl<'a> FromValue<'a> for ClockReturn {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ClockReturn {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -286,21 +286,21 @@ pub enum ClockType {
 
 #[doc(hidden)]
 impl ToGlib for ClockType {
-    type GlibType = ffi::GstClockType;
+    type GlibType = gst_sys::GstClockType;
 
-    fn to_glib(&self) -> ffi::GstClockType {
+    fn to_glib(&self) -> gst_sys::GstClockType {
         match *self {
-            ClockType::Realtime => ffi::GST_CLOCK_TYPE_REALTIME,
-            ClockType::Monotonic => ffi::GST_CLOCK_TYPE_MONOTONIC,
-            ClockType::Other => ffi::GST_CLOCK_TYPE_OTHER,
+            ClockType::Realtime => gst_sys::GST_CLOCK_TYPE_REALTIME,
+            ClockType::Monotonic => gst_sys::GST_CLOCK_TYPE_MONOTONIC,
+            ClockType::Other => gst_sys::GST_CLOCK_TYPE_OTHER,
             ClockType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstClockType> for ClockType {
-    fn from_glib(value: ffi::GstClockType) -> Self {
+impl FromGlib<gst_sys::GstClockType> for ClockType {
+    fn from_glib(value: gst_sys::GstClockType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ClockType::Realtime,
@@ -313,7 +313,7 @@ impl FromGlib<ffi::GstClockType> for ClockType {
 
 impl StaticType for ClockType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_clock_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_clock_type_get_type()) }
     }
 }
 
@@ -325,13 +325,13 @@ impl<'a> FromValueOptional<'a> for ClockType {
 
 impl<'a> FromValue<'a> for ClockType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ClockType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -359,33 +359,33 @@ pub enum CoreError {
 
 #[doc(hidden)]
 impl ToGlib for CoreError {
-    type GlibType = ffi::GstCoreError;
+    type GlibType = gst_sys::GstCoreError;
 
-    fn to_glib(&self) -> ffi::GstCoreError {
+    fn to_glib(&self) -> gst_sys::GstCoreError {
         match *self {
-            CoreError::Failed => ffi::GST_CORE_ERROR_FAILED,
-            CoreError::TooLazy => ffi::GST_CORE_ERROR_TOO_LAZY,
-            CoreError::NotImplemented => ffi::GST_CORE_ERROR_NOT_IMPLEMENTED,
-            CoreError::StateChange => ffi::GST_CORE_ERROR_STATE_CHANGE,
-            CoreError::Pad => ffi::GST_CORE_ERROR_PAD,
-            CoreError::Thread => ffi::GST_CORE_ERROR_THREAD,
-            CoreError::Negotiation => ffi::GST_CORE_ERROR_NEGOTIATION,
-            CoreError::Event => ffi::GST_CORE_ERROR_EVENT,
-            CoreError::Seek => ffi::GST_CORE_ERROR_SEEK,
-            CoreError::Caps => ffi::GST_CORE_ERROR_CAPS,
-            CoreError::Tag => ffi::GST_CORE_ERROR_TAG,
-            CoreError::MissingPlugin => ffi::GST_CORE_ERROR_MISSING_PLUGIN,
-            CoreError::Clock => ffi::GST_CORE_ERROR_CLOCK,
-            CoreError::Disabled => ffi::GST_CORE_ERROR_DISABLED,
-            CoreError::NumErrors => ffi::GST_CORE_ERROR_NUM_ERRORS,
+            CoreError::Failed => gst_sys::GST_CORE_ERROR_FAILED,
+            CoreError::TooLazy => gst_sys::GST_CORE_ERROR_TOO_LAZY,
+            CoreError::NotImplemented => gst_sys::GST_CORE_ERROR_NOT_IMPLEMENTED,
+            CoreError::StateChange => gst_sys::GST_CORE_ERROR_STATE_CHANGE,
+            CoreError::Pad => gst_sys::GST_CORE_ERROR_PAD,
+            CoreError::Thread => gst_sys::GST_CORE_ERROR_THREAD,
+            CoreError::Negotiation => gst_sys::GST_CORE_ERROR_NEGOTIATION,
+            CoreError::Event => gst_sys::GST_CORE_ERROR_EVENT,
+            CoreError::Seek => gst_sys::GST_CORE_ERROR_SEEK,
+            CoreError::Caps => gst_sys::GST_CORE_ERROR_CAPS,
+            CoreError::Tag => gst_sys::GST_CORE_ERROR_TAG,
+            CoreError::MissingPlugin => gst_sys::GST_CORE_ERROR_MISSING_PLUGIN,
+            CoreError::Clock => gst_sys::GST_CORE_ERROR_CLOCK,
+            CoreError::Disabled => gst_sys::GST_CORE_ERROR_DISABLED,
+            CoreError::NumErrors => gst_sys::GST_CORE_ERROR_NUM_ERRORS,
             CoreError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstCoreError> for CoreError {
-    fn from_glib(value: ffi::GstCoreError) -> Self {
+impl FromGlib<gst_sys::GstCoreError> for CoreError {
+    fn from_glib(value: gst_sys::GstCoreError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => CoreError::Failed,
@@ -411,7 +411,7 @@ impl FromGlib<ffi::GstCoreError> for CoreError {
 impl ErrorDomain for CoreError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_core_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_core_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -443,7 +443,7 @@ impl ErrorDomain for CoreError {
 
 impl StaticType for CoreError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_core_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_core_error_get_type()) }
     }
 }
 
@@ -455,13 +455,13 @@ impl<'a> FromValueOptional<'a> for CoreError {
 
 impl<'a> FromValue<'a> for CoreError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for CoreError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -484,28 +484,28 @@ pub enum DebugLevel {
 
 #[doc(hidden)]
 impl ToGlib for DebugLevel {
-    type GlibType = ffi::GstDebugLevel;
+    type GlibType = gst_sys::GstDebugLevel;
 
-    fn to_glib(&self) -> ffi::GstDebugLevel {
+    fn to_glib(&self) -> gst_sys::GstDebugLevel {
         match *self {
-            DebugLevel::None => ffi::GST_LEVEL_NONE,
-            DebugLevel::Error => ffi::GST_LEVEL_ERROR,
-            DebugLevel::Warning => ffi::GST_LEVEL_WARNING,
-            DebugLevel::Fixme => ffi::GST_LEVEL_FIXME,
-            DebugLevel::Info => ffi::GST_LEVEL_INFO,
-            DebugLevel::Debug => ffi::GST_LEVEL_DEBUG,
-            DebugLevel::Log => ffi::GST_LEVEL_LOG,
-            DebugLevel::Trace => ffi::GST_LEVEL_TRACE,
-            DebugLevel::Memdump => ffi::GST_LEVEL_MEMDUMP,
-            DebugLevel::Count => ffi::GST_LEVEL_COUNT,
+            DebugLevel::None => gst_sys::GST_LEVEL_NONE,
+            DebugLevel::Error => gst_sys::GST_LEVEL_ERROR,
+            DebugLevel::Warning => gst_sys::GST_LEVEL_WARNING,
+            DebugLevel::Fixme => gst_sys::GST_LEVEL_FIXME,
+            DebugLevel::Info => gst_sys::GST_LEVEL_INFO,
+            DebugLevel::Debug => gst_sys::GST_LEVEL_DEBUG,
+            DebugLevel::Log => gst_sys::GST_LEVEL_LOG,
+            DebugLevel::Trace => gst_sys::GST_LEVEL_TRACE,
+            DebugLevel::Memdump => gst_sys::GST_LEVEL_MEMDUMP,
+            DebugLevel::Count => gst_sys::GST_LEVEL_COUNT,
             DebugLevel::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
-    fn from_glib(value: ffi::GstDebugLevel) -> Self {
+impl FromGlib<gst_sys::GstDebugLevel> for DebugLevel {
+    fn from_glib(value: gst_sys::GstDebugLevel) -> Self {
         skip_assert_initialized!();
         match value {
             0 => DebugLevel::None,
@@ -525,7 +525,7 @@ impl FromGlib<ffi::GstDebugLevel> for DebugLevel {
 
 impl StaticType for DebugLevel {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_debug_level_get_type()) }
+        unsafe { from_glib(gst_sys::gst_debug_level_get_type()) }
     }
 }
 
@@ -537,13 +537,13 @@ impl<'a> FromValueOptional<'a> for DebugLevel {
 
 impl<'a> FromValue<'a> for DebugLevel {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for DebugLevel {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -586,48 +586,48 @@ pub enum EventType {
 
 #[doc(hidden)]
 impl ToGlib for EventType {
-    type GlibType = ffi::GstEventType;
+    type GlibType = gst_sys::GstEventType;
 
-    fn to_glib(&self) -> ffi::GstEventType {
+    fn to_glib(&self) -> gst_sys::GstEventType {
         match *self {
-            EventType::Unknown => ffi::GST_EVENT_UNKNOWN,
-            EventType::FlushStart => ffi::GST_EVENT_FLUSH_START,
-            EventType::FlushStop => ffi::GST_EVENT_FLUSH_STOP,
-            EventType::StreamStart => ffi::GST_EVENT_STREAM_START,
-            EventType::Caps => ffi::GST_EVENT_CAPS,
-            EventType::Segment => ffi::GST_EVENT_SEGMENT,
-            EventType::StreamCollection => ffi::GST_EVENT_STREAM_COLLECTION,
-            EventType::Tag => ffi::GST_EVENT_TAG,
-            EventType::Buffersize => ffi::GST_EVENT_BUFFERSIZE,
-            EventType::SinkMessage => ffi::GST_EVENT_SINK_MESSAGE,
-            EventType::StreamGroupDone => ffi::GST_EVENT_STREAM_GROUP_DONE,
-            EventType::Eos => ffi::GST_EVENT_EOS,
-            EventType::Toc => ffi::GST_EVENT_TOC,
-            EventType::Protection => ffi::GST_EVENT_PROTECTION,
-            EventType::SegmentDone => ffi::GST_EVENT_SEGMENT_DONE,
-            EventType::Gap => ffi::GST_EVENT_GAP,
-            EventType::Qos => ffi::GST_EVENT_QOS,
-            EventType::Seek => ffi::GST_EVENT_SEEK,
-            EventType::Navigation => ffi::GST_EVENT_NAVIGATION,
-            EventType::Latency => ffi::GST_EVENT_LATENCY,
-            EventType::Step => ffi::GST_EVENT_STEP,
-            EventType::Reconfigure => ffi::GST_EVENT_RECONFIGURE,
-            EventType::TocSelect => ffi::GST_EVENT_TOC_SELECT,
-            EventType::SelectStreams => ffi::GST_EVENT_SELECT_STREAMS,
-            EventType::CustomUpstream => ffi::GST_EVENT_CUSTOM_UPSTREAM,
-            EventType::CustomDownstream => ffi::GST_EVENT_CUSTOM_DOWNSTREAM,
-            EventType::CustomDownstreamOob => ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
-            EventType::CustomDownstreamSticky => ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
-            EventType::CustomBoth => ffi::GST_EVENT_CUSTOM_BOTH,
-            EventType::CustomBothOob => ffi::GST_EVENT_CUSTOM_BOTH_OOB,
+            EventType::Unknown => gst_sys::GST_EVENT_UNKNOWN,
+            EventType::FlushStart => gst_sys::GST_EVENT_FLUSH_START,
+            EventType::FlushStop => gst_sys::GST_EVENT_FLUSH_STOP,
+            EventType::StreamStart => gst_sys::GST_EVENT_STREAM_START,
+            EventType::Caps => gst_sys::GST_EVENT_CAPS,
+            EventType::Segment => gst_sys::GST_EVENT_SEGMENT,
+            EventType::StreamCollection => gst_sys::GST_EVENT_STREAM_COLLECTION,
+            EventType::Tag => gst_sys::GST_EVENT_TAG,
+            EventType::Buffersize => gst_sys::GST_EVENT_BUFFERSIZE,
+            EventType::SinkMessage => gst_sys::GST_EVENT_SINK_MESSAGE,
+            EventType::StreamGroupDone => gst_sys::GST_EVENT_STREAM_GROUP_DONE,
+            EventType::Eos => gst_sys::GST_EVENT_EOS,
+            EventType::Toc => gst_sys::GST_EVENT_TOC,
+            EventType::Protection => gst_sys::GST_EVENT_PROTECTION,
+            EventType::SegmentDone => gst_sys::GST_EVENT_SEGMENT_DONE,
+            EventType::Gap => gst_sys::GST_EVENT_GAP,
+            EventType::Qos => gst_sys::GST_EVENT_QOS,
+            EventType::Seek => gst_sys::GST_EVENT_SEEK,
+            EventType::Navigation => gst_sys::GST_EVENT_NAVIGATION,
+            EventType::Latency => gst_sys::GST_EVENT_LATENCY,
+            EventType::Step => gst_sys::GST_EVENT_STEP,
+            EventType::Reconfigure => gst_sys::GST_EVENT_RECONFIGURE,
+            EventType::TocSelect => gst_sys::GST_EVENT_TOC_SELECT,
+            EventType::SelectStreams => gst_sys::GST_EVENT_SELECT_STREAMS,
+            EventType::CustomUpstream => gst_sys::GST_EVENT_CUSTOM_UPSTREAM,
+            EventType::CustomDownstream => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM,
+            EventType::CustomDownstreamOob => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
+            EventType::CustomDownstreamSticky => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
+            EventType::CustomBoth => gst_sys::GST_EVENT_CUSTOM_BOTH,
+            EventType::CustomBothOob => gst_sys::GST_EVENT_CUSTOM_BOTH_OOB,
             EventType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstEventType> for EventType {
-    fn from_glib(value: ffi::GstEventType) -> Self {
+impl FromGlib<gst_sys::GstEventType> for EventType {
+    fn from_glib(value: gst_sys::GstEventType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => EventType::Unknown,
@@ -667,7 +667,7 @@ impl FromGlib<ffi::GstEventType> for EventType {
 
 impl StaticType for EventType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_event_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_event_type_get_type()) }
     }
 }
 
@@ -679,13 +679,13 @@ impl<'a> FromValueOptional<'a> for EventType {
 
 impl<'a> FromValue<'a> for EventType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for EventType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -712,31 +712,31 @@ pub enum FlowReturn {
 
 #[doc(hidden)]
 impl ToGlib for FlowReturn {
-    type GlibType = ffi::GstFlowReturn;
+    type GlibType = gst_sys::GstFlowReturn;
 
-    fn to_glib(&self) -> ffi::GstFlowReturn {
+    fn to_glib(&self) -> gst_sys::GstFlowReturn {
         match *self {
-            FlowReturn::CustomSuccess2 => ffi::GST_FLOW_CUSTOM_SUCCESS_2,
-            FlowReturn::CustomSuccess1 => ffi::GST_FLOW_CUSTOM_SUCCESS_1,
-            FlowReturn::CustomSuccess => ffi::GST_FLOW_CUSTOM_SUCCESS,
-            FlowReturn::Ok => ffi::GST_FLOW_OK,
-            FlowReturn::NotLinked => ffi::GST_FLOW_NOT_LINKED,
-            FlowReturn::Flushing => ffi::GST_FLOW_FLUSHING,
-            FlowReturn::Eos => ffi::GST_FLOW_EOS,
-            FlowReturn::NotNegotiated => ffi::GST_FLOW_NOT_NEGOTIATED,
-            FlowReturn::Error => ffi::GST_FLOW_ERROR,
-            FlowReturn::NotSupported => ffi::GST_FLOW_NOT_SUPPORTED,
-            FlowReturn::CustomError => ffi::GST_FLOW_CUSTOM_ERROR,
-            FlowReturn::CustomError1 => ffi::GST_FLOW_CUSTOM_ERROR_1,
-            FlowReturn::CustomError2 => ffi::GST_FLOW_CUSTOM_ERROR_2,
+            FlowReturn::CustomSuccess2 => gst_sys::GST_FLOW_CUSTOM_SUCCESS_2,
+            FlowReturn::CustomSuccess1 => gst_sys::GST_FLOW_CUSTOM_SUCCESS_1,
+            FlowReturn::CustomSuccess => gst_sys::GST_FLOW_CUSTOM_SUCCESS,
+            FlowReturn::Ok => gst_sys::GST_FLOW_OK,
+            FlowReturn::NotLinked => gst_sys::GST_FLOW_NOT_LINKED,
+            FlowReturn::Flushing => gst_sys::GST_FLOW_FLUSHING,
+            FlowReturn::Eos => gst_sys::GST_FLOW_EOS,
+            FlowReturn::NotNegotiated => gst_sys::GST_FLOW_NOT_NEGOTIATED,
+            FlowReturn::Error => gst_sys::GST_FLOW_ERROR,
+            FlowReturn::NotSupported => gst_sys::GST_FLOW_NOT_SUPPORTED,
+            FlowReturn::CustomError => gst_sys::GST_FLOW_CUSTOM_ERROR,
+            FlowReturn::CustomError1 => gst_sys::GST_FLOW_CUSTOM_ERROR_1,
+            FlowReturn::CustomError2 => gst_sys::GST_FLOW_CUSTOM_ERROR_2,
             FlowReturn::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
-    fn from_glib(value: ffi::GstFlowReturn) -> Self {
+impl FromGlib<gst_sys::GstFlowReturn> for FlowReturn {
+    fn from_glib(value: gst_sys::GstFlowReturn) -> Self {
         skip_assert_initialized!();
         match value {
             102 => FlowReturn::CustomSuccess2,
@@ -759,7 +759,7 @@ impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
 
 impl StaticType for FlowReturn {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_flow_return_get_type()) }
+        unsafe { from_glib(gst_sys::gst_flow_return_get_type()) }
     }
 }
 
@@ -771,13 +771,13 @@ impl<'a> FromValueOptional<'a> for FlowReturn {
 
 impl<'a> FromValue<'a> for FlowReturn {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for FlowReturn {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -797,24 +797,24 @@ pub enum Format {
 
 #[doc(hidden)]
 impl ToGlib for Format {
-    type GlibType = ffi::GstFormat;
+    type GlibType = gst_sys::GstFormat;
 
-    fn to_glib(&self) -> ffi::GstFormat {
+    fn to_glib(&self) -> gst_sys::GstFormat {
         match *self {
-            Format::Undefined => ffi::GST_FORMAT_UNDEFINED,
-            Format::Default => ffi::GST_FORMAT_DEFAULT,
-            Format::Bytes => ffi::GST_FORMAT_BYTES,
-            Format::Time => ffi::GST_FORMAT_TIME,
-            Format::Buffers => ffi::GST_FORMAT_BUFFERS,
-            Format::Percent => ffi::GST_FORMAT_PERCENT,
+            Format::Undefined => gst_sys::GST_FORMAT_UNDEFINED,
+            Format::Default => gst_sys::GST_FORMAT_DEFAULT,
+            Format::Bytes => gst_sys::GST_FORMAT_BYTES,
+            Format::Time => gst_sys::GST_FORMAT_TIME,
+            Format::Buffers => gst_sys::GST_FORMAT_BUFFERS,
+            Format::Percent => gst_sys::GST_FORMAT_PERCENT,
             Format::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstFormat> for Format {
-    fn from_glib(value: ffi::GstFormat) -> Self {
+impl FromGlib<gst_sys::GstFormat> for Format {
+    fn from_glib(value: gst_sys::GstFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => Format::Undefined,
@@ -830,7 +830,7 @@ impl FromGlib<ffi::GstFormat> for Format {
 
 impl StaticType for Format {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_format_get_type()) }
+        unsafe { from_glib(gst_sys::gst_format_get_type()) }
     }
 }
 
@@ -842,13 +842,13 @@ impl<'a> FromValueOptional<'a> for Format {
 
 impl<'a> FromValue<'a> for Format {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for Format {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -868,25 +868,25 @@ pub enum LibraryError {
 
 #[doc(hidden)]
 impl ToGlib for LibraryError {
-    type GlibType = ffi::GstLibraryError;
+    type GlibType = gst_sys::GstLibraryError;
 
-    fn to_glib(&self) -> ffi::GstLibraryError {
+    fn to_glib(&self) -> gst_sys::GstLibraryError {
         match *self {
-            LibraryError::Failed => ffi::GST_LIBRARY_ERROR_FAILED,
-            LibraryError::TooLazy => ffi::GST_LIBRARY_ERROR_TOO_LAZY,
-            LibraryError::Init => ffi::GST_LIBRARY_ERROR_INIT,
-            LibraryError::Shutdown => ffi::GST_LIBRARY_ERROR_SHUTDOWN,
-            LibraryError::Settings => ffi::GST_LIBRARY_ERROR_SETTINGS,
-            LibraryError::Encode => ffi::GST_LIBRARY_ERROR_ENCODE,
-            LibraryError::NumErrors => ffi::GST_LIBRARY_ERROR_NUM_ERRORS,
+            LibraryError::Failed => gst_sys::GST_LIBRARY_ERROR_FAILED,
+            LibraryError::TooLazy => gst_sys::GST_LIBRARY_ERROR_TOO_LAZY,
+            LibraryError::Init => gst_sys::GST_LIBRARY_ERROR_INIT,
+            LibraryError::Shutdown => gst_sys::GST_LIBRARY_ERROR_SHUTDOWN,
+            LibraryError::Settings => gst_sys::GST_LIBRARY_ERROR_SETTINGS,
+            LibraryError::Encode => gst_sys::GST_LIBRARY_ERROR_ENCODE,
+            LibraryError::NumErrors => gst_sys::GST_LIBRARY_ERROR_NUM_ERRORS,
             LibraryError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstLibraryError> for LibraryError {
-    fn from_glib(value: ffi::GstLibraryError) -> Self {
+impl FromGlib<gst_sys::GstLibraryError> for LibraryError {
+    fn from_glib(value: gst_sys::GstLibraryError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => LibraryError::Failed,
@@ -904,7 +904,7 @@ impl FromGlib<ffi::GstLibraryError> for LibraryError {
 impl ErrorDomain for LibraryError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_library_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_library_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -928,7 +928,7 @@ impl ErrorDomain for LibraryError {
 
 impl StaticType for LibraryError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_library_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_library_error_get_type()) }
     }
 }
 
@@ -940,13 +940,13 @@ impl<'a> FromValueOptional<'a> for LibraryError {
 
 impl<'a> FromValue<'a> for LibraryError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for LibraryError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -962,21 +962,21 @@ pub enum PadDirection {
 
 #[doc(hidden)]
 impl ToGlib for PadDirection {
-    type GlibType = ffi::GstPadDirection;
+    type GlibType = gst_sys::GstPadDirection;
 
-    fn to_glib(&self) -> ffi::GstPadDirection {
+    fn to_glib(&self) -> gst_sys::GstPadDirection {
         match *self {
-            PadDirection::Unknown => ffi::GST_PAD_UNKNOWN,
-            PadDirection::Src => ffi::GST_PAD_SRC,
-            PadDirection::Sink => ffi::GST_PAD_SINK,
+            PadDirection::Unknown => gst_sys::GST_PAD_UNKNOWN,
+            PadDirection::Src => gst_sys::GST_PAD_SRC,
+            PadDirection::Sink => gst_sys::GST_PAD_SINK,
             PadDirection::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadDirection> for PadDirection {
-    fn from_glib(value: ffi::GstPadDirection) -> Self {
+impl FromGlib<gst_sys::GstPadDirection> for PadDirection {
+    fn from_glib(value: gst_sys::GstPadDirection) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadDirection::Unknown,
@@ -989,7 +989,7 @@ impl FromGlib<ffi::GstPadDirection> for PadDirection {
 
 impl StaticType for PadDirection {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_direction_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_direction_get_type()) }
     }
 }
 
@@ -1001,13 +1001,13 @@ impl<'a> FromValueOptional<'a> for PadDirection {
 
 impl<'a> FromValue<'a> for PadDirection {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadDirection {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1028,25 +1028,25 @@ pub enum PadLinkReturn {
 
 #[doc(hidden)]
 impl ToGlib for PadLinkReturn {
-    type GlibType = ffi::GstPadLinkReturn;
+    type GlibType = gst_sys::GstPadLinkReturn;
 
-    fn to_glib(&self) -> ffi::GstPadLinkReturn {
+    fn to_glib(&self) -> gst_sys::GstPadLinkReturn {
         match *self {
-            PadLinkReturn::Ok => ffi::GST_PAD_LINK_OK,
-            PadLinkReturn::WrongHierarchy => ffi::GST_PAD_LINK_WRONG_HIERARCHY,
-            PadLinkReturn::WasLinked => ffi::GST_PAD_LINK_WAS_LINKED,
-            PadLinkReturn::WrongDirection => ffi::GST_PAD_LINK_WRONG_DIRECTION,
-            PadLinkReturn::Noformat => ffi::GST_PAD_LINK_NOFORMAT,
-            PadLinkReturn::Nosched => ffi::GST_PAD_LINK_NOSCHED,
-            PadLinkReturn::Refused => ffi::GST_PAD_LINK_REFUSED,
+            PadLinkReturn::Ok => gst_sys::GST_PAD_LINK_OK,
+            PadLinkReturn::WrongHierarchy => gst_sys::GST_PAD_LINK_WRONG_HIERARCHY,
+            PadLinkReturn::WasLinked => gst_sys::GST_PAD_LINK_WAS_LINKED,
+            PadLinkReturn::WrongDirection => gst_sys::GST_PAD_LINK_WRONG_DIRECTION,
+            PadLinkReturn::Noformat => gst_sys::GST_PAD_LINK_NOFORMAT,
+            PadLinkReturn::Nosched => gst_sys::GST_PAD_LINK_NOSCHED,
+            PadLinkReturn::Refused => gst_sys::GST_PAD_LINK_REFUSED,
             PadLinkReturn::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
-    fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
+impl FromGlib<gst_sys::GstPadLinkReturn> for PadLinkReturn {
+    fn from_glib(value: gst_sys::GstPadLinkReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadLinkReturn::Ok,
@@ -1063,7 +1063,7 @@ impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
 
 impl StaticType for PadLinkReturn {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_link_return_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_link_return_get_type()) }
     }
 }
 
@@ -1075,13 +1075,13 @@ impl<'a> FromValueOptional<'a> for PadLinkReturn {
 
 impl<'a> FromValue<'a> for PadLinkReturn {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadLinkReturn {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1097,21 +1097,21 @@ pub enum PadMode {
 
 #[doc(hidden)]
 impl ToGlib for PadMode {
-    type GlibType = ffi::GstPadMode;
+    type GlibType = gst_sys::GstPadMode;
 
-    fn to_glib(&self) -> ffi::GstPadMode {
+    fn to_glib(&self) -> gst_sys::GstPadMode {
         match *self {
-            PadMode::None => ffi::GST_PAD_MODE_NONE,
-            PadMode::Push => ffi::GST_PAD_MODE_PUSH,
-            PadMode::Pull => ffi::GST_PAD_MODE_PULL,
+            PadMode::None => gst_sys::GST_PAD_MODE_NONE,
+            PadMode::Push => gst_sys::GST_PAD_MODE_PUSH,
+            PadMode::Pull => gst_sys::GST_PAD_MODE_PULL,
             PadMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadMode> for PadMode {
-    fn from_glib(value: ffi::GstPadMode) -> Self {
+impl FromGlib<gst_sys::GstPadMode> for PadMode {
+    fn from_glib(value: gst_sys::GstPadMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadMode::None,
@@ -1124,7 +1124,7 @@ impl FromGlib<ffi::GstPadMode> for PadMode {
 
 impl StaticType for PadMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_mode_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_mode_get_type()) }
     }
 }
 
@@ -1136,13 +1136,13 @@ impl<'a> FromValueOptional<'a> for PadMode {
 
 impl<'a> FromValue<'a> for PadMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1158,21 +1158,21 @@ pub enum PadPresence {
 
 #[doc(hidden)]
 impl ToGlib for PadPresence {
-    type GlibType = ffi::GstPadPresence;
+    type GlibType = gst_sys::GstPadPresence;
 
-    fn to_glib(&self) -> ffi::GstPadPresence {
+    fn to_glib(&self) -> gst_sys::GstPadPresence {
         match *self {
-            PadPresence::Always => ffi::GST_PAD_ALWAYS,
-            PadPresence::Sometimes => ffi::GST_PAD_SOMETIMES,
-            PadPresence::Request => ffi::GST_PAD_REQUEST,
+            PadPresence::Always => gst_sys::GST_PAD_ALWAYS,
+            PadPresence::Sometimes => gst_sys::GST_PAD_SOMETIMES,
+            PadPresence::Request => gst_sys::GST_PAD_REQUEST,
             PadPresence::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadPresence> for PadPresence {
-    fn from_glib(value: ffi::GstPadPresence) -> Self {
+impl FromGlib<gst_sys::GstPadPresence> for PadPresence {
+    fn from_glib(value: gst_sys::GstPadPresence) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadPresence::Always,
@@ -1185,7 +1185,7 @@ impl FromGlib<ffi::GstPadPresence> for PadPresence {
 
 impl StaticType for PadPresence {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_presence_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_presence_get_type()) }
     }
 }
 
@@ -1197,13 +1197,13 @@ impl<'a> FromValueOptional<'a> for PadPresence {
 
 impl<'a> FromValue<'a> for PadPresence {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadPresence {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1221,23 +1221,23 @@ pub enum PadProbeReturn {
 
 #[doc(hidden)]
 impl ToGlib for PadProbeReturn {
-    type GlibType = ffi::GstPadProbeReturn;
+    type GlibType = gst_sys::GstPadProbeReturn;
 
-    fn to_glib(&self) -> ffi::GstPadProbeReturn {
+    fn to_glib(&self) -> gst_sys::GstPadProbeReturn {
         match *self {
-            PadProbeReturn::Drop => ffi::GST_PAD_PROBE_DROP,
-            PadProbeReturn::Ok => ffi::GST_PAD_PROBE_OK,
-            PadProbeReturn::Remove => ffi::GST_PAD_PROBE_REMOVE,
-            PadProbeReturn::Pass => ffi::GST_PAD_PROBE_PASS,
-            PadProbeReturn::Handled => ffi::GST_PAD_PROBE_HANDLED,
+            PadProbeReturn::Drop => gst_sys::GST_PAD_PROBE_DROP,
+            PadProbeReturn::Ok => gst_sys::GST_PAD_PROBE_OK,
+            PadProbeReturn::Remove => gst_sys::GST_PAD_PROBE_REMOVE,
+            PadProbeReturn::Pass => gst_sys::GST_PAD_PROBE_PASS,
+            PadProbeReturn::Handled => gst_sys::GST_PAD_PROBE_HANDLED,
             PadProbeReturn::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
-    fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
+impl FromGlib<gst_sys::GstPadProbeReturn> for PadProbeReturn {
+    fn from_glib(value: gst_sys::GstPadProbeReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PadProbeReturn::Drop,
@@ -1252,7 +1252,7 @@ impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
 
 impl StaticType for PadProbeReturn {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_pad_probe_return_get_type()) }
+        unsafe { from_glib(gst_sys::gst_pad_probe_return_get_type()) }
     }
 }
 
@@ -1264,13 +1264,13 @@ impl<'a> FromValueOptional<'a> for PadProbeReturn {
 
 impl<'a> FromValue<'a> for PadProbeReturn {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PadProbeReturn {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1291,26 +1291,26 @@ pub enum ParseError {
 
 #[doc(hidden)]
 impl ToGlib for ParseError {
-    type GlibType = ffi::GstParseError;
+    type GlibType = gst_sys::GstParseError;
 
-    fn to_glib(&self) -> ffi::GstParseError {
+    fn to_glib(&self) -> gst_sys::GstParseError {
         match *self {
-            ParseError::Syntax => ffi::GST_PARSE_ERROR_SYNTAX,
-            ParseError::NoSuchElement => ffi::GST_PARSE_ERROR_NO_SUCH_ELEMENT,
-            ParseError::NoSuchProperty => ffi::GST_PARSE_ERROR_NO_SUCH_PROPERTY,
-            ParseError::Link => ffi::GST_PARSE_ERROR_LINK,
-            ParseError::CouldNotSetProperty => ffi::GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY,
-            ParseError::EmptyBin => ffi::GST_PARSE_ERROR_EMPTY_BIN,
-            ParseError::Empty => ffi::GST_PARSE_ERROR_EMPTY,
-            ParseError::DelayedLink => ffi::GST_PARSE_ERROR_DELAYED_LINK,
+            ParseError::Syntax => gst_sys::GST_PARSE_ERROR_SYNTAX,
+            ParseError::NoSuchElement => gst_sys::GST_PARSE_ERROR_NO_SUCH_ELEMENT,
+            ParseError::NoSuchProperty => gst_sys::GST_PARSE_ERROR_NO_SUCH_PROPERTY,
+            ParseError::Link => gst_sys::GST_PARSE_ERROR_LINK,
+            ParseError::CouldNotSetProperty => gst_sys::GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY,
+            ParseError::EmptyBin => gst_sys::GST_PARSE_ERROR_EMPTY_BIN,
+            ParseError::Empty => gst_sys::GST_PARSE_ERROR_EMPTY,
+            ParseError::DelayedLink => gst_sys::GST_PARSE_ERROR_DELAYED_LINK,
             ParseError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstParseError> for ParseError {
-    fn from_glib(value: ffi::GstParseError) -> Self {
+impl FromGlib<gst_sys::GstParseError> for ParseError {
+    fn from_glib(value: gst_sys::GstParseError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ParseError::Syntax,
@@ -1329,7 +1329,7 @@ impl FromGlib<ffi::GstParseError> for ParseError {
 impl ErrorDomain for ParseError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_parse_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_parse_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1354,7 +1354,7 @@ impl ErrorDomain for ParseError {
 
 impl StaticType for ParseError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_parse_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_parse_error_get_type()) }
     }
 }
 
@@ -1366,13 +1366,13 @@ impl<'a> FromValueOptional<'a> for ParseError {
 
 impl<'a> FromValue<'a> for ParseError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ParseError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1388,21 +1388,21 @@ pub enum PluginError {
 
 #[doc(hidden)]
 impl ToGlib for PluginError {
-    type GlibType = ffi::GstPluginError;
+    type GlibType = gst_sys::GstPluginError;
 
-    fn to_glib(&self) -> ffi::GstPluginError {
+    fn to_glib(&self) -> gst_sys::GstPluginError {
         match *self {
-            PluginError::Module => ffi::GST_PLUGIN_ERROR_MODULE,
-            PluginError::Dependencies => ffi::GST_PLUGIN_ERROR_DEPENDENCIES,
-            PluginError::NameMismatch => ffi::GST_PLUGIN_ERROR_NAME_MISMATCH,
+            PluginError::Module => gst_sys::GST_PLUGIN_ERROR_MODULE,
+            PluginError::Dependencies => gst_sys::GST_PLUGIN_ERROR_DEPENDENCIES,
+            PluginError::NameMismatch => gst_sys::GST_PLUGIN_ERROR_NAME_MISMATCH,
             PluginError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstPluginError> for PluginError {
-    fn from_glib(value: ffi::GstPluginError) -> Self {
+impl FromGlib<gst_sys::GstPluginError> for PluginError {
+    fn from_glib(value: gst_sys::GstPluginError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PluginError::Module,
@@ -1416,7 +1416,7 @@ impl FromGlib<ffi::GstPluginError> for PluginError {
 impl ErrorDomain for PluginError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_plugin_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_plugin_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1436,7 +1436,7 @@ impl ErrorDomain for PluginError {
 
 impl StaticType for PluginError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_plugin_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_plugin_error_get_type()) }
     }
 }
 
@@ -1448,13 +1448,13 @@ impl<'a> FromValueOptional<'a> for PluginError {
 
 impl<'a> FromValue<'a> for PluginError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for PluginError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1472,23 +1472,23 @@ pub enum ProgressType {
 
 #[doc(hidden)]
 impl ToGlib for ProgressType {
-    type GlibType = ffi::GstProgressType;
+    type GlibType = gst_sys::GstProgressType;
 
-    fn to_glib(&self) -> ffi::GstProgressType {
+    fn to_glib(&self) -> gst_sys::GstProgressType {
         match *self {
-            ProgressType::Start => ffi::GST_PROGRESS_TYPE_START,
-            ProgressType::Continue => ffi::GST_PROGRESS_TYPE_CONTINUE,
-            ProgressType::Complete => ffi::GST_PROGRESS_TYPE_COMPLETE,
-            ProgressType::Canceled => ffi::GST_PROGRESS_TYPE_CANCELED,
-            ProgressType::Error => ffi::GST_PROGRESS_TYPE_ERROR,
+            ProgressType::Start => gst_sys::GST_PROGRESS_TYPE_START,
+            ProgressType::Continue => gst_sys::GST_PROGRESS_TYPE_CONTINUE,
+            ProgressType::Complete => gst_sys::GST_PROGRESS_TYPE_COMPLETE,
+            ProgressType::Canceled => gst_sys::GST_PROGRESS_TYPE_CANCELED,
+            ProgressType::Error => gst_sys::GST_PROGRESS_TYPE_ERROR,
             ProgressType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstProgressType> for ProgressType {
-    fn from_glib(value: ffi::GstProgressType) -> Self {
+impl FromGlib<gst_sys::GstProgressType> for ProgressType {
+    fn from_glib(value: gst_sys::GstProgressType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => ProgressType::Start,
@@ -1503,7 +1503,7 @@ impl FromGlib<ffi::GstProgressType> for ProgressType {
 
 impl StaticType for ProgressType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_progress_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_progress_type_get_type()) }
     }
 }
 
@@ -1515,13 +1515,13 @@ impl<'a> FromValueOptional<'a> for ProgressType {
 
 impl<'a> FromValue<'a> for ProgressType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ProgressType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1540,14 +1540,14 @@ pub enum PromiseResult {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for PromiseResult {
-    type GlibType = ffi::GstPromiseResult;
+    type GlibType = gst_sys::GstPromiseResult;
 
-    fn to_glib(&self) -> ffi::GstPromiseResult {
+    fn to_glib(&self) -> gst_sys::GstPromiseResult {
         match *self {
-            PromiseResult::Pending => ffi::GST_PROMISE_RESULT_PENDING,
-            PromiseResult::Interrupted => ffi::GST_PROMISE_RESULT_INTERRUPTED,
-            PromiseResult::Replied => ffi::GST_PROMISE_RESULT_REPLIED,
-            PromiseResult::Expired => ffi::GST_PROMISE_RESULT_EXPIRED,
+            PromiseResult::Pending => gst_sys::GST_PROMISE_RESULT_PENDING,
+            PromiseResult::Interrupted => gst_sys::GST_PROMISE_RESULT_INTERRUPTED,
+            PromiseResult::Replied => gst_sys::GST_PROMISE_RESULT_REPLIED,
+            PromiseResult::Expired => gst_sys::GST_PROMISE_RESULT_EXPIRED,
             PromiseResult::__Unknown(value) => value
         }
     }
@@ -1555,8 +1555,8 @@ impl ToGlib for PromiseResult {
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
-    fn from_glib(value: ffi::GstPromiseResult) -> Self {
+impl FromGlib<gst_sys::GstPromiseResult> for PromiseResult {
+    fn from_glib(value: gst_sys::GstPromiseResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => PromiseResult::Pending,
@@ -1571,7 +1571,7 @@ impl FromGlib<ffi::GstPromiseResult> for PromiseResult {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 impl StaticType for PromiseResult {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_promise_result_get_type()) }
+        unsafe { from_glib(gst_sys::gst_promise_result_get_type()) }
     }
 }
 
@@ -1585,14 +1585,14 @@ impl<'a> FromValueOptional<'a> for PromiseResult {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 impl<'a> FromValue<'a> for PromiseResult {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 impl SetValue for PromiseResult {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1608,21 +1608,21 @@ pub enum QOSType {
 
 #[doc(hidden)]
 impl ToGlib for QOSType {
-    type GlibType = ffi::GstQOSType;
+    type GlibType = gst_sys::GstQOSType;
 
-    fn to_glib(&self) -> ffi::GstQOSType {
+    fn to_glib(&self) -> gst_sys::GstQOSType {
         match *self {
-            QOSType::Overflow => ffi::GST_QOS_TYPE_OVERFLOW,
-            QOSType::Underflow => ffi::GST_QOS_TYPE_UNDERFLOW,
-            QOSType::Throttle => ffi::GST_QOS_TYPE_THROTTLE,
+            QOSType::Overflow => gst_sys::GST_QOS_TYPE_OVERFLOW,
+            QOSType::Underflow => gst_sys::GST_QOS_TYPE_UNDERFLOW,
+            QOSType::Throttle => gst_sys::GST_QOS_TYPE_THROTTLE,
             QOSType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstQOSType> for QOSType {
-    fn from_glib(value: ffi::GstQOSType) -> Self {
+impl FromGlib<gst_sys::GstQOSType> for QOSType {
+    fn from_glib(value: gst_sys::GstQOSType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => QOSType::Overflow,
@@ -1635,7 +1635,7 @@ impl FromGlib<ffi::GstQOSType> for QOSType {
 
 impl StaticType for QOSType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_qos_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_qos_type_get_type()) }
     }
 }
 
@@ -1647,13 +1647,13 @@ impl<'a> FromValueOptional<'a> for QOSType {
 
 impl<'a> FromValue<'a> for QOSType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for QOSType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1670,22 +1670,22 @@ pub enum Rank {
 
 #[doc(hidden)]
 impl ToGlib for Rank {
-    type GlibType = ffi::GstRank;
+    type GlibType = gst_sys::GstRank;
 
-    fn to_glib(&self) -> ffi::GstRank {
+    fn to_glib(&self) -> gst_sys::GstRank {
         match *self {
-            Rank::None => ffi::GST_RANK_NONE,
-            Rank::Marginal => ffi::GST_RANK_MARGINAL,
-            Rank::Secondary => ffi::GST_RANK_SECONDARY,
-            Rank::Primary => ffi::GST_RANK_PRIMARY,
+            Rank::None => gst_sys::GST_RANK_NONE,
+            Rank::Marginal => gst_sys::GST_RANK_MARGINAL,
+            Rank::Secondary => gst_sys::GST_RANK_SECONDARY,
+            Rank::Primary => gst_sys::GST_RANK_PRIMARY,
             Rank::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRank> for Rank {
-    fn from_glib(value: ffi::GstRank) -> Self {
+impl FromGlib<gst_sys::GstRank> for Rank {
+    fn from_glib(value: gst_sys::GstRank) -> Self {
         skip_assert_initialized!();
         match value {
             0 => Rank::None,
@@ -1699,7 +1699,7 @@ impl FromGlib<ffi::GstRank> for Rank {
 
 impl StaticType for Rank {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rank_get_type()) }
+        unsafe { from_glib(gst_sys::gst_rank_get_type()) }
     }
 }
 
@@ -1711,13 +1711,13 @@ impl<'a> FromValueOptional<'a> for Rank {
 
 impl<'a> FromValue<'a> for Rank {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for Rank {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1746,34 +1746,34 @@ pub enum ResourceError {
 
 #[doc(hidden)]
 impl ToGlib for ResourceError {
-    type GlibType = ffi::GstResourceError;
+    type GlibType = gst_sys::GstResourceError;
 
-    fn to_glib(&self) -> ffi::GstResourceError {
+    fn to_glib(&self) -> gst_sys::GstResourceError {
         match *self {
-            ResourceError::Failed => ffi::GST_RESOURCE_ERROR_FAILED,
-            ResourceError::TooLazy => ffi::GST_RESOURCE_ERROR_TOO_LAZY,
-            ResourceError::NotFound => ffi::GST_RESOURCE_ERROR_NOT_FOUND,
-            ResourceError::Busy => ffi::GST_RESOURCE_ERROR_BUSY,
-            ResourceError::OpenRead => ffi::GST_RESOURCE_ERROR_OPEN_READ,
-            ResourceError::OpenWrite => ffi::GST_RESOURCE_ERROR_OPEN_WRITE,
-            ResourceError::OpenReadWrite => ffi::GST_RESOURCE_ERROR_OPEN_READ_WRITE,
-            ResourceError::Close => ffi::GST_RESOURCE_ERROR_CLOSE,
-            ResourceError::Read => ffi::GST_RESOURCE_ERROR_READ,
-            ResourceError::Write => ffi::GST_RESOURCE_ERROR_WRITE,
-            ResourceError::Seek => ffi::GST_RESOURCE_ERROR_SEEK,
-            ResourceError::Sync => ffi::GST_RESOURCE_ERROR_SYNC,
-            ResourceError::Settings => ffi::GST_RESOURCE_ERROR_SETTINGS,
-            ResourceError::NoSpaceLeft => ffi::GST_RESOURCE_ERROR_NO_SPACE_LEFT,
-            ResourceError::NotAuthorized => ffi::GST_RESOURCE_ERROR_NOT_AUTHORIZED,
-            ResourceError::NumErrors => ffi::GST_RESOURCE_ERROR_NUM_ERRORS,
+            ResourceError::Failed => gst_sys::GST_RESOURCE_ERROR_FAILED,
+            ResourceError::TooLazy => gst_sys::GST_RESOURCE_ERROR_TOO_LAZY,
+            ResourceError::NotFound => gst_sys::GST_RESOURCE_ERROR_NOT_FOUND,
+            ResourceError::Busy => gst_sys::GST_RESOURCE_ERROR_BUSY,
+            ResourceError::OpenRead => gst_sys::GST_RESOURCE_ERROR_OPEN_READ,
+            ResourceError::OpenWrite => gst_sys::GST_RESOURCE_ERROR_OPEN_WRITE,
+            ResourceError::OpenReadWrite => gst_sys::GST_RESOURCE_ERROR_OPEN_READ_WRITE,
+            ResourceError::Close => gst_sys::GST_RESOURCE_ERROR_CLOSE,
+            ResourceError::Read => gst_sys::GST_RESOURCE_ERROR_READ,
+            ResourceError::Write => gst_sys::GST_RESOURCE_ERROR_WRITE,
+            ResourceError::Seek => gst_sys::GST_RESOURCE_ERROR_SEEK,
+            ResourceError::Sync => gst_sys::GST_RESOURCE_ERROR_SYNC,
+            ResourceError::Settings => gst_sys::GST_RESOURCE_ERROR_SETTINGS,
+            ResourceError::NoSpaceLeft => gst_sys::GST_RESOURCE_ERROR_NO_SPACE_LEFT,
+            ResourceError::NotAuthorized => gst_sys::GST_RESOURCE_ERROR_NOT_AUTHORIZED,
+            ResourceError::NumErrors => gst_sys::GST_RESOURCE_ERROR_NUM_ERRORS,
             ResourceError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstResourceError> for ResourceError {
-    fn from_glib(value: ffi::GstResourceError) -> Self {
+impl FromGlib<gst_sys::GstResourceError> for ResourceError {
+    fn from_glib(value: gst_sys::GstResourceError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => ResourceError::Failed,
@@ -1800,7 +1800,7 @@ impl FromGlib<ffi::GstResourceError> for ResourceError {
 impl ErrorDomain for ResourceError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_resource_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_resource_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1833,7 +1833,7 @@ impl ErrorDomain for ResourceError {
 
 impl StaticType for ResourceError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_resource_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_resource_error_get_type()) }
     }
 }
 
@@ -1845,13 +1845,13 @@ impl<'a> FromValueOptional<'a> for ResourceError {
 
 impl<'a> FromValue<'a> for ResourceError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for ResourceError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1867,21 +1867,21 @@ pub enum SeekType {
 
 #[doc(hidden)]
 impl ToGlib for SeekType {
-    type GlibType = ffi::GstSeekType;
+    type GlibType = gst_sys::GstSeekType;
 
-    fn to_glib(&self) -> ffi::GstSeekType {
+    fn to_glib(&self) -> gst_sys::GstSeekType {
         match *self {
-            SeekType::None => ffi::GST_SEEK_TYPE_NONE,
-            SeekType::Set => ffi::GST_SEEK_TYPE_SET,
-            SeekType::End => ffi::GST_SEEK_TYPE_END,
+            SeekType::None => gst_sys::GST_SEEK_TYPE_NONE,
+            SeekType::Set => gst_sys::GST_SEEK_TYPE_SET,
+            SeekType::End => gst_sys::GST_SEEK_TYPE_END,
             SeekType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstSeekType> for SeekType {
-    fn from_glib(value: ffi::GstSeekType) -> Self {
+impl FromGlib<gst_sys::GstSeekType> for SeekType {
+    fn from_glib(value: gst_sys::GstSeekType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => SeekType::None,
@@ -1894,7 +1894,7 @@ impl FromGlib<ffi::GstSeekType> for SeekType {
 
 impl StaticType for SeekType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_seek_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_seek_type_get_type()) }
     }
 }
 
@@ -1906,13 +1906,13 @@ impl<'a> FromValueOptional<'a> for SeekType {
 
 impl<'a> FromValue<'a> for SeekType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for SeekType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -1930,23 +1930,23 @@ pub enum State {
 
 #[doc(hidden)]
 impl ToGlib for State {
-    type GlibType = ffi::GstState;
+    type GlibType = gst_sys::GstState;
 
-    fn to_glib(&self) -> ffi::GstState {
+    fn to_glib(&self) -> gst_sys::GstState {
         match *self {
-            State::VoidPending => ffi::GST_STATE_VOID_PENDING,
-            State::Null => ffi::GST_STATE_NULL,
-            State::Ready => ffi::GST_STATE_READY,
-            State::Paused => ffi::GST_STATE_PAUSED,
-            State::Playing => ffi::GST_STATE_PLAYING,
+            State::VoidPending => gst_sys::GST_STATE_VOID_PENDING,
+            State::Null => gst_sys::GST_STATE_NULL,
+            State::Ready => gst_sys::GST_STATE_READY,
+            State::Paused => gst_sys::GST_STATE_PAUSED,
+            State::Playing => gst_sys::GST_STATE_PLAYING,
             State::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstState> for State {
-    fn from_glib(value: ffi::GstState) -> Self {
+impl FromGlib<gst_sys::GstState> for State {
+    fn from_glib(value: gst_sys::GstState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => State::VoidPending,
@@ -1961,7 +1961,7 @@ impl FromGlib<ffi::GstState> for State {
 
 impl StaticType for State {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_state_get_type()) }
+        unsafe { from_glib(gst_sys::gst_state_get_type()) }
     }
 }
 
@@ -1973,13 +1973,13 @@ impl<'a> FromValueOptional<'a> for State {
 
 impl<'a> FromValue<'a> for State {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for State {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2002,28 +2002,28 @@ pub enum StateChange {
 
 #[doc(hidden)]
 impl ToGlib for StateChange {
-    type GlibType = ffi::GstStateChange;
+    type GlibType = gst_sys::GstStateChange;
 
-    fn to_glib(&self) -> ffi::GstStateChange {
+    fn to_glib(&self) -> gst_sys::GstStateChange {
         match *self {
-            StateChange::NullToReady => ffi::GST_STATE_CHANGE_NULL_TO_READY,
-            StateChange::ReadyToPaused => ffi::GST_STATE_CHANGE_READY_TO_PAUSED,
-            StateChange::PausedToPlaying => ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
-            StateChange::PlayingToPaused => ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
-            StateChange::PausedToReady => ffi::GST_STATE_CHANGE_PAUSED_TO_READY,
-            StateChange::ReadyToNull => ffi::GST_STATE_CHANGE_READY_TO_NULL,
-            StateChange::NullToNull => ffi::GST_STATE_CHANGE_NULL_TO_NULL,
-            StateChange::ReadyToReady => ffi::GST_STATE_CHANGE_READY_TO_READY,
-            StateChange::PausedToPaused => ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
-            StateChange::PlayingToPlaying => ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING,
+            StateChange::NullToReady => gst_sys::GST_STATE_CHANGE_NULL_TO_READY,
+            StateChange::ReadyToPaused => gst_sys::GST_STATE_CHANGE_READY_TO_PAUSED,
+            StateChange::PausedToPlaying => gst_sys::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
+            StateChange::PlayingToPaused => gst_sys::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
+            StateChange::PausedToReady => gst_sys::GST_STATE_CHANGE_PAUSED_TO_READY,
+            StateChange::ReadyToNull => gst_sys::GST_STATE_CHANGE_READY_TO_NULL,
+            StateChange::NullToNull => gst_sys::GST_STATE_CHANGE_NULL_TO_NULL,
+            StateChange::ReadyToReady => gst_sys::GST_STATE_CHANGE_READY_TO_READY,
+            StateChange::PausedToPaused => gst_sys::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
+            StateChange::PlayingToPlaying => gst_sys::GST_STATE_CHANGE_PLAYING_TO_PLAYING,
             StateChange::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstStateChange> for StateChange {
-    fn from_glib(value: ffi::GstStateChange) -> Self {
+impl FromGlib<gst_sys::GstStateChange> for StateChange {
+    fn from_glib(value: gst_sys::GstStateChange) -> Self {
         skip_assert_initialized!();
         match value {
             10 => StateChange::NullToReady,
@@ -2043,7 +2043,7 @@ impl FromGlib<ffi::GstStateChange> for StateChange {
 
 impl StaticType for StateChange {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_state_change_get_type()) }
+        unsafe { from_glib(gst_sys::gst_state_change_get_type()) }
     }
 }
 
@@ -2055,13 +2055,13 @@ impl<'a> FromValueOptional<'a> for StateChange {
 
 impl<'a> FromValue<'a> for StateChange {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StateChange {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2079,22 +2079,22 @@ pub enum StateChangeReturn {
 
 #[doc(hidden)]
 impl ToGlib for StateChangeReturn {
-    type GlibType = ffi::GstStateChangeReturn;
+    type GlibType = gst_sys::GstStateChangeReturn;
 
-    fn to_glib(&self) -> ffi::GstStateChangeReturn {
+    fn to_glib(&self) -> gst_sys::GstStateChangeReturn {
         match *self {
-            StateChangeReturn::Failure => ffi::GST_STATE_CHANGE_FAILURE,
-            StateChangeReturn::Success => ffi::GST_STATE_CHANGE_SUCCESS,
-            StateChangeReturn::Async => ffi::GST_STATE_CHANGE_ASYNC,
-            StateChangeReturn::NoPreroll => ffi::GST_STATE_CHANGE_NO_PREROLL,
+            StateChangeReturn::Failure => gst_sys::GST_STATE_CHANGE_FAILURE,
+            StateChangeReturn::Success => gst_sys::GST_STATE_CHANGE_SUCCESS,
+            StateChangeReturn::Async => gst_sys::GST_STATE_CHANGE_ASYNC,
+            StateChangeReturn::NoPreroll => gst_sys::GST_STATE_CHANGE_NO_PREROLL,
             StateChangeReturn::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
-    fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
+impl FromGlib<gst_sys::GstStateChangeReturn> for StateChangeReturn {
+    fn from_glib(value: gst_sys::GstStateChangeReturn) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StateChangeReturn::Failure,
@@ -2108,7 +2108,7 @@ impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
 
 impl StaticType for StateChangeReturn {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_state_change_return_get_type()) }
+        unsafe { from_glib(gst_sys::gst_state_change_return_get_type()) }
     }
 }
 
@@ -2120,13 +2120,13 @@ impl<'a> FromValueOptional<'a> for StateChangeReturn {
 
 impl<'a> FromValue<'a> for StateChangeReturn {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StateChangeReturn {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2153,32 +2153,32 @@ pub enum StreamError {
 
 #[doc(hidden)]
 impl ToGlib for StreamError {
-    type GlibType = ffi::GstStreamError;
+    type GlibType = gst_sys::GstStreamError;
 
-    fn to_glib(&self) -> ffi::GstStreamError {
+    fn to_glib(&self) -> gst_sys::GstStreamError {
         match *self {
-            StreamError::Failed => ffi::GST_STREAM_ERROR_FAILED,
-            StreamError::TooLazy => ffi::GST_STREAM_ERROR_TOO_LAZY,
-            StreamError::NotImplemented => ffi::GST_STREAM_ERROR_NOT_IMPLEMENTED,
-            StreamError::TypeNotFound => ffi::GST_STREAM_ERROR_TYPE_NOT_FOUND,
-            StreamError::WrongType => ffi::GST_STREAM_ERROR_WRONG_TYPE,
-            StreamError::CodecNotFound => ffi::GST_STREAM_ERROR_CODEC_NOT_FOUND,
-            StreamError::Decode => ffi::GST_STREAM_ERROR_DECODE,
-            StreamError::Encode => ffi::GST_STREAM_ERROR_ENCODE,
-            StreamError::Demux => ffi::GST_STREAM_ERROR_DEMUX,
-            StreamError::Mux => ffi::GST_STREAM_ERROR_MUX,
-            StreamError::Format => ffi::GST_STREAM_ERROR_FORMAT,
-            StreamError::Decrypt => ffi::GST_STREAM_ERROR_DECRYPT,
-            StreamError::DecryptNokey => ffi::GST_STREAM_ERROR_DECRYPT_NOKEY,
-            StreamError::NumErrors => ffi::GST_STREAM_ERROR_NUM_ERRORS,
+            StreamError::Failed => gst_sys::GST_STREAM_ERROR_FAILED,
+            StreamError::TooLazy => gst_sys::GST_STREAM_ERROR_TOO_LAZY,
+            StreamError::NotImplemented => gst_sys::GST_STREAM_ERROR_NOT_IMPLEMENTED,
+            StreamError::TypeNotFound => gst_sys::GST_STREAM_ERROR_TYPE_NOT_FOUND,
+            StreamError::WrongType => gst_sys::GST_STREAM_ERROR_WRONG_TYPE,
+            StreamError::CodecNotFound => gst_sys::GST_STREAM_ERROR_CODEC_NOT_FOUND,
+            StreamError::Decode => gst_sys::GST_STREAM_ERROR_DECODE,
+            StreamError::Encode => gst_sys::GST_STREAM_ERROR_ENCODE,
+            StreamError::Demux => gst_sys::GST_STREAM_ERROR_DEMUX,
+            StreamError::Mux => gst_sys::GST_STREAM_ERROR_MUX,
+            StreamError::Format => gst_sys::GST_STREAM_ERROR_FORMAT,
+            StreamError::Decrypt => gst_sys::GST_STREAM_ERROR_DECRYPT,
+            StreamError::DecryptNokey => gst_sys::GST_STREAM_ERROR_DECRYPT_NOKEY,
+            StreamError::NumErrors => gst_sys::GST_STREAM_ERROR_NUM_ERRORS,
             StreamError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstStreamError> for StreamError {
-    fn from_glib(value: ffi::GstStreamError) -> Self {
+impl FromGlib<gst_sys::GstStreamError> for StreamError {
+    fn from_glib(value: gst_sys::GstStreamError) -> Self {
         skip_assert_initialized!();
         match value {
             1 => StreamError::Failed,
@@ -2203,7 +2203,7 @@ impl FromGlib<ffi::GstStreamError> for StreamError {
 impl ErrorDomain for StreamError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_stream_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_stream_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -2234,7 +2234,7 @@ impl ErrorDomain for StreamError {
 
 impl StaticType for StreamError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_stream_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_stream_error_get_type()) }
     }
 }
 
@@ -2246,13 +2246,13 @@ impl<'a> FromValueOptional<'a> for StreamError {
 
 impl<'a> FromValue<'a> for StreamError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StreamError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2272,25 +2272,25 @@ pub enum StreamStatusType {
 
 #[doc(hidden)]
 impl ToGlib for StreamStatusType {
-    type GlibType = ffi::GstStreamStatusType;
+    type GlibType = gst_sys::GstStreamStatusType;
 
-    fn to_glib(&self) -> ffi::GstStreamStatusType {
+    fn to_glib(&self) -> gst_sys::GstStreamStatusType {
         match *self {
-            StreamStatusType::Create => ffi::GST_STREAM_STATUS_TYPE_CREATE,
-            StreamStatusType::Enter => ffi::GST_STREAM_STATUS_TYPE_ENTER,
-            StreamStatusType::Leave => ffi::GST_STREAM_STATUS_TYPE_LEAVE,
-            StreamStatusType::Destroy => ffi::GST_STREAM_STATUS_TYPE_DESTROY,
-            StreamStatusType::Start => ffi::GST_STREAM_STATUS_TYPE_START,
-            StreamStatusType::Pause => ffi::GST_STREAM_STATUS_TYPE_PAUSE,
-            StreamStatusType::Stop => ffi::GST_STREAM_STATUS_TYPE_STOP,
+            StreamStatusType::Create => gst_sys::GST_STREAM_STATUS_TYPE_CREATE,
+            StreamStatusType::Enter => gst_sys::GST_STREAM_STATUS_TYPE_ENTER,
+            StreamStatusType::Leave => gst_sys::GST_STREAM_STATUS_TYPE_LEAVE,
+            StreamStatusType::Destroy => gst_sys::GST_STREAM_STATUS_TYPE_DESTROY,
+            StreamStatusType::Start => gst_sys::GST_STREAM_STATUS_TYPE_START,
+            StreamStatusType::Pause => gst_sys::GST_STREAM_STATUS_TYPE_PAUSE,
+            StreamStatusType::Stop => gst_sys::GST_STREAM_STATUS_TYPE_STOP,
             StreamStatusType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
-    fn from_glib(value: ffi::GstStreamStatusType) -> Self {
+impl FromGlib<gst_sys::GstStreamStatusType> for StreamStatusType {
+    fn from_glib(value: gst_sys::GstStreamStatusType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StreamStatusType::Create,
@@ -2307,7 +2307,7 @@ impl FromGlib<ffi::GstStreamStatusType> for StreamStatusType {
 
 impl StaticType for StreamStatusType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_stream_status_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_stream_status_type_get_type()) }
     }
 }
 
@@ -2319,13 +2319,13 @@ impl<'a> FromValueOptional<'a> for StreamStatusType {
 
 impl<'a> FromValue<'a> for StreamStatusType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StreamStatusType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2340,20 +2340,20 @@ pub enum StructureChangeType {
 
 #[doc(hidden)]
 impl ToGlib for StructureChangeType {
-    type GlibType = ffi::GstStructureChangeType;
+    type GlibType = gst_sys::GstStructureChangeType;
 
-    fn to_glib(&self) -> ffi::GstStructureChangeType {
+    fn to_glib(&self) -> gst_sys::GstStructureChangeType {
         match *self {
-            StructureChangeType::Link => ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_LINK,
-            StructureChangeType::Unlink => ffi::GST_STRUCTURE_CHANGE_TYPE_PAD_UNLINK,
+            StructureChangeType::Link => gst_sys::GST_STRUCTURE_CHANGE_TYPE_PAD_LINK,
+            StructureChangeType::Unlink => gst_sys::GST_STRUCTURE_CHANGE_TYPE_PAD_UNLINK,
             StructureChangeType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
-    fn from_glib(value: ffi::GstStructureChangeType) -> Self {
+impl FromGlib<gst_sys::GstStructureChangeType> for StructureChangeType {
+    fn from_glib(value: gst_sys::GstStructureChangeType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => StructureChangeType::Link,
@@ -2365,7 +2365,7 @@ impl FromGlib<ffi::GstStructureChangeType> for StructureChangeType {
 
 impl StaticType for StructureChangeType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_structure_change_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_structure_change_type_get_type()) }
     }
 }
 
@@ -2377,13 +2377,13 @@ impl<'a> FromValueOptional<'a> for StructureChangeType {
 
 impl<'a> FromValue<'a> for StructureChangeType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for StructureChangeType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2401,23 +2401,23 @@ pub enum TagFlag {
 
 #[doc(hidden)]
 impl ToGlib for TagFlag {
-    type GlibType = ffi::GstTagFlag;
+    type GlibType = gst_sys::GstTagFlag;
 
-    fn to_glib(&self) -> ffi::GstTagFlag {
+    fn to_glib(&self) -> gst_sys::GstTagFlag {
         match *self {
-            TagFlag::Undefined => ffi::GST_TAG_FLAG_UNDEFINED,
-            TagFlag::Meta => ffi::GST_TAG_FLAG_META,
-            TagFlag::Encoded => ffi::GST_TAG_FLAG_ENCODED,
-            TagFlag::Decoded => ffi::GST_TAG_FLAG_DECODED,
-            TagFlag::Count => ffi::GST_TAG_FLAG_COUNT,
+            TagFlag::Undefined => gst_sys::GST_TAG_FLAG_UNDEFINED,
+            TagFlag::Meta => gst_sys::GST_TAG_FLAG_META,
+            TagFlag::Encoded => gst_sys::GST_TAG_FLAG_ENCODED,
+            TagFlag::Decoded => gst_sys::GST_TAG_FLAG_DECODED,
+            TagFlag::Count => gst_sys::GST_TAG_FLAG_COUNT,
             TagFlag::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTagFlag> for TagFlag {
-    fn from_glib(value: ffi::GstTagFlag) -> Self {
+impl FromGlib<gst_sys::GstTagFlag> for TagFlag {
+    fn from_glib(value: gst_sys::GstTagFlag) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TagFlag::Undefined,
@@ -2432,7 +2432,7 @@ impl FromGlib<ffi::GstTagFlag> for TagFlag {
 
 impl StaticType for TagFlag {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_tag_flag_get_type()) }
+        unsafe { from_glib(gst_sys::gst_tag_flag_get_type()) }
     }
 }
 
@@ -2444,13 +2444,13 @@ impl<'a> FromValueOptional<'a> for TagFlag {
 
 impl<'a> FromValue<'a> for TagFlag {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TagFlag {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2471,26 +2471,26 @@ pub enum TagMergeMode {
 
 #[doc(hidden)]
 impl ToGlib for TagMergeMode {
-    type GlibType = ffi::GstTagMergeMode;
+    type GlibType = gst_sys::GstTagMergeMode;
 
-    fn to_glib(&self) -> ffi::GstTagMergeMode {
+    fn to_glib(&self) -> gst_sys::GstTagMergeMode {
         match *self {
-            TagMergeMode::Undefined => ffi::GST_TAG_MERGE_UNDEFINED,
-            TagMergeMode::ReplaceAll => ffi::GST_TAG_MERGE_REPLACE_ALL,
-            TagMergeMode::Replace => ffi::GST_TAG_MERGE_REPLACE,
-            TagMergeMode::Append => ffi::GST_TAG_MERGE_APPEND,
-            TagMergeMode::Prepend => ffi::GST_TAG_MERGE_PREPEND,
-            TagMergeMode::Keep => ffi::GST_TAG_MERGE_KEEP,
-            TagMergeMode::KeepAll => ffi::GST_TAG_MERGE_KEEP_ALL,
-            TagMergeMode::Count => ffi::GST_TAG_MERGE_COUNT,
+            TagMergeMode::Undefined => gst_sys::GST_TAG_MERGE_UNDEFINED,
+            TagMergeMode::ReplaceAll => gst_sys::GST_TAG_MERGE_REPLACE_ALL,
+            TagMergeMode::Replace => gst_sys::GST_TAG_MERGE_REPLACE,
+            TagMergeMode::Append => gst_sys::GST_TAG_MERGE_APPEND,
+            TagMergeMode::Prepend => gst_sys::GST_TAG_MERGE_PREPEND,
+            TagMergeMode::Keep => gst_sys::GST_TAG_MERGE_KEEP,
+            TagMergeMode::KeepAll => gst_sys::GST_TAG_MERGE_KEEP_ALL,
+            TagMergeMode::Count => gst_sys::GST_TAG_MERGE_COUNT,
             TagMergeMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
-    fn from_glib(value: ffi::GstTagMergeMode) -> Self {
+impl FromGlib<gst_sys::GstTagMergeMode> for TagMergeMode {
+    fn from_glib(value: gst_sys::GstTagMergeMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TagMergeMode::Undefined,
@@ -2508,7 +2508,7 @@ impl FromGlib<ffi::GstTagMergeMode> for TagMergeMode {
 
 impl StaticType for TagMergeMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_tag_merge_mode_get_type()) }
+        unsafe { from_glib(gst_sys::gst_tag_merge_mode_get_type()) }
     }
 }
 
@@ -2520,13 +2520,13 @@ impl<'a> FromValueOptional<'a> for TagMergeMode {
 
 impl<'a> FromValue<'a> for TagMergeMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TagMergeMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2542,20 +2542,20 @@ pub enum TagScope {
 
 #[doc(hidden)]
 impl ToGlib for TagScope {
-    type GlibType = ffi::GstTagScope;
+    type GlibType = gst_sys::GstTagScope;
 
-    fn to_glib(&self) -> ffi::GstTagScope {
+    fn to_glib(&self) -> gst_sys::GstTagScope {
         match *self {
-            TagScope::Stream => ffi::GST_TAG_SCOPE_STREAM,
-            TagScope::Global => ffi::GST_TAG_SCOPE_GLOBAL,
+            TagScope::Stream => gst_sys::GST_TAG_SCOPE_STREAM,
+            TagScope::Global => gst_sys::GST_TAG_SCOPE_GLOBAL,
             TagScope::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTagScope> for TagScope {
-    fn from_glib(value: ffi::GstTagScope) -> Self {
+impl FromGlib<gst_sys::GstTagScope> for TagScope {
+    fn from_glib(value: gst_sys::GstTagScope) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TagScope::Stream,
@@ -2567,7 +2567,7 @@ impl FromGlib<ffi::GstTagScope> for TagScope {
 
 impl StaticType for TagScope {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_tag_scope_get_type()) }
+        unsafe { from_glib(gst_sys::gst_tag_scope_get_type()) }
     }
 }
 
@@ -2579,13 +2579,13 @@ impl<'a> FromValueOptional<'a> for TagScope {
 
 impl<'a> FromValue<'a> for TagScope {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TagScope {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2601,21 +2601,21 @@ pub enum TaskState {
 
 #[doc(hidden)]
 impl ToGlib for TaskState {
-    type GlibType = ffi::GstTaskState;
+    type GlibType = gst_sys::GstTaskState;
 
-    fn to_glib(&self) -> ffi::GstTaskState {
+    fn to_glib(&self) -> gst_sys::GstTaskState {
         match *self {
-            TaskState::Started => ffi::GST_TASK_STARTED,
-            TaskState::Stopped => ffi::GST_TASK_STOPPED,
-            TaskState::Paused => ffi::GST_TASK_PAUSED,
+            TaskState::Started => gst_sys::GST_TASK_STARTED,
+            TaskState::Stopped => gst_sys::GST_TASK_STOPPED,
+            TaskState::Paused => gst_sys::GST_TASK_PAUSED,
             TaskState::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTaskState> for TaskState {
-    fn from_glib(value: ffi::GstTaskState) -> Self {
+impl FromGlib<gst_sys::GstTaskState> for TaskState {
+    fn from_glib(value: gst_sys::GstTaskState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TaskState::Started,
@@ -2628,7 +2628,7 @@ impl FromGlib<ffi::GstTaskState> for TaskState {
 
 impl StaticType for TaskState {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_task_state_get_type()) }
+        unsafe { from_glib(gst_sys::gst_task_state_get_type()) }
     }
 }
 
@@ -2640,13 +2640,13 @@ impl<'a> FromValueOptional<'a> for TaskState {
 
 impl<'a> FromValue<'a> for TaskState {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TaskState {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2667,25 +2667,25 @@ pub enum TocEntryType {
 
 #[doc(hidden)]
 impl ToGlib for TocEntryType {
-    type GlibType = ffi::GstTocEntryType;
+    type GlibType = gst_sys::GstTocEntryType;
 
-    fn to_glib(&self) -> ffi::GstTocEntryType {
+    fn to_glib(&self) -> gst_sys::GstTocEntryType {
         match *self {
-            TocEntryType::Angle => ffi::GST_TOC_ENTRY_TYPE_ANGLE,
-            TocEntryType::Version => ffi::GST_TOC_ENTRY_TYPE_VERSION,
-            TocEntryType::Edition => ffi::GST_TOC_ENTRY_TYPE_EDITION,
-            TocEntryType::Invalid => ffi::GST_TOC_ENTRY_TYPE_INVALID,
-            TocEntryType::Title => ffi::GST_TOC_ENTRY_TYPE_TITLE,
-            TocEntryType::Track => ffi::GST_TOC_ENTRY_TYPE_TRACK,
-            TocEntryType::Chapter => ffi::GST_TOC_ENTRY_TYPE_CHAPTER,
+            TocEntryType::Angle => gst_sys::GST_TOC_ENTRY_TYPE_ANGLE,
+            TocEntryType::Version => gst_sys::GST_TOC_ENTRY_TYPE_VERSION,
+            TocEntryType::Edition => gst_sys::GST_TOC_ENTRY_TYPE_EDITION,
+            TocEntryType::Invalid => gst_sys::GST_TOC_ENTRY_TYPE_INVALID,
+            TocEntryType::Title => gst_sys::GST_TOC_ENTRY_TYPE_TITLE,
+            TocEntryType::Track => gst_sys::GST_TOC_ENTRY_TYPE_TRACK,
+            TocEntryType::Chapter => gst_sys::GST_TOC_ENTRY_TYPE_CHAPTER,
             TocEntryType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
-    fn from_glib(value: ffi::GstTocEntryType) -> Self {
+impl FromGlib<gst_sys::GstTocEntryType> for TocEntryType {
+    fn from_glib(value: gst_sys::GstTocEntryType) -> Self {
         skip_assert_initialized!();
         match value {
             -3 => TocEntryType::Angle,
@@ -2702,7 +2702,7 @@ impl FromGlib<ffi::GstTocEntryType> for TocEntryType {
 
 impl StaticType for TocEntryType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_toc_entry_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_toc_entry_type_get_type()) }
     }
 }
 
@@ -2714,13 +2714,13 @@ impl<'a> FromValueOptional<'a> for TocEntryType {
 
 impl<'a> FromValue<'a> for TocEntryType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TocEntryType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2738,22 +2738,22 @@ pub enum TocLoopType {
 
 #[doc(hidden)]
 impl ToGlib for TocLoopType {
-    type GlibType = ffi::GstTocLoopType;
+    type GlibType = gst_sys::GstTocLoopType;
 
-    fn to_glib(&self) -> ffi::GstTocLoopType {
+    fn to_glib(&self) -> gst_sys::GstTocLoopType {
         match *self {
-            TocLoopType::None => ffi::GST_TOC_LOOP_NONE,
-            TocLoopType::Forward => ffi::GST_TOC_LOOP_FORWARD,
-            TocLoopType::Reverse => ffi::GST_TOC_LOOP_REVERSE,
-            TocLoopType::PingPong => ffi::GST_TOC_LOOP_PING_PONG,
+            TocLoopType::None => gst_sys::GST_TOC_LOOP_NONE,
+            TocLoopType::Forward => gst_sys::GST_TOC_LOOP_FORWARD,
+            TocLoopType::Reverse => gst_sys::GST_TOC_LOOP_REVERSE,
+            TocLoopType::PingPong => gst_sys::GST_TOC_LOOP_PING_PONG,
             TocLoopType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
-    fn from_glib(value: ffi::GstTocLoopType) -> Self {
+impl FromGlib<gst_sys::GstTocLoopType> for TocLoopType {
+    fn from_glib(value: gst_sys::GstTocLoopType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TocLoopType::None,
@@ -2767,7 +2767,7 @@ impl FromGlib<ffi::GstTocLoopType> for TocLoopType {
 
 impl StaticType for TocLoopType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_toc_loop_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_toc_loop_type_get_type()) }
     }
 }
 
@@ -2779,13 +2779,13 @@ impl<'a> FromValueOptional<'a> for TocLoopType {
 
 impl<'a> FromValue<'a> for TocLoopType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TocLoopType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2801,20 +2801,20 @@ pub enum TocScope {
 
 #[doc(hidden)]
 impl ToGlib for TocScope {
-    type GlibType = ffi::GstTocScope;
+    type GlibType = gst_sys::GstTocScope;
 
-    fn to_glib(&self) -> ffi::GstTocScope {
+    fn to_glib(&self) -> gst_sys::GstTocScope {
         match *self {
-            TocScope::Global => ffi::GST_TOC_SCOPE_GLOBAL,
-            TocScope::Current => ffi::GST_TOC_SCOPE_CURRENT,
+            TocScope::Global => gst_sys::GST_TOC_SCOPE_GLOBAL,
+            TocScope::Current => gst_sys::GST_TOC_SCOPE_CURRENT,
             TocScope::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTocScope> for TocScope {
-    fn from_glib(value: ffi::GstTocScope) -> Self {
+impl FromGlib<gst_sys::GstTocScope> for TocScope {
+    fn from_glib(value: gst_sys::GstTocScope) -> Self {
         skip_assert_initialized!();
         match value {
             1 => TocScope::Global,
@@ -2826,7 +2826,7 @@ impl FromGlib<ffi::GstTocScope> for TocScope {
 
 impl StaticType for TocScope {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_toc_scope_get_type()) }
+        unsafe { from_glib(gst_sys::gst_toc_scope_get_type()) }
     }
 }
 
@@ -2838,13 +2838,13 @@ impl<'a> FromValueOptional<'a> for TocScope {
 
 impl<'a> FromValue<'a> for TocScope {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TocScope {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2863,24 +2863,24 @@ pub enum TypeFindProbability {
 
 #[doc(hidden)]
 impl ToGlib for TypeFindProbability {
-    type GlibType = ffi::GstTypeFindProbability;
+    type GlibType = gst_sys::GstTypeFindProbability;
 
-    fn to_glib(&self) -> ffi::GstTypeFindProbability {
+    fn to_glib(&self) -> gst_sys::GstTypeFindProbability {
         match *self {
-            TypeFindProbability::None => ffi::GST_TYPE_FIND_NONE,
-            TypeFindProbability::Minimum => ffi::GST_TYPE_FIND_MINIMUM,
-            TypeFindProbability::Possible => ffi::GST_TYPE_FIND_POSSIBLE,
-            TypeFindProbability::Likely => ffi::GST_TYPE_FIND_LIKELY,
-            TypeFindProbability::NearlyCertain => ffi::GST_TYPE_FIND_NEARLY_CERTAIN,
-            TypeFindProbability::Maximum => ffi::GST_TYPE_FIND_MAXIMUM,
+            TypeFindProbability::None => gst_sys::GST_TYPE_FIND_NONE,
+            TypeFindProbability::Minimum => gst_sys::GST_TYPE_FIND_MINIMUM,
+            TypeFindProbability::Possible => gst_sys::GST_TYPE_FIND_POSSIBLE,
+            TypeFindProbability::Likely => gst_sys::GST_TYPE_FIND_LIKELY,
+            TypeFindProbability::NearlyCertain => gst_sys::GST_TYPE_FIND_NEARLY_CERTAIN,
+            TypeFindProbability::Maximum => gst_sys::GST_TYPE_FIND_MAXIMUM,
             TypeFindProbability::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
-    fn from_glib(value: ffi::GstTypeFindProbability) -> Self {
+impl FromGlib<gst_sys::GstTypeFindProbability> for TypeFindProbability {
+    fn from_glib(value: gst_sys::GstTypeFindProbability) -> Self {
         skip_assert_initialized!();
         match value {
             0 => TypeFindProbability::None,
@@ -2896,7 +2896,7 @@ impl FromGlib<ffi::GstTypeFindProbability> for TypeFindProbability {
 
 impl StaticType for TypeFindProbability {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_type_find_probability_get_type()) }
+        unsafe { from_glib(gst_sys::gst_type_find_probability_get_type()) }
     }
 }
 
@@ -2908,13 +2908,13 @@ impl<'a> FromValueOptional<'a> for TypeFindProbability {
 
 impl<'a> FromValue<'a> for TypeFindProbability {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for TypeFindProbability {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -2931,22 +2931,22 @@ pub enum URIError {
 
 #[doc(hidden)]
 impl ToGlib for URIError {
-    type GlibType = ffi::GstURIError;
+    type GlibType = gst_sys::GstURIError;
 
-    fn to_glib(&self) -> ffi::GstURIError {
+    fn to_glib(&self) -> gst_sys::GstURIError {
         match *self {
-            URIError::UnsupportedProtocol => ffi::GST_URI_ERROR_UNSUPPORTED_PROTOCOL,
-            URIError::BadUri => ffi::GST_URI_ERROR_BAD_URI,
-            URIError::BadState => ffi::GST_URI_ERROR_BAD_STATE,
-            URIError::BadReference => ffi::GST_URI_ERROR_BAD_REFERENCE,
+            URIError::UnsupportedProtocol => gst_sys::GST_URI_ERROR_UNSUPPORTED_PROTOCOL,
+            URIError::BadUri => gst_sys::GST_URI_ERROR_BAD_URI,
+            URIError::BadState => gst_sys::GST_URI_ERROR_BAD_STATE,
+            URIError::BadReference => gst_sys::GST_URI_ERROR_BAD_REFERENCE,
             URIError::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstURIError> for URIError {
-    fn from_glib(value: ffi::GstURIError) -> Self {
+impl FromGlib<gst_sys::GstURIError> for URIError {
+    fn from_glib(value: gst_sys::GstURIError) -> Self {
         skip_assert_initialized!();
         match value {
             0 => URIError::UnsupportedProtocol,
@@ -2961,7 +2961,7 @@ impl FromGlib<ffi::GstURIError> for URIError {
 impl ErrorDomain for URIError {
     fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_uri_error_quark()) }
+        unsafe { from_glib(gst_sys::gst_uri_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -2982,7 +2982,7 @@ impl ErrorDomain for URIError {
 
 impl StaticType for URIError {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_uri_error_get_type()) }
+        unsafe { from_glib(gst_sys::gst_uri_error_get_type()) }
     }
 }
 
@@ -2994,13 +2994,13 @@ impl<'a> FromValueOptional<'a> for URIError {
 
 impl<'a> FromValue<'a> for URIError {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for URIError {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -3016,21 +3016,21 @@ pub enum URIType {
 
 #[doc(hidden)]
 impl ToGlib for URIType {
-    type GlibType = ffi::GstURIType;
+    type GlibType = gst_sys::GstURIType;
 
-    fn to_glib(&self) -> ffi::GstURIType {
+    fn to_glib(&self) -> gst_sys::GstURIType {
         match *self {
-            URIType::Unknown => ffi::GST_URI_UNKNOWN,
-            URIType::Sink => ffi::GST_URI_SINK,
-            URIType::Src => ffi::GST_URI_SRC,
+            URIType::Unknown => gst_sys::GST_URI_UNKNOWN,
+            URIType::Sink => gst_sys::GST_URI_SINK,
+            URIType::Src => gst_sys::GST_URI_SRC,
             URIType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstURIType> for URIType {
-    fn from_glib(value: ffi::GstURIType) -> Self {
+impl FromGlib<gst_sys::GstURIType> for URIType {
+    fn from_glib(value: gst_sys::GstURIType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => URIType::Unknown,
@@ -3043,7 +3043,7 @@ impl FromGlib<ffi::GstURIType> for URIType {
 
 impl StaticType for URIType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_uri_type_get_type()) }
+        unsafe { from_glib(gst_sys::gst_uri_type_get_type()) }
     }
 }
 
@@ -3055,13 +3055,13 @@ impl<'a> FromValueOptional<'a> for URIType {
 
 impl<'a> FromValue<'a> for URIType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for URIType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

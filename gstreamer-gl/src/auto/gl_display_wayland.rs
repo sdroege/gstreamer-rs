@@ -3,29 +3,28 @@
 // DO NOT EDIT
 
 use GLDisplay;
-use ffi;
 use glib::translate::*;
 use gst;
+use gst_gl_sys;
 
 glib_wrapper! {
-    pub struct GLDisplayWayland(Object<ffi::GstGLDisplayWayland, ffi::GstGLDisplayWaylandClass, GLDisplayWaylandClass>) @extends GLDisplay, gst::Object;
+    pub struct GLDisplayWayland(Object<gst_gl_sys::GstGLDisplayWayland, gst_gl_sys::GstGLDisplayWaylandClass, GLDisplayWaylandClass>) @extends GLDisplay, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_display_wayland_get_type(),
+        get_type => || gst_gl_sys::gst_gl_display_wayland_get_type(),
     }
 }
 
 impl GLDisplayWayland {
-    pub fn new<'a, P: Into<Option<&'a str>>>(name: P) -> GLDisplayWayland {
+    pub fn new(name: Option<&str>) -> GLDisplayWayland {
         assert_initialized_main_thread!();
-        let name = name.into();
         unsafe {
-            from_glib_full(ffi::gst_gl_display_wayland_new(name.to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_display_wayland_new(name.to_glib_none().0))
         }
     }
 
     //pub fn new_with_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayWayland {
-    //    unsafe { TODO: call ffi::gst_gl_display_wayland_new_with_display() }
+    //    unsafe { TODO: call gst_gl_sys:gst_gl_display_wayland_new_with_display() }
     //}
 }
 

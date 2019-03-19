@@ -7,7 +7,6 @@ use Object;
 use StreamFlags;
 use StreamType;
 use TagList;
-use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -15,16 +14,17 @@ use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Stream(Object<ffi::GstStream, ffi::GstStreamClass, StreamClass>) @extends Object;
+    pub struct Stream(Object<gst_sys::GstStream, gst_sys::GstStreamClass, StreamClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_stream_get_type(),
+        get_type => || gst_sys::gst_stream_get_type(),
     }
 }
 
@@ -32,100 +32,98 @@ impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_caps(&self) -> Option<Caps> {
         unsafe {
-            from_glib_full(ffi::gst_stream_get_caps(self.to_glib_none().0))
+            from_glib_full(gst_sys::gst_stream_get_caps(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_flags(&self) -> StreamFlags {
         unsafe {
-            from_glib(ffi::gst_stream_get_stream_flags(self.to_glib_none().0))
+            from_glib(gst_sys::gst_stream_get_stream_flags(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_id(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_stream_get_stream_id(self.to_glib_none().0))
+            from_glib_none(gst_sys::gst_stream_get_stream_id(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream_type(&self) -> StreamType {
         unsafe {
-            from_glib(ffi::gst_stream_get_stream_type(self.to_glib_none().0))
+            from_glib(gst_sys::gst_stream_get_stream_type(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_tags(&self) -> Option<TagList> {
         unsafe {
-            from_glib_full(ffi::gst_stream_get_tags(self.to_glib_none().0))
+            from_glib_full(gst_sys::gst_stream_get_tags(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn set_caps<'a, P: Into<Option<&'a Caps>>>(&self, caps: P) {
-        let caps = caps.into();
+    pub fn set_caps(&self, caps: Option<&Caps>) {
         unsafe {
-            ffi::gst_stream_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
+            gst_sys::gst_stream_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn set_stream_flags(&self, flags: StreamFlags) {
         unsafe {
-            ffi::gst_stream_set_stream_flags(self.to_glib_none().0, flags.to_glib());
+            gst_sys::gst_stream_set_stream_flags(self.to_glib_none().0, flags.to_glib());
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn set_stream_type(&self, stream_type: StreamType) {
         unsafe {
-            ffi::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.to_glib());
+            gst_sys::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.to_glib());
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn set_tags<'a, P: Into<Option<&'a TagList>>>(&self, tags: P) {
-        let tags = tags.into();
+    pub fn set_tags(&self, tags: Option<&TagList>) {
         unsafe {
-            ffi::gst_stream_set_tags(self.to_glib_none().0, tags.to_glib_none().0);
+            gst_sys::gst_stream_set_tags(self.to_glib_none().0, tags.to_glib_none().0);
         }
     }
 
     pub fn get_property_caps(&self) -> Option<Caps> {
         unsafe {
             let mut value = Value::from_type(<Caps as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"caps\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"caps\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     pub fn set_property_caps(&self, caps: Option<&Caps>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"caps\0".as_ptr() as *const _, Value::from(caps).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"caps\0".as_ptr() as *const _, Value::from(caps).to_glib_none().0);
         }
     }
 
     pub fn get_property_stream_flags(&self) -> StreamFlags {
         unsafe {
             let mut value = Value::from_type(<StreamFlags as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"stream-flags\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"stream-flags\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_stream_flags(&self, stream_flags: StreamFlags) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"stream-flags\0".as_ptr() as *const _, Value::from(&stream_flags).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"stream-flags\0".as_ptr() as *const _, Value::from(&stream_flags).to_glib_none().0);
         }
     }
 
     pub fn get_property_stream_id(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"stream-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"stream-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -133,28 +131,28 @@ impl Stream {
     pub fn get_property_stream_type(&self) -> StreamType {
         unsafe {
             let mut value = Value::from_type(<StreamType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"stream-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"stream-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_stream_type(&self, stream_type: StreamType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"stream-type\0".as_ptr() as *const _, Value::from(&stream_type).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"stream-type\0".as_ptr() as *const _, Value::from(&stream_type).to_glib_none().0);
         }
     }
 
     pub fn get_property_tags(&self) -> Option<TagList> {
         unsafe {
             let mut value = Value::from_type(<TagList as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"tags\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"tags\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     pub fn set_property_tags(&self, tags: Option<&TagList>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"tags\0".as_ptr() as *const _, Value::from(tags).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"tags\0".as_ptr() as *const _, Value::from(tags).to_glib_none().0);
         }
     }
 
@@ -194,22 +192,22 @@ impl Stream {
 unsafe impl Send for Stream {}
 unsafe impl Sync for Stream {}
 
-unsafe extern "C" fn notify_caps_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_caps_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_stream_flags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_stream_flags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_tags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut ffi::GstStream, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_tags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

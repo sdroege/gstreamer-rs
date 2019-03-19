@@ -2,17 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::translate::*;
+use gst_rtsp_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct RTSPAuthParam(Boxed<ffi::GstRTSPAuthParam>);
+    pub struct RTSPAuthParam(Boxed<gst_rtsp_sys::GstRTSPAuthParam>);
 
     match fn {
-        copy => |ptr| ffi::gst_rtsp_auth_param_copy(mut_override(ptr)),
-        free => |ptr| ffi::gst_rtsp_auth_param_free(ptr),
-        get_type => || ffi::gst_rtsp_auth_param_get_type(),
+        copy => |ptr| gst_rtsp_sys::gst_rtsp_auth_param_copy(mut_override(ptr)),
+        free => |ptr| gst_rtsp_sys::gst_rtsp_auth_param_free(ptr),
+        get_type => || gst_rtsp_sys::gst_rtsp_auth_param_get_type(),
     }
 }
 

@@ -2,8 +2,8 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::translate::*;
+use gst_gl_sys;
 
 bitflags! {
     pub struct GLAPI: u32 {
@@ -18,16 +18,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLAPI {
-    type GlibType = ffi::GstGLAPI;
+    type GlibType = gst_gl_sys::GstGLAPI;
 
-    fn to_glib(&self) -> ffi::GstGLAPI {
+    fn to_glib(&self) -> gst_gl_sys::GstGLAPI {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstGLAPI> for GLAPI {
-    fn from_glib(value: ffi::GstGLAPI) -> GLAPI {
+impl FromGlib<gst_gl_sys::GstGLAPI> for GLAPI {
+    fn from_glib(value: gst_gl_sys::GstGLAPI) -> GLAPI {
         skip_assert_initialized!();
         GLAPI::from_bits_truncate(value)
     }
@@ -50,16 +50,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLDisplayType {
-    type GlibType = ffi::GstGLDisplayType;
+    type GlibType = gst_gl_sys::GstGLDisplayType;
 
-    fn to_glib(&self) -> ffi::GstGLDisplayType {
+    fn to_glib(&self) -> gst_gl_sys::GstGLDisplayType {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
-    fn from_glib(value: ffi::GstGLDisplayType) -> GLDisplayType {
+impl FromGlib<gst_gl_sys::GstGLDisplayType> for GLDisplayType {
+    fn from_glib(value: gst_gl_sys::GstGLDisplayType) -> GLDisplayType {
         skip_assert_initialized!();
         GLDisplayType::from_bits_truncate(value)
     }
@@ -79,16 +79,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLPlatform {
-    type GlibType = ffi::GstGLPlatform;
+    type GlibType = gst_gl_sys::GstGLPlatform;
 
-    fn to_glib(&self) -> ffi::GstGLPlatform {
+    fn to_glib(&self) -> gst_gl_sys::GstGLPlatform {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
-    fn from_glib(value: ffi::GstGLPlatform) -> GLPlatform {
+impl FromGlib<gst_gl_sys::GstGLPlatform> for GLPlatform {
+    fn from_glib(value: gst_gl_sys::GstGLPlatform) -> GLPlatform {
         skip_assert_initialized!();
         GLPlatform::from_bits_truncate(value)
     }
@@ -106,16 +106,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for GLSLProfile {
-    type GlibType = ffi::GstGLSLProfile;
+    type GlibType = gst_gl_sys::GstGLSLProfile;
 
-    fn to_glib(&self) -> ffi::GstGLSLProfile {
+    fn to_glib(&self) -> gst_gl_sys::GstGLSLProfile {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
-    fn from_glib(value: ffi::GstGLSLProfile) -> GLSLProfile {
+impl FromGlib<gst_gl_sys::GstGLSLProfile> for GLSLProfile {
+    fn from_glib(value: gst_gl_sys::GstGLSLProfile) -> GLSLProfile {
         skip_assert_initialized!();
         GLSLProfile::from_bits_truncate(value)
     }

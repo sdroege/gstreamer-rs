@@ -6,7 +6,7 @@ use Clip;
 use Container;
 use Extractable;
 use TimelineElement;
-use ffi;
+use ges_sys;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -15,16 +15,16 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct UriClip(Object<ffi::GESUriClip, ffi::GESUriClipClass, UriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
+    pub struct UriClip(Object<ges_sys::GESUriClip, ges_sys::GESUriClipClass, UriClipClass>) @extends Clip, Container, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_uri_clip_get_type(),
+        get_type => || ges_sys::ges_uri_clip_get_type(),
     }
 }
 
@@ -32,7 +32,7 @@ impl UriClip {
     pub fn new(uri: &str) -> Option<UriClip> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::ges_uri_clip_new(uri.to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_clip_new(uri.to_glib_none().0))
         }
     }
 }
@@ -64,38 +64,38 @@ pub trait UriClipExt: 'static {
 impl<O: IsA<UriClip>> UriClipExt for O {
     fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::ges_uri_clip_get_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_clip_get_uri(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_image(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_uri_clip_is_image(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_uri_clip_is_image(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_muted(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_uri_clip_is_muted(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_uri_clip_is_muted(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_is_image(&self, is_image: bool) {
         unsafe {
-            ffi::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.to_glib());
+            ges_sys::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.to_glib());
         }
     }
 
     fn set_mute(&self, mute: bool) {
         unsafe {
-            ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
+            ges_sys::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
         }
     }
 
     fn get_property_is_image(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-image\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"is-image\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -103,7 +103,7 @@ impl<O: IsA<UriClip>> UriClipExt for O {
     fn get_property_mute(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"mute\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"mute\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -133,19 +133,19 @@ impl<O: IsA<UriClip>> UriClipExt for O {
     }
 }
 
-unsafe extern "C" fn notify_is_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_is_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESUriClip, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<UriClip> {
     let f: &F = &*(f as *const F);
     f(&UriClip::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESUriClip, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<UriClip> {
     let f: &F = &*(f as *const F);
     f(&UriClip::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESUriClip, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_supported_formats_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESUriClip, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<UriClip> {
     let f: &F = &*(f as *const F);
     f(&UriClip::from_glib_borrow(this).unsafe_cast())

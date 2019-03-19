@@ -2,17 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::translate::*;
+use gst_web_rtc_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct WebRTCSessionDescription(Boxed<ffi::GstWebRTCSessionDescription>);
+    pub struct WebRTCSessionDescription(Boxed<gst_web_rtc_sys::GstWebRTCSessionDescription>);
 
     match fn {
-        copy => |ptr| ffi::gst_webrtc_session_description_copy(mut_override(ptr)),
-        free => |ptr| ffi::gst_webrtc_session_description_free(ptr),
-        get_type => || ffi::gst_webrtc_session_description_get_type(),
+        copy => |ptr| gst_web_rtc_sys::gst_webrtc_session_description_copy(mut_override(ptr)),
+        free => |ptr| gst_web_rtc_sys::gst_webrtc_session_description_free(ptr),
+        get_type => || gst_web_rtc_sys::gst_webrtc_session_description_get_type(),
     }
 }
 

@@ -5,7 +5,6 @@
 use Object;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 use Stream;
-use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -13,16 +12,17 @@ use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct StreamCollection(Object<ffi::GstStreamCollection, ffi::GstStreamCollectionClass, StreamCollectionClass>) @extends Object;
+    pub struct StreamCollection(Object<gst_sys::GstStreamCollection, gst_sys::GstStreamCollectionClass, StreamCollectionClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_stream_collection_get_type(),
+        get_type => || gst_sys::gst_stream_collection_get_type(),
     }
 }
 
@@ -30,36 +30,35 @@ impl StreamCollection {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_size(&self) -> u32 {
         unsafe {
-            ffi::gst_stream_collection_get_size(self.to_glib_none().0)
+            gst_sys::gst_stream_collection_get_size(self.to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_stream(&self, index: u32) -> Option<Stream> {
         unsafe {
-            from_glib_none(ffi::gst_stream_collection_get_stream(self.to_glib_none().0, index))
+            from_glib_none(gst_sys::gst_stream_collection_get_stream(self.to_glib_none().0, index))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_upstream_id(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_stream_collection_get_upstream_id(self.to_glib_none().0))
+            from_glib_none(gst_sys::gst_stream_collection_get_upstream_id(self.to_glib_none().0))
         }
     }
 
     pub fn get_property_upstream_id(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"upstream-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"upstream-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    pub fn set_property_upstream_id<'a, P: Into<Option<&'a str>>>(&self, upstream_id: P) {
-        let upstream_id = upstream_id.into();
+    pub fn set_property_upstream_id(&self, upstream_id: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"upstream-id\0".as_ptr() as *const _, Value::from(upstream_id).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"upstream-id\0".as_ptr() as *const _, Value::from(upstream_id).to_glib_none().0);
         }
     }
 
@@ -79,7 +78,7 @@ impl StreamCollection {
 unsafe impl Send for StreamCollection {}
 unsafe impl Sync for StreamCollection {}
 
-unsafe extern "C" fn notify_upstream_id_trampoline<F: Fn(&StreamCollection) + Send + Sync + 'static>(this: *mut ffi::GstStreamCollection, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_upstream_id_trampoline<F: Fn(&StreamCollection) + Send + Sync + 'static>(this: *mut gst_sys::GstStreamCollection, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

@@ -3,15 +3,15 @@
 // DO NOT EDIT
 
 use BaseSrc;
-use ffi;
 use glib::translate::*;
 use gst;
+use gst_base_sys;
 
 glib_wrapper! {
-    pub struct PushSrc(Object<ffi::GstPushSrc, ffi::GstPushSrcClass, PushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
+    pub struct PushSrc(Object<gst_base_sys::GstPushSrc, gst_base_sys::GstPushSrcClass, PushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_push_src_get_type(),
+        get_type => || gst_base_sys::gst_push_src_get_type(),
     }
 }
 

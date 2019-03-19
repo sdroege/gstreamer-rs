@@ -4,21 +4,21 @@
 
 use Object;
 use Pad;
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_sys;
 
 glib_wrapper! {
-    pub struct ProxyPad(Object<ffi::GstProxyPad, ffi::GstProxyPadClass, ProxyPadClass>) @extends Pad, Object;
+    pub struct ProxyPad(Object<gst_sys::GstProxyPad, gst_sys::GstProxyPadClass, ProxyPadClass>) @extends Pad, Object;
 
     match fn {
-        get_type => || ffi::gst_proxy_pad_get_type(),
+        get_type => || gst_sys::gst_proxy_pad_get_type(),
     }
 }
 
 impl ProxyPad {
-    //pub fn iterate_internal_links_default<'a, P: IsA<Pad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(pad: &P, parent: R) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_proxy_pad_iterate_internal_links_default() }
+    //pub fn iterate_internal_links_default<P: IsA<Pad>, Q: IsA<Object>>(pad: &P, parent: Option<&Q>) -> /*Ignored*/Option<Iterator> {
+    //    unsafe { TODO: call gst_sys:gst_proxy_pad_iterate_internal_links_default() }
     //}
 }
 
@@ -34,7 +34,7 @@ pub trait ProxyPadExt: 'static {
 impl<O: IsA<ProxyPad>> ProxyPadExt for O {
     fn get_internal(&self) -> Option<ProxyPad> {
         unsafe {
-            from_glib_full(ffi::gst_proxy_pad_get_internal(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_proxy_pad_get_internal(self.as_ref().to_glib_none().0))
         }
     }
 }

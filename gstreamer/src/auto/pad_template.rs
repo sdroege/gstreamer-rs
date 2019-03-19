@@ -7,7 +7,6 @@ use Object;
 use Pad;
 use PadDirection;
 use PadPresence;
-use ffi;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 use glib;
 use glib::GString;
@@ -18,16 +17,17 @@ use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct PadTemplate(Object<ffi::GstPadTemplate, ffi::GstPadTemplateClass, PadTemplateClass>) @extends Object;
+    pub struct PadTemplate(Object<gst_sys::GstPadTemplate, gst_sys::GstPadTemplateClass, PadTemplateClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_pad_template_get_type(),
+        get_type => || gst_sys::gst_pad_template_get_type(),
     }
 }
 
@@ -35,7 +35,7 @@ impl PadTemplate {
     pub fn new(name_template: &str, direction: PadDirection, presence: PadPresence, caps: &Caps) -> Option<PadTemplate> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::gst_pad_template_new(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0))
+            from_glib_none(gst_sys::gst_pad_template_new(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0))
         }
     }
 
@@ -43,26 +43,26 @@ impl PadTemplate {
     pub fn new_with_gtype(name_template: &str, direction: PadDirection, presence: PadPresence, caps: &Caps, pad_type: glib::types::Type) -> Option<PadTemplate> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::gst_pad_template_new_with_gtype(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0, pad_type.to_glib()))
+            from_glib_none(gst_sys::gst_pad_template_new_with_gtype(name_template.to_glib_none().0, direction.to_glib(), presence.to_glib(), caps.to_glib_none().0, pad_type.to_glib()))
         }
     }
 
     pub fn get_caps(&self) -> Option<Caps> {
         unsafe {
-            from_glib_full(ffi::gst_pad_template_get_caps(self.to_glib_none().0))
+            from_glib_full(gst_sys::gst_pad_template_get_caps(self.to_glib_none().0))
         }
     }
 
     pub fn pad_created<P: IsA<Pad>>(&self, pad: &P) {
         unsafe {
-            ffi::gst_pad_template_pad_created(self.to_glib_none().0, pad.as_ref().to_glib_none().0);
+            gst_sys::gst_pad_template_pad_created(self.to_glib_none().0, pad.as_ref().to_glib_none().0);
         }
     }
 
     pub fn get_property_direction(&self) -> PadDirection {
         unsafe {
             let mut value = Value::from_type(<PadDirection as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"direction\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"direction\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -71,7 +71,7 @@ impl PadTemplate {
     pub fn get_property_gtype(&self) -> glib::types::Type {
         unsafe {
             let mut value = Value::from_type(<glib::types::Type as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"gtype\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"gtype\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -79,7 +79,7 @@ impl PadTemplate {
     pub fn get_property_name_template(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"name-template\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"name-template\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -87,7 +87,7 @@ impl PadTemplate {
     pub fn get_property_presence(&self) -> PadPresence {
         unsafe {
             let mut value = Value::from_type(<PadPresence as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"presence\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"presence\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -104,7 +104,7 @@ impl PadTemplate {
 unsafe impl Send for PadTemplate {}
 unsafe impl Sync for PadTemplate {}
 
-unsafe extern "C" fn pad_created_trampoline<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(this: *mut ffi::GstPadTemplate, pad: *mut ffi::GstPad, f: glib_ffi::gpointer) {
+unsafe extern "C" fn pad_created_trampoline<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstPadTemplate, pad: *mut gst_sys::GstPad, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(pad))
 }

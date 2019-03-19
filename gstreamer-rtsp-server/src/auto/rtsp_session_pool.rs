@@ -4,22 +4,22 @@
 
 use RTSPFilterResult;
 use RTSPSession;
-use ffi;
 use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RTSPSessionPool(Object<ffi::GstRTSPSessionPool, ffi::GstRTSPSessionPoolClass, RTSPSessionPoolClass>);
+    pub struct RTSPSessionPool(Object<gst_rtsp_server_sys::GstRTSPSessionPool, gst_rtsp_server_sys::GstRTSPSessionPoolClass, RTSPSessionPoolClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_session_pool_get_type(),
+        get_type => || gst_rtsp_server_sys::gst_rtsp_session_pool_get_type(),
     }
 }
 
@@ -27,7 +27,7 @@ impl RTSPSessionPool {
     pub fn new() -> RTSPSessionPool {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_rtsp_session_pool_new())
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_new())
         }
     }
 }
@@ -68,19 +68,19 @@ pub trait RTSPSessionPoolExt: 'static {
 impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
     fn cleanup(&self) -> u32 {
         unsafe {
-            ffi::gst_rtsp_session_pool_cleanup(self.as_ref().to_glib_none().0)
+            gst_rtsp_server_sys::gst_rtsp_session_pool_cleanup(self.as_ref().to_glib_none().0)
         }
     }
 
     fn create(&self) -> Option<RTSPSession> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_session_pool_create(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_create(self.as_ref().to_glib_none().0))
         }
     }
 
     fn filter(&self, func: Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)>) -> Vec<RTSPSession> {
         let func_data: Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)> = func;
-        unsafe extern "C" fn func_func(pool: *mut ffi::GstRTSPSessionPool, session: *mut ffi::GstRTSPSession, user_data: glib_ffi::gpointer) -> ffi::GstRTSPFilterResult {
+        unsafe extern "C" fn func_func(pool: *mut gst_rtsp_server_sys::GstRTSPSessionPool, session: *mut gst_rtsp_server_sys::GstRTSPSession, user_data: glib_sys::gpointer) -> gst_rtsp_server_sys::GstRTSPFilterResult {
             let pool = from_glib_borrow(pool);
             let session = from_glib_borrow(session);
             let callback: *mut Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)>;
@@ -91,40 +91,40 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
             };
             res.to_glib()
         }
-        let func = Some(func_func as _);
+        let func = if func_data.is_some() { Some(func_func as _) } else { None };
         let super_callback0: &Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)> = &func_data;
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_pool_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+            FromGlibPtrContainer::from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
         }
     }
 
     fn find(&self, sessionid: &str) -> Option<RTSPSession> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_session_pool_find(self.as_ref().to_glib_none().0, sessionid.to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_pool_find(self.as_ref().to_glib_none().0, sessionid.to_glib_none().0))
         }
     }
 
     fn get_max_sessions(&self) -> u32 {
         unsafe {
-            ffi::gst_rtsp_session_pool_get_max_sessions(self.as_ref().to_glib_none().0)
+            gst_rtsp_server_sys::gst_rtsp_session_pool_get_max_sessions(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_n_sessions(&self) -> u32 {
         unsafe {
-            ffi::gst_rtsp_session_pool_get_n_sessions(self.as_ref().to_glib_none().0)
+            gst_rtsp_server_sys::gst_rtsp_session_pool_get_n_sessions(self.as_ref().to_glib_none().0)
         }
     }
 
     fn remove<P: IsA<RTSPSession>>(&self, sess: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_rtsp_session_pool_remove(self.as_ref().to_glib_none().0, sess.as_ref().to_glib_none().0), "Failed to remove session from pool")
+            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_session_pool_remove(self.as_ref().to_glib_none().0, sess.as_ref().to_glib_none().0), "Failed to remove session from pool")
         }
     }
 
     fn set_max_sessions(&self, max: u32) {
         unsafe {
-            ffi::gst_rtsp_session_pool_set_max_sessions(self.as_ref().to_glib_none().0, max);
+            gst_rtsp_server_sys::gst_rtsp_session_pool_set_max_sessions(self.as_ref().to_glib_none().0, max);
         }
     }
 
@@ -145,13 +145,13 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
     }
 }
 
-unsafe extern "C" fn session_removed_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSessionPool, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
+unsafe extern "C" fn session_removed_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPSessionPool, object: *mut gst_rtsp_server_sys::GstRTSPSession, f: glib_sys::gpointer)
 where P: IsA<RTSPSessionPool> {
     let f: &F = &*(f as *const F);
     f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPSessionPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPSessionPool, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPSessionPool> {
     let f: &F = &*(f as *const F);
     f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast())

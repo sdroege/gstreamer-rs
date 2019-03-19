@@ -9,7 +9,7 @@ use Layer;
 use TimelineElement;
 use Track;
 use TrackType;
-use ffi;
+use ges_sys;
 use glib;
 use glib::GString;
 use glib::StaticType;
@@ -19,17 +19,17 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct TrackElement(Object<ffi::GESTrackElement, ffi::GESTrackElementClass, TrackElementClass>) @extends TimelineElement, @implements Extractable;
+    pub struct TrackElement(Object<ges_sys::GESTrackElement, ges_sys::GESTrackElementClass, TrackElementClass>) @extends TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_track_element_get_type(),
+        get_type => || ges_sys::ges_track_element_get_type(),
     }
 }
 
@@ -82,90 +82,90 @@ pub trait TrackElementExt: 'static {
 impl<O: IsA<TrackElement>> TrackElementExt for O {
     fn add_children_props<P: IsA<gst::Element>>(&self, element: &P, wanted_categories: &[&str], blacklist: &[&str], whitelist: &[&str]) {
         unsafe {
-            ffi::ges_track_element_add_children_props(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0, wanted_categories.to_glib_none().0, blacklist.to_glib_none().0, whitelist.to_glib_none().0);
+            ges_sys::ges_track_element_add_children_props(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0, wanted_categories.to_glib_none().0, blacklist.to_glib_none().0, whitelist.to_glib_none().0);
         }
     }
 
     fn edit(&self, layers: &[Layer], mode: EditMode, edge: Edge, position: u64) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_track_element_edit(self.as_ref().to_glib_none().0, layers.to_glib_none().0, mode.to_glib(), edge.to_glib(), position), "Failed to edit")
+            glib_result_from_gboolean!(ges_sys::ges_track_element_edit(self.as_ref().to_glib_none().0, layers.to_glib_none().0, mode.to_glib(), edge.to_glib(), position), "Failed to edit")
         }
     }
 
     //fn get_all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 83 } {
-    //    unsafe { TODO: call ffi::ges_track_element_get_all_control_bindings() }
+    //    unsafe { TODO: call ges_sys:ges_track_element_get_all_control_bindings() }
     //}
 
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<gst::ControlBinding> {
-    //    unsafe { TODO: call ffi::ges_track_element_get_control_binding() }
+    //    unsafe { TODO: call ges_sys:ges_track_element_get_control_binding() }
     //}
 
     fn get_element(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_element(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_track_element_get_element(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_gnlobject(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_gnlobject(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_track_element_get_gnlobject(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_nleobject(&self) -> Option<gst::Element> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_nleobject(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_track_element_get_nleobject(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_track(&self) -> Option<Track> {
         unsafe {
-            from_glib_none(ffi::ges_track_element_get_track(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_track_element_get_track(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_track_type(&self) -> TrackType {
         unsafe {
-            from_glib(ffi::ges_track_element_get_track_type(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_track_element_get_track_type(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_active(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_track_element_is_active(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_track_element_is_active(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn lookup_child(&self, prop_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<gst::Element> {
-    //    unsafe { TODO: call ffi::ges_track_element_lookup_child() }
+    //    unsafe { TODO: call ges_sys:ges_track_element_lookup_child() }
     //}
 
     fn remove_control_binding(&self, property_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_track_element_remove_control_binding(self.as_ref().to_glib_none().0, property_name.to_glib_none().0), "Failed to remove control binding")
+            glib_result_from_gboolean!(ges_sys::ges_track_element_remove_control_binding(self.as_ref().to_glib_none().0, property_name.to_glib_none().0), "Failed to remove control binding")
         }
     }
 
     fn set_active(&self, active: bool) -> bool {
         unsafe {
-            from_glib(ffi::ges_track_element_set_active(self.as_ref().to_glib_none().0, active.to_glib()))
+            from_glib(ges_sys::ges_track_element_set_active(self.as_ref().to_glib_none().0, active.to_glib()))
         }
     }
 
     //fn set_control_source(&self, source: /*Ignored*/&gst::ControlSource, property_name: &str, binding_type: &str) -> bool {
-    //    unsafe { TODO: call ffi::ges_track_element_set_control_source() }
+    //    unsafe { TODO: call ges_sys:ges_track_element_set_control_source() }
     //}
 
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
-            ffi::ges_track_element_set_track_type(self.as_ref().to_glib_none().0, type_.to_glib());
+            ges_sys::ges_track_element_set_track_type(self.as_ref().to_glib_none().0, type_.to_glib());
         }
     }
 
     fn get_property_active(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -203,19 +203,19 @@ impl<O: IsA<TrackElement>> TrackElementExt for O {
     }
 }
 
-unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrackElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTrackElement, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<TrackElement> {
     let f: &F = &*(f as *const F);
     f(&TrackElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_track_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrackElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_track_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTrackElement, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<TrackElement> {
     let f: &F = &*(f as *const F);
     f(&TrackElement::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_track_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESTrackElement, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_track_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTrackElement, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<TrackElement> {
     let f: &F = &*(f as *const F);
     f(&TrackElement::from_glib_borrow(this).unsafe_cast())

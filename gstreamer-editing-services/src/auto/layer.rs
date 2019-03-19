@@ -7,23 +7,23 @@ use Clip;
 use Extractable;
 use Timeline;
 use TrackType;
-use ffi;
+use ges_sys;
 use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Layer(Object<ffi::GESLayer, ffi::GESLayerClass, LayerClass>) @implements Extractable;
+    pub struct Layer(Object<ges_sys::GESLayer, ges_sys::GESLayerClass, LayerClass>) @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_layer_get_type(),
+        get_type => || ges_sys::ges_layer_get_type(),
     }
 }
 
@@ -31,7 +31,7 @@ impl Layer {
     pub fn new() -> Layer {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::ges_layer_new())
+            from_glib_none(ges_sys::ges_layer_new())
         }
     }
 }
@@ -85,79 +85,79 @@ pub trait LayerExt: 'static {
 impl<O: IsA<Layer>> LayerExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P, start: gst::ClockTime, inpoint: gst::ClockTime, duration: gst::ClockTime, track_types: TrackType) -> Option<Clip> {
         unsafe {
-            from_glib_none(ffi::ges_layer_add_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0, start.to_glib(), inpoint.to_glib(), duration.to_glib(), track_types.to_glib()))
+            from_glib_none(ges_sys::ges_layer_add_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0, start.to_glib(), inpoint.to_glib(), duration.to_glib(), track_types.to_glib()))
         }
     }
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_layer_add_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to add clip")
+            glib_result_from_gboolean!(ges_sys::ges_layer_add_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to add clip")
         }
     }
 
     fn get_auto_transition(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_layer_get_auto_transition(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_layer_get_auto_transition(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_clips(&self) -> Vec<Clip> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_layer_get_clips_in_interval(self.as_ref().to_glib_none().0, start.to_glib(), end.to_glib()))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips_in_interval(self.as_ref().to_glib_none().0, start.to_glib(), end.to_glib()))
         }
     }
 
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::ges_layer_get_duration(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_layer_get_duration(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_priority(&self) -> u32 {
         unsafe {
-            ffi::ges_layer_get_priority(self.as_ref().to_glib_none().0)
+            ges_sys::ges_layer_get_priority(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_timeline(&self) -> Option<Timeline> {
         unsafe {
-            from_glib_none(ffi::ges_layer_get_timeline(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_layer_get_timeline(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_empty(&self) -> bool {
         unsafe {
-            from_glib(ffi::ges_layer_is_empty(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_layer_is_empty(self.as_ref().to_glib_none().0))
         }
     }
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_layer_remove_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to remove clip")
+            glib_result_from_gboolean!(ges_sys::ges_layer_remove_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to remove clip")
         }
     }
 
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
-            ffi::ges_layer_set_auto_transition(self.as_ref().to_glib_none().0, auto_transition.to_glib());
+            ges_sys::ges_layer_set_auto_transition(self.as_ref().to_glib_none().0, auto_transition.to_glib());
         }
     }
 
     fn set_priority(&self, priority: u32) {
         unsafe {
-            ffi::ges_layer_set_priority(self.as_ref().to_glib_none().0, priority);
+            ges_sys::ges_layer_set_priority(self.as_ref().to_glib_none().0, priority);
         }
     }
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) {
         unsafe {
-            ffi::ges_layer_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0);
+            ges_sys::ges_layer_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0);
         }
     }
 
@@ -194,25 +194,25 @@ impl<O: IsA<Layer>> LayerExt for O {
     }
 }
 
-unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ffi::GESLayer, clip: *mut ffi::GESClip, f: glib_ffi::gpointer)
+unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ges_sys::GESLayer, clip: *mut ges_sys::GESClip, f: glib_sys::gpointer)
 where P: IsA<Layer> {
     let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clip))
 }
 
-unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ffi::GESLayer, clip: *mut ffi::GESClip, f: glib_ffi::gpointer)
+unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ges_sys::GESLayer, clip: *mut ges_sys::GESClip, f: glib_sys::gpointer)
 where P: IsA<Layer> {
     let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clip))
 }
 
-unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESLayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESLayer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Layer> {
     let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GESLayer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESLayer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Layer> {
     let f: &F = &*(f as *const F);
     f(&Layer::from_glib_borrow(this).unsafe_cast())

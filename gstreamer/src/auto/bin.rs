@@ -9,7 +9,6 @@ use ElementFlags;
 use Object;
 use Pad;
 use PadDirection;
-use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
@@ -18,25 +17,25 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Bin(Object<ffi::GstBin, ffi::GstBinClass, BinClass>) @extends Element, Object, @implements ChildProxy;
+    pub struct Bin(Object<gst_sys::GstBin, gst_sys::GstBinClass, BinClass>) @extends Element, Object, @implements ChildProxy;
 
     match fn {
-        get_type => || ffi::gst_bin_get_type(),
+        get_type => || gst_sys::gst_bin_get_type(),
     }
 }
 
 impl Bin {
-    pub fn new<'a, P: Into<Option<&'a str>>>(name: P) -> Bin {
+    pub fn new(name: Option<&str>) -> Bin {
         assert_initialized_main_thread!();
-        let name = name.into();
         unsafe {
-            Element::from_glib_none(ffi::gst_bin_new(name.to_glib_none().0)).unsafe_cast()
+            Element::from_glib_none(gst_sys::gst_bin_new(name.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -111,123 +110,123 @@ pub trait GstBinExt: 'static {
 impl<O: IsA<Bin>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_add(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(gst_sys::gst_bin_add(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to add element")
         }
     }
 
     //fn add_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi::gst_bin_add_many() }
+    //    unsafe { TODO: call gst_sys:gst_bin_add_many() }
     //}
 
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_bin_find_unlinked_pad(self.as_ref().to_glib_none().0, direction.to_glib()))
+            from_glib_full(gst_sys::gst_bin_find_unlinked_pad(self.as_ref().to_glib_none().0, direction.to_glib()))
         }
     }
 
     fn get_by_interface(&self, iface: glib::types::Type) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_get_by_interface(self.as_ref().to_glib_none().0, iface.to_glib()))
+            from_glib_full(gst_sys::gst_bin_get_by_interface(self.as_ref().to_glib_none().0, iface.to_glib()))
         }
     }
 
     fn get_by_name(&self, name: &str) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_get_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gst_sys::gst_bin_get_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn get_by_name_recurse_up(&self, name: &str) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_get_by_name_recurse_up(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gst_sys::gst_bin_get_by_name_recurse_up(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn get_suppressed_flags(&self) -> ElementFlags {
         unsafe {
-            from_glib(ffi::gst_bin_get_suppressed_flags(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_bin_get_suppressed_flags(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn iterate_all_by_interface(&self, iface: glib::types::Type) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_bin_iterate_all_by_interface() }
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_all_by_interface() }
     //}
 
     //fn iterate_elements(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_bin_iterate_elements() }
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_elements() }
     //}
 
     //fn iterate_recurse(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_bin_iterate_recurse() }
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_recurse() }
     //}
 
     //fn iterate_sinks(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_bin_iterate_sinks() }
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_sinks() }
     //}
 
     //fn iterate_sorted(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_bin_iterate_sorted() }
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_sorted() }
     //}
 
     //fn iterate_sources(&self) -> /*Ignored*/Option<Iterator> {
-    //    unsafe { TODO: call ffi::gst_bin_iterate_sources() }
+    //    unsafe { TODO: call gst_sys:gst_bin_iterate_sources() }
     //}
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_recalculate_latency(self.as_ref().to_glib_none().0), "Failed to recalculate latency")
+            glib_result_from_gboolean!(gst_sys::gst_bin_recalculate_latency(self.as_ref().to_glib_none().0), "Failed to recalculate latency")
         }
     }
 
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_remove(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(gst_sys::gst_bin_remove(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to remove element")
         }
     }
 
     //fn remove_many<P: IsA<Element>>(&self, element_1: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi::gst_bin_remove_many() }
+    //    unsafe { TODO: call gst_sys:gst_bin_remove_many() }
     //}
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn set_suppressed_flags(&self, flags: ElementFlags) {
         unsafe {
-            ffi::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.to_glib());
+            gst_sys::gst_bin_set_suppressed_flags(self.as_ref().to_glib_none().0, flags.to_glib());
         }
     }
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bin_sync_children_states(self.as_ref().to_glib_none().0), "Failed to sync children states")
+            glib_result_from_gboolean!(gst_sys::gst_bin_sync_children_states(self.as_ref().to_glib_none().0), "Failed to sync children states")
         }
     }
 
     fn get_property_async_handling(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"async-handling\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"async-handling\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_async_handling(&self, async_handling: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"async-handling\0".as_ptr() as *const _, Value::from(&async_handling).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"async-handling\0".as_ptr() as *const _, Value::from(&async_handling).to_glib_none().0);
         }
     }
 
     fn get_property_message_forward(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"message-forward\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"message-forward\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_message_forward(&self, message_forward: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"message-forward\0".as_ptr() as *const _, Value::from(&message_forward).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"message-forward\0".as_ptr() as *const _, Value::from(&message_forward).to_glib_none().0);
         }
     }
 
@@ -283,38 +282,38 @@ impl<O: IsA<Bin>> GstBinExt for O {
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-unsafe extern "C" fn deep_element_added_trampoline<P, F: Fn(&P, &Bin, &Element) + Send + Sync + 'static>(this: *mut ffi::GstBin, sub_bin: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn deep_element_added_trampoline<P, F: Fn(&P, &Bin, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, sub_bin: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
 where P: IsA<Bin> {
     let f: &F = &*(f as *const F);
     f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-unsafe extern "C" fn deep_element_removed_trampoline<P, F: Fn(&P, &Bin, &Element) + Send + Sync + 'static>(this: *mut ffi::GstBin, sub_bin: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn deep_element_removed_trampoline<P, F: Fn(&P, &Bin, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, sub_bin: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
 where P: IsA<Bin> {
     let f: &F = &*(f as *const F);
     f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
 }
 
-unsafe extern "C" fn element_added_trampoline<P, F: Fn(&P, &Element) + Send + Sync + 'static>(this: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn element_added_trampoline<P, F: Fn(&P, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
 where P: IsA<Bin> {
     let f: &F = &*(f as *const F);
     f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
-unsafe extern "C" fn element_removed_trampoline<P, F: Fn(&P, &Element) + Send + Sync + 'static>(this: *mut ffi::GstBin, element: *mut ffi::GstElement, f: glib_ffi::gpointer)
+unsafe extern "C" fn element_removed_trampoline<P, F: Fn(&P, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
 where P: IsA<Bin> {
     let f: &F = &*(f as *const F);
     f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
 }
 
-unsafe extern "C" fn notify_async_handling_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_async_handling_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Bin> {
     let f: &F = &*(f as *const F);
     f(&Bin::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_message_forward_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_message_forward_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Bin> {
     let f: &F = &*(f as *const F);
     f(&Bin::from_glib_borrow(this).unsafe_cast())

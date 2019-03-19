@@ -3,22 +3,22 @@
 // DO NOT EDIT
 
 use PlayerStreamInfo;
-use ffi;
 use glib::GString;
 use glib::translate::*;
+use gst_player_sys;
 
 glib_wrapper! {
-    pub struct PlayerSubtitleInfo(Object<ffi::GstPlayerSubtitleInfo, ffi::GstPlayerSubtitleInfoClass, PlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
+    pub struct PlayerSubtitleInfo(Object<gst_player_sys::GstPlayerSubtitleInfo, gst_player_sys::GstPlayerSubtitleInfoClass, PlayerSubtitleInfoClass>) @extends PlayerStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_player_subtitle_info_get_type(),
+        get_type => || gst_player_sys::gst_player_subtitle_info_get_type(),
     }
 }
 
 impl PlayerSubtitleInfo {
     pub fn get_language(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_player_subtitle_info_get_language(self.to_glib_none().0))
+            from_glib_none(gst_player_sys::gst_player_subtitle_info_get_language(self.to_glib_none().0))
         }
     }
 }

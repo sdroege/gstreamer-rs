@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_video_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
@@ -28,25 +28,25 @@ pub enum VideoColorMatrix {
 
 #[doc(hidden)]
 impl ToGlib for VideoColorMatrix {
-    type GlibType = ffi::GstVideoColorMatrix;
+    type GlibType = gst_video_sys::GstVideoColorMatrix;
 
-    fn to_glib(&self) -> ffi::GstVideoColorMatrix {
+    fn to_glib(&self) -> gst_video_sys::GstVideoColorMatrix {
         match *self {
-            VideoColorMatrix::Unknown => ffi::GST_VIDEO_COLOR_MATRIX_UNKNOWN,
-            VideoColorMatrix::Rgb => ffi::GST_VIDEO_COLOR_MATRIX_RGB,
-            VideoColorMatrix::Fcc => ffi::GST_VIDEO_COLOR_MATRIX_FCC,
-            VideoColorMatrix::Bt709 => ffi::GST_VIDEO_COLOR_MATRIX_BT709,
-            VideoColorMatrix::Bt601 => ffi::GST_VIDEO_COLOR_MATRIX_BT601,
-            VideoColorMatrix::Smpte240m => ffi::GST_VIDEO_COLOR_MATRIX_SMPTE240M,
-            VideoColorMatrix::Bt2020 => ffi::GST_VIDEO_COLOR_MATRIX_BT2020,
+            VideoColorMatrix::Unknown => gst_video_sys::GST_VIDEO_COLOR_MATRIX_UNKNOWN,
+            VideoColorMatrix::Rgb => gst_video_sys::GST_VIDEO_COLOR_MATRIX_RGB,
+            VideoColorMatrix::Fcc => gst_video_sys::GST_VIDEO_COLOR_MATRIX_FCC,
+            VideoColorMatrix::Bt709 => gst_video_sys::GST_VIDEO_COLOR_MATRIX_BT709,
+            VideoColorMatrix::Bt601 => gst_video_sys::GST_VIDEO_COLOR_MATRIX_BT601,
+            VideoColorMatrix::Smpte240m => gst_video_sys::GST_VIDEO_COLOR_MATRIX_SMPTE240M,
+            VideoColorMatrix::Bt2020 => gst_video_sys::GST_VIDEO_COLOR_MATRIX_BT2020,
             VideoColorMatrix::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
-    fn from_glib(value: ffi::GstVideoColorMatrix) -> Self {
+impl FromGlib<gst_video_sys::GstVideoColorMatrix> for VideoColorMatrix {
+    fn from_glib(value: gst_video_sys::GstVideoColorMatrix) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoColorMatrix::Unknown,
@@ -63,7 +63,7 @@ impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
 
 impl StaticType for VideoColorMatrix {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_color_matrix_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_color_matrix_get_type()) }
     }
 }
 
@@ -75,13 +75,13 @@ impl<'a> FromValueOptional<'a> for VideoColorMatrix {
 
 impl<'a> FromValue<'a> for VideoColorMatrix {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoColorMatrix {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -103,27 +103,27 @@ pub enum VideoColorPrimaries {
 
 #[doc(hidden)]
 impl ToGlib for VideoColorPrimaries {
-    type GlibType = ffi::GstVideoColorPrimaries;
+    type GlibType = gst_video_sys::GstVideoColorPrimaries;
 
-    fn to_glib(&self) -> ffi::GstVideoColorPrimaries {
+    fn to_glib(&self) -> gst_video_sys::GstVideoColorPrimaries {
         match *self {
-            VideoColorPrimaries::Unknown => ffi::GST_VIDEO_COLOR_PRIMARIES_UNKNOWN,
-            VideoColorPrimaries::Bt709 => ffi::GST_VIDEO_COLOR_PRIMARIES_BT709,
-            VideoColorPrimaries::Bt470m => ffi::GST_VIDEO_COLOR_PRIMARIES_BT470M,
-            VideoColorPrimaries::Bt470bg => ffi::GST_VIDEO_COLOR_PRIMARIES_BT470BG,
-            VideoColorPrimaries::Smpte170m => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTE170M,
-            VideoColorPrimaries::Smpte240m => ffi::GST_VIDEO_COLOR_PRIMARIES_SMPTE240M,
-            VideoColorPrimaries::Film => ffi::GST_VIDEO_COLOR_PRIMARIES_FILM,
-            VideoColorPrimaries::Bt2020 => ffi::GST_VIDEO_COLOR_PRIMARIES_BT2020,
-            VideoColorPrimaries::Adobergb => ffi::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB,
+            VideoColorPrimaries::Unknown => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_UNKNOWN,
+            VideoColorPrimaries::Bt709 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_BT709,
+            VideoColorPrimaries::Bt470m => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_BT470M,
+            VideoColorPrimaries::Bt470bg => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_BT470BG,
+            VideoColorPrimaries::Smpte170m => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTE170M,
+            VideoColorPrimaries::Smpte240m => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTE240M,
+            VideoColorPrimaries::Film => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_FILM,
+            VideoColorPrimaries::Bt2020 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_BT2020,
+            VideoColorPrimaries::Adobergb => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB,
             VideoColorPrimaries::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
-    fn from_glib(value: ffi::GstVideoColorPrimaries) -> Self {
+impl FromGlib<gst_video_sys::GstVideoColorPrimaries> for VideoColorPrimaries {
+    fn from_glib(value: gst_video_sys::GstVideoColorPrimaries) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoColorPrimaries::Unknown,
@@ -142,7 +142,7 @@ impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
 
 impl StaticType for VideoColorPrimaries {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_color_primaries_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_color_primaries_get_type()) }
     }
 }
 
@@ -154,13 +154,13 @@ impl<'a> FromValueOptional<'a> for VideoColorPrimaries {
 
 impl<'a> FromValue<'a> for VideoColorPrimaries {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoColorPrimaries {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -178,13 +178,13 @@ pub enum VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for VideoFieldOrder {
-    type GlibType = ffi::GstVideoFieldOrder;
+    type GlibType = gst_video_sys::GstVideoFieldOrder;
 
-    fn to_glib(&self) -> ffi::GstVideoFieldOrder {
+    fn to_glib(&self) -> gst_video_sys::GstVideoFieldOrder {
         match *self {
-            VideoFieldOrder::Unknown => ffi::GST_VIDEO_FIELD_ORDER_UNKNOWN,
-            VideoFieldOrder::TopFieldFirst => ffi::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST,
-            VideoFieldOrder::BottomFieldFirst => ffi::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST,
+            VideoFieldOrder::Unknown => gst_video_sys::GST_VIDEO_FIELD_ORDER_UNKNOWN,
+            VideoFieldOrder::TopFieldFirst => gst_video_sys::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST,
+            VideoFieldOrder::BottomFieldFirst => gst_video_sys::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST,
             VideoFieldOrder::__Unknown(value) => value
         }
     }
@@ -192,8 +192,8 @@ impl ToGlib for VideoFieldOrder {
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
-    fn from_glib(value: ffi::GstVideoFieldOrder) -> Self {
+impl FromGlib<gst_video_sys::GstVideoFieldOrder> for VideoFieldOrder {
+    fn from_glib(value: gst_video_sys::GstVideoFieldOrder) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoFieldOrder::Unknown,
@@ -207,7 +207,7 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl StaticType for VideoFieldOrder {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_field_order_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_field_order_get_type()) }
     }
 }
 
@@ -221,14 +221,14 @@ impl<'a> FromValueOptional<'a> for VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl<'a> FromValue<'a> for VideoFieldOrder {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl SetValue for VideoFieldOrder {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -322,99 +322,99 @@ pub enum VideoFormat {
 
 #[doc(hidden)]
 impl ToGlib for VideoFormat {
-    type GlibType = ffi::GstVideoFormat;
+    type GlibType = gst_video_sys::GstVideoFormat;
 
-    fn to_glib(&self) -> ffi::GstVideoFormat {
+    fn to_glib(&self) -> gst_video_sys::GstVideoFormat {
         match *self {
-            VideoFormat::Unknown => ffi::GST_VIDEO_FORMAT_UNKNOWN,
-            VideoFormat::Encoded => ffi::GST_VIDEO_FORMAT_ENCODED,
-            VideoFormat::I420 => ffi::GST_VIDEO_FORMAT_I420,
-            VideoFormat::Yv12 => ffi::GST_VIDEO_FORMAT_YV12,
-            VideoFormat::Yuy2 => ffi::GST_VIDEO_FORMAT_YUY2,
-            VideoFormat::Uyvy => ffi::GST_VIDEO_FORMAT_UYVY,
-            VideoFormat::Ayuv => ffi::GST_VIDEO_FORMAT_AYUV,
-            VideoFormat::Rgbx => ffi::GST_VIDEO_FORMAT_RGBx,
-            VideoFormat::Bgrx => ffi::GST_VIDEO_FORMAT_BGRx,
-            VideoFormat::Xrgb => ffi::GST_VIDEO_FORMAT_xRGB,
-            VideoFormat::Xbgr => ffi::GST_VIDEO_FORMAT_xBGR,
-            VideoFormat::Rgba => ffi::GST_VIDEO_FORMAT_RGBA,
-            VideoFormat::Bgra => ffi::GST_VIDEO_FORMAT_BGRA,
-            VideoFormat::Argb => ffi::GST_VIDEO_FORMAT_ARGB,
-            VideoFormat::Abgr => ffi::GST_VIDEO_FORMAT_ABGR,
-            VideoFormat::Rgb => ffi::GST_VIDEO_FORMAT_RGB,
-            VideoFormat::Bgr => ffi::GST_VIDEO_FORMAT_BGR,
-            VideoFormat::Y41b => ffi::GST_VIDEO_FORMAT_Y41B,
-            VideoFormat::Y42b => ffi::GST_VIDEO_FORMAT_Y42B,
-            VideoFormat::Yvyu => ffi::GST_VIDEO_FORMAT_YVYU,
-            VideoFormat::Y444 => ffi::GST_VIDEO_FORMAT_Y444,
-            VideoFormat::V210 => ffi::GST_VIDEO_FORMAT_v210,
-            VideoFormat::V216 => ffi::GST_VIDEO_FORMAT_v216,
-            VideoFormat::Nv12 => ffi::GST_VIDEO_FORMAT_NV12,
-            VideoFormat::Nv21 => ffi::GST_VIDEO_FORMAT_NV21,
-            VideoFormat::Gray8 => ffi::GST_VIDEO_FORMAT_GRAY8,
-            VideoFormat::Gray16Be => ffi::GST_VIDEO_FORMAT_GRAY16_BE,
-            VideoFormat::Gray16Le => ffi::GST_VIDEO_FORMAT_GRAY16_LE,
-            VideoFormat::V308 => ffi::GST_VIDEO_FORMAT_v308,
-            VideoFormat::Rgb16 => ffi::GST_VIDEO_FORMAT_RGB16,
-            VideoFormat::Bgr16 => ffi::GST_VIDEO_FORMAT_BGR16,
-            VideoFormat::Rgb15 => ffi::GST_VIDEO_FORMAT_RGB15,
-            VideoFormat::Bgr15 => ffi::GST_VIDEO_FORMAT_BGR15,
-            VideoFormat::Uyvp => ffi::GST_VIDEO_FORMAT_UYVP,
-            VideoFormat::A420 => ffi::GST_VIDEO_FORMAT_A420,
-            VideoFormat::Rgb8p => ffi::GST_VIDEO_FORMAT_RGB8P,
-            VideoFormat::Yuv9 => ffi::GST_VIDEO_FORMAT_YUV9,
-            VideoFormat::Yvu9 => ffi::GST_VIDEO_FORMAT_YVU9,
-            VideoFormat::Iyu1 => ffi::GST_VIDEO_FORMAT_IYU1,
-            VideoFormat::Argb64 => ffi::GST_VIDEO_FORMAT_ARGB64,
-            VideoFormat::Ayuv64 => ffi::GST_VIDEO_FORMAT_AYUV64,
-            VideoFormat::R210 => ffi::GST_VIDEO_FORMAT_r210,
-            VideoFormat::I42010be => ffi::GST_VIDEO_FORMAT_I420_10BE,
-            VideoFormat::I42010le => ffi::GST_VIDEO_FORMAT_I420_10LE,
-            VideoFormat::I42210be => ffi::GST_VIDEO_FORMAT_I422_10BE,
-            VideoFormat::I42210le => ffi::GST_VIDEO_FORMAT_I422_10LE,
-            VideoFormat::Y44410be => ffi::GST_VIDEO_FORMAT_Y444_10BE,
-            VideoFormat::Y44410le => ffi::GST_VIDEO_FORMAT_Y444_10LE,
-            VideoFormat::Gbr => ffi::GST_VIDEO_FORMAT_GBR,
-            VideoFormat::Gbr10be => ffi::GST_VIDEO_FORMAT_GBR_10BE,
-            VideoFormat::Gbr10le => ffi::GST_VIDEO_FORMAT_GBR_10LE,
-            VideoFormat::Nv16 => ffi::GST_VIDEO_FORMAT_NV16,
-            VideoFormat::Nv24 => ffi::GST_VIDEO_FORMAT_NV24,
-            VideoFormat::Nv1264z32 => ffi::GST_VIDEO_FORMAT_NV12_64Z32,
-            VideoFormat::A42010be => ffi::GST_VIDEO_FORMAT_A420_10BE,
-            VideoFormat::A42010le => ffi::GST_VIDEO_FORMAT_A420_10LE,
-            VideoFormat::A42210be => ffi::GST_VIDEO_FORMAT_A422_10BE,
-            VideoFormat::A42210le => ffi::GST_VIDEO_FORMAT_A422_10LE,
-            VideoFormat::A44410be => ffi::GST_VIDEO_FORMAT_A444_10BE,
-            VideoFormat::A44410le => ffi::GST_VIDEO_FORMAT_A444_10LE,
-            VideoFormat::Nv61 => ffi::GST_VIDEO_FORMAT_NV61,
-            VideoFormat::P01010be => ffi::GST_VIDEO_FORMAT_P010_10BE,
-            VideoFormat::P01010le => ffi::GST_VIDEO_FORMAT_P010_10LE,
-            VideoFormat::Iyu2 => ffi::GST_VIDEO_FORMAT_IYU2,
-            VideoFormat::Vyuy => ffi::GST_VIDEO_FORMAT_VYUY,
-            VideoFormat::Gbra => ffi::GST_VIDEO_FORMAT_GBRA,
-            VideoFormat::Gbra10be => ffi::GST_VIDEO_FORMAT_GBRA_10BE,
-            VideoFormat::Gbra10le => ffi::GST_VIDEO_FORMAT_GBRA_10LE,
-            VideoFormat::Gbr12be => ffi::GST_VIDEO_FORMAT_GBR_12BE,
-            VideoFormat::Gbr12le => ffi::GST_VIDEO_FORMAT_GBR_12LE,
-            VideoFormat::Gbra12be => ffi::GST_VIDEO_FORMAT_GBRA_12BE,
-            VideoFormat::Gbra12le => ffi::GST_VIDEO_FORMAT_GBRA_12LE,
-            VideoFormat::I42012be => ffi::GST_VIDEO_FORMAT_I420_12BE,
-            VideoFormat::I42012le => ffi::GST_VIDEO_FORMAT_I420_12LE,
-            VideoFormat::I42212be => ffi::GST_VIDEO_FORMAT_I422_12BE,
-            VideoFormat::I42212le => ffi::GST_VIDEO_FORMAT_I422_12LE,
-            VideoFormat::Y44412be => ffi::GST_VIDEO_FORMAT_Y444_12BE,
-            VideoFormat::Y44412le => ffi::GST_VIDEO_FORMAT_Y444_12LE,
-            VideoFormat::Gray10Le32 => ffi::GST_VIDEO_FORMAT_GRAY10_LE32,
-            VideoFormat::Nv1210le32 => ffi::GST_VIDEO_FORMAT_NV12_10LE32,
-            VideoFormat::Nv1610le32 => ffi::GST_VIDEO_FORMAT_NV16_10LE32,
+            VideoFormat::Unknown => gst_video_sys::GST_VIDEO_FORMAT_UNKNOWN,
+            VideoFormat::Encoded => gst_video_sys::GST_VIDEO_FORMAT_ENCODED,
+            VideoFormat::I420 => gst_video_sys::GST_VIDEO_FORMAT_I420,
+            VideoFormat::Yv12 => gst_video_sys::GST_VIDEO_FORMAT_YV12,
+            VideoFormat::Yuy2 => gst_video_sys::GST_VIDEO_FORMAT_YUY2,
+            VideoFormat::Uyvy => gst_video_sys::GST_VIDEO_FORMAT_UYVY,
+            VideoFormat::Ayuv => gst_video_sys::GST_VIDEO_FORMAT_AYUV,
+            VideoFormat::Rgbx => gst_video_sys::GST_VIDEO_FORMAT_RGBx,
+            VideoFormat::Bgrx => gst_video_sys::GST_VIDEO_FORMAT_BGRx,
+            VideoFormat::Xrgb => gst_video_sys::GST_VIDEO_FORMAT_xRGB,
+            VideoFormat::Xbgr => gst_video_sys::GST_VIDEO_FORMAT_xBGR,
+            VideoFormat::Rgba => gst_video_sys::GST_VIDEO_FORMAT_RGBA,
+            VideoFormat::Bgra => gst_video_sys::GST_VIDEO_FORMAT_BGRA,
+            VideoFormat::Argb => gst_video_sys::GST_VIDEO_FORMAT_ARGB,
+            VideoFormat::Abgr => gst_video_sys::GST_VIDEO_FORMAT_ABGR,
+            VideoFormat::Rgb => gst_video_sys::GST_VIDEO_FORMAT_RGB,
+            VideoFormat::Bgr => gst_video_sys::GST_VIDEO_FORMAT_BGR,
+            VideoFormat::Y41b => gst_video_sys::GST_VIDEO_FORMAT_Y41B,
+            VideoFormat::Y42b => gst_video_sys::GST_VIDEO_FORMAT_Y42B,
+            VideoFormat::Yvyu => gst_video_sys::GST_VIDEO_FORMAT_YVYU,
+            VideoFormat::Y444 => gst_video_sys::GST_VIDEO_FORMAT_Y444,
+            VideoFormat::V210 => gst_video_sys::GST_VIDEO_FORMAT_v210,
+            VideoFormat::V216 => gst_video_sys::GST_VIDEO_FORMAT_v216,
+            VideoFormat::Nv12 => gst_video_sys::GST_VIDEO_FORMAT_NV12,
+            VideoFormat::Nv21 => gst_video_sys::GST_VIDEO_FORMAT_NV21,
+            VideoFormat::Gray8 => gst_video_sys::GST_VIDEO_FORMAT_GRAY8,
+            VideoFormat::Gray16Be => gst_video_sys::GST_VIDEO_FORMAT_GRAY16_BE,
+            VideoFormat::Gray16Le => gst_video_sys::GST_VIDEO_FORMAT_GRAY16_LE,
+            VideoFormat::V308 => gst_video_sys::GST_VIDEO_FORMAT_v308,
+            VideoFormat::Rgb16 => gst_video_sys::GST_VIDEO_FORMAT_RGB16,
+            VideoFormat::Bgr16 => gst_video_sys::GST_VIDEO_FORMAT_BGR16,
+            VideoFormat::Rgb15 => gst_video_sys::GST_VIDEO_FORMAT_RGB15,
+            VideoFormat::Bgr15 => gst_video_sys::GST_VIDEO_FORMAT_BGR15,
+            VideoFormat::Uyvp => gst_video_sys::GST_VIDEO_FORMAT_UYVP,
+            VideoFormat::A420 => gst_video_sys::GST_VIDEO_FORMAT_A420,
+            VideoFormat::Rgb8p => gst_video_sys::GST_VIDEO_FORMAT_RGB8P,
+            VideoFormat::Yuv9 => gst_video_sys::GST_VIDEO_FORMAT_YUV9,
+            VideoFormat::Yvu9 => gst_video_sys::GST_VIDEO_FORMAT_YVU9,
+            VideoFormat::Iyu1 => gst_video_sys::GST_VIDEO_FORMAT_IYU1,
+            VideoFormat::Argb64 => gst_video_sys::GST_VIDEO_FORMAT_ARGB64,
+            VideoFormat::Ayuv64 => gst_video_sys::GST_VIDEO_FORMAT_AYUV64,
+            VideoFormat::R210 => gst_video_sys::GST_VIDEO_FORMAT_r210,
+            VideoFormat::I42010be => gst_video_sys::GST_VIDEO_FORMAT_I420_10BE,
+            VideoFormat::I42010le => gst_video_sys::GST_VIDEO_FORMAT_I420_10LE,
+            VideoFormat::I42210be => gst_video_sys::GST_VIDEO_FORMAT_I422_10BE,
+            VideoFormat::I42210le => gst_video_sys::GST_VIDEO_FORMAT_I422_10LE,
+            VideoFormat::Y44410be => gst_video_sys::GST_VIDEO_FORMAT_Y444_10BE,
+            VideoFormat::Y44410le => gst_video_sys::GST_VIDEO_FORMAT_Y444_10LE,
+            VideoFormat::Gbr => gst_video_sys::GST_VIDEO_FORMAT_GBR,
+            VideoFormat::Gbr10be => gst_video_sys::GST_VIDEO_FORMAT_GBR_10BE,
+            VideoFormat::Gbr10le => gst_video_sys::GST_VIDEO_FORMAT_GBR_10LE,
+            VideoFormat::Nv16 => gst_video_sys::GST_VIDEO_FORMAT_NV16,
+            VideoFormat::Nv24 => gst_video_sys::GST_VIDEO_FORMAT_NV24,
+            VideoFormat::Nv1264z32 => gst_video_sys::GST_VIDEO_FORMAT_NV12_64Z32,
+            VideoFormat::A42010be => gst_video_sys::GST_VIDEO_FORMAT_A420_10BE,
+            VideoFormat::A42010le => gst_video_sys::GST_VIDEO_FORMAT_A420_10LE,
+            VideoFormat::A42210be => gst_video_sys::GST_VIDEO_FORMAT_A422_10BE,
+            VideoFormat::A42210le => gst_video_sys::GST_VIDEO_FORMAT_A422_10LE,
+            VideoFormat::A44410be => gst_video_sys::GST_VIDEO_FORMAT_A444_10BE,
+            VideoFormat::A44410le => gst_video_sys::GST_VIDEO_FORMAT_A444_10LE,
+            VideoFormat::Nv61 => gst_video_sys::GST_VIDEO_FORMAT_NV61,
+            VideoFormat::P01010be => gst_video_sys::GST_VIDEO_FORMAT_P010_10BE,
+            VideoFormat::P01010le => gst_video_sys::GST_VIDEO_FORMAT_P010_10LE,
+            VideoFormat::Iyu2 => gst_video_sys::GST_VIDEO_FORMAT_IYU2,
+            VideoFormat::Vyuy => gst_video_sys::GST_VIDEO_FORMAT_VYUY,
+            VideoFormat::Gbra => gst_video_sys::GST_VIDEO_FORMAT_GBRA,
+            VideoFormat::Gbra10be => gst_video_sys::GST_VIDEO_FORMAT_GBRA_10BE,
+            VideoFormat::Gbra10le => gst_video_sys::GST_VIDEO_FORMAT_GBRA_10LE,
+            VideoFormat::Gbr12be => gst_video_sys::GST_VIDEO_FORMAT_GBR_12BE,
+            VideoFormat::Gbr12le => gst_video_sys::GST_VIDEO_FORMAT_GBR_12LE,
+            VideoFormat::Gbra12be => gst_video_sys::GST_VIDEO_FORMAT_GBRA_12BE,
+            VideoFormat::Gbra12le => gst_video_sys::GST_VIDEO_FORMAT_GBRA_12LE,
+            VideoFormat::I42012be => gst_video_sys::GST_VIDEO_FORMAT_I420_12BE,
+            VideoFormat::I42012le => gst_video_sys::GST_VIDEO_FORMAT_I420_12LE,
+            VideoFormat::I42212be => gst_video_sys::GST_VIDEO_FORMAT_I422_12BE,
+            VideoFormat::I42212le => gst_video_sys::GST_VIDEO_FORMAT_I422_12LE,
+            VideoFormat::Y44412be => gst_video_sys::GST_VIDEO_FORMAT_Y444_12BE,
+            VideoFormat::Y44412le => gst_video_sys::GST_VIDEO_FORMAT_Y444_12LE,
+            VideoFormat::Gray10Le32 => gst_video_sys::GST_VIDEO_FORMAT_GRAY10_LE32,
+            VideoFormat::Nv1210le32 => gst_video_sys::GST_VIDEO_FORMAT_NV12_10LE32,
+            VideoFormat::Nv1610le32 => gst_video_sys::GST_VIDEO_FORMAT_NV16_10LE32,
             VideoFormat::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
-    fn from_glib(value: ffi::GstVideoFormat) -> Self {
+impl FromGlib<gst_video_sys::GstVideoFormat> for VideoFormat {
+    fn from_glib(value: gst_video_sys::GstVideoFormat) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoFormat::Unknown,
@@ -505,7 +505,7 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
 
 impl StaticType for VideoFormat {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_format_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_format_get_type()) }
     }
 }
 
@@ -517,13 +517,13 @@ impl<'a> FromValueOptional<'a> for VideoFormat {
 
 impl<'a> FromValue<'a> for VideoFormat {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFormat {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -540,22 +540,22 @@ pub enum VideoInterlaceMode {
 
 #[doc(hidden)]
 impl ToGlib for VideoInterlaceMode {
-    type GlibType = ffi::GstVideoInterlaceMode;
+    type GlibType = gst_video_sys::GstVideoInterlaceMode;
 
-    fn to_glib(&self) -> ffi::GstVideoInterlaceMode {
+    fn to_glib(&self) -> gst_video_sys::GstVideoInterlaceMode {
         match *self {
-            VideoInterlaceMode::Progressive => ffi::GST_VIDEO_INTERLACE_MODE_PROGRESSIVE,
-            VideoInterlaceMode::Interleaved => ffi::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
-            VideoInterlaceMode::Mixed => ffi::GST_VIDEO_INTERLACE_MODE_MIXED,
-            VideoInterlaceMode::Fields => ffi::GST_VIDEO_INTERLACE_MODE_FIELDS,
+            VideoInterlaceMode::Progressive => gst_video_sys::GST_VIDEO_INTERLACE_MODE_PROGRESSIVE,
+            VideoInterlaceMode::Interleaved => gst_video_sys::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
+            VideoInterlaceMode::Mixed => gst_video_sys::GST_VIDEO_INTERLACE_MODE_MIXED,
+            VideoInterlaceMode::Fields => gst_video_sys::GST_VIDEO_INTERLACE_MODE_FIELDS,
             VideoInterlaceMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
-    fn from_glib(value: ffi::GstVideoInterlaceMode) -> Self {
+impl FromGlib<gst_video_sys::GstVideoInterlaceMode> for VideoInterlaceMode {
+    fn from_glib(value: gst_video_sys::GstVideoInterlaceMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoInterlaceMode::Progressive,
@@ -569,7 +569,7 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
 
 impl StaticType for VideoInterlaceMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_interlace_mode_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_interlace_mode_get_type()) }
     }
 }
 
@@ -581,13 +581,13 @@ impl<'a> FromValueOptional<'a> for VideoInterlaceMode {
 
 impl<'a> FromValue<'a> for VideoInterlaceMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoInterlaceMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -610,28 +610,28 @@ pub enum VideoMultiviewFramePacking {
 
 #[doc(hidden)]
 impl ToGlib for VideoMultiviewFramePacking {
-    type GlibType = ffi::GstVideoMultiviewFramePacking;
+    type GlibType = gst_video_sys::GstVideoMultiviewFramePacking;
 
-    fn to_glib(&self) -> ffi::GstVideoMultiviewFramePacking {
+    fn to_glib(&self) -> gst_video_sys::GstVideoMultiviewFramePacking {
         match *self {
-            VideoMultiviewFramePacking::None => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE,
-            VideoMultiviewFramePacking::Mono => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO,
-            VideoMultiviewFramePacking::Left => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT,
-            VideoMultiviewFramePacking::Right => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT,
-            VideoMultiviewFramePacking::SideBySide => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE,
-            VideoMultiviewFramePacking::SideBySideQuincunx => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX,
-            VideoMultiviewFramePacking::ColumnInterleaved => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED,
-            VideoMultiviewFramePacking::RowInterleaved => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED,
-            VideoMultiviewFramePacking::TopBottom => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM,
-            VideoMultiviewFramePacking::Checkerboard => ffi::GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD,
+            VideoMultiviewFramePacking::None => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE,
+            VideoMultiviewFramePacking::Mono => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO,
+            VideoMultiviewFramePacking::Left => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT,
+            VideoMultiviewFramePacking::Right => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT,
+            VideoMultiviewFramePacking::SideBySide => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE,
+            VideoMultiviewFramePacking::SideBySideQuincunx => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX,
+            VideoMultiviewFramePacking::ColumnInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED,
+            VideoMultiviewFramePacking::RowInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED,
+            VideoMultiviewFramePacking::TopBottom => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM,
+            VideoMultiviewFramePacking::Checkerboard => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD,
             VideoMultiviewFramePacking::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking {
-    fn from_glib(value: ffi::GstVideoMultiviewFramePacking) -> Self {
+impl FromGlib<gst_video_sys::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking {
+    fn from_glib(value: gst_video_sys::GstVideoMultiviewFramePacking) -> Self {
         skip_assert_initialized!();
         match value {
             -1 => VideoMultiviewFramePacking::None,
@@ -651,7 +651,7 @@ impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking
 
 impl StaticType for VideoMultiviewFramePacking {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_multiview_frame_packing_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_multiview_frame_packing_get_type()) }
     }
 }
 
@@ -663,13 +663,13 @@ impl<'a> FromValueOptional<'a> for VideoMultiviewFramePacking {
 
 impl<'a> FromValue<'a> for VideoMultiviewFramePacking {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoMultiviewFramePacking {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -695,31 +695,31 @@ pub enum VideoMultiviewMode {
 
 #[doc(hidden)]
 impl ToGlib for VideoMultiviewMode {
-    type GlibType = ffi::GstVideoMultiviewMode;
+    type GlibType = gst_video_sys::GstVideoMultiviewMode;
 
-    fn to_glib(&self) -> ffi::GstVideoMultiviewMode {
+    fn to_glib(&self) -> gst_video_sys::GstVideoMultiviewMode {
         match *self {
-            VideoMultiviewMode::None => ffi::GST_VIDEO_MULTIVIEW_MODE_NONE,
-            VideoMultiviewMode::Mono => ffi::GST_VIDEO_MULTIVIEW_MODE_MONO,
-            VideoMultiviewMode::Left => ffi::GST_VIDEO_MULTIVIEW_MODE_LEFT,
-            VideoMultiviewMode::Right => ffi::GST_VIDEO_MULTIVIEW_MODE_RIGHT,
-            VideoMultiviewMode::SideBySide => ffi::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE,
-            VideoMultiviewMode::SideBySideQuincunx => ffi::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX,
-            VideoMultiviewMode::ColumnInterleaved => ffi::GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED,
-            VideoMultiviewMode::RowInterleaved => ffi::GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED,
-            VideoMultiviewMode::TopBottom => ffi::GST_VIDEO_MULTIVIEW_MODE_TOP_BOTTOM,
-            VideoMultiviewMode::Checkerboard => ffi::GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD,
-            VideoMultiviewMode::FrameByFrame => ffi::GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME,
-            VideoMultiviewMode::MultiviewFrameByFrame => ffi::GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME,
-            VideoMultiviewMode::Separated => ffi::GST_VIDEO_MULTIVIEW_MODE_SEPARATED,
+            VideoMultiviewMode::None => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_NONE,
+            VideoMultiviewMode::Mono => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_MONO,
+            VideoMultiviewMode::Left => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_LEFT,
+            VideoMultiviewMode::Right => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_RIGHT,
+            VideoMultiviewMode::SideBySide => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE,
+            VideoMultiviewMode::SideBySideQuincunx => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX,
+            VideoMultiviewMode::ColumnInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED,
+            VideoMultiviewMode::RowInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED,
+            VideoMultiviewMode::TopBottom => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_TOP_BOTTOM,
+            VideoMultiviewMode::Checkerboard => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD,
+            VideoMultiviewMode::FrameByFrame => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME,
+            VideoMultiviewMode::MultiviewFrameByFrame => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME,
+            VideoMultiviewMode::Separated => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SEPARATED,
             VideoMultiviewMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
-    fn from_glib(value: ffi::GstVideoMultiviewMode) -> Self {
+impl FromGlib<gst_video_sys::GstVideoMultiviewMode> for VideoMultiviewMode {
+    fn from_glib(value: gst_video_sys::GstVideoMultiviewMode) -> Self {
         skip_assert_initialized!();
         match value {
             -1 => VideoMultiviewMode::None,
@@ -742,7 +742,7 @@ impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
 
 impl StaticType for VideoMultiviewMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_multiview_mode_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_multiview_mode_get_type()) }
     }
 }
 
@@ -754,13 +754,13 @@ impl<'a> FromValueOptional<'a> for VideoMultiviewMode {
 
 impl<'a> FromValue<'a> for VideoMultiviewMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoMultiviewMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -775,20 +775,20 @@ pub enum VideoTileMode {
 
 #[doc(hidden)]
 impl ToGlib for VideoTileMode {
-    type GlibType = ffi::GstVideoTileMode;
+    type GlibType = gst_video_sys::GstVideoTileMode;
 
-    fn to_glib(&self) -> ffi::GstVideoTileMode {
+    fn to_glib(&self) -> gst_video_sys::GstVideoTileMode {
         match *self {
-            VideoTileMode::Unknown => ffi::GST_VIDEO_TILE_MODE_UNKNOWN,
-            VideoTileMode::Zflipz2x2 => ffi::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
+            VideoTileMode::Unknown => gst_video_sys::GST_VIDEO_TILE_MODE_UNKNOWN,
+            VideoTileMode::Zflipz2x2 => gst_video_sys::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
             VideoTileMode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
-    fn from_glib(value: ffi::GstVideoTileMode) -> Self {
+impl FromGlib<gst_video_sys::GstVideoTileMode> for VideoTileMode {
+    fn from_glib(value: gst_video_sys::GstVideoTileMode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoTileMode::Unknown,
@@ -800,7 +800,7 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
 
 impl StaticType for VideoTileMode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_tile_mode_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_tile_mode_get_type()) }
     }
 }
 
@@ -812,13 +812,13 @@ impl<'a> FromValueOptional<'a> for VideoTileMode {
 
 impl<'a> FromValue<'a> for VideoTileMode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoTileMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -844,31 +844,31 @@ pub enum VideoTransferFunction {
 
 #[doc(hidden)]
 impl ToGlib for VideoTransferFunction {
-    type GlibType = ffi::GstVideoTransferFunction;
+    type GlibType = gst_video_sys::GstVideoTransferFunction;
 
-    fn to_glib(&self) -> ffi::GstVideoTransferFunction {
+    fn to_glib(&self) -> gst_video_sys::GstVideoTransferFunction {
         match *self {
-            VideoTransferFunction::Unknown => ffi::GST_VIDEO_TRANSFER_UNKNOWN,
-            VideoTransferFunction::Gamma10 => ffi::GST_VIDEO_TRANSFER_GAMMA10,
-            VideoTransferFunction::Gamma18 => ffi::GST_VIDEO_TRANSFER_GAMMA18,
-            VideoTransferFunction::Gamma20 => ffi::GST_VIDEO_TRANSFER_GAMMA20,
-            VideoTransferFunction::Gamma22 => ffi::GST_VIDEO_TRANSFER_GAMMA22,
-            VideoTransferFunction::Bt709 => ffi::GST_VIDEO_TRANSFER_BT709,
-            VideoTransferFunction::Smpte240m => ffi::GST_VIDEO_TRANSFER_SMPTE240M,
-            VideoTransferFunction::Srgb => ffi::GST_VIDEO_TRANSFER_SRGB,
-            VideoTransferFunction::Gamma28 => ffi::GST_VIDEO_TRANSFER_GAMMA28,
-            VideoTransferFunction::Log100 => ffi::GST_VIDEO_TRANSFER_LOG100,
-            VideoTransferFunction::Log316 => ffi::GST_VIDEO_TRANSFER_LOG316,
-            VideoTransferFunction::Bt202012 => ffi::GST_VIDEO_TRANSFER_BT2020_12,
-            VideoTransferFunction::Adobergb => ffi::GST_VIDEO_TRANSFER_ADOBERGB,
+            VideoTransferFunction::Unknown => gst_video_sys::GST_VIDEO_TRANSFER_UNKNOWN,
+            VideoTransferFunction::Gamma10 => gst_video_sys::GST_VIDEO_TRANSFER_GAMMA10,
+            VideoTransferFunction::Gamma18 => gst_video_sys::GST_VIDEO_TRANSFER_GAMMA18,
+            VideoTransferFunction::Gamma20 => gst_video_sys::GST_VIDEO_TRANSFER_GAMMA20,
+            VideoTransferFunction::Gamma22 => gst_video_sys::GST_VIDEO_TRANSFER_GAMMA22,
+            VideoTransferFunction::Bt709 => gst_video_sys::GST_VIDEO_TRANSFER_BT709,
+            VideoTransferFunction::Smpte240m => gst_video_sys::GST_VIDEO_TRANSFER_SMPTE240M,
+            VideoTransferFunction::Srgb => gst_video_sys::GST_VIDEO_TRANSFER_SRGB,
+            VideoTransferFunction::Gamma28 => gst_video_sys::GST_VIDEO_TRANSFER_GAMMA28,
+            VideoTransferFunction::Log100 => gst_video_sys::GST_VIDEO_TRANSFER_LOG100,
+            VideoTransferFunction::Log316 => gst_video_sys::GST_VIDEO_TRANSFER_LOG316,
+            VideoTransferFunction::Bt202012 => gst_video_sys::GST_VIDEO_TRANSFER_BT2020_12,
+            VideoTransferFunction::Adobergb => gst_video_sys::GST_VIDEO_TRANSFER_ADOBERGB,
             VideoTransferFunction::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
-    fn from_glib(value: ffi::GstVideoTransferFunction) -> Self {
+impl FromGlib<gst_video_sys::GstVideoTransferFunction> for VideoTransferFunction {
+    fn from_glib(value: gst_video_sys::GstVideoTransferFunction) -> Self {
         skip_assert_initialized!();
         match value {
             0 => VideoTransferFunction::Unknown,
@@ -891,7 +891,7 @@ impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
 
 impl StaticType for VideoTransferFunction {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_transfer_function_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_transfer_function_get_type()) }
     }
 }
 
@@ -903,13 +903,13 @@ impl<'a> FromValueOptional<'a> for VideoTransferFunction {
 
 impl<'a> FromValue<'a> for VideoTransferFunction {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoTransferFunction {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

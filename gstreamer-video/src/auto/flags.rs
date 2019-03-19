@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_video_sys;
 
 bitflags! {
     pub struct VideoChromaSite: u32 {
@@ -28,16 +28,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for VideoChromaSite {
-    type GlibType = ffi::GstVideoChromaSite;
+    type GlibType = gst_video_sys::GstVideoChromaSite;
 
-    fn to_glib(&self) -> ffi::GstVideoChromaSite {
+    fn to_glib(&self) -> gst_video_sys::GstVideoChromaSite {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoChromaSite> for VideoChromaSite {
-    fn from_glib(value: ffi::GstVideoChromaSite) -> VideoChromaSite {
+impl FromGlib<gst_video_sys::GstVideoChromaSite> for VideoChromaSite {
+    fn from_glib(value: gst_video_sys::GstVideoChromaSite) -> VideoChromaSite {
         skip_assert_initialized!();
         VideoChromaSite::from_bits_truncate(value)
     }
@@ -45,7 +45,7 @@ impl FromGlib<ffi::GstVideoChromaSite> for VideoChromaSite {
 
 impl StaticType for VideoChromaSite {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_chroma_site_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_chroma_site_get_type()) }
     }
 }
 
@@ -57,13 +57,13 @@ impl<'a> FromValueOptional<'a> for VideoChromaSite {
 
 impl<'a> FromValue<'a> for VideoChromaSite {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoChromaSite {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -77,16 +77,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for VideoFlags {
-    type GlibType = ffi::GstVideoFlags;
+    type GlibType = gst_video_sys::GstVideoFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoFlags {
+    fn to_glib(&self) -> gst_video_sys::GstVideoFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoFlags> for VideoFlags {
-    fn from_glib(value: ffi::GstVideoFlags) -> VideoFlags {
+impl FromGlib<gst_video_sys::GstVideoFlags> for VideoFlags {
+    fn from_glib(value: gst_video_sys::GstVideoFlags) -> VideoFlags {
         skip_assert_initialized!();
         VideoFlags::from_bits_truncate(value)
     }
@@ -94,7 +94,7 @@ impl FromGlib<ffi::GstVideoFlags> for VideoFlags {
 
 impl StaticType for VideoFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_flags_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_flags_get_type()) }
     }
 }
 
@@ -106,13 +106,13 @@ impl<'a> FromValueOptional<'a> for VideoFlags {
 
 impl<'a> FromValue<'a> for VideoFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -132,16 +132,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for VideoFormatFlags {
-    type GlibType = ffi::GstVideoFormatFlags;
+    type GlibType = gst_video_sys::GstVideoFormatFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoFormatFlags {
+    fn to_glib(&self) -> gst_video_sys::GstVideoFormatFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoFormatFlags> for VideoFormatFlags {
-    fn from_glib(value: ffi::GstVideoFormatFlags) -> VideoFormatFlags {
+impl FromGlib<gst_video_sys::GstVideoFormatFlags> for VideoFormatFlags {
+    fn from_glib(value: gst_video_sys::GstVideoFormatFlags) -> VideoFormatFlags {
         skip_assert_initialized!();
         VideoFormatFlags::from_bits_truncate(value)
     }
@@ -149,7 +149,7 @@ impl FromGlib<ffi::GstVideoFormatFlags> for VideoFormatFlags {
 
 impl StaticType for VideoFormatFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_format_flags_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_format_flags_get_type()) }
     }
 }
 
@@ -161,13 +161,13 @@ impl<'a> FromValueOptional<'a> for VideoFormatFlags {
 
 impl<'a> FromValue<'a> for VideoFormatFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFormatFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -185,16 +185,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for VideoFrameFlags {
-    type GlibType = ffi::GstVideoFrameFlags;
+    type GlibType = gst_video_sys::GstVideoFrameFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoFrameFlags {
+    fn to_glib(&self) -> gst_video_sys::GstVideoFrameFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
-    fn from_glib(value: ffi::GstVideoFrameFlags) -> VideoFrameFlags {
+impl FromGlib<gst_video_sys::GstVideoFrameFlags> for VideoFrameFlags {
+    fn from_glib(value: gst_video_sys::GstVideoFrameFlags) -> VideoFrameFlags {
         skip_assert_initialized!();
         VideoFrameFlags::from_bits_truncate(value)
     }
@@ -202,7 +202,7 @@ impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
 
 impl StaticType for VideoFrameFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_frame_flags_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_frame_flags_get_type()) }
     }
 }
 
@@ -214,13 +214,13 @@ impl<'a> FromValueOptional<'a> for VideoFrameFlags {
 
 impl<'a> FromValue<'a> for VideoFrameFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoFrameFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -239,16 +239,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for VideoMultiviewFlags {
-    type GlibType = ffi::GstVideoMultiviewFlags;
+    type GlibType = gst_video_sys::GstVideoMultiviewFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoMultiviewFlags {
+    fn to_glib(&self) -> gst_video_sys::GstVideoMultiviewFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
-    fn from_glib(value: ffi::GstVideoMultiviewFlags) -> VideoMultiviewFlags {
+impl FromGlib<gst_video_sys::GstVideoMultiviewFlags> for VideoMultiviewFlags {
+    fn from_glib(value: gst_video_sys::GstVideoMultiviewFlags) -> VideoMultiviewFlags {
         skip_assert_initialized!();
         VideoMultiviewFlags::from_bits_truncate(value)
     }
@@ -256,7 +256,7 @@ impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
 
 impl StaticType for VideoMultiviewFlags {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_video_multiview_flags_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_multiview_flags_get_type()) }
     }
 }
 
@@ -268,13 +268,13 @@ impl<'a> FromValueOptional<'a> for VideoMultiviewFlags {
 
 impl<'a> FromValue<'a> for VideoMultiviewFlags {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl SetValue for VideoMultiviewFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -288,16 +288,16 @@ bitflags! {
 
 #[doc(hidden)]
 impl ToGlib for VideoOverlayFormatFlags {
-    type GlibType = ffi::GstVideoOverlayFormatFlags;
+    type GlibType = gst_video_sys::GstVideoOverlayFormatFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoOverlayFormatFlags {
+    fn to_glib(&self) -> gst_video_sys::GstVideoOverlayFormatFlags {
         self.bits()
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
-    fn from_glib(value: ffi::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
+impl FromGlib<gst_video_sys::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
+    fn from_glib(value: gst_video_sys::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
         skip_assert_initialized!();
         VideoOverlayFormatFlags::from_bits_truncate(value)
     }
@@ -315,17 +315,17 @@ bitflags! {
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for VideoTimeCodeFlags {
-    type GlibType = ffi::GstVideoTimeCodeFlags;
+    type GlibType = gst_video_sys::GstVideoTimeCodeFlags;
 
-    fn to_glib(&self) -> ffi::GstVideoTimeCodeFlags {
+    fn to_glib(&self) -> gst_video_sys::GstVideoTimeCodeFlags {
         self.bits()
     }
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
-    fn from_glib(value: ffi::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
+impl FromGlib<gst_video_sys::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
+    fn from_glib(value: gst_video_sys::GstVideoTimeCodeFlags) -> VideoTimeCodeFlags {
         skip_assert_initialized!();
         VideoTimeCodeFlags::from_bits_truncate(value)
     }

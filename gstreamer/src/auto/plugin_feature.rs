@@ -4,16 +4,16 @@
 
 use Object;
 use Plugin;
-use ffi;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_sys;
 
 glib_wrapper! {
-    pub struct PluginFeature(Object<ffi::GstPluginFeature, ffi::GstPluginFeatureClass, PluginFeatureClass>) @extends Object;
+    pub struct PluginFeature(Object<gst_sys::GstPluginFeature, gst_sys::GstPluginFeatureClass, PluginFeatureClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_plugin_feature_get_type(),
+        get_type => || gst_sys::gst_plugin_feature_get_type(),
     }
 }
 
@@ -39,37 +39,37 @@ pub trait PluginFeatureExt: 'static {
 impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool {
         unsafe {
-            from_glib(ffi::gst_plugin_feature_check_version(self.as_ref().to_glib_none().0, min_major, min_minor, min_micro))
+            from_glib(gst_sys::gst_plugin_feature_check_version(self.as_ref().to_glib_none().0, min_major, min_minor, min_micro))
         }
     }
 
     fn get_plugin(&self) -> Option<Plugin> {
         unsafe {
-            from_glib_full(ffi::gst_plugin_feature_get_plugin(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_plugin_feature_get_plugin(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_plugin_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_plugin_feature_get_plugin_name(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_sys::gst_plugin_feature_get_plugin_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_rank(&self) -> u32 {
         unsafe {
-            ffi::gst_plugin_feature_get_rank(self.as_ref().to_glib_none().0)
+            gst_sys::gst_plugin_feature_get_rank(self.as_ref().to_glib_none().0)
         }
     }
 
     fn load(&self) -> Option<PluginFeature> {
         unsafe {
-            from_glib_full(ffi::gst_plugin_feature_load(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_plugin_feature_load(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_rank(&self, rank: u32) {
         unsafe {
-            ffi::gst_plugin_feature_set_rank(self.as_ref().to_glib_none().0, rank);
+            gst_sys::gst_plugin_feature_set_rank(self.as_ref().to_glib_none().0, rank);
         }
     }
 }

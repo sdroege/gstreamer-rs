@@ -3,22 +3,22 @@
 // DO NOT EDIT
 
 use DiscovererStreamInfo;
-use ffi;
 use glib::GString;
 use glib::translate::*;
+use gst_pbutils_sys;
 
 glib_wrapper! {
-    pub struct DiscovererSubtitleInfo(Object<ffi::GstDiscovererSubtitleInfo, DiscovererSubtitleInfoClass>) @extends DiscovererStreamInfo;
+    pub struct DiscovererSubtitleInfo(Object<gst_pbutils_sys::GstDiscovererSubtitleInfo, DiscovererSubtitleInfoClass>) @extends DiscovererStreamInfo;
 
     match fn {
-        get_type => || ffi::gst_discoverer_subtitle_info_get_type(),
+        get_type => || gst_pbutils_sys::gst_discoverer_subtitle_info_get_type(),
     }
 }
 
 impl DiscovererSubtitleInfo {
     pub fn get_language(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_discoverer_subtitle_info_get_language(self.to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_discoverer_subtitle_info_get_language(self.to_glib_none().0))
         }
     }
 }

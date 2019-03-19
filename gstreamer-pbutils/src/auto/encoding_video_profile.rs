@@ -3,27 +3,27 @@
 // DO NOT EDIT
 
 use EncodingProfile;
-use ffi;
 use glib::translate::*;
+use gst_pbutils_sys;
 
 glib_wrapper! {
-    pub struct EncodingVideoProfile(Object<ffi::GstEncodingVideoProfile, ffi::GstEncodingVideoProfileClass, EncodingVideoProfileClass>) @extends EncodingProfile;
+    pub struct EncodingVideoProfile(Object<gst_pbutils_sys::GstEncodingVideoProfile, gst_pbutils_sys::GstEncodingVideoProfileClass, EncodingVideoProfileClass>) @extends EncodingProfile;
 
     match fn {
-        get_type => || ffi::gst_encoding_video_profile_get_type(),
+        get_type => || gst_pbutils_sys::gst_encoding_video_profile_get_type(),
     }
 }
 
 impl EncodingVideoProfile {
     pub fn get_pass(&self) -> u32 {
         unsafe {
-            ffi::gst_encoding_video_profile_get_pass(self.to_glib_none().0)
+            gst_pbutils_sys::gst_encoding_video_profile_get_pass(self.to_glib_none().0)
         }
     }
 
     pub fn get_variableframerate(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_encoding_video_profile_get_variableframerate(self.to_glib_none().0))
+            from_glib(gst_pbutils_sys::gst_encoding_video_profile_get_variableframerate(self.to_glib_none().0))
         }
     }
 }

@@ -4,24 +4,24 @@
 
 use DiscovererInfo;
 use Error;
-use ffi;
 use glib;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use gst;
-use gst_ffi;
+use gst_pbutils_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Discoverer(Object<ffi::GstDiscoverer, ffi::GstDiscovererClass, DiscovererClass>);
+    pub struct Discoverer(Object<gst_pbutils_sys::GstDiscoverer, gst_pbutils_sys::GstDiscovererClass, DiscovererClass>);
 
     match fn {
-        get_type => || ffi::gst_discoverer_get_type(),
+        get_type => || gst_pbutils_sys::gst_discoverer_get_type(),
     }
 }
 
@@ -30,7 +30,7 @@ impl Discoverer {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gst_discoverer_new(timeout.to_glib(), &mut error);
+            let ret = gst_pbutils_sys::gst_discoverer_new(timeout.to_glib(), &mut error);
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
@@ -38,26 +38,26 @@ impl Discoverer {
     pub fn discover_uri(&self, uri: &str) -> Result<DiscovererInfo, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gst_discoverer_discover_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let ret = gst_pbutils_sys::gst_discoverer_discover_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
 
     pub fn discover_uri_async(&self, uri: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_discoverer_discover_uri_async(self.to_glib_none().0, uri.to_glib_none().0), "Failed to add URI to list of discovers")
+            glib_result_from_gboolean!(gst_pbutils_sys::gst_discoverer_discover_uri_async(self.to_glib_none().0, uri.to_glib_none().0), "Failed to add URI to list of discovers")
         }
     }
 
     pub fn start(&self) {
         unsafe {
-            ffi::gst_discoverer_start(self.to_glib_none().0);
+            gst_pbutils_sys::gst_discoverer_start(self.to_glib_none().0);
         }
     }
 
     pub fn stop(&self) {
         unsafe {
-            ffi::gst_discoverer_stop(self.to_glib_none().0);
+            gst_pbutils_sys::gst_discoverer_stop(self.to_glib_none().0);
         }
     }
 
@@ -97,22 +97,22 @@ impl Discoverer {
 unsafe impl Send for Discoverer {}
 unsafe impl Sync for Discoverer {}
 
-unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, info: *mut ffi::GstDiscovererInfo, error: *mut glib_ffi::GError, f: glib_ffi::gpointer) {
+unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, info: *mut gst_pbutils_sys::GstDiscovererInfo, error: *mut glib_sys::GError, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(info), &from_glib_borrow(error))
 }
 
-unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn source_setup_trampoline<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, source: *mut gst_ffi::GstElement, f: glib_ffi::gpointer) {
+unsafe extern "C" fn source_setup_trampoline<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, source: *mut gst_sys::GstElement, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(source))
 }
 
-unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut ffi::GstDiscoverer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

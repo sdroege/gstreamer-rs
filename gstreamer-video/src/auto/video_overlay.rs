@@ -2,26 +2,26 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_video_sys;
 
 glib_wrapper! {
-    pub struct VideoOverlay(Interface<ffi::GstVideoOverlay>);
+    pub struct VideoOverlay(Interface<gst_video_sys::GstVideoOverlay>);
 
     match fn {
-        get_type => || ffi::gst_video_overlay_get_type(),
+        get_type => || gst_video_sys::gst_video_overlay_get_type(),
     }
 }
 
 impl VideoOverlay {
     //pub fn install_properties(oclass: /*Ignored*/&mut glib::ObjectClass, last_prop_id: i32) {
-    //    unsafe { TODO: call ffi::gst_video_overlay_install_properties() }
+    //    unsafe { TODO: call gst_video_sys:gst_video_overlay_install_properties() }
     //}
 
     //pub fn set_property<P: IsA<glib::Object>>(object: &P, last_prop_id: i32, property_id: u32, value: /*Ignored*/&glib::Value) -> bool {
-    //    unsafe { TODO: call ffi::gst_video_overlay_set_property() }
+    //    unsafe { TODO: call gst_video_sys:gst_video_overlay_set_property() }
     //}
 }
 
@@ -47,33 +47,33 @@ pub trait VideoOverlayExt: 'static {
 impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
     fn expose(&self) {
         unsafe {
-            ffi::gst_video_overlay_expose(self.as_ref().to_glib_none().0);
+            gst_video_sys::gst_video_overlay_expose(self.as_ref().to_glib_none().0);
         }
     }
 
     //fn got_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr) {
-    //    unsafe { TODO: call ffi::gst_video_overlay_got_window_handle() }
+    //    unsafe { TODO: call gst_video_sys:gst_video_overlay_got_window_handle() }
     //}
 
     fn handle_events(&self, handle_events: bool) {
         unsafe {
-            ffi::gst_video_overlay_handle_events(self.as_ref().to_glib_none().0, handle_events.to_glib());
+            gst_video_sys::gst_video_overlay_handle_events(self.as_ref().to_glib_none().0, handle_events.to_glib());
         }
     }
 
     fn prepare_window_handle(&self) {
         unsafe {
-            ffi::gst_video_overlay_prepare_window_handle(self.as_ref().to_glib_none().0);
+            gst_video_sys::gst_video_overlay_prepare_window_handle(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_video_overlay_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
+            glib_result_from_gboolean!(gst_video_sys::gst_video_overlay_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
         }
     }
 
     //fn set_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr) {
-    //    unsafe { TODO: call ffi::gst_video_overlay_set_window_handle() }
+    //    unsafe { TODO: call gst_video_sys:gst_video_overlay_set_window_handle() }
     //}
 }

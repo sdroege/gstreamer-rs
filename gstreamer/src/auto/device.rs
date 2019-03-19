@@ -6,7 +6,6 @@ use Caps;
 use Element;
 use Object;
 use Structure;
-use ffi;
 use glib;
 use glib::GString;
 use glib::object::Cast;
@@ -14,15 +13,16 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Device(Object<ffi::GstDevice, ffi::GstDeviceClass, DeviceClass>) @extends Object;
+    pub struct Device(Object<gst_sys::GstDevice, gst_sys::GstDeviceClass, DeviceClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_device_get_type(),
+        get_type => || gst_sys::gst_device_get_type(),
     }
 }
 
@@ -32,7 +32,7 @@ unsafe impl Sync for Device {}
 pub const NONE_DEVICE: Option<&Device> = None;
 
 pub trait DeviceExt: 'static {
-    fn create_element<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element>;
+    fn create_element(&self, name: Option<&str>) -> Option<Element>;
 
     fn get_caps(&self) -> Option<Caps>;
 
@@ -52,52 +52,51 @@ pub trait DeviceExt: 'static {
 }
 
 impl<O: IsA<Device>> DeviceExt for O {
-    fn create_element<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<Element> {
-        let name = name.into();
+    fn create_element(&self, name: Option<&str>) -> Option<Element> {
         unsafe {
-            from_glib_full(ffi::gst_device_create_element(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_create_element(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn get_caps(&self) -> Option<Caps> {
         unsafe {
-            from_glib_full(ffi::gst_device_get_caps(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_get_caps(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_device_class(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gst_device_get_device_class(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_get_device_class(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_display_name(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gst_device_get_display_name(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_get_display_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_properties(&self) -> Option<Structure> {
         unsafe {
-            from_glib_full(ffi::gst_device_get_properties(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_get_properties(self.as_ref().to_glib_none().0))
         }
     }
 
     fn has_classes(&self, classes: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_has_classes(self.as_ref().to_glib_none().0, classes.to_glib_none().0))
+            from_glib(gst_sys::gst_device_has_classes(self.as_ref().to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
     fn has_classesv(&self, classes: &[&str]) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_has_classesv(self.as_ref().to_glib_none().0, classes.to_glib_none().0))
+            from_glib(gst_sys::gst_device_has_classesv(self.as_ref().to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
     fn reconfigure_element<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_device_reconfigure_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to reconfigure the element to use this device")
+            glib_result_from_gboolean!(gst_sys::gst_device_reconfigure_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to reconfigure the element to use this device")
         }
     }
 
@@ -110,7 +109,7 @@ impl<O: IsA<Device>> DeviceExt for O {
     }
 }
 
-unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstDevice, f: glib_ffi::gpointer)
+unsafe extern "C" fn removed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstDevice, f: glib_sys::gpointer)
 where P: IsA<Device> {
     let f: &F = &*(f as *const F);
     f(&Device::from_glib_borrow(this).unsafe_cast())

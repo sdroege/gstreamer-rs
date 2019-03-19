@@ -2,43 +2,41 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
+use gst_base_sys;
 use std::mem;
 
 
 pub fn type_find_helper<P: IsA<gst::Pad>>(src: &P, size: u64) -> Option<gst::Caps> {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib_full(ffi::gst_type_find_helper(src.as_ref().to_glib_none().0, size))
+        from_glib_full(gst_base_sys::gst_type_find_helper(src.as_ref().to_glib_none().0, size))
     }
 }
 
-pub fn type_find_helper_for_buffer<'a, P: IsA<gst::Object> + 'a, Q: Into<Option<&'a P>>>(obj: Q, buf: &gst::Buffer) -> (Option<gst::Caps>, gst::TypeFindProbability) {
+pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(obj: Option<&P>, buf: &gst::Buffer) -> (Option<gst::Caps>, gst::TypeFindProbability) {
     assert_initialized_main_thread!();
-    let obj = obj.into();
     unsafe {
         let mut prob = mem::uninitialized();
-        let ret = from_glib_full(ffi::gst_type_find_helper_for_buffer(obj.map(|p| p.as_ref()).to_glib_none().0, buf.to_glib_none().0, &mut prob));
+        let ret = from_glib_full(gst_base_sys::gst_type_find_helper_for_buffer(obj.map(|p| p.as_ref()).to_glib_none().0, buf.to_glib_none().0, &mut prob));
         (ret, from_glib(prob))
     }
 }
 
-pub fn type_find_helper_for_extension<'a, P: IsA<gst::Object> + 'a, Q: Into<Option<&'a P>>>(obj: Q, extension: &str) -> Option<gst::Caps> {
+pub fn type_find_helper_for_extension<P: IsA<gst::Object>>(obj: Option<&P>, extension: &str) -> Option<gst::Caps> {
     assert_initialized_main_thread!();
-    let obj = obj.into();
     unsafe {
-        from_glib_full(ffi::gst_type_find_helper_for_extension(obj.map(|p| p.as_ref()).to_glib_none().0, extension.to_glib_none().0))
+        from_glib_full(gst_base_sys::gst_type_find_helper_for_extension(obj.map(|p| p.as_ref()).to_glib_none().0, extension.to_glib_none().0))
     }
 }
 
-//pub fn type_find_helper_get_range<'a, P: IsA<gst::Object>, Q: IsA<gst::Object> + 'a, R: Into<Option<&'a Q>>, S: FnMut(&gst::Object, &gst::Object, u64, u32, &gst::Buffer) -> gst::FlowReturn>(obj: &P, parent: R, func: S, size: u64, extension: &str) -> (Option<gst::Caps>, gst::TypeFindProbability) {
-//    unsafe { TODO: call ffi::gst_type_find_helper_get_range() }
+//pub fn type_find_helper_get_range<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, &Option<gst::Object>, u64, u32, &gst::Buffer) -> gst::FlowReturn>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: &str) -> (Option<gst::Caps>, gst::TypeFindProbability) {
+//    unsafe { TODO: call gst_base_sys:gst_type_find_helper_get_range() }
 //}
 
 //#[cfg(any(feature = "v1_14_3", feature = "dox"))]
-//pub fn type_find_helper_get_range_full<'a, 'b, P: IsA<gst::Object>, Q: IsA<gst::Object> + 'a, R: Into<Option<&'a Q>>, S: FnMut(&gst::Object, &gst::Object, u64, u32, &gst::Buffer) -> gst::FlowReturn, T: Into<Option<&'b str>>>(obj: &P, parent: R, func: S, size: u64, extension: T) -> (gst::FlowReturn, gst::Caps, gst::TypeFindProbability) {
-//    unsafe { TODO: call ffi::gst_type_find_helper_get_range_full() }
+//pub fn type_find_helper_get_range_full<P: IsA<gst::Object>, Q: IsA<gst::Object>, R: FnMut(&gst::Object, &Option<gst::Object>, u64, u32, &gst::Buffer) -> gst::FlowReturn>(obj: &P, parent: Option<&Q>, func: R, size: u64, extension: Option<&str>) -> (gst::FlowReturn, gst::Caps, gst::TypeFindProbability) {
+//    unsafe { TODO: call gst_base_sys:gst_type_find_helper_get_range_full() }
 //}

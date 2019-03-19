@@ -2,24 +2,24 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use gst;
+use gst_net_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct PtpClock(Object<ffi::GstPtpClock, ffi::GstPtpClockClass, PtpClockClass>) @extends gst::Clock, gst::Object;
+    pub struct PtpClock(Object<gst_net_sys::GstPtpClock, gst_net_sys::GstPtpClockClass, PtpClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_ptp_clock_get_type(),
+        get_type => || gst_net_sys::gst_ptp_clock_get_type(),
     }
 }
 
@@ -27,7 +27,7 @@ impl PtpClock {
     pub fn get_property_domain(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"domain\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"domain\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -35,7 +35,7 @@ impl PtpClock {
     pub fn get_property_grandmaster_clock_id(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"grandmaster-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"grandmaster-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -43,7 +43,7 @@ impl PtpClock {
     pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -51,7 +51,7 @@ impl PtpClock {
     pub fn get_property_master_clock_id(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"master-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"master-clock-id\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -84,17 +84,17 @@ impl PtpClock {
 unsafe impl Send for PtpClock {}
 unsafe impl Sync for PtpClock {}
 
-unsafe extern "C" fn notify_grandmaster_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_grandmaster_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstPtpClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstPtpClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_master_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut ffi::GstPtpClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_master_clock_id_trampoline<F: Fn(&PtpClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstPtpClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

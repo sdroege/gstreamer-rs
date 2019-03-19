@@ -3,26 +3,26 @@
 // DO NOT EDIT
 
 use RTSPStream;
-use ffi;
 use glib;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_rtsp;
+use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 
 glib_wrapper! {
-    pub struct RTSPStreamTransport(Object<ffi::GstRTSPStreamTransport, ffi::GstRTSPStreamTransportClass, RTSPStreamTransportClass>);
+    pub struct RTSPStreamTransport(Object<gst_rtsp_server_sys::GstRTSPStreamTransport, gst_rtsp_server_sys::GstRTSPStreamTransportClass, RTSPStreamTransportClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_stream_transport_get_type(),
+        get_type => || gst_rtsp_server_sys::gst_rtsp_stream_transport_get_type(),
     }
 }
 
 impl RTSPStreamTransport {
     //pub fn new<P: IsA<RTSPStream>>(stream: &P, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) -> RTSPStreamTransport {
-    //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_new() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_new() }
     //}
 }
 
@@ -55,97 +55,96 @@ pub trait RTSPStreamTransportExt: 'static {
 
     //fn set_transport(&self, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport);
 
-    fn set_url<'a, P: Into<Option<&'a gst_rtsp::RTSPUrl>>>(&self, url: P);
+    fn set_url(&self, url: Option<&gst_rtsp::RTSPUrl>);
 }
 
 impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_stream_transport_get_rtpinfo(self.as_ref().to_glib_none().0, start_time.to_glib()))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_rtpinfo(self.as_ref().to_glib_none().0, start_time.to_glib()))
         }
     }
 
     fn get_stream(&self) -> Option<RTSPStream> {
         unsafe {
-            from_glib_none(ffi::gst_rtsp_stream_transport_get_stream(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_stream(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn get_transport(&self) -> /*Ignored*/Option<gst_rtsp::RTSPTransport> {
-    //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_get_transport() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_get_transport() }
     //}
 
     fn get_url(&self) -> Option<gst_rtsp::RTSPUrl> {
         unsafe {
-            from_glib_none(ffi::gst_rtsp_stream_transport_get_url(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_url(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_timed_out(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_rtsp_stream_transport_is_timed_out(self.as_ref().to_glib_none().0))
+            from_glib(gst_rtsp_server_sys::gst_rtsp_stream_transport_is_timed_out(self.as_ref().to_glib_none().0))
         }
     }
 
     fn keep_alive(&self) {
         unsafe {
-            ffi::gst_rtsp_stream_transport_keep_alive(self.as_ref().to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_keep_alive(self.as_ref().to_glib_none().0);
         }
     }
 
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_rtsp_stream_transport_send_rtcp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtcp")
+            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtcp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtcp")
         }
     }
 
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_rtsp_stream_transport_send_rtp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtp")
+            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtp")
         }
     }
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_rtsp_stream_transport_set_active(self.as_ref().to_glib_none().0, active.to_glib()), "Failed to set active")
+            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_set_active(self.as_ref().to_glib_none().0, active.to_glib()), "Failed to set active")
         }
     }
 
     //fn set_callbacks<P: Fn(&gst::Buffer, u8) -> bool + 'static, Q: Fn(&gst::Buffer, u8) -> bool + 'static>(&self, send_rtp: P, send_rtcp: Q) {
-    //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_set_callbacks() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_set_callbacks() }
     //}
 
     fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P) {
         let keep_alive_data: Box_<P> = Box::new(keep_alive);
-        unsafe extern "C" fn keep_alive_func<P: Fn() + 'static>(user_data: glib_ffi::gpointer) {
+        unsafe extern "C" fn keep_alive_func<P: Fn() + 'static>(user_data: glib_sys::gpointer) {
             let callback: &P = &*(user_data as *mut _);
             (*callback)();
         }
         let keep_alive = Some(keep_alive_func::<P> as _);
-        unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib_ffi::gpointer) {
+        unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib_sys::gpointer) {
             let _callback: Box_<P> = Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = keep_alive_data;
         unsafe {
-            ffi::gst_rtsp_stream_transport_set_keepalive(self.as_ref().to_glib_none().0, keep_alive, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_keepalive(self.as_ref().to_glib_none().0, keep_alive, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
     }
 
     fn set_timed_out(&self, timedout: bool) {
         unsafe {
-            ffi::gst_rtsp_stream_transport_set_timed_out(self.as_ref().to_glib_none().0, timedout.to_glib());
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_timed_out(self.as_ref().to_glib_none().0, timedout.to_glib());
         }
     }
 
     //fn set_transport(&self, tr: /*Ignored*/&mut gst_rtsp::RTSPTransport) {
-    //    unsafe { TODO: call ffi::gst_rtsp_stream_transport_set_transport() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_set_transport() }
     //}
 
-    fn set_url<'a, P: Into<Option<&'a gst_rtsp::RTSPUrl>>>(&self, url: P) {
-        let url = url.into();
+    fn set_url(&self, url: Option<&gst_rtsp::RTSPUrl>) {
         unsafe {
-            ffi::gst_rtsp_stream_transport_set_url(self.as_ref().to_glib_none().0, url.to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_url(self.as_ref().to_glib_none().0, url.to_glib_none().0);
         }
     }
 }

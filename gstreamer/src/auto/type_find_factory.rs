@@ -5,45 +5,45 @@
 use Caps;
 use Object;
 use PluginFeature;
-use ffi;
 use glib::GString;
 use glib::translate::*;
+use gst_sys;
 
 glib_wrapper! {
-    pub struct TypeFindFactory(Object<ffi::GstTypeFindFactory, ffi::GstTypeFindFactoryClass, TypeFindFactoryClass>) @extends PluginFeature, Object;
+    pub struct TypeFindFactory(Object<gst_sys::GstTypeFindFactory, gst_sys::GstTypeFindFactoryClass, TypeFindFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
-        get_type => || ffi::gst_type_find_factory_get_type(),
+        get_type => || gst_sys::gst_type_find_factory_get_type(),
     }
 }
 
 impl TypeFindFactory {
     //pub fn call_function(&self, find: /*Ignored*/&mut TypeFind) {
-    //    unsafe { TODO: call ffi::gst_type_find_factory_call_function() }
+    //    unsafe { TODO: call gst_sys:gst_type_find_factory_call_function() }
     //}
 
     pub fn get_caps(&self) -> Option<Caps> {
         unsafe {
-            from_glib_none(ffi::gst_type_find_factory_get_caps(self.to_glib_none().0))
+            from_glib_none(gst_sys::gst_type_find_factory_get_caps(self.to_glib_none().0))
         }
     }
 
     pub fn get_extensions(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gst_type_find_factory_get_extensions(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(gst_sys::gst_type_find_factory_get_extensions(self.to_glib_none().0))
         }
     }
 
     pub fn has_function(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_type_find_factory_has_function(self.to_glib_none().0))
+            from_glib(gst_sys::gst_type_find_factory_has_function(self.to_glib_none().0))
         }
     }
 
     pub fn get_list() -> Vec<TypeFindFactory> {
         assert_initialized_main_thread!();
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_type_find_factory_get_list())
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_type_find_factory_get_list())
         }
     }
 }

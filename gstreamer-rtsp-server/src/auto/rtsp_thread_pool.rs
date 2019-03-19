@@ -2,21 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RTSPThreadPool(Object<ffi::GstRTSPThreadPool, ffi::GstRTSPThreadPoolClass, RTSPThreadPoolClass>);
+    pub struct RTSPThreadPool(Object<gst_rtsp_server_sys::GstRTSPThreadPool, gst_rtsp_server_sys::GstRTSPThreadPoolClass, RTSPThreadPoolClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_thread_pool_get_type(),
+        get_type => || gst_rtsp_server_sys::gst_rtsp_thread_pool_get_type(),
     }
 }
 
@@ -24,14 +24,14 @@ impl RTSPThreadPool {
     pub fn new() -> RTSPThreadPool {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_rtsp_thread_pool_new())
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_thread_pool_new())
         }
     }
 
     pub fn cleanup() {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gst_rtsp_thread_pool_cleanup();
+            gst_rtsp_server_sys::gst_rtsp_thread_pool_cleanup();
         }
     }
 }
@@ -60,17 +60,17 @@ pub trait RTSPThreadPoolExt: 'static {
 impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
     fn get_max_threads(&self) -> i32 {
         unsafe {
-            ffi::gst_rtsp_thread_pool_get_max_threads(self.as_ref().to_glib_none().0)
+            gst_rtsp_server_sys::gst_rtsp_thread_pool_get_max_threads(self.as_ref().to_glib_none().0)
         }
     }
 
     //fn get_thread(&self, type_: RTSPThreadType, ctx: &RTSPContext) -> /*Ignored*/Option<RTSPThread> {
-    //    unsafe { TODO: call ffi::gst_rtsp_thread_pool_get_thread() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_thread_pool_get_thread() }
     //}
 
     fn set_max_threads(&self, max_threads: i32) {
         unsafe {
-            ffi::gst_rtsp_thread_pool_set_max_threads(self.as_ref().to_glib_none().0, max_threads);
+            gst_rtsp_server_sys::gst_rtsp_thread_pool_set_max_threads(self.as_ref().to_glib_none().0, max_threads);
         }
     }
 
@@ -83,7 +83,7 @@ impl<O: IsA<RTSPThreadPool>> RTSPThreadPoolExt for O {
     }
 }
 
-unsafe extern "C" fn notify_max_threads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPThreadPool, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_threads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPThreadPool, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPThreadPool> {
     let f: &F = &*(f as *const F);
     f(&RTSPThreadPool::from_glib_borrow(this).unsafe_cast())

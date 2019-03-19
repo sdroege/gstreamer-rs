@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_app_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
@@ -24,21 +24,21 @@ pub enum AppStreamType {
 
 #[doc(hidden)]
 impl ToGlib for AppStreamType {
-    type GlibType = ffi::GstAppStreamType;
+    type GlibType = gst_app_sys::GstAppStreamType;
 
-    fn to_glib(&self) -> ffi::GstAppStreamType {
+    fn to_glib(&self) -> gst_app_sys::GstAppStreamType {
         match *self {
-            AppStreamType::Stream => ffi::GST_APP_STREAM_TYPE_STREAM,
-            AppStreamType::Seekable => ffi::GST_APP_STREAM_TYPE_SEEKABLE,
-            AppStreamType::RandomAccess => ffi::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
+            AppStreamType::Stream => gst_app_sys::GST_APP_STREAM_TYPE_STREAM,
+            AppStreamType::Seekable => gst_app_sys::GST_APP_STREAM_TYPE_SEEKABLE,
+            AppStreamType::RandomAccess => gst_app_sys::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
             AppStreamType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
-    fn from_glib(value: ffi::GstAppStreamType) -> Self {
+impl FromGlib<gst_app_sys::GstAppStreamType> for AppStreamType {
+    fn from_glib(value: gst_app_sys::GstAppStreamType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => AppStreamType::Stream,
@@ -51,7 +51,7 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
 
 impl StaticType for AppStreamType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_app_stream_type_get_type()) }
+        unsafe { from_glib(gst_app_sys::gst_app_stream_type_get_type()) }
     }
 }
 
@@ -63,13 +63,13 @@ impl<'a> FromValueOptional<'a> for AppStreamType {
 
 impl<'a> FromValue<'a> for AppStreamType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for AppStreamType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

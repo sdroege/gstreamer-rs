@@ -5,7 +5,7 @@
 use Asset;
 use Error;
 use Timeline;
-use ffi;
+use ges_sys;
 use glib;
 use glib::GString;
 use glib::object::Cast;
@@ -13,7 +13,7 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use gst_pbutils;
 use libc;
 use std::boxed::Box as Box_;
@@ -21,19 +21,18 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Project(Object<ffi::GESProject, ffi::GESProjectClass, ProjectClass>) @extends Asset;
+    pub struct Project(Object<ges_sys::GESProject, ges_sys::GESProjectClass, ProjectClass>) @extends Asset;
 
     match fn {
-        get_type => || ffi::ges_project_get_type(),
+        get_type => || ges_sys::ges_project_get_type(),
     }
 }
 
 impl Project {
-    pub fn new<'a, P: Into<Option<&'a str>>>(uri: P) -> Project {
+    pub fn new(uri: Option<&str>) -> Project {
         assert_initialized_main_thread!();
-        let uri = uri.into();
         unsafe {
-            from_glib_full(ffi::ges_project_new(uri.to_glib_none().0))
+            from_glib_full(ges_sys::ges_project_new(uri.to_glib_none().0))
         }
     }
 }
@@ -45,9 +44,9 @@ pub trait ProjectExt: 'static {
 
     fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError>;
 
-    fn create_asset<'a, P: Into<Option<&'a str>>>(&self, id: P, extractable_type: glib::types::Type) -> bool;
+    fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool;
 
-    fn create_asset_sync<'a, P: Into<Option<&'a str>>>(&self, id: P, extractable_type: glib::types::Type) -> Result<Option<Asset>, Error>;
+    fn create_asset_sync(&self, id: Option<&str>, extractable_type: glib::types::Type) -> Result<Option<Asset>, Error>;
 
     fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
 
@@ -63,7 +62,7 @@ pub trait ProjectExt: 'static {
 
     fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 
-    fn save<'a, P: IsA<Timeline>, Q: IsA<Asset> + 'a, R: Into<Option<&'a Q>>>(&self, timeline: &P, uri: &str, formatter_asset: R, overwrite: bool) -> Result<(), Error>;
+    fn save<P: IsA<Timeline>, Q: IsA<Asset>>(&self, timeline: &P, uri: &str, formatter_asset: Option<&Q>, overwrite: bool) -> Result<(), Error>;
 
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -81,81 +80,78 @@ pub trait ProjectExt: 'static {
 impl<O: IsA<Project>> ProjectExt for O {
     fn add_asset<P: IsA<Asset>>(&self, asset: &P) -> bool {
         unsafe {
-            from_glib(ffi::ges_project_add_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_project_add_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0))
         }
     }
 
     fn add_encoding_profile<P: IsA<gst_pbutils::EncodingProfile>>(&self, profile: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_project_add_encoding_profile(self.as_ref().to_glib_none().0, profile.as_ref().to_glib_none().0), "Failed to add profile")
+            glib_result_from_gboolean!(ges_sys::ges_project_add_encoding_profile(self.as_ref().to_glib_none().0, profile.as_ref().to_glib_none().0), "Failed to add profile")
         }
     }
 
-    fn create_asset<'a, P: Into<Option<&'a str>>>(&self, id: P, extractable_type: glib::types::Type) -> bool {
-        let id = id.into();
+    fn create_asset(&self, id: Option<&str>, extractable_type: glib::types::Type) -> bool {
         unsafe {
-            from_glib(ffi::ges_project_create_asset(self.as_ref().to_glib_none().0, id.to_glib_none().0, extractable_type.to_glib()))
+            from_glib(ges_sys::ges_project_create_asset(self.as_ref().to_glib_none().0, id.to_glib_none().0, extractable_type.to_glib()))
         }
     }
 
-    fn create_asset_sync<'a, P: Into<Option<&'a str>>>(&self, id: P, extractable_type: glib::types::Type) -> Result<Option<Asset>, Error> {
-        let id = id.into();
+    fn create_asset_sync(&self, id: Option<&str>, extractable_type: glib::types::Type) -> Result<Option<Asset>, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::ges_project_create_asset_sync(self.as_ref().to_glib_none().0, id.to_glib_none().0, extractable_type.to_glib(), &mut error);
+            let ret = ges_sys::ges_project_create_asset_sync(self.as_ref().to_glib_none().0, id.to_glib_none().0, extractable_type.to_glib(), &mut error);
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset> {
         unsafe {
-            from_glib_full(ffi::ges_project_get_asset(self.as_ref().to_glib_none().0, id.to_glib_none().0, extractable_type.to_glib()))
+            from_glib_full(ges_sys::ges_project_get_asset(self.as_ref().to_glib_none().0, id.to_glib_none().0, extractable_type.to_glib()))
         }
     }
 
     fn get_loading_assets(&self) -> Vec<Asset> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_project_get_loading_assets(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_project_get_loading_assets(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::ges_project_get_uri(self.as_ref().to_glib_none().0))
+            from_glib_full(ges_sys::ges_project_get_uri(self.as_ref().to_glib_none().0))
         }
     }
 
     fn list_assets(&self, filter: glib::types::Type) -> Vec<Asset> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::ges_project_list_assets(self.as_ref().to_glib_none().0, filter.to_glib()))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_project_list_assets(self.as_ref().to_glib_none().0, filter.to_glib()))
         }
     }
 
     fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::ges_project_list_encoding_profiles(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ges_sys::ges_project_list_encoding_profiles(self.as_ref().to_glib_none().0))
         }
     }
 
     fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_project_load(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0, &mut error);
+            let _ = ges_sys::ges_project_load(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::ges_project_remove_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0), "Failed to remove asset")
+            glib_result_from_gboolean!(ges_sys::ges_project_remove_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0), "Failed to remove asset")
         }
     }
 
-    fn save<'a, P: IsA<Timeline>, Q: IsA<Asset> + 'a, R: Into<Option<&'a Q>>>(&self, timeline: &P, uri: &str, formatter_asset: R, overwrite: bool) -> Result<(), Error> {
-        let formatter_asset = formatter_asset.into();
+    fn save<P: IsA<Timeline>, Q: IsA<Asset>>(&self, timeline: &P, uri: &str, formatter_asset: Option<&Q>, overwrite: bool) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::ges_project_save(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0, uri.to_glib_none().0, formatter_asset.map(|p| p.as_ref()).to_glib_none().0, overwrite.to_glib(), &mut error);
+            let _ = ges_sys::ges_project_save(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0, uri.to_glib_none().0, formatter_asset.map(|p| p.as_ref()).to_glib_none().0, overwrite.to_glib(), &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -209,37 +205,37 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 }
 
-unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
+unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
 where P: IsA<Project> {
     let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
-unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
+unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
 where P: IsA<Project> {
     let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
-unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ffi::GESProject, asset: *mut ffi::GESAsset, f: glib_ffi::gpointer)
+unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
 where P: IsA<Project> {
     let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
 }
 
-unsafe extern "C" fn error_loading_asset_trampoline<P, F: Fn(&P, &Error, &str, glib::types::Type) + 'static>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, id: *mut libc::c_char, extractable_type: glib_ffi::GType, f: glib_ffi::gpointer)
+unsafe extern "C" fn error_loading_asset_trampoline<P, F: Fn(&P, &Error, &str, glib::types::Type) + 'static>(this: *mut ges_sys::GESProject, error: *mut glib_sys::GError, id: *mut libc::c_char, extractable_type: glib_sys::GType, f: glib_sys::gpointer)
 where P: IsA<Project> {
     let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &GString::from_glib_borrow(id), from_glib(extractable_type))
 }
 
-unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(this: *mut ffi::GESProject, timeline: *mut ffi::GESTimeline, f: glib_ffi::gpointer)
+unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(this: *mut ges_sys::GESProject, timeline: *mut ges_sys::GESTimeline, f: glib_sys::gpointer)
 where P: IsA<Project> {
     let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(timeline))
 }
 
-unsafe extern "C" fn missing_uri_trampoline<P, F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static>(this: *mut ffi::GESProject, error: *mut glib_ffi::GError, wrong_asset: *mut ffi::GESAsset, f: glib_ffi::gpointer) -> *mut libc::c_char
+unsafe extern "C" fn missing_uri_trampoline<P, F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static>(this: *mut ges_sys::GESProject, error: *mut glib_sys::GError, wrong_asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer) -> *mut libc::c_char
 where P: IsA<Project> {
     let f: &F = &*(f as *const F);
     f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &from_glib_borrow(wrong_asset)).to_glib_full()

@@ -2,27 +2,25 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
-use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::IsA;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use gst;
+use gst_net_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct NetClientClock(Object<ffi::GstNetClientClock, ffi::GstNetClientClockClass, NetClientClockClass>) @extends gst::Clock, gst::Object;
+    pub struct NetClientClock(Object<gst_net_sys::GstNetClientClock, gst_net_sys::GstNetClientClockClass, NetClientClockClass>) @extends gst::Clock, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_net_client_clock_get_type(),
+        get_type => || gst_net_sys::gst_net_client_clock_get_type(),
     }
 }
 
@@ -30,22 +28,21 @@ impl NetClientClock {
     pub fn get_property_address(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"address\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"address\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    pub fn set_property_address<'a, P: Into<Option<&'a str>>>(&self, address: P) {
-        let address = address.into();
+    pub fn set_property_address(&self, address: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"address\0".as_ptr() as *const _, Value::from(address).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"address\0".as_ptr() as *const _, Value::from(address).to_glib_none().0);
         }
     }
 
     pub fn get_property_base_time(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"base-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"base-time\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -53,21 +50,21 @@ impl NetClientClock {
     pub fn get_property_bus(&self) -> Option<gst::Bus> {
         unsafe {
             let mut value = Value::from_type(<gst::Bus as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"bus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"bus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    pub fn set_property_bus<P: IsA<gst::Bus> + glib::value::SetValueOptional>(&self, bus: Option<&P>) {
+    pub fn set_property_bus(&self, bus: Option<&gst::Bus>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"bus\0".as_ptr() as *const _, Value::from(bus).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"bus\0".as_ptr() as *const _, Value::from(bus).to_glib_none().0);
         }
     }
 
     pub fn get_property_internal_clock(&self) -> Option<gst::Clock> {
         unsafe {
             let mut value = Value::from_type(<gst::Clock as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"internal-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -75,56 +72,56 @@ impl NetClientClock {
     pub fn get_property_minimum_update_interval(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"minimum-update-interval\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"minimum-update-interval\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_minimum_update_interval(&self, minimum_update_interval: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"minimum-update-interval\0".as_ptr() as *const _, Value::from(&minimum_update_interval).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"minimum-update-interval\0".as_ptr() as *const _, Value::from(&minimum_update_interval).to_glib_none().0);
         }
     }
 
     pub fn get_property_port(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"port\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"port\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_port(&self, port: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"port\0".as_ptr() as *const _, Value::from(&port).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"port\0".as_ptr() as *const _, Value::from(&port).to_glib_none().0);
         }
     }
 
     pub fn get_property_qos_dscp(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"qos-dscp\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"qos-dscp\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_qos_dscp(&self, qos_dscp: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"qos-dscp\0".as_ptr() as *const _, Value::from(&qos_dscp).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"qos-dscp\0".as_ptr() as *const _, Value::from(&qos_dscp).to_glib_none().0);
         }
     }
 
     pub fn get_property_round_trip_limit(&self) -> u64 {
         unsafe {
             let mut value = Value::from_type(<u64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"round-trip-limit\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"round-trip-limit\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     pub fn set_property_round_trip_limit(&self, round_trip_limit: u64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"round-trip-limit\0".as_ptr() as *const _, Value::from(&round_trip_limit).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"round-trip-limit\0".as_ptr() as *const _, Value::from(&round_trip_limit).to_glib_none().0);
         }
     }
 
@@ -188,37 +185,37 @@ impl NetClientClock {
 unsafe impl Send for NetClientClock {}
 unsafe impl Sync for NetClientClock {}
 
-unsafe extern "C" fn notify_address_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_address_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_bus_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_bus_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_internal_clock_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_minimum_update_interval_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_minimum_update_interval_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_port_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_port_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn notify_round_trip_limit_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut ffi::GstNetClientClock, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+unsafe extern "C" fn notify_round_trip_limit_trampoline<F: Fn(&NetClientClock) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetClientClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

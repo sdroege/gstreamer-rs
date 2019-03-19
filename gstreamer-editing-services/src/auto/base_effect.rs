@@ -5,14 +5,14 @@
 use Extractable;
 use TimelineElement;
 use TrackElement;
-use ffi;
+use ges_sys;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct BaseEffect(Object<ffi::GESBaseEffect, ffi::GESBaseEffectClass, BaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
+    pub struct BaseEffect(Object<ges_sys::GESBaseEffect, ges_sys::GESBaseEffectClass, BaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_base_effect_get_type(),
+        get_type => || ges_sys::ges_base_effect_get_type(),
     }
 }
 

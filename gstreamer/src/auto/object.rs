@@ -4,7 +4,6 @@
 
 use ClockTime;
 use Error;
-use ffi;
 use glib;
 use glib::GString;
 use glib::object::Cast;
@@ -12,15 +11,16 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Object(Object<ffi::GstObject, ffi::GstObjectClass, ObjectClass>);
+    pub struct Object(Object<gst_sys::GstObject, gst_sys::GstObjectClass, ObjectClass>);
 
     match fn {
-        get_type => || ffi::gst_object_get_type(),
+        get_type => || gst_sys::gst_object_get_type(),
     }
 }
 
@@ -28,20 +28,20 @@ impl Object {
     pub fn check_uniqueness(list: &[Object], name: &str) -> bool {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib(ffi::gst_object_check_uniqueness(list.to_glib_none().0, name.to_glib_none().0))
+            from_glib(gst_sys::gst_object_check_uniqueness(list.to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     //pub fn default_deep_notify<P: IsA<glib::Object>, Q: IsA<Object>>(object: &P, orig: &Q, pspec: /*Ignored*/&glib::ParamSpec, excluded_props: &[&str]) {
-    //    unsafe { TODO: call ffi::gst_object_default_deep_notify() }
+    //    unsafe { TODO: call gst_sys:gst_object_default_deep_notify() }
     //}
 
     //pub fn ref_sink(object: /*Unimplemented*/Option<Fundamental: Pointer>) -> /*Unimplemented*/Option<Fundamental: Pointer> {
-    //    unsafe { TODO: call ffi::gst_object_ref_sink() }
+    //    unsafe { TODO: call gst_sys:gst_object_ref_sink() }
     //}
 
-    //pub fn replace<'a, 'b, P: IsA<Object> + 'a, Q: Into<Option<&'a P>>, R: IsA<Object> + 'b, S: Into<Option<&'b R>>>(oldobj: Q, newobj: S) -> bool {
-    //    unsafe { TODO: call ffi::gst_object_replace() }
+    //pub fn replace<P: IsA<Object>, Q: IsA<Object>>(oldobj: Option<&P>, newobj: Option<&Q>) -> bool {
+    //    unsafe { TODO: call gst_sys:gst_object_replace() }
     //}
 }
 
@@ -53,7 +53,7 @@ pub const NONE_OBJECT: Option<&Object> = None;
 pub trait GstObjectExt: 'static {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
 
-    fn default_error<'a, P: Into<Option<&'a str>>>(&self, error: &Error, debug: P);
+    fn default_error(&self, error: &Error, debug: Option<&str>);
 
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<ControlBinding>;
 
@@ -106,129 +106,128 @@ pub trait GstObjectExt: 'static {
 
 impl<O: IsA<Object>> GstObjectExt for O {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool {
-    //    unsafe { TODO: call ffi::gst_object_add_control_binding() }
+    //    unsafe { TODO: call gst_sys:gst_object_add_control_binding() }
     //}
 
-    fn default_error<'a, P: Into<Option<&'a str>>>(&self, error: &Error, debug: P) {
-        let debug = debug.into();
+    fn default_error(&self, error: &Error, debug: Option<&str>) {
         unsafe {
-            ffi::gst_object_default_error(self.as_ref().to_glib_none().0, error.to_glib_none().0, debug.to_glib_none().0);
+            gst_sys::gst_object_default_error(self.as_ref().to_glib_none().0, error.to_glib_none().0, debug.to_glib_none().0);
         }
     }
 
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<ControlBinding> {
-    //    unsafe { TODO: call ffi::gst_object_get_control_binding() }
+    //    unsafe { TODO: call gst_sys:gst_object_get_control_binding() }
     //}
 
     fn get_control_rate(&self) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_object_get_control_rate(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_object_get_control_rate(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn get_g_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, values: /*Ignored*/&[&glib::Value]) -> bool {
-    //    unsafe { TODO: call ffi::gst_object_get_g_value_array() }
+    //    unsafe { TODO: call gst_sys:gst_object_get_g_value_array() }
     //}
 
     fn get_name(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gst_object_get_name(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_object_get_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_parent(&self) -> Option<Object> {
         unsafe {
-            from_glib_full(ffi::gst_object_get_parent(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_object_get_parent(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_path_string(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gst_object_get_path_string(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_object_get_path_string(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn get_value(&self, property_name: &str, timestamp: ClockTime) -> /*Ignored*/Option<glib::Value> {
-    //    unsafe { TODO: call ffi::gst_object_get_value() }
+    //    unsafe { TODO: call gst_sys:gst_object_get_value() }
     //}
 
     //fn get_value_array(&self, property_name: &str, timestamp: ClockTime, interval: ClockTime, n_values: u32, values: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
-    //    unsafe { TODO: call ffi::gst_object_get_value_array() }
+    //    unsafe { TODO: call gst_sys:gst_object_get_value_array() }
     //}
 
     fn has_active_control_bindings(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_object_has_active_control_bindings(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_object_has_active_control_bindings(self.as_ref().to_glib_none().0))
         }
     }
 
     fn has_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_object_has_ancestor(self.as_ref().to_glib_none().0, ancestor.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_object_has_ancestor(self.as_ref().to_glib_none().0, ancestor.as_ref().to_glib_none().0))
         }
     }
 
     fn has_as_ancestor<P: IsA<Object>>(&self, ancestor: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_object_has_as_ancestor(self.as_ref().to_glib_none().0, ancestor.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_object_has_as_ancestor(self.as_ref().to_glib_none().0, ancestor.as_ref().to_glib_none().0))
         }
     }
 
     fn has_as_parent<P: IsA<Object>>(&self, parent: &P) -> bool {
         unsafe {
-            from_glib(ffi::gst_object_has_as_parent(self.as_ref().to_glib_none().0, parent.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_object_has_as_parent(self.as_ref().to_glib_none().0, parent.as_ref().to_glib_none().0))
         }
     }
 
     //fn remove_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool {
-    //    unsafe { TODO: call ffi::gst_object_remove_control_binding() }
+    //    unsafe { TODO: call gst_sys:gst_object_remove_control_binding() }
     //}
 
     fn set_control_binding_disabled(&self, property_name: &str, disabled: bool) {
         unsafe {
-            ffi::gst_object_set_control_binding_disabled(self.as_ref().to_glib_none().0, property_name.to_glib_none().0, disabled.to_glib());
+            gst_sys::gst_object_set_control_binding_disabled(self.as_ref().to_glib_none().0, property_name.to_glib_none().0, disabled.to_glib());
         }
     }
 
     fn set_control_bindings_disabled(&self, disabled: bool) {
         unsafe {
-            ffi::gst_object_set_control_bindings_disabled(self.as_ref().to_glib_none().0, disabled.to_glib());
+            gst_sys::gst_object_set_control_bindings_disabled(self.as_ref().to_glib_none().0, disabled.to_glib());
         }
     }
 
     fn set_control_rate(&self, control_rate: ClockTime) {
         unsafe {
-            ffi::gst_object_set_control_rate(self.as_ref().to_glib_none().0, control_rate.to_glib());
+            gst_sys::gst_object_set_control_rate(self.as_ref().to_glib_none().0, control_rate.to_glib());
         }
     }
 
     fn set_name(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_object_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0), "Failed to set object name")
+            glib_result_from_gboolean!(gst_sys::gst_object_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0), "Failed to set object name")
         }
     }
 
     fn set_parent<P: IsA<Object>>(&self, parent: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_object_set_parent(self.as_ref().to_glib_none().0, parent.as_ref().to_glib_none().0), "Failed to set parent object")
+            glib_result_from_gboolean!(gst_sys::gst_object_set_parent(self.as_ref().to_glib_none().0, parent.as_ref().to_glib_none().0), "Failed to set parent object")
         }
     }
 
     fn suggest_next_sync(&self) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_object_suggest_next_sync(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_object_suggest_next_sync(self.as_ref().to_glib_none().0))
         }
     }
 
     fn sync_values(&self, timestamp: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_object_sync_values(self.as_ref().to_glib_none().0, timestamp.to_glib()), "Failed to sync values")
+            glib_result_from_gboolean!(gst_sys::gst_object_sync_values(self.as_ref().to_glib_none().0, timestamp.to_glib()), "Failed to sync values")
         }
     }
 
     fn unparent(&self) {
         unsafe {
-            ffi::gst_object_unparent(self.as_ref().to_glib_none().0);
+            gst_sys::gst_object_unparent(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -253,13 +252,13 @@ impl<O: IsA<Object>> GstObjectExt for O {
     }
 }
 
-unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstObject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstObject, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Object> {
     let f: &F = &*(f as *const F);
     f(&Object::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstObject, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstObject, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Object> {
     let f: &F = &*(f as *const F);
     f(&Object::from_glib_borrow(this).unsafe_cast())

@@ -4,17 +4,17 @@
 
 use Asset;
 use UriClipAsset;
-use ffi;
+use ges_sys;
 use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_pbutils;
 
 glib_wrapper! {
-    pub struct UriSourceAsset(Object<ffi::GESUriSourceAsset, ffi::GESUriSourceAssetClass, UriSourceAssetClass>) @extends Asset;
+    pub struct UriSourceAsset(Object<ges_sys::GESUriSourceAsset, ges_sys::GESUriSourceAssetClass, UriSourceAssetClass>) @extends Asset;
 
     match fn {
-        get_type => || ffi::ges_uri_source_asset_get_type(),
+        get_type => || ges_sys::ges_uri_source_asset_get_type(),
     }
 }
 
@@ -31,19 +31,19 @@ pub trait UriSourceAssetExt: 'static {
 impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
     fn get_filesource_asset(&self) -> Option<UriClipAsset> {
         unsafe {
-            from_glib_none(ffi::ges_uri_source_asset_get_filesource_asset(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_source_asset_get_filesource_asset(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo> {
         unsafe {
-            from_glib_none(ffi::ges_uri_source_asset_get_stream_info(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_info(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_stream_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::ges_uri_source_asset_get_stream_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_uri(self.as_ref().to_glib_none().0))
         }
     }
 }

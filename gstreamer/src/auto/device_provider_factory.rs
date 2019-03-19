@@ -6,75 +6,74 @@ use DeviceProvider;
 use Object;
 use PluginFeature;
 use Rank;
-use ffi;
 use glib;
 use glib::GString;
 use glib::translate::*;
+use gst_sys;
 
 glib_wrapper! {
-    pub struct DeviceProviderFactory(Object<ffi::GstDeviceProviderFactory, ffi::GstDeviceProviderFactoryClass, DeviceProviderFactoryClass>) @extends PluginFeature, Object;
+    pub struct DeviceProviderFactory(Object<gst_sys::GstDeviceProviderFactory, gst_sys::GstDeviceProviderFactoryClass, DeviceProviderFactoryClass>) @extends PluginFeature, Object;
 
     match fn {
-        get_type => || ffi::gst_device_provider_factory_get_type(),
+        get_type => || gst_sys::gst_device_provider_factory_get_type(),
     }
 }
 
 impl DeviceProviderFactory {
     pub fn get(&self) -> Option<DeviceProvider> {
         unsafe {
-            from_glib_full(ffi::gst_device_provider_factory_get(self.to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_provider_factory_get(self.to_glib_none().0))
         }
     }
 
     pub fn get_device_provider_type(&self) -> glib::types::Type {
         unsafe {
-            from_glib(ffi::gst_device_provider_factory_get_device_provider_type(self.to_glib_none().0))
+            from_glib(gst_sys::gst_device_provider_factory_get_device_provider_type(self.to_glib_none().0))
         }
     }
 
     pub fn get_metadata(&self, key: &str) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gst_device_provider_factory_get_metadata(self.to_glib_none().0, key.to_glib_none().0))
+            from_glib_none(gst_sys::gst_device_provider_factory_get_metadata(self.to_glib_none().0, key.to_glib_none().0))
         }
     }
 
     pub fn get_metadata_keys(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_factory_get_metadata_keys(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_device_provider_factory_get_metadata_keys(self.to_glib_none().0))
         }
     }
 
-    pub fn has_classes<'a, P: Into<Option<&'a str>>>(&self, classes: P) -> bool {
-        let classes = classes.into();
+    pub fn has_classes(&self, classes: Option<&str>) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_provider_factory_has_classes(self.to_glib_none().0, classes.to_glib_none().0))
+            from_glib(gst_sys::gst_device_provider_factory_has_classes(self.to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
     pub fn has_classesv(&self, classes: &[&str]) -> bool {
         unsafe {
-            from_glib(ffi::gst_device_provider_factory_has_classesv(self.to_glib_none().0, classes.to_glib_none().0))
+            from_glib(gst_sys::gst_device_provider_factory_has_classesv(self.to_glib_none().0, classes.to_glib_none().0))
         }
     }
 
     pub fn find(name: &str) -> Option<DeviceProviderFactory> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_device_provider_factory_find(name.to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_provider_factory_find(name.to_glib_none().0))
         }
     }
 
     pub fn get_by_name(factoryname: &str) -> Option<DeviceProvider> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_device_provider_factory_get_by_name(factoryname.to_glib_none().0))
+            from_glib_full(gst_sys::gst_device_provider_factory_get_by_name(factoryname.to_glib_none().0))
         }
     }
 
     pub fn list_get_device_providers(minrank: Rank) -> Vec<DeviceProviderFactory> {
         assert_initialized_main_thread!();
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_device_provider_factory_list_get_device_providers(minrank.to_glib()))
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_device_provider_factory_list_get_device_providers(minrank.to_glib()))
         }
     }
 }

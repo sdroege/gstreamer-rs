@@ -5,21 +5,21 @@
 use ClockTime;
 use Message;
 use Object;
-use ffi;
 use glib;
 use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Bus(Object<ffi::GstBus, ffi::GstBusClass, BusClass>) @extends Object;
+    pub struct Bus(Object<gst_sys::GstBus, gst_sys::GstBusClass, BusClass>) @extends Object;
 
     match fn {
-        get_type => || ffi::gst_bus_get_type(),
+        get_type => || gst_sys::gst_bus_get_type(),
     }
 }
 
@@ -27,86 +27,86 @@ impl Bus {
     pub fn new() -> Bus {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_bus_new())
+            from_glib_full(gst_sys::gst_bus_new())
         }
     }
 
     pub fn add_signal_watch(&self) {
         unsafe {
-            ffi::gst_bus_add_signal_watch(self.to_glib_none().0);
+            gst_sys::gst_bus_add_signal_watch(self.to_glib_none().0);
         }
     }
 
     //pub fn async_signal_func(&self, message: &Message, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
-    //    unsafe { TODO: call ffi::gst_bus_async_signal_func() }
+    //    unsafe { TODO: call gst_sys:gst_bus_async_signal_func() }
     //}
 
     pub fn disable_sync_message_emission(&self) {
         unsafe {
-            ffi::gst_bus_disable_sync_message_emission(self.to_glib_none().0);
+            gst_sys::gst_bus_disable_sync_message_emission(self.to_glib_none().0);
         }
     }
 
     pub fn enable_sync_message_emission(&self) {
         unsafe {
-            ffi::gst_bus_enable_sync_message_emission(self.to_glib_none().0);
+            gst_sys::gst_bus_enable_sync_message_emission(self.to_glib_none().0);
         }
     }
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //pub fn get_pollfd(&self, fd: /*Ignored*/&mut glib::PollFD) {
-    //    unsafe { TODO: call ffi::gst_bus_get_pollfd() }
+    //    unsafe { TODO: call gst_sys:gst_bus_get_pollfd() }
     //}
 
     pub fn have_pending(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_bus_have_pending(self.to_glib_none().0))
+            from_glib(gst_sys::gst_bus_have_pending(self.to_glib_none().0))
         }
     }
 
     pub fn peek(&self) -> Option<Message> {
         unsafe {
-            from_glib_full(ffi::gst_bus_peek(self.to_glib_none().0))
+            from_glib_full(gst_sys::gst_bus_peek(self.to_glib_none().0))
         }
     }
 
     pub fn pop(&self) -> Option<Message> {
         unsafe {
-            from_glib_full(ffi::gst_bus_pop(self.to_glib_none().0))
+            from_glib_full(gst_sys::gst_bus_pop(self.to_glib_none().0))
         }
     }
 
     pub fn post(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bus_post(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
+            glib_result_from_gboolean!(gst_sys::gst_bus_post(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
         }
     }
 
     pub fn remove_signal_watch(&self) {
         unsafe {
-            ffi::gst_bus_remove_signal_watch(self.to_glib_none().0);
+            gst_sys::gst_bus_remove_signal_watch(self.to_glib_none().0);
         }
     }
 
     pub fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ffi::gst_bus_remove_watch(self.to_glib_none().0), "Bus has no event source")
+            glib_result_from_gboolean!(gst_sys::gst_bus_remove_watch(self.to_glib_none().0), "Bus has no event source")
         }
     }
 
     pub fn set_flushing(&self, flushing: bool) {
         unsafe {
-            ffi::gst_bus_set_flushing(self.to_glib_none().0, flushing.to_glib());
+            gst_sys::gst_bus_set_flushing(self.to_glib_none().0, flushing.to_glib());
         }
     }
 
     //pub fn sync_signal_handler(&self, message: &Message, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> BusSyncReply {
-    //    unsafe { TODO: call ffi::gst_bus_sync_signal_handler() }
+    //    unsafe { TODO: call gst_sys:gst_bus_sync_signal_handler() }
     //}
 
     pub fn timed_pop(&self, timeout: ClockTime) -> Option<Message> {
         unsafe {
-            from_glib_full(ffi::gst_bus_timed_pop(self.to_glib_none().0, timeout.to_glib()))
+            from_glib_full(gst_sys::gst_bus_timed_pop(self.to_glib_none().0, timeout.to_glib()))
         }
     }
 
@@ -136,12 +136,12 @@ impl Default for Bus {
 unsafe impl Send for Bus {}
 unsafe impl Sync for Bus {}
 
-unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
+unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
 }
 
-unsafe extern "C" fn sync_message_trampoline<F: Fn(&Bus, &Message) + Send + Sync + 'static>(this: *mut ffi::GstBus, message: *mut ffi::GstMessage, f: glib_ffi::gpointer) {
+unsafe extern "C" fn sync_message_trampoline<F: Fn(&Bus, &Message) + Send + Sync + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), &from_glib_borrow(message))
 }

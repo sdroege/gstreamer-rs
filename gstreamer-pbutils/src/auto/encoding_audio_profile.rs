@@ -3,14 +3,14 @@
 // DO NOT EDIT
 
 use EncodingProfile;
-use ffi;
 use glib::translate::*;
+use gst_pbutils_sys;
 
 glib_wrapper! {
-    pub struct EncodingAudioProfile(Object<ffi::GstEncodingAudioProfile, ffi::GstEncodingAudioProfileClass, EncodingAudioProfileClass>) @extends EncodingProfile;
+    pub struct EncodingAudioProfile(Object<gst_pbutils_sys::GstEncodingAudioProfile, gst_pbutils_sys::GstEncodingAudioProfileClass, EncodingAudioProfileClass>) @extends EncodingProfile;
 
     match fn {
-        get_type => || ffi::gst_encoding_audio_profile_get_type(),
+        get_type => || gst_pbutils_sys::gst_encoding_audio_profile_get_type(),
     }
 }
 

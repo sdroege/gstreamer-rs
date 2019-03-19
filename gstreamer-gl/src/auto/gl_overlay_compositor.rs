@@ -3,16 +3,16 @@
 // DO NOT EDIT
 
 use GLContext;
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
+use gst_gl_sys;
 
 glib_wrapper! {
-    pub struct GLOverlayCompositor(Object<ffi::GstGLOverlayCompositor, ffi::GstGLOverlayCompositorClass, GLOverlayCompositorClass>) @extends gst::Object;
+    pub struct GLOverlayCompositor(Object<gst_gl_sys::GstGLOverlayCompositor, gst_gl_sys::GstGLOverlayCompositorClass, GLOverlayCompositorClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_overlay_compositor_get_type(),
+        get_type => || gst_gl_sys::gst_gl_overlay_compositor_get_type(),
     }
 }
 
@@ -20,26 +20,26 @@ impl GLOverlayCompositor {
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLOverlayCompositor {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(ffi::gst_gl_overlay_compositor_new(context.as_ref().to_glib_none().0))
+            from_glib_none(gst_gl_sys::gst_gl_overlay_compositor_new(context.as_ref().to_glib_none().0))
         }
     }
 
     pub fn draw_overlays(&self) {
         unsafe {
-            ffi::gst_gl_overlay_compositor_draw_overlays(self.to_glib_none().0);
+            gst_gl_sys::gst_gl_overlay_compositor_draw_overlays(self.to_glib_none().0);
         }
     }
 
     pub fn free_overlays(&self) {
         unsafe {
-            ffi::gst_gl_overlay_compositor_free_overlays(self.to_glib_none().0);
+            gst_gl_sys::gst_gl_overlay_compositor_free_overlays(self.to_glib_none().0);
         }
     }
 
     pub fn add_caps(caps: &gst::Caps) -> Option<gst::Caps> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_gl_overlay_compositor_add_caps(caps.to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_overlay_compositor_add_caps(caps.to_glib_none().0))
         }
     }
 }

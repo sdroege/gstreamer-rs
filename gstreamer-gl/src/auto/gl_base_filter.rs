@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use GLContext;
-use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -11,17 +10,18 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use gst;
+use gst_gl_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GLBaseFilter(Object<ffi::GstGLBaseFilter, ffi::GstGLBaseFilterClass, GLBaseFilterClass>) @extends gst::Object;
+    pub struct GLBaseFilter(Object<gst_gl_sys::GstGLBaseFilter, gst_gl_sys::GstGLBaseFilterClass, GLBaseFilterClass>) @extends gst::Object;
 
     match fn {
-        get_type => || ffi::gst_gl_base_filter_get_type(),
+        get_type => || gst_gl_sys::gst_gl_base_filter_get_type(),
     }
 }
 
@@ -40,7 +40,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     fn get_property_context(&self) -> Option<GLContext> {
         unsafe {
             let mut value = Value::from_type(<GLContext as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -54,7 +54,7 @@ impl<O: IsA<GLBaseFilter>> GLBaseFilterExt for O {
     }
 }
 
-unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstGLBaseFilter, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLBaseFilter, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<GLBaseFilter> {
     let f: &F = &*(f as *const F);
     f(&GLBaseFilter::from_glib_borrow(this).unsafe_cast())

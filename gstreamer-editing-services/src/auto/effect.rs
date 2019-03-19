@@ -6,19 +6,19 @@ use BaseEffect;
 use Extractable;
 use TimelineElement;
 use TrackElement;
-use ffi;
+use ges_sys;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
-use gobject_ffi;
+use gobject_sys;
 
 glib_wrapper! {
-    pub struct Effect(Object<ffi::GESEffect, ffi::GESEffectClass, EffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
+    pub struct Effect(Object<ges_sys::GESEffect, ges_sys::GESEffectClass, EffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
 
     match fn {
-        get_type => || ffi::ges_effect_get_type(),
+        get_type => || ges_sys::ges_effect_get_type(),
     }
 }
 
@@ -26,7 +26,7 @@ impl Effect {
     pub fn new(bin_description: &str) -> Option<Effect> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::ges_effect_new(bin_description.to_glib_none().0))
+            from_glib_none(ges_sys::ges_effect_new(bin_description.to_glib_none().0))
         }
     }
 }
@@ -41,7 +41,7 @@ impl<O: IsA<Effect>> EffectExt for O {
     fn get_property_bin_description(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"bin-description\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"bin-description\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }

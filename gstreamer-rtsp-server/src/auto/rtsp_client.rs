@@ -9,7 +9,6 @@ use RTSPMountPoints;
 use RTSPSession;
 use RTSPSessionPool;
 use RTSPThreadPool;
-use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -17,20 +16,21 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use gst_rtsp;
+use gst_rtsp_server_sys;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-use gst_rtsp_ffi;
+use gst_rtsp_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RTSPClient(Object<ffi::GstRTSPClient, ffi::GstRTSPClientClass, RTSPClientClass>);
+    pub struct RTSPClient(Object<gst_rtsp_server_sys::GstRTSPClient, gst_rtsp_server_sys::GstRTSPClientClass, RTSPClientClass>);
 
     match fn {
-        get_type => || ffi::gst_rtsp_client_get_type(),
+        get_type => || gst_rtsp_server_sys::gst_rtsp_client_get_type(),
     }
 }
 
@@ -38,7 +38,7 @@ impl RTSPClient {
     pub fn new() -> RTSPClient {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_rtsp_client_new())
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_new())
         }
     }
 }
@@ -69,21 +69,21 @@ pub trait RTSPClientExt: 'static {
 
     //fn handle_message(&self, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
-    //fn send_message<'a, P: IsA<RTSPSession> + 'a, Q: Into<Option<&'a P>>>(&self, session: Q, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
+    //fn send_message<P: IsA<RTSPSession>>(&self, session: Option<&P>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult;
 
     fn session_filter(&self, func: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>) -> Vec<RTSPSession>;
 
-    fn set_auth<'a, P: IsA<RTSPAuth> + 'a, Q: Into<Option<&'a P>>>(&self, auth: Q);
+    fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>);
 
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool;
 
-    fn set_mount_points<'a, P: IsA<RTSPMountPoints> + 'a, Q: Into<Option<&'a P>>>(&self, mounts: Q);
+    fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>);
 
     //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    fn set_session_pool<'a, P: IsA<RTSPSessionPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q);
+    fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>);
 
-    fn set_thread_pool<'a, P: IsA<RTSPThreadPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q);
+    fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>);
 
     fn get_property_drop_backlog(&self) -> bool;
 
@@ -159,49 +159,49 @@ pub trait RTSPClientExt: 'static {
 impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     fn close(&self) {
         unsafe {
-            ffi::gst_rtsp_client_close(self.as_ref().to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_client_close(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_auth(&self) -> Option<RTSPAuth> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_client_get_auth(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_auth(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn get_connection(&self) -> /*Ignored*/Option<gst_rtsp::RTSPConnection> {
-    //    unsafe { TODO: call ffi::gst_rtsp_client_get_connection() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_get_connection() }
     //}
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_client_get_mount_points(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_mount_points(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_client_get_session_pool(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_session_pool(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_thread_pool(&self) -> Option<RTSPThreadPool> {
         unsafe {
-            from_glib_full(ffi::gst_rtsp_client_get_thread_pool(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_get_thread_pool(self.as_ref().to_glib_none().0))
         }
     }
 
     //fn handle_message(&self, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
-    //    unsafe { TODO: call ffi::gst_rtsp_client_handle_message() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_handle_message() }
     //}
 
-    //fn send_message<'a, P: IsA<RTSPSession> + 'a, Q: Into<Option<&'a P>>>(&self, session: Q, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
-    //    unsafe { TODO: call ffi::gst_rtsp_client_send_message() }
+    //fn send_message<P: IsA<RTSPSession>>(&self, session: Option<&P>, message: /*Ignored*/&mut gst_rtsp::RTSPMessage) -> gst_rtsp::RTSPResult {
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_send_message() }
     //}
 
     fn session_filter(&self, func: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>) -> Vec<RTSPSession> {
         let func_data: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> = func;
-        unsafe extern "C" fn func_func(client: *mut ffi::GstRTSPClient, sess: *mut ffi::GstRTSPSession, user_data: glib_ffi::gpointer) -> ffi::GstRTSPFilterResult {
+        unsafe extern "C" fn func_func(client: *mut gst_rtsp_server_sys::GstRTSPClient, sess: *mut gst_rtsp_server_sys::GstRTSPSession, user_data: glib_sys::gpointer) -> gst_rtsp_server_sys::GstRTSPFilterResult {
             let client = from_glib_borrow(client);
             let sess = from_glib_borrow(sess);
             let callback: *mut Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>;
@@ -212,60 +212,56 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
             };
             res.to_glib()
         }
-        let func = Some(func_func as _);
+        let func = if func_data.is_some() { Some(func_func as _) } else { None };
         let super_callback0: &Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> = &func_data;
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_client_session_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+            FromGlibPtrContainer::from_glib_full(gst_rtsp_server_sys::gst_rtsp_client_session_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
         }
     }
 
-    fn set_auth<'a, P: IsA<RTSPAuth> + 'a, Q: Into<Option<&'a P>>>(&self, auth: Q) {
-        let auth = auth.into();
+    fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>) {
         unsafe {
-            ffi::gst_rtsp_client_set_auth(self.as_ref().to_glib_none().0, auth.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_client_set_auth(self.as_ref().to_glib_none().0, auth.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     //fn set_connection(&self, conn: /*Ignored*/&mut gst_rtsp::RTSPConnection) -> bool {
-    //    unsafe { TODO: call ffi::gst_rtsp_client_set_connection() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_set_connection() }
     //}
 
-    fn set_mount_points<'a, P: IsA<RTSPMountPoints> + 'a, Q: Into<Option<&'a P>>>(&self, mounts: Q) {
-        let mounts = mounts.into();
+    fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
         unsafe {
-            ffi::gst_rtsp_client_set_mount_points(self.as_ref().to_glib_none().0, mounts.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_client_set_mount_points(self.as_ref().to_glib_none().0, mounts.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     //fn set_send_func(&self, func: /*Unimplemented*/Fn(&RTSPClient, /*Ignored*/gst_rtsp::RTSPMessage, bool) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi::gst_rtsp_client_set_send_func() }
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_client_set_send_func() }
     //}
 
-    fn set_session_pool<'a, P: IsA<RTSPSessionPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q) {
-        let pool = pool.into();
+    fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>) {
         unsafe {
-            ffi::gst_rtsp_client_set_session_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_client_set_session_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_thread_pool<'a, P: IsA<RTSPThreadPool> + 'a, Q: Into<Option<&'a P>>>(&self, pool: Q) {
-        let pool = pool.into();
+    fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>) {
         unsafe {
-            ffi::gst_rtsp_client_set_thread_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_client_set_thread_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn get_property_drop_backlog(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"drop-backlog\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"drop-backlog\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_drop_backlog(&self, drop_backlog: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"drop-backlog\0".as_ptr() as *const _, Value::from(&drop_backlog).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"drop-backlog\0".as_ptr() as *const _, Value::from(&drop_backlog).to_glib_none().0);
         }
     }
 
@@ -496,167 +492,167 @@ impl<O: IsA<RTSPClient>> RTSPClientExt for O {
     }
 }
 
-unsafe extern "C" fn announce_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn announce_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, f: glib_ffi::gpointer)
+unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn describe_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn describe_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn get_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn get_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn handle_response_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn handle_response_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn new_session_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, object: *mut ffi::GstRTSPSession, f: glib_ffi::gpointer)
+unsafe extern "C" fn new_session_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, object: *mut gst_rtsp_server_sys::GstRTSPSession, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn options_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn options_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn pause_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn pause_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn play_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn play_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_announce_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_announce_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_describe_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_describe_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_get_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_get_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_options_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_options_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_pause_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_pause_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_play_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_play_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_record_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_record_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_set_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_set_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_setup_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_setup_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-unsafe extern "C" fn pre_teardown_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer) -> gst_rtsp_ffi::GstRTSPStatusCode
+unsafe extern "C" fn pre_teardown_request_trampoline<P, F: Fn(&P, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer) -> gst_rtsp_sys::GstRTSPStatusCode
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx)).to_glib()
 }
 
-unsafe extern "C" fn record_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn record_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn set_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn set_parameter_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn setup_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn setup_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn teardown_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, ctx: *mut ffi::GstRTSPContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn teardown_request_trampoline<P, F: Fn(&P, &RTSPContext) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, ctx: *mut gst_rtsp_server_sys::GstRTSPContext, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(ctx))
 }
 
-unsafe extern "C" fn notify_drop_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_drop_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstRTSPClient, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPClient, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPClient> {
     let f: &F = &*(f as *const F);
     f(&RTSPClient::from_glib_borrow(this).unsafe_cast())

@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Type;
 use glib::translate::*;
@@ -10,7 +9,8 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use gobject_ffi;
+use gobject_sys;
+use gst_rtsp_sys;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
@@ -24,21 +24,21 @@ pub enum RTSPAuthMethod {
 
 #[doc(hidden)]
 impl ToGlib for RTSPAuthMethod {
-    type GlibType = ffi::GstRTSPAuthMethod;
+    type GlibType = gst_rtsp_sys::GstRTSPAuthMethod;
 
-    fn to_glib(&self) -> ffi::GstRTSPAuthMethod {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPAuthMethod {
         match *self {
-            RTSPAuthMethod::None => ffi::GST_RTSP_AUTH_NONE,
-            RTSPAuthMethod::Basic => ffi::GST_RTSP_AUTH_BASIC,
-            RTSPAuthMethod::Digest => ffi::GST_RTSP_AUTH_DIGEST,
+            RTSPAuthMethod::None => gst_rtsp_sys::GST_RTSP_AUTH_NONE,
+            RTSPAuthMethod::Basic => gst_rtsp_sys::GST_RTSP_AUTH_BASIC,
+            RTSPAuthMethod::Digest => gst_rtsp_sys::GST_RTSP_AUTH_DIGEST,
             RTSPAuthMethod::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
-    fn from_glib(value: ffi::GstRTSPAuthMethod) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPAuthMethod> for RTSPAuthMethod {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPAuthMethod) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPAuthMethod::None,
@@ -51,7 +51,7 @@ impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
 
 impl StaticType for RTSPAuthMethod {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_auth_method_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_auth_method_get_type()) }
     }
 }
 
@@ -63,13 +63,13 @@ impl<'a> FromValueOptional<'a> for RTSPAuthMethod {
 
 impl<'a> FromValue<'a> for RTSPAuthMethod {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPAuthMethod {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -85,21 +85,21 @@ pub enum RTSPFamily {
 
 #[doc(hidden)]
 impl ToGlib for RTSPFamily {
-    type GlibType = ffi::GstRTSPFamily;
+    type GlibType = gst_rtsp_sys::GstRTSPFamily;
 
-    fn to_glib(&self) -> ffi::GstRTSPFamily {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPFamily {
         match *self {
-            RTSPFamily::None => ffi::GST_RTSP_FAM_NONE,
-            RTSPFamily::Inet => ffi::GST_RTSP_FAM_INET,
-            RTSPFamily::Inet6 => ffi::GST_RTSP_FAM_INET6,
+            RTSPFamily::None => gst_rtsp_sys::GST_RTSP_FAM_NONE,
+            RTSPFamily::Inet => gst_rtsp_sys::GST_RTSP_FAM_INET,
+            RTSPFamily::Inet6 => gst_rtsp_sys::GST_RTSP_FAM_INET6,
             RTSPFamily::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
-    fn from_glib(value: ffi::GstRTSPFamily) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPFamily> for RTSPFamily {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPFamily) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPFamily::None,
@@ -112,7 +112,7 @@ impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
 
 impl StaticType for RTSPFamily {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_family_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_family_get_type()) }
     }
 }
 
@@ -124,13 +124,13 @@ impl<'a> FromValueOptional<'a> for RTSPFamily {
 
 impl<'a> FromValue<'a> for RTSPFamily {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPFamily {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -231,106 +231,106 @@ pub enum RTSPHeaderField {
 
 #[doc(hidden)]
 impl ToGlib for RTSPHeaderField {
-    type GlibType = ffi::GstRTSPHeaderField;
+    type GlibType = gst_rtsp_sys::GstRTSPHeaderField;
 
-    fn to_glib(&self) -> ffi::GstRTSPHeaderField {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPHeaderField {
         match *self {
-            RTSPHeaderField::Invalid => ffi::GST_RTSP_HDR_INVALID,
-            RTSPHeaderField::Accept => ffi::GST_RTSP_HDR_ACCEPT,
-            RTSPHeaderField::AcceptEncoding => ffi::GST_RTSP_HDR_ACCEPT_ENCODING,
-            RTSPHeaderField::AcceptLanguage => ffi::GST_RTSP_HDR_ACCEPT_LANGUAGE,
-            RTSPHeaderField::Allow => ffi::GST_RTSP_HDR_ALLOW,
-            RTSPHeaderField::Authorization => ffi::GST_RTSP_HDR_AUTHORIZATION,
-            RTSPHeaderField::Bandwidth => ffi::GST_RTSP_HDR_BANDWIDTH,
-            RTSPHeaderField::Blocksize => ffi::GST_RTSP_HDR_BLOCKSIZE,
-            RTSPHeaderField::CacheControl => ffi::GST_RTSP_HDR_CACHE_CONTROL,
-            RTSPHeaderField::Conference => ffi::GST_RTSP_HDR_CONFERENCE,
-            RTSPHeaderField::Connection => ffi::GST_RTSP_HDR_CONNECTION,
-            RTSPHeaderField::ContentBase => ffi::GST_RTSP_HDR_CONTENT_BASE,
-            RTSPHeaderField::ContentEncoding => ffi::GST_RTSP_HDR_CONTENT_ENCODING,
-            RTSPHeaderField::ContentLanguage => ffi::GST_RTSP_HDR_CONTENT_LANGUAGE,
-            RTSPHeaderField::ContentLength => ffi::GST_RTSP_HDR_CONTENT_LENGTH,
-            RTSPHeaderField::ContentLocation => ffi::GST_RTSP_HDR_CONTENT_LOCATION,
-            RTSPHeaderField::ContentType => ffi::GST_RTSP_HDR_CONTENT_TYPE,
-            RTSPHeaderField::Cseq => ffi::GST_RTSP_HDR_CSEQ,
-            RTSPHeaderField::Date => ffi::GST_RTSP_HDR_DATE,
-            RTSPHeaderField::Expires => ffi::GST_RTSP_HDR_EXPIRES,
-            RTSPHeaderField::From => ffi::GST_RTSP_HDR_FROM,
-            RTSPHeaderField::IfModifiedSince => ffi::GST_RTSP_HDR_IF_MODIFIED_SINCE,
-            RTSPHeaderField::LastModified => ffi::GST_RTSP_HDR_LAST_MODIFIED,
-            RTSPHeaderField::ProxyAuthenticate => ffi::GST_RTSP_HDR_PROXY_AUTHENTICATE,
-            RTSPHeaderField::ProxyRequire => ffi::GST_RTSP_HDR_PROXY_REQUIRE,
-            RTSPHeaderField::Public => ffi::GST_RTSP_HDR_PUBLIC,
-            RTSPHeaderField::Range => ffi::GST_RTSP_HDR_RANGE,
-            RTSPHeaderField::Referer => ffi::GST_RTSP_HDR_REFERER,
-            RTSPHeaderField::Require => ffi::GST_RTSP_HDR_REQUIRE,
-            RTSPHeaderField::RetryAfter => ffi::GST_RTSP_HDR_RETRY_AFTER,
-            RTSPHeaderField::RtpInfo => ffi::GST_RTSP_HDR_RTP_INFO,
-            RTSPHeaderField::Scale => ffi::GST_RTSP_HDR_SCALE,
-            RTSPHeaderField::Session => ffi::GST_RTSP_HDR_SESSION,
-            RTSPHeaderField::Server => ffi::GST_RTSP_HDR_SERVER,
-            RTSPHeaderField::Speed => ffi::GST_RTSP_HDR_SPEED,
-            RTSPHeaderField::Transport => ffi::GST_RTSP_HDR_TRANSPORT,
-            RTSPHeaderField::Unsupported => ffi::GST_RTSP_HDR_UNSUPPORTED,
-            RTSPHeaderField::UserAgent => ffi::GST_RTSP_HDR_USER_AGENT,
-            RTSPHeaderField::Via => ffi::GST_RTSP_HDR_VIA,
-            RTSPHeaderField::WwwAuthenticate => ffi::GST_RTSP_HDR_WWW_AUTHENTICATE,
-            RTSPHeaderField::ClientChallenge => ffi::GST_RTSP_HDR_CLIENT_CHALLENGE,
-            RTSPHeaderField::RealChallenge1 => ffi::GST_RTSP_HDR_REAL_CHALLENGE1,
-            RTSPHeaderField::RealChallenge2 => ffi::GST_RTSP_HDR_REAL_CHALLENGE2,
-            RTSPHeaderField::RealChallenge3 => ffi::GST_RTSP_HDR_REAL_CHALLENGE3,
-            RTSPHeaderField::Subscribe => ffi::GST_RTSP_HDR_SUBSCRIBE,
-            RTSPHeaderField::Alert => ffi::GST_RTSP_HDR_ALERT,
-            RTSPHeaderField::ClientId => ffi::GST_RTSP_HDR_CLIENT_ID,
-            RTSPHeaderField::CompanyId => ffi::GST_RTSP_HDR_COMPANY_ID,
-            RTSPHeaderField::Guid => ffi::GST_RTSP_HDR_GUID,
-            RTSPHeaderField::RegionData => ffi::GST_RTSP_HDR_REGION_DATA,
-            RTSPHeaderField::MaxAsmWidth => ffi::GST_RTSP_HDR_MAX_ASM_WIDTH,
-            RTSPHeaderField::Language => ffi::GST_RTSP_HDR_LANGUAGE,
-            RTSPHeaderField::PlayerStartTime => ffi::GST_RTSP_HDR_PLAYER_START_TIME,
-            RTSPHeaderField::Location => ffi::GST_RTSP_HDR_LOCATION,
-            RTSPHeaderField::Etag => ffi::GST_RTSP_HDR_ETAG,
-            RTSPHeaderField::IfMatch => ffi::GST_RTSP_HDR_IF_MATCH,
-            RTSPHeaderField::AcceptCharset => ffi::GST_RTSP_HDR_ACCEPT_CHARSET,
-            RTSPHeaderField::Supported => ffi::GST_RTSP_HDR_SUPPORTED,
-            RTSPHeaderField::Vary => ffi::GST_RTSP_HDR_VARY,
-            RTSPHeaderField::XAccelerateStreaming => ffi::GST_RTSP_HDR_X_ACCELERATE_STREAMING,
-            RTSPHeaderField::XAcceptAuthent => ffi::GST_RTSP_HDR_X_ACCEPT_AUTHENT,
-            RTSPHeaderField::XAcceptProxyAuthent => ffi::GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT,
-            RTSPHeaderField::XBroadcastId => ffi::GST_RTSP_HDR_X_BROADCAST_ID,
-            RTSPHeaderField::XBurstStreaming => ffi::GST_RTSP_HDR_X_BURST_STREAMING,
-            RTSPHeaderField::XNotice => ffi::GST_RTSP_HDR_X_NOTICE,
-            RTSPHeaderField::XPlayerLagTime => ffi::GST_RTSP_HDR_X_PLAYER_LAG_TIME,
-            RTSPHeaderField::XPlaylist => ffi::GST_RTSP_HDR_X_PLAYLIST,
-            RTSPHeaderField::XPlaylistChangeNotice => ffi::GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE,
-            RTSPHeaderField::XPlaylistGenId => ffi::GST_RTSP_HDR_X_PLAYLIST_GEN_ID,
-            RTSPHeaderField::XPlaylistSeekId => ffi::GST_RTSP_HDR_X_PLAYLIST_SEEK_ID,
-            RTSPHeaderField::XProxyClientAgent => ffi::GST_RTSP_HDR_X_PROXY_CLIENT_AGENT,
-            RTSPHeaderField::XProxyClientVerb => ffi::GST_RTSP_HDR_X_PROXY_CLIENT_VERB,
-            RTSPHeaderField::XRecedingPlaylistchange => ffi::GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE,
-            RTSPHeaderField::XRtpInfo => ffi::GST_RTSP_HDR_X_RTP_INFO,
-            RTSPHeaderField::XStartupprofile => ffi::GST_RTSP_HDR_X_STARTUPPROFILE,
-            RTSPHeaderField::Timestamp => ffi::GST_RTSP_HDR_TIMESTAMP,
-            RTSPHeaderField::AuthenticationInfo => ffi::GST_RTSP_HDR_AUTHENTICATION_INFO,
-            RTSPHeaderField::Host => ffi::GST_RTSP_HDR_HOST,
-            RTSPHeaderField::Pragma => ffi::GST_RTSP_HDR_PRAGMA,
-            RTSPHeaderField::XServerIpAddress => ffi::GST_RTSP_HDR_X_SERVER_IP_ADDRESS,
-            RTSPHeaderField::XSessioncookie => ffi::GST_RTSP_HDR_X_SESSIONCOOKIE,
-            RTSPHeaderField::RtcpInterval => ffi::GST_RTSP_HDR_RTCP_INTERVAL,
-            RTSPHeaderField::Keymgmt => ffi::GST_RTSP_HDR_KEYMGMT,
-            RTSPHeaderField::PipelinedRequests => ffi::GST_RTSP_HDR_PIPELINED_REQUESTS,
-            RTSPHeaderField::MediaProperties => ffi::GST_RTSP_HDR_MEDIA_PROPERTIES,
-            RTSPHeaderField::SeekStyle => ffi::GST_RTSP_HDR_SEEK_STYLE,
-            RTSPHeaderField::AcceptRanges => ffi::GST_RTSP_HDR_ACCEPT_RANGES,
-            RTSPHeaderField::Last => ffi::GST_RTSP_HDR_LAST,
+            RTSPHeaderField::Invalid => gst_rtsp_sys::GST_RTSP_HDR_INVALID,
+            RTSPHeaderField::Accept => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT,
+            RTSPHeaderField::AcceptEncoding => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT_ENCODING,
+            RTSPHeaderField::AcceptLanguage => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT_LANGUAGE,
+            RTSPHeaderField::Allow => gst_rtsp_sys::GST_RTSP_HDR_ALLOW,
+            RTSPHeaderField::Authorization => gst_rtsp_sys::GST_RTSP_HDR_AUTHORIZATION,
+            RTSPHeaderField::Bandwidth => gst_rtsp_sys::GST_RTSP_HDR_BANDWIDTH,
+            RTSPHeaderField::Blocksize => gst_rtsp_sys::GST_RTSP_HDR_BLOCKSIZE,
+            RTSPHeaderField::CacheControl => gst_rtsp_sys::GST_RTSP_HDR_CACHE_CONTROL,
+            RTSPHeaderField::Conference => gst_rtsp_sys::GST_RTSP_HDR_CONFERENCE,
+            RTSPHeaderField::Connection => gst_rtsp_sys::GST_RTSP_HDR_CONNECTION,
+            RTSPHeaderField::ContentBase => gst_rtsp_sys::GST_RTSP_HDR_CONTENT_BASE,
+            RTSPHeaderField::ContentEncoding => gst_rtsp_sys::GST_RTSP_HDR_CONTENT_ENCODING,
+            RTSPHeaderField::ContentLanguage => gst_rtsp_sys::GST_RTSP_HDR_CONTENT_LANGUAGE,
+            RTSPHeaderField::ContentLength => gst_rtsp_sys::GST_RTSP_HDR_CONTENT_LENGTH,
+            RTSPHeaderField::ContentLocation => gst_rtsp_sys::GST_RTSP_HDR_CONTENT_LOCATION,
+            RTSPHeaderField::ContentType => gst_rtsp_sys::GST_RTSP_HDR_CONTENT_TYPE,
+            RTSPHeaderField::Cseq => gst_rtsp_sys::GST_RTSP_HDR_CSEQ,
+            RTSPHeaderField::Date => gst_rtsp_sys::GST_RTSP_HDR_DATE,
+            RTSPHeaderField::Expires => gst_rtsp_sys::GST_RTSP_HDR_EXPIRES,
+            RTSPHeaderField::From => gst_rtsp_sys::GST_RTSP_HDR_FROM,
+            RTSPHeaderField::IfModifiedSince => gst_rtsp_sys::GST_RTSP_HDR_IF_MODIFIED_SINCE,
+            RTSPHeaderField::LastModified => gst_rtsp_sys::GST_RTSP_HDR_LAST_MODIFIED,
+            RTSPHeaderField::ProxyAuthenticate => gst_rtsp_sys::GST_RTSP_HDR_PROXY_AUTHENTICATE,
+            RTSPHeaderField::ProxyRequire => gst_rtsp_sys::GST_RTSP_HDR_PROXY_REQUIRE,
+            RTSPHeaderField::Public => gst_rtsp_sys::GST_RTSP_HDR_PUBLIC,
+            RTSPHeaderField::Range => gst_rtsp_sys::GST_RTSP_HDR_RANGE,
+            RTSPHeaderField::Referer => gst_rtsp_sys::GST_RTSP_HDR_REFERER,
+            RTSPHeaderField::Require => gst_rtsp_sys::GST_RTSP_HDR_REQUIRE,
+            RTSPHeaderField::RetryAfter => gst_rtsp_sys::GST_RTSP_HDR_RETRY_AFTER,
+            RTSPHeaderField::RtpInfo => gst_rtsp_sys::GST_RTSP_HDR_RTP_INFO,
+            RTSPHeaderField::Scale => gst_rtsp_sys::GST_RTSP_HDR_SCALE,
+            RTSPHeaderField::Session => gst_rtsp_sys::GST_RTSP_HDR_SESSION,
+            RTSPHeaderField::Server => gst_rtsp_sys::GST_RTSP_HDR_SERVER,
+            RTSPHeaderField::Speed => gst_rtsp_sys::GST_RTSP_HDR_SPEED,
+            RTSPHeaderField::Transport => gst_rtsp_sys::GST_RTSP_HDR_TRANSPORT,
+            RTSPHeaderField::Unsupported => gst_rtsp_sys::GST_RTSP_HDR_UNSUPPORTED,
+            RTSPHeaderField::UserAgent => gst_rtsp_sys::GST_RTSP_HDR_USER_AGENT,
+            RTSPHeaderField::Via => gst_rtsp_sys::GST_RTSP_HDR_VIA,
+            RTSPHeaderField::WwwAuthenticate => gst_rtsp_sys::GST_RTSP_HDR_WWW_AUTHENTICATE,
+            RTSPHeaderField::ClientChallenge => gst_rtsp_sys::GST_RTSP_HDR_CLIENT_CHALLENGE,
+            RTSPHeaderField::RealChallenge1 => gst_rtsp_sys::GST_RTSP_HDR_REAL_CHALLENGE1,
+            RTSPHeaderField::RealChallenge2 => gst_rtsp_sys::GST_RTSP_HDR_REAL_CHALLENGE2,
+            RTSPHeaderField::RealChallenge3 => gst_rtsp_sys::GST_RTSP_HDR_REAL_CHALLENGE3,
+            RTSPHeaderField::Subscribe => gst_rtsp_sys::GST_RTSP_HDR_SUBSCRIBE,
+            RTSPHeaderField::Alert => gst_rtsp_sys::GST_RTSP_HDR_ALERT,
+            RTSPHeaderField::ClientId => gst_rtsp_sys::GST_RTSP_HDR_CLIENT_ID,
+            RTSPHeaderField::CompanyId => gst_rtsp_sys::GST_RTSP_HDR_COMPANY_ID,
+            RTSPHeaderField::Guid => gst_rtsp_sys::GST_RTSP_HDR_GUID,
+            RTSPHeaderField::RegionData => gst_rtsp_sys::GST_RTSP_HDR_REGION_DATA,
+            RTSPHeaderField::MaxAsmWidth => gst_rtsp_sys::GST_RTSP_HDR_MAX_ASM_WIDTH,
+            RTSPHeaderField::Language => gst_rtsp_sys::GST_RTSP_HDR_LANGUAGE,
+            RTSPHeaderField::PlayerStartTime => gst_rtsp_sys::GST_RTSP_HDR_PLAYER_START_TIME,
+            RTSPHeaderField::Location => gst_rtsp_sys::GST_RTSP_HDR_LOCATION,
+            RTSPHeaderField::Etag => gst_rtsp_sys::GST_RTSP_HDR_ETAG,
+            RTSPHeaderField::IfMatch => gst_rtsp_sys::GST_RTSP_HDR_IF_MATCH,
+            RTSPHeaderField::AcceptCharset => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT_CHARSET,
+            RTSPHeaderField::Supported => gst_rtsp_sys::GST_RTSP_HDR_SUPPORTED,
+            RTSPHeaderField::Vary => gst_rtsp_sys::GST_RTSP_HDR_VARY,
+            RTSPHeaderField::XAccelerateStreaming => gst_rtsp_sys::GST_RTSP_HDR_X_ACCELERATE_STREAMING,
+            RTSPHeaderField::XAcceptAuthent => gst_rtsp_sys::GST_RTSP_HDR_X_ACCEPT_AUTHENT,
+            RTSPHeaderField::XAcceptProxyAuthent => gst_rtsp_sys::GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT,
+            RTSPHeaderField::XBroadcastId => gst_rtsp_sys::GST_RTSP_HDR_X_BROADCAST_ID,
+            RTSPHeaderField::XBurstStreaming => gst_rtsp_sys::GST_RTSP_HDR_X_BURST_STREAMING,
+            RTSPHeaderField::XNotice => gst_rtsp_sys::GST_RTSP_HDR_X_NOTICE,
+            RTSPHeaderField::XPlayerLagTime => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYER_LAG_TIME,
+            RTSPHeaderField::XPlaylist => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST,
+            RTSPHeaderField::XPlaylistChangeNotice => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE,
+            RTSPHeaderField::XPlaylistGenId => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_GEN_ID,
+            RTSPHeaderField::XPlaylistSeekId => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_SEEK_ID,
+            RTSPHeaderField::XProxyClientAgent => gst_rtsp_sys::GST_RTSP_HDR_X_PROXY_CLIENT_AGENT,
+            RTSPHeaderField::XProxyClientVerb => gst_rtsp_sys::GST_RTSP_HDR_X_PROXY_CLIENT_VERB,
+            RTSPHeaderField::XRecedingPlaylistchange => gst_rtsp_sys::GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE,
+            RTSPHeaderField::XRtpInfo => gst_rtsp_sys::GST_RTSP_HDR_X_RTP_INFO,
+            RTSPHeaderField::XStartupprofile => gst_rtsp_sys::GST_RTSP_HDR_X_STARTUPPROFILE,
+            RTSPHeaderField::Timestamp => gst_rtsp_sys::GST_RTSP_HDR_TIMESTAMP,
+            RTSPHeaderField::AuthenticationInfo => gst_rtsp_sys::GST_RTSP_HDR_AUTHENTICATION_INFO,
+            RTSPHeaderField::Host => gst_rtsp_sys::GST_RTSP_HDR_HOST,
+            RTSPHeaderField::Pragma => gst_rtsp_sys::GST_RTSP_HDR_PRAGMA,
+            RTSPHeaderField::XServerIpAddress => gst_rtsp_sys::GST_RTSP_HDR_X_SERVER_IP_ADDRESS,
+            RTSPHeaderField::XSessioncookie => gst_rtsp_sys::GST_RTSP_HDR_X_SESSIONCOOKIE,
+            RTSPHeaderField::RtcpInterval => gst_rtsp_sys::GST_RTSP_HDR_RTCP_INTERVAL,
+            RTSPHeaderField::Keymgmt => gst_rtsp_sys::GST_RTSP_HDR_KEYMGMT,
+            RTSPHeaderField::PipelinedRequests => gst_rtsp_sys::GST_RTSP_HDR_PIPELINED_REQUESTS,
+            RTSPHeaderField::MediaProperties => gst_rtsp_sys::GST_RTSP_HDR_MEDIA_PROPERTIES,
+            RTSPHeaderField::SeekStyle => gst_rtsp_sys::GST_RTSP_HDR_SEEK_STYLE,
+            RTSPHeaderField::AcceptRanges => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT_RANGES,
+            RTSPHeaderField::Last => gst_rtsp_sys::GST_RTSP_HDR_LAST,
             RTSPHeaderField::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
-    fn from_glib(value: ffi::GstRTSPHeaderField) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPHeaderField> for RTSPHeaderField {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPHeaderField) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPHeaderField::Invalid,
@@ -428,7 +428,7 @@ impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
 
 impl StaticType for RTSPHeaderField {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_header_field_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_header_field_get_type()) }
     }
 }
 
@@ -440,13 +440,13 @@ impl<'a> FromValueOptional<'a> for RTSPHeaderField {
 
 impl<'a> FromValue<'a> for RTSPHeaderField {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPHeaderField {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -465,24 +465,24 @@ pub enum RTSPMsgType {
 
 #[doc(hidden)]
 impl ToGlib for RTSPMsgType {
-    type GlibType = ffi::GstRTSPMsgType;
+    type GlibType = gst_rtsp_sys::GstRTSPMsgType;
 
-    fn to_glib(&self) -> ffi::GstRTSPMsgType {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPMsgType {
         match *self {
-            RTSPMsgType::Invalid => ffi::GST_RTSP_MESSAGE_INVALID,
-            RTSPMsgType::Request => ffi::GST_RTSP_MESSAGE_REQUEST,
-            RTSPMsgType::Response => ffi::GST_RTSP_MESSAGE_RESPONSE,
-            RTSPMsgType::HttpRequest => ffi::GST_RTSP_MESSAGE_HTTP_REQUEST,
-            RTSPMsgType::HttpResponse => ffi::GST_RTSP_MESSAGE_HTTP_RESPONSE,
-            RTSPMsgType::Data => ffi::GST_RTSP_MESSAGE_DATA,
+            RTSPMsgType::Invalid => gst_rtsp_sys::GST_RTSP_MESSAGE_INVALID,
+            RTSPMsgType::Request => gst_rtsp_sys::GST_RTSP_MESSAGE_REQUEST,
+            RTSPMsgType::Response => gst_rtsp_sys::GST_RTSP_MESSAGE_RESPONSE,
+            RTSPMsgType::HttpRequest => gst_rtsp_sys::GST_RTSP_MESSAGE_HTTP_REQUEST,
+            RTSPMsgType::HttpResponse => gst_rtsp_sys::GST_RTSP_MESSAGE_HTTP_RESPONSE,
+            RTSPMsgType::Data => gst_rtsp_sys::GST_RTSP_MESSAGE_DATA,
             RTSPMsgType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
-    fn from_glib(value: ffi::GstRTSPMsgType) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPMsgType> for RTSPMsgType {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPMsgType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPMsgType::Invalid,
@@ -498,7 +498,7 @@ impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
 
 impl StaticType for RTSPMsgType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_msg_type_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_msg_type_get_type()) }
     }
 }
 
@@ -510,13 +510,13 @@ impl<'a> FromValueOptional<'a> for RTSPMsgType {
 
 impl<'a> FromValue<'a> for RTSPMsgType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPMsgType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -534,23 +534,23 @@ pub enum RTSPRangeUnit {
 
 #[doc(hidden)]
 impl ToGlib for RTSPRangeUnit {
-    type GlibType = ffi::GstRTSPRangeUnit;
+    type GlibType = gst_rtsp_sys::GstRTSPRangeUnit;
 
-    fn to_glib(&self) -> ffi::GstRTSPRangeUnit {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPRangeUnit {
         match *self {
-            RTSPRangeUnit::Smpte => ffi::GST_RTSP_RANGE_SMPTE,
-            RTSPRangeUnit::Smpte30Drop => ffi::GST_RTSP_RANGE_SMPTE_30_DROP,
-            RTSPRangeUnit::Smpte25 => ffi::GST_RTSP_RANGE_SMPTE_25,
-            RTSPRangeUnit::Npt => ffi::GST_RTSP_RANGE_NPT,
-            RTSPRangeUnit::Clock => ffi::GST_RTSP_RANGE_CLOCK,
+            RTSPRangeUnit::Smpte => gst_rtsp_sys::GST_RTSP_RANGE_SMPTE,
+            RTSPRangeUnit::Smpte30Drop => gst_rtsp_sys::GST_RTSP_RANGE_SMPTE_30_DROP,
+            RTSPRangeUnit::Smpte25 => gst_rtsp_sys::GST_RTSP_RANGE_SMPTE_25,
+            RTSPRangeUnit::Npt => gst_rtsp_sys::GST_RTSP_RANGE_NPT,
+            RTSPRangeUnit::Clock => gst_rtsp_sys::GST_RTSP_RANGE_CLOCK,
             RTSPRangeUnit::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
-    fn from_glib(value: ffi::GstRTSPRangeUnit) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPRangeUnit> for RTSPRangeUnit {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPRangeUnit) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPRangeUnit::Smpte,
@@ -565,7 +565,7 @@ impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
 
 impl StaticType for RTSPRangeUnit {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_range_unit_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_range_unit_get_type()) }
     }
 }
 
@@ -577,13 +577,13 @@ impl<'a> FromValueOptional<'a> for RTSPRangeUnit {
 
 impl<'a> FromValue<'a> for RTSPRangeUnit {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPRangeUnit {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -614,36 +614,36 @@ pub enum RTSPResult {
 
 #[doc(hidden)]
 impl ToGlib for RTSPResult {
-    type GlibType = ffi::GstRTSPResult;
+    type GlibType = gst_rtsp_sys::GstRTSPResult;
 
-    fn to_glib(&self) -> ffi::GstRTSPResult {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPResult {
         match *self {
-            RTSPResult::Ok => ffi::GST_RTSP_OK,
-            RTSPResult::Error => ffi::GST_RTSP_ERROR,
-            RTSPResult::Einval => ffi::GST_RTSP_EINVAL,
-            RTSPResult::Eintr => ffi::GST_RTSP_EINTR,
-            RTSPResult::Enomem => ffi::GST_RTSP_ENOMEM,
-            RTSPResult::Eresolv => ffi::GST_RTSP_ERESOLV,
-            RTSPResult::Enotimpl => ffi::GST_RTSP_ENOTIMPL,
-            RTSPResult::Esys => ffi::GST_RTSP_ESYS,
-            RTSPResult::Eparse => ffi::GST_RTSP_EPARSE,
-            RTSPResult::Ewsastart => ffi::GST_RTSP_EWSASTART,
-            RTSPResult::Ewsaversion => ffi::GST_RTSP_EWSAVERSION,
-            RTSPResult::Eeof => ffi::GST_RTSP_EEOF,
-            RTSPResult::Enet => ffi::GST_RTSP_ENET,
-            RTSPResult::Enotip => ffi::GST_RTSP_ENOTIP,
-            RTSPResult::Etimeout => ffi::GST_RTSP_ETIMEOUT,
-            RTSPResult::Etget => ffi::GST_RTSP_ETGET,
-            RTSPResult::Etpost => ffi::GST_RTSP_ETPOST,
-            RTSPResult::Elast => ffi::GST_RTSP_ELAST,
+            RTSPResult::Ok => gst_rtsp_sys::GST_RTSP_OK,
+            RTSPResult::Error => gst_rtsp_sys::GST_RTSP_ERROR,
+            RTSPResult::Einval => gst_rtsp_sys::GST_RTSP_EINVAL,
+            RTSPResult::Eintr => gst_rtsp_sys::GST_RTSP_EINTR,
+            RTSPResult::Enomem => gst_rtsp_sys::GST_RTSP_ENOMEM,
+            RTSPResult::Eresolv => gst_rtsp_sys::GST_RTSP_ERESOLV,
+            RTSPResult::Enotimpl => gst_rtsp_sys::GST_RTSP_ENOTIMPL,
+            RTSPResult::Esys => gst_rtsp_sys::GST_RTSP_ESYS,
+            RTSPResult::Eparse => gst_rtsp_sys::GST_RTSP_EPARSE,
+            RTSPResult::Ewsastart => gst_rtsp_sys::GST_RTSP_EWSASTART,
+            RTSPResult::Ewsaversion => gst_rtsp_sys::GST_RTSP_EWSAVERSION,
+            RTSPResult::Eeof => gst_rtsp_sys::GST_RTSP_EEOF,
+            RTSPResult::Enet => gst_rtsp_sys::GST_RTSP_ENET,
+            RTSPResult::Enotip => gst_rtsp_sys::GST_RTSP_ENOTIP,
+            RTSPResult::Etimeout => gst_rtsp_sys::GST_RTSP_ETIMEOUT,
+            RTSPResult::Etget => gst_rtsp_sys::GST_RTSP_ETGET,
+            RTSPResult::Etpost => gst_rtsp_sys::GST_RTSP_ETPOST,
+            RTSPResult::Elast => gst_rtsp_sys::GST_RTSP_ELAST,
             RTSPResult::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
-    fn from_glib(value: ffi::GstRTSPResult) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPResult> for RTSPResult {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPResult) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPResult::Ok,
@@ -671,7 +671,7 @@ impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
 
 impl StaticType for RTSPResult {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_result_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_result_get_type()) }
     }
 }
 
@@ -683,13 +683,13 @@ impl<'a> FromValueOptional<'a> for RTSPResult {
 
 impl<'a> FromValue<'a> for RTSPResult {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPResult {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -708,24 +708,24 @@ pub enum RTSPState {
 
 #[doc(hidden)]
 impl ToGlib for RTSPState {
-    type GlibType = ffi::GstRTSPState;
+    type GlibType = gst_rtsp_sys::GstRTSPState;
 
-    fn to_glib(&self) -> ffi::GstRTSPState {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPState {
         match *self {
-            RTSPState::Invalid => ffi::GST_RTSP_STATE_INVALID,
-            RTSPState::Init => ffi::GST_RTSP_STATE_INIT,
-            RTSPState::Ready => ffi::GST_RTSP_STATE_READY,
-            RTSPState::Seeking => ffi::GST_RTSP_STATE_SEEKING,
-            RTSPState::Playing => ffi::GST_RTSP_STATE_PLAYING,
-            RTSPState::Recording => ffi::GST_RTSP_STATE_RECORDING,
+            RTSPState::Invalid => gst_rtsp_sys::GST_RTSP_STATE_INVALID,
+            RTSPState::Init => gst_rtsp_sys::GST_RTSP_STATE_INIT,
+            RTSPState::Ready => gst_rtsp_sys::GST_RTSP_STATE_READY,
+            RTSPState::Seeking => gst_rtsp_sys::GST_RTSP_STATE_SEEKING,
+            RTSPState::Playing => gst_rtsp_sys::GST_RTSP_STATE_PLAYING,
+            RTSPState::Recording => gst_rtsp_sys::GST_RTSP_STATE_RECORDING,
             RTSPState::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPState> for RTSPState {
-    fn from_glib(value: ffi::GstRTSPState) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPState> for RTSPState {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPState) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPState::Invalid,
@@ -741,7 +741,7 @@ impl FromGlib<ffi::GstRTSPState> for RTSPState {
 
 impl StaticType for RTSPState {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_state_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_state_get_type()) }
     }
 }
 
@@ -753,13 +753,13 @@ impl<'a> FromValueOptional<'a> for RTSPState {
 
 impl<'a> FromValue<'a> for RTSPState {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPState {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -818,64 +818,64 @@ pub enum RTSPStatusCode {
 
 #[doc(hidden)]
 impl ToGlib for RTSPStatusCode {
-    type GlibType = ffi::GstRTSPStatusCode;
+    type GlibType = gst_rtsp_sys::GstRTSPStatusCode;
 
-    fn to_glib(&self) -> ffi::GstRTSPStatusCode {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPStatusCode {
         match *self {
-            RTSPStatusCode::Invalid => ffi::GST_RTSP_STS_INVALID,
-            RTSPStatusCode::Continue => ffi::GST_RTSP_STS_CONTINUE,
-            RTSPStatusCode::Ok => ffi::GST_RTSP_STS_OK,
-            RTSPStatusCode::Created => ffi::GST_RTSP_STS_CREATED,
-            RTSPStatusCode::LowOnStorage => ffi::GST_RTSP_STS_LOW_ON_STORAGE,
-            RTSPStatusCode::MultipleChoices => ffi::GST_RTSP_STS_MULTIPLE_CHOICES,
-            RTSPStatusCode::MovedPermanently => ffi::GST_RTSP_STS_MOVED_PERMANENTLY,
-            RTSPStatusCode::MoveTemporarily => ffi::GST_RTSP_STS_MOVE_TEMPORARILY,
-            RTSPStatusCode::SeeOther => ffi::GST_RTSP_STS_SEE_OTHER,
-            RTSPStatusCode::NotModified => ffi::GST_RTSP_STS_NOT_MODIFIED,
-            RTSPStatusCode::UseProxy => ffi::GST_RTSP_STS_USE_PROXY,
-            RTSPStatusCode::BadRequest => ffi::GST_RTSP_STS_BAD_REQUEST,
-            RTSPStatusCode::Unauthorized => ffi::GST_RTSP_STS_UNAUTHORIZED,
-            RTSPStatusCode::PaymentRequired => ffi::GST_RTSP_STS_PAYMENT_REQUIRED,
-            RTSPStatusCode::Forbidden => ffi::GST_RTSP_STS_FORBIDDEN,
-            RTSPStatusCode::NotFound => ffi::GST_RTSP_STS_NOT_FOUND,
-            RTSPStatusCode::MethodNotAllowed => ffi::GST_RTSP_STS_METHOD_NOT_ALLOWED,
-            RTSPStatusCode::NotAcceptable => ffi::GST_RTSP_STS_NOT_ACCEPTABLE,
-            RTSPStatusCode::ProxyAuthRequired => ffi::GST_RTSP_STS_PROXY_AUTH_REQUIRED,
-            RTSPStatusCode::RequestTimeout => ffi::GST_RTSP_STS_REQUEST_TIMEOUT,
-            RTSPStatusCode::Gone => ffi::GST_RTSP_STS_GONE,
-            RTSPStatusCode::LengthRequired => ffi::GST_RTSP_STS_LENGTH_REQUIRED,
-            RTSPStatusCode::PreconditionFailed => ffi::GST_RTSP_STS_PRECONDITION_FAILED,
-            RTSPStatusCode::RequestEntityTooLarge => ffi::GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE,
-            RTSPStatusCode::RequestUriTooLarge => ffi::GST_RTSP_STS_REQUEST_URI_TOO_LARGE,
-            RTSPStatusCode::UnsupportedMediaType => ffi::GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE,
-            RTSPStatusCode::ParameterNotUnderstood => ffi::GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD,
-            RTSPStatusCode::ConferenceNotFound => ffi::GST_RTSP_STS_CONFERENCE_NOT_FOUND,
-            RTSPStatusCode::NotEnoughBandwidth => ffi::GST_RTSP_STS_NOT_ENOUGH_BANDWIDTH,
-            RTSPStatusCode::SessionNotFound => ffi::GST_RTSP_STS_SESSION_NOT_FOUND,
-            RTSPStatusCode::MethodNotValidInThisState => ffi::GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE,
-            RTSPStatusCode::HeaderFieldNotValidForResource => ffi::GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE,
-            RTSPStatusCode::InvalidRange => ffi::GST_RTSP_STS_INVALID_RANGE,
-            RTSPStatusCode::ParameterIsReadonly => ffi::GST_RTSP_STS_PARAMETER_IS_READONLY,
-            RTSPStatusCode::AggregateOperationNotAllowed => ffi::GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED,
-            RTSPStatusCode::OnlyAggregateOperationAllowed => ffi::GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED,
-            RTSPStatusCode::UnsupportedTransport => ffi::GST_RTSP_STS_UNSUPPORTED_TRANSPORT,
-            RTSPStatusCode::DestinationUnreachable => ffi::GST_RTSP_STS_DESTINATION_UNREACHABLE,
-            RTSPStatusCode::KeyManagementFailure => ffi::GST_RTSP_STS_KEY_MANAGEMENT_FAILURE,
-            RTSPStatusCode::InternalServerError => ffi::GST_RTSP_STS_INTERNAL_SERVER_ERROR,
-            RTSPStatusCode::NotImplemented => ffi::GST_RTSP_STS_NOT_IMPLEMENTED,
-            RTSPStatusCode::BadGateway => ffi::GST_RTSP_STS_BAD_GATEWAY,
-            RTSPStatusCode::ServiceUnavailable => ffi::GST_RTSP_STS_SERVICE_UNAVAILABLE,
-            RTSPStatusCode::GatewayTimeout => ffi::GST_RTSP_STS_GATEWAY_TIMEOUT,
-            RTSPStatusCode::RtspVersionNotSupported => ffi::GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED,
-            RTSPStatusCode::OptionNotSupported => ffi::GST_RTSP_STS_OPTION_NOT_SUPPORTED,
+            RTSPStatusCode::Invalid => gst_rtsp_sys::GST_RTSP_STS_INVALID,
+            RTSPStatusCode::Continue => gst_rtsp_sys::GST_RTSP_STS_CONTINUE,
+            RTSPStatusCode::Ok => gst_rtsp_sys::GST_RTSP_STS_OK,
+            RTSPStatusCode::Created => gst_rtsp_sys::GST_RTSP_STS_CREATED,
+            RTSPStatusCode::LowOnStorage => gst_rtsp_sys::GST_RTSP_STS_LOW_ON_STORAGE,
+            RTSPStatusCode::MultipleChoices => gst_rtsp_sys::GST_RTSP_STS_MULTIPLE_CHOICES,
+            RTSPStatusCode::MovedPermanently => gst_rtsp_sys::GST_RTSP_STS_MOVED_PERMANENTLY,
+            RTSPStatusCode::MoveTemporarily => gst_rtsp_sys::GST_RTSP_STS_MOVE_TEMPORARILY,
+            RTSPStatusCode::SeeOther => gst_rtsp_sys::GST_RTSP_STS_SEE_OTHER,
+            RTSPStatusCode::NotModified => gst_rtsp_sys::GST_RTSP_STS_NOT_MODIFIED,
+            RTSPStatusCode::UseProxy => gst_rtsp_sys::GST_RTSP_STS_USE_PROXY,
+            RTSPStatusCode::BadRequest => gst_rtsp_sys::GST_RTSP_STS_BAD_REQUEST,
+            RTSPStatusCode::Unauthorized => gst_rtsp_sys::GST_RTSP_STS_UNAUTHORIZED,
+            RTSPStatusCode::PaymentRequired => gst_rtsp_sys::GST_RTSP_STS_PAYMENT_REQUIRED,
+            RTSPStatusCode::Forbidden => gst_rtsp_sys::GST_RTSP_STS_FORBIDDEN,
+            RTSPStatusCode::NotFound => gst_rtsp_sys::GST_RTSP_STS_NOT_FOUND,
+            RTSPStatusCode::MethodNotAllowed => gst_rtsp_sys::GST_RTSP_STS_METHOD_NOT_ALLOWED,
+            RTSPStatusCode::NotAcceptable => gst_rtsp_sys::GST_RTSP_STS_NOT_ACCEPTABLE,
+            RTSPStatusCode::ProxyAuthRequired => gst_rtsp_sys::GST_RTSP_STS_PROXY_AUTH_REQUIRED,
+            RTSPStatusCode::RequestTimeout => gst_rtsp_sys::GST_RTSP_STS_REQUEST_TIMEOUT,
+            RTSPStatusCode::Gone => gst_rtsp_sys::GST_RTSP_STS_GONE,
+            RTSPStatusCode::LengthRequired => gst_rtsp_sys::GST_RTSP_STS_LENGTH_REQUIRED,
+            RTSPStatusCode::PreconditionFailed => gst_rtsp_sys::GST_RTSP_STS_PRECONDITION_FAILED,
+            RTSPStatusCode::RequestEntityTooLarge => gst_rtsp_sys::GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE,
+            RTSPStatusCode::RequestUriTooLarge => gst_rtsp_sys::GST_RTSP_STS_REQUEST_URI_TOO_LARGE,
+            RTSPStatusCode::UnsupportedMediaType => gst_rtsp_sys::GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE,
+            RTSPStatusCode::ParameterNotUnderstood => gst_rtsp_sys::GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD,
+            RTSPStatusCode::ConferenceNotFound => gst_rtsp_sys::GST_RTSP_STS_CONFERENCE_NOT_FOUND,
+            RTSPStatusCode::NotEnoughBandwidth => gst_rtsp_sys::GST_RTSP_STS_NOT_ENOUGH_BANDWIDTH,
+            RTSPStatusCode::SessionNotFound => gst_rtsp_sys::GST_RTSP_STS_SESSION_NOT_FOUND,
+            RTSPStatusCode::MethodNotValidInThisState => gst_rtsp_sys::GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE,
+            RTSPStatusCode::HeaderFieldNotValidForResource => gst_rtsp_sys::GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE,
+            RTSPStatusCode::InvalidRange => gst_rtsp_sys::GST_RTSP_STS_INVALID_RANGE,
+            RTSPStatusCode::ParameterIsReadonly => gst_rtsp_sys::GST_RTSP_STS_PARAMETER_IS_READONLY,
+            RTSPStatusCode::AggregateOperationNotAllowed => gst_rtsp_sys::GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED,
+            RTSPStatusCode::OnlyAggregateOperationAllowed => gst_rtsp_sys::GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED,
+            RTSPStatusCode::UnsupportedTransport => gst_rtsp_sys::GST_RTSP_STS_UNSUPPORTED_TRANSPORT,
+            RTSPStatusCode::DestinationUnreachable => gst_rtsp_sys::GST_RTSP_STS_DESTINATION_UNREACHABLE,
+            RTSPStatusCode::KeyManagementFailure => gst_rtsp_sys::GST_RTSP_STS_KEY_MANAGEMENT_FAILURE,
+            RTSPStatusCode::InternalServerError => gst_rtsp_sys::GST_RTSP_STS_INTERNAL_SERVER_ERROR,
+            RTSPStatusCode::NotImplemented => gst_rtsp_sys::GST_RTSP_STS_NOT_IMPLEMENTED,
+            RTSPStatusCode::BadGateway => gst_rtsp_sys::GST_RTSP_STS_BAD_GATEWAY,
+            RTSPStatusCode::ServiceUnavailable => gst_rtsp_sys::GST_RTSP_STS_SERVICE_UNAVAILABLE,
+            RTSPStatusCode::GatewayTimeout => gst_rtsp_sys::GST_RTSP_STS_GATEWAY_TIMEOUT,
+            RTSPStatusCode::RtspVersionNotSupported => gst_rtsp_sys::GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED,
+            RTSPStatusCode::OptionNotSupported => gst_rtsp_sys::GST_RTSP_STS_OPTION_NOT_SUPPORTED,
             RTSPStatusCode::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
-    fn from_glib(value: ffi::GstRTSPStatusCode) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPStatusCode> for RTSPStatusCode {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPStatusCode) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPStatusCode::Invalid,
@@ -931,7 +931,7 @@ impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
 
 impl StaticType for RTSPStatusCode {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_status_code_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_status_code_get_type()) }
     }
 }
 
@@ -943,13 +943,13 @@ impl<'a> FromValueOptional<'a> for RTSPStatusCode {
 
 impl<'a> FromValue<'a> for RTSPStatusCode {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPStatusCode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -967,23 +967,23 @@ pub enum RTSPTimeType {
 
 #[doc(hidden)]
 impl ToGlib for RTSPTimeType {
-    type GlibType = ffi::GstRTSPTimeType;
+    type GlibType = gst_rtsp_sys::GstRTSPTimeType;
 
-    fn to_glib(&self) -> ffi::GstRTSPTimeType {
+    fn to_glib(&self) -> gst_rtsp_sys::GstRTSPTimeType {
         match *self {
-            RTSPTimeType::Seconds => ffi::GST_RTSP_TIME_SECONDS,
-            RTSPTimeType::Now => ffi::GST_RTSP_TIME_NOW,
-            RTSPTimeType::End => ffi::GST_RTSP_TIME_END,
-            RTSPTimeType::Frames => ffi::GST_RTSP_TIME_FRAMES,
-            RTSPTimeType::Utc => ffi::GST_RTSP_TIME_UTC,
+            RTSPTimeType::Seconds => gst_rtsp_sys::GST_RTSP_TIME_SECONDS,
+            RTSPTimeType::Now => gst_rtsp_sys::GST_RTSP_TIME_NOW,
+            RTSPTimeType::End => gst_rtsp_sys::GST_RTSP_TIME_END,
+            RTSPTimeType::Frames => gst_rtsp_sys::GST_RTSP_TIME_FRAMES,
+            RTSPTimeType::Utc => gst_rtsp_sys::GST_RTSP_TIME_UTC,
             RTSPTimeType::__Unknown(value) => value
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
-    fn from_glib(value: ffi::GstRTSPTimeType) -> Self {
+impl FromGlib<gst_rtsp_sys::GstRTSPTimeType> for RTSPTimeType {
+    fn from_glib(value: gst_rtsp_sys::GstRTSPTimeType) -> Self {
         skip_assert_initialized!();
         match value {
             0 => RTSPTimeType::Seconds,
@@ -998,7 +998,7 @@ impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
 
 impl StaticType for RTSPTimeType {
     fn static_type() -> Type {
-        unsafe { from_glib(ffi::gst_rtsp_time_type_get_type()) }
+        unsafe { from_glib(gst_rtsp_sys::gst_rtsp_time_type_get_type()) }
     }
 }
 
@@ -1010,13 +1010,13 @@ impl<'a> FromValueOptional<'a> for RTSPTimeType {
 
 impl<'a> FromValue<'a> for RTSPTimeType {
     unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl SetValue for RTSPTimeType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

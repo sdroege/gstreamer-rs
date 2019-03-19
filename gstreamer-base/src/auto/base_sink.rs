@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -10,18 +9,19 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use gst;
+use gst_base_sys;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct BaseSink(Object<ffi::GstBaseSink, ffi::GstBaseSinkClass, BaseSinkClass>) @extends gst::Element, gst::Object;
+    pub struct BaseSink(Object<gst_base_sys::GstBaseSink, gst_base_sys::GstBaseSinkClass, BaseSinkClass>) @extends gst::Element, gst::Object;
 
     match fn {
-        get_type => || ffi::gst_base_sink_get_type(),
+        get_type => || gst_base_sys::gst_base_sink_get_type(),
     }
 }
 
@@ -124,85 +124,85 @@ pub trait BaseSinkExt: 'static {
 
 impl<O: IsA<BaseSink>> BaseSinkExt for O {
     //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> gst::FlowReturn {
-    //    unsafe { TODO: call ffi::gst_base_sink_do_preroll() }
+    //    unsafe { TODO: call gst_base_sys:gst_base_sink_do_preroll() }
     //}
 
     fn get_blocksize(&self) -> u32 {
         unsafe {
-            ffi::gst_base_sink_get_blocksize(self.as_ref().to_glib_none().0)
+            gst_base_sys::gst_base_sink_get_blocksize(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn get_drop_out_of_segment(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_drop_out_of_segment(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_get_drop_out_of_segment(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_last_sample(&self) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(ffi::gst_base_sink_get_last_sample(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_base_sys::gst_base_sink_get_last_sample(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_latency(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_latency(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_get_latency(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_max_bitrate(&self) -> u64 {
         unsafe {
-            ffi::gst_base_sink_get_max_bitrate(self.as_ref().to_glib_none().0)
+            gst_base_sys::gst_base_sink_get_max_bitrate(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_max_lateness(&self) -> i64 {
         unsafe {
-            ffi::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0)
+            gst_base_sys::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_render_delay(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_render_delay(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_get_render_delay(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_sync(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_sink_get_sync(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_get_sync(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_throttle_time(&self) -> u64 {
         unsafe {
-            ffi::gst_base_sink_get_throttle_time(self.as_ref().to_glib_none().0)
+            gst_base_sys::gst_base_sink_get_throttle_time(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_ts_offset(&self) -> gst::ClockTimeDiff {
         unsafe {
-            ffi::gst_base_sink_get_ts_offset(self.as_ref().to_glib_none().0)
+            gst_base_sys::gst_base_sink_get_ts_offset(self.as_ref().to_glib_none().0)
         }
     }
 
     fn is_async_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_sink_is_async_enabled(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_is_async_enabled(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_last_sample_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_sink_is_last_sample_enabled(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_is_last_sample_enabled(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_qos_enabled(&self) -> bool {
         unsafe {
-            from_glib(ffi::gst_base_sink_is_qos_enabled(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_sink_is_qos_enabled(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -212,82 +212,82 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
             let mut upstream_live = mem::uninitialized();
             let mut min_latency = mem::uninitialized();
             let mut max_latency = mem::uninitialized();
-            let ret = from_glib(ffi::gst_base_sink_query_latency(self.as_ref().to_glib_none().0, &mut live, &mut upstream_live, &mut min_latency, &mut max_latency));
+            let ret = from_glib(gst_base_sys::gst_base_sink_query_latency(self.as_ref().to_glib_none().0, &mut live, &mut upstream_live, &mut min_latency, &mut max_latency));
             if ret { Some((from_glib(live), from_glib(upstream_live), from_glib(min_latency), from_glib(max_latency))) } else { None }
         }
     }
 
     fn set_async_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_base_sink_set_async_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            gst_base_sys::gst_base_sink_set_async_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
-            ffi::gst_base_sink_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
+            gst_base_sys::gst_base_sink_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
         }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn set_drop_out_of_segment(&self, drop_out_of_segment: bool) {
         unsafe {
-            ffi::gst_base_sink_set_drop_out_of_segment(self.as_ref().to_glib_none().0, drop_out_of_segment.to_glib());
+            gst_base_sys::gst_base_sink_set_drop_out_of_segment(self.as_ref().to_glib_none().0, drop_out_of_segment.to_glib());
         }
     }
 
     fn set_last_sample_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_base_sink_set_last_sample_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            gst_base_sys::gst_base_sink_set_last_sample_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_max_bitrate(&self, max_bitrate: u64) {
         unsafe {
-            ffi::gst_base_sink_set_max_bitrate(self.as_ref().to_glib_none().0, max_bitrate);
+            gst_base_sys::gst_base_sink_set_max_bitrate(self.as_ref().to_glib_none().0, max_bitrate);
         }
     }
 
     fn set_max_lateness(&self, max_lateness: i64) {
         unsafe {
-            ffi::gst_base_sink_set_max_lateness(self.as_ref().to_glib_none().0, max_lateness);
+            gst_base_sys::gst_base_sink_set_max_lateness(self.as_ref().to_glib_none().0, max_lateness);
         }
     }
 
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
-            ffi::gst_base_sink_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            gst_base_sys::gst_base_sink_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
         }
     }
 
     fn set_render_delay(&self, delay: gst::ClockTime) {
         unsafe {
-            ffi::gst_base_sink_set_render_delay(self.as_ref().to_glib_none().0, delay.to_glib());
+            gst_base_sys::gst_base_sink_set_render_delay(self.as_ref().to_glib_none().0, delay.to_glib());
         }
     }
 
     fn set_sync(&self, sync: bool) {
         unsafe {
-            ffi::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.to_glib());
+            gst_base_sys::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.to_glib());
         }
     }
 
     fn set_throttle_time(&self, throttle: u64) {
         unsafe {
-            ffi::gst_base_sink_set_throttle_time(self.as_ref().to_glib_none().0, throttle);
+            gst_base_sys::gst_base_sink_set_throttle_time(self.as_ref().to_glib_none().0, throttle);
         }
     }
 
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff) {
         unsafe {
-            ffi::gst_base_sink_set_ts_offset(self.as_ref().to_glib_none().0, offset);
+            gst_base_sys::gst_base_sink_set_ts_offset(self.as_ref().to_glib_none().0, offset);
         }
     }
 
     fn wait_clock(&self, time: gst::ClockTime) -> (gst::ClockReturn, gst::ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::uninitialized();
-            let ret = from_glib(ffi::gst_base_sink_wait_clock(self.as_ref().to_glib_none().0, time.to_glib(), &mut jitter));
+            let ret = from_glib(gst_base_sys::gst_base_sink_wait_clock(self.as_ref().to_glib_none().0, time.to_glib(), &mut jitter));
             (ret, jitter)
         }
     }
@@ -295,42 +295,42 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     fn get_property_async(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"async\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"async\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_async(&self, async: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"async\0".as_ptr() as *const _, Value::from(&async).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"async\0".as_ptr() as *const _, Value::from(&async).to_glib_none().0);
         }
     }
 
     fn get_property_enable_last_sample(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-last-sample\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"enable-last-sample\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_enable_last_sample(&self, enable_last_sample: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-last-sample\0".as_ptr() as *const _, Value::from(&enable_last_sample).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"enable-last-sample\0".as_ptr() as *const _, Value::from(&enable_last_sample).to_glib_none().0);
         }
     }
 
     fn get_property_qos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"qos\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"qos\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_qos(&self, qos: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"qos\0".as_ptr() as *const _, Value::from(&qos).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"qos\0".as_ptr() as *const _, Value::from(&qos).to_glib_none().0);
         }
     }
 
@@ -423,67 +423,67 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
     }
 }
 
-unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_async_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_enable_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_enable_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_last_sample_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_bitrate_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_bitrate_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_lateness_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_lateness_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_render_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_render_delay_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_sync_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_throttle_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_throttle_time_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ts_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut ffi::GstBaseSink, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ts_offset_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<BaseSink> {
     let f: &F = &*(f as *const F);
     f(&BaseSink::from_glib_borrow(this).unsafe_cast())
