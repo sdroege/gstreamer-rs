@@ -14,7 +14,7 @@ use glib::{SendValue, ToValue};
 use serde::de;
 use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
 use serde::ser;
-use serde::ser::{Serialize, SerializeSeq, SerializeTuple, Serializer};
+use serde::ser::{Serialize, SerializeSeq, SerializeStruct, SerializeTuple, Serializer};
 
 use std::cell::RefCell;
 use std::fmt;
@@ -25,6 +25,7 @@ use value_serde::{DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
 use DateTime;
 use Sample;
 use TagMergeMode;
+use TagScope;
 
 macro_rules! ser_tag (
     ($value:ident, $seq:ident, $t:ty) => (
@@ -92,12 +93,13 @@ impl<'a> Serialize for TagsSer<'a> {
     }
 }
 
-impl Serialize for TagListRef {
+struct TagListSer<'a>(&'a TagListRef);
+impl<'a> Serialize for TagListSer<'a> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let tag_count = self.n_tags();
+        let tag_count = self.0.n_tags();
         if tag_count > 0 {
             let mut seq = serializer.serialize_seq(Some(tag_count as usize))?;
-            let tag_list_iter = self.iter_generic();
+            let tag_list_iter = self.0.iter_generic();
             for (tag_name, tag_iter) in tag_list_iter {
                 seq.serialize_element(&TagsSer::new(tag_name, tag_iter))?;
             }
@@ -108,6 +110,15 @@ impl Serialize for TagListRef {
         } else {
             Err(ser::Error::custom("tag count < 0"))
         }
+    }
+}
+
+impl Serialize for TagListRef {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let mut tag_list = serializer.serialize_struct("TagList", 3)?;
+        tag_list.serialize_field("scope", &self.get_scope())?;
+        tag_list.serialize_field("tags", &TagListSer(self))?;
+        tag_list.end()
     }
 }
 
@@ -218,9 +229,11 @@ impl<'de, 'a> DeserializeSeed<'de> for TagValuesTuple<'a> {
     }
 }
 
-struct TagListVisitor;
-impl<'de> Visitor<'de> for TagListVisitor {
-    type Value = TagList;
+struct TagsDe(TagList);
+
+struct TagsVisitor;
+impl<'de> Visitor<'de> for TagsVisitor {
+    type Value = TagsDe;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
         formatter.write_str("a sequence of `Tag`s")
@@ -234,13 +247,34 @@ impl<'de> Visitor<'de> for TagListVisitor {
                 // tags are added in the dedicated deserializers
             }
         }
-        Ok(tag_list)
+        Ok(TagsDe(tag_list))
+    }
+}
+
+impl<'de> Deserialize<'de> for TagsDe {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        deserializer.deserialize_seq(TagsVisitor)
+    }
+}
+
+#[derive(Deserialize)]
+struct TagListDe {
+    scope: TagScope,
+    tags: TagsDe,
+}
+
+impl From<TagListDe> for TagList {
+    fn from(tag_list_de: TagListDe) -> Self {
+        let mut tag_list = tag_list_de.tags.0;
+        tag_list.get_mut().unwrap().set_scope(tag_list_de.scope);
+
+        tag_list
     }
 }
 
 impl<'de> Deserialize<'de> for TagList {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_seq(TagListVisitor)
+        TagListDe::deserialize(deserializer).map(|tag_list_de| tag_list_de.into())
     }
 }
 
@@ -253,6 +287,7 @@ mod tests {
     use GenericFormattedValue;
     use Sample;
     use TagMergeMode;
+    use TagScope;
 
     #[test]
     fn test_serialize() {
@@ -287,57 +322,60 @@ mod tests {
         let res = ron::ser::to_string_pretty(&tags, pretty_config);
         assert_eq!(
             Ok(concat!(
-                "[",
-                "    (\"title\", [",
-                "        \"a title\",",
-                "        \"another title\",",
-                "    ]),",
-                "    (\"duration\", [",
-                "        120000000000,",
-                "    ]),",
-                "    (\"bitrate\", [",
-                "        96000,",
-                "    ]),",
-                "    (\"replaygain-track-gain\", [",
-                "        1,",
-                "    ]),",
-                "    (\"datetime\", [",
-                "        YMD(2018, 5, 28),",
-                "    ]),",
-                "    (\"image\", [",
-                "        (",
-                "            buffer: Some((",
-                "                pts: None,",
-                "                dts: None,",
-                "                duration: None,",
-                "                offset: 0,",
-                "                offset_end: 0,",
-                "                flags: (",
-                "                    bits: 0,",
-                "                ),",
-                "                buffer: \"AQIDBA==\",",
-                "            )),",
-                "            buffer_list: None,",
-                "            caps: None,",
-                "            segment: Some((",
-                "                flags: (",
-                "                    bits: 0,",
-                "                ),",
-                "                rate: 1,",
-                "                applied_rate: 1,",
-                "                format: Time,",
-                "                base: 0,",
-                "                offset: 0,",
-                "                start: 0,",
-                "                stop: -1,",
-                "                time: 0,",
-                "                position: 0,",
-                "                duration: -1,",
-                "            )),",
-                "            info: None,",
-                "        ),",
-                "    ]),",
-                "]",
+                "(",
+                "    scope: Stream,",
+                "    tags: [",
+                "        (\"title\", [",
+                "            \"a title\",",
+                "            \"another title\",",
+                "        ]),",
+                "        (\"duration\", [",
+                "            120000000000,",
+                "        ]),",
+                "        (\"bitrate\", [",
+                "            96000,",
+                "        ]),",
+                "        (\"replaygain-track-gain\", [",
+                "            1,",
+                "        ]),",
+                "        (\"datetime\", [",
+                "            YMD(2018, 5, 28),",
+                "        ]),",
+                "        (\"image\", [",
+                "            (",
+                "                buffer: Some((",
+                "                    pts: None,",
+                "                    dts: None,",
+                "                    duration: None,",
+                "                    offset: 0,",
+                "                    offset_end: 0,",
+                "                    flags: (",
+                "                        bits: 0,",
+                "                    ),",
+                "                    buffer: \"AQIDBA==\",",
+                "                )),",
+                "                buffer_list: None,",
+                "                caps: None,",
+                "                segment: Some((",
+                "                    flags: (",
+                "                        bits: 0,",
+                "                    ),",
+                "                    rate: 1,",
+                "                    applied_rate: 1,",
+                "                    format: Time,",
+                "                    base: 0,",
+                "                    offset: 0,",
+                "                    start: 0,",
+                "                    stop: -1,",
+                "                    time: 0,",
+                "                    position: 0,",
+                "                    duration: -1,",
+                "                )),",
+                "                info: None,",
+                "            ),",
+                "        ]),",
+                "    ],",
+                ")",
             )
             .to_owned()),
             res,
@@ -351,39 +389,44 @@ mod tests {
         ::init().unwrap();
 
         let tag_list_ron = r#"
-            [
-                ("title", [
-                    "a title",
-                    "another title",
-                ]),
-                ("duration", [120000000000]),
-                ("bitrate", [96000]),
-                ("replaygain-track-gain", [1]),
-                ("datetime", [
-                    YMD(2018, 5, 28),
-                ]),
-                ("image", [
-                    (
-                        buffer: Some((
-                            pts: None,
-                            dts: None,
-                            duration: None,
-                            offset: 0,
-                            offset_end: 0,
-                            flags: (
-                                bits: 0,
-                            ),
-                            buffer: "AQIDBA==",
-                        )),
-                        buffer_list: None,
-                        caps: None,
-                        segment: None,
-                        info: None,
-                    ),
-                ])
-            ]
+            (
+                scope: Global,
+                tags: [
+                    ("title", [
+                        "a title",
+                        "another title",
+                    ]),
+                    ("duration", [120000000000]),
+                    ("bitrate", [96000]),
+                    ("replaygain-track-gain", [1]),
+                    ("datetime", [
+                        YMD(2018, 5, 28),
+                    ]),
+                    ("image", [
+                        (
+                            buffer: Some((
+                                pts: None,
+                                dts: None,
+                                duration: None,
+                                offset: 0,
+                                offset_end: 0,
+                                flags: (
+                                    bits: 0,
+                                ),
+                                buffer: "AQIDBA==",
+                            )),
+                            buffer_list: None,
+                            caps: None,
+                            segment: None,
+                            info: None,
+                        ),
+                    ])
+                ],
+            )
         "#;
         let tags: TagList = ron::de::from_str(tag_list_ron).unwrap();
+        assert_eq!(tags.get_scope(), TagScope::Global);
+
         assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
         assert_eq!(
             tags.get_index::<Title>(1).unwrap().get(),
@@ -407,16 +450,21 @@ mod tests {
         }
 
         let tag_json = r#"
-            [
-                ["title", ["a title", "another title"]],
-                ["duration", [120000000000]],
-                ["bitrate", [96000]],
-                ["replaygain-track-gain", [1.0]],
-                ["datetime",[{"YMD":[2018,5,28]}]],
-                ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
-            ]
+            {
+                "scope":"Global",
+                "tags":[
+                    ["title", ["a title", "another title"]],
+                    ["duration", [120000000000]],
+                    ["bitrate", [96000]],
+                    ["replaygain-track-gain", [1.0]],
+                    ["datetime",[{"YMD":[2018,5,28]}]],
+                    ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
+                ]
+            }
         "#;
         let tags: TagList = serde_json::from_str(tag_json).unwrap();
+        assert_eq!(tags.get_scope(), TagScope::Global);
+
         assert_eq!(tags.get_index::<Title>(0).unwrap().get(), Some("a title"));
         assert_eq!(
             tags.get_index::<Title>(1).unwrap().get(),
@@ -444,6 +492,7 @@ mod tests {
         assert_eq!(tags.to_string(), "taglist;");
         {
             let tags = tags.get_mut().unwrap();
+            tags.set_scope(TagScope::Global);
             tags.add::<Title>(&"a title", TagMergeMode::Append); // String
             tags.add::<Title>(&"another title", TagMergeMode::Append); // String
             tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
@@ -465,6 +514,8 @@ mod tests {
         let tags_ser = ron::ser::to_string(&tags).unwrap();
 
         let tags_de: TagList = ron::de::from_str(tags_ser.as_str()).unwrap();
+        assert_eq!(tags_de.get_scope(), TagScope::Global);
+
         assert_eq!(
             tags_de.get_index::<Title>(0).unwrap().get(),
             tags.get_index::<Title>(0).unwrap().get(),

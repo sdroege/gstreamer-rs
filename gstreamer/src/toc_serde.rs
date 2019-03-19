@@ -203,11 +203,14 @@ mod tests {
             Ok(concat!(
                 "(",
                 "    scope: Global,",
-                "    tags: Some([",
-                "        (\"title\", [",
-                "            \"toc\",",
-                "        ]),",
-                "    ]),",
+                "    tags: Some((",
+                "        scope: Stream,",
+                "        tags: [",
+                "            (\"title\", [",
+                "                \"toc\",",
+                "            ]),",
+                "        ],",
+                "    )),",
                 "    entries: [",
                 "        (",
                 "            entry_type: Edition,",
@@ -227,11 +230,14 @@ mod tests {
                 "                            entry_type: Chapter,",
                 "                            uid: \"chapter1.1\",",
                 "                            start_stop: Some((0, 4)),",
-                "                            tags: Some([",
-                "                                (\"title\", [",
-                "                                    \"chapter 1.1\",",
-                "                                ]),",
-                "                            ]),",
+                "                            tags: Some((",
+                "                                scope: Stream,",
+                "                                tags: [",
+                "                                    (\"title\", [",
+                "                                        \"chapter 1.1\",",
+                "                                    ]),",
+                "                                ],",
+                "                            )),",
                 "                            loop: Some((None, 0)),",
                 "                            sub_entries: [",
                 "                            ],",
@@ -240,11 +246,14 @@ mod tests {
                 "                            entry_type: Chapter,",
                 "                            uid: \"chapter1.2\",",
                 "                            start_stop: Some((4, 10)),",
-                "                            tags: Some([",
-                "                                (\"title\", [",
-                "                                    \"chapter 1.2\",",
-                "                                ]),",
-                "                            ]),",
+                "                            tags: Some((",
+                "                                scope: Stream,",
+                "                                tags: [",
+                "                                    (\"title\", [",
+                "                                        \"chapter 1.2\",",
+                "                                    ]),",
+                "                                ],",
+                "                            )),",
                 "                            loop: Some((None, 0)),",
                 "                            sub_entries: [",
                 "                            ],",
@@ -255,11 +264,14 @@ mod tests {
                 "                    entry_type: Chapter,",
                 "                    uid: \"chapter2\",",
                 "                    start_stop: Some((10, 15)),",
-                "                    tags: Some([",
-                "                        (\"title\", [",
-                "                            \"chapter 2\",",
-                "                        ]),",
-                "                    ]),",
+                "                    tags: Some((",
+                "                        scope: Stream,",
+                "                        tags: [",
+                "                            (\"title\", [",
+                "                                \"chapter 2\",",
+                "                            ]),",
+                "                        ],",
+                "                    )),",
                 "                    loop: Some((None, 0)),",
                 "                    sub_entries: [",
                 "                    ],",
@@ -283,9 +295,12 @@ mod tests {
         let toc_ron = r#"
             (
                 scope: Global,
-                tags: Some([
-                    ("title", ["toc"]),
-                ]),
+                tags: Some((
+                    scope: Stream,
+                    tags: [
+                        ("title", ["toc"]),
+                    ],
+                )),
                 entries: [
                     (
                         entry_type: Edition,
@@ -305,9 +320,12 @@ mod tests {
                                         entry_type: Chapter,
                                         uid: "chapter1.1",
                                         start_stop: Some((0, 4)),
-                                        tags: Some([
-                                            ("title", ["chapter 1.1"]),
-                                        ]),
+                                        tags: Some((
+                                            scope: Stream,
+                                            tags: [
+                                                ("title", ["chapter 1.1"]),
+                                            ],
+                                        )),
                                         loop: Some((None, 0)),
                                         sub_entries: [
                                         ],
@@ -316,9 +334,12 @@ mod tests {
                                         entry_type: Chapter,
                                         uid: "chapter1.2",
                                         start_stop: Some((4, 10)),
-                                        tags: Some([
-                                            ("title", ["chapter 1.2"]),
-                                        ]),
+                                        tags: Some((
+                                            scope: Stream,
+                                            tags: [
+                                                ("title", ["chapter 1.2"]),
+                                            ],
+                                        )),
                                         loop: Some((None, 0)),
                                         sub_entries: [
                                         ],
@@ -329,9 +350,12 @@ mod tests {
                                 entry_type: Chapter,
                                 uid: "chapter2",
                                 start_stop: Some((10, 15)),
-                                tags: Some([
-                                    ("title", ["chapter 2"]),
-                                ]),
+                                tags: Some((
+                                    scope: Stream,
+                                    tags: [
+                                        ("title", ["chapter 2"]),
+                                    ],
+                                )),
                                 loop: Some((None, 0)),
                                 sub_entries: [
                                 ],
