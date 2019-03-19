@@ -10,16 +10,16 @@ extern crate libc;
 
 #[macro_use]
 extern crate glib;
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
+extern crate glib_sys;
+extern crate gobject_sys;
 extern crate gstreamer as gst;
 extern crate gstreamer_sdp as gst_sdp;
-extern crate gstreamer_sys as gst_ffi;
-extern crate gstreamer_webrtc_sys as ffi;
+extern crate gstreamer_sys as gst_sys;
+extern crate gstreamer_webrtc_sys as gst_web_rtc_sys;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
+        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };

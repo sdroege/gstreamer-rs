@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_video_sys;
 
 use glib;
 use glib::translate::{
@@ -34,21 +34,21 @@ pub enum VideoColorRange {
 
 #[doc(hidden)]
 impl ToGlib for VideoColorRange {
-    type GlibType = ffi::GstVideoColorRange;
+    type GlibType = gst_video_sys::GstVideoColorRange;
 
-    fn to_glib(&self) -> ffi::GstVideoColorRange {
+    fn to_glib(&self) -> gst_video_sys::GstVideoColorRange {
         match *self {
-            VideoColorRange::Unknown => ffi::GST_VIDEO_COLOR_RANGE_UNKNOWN,
-            VideoColorRange::Range0255 => ffi::GST_VIDEO_COLOR_RANGE_0_255,
-            VideoColorRange::Range16235 => ffi::GST_VIDEO_COLOR_RANGE_16_235,
+            VideoColorRange::Unknown => gst_video_sys::GST_VIDEO_COLOR_RANGE_UNKNOWN,
+            VideoColorRange::Range0255 => gst_video_sys::GST_VIDEO_COLOR_RANGE_0_255,
+            VideoColorRange::Range16235 => gst_video_sys::GST_VIDEO_COLOR_RANGE_16_235,
             VideoColorRange::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
-    fn from_glib(value: ffi::GstVideoColorRange) -> Self {
+impl FromGlib<gst_video_sys::GstVideoColorRange> for VideoColorRange {
+    fn from_glib(value: gst_video_sys::GstVideoColorRange) -> Self {
         skip_assert_initialized!();
         match value as i32 {
             0 => VideoColorRange::Unknown,
@@ -61,7 +61,7 @@ impl FromGlib<ffi::GstVideoColorRange> for VideoColorRange {
 
 impl glib::StaticType for VideoColorRange {
     fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_video_color_range_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_color_range_get_type()) }
     }
 }
 
@@ -73,17 +73,17 @@ impl<'a> glib::value::FromValueOptional<'a> for VideoColorRange {
 
 impl<'a> glib::value::FromValue<'a> for VideoColorRange {
     unsafe fn from_value(value: &glib::value::Value) -> Self {
-        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
 impl glib::value::SetValue for VideoColorRange {
     unsafe fn set_value(value: &mut glib::value::Value, this: &Self) {
-        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib() as i32)
     }
 }
 
-pub struct VideoColorimetry(ffi::GstVideoColorimetry);
+pub struct VideoColorimetry(gst_video_sys::GstVideoColorimetry);
 
 impl VideoColorimetry {
     pub fn new(
@@ -95,7 +95,7 @@ impl VideoColorimetry {
         assert_initialized_main_thread!();
 
         let colorimetry = unsafe {
-            let mut colorimetry: ffi::GstVideoColorimetry = mem::zeroed();
+            let mut colorimetry: gst_video_sys::GstVideoColorimetry = mem::zeroed();
 
             colorimetry.range = range.to_glib();
             colorimetry.matrix = matrix.to_glib();
@@ -109,7 +109,7 @@ impl VideoColorimetry {
     }
 
     pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(ffi::gst_video_colorimetry_to_string(&self.0)) }
+        unsafe { from_glib_full(gst_video_sys::gst_video_colorimetry_to_string(&self.0)) }
     }
 
     pub fn from_string(s: &str) -> Option<Self> {
@@ -117,7 +117,7 @@ impl VideoColorimetry {
 
         unsafe {
             let mut colorimetry = mem::zeroed();
-            let valid: bool = from_glib(ffi::gst_video_colorimetry_from_string(
+            let valid: bool = from_glib(gst_video_sys::gst_video_colorimetry_from_string(
                 &mut colorimetry,
                 s.to_glib_none().0,
             ));
@@ -154,7 +154,11 @@ impl Clone for VideoColorimetry {
 
 impl PartialEq for VideoColorimetry {
     fn eq(&self, other: &Self) -> bool {
-        unsafe { from_glib(ffi::gst_video_colorimetry_is_equal(&self.0, &other.0)) }
+        unsafe {
+            from_glib(gst_video_sys::gst_video_colorimetry_is_equal(
+                &self.0, &other.0,
+            ))
+        }
     }
 }
 
@@ -206,7 +210,7 @@ impl ::VideoMultiviewFramePacking {
     }
 }
 
-pub struct VideoInfo(pub(crate) ffi::GstVideoInfo);
+pub struct VideoInfo(pub(crate) gst_video_sys::GstVideoInfo);
 
 impl fmt::Debug for VideoInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
@@ -263,7 +267,7 @@ impl<'a> VideoInfoBuilder<'a> {
         unsafe {
             let mut info = mem::uninitialized();
 
-            ffi::gst_video_info_set_format(
+            gst_video_sys::gst_video_info_set_format(
                 &mut info,
                 self.format.to_glib(),
                 self.width,
@@ -494,7 +498,10 @@ impl VideoInfo {
 
         unsafe {
             let mut info = mem::uninitialized();
-            if from_glib(ffi::gst_video_info_from_caps(&mut info, caps.as_ptr())) {
+            if from_glib(gst_video_sys::gst_video_info_from_caps(
+                &mut info,
+                caps.as_ptr(),
+            )) {
                 Some(VideoInfo(info))
             } else {
                 None
@@ -503,7 +510,11 @@ impl VideoInfo {
     }
 
     pub fn to_caps(&self) -> Option<gst::Caps> {
-        unsafe { from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _)) }
+        unsafe {
+            from_glib_full(gst_video_sys::gst_video_info_to_caps(
+                &self.0 as *const _ as *mut _,
+            ))
+        }
     }
 
     pub fn format(&self) -> ::VideoFormat {
@@ -621,7 +632,7 @@ impl VideoInfo {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::uninitialized();
-            if from_glib(ffi::gst_video_info_convert(
+            if from_glib(gst_video_sys::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -645,7 +656,7 @@ impl VideoInfo {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::uninitialized();
-            if from_glib(ffi::gst_video_info_convert(
+            if from_glib(gst_video_sys::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -668,7 +679,7 @@ impl Clone for VideoInfo {
 
 impl PartialEq for VideoInfo {
     fn eq(&self, other: &Self) -> bool {
-        unsafe { from_glib(ffi::gst_video_info_is_equal(&self.0, &other.0)) }
+        unsafe { from_glib(gst_video_sys::gst_video_info_is_equal(&self.0, &other.0)) }
     }
 }
 
@@ -679,26 +690,25 @@ unsafe impl Sync for VideoInfo {}
 
 impl glib::types::StaticType for VideoInfo {
     fn static_type() -> glib::types::Type {
-        unsafe { glib::translate::from_glib(ffi::gst_video_info_get_type()) }
+        unsafe { glib::translate::from_glib(gst_video_sys::gst_video_info_get_type()) }
     }
 }
 
 #[doc(hidden)]
 impl<'a> glib::value::FromValueOptional<'a> for VideoInfo {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<VideoInfo>::from_glib_none(
-            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstVideoInfo
-        )
+        Option::<VideoInfo>::from_glib_none(gobject_sys::g_value_get_boxed(value.to_glib_none().0)
+            as *mut gst_video_sys::GstVideoInfo)
     }
 }
 
 #[doc(hidden)]
 impl glib::value::SetValue for VideoInfo {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_ffi::g_value_set_boxed(
+        gobject_sys::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstVideoInfo>::to_glib_none(this).0
-                as glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const gst_video_sys::GstVideoInfo>::to_glib_none(this).0
+                as glib_sys::gpointer,
         )
     }
 }
@@ -706,10 +716,10 @@ impl glib::value::SetValue for VideoInfo {
 #[doc(hidden)]
 impl glib::value::SetValueOptional for VideoInfo {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_ffi::g_value_set_boxed(
+        gobject_sys::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstVideoInfo>::to_glib_none(&this).0
-                as glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const gst_video_sys::GstVideoInfo>::to_glib_none(&this).0
+                as glib_sys::gpointer,
         )
     }
 }
@@ -723,36 +733,38 @@ impl glib::translate::Uninitialized for VideoInfo {
 
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for VideoInfo {
-    type GlibType = *mut ffi::GstVideoInfo;
+    type GlibType = *mut gst_video_sys::GstVideoInfo;
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfo> for VideoInfo {
+impl<'a> glib::translate::ToGlibPtr<'a, *const gst_video_sys::GstVideoInfo> for VideoInfo {
     type Storage = &'a VideoInfo;
 
-    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoInfo, Self> {
+    fn to_glib_none(
+        &'a self,
+    ) -> glib::translate::Stash<'a, *const gst_video_sys::GstVideoInfo, Self> {
         glib::translate::Stash(&self.0, self)
     }
 
-    fn to_glib_full(&self) -> *const ffi::GstVideoInfo {
+    fn to_glib_full(&self) -> *const gst_video_sys::GstVideoInfo {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoInfo> for VideoInfo {
+impl glib::translate::FromGlibPtrNone<*mut gst_video_sys::GstVideoInfo> for VideoInfo {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut ffi::GstVideoInfo) -> Self {
+    unsafe fn from_glib_none(ptr: *mut gst_video_sys::GstVideoInfo) -> Self {
         VideoInfo(ptr::read(ptr))
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
+impl glib::translate::FromGlibPtrFull<*mut gst_video_sys::GstVideoInfo> for VideoInfo {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GstVideoInfo) -> Self {
+    unsafe fn from_glib_full(ptr: *mut gst_video_sys::GstVideoInfo) -> Self {
         let info = from_glib_none(ptr);
-        glib_ffi::g_free(ptr as *mut _);
+        glib_sys::g_free(ptr as *mut _);
         info
     }
 }
@@ -760,13 +772,21 @@ impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfo> for VideoInfo {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl ::VideoFieldOrder {
     pub fn to_string(self) -> String {
-        unsafe { from_glib_full(ffi::gst_video_field_order_to_string(self.to_glib())) }
+        unsafe {
+            from_glib_full(gst_video_sys::gst_video_field_order_to_string(
+                self.to_glib(),
+            ))
+        }
     }
 
     pub fn from_string(s: &str) -> Self {
         assert_initialized_main_thread!();
 
-        unsafe { from_glib(ffi::gst_video_field_order_from_string(s.to_glib_none().0)) }
+        unsafe {
+            from_glib(gst_video_sys::gst_video_field_order_from_string(
+                s.to_glib_none().0,
+            ))
+        }
     }
 }
 
@@ -789,14 +809,18 @@ impl fmt::Display for ::VideoFieldOrder {
 
 impl ::VideoInterlaceMode {
     pub fn to_string(self) -> String {
-        unsafe { from_glib_full(ffi::gst_video_interlace_mode_to_string(self.to_glib())) }
+        unsafe {
+            from_glib_full(gst_video_sys::gst_video_interlace_mode_to_string(
+                self.to_glib(),
+            ))
+        }
     }
 
     pub fn from_string(s: &str) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
-            from_glib(ffi::gst_video_interlace_mode_from_string(
+            from_glib(gst_video_sys::gst_video_interlace_mode_from_string(
                 s.to_glib_none().0,
             ))
         }

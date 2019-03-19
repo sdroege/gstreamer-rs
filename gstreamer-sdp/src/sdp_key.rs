@@ -9,10 +9,10 @@
 use std::ffi::CStr;
 use std::fmt;
 
-use ffi;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPKey(ffi::GstSDPKey);
+pub struct SDPKey(gst_sdp_sys::GstSDPKey);
 
 impl SDPKey {
     pub fn type_(&self) -> &str {

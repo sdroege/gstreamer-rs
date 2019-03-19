@@ -10,18 +10,18 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 
-use ffi;
 use glib::translate::*;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPZone(pub(crate) ffi::GstSDPZone);
+pub struct SDPZone(pub(crate) gst_sdp_sys::GstSDPZone);
 
 impl SDPZone {
     pub fn new(time: &str, typed_time: &str) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut zone = mem::zeroed();
-            ffi::gst_sdp_zone_set(
+            gst_sdp_sys::gst_sdp_zone_set(
                 &mut zone,
                 time.to_glib_none().0,
                 typed_time.to_glib_none().0,
@@ -48,7 +48,7 @@ impl Clone for SDPZone {
 impl Drop for SDPZone {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_sdp_zone_clear(&mut self.0);
+            gst_sdp_sys::gst_sdp_zone_clear(&mut self.0);
         }
     }
 }

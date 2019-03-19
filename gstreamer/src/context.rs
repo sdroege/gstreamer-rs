@@ -9,7 +9,7 @@
 use std::ffi::CStr;
 use std::fmt;
 
-use ffi;
+use gst_sys;
 
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
@@ -17,15 +17,15 @@ use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use miniobject::*;
 use StructureRef;
 
-gst_define_mini_object_wrapper!(Context, ContextRef, ffi::GstContext, [Debug,], || {
-    ffi::gst_context_get_type()
+gst_define_mini_object_wrapper!(Context, ContextRef, gst_sys::GstContext, [Debug,], || {
+    gst_sys::gst_context_get_type()
 });
 
 impl Context {
     pub fn new(context_type: &str, persistent: bool) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_context_new(
+            from_glib_full(gst_sys::gst_context_new(
                 context_type.to_glib_none().0,
                 persistent.to_glib(),
             ))
@@ -36,14 +36,14 @@ impl Context {
 impl ContextRef {
     pub fn get_context_type(&self) -> &str {
         unsafe {
-            let raw = ffi::gst_context_get_context_type(self.as_mut_ptr());
+            let raw = gst_sys::gst_context_get_context_type(self.as_mut_ptr());
             CStr::from_ptr(raw).to_str().unwrap()
         }
     }
 
     pub fn has_context_type(&self, context_type: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_context_has_context_type(
+            from_glib(gst_sys::gst_context_has_context_type(
                 self.as_mut_ptr(),
                 context_type.to_glib_none().0,
             ))
@@ -51,16 +51,18 @@ impl ContextRef {
     }
 
     pub fn is_persistent(&self) -> bool {
-        unsafe { from_glib(ffi::gst_context_is_persistent(self.as_mut_ptr())) }
+        unsafe { from_glib(gst_sys::gst_context_is_persistent(self.as_mut_ptr())) }
     }
 
     pub fn get_structure(&self) -> &StructureRef {
-        unsafe { StructureRef::from_glib_borrow(ffi::gst_context_get_structure(self.as_mut_ptr())) }
+        unsafe {
+            StructureRef::from_glib_borrow(gst_sys::gst_context_get_structure(self.as_mut_ptr()))
+        }
     }
 
     pub fn get_mut_structure(&mut self) -> &mut StructureRef {
         unsafe {
-            StructureRef::from_glib_borrow_mut(ffi::gst_context_writable_structure(
+            StructureRef::from_glib_borrow_mut(gst_sys::gst_context_writable_structure(
                 self.as_mut_ptr(),
             ))
         }

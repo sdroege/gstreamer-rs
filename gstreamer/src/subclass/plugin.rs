@@ -28,12 +28,12 @@ macro_rules! gst_plugin_define(
             use $crate::glib::translate::{from_glib_borrow, ToGlib, from_glib};
 
             #[repr(C)]
-            pub struct GstPluginDesc($crate::ffi::GstPluginDesc);
+            pub struct GstPluginDesc($crate::gst_sys::GstPluginDesc);
             unsafe impl Sync for GstPluginDesc {}
 
             #[no_mangle]
             #[allow(non_upper_case_globals)]
-            pub static gst_plugin_desc: GstPluginDesc = GstPluginDesc($crate::ffi::GstPluginDesc {
+            pub static gst_plugin_desc: GstPluginDesc = GstPluginDesc($crate::gst_sys::GstPluginDesc {
                 major_version: $crate::subclass::plugin::MAJOR_VERSION,
                 minor_version: $crate::subclass::plugin::MINOR_VERSION,
                 name: concat!($name, "\0") as *const str as *const _,
@@ -45,13 +45,13 @@ macro_rules! gst_plugin_define(
                 package: concat!($package, "\0") as *const str as *const _,
                 origin: concat!($origin, "\0") as *const str as *const _,
                 release_datetime: concat!($release_datetime, "\0") as *const str as *const _,
-                _gst_reserved: [0 as $crate::glib_ffi::gpointer; 4],
+                _gst_reserved: [0 as $crate::glib_sys::gpointer; 4],
             });
 
             pub fn plugin_register_static() -> Result<(), glib::BoolError> {
                 unsafe {
                     glib_result_from_gboolean!(
-                        $crate::ffi::gst_plugin_register_static(
+                        $crate::gst_sys::gst_plugin_register_static(
                             $crate::subclass::plugin::MAJOR_VERSION,
                             $crate::subclass::plugin::MINOR_VERSION,
                             concat!($name, "\0") as *const str as *const _,
@@ -68,17 +68,17 @@ macro_rules! gst_plugin_define(
                 }
             }
 
-            unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::ffi::GstPlugin) -> $crate::glib_ffi::gboolean {
+            unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::gst_sys::GstPlugin) -> $crate::glib_sys::gboolean {
                 use std::panic::{self, AssertUnwindSafe};
 
                 let panic_result = panic::catch_unwind(AssertUnwindSafe(|| super::$plugin_init(&from_glib_borrow(plugin))));
                 match panic_result {
                     Ok(register_result) => match register_result {
-                        Ok(_) => $crate::glib_ffi::GTRUE,
+                        Ok(_) => $crate::glib_sys::GTRUE,
                         Err(err) => {
                             let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
                             gst_error!(cat, "Failed to register plugin: {}", err);
-                            $crate::glib_ffi::GFALSE
+                            $crate::glib_sys::GFALSE
                         }
                     }
                     Err(err) => {
@@ -91,7 +91,7 @@ macro_rules! gst_plugin_define(
                             gst_error!(cat, "Failed to initialize plugin due to panic");
                         }
 
-                        $crate::glib_ffi::GFALSE
+                        $crate::glib_sys::GFALSE
                     }
                 }
             }

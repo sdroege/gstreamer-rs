@@ -10,16 +10,16 @@ extern crate libc;
 
 use std::sync::{Once, ONCE_INIT};
 
-extern crate gio_sys as gio_ffi;
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
+extern crate gio_sys;
+extern crate glib_sys;
+extern crate gobject_sys;
 extern crate gstreamer as gst;
 extern crate gstreamer_base as gst_base;
-extern crate gstreamer_base_sys as gst_base_ffi;
-extern crate gstreamer_editing_services_sys as ffi;
+extern crate gstreamer_base_sys as gst_base_sys;
+extern crate gstreamer_editing_services_sys as ges_sys;
 extern crate gstreamer_pbutils as gst_pbutils;
-extern crate gstreamer_pbutils_sys as gst_pbutils_ffi;
-extern crate gstreamer_sys as gst_ffi;
+extern crate gstreamer_pbutils_sys as gst_pbutils_sys;
+extern crate gstreamer_sys as gst_sys;
 
 use glib::translate::from_glib;
 
@@ -39,7 +39,7 @@ pub fn init() -> Result<(), BoolError> {
     }
 
     unsafe {
-        if from_glib(ffi::ges_init()) {
+        if from_glib(ges_sys::ges_init()) {
             Ok(())
         } else {
             Err(glib_bool_error!("Could not initialize GES."))
@@ -48,16 +48,16 @@ pub fn init() -> Result<(), BoolError> {
 }
 
 pub unsafe fn deinit() {
-    ffi::ges_deinit();
+    ges_sys::ges_deinit();
 }
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
+        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
         ::GES_INIT.call_once(|| {
-            unsafe { ::ffi::ges_init() };
+            unsafe { ::ges_sys::ges_init() };
         });
     };
 }

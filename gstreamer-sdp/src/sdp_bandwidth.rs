@@ -10,18 +10,18 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 
-use ffi;
 use glib::translate::*;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPBandwidth(pub(crate) ffi::GstSDPBandwidth);
+pub struct SDPBandwidth(pub(crate) gst_sdp_sys::GstSDPBandwidth);
 
 impl SDPBandwidth {
     pub fn new(bwtype: &str, bandwidth: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut bw = mem::zeroed();
-            ffi::gst_sdp_bandwidth_set(&mut bw, bwtype.to_glib_none().0, bandwidth);
+            gst_sdp_sys::gst_sdp_bandwidth_set(&mut bw, bwtype.to_glib_none().0, bandwidth);
             SDPBandwidth(bw)
         }
     }
@@ -44,7 +44,7 @@ impl Clone for SDPBandwidth {
 impl Drop for SDPBandwidth {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_sdp_bandwidth_clear(&mut self.0);
+            gst_sdp_sys::gst_sdp_bandwidth_clear(&mut self.0);
         }
     }
 }

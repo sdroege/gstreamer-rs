@@ -12,7 +12,7 @@ use glib::signal::SignalHandlerId;
 use glib::translate::{from_glib_borrow, from_glib_none, ToGlibPtr};
 use glib::IsA;
 
-use gobject_ffi;
+use gobject_sys;
 
 pub trait GstObjectExtManual: 'static {
     fn connect_deep_notify<
@@ -44,14 +44,14 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
         };
 
         let obj: glib::Object =
-            unsafe { from_glib_borrow(self.as_ptr() as *mut gobject_ffi::GObject) };
+            unsafe { from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject) };
 
         obj.connect(signal_name.as_str(), false, move |values| {
             let obj: O = unsafe { values[0].get::<::Object>().unwrap().unsafe_cast() };
             let prop_obj: ::Object = values[1].get().unwrap();
 
             let pspec = unsafe {
-                let pspec = gobject_ffi::g_value_get_param(values[2].to_glib_none().0);
+                let pspec = gobject_sys::g_value_get_param(values[2].to_glib_none().0);
                 from_glib_none(pspec)
             };
 
@@ -74,7 +74,7 @@ mod tests {
         ::init().unwrap();
 
         let bin = ::Bin::new(None);
-        let identity = ::ElementFactory::make("identity", "id").unwrap();
+        let identity = ::ElementFactory::make("identity", Some("id")).unwrap();
         bin.add(&identity).unwrap();
 
         let notify = Arc::new(Mutex::new(None));

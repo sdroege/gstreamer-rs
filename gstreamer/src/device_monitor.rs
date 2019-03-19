@@ -13,17 +13,17 @@ use glib;
 use glib::object::IsA;
 use glib::translate::*;
 
-use ffi;
+use gst_sys;
 
 impl DeviceMonitor {
     pub fn new() -> DeviceMonitor {
         assert_initialized_main_thread!();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_device_monitor_new()) }
+            unsafe { from_glib_full(gst_sys::gst_device_monitor_new()) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(ffi::gst_device_monitor_new()) }
+            unsafe { from_glib_none(gst_sys::gst_device_monitor_new()) }
         }
     }
 }
@@ -73,7 +73,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
         let classes = classes.into();
         let caps = caps.into();
         let id = unsafe {
-            ffi::gst_device_monitor_add_filter(
+            gst_sys::gst_device_monitor_add_filter(
                 self.as_ref().to_glib_none().0,
                 classes.to_glib_none().0,
                 caps.to_glib_none().0,
@@ -93,7 +93,7 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
     ) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_device_monitor_remove_filter(
+                gst_sys::gst_device_monitor_remove_filter(
                     self.as_ref().to_glib_none().0,
                     filter_id.to_glib()
                 ),

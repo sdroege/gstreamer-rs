@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::*;
+use gst_player_sys;
 use PlayerGMainContextSignalDispatcher;
 
 impl PlayerGMainContextSignalDispatcher {
@@ -19,10 +19,11 @@ impl PlayerGMainContextSignalDispatcher {
         let application_context = application_context.into();
         let application_context = application_context.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gst_player_g_main_context_signal_dispatcher_new(
-                application_context.0,
+            from_glib_full(
+                gst_player_sys::gst_player_g_main_context_signal_dispatcher_new(
+                    application_context.0,
+                ) as *mut gst_player_sys::GstPlayerGMainContextSignalDispatcher,
             )
-                as *mut ffi::GstPlayerGMainContextSignalDispatcher)
         }
     }
 }

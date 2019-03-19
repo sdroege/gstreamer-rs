@@ -6,12 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
-use glib_ffi;
-use glib_ffi::{gboolean, gpointer};
+use glib_sys;
+use glib_sys::{gboolean, gpointer};
+use gst_sys;
 use std::cell::RefCell;
 use std::mem::transmute;
 use std::ptr;
@@ -21,8 +21,8 @@ use BusSyncReply;
 use Message;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
-    bus: *mut ffi::GstBus,
-    msg: *mut ffi::GstMessage,
+    bus: *mut gst_sys::GstBus,
+    msg: *mut gst_sys::GstMessage,
     func: gpointer,
 ) -> gboolean {
     let func: &RefCell<F> = &*(func as *const RefCell<F>);
@@ -44,15 +44,15 @@ fn into_raw_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(func: F) -> gp
 unsafe extern "C" fn trampoline_sync<
     F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
 >(
-    bus: *mut ffi::GstBus,
-    msg: *mut ffi::GstMessage,
+    bus: *mut gst_sys::GstBus,
+    msg: *mut gst_sys::GstMessage,
     func: gpointer,
-) -> ffi::GstBusSyncReply {
+) -> gst_sys::GstBusSyncReply {
     let f: &F = &*(func as *const F);
     let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).to_glib();
 
-    if res == ffi::GST_BUS_DROP {
-        ffi::gst_mini_object_unref(msg as *mut _);
+    if res == gst_sys::GST_BUS_DROP {
+        gst_sys::gst_mini_object_unref(msg as *mut _);
     }
 
     res
@@ -76,7 +76,7 @@ fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
 impl Bus {
     pub fn add_signal_watch_full(&self, priority: Priority) {
         unsafe {
-            ffi::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.to_glib());
+            gst_sys::gst_bus_add_signal_watch_full(self.to_glib_none().0, priority.to_glib());
         }
     }
 
@@ -91,18 +91,18 @@ impl Bus {
     {
         skip_assert_initialized!();
         unsafe {
-            let source = ffi::gst_bus_create_watch(self.to_glib_none().0);
-            glib_ffi::g_source_set_callback(
+            let source = gst_sys::gst_bus_create_watch(self.to_glib_none().0);
+            glib_sys::g_source_set_callback(
                 source,
                 Some(transmute(trampoline_watch::<F> as usize)),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
             );
-            glib_ffi::g_source_set_priority(source, priority.to_glib());
+            glib_sys::g_source_set_priority(source, priority.to_glib());
 
             let name = name.into();
             if let Some(name) = name {
-                glib_ffi::g_source_set_name(source, name.to_glib_none().0);
+                glib_sys::g_source_set_name(source, name.to_glib_none().0);
             }
 
             from_glib_full(source)
@@ -114,9 +114,9 @@ impl Bus {
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
         unsafe {
-            let res = ffi::gst_bus_add_watch_full(
+            let res = gst_sys::gst_bus_add_watch_full(
                 self.to_glib_none().0,
-                glib_ffi::G_PRIORITY_DEFAULT,
+                glib_sys::G_PRIORITY_DEFAULT,
                 Some(trampoline_watch::<F>),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
@@ -137,9 +137,9 @@ impl Bus {
         unsafe {
             assert!(glib::MainContext::ref_thread_default().is_owner());
 
-            let res = ffi::gst_bus_add_watch_full(
+            let res = gst_sys::gst_bus_add_watch_full(
                 self.to_glib_none().0,
-                glib_ffi::G_PRIORITY_DEFAULT,
+                glib_sys::G_PRIORITY_DEFAULT,
                 Some(trampoline_watch::<F>),
                 into_raw_watch(func),
                 Some(destroy_closure_watch::<F>),
@@ -158,7 +158,7 @@ impl Bus {
         F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
     {
         unsafe {
-            ffi::gst_bus_set_sync_handler(
+            gst_sys::gst_bus_set_sync_handler(
                 self.to_glib_none().0,
                 Some(trampoline_sync::<F>),
                 into_raw_sync(func),
@@ -168,7 +168,9 @@ impl Bus {
     }
 
     pub fn unset_sync_handler(&self) {
-        unsafe { ffi::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None) }
+        unsafe {
+            gst_sys::gst_bus_set_sync_handler(self.to_glib_none().0, None, ptr::null_mut(), None)
+        }
     }
 
     pub fn iter(&self) -> Iter {

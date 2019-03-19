@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::*;
+use gst_sys;
 use std::{cmp, fmt};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
@@ -107,22 +107,22 @@ impl fmt::Display for ClockTime {
 
 #[doc(hidden)]
 impl ToGlib for ClockTime {
-    type GlibType = ffi::GstClockTime;
+    type GlibType = gst_sys::GstClockTime;
 
-    fn to_glib(&self) -> ffi::GstClockTime {
+    fn to_glib(&self) -> gst_sys::GstClockTime {
         match self.0 {
-            None => ffi::GST_CLOCK_TIME_NONE,
+            None => gst_sys::GST_CLOCK_TIME_NONE,
             Some(v) => v,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<ffi::GstClockTime> for ClockTime {
-    fn from_glib(value: ffi::GstClockTime) -> Self {
+impl FromGlib<gst_sys::GstClockTime> for ClockTime {
+    fn from_glib(value: gst_sys::GstClockTime) -> Self {
         skip_assert_initialized!();
         match value {
-            ffi::GST_CLOCK_TIME_NONE => ClockTime(None),
+            gst_sys::GST_CLOCK_TIME_NONE => ClockTime(None),
             value => ClockTime(Some(value)),
         }
     }

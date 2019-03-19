@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use gst_ffi;
+use gst_sys;
+use gst_video_sys;
 
 use glib::translate::{from_glib, from_glib_full, ToGlib};
 use glib::ToSendValue;
@@ -16,7 +16,11 @@ use gst::MiniObject;
 use std::mem;
 
 pub fn is_force_key_unit_event(event: &gst::EventRef) -> bool {
-    unsafe { from_glib(ffi::gst_video_event_is_force_key_unit(event.as_mut_ptr())) }
+    unsafe {
+        from_glib(gst_video_sys::gst_video_event_is_force_key_unit(
+            event.as_mut_ptr(),
+        ))
+    }
 }
 
 // FIXME: Copy from gstreamer/src/event.rs
@@ -50,16 +54,16 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.seqnum {
-                    gst_ffi::gst_event_set_seqnum(event, seqnum.to_glib());
+                    gst_sys::gst_event_set_seqnum(event, seqnum.to_glib());
                 }
 
                 if let Some(running_time_offset) = self.running_time_offset {
-                    gst_ffi::gst_event_set_running_time_offset(event, running_time_offset);
+                    gst_sys::gst_event_set_running_time_offset(event, running_time_offset);
                 }
 
                 {
                     let s = gst::StructureRef::from_glib_borrow_mut(
-                        gst_ffi::gst_event_writable_structure(event)
+                        gst_sys::gst_event_writable_structure(event)
                     );
 
                     for (k, v) in self.other_fields {
@@ -132,15 +136,15 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         Self { count, ..self }
     }
 
-    event_builder_generic_impl!(
-        |s: &mut Self| ffi::gst_video_event_new_downstream_force_key_unit(
+    event_builder_generic_impl!(|s: &mut Self| {
+        gst_video_sys::gst_video_event_new_downstream_force_key_unit(
             s.timestamp.to_glib(),
             s.stream_time.to_glib(),
             s.running_time.to_glib(),
             s.all_headers.to_glib(),
             s.count,
         )
-    );
+    });
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -162,14 +166,16 @@ pub fn parse_downstream_force_key_unit_event(
         let mut all_headers = mem::uninitialized();
         let mut count = mem::uninitialized();
 
-        let res: bool = from_glib(ffi::gst_video_event_parse_downstream_force_key_unit(
-            event.as_mut_ptr(),
-            &mut timestamp,
-            &mut stream_time,
-            &mut running_time,
-            &mut all_headers,
-            &mut count,
-        ));
+        let res: bool = from_glib(
+            gst_video_sys::gst_video_event_parse_downstream_force_key_unit(
+                event.as_mut_ptr(),
+                &mut timestamp,
+                &mut stream_time,
+                &mut running_time,
+                &mut all_headers,
+                &mut count,
+            ),
+        );
         if res {
             Some(DownstreamForceKeyUnitEvent {
                 timestamp: from_glib(timestamp),
@@ -228,13 +234,13 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
         Self { count, ..self }
     }
 
-    event_builder_generic_impl!(
-        |s: &mut Self| ffi::gst_video_event_new_upstream_force_key_unit(
+    event_builder_generic_impl!(|s: &mut Self| {
+        gst_video_sys::gst_video_event_new_upstream_force_key_unit(
             s.running_time.to_glib(),
             s.all_headers.to_glib(),
             s.count,
         )
-    );
+    });
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -252,12 +258,14 @@ pub fn parse_upstream_force_key_unit_event(
         let mut all_headers = mem::uninitialized();
         let mut count = mem::uninitialized();
 
-        let res: bool = from_glib(ffi::gst_video_event_parse_upstream_force_key_unit(
-            event.as_mut_ptr(),
-            &mut running_time,
-            &mut all_headers,
-            &mut count,
-        ));
+        let res: bool = from_glib(
+            gst_video_sys::gst_video_event_parse_upstream_force_key_unit(
+                event.as_mut_ptr(),
+                &mut running_time,
+                &mut all_headers,
+                &mut count,
+            ),
+        );
         if res {
             Some(UpstreamForceKeyUnitEvent {
                 running_time: from_glib(running_time),
@@ -306,9 +314,9 @@ impl<'a> StillFrameEventBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &mut Self| ffi::gst_video_event_new_still_frame(
-        s.in_still.to_glib()
-    ));
+    event_builder_generic_impl!(
+        |s: &mut Self| gst_video_sys::gst_video_event_new_still_frame(s.in_still.to_glib())
+    );
 }
 
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -320,7 +328,7 @@ pub fn parse_still_frame_event(event: &gst::EventRef) -> Option<StillFrameEvent>
     unsafe {
         let mut in_still = mem::uninitialized();
 
-        let res: bool = from_glib(ffi::gst_video_event_parse_still_frame(
+        let res: bool = from_glib(gst_video_sys::gst_video_event_parse_still_frame(
             event.as_mut_ptr(),
             &mut in_still,
         ));

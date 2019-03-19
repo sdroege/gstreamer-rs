@@ -2,6 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
+use gst_app_sys;
 use glib::translate::*;
 

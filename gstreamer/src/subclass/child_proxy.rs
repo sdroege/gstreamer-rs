@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
 
 use glib;
 use glib::subclass::prelude::*;
@@ -21,9 +21,9 @@ use ChildProxy;
 pub trait ChildProxyImpl: super::element::ElementImpl + Send + Sync + 'static {
     fn get_child_by_name(&self, object: &ChildProxy, name: &str) -> Option<glib::Object> {
         unsafe {
-            let type_ = ffi::gst_child_proxy_get_type();
-            let iface = gobject_ffi::g_type_default_interface_ref(type_)
-                as *mut ffi::GstChildProxyInterface;
+            let type_ = gst_sys::gst_child_proxy_get_type();
+            let iface = gobject_sys::g_type_default_interface_ref(type_)
+                as *mut gst_sys::GstChildProxyInterface;
             assert!(!iface.is_null());
 
             let ret = ((*iface).get_child_by_name.as_ref().unwrap())(
@@ -31,7 +31,7 @@ pub trait ChildProxyImpl: super::element::ElementImpl + Send + Sync + 'static {
                 name.to_glib_none().0,
             );
 
-            gobject_ffi::g_type_default_interface_unref(iface as glib_ffi::gpointer);
+            gobject_sys::g_type_default_interface_unref(iface as glib_sys::gpointer);
 
             from_glib_full(ret)
         }
@@ -46,10 +46,10 @@ pub trait ChildProxyImpl: super::element::ElementImpl + Send + Sync + 'static {
 
 unsafe impl<T: ObjectSubclass + ChildProxyImpl> IsImplementable<T> for ChildProxy {
     unsafe extern "C" fn interface_init(
-        iface: glib_ffi::gpointer,
-        _iface_data: glib_ffi::gpointer,
+        iface: glib_sys::gpointer,
+        _iface_data: glib_sys::gpointer,
     ) {
-        let child_proxy_iface = &mut *(iface as *mut ffi::GstChildProxyInterface);
+        let child_proxy_iface = &mut *(iface as *mut gst_sys::GstChildProxyInterface);
 
         child_proxy_iface.get_child_by_name = Some(child_proxy_get_child_by_name::<T>);
         child_proxy_iface.get_child_by_index = Some(child_proxy_get_child_by_index::<T>);
@@ -60,9 +60,9 @@ unsafe impl<T: ObjectSubclass + ChildProxyImpl> IsImplementable<T> for ChildProx
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_name<T: ObjectSubclass>(
-    child_proxy: *mut ffi::GstChildProxy,
+    child_proxy: *mut gst_sys::GstChildProxy,
     name: *const libc::c_char,
-) -> *mut gobject_ffi::GObject
+) -> *mut gobject_sys::GObject
 where
     T: ChildProxyImpl,
 {
@@ -78,9 +78,9 @@ where
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_index<T: ObjectSubclass>(
-    child_proxy: *mut ffi::GstChildProxy,
+    child_proxy: *mut gst_sys::GstChildProxy,
     index: u32,
-) -> *mut gobject_ffi::GObject
+) -> *mut gobject_sys::GObject
 where
     T: ChildProxyImpl,
 {
@@ -93,7 +93,7 @@ where
 }
 
 unsafe extern "C" fn child_proxy_get_children_count<T: ObjectSubclass>(
-    child_proxy: *mut ffi::GstChildProxy,
+    child_proxy: *mut gst_sys::GstChildProxy,
 ) -> u32
 where
     T: ChildProxyImpl,
@@ -106,8 +106,8 @@ where
 }
 
 unsafe extern "C" fn child_proxy_child_added<T: ObjectSubclass>(
-    child_proxy: *mut ffi::GstChildProxy,
-    child: *mut gobject_ffi::GObject,
+    child_proxy: *mut gst_sys::GstChildProxy,
+    child: *mut gobject_sys::GObject,
     name: *const libc::c_char,
 ) where
     T: ChildProxyImpl,
@@ -124,8 +124,8 @@ unsafe extern "C" fn child_proxy_child_added<T: ObjectSubclass>(
 }
 
 unsafe extern "C" fn child_proxy_child_removed<T: ObjectSubclass>(
-    child_proxy: *mut ffi::GstChildProxy,
-    child: *mut gobject_ffi::GObject,
+    child_proxy: *mut gst_sys::GstChildProxy,
+    child: *mut gobject_sys::GObject,
     name: *const libc::c_char,
 ) where
     T: ChildProxyImpl,

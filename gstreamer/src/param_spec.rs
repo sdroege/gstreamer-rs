@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::*;
+use gst_sys;
 
 pub trait GstParamSpecExt {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -41,7 +41,7 @@ impl GstParamSpecExt for glib::ParamSpec {
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
         unsafe {
-            from_glib_full(ffi::gst_param_spec_array(
+            from_glib_full(gst_sys::gst_param_spec_array(
                 name.to_glib_none().0,
                 nick.to_glib_none().0,
                 blurb.to_glib_none().0,
@@ -61,7 +61,7 @@ impl GstParamSpecExt for glib::ParamSpec {
         flags: glib::ParamFlags,
     ) -> glib::ParamSpec {
         unsafe {
-            from_glib_full(ffi::gst_param_spec_fraction(
+            from_glib_full(gst_sys::gst_param_spec_fraction(
                 name.to_glib_none().0,
                 nick.to_glib_none().0,
                 blurb.to_glib_none().0,

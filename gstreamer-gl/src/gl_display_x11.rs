@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
-use glib_ffi::gpointer;
+use glib_sys::gpointer;
+use gst_gl_sys;
 use libc::uintptr_t;
 use GLDisplayX11;
 
 impl GLDisplayX11 {
     pub unsafe fn new_with_display(display: uintptr_t) -> Option<GLDisplayX11> {
-        from_glib_full(ffi::gst_gl_display_x11_new_with_display(
+        from_glib_full(gst_gl_sys::gst_gl_display_x11_new_with_display(
             display as gpointer,
         ))
     }

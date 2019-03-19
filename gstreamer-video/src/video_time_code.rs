@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::prelude::*;
 use glib::translate::*;
 use glib::value;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
 use gst;
 use gst::prelude::*;
+use gst_video_sys;
 use std::cmp;
 use std::fmt;
 use std::mem;
@@ -26,15 +26,15 @@ use VideoTimeCodeFlags;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use VideoTimeCodeInterval;
 
-pub struct VideoTimeCode(ffi::GstVideoTimeCode);
-pub struct ValidVideoTimeCode(ffi::GstVideoTimeCode);
+pub struct VideoTimeCode(gst_video_sys::GstVideoTimeCode);
+pub struct ValidVideoTimeCode(gst_video_sys::GstVideoTimeCode);
 
 impl VideoTimeCode {
     pub fn new_empty() -> VideoTimeCode {
         assert_initialized_main_thread!();
         unsafe {
             let mut v = mem::zeroed();
-            ffi::gst_video_time_code_clear(&mut v);
+            gst_video_sys::gst_video_time_code_clear(&mut v);
             VideoTimeCode(v)
         }
     }
@@ -53,7 +53,7 @@ impl VideoTimeCode {
         assert_initialized_main_thread!();
         unsafe {
             let mut v = mem::zeroed();
-            ffi::gst_video_time_code_init(
+            gst_video_sys::gst_video_time_code_init(
                 &mut v,
                 *fps.numer() as u32,
                 *fps.denom() as u32,
@@ -81,7 +81,7 @@ impl VideoTimeCode {
     //        assert!(fps_d > 0);
     //        unsafe {
     //            let mut v = mem::zeroed();
-    //            let res = ffi::gst_video_time_code_init_from_date_time_full(
+    //            let res = gst_video_sys::gst_video_time_code_init_from_date_time_full(
     //                &mut v,
     //                *fps.numer() as u32,
     //                *fps.denom() as u32,
@@ -90,7 +90,7 @@ impl VideoTimeCode {
     //                field_count,
     //            );
     //
-    //            if res == glib_ffi::GFALSE {
+    //            if res == glib_sys::GFALSE {
     //                None
     //            } else {
     //                Some(VideoTimeCode(v))
@@ -102,14 +102,18 @@ impl VideoTimeCode {
     pub fn from_string(tc_str: &str) -> Option<VideoTimeCode> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_video_time_code_new_from_string(
+            from_glib_full(gst_video_sys::gst_video_time_code_new_from_string(
                 tc_str.to_glib_none().0,
             ))
         }
     }
 
     pub fn is_valid(&self) -> bool {
-        unsafe { from_glib(ffi::gst_video_time_code_is_valid(self.to_glib_none().0)) }
+        unsafe {
+            from_glib(gst_video_sys::gst_video_time_code_is_valid(
+                self.to_glib_none().0,
+            ))
+        }
     }
 
     pub fn set_fps(&mut self, fps: gst::Fraction) {
@@ -191,14 +195,14 @@ impl ValidVideoTimeCode {
 
     pub fn add_frames(&mut self, frames: i64) {
         unsafe {
-            ffi::gst_video_time_code_add_frames(self.to_glib_none_mut().0, frames);
+            gst_video_sys::gst_video_time_code_add_frames(self.to_glib_none_mut().0, frames);
         }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn add_interval(&self, tc_inter: &VideoTimeCodeInterval) -> Option<VideoTimeCode> {
         unsafe {
-            from_glib_full(ffi::gst_video_time_code_add_interval(
+            from_glib_full(gst_video_sys::gst_video_time_code_add_interval(
                 self.to_glib_none().0,
                 tc_inter.to_glib_none().0,
             ))
@@ -206,25 +210,31 @@ impl ValidVideoTimeCode {
     }
 
     fn compare(&self, tc2: &ValidVideoTimeCode) -> i32 {
-        unsafe { ffi::gst_video_time_code_compare(self.to_glib_none().0, tc2.to_glib_none().0) }
+        unsafe {
+            gst_video_sys::gst_video_time_code_compare(self.to_glib_none().0, tc2.to_glib_none().0)
+        }
     }
 
     pub fn frames_since_daily_jam(&self) -> u64 {
-        unsafe { ffi::gst_video_time_code_frames_since_daily_jam(self.to_glib_none().0) }
+        unsafe { gst_video_sys::gst_video_time_code_frames_since_daily_jam(self.to_glib_none().0) }
     }
 
     pub fn increment_frame(&mut self) {
         unsafe {
-            ffi::gst_video_time_code_increment_frame(self.to_glib_none_mut().0);
+            gst_video_sys::gst_video_time_code_increment_frame(self.to_glib_none_mut().0);
         }
     }
 
     pub fn nsec_since_daily_jam(&self) -> u64 {
-        unsafe { ffi::gst_video_time_code_nsec_since_daily_jam(self.to_glib_none().0) }
+        unsafe { gst_video_sys::gst_video_time_code_nsec_since_daily_jam(self.to_glib_none().0) }
     }
 
     pub fn to_date_time(&self) -> Option<glib::DateTime> {
-        unsafe { from_glib_full(ffi::gst_video_time_code_to_date_time(self.to_glib_none().0)) }
+        unsafe {
+            from_glib_full(gst_video_sys::gst_video_time_code_to_date_time(
+                self.to_glib_none().0,
+            ))
+        }
     }
 }
 
@@ -232,7 +242,11 @@ macro_rules! generic_impl {
     ($name:ident) => {
         impl $name {
             pub fn to_string(&self) -> String {
-                unsafe { from_glib_full(ffi::gst_video_time_code_to_string(self.to_glib_none().0)) }
+                unsafe {
+                    from_glib_full(gst_video_sys::gst_video_time_code_to_string(
+                        self.to_glib_none().0,
+                    ))
+                }
             }
 
             pub fn get_hours(&self) -> u32 {
@@ -270,7 +284,7 @@ macro_rules! generic_impl {
             pub fn set_latest_daily_jam(&mut self, latest_daily_jam: Option<&glib::DateTime>) {
                 unsafe {
                     if !self.0.config.latest_daily_jam.is_null() {
-                        glib_ffi::g_date_time_unref(self.0.config.latest_daily_jam);
+                        glib_sys::g_date_time_unref(self.0.config.latest_daily_jam);
                     }
 
                     self.0.config.latest_daily_jam = latest_daily_jam.to_glib_full()
@@ -283,7 +297,7 @@ macro_rules! generic_impl {
                 unsafe {
                     let v = self.0;
                     if !v.config.latest_daily_jam.is_null() {
-                        glib_ffi::g_date_time_ref(v.config.latest_daily_jam);
+                        glib_sys::g_date_time_ref(v.config.latest_daily_jam);
                     }
 
                     $name(v)
@@ -295,7 +309,7 @@ macro_rules! generic_impl {
             fn drop(&mut self) {
                 unsafe {
                     if !self.0.config.latest_daily_jam.is_null() {
-                        glib_ffi::g_date_time_unref(self.0.config.latest_daily_jam);
+                        glib_sys::g_date_time_unref(self.0.config.latest_daily_jam);
                     }
                 }
             }
@@ -328,43 +342,45 @@ macro_rules! generic_impl {
 
         #[doc(hidden)]
         impl GlibPtrDefault for $name {
-            type GlibType = *mut ffi::GstVideoTimeCode;
+            type GlibType = *mut gst_video_sys::GstVideoTimeCode;
         }
 
         #[doc(hidden)]
-        impl<'a> ToGlibPtr<'a, *const ffi::GstVideoTimeCode> for $name {
+        impl<'a> ToGlibPtr<'a, *const gst_video_sys::GstVideoTimeCode> for $name {
             type Storage = &'a Self;
 
             #[inline]
-            fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstVideoTimeCode, Self> {
+            fn to_glib_none(&'a self) -> Stash<'a, *const gst_video_sys::GstVideoTimeCode, Self> {
                 Stash(&self.0 as *const _, self)
             }
 
             #[inline]
-            fn to_glib_full(&self) -> *const ffi::GstVideoTimeCode {
-                unsafe { ffi::gst_video_time_code_copy(&self.0 as *const _) }
+            fn to_glib_full(&self) -> *const gst_video_sys::GstVideoTimeCode {
+                unsafe { gst_video_sys::gst_video_time_code_copy(&self.0 as *const _) }
             }
         }
 
         #[doc(hidden)]
-        impl<'a> ToGlibPtrMut<'a, *mut ffi::GstVideoTimeCode> for $name {
+        impl<'a> ToGlibPtrMut<'a, *mut gst_video_sys::GstVideoTimeCode> for $name {
             type Storage = &'a mut Self;
 
             #[inline]
-            fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GstVideoTimeCode, Self> {
+            fn to_glib_none_mut(
+                &'a mut self,
+            ) -> StashMut<'a, *mut gst_video_sys::GstVideoTimeCode, Self> {
                 let ptr = &mut self.0 as *mut _;
                 StashMut(ptr, self)
             }
         }
 
         #[doc(hidden)]
-        impl FromGlibPtrNone<*mut ffi::GstVideoTimeCode> for $name {
+        impl FromGlibPtrNone<*mut gst_video_sys::GstVideoTimeCode> for $name {
             #[inline]
-            unsafe fn from_glib_none(ptr: *mut ffi::GstVideoTimeCode) -> Self {
+            unsafe fn from_glib_none(ptr: *mut gst_video_sys::GstVideoTimeCode) -> Self {
                 assert!(!ptr.is_null());
                 let v = ptr::read(ptr);
                 if !v.config.latest_daily_jam.is_null() {
-                    glib_ffi::g_date_time_ref(v.config.latest_daily_jam);
+                    glib_sys::g_date_time_ref(v.config.latest_daily_jam);
                 }
 
                 $name(v)
@@ -372,13 +388,13 @@ macro_rules! generic_impl {
         }
 
         #[doc(hidden)]
-        impl FromGlibPtrNone<*const ffi::GstVideoTimeCode> for $name {
+        impl FromGlibPtrNone<*const gst_video_sys::GstVideoTimeCode> for $name {
             #[inline]
-            unsafe fn from_glib_none(ptr: *const ffi::GstVideoTimeCode) -> Self {
+            unsafe fn from_glib_none(ptr: *const gst_video_sys::GstVideoTimeCode) -> Self {
                 assert!(!ptr.is_null());
                 let v = ptr::read(ptr);
                 if !v.config.latest_daily_jam.is_null() {
-                    glib_ffi::g_date_time_ref(v.config.latest_daily_jam);
+                    glib_sys::g_date_time_ref(v.config.latest_daily_jam);
                 }
 
                 $name(v)
@@ -386,28 +402,28 @@ macro_rules! generic_impl {
         }
 
         #[doc(hidden)]
-        impl FromGlibPtrFull<*mut ffi::GstVideoTimeCode> for $name {
+        impl FromGlibPtrFull<*mut gst_video_sys::GstVideoTimeCode> for $name {
             #[inline]
-            unsafe fn from_glib_full(ptr: *mut ffi::GstVideoTimeCode) -> Self {
+            unsafe fn from_glib_full(ptr: *mut gst_video_sys::GstVideoTimeCode) -> Self {
                 assert!(!ptr.is_null());
                 let v = ptr::read(ptr);
                 if !v.config.latest_daily_jam.is_null() {
-                    glib_ffi::g_date_time_ref(v.config.latest_daily_jam);
+                    glib_sys::g_date_time_ref(v.config.latest_daily_jam);
                 }
-                ffi::gst_video_time_code_free(ptr);
+                gst_video_sys::gst_video_time_code_free(ptr);
 
                 $name(v)
             }
         }
 
         #[doc(hidden)]
-        impl FromGlibPtrBorrow<*mut ffi::GstVideoTimeCode> for $name {
+        impl FromGlibPtrBorrow<*mut gst_video_sys::GstVideoTimeCode> for $name {
             #[inline]
-            unsafe fn from_glib_borrow(ptr: *mut ffi::GstVideoTimeCode) -> Self {
+            unsafe fn from_glib_borrow(ptr: *mut gst_video_sys::GstVideoTimeCode) -> Self {
                 assert!(!ptr.is_null());
                 let v = ptr::read(ptr);
                 if !v.config.latest_daily_jam.is_null() {
-                    glib_ffi::g_date_time_ref(v.config.latest_daily_jam);
+                    glib_sys::g_date_time_ref(v.config.latest_daily_jam);
                 }
 
                 $name(v)
@@ -416,26 +432,26 @@ macro_rules! generic_impl {
 
         impl StaticType for $name {
             fn static_type() -> glib::Type {
-                unsafe { from_glib(ffi::gst_video_time_code_get_type()) }
+                unsafe { from_glib(gst_video_sys::gst_video_time_code_get_type()) }
             }
         }
 
         #[doc(hidden)]
         impl<'a> value::FromValueOptional<'a> for $name {
             unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-                Option::<$name>::from_glib_none(gobject_ffi::g_value_get_boxed(
+                Option::<$name>::from_glib_none(gobject_sys::g_value_get_boxed(
                     value.to_glib_none().0,
-                ) as *mut ffi::GstVideoTimeCode)
+                ) as *mut gst_video_sys::GstVideoTimeCode)
             }
         }
 
         #[doc(hidden)]
         impl value::SetValue for $name {
             unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-                gobject_ffi::g_value_set_boxed(
+                gobject_sys::g_value_set_boxed(
                     value.to_glib_none_mut().0,
-                    ToGlibPtr::<*const ffi::GstVideoTimeCode>::to_glib_none(this).0
-                        as glib_ffi::gpointer,
+                    ToGlibPtr::<*const gst_video_sys::GstVideoTimeCode>::to_glib_none(this).0
+                        as glib_sys::gpointer,
                 )
             }
         }
@@ -443,10 +459,10 @@ macro_rules! generic_impl {
         #[doc(hidden)]
         impl value::SetValueOptional for $name {
             unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-                gobject_ffi::g_value_set_boxed(
+                gobject_sys::g_value_set_boxed(
                     value.to_glib_none_mut().0,
-                    ToGlibPtr::<*const ffi::GstVideoTimeCode>::to_glib_none(&this).0
-                        as glib_ffi::gpointer,
+                    ToGlibPtr::<*const gst_video_sys::GstVideoTimeCode>::to_glib_none(&this).0
+                        as glib_sys::gpointer,
                 )
             }
         }
@@ -496,7 +512,7 @@ impl From<ValidVideoTimeCode> for VideoTimeCode {
 }
 
 #[repr(C)]
-pub struct VideoTimeCodeMeta(ffi::GstVideoTimeCodeMeta);
+pub struct VideoTimeCodeMeta(gst_video_sys::GstVideoTimeCodeMeta);
 
 impl VideoTimeCodeMeta {
     pub fn add<'a>(
@@ -504,7 +520,7 @@ impl VideoTimeCodeMeta {
         tc: &ValidVideoTimeCode,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         unsafe {
-            let meta = ffi::gst_buffer_add_video_time_code_meta(
+            let meta = gst_video_sys::gst_buffer_add_video_time_code_meta(
                 buffer.as_mut_ptr(),
                 tc.to_glib_none().0 as *mut _,
             );
@@ -520,20 +536,20 @@ impl VideoTimeCodeMeta {
     pub fn set_tc(&mut self, tc: ValidVideoTimeCode) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
-            ffi::gst_video_time_code_clear(&mut self.0.tc);
+            gst_video_sys::gst_video_time_code_clear(&mut self.0.tc);
             self.0.tc = tc.0;
             if !self.0.tc.config.latest_daily_jam.is_null() {
-                glib_ffi::g_date_time_ref(self.0.tc.config.latest_daily_jam);
+                glib_sys::g_date_time_ref(self.0.tc.config.latest_daily_jam);
             }
         }
     }
 }
 
 unsafe impl MetaAPI for VideoTimeCodeMeta {
-    type GstType = ffi::GstVideoTimeCodeMeta;
+    type GstType = gst_video_sys::GstVideoTimeCodeMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(ffi::gst_video_time_code_meta_api_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_time_code_meta_api_get_type()) }
     }
 }
 

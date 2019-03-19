@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_video_sys;
 
 use std::ffi::CStr;
 use std::fmt;
@@ -49,13 +49,17 @@ impl ::VideoFormat {
     pub fn from_string(s: &str) -> ::VideoFormat {
         assert_initialized_main_thread!();
 
-        unsafe { from_glib(ffi::gst_video_format_from_string(s.to_glib_none().0)) }
+        unsafe {
+            from_glib(gst_video_sys::gst_video_format_from_string(
+                s.to_glib_none().0,
+            ))
+        }
     }
 
     pub fn from_fourcc(fourcc: u32) -> ::VideoFormat {
         assert_initialized_main_thread!();
 
-        unsafe { from_glib(ffi::gst_video_format_from_fourcc(fourcc)) }
+        unsafe { from_glib(gst_video_sys::gst_video_format_from_fourcc(fourcc)) }
     }
 
     pub fn from_masks(
@@ -70,7 +74,7 @@ impl ::VideoFormat {
         assert_initialized_main_thread!();
 
         unsafe {
-            from_glib(ffi::gst_video_format_from_masks(
+            from_glib(gst_video_sys::gst_video_format_from_masks(
                 depth as i32,
                 bpp as i32,
                 endianness.to_glib(),
@@ -88,7 +92,7 @@ impl ::VideoFormat {
         }
 
         unsafe {
-            CStr::from_ptr(ffi::gst_video_format_to_string(self.to_glib()))
+            CStr::from_ptr(gst_video_sys::gst_video_format_to_string(self.to_glib()))
                 .to_str()
                 .unwrap()
         }

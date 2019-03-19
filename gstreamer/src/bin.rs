@@ -18,7 +18,7 @@ use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::GString;
 
-use ffi;
+use gst_sys;
 
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -55,7 +55,10 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         for e in elements {
             unsafe {
                 glib_result_from_gboolean!(
-                    ffi::gst_bin_add(self.as_ref().to_glib_none().0, e.as_ref().to_glib_none().0),
+                    gst_sys::gst_bin_add(
+                        self.as_ref().to_glib_none().0,
+                        e.as_ref().to_glib_none().0
+                    ),
                     "Failed to add elements"
                 )?;
             }
@@ -68,7 +71,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
         for e in elements {
             unsafe {
                 glib_result_from_gboolean!(
-                    ffi::gst_bin_remove(
+                    gst_sys::gst_bin_remove(
                         self.as_ref().to_glib_none().0,
                         e.as_ref().to_glib_none().0,
                     ),
@@ -97,7 +100,7 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
 
     fn iterate_all_by_interface(&self, iface: glib::types::Type) -> ::Iterator<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_iterate_all_by_interface(
+            from_glib_full(gst_sys::gst_bin_iterate_all_by_interface(
                 self.as_ref().to_glib_none().0,
                 iface.to_glib(),
             ))
@@ -106,31 +109,47 @@ impl<O: IsA<Bin>> GstBinExtManual for O {
 
     fn iterate_elements(&self) -> ::Iterator<Element> {
         unsafe {
-            from_glib_full(ffi::gst_bin_iterate_elements(
+            from_glib_full(gst_sys::gst_bin_iterate_elements(
                 self.as_ref().to_glib_none().0,
             ))
         }
     }
 
     fn iterate_recurse(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_recurse(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            from_glib_full(gst_sys::gst_bin_iterate_recurse(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_sinks(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_sinks(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            from_glib_full(gst_sys::gst_bin_iterate_sinks(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_sorted(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_sorted(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            from_glib_full(gst_sys::gst_bin_iterate_sorted(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn iterate_sources(&self) -> ::Iterator<Element> {
-        unsafe { from_glib_full(ffi::gst_bin_iterate_sources(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            from_glib_full(gst_sys::gst_bin_iterate_sources(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn get_children(&self) -> Vec<Element> {
         unsafe {
-            let bin: &ffi::GstBin = &*(self.as_ptr() as *const _);
+            let bin: &gst_sys::GstBin = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&bin.element.object.lock);
             FromGlibPtrContainer::from_glib_none(bin.children)
         }
@@ -157,9 +176,9 @@ unsafe extern "C" fn do_latency_trampoline<
     P,
     F: Fn(&P) -> Result<(), LoggableError> + Send + Sync + 'static,
 >(
-    this: *mut ffi::GstBin,
-    f: glib_ffi::gpointer,
-) -> glib_ffi::gboolean
+    this: *mut gst_sys::GstBin,
+    f: glib_sys::gpointer,
+) -> glib_sys::gboolean
 where
     P: IsA<Bin>,
 {
@@ -184,9 +203,9 @@ mod tests {
         ::init().unwrap();
 
         let bin = ::Bin::new(None);
-        bin.add(&::ElementFactory::make("identity", "identity0").unwrap())
+        bin.add(&::ElementFactory::make("identity", Some("identity0")).unwrap())
             .unwrap();
-        bin.add(&::ElementFactory::make("identity", "identity1").unwrap())
+        bin.add(&::ElementFactory::make("identity", Some("identity1")).unwrap())
             .unwrap();
 
         let mut child_names = bin

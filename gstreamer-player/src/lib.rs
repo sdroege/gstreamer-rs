@@ -8,11 +8,11 @@
 
 extern crate libc;
 
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
+extern crate glib_sys;
+extern crate gobject_sys;
 extern crate gstreamer as gst;
-extern crate gstreamer_player_sys as ffi;
-extern crate gstreamer_sys as gst_ffi;
+extern crate gstreamer_player_sys as gst_player_sys;
+extern crate gstreamer_sys as gst_sys;
 extern crate gstreamer_video as gst_video;
 
 #[macro_use]

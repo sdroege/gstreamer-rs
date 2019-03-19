@@ -125,14 +125,14 @@ macro_rules! gst_loggable_error(
 #[macro_export]
 macro_rules! gst_result_from_gboolean(
 // Plain strings
-    ($ffi_bool:expr, $cat:expr, $msg:expr) =>  {
-        glib_result_from_gboolean!($ffi_bool, $msg)
+    ($gst_sys_bool:expr, $cat:expr, $msg:expr) =>  {
+        glib_result_from_gboolean!($gst_sys_bool, $msg)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     };
 
 // Format strings
-    ($ffi_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
-        glib_result_from_gboolean!($ffi_bool, $($msg)*)
+    ($gst_sys_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
+        glib_result_from_gboolean!($gst_sys_bool, $($msg)*)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     }};
 );

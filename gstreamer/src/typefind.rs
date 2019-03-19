@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_sys;
 use Caps;
 use Plugin;
 use TypeFindFactory;
@@ -14,14 +14,14 @@ use TypeFindProbability;
 
 use glib;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use std::marker::PhantomData;
 use std::ptr;
 use std::slice;
 
 #[repr(C)]
 #[derive(Debug)]
-pub struct TypeFind<'a>(ffi::GstTypeFind, PhantomData<&'a ()>);
+pub struct TypeFind<'a>(gst_sys::GstTypeFind, PhantomData<&'a ()>);
 
 pub trait TypeFindImpl {
     fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]>;
@@ -58,7 +58,7 @@ impl<'a> TypeFind<'a> {
             let func: Box<F> = Box::new(func);
             let func = Box::into_raw(func);
 
-            let res = ffi::gst_type_find_register(
+            let res = gst_sys::gst_type_find_register(
                 plugin.to_glib_none().0,
                 name.to_glib_none().0,
                 rank,
@@ -75,7 +75,7 @@ impl<'a> TypeFind<'a> {
 
     pub fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]> {
         unsafe {
-            let data = ffi::gst_type_find_peek(&mut self.0, offset, size);
+            let data = gst_sys::gst_type_find_peek(&mut self.0, offset, size);
             if data.is_null() {
                 None
             } else {
@@ -86,7 +86,7 @@ impl<'a> TypeFind<'a> {
 
     pub fn suggest(&mut self, probability: TypeFindProbability, caps: &Caps) {
         unsafe {
-            ffi::gst_type_find_suggest(
+            gst_sys::gst_type_find_suggest(
                 &mut self.0,
                 probability.to_glib() as u32,
                 caps.to_glib_none().0,
@@ -100,8 +100,8 @@ unsafe impl<'a> Send for TypeFind<'a> {}
 impl TypeFindFactory {
     pub fn call_function(&self, find: &mut TypeFindImpl) {
         unsafe {
-            let find_ptr = &find as *const &mut TypeFindImpl as glib_ffi::gpointer;
-            let mut find = ffi::GstTypeFind {
+            let find_ptr = &find as *const &mut TypeFindImpl as glib_sys::gpointer;
+            let mut find = gst_sys::GstTypeFind {
                 peek: Some(type_find_peek),
                 suggest: Some(type_find_suggest),
                 data: find_ptr,
@@ -109,26 +109,26 @@ impl TypeFindFactory {
                 _gst_reserved: [ptr::null_mut(); 4],
             };
 
-            ffi::gst_type_find_factory_call_function(self.to_glib_none().0, &mut find)
+            gst_sys::gst_type_find_factory_call_function(self.to_glib_none().0, &mut find)
         }
     }
 }
 
 unsafe extern "C" fn type_find_trampoline<F: Fn(&mut TypeFind) + Send + Sync + 'static>(
-    find: *mut ffi::GstTypeFind,
-    user_data: glib_ffi::gpointer,
+    find: *mut gst_sys::GstTypeFind,
+    user_data: glib_sys::gpointer,
 ) {
     let func: &F = &*(user_data as *const F);
     func(&mut *(find as *mut TypeFind));
 }
 
 unsafe extern "C" fn type_find_closure_drop<F: Fn(&mut TypeFind) + Send + Sync + 'static>(
-    data: glib_ffi::gpointer,
+    data: glib_sys::gpointer,
 ) {
     Box::<F>::from_raw(data as *mut _);
 }
 
-unsafe extern "C" fn type_find_peek(data: glib_ffi::gpointer, offset: i64, size: u32) -> *const u8 {
+unsafe extern "C" fn type_find_peek(data: glib_sys::gpointer, offset: i64, size: u32) -> *const u8 {
     let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
     match find.peek(offset, size) {
         None => ptr::null(),
@@ -137,15 +137,15 @@ unsafe extern "C" fn type_find_peek(data: glib_ffi::gpointer, offset: i64, size:
 }
 
 unsafe extern "C" fn type_find_suggest(
-    data: glib_ffi::gpointer,
+    data: glib_sys::gpointer,
     probability: u32,
-    caps: *mut ffi::GstCaps,
+    caps: *mut gst_sys::GstCaps,
 ) {
     let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
     find.suggest(from_glib(probability as i32), &from_glib_borrow(caps));
 }
 
-unsafe extern "C" fn type_find_get_length(data: glib_ffi::gpointer) -> u64 {
+unsafe extern "C" fn type_find_get_length(data: glib_sys::gpointer) -> u64 {
     use std::u64;
 
     let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);

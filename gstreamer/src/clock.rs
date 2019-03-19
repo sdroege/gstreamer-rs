@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::*;
 use glib::IsA;
-use glib_ffi::{gboolean, gpointer};
+use glib_sys::{gboolean, gpointer};
+use gst_sys;
 use libc::c_void;
 use std::cmp;
 use std::mem;
@@ -27,14 +27,14 @@ glib_wrapper! {
     pub struct ClockId(Shared<c_void>);
 
     match fn {
-        ref => |ptr| ffi::gst_clock_id_ref(ptr),
-        unref => |ptr| ffi::gst_clock_id_unref(ptr),
+        ref => |ptr| gst_sys::gst_clock_id_ref(ptr),
+        unref => |ptr| gst_sys::gst_clock_id_unref(ptr),
     }
 }
 
 unsafe extern "C" fn trampoline_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(
-    clock: *mut ffi::GstClock,
-    time: ffi::GstClockTime,
+    clock: *mut gst_sys::GstClock,
+    time: gst_sys::GstClockTime,
     id: gpointer,
     func: gpointer,
 ) -> gboolean {
@@ -44,7 +44,7 @@ unsafe extern "C" fn trampoline_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + 
         from_glib(time),
         &from_glib_borrow(id),
     );
-    glib_ffi::GTRUE
+    glib_sys::GTRUE
 }
 
 unsafe extern "C" fn destroy_closure_wait_async<
@@ -63,18 +63,20 @@ fn into_raw_wait_async<F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static>(func
 
 impl ClockId {
     pub fn get_time(&self) -> ClockTime {
-        unsafe { from_glib(ffi::gst_clock_id_get_time(self.to_glib_none().0)) }
+        unsafe { from_glib(gst_sys::gst_clock_id_get_time(self.to_glib_none().0)) }
     }
 
     pub fn unschedule(&self) {
-        unsafe { ffi::gst_clock_id_unschedule(self.to_glib_none().0) }
+        unsafe { gst_sys::gst_clock_id_unschedule(self.to_glib_none().0) }
     }
 
     pub fn wait(&self) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
             let mut jitter = mem::uninitialized();
-            let res: ClockReturn =
-                from_glib(ffi::gst_clock_id_wait(self.to_glib_none().0, &mut jitter));
+            let res: ClockReturn = from_glib(gst_sys::gst_clock_id_wait(
+                self.to_glib_none().0,
+                &mut jitter,
+            ));
             (res.into_result(), jitter)
         }
     }
@@ -84,7 +86,7 @@ impl ClockId {
         F: Fn(&Clock, ClockTime, &ClockId) + Send + 'static,
     {
         let ret: ClockReturn = unsafe {
-            from_glib(ffi::gst_clock_id_wait_async(
+            from_glib(gst_sys::gst_clock_id_wait_async(
                 self.to_glib_none().0,
                 Some(trampoline_wait_async::<F>),
                 into_raw_wait_async(func),
@@ -96,7 +98,8 @@ impl ClockId {
 
     pub fn compare_by_time(&self, other: &Self) -> cmp::Ordering {
         unsafe {
-            let res = ffi::gst_clock_id_compare_func(self.to_glib_none().0, other.to_glib_none().0);
+            let res =
+                gst_sys::gst_clock_id_compare_func(self.to_glib_none().0, other.to_glib_none().0);
             if res < 0 {
                 cmp::Ordering::Less
             } else if res > 0 {
@@ -120,7 +123,7 @@ impl Clock {
         cdenom: ClockTime,
     ) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_adjust_with_calibration(
+            from_glib(gst_sys::gst_clock_adjust_with_calibration(
                 ptr::null_mut(),
                 internal_target.to_glib(),
                 cinternal.to_glib(),
@@ -139,7 +142,7 @@ impl Clock {
         cdenom: ClockTime,
     ) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_unadjust_with_calibration(
+            from_glib(gst_sys::gst_clock_unadjust_with_calibration(
                 ptr::null_mut(),
                 external_target.to_glib(),
                 cinternal.to_glib(),
@@ -169,7 +172,7 @@ pub trait ClockExtManual: 'static {
 impl<O: IsA<Clock>> ClockExtManual for O {
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> Option<ClockId> {
         unsafe {
-            from_glib_full(ffi::gst_clock_new_periodic_id(
+            from_glib_full(gst_sys::gst_clock_new_periodic_id(
                 self.as_ref().to_glib_none().0,
                 start_time.to_glib(),
                 interval.to_glib(),
@@ -185,7 +188,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            let res: bool = from_glib(ffi::gst_clock_periodic_id_reinit(
+            let res: bool = from_glib(gst_sys::gst_clock_periodic_id_reinit(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
                 start_time.to_glib(),
@@ -201,7 +204,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
 
     fn new_single_shot_id(&self, time: ClockTime) -> Option<ClockId> {
         unsafe {
-            from_glib_full(ffi::gst_clock_new_single_shot_id(
+            from_glib_full(gst_sys::gst_clock_new_single_shot_id(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
             ))
@@ -210,7 +213,7 @@ impl<O: IsA<Clock>> ClockExtManual for O {
 
     fn single_shot_id_reinit(&self, id: &ClockId, time: ClockTime) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(ffi::gst_clock_single_shot_id_reinit(
+            let res: bool = from_glib(gst_sys::gst_clock_single_shot_id_reinit(
                 self.as_ref().to_glib_none().0,
                 id.to_glib_none().0,
                 time.to_glib(),

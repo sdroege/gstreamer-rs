@@ -6,17 +6,17 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
+use gst_rtsp_server_sys;
 use std::ptr;
 
 #[derive(Debug, PartialEq, Eq)]
-pub struct RTSPContext(ptr::NonNull<ffi::GstRTSPContext>);
+pub struct RTSPContext(ptr::NonNull<gst_rtsp_server_sys::GstRTSPContext>);
 
 impl RTSPContext {
     pub fn with_current_context<F: FnOnce(&RTSPContext) -> T, T>(func: F) -> Option<T> {
         unsafe {
-            let ptr = ffi::gst_rtsp_context_get_current();
+            let ptr = gst_rtsp_server_sys::gst_rtsp_context_get_current();
             if ptr.is_null() {
                 return None;
             }
@@ -30,9 +30,9 @@ impl RTSPContext {
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstRTSPContext> for RTSPContext {
+impl glib::translate::FromGlibPtrBorrow<*mut gst_rtsp_server_sys::GstRTSPContext> for RTSPContext {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut ffi::GstRTSPContext) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_rtsp_server_sys::GstRTSPContext) -> Self {
         assert!(!ptr.is_null());
         RTSPContext(ptr::NonNull::new_unchecked(ptr))
     }

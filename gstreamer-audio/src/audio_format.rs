@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_audio_sys;
 
 use std::ffi::CStr;
 use std::fmt;
@@ -24,7 +24,7 @@ impl ::AudioFormat {
         assert_initialized_main_thread!();
 
         unsafe {
-            from_glib(ffi::gst_audio_format_build_integer(
+            from_glib(gst_audio_sys::gst_audio_format_build_integer(
                 sign.to_glib(),
                 endianness.to_glib(),
                 width,
@@ -36,7 +36,11 @@ impl ::AudioFormat {
     pub fn from_string(s: &str) -> ::AudioFormat {
         assert_initialized_main_thread!();
 
-        unsafe { from_glib(ffi::gst_audio_format_from_string(s.to_glib_none().0)) }
+        unsafe {
+            from_glib(gst_audio_sys::gst_audio_format_from_string(
+                s.to_glib_none().0,
+            ))
+        }
     }
 
     pub fn to_string<'a>(self) -> &'a str {
@@ -45,7 +49,7 @@ impl ::AudioFormat {
         }
 
         unsafe {
-            CStr::from_ptr(ffi::gst_audio_format_to_string(self.to_glib()))
+            CStr::from_ptr(gst_audio_sys::gst_audio_format_to_string(self.to_glib()))
                 .to_str()
                 .unwrap()
         }

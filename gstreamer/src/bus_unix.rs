@@ -9,8 +9,8 @@
 #[macro_use]
 cfg_if! {
     if #[cfg(unix)] {
-        use ffi;
-        use glib_ffi;
+        use gst_sys;
+        use glib_sys;
         use glib::translate::ToGlibPtr;
 
         use std::mem;
@@ -36,8 +36,8 @@ impl UnixBusExtManual for Bus {
     fn get_pollfd(&self) -> unix::io::RawFd {
         #[cfg(unix)]
         unsafe {
-            let mut pollfd: glib_ffi::GPollFD = mem::zeroed();
-            ffi::gst_bus_get_pollfd(self.to_glib_none().0, &mut pollfd);
+            let mut pollfd: glib_sys::GPollFD = mem::zeroed();
+            gst_sys::gst_bus_get_pollfd(self.to_glib_none().0, &mut pollfd);
 
             pollfd.fd
         }

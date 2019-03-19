@@ -15,14 +15,14 @@ use std::ops::{Deref, DerefMut};
 use std::ptr;
 use std::str;
 
-use ffi;
 use glib;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault,
     Stash, StashMut, ToGlibPtr, ToGlibPtrMut,
 };
-use glib_ffi::gpointer;
-use gobject_ffi;
+use glib_sys::gpointer;
+use gobject_sys;
+use gst_sys;
 
 pub struct CapsFeatures(ptr::NonNull<CapsFeaturesRef>, PhantomData<CapsFeaturesRef>);
 unsafe impl Send for CapsFeatures {}
@@ -44,7 +44,7 @@ impl CapsFeatures {
         unsafe {
             CapsFeatures(
                 ptr::NonNull::new_unchecked(
-                    ffi::gst_caps_features_new_empty() as *mut CapsFeaturesRef
+                    gst_sys::gst_caps_features_new_empty() as *mut CapsFeaturesRef
                 ),
                 PhantomData,
             )
@@ -56,7 +56,7 @@ impl CapsFeatures {
         unsafe {
             CapsFeatures(
                 ptr::NonNull::new_unchecked(
-                    ffi::gst_caps_features_new_any() as *mut CapsFeaturesRef
+                    gst_sys::gst_caps_features_new_any() as *mut CapsFeaturesRef
                 ),
                 PhantomData,
             )
@@ -66,7 +66,7 @@ impl CapsFeatures {
     pub fn from_string(value: &str) -> Option<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            let ptr = ffi::gst_caps_features_from_string(value.to_glib_none().0);
+            let ptr = gst_sys::gst_caps_features_from_string(value.to_glib_none().0);
             if ptr.is_null() {
                 return None;
             }
@@ -78,8 +78,8 @@ impl CapsFeatures {
         }
     }
 
-    pub unsafe fn into_ptr(self) -> *mut ffi::GstCapsFeatures {
-        let ptr = self.0.as_ptr() as *mut CapsFeaturesRef as *mut ffi::GstCapsFeatures;
+    pub unsafe fn into_ptr(self) -> *mut gst_sys::GstCapsFeatures {
+        let ptr = self.0.as_ptr() as *mut CapsFeaturesRef as *mut gst_sys::GstCapsFeatures;
         mem::forget(self);
 
         ptr
@@ -115,7 +115,7 @@ impl AsMut<CapsFeaturesRef> for CapsFeatures {
 impl Clone for CapsFeatures {
     fn clone(&self) -> Self {
         unsafe {
-            let ptr = ffi::gst_caps_features_copy(&self.0.as_ref().0) as *mut CapsFeaturesRef;
+            let ptr = gst_sys::gst_caps_features_copy(&self.0.as_ref().0) as *mut CapsFeaturesRef;
             assert!(!ptr.is_null());
             CapsFeatures(ptr::NonNull::new_unchecked(ptr), PhantomData)
         }
@@ -124,7 +124,7 @@ impl Clone for CapsFeatures {
 
 impl Drop for CapsFeatures {
     fn drop(&mut self) {
-        unsafe { ffi::gst_caps_features_free(&mut self.0.as_mut().0) }
+        unsafe { gst_sys::gst_caps_features_free(&mut self.0.as_mut().0) }
     }
 }
 
@@ -167,58 +167,46 @@ impl BorrowMut<CapsFeaturesRef> for CapsFeatures {
 
 impl glib::types::StaticType for CapsFeatures {
     fn static_type() -> glib::types::Type {
-        unsafe { from_glib(ffi::gst_caps_features_get_type()) }
+        unsafe { from_glib(gst_sys::gst_caps_features_get_type()) }
     }
 }
 
-impl<'a> ToGlibPtr<'a, *const ffi::GstCapsFeatures> for CapsFeatures {
+impl<'a> ToGlibPtr<'a, *const gst_sys::GstCapsFeatures> for CapsFeatures {
     type Storage = &'a Self;
 
-    fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstCapsFeatures, Self> {
+    fn to_glib_none(&'a self) -> Stash<'a, *const gst_sys::GstCapsFeatures, Self> {
         unsafe { Stash(&self.0.as_ref().0, self) }
     }
 
-    fn to_glib_full(&self) -> *const ffi::GstCapsFeatures {
-        unsafe { ffi::gst_caps_features_copy(&self.0.as_ref().0) }
+    fn to_glib_full(&self) -> *const gst_sys::GstCapsFeatures {
+        unsafe { gst_sys::gst_caps_features_copy(&self.0.as_ref().0) }
     }
 }
 
-impl<'a> ToGlibPtr<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
+impl<'a> ToGlibPtr<'a, *mut gst_sys::GstCapsFeatures> for CapsFeatures {
     type Storage = &'a Self;
 
-    fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GstCapsFeatures, Self> {
+    fn to_glib_none(&'a self) -> Stash<'a, *mut gst_sys::GstCapsFeatures, Self> {
         unsafe { Stash(&self.0.as_ref().0 as *const _ as *mut _, self) }
     }
 
-    fn to_glib_full(&self) -> *mut ffi::GstCapsFeatures {
-        unsafe { ffi::gst_caps_features_copy(&self.0.as_ref().0) }
+    fn to_glib_full(&self) -> *mut gst_sys::GstCapsFeatures {
+        unsafe { gst_sys::gst_caps_features_copy(&self.0.as_ref().0) }
     }
 }
 
-impl<'a> ToGlibPtrMut<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
+impl<'a> ToGlibPtrMut<'a, *mut gst_sys::GstCapsFeatures> for CapsFeatures {
     type Storage = &'a mut Self;
 
-    fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstCapsFeatures, Self> {
+    fn to_glib_none_mut(&'a mut self) -> StashMut<*mut gst_sys::GstCapsFeatures, Self> {
         unsafe { StashMut(&mut self.0.as_mut().0, self) }
     }
 }
 
-impl FromGlibPtrNone<*const ffi::GstCapsFeatures> for CapsFeatures {
-    unsafe fn from_glib_none(ptr: *const ffi::GstCapsFeatures) -> Self {
+impl FromGlibPtrNone<*const gst_sys::GstCapsFeatures> for CapsFeatures {
+    unsafe fn from_glib_none(ptr: *const gst_sys::GstCapsFeatures) -> Self {
         assert!(!ptr.is_null());
-        let ptr = ffi::gst_caps_features_copy(ptr);
-        assert!(!ptr.is_null());
-        CapsFeatures(
-            ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-            PhantomData,
-        )
-    }
-}
-
-impl FromGlibPtrNone<*mut ffi::GstCapsFeatures> for CapsFeatures {
-    unsafe fn from_glib_none(ptr: *mut ffi::GstCapsFeatures) -> Self {
-        assert!(!ptr.is_null());
-        let ptr = ffi::gst_caps_features_copy(ptr);
+        let ptr = gst_sys::gst_caps_features_copy(ptr);
         assert!(!ptr.is_null());
         CapsFeatures(
             ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
@@ -227,8 +215,10 @@ impl FromGlibPtrNone<*mut ffi::GstCapsFeatures> for CapsFeatures {
     }
 }
 
-impl FromGlibPtrFull<*const ffi::GstCapsFeatures> for CapsFeatures {
-    unsafe fn from_glib_full(ptr: *const ffi::GstCapsFeatures) -> Self {
+impl FromGlibPtrNone<*mut gst_sys::GstCapsFeatures> for CapsFeatures {
+    unsafe fn from_glib_none(ptr: *mut gst_sys::GstCapsFeatures) -> Self {
+        assert!(!ptr.is_null());
+        let ptr = gst_sys::gst_caps_features_copy(ptr);
         assert!(!ptr.is_null());
         CapsFeatures(
             ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
@@ -237,8 +227,18 @@ impl FromGlibPtrFull<*const ffi::GstCapsFeatures> for CapsFeatures {
     }
 }
 
-impl FromGlibPtrFull<*mut ffi::GstCapsFeatures> for CapsFeatures {
-    unsafe fn from_glib_full(ptr: *mut ffi::GstCapsFeatures) -> Self {
+impl FromGlibPtrFull<*const gst_sys::GstCapsFeatures> for CapsFeatures {
+    unsafe fn from_glib_full(ptr: *const gst_sys::GstCapsFeatures) -> Self {
+        assert!(!ptr.is_null());
+        CapsFeatures(
+            ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
+            PhantomData,
+        )
+    }
+}
+
+impl FromGlibPtrFull<*mut gst_sys::GstCapsFeatures> for CapsFeatures {
+    unsafe fn from_glib_full(ptr: *mut gst_sys::GstCapsFeatures) -> Self {
         assert!(!ptr.is_null());
         CapsFeatures(
             ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
@@ -249,60 +249,62 @@ impl FromGlibPtrFull<*mut ffi::GstCapsFeatures> for CapsFeatures {
 
 impl<'a> glib::value::FromValueOptional<'a> for CapsFeatures {
     unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
-        let ptr = gobject_ffi::g_value_get_boxed(v.to_glib_none().0);
+        let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
         assert!(!ptr.is_null());
-        from_glib_none(ptr as *const ffi::GstCapsFeatures)
+        from_glib_none(ptr as *const gst_sys::GstCapsFeatures)
     }
 }
 
 impl glib::value::SetValue for CapsFeatures {
     unsafe fn set_value(v: &mut glib::Value, s: &Self) {
-        gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.0.as_ptr() as gpointer);
+        gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.0.as_ptr() as gpointer);
     }
 }
 
 impl glib::value::SetValueOptional for CapsFeatures {
     unsafe fn set_value_optional(v: &mut glib::Value, s: Option<&Self>) {
         if let Some(s) = s {
-            gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, s.as_ptr() as gpointer);
         } else {
-            gobject_ffi::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
+            gobject_sys::g_value_set_boxed(v.to_glib_none_mut().0, ptr::null_mut());
         }
     }
 }
 
 impl GlibPtrDefault for CapsFeatures {
-    type GlibType = *mut ffi::GstCapsFeatures;
+    type GlibType = *mut gst_sys::GstCapsFeatures;
 }
 
 #[repr(C)]
-pub struct CapsFeaturesRef(ffi::GstCapsFeatures);
+pub struct CapsFeaturesRef(gst_sys::GstCapsFeatures);
 
 impl CapsFeaturesRef {
-    pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstCapsFeatures) -> &'a CapsFeaturesRef {
+    pub unsafe fn from_glib_borrow<'a>(
+        ptr: *const gst_sys::GstCapsFeatures,
+    ) -> &'a CapsFeaturesRef {
         assert!(!ptr.is_null());
 
         &*(ptr as *mut CapsFeaturesRef)
     }
 
     pub unsafe fn from_glib_borrow_mut<'a>(
-        ptr: *mut ffi::GstCapsFeatures,
+        ptr: *mut gst_sys::GstCapsFeatures,
     ) -> &'a mut CapsFeaturesRef {
         assert!(!ptr.is_null());
 
         &mut *(ptr as *mut CapsFeaturesRef)
     }
 
-    pub unsafe fn as_ptr(&self) -> *const ffi::GstCapsFeatures {
-        self as *const Self as *const ffi::GstCapsFeatures
+    pub unsafe fn as_ptr(&self) -> *const gst_sys::GstCapsFeatures {
+        self as *const Self as *const gst_sys::GstCapsFeatures
     }
 
-    pub unsafe fn as_mut_ptr(&self) -> *mut ffi::GstCapsFeatures {
-        self as *const Self as *mut ffi::GstCapsFeatures
+    pub unsafe fn as_mut_ptr(&self) -> *mut gst_sys::GstCapsFeatures {
+        self as *const Self as *mut gst_sys::GstCapsFeatures
     }
 
     pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(ffi::gst_caps_features_to_string(self.as_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_features_to_string(self.as_ptr())) }
     }
 
     pub fn is_empty(&self) -> bool {
@@ -310,12 +312,12 @@ impl CapsFeaturesRef {
     }
 
     pub fn is_any(&self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_features_is_any(self.as_ptr())) }
+        unsafe { from_glib(gst_sys::gst_caps_features_is_any(self.as_ptr())) }
     }
 
     pub fn contains(&self, feature: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_features_contains(
+            from_glib(gst_sys::gst_caps_features_contains(
                 self.as_ptr(),
                 feature.to_glib_none().0,
             ))
@@ -323,7 +325,7 @@ impl CapsFeaturesRef {
     }
 
     pub fn get_size(&self) -> u32 {
-        unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) }
+        unsafe { gst_sys::gst_caps_features_get_size(self.as_ptr()) }
     }
 
     pub fn get_nth(&self, idx: u32) -> Option<&str> {
@@ -332,7 +334,7 @@ impl CapsFeaturesRef {
         }
 
         unsafe {
-            let feature = ffi::gst_caps_features_get_nth(self.as_ptr(), idx);
+            let feature = gst_sys::gst_caps_features_get_nth(self.as_ptr(), idx);
             if feature.is_null() {
                 return None;
             }
@@ -342,11 +344,11 @@ impl CapsFeaturesRef {
     }
 
     pub fn add(&mut self, feature: &str) {
-        unsafe { ffi::gst_caps_features_add(self.as_mut_ptr(), feature.to_glib_none().0) }
+        unsafe { gst_sys::gst_caps_features_add(self.as_mut_ptr(), feature.to_glib_none().0) }
     }
 
     pub fn remove(&mut self, feature: &str) {
-        unsafe { ffi::gst_caps_features_remove(self.as_mut_ptr(), feature.to_glib_none().0) }
+        unsafe { gst_sys::gst_caps_features_remove(self.as_mut_ptr(), feature.to_glib_none().0) }
     }
 
     pub fn iter(&self) -> Iter {
@@ -356,7 +358,7 @@ impl CapsFeaturesRef {
     // This is not an equivalence relation with regards to ANY. Everything is equal to ANY
     pub fn is_equal(&self, other: &CapsFeaturesRef) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_features_is_equal(
+            from_glib(gst_sys::gst_caps_features_is_equal(
                 self.as_ptr(),
                 other.as_ptr(),
             ))
@@ -393,7 +395,7 @@ impl<'a> Iterator for Iter<'a> {
         }
 
         unsafe {
-            let feature = ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.idx);
+            let feature = gst_sys::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.idx);
             if feature.is_null() {
                 return None;
             }
@@ -425,7 +427,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 
         unsafe {
             let feature =
-                ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features);
+                gst_sys::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features);
             if feature.is_null() {
                 return None;
             }
@@ -455,7 +457,9 @@ impl ToOwned for CapsFeaturesRef {
     type Owned = CapsFeatures;
 
     fn to_owned(&self) -> CapsFeatures {
-        unsafe { from_glib_full(ffi::gst_caps_features_copy(self.as_ptr() as *const _) as *mut _) }
+        unsafe {
+            from_glib_full(gst_sys::gst_caps_features_copy(self.as_ptr() as *const _) as *mut _)
+        }
     }
 }
 
@@ -464,7 +468,7 @@ unsafe impl Send for CapsFeaturesRef {}
 
 lazy_static! {
     pub static ref CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY)
+        CStr::from_ptr(gst_sys::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY)
             .to_str()
             .unwrap()
     };

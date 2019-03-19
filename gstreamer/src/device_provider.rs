@@ -13,8 +13,8 @@ use glib::translate::ToGlibPtr;
 
 use std::ffi::CStr;
 
-use ffi;
-use gobject_ffi;
+use gobject_sys;
+use gst_sys;
 
 pub trait DeviceProviderExtManual: 'static {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str>;
@@ -23,10 +23,10 @@ pub trait DeviceProviderExtManual: 'static {
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {
     fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = (*(self.as_ptr() as *mut gobject_ffi::GTypeInstance)).g_class
-                as *mut ffi::GstDeviceProviderClass;
+            let klass = (*(self.as_ptr() as *mut gobject_sys::GTypeInstance)).g_class
+                as *mut gst_sys::GstDeviceProviderClass;
 
-            let ptr = ffi::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);
+            let ptr = gst_sys::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);
 
             if ptr.is_null() {
                 None

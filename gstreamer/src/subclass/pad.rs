@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_sys;
 
 use glib;
 use glib::translate::*;
@@ -36,7 +36,7 @@ impl<T: PadImpl + ObjectImpl> PadImplExt for T {
     fn parent_linked(&self, pad: &Pad, peer: &Pad) {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPadClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
 
             (*parent_class)
                 .linked
@@ -48,7 +48,7 @@ impl<T: PadImpl + ObjectImpl> PadImplExt for T {
     fn parent_unlinked(&self, pad: &Pad, peer: &Pad) {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstPadClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstPadClass;
 
             (*parent_class)
                 .unlinked
@@ -63,15 +63,17 @@ unsafe impl<T: ObjectSubclass + PadImpl> IsSubclassable<T> for PadClass {
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
 
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut ffi::GstPadClass);
+            let klass = &mut *(self as *mut Self as *mut gst_sys::GstPadClass);
             klass.linked = Some(pad_linked::<T>);
             klass.unlinked = Some(pad_unlinked::<T>);
         }
     }
 }
 
-unsafe extern "C" fn pad_linked<T: ObjectSubclass>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad)
-where
+unsafe extern "C" fn pad_linked<T: ObjectSubclass>(
+    ptr: *mut gst_sys::GstPad,
+    peer: *mut gst_sys::GstPad,
+) where
     T: PadImpl,
 {
     glib_floating_reference_guard!(ptr);
@@ -82,8 +84,10 @@ where
     imp.linked(&wrap, &from_glib_borrow(peer))
 }
 
-unsafe extern "C" fn pad_unlinked<T: ObjectSubclass>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad)
-where
+unsafe extern "C" fn pad_unlinked<T: ObjectSubclass>(
+    ptr: *mut gst_sys::GstPad,
+    peer: *mut gst_sys::GstPad,
+) where
     T: PadImpl,
 {
     glib_floating_reference_guard!(ptr);

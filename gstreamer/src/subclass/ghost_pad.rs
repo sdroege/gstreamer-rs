@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_sys;
 
 use super::prelude::*;
 use glib::subclass::prelude::*;
@@ -19,7 +19,7 @@ unsafe impl<T: ObjectSubclass + GhostPadImpl> IsSubclassable<T> for GhostPadClas
     fn override_vfuncs(&mut self) {
         <::PadClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let _klass = &mut *(self as *mut Self as *mut ffi::GstGhostPadClass);
+            let _klass = &mut *(self as *mut Self as *mut gst_sys::GstGhostPadClass);
             // Nothing to do here
         }
     }

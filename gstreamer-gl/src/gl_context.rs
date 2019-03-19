@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
 use glib::IsA;
+use gst_gl_sys;
 use libc::uintptr_t;
 use GLContext;
 use GLDisplay;
@@ -22,7 +22,7 @@ impl GLContext {
         context_type: GLPlatform,
         available_apis: GLAPI,
     ) -> Option<GLContext> {
-        from_glib_full(ffi::gst_gl_context_new_wrapped(
+        from_glib_full(gst_gl_sys::gst_gl_context_new_wrapped(
             display.as_ref().to_glib_none().0,
             handle,
             context_type.to_glib(),
@@ -31,7 +31,9 @@ impl GLContext {
     }
 
     pub fn get_current_gl_context(context_type: GLPlatform) -> uintptr_t {
-        unsafe { ffi::gst_gl_context_get_current_gl_context(context_type.to_glib()) as uintptr_t }
+        unsafe {
+            gst_gl_sys::gst_gl_context_get_current_gl_context(context_type.to_glib()) as uintptr_t
+        }
     }
 
     pub fn get_proc_address_with_platform(
@@ -40,7 +42,7 @@ impl GLContext {
         name: &str,
     ) -> uintptr_t {
         unsafe {
-            ffi::gst_gl_context_get_proc_address_with_platform(
+            gst_gl_sys::gst_gl_context_get_proc_address_with_platform(
                 context_type.to_glib(),
                 gl_api.to_glib(),
                 name.to_glib_none().0,
@@ -57,12 +59,14 @@ pub trait GLContextExtManual: 'static {
 
 impl<O: IsA<GLContext>> GLContextExtManual for O {
     fn get_gl_context(&self) -> uintptr_t {
-        unsafe { ffi::gst_gl_context_get_gl_context(self.as_ref().to_glib_none().0) as uintptr_t }
+        unsafe {
+            gst_gl_sys::gst_gl_context_get_gl_context(self.as_ref().to_glib_none().0) as uintptr_t
+        }
     }
 
     fn get_proc_address(&self, name: &str) -> uintptr_t {
         unsafe {
-            ffi::gst_gl_context_get_proc_address(
+            gst_gl_sys::gst_gl_context_get_proc_address(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ) as uintptr_t

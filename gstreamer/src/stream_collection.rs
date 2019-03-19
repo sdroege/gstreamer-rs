@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_sys;
 use Stream;
 use StreamCollection;
 
@@ -75,17 +75,17 @@ impl StreamCollection {
         let upstream_id = upstream_id.to_glib_none();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_stream_collection_new(upstream_id.0)) }
+            unsafe { from_glib_full(gst_sys::gst_stream_collection_new(upstream_id.0)) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(ffi::gst_stream_collection_new(upstream_id.0)) }
+            unsafe { from_glib_none(gst_sys::gst_stream_collection_new(upstream_id.0)) }
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn add_stream<P: IsA<Stream>>(&self, stream: &P) {
         unsafe {
-            ffi::gst_stream_collection_add_stream(
+            gst_sys::gst_stream_collection_add_stream(
                 self.to_glib_none().0,
                 stream.as_ref().to_glib_full(),
             );

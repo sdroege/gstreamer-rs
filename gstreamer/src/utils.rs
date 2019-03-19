@@ -7,15 +7,15 @@
 // except according to those terms.
 
 use glib::translate::mut_override;
-use glib_ffi;
+use glib_sys;
 
-pub struct MutexGuard<'a>(&'a glib_ffi::GMutex);
+pub struct MutexGuard<'a>(&'a glib_sys::GMutex);
 
 impl<'a> MutexGuard<'a> {
     #[allow(clippy::trivially_copy_pass_by_ref)]
-    pub fn lock(mutex: &'a glib_ffi::GMutex) -> Self {
+    pub fn lock(mutex: &'a glib_sys::GMutex) -> Self {
         unsafe {
-            glib_ffi::g_mutex_lock(mut_override(mutex));
+            glib_sys::g_mutex_lock(mut_override(mutex));
         }
         MutexGuard(mutex)
     }
@@ -24,7 +24,7 @@ impl<'a> MutexGuard<'a> {
 impl<'a> Drop for MutexGuard<'a> {
     fn drop(&mut self) {
         unsafe {
-            glib_ffi::g_mutex_unlock(mut_override(self.0));
+            glib_sys::g_mutex_unlock(mut_override(self.0));
         }
     }
 }

@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 
 use glib;
 use glib::prelude::*;
@@ -29,10 +29,10 @@ pub trait URIHandlerImpl: super::element::ElementImpl + Send + Sync + 'static {
 
 unsafe impl<T: ObjectSubclass + URIHandlerImpl> IsImplementable<T> for URIHandler {
     unsafe extern "C" fn interface_init(
-        iface: glib_ffi::gpointer,
-        _iface_data: glib_ffi::gpointer,
+        iface: glib_sys::gpointer,
+        _iface_data: glib_sys::gpointer,
     ) {
-        let uri_handler_iface = &mut *(iface as *mut ffi::GstURIHandlerInterface);
+        let uri_handler_iface = &mut *(iface as *mut gst_sys::GstURIHandlerInterface);
 
         // Store the protocols in the interface data for later use
         let mut data = T::type_data();
@@ -42,7 +42,7 @@ unsafe impl<T: ObjectSubclass + URIHandlerImpl> IsImplementable<T> for URIHandle
         if data.interface_data.is_null() {
             data.interface_data = Box::into_raw(Box::new(Vec::new()));
         }
-        (*(data.interface_data as *mut Vec<(glib_ffi::GType, glib_ffi::gpointer)>))
+        (*(data.interface_data as *mut Vec<(glib_sys::GType, glib_sys::gpointer)>))
             .push((URIHandler::static_type().to_glib(), protocols as *mut _));
 
         uri_handler_iface.get_type = Some(uri_handler_get_type::<T>);
@@ -53,8 +53,8 @@ unsafe impl<T: ObjectSubclass + URIHandlerImpl> IsImplementable<T> for URIHandle
 }
 
 unsafe extern "C" fn uri_handler_get_type<T: ObjectSubclass>(
-    _type_: glib_ffi::GType,
-) -> ffi::GstURIType
+    _type_: glib_sys::GType,
+) -> gst_sys::GstURIType
 where
     T: URIHandlerImpl,
 {
@@ -62,7 +62,7 @@ where
 }
 
 unsafe extern "C" fn uri_handler_get_protocols<T: ObjectSubclass>(
-    _type_: glib_ffi::GType,
+    _type_: glib_sys::GType,
 ) -> *const *const libc::c_char
 where
     T: URIHandlerImpl,
@@ -73,7 +73,7 @@ where
 }
 
 unsafe extern "C" fn uri_handler_get_uri<T: ObjectSubclass>(
-    uri_handler: *mut ffi::GstURIHandler,
+    uri_handler: *mut gst_sys::GstURIHandler,
 ) -> *mut libc::c_char
 where
     T: URIHandlerImpl,
@@ -86,10 +86,10 @@ where
 }
 
 unsafe extern "C" fn uri_handler_set_uri<T: ObjectSubclass>(
-    uri_handler: *mut ffi::GstURIHandler,
+    uri_handler: *mut gst_sys::GstURIHandler,
     uri: *const libc::c_char,
-    err: *mut *mut glib_ffi::GError,
-) -> glib_ffi::gboolean
+    err: *mut *mut glib_sys::GError,
+) -> glib_sys::gboolean
 where
     T: URIHandlerImpl,
 {

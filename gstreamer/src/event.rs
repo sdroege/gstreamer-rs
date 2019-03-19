@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_sys;
 use miniobject::*;
 use structure::*;
 use GenericFormattedValue;
@@ -67,7 +67,7 @@ impl cmp::PartialOrd for Seqnum {
 impl cmp::Ord for Seqnum {
     fn cmp(&self, other: &Seqnum) -> cmp::Ordering {
         unsafe {
-            let ret = ffi::gst_util_seqnum_compare(self.0, other.0);
+            let ret = gst_sys::gst_util_seqnum_compare(self.0, other.0);
             if ret < 0 {
                 cmp::Ordering::Less
             } else if ret > 0 {
@@ -112,23 +112,23 @@ impl FromGlib<u32> for GroupId {
 
 impl EventType {
     pub fn is_upstream(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_UPSTREAM != 0
+        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_UPSTREAM != 0
     }
 
     pub fn is_downstream(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_DOWNSTREAM != 0
+        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_DOWNSTREAM != 0
     }
 
     pub fn is_serialized(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_SERIALIZED != 0
+        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_SERIALIZED != 0
     }
 
     pub fn is_sticky(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY != 0
+        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_STICKY != 0
     }
 
     pub fn is_sticky_multi(self) -> bool {
-        (self.to_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
+        (self.to_glib() as u32) & gst_sys::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
 }
 
@@ -141,9 +141,9 @@ impl PartialOrd for EventType {
         let v1 = self.to_glib() as u32;
         let v2 = other.to_glib() as u32;
 
-        let stream_start = ffi::GST_EVENT_STREAM_START as u32;
-        let segment = ffi::GST_EVENT_SEGMENT as u32;
-        let eos = ffi::GST_EVENT_EOS as u32;
+        let stream_start = gst_sys::GST_EVENT_STREAM_START as u32;
+        let segment = gst_sys::GST_EVENT_SEGMENT as u32;
+        let eos = gst_sys::GST_EVENT_EOS as u32;
 
         // Strictly ordered range between stream_start and segment,
         // and EOS is bigger than everything else
@@ -164,26 +164,26 @@ impl PartialOrd for EventType {
     }
 }
 
-gst_define_mini_object_wrapper!(Event, EventRef, ffi::GstEvent, [Debug,], || {
-    ffi::gst_event_get_type()
+gst_define_mini_object_wrapper!(Event, EventRef, gst_sys::GstEvent, [Debug,], || {
+    gst_sys::gst_event_get_type()
 });
 
 impl EventRef {
     pub fn get_seqnum(&self) -> Seqnum {
-        unsafe { from_glib(ffi::gst_event_get_seqnum(self.as_mut_ptr())) }
+        unsafe { from_glib(gst_sys::gst_event_get_seqnum(self.as_mut_ptr())) }
     }
 
     pub fn get_running_time_offset(&self) -> i64 {
-        unsafe { ffi::gst_event_get_running_time_offset(self.as_mut_ptr()) }
+        unsafe { gst_sys::gst_event_get_running_time_offset(self.as_mut_ptr()) }
     }
 
     pub fn set_running_time_offset(&mut self, offset: i64) {
-        unsafe { ffi::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
+        unsafe { gst_sys::gst_event_set_running_time_offset(self.as_mut_ptr(), offset) }
     }
 
     pub fn get_structure(&self) -> Option<&StructureRef> {
         unsafe {
-            let structure = ffi::gst_event_get_structure(self.as_mut_ptr());
+            let structure = gst_sys::gst_event_get_structure(self.as_mut_ptr());
             if structure.is_null() {
                 None
             } else {
@@ -220,39 +220,45 @@ impl EventRef {
         let type_ = unsafe { (*self.as_ptr()).type_ };
 
         match type_ {
-            ffi::GST_EVENT_FLUSH_START => EventView::FlushStart(FlushStart(self)),
-            ffi::GST_EVENT_FLUSH_STOP => EventView::FlushStop(FlushStop(self)),
-            ffi::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
-            ffi::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
-            ffi::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
-            ffi::GST_EVENT_STREAM_COLLECTION => EventView::StreamCollection(StreamCollection(self)),
-            ffi::GST_EVENT_TAG => EventView::Tag(Tag(self)),
-            ffi::GST_EVENT_BUFFERSIZE => EventView::BufferSize(BufferSize(self)),
-            ffi::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
-            ffi::GST_EVENT_STREAM_GROUP_DONE => EventView::StreamGroupDone(StreamGroupDone(self)),
-            ffi::GST_EVENT_EOS => EventView::Eos(Eos(self)),
-            ffi::GST_EVENT_TOC => EventView::Toc(Toc(self)),
-            ffi::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
-            ffi::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
-            ffi::GST_EVENT_GAP => EventView::Gap(Gap(self)),
-            ffi::GST_EVENT_QOS => EventView::Qos(Qos(self)),
-            ffi::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
-            ffi::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
-            ffi::GST_EVENT_LATENCY => EventView::Latency(Latency(self)),
-            ffi::GST_EVENT_STEP => EventView::Step(Step(self)),
-            ffi::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
-            ffi::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
-            ffi::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
-            ffi::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM => EventView::CustomDownstream(CustomDownstream(self)),
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
+            gst_sys::GST_EVENT_FLUSH_START => EventView::FlushStart(FlushStart(self)),
+            gst_sys::GST_EVENT_FLUSH_STOP => EventView::FlushStop(FlushStop(self)),
+            gst_sys::GST_EVENT_STREAM_START => EventView::StreamStart(StreamStart(self)),
+            gst_sys::GST_EVENT_CAPS => EventView::Caps(Caps(self)),
+            gst_sys::GST_EVENT_SEGMENT => EventView::Segment(Segment(self)),
+            gst_sys::GST_EVENT_STREAM_COLLECTION => {
+                EventView::StreamCollection(StreamCollection(self))
+            }
+            gst_sys::GST_EVENT_TAG => EventView::Tag(Tag(self)),
+            gst_sys::GST_EVENT_BUFFERSIZE => EventView::BufferSize(BufferSize(self)),
+            gst_sys::GST_EVENT_SINK_MESSAGE => EventView::SinkMessage(SinkMessage(self)),
+            gst_sys::GST_EVENT_STREAM_GROUP_DONE => {
+                EventView::StreamGroupDone(StreamGroupDone(self))
+            }
+            gst_sys::GST_EVENT_EOS => EventView::Eos(Eos(self)),
+            gst_sys::GST_EVENT_TOC => EventView::Toc(Toc(self)),
+            gst_sys::GST_EVENT_PROTECTION => EventView::Protection(Protection(self)),
+            gst_sys::GST_EVENT_SEGMENT_DONE => EventView::SegmentDone(SegmentDone(self)),
+            gst_sys::GST_EVENT_GAP => EventView::Gap(Gap(self)),
+            gst_sys::GST_EVENT_QOS => EventView::Qos(Qos(self)),
+            gst_sys::GST_EVENT_SEEK => EventView::Seek(Seek(self)),
+            gst_sys::GST_EVENT_NAVIGATION => EventView::Navigation(Navigation(self)),
+            gst_sys::GST_EVENT_LATENCY => EventView::Latency(Latency(self)),
+            gst_sys::GST_EVENT_STEP => EventView::Step(Step(self)),
+            gst_sys::GST_EVENT_RECONFIGURE => EventView::Reconfigure(Reconfigure(self)),
+            gst_sys::GST_EVENT_TOC_SELECT => EventView::TocSelect(TocSelect(self)),
+            gst_sys::GST_EVENT_SELECT_STREAMS => EventView::SelectStreams(SelectStreams(self)),
+            gst_sys::GST_EVENT_CUSTOM_UPSTREAM => EventView::CustomUpstream(CustomUpstream(self)),
+            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM => {
+                EventView::CustomDownstream(CustomDownstream(self))
+            }
+            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => {
                 EventView::CustomDownstreamOob(CustomDownstreamOob(self))
             }
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => {
+            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => {
                 EventView::CustomDownstreamSticky(CustomDownstreamSticky(self))
             }
-            ffi::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
-            ffi::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
+            gst_sys::GST_EVENT_CUSTOM_BOTH => EventView::CustomBoth(CustomBoth(self)),
+            gst_sys::GST_EVENT_CUSTOM_BOTH_OOB => EventView::CustomBothOob(CustomBothOob(self)),
             _ => EventView::Other,
         }
     }
@@ -449,7 +455,7 @@ impl fmt::Debug for EventRef {
         f.debug_struct("Event")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("type", &unsafe {
-                let type_ = ffi::gst_event_type_get_name((*self.as_ptr()).type_);
+                let type_ = gst_sys::gst_event_type_get_name((*self.as_ptr()).type_);
                 CStr::from_ptr(type_).to_str().unwrap()
             })
             .field("seqnum", &self.get_seqnum())
@@ -516,7 +522,7 @@ impl<'a> FlushStop<'a> {
         unsafe {
             let mut reset_time = mem::uninitialized();
 
-            ffi::gst_event_parse_flush_stop(self.as_mut_ptr(), &mut reset_time);
+            gst_sys::gst_event_parse_flush_stop(self.as_mut_ptr(), &mut reset_time);
 
             from_glib(reset_time)
         }
@@ -529,7 +535,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut stream_id = ptr::null();
 
-            ffi::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
+            gst_sys::gst_event_parse_stream_start(self.as_mut_ptr(), &mut stream_id);
             CStr::from_ptr(stream_id).to_str().unwrap()
         }
     }
@@ -538,7 +544,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut stream_flags = mem::uninitialized();
 
-            ffi::gst_event_parse_stream_flags(self.as_mut_ptr(), &mut stream_flags);
+            gst_sys::gst_event_parse_stream_flags(self.as_mut_ptr(), &mut stream_flags);
 
             from_glib(stream_flags)
         }
@@ -548,7 +554,7 @@ impl<'a> StreamStart<'a> {
         unsafe {
             let mut group_id = mem::uninitialized();
 
-            ffi::gst_event_parse_group_id(self.as_mut_ptr(), &mut group_id);
+            gst_sys::gst_event_parse_group_id(self.as_mut_ptr(), &mut group_id);
 
             from_glib(group_id)
         }
@@ -561,7 +567,7 @@ impl<'a> Caps<'a> {
         unsafe {
             let mut caps = ptr::null_mut();
 
-            ffi::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
+            gst_sys::gst_event_parse_caps(self.as_mut_ptr(), &mut caps);
             ::CapsRef::from_ptr(caps)
         }
     }
@@ -573,8 +579,8 @@ impl<'a> Segment<'a> {
         unsafe {
             let mut segment = ptr::null();
 
-            ffi::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
-            &*(segment as *mut ffi::GstSegment as *mut ::Segment)
+            gst_sys::gst_event_parse_segment(self.as_mut_ptr(), &mut segment);
+            &*(segment as *mut gst_sys::GstSegment as *mut ::Segment)
         }
     }
 }
@@ -586,7 +592,7 @@ impl<'a> StreamCollection<'a> {
         unsafe {
             let mut stream_collection = ptr::null_mut();
 
-            ffi::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
+            gst_sys::gst_event_parse_stream_collection(self.as_mut_ptr(), &mut stream_collection);
             from_glib_full(stream_collection)
         }
     }
@@ -598,7 +604,7 @@ impl<'a> Tag<'a> {
         unsafe {
             let mut tags = ptr::null_mut();
 
-            ffi::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
+            gst_sys::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
             ::TagListRef::from_ptr(tags)
         }
     }
@@ -613,7 +619,7 @@ impl<'a> BufferSize<'a> {
             let mut maxsize = mem::uninitialized();
             let mut async = mem::uninitialized();
 
-            ffi::gst_event_parse_buffer_size(
+            gst_sys::gst_event_parse_buffer_size(
                 self.as_mut_ptr(),
                 &mut fmt,
                 &mut minsize,
@@ -635,7 +641,7 @@ impl<'a> SinkMessage<'a> {
         unsafe {
             let mut msg = ptr::null_mut();
 
-            ffi::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
+            gst_sys::gst_event_parse_sink_message(self.as_mut_ptr(), &mut msg);
             from_glib_full(msg)
         }
     }
@@ -648,7 +654,7 @@ impl<'a> StreamGroupDone<'a> {
         unsafe {
             let mut group_id = mem::uninitialized();
 
-            ffi::gst_event_parse_stream_group_done(self.as_mut_ptr(), &mut group_id);
+            gst_sys::gst_event_parse_stream_group_done(self.as_mut_ptr(), &mut group_id);
 
             from_glib(group_id)
         }
@@ -664,7 +670,7 @@ impl<'a> Toc<'a> {
             let mut toc = ptr::null_mut();
             let mut updated = mem::uninitialized();
 
-            ffi::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
+            gst_sys::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
             (::TocRef::from_ptr(toc), from_glib(updated))
         }
     }
@@ -678,7 +684,7 @@ impl<'a> Protection<'a> {
             let mut buffer = ptr::null_mut();
             let mut origin = ptr::null();
 
-            ffi::gst_event_parse_protection(
+            gst_sys::gst_event_parse_protection(
                 self.as_mut_ptr(),
                 &mut system_id,
                 &mut buffer,
@@ -705,7 +711,7 @@ impl<'a> SegmentDone<'a> {
             let mut fmt = mem::uninitialized();
             let mut position = mem::uninitialized();
 
-            ffi::gst_event_parse_segment_done(self.as_mut_ptr(), &mut fmt, &mut position);
+            gst_sys::gst_event_parse_segment_done(self.as_mut_ptr(), &mut fmt, &mut position);
 
             GenericFormattedValue::new(from_glib(fmt), position)
         }
@@ -719,7 +725,7 @@ impl<'a> Gap<'a> {
             let mut timestamp = mem::uninitialized();
             let mut duration = mem::uninitialized();
 
-            ffi::gst_event_parse_gap(self.as_mut_ptr(), &mut timestamp, &mut duration);
+            gst_sys::gst_event_parse_gap(self.as_mut_ptr(), &mut timestamp, &mut duration);
 
             (from_glib(timestamp), from_glib(duration))
         }
@@ -735,7 +741,7 @@ impl<'a> Qos<'a> {
             let mut diff = mem::uninitialized();
             let mut timestamp = mem::uninitialized();
 
-            ffi::gst_event_parse_qos(
+            gst_sys::gst_event_parse_qos(
                 self.as_mut_ptr(),
                 &mut type_,
                 &mut proportion,
@@ -769,7 +775,7 @@ impl<'a> Seek<'a> {
             let mut stop_type = mem::uninitialized();
             let mut stop = mem::uninitialized();
 
-            ffi::gst_event_parse_seek(
+            gst_sys::gst_event_parse_seek(
                 self.as_mut_ptr(),
                 &mut rate,
                 &mut fmt,
@@ -800,7 +806,7 @@ impl<'a> Latency<'a> {
         unsafe {
             let mut latency = mem::uninitialized();
 
-            ffi::gst_event_parse_latency(self.as_mut_ptr(), &mut latency);
+            gst_sys::gst_event_parse_latency(self.as_mut_ptr(), &mut latency);
 
             from_glib(latency)
         }
@@ -817,7 +823,7 @@ impl<'a> Step<'a> {
             let mut flush = mem::uninitialized();
             let mut intermediate = mem::uninitialized();
 
-            ffi::gst_event_parse_step(
+            gst_sys::gst_event_parse_step(
                 self.as_mut_ptr(),
                 &mut fmt,
                 &mut amount,
@@ -844,7 +850,7 @@ impl<'a> TocSelect<'a> {
         unsafe {
             let mut uid = ptr::null_mut();
 
-            ffi::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
+            gst_sys::gst_event_parse_toc_select(self.as_mut_ptr(), &mut uid);
 
             CStr::from_ptr(uid).to_str().unwrap()
         }
@@ -858,7 +864,7 @@ impl<'a> SelectStreams<'a> {
         unsafe {
             let mut streams = ptr::null_mut();
 
-            ffi::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
+            gst_sys::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
 
             FromGlibPtrContainer::from_glib_full(streams)
         }
@@ -945,16 +951,16 @@ macro_rules! event_builder_generic_impl {
             unsafe {
                 let event = $new_fn(&mut self);
                 if let Some(seqnum) = self.builder.seqnum {
-                    ffi::gst_event_set_seqnum(event, seqnum.to_glib());
+                    gst_sys::gst_event_set_seqnum(event, seqnum.to_glib());
                 }
 
                 if let Some(running_time_offset) = self.builder.running_time_offset {
-                    ffi::gst_event_set_running_time_offset(event, running_time_offset);
+                    gst_sys::gst_event_set_running_time_offset(event, running_time_offset);
                 }
 
                 if !self.builder.other_fields.is_empty() {
                     let s = StructureRef::from_glib_borrow_mut(
-                        ffi::gst_event_writable_structure(event)
+                        gst_sys::gst_event_writable_structure(event)
                     );
 
                     for (k, v) in self.builder.other_fields {
@@ -979,7 +985,7 @@ impl<'a> FlushStartBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| ffi::gst_event_new_flush_start());
+    event_builder_generic_impl!(|_| gst_sys::gst_event_new_flush_start());
 }
 
 pub struct FlushStopBuilder<'a> {
@@ -995,7 +1001,9 @@ impl<'a> FlushStopBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_flush_stop(s.reset_time.to_glib()));
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_flush_stop(
+        s.reset_time.to_glib()
+    ));
 }
 
 pub struct StreamStartBuilder<'a> {
@@ -1030,12 +1038,12 @@ impl<'a> StreamStartBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        let ev = ffi::gst_event_new_stream_start(s.stream_id.to_glib_none().0);
+        let ev = gst_sys::gst_event_new_stream_start(s.stream_id.to_glib_none().0);
         if let Some(flags) = s.flags {
-            ffi::gst_event_set_stream_flags(ev, flags.to_glib());
+            gst_sys::gst_event_set_stream_flags(ev, flags.to_glib());
         }
         if let Some(group_id) = s.group_id {
-            ffi::gst_event_set_group_id(ev, group_id.to_glib());
+            gst_sys::gst_event_set_group_id(ev, group_id.to_glib());
         }
         ev
     });
@@ -1054,7 +1062,7 @@ impl<'a> CapsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_caps(s.caps.as_mut_ptr()));
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_caps(s.caps.as_mut_ptr()));
 }
 
 pub struct SegmentBuilder<'a> {
@@ -1070,7 +1078,9 @@ impl<'a> SegmentBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment(s.segment.to_glib_none().0));
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_segment(
+        s.segment.to_glib_none().0
+    ));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1088,7 +1098,7 @@ impl<'a> StreamCollectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_collection(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_stream_collection(
         s.stream_collection.to_glib_none().0
     ));
 }
@@ -1108,7 +1118,7 @@ impl<'a> TagBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let tags = s.tags.take().unwrap();
-        ffi::gst_event_new_tag(tags.into_ptr())
+        gst_sys::gst_event_new_tag(tags.into_ptr())
     });
 }
 
@@ -1129,7 +1139,7 @@ impl<'a> BufferSizeBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_buffer_size(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_buffer_size(
         s.minsize.get_format().to_glib(),
         s.minsize.get_value(),
         s.maxsize.get_value(),
@@ -1152,7 +1162,7 @@ impl<'a> SinkMessageBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_sink_message(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_sink_message(
         s.name.to_glib_none().0,
         s.msg.as_mut_ptr()
     ));
@@ -1173,7 +1183,7 @@ impl<'a> StreamGroupDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_stream_group_done(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_stream_group_done(
         s.group_id.to_glib()
     ));
 }
@@ -1189,7 +1199,7 @@ impl<'a> EosBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| ffi::gst_event_new_eos());
+    event_builder_generic_impl!(|_| gst_sys::gst_event_new_eos());
 }
 
 pub struct TocBuilder<'a> {
@@ -1207,7 +1217,7 @@ impl<'a> TocBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_toc(
         s.toc.to_glib_none().0,
         s.updated.to_glib()
     ));
@@ -1237,7 +1247,7 @@ impl<'a> ProtectionBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_protection(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_protection(
         s.system_id.to_glib_none().0,
         s.data.as_mut_ptr(),
         s.origin.to_glib_none().0,
@@ -1257,7 +1267,7 @@ impl<'a> SegmentDoneBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_segment_done(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_segment_done(
         s.position.get_format().to_glib(),
         s.position.get_value()
     ));
@@ -1278,7 +1288,7 @@ impl<'a> GapBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_gap(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_gap(
         s.timestamp.to_glib(),
         s.duration.to_glib()
     ));
@@ -1303,7 +1313,7 @@ impl<'a> QosBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_qos(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_qos(
         s.type_.to_glib(),
         s.proportion,
         s.diff,
@@ -1341,7 +1351,7 @@ impl<'a> SeekBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_seek(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_seek(
         s.rate,
         s.start.get_format().to_glib(),
         s.flags.to_glib(),
@@ -1367,7 +1377,7 @@ impl<'a> NavigationBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev = ffi::gst_event_new_navigation(structure.to_glib_none().0);
+        let ev = gst_sys::gst_event_new_navigation(structure.to_glib_none().0);
         mem::forget(structure);
 
         ev
@@ -1387,7 +1397,7 @@ impl<'a> LatencyBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_latency(s.latency.to_glib()));
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_latency(s.latency.to_glib()));
 }
 
 pub struct StepBuilder<'a> {
@@ -1409,7 +1419,7 @@ impl<'a> StepBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_step(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_step(
         s.amount.get_format().to_glib(),
         s.amount.get_value() as u64,
         s.rate,
@@ -1429,7 +1439,7 @@ impl<'a> ReconfigureBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|_| ffi::gst_event_new_reconfigure());
+    event_builder_generic_impl!(|_| gst_sys::gst_event_new_reconfigure());
 }
 
 pub struct TocSelectBuilder<'a> {
@@ -1445,7 +1455,9 @@ impl<'a> TocSelectBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_toc_select(s.uid.to_glib_none().0));
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_toc_select(
+        s.uid.to_glib_none().0
+    ));
 }
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -1463,7 +1475,7 @@ impl<'a> SelectStreamsBuilder<'a> {
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_select_streams(
+    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_select_streams(
         s.streams.to_glib_full()
     ));
 }
@@ -1483,8 +1495,10 @@ impl<'a> CustomUpstreamBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev =
-            ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_UPSTREAM, structure.to_glib_none().0);
+        let ev = gst_sys::gst_event_new_custom(
+            gst_sys::GST_EVENT_CUSTOM_UPSTREAM,
+            structure.to_glib_none().0,
+        );
         mem::forget(structure);
 
         ev
@@ -1506,8 +1520,10 @@ impl<'a> CustomDownstreamBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev =
-            ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_DOWNSTREAM, structure.to_glib_none().0);
+        let ev = gst_sys::gst_event_new_custom(
+            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM,
+            structure.to_glib_none().0,
+        );
         mem::forget(structure);
 
         ev
@@ -1529,8 +1545,8 @@ impl<'a> CustomDownstreamOobBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev = ffi::gst_event_new_custom(
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
+        let ev = gst_sys::gst_event_new_custom(
+            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_OOB,
             structure.to_glib_none().0,
         );
         mem::forget(structure);
@@ -1554,8 +1570,8 @@ impl<'a> CustomDownstreamStickyBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev = ffi::gst_event_new_custom(
-            ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
+        let ev = gst_sys::gst_event_new_custom(
+            gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
             structure.to_glib_none().0,
         );
         mem::forget(structure);
@@ -1579,7 +1595,10 @@ impl<'a> CustomBothBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev = ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH, structure.to_glib_none().0);
+        let ev = gst_sys::gst_event_new_custom(
+            gst_sys::GST_EVENT_CUSTOM_BOTH,
+            structure.to_glib_none().0,
+        );
         mem::forget(structure);
 
         ev
@@ -1601,8 +1620,10 @@ impl<'a> CustomBothOobBuilder<'a> {
 
     event_builder_generic_impl!(|s: &mut Self| {
         let structure = s.structure.take();
-        let ev =
-            ffi::gst_event_new_custom(ffi::GST_EVENT_CUSTOM_BOTH_OOB, structure.to_glib_none().0);
+        let ev = gst_sys::gst_event_new_custom(
+            gst_sys::GST_EVENT_CUSTOM_BOTH_OOB,
+            structure.to_glib_none().0,
+        );
         mem::forget(structure);
 
         ev

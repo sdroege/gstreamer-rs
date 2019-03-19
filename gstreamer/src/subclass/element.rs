@@ -8,8 +8,8 @@
 
 use libc;
 
-use ffi;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 
 use super::prelude::*;
 use glib;
@@ -117,7 +117,7 @@ where
     ) -> Result<StateChangeSuccess, StateChangeError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             let f = (*parent_class)
                 .change_state
@@ -136,7 +136,7 @@ where
     ) -> Option<::Pad> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
                 .request_new_pad
@@ -155,7 +155,7 @@ where
     fn parent_release_pad(&self, element: &::Element, pad: &::Pad) {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
                 .release_pad
@@ -167,7 +167,7 @@ where
     fn parent_send_event(&self, element: &::Element, event: Event) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
                 .send_event
@@ -179,7 +179,7 @@ where
     fn parent_query(&self, element: &::Element, query: &mut QueryRef) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
                 .query
@@ -191,7 +191,7 @@ where
     fn parent_set_context(&self, element: &::Element, context: &::Context) {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstElementClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
 
             (*parent_class)
                 .set_context
@@ -213,7 +213,7 @@ where
     ) -> R {
         unsafe {
             assert!(element.get_type().is_a(&T::get_type()));
-            let ptr: *mut ffi::GstElement = element.as_ptr() as *mut _;
+            let ptr: *mut gst_sys::GstElement = element.as_ptr() as *mut _;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
 
@@ -233,7 +233,7 @@ where
                 .downcast_ref::<::Element>()
                 .unwrap();
             assert!(wrap.get_type().is_a(&T::get_type()));
-            let ptr: *mut ffi::GstElement = wrap.to_glib_none().0;
+            let ptr: *mut gst_sys::GstElement = wrap.to_glib_none().0;
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
 
@@ -245,8 +245,8 @@ where
 pub unsafe trait ElementClassSubclassExt: Sized + 'static {
     fn add_pad_template(&mut self, pad_template: PadTemplate) {
         unsafe {
-            ffi::gst_element_class_add_pad_template(
-                self as *mut Self as *mut ffi::GstElementClass,
+            gst_sys::gst_element_class_add_pad_template(
+                self as *mut Self as *mut gst_sys::GstElementClass,
                 pad_template.to_glib_none().0,
             );
         }
@@ -260,8 +260,8 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
         author: &str,
     ) {
         unsafe {
-            ffi::gst_element_class_set_metadata(
-                self as *mut Self as *mut ffi::GstElementClass,
+            gst_sys::gst_element_class_set_metadata(
+                self as *mut Self as *mut gst_sys::GstElementClass,
                 long_name.to_glib_none().0,
                 classification.to_glib_none().0,
                 description.to_glib_none().0,
@@ -281,7 +281,7 @@ where
         <glib::ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
 
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut ffi::GstElementClass);
+            let klass = &mut *(self as *mut Self as *mut gst_sys::GstElementClass);
             klass.change_state = Some(element_change_state::<T>);
             klass.request_new_pad = Some(element_request_new_pad::<T>);
             klass.release_pad = Some(element_release_pad::<T>);
@@ -293,9 +293,9 @@ where
 }
 
 unsafe extern "C" fn element_change_state<T: ObjectSubclass>(
-    ptr: *mut ffi::GstElement,
-    transition: ffi::GstStateChange,
-) -> ffi::GstStateChangeReturn
+    ptr: *mut gst_sys::GstElement,
+    transition: gst_sys::GstStateChange,
+) -> gst_sys::GstStateChangeReturn
 where
     T: ElementImpl,
     T::Instance: PanicPoison,
@@ -322,11 +322,11 @@ where
 }
 
 unsafe extern "C" fn element_request_new_pad<T: ObjectSubclass>(
-    ptr: *mut ffi::GstElement,
-    templ: *mut ffi::GstPadTemplate,
+    ptr: *mut gst_sys::GstElement,
+    templ: *mut gst_sys::GstPadTemplate,
     name: *const libc::c_char,
-    caps: *const ffi::GstCaps,
-) -> *mut ffi::GstPad
+    caps: *const gst_sys::GstCaps,
+) -> *mut gst_sys::GstPad
 where
     T: ElementImpl,
     T::Instance: PanicPoison,
@@ -352,7 +352,7 @@ where
     if let Some(ref pad) = pad {
         assert_eq!(
             pad.get_parent(),
-            Some(::Object::from_glib_borrow(ptr as *mut ffi::GstObject))
+            Some(::Object::from_glib_borrow(ptr as *mut gst_sys::GstObject))
         );
     }
 
@@ -360,8 +360,8 @@ where
 }
 
 unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
-    ptr: *mut ffi::GstElement,
-    pad: *mut ffi::GstPad,
+    ptr: *mut gst_sys::GstElement,
+    pad: *mut gst_sys::GstPad,
 ) where
     T: ElementImpl,
     T::Instance: PanicPoison,
@@ -377,9 +377,9 @@ unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
 }
 
 unsafe extern "C" fn element_send_event<T: ObjectSubclass>(
-    ptr: *mut ffi::GstElement,
-    event: *mut ffi::GstEvent,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_sys::GstElement,
+    event: *mut gst_sys::GstEvent,
+) -> glib_sys::gboolean
 where
     T: ElementImpl,
     T::Instance: PanicPoison,
@@ -396,9 +396,9 @@ where
 }
 
 unsafe extern "C" fn element_query<T: ObjectSubclass>(
-    ptr: *mut ffi::GstElement,
-    query: *mut ffi::GstQuery,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_sys::GstElement,
+    query: *mut gst_sys::GstQuery,
+) -> glib_sys::gboolean
 where
     T: ElementImpl,
     T::Instance: PanicPoison,
@@ -416,8 +416,8 @@ where
 }
 
 unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
-    ptr: *mut ffi::GstElement,
-    context: *mut ffi::GstContext,
+    ptr: *mut gst_sys::GstElement,
+    context: *mut gst_sys::GstContext,
 ) where
     T: ElementImpl,
     T::Instance: PanicPoison,

@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_sys;
 use std::ptr;
 use ChildProxy;
 
@@ -21,7 +21,7 @@ pub trait ChildProxyExtManual: 'static {
 impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
     fn get_child_property(&self, name: &str) -> Option<glib::Value> {
         unsafe {
-            let found: bool = from_glib(ffi::gst_child_proxy_lookup(
+            let found: bool = from_glib(gst_sys::gst_child_proxy_lookup(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 ptr::null_mut(),
@@ -32,7 +32,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
             }
 
             let mut value = glib::Value::uninitialized();
-            ffi::gst_child_proxy_get_property(
+            gst_sys::gst_child_proxy_get_property(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 value.to_glib_none_mut().0,
@@ -43,7 +43,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
 
     fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError> {
         unsafe {
-            let found: bool = from_glib(ffi::gst_child_proxy_lookup(
+            let found: bool = from_glib(gst_sys::gst_child_proxy_lookup(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 ptr::null_mut(),
@@ -54,7 +54,7 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
             }
 
             let value = value.to_value();
-            ffi::gst_child_proxy_set_property(
+            gst_sys::gst_child_proxy_set_property(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 value.to_glib_none().0,

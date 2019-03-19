@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_sys;
 use Plugin;
 use Structure;
 use StructureRef;
@@ -16,7 +16,7 @@ use glib::translate::*;
 impl Plugin {
     pub fn get_cache_data(&self) -> Option<&StructureRef> {
         unsafe {
-            let cache_data = ffi::gst_plugin_get_cache_data(self.to_glib_none().0);
+            let cache_data = gst_sys::gst_plugin_get_cache_data(self.to_glib_none().0);
             if cache_data.is_null() {
                 None
             } else {
@@ -27,7 +27,7 @@ impl Plugin {
 
     pub fn set_cache_data(&self, cache_data: Structure) {
         unsafe {
-            ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_ptr());
+            gst_sys::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_ptr());
         }
     }
 }

@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_video_sys;
 
 use std::ffi::CStr;
 use std::fmt;
@@ -15,14 +15,14 @@ use std::str;
 use glib;
 use glib::translate::{from_glib, ToGlib};
 
-pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
+pub struct VideoFormatInfo(&'static gst_video_sys::GstVideoFormatInfo);
 
 impl VideoFormatInfo {
     pub fn from_format(format: ::VideoFormat) -> VideoFormatInfo {
         assert_initialized_main_thread!();
 
         unsafe {
-            let info = ffi::gst_video_format_get_info(format.to_glib());
+            let info = gst_video_sys::gst_video_format_get_info(format.to_glib());
             assert!(!info.is_null());
 
             VideoFormatInfo(&*info)
@@ -106,35 +106,35 @@ impl VideoFormatInfo {
     }
 
     pub fn has_alpha(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_ALPHA != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_ALPHA != 0
     }
 
     pub fn has_palette(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_PALETTE != 0
     }
 
     pub fn is_complex(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
     }
 
     pub fn is_gray(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_GRAY != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_GRAY != 0
     }
 
     pub fn is_le(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_LE != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_LE != 0
     }
 
     pub fn is_rgb(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_RGB != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_RGB != 0
     }
 
     pub fn is_tiled(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_TILED != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_TILED != 0
     }
 
     pub fn is_yuv(&self) -> bool {
-        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_YUV != 0
+        self.0.flags & gst_video_sys::GST_VIDEO_FORMAT_FLAG_YUV != 0
     }
 
     pub fn scale_width(&self, component: u8, width: u32) -> u32 {
@@ -190,26 +190,30 @@ impl From<::VideoFormat> for VideoFormatInfo {
 
 #[doc(hidden)]
 impl glib::translate::GlibPtrDefault for VideoFormatInfo {
-    type GlibType = *mut ffi::GstVideoFormatInfo;
+    type GlibType = *mut gst_video_sys::GstVideoFormatInfo;
 }
 
 #[doc(hidden)]
-impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for VideoFormatInfo {
+impl<'a> glib::translate::ToGlibPtr<'a, *const gst_video_sys::GstVideoFormatInfo>
+    for VideoFormatInfo
+{
     type Storage = &'a VideoFormatInfo;
 
-    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoFormatInfo, Self> {
+    fn to_glib_none(
+        &'a self,
+    ) -> glib::translate::Stash<'a, *const gst_video_sys::GstVideoFormatInfo, Self> {
         glib::translate::Stash(self.0, self)
     }
 
-    fn to_glib_full(&self) -> *const ffi::GstVideoFormatInfo {
+    fn to_glib_full(&self) -> *const gst_video_sys::GstVideoFormatInfo {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFormatInfo {
+impl glib::translate::FromGlibPtrNone<*mut gst_video_sys::GstVideoFormatInfo> for VideoFormatInfo {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut ffi::GstVideoFormatInfo) -> Self {
+    unsafe fn from_glib_none(ptr: *mut gst_video_sys::GstVideoFormatInfo) -> Self {
         VideoFormatInfo(&*ptr)
     }
 }

@@ -13,10 +13,10 @@ use std::mem;
 use std::ops;
 use std::ptr;
 
-use ffi;
 use glib::translate::*;
 use gst;
 use gst::prelude::*;
+use gst_sdp_sys;
 
 use sdp_attribute::SDPAttribute;
 use sdp_bandwidth::SDPBandwidth;
@@ -25,16 +25,16 @@ use sdp_key::SDPKey;
 
 glib_wrapper! {
     #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct SDPMedia(Boxed<ffi::GstSDPMedia>);
+    pub struct SDPMedia(Boxed<gst_sdp_sys::GstSDPMedia>);
 
     match fn {
         copy => |ptr| {
             let mut copy = ptr::null_mut();
-            ffi::gst_sdp_media_copy(ptr as *const ffi::GstSDPMedia, &mut copy);
+            gst_sdp_sys::gst_sdp_media_copy(ptr as *const gst_sdp_sys::GstSDPMedia, &mut copy);
             copy
         },
         free => |ptr| {
-            ffi::gst_sdp_media_free(ptr);
+            gst_sdp_sys::gst_sdp_media_free(ptr);
         },
     }
 }
@@ -44,7 +44,7 @@ impl SDPMedia {
         assert_initialized_main_thread!();
         unsafe {
             let mut media = ptr::null_mut();
-            ffi::gst_sdp_media_new(&mut media);
+            gst_sdp_sys::gst_sdp_media_new(&mut media);
             from_glib_full(media)
         }
     }
@@ -80,7 +80,7 @@ impl fmt::Display for SDPMedia {
 }
 
 #[repr(C)]
-pub struct SDPMediaRef(ffi::GstSDPMedia);
+pub struct SDPMediaRef(gst_sdp_sys::GstSDPMedia);
 
 impl fmt::Debug for SDPMediaRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -127,12 +127,18 @@ impl SDPMediaRef {
     pub fn add_attribute<'a, P: Into<Option<&'a str>>>(&mut self, key: &str, value: P) {
         let value = value.into();
         let value = value.to_glib_none();
-        unsafe { ffi::gst_sdp_media_add_attribute(&mut self.0, key.to_glib_none().0, value.0) };
+        unsafe {
+            gst_sdp_sys::gst_sdp_media_add_attribute(&mut self.0, key.to_glib_none().0, value.0)
+        };
     }
 
     pub fn add_bandwidth(&mut self, bwtype: &str, bandwidth: u32) {
         unsafe {
-            ffi::gst_sdp_media_add_bandwidth(&mut self.0, bwtype.to_glib_none().0, bandwidth)
+            gst_sdp_sys::gst_sdp_media_add_bandwidth(
+                &mut self.0,
+                bwtype.to_glib_none().0,
+                bandwidth,
+            )
         };
     }
 
@@ -145,7 +151,7 @@ impl SDPMediaRef {
         addr_number: u32,
     ) {
         unsafe {
-            ffi::gst_sdp_media_add_connection(
+            gst_sdp_sys::gst_sdp_media_add_connection(
                 &mut self.0,
                 nettype.to_glib_none().0,
                 addrtype.to_glib_none().0,
@@ -157,11 +163,11 @@ impl SDPMediaRef {
     }
 
     pub fn add_format(&mut self, format: &str) {
-        unsafe { ffi::gst_sdp_media_add_format(&mut self.0, format.to_glib_none().0) };
+        unsafe { gst_sdp_sys::gst_sdp_media_add_format(&mut self.0, format.to_glib_none().0) };
     }
 
     pub fn as_text(&self) -> Option<String> {
-        unsafe { from_glib_full(ffi::gst_sdp_media_as_text(&self.0)) }
+        unsafe { from_glib_full(gst_sdp_sys::gst_sdp_media_as_text(&self.0)) }
     }
 
     pub fn attributes(&self) -> AttributesIter {
@@ -181,27 +187,28 @@ impl SDPMediaRef {
     }
 
     pub fn attributes_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_media_attributes_len(&self.0) }
+        unsafe { gst_sdp_sys::gst_sdp_media_attributes_len(&self.0) }
     }
 
     pub fn attributes_to_caps(&self, caps: &mut gst::CapsRef) -> Result<(), ()> {
-        let result = unsafe { ffi::gst_sdp_media_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
+        let result =
+            unsafe { gst_sdp_sys::gst_sdp_media_attributes_to_caps(&self.0, caps.as_mut_ptr()) };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
     pub fn bandwidths_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_media_bandwidths_len(&self.0) }
+        unsafe { gst_sdp_sys::gst_sdp_media_bandwidths_len(&self.0) }
     }
 
     pub fn connections_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_media_connections_len(&self.0) }
+        unsafe { gst_sdp_sys::gst_sdp_media_connections_len(&self.0) }
     }
 
     pub fn formats_len(&self) -> u32 {
-        unsafe { ffi::gst_sdp_media_formats_len(&self.0) }
+        unsafe { gst_sdp_sys::gst_sdp_media_formats_len(&self.0) }
     }
 
     pub fn get_attribute(&self, idx: u32) -> Option<&SDPAttribute> {
@@ -210,7 +217,7 @@ impl SDPMediaRef {
         }
 
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_attribute(&self.0, idx);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_attribute(&self.0, idx);
             if ptr.is_null() {
                 None
             } else {
@@ -221,7 +228,7 @@ impl SDPMediaRef {
 
     pub fn get_attribute_val(&self, key: &str) -> Option<&str> {
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_attribute_val(&self.0, key.to_glib_none().0);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_attribute_val(&self.0, key.to_glib_none().0);
             if ptr.is_null() {
                 None
             } else {
@@ -236,7 +243,8 @@ impl SDPMediaRef {
 
     pub fn get_attribute_val_n(&self, key: &str, nth: u32) -> Option<&str> {
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
+            let ptr =
+                gst_sdp_sys::gst_sdp_media_get_attribute_val_n(&self.0, key.to_glib_none().0, nth);
             if ptr.is_null() {
                 None
             } else {
@@ -255,7 +263,7 @@ impl SDPMediaRef {
         }
 
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_bandwidth(&self.0, idx);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_bandwidth(&self.0, idx);
             if ptr.is_null() {
                 None
             } else {
@@ -265,7 +273,7 @@ impl SDPMediaRef {
     }
 
     pub fn get_caps_from_media(&self, pt: i32) -> Option<gst::Caps> {
-        unsafe { from_glib_full(ffi::gst_sdp_media_get_caps_from_media(&self.0, pt)) }
+        unsafe { from_glib_full(gst_sdp_sys::gst_sdp_media_get_caps_from_media(&self.0, pt)) }
     }
 
     pub fn get_connection(&self, idx: u32) -> Option<&SDPConnection> {
@@ -274,7 +282,7 @@ impl SDPMediaRef {
         }
 
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_connection(&self.0, idx);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_connection(&self.0, idx);
             if ptr.is_null() {
                 None
             } else {
@@ -289,7 +297,7 @@ impl SDPMediaRef {
         }
 
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_format(&self.0, idx);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_format(&self.0, idx);
             if ptr.is_null() {
                 None
             } else {
@@ -304,7 +312,7 @@ impl SDPMediaRef {
 
     pub fn get_information(&self) -> Option<&str> {
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_information(&self.0);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_information(&self.0);
             if ptr.is_null() {
                 None
             } else {
@@ -319,7 +327,7 @@ impl SDPMediaRef {
 
     pub fn get_key(&self) -> Option<&SDPKey> {
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_key(&self.0);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_key(&self.0);
             if ptr.is_null() {
                 None
             } else {
@@ -330,7 +338,7 @@ impl SDPMediaRef {
 
     pub fn get_media(&self) -> Option<&str> {
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_media(&self.0);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_media(&self.0);
             if ptr.is_null() {
                 None
             } else {
@@ -344,16 +352,16 @@ impl SDPMediaRef {
     }
 
     pub fn get_num_ports(&self) -> u32 {
-        unsafe { ffi::gst_sdp_media_get_num_ports(&self.0) }
+        unsafe { gst_sdp_sys::gst_sdp_media_get_num_ports(&self.0) }
     }
 
     pub fn get_port(&self) -> u32 {
-        unsafe { ffi::gst_sdp_media_get_port(&self.0) }
+        unsafe { gst_sdp_sys::gst_sdp_media_get_port(&self.0) }
     }
 
     pub fn get_proto(&self) -> Option<&str> {
         unsafe {
-            let ptr = ffi::gst_sdp_media_get_proto(&self.0);
+            let ptr = gst_sdp_sys::gst_sdp_media_get_proto(&self.0);
             if ptr.is_null() {
                 None
             } else {
@@ -374,10 +382,11 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
-        let result = unsafe { ffi::gst_sdp_media_insert_attribute(&mut self.0, idx, &mut attr.0) };
+        let result =
+            unsafe { gst_sdp_sys::gst_sdp_media_insert_attribute(&mut self.0, idx, &mut attr.0) };
         mem::forget(attr);
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -390,10 +399,11 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
-        let result = unsafe { ffi::gst_sdp_media_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
+        let result =
+            unsafe { gst_sdp_sys::gst_sdp_media_insert_bandwidth(&mut self.0, idx, &mut bw.0) };
         mem::forget(bw);
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -410,10 +420,11 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
-        let result = unsafe { ffi::gst_sdp_media_insert_connection(&mut self.0, idx, &mut conn.0) };
+        let result =
+            unsafe { gst_sdp_sys::gst_sdp_media_insert_connection(&mut self.0, idx, &mut conn.0) };
         mem::forget(conn);
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -426,10 +437,11 @@ impl SDPMediaRef {
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
-        let result =
-            unsafe { ffi::gst_sdp_media_insert_format(&mut self.0, idx, format.to_glib_none().0) };
+        let result = unsafe {
+            gst_sdp_sys::gst_sdp_media_insert_format(&mut self.0, idx, format.to_glib_none().0)
+        };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -439,9 +451,9 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result = unsafe { ffi::gst_sdp_media_remove_attribute(&mut self.0, idx) };
+        let result = unsafe { gst_sdp_sys::gst_sdp_media_remove_attribute(&mut self.0, idx) };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -451,9 +463,9 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result = unsafe { ffi::gst_sdp_media_remove_bandwidth(&mut self.0, idx) };
+        let result = unsafe { gst_sdp_sys::gst_sdp_media_remove_bandwidth(&mut self.0, idx) };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -463,9 +475,9 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result = unsafe { ffi::gst_sdp_media_remove_connection(&mut self.0, idx) };
+        let result = unsafe { gst_sdp_sys::gst_sdp_media_remove_connection(&mut self.0, idx) };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -475,9 +487,9 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result = unsafe { ffi::gst_sdp_media_remove_format(&mut self.0, idx) };
+        let result = unsafe { gst_sdp_sys::gst_sdp_media_remove_format(&mut self.0, idx) };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -487,10 +499,11 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result = unsafe { ffi::gst_sdp_media_replace_attribute(&mut self.0, idx, &mut attr.0) };
+        let result =
+            unsafe { gst_sdp_sys::gst_sdp_media_replace_attribute(&mut self.0, idx, &mut attr.0) };
         mem::forget(attr);
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -500,10 +513,11 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result = unsafe { ffi::gst_sdp_media_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
+        let result =
+            unsafe { gst_sdp_sys::gst_sdp_media_replace_bandwidth(&mut self.0, idx, &mut bw.0) };
         mem::forget(bw);
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -514,10 +528,10 @@ impl SDPMediaRef {
         }
 
         let result =
-            unsafe { ffi::gst_sdp_media_replace_connection(&mut self.0, idx, &mut conn.0) };
+            unsafe { gst_sdp_sys::gst_sdp_media_replace_connection(&mut self.0, idx, &mut conn.0) };
         mem::forget(conn);
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -527,46 +541,53 @@ impl SDPMediaRef {
             return Err(());
         }
 
-        let result =
-            unsafe { ffi::gst_sdp_media_replace_format(&mut self.0, idx, format.to_glib_none().0) };
+        let result = unsafe {
+            gst_sdp_sys::gst_sdp_media_replace_format(&mut self.0, idx, format.to_glib_none().0)
+        };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
 
     pub fn set_information(&mut self, information: &str) {
-        unsafe { ffi::gst_sdp_media_set_information(&mut self.0, information.to_glib_none().0) };
+        unsafe {
+            gst_sdp_sys::gst_sdp_media_set_information(&mut self.0, information.to_glib_none().0)
+        };
     }
 
     pub fn set_key(&mut self, type_: &str, data: &str) {
         unsafe {
-            ffi::gst_sdp_media_set_key(&mut self.0, type_.to_glib_none().0, data.to_glib_none().0)
+            gst_sdp_sys::gst_sdp_media_set_key(
+                &mut self.0,
+                type_.to_glib_none().0,
+                data.to_glib_none().0,
+            )
         };
     }
 
     pub fn set_media(&mut self, med: &str) {
-        unsafe { ffi::gst_sdp_media_set_media(&mut self.0, med.to_glib_none().0) };
+        unsafe { gst_sdp_sys::gst_sdp_media_set_media(&mut self.0, med.to_glib_none().0) };
     }
 
     pub fn set_port_info(&mut self, port: u32, num_ports: u32) {
-        unsafe { ffi::gst_sdp_media_set_port_info(&mut self.0, port, num_ports) };
+        unsafe { gst_sdp_sys::gst_sdp_media_set_port_info(&mut self.0, port, num_ports) };
     }
 
     pub fn set_proto(&mut self, proto: &str) {
-        unsafe { ffi::gst_sdp_media_set_proto(&mut self.0, proto.to_glib_none().0) };
+        unsafe { gst_sdp_sys::gst_sdp_media_set_proto(&mut self.0, proto.to_glib_none().0) };
     }
 
     pub fn set_media_from_caps(caps: &gst::Caps, media: &mut SDPMedia) -> Result<(), ()> {
         assert_initialized_main_thread!();
         let result = unsafe {
-            ffi::gst_sdp_media_set_media_from_caps(
+            gst_sdp_sys::gst_sdp_media_set_media_from_caps(
                 caps.to_glib_none().0,
                 media.to_glib_none_mut().0,
             )
         };
         match result {
-            ffi::GST_SDP_OK => Ok(()),
+            gst_sdp_sys::GST_SDP_OK => Ok(()),
             _ => Err(()),
         }
     }
@@ -590,7 +611,7 @@ impl ToOwned for SDPMediaRef {
     fn to_owned(&self) -> SDPMedia {
         unsafe {
             let mut ptr = ptr::null_mut();
-            ffi::gst_sdp_media_copy(&self.0, &mut ptr);
+            gst_sdp_sys::gst_sdp_media_copy(&self.0, &mut ptr);
             from_glib_full(ptr)
         }
     }

@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_audio_sys;
 use AudioChannelPosition;
 
 use std::mem;
@@ -25,7 +25,7 @@ impl AudioChannelPosition {
             return 0;
         }
         unsafe {
-            let val = mem::transmute::<ffi::GstAudioChannelPosition, u32>(pos);
+            let val = mem::transmute::<gst_audio_sys::GstAudioChannelPosition, u32>(pos);
             1 << val
         }
     }
@@ -38,17 +38,18 @@ impl AudioChannelPosition {
             return None;
         }
 
-        let positions_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
-            if i >= len as usize {
-                ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
-            } else {
-                positions[i].to_glib()
-            }
-        });
+        let positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
+            array_init::array_init_copy(|i| {
+                if i >= len as usize {
+                    gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
+                } else {
+                    positions[i].to_glib()
+                }
+            });
 
         unsafe {
             let mut mask = mem::uninitialized();
-            let valid: bool = from_glib(ffi::gst_audio_channel_positions_to_mask(
+            let valid: bool = from_glib(gst_audio_sys::gst_audio_channel_positions_to_mask(
                 positions_raw.as_ptr() as *mut _,
                 len as i32,
                 force_order.to_glib(),
@@ -73,10 +74,10 @@ impl AudioChannelPosition {
         }
 
         let len = positions.len();
-        let mut positions_raw: [ffi::GstAudioChannelPosition; 64] =
-            [ffi::GST_AUDIO_CHANNEL_POSITION_INVALID; 64];
+        let mut positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
+            [gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID; 64];
         let valid: bool = unsafe {
-            from_glib(ffi::gst_audio_channel_positions_from_mask(
+            from_glib(gst_audio_sys::gst_audio_channel_positions_from_mask(
                 len as i32,
                 mask,
                 positions_raw.as_mut_ptr(),
@@ -105,17 +106,17 @@ impl AudioChannelPosition {
         }
 
         let len = positions.len();
-        let mut positions_raw: [ffi::GstAudioChannelPosition; 64] =
+        let mut positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
             array_init::array_init_copy(|i| {
                 if i >= len as usize {
-                    ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+                    gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
                 } else {
                     positions[i].to_glib()
                 }
             });
 
         let valid: bool = unsafe {
-            from_glib(ffi::gst_audio_channel_positions_to_valid_order(
+            from_glib(gst_audio_sys::gst_audio_channel_positions_to_valid_order(
                 positions_raw.as_mut_ptr(),
                 len as i32,
             ))
@@ -136,7 +137,7 @@ impl AudioChannelPosition {
     pub fn get_fallback_mask(channels: u32) -> u64 {
         assert_initialized_main_thread!();
 
-        unsafe { ffi::gst_audio_channel_get_fallback_mask(channels as i32) }
+        unsafe { gst_audio_sys::gst_audio_channel_get_fallback_mask(channels as i32) }
     }
 
     pub fn check_valid_channel_positions(
@@ -150,16 +151,17 @@ impl AudioChannelPosition {
         }
 
         let len = positions.len();
-        let positions_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
-            if i >= len as usize {
-                ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
-            } else {
-                positions[i].to_glib()
-            }
-        });
+        let positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
+            array_init::array_init_copy(|i| {
+                if i >= len as usize {
+                    gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
+                } else {
+                    positions[i].to_glib()
+                }
+            });
 
         unsafe {
-            from_glib(ffi::gst_audio_check_valid_channel_positions(
+            from_glib(gst_audio_sys::gst_audio_check_valid_channel_positions(
                 positions_raw.as_ptr() as *mut _,
                 len as i32,
                 force_order.to_glib(),
@@ -184,24 +186,24 @@ pub fn buffer_reorder_channels(
     let from_len = from.len();
     let to_len = to.len();
 
-    let from_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
         if i >= from_len as usize {
-            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+            gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             from[i].to_glib()
         }
     });
 
-    let to_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
         if i >= to_len as usize {
-            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+            gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             to[i].to_glib()
         }
     });
 
     let valid: bool = unsafe {
-        from_glib(ffi::gst_audio_buffer_reorder_channels(
+        from_glib(gst_audio_sys::gst_audio_buffer_reorder_channels(
             buffer.as_mut_ptr(),
             format.to_glib(),
             channels as i32,
@@ -233,24 +235,24 @@ pub fn reorder_channels(
     let from_len = from.len();
     let to_len = to.len();
 
-    let from_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
         if i >= from_len as usize {
-            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+            gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             from[i].to_glib()
         }
     });
 
-    let to_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
         if i >= to_len as usize {
-            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+            gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             to[i].to_glib()
         }
     });
 
     let valid: bool = unsafe {
-        from_glib(ffi::gst_audio_reorder_channels(
+        from_glib(gst_audio_sys::gst_audio_reorder_channels(
             data.as_mut_ptr() as *mut _,
             data.len(),
             format.to_glib(),
@@ -281,17 +283,17 @@ pub fn get_channel_reorder_map(
     let from_len = from.len();
     let to_len = to.len();
 
-    let from_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
         if i >= from_len as usize {
-            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+            gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             from[i].to_glib()
         }
     });
 
-    let to_raw: [ffi::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
         if i >= to_len as usize {
-            ffi::GST_AUDIO_CHANNEL_POSITION_INVALID
+            gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
             to[i].to_glib()
         }
@@ -299,7 +301,7 @@ pub fn get_channel_reorder_map(
 
     let mut reorder_map_raw = [0i32, 64];
     let valid: bool = unsafe {
-        from_glib(ffi::gst_audio_get_channel_reorder_map(
+        from_glib(gst_audio_sys::gst_audio_get_channel_reorder_map(
             from_len as i32,
             from_raw.as_ptr() as *mut _,
             to_raw.as_ptr() as *mut _,

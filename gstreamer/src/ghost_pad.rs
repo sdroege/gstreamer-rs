@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
+use gst_sys;
 use GhostPad;
 use Object;
 use Pad;
@@ -22,7 +22,7 @@ impl GhostPad {
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
-            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new(
+            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new(
                 name.0,
                 target.as_ref().to_glib_none().0,
             ))
@@ -39,7 +39,7 @@ impl GhostPad {
         let name = name.into();
         let name = name.to_glib_none();
         unsafe {
-            Option::<Pad>::from_glib_none(ffi::gst_ghost_pad_new_from_template(
+            Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_from_template(
                 name.0,
                 target.as_ref().to_glib_none().0,
                 templ.to_glib_none().0,
@@ -63,8 +63,8 @@ impl GhostPad {
         let parent = parent.into();
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_ghost_pad_activate_mode_default(
-                    pad.to_glib_none().0 as *mut ffi::GstPad,
+                gst_sys::gst_ghost_pad_activate_mode_default(
+                    pad.to_glib_none().0 as *mut gst_sys::GstPad,
                     parent.map(|p| p.as_ref()).to_glib_none().0,
                     mode.to_glib(),
                     active.to_glib(),
@@ -89,8 +89,8 @@ impl GhostPad {
         let parent = parent.into();
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_ghost_pad_internal_activate_mode_default(
-                    pad.to_glib_none().0 as *mut ffi::GstPad,
+                gst_sys::gst_ghost_pad_internal_activate_mode_default(
+                    pad.to_glib_none().0 as *mut gst_sys::GstPad,
                     parent.map(|p| p.as_ref()).to_glib_none().0,
                     mode.to_glib(),
                     active.to_glib(),

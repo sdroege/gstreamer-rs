@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
 use gst;
+use gst_base_sys;
 use std::io;
 use std::ops;
 use Adapter;
@@ -17,7 +17,7 @@ impl Adapter {
     pub fn copy(&self, offset: usize, dest: &mut [u8]) {
         unsafe {
             let size = dest.len();
-            ffi::gst_adapter_copy(
+            gst_base_sys::gst_adapter_copy(
                 self.to_glib_none().0,
                 dest.as_mut_ptr() as *mut _,
                 offset,
@@ -28,7 +28,7 @@ impl Adapter {
 
     pub fn push(&self, buf: gst::Buffer) {
         unsafe {
-            ffi::gst_adapter_push(self.to_glib_none().0, buf.into_ptr());
+            gst_base_sys::gst_adapter_push(self.to_glib_none().0, buf.into_ptr());
         }
     }
 }
@@ -187,7 +187,7 @@ impl UniqueAdapter {
         use std::slice;
 
         unsafe {
-            let ptr = ffi::gst_adapter_map(self.0.to_glib_none().0, nbytes);
+            let ptr = gst_base_sys::gst_adapter_map(self.0.to_glib_none().0, nbytes);
             if ptr.is_null() {
                 None
             } else {
@@ -206,7 +206,7 @@ pub struct UniqueAdapterMap<'a>(&'a UniqueAdapter, &'a [u8]);
 impl<'a> Drop for UniqueAdapterMap<'a> {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_adapter_unmap((self.0).0.to_glib_none().0);
+            gst_base_sys::gst_adapter_unmap((self.0).0.to_glib_none().0);
         }
     }
 }

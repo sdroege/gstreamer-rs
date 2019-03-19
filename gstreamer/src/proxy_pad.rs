@@ -19,7 +19,7 @@ use ProxyPad;
 use glib::object::IsA;
 use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
 
-use ffi;
+use gst_sys;
 
 impl ProxyPad {
     pub fn chain_default<'a, P: IsA<ProxyPad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
@@ -30,8 +30,8 @@ impl ProxyPad {
         skip_assert_initialized!();
         let parent = parent.into();
         let ret: FlowReturn = unsafe {
-            from_glib(ffi::gst_proxy_pad_chain_default(
-                pad.as_ptr() as *mut ffi::GstPad,
+            from_glib(gst_sys::gst_proxy_pad_chain_default(
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -47,8 +47,8 @@ impl ProxyPad {
         skip_assert_initialized!();
         let parent = parent.into();
         let ret: FlowReturn = unsafe {
-            from_glib(ffi::gst_proxy_pad_chain_list_default(
-                pad.as_ptr() as *mut ffi::GstPad,
+            from_glib(gst_sys::gst_proxy_pad_chain_list_default(
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 list.into_ptr(),
             ))
@@ -65,8 +65,8 @@ impl ProxyPad {
         skip_assert_initialized!();
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret: FlowReturn = from_glib(ffi::gst_proxy_pad_getrange_default(
-                pad.as_ptr() as *mut ffi::GstPad,
+            let ret: FlowReturn = from_glib(gst_sys::gst_proxy_pad_getrange_default(
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.as_ref().to_glib_none().0,
                 offset,
                 size,
@@ -88,8 +88,8 @@ impl ProxyPad {
         skip_assert_initialized!();
         let parent = parent.into();
         unsafe {
-            from_glib_full(ffi::gst_proxy_pad_iterate_internal_links_default(
-                pad.as_ptr() as *mut ffi::GstPad,
+            from_glib_full(gst_sys::gst_proxy_pad_iterate_internal_links_default(
+                pad.as_ptr() as *mut gst_sys::GstPad,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
             ))
         }

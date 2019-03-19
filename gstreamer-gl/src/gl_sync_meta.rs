@@ -1,15 +1,15 @@
 use std::fmt;
 
-use ffi;
 use glib;
 use glib::translate::*;
 use gst;
 use gst::prelude::*;
+use gst_gl_sys;
 
 use GLContext;
 
 #[repr(C)]
-pub struct GLSyncMeta(ffi::GstGLSyncMeta);
+pub struct GLSyncMeta(gst_gl_sys::GstGLSyncMeta);
 
 impl GLSyncMeta {
     pub fn add<'a, C: IsA<GLContext>>(
@@ -17,7 +17,7 @@ impl GLSyncMeta {
         context: &C,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         unsafe {
-            let meta = ffi::gst_buffer_add_gl_sync_meta(
+            let meta = gst_gl_sys::gst_buffer_add_gl_sync_meta(
                 context.as_ref().to_glib_none().0,
                 buffer.as_mut_ptr(),
             );
@@ -31,7 +31,7 @@ impl GLSyncMeta {
 
     pub fn set_sync_point<C: IsA<GLContext>>(&self, context: &C) {
         unsafe {
-            ffi::gst_gl_sync_meta_set_sync_point(
+            gst_gl_sys::gst_gl_sync_meta_set_sync_point(
                 &self.0 as *const _ as *mut _,
                 context.as_ref().to_glib_none().0,
             );
@@ -40,7 +40,7 @@ impl GLSyncMeta {
 
     pub fn wait<C: IsA<GLContext>>(&self, context: &C) {
         unsafe {
-            ffi::gst_gl_sync_meta_wait(
+            gst_gl_sys::gst_gl_sync_meta_wait(
                 &self.0 as *const _ as *mut _,
                 context.as_ref().to_glib_none().0,
             );
@@ -49,7 +49,7 @@ impl GLSyncMeta {
 
     pub fn wait_cpu<C: IsA<GLContext>>(&self, context: &C) {
         unsafe {
-            ffi::gst_gl_sync_meta_wait_cpu(
+            gst_gl_sys::gst_gl_sync_meta_wait_cpu(
                 &self.0 as *const _ as *mut _,
                 context.as_ref().to_glib_none().0,
             );
@@ -58,10 +58,10 @@ impl GLSyncMeta {
 }
 
 unsafe impl MetaAPI for GLSyncMeta {
-    type GstType = ffi::GstGLSyncMeta;
+    type GstType = gst_gl_sys::GstGLSyncMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(ffi::gst_gl_sync_meta_api_get_type()) }
+        unsafe { from_glib(gst_gl_sys::gst_gl_sync_meta_api_get_type()) }
     }
 }
 

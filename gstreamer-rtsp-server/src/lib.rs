@@ -13,24 +13,24 @@ extern crate lazy_static;
 extern crate libc;
 
 extern crate gio;
-extern crate gio_sys as gio_ffi;
+extern crate gio_sys as gio_sys;
 use std::ffi::CStr;
 #[macro_use]
 extern crate glib;
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
+extern crate glib_sys;
+extern crate gobject_sys;
 #[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_net as gst_net;
-extern crate gstreamer_net_sys as gst_net_ffi;
+extern crate gstreamer_net_sys as gst_net_sys;
 extern crate gstreamer_rtsp as gst_rtsp;
-extern crate gstreamer_rtsp_server_sys as ffi;
-extern crate gstreamer_rtsp_sys as gst_rtsp_ffi;
-extern crate gstreamer_sys as gst_ffi;
+extern crate gstreamer_rtsp_server_sys as gst_rtsp_server_sys;
+extern crate gstreamer_rtsp_sys as gst_rtsp_sys;
+extern crate gstreamer_sys as gst_sys;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
+        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -73,57 +73,57 @@ pub use rtsp_token::*;
 
 lazy_static! {
     pub static ref RTSP_ADDRESS_POOL_ANY_IPV4: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV4)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ANY_IPV4)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_ADDRESS_POOL_ANY_IPV6: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_ADDRESS_POOL_ANY_IPV6)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ANY_IPV6)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_AUTH_CHECK_CONNECT: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_CONNECT)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_CONNECT)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_AUTH_CHECK_URL: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_AUTH_CHECK_URL)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_AUTH_CHECK_URL)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_PERM_MEDIA_FACTORY_ACCESS: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_PERM_MEDIA_FACTORY_ACCESS)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_PERM_MEDIA_FACTORY_ACCESS)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_PERM_MEDIA_FACTORY_CONSTRUCT: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_TOKEN_MEDIA_FACTORY_ROLE: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE)
             .to_str()
             .unwrap()
     };
     pub static ref RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS)
+        CStr::from_ptr(gst_rtsp_server_sys::GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS)
             .to_str()
             .unwrap()
     };

@@ -13,10 +13,10 @@ use std::ops;
 use miniobject::MiniObject;
 use BufferRef;
 
-use ffi;
 use glib;
 use glib::translate::{from_glib, FromGlib};
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 
 pub unsafe trait MetaAPI: Sized {
     type GstType;
@@ -30,7 +30,7 @@ pub unsafe trait MetaAPI: Sized {
         if meta_api != glib::Type::Invalid {
             assert_eq!(
                 meta_api,
-                from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
+                from_glib((*(*(ptr as *const gst_sys::GstMeta)).info).api)
             )
         }
 
@@ -50,7 +50,7 @@ pub unsafe trait MetaAPI: Sized {
         if meta_api != glib::Type::Invalid {
             assert_eq!(
                 meta_api,
-                from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
+                from_glib((*(*(ptr as *const gst_sys::GstMeta)).info).api)
             )
         }
 
@@ -115,7 +115,7 @@ impl<'a, T: MetaAPI, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
 impl<'a, T: MetaAPI> MetaRef<'a, T> {
     pub fn get_api(&self) -> glib::Type {
         unsafe {
-            let meta = self.meta as *const _ as *const ffi::GstMeta;
+            let meta = self.meta as *const _ as *const gst_sys::GstMeta;
             let info = (*meta).info;
             glib::Type::from_glib((*info).api)
         }
@@ -142,7 +142,7 @@ impl<'a> MetaRef<'a, Meta> {
 impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
     pub fn get_api(&self) -> glib::Type {
         unsafe {
-            let meta = self.meta as *const _ as *const ffi::GstMeta;
+            let meta = self.meta as *const _ as *const gst_sys::GstMeta;
             let info = (*meta).info;
             glib::Type::from_glib((*info).api)
         }
@@ -160,11 +160,11 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
 impl<'a, T: MetaAPI> MetaRefMut<'a, T, Standalone> {
     pub fn remove(mut self) {
         unsafe {
-            let res = ffi::gst_buffer_remove_meta(
+            let res = gst_sys::gst_buffer_remove_meta(
                 self.buffer.as_mut_ptr(),
-                self.as_mut_ptr() as *mut ffi::GstMeta,
+                self.as_mut_ptr() as *mut gst_sys::GstMeta,
             );
-            assert_ne!(res, glib_ffi::GFALSE);
+            assert_ne!(res, glib_sys::GFALSE);
         }
     }
 }
@@ -183,7 +183,7 @@ impl<'a, U> MetaRefMut<'a, Meta, U> {
 }
 
 #[repr(C)]
-pub struct Meta(ffi::GstMeta);
+pub struct Meta(gst_sys::GstMeta);
 
 impl Meta {
     fn get_api(&self) -> glib::Type {
@@ -192,7 +192,7 @@ impl Meta {
 }
 
 unsafe impl MetaAPI for Meta {
-    type GstType = ffi::GstMeta;
+    type GstType = gst_sys::GstMeta;
 
     fn get_meta_api() -> glib::Type {
         glib::Type::Invalid
@@ -208,7 +208,7 @@ impl fmt::Debug for Meta {
 }
 
 #[repr(C)]
-pub struct ParentBufferMeta(ffi::GstParentBufferMeta);
+pub struct ParentBufferMeta(gst_sys::GstParentBufferMeta);
 
 impl ParentBufferMeta {
     pub fn add<'a>(
@@ -216,8 +216,10 @@ impl ParentBufferMeta {
         parent: &BufferRef,
     ) -> MetaRefMut<'a, Self, Standalone> {
         unsafe {
-            let meta =
-                ffi::gst_buffer_add_parent_buffer_meta(buffer.as_mut_ptr(), parent.as_mut_ptr());
+            let meta = gst_sys::gst_buffer_add_parent_buffer_meta(
+                buffer.as_mut_ptr(),
+                parent.as_mut_ptr(),
+            );
 
             Self::from_mut_ptr(buffer, meta)
         }
@@ -229,10 +231,10 @@ impl ParentBufferMeta {
 }
 
 unsafe impl MetaAPI for ParentBufferMeta {
-    type GstType = ffi::GstParentBufferMeta;
+    type GstType = gst_sys::GstParentBufferMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(ffi::gst_parent_buffer_meta_api_get_type()) }
+        unsafe { from_glib(gst_sys::gst_parent_buffer_meta_api_get_type()) }
     }
 }
 

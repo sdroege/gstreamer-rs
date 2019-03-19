@@ -15,14 +15,18 @@ use structure::*;
 
 use CapsIntersectMode;
 
-use ffi;
 use glib;
 use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
+use gst_sys;
 
-gst_define_mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, [Debug, PartialEq, Eq,], || {
-    ffi::gst_caps_get_type()
-});
+gst_define_mini_object_wrapper!(
+    Caps,
+    CapsRef,
+    gst_sys::GstCaps,
+    [Debug, PartialEq, Eq,],
+    || gst_sys::gst_caps_get_type()
+);
 
 impl Caps {
     pub fn builder(name: &str) -> Builder {
@@ -32,12 +36,12 @@ impl Caps {
 
     pub fn new_empty() -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_caps_new_empty()) }
+        unsafe { from_glib_full(gst_sys::gst_caps_new_empty()) }
     }
 
     pub fn new_any() -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_caps_new_any()) }
+        unsafe { from_glib_full(gst_sys::gst_caps_new_any()) }
     }
 
     pub fn new_simple(name: &str, values: &[(&str, &ToSendValue)]) -> Self {
@@ -52,23 +56,23 @@ impl Caps {
 
     pub fn from_string(value: &str) -> Option<Self> {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_caps_from_string(value.to_glib_none().0)) }
+        unsafe { from_glib_full(gst_sys::gst_caps_from_string(value.to_glib_none().0)) }
     }
 
     pub fn fixate(caps: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_fixate(caps.into_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_fixate(caps.into_ptr())) }
     }
 
     pub fn merge(caps: Self, other: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_merge(caps.into_ptr(), other.into_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_merge(caps.into_ptr(), other.into_ptr())) }
     }
 
     pub fn merge_structure(caps: Self, structure: Structure) -> Self {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_caps_merge_structure(
+            from_glib_full(gst_sys::gst_caps_merge_structure(
                 caps.into_ptr(),
                 structure.into_ptr(),
             ))
@@ -82,7 +86,7 @@ impl Caps {
     ) -> Self {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_caps_merge_structure_full(
+            from_glib_full(gst_sys::gst_caps_merge_structure_full(
                 caps.into_ptr(),
                 structure.into_ptr(),
                 features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
@@ -92,17 +96,17 @@ impl Caps {
 
     pub fn normalize(caps: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_normalize(caps.into_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_normalize(caps.into_ptr())) }
     }
 
     pub fn simplify(caps: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_simplify(caps.into_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_simplify(caps.into_ptr())) }
     }
 
     pub fn truncate(caps: Self) -> Self {
         skip_assert_initialized!();
-        unsafe { from_glib_full(ffi::gst_caps_truncate(caps.into_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_truncate(caps.into_ptr())) }
     }
 }
 
@@ -127,7 +131,7 @@ impl CapsRef {
             let value = value.to_value();
 
             unsafe {
-                ffi::gst_caps_set_value(
+                gst_sys::gst_caps_set_value(
                     self.as_mut_ptr(),
                     name.to_glib_none().0,
                     value.to_glib_none().0,
@@ -137,7 +141,7 @@ impl CapsRef {
     }
 
     pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(ffi::gst_caps_to_string(self.as_ptr())) }
+        unsafe { from_glib_full(gst_sys::gst_caps_to_string(self.as_ptr())) }
     }
 
     pub fn get_structure(&self, idx: u32) -> Option<&StructureRef> {
@@ -146,7 +150,7 @@ impl CapsRef {
         }
 
         unsafe {
-            let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
+            let structure = gst_sys::gst_caps_get_structure(self.as_ptr(), idx);
             if structure.is_null() {
                 return None;
             }
@@ -161,7 +165,7 @@ impl CapsRef {
         }
 
         unsafe {
-            let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
+            let structure = gst_sys::gst_caps_get_structure(self.as_ptr(), idx);
             if structure.is_null() {
                 return None;
             }
@@ -176,7 +180,7 @@ impl CapsRef {
         }
 
         unsafe {
-            let features = ffi::gst_caps_get_features(self.as_ptr(), idx);
+            let features = gst_sys::gst_caps_get_features(self.as_ptr(), idx);
             Some(CapsFeaturesRef::from_glib_borrow(features))
         }
     }
@@ -187,7 +191,7 @@ impl CapsRef {
         }
 
         unsafe {
-            let features = ffi::gst_caps_get_features(self.as_ptr(), idx);
+            let features = gst_sys::gst_caps_get_features(self.as_ptr(), idx);
             Some(CapsFeaturesRef::from_glib_borrow_mut(features))
         }
     }
@@ -196,7 +200,7 @@ impl CapsRef {
         assert!(idx < self.get_size());
 
         unsafe {
-            ffi::gst_caps_set_features(
+            gst_sys::gst_caps_set_features(
                 self.as_mut_ptr(),
                 idx,
                 features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
@@ -205,7 +209,7 @@ impl CapsRef {
     }
 
     pub fn get_size(&self) -> u32 {
-        unsafe { ffi::gst_caps_get_size(self.as_ptr()) }
+        unsafe { gst_sys::gst_caps_get_size(self.as_ptr()) }
     }
 
     pub fn iter(&self) -> Iter {
@@ -225,12 +229,12 @@ impl CapsRef {
     }
 
     pub fn append_structure(&mut self, structure: Structure) {
-        unsafe { ffi::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
+        unsafe { gst_sys::gst_caps_append_structure(self.as_mut_ptr(), structure.into_ptr()) }
     }
 
     pub fn append_structure_full(&mut self, structure: Structure, features: Option<CapsFeatures>) {
         unsafe {
-            ffi::gst_caps_append_structure_full(
+            gst_sys::gst_caps_append_structure_full(
                 self.as_mut_ptr(),
                 structure.into_ptr(),
                 features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
@@ -239,20 +243,25 @@ impl CapsRef {
     }
 
     pub fn remove_structure(&mut self, idx: u32) {
-        unsafe { ffi::gst_caps_remove_structure(self.as_mut_ptr(), idx) }
+        unsafe { gst_sys::gst_caps_remove_structure(self.as_mut_ptr(), idx) }
     }
 
     pub fn append(&mut self, other: Caps) {
-        unsafe { ffi::gst_caps_append(self.as_mut_ptr(), other.into_ptr()) }
+        unsafe { gst_sys::gst_caps_append(self.as_mut_ptr(), other.into_ptr()) }
     }
 
     pub fn can_intersect(&self, other: &Self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_can_intersect(self.as_ptr(), other.as_ptr())) }
+        unsafe {
+            from_glib(gst_sys::gst_caps_can_intersect(
+                self.as_ptr(),
+                other.as_ptr(),
+            ))
+        }
     }
 
     pub fn intersect(&self, other: &Self) -> Caps {
         unsafe {
-            from_glib_full(ffi::gst_caps_intersect(
+            from_glib_full(gst_sys::gst_caps_intersect(
                 self.as_mut_ptr(),
                 other.as_mut_ptr(),
             ))
@@ -261,7 +270,7 @@ impl CapsRef {
 
     pub fn intersect_with_mode(&self, other: &Self, mode: CapsIntersectMode) -> Caps {
         unsafe {
-            from_glib_full(ffi::gst_caps_intersect_full(
+            from_glib_full(gst_sys::gst_caps_intersect_full(
                 self.as_mut_ptr(),
                 other.as_mut_ptr(),
                 mode.to_glib(),
@@ -271,7 +280,7 @@ impl CapsRef {
 
     pub fn is_always_compatible(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_is_always_compatible(
+            from_glib(gst_sys::gst_caps_is_always_compatible(
                 self.as_ptr(),
                 other.as_ptr(),
             ))
@@ -279,24 +288,29 @@ impl CapsRef {
     }
 
     pub fn is_any(&self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_is_any(self.as_ptr())) }
+        unsafe { from_glib(gst_sys::gst_caps_is_any(self.as_ptr())) }
     }
 
     pub fn is_empty(&self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_is_empty(self.as_ptr())) }
+        unsafe { from_glib(gst_sys::gst_caps_is_empty(self.as_ptr())) }
     }
 
     pub fn is_fixed(&self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_is_fixed(self.as_ptr())) }
+        unsafe { from_glib(gst_sys::gst_caps_is_fixed(self.as_ptr())) }
     }
 
     pub fn is_equal_fixed(&self, other: &Self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_is_equal_fixed(self.as_ptr(), other.as_ptr())) }
+        unsafe {
+            from_glib(gst_sys::gst_caps_is_equal_fixed(
+                self.as_ptr(),
+                other.as_ptr(),
+            ))
+        }
     }
 
     pub fn is_strictly_equal(&self, other: &Self) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_is_strictly_equal(
+            from_glib(gst_sys::gst_caps_is_strictly_equal(
                 self.as_ptr(),
                 other.as_ptr(),
             ))
@@ -304,12 +318,17 @@ impl CapsRef {
     }
 
     pub fn is_subset(&self, superset: &Self) -> bool {
-        unsafe { from_glib(ffi::gst_caps_is_subset(self.as_ptr(), superset.as_ptr())) }
+        unsafe {
+            from_glib(gst_sys::gst_caps_is_subset(
+                self.as_ptr(),
+                superset.as_ptr(),
+            ))
+        }
     }
 
     pub fn is_subset_structure(&self, structure: &StructureRef) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_is_subset_structure(
+            from_glib(gst_sys::gst_caps_is_subset_structure(
                 self.as_ptr(),
                 structure.as_ptr(),
             ))
@@ -322,7 +341,7 @@ impl CapsRef {
         features: Option<&CapsFeaturesRef>,
     ) -> bool {
         unsafe {
-            from_glib(ffi::gst_caps_is_subset_structure_full(
+            from_glib(gst_sys::gst_caps_is_subset_structure_full(
                 self.as_ptr(),
                 structure.as_ptr(),
                 features.map(|f| f.as_ptr()).unwrap_or(ptr::null()),
@@ -333,7 +352,7 @@ impl CapsRef {
     pub fn subtract(&self, other: &Self) -> Caps {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_caps_subtract(
+            from_glib_full(gst_sys::gst_caps_subtract(
                 self.as_mut_ptr(),
                 other.as_mut_ptr(),
             ))
@@ -412,12 +431,12 @@ define_iter!(
     &'a CapsRef,
     &'a StructureRef,
     |caps: &CapsRef, idx| {
-        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr = gst_sys::gst_caps_get_structure(caps.as_ptr(), idx);
         if ptr.is_null() {
             None
         } else {
             Some(StructureRef::from_glib_borrow(
-                ptr as *const ffi::GstStructure,
+                ptr as *const gst_sys::GstStructure,
             ))
         }
     }
@@ -427,12 +446,12 @@ define_iter!(
     &'a mut CapsRef,
     &'a mut StructureRef,
     |caps: &CapsRef, idx| {
-        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr = gst_sys::gst_caps_get_structure(caps.as_ptr(), idx);
         if ptr.is_null() {
             None
         } else {
             Some(StructureRef::from_glib_borrow_mut(
-                ptr as *mut ffi::GstStructure,
+                ptr as *mut gst_sys::GstStructure,
             ))
         }
     }
@@ -442,14 +461,14 @@ define_iter!(
     &'a CapsRef,
     (&'a StructureRef, &'a CapsFeaturesRef),
     |caps: &CapsRef, idx| {
-        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
-        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx);
+        let ptr1 = gst_sys::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr2 = gst_sys::gst_caps_get_features(caps.as_ptr(), idx);
         if ptr1.is_null() || ptr2.is_null() {
             None
         } else {
             Some((
-                StructureRef::from_glib_borrow(ptr1 as *const ffi::GstStructure),
-                CapsFeaturesRef::from_glib_borrow(ptr2 as *const ffi::GstCapsFeatures),
+                StructureRef::from_glib_borrow(ptr1 as *const gst_sys::GstStructure),
+                CapsFeaturesRef::from_glib_borrow(ptr2 as *const gst_sys::GstCapsFeatures),
             ))
         }
     }
@@ -459,14 +478,14 @@ define_iter!(
     &'a mut CapsRef,
     (&'a mut StructureRef, &'a mut CapsFeaturesRef),
     |caps: &CapsRef, idx| {
-        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
-        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx);
+        let ptr1 = gst_sys::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr2 = gst_sys::gst_caps_get_features(caps.as_ptr(), idx);
         if ptr1.is_null() || ptr2.is_null() {
             None
         } else {
             Some((
-                StructureRef::from_glib_borrow_mut(ptr1 as *mut ffi::GstStructure),
-                CapsFeaturesRef::from_glib_borrow_mut(ptr2 as *mut ffi::GstCapsFeatures),
+                StructureRef::from_glib_borrow_mut(ptr1 as *mut gst_sys::GstStructure),
+                CapsFeaturesRef::from_glib_borrow_mut(ptr2 as *mut gst_sys::GstCapsFeatures),
             ))
         }
     }
@@ -486,7 +505,7 @@ impl fmt::Display for CapsRef {
 
 impl PartialEq for CapsRef {
     fn eq(&self, other: &CapsRef) -> bool {
-        unsafe { from_glib(ffi::gst_caps_is_equal(self.as_ptr(), other.as_ptr())) }
+        unsafe { from_glib(gst_sys::gst_caps_is_equal(self.as_ptr(), other.as_ptr())) }
     }
 }
 

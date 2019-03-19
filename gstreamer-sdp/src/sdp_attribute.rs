@@ -10,18 +10,22 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 
-use ffi;
 use glib::translate::*;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPAttribute(pub(crate) ffi::GstSDPAttribute);
+pub struct SDPAttribute(pub(crate) gst_sdp_sys::GstSDPAttribute);
 
 impl SDPAttribute {
     pub fn new(key: &str, value: Option<&str>) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut attr = mem::zeroed();
-            ffi::gst_sdp_attribute_set(&mut attr, key.to_glib_none().0, value.to_glib_none().0);
+            gst_sdp_sys::gst_sdp_attribute_set(
+                &mut attr,
+                key.to_glib_none().0,
+                value.to_glib_none().0,
+            );
             SDPAttribute(attr)
         }
     }
@@ -52,7 +56,7 @@ impl Clone for SDPAttribute {
 impl Drop for SDPAttribute {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_sdp_attribute_clear(&mut self.0);
+            gst_sdp_sys::gst_sdp_attribute_clear(&mut self.0);
         }
     }
 }

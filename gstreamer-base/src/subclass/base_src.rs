@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
-use gst_ffi;
+use glib_sys;
+use gst_base_sys;
+use gst_sys;
 
 use glib::translate::*;
 use prelude::*;
@@ -150,7 +150,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_start(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .start
                 .map(|f| {
@@ -170,7 +171,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .stop
                 .map(|f| {
@@ -190,7 +192,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_is_seekable(&self, element: &BaseSrc) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .is_seekable
                 .map(|f| from_glib(f(element.to_glib_none().0)))
@@ -201,7 +204,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_get_size(&self, element: &BaseSrc) -> Option<u64> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .get_size
                 .map(|f| {
@@ -225,7 +229,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .fill
                 .map(|f| {
@@ -249,14 +254,15 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     ) -> Result<gst::Buffer, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .create
                 .map(|f| {
-                    let mut buffer: *mut gst_ffi::GstBuffer = ptr::null_mut();
+                    let mut buffer: *mut gst_sys::GstBuffer = ptr::null_mut();
                     // FIXME: Wrong signature in -sys bindings
                     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
-                    let buffer_ref = &mut buffer as *mut _ as *mut gst_ffi::GstBuffer;
+                    let buffer_ref = &mut buffer as *mut _ as *mut gst_sys::GstBuffer;
                     let ret: gst::FlowReturn =
                         from_glib(f(element.to_glib_none().0, offset, length, buffer_ref));
 
@@ -269,7 +275,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_do_seek(&self, element: &BaseSrc, segment: &mut gst::Segment) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .do_seek
                 .map(|f| from_glib(f(element.to_glib_none().0, segment.to_glib_none_mut().0)))
@@ -280,7 +287,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_query(&self, element: &BaseSrc, query: &mut gst::QueryRef) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .query
                 .map(|f| from_glib(f(element.to_glib_none().0, query.as_mut_ptr())))
@@ -291,7 +299,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_event(&self, element: &BaseSrc, event: &gst::Event) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .event
                 .map(|f| from_glib(f(element.to_glib_none().0, event.to_glib_none().0)))
@@ -306,7 +315,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     ) -> Option<gst::Caps> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             let filter_ptr = if let Some(filter) = filter {
                 filter.as_mut_ptr()
             } else {
@@ -323,7 +333,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_negotiate(&self, element: &BaseSrc) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .negotiate
                 .map(|f| {
@@ -344,7 +355,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .set_caps
                 .map(|f| {
@@ -361,7 +373,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_fixate(&self, element: &BaseSrc, caps: gst::Caps) -> gst::Caps {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
 
             match (*parent_class).fixate {
                 Some(fixate) => from_glib_full(fixate(element.to_glib_none().0, caps.into_ptr())),
@@ -373,7 +386,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_unlock(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .unlock
                 .map(|f| {
@@ -393,7 +407,8 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
     fn parent_unlock_stop(&self, element: &BaseSrc) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBaseSrcClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
             (*parent_class)
                 .unlock_stop
                 .map(|f| {
@@ -418,7 +433,7 @@ where
     fn override_vfuncs(&mut self) {
         <gst::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut ffi::GstBaseSrcClass);
+            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstBaseSrcClass);
             klass.start = Some(base_src_start::<T>);
             klass.stop = Some(base_src_stop::<T>);
             klass.is_seekable = Some(base_src_is_seekable::<T>);
@@ -439,8 +454,8 @@ where
 }
 
 unsafe extern "C" fn base_src_start<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -463,8 +478,8 @@ where
 }
 
 unsafe extern "C" fn base_src_stop<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -487,8 +502,8 @@ where
 }
 
 unsafe extern "C" fn base_src_is_seekable<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -505,9 +520,9 @@ where
 }
 
 unsafe extern "C" fn base_src_get_size<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
+    ptr: *mut gst_base_sys::GstBaseSrc,
     size: *mut u64,
-) -> glib_ffi::gboolean
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -530,11 +545,11 @@ where
 }
 
 unsafe extern "C" fn base_src_fill<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
+    ptr: *mut gst_base_sys::GstBaseSrc,
     offset: u64,
     length: u32,
-    buffer: *mut gst_ffi::GstBuffer,
-) -> gst_ffi::GstFlowReturn
+    buffer: *mut gst_sys::GstBuffer,
+) -> gst_sys::GstFlowReturn
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -552,11 +567,11 @@ where
 }
 
 unsafe extern "C" fn base_src_create<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
+    ptr: *mut gst_base_sys::GstBaseSrc,
     offset: u64,
     length: u32,
-    buffer_ptr: *mut gst_ffi::GstBuffer,
-) -> gst_ffi::GstFlowReturn
+    buffer_ptr: *mut gst_sys::GstBuffer,
+) -> gst_sys::GstFlowReturn
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -567,7 +582,7 @@ where
     let wrap: BaseSrc = from_glib_borrow(ptr);
     // FIXME: Wrong signature in -sys bindings
     // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
-    let buffer_ptr = buffer_ptr as *mut *mut gst_ffi::GstBuffer;
+    let buffer_ptr = buffer_ptr as *mut *mut gst_sys::GstBuffer;
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         match imp.create(&wrap, offset, length) {
@@ -582,9 +597,9 @@ where
 }
 
 unsafe extern "C" fn base_src_do_seek<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-    segment: *mut gst_ffi::GstSegment,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    segment: *mut gst_sys::GstSegment,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -601,9 +616,9 @@ where
 }
 
 unsafe extern "C" fn base_src_query<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-    query_ptr: *mut gst_ffi::GstQuery,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    query_ptr: *mut gst_sys::GstQuery,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -621,9 +636,9 @@ where
 }
 
 unsafe extern "C" fn base_src_event<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-    event_ptr: *mut gst_ffi::GstEvent,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    event_ptr: *mut gst_sys::GstEvent,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -640,9 +655,9 @@ where
 }
 
 unsafe extern "C" fn base_src_get_caps<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-    filter: *mut gst_ffi::GstCaps,
-) -> *mut gst_ffi::GstCaps
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    filter: *mut gst_sys::GstCaps,
+) -> *mut gst_sys::GstCaps
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -665,8 +680,8 @@ where
 }
 
 unsafe extern "C" fn base_src_negotiate<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -689,9 +704,9 @@ where
 }
 
 unsafe extern "C" fn base_src_set_caps<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-    caps: *mut gst_ffi::GstCaps,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    caps: *mut gst_sys::GstCaps,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -715,9 +730,9 @@ where
 }
 
 unsafe extern "C" fn base_src_fixate<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-    caps: *mut gst_ffi::GstCaps,
-) -> *mut gst_ffi::GstCaps
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    caps: *mut gst_sys::GstCaps,
+) -> *mut gst_sys::GstCaps
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -735,8 +750,8 @@ where
 }
 
 unsafe extern "C" fn base_src_unlock<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
@@ -759,8 +774,8 @@ where
 }
 
 unsafe extern "C" fn base_src_unlock_stop<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBaseSrc,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstBaseSrc,
+) -> glib_sys::gboolean
 where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,

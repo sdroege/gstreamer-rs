@@ -14,7 +14,7 @@ extern crate failure_derive;
 extern crate gstreamer as gst;
 extern crate gstreamer_rtsp as gst_rtsp;
 extern crate gstreamer_rtsp_server as gst_rtsp_server;
-extern crate gstreamer_rtsp_server_sys as ffi;
+extern crate gstreamer_rtsp_server_sys as gst_rtsp_server_sys;
 
 use failure::Error;
 use std::env;
@@ -93,7 +93,7 @@ fn main_loop() -> Result<(), Error> {
     // This declares that the user "user" (once authenticated) has a role that
     // allows them to access and construct media factories.
     unsafe {
-        ffi::gst_rtsp_media_factory_add_role(
+        gst_rtsp_server_sys::gst_rtsp_media_factory_add_role(
             factory.to_glib_none().0,
             "user".to_glib_none().0,
             RTSP_PERM_MEDIA_FACTORY_ACCESS.to_glib_none().0,

@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::{from_glib, ToGlibPtr};
 use glib::{SendValue, ToValue};
+use gst_sys;
 
 use serde::de;
 use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
@@ -147,7 +147,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
         let tag_type: glib::Type = unsafe {
             let tag_name = self.0.to_glib_none();
-            from_glib(ffi::gst_tag_get_type(tag_name.0))
+            from_glib(gst_sys::gst_tag_get_type(tag_name.0))
         };
 
         loop {

@@ -39,10 +39,10 @@ use std::mem;
 
 use libc;
 
-use ffi;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
 
 impl Element {
     pub fn link_many<E: IsA<Element>>(elements: &[&E]) -> Result<(), glib::BoolError> {
@@ -50,7 +50,7 @@ impl Element {
         for e in elements.windows(2) {
             unsafe {
                 glib_result_from_gboolean!(
-                    ffi::gst_element_link(
+                    gst_sys::gst_element_link(
                         e[0].as_ref().to_glib_none().0,
                         e[1].as_ref().to_glib_none().0,
                     ),
@@ -66,7 +66,7 @@ impl Element {
         skip_assert_initialized!();
         for e in elements.windows(2) {
             unsafe {
-                ffi::gst_element_unlink(
+                gst_sys::gst_element_unlink(
                     e[0].as_ref().to_glib_none().0,
                     e[1].as_ref().to_glib_none().0,
                 );
@@ -219,7 +219,7 @@ pub trait ElementExtManual: 'static {
 impl<O: IsA<Element>> ElementExtManual for O {
     fn get_element_class(&self) -> &ElementClass {
         unsafe {
-            let klass = (*(self.as_ptr() as *mut gobject_ffi::GTypeInstance)).g_class
+            let klass = (*(self.as_ptr() as *mut gobject_sys::GTypeInstance)).g_class
                 as *const ElementClass;
             &*klass
         }
@@ -230,7 +230,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         transition: StateChange,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         let ret: StateChangeReturn = unsafe {
-            from_glib(ffi::gst_element_change_state(
+            from_glib(gst_sys::gst_element_change_state(
                 self.as_ref().to_glib_none().0,
                 transition.to_glib(),
             ))
@@ -243,7 +243,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         ret: StateChangeReturn,
     ) -> Result<StateChangeSuccess, StateChangeError> {
         let ret: StateChangeReturn = unsafe {
-            from_glib(ffi::gst_element_continue_state(
+            from_glib(gst_sys::gst_element_continue_state(
                 self.as_ref().to_glib_none().0,
                 ret.to_glib(),
             ))
@@ -258,7 +258,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         unsafe {
             let mut state = mem::uninitialized();
             let mut pending = mem::uninitialized();
-            let ret: StateChangeReturn = from_glib(ffi::gst_element_get_state(
+            let ret: StateChangeReturn = from_glib(gst_sys::gst_element_get_state(
                 self.as_ref().to_glib_none().0,
                 &mut state,
                 &mut pending,
@@ -270,7 +270,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn set_state(&self, state: State) -> Result<StateChangeSuccess, StateChangeError> {
         let ret: StateChangeReturn = unsafe {
-            from_glib(ffi::gst_element_set_state(
+            from_glib(gst_sys::gst_element_set_state(
                 self.as_ref().to_glib_none().0,
                 state.to_glib(),
             ))
@@ -280,7 +280,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn query(&self, query: &mut QueryRef) -> bool {
         unsafe {
-            from_glib(ffi::gst_element_query(
+            from_glib(gst_sys::gst_element_query(
                 self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
@@ -289,7 +289,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn send_event(&self, event: Event) -> bool {
         unsafe {
-            from_glib(ffi::gst_element_send_event(
+            from_glib(gst_sys::gst_element_send_event(
                 self.as_ref().to_glib_none().0,
                 event.into_ptr(),
             ))
@@ -320,12 +320,12 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) {
         unsafe {
             let type_ = match type_ {
-                ElementMessageType::Error => ffi::GST_MESSAGE_ERROR,
-                ElementMessageType::Warning => ffi::GST_MESSAGE_WARNING,
-                ElementMessageType::Info => ffi::GST_MESSAGE_INFO,
+                ElementMessageType::Error => gst_sys::GST_MESSAGE_ERROR,
+                ElementMessageType::Warning => gst_sys::GST_MESSAGE_WARNING,
+                ElementMessageType::Info => gst_sys::GST_MESSAGE_INFO,
             };
 
-            ffi::gst_element_message_full(
+            gst_sys::gst_element_message_full(
                 self.as_ref().to_glib_none().0,
                 type_,
                 T::domain().to_glib(),
@@ -353,12 +353,12 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) {
         unsafe {
             let type_ = match type_ {
-                ElementMessageType::Error => ffi::GST_MESSAGE_ERROR,
-                ElementMessageType::Warning => ffi::GST_MESSAGE_WARNING,
-                ElementMessageType::Info => ffi::GST_MESSAGE_INFO,
+                ElementMessageType::Error => gst_sys::GST_MESSAGE_ERROR,
+                ElementMessageType::Warning => gst_sys::GST_MESSAGE_WARNING,
+                ElementMessageType::Info => gst_sys::GST_MESSAGE_INFO,
             };
 
-            ffi::gst_element_message_full_with_details(
+            gst_sys::gst_element_message_full_with_details(
                 self.as_ref().to_glib_none().0,
                 type_,
                 T::domain().to_glib(),
@@ -385,9 +385,9 @@ impl<O: IsA<Element>> ElementExtManual for O {
         } = *msg;
 
         unsafe {
-            ffi::gst_element_message_full(
+            gst_sys::gst_element_message_full(
                 self.as_ref().to_glib_none().0,
-                ffi::GST_MESSAGE_ERROR,
+                gst_sys::GST_MESSAGE_ERROR,
                 error_domain.to_glib(),
                 error_code,
                 message.to_glib_full(),
@@ -401,7 +401,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn iterate_pads(&self) -> ::Iterator<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_element_iterate_pads(
+            from_glib_full(gst_sys::gst_element_iterate_pads(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -409,7 +409,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn iterate_sink_pads(&self) -> ::Iterator<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_element_iterate_sink_pads(
+            from_glib_full(gst_sys::gst_element_iterate_sink_pads(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -417,7 +417,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn iterate_src_pads(&self) -> ::Iterator<Pad> {
         unsafe {
-            from_glib_full(ffi::gst_element_iterate_src_pads(
+            from_glib_full(gst_sys::gst_element_iterate_src_pads(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -425,7 +425,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_pads(&self) -> Vec<Pad> {
         unsafe {
-            let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
+            let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.pads)
         }
@@ -433,7 +433,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_sink_pads(&self) -> Vec<Pad> {
         unsafe {
-            let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
+            let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.sinkpads)
         }
@@ -441,7 +441,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_src_pads(&self) -> Vec<Pad> {
         unsafe {
-            let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
+            let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
         }
@@ -456,7 +456,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let property_name = property_name.into();
         let property_name = property_name.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_element_add_property_deep_notify_watch(
+            from_glib(gst_sys::gst_element_add_property_deep_notify_watch(
                 self.as_ref().to_glib_none().0,
                 property_name.0,
                 include_value.to_glib(),
@@ -473,7 +473,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let property_name = property_name.into();
         let property_name = property_name.to_glib_none();
         unsafe {
-            from_glib(ffi::gst_element_add_property_notify_watch(
+            from_glib(gst_sys::gst_element_add_property_notify_watch(
                 self.as_ref().to_glib_none().0,
                 property_name.0,
                 include_value.to_glib(),
@@ -484,7 +484,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn remove_property_notify_watch(&self, watch_id: NotifyWatchId) {
         unsafe {
-            ffi::gst_element_remove_property_notify_watch(
+            gst_sys::gst_element_remove_property_notify_watch(
                 self.as_ref().to_glib_none().0,
                 watch_id.0,
             );
@@ -498,7 +498,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_convert(
+            let ret = from_glib(gst_sys::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
@@ -521,7 +521,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let src_val = src_val.into();
         unsafe {
             let mut dest_val = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_convert(
+            let ret = from_glib(gst_sys::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.get_value(),
@@ -539,7 +539,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
         unsafe {
             let mut duration = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_duration(
+            let ret = from_glib(gst_sys::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut duration,
@@ -555,7 +555,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut duration = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_duration(
+            let ret = from_glib(gst_sys::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut duration,
@@ -571,7 +571,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
         unsafe {
             let mut cur = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_position(
+            let ret = from_glib(gst_sys::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
                 &mut cur,
@@ -587,7 +587,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
             let mut cur = mem::uninitialized();
-            let ret = from_glib(ffi::gst_element_query_position(
+            let ret = from_glib(gst_sys::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
                 format.to_glib(),
                 &mut cur,
@@ -616,7 +616,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_element_seek(
+                gst_sys::gst_element_seek(
                     self.as_ref().to_glib_none().0,
                     rate,
                     start.get_format().to_glib(),
@@ -639,7 +639,7 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let seek_pos = seek_pos.into();
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_element_seek_simple(
+                gst_sys::gst_element_seek_simple(
                     self.as_ref().to_glib_none().0,
                     seek_pos.get_format().to_glib(),
                     seek_flags.to_glib(),
@@ -658,8 +658,8 @@ impl<O: IsA<Element>> ElementExtManual for O {
         let user_data: Box<Option<F>> = Box::new(Some(func));
 
         unsafe extern "C" fn trampoline<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
-            element: *mut ffi::GstElement,
-            user_data: glib_ffi::gpointer,
+            element: *mut gst_sys::GstElement,
+            user_data: glib_sys::gpointer,
         ) {
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
@@ -668,13 +668,13 @@ impl<O: IsA<Element>> ElementExtManual for O {
         }
 
         unsafe extern "C" fn free_user_data<O: IsA<Element>, F: FnOnce(&O) + Send + 'static>(
-            user_data: glib_ffi::gpointer,
+            user_data: glib_sys::gpointer,
         ) {
             let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
         }
 
         unsafe {
-            ffi::gst_element_call_async(
+            gst_sys::gst_element_call_async(
                 self.as_ref().to_glib_none().0,
                 Some(trampoline::<Self, F>),
                 Box::into_raw(user_data) as *mut _,
@@ -687,9 +687,10 @@ impl<O: IsA<Element>> ElementExtManual for O {
 impl ElementClass {
     pub fn get_metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = self as *const _ as *const ffi::GstElementClass;
+            let klass = self as *const _ as *const gst_sys::GstElementClass;
 
-            let ptr = ffi::gst_element_class_get_metadata(klass as *mut _, key.to_glib_none().0);
+            let ptr =
+                gst_sys::gst_element_class_get_metadata(klass as *mut _, key.to_glib_none().0);
 
             if ptr.is_null() {
                 None
@@ -701,9 +702,9 @@ impl ElementClass {
 
     pub fn get_pad_template(&self, name: &str) -> Option<PadTemplate> {
         unsafe {
-            let klass = self as *const _ as *const ffi::GstElementClass;
+            let klass = self as *const _ as *const gst_sys::GstElementClass;
 
-            from_glib_none(ffi::gst_element_class_get_pad_template(
+            from_glib_none(gst_sys::gst_element_class_get_pad_template(
                 klass as *mut _,
                 name.to_glib_none().0,
             ))
@@ -712,9 +713,9 @@ impl ElementClass {
 
     pub fn get_pad_template_list(&self) -> Vec<PadTemplate> {
         unsafe {
-            let klass = self as *const _ as *const ffi::GstElementClass;
+            let klass = self as *const _ as *const gst_sys::GstElementClass;
 
-            FromGlibPtrContainer::from_glib_none(ffi::gst_element_class_get_pad_template_list(
+            FromGlibPtrContainer::from_glib_none(gst_sys::gst_element_class_get_pad_template_list(
                 klass as *mut _,
             ))
         }
@@ -723,32 +724,32 @@ impl ElementClass {
 
 lazy_static! {
     pub static ref ELEMENT_METADATA_AUTHOR: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_AUTHOR)
+        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_AUTHOR)
             .to_str()
             .unwrap()
     };
     pub static ref ELEMENT_METADATA_DESCRIPTION: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DESCRIPTION)
+        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_DESCRIPTION)
             .to_str()
             .unwrap()
     };
     pub static ref ELEMENT_METADATA_DOC_URI: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_DOC_URI)
+        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_DOC_URI)
             .to_str()
             .unwrap()
     };
     pub static ref ELEMENT_METADATA_ICON_NAME: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_ICON_NAME)
+        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_ICON_NAME)
             .to_str()
             .unwrap()
     };
     pub static ref ELEMENT_METADATA_KLASS: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_KLASS)
+        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_KLASS)
             .to_str()
             .unwrap()
     };
     pub static ref ELEMENT_METADATA_LONGNAME: &'static str = unsafe {
-        CStr::from_ptr(ffi::GST_ELEMENT_METADATA_LONGNAME)
+        CStr::from_ptr(gst_sys::GST_ELEMENT_METADATA_LONGNAME)
             .to_str()
             .unwrap()
     };

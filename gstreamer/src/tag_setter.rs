@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::value::ToSendValue;
+use gst_sys;
 use tags::*;
 use TagMergeMode;
 use TagSetter;
@@ -28,7 +28,7 @@ impl<O: IsA<TagSetter>> TagSetterExtManual for O {
         unsafe {
             let v = value.to_send_value();
 
-            ffi::gst_tag_setter_add_tag_value(
+            gst_sys::gst_tag_setter_add_tag_value(
                 self.as_ref().to_glib_none().0,
                 mode.to_glib(),
                 T::tag_name().to_glib_none().0,

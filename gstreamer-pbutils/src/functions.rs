@@ -6,11 +6,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::*;
 use gst;
 use gst::MiniObject;
+use gst_pbutils_sys;
 use std::ptr;
 
 pub unsafe trait CodecTag<'a>: gst::Tag<'a, TagType = &'a str> {}
@@ -29,7 +29,7 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     let codec_tag = T::tag_name();
     unsafe {
         glib_result_from_gboolean!(
-            ffi::gst_pb_utils_add_codec_description_to_tag_list(
+            gst_pbutils_sys::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 codec_tag.to_glib_none().0,
                 caps.as_ptr(),
@@ -46,7 +46,7 @@ pub fn pb_utils_add_codec_description_to_tag_list(
     assert_initialized_main_thread!();
     unsafe {
         glib_result_from_gboolean!(
-            ffi::gst_pb_utils_add_codec_description_to_tag_list(
+            gst_pbutils_sys::gst_pb_utils_add_codec_description_to_tag_list(
                 taglist.as_mut_ptr(),
                 ptr::null_mut(),
                 caps.as_ptr(),
@@ -58,15 +58,27 @@ pub fn pb_utils_add_codec_description_to_tag_list(
 
 pub fn pb_utils_get_encoder_description(caps: &gst::CapsRef) -> Option<String> {
     assert_initialized_main_thread!();
-    unsafe { from_glib_full(ffi::gst_pb_utils_get_encoder_description(caps.as_ptr())) }
+    unsafe {
+        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_encoder_description(
+            caps.as_ptr(),
+        ))
+    }
 }
 
 pub fn pb_utils_get_decoder_description(caps: &gst::CapsRef) -> Option<String> {
     assert_initialized_main_thread!();
-    unsafe { from_glib_full(ffi::gst_pb_utils_get_decoder_description(caps.as_ptr())) }
+    unsafe {
+        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_decoder_description(
+            caps.as_ptr(),
+        ))
+    }
 }
 
 pub fn pb_utils_get_codec_description(caps: &gst::CapsRef) -> Option<String> {
     assert_initialized_main_thread!();
-    unsafe { from_glib_full(ffi::gst_pb_utils_get_codec_description(caps.as_ptr())) }
+    unsafe {
+        from_glib_full(gst_pbutils_sys::gst_pb_utils_get_codec_description(
+            caps.as_ptr(),
+        ))
+    }
 }

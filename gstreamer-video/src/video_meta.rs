@@ -8,15 +8,15 @@
 
 use std::fmt;
 
-use ffi;
 use glib;
 use glib::translate::{from_glib, ToGlib};
 use gst;
 use gst::prelude::*;
-use gst_ffi;
+use gst_sys;
+use gst_video_sys;
 
 #[repr(C)]
-pub struct VideoMeta(ffi::GstVideoMeta);
+pub struct VideoMeta(gst_video_sys::GstVideoMeta);
 
 impl VideoMeta {
     pub fn add(
@@ -30,7 +30,7 @@ impl VideoMeta {
         assert!(buffer.get_size() >= info.size());
 
         unsafe {
-            let meta = ffi::gst_buffer_add_video_meta(
+            let meta = gst_video_sys::gst_buffer_add_video_meta(
                 buffer.as_mut_ptr(),
                 flags.to_glib(),
                 format.to_glib(),
@@ -61,7 +61,7 @@ impl VideoMeta {
         assert!(buffer.get_size() >= info.size());
 
         unsafe {
-            let meta = ffi::gst_buffer_add_video_meta_full(
+            let meta = gst_video_sys::gst_buffer_add_video_meta_full(
                 buffer.as_mut_ptr(),
                 flags.to_glib(),
                 format.to_glib(),
@@ -110,10 +110,10 @@ impl VideoMeta {
 }
 
 unsafe impl MetaAPI for VideoMeta {
-    type GstType = ffi::GstVideoMeta;
+    type GstType = gst_video_sys::GstVideoMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(ffi::gst_video_meta_api_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_meta_api_get_type()) }
     }
 }
 
@@ -133,7 +133,7 @@ impl fmt::Debug for VideoMeta {
 }
 
 #[repr(C)]
-pub struct VideoOverlayCompositionMeta(ffi::GstVideoOverlayCompositionMeta);
+pub struct VideoOverlayCompositionMeta(gst_video_sys::GstVideoOverlayCompositionMeta);
 
 impl VideoOverlayCompositionMeta {
     pub fn add<'a>(
@@ -141,7 +141,7 @@ impl VideoOverlayCompositionMeta {
         overlay: &::VideoOverlayComposition,
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
         unsafe {
-            let meta = ffi::gst_buffer_add_video_overlay_composition_meta(
+            let meta = gst_video_sys::gst_buffer_add_video_overlay_composition_meta(
                 buffer.as_mut_ptr(),
                 overlay.as_mut_ptr(),
             );
@@ -157,17 +157,17 @@ impl VideoOverlayCompositionMeta {
     pub fn set_overlay(&mut self, overlay: &::VideoOverlayComposition) {
         #![allow(clippy::cast_ptr_alignment)]
         unsafe {
-            gst_ffi::gst_mini_object_unref(self.0.overlay as *mut _);
-            self.0.overlay = gst_ffi::gst_mini_object_ref(overlay.as_mut_ptr() as *mut _) as *mut _;
+            gst_sys::gst_mini_object_unref(self.0.overlay as *mut _);
+            self.0.overlay = gst_sys::gst_mini_object_ref(overlay.as_mut_ptr() as *mut _) as *mut _;
         }
     }
 }
 
 unsafe impl MetaAPI for VideoOverlayCompositionMeta {
-    type GstType = ffi::GstVideoOverlayCompositionMeta;
+    type GstType = gst_video_sys::GstVideoOverlayCompositionMeta;
 
     fn get_meta_api() -> glib::Type {
-        unsafe { from_glib(ffi::gst_video_overlay_composition_meta_api_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_overlay_composition_meta_api_get_type()) }
     }
 }
 

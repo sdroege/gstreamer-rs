@@ -6,14 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::object::ObjectType;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
 use gst;
+use gst_player_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use Player;
@@ -31,22 +31,32 @@ impl Player {
 
         let (major, minor, _, _) = gst::version();
         if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_player_new(video_renderer, signal_dispatcher)) }
+            unsafe {
+                from_glib_full(gst_player_sys::gst_player_new(
+                    video_renderer,
+                    signal_dispatcher,
+                ))
+            }
         } else {
             // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13 in
             // https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/gst-libs/gst/player/gstplayer.c?id=634cd87c76f58b5e1383715bafd5614db825c7d1
-            unsafe { from_glib_none(ffi::gst_player_new(video_renderer, signal_dispatcher)) }
+            unsafe {
+                from_glib_none(gst_player_sys::gst_player_new(
+                    video_renderer,
+                    signal_dispatcher,
+                ))
+            }
         }
     }
 
     pub fn get_config(&self) -> ::PlayerConfig {
-        unsafe { from_glib_full(ffi::gst_player_get_config(self.to_glib_none().0)) }
+        unsafe { from_glib_full(gst_player_sys::gst_player_get_config(self.to_glib_none().0)) }
     }
 
     pub fn set_config(&self, config: ::PlayerConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_player_set_config(self.to_glib_none().0, config.into_ptr()),
+                gst_player_sys::gst_player_set_config(self.to_glib_none().0, config.into_ptr()),
                 "Failed to set config",
             )
         }
@@ -104,9 +114,9 @@ impl Player {
 unsafe extern "C" fn duration_changed_trampoline<
     F: Fn(&Player, gst::ClockTime) + Send + 'static,
 >(
-    this: *mut ffi::GstPlayer,
+    this: *mut gst_player_sys::GstPlayer,
     object: u64,
-    f: glib_ffi::gpointer,
+    f: glib_sys::gpointer,
 ) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
@@ -115,18 +125,18 @@ unsafe extern "C" fn duration_changed_trampoline<
 unsafe extern "C" fn position_updated_trampoline<
     F: Fn(&Player, gst::ClockTime) + Send + 'static,
 >(
-    this: *mut ffi::GstPlayer,
+    this: *mut gst_player_sys::GstPlayer,
     object: u64,
-    f: glib_ffi::gpointer,
+    f: glib_sys::gpointer,
 ) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))
 }
 
 unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
-    this: *mut ffi::GstPlayer,
+    this: *mut gst_player_sys::GstPlayer,
     object: u64,
-    f: glib_ffi::gpointer,
+    f: glib_sys::gpointer,
 ) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this), gst::ClockTime(Some(object)))

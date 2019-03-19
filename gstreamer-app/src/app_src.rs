@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
-use glib_ffi::{gboolean, gpointer};
+use glib_sys::{gboolean, gpointer};
 use gst;
+use gst_app_sys;
 use std::cell::RefCell;
 use std::mem;
 use std::ptr;
@@ -20,7 +20,7 @@ pub struct AppSrcCallbacks {
     need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
     enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
     seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
-    callbacks: ffi::GstAppSrcCallbacks,
+    callbacks: gst_app_sys::GstAppSrcCallbacks,
 }
 
 unsafe impl Send for AppSrcCallbacks {}
@@ -80,7 +80,7 @@ impl AppSrcCallbacksBuilder {
             need_data: self.need_data,
             enough_data: self.enough_data,
             seek_data: self.seek_data,
-            callbacks: ffi::GstAppSrcCallbacks {
+            callbacks: gst_app_sys::GstAppSrcCallbacks {
                 need_data: if have_need_data {
                     Some(trampoline_need_data)
                 } else {
@@ -108,7 +108,7 @@ impl AppSrcCallbacksBuilder {
 }
 
 unsafe extern "C" fn trampoline_need_data(
-    appsrc: *mut ffi::GstAppSrc,
+    appsrc: *mut gst_app_sys::GstAppSrc,
     length: u32,
     callbacks: gpointer,
 ) {
@@ -119,7 +119,10 @@ unsafe extern "C" fn trampoline_need_data(
     }
 }
 
-unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
+unsafe extern "C" fn trampoline_enough_data(
+    appsrc: *mut gst_app_sys::GstAppSrc,
+    callbacks: gpointer,
+) {
     let callbacks = &*(callbacks as *const AppSrcCallbacks);
 
     if let Some(ref enough_data) = callbacks.enough_data {
@@ -128,7 +131,7 @@ unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbac
 }
 
 unsafe extern "C" fn trampoline_seek_data(
-    appsrc: *mut ffi::GstAppSrc,
+    appsrc: *mut gst_app_sys::GstAppSrc,
     offset: u64,
     callbacks: gpointer,
 ) -> gboolean {
@@ -149,14 +152,17 @@ unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
 
 impl AppSrc {
     pub fn end_of_stream(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_app_src_end_of_stream(self.to_glib_none().0)) };
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(gst_app_sys::gst_app_src_end_of_stream(
+                self.to_glib_none().0,
+            ))
+        };
         ret.into_result()
     }
 
     pub fn push_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_app_src_push_buffer(
+            from_glib(gst_app_sys::gst_app_src_push_buffer(
                 self.to_glib_none().0,
                 buffer.into_ptr(),
             ))
@@ -170,7 +176,7 @@ impl AppSrc {
         list: gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_app_src_push_buffer_list(
+            from_glib(gst_app_sys::gst_app_src_push_buffer_list(
                 self.to_glib_none().0,
                 list.into_ptr(),
             ))
@@ -180,7 +186,7 @@ impl AppSrc {
 
     pub fn push_sample(&self, sample: &gst::Sample) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_app_src_push_sample(
+            from_glib(gst_app_sys::gst_app_src_push_sample(
                 self.to_glib_none().0,
                 sample.to_glib_none().0,
             ))
@@ -190,7 +196,7 @@ impl AppSrc {
 
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         unsafe {
-            ffi::gst_app_src_set_callbacks(
+            gst_app_sys::gst_app_src_set_callbacks(
                 self.to_glib_none().0,
                 mut_override(&callbacks.callbacks),
                 Box::into_raw(Box::new(callbacks)) as *mut _,
@@ -201,7 +207,11 @@ impl AppSrc {
 
     pub fn set_latency(&self, min: gst::ClockTime, max: gst::ClockTime) {
         unsafe {
-            ffi::gst_app_src_set_latency(self.to_glib_none().0, min.to_glib(), max.to_glib());
+            gst_app_sys::gst_app_src_set_latency(
+                self.to_glib_none().0,
+                min.to_glib(),
+                max.to_glib(),
+            );
         }
     }
 
@@ -209,7 +219,7 @@ impl AppSrc {
         unsafe {
             let mut min = mem::uninitialized();
             let mut max = mem::uninitialized();
-            ffi::gst_app_src_get_latency(self.to_glib_none().0, &mut min, &mut max);
+            gst_app_sys::gst_app_src_get_latency(self.to_glib_none().0, &mut min, &mut max);
             (from_glib(min), from_glib(max))
         }
     }

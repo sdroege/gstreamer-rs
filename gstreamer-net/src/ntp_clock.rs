@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_net_sys;
 use NtpClock;
 
 use glib::object::Cast;
@@ -26,7 +26,7 @@ impl NtpClock {
         let (major, minor, _, _) = gst::version();
         if (major, minor) > (1, 12) {
             unsafe {
-                gst::Clock::from_glib_full(ffi::gst_ntp_clock_new(
+                gst::Clock::from_glib_full(gst_net_sys::gst_ntp_clock_new(
                     name.0,
                     remote_address.to_glib_none().0,
                     remote_port,
@@ -37,7 +37,7 @@ impl NtpClock {
         } else {
             // Workaround for bad floating reference handling in 1.12. This issue was fixed for 1.13
             unsafe {
-                gst::Clock::from_glib_none(ffi::gst_ntp_clock_new(
+                gst::Clock::from_glib_none(gst_net_sys::gst_ntp_clock_new(
                     name.0,
                     remote_address.to_glib_none().0,
                     remote_port,

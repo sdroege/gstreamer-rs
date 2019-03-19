@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
+use gst_sys;
 
 use super::prelude::*;
 use glib::subclass::prelude::*;
@@ -22,7 +22,7 @@ where
     fn override_vfuncs(&mut self) {
         <::BinClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let _klass = &mut *(self as *mut Self as *mut ffi::GstPipelineClass);
+            let _klass = &mut *(self as *mut Self as *mut gst_sys::GstPipelineClass);
             // Nothing to do here
         }
     }

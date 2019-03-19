@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use gst_ffi;
+use gst_sys;
+use gst_video_sys;
 
 use glib;
 use glib::translate::{from_glib, ToGlibPtr};
@@ -25,7 +25,7 @@ pub enum Writable {}
 
 #[derive(Debug)]
 pub struct VideoFrame<T>(
-    ffi::GstVideoFrame,
+    gst_video_sys::GstVideoFrame,
     Option<gst::Buffer>,
     ::VideoInfo,
     PhantomData<T>,
@@ -53,7 +53,7 @@ impl<T> VideoFrame<T> {
 
     pub fn copy(&self, dest: &mut VideoFrame<Writable>) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.0, &self.0));
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(&mut dest.0, &self.0));
             if res {
                 Ok(())
             } else {
@@ -70,7 +70,11 @@ impl<T> VideoFrame<T> {
         skip_assert_initialized!();
 
         unsafe {
-            let res: bool = from_glib(ffi::gst_video_frame_copy_plane(&mut dest.0, &self.0, plane));
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy_plane(
+                &mut dest.0,
+                &self.0,
+                plane,
+            ));
             if res {
                 Ok(())
             } else {
@@ -162,7 +166,7 @@ impl<T> VideoFrame<T> {
         }
     }
 
-    pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
+    pub unsafe fn from_glib_full(frame: gst_video_sys::GstVideoFrame) -> Self {
         let info = ::VideoInfo(ptr::read(&frame.info));
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
         VideoFrame(frame, Some(buffer), info, PhantomData)
@@ -172,7 +176,7 @@ impl<T> VideoFrame<T> {
 impl<T> Drop for VideoFrame<T> {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_video_frame_unmap(&mut self.0);
+            gst_video_sys::gst_video_frame_unmap(&mut self.0);
         }
     }
 }
@@ -186,11 +190,11 @@ impl VideoFrame<Readable> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
             ));
 
             if !res {
@@ -211,12 +215,12 @@ impl VideoFrame<Readable> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map_id(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
             ));
 
             if !res {
@@ -234,7 +238,7 @@ impl VideoFrame<Readable> {
         VideoFrameRef(vframe, Some(self.buffer()), info, true)
     }
 
-    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
+    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
         &self.0
     }
 }
@@ -248,13 +252,13 @@ impl VideoFrame<Writable> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_ffi::GST_MAP_READ
-                    | gst_ffi::GST_MAP_WRITE,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_sys::GST_MAP_READ
+                    | gst_sys::GST_MAP_WRITE,
             ));
 
             if !res {
@@ -275,14 +279,14 @@ impl VideoFrame<Writable> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map_id(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_ffi::GST_MAP_READ
-                    | gst_ffi::GST_MAP_WRITE,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_sys::GST_MAP_READ
+                    | gst_sys::GST_MAP_WRITE,
             ));
 
             if !res {
@@ -334,20 +338,20 @@ impl VideoFrame<Writable> {
         VideoFrameRef(vframe, Some(self.buffer_mut()), info, true)
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
+    pub fn as_mut_ptr(&mut self) -> *mut gst_video_sys::GstVideoFrame {
         &mut self.0
     }
 }
 
 #[derive(Debug)]
-pub struct VideoFrameRef<T>(ffi::GstVideoFrame, Option<T>, ::VideoInfo, bool);
+pub struct VideoFrameRef<T>(gst_video_sys::GstVideoFrame, Option<T>, ::VideoInfo, bool);
 
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
-    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
+    pub fn as_ptr(&self) -> *const gst_video_sys::GstVideoFrame {
         &self.0
     }
 
-    pub unsafe fn from_glib_borrow(frame: *const ffi::GstVideoFrame) -> Self {
+    pub unsafe fn from_glib_borrow(frame: *const gst_video_sys::GstVideoFrame) -> Self {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
@@ -364,11 +368,11 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
             ));
 
             if !res {
@@ -389,12 +393,12 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map_id(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_ffi::GST_MAP_READ,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
             ));
 
             if !res {
@@ -423,7 +427,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         dest: &mut VideoFrameRef<&mut gst::BufferRef>,
     ) -> Result<(), glib::BoolError> {
         unsafe {
-            let res: bool = from_glib(ffi::gst_video_frame_copy(&mut dest.0, &self.0));
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy(&mut dest.0, &self.0));
             if res {
                 Ok(())
             } else {
@@ -440,7 +444,11 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         skip_assert_initialized!();
 
         unsafe {
-            let res: bool = from_glib(ffi::gst_video_frame_copy_plane(&mut dest.0, &self.0, plane));
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_copy_plane(
+                &mut dest.0,
+                &self.0,
+                plane,
+            ));
             if res {
                 Ok(())
             } else {
@@ -534,7 +542,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 }
 
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
-    pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Self {
+    pub unsafe fn from_glib_borrow_mut(frame: *mut gst_video_sys::GstVideoFrame) -> Self {
         assert!(!frame.is_null());
 
         let frame = ptr::read(frame);
@@ -551,13 +559,13 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_ffi::GST_MAP_READ
-                    | gst_ffi::GST_MAP_WRITE,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_sys::GST_MAP_READ
+                    | gst_sys::GST_MAP_WRITE,
             ));
 
             if !res {
@@ -578,14 +586,14 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(ffi::gst_video_frame_map_id(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_ffi::GST_MAP_READ
-                    | gst_ffi::GST_MAP_WRITE,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_sys::GST_MAP_READ
+                    | gst_sys::GST_MAP_WRITE,
             ));
 
             if !res {
@@ -631,7 +639,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         }
     }
 
-    pub fn as_mut_ptr(&mut self) -> *mut ffi::GstVideoFrame {
+    pub fn as_mut_ptr(&mut self) -> *mut gst_video_sys::GstVideoFrame {
         &mut self.0
     }
 }
@@ -651,7 +659,7 @@ impl<T> Drop for VideoFrameRef<T> {
     fn drop(&mut self) {
         if !self.3 {
             unsafe {
-                ffi::gst_video_frame_unmap(&mut self.0);
+                gst_video_sys::gst_video_frame_unmap(&mut self.0);
             }
         }
     }

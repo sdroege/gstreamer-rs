@@ -11,18 +11,18 @@ use std::fmt;
 use std::mem;
 use std::os::raw::c_char;
 
-use ffi;
 use glib::translate::*;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPTime(pub(crate) ffi::GstSDPTime);
+pub struct SDPTime(pub(crate) gst_sdp_sys::GstSDPTime);
 
 impl SDPTime {
     pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut time = mem::zeroed();
-            ffi::gst_sdp_time_set(
+            gst_sdp_sys::gst_sdp_time_set(
                 &mut time,
                 start.to_glib_none().0,
                 stop.to_glib_none().0,
@@ -63,7 +63,7 @@ impl Clone for SDPTime {
 impl Drop for SDPTime {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_sdp_time_clear(&mut self.0);
+            gst_sdp_sys::gst_sdp_time_clear(&mut self.0);
         }
     }
 }

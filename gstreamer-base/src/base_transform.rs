@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
+use gst_base_sys;
 use BaseTransform;
 
 pub trait BaseTransformExtManual: 'static {
@@ -19,7 +19,7 @@ pub trait BaseTransformExtManual: 'static {
 impl<O: IsA<BaseTransform>> BaseTransformExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
-            let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
+            let trans: &gst_base_sys::GstBaseTransform = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&trans.element.object.lock);
             from_glib_none(&trans.segment as *const _)
         }

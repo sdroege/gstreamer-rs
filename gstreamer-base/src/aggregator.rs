@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
 use glib::IsA;
 use gst;
+use gst_base_sys;
 use Aggregator;
 
 pub trait AggregatorExtManual: 'static {
@@ -19,7 +19,7 @@ pub trait AggregatorExtManual: 'static {
 impl<O: IsA<Aggregator>> AggregatorExtManual for O {
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_aggregator_finish_buffer(
+            from_glib(gst_base_sys::gst_aggregator_finish_buffer(
                 self.as_ref().to_glib_none().0,
                 buffer.into_ptr(),
             ))

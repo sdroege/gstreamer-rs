@@ -14,21 +14,21 @@ use std::sync::{Once, ONCE_INIT};
 
 #[macro_use]
 extern crate glib;
-extern crate glib_sys as glib_ffi;
-extern crate gobject_sys as gobject_ffi;
+extern crate glib_sys;
+extern crate gobject_sys;
 extern crate gstreamer as gst;
-extern crate gstreamer_pbutils_sys as ffi;
-extern crate gstreamer_sys as gst_ffi;
+extern crate gstreamer_pbutils_sys as gst_pbutils_sys;
+extern crate gstreamer_sys as gst_sys;
 
 static PBUTILS_INIT: Once = ONCE_INIT;
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::gst_ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
+        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
         ::PBUTILS_INIT.call_once(|| {
-            unsafe { ::ffi::gst_pb_utils_init() };
+            unsafe { ::gst_pbutils_sys::gst_pb_utils_init() };
         });
     };
 }

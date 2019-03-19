@@ -6,33 +6,33 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
-use gobject_ffi;
+use gobject_sys;
+use gst_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct ParseContext(Boxed<ffi::GstParseContext>);
+    pub struct ParseContext(Boxed<gst_sys::GstParseContext>);
 
     match fn {
         copy => |ptr| {
-            gobject_ffi::g_boxed_copy(ffi::gst_parse_context_get_type(), ptr as *mut _) as *mut ffi::GstParseContext
+            gobject_sys::g_boxed_copy(gst_sys::gst_parse_context_get_type(), ptr as *mut _) as *mut gst_sys::GstParseContext
         },
         free => |ptr| {
-            gobject_ffi::g_boxed_free(ffi::gst_parse_context_get_type(), ptr as *mut _)
+            gobject_sys::g_boxed_free(gst_sys::gst_parse_context_get_type(), ptr as *mut _)
         },
-        get_type => || ffi::gst_parse_context_get_type(),
+        get_type => || gst_sys::gst_parse_context_get_type(),
     }
 }
 
 impl ParseContext {
     pub fn new() -> Self {
-        unsafe { from_glib_full(ffi::gst_parse_context_new()) }
+        unsafe { from_glib_full(gst_sys::gst_parse_context_new()) }
     }
 
     pub fn get_missing_elements(&self) -> Vec<String> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_parse_context_get_missing_elements(
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_parse_context_get_missing_elements(
                 mut_override(self.to_glib_none().0),
             ))
         }

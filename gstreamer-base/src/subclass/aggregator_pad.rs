@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
-use gst_ffi;
+use glib_sys;
+use gst_base_sys;
+use gst_sys;
 
 use glib::translate::*;
 use gst;
@@ -63,7 +63,8 @@ impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorPadClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorPadClass;
             (*parent_class)
                 .flush
                 .map(|f| {
@@ -85,7 +86,8 @@ impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
     ) -> bool {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstAggregatorPadClass;
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstAggregatorPadClass;
             (*parent_class)
                 .skip_buffer
                 .map(|f| {
@@ -103,7 +105,7 @@ unsafe impl<T: ObjectSubclass + AggregatorPadImpl> IsSubclassable<T> for Aggrega
     fn override_vfuncs(&mut self) {
         <gst::PadClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut ffi::GstAggregatorPadClass);
+            let klass = &mut *(self as *mut Self as *mut gst_base_sys::GstAggregatorPadClass);
             klass.flush = Some(aggregator_pad_flush::<T>);
             klass.skip_buffer = Some(aggregator_pad_skip_buffer::<T>);
         }
@@ -111,9 +113,9 @@ unsafe impl<T: ObjectSubclass + AggregatorPadImpl> IsSubclassable<T> for Aggrega
 }
 
 unsafe extern "C" fn aggregator_pad_flush<T: ObjectSubclass>(
-    ptr: *mut ffi::GstAggregatorPad,
-    aggregator: *mut ffi::GstAggregator,
-) -> gst_ffi::GstFlowReturn
+    ptr: *mut gst_base_sys::GstAggregatorPad,
+    aggregator: *mut gst_base_sys::GstAggregator,
+) -> gst_sys::GstFlowReturn
 where
     T: AggregatorPadImpl,
 {
@@ -127,10 +129,10 @@ where
 }
 
 unsafe extern "C" fn aggregator_pad_skip_buffer<T: ObjectSubclass>(
-    ptr: *mut ffi::GstAggregatorPad,
-    aggregator: *mut ffi::GstAggregator,
-    buffer: *mut gst_ffi::GstBuffer,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_base_sys::GstAggregatorPad,
+    aggregator: *mut gst_base_sys::GstAggregator,
+    buffer: *mut gst_sys::GstBuffer,
+) -> glib_sys::gboolean
 where
     T: AggregatorPadImpl,
 {

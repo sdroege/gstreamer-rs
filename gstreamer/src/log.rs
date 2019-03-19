@@ -11,14 +11,14 @@ use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
 
-use ffi;
-use gobject_ffi;
+use gobject_sys;
+use gst_sys;
 
 use glib::translate::{from_glib, ToGlib, ToGlibPtr};
 use glib::IsA;
 
 #[derive(PartialEq, Eq, Clone, Copy)]
-pub struct DebugCategory(ptr::NonNull<ffi::GstDebugCategory>);
+pub struct DebugCategory(ptr::NonNull<gst_sys::GstDebugCategory>);
 
 impl DebugCategory {
     pub fn new<'a, P: Into<Option<&'a str>>>(
@@ -29,9 +29,9 @@ impl DebugCategory {
         extern "C" {
             fn _gst_debug_category_new(
                 name: *const c_char,
-                color: ffi::GstDebugColorFlags,
+                color: gst_sys::GstDebugColorFlags,
                 description: *const c_char,
-            ) -> *mut ffi::GstDebugCategory;
+            ) -> *mut gst_sys::GstDebugCategory;
         }
         let description = description.into();
 
@@ -50,7 +50,7 @@ impl DebugCategory {
     pub fn get(name: &str) -> Option<DebugCategory> {
         unsafe {
             extern "C" {
-                fn _gst_debug_get_category(name: *const c_char) -> *mut ffi::GstDebugCategory;
+                fn _gst_debug_get_category(name: *const c_char) -> *mut gst_sys::GstDebugCategory;
             }
 
             let cat = _gst_debug_get_category(name.to_glib_none().0);
@@ -64,24 +64,24 @@ impl DebugCategory {
     }
 
     pub fn get_threshold(self) -> ::DebugLevel {
-        from_glib(unsafe { ffi::gst_debug_category_get_threshold(self.0.as_ptr()) })
+        from_glib(unsafe { gst_sys::gst_debug_category_get_threshold(self.0.as_ptr()) })
     }
 
     pub fn set_threshold(self, threshold: ::DebugLevel) {
-        unsafe { ffi::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
+        unsafe { gst_sys::gst_debug_category_set_threshold(self.0.as_ptr(), threshold.to_glib()) }
     }
 
     pub fn reset_threshold(self) {
-        unsafe { ffi::gst_debug_category_reset_threshold(self.0.as_ptr()) }
+        unsafe { gst_sys::gst_debug_category_reset_threshold(self.0.as_ptr()) }
     }
 
     pub fn get_color(self) -> ::DebugColorFlags {
-        unsafe { from_glib(ffi::gst_debug_category_get_color(self.0.as_ptr())) }
+        unsafe { from_glib(gst_sys::gst_debug_category_get_color(self.0.as_ptr())) }
     }
 
     pub fn get_name<'a>(self) -> &'a str {
         unsafe {
-            CStr::from_ptr(ffi::gst_debug_category_get_name(self.0.as_ptr()))
+            CStr::from_ptr(gst_sys::gst_debug_category_get_name(self.0.as_ptr()))
                 .to_str()
                 .unwrap()
         }
@@ -89,7 +89,7 @@ impl DebugCategory {
 
     pub fn get_description<'a>(self) -> Option<&'a str> {
         unsafe {
-            let ptr = ffi::gst_debug_category_get_description(self.0.as_ptr());
+            let ptr = gst_sys::gst_debug_category_get_description(self.0.as_ptr());
 
             if ptr.is_null() {
                 None
@@ -116,12 +116,12 @@ impl DebugCategory {
         }
 
         let obj_ptr = match obj {
-            Some(obj) => obj.to_glib_none().0 as *mut gobject_ffi::GObject,
+            Some(obj) => obj.to_glib_none().0 as *mut gobject_sys::GObject,
             None => ptr::null_mut(),
         };
 
         unsafe {
-            ffi::gst_debug_log(
+            gst_sys::gst_debug_log(
                 self.0.as_ptr(),
                 level.to_glib(),
                 file.to_glib_none().0,
@@ -319,7 +319,7 @@ mod tests {
         gst_trace!(cat, "meh");
         gst_memdump!(cat, "meh");
 
-        let obj = ::Bin::new("meh");
+        let obj = ::Bin::new(Some("meh"));
         gst_error!(cat, obj: &obj, "meh");
         gst_warning!(cat, obj: &obj, "meh");
         gst_fixme!(cat, obj: &obj, "meh");

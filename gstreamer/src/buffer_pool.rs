@@ -13,7 +13,7 @@ use glib;
 use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlib, ToGlibPtr, ToGlibPtrMut};
 use glib::IsA;
 
-use ffi;
+use gst_sys;
 
 use std::mem;
 use std::ops;
@@ -51,7 +51,7 @@ impl AsMut<::StructureRef> for BufferPoolConfig {
 impl BufferPoolConfig {
     pub fn add_option(&mut self, option: &str) {
         unsafe {
-            ffi::gst_buffer_pool_config_add_option(
+            gst_sys::gst_buffer_pool_config_add_option(
                 self.0.to_glib_none_mut().0,
                 option.to_glib_none().0,
             );
@@ -60,7 +60,7 @@ impl BufferPoolConfig {
 
     pub fn has_option(&self, option: &str) -> bool {
         unsafe {
-            from_glib(ffi::gst_buffer_pool_config_has_option(
+            from_glib(gst_sys::gst_buffer_pool_config_has_option(
                 self.0.to_glib_none().0,
                 option.to_glib_none().0,
             ))
@@ -69,11 +69,11 @@ impl BufferPoolConfig {
 
     pub fn get_options(&self) -> Vec<String> {
         unsafe {
-            let n = ffi::gst_buffer_pool_config_n_options(self.0.to_glib_none().0) as usize;
+            let n = gst_sys::gst_buffer_pool_config_n_options(self.0.to_glib_none().0) as usize;
             let mut options = Vec::with_capacity(n);
 
             for i in 0..n {
-                options.push(from_glib_none(ffi::gst_buffer_pool_config_get_option(
+                options.push(from_glib_none(gst_sys::gst_buffer_pool_config_get_option(
                     self.0.to_glib_none().0,
                     i as u32,
                 )));
@@ -93,7 +93,7 @@ impl BufferPoolConfig {
         let caps = caps.into();
 
         unsafe {
-            ffi::gst_buffer_pool_config_set_params(
+            gst_sys::gst_buffer_pool_config_set_params(
                 self.0.to_glib_none_mut().0,
                 caps.to_glib_none().0,
                 size,
@@ -110,7 +110,7 @@ impl BufferPoolConfig {
             let mut min_buffers = mem::uninitialized();
             let mut max_buffers = mem::uninitialized();
 
-            let ret: bool = from_glib(ffi::gst_buffer_pool_config_get_params(
+            let ret: bool = from_glib(gst_sys::gst_buffer_pool_config_get_params(
                 self.0.to_glib_none().0,
                 &mut caps,
                 &mut size,
@@ -136,7 +136,7 @@ impl BufferPoolConfig {
 
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_buffer_pool_config_validate_params(
+                gst_sys::gst_buffer_pool_config_validate_params(
                     self.0.to_glib_none().0,
                     caps.to_glib_none().0,
                     size,
@@ -153,12 +153,12 @@ impl BufferPoolConfig {
 }
 
 #[derive(Debug)]
-pub struct BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams);
+pub struct BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams);
 
 impl BufferPoolAcquireParams {
     pub fn with_flags(flags: ::BufferPoolAcquireFlags) -> Self {
-        BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams {
-            format: ffi::GST_FORMAT_UNDEFINED,
+        BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams {
+            format: gst_sys::GST_FORMAT_UNDEFINED,
             start: -1,
             stop: -1,
             flags: flags.to_glib(),
@@ -172,7 +172,7 @@ impl BufferPoolAcquireParams {
         flags: ::BufferPoolAcquireFlags,
     ) -> Self {
         unsafe {
-            BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams {
+            BufferPoolAcquireParams(gst_sys::GstBufferPoolAcquireParams {
                 format: start.get_format().to_glib(),
                 start: start.to_raw_value(),
                 stop: stop.to_raw_value(),
@@ -214,10 +214,10 @@ impl BufferPool {
         assert_initialized_main_thread!();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {
-            unsafe { from_glib_full(ffi::gst_buffer_pool_new()) }
+            unsafe { from_glib_full(gst_sys::gst_buffer_pool_new()) }
         } else {
             // Work-around for 1.14 switching from transfer-floating to transfer-full
-            unsafe { from_glib_none(ffi::gst_buffer_pool_new()) }
+            unsafe { from_glib_none(gst_sys::gst_buffer_pool_new()) }
         }
     }
 }
@@ -244,7 +244,7 @@ pub trait BufferPoolExtManual: 'static {
 impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
     fn get_config(&self) -> BufferPoolConfig {
         unsafe {
-            let ptr = ffi::gst_buffer_pool_get_config(self.as_ref().to_glib_none().0);
+            let ptr = gst_sys::gst_buffer_pool_get_config(self.as_ref().to_glib_none().0);
             BufferPoolConfig(from_glib_full(ptr))
         }
     }
@@ -252,7 +252,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
     fn set_config(&self, config: BufferPoolConfig) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(
-                ffi::gst_buffer_pool_set_config(
+                gst_sys::gst_buffer_pool_set_config(
                     self.as_ref().to_glib_none().0,
                     config.0.into_ptr()
                 ),
@@ -264,7 +264,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
     fn is_flushing(&self) -> bool {
         unsafe {
             let stash = self.as_ref().to_glib_none();
-            let ptr: *mut ffi::GstBufferPool = stash.0;
+            let ptr: *mut gst_sys::GstBufferPool = stash.0;
 
             from_glib((*ptr).flushing)
         }
@@ -282,7 +282,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
         unsafe {
             let mut buffer = ptr::null_mut();
-            let ret: ::FlowReturn = from_glib(ffi::gst_buffer_pool_acquire_buffer(
+            let ret: ::FlowReturn = from_glib(gst_sys::gst_buffer_pool_acquire_buffer(
                 self.as_ref().to_glib_none().0,
                 &mut buffer,
                 params_ptr,
@@ -294,7 +294,10 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
 
     fn release_buffer(&self, buffer: ::Buffer) {
         unsafe {
-            ffi::gst_buffer_pool_release_buffer(self.as_ref().to_glib_none().0, buffer.into_ptr());
+            gst_sys::gst_buffer_pool_release_buffer(
+                self.as_ref().to_glib_none().0,
+                buffer.into_ptr(),
+            );
         }
     }
 }

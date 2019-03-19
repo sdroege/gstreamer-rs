@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
-use gst_ffi;
-use gst_video_ffi;
+use glib_sys;
+use gst_gl_sys;
+use gst_sys;
+use gst_video_sys;
 
 use glib::translate::{from_glib, ToGlibPtr};
 use gst;
@@ -75,13 +75,13 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(gst_video_ffi::gst_video_frame_map(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_video_ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_ffi::GST_MAP_READ
-                    | ffi::GST_MAP_GL as u32,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_sys::GST_MAP_READ
+                    | gst_gl_sys::GST_MAP_GL as u32,
             ));
 
             if !res {
@@ -112,13 +112,13 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
 
         unsafe {
             let mut frame = mem::zeroed();
-            let res: bool = from_glib(gst_video_ffi::gst_video_frame_map(
+            let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
                 &mut frame,
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
-                gst_video_ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst_ffi::GST_MAP_READ
-                    | ffi::GST_MAP_GL as u32,
+                gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst_sys::GST_MAP_READ
+                    | gst_gl_sys::GST_MAP_GL as u32,
             ));
 
             if !res {
@@ -151,10 +151,10 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
 fn buffer_n_gl_memory(buffer: &gst::BufferRef) -> Option<u32> {
     unsafe {
         let buf = buffer.as_mut_ptr();
-        let num = gst_ffi::gst_buffer_n_memory(buf);
+        let num = gst_sys::gst_buffer_n_memory(buf);
         for i in 0..num - 1 {
-            let mem = gst_ffi::gst_buffer_peek_memory(buf, i);
-            if ffi::gst_is_gl_memory(mem) != glib_ffi::GTRUE {
+            let mem = gst_sys::gst_buffer_peek_memory(buf, i);
+            if gst_gl_sys::gst_is_gl_memory(mem) != glib_sys::GTRUE {
                 return None;
             }
         }

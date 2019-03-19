@@ -6,8 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
+use glib_sys;
+use gst_sys;
 
 use glib::translate::*;
 
@@ -46,7 +46,7 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
     fn parent_add_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             let f = (*parent_class).add_element.ok_or_else(|| {
                 gst_loggable_error!(::CAT_RUST, "Parent function `add_element` is not defined")
             })?;
@@ -61,7 +61,7 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
     fn parent_remove_element(&self, bin: &Bin, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             let f = (*parent_class).remove_element.ok_or_else(|| {
                 gst_loggable_error!(
                     ::CAT_RUST,
@@ -79,7 +79,7 @@ impl<T: BinImpl + ObjectImpl> BinImplExt for T {
     fn parent_handle_message(&self, bin: &Bin, message: Message) {
         unsafe {
             let data = self.get_type_data();
-            let parent_class = data.as_ref().get_parent_class() as *mut ffi::GstBinClass;
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstBinClass;
             if let Some(ref f) = (*parent_class).handle_message {
                 f(bin.to_glib_none().0, message.into_ptr());
             }
@@ -94,7 +94,7 @@ where
     fn override_vfuncs(&mut self) {
         <::ElementClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
-            let klass = &mut *(self as *mut Self as *mut ffi::GstBinClass);
+            let klass = &mut *(self as *mut Self as *mut gst_sys::GstBinClass);
             klass.add_element = Some(bin_add_element::<T>);
             klass.remove_element = Some(bin_remove_element::<T>);
             klass.handle_message = Some(bin_handle_message::<T>);
@@ -103,9 +103,9 @@ where
 }
 
 unsafe extern "C" fn bin_add_element<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBin,
-    element: *mut ffi::GstElement,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_sys::GstBin,
+    element: *mut gst_sys::GstElement,
+) -> glib_sys::gboolean
 where
     T: BinImpl,
     T::Instance: PanicPoison,
@@ -128,9 +128,9 @@ where
 }
 
 unsafe extern "C" fn bin_remove_element<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBin,
-    element: *mut ffi::GstElement,
-) -> glib_ffi::gboolean
+    ptr: *mut gst_sys::GstBin,
+    element: *mut gst_sys::GstElement,
+) -> glib_sys::gboolean
 where
     T: BinImpl,
     T::Instance: PanicPoison,
@@ -153,8 +153,8 @@ where
 }
 
 unsafe extern "C" fn bin_handle_message<T: ObjectSubclass>(
-    ptr: *mut ffi::GstBin,
-    message: *mut ffi::GstMessage,
+    ptr: *mut gst_sys::GstBin,
+    message: *mut gst_sys::GstMessage,
 ) where
     T: BinImpl,
     T::Instance: PanicPoison,

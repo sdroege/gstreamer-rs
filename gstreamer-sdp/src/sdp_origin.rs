@@ -9,10 +9,10 @@
 use std::ffi::CStr;
 use std::fmt;
 
-use ffi;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
+pub struct SDPOrigin(pub(crate) gst_sdp_sys::GstSDPOrigin);
 
 impl SDPOrigin {
     pub fn username(&self) -> &str {

@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
-use glib_ffi;
-use gst_ffi;
+use glib_sys;
+use gst_sys;
+use gst_video_sys;
 
 use glib;
 use glib::translate::{from_glib_full, ToGlib, ToGlibPtr};
@@ -24,7 +24,7 @@ pub fn convert_sample(
 ) -> Result<gst::Sample, glib::Error> {
     unsafe {
         let mut error = ptr::null_mut();
-        let ret = ffi::gst_video_convert_sample(
+        let ret = gst_video_sys::gst_video_convert_sample(
             sample.to_glib_none().0,
             caps.to_glib_none().0,
             timeout.to_glib(),
@@ -73,9 +73,9 @@ unsafe fn convert_sample_async_unsafe<F>(
     F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
 {
     unsafe extern "C" fn convert_sample_async_trampoline<F>(
-        sample: *mut gst_ffi::GstSample,
-        error: *mut glib_ffi::GError,
-        user_data: glib_ffi::gpointer,
+        sample: *mut gst_sys::GstSample,
+        error: *mut glib_sys::GError,
+        user_data: glib_sys::gpointer,
     ) where
         F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
@@ -88,7 +88,7 @@ unsafe fn convert_sample_async_unsafe<F>(
             callback(Err(from_glib_full(error)))
         }
     }
-    unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib_ffi::gpointer)
+    unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib_sys::gpointer)
     where
         F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
     {
@@ -97,12 +97,12 @@ unsafe fn convert_sample_async_unsafe<F>(
 
     let user_data: Box<Option<F>> = Box::new(Some(func));
 
-    ffi::gst_video_convert_sample_async(
+    gst_video_sys::gst_video_convert_sample_async(
         sample.to_glib_none().0,
         caps.to_glib_none().0,
         timeout.to_glib(),
         Some(convert_sample_async_trampoline::<F>),
-        Box::into_raw(user_data) as glib_ffi::gpointer,
+        Box::into_raw(user_data) as glib_sys::gpointer,
         Some(mem::transmute(convert_sample_async_free::<F> as usize)),
     );
 }

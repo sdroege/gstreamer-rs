@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
+use gst_base_sys;
 use BaseSrc;
 
 pub trait BaseSrcExtManual: 'static {
@@ -25,7 +25,7 @@ pub trait BaseSrcExtManual: 'static {
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn get_segment(&self) -> gst::Segment {
         unsafe {
-            let src: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
+            let src: &gst_base_sys::GstBaseSrc = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&src.element.object.lock);
             from_glib_none(&src.segment as *const _)
         }
@@ -34,19 +34,25 @@ impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {
     fn start_complete(&self, ret: Result<gst::FlowSuccess, gst::FlowError>) {
         let ret: gst::FlowReturn = ret.into();
         unsafe {
-            ffi::gst_base_src_start_complete(self.as_ref().to_glib_none().0, ret.to_glib());
+            gst_base_sys::gst_base_src_start_complete(
+                self.as_ref().to_glib_none().0,
+                ret.to_glib(),
+            );
         }
     }
 
     fn start_wait(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
-        let ret: gst::FlowReturn =
-            unsafe { from_glib(ffi::gst_base_src_start_wait(self.as_ref().to_glib_none().0)) };
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(gst_base_sys::gst_base_src_start_wait(
+                self.as_ref().to_glib_none().0,
+            ))
+        };
         ret.into_result()
     }
 
     fn wait_playing(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_base_src_wait_playing(
+            from_glib(gst_base_sys::gst_base_src_wait_playing(
                 self.as_ref().to_glib_none().0,
             ))
         };

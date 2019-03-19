@@ -6,10 +6,10 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
+use gst_base_sys;
 use std::mem;
 
 pub fn type_find_helper_for_data<
@@ -27,7 +27,7 @@ pub fn type_find_helper_for_data<
         let mut prob = mem::uninitialized();
         let data = data.as_ref();
         let (ptr, len) = (data.as_ptr(), data.len());
-        let ret = from_glib_full(ffi::gst_type_find_helper_for_data(
+        let ret = from_glib_full(gst_base_sys::gst_type_find_helper_for_data(
             obj.map(|p| p.as_ref()).to_glib_none().0,
             mut_override(ptr),
             len,

@@ -18,11 +18,11 @@ extern crate libc;
 
 // Re-exported for the subclass gst_plugin_define! macro
 #[doc(hidden)]
-pub extern crate glib_sys as glib_ffi;
+pub extern crate glib_sys;
 #[doc(hidden)]
-pub extern crate gobject_sys as gobject_ffi;
+pub extern crate gobject_sys;
 #[doc(hidden)]
-pub extern crate gstreamer_sys as ffi;
+pub extern crate gstreamer_sys as gst_sys;
 
 #[macro_use]
 #[doc(hidden)]
@@ -47,7 +47,7 @@ use glib::translate::{from_glib, from_glib_full};
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if unsafe { ::ffi::gst_is_initialized() } != ::glib_ffi::GTRUE {
+        if unsafe { ::gst_sys::gst_is_initialized() } != ::glib_sys::GTRUE {
             panic!("GStreamer has not been initialized. Call `gst::init` first.");
         }
     };
@@ -266,7 +266,7 @@ use std::ptr;
 pub fn init() -> Result<(), glib::Error> {
     unsafe {
         let mut error = ptr::null_mut();
-        if from_glib(ffi::gst_init_check(
+        if from_glib(gst_sys::gst_init_check(
             ptr::null_mut(),
             ptr::null_mut(),
             &mut error,
@@ -279,10 +279,10 @@ pub fn init() -> Result<(), glib::Error> {
 }
 
 pub unsafe fn deinit() {
-    ffi::gst_deinit();
+    gst_sys::gst_deinit();
 }
 
-pub const BUFFER_OFFSET_NONE: u64 = ffi::GST_BUFFER_OFFSET_NONE;
+pub const BUFFER_OFFSET_NONE: u64 = gst_sys::GST_BUFFER_OFFSET_NONE;
 pub const CLOCK_TIME_NONE: ClockTime = ClockTime(None);
 
 pub const SECOND: ClockTime = ClockTime(Some(1_000_000_000));
@@ -295,8 +295,8 @@ pub const MSECOND_VAL: u64 = 1_000_000;
 pub const USECOND_VAL: u64 = 1_000;
 pub const NSECOND_VAL: u64 = 1;
 
-pub const FORMAT_PERCENT_MAX: u32 = ffi::GST_FORMAT_PERCENT_MAX as u32;
-pub const FORMAT_PERCENT_SCALE: u32 = ffi::GST_FORMAT_PERCENT_SCALE as u32;
+pub const FORMAT_PERCENT_MAX: u32 = gst_sys::GST_FORMAT_PERCENT_MAX as u32;
+pub const FORMAT_PERCENT_SCALE: u32 = gst_sys::GST_FORMAT_PERCENT_SCALE as u32;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

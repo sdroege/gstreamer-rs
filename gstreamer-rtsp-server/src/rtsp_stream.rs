@@ -1,7 +1,7 @@
-use ffi;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
+use gst_rtsp_server_sys;
 use RTSPStream;
 
 pub trait RTSPStreamExtManual: 'static {
@@ -13,7 +13,7 @@ pub trait RTSPStreamExtManual: 'static {
 impl<O: IsA<RTSPStream>> RTSPStreamExtManual for O {
     fn recv_rtcp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_rtsp_stream_recv_rtcp(
+            from_glib(gst_rtsp_server_sys::gst_rtsp_stream_recv_rtcp(
                 self.as_ref().to_glib_none().0,
                 buffer.to_glib_full(),
             ))
@@ -23,7 +23,7 @@ impl<O: IsA<RTSPStream>> RTSPStreamExtManual for O {
 
     fn recv_rtp(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         let ret: gst::FlowReturn = unsafe {
-            from_glib(ffi::gst_rtsp_stream_recv_rtp(
+            from_glib(gst_rtsp_server_sys::gst_rtsp_stream_recv_rtp(
                 self.as_ref().to_glib_none().0,
                 buffer.to_glib_full(),
             ))

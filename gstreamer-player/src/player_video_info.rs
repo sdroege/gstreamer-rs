@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib::translate::*;
 use gst;
+use gst_player_sys;
 use std::mem;
 use PlayerVideoInfo;
 
@@ -17,7 +17,11 @@ impl PlayerVideoInfo {
         unsafe {
             let mut fps_n = mem::uninitialized();
             let mut fps_d = mem::uninitialized();
-            ffi::gst_player_video_info_get_framerate(self.to_glib_none().0, &mut fps_n, &mut fps_d);
+            gst_player_sys::gst_player_video_info_get_framerate(
+                self.to_glib_none().0,
+                &mut fps_n,
+                &mut fps_d,
+            );
             (fps_n as i32, fps_d as i32).into()
         }
     }
@@ -26,7 +30,7 @@ impl PlayerVideoInfo {
         unsafe {
             let mut par_n = mem::uninitialized();
             let mut par_d = mem::uninitialized();
-            ffi::gst_player_video_info_get_pixel_aspect_ratio(
+            gst_player_sys::gst_player_video_info_get_pixel_aspect_ratio(
                 self.to_glib_none().0,
                 &mut par_n,
                 &mut par_d,

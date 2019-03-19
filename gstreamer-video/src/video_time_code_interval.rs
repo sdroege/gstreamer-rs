@@ -6,26 +6,26 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::prelude::*;
 use glib::translate::*;
 use glib::value;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gst_video_sys;
 use std::cmp;
 use std::fmt;
 use std::mem;
 use std::ptr;
 
 #[derive(Clone)]
-pub struct VideoTimeCodeInterval(ffi::GstVideoTimeCodeInterval);
+pub struct VideoTimeCodeInterval(gst_video_sys::GstVideoTimeCodeInterval);
 
 impl VideoTimeCodeInterval {
     pub fn from_string(tc_inter_str: &str) -> Option<Self> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_video_time_code_interval_new_from_string(
+            from_glib_full(gst_video_sys::gst_video_time_code_interval_new_from_string(
                 tc_inter_str.to_glib_none().0,
             ))
         }
@@ -35,7 +35,9 @@ impl VideoTimeCodeInterval {
         assert_initialized_main_thread!();
         unsafe {
             let mut v = mem::zeroed();
-            ffi::gst_video_time_code_interval_init(&mut v, hours, minutes, seconds, frames);
+            gst_video_sys::gst_video_time_code_interval_init(
+                &mut v, hours, minutes, seconds, frames,
+            );
             VideoTimeCodeInterval(v)
         }
     }
@@ -131,69 +133,71 @@ impl fmt::Display for VideoTimeCodeInterval {
 
 #[doc(hidden)]
 impl GlibPtrDefault for VideoTimeCodeInterval {
-    type GlibType = *mut ffi::GstVideoTimeCodeInterval;
+    type GlibType = *mut gst_video_sys::GstVideoTimeCodeInterval;
 }
 
 #[doc(hidden)]
-impl<'a> ToGlibPtr<'a, *const ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
+impl<'a> ToGlibPtr<'a, *const gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     type Storage = &'a Self;
 
     #[inline]
-    fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstVideoTimeCodeInterval, Self> {
+    fn to_glib_none(&'a self) -> Stash<'a, *const gst_video_sys::GstVideoTimeCodeInterval, Self> {
         Stash(&self.0 as *const _, self)
     }
 
     #[inline]
-    fn to_glib_full(&self) -> *const ffi::GstVideoTimeCodeInterval {
-        unsafe { ffi::gst_video_time_code_interval_copy(&self.0 as *const _) }
+    fn to_glib_full(&self) -> *const gst_video_sys::GstVideoTimeCodeInterval {
+        unsafe { gst_video_sys::gst_video_time_code_interval_copy(&self.0 as *const _) }
     }
 }
 
 #[doc(hidden)]
-impl<'a> ToGlibPtrMut<'a, *mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
+impl<'a> ToGlibPtrMut<'a, *mut gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     type Storage = &'a mut Self;
 
     #[inline]
-    fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GstVideoTimeCodeInterval, Self> {
+    fn to_glib_none_mut(
+        &'a mut self,
+    ) -> StashMut<'a, *mut gst_video_sys::GstVideoTimeCodeInterval, Self> {
         let ptr = &mut self.0 as *mut _;
         StashMut(ptr, self)
     }
 }
 
 #[doc(hidden)]
-impl FromGlibPtrNone<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
+impl FromGlibPtrNone<*mut gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut ffi::GstVideoTimeCodeInterval) -> Self {
+    unsafe fn from_glib_none(ptr: *mut gst_video_sys::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
         VideoTimeCodeInterval(ptr::read(ptr))
     }
 }
 
 #[doc(hidden)]
-impl FromGlibPtrNone<*const ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
+impl FromGlibPtrNone<*const gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     #[inline]
-    unsafe fn from_glib_none(ptr: *const ffi::GstVideoTimeCodeInterval) -> Self {
+    unsafe fn from_glib_none(ptr: *const gst_video_sys::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
         VideoTimeCodeInterval(ptr::read(ptr))
     }
 }
 
 #[doc(hidden)]
-impl FromGlibPtrFull<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
+impl FromGlibPtrFull<*mut gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GstVideoTimeCodeInterval) -> Self {
+    unsafe fn from_glib_full(ptr: *mut gst_video_sys::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
         let res = VideoTimeCodeInterval(ptr::read(ptr));
-        ffi::gst_video_time_code_interval_free(ptr);
+        gst_video_sys::gst_video_time_code_interval_free(ptr);
 
         res
     }
 }
 
 #[doc(hidden)]
-impl FromGlibPtrBorrow<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
+impl FromGlibPtrBorrow<*mut gst_video_sys::GstVideoTimeCodeInterval> for VideoTimeCodeInterval {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut ffi::GstVideoTimeCodeInterval) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_video_sys::GstVideoTimeCodeInterval) -> Self {
         assert!(!ptr.is_null());
         VideoTimeCodeInterval(ptr::read(ptr))
     }
@@ -201,27 +205,27 @@ impl FromGlibPtrBorrow<*mut ffi::GstVideoTimeCodeInterval> for VideoTimeCodeInte
 
 impl StaticType for VideoTimeCodeInterval {
     fn static_type() -> glib::Type {
-        unsafe { from_glib(ffi::gst_video_time_code_interval_get_type()) }
+        unsafe { from_glib(gst_video_sys::gst_video_time_code_interval_get_type()) }
     }
 }
 
 #[doc(hidden)]
 impl<'a> value::FromValueOptional<'a> for VideoTimeCodeInterval {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
-        Option::<VideoTimeCodeInterval>::from_glib_full(gobject_ffi::g_value_dup_boxed(
+        Option::<VideoTimeCodeInterval>::from_glib_full(gobject_sys::g_value_dup_boxed(
             value.to_glib_none().0,
         )
-            as *mut ffi::GstVideoTimeCodeInterval)
+            as *mut gst_video_sys::GstVideoTimeCodeInterval)
     }
 }
 
 #[doc(hidden)]
 impl value::SetValue for VideoTimeCodeInterval {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_ffi::g_value_set_boxed(
+        gobject_sys::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            ToGlibPtr::<*const ffi::GstVideoTimeCodeInterval>::to_glib_none(this).0
-                as glib_ffi::gpointer,
+            ToGlibPtr::<*const gst_video_sys::GstVideoTimeCodeInterval>::to_glib_none(this).0
+                as glib_sys::gpointer,
         )
     }
 }
@@ -229,10 +233,10 @@ impl value::SetValue for VideoTimeCodeInterval {
 #[doc(hidden)]
 impl value::SetValueOptional for VideoTimeCodeInterval {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_ffi::g_value_set_boxed(
+        gobject_sys::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            ToGlibPtr::<*const ffi::GstVideoTimeCodeInterval>::to_glib_none(&this).0
-                as glib_ffi::gpointer,
+            ToGlibPtr::<*const gst_video_sys::GstVideoTimeCodeInterval>::to_glib_none(&this).0
+                as glib_sys::gpointer,
         )
     }
 }

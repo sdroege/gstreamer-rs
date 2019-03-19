@@ -6,15 +6,15 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use ffi;
 use glib;
 use glib::translate::*;
 use glib::value::{FromValueOptional, ToValue};
 use glib::StaticType;
 use glib::Value;
-use glib_ffi;
-use glib_ffi::{gconstpointer, gpointer};
-use gobject_ffi;
+use glib_sys;
+use glib_sys::{gconstpointer, gpointer};
+use gobject_sys;
+use gst_sys;
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
@@ -50,7 +50,7 @@ impl Error for IteratorError {
 // Implemented manually so that we can use generics for the item
 #[derive(Debug)]
 pub struct Iterator<T> {
-    iter: ptr::NonNull<ffi::GstIterator>,
+    iter: ptr::NonNull<gst_sys::GstIterator>,
     borrowed: bool,
     phantom: PhantomData<T>,
 }
@@ -63,22 +63,23 @@ where
     pub fn next(&mut self) -> Result<Option<T>, IteratorError> {
         unsafe {
             let mut value = Value::uninitialized();
-            let res = ffi::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
+            let res =
+                gst_sys::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
             match res {
-                ffi::GST_ITERATOR_OK => match value.get::<T>() {
+                gst_sys::GST_ITERATOR_OK => match value.get::<T>() {
                     Some(value) => Ok(Some(value)),
                     None => Err(IteratorError::Error),
                 },
-                ffi::GST_ITERATOR_DONE => Ok(None),
-                ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
-                ffi::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
+                gst_sys::GST_ITERATOR_DONE => Ok(None),
+                gst_sys::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
+                gst_sys::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
             }
         }
     }
 
     pub fn resync(&mut self) {
         unsafe {
-            ffi::gst_iterator_resync(self.to_glib_none_mut().0);
+            gst_sys::gst_iterator_resync(self.to_glib_none_mut().0);
         }
     }
 
@@ -92,12 +93,12 @@ where
 
             let func_box: Box<Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
             let mut closure_value = glib::Value::from_type(from_glib(filter_boxed_get_type::<T>()));
-            gobject_ffi::g_value_set_boxed(
+            gobject_sys::g_value_set_boxed(
                 closure_value.to_glib_none_mut().0,
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
             );
 
-            from_glib_full(ffi::gst_iterator_filter(
+            from_glib_full(gst_sys::gst_iterator_filter(
                 it as *mut _,
                 Some(filter_trampoline::<T>),
                 closure_value.to_glib_none().0,
@@ -115,7 +116,7 @@ where
             let mut func = func;
             let func_ptr = &mut func as *mut F as gpointer;
 
-            let res = from_glib(ffi::gst_iterator_find_custom(
+            let res = from_glib(gst_sys::gst_iterator_find_custom(
                 self.to_glib_none_mut().0,
                 Some(find_trampoline::<T, F>),
                 elem.to_glib_none_mut().0,
@@ -137,16 +138,16 @@ where
             let mut func = func;
             let func_ptr = &mut func as *mut F as gpointer;
 
-            let res = ffi::gst_iterator_foreach(
+            let res = gst_sys::gst_iterator_foreach(
                 self.to_glib_none_mut().0,
                 Some(foreach_trampoline::<T, F>),
                 func_ptr,
             );
 
             match res {
-                ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(()),
-                ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
-                ffi::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
+                gst_sys::GST_ITERATOR_OK | gst_sys::GST_ITERATOR_DONE => Ok(()),
+                gst_sys::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
+                gst_sys::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
             }
         }
     }
@@ -161,12 +162,12 @@ where
 
             let mut accum = Some(init);
             let mut ret = glib::Value::from_type(glib::Type::Pointer);
-            gobject_ffi::g_value_set_pointer(
+            gobject_sys::g_value_set_pointer(
                 ret.to_glib_none_mut().0,
                 &mut accum as *mut _ as gpointer,
             );
 
-            let res = ffi::gst_iterator_fold(
+            let res = gst_sys::gst_iterator_fold(
                 self.to_glib_none_mut().0,
                 Some(fold_trampoline::<T, U, F>),
                 ret.to_glib_none_mut().0,
@@ -174,9 +175,9 @@ where
             );
 
             match res {
-                ffi::GST_ITERATOR_OK | ffi::GST_ITERATOR_DONE => Ok(accum.unwrap()),
-                ffi::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
-                ffi::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
+                gst_sys::GST_ITERATOR_OK | gst_sys::GST_ITERATOR_DONE => Ok(accum.unwrap()),
+                gst_sys::GST_ITERATOR_RESYNC => Err(IteratorError::Resync),
+                gst_sys::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
             }
         }
     }
@@ -190,7 +191,7 @@ where
         static DUMMY_COOKIE: u32 = 0;
 
         unsafe {
-            let it = ffi::gst_iterator_new(
+            let it = gst_sys::gst_iterator_new(
                 mem::size_of::<RsIterator<T, I>>() as u32,
                 T::static_type().to_glib(),
                 ptr::null_mut(),
@@ -226,7 +227,7 @@ struct RsIterator<T, I: IteratorImpl<T>>
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
-    iter: ffi::GstIterator,
+    iter: gst_sys::GstIterator,
     imp: Option<I>,
     phantom: PhantomData<T>,
 }
@@ -240,8 +241,8 @@ where
 }
 
 unsafe extern "C" fn rs_iterator_copy<T, I: IteratorImpl<T>>(
-    it: *const ffi::GstIterator,
-    copy: *mut ffi::GstIterator,
+    it: *const gst_sys::GstIterator,
+    copy: *mut gst_sys::GstIterator,
 ) where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
@@ -251,7 +252,7 @@ unsafe extern "C" fn rs_iterator_copy<T, I: IteratorImpl<T>>(
     ptr::write(&mut (*copy).imp, (*it).imp.clone());
 }
 
-unsafe extern "C" fn rs_iterator_free<T, I: IteratorImpl<T>>(it: *mut ffi::GstIterator)
+unsafe extern "C" fn rs_iterator_free<T, I: IteratorImpl<T>>(it: *mut gst_sys::GstIterator)
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
@@ -260,9 +261,9 @@ where
 }
 
 unsafe extern "C" fn rs_iterator_next<T, I: IteratorImpl<T>>(
-    it: *mut ffi::GstIterator,
-    result: *mut gobject_ffi::GValue,
-) -> ffi::GstIteratorResult
+    it: *mut gst_sys::GstIterator,
+    result: *mut gobject_sys::GValue,
+) -> gst_sys::GstIteratorResult
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
@@ -272,17 +273,17 @@ where
             let value = value.to_value();
             ptr::write(result, ptr::read(value.to_glib_none().0));
             mem::forget(value);
-            ffi::GST_ITERATOR_OK
+            gst_sys::GST_ITERATOR_OK
         }
-        None => ffi::GST_ITERATOR_DONE,
+        None => gst_sys::GST_ITERATOR_DONE,
         Some(Err(res)) => match res {
-            IteratorError::Resync => ffi::GST_ITERATOR_RESYNC,
-            IteratorError::Error => ffi::GST_ITERATOR_ERROR,
+            IteratorError::Resync => gst_sys::GST_ITERATOR_RESYNC,
+            IteratorError::Error => gst_sys::GST_ITERATOR_ERROR,
         },
     }
 }
 
-unsafe extern "C" fn rs_iterator_resync<T, I: IteratorImpl<T>>(it: *mut ffi::GstIterator)
+unsafe extern "C" fn rs_iterator_resync<T, I: IteratorImpl<T>>(it: *mut gst_sys::GstIterator)
 where
     for<'a> T: FromValueOptional<'a> + StaticType + ToValue + Send + 'static,
 {
@@ -330,10 +331,10 @@ unsafe extern "C" fn filter_trampoline<T>(value: gconstpointer, func: gconstpoin
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
-    let value = value as *const gobject_ffi::GValue;
+    let value = value as *const gobject_sys::GValue;
 
-    let func = func as *const gobject_ffi::GValue;
-    let func = gobject_ffi::g_value_get_boxed(func);
+    let func = func as *const gobject_sys::GValue;
+    let func = gobject_sys::g_value_get_boxed(func);
     #[allow(clippy::transmute_ptr_to_ref)]
     let func: &&(Fn(T) -> bool + Send + Sync + 'static) = mem::transmute(func);
 
@@ -361,10 +362,10 @@ unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
     let _ = Arc::from_raw(boxed as *const (Box<Fn(T) -> bool + Send + Sync + 'static>));
 }
 
-unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_ffi::GType {
+unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_sys::GType {
     use std::sync::{Once, ONCE_INIT};
 
-    static mut TYPE: glib_ffi::GType = gobject_ffi::G_TYPE_INVALID;
+    static mut TYPE: glib_sys::GType = gobject_sys::G_TYPE_INVALID;
     static ONCE: Once = ONCE_INIT;
 
     ONCE.call_once(|| {
@@ -378,7 +379,7 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_ff
                     idx
                 ))
                 .unwrap();
-                if gobject_ffi::g_type_from_name(type_name.as_ptr()) == gobject_ffi::G_TYPE_INVALID
+                if gobject_sys::g_type_from_name(type_name.as_ptr()) == gobject_sys::G_TYPE_INVALID
                 {
                     break type_name;
                 }
@@ -386,7 +387,7 @@ unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_ff
             }
         };
 
-        TYPE = gobject_ffi::g_boxed_type_register_static(
+        TYPE = gobject_sys::g_boxed_type_register_static(
             type_name.as_ptr(),
             Some(filter_boxed_ref::<T>),
             Some(filter_boxed_unref::<T>),
@@ -403,7 +404,7 @@ unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
-    let value = value as *const gobject_ffi::GValue;
+    let value = value as *const gobject_sys::GValue;
 
     let func = func as *mut F;
     let value = &*(value as *const glib::Value);
@@ -417,7 +418,7 @@ where
 }
 
 unsafe extern "C" fn foreach_trampoline<T, F: FnMut(T)>(
-    value: *const gobject_ffi::GValue,
+    value: *const gobject_sys::GValue,
     func: gpointer,
 ) where
     for<'a> T: FromValueOptional<'a> + 'static,
@@ -430,10 +431,10 @@ unsafe extern "C" fn foreach_trampoline<T, F: FnMut(T)>(
 }
 
 unsafe extern "C" fn fold_trampoline<T, U, F: FnMut(U, T) -> Result<U, U>>(
-    value: *const gobject_ffi::GValue,
-    ret: *mut gobject_ffi::GValue,
+    value: *const gobject_sys::GValue,
+    ret: *mut gobject_sys::GValue,
     func: gpointer,
-) -> glib_ffi::gboolean
+) -> glib_sys::gboolean
 where
     for<'a> T: FromValueOptional<'a> + 'static,
 {
@@ -441,23 +442,23 @@ where
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
 
-    let accum = &mut *(gobject_ffi::g_value_get_pointer(ret) as *mut Option<U>);
+    let accum = &mut *(gobject_sys::g_value_get_pointer(ret) as *mut Option<U>);
 
     match (*func)(accum.take().unwrap(), value) {
         Ok(next_accum) => {
             *accum = Some(next_accum);
-            glib_ffi::GTRUE
+            glib_sys::GTRUE
         }
         Err(next_accum) => {
             *accum = Some(next_accum);
-            glib_ffi::GFALSE
+            glib_sys::GFALSE
         }
     }
 }
 
 impl<T: StaticType + 'static> Clone for Iterator<T> {
     fn clone(&self) -> Self {
-        unsafe { from_glib_full(ffi::gst_iterator_copy(self.to_glib_none().0)) }
+        unsafe { from_glib_full(gst_sys::gst_iterator_copy(self.to_glib_none().0)) }
     }
 }
 
@@ -465,7 +466,7 @@ impl<T> Drop for Iterator<T> {
     fn drop(&mut self) {
         if !self.borrowed {
             unsafe {
-                ffi::gst_iterator_free(self.iter.as_ptr());
+                gst_sys::gst_iterator_free(self.iter.as_ptr());
             }
         }
     }
@@ -473,7 +474,7 @@ impl<T> Drop for Iterator<T> {
 
 impl<T> glib::types::StaticType for Iterator<T> {
     fn static_type() -> glib::types::Type {
-        unsafe { glib::translate::from_glib(ffi::gst_iterator_get_type()) }
+        unsafe { glib::translate::from_glib(gst_sys::gst_iterator_get_type()) }
     }
 }
 
@@ -481,7 +482,7 @@ impl<T> glib::types::StaticType for Iterator<T> {
 impl<'a, T: StaticType> glib::value::FromValueOptional<'a> for Iterator<T> {
     unsafe fn from_value_optional(value: &glib::Value) -> Option<Self> {
         Option::<Iterator<T>>::from_glib_none(
-            gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstIterator,
+            gobject_sys::g_value_get_boxed(value.to_glib_none().0) as *mut gst_sys::GstIterator,
         )
     }
 }
@@ -489,10 +490,10 @@ impl<'a, T: StaticType> glib::value::FromValueOptional<'a> for Iterator<T> {
 #[doc(hidden)]
 impl<T: 'static> glib::value::SetValue for Iterator<T> {
     unsafe fn set_value(value: &mut glib::Value, this: &Self) {
-        gobject_ffi::g_value_set_boxed(
+        gobject_sys::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstIterator>::to_glib_none(this).0
-                as glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const gst_sys::GstIterator>::to_glib_none(this).0
+                as glib_sys::gpointer,
         )
     }
 }
@@ -500,76 +501,76 @@ impl<T: 'static> glib::value::SetValue for Iterator<T> {
 #[doc(hidden)]
 impl<T: 'static> glib::value::SetValueOptional for Iterator<T> {
     unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
-        gobject_ffi::g_value_set_boxed(
+        gobject_sys::g_value_set_boxed(
             value.to_glib_none_mut().0,
-            glib::translate::ToGlibPtr::<*const ffi::GstIterator>::to_glib_none(&this).0
-                as glib_ffi::gpointer,
+            glib::translate::ToGlibPtr::<*const gst_sys::GstIterator>::to_glib_none(&this).0
+                as glib_sys::gpointer,
         )
     }
 }
 
 #[doc(hidden)]
 impl<T> glib::translate::GlibPtrDefault for Iterator<T> {
-    type GlibType = *mut ffi::GstIterator;
+    type GlibType = *mut gst_sys::GstIterator;
 }
 
 #[doc(hidden)]
-impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const ffi::GstIterator> for Iterator<T> {
+impl<'a, T: 'static> glib::translate::ToGlibPtr<'a, *const gst_sys::GstIterator> for Iterator<T> {
     type Storage = &'a Iterator<T>;
 
-    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstIterator, Self> {
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const gst_sys::GstIterator, Self> {
         glib::translate::Stash(self.iter.as_ptr(), self)
     }
 
-    fn to_glib_full(&self) -> *const ffi::GstIterator {
+    fn to_glib_full(&self) -> *const gst_sys::GstIterator {
         unimplemented!()
     }
 }
 
 #[doc(hidden)]
-impl<'a, T: 'static> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstIterator> for Iterator<T> {
+impl<'a, T: 'static> glib::translate::ToGlibPtrMut<'a, *mut gst_sys::GstIterator> for Iterator<T> {
     type Storage = &'a mut Iterator<T>;
 
     #[inline]
     fn to_glib_none_mut(
         &'a mut self,
-    ) -> glib::translate::StashMut<'a, *mut ffi::GstIterator, Self> {
+    ) -> glib::translate::StashMut<'a, *mut gst_sys::GstIterator, Self> {
         glib::translate::StashMut(self.iter.as_ptr(), self)
     }
 }
 
 #[doc(hidden)]
-impl<T: StaticType> glib::translate::FromGlibPtrNone<*const ffi::GstIterator> for Iterator<T> {
+impl<T: StaticType> glib::translate::FromGlibPtrNone<*const gst_sys::GstIterator> for Iterator<T> {
     #[inline]
-    unsafe fn from_glib_none(ptr: *const ffi::GstIterator) -> Self {
+    unsafe fn from_glib_none(ptr: *const gst_sys::GstIterator) -> Self {
         assert_ne!(
-            gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
-            glib_ffi::GFALSE
+            gobject_sys::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib_sys::GFALSE
         );
-        from_glib_full(ffi::gst_iterator_copy(ptr))
+        from_glib_full(gst_sys::gst_iterator_copy(ptr))
     }
 }
 
 #[doc(hidden)]
-impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for Iterator<T> {
+impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut gst_sys::GstIterator> for Iterator<T> {
     #[inline]
-    unsafe fn from_glib_none(ptr: *mut ffi::GstIterator) -> Self {
+    unsafe fn from_glib_none(ptr: *mut gst_sys::GstIterator) -> Self {
         assert_ne!(
-            gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
-            glib_ffi::GFALSE
+            gobject_sys::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib_sys::GFALSE
         );
-        from_glib_full(ffi::gst_iterator_copy(ptr))
+        from_glib_full(gst_sys::gst_iterator_copy(ptr))
     }
 }
 
 #[doc(hidden)]
-impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> for Iterator<T> {
+impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut gst_sys::GstIterator> for Iterator<T> {
     #[inline]
-    unsafe fn from_glib_borrow(ptr: *mut ffi::GstIterator) -> Self {
+    unsafe fn from_glib_borrow(ptr: *mut gst_sys::GstIterator) -> Self {
         assert!(!ptr.is_null());
         assert_ne!(
-            gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
-            glib_ffi::GFALSE
+            gobject_sys::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib_sys::GFALSE
         );
         Self {
             iter: ptr::NonNull::new_unchecked(ptr),
@@ -580,13 +581,13 @@ impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> fo
 }
 
 #[doc(hidden)]
-impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut ffi::GstIterator> for Iterator<T> {
+impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut gst_sys::GstIterator> for Iterator<T> {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GstIterator) -> Self {
+    unsafe fn from_glib_full(ptr: *mut gst_sys::GstIterator) -> Self {
         assert!(!ptr.is_null());
         assert_ne!(
-            gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
-            glib_ffi::GFALSE
+            gobject_sys::g_type_is_a((*ptr).type_, T::static_type().to_glib()),
+            glib_sys::GFALSE
         );
         Self {
             iter: ptr::NonNull::new_unchecked(ptr),

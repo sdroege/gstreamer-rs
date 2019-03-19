@@ -10,18 +10,18 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 
-use ffi;
 use glib::translate::*;
+use gst_sdp_sys;
 
 #[repr(C)]
-pub struct SDPConnection(pub(crate) ffi::GstSDPConnection);
+pub struct SDPConnection(pub(crate) gst_sdp_sys::GstSDPConnection);
 
 impl SDPConnection {
     pub fn new(nettype: &str, addrtype: &str, address: &str, ttl: u32, addr_number: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
             let mut conn = mem::zeroed();
-            ffi::gst_sdp_connection_set(
+            gst_sdp_sys::gst_sdp_connection_set(
                 &mut conn,
                 nettype.to_glib_none().0,
                 addrtype.to_glib_none().0,
@@ -69,7 +69,7 @@ impl Clone for SDPConnection {
 impl Drop for SDPConnection {
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_sdp_connection_clear(&mut self.0);
+            gst_sdp_sys::gst_sdp_connection_clear(&mut self.0);
         }
     }
 }
