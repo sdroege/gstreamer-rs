@@ -57,6 +57,8 @@ pub use gl_display::GL_DISPLAY_CONTEXT_TYPE;
 mod gl_display_egl;
 mod gl_video_frame;
 pub use gl_video_frame::VideoFrameGLExt;
+mod gl_sync_meta;
+pub use gl_sync_meta::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
