@@ -50,6 +50,12 @@ impl SDPMedia {
     }
 }
 
+impl Default for SDPMedia {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 unsafe impl Send for SDPMedia {}
 unsafe impl Sync for SDPMedia {}
 
