@@ -282,6 +282,15 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.TagScope"
+status = "generate"
+    [[object.derive]]
+    name = "Serialize, Deserialize"
+    cfg_condition = "feature = \"ser_de\""
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+
+[[object]]
 name = "Gst.Query"
 status = "manual"
 ref_mode = "ref"

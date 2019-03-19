@@ -23,6 +23,7 @@ use miniobject::*;
 use Sample;
 use TagError;
 use TagMergeMode;
+use TagScope;
 
 pub trait Tag<'a> {
     type TagType: FromValueOptional<'a> + SetValue + Send;
@@ -498,6 +499,14 @@ impl TagListRef {
             ))
         }
     }
+
+    pub fn get_scope(&self) -> TagScope {
+        unsafe { from_glib(ffi::gst_tag_list_get_scope(self.as_ptr())) }
+    }
+
+    pub fn set_scope(&mut self, scope: TagScope) {
+        unsafe { ffi::gst_tag_list_set_scope(self.as_mut_ptr(), scope.to_glib()) }
+    }
 }
 
 impl fmt::Debug for TagListRef {
@@ -902,6 +911,19 @@ mod tests {
             tags.get_index::<Duration>(0).unwrap().get_some(),
             (::SECOND * 120)
         );
+    }
+
+    #[test]
+    fn test_scope() {
+        ::init().unwrap();
+
+        let mut tags = TagList::new();
+        assert_eq!(tags.get_scope(), TagScope::Stream);
+        {
+            let tags = tags.get_mut().unwrap();
+            tags.set_scope(TagScope::Global);
+        }
+        assert_eq!(tags.get_scope(), TagScope::Global);
     }
 
     #[test]

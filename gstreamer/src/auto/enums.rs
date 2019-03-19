@@ -2530,6 +2530,65 @@ impl SetValue for TagMergeMode {
     }
 }
 
+    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy)]
+pub enum TagScope {
+    Stream,
+    Global,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for TagScope {
+    type GlibType = ffi::GstTagScope;
+
+    fn to_glib(&self) -> ffi::GstTagScope {
+        match *self {
+            TagScope::Stream => ffi::GST_TAG_SCOPE_STREAM,
+            TagScope::Global => ffi::GST_TAG_SCOPE_GLOBAL,
+            TagScope::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstTagScope> for TagScope {
+    fn from_glib(value: ffi::GstTagScope) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => TagScope::Stream,
+            1 => TagScope::Global,
+            value => TagScope::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for TagScope {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gst_tag_scope_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for TagScope {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for TagScope {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for TagScope {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum TaskState {

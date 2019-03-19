@@ -146,6 +146,7 @@ pub use self::enums::StreamStatusType;
 pub use self::enums::StructureChangeType;
 pub use self::enums::TagFlag;
 pub use self::enums::TagMergeMode;
+pub use self::enums::TagScope;
 pub use self::enums::TaskState;
 pub use self::enums::TocEntryType;
 pub use self::enums::TocLoopType;
