@@ -327,16 +327,18 @@ fn load(gl_context: &glutin::Context) -> Gl {
 struct App {
     pipeline: gst::Pipeline,
     appsink: gst_app::AppSink,
+    glupload: gst::Element,
     bus: gst::Bus,
     events_loop: Arc<glutin::EventsLoop>,
     windowed_context: Arc<glutin::WindowedContext>,
+    shared_context: gst_gl::GLContext,
 }
 
 impl App {
     fn new() -> Result<App, Error> {
         gst::init()?;
 
-        let (pipeline, appsink) = App::create_pipeline()?;
+        let (pipeline, appsink, glupload) = App::create_pipeline()?;
         let bus = pipeline
             .get_bus()
             .expect("Pipeline without bus. Shouldn't happen!");
@@ -349,9 +351,12 @@ impl App {
                 .build_windowed(window, &events_loop)?,
         );
 
+        unsafe { windowed_context.make_current()? };
+
         let windowed_context_ = windowed_context.clone();
         let context = windowed_context_.context();
 
+        let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
             use glutin::os::unix::RawHandle;
             use glutin::os::ContextTraitExt;
@@ -369,9 +374,17 @@ impl App {
 
             let gl_display =
                 unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(egl_display) }.unwrap();
-            let gl_context =
+            shared_context =
                 unsafe { gst_gl::GLContext::new_wrapped(&gl_display, egl_context, platform, api) }
                     .unwrap();
+
+            shared_context
+                .activate(true)
+                .expect("Couldn't activate wrapped GL context");
+
+            shared_context.fill_info()?;
+
+            let gl_context = shared_context.clone();
 
             #[allow(clippy::single_match)]
             bus.set_sync_handler(move |_, msg| {
@@ -415,9 +428,11 @@ impl App {
         Ok(App {
             pipeline,
             appsink,
+            glupload,
             bus,
             events_loop: Arc::new(events_loop),
             windowed_context,
+            shared_context,
         })
     }
 
@@ -483,7 +498,7 @@ impl App {
         }
     }
 
-    fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSink), Error> {
+    fn create_pipeline() -> Result<(gst::Pipeline, gst_app::AppSink, gst::Element), Error> {
         let pipeline = gst::Pipeline::new(None);
         let src = gst::ElementFactory::make("videotestsrc", None)
             .ok_or(MissingElement("videotestsrc"))?;
@@ -511,7 +526,21 @@ impl App {
             .build();
         appsink.set_caps(&caps);
 
-        Ok((pipeline, appsink))
+        // get the glupload element to extract later the used context in it
+        let mut iter = sink.dynamic_cast::<gst::Bin>().unwrap().iterate_elements();
+        let glupload = loop {
+            match iter.next() {
+                Ok(Some(element)) => {
+                    if "glupload" == element.get_factory().unwrap().get_name() {
+                        break Some(element);
+                    }
+                }
+                Err(gst::IteratorError::Resync) => iter.resync(),
+                _ => break None,
+            }
+        };
+
+        Ok((pipeline, appsink, glupload.unwrap()))
     }
 
     fn gst_loop(bus: gst::Bus) -> Result<(), Error> {
@@ -540,8 +569,6 @@ impl App {
 }
 
 fn main_loop(mut app: App) -> Result<(), Error> {
-    unsafe { app.windowed_context.make_current()? };
-
     println!(
         "Pixel format of the window's GL context {:?}",
         app.windowed_context.get_pixel_format()
@@ -555,6 +582,8 @@ fn main_loop(mut app: App) -> Result<(), Error> {
     let mut running = true;
     let events_loop = Arc::get_mut(&mut app.events_loop).unwrap();
     let windowed_context = app.windowed_context.clone();
+    let mut gst_gl_context: Option<gst_gl::GLContext> = None;
+
     while running {
         #[allow(clippy::single_match)]
         events_loop.poll_events(|event| match event {
@@ -577,12 +606,28 @@ fn main_loop(mut app: App) -> Result<(), Error> {
                 .get_caps()
                 .and_then(|caps| gst_video::VideoInfo::from_caps(caps.as_ref()))
                 .unwrap();
+
+            {
+                if gst_gl_context.is_none() {
+                    gst_gl_context = app
+                        .glupload
+                        .get_property("context")
+                        .unwrap()
+                        .get::<gst_gl::GLContext>();
+                }
+
+                let sync_meta = buffer.as_ref().get_meta::<gst_gl::GLSyncMeta>().unwrap();
+                sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
+            }
+
             if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
                 curr_frame = Some(Arc::new(frame));
             }
         }
 
         if let Some(frame) = curr_frame.clone() {
+            let sync_meta = frame.buffer().get_meta::<gst_gl::GLSyncMeta>().unwrap();
+            sync_meta.wait(&app.shared_context);
             if let Some(texture) = frame.get_texture_id(0) {
                 gl.draw_frame(texture as gl::types::GLuint);
             }
