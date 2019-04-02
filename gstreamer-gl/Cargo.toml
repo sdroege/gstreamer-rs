@@ -5,11 +5,11 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>",
            "Víctor M. Jáquez L. <vjaquez@igalia.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer GL library"
-repository = "https://github.com/sdroege/gstreamer-rs"
+repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT/Apache-2.0"
 readme = "README.md"
 homepage = "https://gstreamer.freedesktop.org"
-documentation = "https://sdroege.github.io/rustdoc/gstreamer/gstreamer_gl"
+documentation = "https://slomo.pages.freedesktop.org/rustdocs/gstreamer/gstreamer_gl"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
 
