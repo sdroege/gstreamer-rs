@@ -45,3 +45,16 @@ cfg_condition = "feature = \"egl\""
 #[[object]]
 #name = "GstGL.GL_COLOR_CONVERT_VIDEO_CAPS"
 #status = "manual"
+
+[[object]]
+name = "GstGL.GLDisplayX11"
+status = "generate"
+cfg_condition = "feature = \"x11\""
+    [[object.function]]
+    pattern = ".*"
+    cfg_condition = "feature = \"x11\""
+
+[[object]]
+name = "GstGL.GLDisplayX11Class"
+status = "generate"
+cfg_condition = "feature = \"x11\""
