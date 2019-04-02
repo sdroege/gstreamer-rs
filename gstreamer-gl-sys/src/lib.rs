@@ -549,6 +549,24 @@ impl ::std::fmt::Debug for GstGLDisplayPrivate {
     }
 }
 
+#[cfg(any(feature = "wayland", feature = "dox"))]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct GstGLDisplayWaylandClass {
+    pub object_class: GstGLDisplayClass,
+    pub _padding: [gpointer; 4],
+}
+
+#[cfg(any(feature = "wayland", feature = "dox"))]
+impl ::std::fmt::Debug for GstGLDisplayWaylandClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLDisplayWaylandClass @ {:?}", self as *const _))
+         .field("object_class", &self.object_class)
+         .field("_padding", &self._padding)
+         .finish()
+    }
+}
+
 #[cfg(any(feature = "x11", feature = "dox"))]
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1172,6 +1190,34 @@ impl ::std::fmt::Debug for GstGLDisplayEGL {
     }
 }
 
+#[cfg(any(feature = "wayland", feature = "dox"))]
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct GstGLDisplayWayland {
+    pub parent: GstGLDisplay,
+    pub display: gpointer,
+    pub registry: gpointer,
+    pub compositor: gpointer,
+    pub subcompositor: gpointer,
+    pub shell: gpointer,
+    pub foreign_display: gboolean,
+    pub _padding: [gpointer; 4],
+}
+
+#[cfg(any(feature = "wayland", feature = "dox"))]
+impl ::std::fmt::Debug for GstGLDisplayWayland {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstGLDisplayWayland @ {:?}", self as *const _))
+         .field("parent", &self.parent)
+         .field("display", &self.display)
+         .field("registry", &self.registry)
+         .field("compositor", &self.compositor)
+         .field("subcompositor", &self.subcompositor)
+         .field("shell", &self.shell)
+         .finish()
+    }
+}
+
 #[cfg(any(feature = "x11", feature = "dox"))]
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1666,6 +1712,16 @@ extern "C" {
     pub fn gst_gl_display_egl_new_with_egl_display(display: gpointer) -> *mut GstGLDisplayEGL;
     #[cfg(any(feature = "egl", feature = "dox"))]
     pub fn gst_gl_display_egl_get_from_native(type_: GstGLDisplayType, display: uintptr_t) -> gpointer;
+
+    //=========================================================================
+    // GstGLDisplayWayland
+    //=========================================================================
+    #[cfg(any(feature = "wayland", feature = "dox"))]
+    pub fn gst_gl_display_wayland_get_type() -> GType;
+    #[cfg(any(feature = "wayland", feature = "dox"))]
+    pub fn gst_gl_display_wayland_new(name: *const c_char) -> *mut GstGLDisplayWayland;
+    #[cfg(any(feature = "wayland", feature = "dox"))]
+    pub fn gst_gl_display_wayland_new_with_display(display: gpointer) -> *mut GstGLDisplayWayland;
 
     //=========================================================================
     // GstGLDisplayX11

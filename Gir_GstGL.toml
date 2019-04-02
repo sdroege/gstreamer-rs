@@ -58,3 +58,16 @@ cfg_condition = "feature = \"x11\""
 name = "GstGL.GLDisplayX11Class"
 status = "generate"
 cfg_condition = "feature = \"x11\""
+
+[[object]]
+name = "GstGL.GLDisplayWayland"
+status = "generate"
+cfg_condition = "feature = \"wayland\""
+    [[object.function]]
+    pattern = ".*"
+    cfg_condition = "feature = \"wayland\""
+
+[[object]]
+name = "GstGL.GLDisplayWaylandClass"
+status = "generate"
+cfg_condition = "feature = \"wayland\""

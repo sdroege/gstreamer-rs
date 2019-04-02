@@ -266,6 +266,10 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
     #[cfg(any(feature = "egl", feature = "dox"))]
     ("GstGLDisplayEGLClass", Layout {size: size_of::<GstGLDisplayEGLClass>(), alignment: align_of::<GstGLDisplayEGLClass>()}),
     ("GstGLDisplayType", Layout {size: size_of::<GstGLDisplayType>(), alignment: align_of::<GstGLDisplayType>()}),
+    #[cfg(any(feature = "wayland", feature = "dox"))]
+    ("GstGLDisplayWayland", Layout {size: size_of::<GstGLDisplayWayland>(), alignment: align_of::<GstGLDisplayWayland>()}),
+    #[cfg(any(feature = "wayland", feature = "dox"))]
+    ("GstGLDisplayWaylandClass", Layout {size: size_of::<GstGLDisplayWaylandClass>(), alignment: align_of::<GstGLDisplayWaylandClass>()}),
     #[cfg(any(feature = "x11", feature = "dox"))]
     ("GstGLDisplayX11", Layout {size: size_of::<GstGLDisplayX11>(), alignment: align_of::<GstGLDisplayX11>()}),
     #[cfg(any(feature = "x11", feature = "dox"))]
