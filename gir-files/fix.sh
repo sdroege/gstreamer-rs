@@ -27,11 +27,19 @@ xmlstarlet ed --pf --inplace \
 	      --value GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS \
 	   GstGL-1.0.gir
 
-# Remove GstDisplayWayland
+# replace wayland structures to gpointers
 xmlstarlet ed --pf --inplace \
-	   --delete '//_:class[@name="GLDisplayWayland"]' \
-	   --delete '//_:record[@name="GLDisplayWaylandClass"]' \
-	   GstGL-1.0.gir
+            --update '//*[@c:type="wl_display*"]/@c:type' \
+              --value gpointer \
+	    --update '//*[@c:type="wl_registry*"]/@c:type' \
+	      --value gpointer \
+	    --update '//*[@c:type="wl_compositor*"]/@c:type' \
+	      --value gpointer \
+	    --update '//*[@c:type="wl_subcompositor*"]/@c:type' \
+	      --value gpointer \
+	    --update '//*[@c:type="wl_shell*"]/@c:type' \
+	      --value gpointer \
+	    GstGL-1.0.gir
 
 # Change X11's Display* and xcb_connection_t* pointers to gpointer
 xmlstarlet ed --pf --inplace \

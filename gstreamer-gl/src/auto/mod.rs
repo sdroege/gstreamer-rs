@@ -22,6 +22,11 @@ mod gl_display_egl;
 #[cfg(any(feature = "egl", feature = "dox"))]
 pub use self::gl_display_egl::{GLDisplayEGL, GLDisplayEGLClass};
 
+#[cfg(any(feature = "wayland", feature = "dox"))]
+mod gl_display_wayland;
+#[cfg(any(feature = "wayland", feature = "dox"))]
+pub use self::gl_display_wayland::{GLDisplayWayland, GLDisplayWaylandClass};
+
 #[cfg(any(feature = "x11", feature = "dox"))]
 mod gl_display_x11;
 #[cfg(any(feature = "x11", feature = "dox"))]
