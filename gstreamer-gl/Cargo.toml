@@ -37,5 +37,6 @@ optional = true
 default = []
 dox = ["gstreamer-gl-sys/dox", "glib/dox", "gstreamer/dox", "gstreamer-base/dox"]
 egl = ["gstreamer-gl-sys/egl"]
+x11 = ["gstreamer-gl-sys/x11"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]

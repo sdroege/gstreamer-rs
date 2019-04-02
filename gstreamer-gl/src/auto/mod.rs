@@ -22,6 +22,11 @@ mod gl_display_egl;
 #[cfg(any(feature = "egl", feature = "dox"))]
 pub use self::gl_display_egl::{GLDisplayEGL, GLDisplayEGLClass};
 
+#[cfg(any(feature = "x11", feature = "dox"))]
+mod gl_display_x11;
+#[cfg(any(feature = "x11", feature = "dox"))]
+pub use self::gl_display_x11::{GLDisplayX11, GLDisplayX11Class};
+
 mod gl_framebuffer;
 pub use self::gl_framebuffer::{GLFramebuffer, GLFramebufferClass, NONE_GL_FRAMEBUFFER};
 pub use self::gl_framebuffer::GLFramebufferExt;

@@ -55,6 +55,8 @@ mod gl_display;
 pub use gl_display::GL_DISPLAY_CONTEXT_TYPE;
 #[cfg(any(feature = "egl", feature = "dox"))]
 mod gl_display_egl;
+#[cfg(any(feature = "x11", feature = "dox"))]
+mod gl_display_x11;
 mod gl_video_frame;
 pub use gl_video_frame::VideoFrameGLExt;
 mod gl_sync_meta;

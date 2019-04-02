@@ -2658,8 +2658,67 @@ through the provided API</doc>
     </bitfield>
     
     
-    
-    
+    <class name="GLDisplayX11" c:symbol-prefix="gl_display_x11" c:type="GstGLDisplayX11" parent="GLDisplay" glib:type-name="GstGLDisplayX11" glib:get-type="gst_gl_display_x11_get_type" glib:type-struct="GLDisplayX11Class">
+      <doc xml:space="preserve">the contents of a #GstGLDisplayX11 are private and should only be accessed
+through the provided API</doc>
+      <constructor name="new" c:identifier="gst_gl_display_x11_new">
+        <doc xml:space="preserve">Create a new #GstGLDisplayX11 from the x11 display name.  See XOpenDisplay()
+for details on what is a valid name.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">a new #GstGLDisplayX11 or %NULL</doc>
+          <type name="GLDisplayX11" c:type="GstGLDisplayX11*"/>
+        </return-value>
+        <parameters>
+          <parameter name="name" transfer-ownership="none" nullable="1" allow-none="1">
+            <doc xml:space="preserve">a display name</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <constructor name="new_with_display" c:identifier="gst_gl_display_x11_new_with_display" introspectable="0">
+        <doc xml:space="preserve">Creates a new display connection from a X11 Display.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">a new #GstGLDisplayX11</doc>
+          <type name="GLDisplayX11" c:type="GstGLDisplayX11*"/>
+        </return-value>
+        <parameters>
+          <parameter name="display" transfer-ownership="none">
+            <doc xml:space="preserve">an existing, x11 display</doc>
+            <type c:type="gpointer" name="gpointer"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <field name="parent">
+        <type name="GLDisplay" c:type="GstGLDisplay"/>
+      </field>
+      <field name="name" readable="0" private="1">
+        <type name="utf8" c:type="gchar*"/>
+      </field>
+      <field name="display" introspectable="0" readable="0" private="1">
+        <type c:type="gpointer" name="gpointer"/>
+      </field>
+      <field name="xcb_connection" introspectable="0" readable="0" private="1">
+        <type c:type="gpointer" name="gpointer"/>
+      </field>
+      <field name="foreign_display" readable="0" private="1">
+        <type name="gboolean" c:type="gboolean"/>
+      </field>
+      <field name="_padding" readable="0" private="1">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </class>
+    <record name="GLDisplayX11Class" c:type="GstGLDisplayX11Class" glib:is-gtype-struct-for="GLDisplayX11">
+      <field name="object_class">
+        <type name="GLDisplayClass" c:type="GstGLDisplayClass"/>
+      </field>
+      <field name="_padding">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+    </record>
     <class name="GLFilter" c:symbol-prefix="gl_filter" c:type="GstGLFilter" parent="GLBaseFilter" glib:type-name="GstGLFilter" glib:get-type="gst_gl_filter_get_type" glib:type-struct="GLFilterClass">
       <doc xml:space="preserve">#GstGLFilter helps to implement simple OpenGL filter elements taking a
 single input and producing a single output with a #GstGLFramebuffer</doc>

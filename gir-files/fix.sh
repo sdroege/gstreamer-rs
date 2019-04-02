@@ -33,11 +33,17 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[@name="GLDisplayWaylandClass"]' \
 	   GstGL-1.0.gir
 
-# Remove GstDisplayX11
+# Change X11's Display* and xcb_connection_t* pointers to gpointer
 xmlstarlet ed --pf --inplace \
-	   --delete '//_:class[@name="GLDisplayX11"]' \
-	   --delete '//_:record[@name="GLDisplayX11Class"]' \
-	   GstGL-1.0.gir
+	   --insert '//_:type[@c:type="Display*"]' \
+              --type attr --name 'name' --value 'gpointer' \
+	   --insert '//_:type[@c:type="xcb_connection_t*"]' \
+              --type attr --name 'name' --value 'gpointer' \
+            --update '//*[@c:type="Display*"]/@c:type' \
+              --value gpointer \
+	    --update '//*[@c:type="xcb_connection_t*"]/@c:type' \
+	      --value gpointer \
+	    GstGL-1.0.gir
 
 # Remove GstMemoryEGL
 xmlstarlet ed --pf --inplace \

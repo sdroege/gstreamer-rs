@@ -193,6 +193,12 @@ final_type = true
 cfg_condition = "feature = \"egl\""
 
 [[object]]
+name = "GstGL.GLDisplayX11"
+status = "generate"
+final_type = true
+cfg_condition = "feature = \"x11\""
+
+[[object]]
 name = "GstGL.GLWindow"
 status = "generate"
 
