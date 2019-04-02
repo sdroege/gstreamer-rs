@@ -1,6 +1,6 @@
-// This example demostrates how to output GL textures, within an EGL
-// context provided by the application, and render those textures in
-// the GL application.
+// This example demostrates how to output GL textures, within an
+// EGL/X11 context provided by the application, and render those
+// textures in the GL application.
 
 // {videotestsrc} - { glsinkbin }
 
@@ -355,27 +355,52 @@ impl App {
 
         let windowed_context_ = windowed_context.clone();
         let context = windowed_context_.context();
+        let inner_window = windowed_context_.window();
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
             use glutin::os::unix::RawHandle;
             use glutin::os::ContextTraitExt;
 
-            let egl_context = match unsafe { context.raw_handle() } {
-                RawHandle::Egl(egl_context) => egl_context as usize,
-                _ => panic!("Invalid platform"),
-            };
-            let egl_display = match unsafe { context.get_egl_display() } {
-                Some(display) => display as usize,
-                _ => panic!("Invalid platform"),
-            };
             let api = App::map_gl_api(context.get_api());
-            let platform = gst_gl::GLPlatform::EGL;
 
-            let gl_display =
-                unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(egl_display) }.unwrap();
+            let (gl_context, gl_display, platform) = match unsafe { context.raw_handle() } {
+                #[cfg(feature = "gl-egl")]
+                RawHandle::Egl(egl_context) => {
+                    let gl_display = if let Some(display) = unsafe { context.get_egl_display() } {
+                        unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(display as usize) }
+                            .unwrap()
+                    } else {
+                        panic!("EGL context without EGL display");
+                    };
+
+                    (
+                        egl_context as usize,
+                        gl_display.upcast::<gst_gl::GLDisplay>(),
+                        gst_gl::GLPlatform::EGL,
+                    )
+                }
+                #[cfg(feature = "gl-x11")]
+                RawHandle::Glx(glx_context) => {
+                    use glutin::os::unix::WindowExt;
+
+                    let gl_display = if let Some(display) = inner_window.get_xlib_display() {
+                        unsafe { gst_gl::GLDisplayX11::new_with_display(display as usize) }.unwrap()
+                    } else {
+                        panic!("X11 window without X Display");
+                    };
+
+                    (
+                        glx_context as usize,
+                        gl_display.upcast::<gst_gl::GLDisplay>(),
+                        gst_gl::GLPlatform::GLX,
+                    )
+                }
+                _ => panic!("Unsupported platform"),
+            };
+
             shared_context =
-                unsafe { gst_gl::GLContext::new_wrapped(&gl_display, egl_context, platform, api) }
+                unsafe { gst_gl::GLContext::new_wrapped(&gl_display, gl_context, platform, api) }
                     .unwrap();
 
             shared_context
@@ -388,10 +413,8 @@ impl App {
 
             #[allow(clippy::single_match)]
             bus.set_sync_handler(move |_, msg| {
-                use gst::MessageView;
-
                 match msg.view() {
-                    MessageView::NeedContext(ctxt) => {
+                    gst::MessageView::NeedContext(ctxt) => {
                         let context_type = ctxt.get_context_type();
                         if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
                             if let Some(el) =

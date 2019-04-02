@@ -27,6 +27,7 @@ cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], opt
 pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
 glutin = { version = "0.20", optional = true }
+winit = { version = "0.19", optional = true }
 
 [build-dependencies]
 gl_generator = { version = "0.10", optional = true }
@@ -45,7 +46,9 @@ gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 v1_10 = ["gstreamer/v1_10"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
-gl = ["gstreamer-gl/egl", "gl_generator", "glutin"]
+gl = ["gl_generator", "glutin"]
+gl-egl = ["gstreamer-gl/egl"]
+gl-x11 = ["gstreamer-gl/x11"]
 
 [[bin]]
 name = "appsink"
@@ -137,3 +140,4 @@ required-features = ["ges"]
 [[bin]]
 name = "glupload"
 required-features = ["gl"]
+features = ["gl-egl", "gl-x11"]
