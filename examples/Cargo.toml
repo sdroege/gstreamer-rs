@@ -49,6 +49,7 @@ pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 gl = ["gl_generator", "glutin"]
 gl-egl = ["gstreamer-gl/egl"]
 gl-x11 = ["gstreamer-gl/x11"]
+gl-wayland = ["gstreamer-gl/wayland"]
 
 [[bin]]
 name = "appsink"
@@ -140,4 +141,4 @@ required-features = ["ges"]
 [[bin]]
 name = "glupload"
 required-features = ["gl"]
-features = ["gl-egl", "gl-x11"]
+features = ["gl-egl", "gl-x11", "gl-wayland"]

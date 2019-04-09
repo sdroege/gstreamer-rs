@@ -355,23 +355,36 @@ impl App {
 
         let windowed_context_ = windowed_context.clone();
         let context = windowed_context_.context();
+
+        #[cfg(any(feature = "gl-x11", feature = "gl-wayland"))]
         let inner_window = windowed_context_.window();
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
             use glutin::os::unix::RawHandle;
+            #[cfg(any(feature = "gl-x11", feature = "gl-wayland"))]
+            use glutin::os::unix::WindowExt;
             use glutin::os::ContextTraitExt;
 
             let api = App::map_gl_api(context.get_api());
 
             let (gl_context, gl_display, platform) = match unsafe { context.raw_handle() } {
-                #[cfg(feature = "gl-egl")]
+                #[cfg(any(feature = "gl-egl", feature = "gl-wayland"))]
                 RawHandle::Egl(egl_context) => {
+                    #[cfg(feature = "gl-egl")]
                     let gl_display = if let Some(display) = unsafe { context.get_egl_display() } {
                         unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(display as usize) }
                             .unwrap()
                     } else {
                         panic!("EGL context without EGL display");
+                    };
+
+                    #[cfg(not(feature = "gl-egl"))]
+                    let gl_display = if let Some(display) = inner_window.get_wayland_display() {
+                        unsafe { gst_gl::GLDisplayWayland::new_with_display(display as usize) }
+                            .unwrap()
+                    } else {
+                        panic!("Wayland window without Wayland display");
                     };
 
                     (
@@ -382,8 +395,6 @@ impl App {
                 }
                 #[cfg(feature = "gl-x11")]
                 RawHandle::Glx(glx_context) => {
-                    use glutin::os::unix::WindowExt;
-
                     let gl_display = if let Some(display) = inner_window.get_xlib_display() {
                         unsafe { gst_gl::GLDisplayX11::new_with_display(display as usize) }.unwrap()
                     } else {
@@ -396,7 +407,7 @@ impl App {
                         gst_gl::GLPlatform::GLX,
                     )
                 }
-                _ => panic!("Unsupported platform"),
+                handler => panic!("Unsupported platform: {:?}.", handler),
             };
 
             shared_context =
