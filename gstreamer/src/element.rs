@@ -47,12 +47,12 @@ use gobject_ffi;
 impl Element {
     pub fn link_many<E: IsA<Element>>(elements: &[&E]) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
-        for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
+        for e in elements.windows(2) {
             unsafe {
                 glib_result_from_gboolean!(
                     ffi::gst_element_link(
-                        e1.as_ref().to_glib_none().0,
-                        e2.as_ref().to_glib_none().0,
+                        e[0].as_ref().to_glib_none().0,
+                        e[1].as_ref().to_glib_none().0,
                     ),
                     "Failed to link elements"
                 )?;
@@ -64,9 +64,12 @@ impl Element {
 
     pub fn unlink_many<E: IsA<Element>>(elements: &[&E]) {
         skip_assert_initialized!();
-        for (e1, e2) in elements.iter().zip(elements.iter().skip(1)) {
+        for e in elements.windows(2) {
             unsafe {
-                ffi::gst_element_unlink(e1.as_ref().to_glib_none().0, e2.as_ref().to_glib_none().0);
+                ffi::gst_element_unlink(
+                    e[0].as_ref().to_glib_none().0,
+                    e[1].as_ref().to_glib_none().0,
+                );
             }
         }
     }
