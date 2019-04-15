@@ -21,8 +21,8 @@ fn tutorial_main() {
     gst::init().unwrap();
 
     // Creat the playbin element
-    let playbin =
-        gst::ElementFactory::make("playbin", "playbin").expect("Failed to create playbin element");
+    let playbin = gst::ElementFactory::make("playbin", Some("playbin"))
+        .expect("Failed to create playbin element");
 
     // Set the URI to play
     let uri =

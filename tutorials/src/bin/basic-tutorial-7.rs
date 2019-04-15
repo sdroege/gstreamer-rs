@@ -11,18 +11,19 @@ fn tutorial_main() {
         return;
     }
 
-    let audio_source = gst::ElementFactory::make("audiotestsrc", "audio_source").unwrap();
-    let tee = gst::ElementFactory::make("tee", "tee").unwrap();
-    let audio_queue = gst::ElementFactory::make("queue", "audio_queue").unwrap();
-    let audio_convert = gst::ElementFactory::make("audioconvert", "audio_convert").unwrap();
-    let audio_resample = gst::ElementFactory::make("audioresample", "audio_resample").unwrap();
-    let audio_sink = gst::ElementFactory::make("autoaudiosink", "audio_sink").unwrap();
-    let video_queue = gst::ElementFactory::make("queue", "video_queue").unwrap();
-    let visual = gst::ElementFactory::make("wavescope", "visual").unwrap();
-    let video_convert = gst::ElementFactory::make("videoconvert", "video_convert").unwrap();
-    let video_sink = gst::ElementFactory::make("autovideosink", "video_sink").unwrap();
+    let audio_source = gst::ElementFactory::make("audiotestsrc", Some("audio_source")).unwrap();
+    let tee = gst::ElementFactory::make("tee", Some("tee")).unwrap();
+    let audio_queue = gst::ElementFactory::make("queue", Some("audio_queue")).unwrap();
+    let audio_convert = gst::ElementFactory::make("audioconvert", Some("audio_convert")).unwrap();
+    let audio_resample =
+        gst::ElementFactory::make("audioresample", Some("audio_resample")).unwrap();
+    let audio_sink = gst::ElementFactory::make("autoaudiosink", Some("audio_sink")).unwrap();
+    let video_queue = gst::ElementFactory::make("queue", Some("video_queue")).unwrap();
+    let visual = gst::ElementFactory::make("wavescope", Some("visual")).unwrap();
+    let video_convert = gst::ElementFactory::make("videoconvert", Some("video_convert")).unwrap();
+    let video_sink = gst::ElementFactory::make("autovideosink", Some("video_sink")).unwrap();
 
-    let pipeline = gst::Pipeline::new("test-pipeline");
+    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     audio_source.set_property("freq", &215.0).unwrap();
     visual.set_property_from_str("shader", "none");

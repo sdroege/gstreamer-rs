@@ -558,7 +558,7 @@ impl App {
             .field("format", &gst_video::VideoFormat::Rgba.to_string())
             .field("texture-target", &"2D")
             .build();
-        appsink.set_caps(&caps);
+        appsink.set_caps(Some(&caps));
 
         // get the glupload element to extract later the used context in it
         let mut iter = sink.dynamic_cast::<gst::Bin>().unwrap().iterate_elements();

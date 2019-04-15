@@ -94,14 +94,14 @@ fn tutorial_main() {
 
     // Ask the factories to instantiate actual elements
     let source = source_factory
-        .create("source")
+        .create(Some("source"))
         .expect("Failed to create source element");
     let sink = sink_factory
-        .create("sink")
+        .create(Some("sink"))
         .expect("Failed to create sink element");
 
     // Create the empty pipeline
-    let pipeline = gst::Pipeline::new("test-pipeline");
+    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     pipeline.add_many(&[&source, &sink]).unwrap();
     source.link(&sink).expect("Elements could not be linked.");

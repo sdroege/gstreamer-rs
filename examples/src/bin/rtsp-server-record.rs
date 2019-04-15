@@ -106,11 +106,11 @@ fn main_loop() -> Result<(), Error> {
         );
     }
 
-    auth.set_tls_certificate(&cert);
+    auth.set_tls_certificate(Some(&cert));
     auth.add_basic(basic.as_str(), &token);
     // Here, we tell the RTSP server about the authentication method we
     // configured above.
-    server.set_auth(&auth);
+    server.set_auth(Some(&auth));
 
     factory.set_launch(args[1].as_str());
     // Tell the RTSP server that we want to work in RECORD mode (clients send)

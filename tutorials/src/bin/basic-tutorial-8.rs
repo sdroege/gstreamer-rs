@@ -52,21 +52,22 @@ fn main() {
         return;
     }
 
-    let appsrc = gst::ElementFactory::make("appsrc", "audio_source").unwrap();
-    let tee = gst::ElementFactory::make("tee", "tee").unwrap();
-    let audio_queue = gst::ElementFactory::make("queue", "audio_queue").unwrap();
-    let audio_convert1 = gst::ElementFactory::make("audioconvert", "audio_convert1").unwrap();
-    let audio_resample = gst::ElementFactory::make("audioresample", "audio_resample").unwrap();
-    let audio_sink = gst::ElementFactory::make("autoaudiosink", "audio_sink").unwrap();
-    let video_queue = gst::ElementFactory::make("queue", "video_queue").unwrap();
-    let audio_convert2 = gst::ElementFactory::make("audioconvert", "audio_convert2").unwrap();
-    let visual = gst::ElementFactory::make("wavescope", "visual").unwrap();
-    let video_convert = gst::ElementFactory::make("videoconvert", "video_convert").unwrap();
-    let video_sink = gst::ElementFactory::make("autovideosink", "video_sink").unwrap();
-    let app_queue = gst::ElementFactory::make("queue", "app_queue").unwrap();
-    let appsink = gst::ElementFactory::make("appsink", "app_sink").unwrap();
+    let appsrc = gst::ElementFactory::make("appsrc", Some("audio_source")).unwrap();
+    let tee = gst::ElementFactory::make("tee", Some("tee")).unwrap();
+    let audio_queue = gst::ElementFactory::make("queue", Some("audio_queue")).unwrap();
+    let audio_convert1 = gst::ElementFactory::make("audioconvert", Some("audio_convert1")).unwrap();
+    let audio_resample =
+        gst::ElementFactory::make("audioresample", Some("audio_resample")).unwrap();
+    let audio_sink = gst::ElementFactory::make("autoaudiosink", Some("audio_sink")).unwrap();
+    let video_queue = gst::ElementFactory::make("queue", Some("video_queue")).unwrap();
+    let audio_convert2 = gst::ElementFactory::make("audioconvert", Some("audio_convert2")).unwrap();
+    let visual = gst::ElementFactory::make("wavescope", Some("visual")).unwrap();
+    let video_convert = gst::ElementFactory::make("videoconvert", Some("video_convert")).unwrap();
+    let video_sink = gst::ElementFactory::make("autovideosink", Some("video_sink")).unwrap();
+    let app_queue = gst::ElementFactory::make("queue", Some("app_queue")).unwrap();
+    let appsink = gst::ElementFactory::make("appsink", Some("app_sink")).unwrap();
 
-    let pipeline = gst::Pipeline::new("test-pipeline");
+    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     visual.set_property_from_str("shader", "none");
     visual.set_property_from_str("style", "lines");
@@ -130,7 +131,7 @@ fn main() {
     let appsrc = appsrc
         .dynamic_cast::<AppSrc>()
         .expect("Source element is expected to be an appsrc!");
-    appsrc.set_caps(&audio_caps);
+    appsrc.set_caps(Some(&audio_caps));
     appsrc.set_property_format(gst::Format::Time);
 
     let appsink = appsink
@@ -216,7 +217,7 @@ fn main() {
 
     // configure appsink
     appsink.set_emit_signals(true);
-    appsink.set_caps(&audio_caps);
+    appsink.set_caps(Some(&audio_caps));
 
     let data_weak = Arc::downgrade(&data);
     appsink.connect_new_sample(move |_| {

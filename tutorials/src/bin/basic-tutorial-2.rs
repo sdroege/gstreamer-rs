@@ -9,13 +9,13 @@ fn tutorial_main() {
     gst::init().unwrap();
 
     // Create the elements
-    let source = gst::ElementFactory::make("videotestsrc", "source")
+    let source = gst::ElementFactory::make("videotestsrc", Some("source"))
         .expect("Could not create source element.");
-    let sink =
-        gst::ElementFactory::make("autovideosink", "sink").expect("Could not create sink element");
+    let sink = gst::ElementFactory::make("autovideosink", Some("sink"))
+        .expect("Could not create sink element");
 
     // Create the empty pipeline
-    let pipeline = gst::Pipeline::new("test-pipeline");
+    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     // Build the pipeline
     pipeline.add_many(&[&source, &sink]).unwrap();

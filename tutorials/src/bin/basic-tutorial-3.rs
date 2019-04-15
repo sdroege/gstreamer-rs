@@ -9,15 +9,15 @@ fn tutorial_main() {
     gst::init().unwrap();
 
     // Create the elements
-    let source = gst::ElementFactory::make("uridecodebin", "source")
+    let source = gst::ElementFactory::make("uridecodebin", Some("source"))
         .expect("Could not create uridecodebin element.");
-    let convert = gst::ElementFactory::make("audioconvert", "convert")
+    let convert = gst::ElementFactory::make("audioconvert", Some("convert"))
         .expect("Could not create convert element.");
-    let sink =
-        gst::ElementFactory::make("autoaudiosink", "sink").expect("Could not create sink element.");
+    let sink = gst::ElementFactory::make("autoaudiosink", Some("sink"))
+        .expect("Could not create sink element.");
 
     // Create the empty pipeline
-    let pipeline = gst::Pipeline::new("test-pipeline");
+    let pipeline = gst::Pipeline::new(Some("test-pipeline"));
 
     // Build the pipeline Note that we are NOT linking the source at this
     // point. We will do it later.
