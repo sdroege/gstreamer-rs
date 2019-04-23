@@ -41,15 +41,29 @@ pub trait RTSPStreamTransportExt: 'static {
 
     fn keep_alive(&self);
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn message_sent(&self);
+
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
 
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool;
+
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError>;
+
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool;
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError>;
 
     //fn set_callbacks<P: Fn(&gst::Buffer, u8) -> bool + 'static, Q: Fn(&gst::Buffer, u8) -> bool + 'static>(&self, send_rtp: P, send_rtcp: Q);
 
     fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P);
+
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
+
+    fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P);
 
     fn set_timed_out(&self, timedout: bool);
 
@@ -93,17 +107,34 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn message_sent(&self) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_message_sent(self.as_ref().to_glib_none().0);
+        }
+    }
+
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtcp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtcp")
         }
     }
 
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //fn send_rtcp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool {
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_send_rtcp_list() }
+    //}
+
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtp")
         }
     }
+
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //fn send_rtp_list(&self, buffer_list: /*Ignored*/&mut gst::BufferList) -> bool {
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_send_rtp_list() }
+    //}
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -129,6 +160,28 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         let super_callback0: Box_<P> = keep_alive_data;
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_stream_transport_set_keepalive(self.as_ref().to_glib_none().0, keep_alive, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
+
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //fn set_list_callbacks(&self, send_rtp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, send_rtcp_list: /*Unimplemented*/Fn(/*Ignored*/gst::BufferList, u8) -> bool, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_stream_transport_set_list_callbacks() }
+    //}
+
+    fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P) {
+        let message_sent_data: Box_<P> = Box::new(message_sent);
+        unsafe extern "C" fn message_sent_func<P: Fn() + 'static>(user_data: glib_sys::gpointer) {
+            let callback: &P = &*(user_data as *mut _);
+            (*callback)();
+        }
+        let message_sent = Some(message_sent_func::<P> as _);
+        unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib_sys::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(notify_func::<P> as _);
+        let super_callback0: Box_<P> = message_sent_data;
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_message_sent(self.as_ref().to_glib_none().0, message_sent, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
     }
 

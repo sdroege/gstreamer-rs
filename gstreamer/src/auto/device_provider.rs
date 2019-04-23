@@ -47,6 +47,9 @@ pub trait DeviceProviderExt: 'static {
 
     fn device_add<P: IsA<Device>>(&self, device: &P);
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q);
+
     fn device_remove<P: IsA<Device>>(&self, device: &P);
 
     fn get_bus(&self) -> Bus;
@@ -80,6 +83,13 @@ impl<O: IsA<DeviceProvider>> DeviceProviderExt for O {
     fn device_add<P: IsA<Device>>(&self, device: &P) {
         unsafe {
             gst_sys::gst_device_provider_device_add(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn device_changed<P: IsA<Device>, Q: IsA<Device>>(&self, device: &P, changed_device: &Q) {
+        unsafe {
+            gst_sys::gst_device_provider_device_changed(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0, changed_device.as_ref().to_glib_none().0);
         }
     }
 

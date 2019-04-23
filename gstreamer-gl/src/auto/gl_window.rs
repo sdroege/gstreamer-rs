@@ -42,6 +42,9 @@ unsafe impl Sync for GLWindow {}
 pub const NONE_GL_WINDOW: Option<&GLWindow> = None;
 
 pub trait GLWindowExt: 'static {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn controls_viewport(&self) -> bool;
+
     fn draw(&self);
 
     fn get_context(&self) -> Option<GLContext>;
@@ -74,6 +77,13 @@ pub trait GLWindowExt: 'static {
 }
 
 impl<O: IsA<GLWindow>> GLWindowExt for O {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn controls_viewport(&self) -> bool {
+        unsafe {
+            from_glib(gst_gl_sys::gst_gl_window_controls_viewport(self.as_ref().to_glib_none().0))
+        }
+    }
+
     fn draw(&self) {
         unsafe {
             gst_gl_sys::gst_gl_window_draw(self.as_ref().to_glib_none().0);

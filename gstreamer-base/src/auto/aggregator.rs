@@ -45,6 +45,9 @@ pub trait AggregatorExt: 'static {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn set_src_caps(&self, caps: &gst::Caps);
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn simple_get_next_time(&self) -> gst::ClockTime;
+
     fn get_property_start_time(&self) -> u64;
 
     fn set_property_start_time(&self, start_time: u64);
@@ -86,6 +89,13 @@ impl<O: IsA<Aggregator>> AggregatorExt for O {
     fn set_src_caps(&self, caps: &gst::Caps) {
         unsafe {
             gst_base_sys::gst_aggregator_set_src_caps(self.as_ref().to_glib_none().0, caps.to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn simple_get_next_time(&self) -> gst::ClockTime {
+        unsafe {
+            from_glib(gst_base_sys::gst_aggregator_simple_get_next_time(self.as_ref().to_glib_none().0))
         }
     }
 

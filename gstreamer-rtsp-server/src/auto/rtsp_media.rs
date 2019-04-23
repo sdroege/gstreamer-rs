@@ -51,7 +51,8 @@ pub const NONE_RTSP_MEDIA: Option<&RTSPMedia> = None;
 pub trait RTSPMediaExt: 'static {
     fn collect_streams(&self);
 
-    //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 9, id: 31 }) -> bool;
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 10, id: 31 }) -> bool;
 
     fn create_stream<P: IsA<gst::Element>, Q: IsA<gst::Pad>>(&self, payloader: &P, pad: &Q) -> Option<RTSPStream>;
 
@@ -65,9 +66,15 @@ pub trait RTSPMediaExt: 'static {
 
     fn get_clock(&self) -> Option<gst::Clock>;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn get_do_retransmission(&self) -> bool;
+
     fn get_element(&self) -> Option<gst::Element>;
 
     fn get_latency(&self) -> u32;
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn get_max_mcast_ttl(&self) -> u32;
 
     fn get_multicast_iface(&self) -> Option<GString>;
 
@@ -95,6 +102,9 @@ pub trait RTSPMediaExt: 'static {
 
     //fn handle_sdp(&self, sdp: /*Ignored*/&mut gst_sdp::SDPMessage) -> bool;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn is_bind_mcast_address(&self) -> bool;
+
     fn is_eos_shutdown(&self) -> bool;
 
     fn is_reusable(&self) -> bool;
@@ -111,19 +121,30 @@ pub trait RTSPMediaExt: 'static {
 
     //fn seek(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange) -> bool;
 
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool;
 
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff;
 
     fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>);
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_bind_mcast_address(&self, bind_mcast_addr: bool);
 
     fn set_buffer_size(&self, size: u32);
 
     fn set_clock<P: IsA<gst::Clock>>(&self, clock: Option<&P>);
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_do_retransmission(&self, do_retransmission: bool);
+
     fn set_eos_shutdown(&self, eos_shutdown: bool);
 
     fn set_latency(&self, latency: u32);
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_max_mcast_ttl(&self, ttl: u32) -> bool;
 
     fn set_multicast_iface(&self, multicast_iface: Option<&str>);
 
@@ -143,7 +164,7 @@ pub trait RTSPMediaExt: 'static {
 
     fn set_shared(&self, shared: bool);
 
-    //fn set_state(&self, state: gst::State, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 26 }) -> bool;
+    //fn set_state(&self, state: gst::State, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 27 }) -> bool;
 
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool);
 
@@ -163,7 +184,15 @@ pub trait RTSPMediaExt: 'static {
 
     fn use_time_provider(&self, time_provider: bool);
 
+    fn get_property_bind_mcast_address(&self) -> bool;
+
+    fn set_property_bind_mcast_address(&self, bind_mcast_address: bool);
+
     fn get_property_eos_shutdown(&self) -> bool;
+
+    fn get_property_max_mcast_ttl(&self) -> u32;
+
+    fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32);
 
     fn get_property_reusable(&self) -> bool;
 
@@ -185,6 +214,8 @@ pub trait RTSPMediaExt: 'static {
 
     fn connect_unprepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
+    fn connect_property_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
     fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
@@ -192,6 +223,8 @@ pub trait RTSPMediaExt: 'static {
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -217,7 +250,8 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 9, id: 31 }) -> bool {
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //fn complete_pipeline(&self, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 10, id: 31 }) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_complete_pipeline() }
     //}
 
@@ -257,6 +291,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn get_do_retransmission(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_get_do_retransmission(self.as_ref().to_glib_none().0))
+        }
+    }
+
     fn get_element(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_full(gst_rtsp_server_sys::gst_rtsp_media_get_element(self.as_ref().to_glib_none().0))
@@ -266,6 +307,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn get_latency(&self) -> u32 {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_get_latency(self.as_ref().to_glib_none().0)
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn get_max_mcast_ttl(&self) -> u32 {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_get_max_mcast_ttl(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -341,6 +389,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_handle_sdp() }
     //}
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn is_bind_mcast_address(&self) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_bind_mcast_address(self.as_ref().to_glib_none().0))
+        }
+    }
+
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_media_is_eos_shutdown(self.as_ref().to_glib_none().0))
@@ -385,10 +440,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek() }
     //}
 
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn seek_full(&self, range: /*Ignored*/&mut gst_rtsp::RTSPTimeRange, flags: /*Ignored*/gst::SeekFlags) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seek_full() }
     //}
 
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //fn seekable(&self) -> /*Ignored*/gst::ClockTimeDiff {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_seekable() }
     //}
@@ -396,6 +453,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn set_address_pool<P: IsA<RTSPAddressPool>>(&self, pool: Option<&P>) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_set_address_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_bind_mcast_address(&self, bind_mcast_addr: bool) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_set_bind_mcast_address(self.as_ref().to_glib_none().0, bind_mcast_addr.to_glib());
         }
     }
 
@@ -411,6 +475,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_do_retransmission(&self, do_retransmission: bool) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_media_set_do_retransmission(self.as_ref().to_glib_none().0, do_retransmission.to_glib());
+        }
+    }
+
     fn set_eos_shutdown(&self, eos_shutdown: bool) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_set_eos_shutdown(self.as_ref().to_glib_none().0, eos_shutdown.to_glib());
@@ -420,6 +491,13 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     fn set_latency(&self, latency: u32) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_media_set_latency(self.as_ref().to_glib_none().0, latency);
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_max_mcast_ttl(&self, ttl: u32) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_media_set_max_mcast_ttl(self.as_ref().to_glib_none().0, ttl))
         }
     }
 
@@ -475,7 +553,7 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
-    //fn set_state(&self, state: gst::State, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 26 }) -> bool {
+    //fn set_state(&self, state: gst::State, transports: /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 27 }) -> bool {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_media_set_state() }
     //}
 
@@ -531,11 +609,39 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    fn get_property_bind_mcast_address(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"bind-mcast-address\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_bind_mcast_address(&self, bind_mcast_address: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"bind-mcast-address\0".as_ptr() as *const _, Value::from(&bind_mcast_address).to_glib_none().0);
+        }
+    }
+
     fn get_property_eos_shutdown(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"eos-shutdown\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
+        }
+    }
+
+    fn get_property_max_mcast_ttl(&self) -> u32 {
+        unsafe {
+            let mut value = Value::from_type(<u32 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"max-mcast-ttl\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32) {
+        unsafe {
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"max-mcast-ttl\0".as_ptr() as *const _, Value::from(&max_mcast_ttl).to_glib_none().0);
         }
     }
 
@@ -617,6 +723,14 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
         }
     }
 
+    fn connect_property_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::bind-mcast-address\0".as_ptr() as *const _,
+                Some(transmute(notify_bind_mcast_address_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
     fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -646,6 +760,14 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::latency\0".as_ptr() as *const _,
                 Some(transmute(notify_latency_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
+    fn connect_property_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::max-mcast-ttl\0".as_ptr() as *const _,
+                Some(transmute(notify_max_mcast_ttl_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -750,6 +872,12 @@ where P: IsA<RTSPMedia> {
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }
 
+unsafe extern "C" fn notify_bind_mcast_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+where P: IsA<RTSPMedia> {
+    let f: &F = &*(f as *const F);
+    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+}
+
 unsafe extern "C" fn notify_buffer_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPMedia> {
     let f: &F = &*(f as *const F);
@@ -769,6 +897,12 @@ where P: IsA<RTSPMedia> {
 }
 
 unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+where P: IsA<RTSPMedia> {
+    let f: &F = &*(f as *const F);
+    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_max_mcast_ttl_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RTSPMedia> {
     let f: &F = &*(f as *const F);
     f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())

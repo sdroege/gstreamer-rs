@@ -84,6 +84,30 @@ impl ErrorDomain for GLContextError {
     }
 }
 
+impl StaticType for GLContextError {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_context_error_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLContextError {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLContextError {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLContextError {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum GLFormat {
@@ -97,8 +121,10 @@ pub enum GLFormat {
     Rgb,
     Rgb8,
     Rgb565,
+    Rgb16,
     Rgba,
     Rgba8,
+    Rgba16,
     DepthComponent16,
     Depth24Stencil8,
     #[doc(hidden)]
@@ -121,8 +147,10 @@ impl ToGlib for GLFormat {
             GLFormat::Rgb => gst_gl_sys::GST_GL_RGB,
             GLFormat::Rgb8 => gst_gl_sys::GST_GL_RGB8,
             GLFormat::Rgb565 => gst_gl_sys::GST_GL_RGB565,
+            GLFormat::Rgb16 => gst_gl_sys::GST_GL_RGB16,
             GLFormat::Rgba => gst_gl_sys::GST_GL_RGBA,
             GLFormat::Rgba8 => gst_gl_sys::GST_GL_RGBA8,
+            GLFormat::Rgba16 => gst_gl_sys::GST_GL_RGBA16,
             GLFormat::DepthComponent16 => gst_gl_sys::GST_GL_DEPTH_COMPONENT16,
             GLFormat::Depth24Stencil8 => gst_gl_sys::GST_GL_DEPTH24_STENCIL8,
             GLFormat::__Unknown(value) => value
@@ -145,12 +173,38 @@ impl FromGlib<gst_gl_sys::GstGLFormat> for GLFormat {
             6407 => GLFormat::Rgb,
             32849 => GLFormat::Rgb8,
             36194 => GLFormat::Rgb565,
+            32852 => GLFormat::Rgb16,
             6408 => GLFormat::Rgba,
             32856 => GLFormat::Rgba8,
+            32859 => GLFormat::Rgba16,
             33189 => GLFormat::DepthComponent16,
             35056 => GLFormat::Depth24Stencil8,
             value => GLFormat::__Unknown(value),
         }
+    }
+}
+
+impl StaticType for GLFormat {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_format_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLFormat {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLFormat {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLFormat {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -188,6 +242,30 @@ impl FromGlib<gst_gl_sys::GstGLQueryType> for GLQueryType {
             2 => GLQueryType::Timestamp,
             value => GLQueryType::__Unknown(value),
         }
+    }
+}
+
+impl StaticType for GLQueryType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_query_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLQueryType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLQueryType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLQueryType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -246,6 +324,30 @@ impl ErrorDomain for GLSLError {
             2 => Some(GLSLError::Program),
             value => Some(GLSLError::__Unknown(value)),
         }
+    }
+}
+
+impl StaticType for GLSLError {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_glsl_error_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLSLError {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLSLError {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLSLError {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -328,6 +430,30 @@ impl FromGlib<gst_gl_sys::GstGLSLVersion> for GLSLVersion {
     }
 }
 
+impl StaticType for GLSLVersion {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_glsl_version_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLSLVersion {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLSLVersion {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLSLVersion {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum GLStereoDownmix {
@@ -367,7 +493,7 @@ impl FromGlib<gst_gl_sys::GstGLStereoDownmix> for GLStereoDownmix {
 
 impl StaticType for GLStereoDownmix {
     fn static_type() -> Type {
-        unsafe { from_glib(gst_gl_sys::gst_gl_stereo_downmix_mode_get_type()) }
+        unsafe { from_glib(gst_gl_sys::gst_gl_stereo_downmix_get_type()) }
     }
 }
 
@@ -429,6 +555,30 @@ impl FromGlib<gst_gl_sys::GstGLTextureTarget> for GLTextureTarget {
     }
 }
 
+impl StaticType for GLTextureTarget {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_texture_target_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLTextureTarget {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLTextureTarget {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLTextureTarget {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum GLUploadReturn {
@@ -436,6 +586,7 @@ pub enum GLUploadReturn {
     Error,
     Unsupported,
     Reconfigure,
+    UnsharedGlContext,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -450,6 +601,7 @@ impl ToGlib for GLUploadReturn {
             GLUploadReturn::Error => gst_gl_sys::GST_GL_UPLOAD_ERROR,
             GLUploadReturn::Unsupported => gst_gl_sys::GST_GL_UPLOAD_UNSUPPORTED,
             GLUploadReturn::Reconfigure => gst_gl_sys::GST_GL_UPLOAD_RECONFIGURE,
+            GLUploadReturn::UnsharedGlContext => gst_gl_sys::GST_GL_UPLOAD_UNSHARED_GL_CONTEXT,
             GLUploadReturn::__Unknown(value) => value
         }
     }
@@ -464,8 +616,33 @@ impl FromGlib<gst_gl_sys::GstGLUploadReturn> for GLUploadReturn {
             -1 => GLUploadReturn::Error,
             -2 => GLUploadReturn::Unsupported,
             -3 => GLUploadReturn::Reconfigure,
+            -100 => GLUploadReturn::UnsharedGlContext,
             value => GLUploadReturn::__Unknown(value),
         }
+    }
+}
+
+impl StaticType for GLUploadReturn {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_upload_return_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLUploadReturn {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLUploadReturn {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLUploadReturn {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -524,6 +701,30 @@ impl ErrorDomain for GLWindowError {
             2 => Some(GLWindowError::ResourceUnavailable),
             _ => Some(GLWindowError::Failed),
         }
+    }
+}
+
+impl StaticType for GLWindowError {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_window_error_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLWindowError {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLWindowError {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLWindowError {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

@@ -54,7 +54,7 @@ impl Bus {
     }
 
     //#[cfg(any(feature = "v1_14", feature = "dox"))]
-    //pub fn get_pollfd(&self, fd: /*Ignored*/&mut glib::PollFD) {
+    //pub fn get_pollfd(&self, fd: /*Ignored*/glib::PollFD) {
     //    unsafe { TODO: call gst_sys:gst_bus_get_pollfd() }
     //}
 

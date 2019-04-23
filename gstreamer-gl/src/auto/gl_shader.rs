@@ -4,8 +4,14 @@
 
 use Error;
 use GLContext;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use GLSLProfile;
 use GLSLStage;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use GLSLVersion;
 use glib;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
@@ -251,6 +257,30 @@ impl GLShader {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"linked\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn string_fragment_external_oes_get_default<P: IsA<GLContext>>(context: &P, version: GLSLVersion, profile: GLSLProfile) -> Option<GString> {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(gst_gl_sys::gst_gl_shader_string_fragment_external_oes_get_default(context.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn string_fragment_get_default<P: IsA<GLContext>>(context: &P, version: GLSLVersion, profile: GLSLProfile) -> Option<GString> {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_full(gst_gl_sys::gst_gl_shader_string_fragment_get_default(context.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn string_get_highest_precision<P: IsA<GLContext>>(context: &P, version: GLSLVersion, profile: GLSLProfile) -> Option<GString> {
+        skip_assert_initialized!();
+        unsafe {
+            from_glib_none(gst_gl_sys::gst_gl_shader_string_get_highest_precision(context.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
         }
     }
 

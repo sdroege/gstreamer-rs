@@ -39,6 +39,7 @@ unsafe impl Sync for EncodingProfile {}
 pub const NONE_ENCODING_PROFILE: Option<&EncodingProfile> = None;
 
 pub trait EncodingProfileExt: 'static {
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn copy(&self) -> EncodingProfile;
 
     fn get_allow_dynamic_output(&self) -> bool;
@@ -69,6 +70,7 @@ pub trait EncodingProfileExt: 'static {
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileExt for O {
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn copy(&self) -> EncodingProfile {
         unsafe {
             from_glib_full(gst_pbutils_sys::gst_encoding_profile_copy(self.as_ref().to_glib_none().0))

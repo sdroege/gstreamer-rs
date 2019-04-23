@@ -16,10 +16,12 @@ glib_wrapper! {
 }
 
 impl VideoOverlay {
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //pub fn install_properties(oclass: /*Ignored*/&mut glib::ObjectClass, last_prop_id: i32) {
     //    unsafe { TODO: call gst_video_sys:gst_video_overlay_install_properties() }
     //}
 
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
     //pub fn set_property<P: IsA<glib::Object>>(object: &P, last_prop_id: i32, property_id: u32, value: /*Ignored*/&glib::Value) -> bool {
     //    unsafe { TODO: call gst_video_sys:gst_video_overlay_set_property() }
     //}

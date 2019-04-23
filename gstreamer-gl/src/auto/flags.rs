@@ -2,7 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::StaticType;
+use glib::Type;
 use glib::translate::*;
+use glib::value::FromValue;
+use glib::value::FromValueOptional;
+use glib::value::SetValue;
+use glib::value::Value;
+use gobject_sys;
 use gst_gl_sys;
 
 bitflags! {
@@ -30,6 +37,30 @@ impl FromGlib<gst_gl_sys::GstGLAPI> for GLAPI {
     fn from_glib(value: gst_gl_sys::GstGLAPI) -> GLAPI {
         skip_assert_initialized!();
         GLAPI::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for GLAPI {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_api_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLAPI {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLAPI {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLAPI {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
@@ -65,6 +96,30 @@ impl FromGlib<gst_gl_sys::GstGLDisplayType> for GLDisplayType {
     }
 }
 
+impl StaticType for GLDisplayType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_display_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLDisplayType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLDisplayType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLDisplayType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 bitflags! {
     pub struct GLPlatform: u32 {
         const NONE = 0;
@@ -94,6 +149,30 @@ impl FromGlib<gst_gl_sys::GstGLPlatform> for GLPlatform {
     }
 }
 
+impl StaticType for GLPlatform {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_gl_platform_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLPlatform {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLPlatform {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLPlatform {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 bitflags! {
     pub struct GLSLProfile: u32 {
         const NONE = 0;
@@ -118,6 +197,30 @@ impl FromGlib<gst_gl_sys::GstGLSLProfile> for GLSLProfile {
     fn from_glib(value: gst_gl_sys::GstGLSLProfile) -> GLSLProfile {
         skip_assert_initialized!();
         GLSLProfile::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for GLSLProfile {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_gl_sys::gst_glsl_profile_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for GLSLProfile {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for GLSLProfile {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for GLSLProfile {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

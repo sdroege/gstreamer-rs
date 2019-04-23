@@ -85,6 +85,11 @@ impl TestClock {
         }
     }
 
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //pub fn timed_wait_for_multiple_pending_ids(&self, count: u32, timeout_ms: u32, pending_list: /*Unimplemented*/Vec<gst::ClockID>) -> bool {
+    //    unsafe { TODO: call gst_check_sys:gst_test_clock_timed_wait_for_multiple_pending_ids() }
+    //}
+
     //pub fn wait_for_multiple_pending_ids(&self, count: u32, pending_list: /*Unimplemented*/Vec<gst::ClockID>) {
     //    unsafe { TODO: call gst_check_sys:gst_test_clock_wait_for_multiple_pending_ids() }
     //}

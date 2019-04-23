@@ -127,6 +127,13 @@ impl Player {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_subtitle_video_offset(&self) -> i64 {
+        unsafe {
+            gst_player_sys::gst_player_get_subtitle_video_offset(self.to_glib_none().0)
+        }
+    }
+
     pub fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(gst_player_sys::gst_player_get_uri(self.to_glib_none().0))
@@ -232,6 +239,13 @@ impl Player {
     pub fn set_subtitle_uri(&self, uri: &str) {
         unsafe {
             gst_player_sys::gst_player_set_subtitle_uri(self.to_glib_none().0, uri.to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_subtitle_video_offset(&self, offset: i64) {
+        unsafe {
+            gst_player_sys::gst_player_set_subtitle_video_offset(self.to_glib_none().0, offset);
         }
     }
 
@@ -507,6 +521,15 @@ impl Player {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn connect_property_subtitle_video_offset_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::subtitle-video-offset\0".as_ptr() as *const _,
+                Some(transmute(notify_subtitle_video_offset_trampoline::<F> as usize)), Box_::into_raw(f))
+        }
+    }
+
     pub fn connect_property_suburi_notify<F: Fn(&Player) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -647,6 +670,12 @@ unsafe extern "C" fn notify_position_trampoline<F: Fn(&Player) + Send + Sync + '
 }
 
 unsafe extern "C" fn notify_rate_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut gst_player_sys::GstPlayer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    let f: &F = &*(f as *const F);
+    f(&from_glib_borrow(this))
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe extern "C" fn notify_subtitle_video_offset_trampoline<F: Fn(&Player) + Send + Sync + 'static>(this: *mut gst_player_sys::GstPlayer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

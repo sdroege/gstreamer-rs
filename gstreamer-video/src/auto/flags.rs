@@ -180,6 +180,8 @@ bitflags! {
         const ONEFIELD = 8;
         const MULTIPLE_VIEW = 16;
         const FIRST_IN_BUNDLE = 32;
+        const TOP_FIELD = 10;
+        const BOTTOM_FIELD = 8;
     }
 }
 
@@ -300,6 +302,30 @@ impl FromGlib<gst_video_sys::GstVideoOverlayFormatFlags> for VideoOverlayFormatF
     fn from_glib(value: gst_video_sys::GstVideoOverlayFormatFlags) -> VideoOverlayFormatFlags {
         skip_assert_initialized!();
         VideoOverlayFormatFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for VideoOverlayFormatFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_overlay_format_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoOverlayFormatFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoOverlayFormatFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoOverlayFormatFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 

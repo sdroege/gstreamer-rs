@@ -16,6 +16,7 @@ use glib_sys;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use gst_rtsp;
 use gst_rtsp_server_sys;
+use std;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -69,6 +70,9 @@ pub trait RTSPAuthExt: 'static {
 
     fn get_default_token(&self) -> Option<RTSPToken>;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn get_realm(&self) -> Option<GString>;
+
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn get_supported_methods(&self) -> gst_rtsp::RTSPAuthMethod;
 
@@ -78,10 +82,16 @@ pub trait RTSPAuthExt: 'static {
 
     fn get_tls_database(&self) -> Option<gio::TlsDatabase>;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool;
+
     fn remove_basic(&self, basic: &str);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn remove_digest(&self, user: &str);
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_realm(&self, realm: &str);
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn set_supported_methods(&self, methods: gst_rtsp::RTSPAuthMethod);
@@ -115,6 +125,13 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn get_realm(&self) -> Option<GString> {
+        unsafe {
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_auth_get_realm(self.as_ref().to_glib_none().0))
+        }
+    }
+
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn get_supported_methods(&self) -> gst_rtsp::RTSPAuthMethod {
         unsafe {
@@ -140,6 +157,13 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn parse_htdigest<P: AsRef<std::path::Path>>(&self, path: P, token: &RTSPToken) -> bool {
+        unsafe {
+            from_glib(gst_rtsp_server_sys::gst_rtsp_auth_parse_htdigest(self.as_ref().to_glib_none().0, path.as_ref().to_glib_none().0, token.to_glib_none().0))
+        }
+    }
+
     fn remove_basic(&self, basic: &str) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_remove_basic(self.as_ref().to_glib_none().0, basic.to_glib_none().0);
@@ -150,6 +174,13 @@ impl<O: IsA<RTSPAuth>> RTSPAuthExt for O {
     fn remove_digest(&self, user: &str) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_remove_digest(self.as_ref().to_glib_none().0, user.to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn set_realm(&self, realm: &str) {
+        unsafe {
+            gst_rtsp_server_sys::gst_rtsp_auth_set_realm(self.as_ref().to_glib_none().0, realm.to_glib_none().0);
         }
     }
 

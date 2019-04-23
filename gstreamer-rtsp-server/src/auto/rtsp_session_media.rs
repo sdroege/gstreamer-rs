@@ -47,7 +47,8 @@ pub trait RTSPSessionMediaExt: 'static {
 
     fn get_transport(&self, idx: u32) -> Option<RTSPStreamTransport>;
 
-    //fn get_transports(&self) -> /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 26 };
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //fn get_transports(&self) -> /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 27 };
 
     fn matches(&self, path: &str) -> Option<i32>;
 
@@ -91,7 +92,8 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
         }
     }
 
-    //fn get_transports(&self) -> /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 26 } {
+    //#[cfg(any(feature = "v1_14", feature = "dox"))]
+    //fn get_transports(&self) -> /*Unknown conversion*//*Unimplemented*/PtrArray TypeId { ns_id: 1, id: 27 } {
     //    unsafe { TODO: call gst_rtsp_server_sys:gst_rtsp_session_media_get_transports() }
     //}
 

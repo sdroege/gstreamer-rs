@@ -2,8 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 mod gl_base_filter;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 pub use self::gl_base_filter::{GLBaseFilter, GLBaseFilterClass, NONE_GL_BASE_FILTER};
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 pub use self::gl_base_filter::GLBaseFilterExt;
 
 mod gl_color_convert;
@@ -74,6 +77,7 @@ pub use self::flags::GLSLProfile;
 
 #[doc(hidden)]
 pub mod traits {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub use super::GLBaseFilterExt;
     pub use super::GLContextExt;
     pub use super::GLDisplayExt;

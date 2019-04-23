@@ -97,6 +97,10 @@ pub enum VideoColorPrimaries {
     Film,
     Bt2020,
     Adobergb,
+    Smptest428,
+    Smpterp431,
+    Smpteeg432,
+    Ebu3213,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -116,6 +120,10 @@ impl ToGlib for VideoColorPrimaries {
             VideoColorPrimaries::Film => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_FILM,
             VideoColorPrimaries::Bt2020 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_BT2020,
             VideoColorPrimaries::Adobergb => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_ADOBERGB,
+            VideoColorPrimaries::Smptest428 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTEST428,
+            VideoColorPrimaries::Smpterp431 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTERP431,
+            VideoColorPrimaries::Smpteeg432 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432,
+            VideoColorPrimaries::Ebu3213 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_EBU3213,
             VideoColorPrimaries::__Unknown(value) => value
         }
     }
@@ -135,6 +143,10 @@ impl FromGlib<gst_video_sys::GstVideoColorPrimaries> for VideoColorPrimaries {
             6 => VideoColorPrimaries::Film,
             7 => VideoColorPrimaries::Bt2020,
             8 => VideoColorPrimaries::Adobergb,
+            9 => VideoColorPrimaries::Smptest428,
+            10 => VideoColorPrimaries::Smpterp431,
+            11 => VideoColorPrimaries::Smpteeg432,
+            12 => VideoColorPrimaries::Ebu3213,
             value => VideoColorPrimaries::__Unknown(value),
         }
     }
@@ -316,6 +328,11 @@ pub enum VideoFormat {
     Gray10Le32,
     Nv1210le32,
     Nv1610le32,
+    Nv1210le40,
+    Y210,
+    Y410,
+    Vuya,
+    Bgr10a2Le,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -407,6 +424,11 @@ impl ToGlib for VideoFormat {
             VideoFormat::Gray10Le32 => gst_video_sys::GST_VIDEO_FORMAT_GRAY10_LE32,
             VideoFormat::Nv1210le32 => gst_video_sys::GST_VIDEO_FORMAT_NV12_10LE32,
             VideoFormat::Nv1610le32 => gst_video_sys::GST_VIDEO_FORMAT_NV16_10LE32,
+            VideoFormat::Nv1210le40 => gst_video_sys::GST_VIDEO_FORMAT_NV12_10LE40,
+            VideoFormat::Y210 => gst_video_sys::GST_VIDEO_FORMAT_Y210,
+            VideoFormat::Y410 => gst_video_sys::GST_VIDEO_FORMAT_Y410,
+            VideoFormat::Vuya => gst_video_sys::GST_VIDEO_FORMAT_VUYA,
+            VideoFormat::Bgr10a2Le => gst_video_sys::GST_VIDEO_FORMAT_BGR10A2_LE,
             VideoFormat::__Unknown(value) => value
         }
     }
@@ -498,6 +520,11 @@ impl FromGlib<gst_video_sys::GstVideoFormat> for VideoFormat {
             78 => VideoFormat::Gray10Le32,
             79 => VideoFormat::Nv1210le32,
             80 => VideoFormat::Nv1610le32,
+            81 => VideoFormat::Nv1210le40,
+            82 => VideoFormat::Y210,
+            83 => VideoFormat::Y410,
+            84 => VideoFormat::Vuya,
+            85 => VideoFormat::Bgr10a2Le,
             value => VideoFormat::__Unknown(value),
         }
     }
@@ -534,6 +561,7 @@ pub enum VideoInterlaceMode {
     Interleaved,
     Mixed,
     Fields,
+    Alternate,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -548,6 +576,7 @@ impl ToGlib for VideoInterlaceMode {
             VideoInterlaceMode::Interleaved => gst_video_sys::GST_VIDEO_INTERLACE_MODE_INTERLEAVED,
             VideoInterlaceMode::Mixed => gst_video_sys::GST_VIDEO_INTERLACE_MODE_MIXED,
             VideoInterlaceMode::Fields => gst_video_sys::GST_VIDEO_INTERLACE_MODE_FIELDS,
+            VideoInterlaceMode::Alternate => gst_video_sys::GST_VIDEO_INTERLACE_MODE_ALTERNATE,
             VideoInterlaceMode::__Unknown(value) => value
         }
     }
@@ -562,6 +591,7 @@ impl FromGlib<gst_video_sys::GstVideoInterlaceMode> for VideoInterlaceMode {
             1 => VideoInterlaceMode::Interleaved,
             2 => VideoInterlaceMode::Mixed,
             3 => VideoInterlaceMode::Fields,
+            4 => VideoInterlaceMode::Alternate,
             value => VideoInterlaceMode::__Unknown(value),
         }
     }

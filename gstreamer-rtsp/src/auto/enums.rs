@@ -224,6 +224,8 @@ pub enum RTSPHeaderField {
     MediaProperties,
     SeekStyle,
     AcceptRanges,
+    Frames,
+    RateControl,
     Last,
     #[doc(hidden)]
     __Unknown(i32),
@@ -322,6 +324,8 @@ impl ToGlib for RTSPHeaderField {
             RTSPHeaderField::MediaProperties => gst_rtsp_sys::GST_RTSP_HDR_MEDIA_PROPERTIES,
             RTSPHeaderField::SeekStyle => gst_rtsp_sys::GST_RTSP_HDR_SEEK_STYLE,
             RTSPHeaderField::AcceptRanges => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT_RANGES,
+            RTSPHeaderField::Frames => gst_rtsp_sys::GST_RTSP_HDR_FRAMES,
+            RTSPHeaderField::RateControl => gst_rtsp_sys::GST_RTSP_HDR_RATE_CONTROL,
             RTSPHeaderField::Last => gst_rtsp_sys::GST_RTSP_HDR_LAST,
             RTSPHeaderField::__Unknown(value) => value
         }
@@ -420,7 +424,9 @@ impl FromGlib<gst_rtsp_sys::GstRTSPHeaderField> for RTSPHeaderField {
             84 => RTSPHeaderField::MediaProperties,
             85 => RTSPHeaderField::SeekStyle,
             86 => RTSPHeaderField::AcceptRanges,
-            87 => RTSPHeaderField::Last,
+            87 => RTSPHeaderField::Frames,
+            88 => RTSPHeaderField::RateControl,
+            89 => RTSPHeaderField::Last,
             value => RTSPHeaderField::__Unknown(value),
         }
     }

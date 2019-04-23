@@ -97,6 +97,12 @@ pub trait GLContextExt: 'static {
 
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool;
+
     fn swap_buffers(&self);
 }
 
@@ -228,6 +234,20 @@ impl<O: IsA<GLContext>> GLContextExt for O {
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
             from_glib(gst_gl_sys::gst_gl_context_supports_glsl_profile_version(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
+        unsafe {
+            from_glib(gst_gl_sys::gst_gl_context_supports_precision(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
+        unsafe {
+            from_glib(gst_gl_sys::gst_gl_context_supports_precision_highp(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
         }
     }
 

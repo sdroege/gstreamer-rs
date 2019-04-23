@@ -32,6 +32,11 @@ impl Clock {
     //    unsafe { TODO: call gst_sys:gst_clock_id_compare_func() }
     //}
 
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //pub fn id_get_clock(id: /*Unimplemented*/ClockID) -> Option<Clock> {
+    //    unsafe { TODO: call gst_sys:gst_clock_id_get_clock() }
+    //}
+
     //pub fn id_get_time(id: /*Unimplemented*/ClockID) -> ClockTime {
     //    unsafe { TODO: call gst_sys:gst_clock_id_get_time() }
     //}
@@ -46,6 +51,11 @@ impl Clock {
 
     //pub fn id_unschedule(id: /*Unimplemented*/ClockID) {
     //    unsafe { TODO: call gst_sys:gst_clock_id_unschedule() }
+    //}
+
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
+    //pub fn id_uses_clock<P: IsA<Clock>>(id: /*Unimplemented*/ClockID, clock: &P) -> bool {
+    //    unsafe { TODO: call gst_sys:gst_clock_id_uses_clock() }
     //}
 
     //pub fn id_wait(id: /*Unimplemented*/ClockID) -> (ClockReturn, ClockTimeDiff) {
