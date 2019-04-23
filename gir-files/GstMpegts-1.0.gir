@@ -108,9 +108,11 @@ Consult the relevant specifications for more details.</doc>
             c:symbol-prefix="atsc_eit">
       <doc xml:space="preserve">Event Information Table (ATSC)</doc>
       <field name="source_id" writable="1">
+        <doc xml:space="preserve">The source id</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="protocol_version" writable="1">
+        <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="events" writable="1">
@@ -127,15 +129,19 @@ Consult the relevant specifications for more details.</doc>
             c:symbol-prefix="atsc_eit_event">
       <doc xml:space="preserve">An ATSC EIT Event</doc>
       <field name="event_id" writable="1">
+        <doc xml:space="preserve">The event id</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="start_time" writable="1">
+        <doc xml:space="preserve">The start time</doc>
         <type name="guint32" c:type="guint32"/>
       </field>
       <field name="etm_location" writable="1">
+        <doc xml:space="preserve">The etm location</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="length_in_seconds" writable="1">
+        <doc xml:space="preserve">The length in seconds</doc>
         <type name="guint32" c:type="guint32"/>
       </field>
       <field name="titles" writable="1">
@@ -161,9 +167,11 @@ Consult the relevant specifications for more details.</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="protocol_version" writable="1">
+        <doc xml:space="preserve">The protocol version</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="etm_id" writable="1">
+        <doc xml:space="preserve">The etm id</doc>
         <type name="guint32" c:type="guint32"/>
       </field>
       <field name="messages" writable="1">
@@ -180,9 +188,11 @@ Consult the relevant specifications for more details.</doc>
             c:symbol-prefix="atsc_mgt">
       <doc xml:space="preserve">Master Guide Table (A65)</doc>
       <field name="protocol_version" writable="1">
+        <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="tables_defined" writable="1">
+        <doc xml:space="preserve">The numbers of subtables</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="tables" writable="1">
@@ -205,12 +215,15 @@ Consult the relevant specifications for more details.</doc>
             c:symbol-prefix="atsc_mgt_table">
       <doc xml:space="preserve">Source from a @GstMpegtsAtscMGT</doc>
       <field name="table_type" writable="1">
+        <doc xml:space="preserve">#GstMpegtsAtscMGTTableType</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="pid" writable="1">
+        <doc xml:space="preserve">The packet ID</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="version_number" writable="1">
+        <doc xml:space="preserve">The version number</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="number_bytes" writable="1">
@@ -247,6 +260,7 @@ Consult the relevant specifications for more details.</doc>
             glib:get-type="gst_mpegts_atsc_mult_string_get_type"
             c:symbol-prefix="atsc_mult_string">
       <field name="iso_639_langcode" writable="1">
+        <doc xml:space="preserve">The ISO639 language code</doc>
         <array zero-terminated="0" c:type="gchar" fixed-size="4">
           <type name="gchar" c:type="gchar"/>
         </array>
@@ -264,21 +278,26 @@ Consult the relevant specifications for more details.</doc>
             c:symbol-prefix="atsc_stt">
       <doc xml:space="preserve">System Time Table (A65)</doc>
       <field name="protocol_version" writable="1">
+        <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="system_time" writable="1">
+        <doc xml:space="preserve">The system time</doc>
         <type name="guint32" c:type="guint32"/>
       </field>
       <field name="gps_utc_offset" writable="1">
+        <doc xml:space="preserve">The GPS to UTC offset</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="ds_status" writable="1">
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="ds_dayofmonth" writable="1">
+        <doc xml:space="preserve">The day of month</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="ds_hour" writable="1">
+        <doc xml:space="preserve">The hour</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="descriptors" writable="1">
@@ -288,6 +307,7 @@ Consult the relevant specifications for more details.</doc>
         </array>
       </field>
       <field name="utc_datetime" writable="1">
+        <doc xml:space="preserve">The UTC date and time</doc>
         <type name="Gst.DateTime" c:type="GstDateTime*"/>
       </field>
       <method name="get_datetime_utc"
@@ -307,16 +327,21 @@ Consult the relevant specifications for more details.</doc>
             glib:type-name="GstMpegtsAtscStringSegment"
             glib:get-type="gst_mpegts_atsc_string_segment_get_type"
             c:symbol-prefix="atsc_string_segment">
+      <doc xml:space="preserve">A string segment</doc>
       <field name="compression_type" writable="1">
+        <doc xml:space="preserve">The compression type</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="mode" writable="1">
+        <doc xml:space="preserve">The mode</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="compressed_data_size" writable="1">
+        <doc xml:space="preserve">The size of compressed data</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="compressed_data" writable="1">
+        <doc xml:space="preserve">The compressed data</doc>
         <type name="guint8" c:type="guint8*"/>
       </field>
       <field name="cached_string" writable="1">
@@ -344,9 +369,11 @@ Consult the relevant specifications for more details.</doc>
   Terrestrial Virtual Channel Table (A65)
   Cable Virtual Channel Table (A65)</doc>
       <field name="transport_stream_id" writable="1">
+        <doc xml:space="preserve">The transport stream</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="protocol_version" writable="1">
+        <doc xml:space="preserve">The protocol version</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="sources" writable="1">
@@ -369,48 +396,63 @@ Consult the relevant specifications for more details.</doc>
             c:symbol-prefix="atsc_vct_source">
       <doc xml:space="preserve">Source from a @GstMpegtsAtscVCT, can be used both for TVCT and CVCT tables</doc>
       <field name="short_name" writable="1">
+        <doc xml:space="preserve">The short name of a source</doc>
         <type name="utf8" c:type="gchar*"/>
       </field>
       <field name="major_channel_number" writable="1">
+        <doc xml:space="preserve">The major channel number</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="minor_channel_number" writable="1">
+        <doc xml:space="preserve">The minor channel number</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="modulation_mode" writable="1">
+        <doc xml:space="preserve">The modulation mode</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="carrier_frequency" writable="1">
+        <doc xml:space="preserve">The carrier frequency</doc>
         <type name="guint32" c:type="guint32"/>
       </field>
       <field name="channel_TSID" writable="1">
+        <doc xml:space="preserve">The transport stream ID</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="program_number" writable="1">
+        <doc xml:space="preserve">The program number (see #GstMpegtsPatProgram)</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="ETM_location" writable="1">
+        <doc xml:space="preserve">The ETM location</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="access_controlled" writable="1">
+        <doc xml:space="preserve">is access controlled</doc>
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="hidden" writable="1">
+        <doc xml:space="preserve">is hidden</doc>
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="path_select" writable="1">
+        <doc xml:space="preserve">is path select, CVCT only</doc>
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="out_of_band" writable="1">
+        <doc xml:space="preserve">is out of band, CVCT only</doc>
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="hide_guide" writable="1">
+        <doc xml:space="preserve">is hide guide</doc>
         <type name="gboolean" c:type="gboolean"/>
       </field>
       <field name="service_type" writable="1">
+        <doc xml:space="preserve">The service type</doc>
         <type name="guint8" c:type="guint8"/>
       </field>
       <field name="source_id" writable="1">
+        <doc xml:space="preserve">The source id</doc>
         <type name="guint16" c:type="guint16"/>
       </field>
       <field name="descriptors" writable="1">
