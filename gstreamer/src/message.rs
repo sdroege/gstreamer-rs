@@ -1024,7 +1024,7 @@ impl<'a> DeviceAdded<'a> {
 
             gst_sys::gst_message_parse_device_added(self.as_mut_ptr(), &mut device);
 
-            from_glib_none(device)
+            from_glib_full(device)
         }
     }
 }
@@ -1037,7 +1037,7 @@ impl<'a> DeviceRemoved<'a> {
 
             gst_sys::gst_message_parse_device_removed(self.as_mut_ptr(), &mut device);
 
-            from_glib_none(device)
+            from_glib_full(device)
         }
     }
 }
