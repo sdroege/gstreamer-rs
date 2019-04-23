@@ -143,6 +143,11 @@ version = "1.14"
     name = "latency"
     version = "1.14"
 
+    [[object.property]]
+    name = "min-upstream-latency"
+    # clock time instead of u64
+    ignore = true
+
 [[object]]
 name = "GstBase.AggregatorPad"
 status = "generate"

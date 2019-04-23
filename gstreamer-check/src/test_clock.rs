@@ -73,4 +73,25 @@ impl TestClock {
             from_glib_full(id)
         }
     }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn timed_wait_for_multiple_pending_ids(
+        &self,
+        count: u32,
+        timeout_ms: u32,
+    ) -> (bool, Vec<gst::ClockId>) {
+        unsafe {
+            let mut pending_list = ptr::null_mut();
+            let res = gst_check_sys::gst_test_clock_timed_wait_for_multiple_pending_ids(
+                self.to_glib_none().0,
+                count,
+                timeout_ms,
+                &mut pending_list,
+            );
+            (
+                from_glib(res),
+                FromGlibPtrContainer::from_glib_full(pending_list),
+            )
+        }
+    }
 }

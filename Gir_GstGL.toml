@@ -293,6 +293,10 @@ final_type = true
     # correct mutability
     ignore = true
 
+    [[object.property]]
+    name = "yinvert"
+    version = "1.16"
+
 [[object]]
 name = "GstGL.GLSLStage"
 status = "generate"

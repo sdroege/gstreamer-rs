@@ -1298,6 +1298,11 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    pattern = "clear_.*"
+    # C memory management
+    ignore = true
+
+    [[object.function]]
     name = "debug_bin_to_dot_data"
         [object.function.return]
         nullable = false

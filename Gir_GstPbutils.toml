@@ -86,6 +86,10 @@ final_type = true
     name = "timeout"
     ignore = true
 
+    [[object.property]]
+    name = "use-cache"
+    version = "1.16"
+
 [[object]]
 name = "GstPbutils.DiscovererInfo"
 status = "generate"

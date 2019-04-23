@@ -173,6 +173,9 @@ final_type = true
     name = "warning"
     concurrency = "send"
 
+    [[object.property]]
+    name = "subtitle-video-offset"
+    version = "1.16"
 
 [[object]]
 name = "GstPlayer.PlayerStreamInfo"

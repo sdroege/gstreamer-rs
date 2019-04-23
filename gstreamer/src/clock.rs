@@ -7,6 +7,8 @@
 // except according to those terms.
 
 use glib;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+use glib::prelude::*;
 use glib::translate::*;
 use glib::IsA;
 use glib_sys::{gboolean, gpointer};
@@ -107,6 +109,21 @@ impl ClockId {
             } else {
                 cmp::Ordering::Equal
             }
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_clock(&self) -> Option<Clock> {
+        unsafe { from_glib_full(gst_sys::gst_clock_id_get_clock(self.to_glib_none().0)) }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn id_uses_clock<P: IsA<Clock>>(&self, clock: &P) -> bool {
+        unsafe {
+            from_glib(gst_sys::gst_clock_id_uses_clock(
+                self.to_glib_none().0,
+                clock.as_ref().as_ptr(),
+            ))
         }
     }
 }
