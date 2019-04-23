@@ -158,6 +158,12 @@ impl Query {
             )))
         }
     }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn new_bitrate() -> Bitrate<Self> {
+        assert_initialized_main_thread!();
+        unsafe { Bitrate::<Self>(from_glib_full(gst_sys::gst_query_new_bitrate())) }
+    }
 }
 
 impl QueryRef {
@@ -213,6 +219,7 @@ impl QueryRef {
             gst_sys::GST_QUERY_CAPS => QueryView::Caps(Caps(self)),
             gst_sys::GST_QUERY_DRAIN => QueryView::Drain(Drain(self)),
             gst_sys::GST_QUERY_CONTEXT => QueryView::Context(Context(self)),
+            gst_sys::GST_QUERY_BITRATE => QueryView::Bitrate(Bitrate(self)),
             _ => QueryView::Other(Other(self)),
         }
     }
@@ -293,6 +300,7 @@ pub enum QueryView<T> {
     Caps(Caps<T>),
     Drain(Drain<T>),
     Context(Context<T>),
+    Bitrate(Bitrate<T>),
     Other(Other<T>),
     __NonExhaustive,
 }
@@ -1214,6 +1222,27 @@ impl<T: AsMutPtr> Context<T> {
     pub fn set_context(&mut self, context: &::Context) {
         unsafe {
             gst_sys::gst_query_set_context(self.0.as_mut_ptr(), context.as_mut_ptr());
+        }
+    }
+}
+
+declare_concrete_query!(Bitrate, T);
+impl<T: AsPtr> Bitrate<T> {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_bitrate(&self) -> u32 {
+        unsafe {
+            let mut bitrate = 0;
+            gst_sys::gst_query_parse_bitrate(self.0.as_ptr(), &mut bitrate);
+            bitrate
+        }
+    }
+}
+
+impl<T: AsMutPtr> Bitrate<T> {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_bitrate(&mut self, bitrate: u32) {
+        unsafe {
+            gst_sys::gst_query_set_bitrate(self.0.as_mut_ptr(), bitrate);
         }
     }
 }

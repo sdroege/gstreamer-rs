@@ -208,6 +208,16 @@ impl CapsRef {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_features_simple(&mut self, features: Option<CapsFeatures>) {
+        unsafe {
+            gst_sys::gst_caps_set_features_simple(
+                self.as_mut_ptr(),
+                features.map(|f| f.into_ptr()).unwrap_or(ptr::null_mut()),
+            )
+        }
+    }
+
     pub fn get_size(&self) -> u32 {
         unsafe { gst_sys::gst_caps_get_size(self.as_ptr()) }
     }

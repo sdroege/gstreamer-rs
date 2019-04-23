@@ -15,9 +15,9 @@ use glib;
 use glib::translate::{from_glib_full, from_glib_none, mut_override, ToGlibPtr};
 
 use miniobject::*;
-use Buffer;
-use BufferList;
-use Caps;
+use BufferListRef;
+use BufferRef;
+use CapsRef;
 use FormattedSegment;
 use FormattedValue;
 use Segment;
@@ -30,8 +30,8 @@ gst_define_mini_object_wrapper!(Sample, SampleRef, gst_sys::GstSample, [Debug,],
 
 impl Sample {
     pub fn new<F: FormattedValue>(
-        buffer: Option<&Buffer>,
-        caps: Option<&Caps>,
+        buffer: Option<&BufferRef>,
+        caps: Option<&CapsRef>,
         segment: Option<&FormattedSegment<F>>,
         info: Option<Structure>,
     ) -> Self {
@@ -40,8 +40,11 @@ impl Sample {
             let info = info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut());
 
             from_glib_full(gst_sys::gst_sample_new(
-                buffer.to_glib_none().0,
-                caps.to_glib_none().0,
+                buffer
+                    .map(|buffer| buffer.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
+                caps.map(|caps| caps.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
                 segment.to_glib_none().0,
                 mut_override(info),
             ))
@@ -49,8 +52,8 @@ impl Sample {
     }
 
     pub fn with_buffer_list<F: FormattedValue>(
-        buffer_list: Option<&BufferList>,
-        caps: Option<&Caps>,
+        buffer_list: Option<&BufferListRef>,
+        caps: Option<&CapsRef>,
         segment: Option<&FormattedSegment<F>>,
         info: Option<Structure>,
     ) -> Self {
@@ -59,7 +62,9 @@ impl Sample {
         unsafe {
             gst_sys::gst_sample_set_buffer_list(
                 sample.to_glib_none().0,
-                buffer_list.to_glib_none().0,
+                buffer_list
+                    .map(|buffer_list| buffer_list.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
             );
         }
         sample
@@ -67,16 +72,37 @@ impl Sample {
 }
 
 impl SampleRef {
-    pub fn get_buffer(&self) -> Option<Buffer> {
-        unsafe { from_glib_none(gst_sys::gst_sample_get_buffer(self.as_mut_ptr())) }
+    pub fn get_buffer(&self) -> Option<&BufferRef> {
+        unsafe {
+            let ptr = gst_sys::gst_sample_get_buffer(self.as_mut_ptr());
+            if ptr.is_null() {
+                None
+            } else {
+                Some(BufferRef::from_ptr(ptr))
+            }
+        }
     }
 
-    pub fn get_buffer_list(&self) -> Option<BufferList> {
-        unsafe { from_glib_none(gst_sys::gst_sample_get_buffer_list(self.as_mut_ptr())) }
+    pub fn get_buffer_list(&self) -> Option<&BufferListRef> {
+        unsafe {
+            let ptr = gst_sys::gst_sample_get_buffer_list(self.as_mut_ptr());
+            if ptr.is_null() {
+                None
+            } else {
+                Some(BufferListRef::from_ptr(ptr))
+            }
+        }
     }
 
-    pub fn get_caps(&self) -> Option<Caps> {
-        unsafe { from_glib_none(gst_sys::gst_sample_get_caps(self.as_mut_ptr())) }
+    pub fn get_caps(&self) -> Option<&CapsRef> {
+        unsafe {
+            let ptr = gst_sys::gst_sample_get_caps(self.as_mut_ptr());
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CapsRef::from_ptr(ptr))
+            }
+        }
     }
 
     pub fn get_segment(&self) -> Option<Segment> {
@@ -91,6 +117,56 @@ impl SampleRef {
             } else {
                 Some(StructureRef::from_glib_borrow(ptr))
             }
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_buffer(&mut self, buffer: Option<&BufferRef>) {
+        unsafe {
+            gst_sys::gst_sample_set_buffer(
+                self.as_mut_ptr(),
+                buffer
+                    .map(|buffer| buffer.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_buffer_list(&mut self, buffer_list: Option<&BufferListRef>) {
+        unsafe {
+            gst_sys::gst_sample_set_buffer_list(
+                self.as_mut_ptr(),
+                buffer_list
+                    .map(|buffer_list| buffer_list.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_caps(&mut self, caps: Option<&CapsRef>) {
+        unsafe {
+            gst_sys::gst_sample_set_caps(
+                self.as_mut_ptr(),
+                caps.map(|caps| caps.as_mut_ptr())
+                    .unwrap_or(ptr::null_mut()),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_segment(&mut self, segment: &Option<&Segment>) {
+        unsafe { gst_sys::gst_sample_set_segment(self.as_mut_ptr(), segment.to_glib_none().0) }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn set_info(&mut self, info: Option<Structure>) {
+        unsafe {
+            gst_sys::gst_sample_set_info(
+                self.as_mut_ptr(),
+                info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut()),
+            );
         }
     }
 }

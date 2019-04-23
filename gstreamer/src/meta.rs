@@ -121,6 +121,14 @@ impl<'a, T: MetaAPI> MetaRef<'a, T> {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_seqnum(&self) -> u64 {
+        unsafe {
+            let meta = self.meta as *const _ as *const gst_sys::GstMeta;
+            gst_sys::gst_meta_get_seqnum(meta)
+        }
+    }
+
     pub fn as_ptr(&self) -> *const T::GstType {
         self.meta as *const _ as *const <T as MetaAPI>::GstType
     }
@@ -145,6 +153,14 @@ impl<'a, T: MetaAPI, U> MetaRefMut<'a, T, U> {
             let meta = self.meta as *const _ as *const gst_sys::GstMeta;
             let info = (*meta).info;
             glib::Type::from_glib((*info).api)
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_seqnum(&self) -> u64 {
+        unsafe {
+            let meta = self.meta as *const _ as *const gst_sys::GstMeta;
+            gst_sys::gst_meta_get_seqnum(meta)
         }
     }
 

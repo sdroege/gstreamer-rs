@@ -102,6 +102,7 @@ impl MessageRef {
             gst_sys::GST_MESSAGE_STREAMS_SELECTED => {
                 MessageView::StreamsSelected(StreamsSelected(self))
             }
+            gst_sys::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
             _ => MessageView::Other,
         }
     }
@@ -340,6 +341,15 @@ impl Message {
         assert_initialized_main_thread!();
         RedirectBuilder::new(location)
     }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn new_device_changed<'a>(
+        device: &'a ::Device,
+        changed_device: &'a ::Device,
+    ) -> DeviceChangedBuilder<'a> {
+        assert_initialized_main_thread!();
+        DeviceChangedBuilder::new(device, changed_device)
+    }
 }
 
 impl fmt::Debug for MessageRef {
@@ -396,6 +406,7 @@ pub enum MessageView<'a> {
     StreamCollection(StreamCollection<'a>),
     StreamsSelected(StreamsSelected<'a>),
     Redirect(Redirect<'a>),
+    DeviceChanged(DeviceChanged<'a>),
     Other,
     __NonExhaustive,
 }
@@ -1149,6 +1160,25 @@ impl<'a> Redirect<'a> {
                     )
                 })
                 .collect()
+        }
+    }
+}
+
+declare_concrete_message!(DeviceChanged);
+impl<'a> DeviceChanged<'a> {
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_device_changed(&self) -> (::Device, ::Device) {
+        unsafe {
+            let mut device = ptr::null_mut();
+            let mut changed_device = ptr::null_mut();
+
+            gst_sys::gst_message_parse_device_changed(
+                self.as_mut_ptr(),
+                &mut device,
+                &mut changed_device,
+            );
+
+            (from_glib_full(device), from_glib_full(changed_device))
         }
     }
 }
@@ -2363,6 +2393,30 @@ impl<'a> RedirectBuilder<'a> {
         }
         msg
     });
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub struct DeviceChangedBuilder<'a> {
+    builder: MessageBuilder<'a>,
+    device: &'a ::Device,
+    changed_device: &'a ::Device,
+}
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl<'a> DeviceChangedBuilder<'a> {
+    fn new(device: &'a ::Device, changed_device: &'a ::Device) -> Self {
+        skip_assert_initialized!();
+        Self {
+            builder: MessageBuilder::new(),
+            device,
+            changed_device,
+        }
+    }
+
+    message_builder_generic_impl!(|s: &mut Self, src| gst_sys::gst_message_new_device_changed(
+        src,
+        s.device.to_glib_none().0,
+        s.changed_device.to_glib_none().0,
+    ));
 }
 
 #[cfg(test)]

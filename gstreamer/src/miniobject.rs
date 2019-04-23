@@ -99,6 +99,26 @@ impl<T: MiniObject> GstRc<T> {
 
         ptr
     }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn add_parent<U: MiniObject>(&self, parent: &U) {
+        unsafe {
+            gst_sys::gst_mini_object_add_parent(
+                self.as_ptr() as *mut gst_sys::GstMiniObject,
+                parent.as_ptr() as *mut gst_sys::GstMiniObject,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn remove_parent<U: MiniObject>(&self, parent: &U) {
+        unsafe {
+            gst_sys::gst_mini_object_remove_parent(
+                self.as_ptr() as *mut gst_sys::GstMiniObject,
+                parent.as_ptr() as *mut gst_sys::GstMiniObject,
+            );
+        }
+    }
 }
 
 impl<T: MiniObject> ops::Deref for GstRc<T> {
@@ -119,15 +139,6 @@ impl<T: MiniObject> borrow::Borrow<T> for GstRc<T> {
         self.as_ref()
     }
 }
-
-// FIXME: Not generally possible because neither T nor ToOwned are defined here...
-//impl<T: MiniObject> ToOwned for T {
-//    type Owned = GstRc<T>;
-//
-//    fn to_owned(&self) -> GstRc<T> {
-//        unsafe { GstRc::from_unowned_ptr(self.as_ptr()) }
-//    }
-//}
 
 impl<T: MiniObject> Clone for GstRc<T> {
     fn clone(&self) -> GstRc<T> {

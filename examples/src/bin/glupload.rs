@@ -486,28 +486,30 @@ impl App {
                 .new_sample(move |appsink| {
                     let sample = appsink.pull_sample().ok_or(gst::FlowError::Eos)?;
 
-                    let _buffer = sample.get_buffer().ok_or_else(|| {
-                        gst_element_error!(
-                            appsink,
-                            gst::ResourceError::Failed,
-                            ("Failed to get buffer from appsink")
-                        );
-
-                        gst::FlowError::Error
-                    })?;
-
-                    let _info = sample
-                        .get_caps()
-                        .and_then(|caps| gst_video::VideoInfo::from_caps(caps.as_ref()))
-                        .ok_or_else(|| {
+                    {
+                        let _buffer = sample.get_buffer().ok_or_else(|| {
                             gst_element_error!(
                                 appsink,
                                 gst::ResourceError::Failed,
-                                ("Failed to get video info from sample")
+                                ("Failed to get buffer from appsink")
                             );
 
                             gst::FlowError::Error
                         })?;
+
+                        let _info = sample
+                            .get_caps()
+                            .and_then(|caps| gst_video::VideoInfo::from_caps(caps))
+                            .ok_or_else(|| {
+                                gst_element_error!(
+                                    appsink,
+                                    gst::ResourceError::Failed,
+                                    ("Failed to get video info from sample")
+                                );
+
+                                gst::FlowError::Error
+                            })?;
+                    }
 
                     sender_clone
                         .lock()
@@ -638,7 +640,7 @@ fn main_loop(mut app: App) -> Result<(), Error> {
             let buffer = sample.get_buffer().unwrap();
             let info = sample
                 .get_caps()
-                .and_then(|caps| gst_video::VideoInfo::from_caps(caps.as_ref()))
+                .and_then(|caps| gst_video::VideoInfo::from_caps(caps))
                 .unwrap();
 
             {
@@ -650,11 +652,13 @@ fn main_loop(mut app: App) -> Result<(), Error> {
                         .get::<gst_gl::GLContext>();
                 }
 
-                let sync_meta = buffer.as_ref().get_meta::<gst_gl::GLSyncMeta>().unwrap();
+                let sync_meta = buffer.get_meta::<gst_gl::GLSyncMeta>().unwrap();
                 sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
             }
 
-            if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
+            if let Ok(frame) =
+                gst_video::VideoFrame::from_buffer_readable_gl(buffer.to_owned(), &info)
+            {
                 curr_frame = Some(Arc::new(frame));
             }
         }

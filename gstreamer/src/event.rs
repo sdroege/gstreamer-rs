@@ -796,6 +796,20 @@ impl<'a> Seek<'a> {
             )
         }
     }
+
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn get_trickmode_interval(&self) -> ::ClockTime {
+        unsafe {
+            let mut trickmode_interval = mem::uninitialized();
+
+            gst_sys::gst_event_parse_seek_trickmode_interval(
+                self.as_mut_ptr(),
+                &mut trickmode_interval,
+            );
+
+            from_glib(trickmode_interval)
+        }
+    }
 }
 
 declare_concrete_event!(Navigation);
@@ -1329,6 +1343,8 @@ pub struct SeekBuilder<'a> {
     start: GenericFormattedValue,
     stop_type: ::SeekType,
     stop: GenericFormattedValue,
+    #[allow(unused)]
+    trickmode_interval: Option<::ClockTime>,
 }
 impl<'a> SeekBuilder<'a> {
     fn new(
@@ -1348,18 +1364,30 @@ impl<'a> SeekBuilder<'a> {
             start,
             stop_type,
             stop,
+            trickmode_interval: None,
         }
     }
 
-    event_builder_generic_impl!(|s: &Self| gst_sys::gst_event_new_seek(
-        s.rate,
-        s.start.get_format().to_glib(),
-        s.flags.to_glib(),
-        s.start_type.to_glib(),
-        s.start.get_value(),
-        s.stop_type.to_glib(),
-        s.stop.get_value(),
-    ));
+    event_builder_generic_impl!(|s: &Self| {
+        let ev = gst_sys::gst_event_new_seek(
+            s.rate,
+            s.start.get_format().to_glib(),
+            s.flags.to_glib(),
+            s.start_type.to_glib(),
+            s.start.get_value(),
+            s.stop_type.to_glib(),
+            s.stop.get_value(),
+        );
+
+        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        {
+            if let Some(trickmode_interval) = s.trickmode_interval {
+                gst_sys::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
+            }
+        }
+
+        ev
+    });
 }
 
 pub struct NavigationBuilder<'a> {

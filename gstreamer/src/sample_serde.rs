@@ -49,15 +49,18 @@ impl From<SampleDe> for Sample {
     fn from(mut buf_de: SampleDe) -> Self {
         if buf_de.buffer.is_some() {
             Sample::new::<GenericFormattedValue>(
-                buf_de.buffer.as_ref(),
-                buf_de.caps.as_ref(),
+                buf_de.buffer.as_ref().map(|buffer| buffer.as_ref()),
+                buf_de.caps.as_ref().map(|caps| caps.as_ref()),
                 buf_de.segment.as_ref(),
                 buf_de.info.take(),
             )
         } else {
             Sample::with_buffer_list::<GenericFormattedValue>(
-                buf_de.buffer_list.as_ref(),
-                buf_de.caps.as_ref(),
+                buf_de
+                    .buffer_list
+                    .as_ref()
+                    .map(|buffer_list| buffer_list.as_ref()),
+                buf_de.caps.as_ref().map(|caps| caps.as_ref()),
                 buf_de.segment.as_ref(),
                 buf_de.info.take(),
             )
