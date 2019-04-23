@@ -20,7 +20,9 @@ fn main() {
 fn find() -> Result<(), Error> {
     let package_name = "gstreamer-gl-1.0";
     let shared_libs = ["gstgl-1.0"];
-    let version = {
+    let version = if cfg!(feature = "v1_16") {
+        "1.16"
+    } else {
         "1.14"
     };
 

@@ -28,6 +28,7 @@ dox = []
 egl = []
 x11 = []
 wayland = []
+v1_16 = []
 
 [lib]
 name = "gstreamer_gl_sys"

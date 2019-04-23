@@ -22,6 +22,7 @@ tempdir = "0.3"
 
 [features]
 dox = []
+v1_16 = []
 
 [lib]
 name = "gstreamer_webrtc_sys"
