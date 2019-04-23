@@ -1,32 +1,6 @@
 #!/bin/bash
 set -x -e
 
-# Remove GLFuncs record
-# commit 5765641
-xmlstarlet ed --pf --inplace --delete '//_:record[@name="GLFuncs"]' GstGL-1.0.gir
-
-# Add a disguised GFuncs record (two steps)
-xmlstarlet ed --pf --inplace \
-	   --subnode '//_:namespace' --type elem -n 'recordTMP' --value ' ' \
-	   GstGL-1.0.gir
-
-xmlstarlet ed --pf --inplace \
-	   --insert '//_:recordTMP' -t attr -n 'name' --value 'GLFuncs' \
-	   --insert '//_:recordTMP' -t attr -n 'c:type' --value 'GstGLFuncs' \
-	   --insert '//_:recordTMP' -t attr -n 'disguised' --value '1' \
-	   --rename '//_:recordTMP' --value 'record' \
-	   GstGL-1.0.gir
-
-# incorrect GIR due bug #797144
-xmlstarlet ed --pf --inplace \
-	   --update '//*[@c:identifier="Dubois optimised Green-Magenta anaglyph"]/@c:identifier' \
-	     --value GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS \
-	   --update '//*[@c:identifier="Dubois optimised Red-Cyan anaglyph"]/@c:identifier' \
-	     --value GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS \
-	   --update '//*[@c:identifier="Dubois optimised Amber-Blue anaglyph"]/@c:identifier' \
-	      --value GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS \
-	   GstGL-1.0.gir
-
 # replace wayland structures to gpointers
 xmlstarlet ed --pf --inplace \
             --update '//*[@c:type="wl_display*"]/@c:type' \
@@ -72,18 +46,10 @@ xmlstarlet ed --pf --inplace \
 	   --delete '//_:record[starts-with(@name, "Check")]' \
 	   GstCheck-1.0.gir
 
-# Fix gst_gl_base_buffer_error_quark() and gst_glsl_error_quark()
+# Change GstVideoAncillary.data to a fixed-size 256 byte array
 xmlstarlet ed --pf --inplace \
-	   --update '//*[@glib:error-domain="gst-gl-base-buffer-error-quark"]/@glib:error-domain' \
-	     --value gst-gl-base-memory-error-quark \
-	   --update '//*[@glib:error-domain="gst-glsl-error"]/@glib:error-domain' \
-	     --value  gst-glsl-error-quark \
-	   GstGL-1.0.gir
+	   --delete '//_:record[@name="VideoAncillary"]/_:field[@name="data"]/_:array/@length' \
+	   --insert '//_:record[@name="VideoAncillary"]/_:field[@name="data"]/_:array' \
+              --type attr --name 'fixed-size' --value '256' \
+	    GstVideo-1.0.gir
 
-# Fix error domains for GstGLContext and GstGLWindow
-xmlstarlet ed --pf --inplace \
-	   --insert '//_:enumeration[@name="GLContextError"][not(@glib:error-domain)]' \
-	     --type attr -n 'glib:error-domain' --value gst-gl-context-error-quark \
-	   --insert '//_:enumeration[@name="GLWindowError"][not(@glib:error-domain)]' \
-	     --type attr -n 'glib:error-domain' --value gst-gl-window-error-quark \
-	   GstGL-1.0.gir

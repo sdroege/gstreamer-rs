@@ -496,6 +496,19 @@ usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_realm"
+              c:identifier="gst_rtsp_auth_get_realm"
+              version="1.16">
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">the @realm of @auth</doc>
+          <type name="utf8" c:type="gchar*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="auth" transfer-ownership="none">
+            <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_supported_methods"
               c:identifier="gst_rtsp_auth_get_supported_methods"
               version="1.12">
@@ -557,6 +570,33 @@ usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="parse_htdigest"
+              c:identifier="gst_rtsp_auth_parse_htdigest"
+              version="1.16">
+        <doc xml:space="preserve">Parse the contents of the file at @path and enable the privileges
+listed in @token for the users it describes.
+
+The format of the file is expected to match the format described by
+&lt;https://en.wikipedia.org/wiki/Digest_access_authentication#The_.htdigest_file&gt;,
+as output by the `htdigest` command.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the file was successfully parsed, %FALSE otherwise.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="auth" transfer-ownership="none">
+            <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
+          </instance-parameter>
+          <parameter name="path" transfer-ownership="none">
+            <doc xml:space="preserve">Path to the htdigest file</doc>
+            <type name="filename" c:type="const gchar*"/>
+          </parameter>
+          <parameter name="token" transfer-ownership="none">
+            <doc xml:space="preserve">authorisation token</doc>
+            <type name="RTSPToken" c:type="GstRTSPToken*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="remove_basic" c:identifier="gst_rtsp_auth_remove_basic">
         <doc xml:space="preserve">Removes @basic authentication token.</doc>
         <return-value transfer-ownership="none">
@@ -609,6 +649,22 @@ be used for unauthenticated users.</doc>
                      allow-none="1">
             <doc xml:space="preserve">a #GstRTSPToken</doc>
             <type name="RTSPToken" c:type="GstRTSPToken*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_realm"
+              c:identifier="gst_rtsp_auth_set_realm"
+              version="1.16">
+        <doc xml:space="preserve">Set the @realm of @auth</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="auth" transfer-ownership="none">
+            <type name="RTSPAuth" c:type="GstRTSPAuth*"/>
+          </instance-parameter>
+          <parameter name="realm" transfer-ownership="none">
+            <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>
@@ -673,12 +729,11 @@ be accepted when TLS is negotiated.</doc>
         </parameters>
       </method>
       <method name="set_tls_database"
-              c:identifier="gst_rtsp_auth_set_tls_database">
+              c:identifier="gst_rtsp_auth_set_tls_database"
+              version="1.6">
         <doc xml:space="preserve">Sets the certificate database that is used to verify peer certificates.
 If set to %NULL (the default), then peer certificate validation will always
-set the %G_TLS_CERTIFICATE_UNKNOWN_CA error.
-
-Since 1.6</doc>
+set the %G_TLS_CERTIFICATE_UNKNOWN_CA error.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1550,7 +1605,10 @@ sent to the client. @user_data is passed to @func and @notify is called when
 @user_data is no longer in use.
 
 By default, the client will send the messages on the #GstRTSPConnection that
-was configured with gst_rtsp_client_attach() was called.</doc>
+was configured with gst_rtsp_client_attach() was called.
+
+It is only allowed to set either a `send_func` or a `send_messages_func`
+but not both at the same time.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1566,6 +1624,52 @@ was configured with gst_rtsp_client_attach() was called.</doc>
                      destroy="2">
             <doc xml:space="preserve">a #GstRTSPClientSendFunc</doc>
             <type name="RTSPClientSendFunc" c:type="GstRTSPClientSendFunc"/>
+          </parameter>
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
+            <doc xml:space="preserve">user data passed to @func</doc>
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+          <parameter name="notify"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     scope="async">
+            <doc xml:space="preserve">called when @user_data is no longer in use</doc>
+            <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_send_messages_func"
+              c:identifier="gst_rtsp_client_set_send_messages_func"
+              version="1.16">
+        <doc xml:space="preserve">Set @func as the callback that will be called when new messages needs to be
+sent to the client. @user_data is passed to @func and @notify is called when
+@user_data is no longer in use.
+
+By default, the client will send the messages on the #GstRTSPConnection that
+was configured with gst_rtsp_client_attach() was called.
+
+It is only allowed to set either a `send_func` or a `send_messages_func`
+but not both at the same time.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="client" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPClient</doc>
+            <type name="RTSPClient" c:type="GstRTSPClient*"/>
+          </instance-parameter>
+          <parameter name="func"
+                     transfer-ownership="none"
+                     scope="notified"
+                     closure="1"
+                     destroy="2">
+            <doc xml:space="preserve">a #GstRTSPClientSendMessagesFunc</doc>
+            <type name="RTSPClientSendMessagesFunc"
+                  c:type="GstRTSPClientSendMessagesFunc"/>
           </parameter>
           <parameter name="user_data"
                      transfer-ownership="none"
@@ -2511,6 +2615,42 @@ that created the client but can be overridden later.</doc>
         </parameter>
       </parameters>
     </callback>
+    <callback name="RTSPClientSendMessagesFunc"
+              c:type="GstRTSPClientSendMessagesFunc"
+              version="1.16">
+      <doc xml:space="preserve">This callback is called when @client wants to send @messages. When @close is
+%TRUE, the connection should be closed when the message has been sent.</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">%TRUE on success.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="client" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstRTSPClient</doc>
+          <type name="RTSPClient" c:type="GstRTSPClient*"/>
+        </parameter>
+        <parameter name="messages" transfer-ownership="none">
+          <doc xml:space="preserve">#GstRTSPMessage</doc>
+          <type name="GstRtsp.RTSPMessage" c:type="GstRTSPMessage*"/>
+        </parameter>
+        <parameter name="n_messages" transfer-ownership="none">
+          <doc xml:space="preserve">number of messages</doc>
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="close" transfer-ownership="none">
+          <doc xml:space="preserve">close the connection</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </parameter>
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="4">
+          <doc xml:space="preserve">user data when registering the callback</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
     <callback name="RTSPClientSessionFilterFunc"
               c:type="GstRTSPClientSessionFilterFunc">
       <doc xml:space="preserve">This function will be called by the gst_rtsp_client_session_filter(). An
@@ -2991,7 +3131,8 @@ element of @media, and create #GstRTSPStreams for them.</doc>
         </parameters>
       </method>
       <method name="complete_pipeline"
-              c:identifier="gst_rtsp_media_complete_pipeline">
+              c:identifier="gst_rtsp_media_complete_pipeline"
+              version="1.14">
         <doc xml:space="preserve">Add a receiver and sender parts to the pipeline based on the transport from
 SETUP.</doc>
         <return-value transfer-ownership="none">
@@ -3112,6 +3253,19 @@ g_object_unref() after usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_do_retransmission"
+              c:identifier="gst_rtsp_media_get_do_retransmission"
+              version="1.16">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">Whether retransmission requests will be sent</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_element" c:identifier="gst_rtsp_media_get_element">
         <doc xml:space="preserve">Get the element that was used when constructing @media.</doc>
         <return-value transfer-ownership="full">
@@ -3129,6 +3283,21 @@ g_object_unref() after usage.</doc>
         <doc xml:space="preserve">Get the latency that is used for receiving media.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">latency in milliseconds</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_max_mcast_ttl"
+              c:identifier="gst_rtsp_media_get_max_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Get the the maximum time-to-live value of outgoing multicast packets.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the maximum time-to-live value of outgoing multicast packets.</doc>
           <type name="guint" c:type="guint"/>
         </return-value>
         <parameters>
@@ -3348,6 +3517,21 @@ will listen on @address and @port for client time requests.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="is_bind_mcast_address"
+              c:identifier="gst_rtsp_media_is_bind_mcast_address"
+              version="1.16">
+        <doc xml:space="preserve">Check if multicast sockets are configured to be bound to multicast addresses.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if multicast sockets are configured to be bound to multicast addresses.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="is_eos_shutdown"
               c:identifier="gst_rtsp_media_is_eos_shutdown">
         <doc xml:space="preserve">Check if the pipeline for @media will send an EOS down the pipeline before
@@ -3478,9 +3662,12 @@ gst_rtsp_media_prepare().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="seek_full" c:identifier="gst_rtsp_media_seek_full">
+      <method name="seek_full"
+              c:identifier="gst_rtsp_media_seek_full"
+              version="1.14">
         <doc xml:space="preserve">Seek the pipeline of @media to @range. @media must be prepared with
-gst_rtsp_media_prepare().</doc>
+gst_rtsp_media_prepare(). In order to perform the seek operation,
+the pipeline must contain all needed transport parts (transport sinks).</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE on success.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -3500,12 +3687,20 @@ gst_rtsp_media_prepare().</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="seekable" c:identifier="gst_rtsp_media_seekable">
+      <method name="seekable"
+              c:identifier="gst_rtsp_media_seekable"
+              version="1.14">
+        <doc xml:space="preserve">Check if the pipeline for @media seek and up to what point in time,
+it can seek.</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">-1 if the stream is not seekable, 0 if seekable only to the beginning
+and &gt; 0 to indicate the longest duration between any two random access points.
+%G_MAXINT64 means any value is possible.</doc>
           <type name="Gst.ClockTimeDiff" c:type="GstClockTimeDiff"/>
         </return-value>
         <parameters>
           <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
           </instance-parameter>
         </parameters>
@@ -3527,6 +3722,25 @@ gst_rtsp_media_prepare().</doc>
                      allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAddressPool</doc>
             <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_bind_mcast_address"
+              c:identifier="gst_rtsp_media_set_bind_mcast_address"
+              version="1.16">
+        <doc xml:space="preserve">Decide whether the multicast socket should be bound to a multicast address or
+INADDR_ANY.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+          <parameter name="bind_mcast_addr" transfer-ownership="none">
+            <doc xml:space="preserve">the new value</doc>
+            <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
       </method>
@@ -3566,6 +3780,22 @@ gst_rtsp_media_prepare().</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_do_retransmission"
+              c:identifier="gst_rtsp_media_set_do_retransmission"
+              version="1.16">
+        <doc xml:space="preserve">Set whether retransmission requests will be sent</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+          <parameter name="do_retransmission" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_eos_shutdown"
               c:identifier="gst_rtsp_media_set_eos_shutdown">
         <doc xml:space="preserve">Set or unset if an EOS event will be sent to the pipeline for @media before
@@ -3596,6 +3826,25 @@ it is unprepared.</doc>
           </instance-parameter>
           <parameter name="latency" transfer-ownership="none">
             <doc xml:space="preserve">latency in milliseconds</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_max_mcast_ttl"
+              c:identifier="gst_rtsp_media_set_max_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Set the maximum time-to-live value of outgoing multicast packets.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the requested ttl has been set successfully.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="media" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMedia" c:type="GstRTSPMedia*"/>
+          </instance-parameter>
+          <parameter name="ttl" transfer-ownership="none">
+            <doc xml:space="preserve">the new multicast ttl value</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
@@ -3943,6 +4192,11 @@ when the media was not in the suspended state.</doc>
           </parameter>
         </parameters>
       </method>
+      <property name="bind-mcast-address"
+                writable="1"
+                transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
       <property name="buffer-size" writable="1" transfer-ownership="none">
         <type name="guint" c:type="guint"/>
       </property>
@@ -3959,6 +4213,9 @@ when the media was not in the suspended state.</doc>
         <type name="gboolean" c:type="gboolean"/>
       </property>
       <property name="latency" writable="1" transfer-ownership="none">
+        <type name="guint" c:type="guint"/>
+      </property>
+      <property name="max-mcast-ttl" writable="1" transfer-ownership="none">
         <type name="guint" c:type="guint"/>
       </property>
       <property name="profiles" writable="1" transfer-ownership="none">
@@ -4607,6 +4864,19 @@ of all medias created from this factory.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_do_retransmission"
+              c:identifier="gst_rtsp_media_factory_get_do_retransmission"
+              version="1.16">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">Whether retransmission requests will be sent for receiving media</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_latency"
               c:identifier="gst_rtsp_media_factory_get_latency">
         <doc xml:space="preserve">Get the latency that is used for receiving media</doc>
@@ -4633,6 +4903,21 @@ usage.</doc>
         <parameters>
           <instance-parameter name="factory" transfer-ownership="none">
             <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
+            <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_max_mcast_ttl"
+              c:identifier="gst_rtsp_media_factory_get_max_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Get the the maximum time-to-live value of outgoing multicast packets.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the maximum time-to-live value of outgoing multicast packets.</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
             <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
           </instance-parameter>
         </parameters>
@@ -4767,6 +5052,21 @@ methods.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="is_bind_mcast_address"
+              c:identifier="gst_rtsp_media_factory_is_bind_mcast_address"
+              version="1.16">
+        <doc xml:space="preserve">Check if multicast sockets are configured to be bound to multicast addresses.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if multicast sockets are configured to be bound to multicast addresses.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
+            <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="is_eos_shutdown"
               c:identifier="gst_rtsp_media_factory_is_eos_shutdown">
         <doc xml:space="preserve">Get if media created from this factory will have an EOS event sent to the
@@ -4826,6 +5126,25 @@ pipeline before shutdown.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_bind_mcast_address"
+              c:identifier="gst_rtsp_media_factory_set_bind_mcast_address"
+              version="1.16">
+        <doc xml:space="preserve">Decide whether the multicast socket should be bound to a multicast address or
+INADDR_ANY.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMediaFactory</doc>
+            <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
+          </instance-parameter>
+          <parameter name="bind_mcast_addr" transfer-ownership="none">
+            <doc xml:space="preserve">the new value</doc>
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_buffer_size"
               c:identifier="gst_rtsp_media_factory_set_buffer_size">
         <doc xml:space="preserve">Set the kernel UDP buffer size.</doc>
@@ -4862,6 +5181,23 @@ of all medias created from this factory.</doc>
                      allow-none="1">
             <doc xml:space="preserve">the clock to be used by the media factory</doc>
             <type name="Gst.Clock" c:type="GstClock*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_do_retransmission"
+              c:identifier="gst_rtsp_media_factory_set_do_retransmission"
+              version="1.16">
+        <doc xml:space="preserve">Set whether retransmission requests will be sent for
+receiving media</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
+          </instance-parameter>
+          <parameter name="do_retransmission" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
       </method>
@@ -4922,6 +5258,25 @@ etc.. Each of the payloaders will result in a stream.</doc>
           <parameter name="launch" transfer-ownership="none">
             <doc xml:space="preserve">the launch description</doc>
             <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_max_mcast_ttl"
+              c:identifier="gst_rtsp_media_factory_set_max_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Set the maximum time-to-live value of outgoing multicast packets.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the requested ttl has been set successfully.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="factory" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPMedia</doc>
+            <type name="RTSPMediaFactory" c:type="GstRTSPMediaFactory*"/>
+          </instance-parameter>
+          <parameter name="ttl" transfer-ownership="none">
+            <doc xml:space="preserve">the new multicast ttl value</doc>
+            <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </method>
@@ -5124,6 +5479,11 @@ when a client disconnects without sending TEARDOWN.</doc>
           </parameter>
         </parameters>
       </method>
+      <property name="bind-mcast-address"
+                writable="1"
+                transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
       <property name="buffer-size" writable="1" transfer-ownership="none">
         <type name="guint" c:type="guint"/>
       </property>
@@ -5138,6 +5498,9 @@ when a client disconnects without sending TEARDOWN.</doc>
       </property>
       <property name="launch" writable="1" transfer-ownership="none">
         <type name="utf8" c:type="gchar*"/>
+      </property>
+      <property name="max-mcast-ttl" writable="1" transfer-ownership="none">
+        <type name="guint" c:type="guint"/>
       </property>
       <property name="profiles" writable="1" transfer-ownership="none">
         <type name="GstRtsp.RTSPProfile"/>
@@ -5436,6 +5799,23 @@ when a client disconnects without sending TEARDOWN.</doc>
         <doc xml:space="preserve">media pipeline is in error</doc>
       </member>
     </enumeration>
+    <callback name="RTSPMessageSentFunc" c:type="GstRTSPMessageSentFunc">
+      <doc xml:space="preserve">Function registered with gst_rtsp_stream_transport_set_message_sent()
+and called when a message has been sent on the transport.</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="0">
+          <doc xml:space="preserve">user data</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
     <class name="RTSPMountPoints"
            c:symbol-prefix="rtsp_mount_points"
            c:type="GstRTSPMountPoints"
@@ -5609,6 +5989,7 @@ g_object_unref() after usage.</doc>
     <class name="RTSPOnvifClient"
            c:symbol-prefix="rtsp_onvif_client"
            c:type="GstRTSPOnvifClient"
+           version="1.14"
            parent="RTSPClient"
            glib:type-name="GstRTSPOnvifClient"
            glib:get-type="gst_rtsp_onvif_client_get_type"
@@ -5637,6 +6018,7 @@ g_object_unref() after usage.</doc>
     <class name="RTSPOnvifMedia"
            c:symbol-prefix="rtsp_onvif_media"
            c:type="GstRTSPOnvifMedia"
+           version="1.14"
            parent="RTSPMedia"
            glib:type-name="GstRTSPOnvifMedia"
            glib:get-type="gst_rtsp_onvif_media_get_type"
@@ -5723,6 +6105,7 @@ bits per second.</doc>
     <class name="RTSPOnvifMediaFactory"
            c:symbol-prefix="rtsp_onvif_media_factory"
            c:type="GstRTSPOnvifMediaFactory"
+           version="1.14"
            parent="RTSPMediaFactory"
            glib:type-name="GstRTSPOnvifMediaFactory"
            glib:get-type="gst_rtsp_onvif_media_factory_get_type"
@@ -5926,6 +6309,7 @@ prepare.</doc>
     <class name="RTSPOnvifServer"
            c:symbol-prefix="rtsp_onvif_server"
            c:type="GstRTSPOnvifServer"
+           version="1.14"
            parent="RTSPServer"
            glib:type-name="GstRTSPOnvifServer"
            glib:get-type="gst_rtsp_onvif_server_get_type"
@@ -6190,6 +6574,34 @@ called when @buffer must be sent on @channel.</doc>
         <parameter name="buffer" transfer-ownership="none">
           <doc xml:space="preserve">a #GstBuffer</doc>
           <type name="Gst.Buffer" c:type="GstBuffer*"/>
+        </parameter>
+        <parameter name="channel" transfer-ownership="none">
+          <doc xml:space="preserve">a channel</doc>
+          <type name="guint8" c:type="guint8"/>
+        </parameter>
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="2">
+          <doc xml:space="preserve">user data</doc>
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <callback name="RTSPSendListFunc"
+              c:type="GstRTSPSendListFunc"
+              version="1.16">
+      <doc xml:space="preserve">Function registered with gst_rtsp_stream_transport_set_callbacks() and
+called when @buffer_list must be sent on @channel.</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">%TRUE on success</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="buffer_list" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstBufferList</doc>
+          <type name="Gst.BufferList" c:type="GstBufferList*"/>
         </parameter>
         <parameter name="channel" transfer-ownership="none">
           <doc xml:space="preserve">a channel</doc>
@@ -7319,7 +7731,8 @@ valid until the session of @media is unreffed.</doc>
         </parameters>
       </method>
       <method name="get_transports"
-              c:identifier="gst_rtsp_session_media_get_transports">
+              c:identifier="gst_rtsp_session_media_get_transports"
+              version="1.14">
         <doc xml:space="preserve">Get a list of all available #GstRTSPStreamTransport in this session.</doc>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">a
@@ -7850,6 +8263,39 @@ or a depayloader element @payloader if @pad is a sink pad.</doc>
           </parameter>
         </parameters>
       </constructor>
+      <method name="add_multicast_client_address"
+              c:identifier="gst_rtsp_stream_add_multicast_client_address"
+              version="1.16">
+        <doc xml:space="preserve">Add multicast client address to stream. At this point, the sockets that
+will stream RTP and RTCP data to @destination are supposed to be
+allocated.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @destination can be addedd and handled by @stream.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="destination" transfer-ownership="none">
+            <doc xml:space="preserve">a multicast address to add</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+          <parameter name="rtp_port" transfer-ownership="none">
+            <doc xml:space="preserve">RTP port</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="rtcp_port" transfer-ownership="none">
+            <doc xml:space="preserve">RTCP port</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+          <parameter name="family" transfer-ownership="none">
+            <doc xml:space="preserve">socket family</doc>
+            <type name="Gio.SocketFamily" c:type="GSocketFamily"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="add_transport"
               c:identifier="gst_rtsp_stream_add_transport">
         <doc xml:space="preserve">Add the transport in @trans to @stream. The media of @stream will
@@ -7900,7 +8346,8 @@ then also be send to the values configured in @trans.
         </parameters>
       </method>
       <method name="complete_stream"
-              c:identifier="gst_rtsp_stream_complete_stream">
+              c:identifier="gst_rtsp_stream_complete_stream"
+              version="1.14">
         <doc xml:space="preserve">Add a receiver and sender part to the pipeline based on the transport from
 SETUP.</doc>
         <return-value transfer-ownership="none">
@@ -8027,6 +8474,21 @@ use gst_caps_unref() after usage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="get_max_mcast_ttl"
+              c:identifier="gst_rtsp_stream_get_max_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Get the the maximum time-to-live value of outgoing multicast packets.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the maximum time-to-live value of outgoing multicast packets.</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="get_mtu" c:identifier="gst_rtsp_stream_get_mtu">
         <doc xml:space="preserve">Get the configured MTU in the payloader of @stream.</doc>
         <return-value transfer-ownership="none">
@@ -8060,6 +8522,21 @@ after usage.</doc>
             <doc xml:space="preserve">the #GSocketFamily</doc>
             <type name="Gio.SocketFamily" c:type="GSocketFamily"/>
           </parameter>
+        </parameters>
+      </method>
+      <method name="get_multicast_client_addresses"
+              c:identifier="gst_rtsp_stream_get_multicast_client_addresses"
+              version="1.16">
+        <doc xml:space="preserve">Get all multicast client addresses that RTP data will be sent to</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A comma separated list of host:port pairs with destinations</doc>
+          <type name="utf8" c:type="gchar*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
         </parameters>
       </method>
       <method name="get_multicast_iface"
@@ -8161,7 +8638,8 @@ g_free() after usage.</doc>
         </parameters>
       </method>
       <method name="get_rtcp_multicast_socket"
-              c:identifier="gst_rtsp_stream_get_rtcp_multicast_socket">
+              c:identifier="gst_rtsp_stream_get_rtcp_multicast_socket"
+              version="1.14">
         <doc xml:space="preserve">Get the multicast RTCP socket from @stream for a @family.</doc>
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the multicast RTCP socket or %NULL if no
@@ -8205,6 +8683,7 @@ socket could be allocated for @family. Unref after usage</doc>
         <doc xml:space="preserve">Get the multicast RTP socket from @stream for a @family.</doc>
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the multicast RTP socket or %NULL if no
+
 socket could be allocated for @family. Unref after usage</doc>
           <type name="Gio.Socket" c:type="GSocket*"/>
         </return-value>
@@ -8387,6 +8866,62 @@ be called when @stream has been joined.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="get_ulpfec_enabled"
+              c:identifier="gst_rtsp_stream_get_ulpfec_enabled">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_ulpfec_percentage"
+              c:identifier="gst_rtsp_stream_get_ulpfec_percentage"
+              version="1.16">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the amount of redundancy applied when creating ULPFEC
+protection packets.</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_ulpfec_pt"
+              c:identifier="gst_rtsp_stream_get_ulpfec_pt"
+              version="1.16">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">the payload type used for ULPFEC protection packets</doc>
+          <type name="guint" c:type="guint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="handle_keymgmt"
+              c:identifier="gst_rtsp_stream_handle_keymgmt"
+              version="1.16">
+        <doc xml:space="preserve">Parse and handle a KeyMgmt header.</doc>
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="keymgmt" transfer-ownership="none">
+            <doc xml:space="preserve">a keymgmt header</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="has_control" c:identifier="gst_rtsp_stream_has_control">
         <doc xml:space="preserve">Check if @stream has the control string @control.</doc>
         <return-value transfer-ownership="none">
@@ -8405,6 +8940,21 @@ be called when @stream has been joined.</doc>
             <doc xml:space="preserve">a control string</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
+        </parameters>
+      </method>
+      <method name="is_bind_mcast_address"
+              c:identifier="gst_rtsp_stream_is_bind_mcast_address"
+              version="1.16">
+        <doc xml:space="preserve">Check if multicast sockets are configured to be bound to multicast addresses.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if multicast sockets are configured to be bound to multicast addresses.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
         </parameters>
       </method>
       <method name="is_blocking" c:identifier="gst_rtsp_stream_is_blocking">
@@ -8434,7 +8984,9 @@ be called when @stream has been joined.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="is_complete" c:identifier="gst_rtsp_stream_is_complete">
+      <method name="is_complete"
+              c:identifier="gst_rtsp_stream_is_complete"
+              version="1.14">
         <doc xml:space="preserve">Checks whether the stream is complete, contains the receiver and the sender
 parts. As the stream contains sink(s) element(s), it's possible to perform
 seek operations on it.</doc>
@@ -8449,7 +9001,9 @@ seek operations on it.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="is_receiver" c:identifier="gst_rtsp_stream_is_receiver">
+      <method name="is_receiver"
+              c:identifier="gst_rtsp_stream_is_receiver"
+              version="1.14">
         <doc xml:space="preserve">Checks whether the stream is a receiver.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the stream is a receiver and %FALSE otherwise.</doc>
@@ -8462,7 +9016,9 @@ seek operations on it.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="is_sender" c:identifier="gst_rtsp_stream_is_sender">
+      <method name="is_sender"
+              c:identifier="gst_rtsp_stream_is_sender"
+              version="1.14">
         <doc xml:space="preserve">Checks whether the stream is a sender.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if the stream is a sender and %FALSE otherwise.</doc>
@@ -8648,6 +9204,25 @@ not be sent to the values configured in @trans.
           </parameter>
         </parameters>
       </method>
+      <method name="request_aux_receiver"
+              c:identifier="gst_rtsp_stream_request_aux_receiver"
+              version="1.16">
+        <doc xml:space="preserve">Creating a rtxreceive bin</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">a #GstElement.</doc>
+          <type name="Gst.Element" c:type="GstElement*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="sessid" transfer-ownership="none">
+            <doc xml:space="preserve">the session id</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="request_aux_sender"
               c:identifier="gst_rtsp_stream_request_aux_sender"
               version="1.6">
@@ -8667,6 +9242,43 @@ not be sent to the values configured in @trans.
           </parameter>
         </parameters>
       </method>
+      <method name="request_ulpfec_decoder"
+              c:identifier="gst_rtsp_stream_request_ulpfec_decoder"
+              version="1.16">
+        <doc xml:space="preserve">Creating a rtpulpfecdec element</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">a #GstElement.</doc>
+          <type name="Gst.Element" c:type="GstElement*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="rtpbin" transfer-ownership="none">
+            <type name="Gst.Element" c:type="GstElement*"/>
+          </parameter>
+          <parameter name="sessid" transfer-ownership="none">
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="request_ulpfec_encoder"
+              c:identifier="gst_rtsp_stream_request_ulpfec_encoder"
+              version="1.16">
+        <doc xml:space="preserve">Creating a rtpulpfecenc element</doc>
+        <return-value transfer-ownership="full" nullable="1">
+          <doc xml:space="preserve">a #GstElement.</doc>
+          <type name="Gst.Element" c:type="GstElement*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="sessid" transfer-ownership="none">
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="reserve_address"
               c:identifier="gst_rtsp_stream_reserve_address">
         <doc xml:space="preserve">Reserve @address and @port as the address and port of @stream. The original
@@ -8674,7 +9286,8 @@ not be sent to the values configured in @trans.
 won't release the address from the pool.</doc>
         <return-value transfer-ownership="full" nullable="1">
           <doc xml:space="preserve">the #GstRTSPAddress of @stream or %NULL when
-the address could be reserved. gst_rtsp_address_free() after usage.</doc>
+the address could not be reserved. gst_rtsp_address_free() after
+usage.</doc>
           <type name="RTSPAddress" c:type="GstRTSPAddress*"/>
         </return-value>
         <parameters>
@@ -8700,7 +9313,9 @@ the address could be reserved. gst_rtsp_address_free() after usage.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="seekable" c:identifier="gst_rtsp_stream_seekable">
+      <method name="seekable"
+              c:identifier="gst_rtsp_stream_seekable"
+              version="1.14">
         <doc xml:space="preserve">Checks whether the individual @stream is seekable.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">%TRUE if @stream is seekable, else %FALSE.</doc>
@@ -8730,6 +9345,25 @@ the address could be reserved. gst_rtsp_address_free() after usage.</doc>
                      allow-none="1">
             <doc xml:space="preserve">a #GstRTSPAddressPool</doc>
             <type name="RTSPAddressPool" c:type="GstRTSPAddressPool*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_bind_mcast_address"
+              c:identifier="gst_rtsp_stream_set_bind_mcast_address"
+              version="1.16">
+        <doc xml:space="preserve">Decide whether the multicast socket should be bound to a multicast address or
+INADDR_ANY.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream,</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="bind_mcast_addr" transfer-ownership="none">
+            <doc xml:space="preserve">the new value</doc>
+            <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
       </method>
@@ -8823,6 +9457,25 @@ an RTSP connection.</doc>
           <parameter name="dscp_qos" transfer-ownership="none">
             <doc xml:space="preserve">a new dscp qos value (0-63, or -1 to disable)</doc>
             <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_max_mcast_ttl"
+              c:identifier="gst_rtsp_stream_set_max_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Set the maximum time-to-live value of outgoing multicast packets.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the requested ttl has been set successfully.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="ttl" transfer-ownership="none">
+            <doc xml:space="preserve">the new multicast ttl value</doc>
+            <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </method>
@@ -8982,6 +9635,39 @@ an RTSP connection.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="set_ulpfec_percentage"
+              c:identifier="gst_rtsp_stream_set_ulpfec_percentage"
+              version="1.16">
+        <doc xml:space="preserve">Sets the amount of redundancy to apply when creating ULPFEC
+protection packets.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="percentage" transfer-ownership="none">
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_ulpfec_pt"
+              c:identifier="gst_rtsp_stream_set_ulpfec_pt"
+              version="1.16">
+        <doc xml:space="preserve">Set the payload type to be used for ULPFEC protection packets</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="pt" transfer-ownership="none">
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="transport_filter"
               c:identifier="gst_rtsp_stream_transport_filter">
         <doc xml:space="preserve">Call @func for each transport managed by @stream. The result value of @func
@@ -9069,6 +9755,25 @@ be removed from @stream.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="verify_mcast_ttl"
+              c:identifier="gst_rtsp_stream_verify_mcast_ttl"
+              version="1.16">
+        <doc xml:space="preserve">Check if the requested multicast ttl value is allowed.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">TRUE if the requested ttl value is allowed.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="stream" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStream</doc>
+            <type name="RTSPStream" c:type="GstRTSPStream*"/>
+          </instance-parameter>
+          <parameter name="ttl" transfer-ownership="none">
+            <doc xml:space="preserve">a requested multicast ttl</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="control" writable="1" transfer-ownership="none">
         <type name="utf8" c:type="gchar*"/>
       </property>
@@ -9100,6 +9805,16 @@ be removed from @stream.</doc>
         </parameters>
       </glib:signal>
       <glib:signal name="new-rtp-encoder" when="last">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <type name="Gst.Element"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="new-rtp-rtcp-decoder" when="last">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -9242,6 +9957,20 @@ It remains valid for as long as @trans is valid.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="message_sent"
+              c:identifier="gst_rtsp_stream_transport_message_sent"
+              version="1.16">
+        <doc xml:space="preserve">Signal the installed message_sent callback for @trans.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="trans" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStreamTransport</doc>
+            <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="recv_data"
               c:identifier="gst_rtsp_stream_transport_recv_data">
         <doc xml:space="preserve">Receive @buffer on @channel @trans.</doc>
@@ -9283,6 +10012,25 @@ It remains valid for as long as @trans is valid.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="send_rtcp_list"
+              c:identifier="gst_rtsp_stream_transport_send_rtcp_list"
+              version="1.16">
+        <doc xml:space="preserve">Send @buffer_list to the installed RTCP callback for @trans.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE on success</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="trans" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStreamTransport</doc>
+            <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+          </instance-parameter>
+          <parameter name="buffer_list" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstBuffer</doc>
+            <type name="Gst.BufferList" c:type="GstBufferList*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="send_rtp"
               c:identifier="gst_rtsp_stream_transport_send_rtp">
         <doc xml:space="preserve">Send @buffer to the installed RTP callback for @trans.</doc>
@@ -9298,6 +10046,25 @@ It remains valid for as long as @trans is valid.</doc>
           <parameter name="buffer" transfer-ownership="none">
             <doc xml:space="preserve">a #GstBuffer</doc>
             <type name="Gst.Buffer" c:type="GstBuffer*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="send_rtp_list"
+              c:identifier="gst_rtsp_stream_transport_send_rtp_list"
+              version="1.16">
+        <doc xml:space="preserve">Send @buffer_list to the installed RTP callback for @trans.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE on success</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="trans" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStreamTransport</doc>
+            <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+          </instance-parameter>
+          <parameter name="buffer_list" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstBufferList</doc>
+            <type name="Gst.BufferList" c:type="GstBufferList*"/>
           </parameter>
         </parameters>
       </method>
@@ -9395,6 +10162,86 @@ receiver of @trans.</doc>
                      allow-none="1"
                      scope="async">
             <doc xml:space="preserve">called with the user_data when no longer needed.</doc>
+            <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_list_callbacks"
+              c:identifier="gst_rtsp_stream_transport_set_list_callbacks"
+              version="1.16">
+        <doc xml:space="preserve">Install callbacks that will be called when data for a stream should be sent
+to a client. This is usually used when sending RTP/RTCP over TCP.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="trans" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStreamTransport</doc>
+            <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+          </instance-parameter>
+          <parameter name="send_rtp_list"
+                     transfer-ownership="none"
+                     scope="notified">
+            <doc xml:space="preserve">a callback called when RTP should be sent</doc>
+            <type name="RTSPSendListFunc" c:type="GstRTSPSendListFunc"/>
+          </parameter>
+          <parameter name="send_rtcp_list"
+                     transfer-ownership="none"
+                     scope="notified"
+                     closure="2"
+                     destroy="3">
+            <doc xml:space="preserve">a callback called when RTCP should be sent</doc>
+            <type name="RTSPSendListFunc" c:type="GstRTSPSendListFunc"/>
+          </parameter>
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
+            <doc xml:space="preserve">user data passed to callbacks</doc>
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+          <parameter name="notify"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     scope="async">
+            <doc xml:space="preserve">called with the user_data when no longer needed.</doc>
+            <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_message_sent"
+              c:identifier="gst_rtsp_stream_transport_set_message_sent">
+        <doc xml:space="preserve">Install a callback that will be called when a message has been sent on @trans.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="trans" transfer-ownership="none">
+            <doc xml:space="preserve">a #GstRTSPStreamTransport</doc>
+            <type name="RTSPStreamTransport" c:type="GstRTSPStreamTransport*"/>
+          </instance-parameter>
+          <parameter name="message_sent"
+                     transfer-ownership="none"
+                     scope="notified"
+                     closure="1"
+                     destroy="2">
+            <doc xml:space="preserve">a callback called when a message has been sent</doc>
+            <type name="RTSPMessageSentFunc" c:type="GstRTSPMessageSentFunc"/>
+          </parameter>
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
+            <doc xml:space="preserve">user data passed to callback</doc>
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+          <parameter name="notify"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     scope="async">
+            <doc xml:space="preserve">called with the user_data when no longer needed</doc>
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
           </parameter>
         </parameters>
@@ -10251,24 +11098,32 @@ information in the SDP.</doc>
       </parameters>
     </function>
     <function name="rtsp_sdp_make_media"
-              c:identifier="gst_rtsp_sdp_make_media">
+              c:identifier="gst_rtsp_sdp_make_media"
+              version="1.14">
+      <doc xml:space="preserve">Creates a #GstSDPMedia from the parameters and stores it in @sdp.</doc>
       <return-value transfer-ownership="none">
+        <doc xml:space="preserve">%TRUE on success</doc>
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
       <parameters>
         <parameter name="sdp" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstRTSPMessage</doc>
           <type name="GstSdp.SDPMessage" c:type="GstSDPMessage*"/>
         </parameter>
         <parameter name="info" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstSDPInfo</doc>
           <type name="SDPInfo" c:type="GstSDPInfo*"/>
         </parameter>
         <parameter name="stream" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstRTSPStream</doc>
           <type name="RTSPStream" c:type="GstRTSPStream*"/>
         </parameter>
         <parameter name="caps" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstCaps</doc>
           <type name="Gst.Caps" c:type="GstCaps*"/>
         </parameter>
         <parameter name="profile" transfer-ownership="none">
+          <doc xml:space="preserve">a #GstRTSPProfile</doc>
           <type name="GstRtsp.RTSPProfile" c:type="GstRTSPProfile"/>
         </parameter>
       </parameters>

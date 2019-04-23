@@ -123,7 +123,7 @@ new frame.</doc>
     <record name="AudioVisualizerClass"
             c:type="GstAudioVisualizerClass"
             glib:is-gtype-struct-for="AudioVisualizer">
-      <field name="parent_class">
+      <field name="parent_class" readable="0" private="1">
         <type name="Gst.ElementClass" c:type="GstElementClass"/>
       </field>
       <field name="setup">
@@ -432,6 +432,12 @@ URI will timeout.
 If the discovery of a URI times out, the %GST_DISCOVERER_TIMEOUT will be
 set on the result flags.</doc>
         <type name="guint64" c:type="guint64"/>
+      </property>
+      <property name="use-cache"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
       </property>
       <field name="parent">
         <type name="GObject.Object" c:type="GObject"/>
@@ -1717,12 +1723,12 @@ subtitles), are currently ignored.</doc>
           </parameter>
         </parameters>
       </function>
-      <method name="copy" c:identifier="gst_encoding_profile_copy">
+      <method name="copy"
+              c:identifier="gst_encoding_profile_copy"
+              version="1.12">
         <doc xml:space="preserve">Makes a deep copy of @self</doc>
         <return-value transfer-ownership="full">
-          <doc xml:space="preserve">The copy of @self
-
-Since 1.12</doc>
+          <doc xml:space="preserve">The copy of @self</doc>
           <type name="EncodingProfile" c:type="GstEncodingProfile*"/>
         </return-value>
         <parameters>
@@ -1951,10 +1957,9 @@ during the encoding</doc>
         </parameters>
       </method>
       <method name="set_enabled"
-              c:identifier="gst_encoding_profile_set_enabled">
-        <doc xml:space="preserve">Set whether the profile should be used or not.
-
-Since 1.6</doc>
+              c:identifier="gst_encoding_profile_set_enabled"
+              version="1.6">
+        <doc xml:space="preserve">Set whether the profile should be used or not.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2747,13 +2752,13 @@ in debugging.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PLUGINS_BASE_VERSION_MICRO"
-              value="4"
+              value="0"
               c:type="GST_PLUGINS_BASE_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="PLUGINS_BASE_VERSION_MINOR"
-              value="14"
+              value="16"
               c:type="GST_PLUGINS_BASE_VERSION_MINOR">
       <doc xml:space="preserve">The minor version of GStreamer's gst-plugins-base libraries at compile time.</doc>
       <type name="gint" c:type="gint"/>
@@ -2796,12 +2801,11 @@ If mpegversion is 4, the "base-profile" field is also set in @caps.</doc>
       </parameters>
     </function>
     <function name="codec_utils_aac_get_channels"
-              c:identifier="gst_codec_utils_aac_get_channels">
+              c:identifier="gst_codec_utils_aac_get_channels"
+              version="1.10">
       <doc xml:space="preserve">Returns the channels of the given AAC stream.</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">The channels or 0 if the channel could not be determined.
-
-Since 1.10</doc>
+        <doc xml:space="preserve">The channels or 0 if the channel could not be determined.</doc>
         <type name="guint" c:type="guint"/>
       </return-value>
       <parameters>
@@ -2843,13 +2847,12 @@ Main, LTP, SSR and others, the Main profile is used.
 The @audio_config parameter follows the following format, starting from the
 most significant bit of the first byte:
 
-  * Bit 0:4 contains the AudioObjectType
+  * Bit 0:4 contains the AudioObjectType (if this is 0x5, then the
+    real AudioObjectType is carried after the rate and channel data)
   * Bit 5:8 contains the sample frequency index (if this is 0xf, then the
     next 24 bits define the actual sample frequency, and subsequent
     fields are appropriately shifted).
-  * Bit 9:12 contains the channel configuration
-
-&gt; HE-AAC support has not yet been implemented.</doc>
+  * Bit 9:12 contains the channel configuration</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The level as a const string and %NULL if the level could not be
 determined.</doc>
@@ -2873,10 +2876,8 @@ determined.</doc>
     <function name="codec_utils_aac_get_profile"
               c:identifier="gst_codec_utils_aac_get_profile">
       <doc xml:space="preserve">Returns the profile of the given AAC stream as a string. The profile is
-determined using the AudioObjectType field which is in the first 5 bits of
-@audio_config.
-
-&gt; HE-AAC support has not yet been implemented.</doc>
+normally determined using the AudioObjectType field which is in the first
+5 bits of @audio_config</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">The profile as a const string and %NULL if the profile could not be
 determined.</doc>
@@ -2898,13 +2899,12 @@ determined.</doc>
       </parameters>
     </function>
     <function name="codec_utils_aac_get_sample_rate"
-              c:identifier="gst_codec_utils_aac_get_sample_rate">
+              c:identifier="gst_codec_utils_aac_get_sample_rate"
+              version="1.10">
       <doc xml:space="preserve">Translates the sample rate index found in AAC headers to the actual sample
 rate.</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">The sample rate if sr_idx is valid, 0 otherwise.
-
-Since 1.10</doc>
+        <doc xml:space="preserve">The sample rate if sr_idx is valid, 0 otherwise.</doc>
         <type name="guint" c:type="guint"/>
       </return-value>
       <parameters>
@@ -3034,15 +3034,14 @@ byte.
       </parameters>
     </function>
     <function name="codec_utils_h265_caps_set_level_tier_and_profile"
-              c:identifier="gst_codec_utils_h265_caps_set_level_tier_and_profile">
+              c:identifier="gst_codec_utils_h265_caps_set_level_tier_and_profile"
+              version="1.4">
       <doc xml:space="preserve">Sets the level, tier and profile in @caps if it can be determined from
 @profile_tier_level. See gst_codec_utils_h265_get_level(),
 gst_codec_utils_h265_get_tier() and gst_codec_utils_h265_get_profile()
 for more details on the parameters.</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">%TRUE if the level, tier, profile could be set, %FALSE otherwise.
-
-Since 1.4</doc>
+        <doc xml:space="preserve">%TRUE if the level, tier, profile could be set, %FALSE otherwise.</doc>
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
       <parameters>
@@ -3064,14 +3063,13 @@ Since 1.4</doc>
       </parameters>
     </function>
     <function name="codec_utils_h265_get_level"
-              c:identifier="gst_codec_utils_h265_get_level">
+              c:identifier="gst_codec_utils_h265_get_level"
+              version="1.4">
       <doc xml:space="preserve">Converts the level indication (general_level_idc) in the stream's
 profile_tier_level structure into a string. The profiel_tier_level is
 expected to have the same format as for gst_codec_utils_h264_get_profile().</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">The level as a const string, or %NULL if there is an error.
-
-Since 1.4</doc>
+        <doc xml:space="preserve">The level as a const string, or %NULL if there is an error.</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
@@ -3089,12 +3087,11 @@ Since 1.4</doc>
       </parameters>
     </function>
     <function name="codec_utils_h265_get_level_idc"
-              c:identifier="gst_codec_utils_h265_get_level_idc">
+              c:identifier="gst_codec_utils_h265_get_level_idc"
+              version="1.4">
       <doc xml:space="preserve">Transform a level string from the caps into the level_idc</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">the level_idc or 0 if the level is unknown
-
-Since 1.4</doc>
+        <doc xml:space="preserve">the level_idc or 0 if the level is unknown</doc>
         <type name="guint8" c:type="guint8"/>
       </return-value>
       <parameters>
@@ -3105,7 +3102,8 @@ Since 1.4</doc>
       </parameters>
     </function>
     <function name="codec_utils_h265_get_profile"
-              c:identifier="gst_codec_utils_h265_get_profile">
+              c:identifier="gst_codec_utils_h265_get_profile"
+              version="1.4">
       <doc xml:space="preserve">Converts the profile indication (general_profile_idc) in the stream's
 profile_level_tier structure into a string. The profile_tier_level is
 expected to have the following format, as defined in the H.265
@@ -3123,9 +3121,7 @@ with bit 0 being the most significant bit of the first byte.
 * Bit 44:87 - general_reserved_zero_44bits
 * Bit 88:95 - general_level_idc</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">The profile as a const string, or %NULL if there is an error.
-
-Since 1.4</doc>
+        <doc xml:space="preserve">The profile as a const string, or %NULL if there is an error.</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
@@ -3143,14 +3139,13 @@ Since 1.4</doc>
       </parameters>
     </function>
     <function name="codec_utils_h265_get_tier"
-              c:identifier="gst_codec_utils_h265_get_tier">
+              c:identifier="gst_codec_utils_h265_get_tier"
+              version="1.4">
       <doc xml:space="preserve">Converts the tier indication (general_tier_flag) in the stream's
 profile_tier_level structure into a string. The profile_tier_level
 is expected to have the same format as for gst_codec_utils_h264_get_profile().</doc>
       <return-value transfer-ownership="none">
-        <doc xml:space="preserve">The tier as a const string, or %NULL if there is an error.
-
-Since 1.4</doc>
+        <doc xml:space="preserve">The tier as a const string, or %NULL if there is an error.</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
