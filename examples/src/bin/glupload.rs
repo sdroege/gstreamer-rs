@@ -19,8 +19,7 @@ use std::error::Error as StdError;
 use std::ffi::CStr;
 use std::mem;
 use std::ptr;
-use std::sync::{mpsc, Arc, Mutex};
-use std::thread;
+use std::sync::mpsc;
 
 extern crate failure;
 use failure::Error;
@@ -29,7 +28,6 @@ use failure::Error;
 extern crate failure_derive;
 
 extern crate glutin;
-use glutin::ContextTrait;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
@@ -209,7 +207,7 @@ impl Gl {
     }
 }
 
-fn load(gl_context: &glutin::Context) -> Gl {
+fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
     let gl = gl::Gl::load_with(|ptr| gl_context.get_proc_address(ptr) as *const _);
 
     let version = unsafe {
@@ -329,8 +327,8 @@ struct App {
     appsink: gst_app::AppSink,
     glupload: gst::Element,
     bus: gst::Bus,
-    events_loop: Arc<glutin::EventsLoop>,
-    windowed_context: Arc<glutin::WindowedContext>,
+    events_loop: glutin::EventsLoop,
+    windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
     shared_context: gst_gl::GLContext,
 }
 
@@ -345,19 +343,14 @@ impl App {
 
         let events_loop = glutin::EventsLoop::new();
         let window = glutin::WindowBuilder::new().with_title("GL rendering");
-        let windowed_context = Arc::new(
-            glutin::ContextBuilder::new()
-                .with_vsync(true)
-                .build_windowed(window, &events_loop)?,
-        );
+        let windowed_context = glutin::ContextBuilder::new()
+            .with_vsync(true)
+            .build_windowed(window, &events_loop)?;
 
-        unsafe { windowed_context.make_current()? };
-
-        let windowed_context_ = windowed_context.clone();
-        let context = windowed_context_.context();
+        let windowed_context = unsafe { windowed_context.make_current().map_err(|(_, err)| err)? };
 
         #[cfg(any(feature = "gl-x11", feature = "gl-wayland"))]
-        let inner_window = windowed_context_.window();
+        let inner_window = windowed_context.window();
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
@@ -366,18 +359,20 @@ impl App {
             use glutin::os::unix::WindowExt;
             use glutin::os::ContextTraitExt;
 
-            let api = App::map_gl_api(context.get_api());
+            let api = App::map_gl_api(windowed_context.get_api());
 
-            let (gl_context, gl_display, platform) = match unsafe { context.raw_handle() } {
+            let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
+            {
                 #[cfg(any(feature = "gl-egl", feature = "gl-wayland"))]
                 RawHandle::Egl(egl_context) => {
                     #[cfg(feature = "gl-egl")]
-                    let gl_display = if let Some(display) = unsafe { context.get_egl_display() } {
-                        unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(display as usize) }
-                            .unwrap()
-                    } else {
-                        panic!("EGL context without EGL display");
-                    };
+                    let gl_display =
+                        if let Some(display) = unsafe { windowed_context.get_egl_display() } {
+                            unsafe { gst_gl::GLDisplayEGL::new_with_egl_display(display as usize) }
+                                .unwrap()
+                        } else {
+                            panic!("EGL context without EGL display");
+                        };
 
                     #[cfg(not(feature = "gl-egl"))]
                     let gl_display = if let Some(display) = inner_window.get_wayland_display() {
@@ -421,6 +416,7 @@ impl App {
             shared_context.fill_info()?;
 
             let gl_context = shared_context.clone();
+            let events_proxy = events_loop.create_proxy();
 
             #[allow(clippy::single_match)]
             bus.set_sync_handler(move |_, msg| {
@@ -443,7 +439,7 @@ impl App {
                                 let mut context = gst::Context::new(context_type, true);
                                 {
                                     let context = context.get_mut().unwrap();
-                                    let mut s = context.get_mut_structure();
+                                    let s = context.get_mut_structure();
                                     s.set_value("context", gl_context.to_send_value());
                                 }
                                 el.set_context(&context);
@@ -452,6 +448,8 @@ impl App {
                     }
                     _ => (),
                 }
+
+                let _ = events_proxy.wakeup();
 
                 gst::BusSyncReply::Pass
             });
@@ -464,23 +462,18 @@ impl App {
             appsink,
             glupload,
             bus,
-            events_loop: Arc::new(events_loop),
-            windowed_context,
+            events_loop: events_loop,
+            windowed_context: windowed_context,
             shared_context,
         })
     }
 
-    fn setup(&self) -> Result<(thread::JoinHandle<()>, mpsc::Receiver<gst::Sample>), Error> {
-        let bus = self.bus.clone();
-        let bus_handler = thread::spawn(move || {
-            let ret = App::gst_loop(bus);
-            if ret.is_err() {
-                eprintln!("ERROR! {:?}", ret);
-            }
-        });
-
+    fn setup(
+        &self,
+        events_loop: &glutin::EventsLoop,
+    ) -> Result<mpsc::Receiver<gst::Sample>, Error> {
+        let events_proxy = events_loop.create_proxy();
         let (sender, receiver) = mpsc::channel();
-        let sender_clone = Mutex::new(sender.clone());
         self.appsink.set_callbacks(
             gst_app::AppSinkCallbacks::new()
                 .new_sample(move |appsink| {
@@ -511,19 +504,21 @@ impl App {
                             })?;
                     }
 
-                    sender_clone
-                        .lock()
-                        .unwrap()
+                    sender
                         .send(sample)
                         .map(|_| gst::FlowSuccess::Ok)
-                        .map_err(|_| gst::FlowError::Error)
+                        .map_err(|_| gst::FlowError::Error)?;
+
+                    let _ = events_proxy.wakeup();
+
+                    Ok(gst::FlowSuccess::Ok)
                 })
                 .build(),
         );
 
         self.pipeline.set_state(gst::State::Playing)?;
 
-        Ok((bus_handler, receiver))
+        Ok(receiver)
     }
 
     fn map_gl_api(api: glutin::Api) -> gst_gl::GLAPI {
@@ -579,10 +574,10 @@ impl App {
         Ok((pipeline, appsink, glupload.unwrap()))
     }
 
-    fn gst_loop(bus: gst::Bus) -> Result<(), Error> {
+    fn handle_messages(bus: &gst::Bus) -> Result<(), Error> {
         use gst::MessageView;
 
-        for msg in bus.iter_timed(gst::CLOCK_TIME_NONE) {
+        for msg in bus.iter() {
             match msg.view() {
                 MessageView::Eos(..) => break,
                 MessageView::Error(err) => {
@@ -610,15 +605,16 @@ fn main_loop(mut app: App) -> Result<(), Error> {
         app.windowed_context.get_pixel_format()
     );
 
-    let gl = load(&app.windowed_context.context());
+    let gl = load(&app.windowed_context);
 
-    let (bus_handler, receiver) = app.setup()?;
+    let receiver = app.setup(&app.events_loop)?;
 
-    let mut curr_frame: Option<Arc<gst_video::VideoFrame<gst_video::video_frame::Readable>>> = None;
+    let mut curr_frame: Option<gst_video::VideoFrame<gst_video::video_frame::Readable>> = None;
     let mut running = true;
-    let events_loop = Arc::get_mut(&mut app.events_loop).unwrap();
-    let windowed_context = app.windowed_context.clone();
     let mut gst_gl_context: Option<gst_gl::GLContext> = None;
+    let events_loop = &mut app.events_loop;
+    let windowed_context = &mut app.windowed_context;
+    let bus = &app.bus;
 
     while running {
         #[allow(clippy::single_match)]
@@ -626,7 +622,7 @@ fn main_loop(mut app: App) -> Result<(), Error> {
             glutin::Event::WindowEvent { event, .. } => match event {
                 glutin::WindowEvent::CloseRequested => running = false,
                 glutin::WindowEvent::Resized(logical_size) => {
-                    let dpi_factor = windowed_context.get_hidpi_factor();
+                    let dpi_factor = windowed_context.window().get_hidpi_factor();
                     windowed_context.resize(logical_size.to_physical(dpi_factor));
                     gl.resize(logical_size.to_physical(dpi_factor));
                 }
@@ -635,8 +631,12 @@ fn main_loop(mut app: App) -> Result<(), Error> {
             _ => (),
         });
 
+        // Handle all pending messages. Whenever there is a message we will
+        // wake up the events loop above
+        App::handle_messages(&bus)?;
+
         // get the last frame in channel
-        while let Ok(sample) = receiver.try_recv() {
+        if let Some(sample) = receiver.try_iter().last() {
             let buffer = sample.get_buffer().unwrap();
             let info = sample
                 .get_caps()
@@ -659,22 +659,21 @@ fn main_loop(mut app: App) -> Result<(), Error> {
             if let Ok(frame) =
                 gst_video::VideoFrame::from_buffer_readable_gl(buffer.to_owned(), &info)
             {
-                curr_frame = Some(Arc::new(frame));
+                curr_frame = Some(frame);
             }
         }
 
-        if let Some(frame) = curr_frame.clone() {
+        if let Some(frame) = curr_frame.as_ref() {
             let sync_meta = frame.buffer().get_meta::<gst_gl::GLSyncMeta>().unwrap();
             sync_meta.wait(&app.shared_context);
             if let Some(texture) = frame.get_texture_id(0) {
                 gl.draw_frame(texture as gl::types::GLuint);
             }
         }
-        app.windowed_context.swap_buffers()?;
+        windowed_context.swap_buffers()?;
     }
 
     app.pipeline.send_event(gst::Event::new_eos().build());
-    bus_handler.join().expect("Could join bus handler thread");
     app.pipeline.set_state(gst::State::Null)?;
 
     Ok(())
