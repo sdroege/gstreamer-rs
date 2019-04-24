@@ -157,7 +157,7 @@ impl AppSink {
         }
     }
 
-    pub fn connect_eos<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_eos<F: Fn(&AppSink) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"eos\0".as_ptr() as *const _,
@@ -225,7 +225,7 @@ impl AppSink {
 unsafe impl Send for AppSink {}
 unsafe impl Sync for AppSink {}
 
-unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, f: glib_sys::gpointer) {
+unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(this: *mut gst_app_sys::GstAppSink, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }

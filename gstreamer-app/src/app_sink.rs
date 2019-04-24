@@ -59,7 +59,7 @@ pub struct AppSinkCallbacksBuilder {
 }
 
 impl AppSinkCallbacksBuilder {
-    pub fn eos<F: Fn(&AppSink) + Send + Sync + 'static>(self, eos: F) -> Self {
+    pub fn eos<F: Fn(&AppSink) + Send + 'static>(self, eos: F) -> Self {
         Self {
             eos: Some(RefCell::new(Box::new(eos))),
             ..self
@@ -67,7 +67,7 @@ impl AppSinkCallbacksBuilder {
     }
 
     pub fn new_preroll<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         self,
         new_preroll: F,
@@ -79,7 +79,7 @@ impl AppSinkCallbacksBuilder {
     }
 
     pub fn new_sample<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         self,
         new_sample: F,
@@ -177,7 +177,7 @@ impl AppSink {
     }
 
     pub fn connect_new_sample<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         &self,
         f: F,
@@ -194,7 +194,7 @@ impl AppSink {
     }
 
     pub fn connect_new_preroll<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         &self,
         f: F,
@@ -212,7 +212,7 @@ impl AppSink {
 }
 
 unsafe extern "C" fn new_sample_trampoline<
-    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
 >(
     this: *mut gst_app_sys::GstAppSink,
     f: glib_sys::gpointer,
@@ -223,7 +223,7 @@ unsafe extern "C" fn new_sample_trampoline<
 }
 
 unsafe extern "C" fn new_preroll_trampoline<
-    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + Sync + 'static,
+    F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
 >(
     this: *mut gst_app_sys::GstAppSink,
     f: glib_sys::gpointer,

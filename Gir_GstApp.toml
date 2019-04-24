@@ -67,6 +67,10 @@ final_type = true
     # Use Result<FlowSuccess, FlowError>
     ignore = true
 
+    [[object.signal]]
+    name = "eos"
+    concurrency = "send"
+
     [[object.function]]
     name = "set_caps"
         [[object.function.parameter]]
