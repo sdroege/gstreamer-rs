@@ -597,9 +597,13 @@ impl App {
 
         Ok(())
     }
+
+    fn into_context(self: App) -> glutin::WindowedContext<glutin::PossiblyCurrent> {
+        self.windowed_context
+    }
 }
 
-fn main_loop(mut app: App) -> Result<(), Error> {
+fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCurrent>, Error> {
     println!(
         "Pixel format of the window's GL context {:?}",
         app.windowed_context.get_pixel_format()
@@ -676,11 +680,23 @@ fn main_loop(mut app: App) -> Result<(), Error> {
     app.pipeline.send_event(gst::Event::new_eos().build());
     app.pipeline.set_state(gst::State::Null)?;
 
+    Ok(app.into_context())
+}
+
+fn cleanup(
+    _windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
+) -> Result<(), failure::Error> {
+    // To ensure that the context stays alive longer than the pipeline or any reference
+    // inside GStreamer to the GL context, its display or anything else. See
+    // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/196
+    //
+    // We might do any window/GL specific cleanup here as needed.
+
     Ok(())
 }
 
 fn example_main() {
-    match App::new().and_then(main_loop) {
+    match App::new().and_then(main_loop).and_then(cleanup) {
         Ok(r) => r,
         Err(e) => eprintln!("Error! {}", e),
     }
