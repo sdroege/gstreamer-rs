@@ -47,8 +47,12 @@ stages:
     - rustc --version
     - cargo build --color=always --all
     - G_DEBUG=fatal_warnings cargo test --color=always --all
-    - cargo build --color=always --all --all-features
-    - G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
+
+    - |
+      if [ -n "$NIGHTLY" ]; then
+        cargo build --color=always --all --all-features
+        G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
+      fi
 
 test 1.31:
   # 1.31 img
@@ -67,6 +71,8 @@ test nightly:
   # https://hub.docker.com/r/rustlang/rust/
   image: "rustlang/rust:nightly-slim"
   allow_failure: true
+  variables:
+    NIGHTLY: 'yes'
   extends: '.cargo test'
 
 rustfmt:
@@ -79,7 +85,7 @@ rustfmt:
 
 clippy:
   extends: '.tarball_setup'
-  image: "rust:slim"
+  image: "rustlang/rust:nightly-slim"
   stage: 'extras'
   script:
     - rustup component add clippy-preview
