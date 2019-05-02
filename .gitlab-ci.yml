@@ -3,7 +3,7 @@ stages:
   - "test"
   - "extras"
 
-.tarball_setup: &setup
+.tarball_setup:
   variables:
     # Only stuff inside the repo directory can be cached
     # Override the CARGO_HOME variable to force its location
@@ -40,9 +40,9 @@ stages:
     paths:
       - "${CARGO_HOME}"
 
-.cargo_test_template: &cargo_test
+.cargo test:
+  extends: '.tarball_setup'
   stage: "test"
-  <<: *setup
   script:
     - rustc --version
     - cargo build --color=always --all
@@ -54,20 +54,20 @@ test 1.31:
   # 1.31 img
   # https://hub.docker.com/_/rust/
   image: "rust:1.31-slim"
-  <<: *cargo_test
+  extends: '.cargo test'
 
 test stable:
   # Stable img
   # https://hub.docker.com/_/rust/
   image: "rust:slim"
-  <<: *cargo_test
+  extends: '.cargo test'
 
 test nightly:
   # Nightly
   # https://hub.docker.com/r/rustlang/rust/
   image: "rustlang/rust:nightly-slim"
   allow_failure: true
-  <<: *cargo_test
+  extends: '.cargo test'
 
 rustfmt:
   image: "rust:slim"
@@ -78,9 +78,9 @@ rustfmt:
     - cargo fmt -- --color=always --check
 
 clippy:
+  extends: '.tarball_setup'
   image: "rust:slim"
   stage: 'extras'
-  <<: *setup
   script:
     - rustup component add clippy-preview
     - cargo clippy --version
