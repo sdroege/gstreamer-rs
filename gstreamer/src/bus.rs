@@ -201,7 +201,8 @@ mod futures {
     use super::*;
     use futures_core::stream::Stream;
     use futures_core::task::{Context, Waker};
-    use futures_core::{Async, Poll};
+    use futures_core::Poll;
+    use std::pin::Pin;
     use std::sync::{Arc, Mutex};
 
     #[derive(Debug)]
@@ -236,18 +237,17 @@ mod futures {
 
     impl Stream for BusStream {
         type Item = Message;
-        type Error = ();
 
-        fn poll_next(&mut self, ctx: &mut Context) -> Poll<Option<Self::Item>, Self::Error> {
+        fn poll_next(self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Option<Self::Item>> {
             let BusStream(ref bus, ref waker) = *self;
 
             let msg = bus.pop();
             if let Some(msg) = msg {
-                Ok(Async::Ready(Some(msg)))
+                Poll::Ready(Some(msg))
             } else {
                 let mut waker = waker.lock().unwrap();
                 *waker = Some(ctx.waker().clone());
-                Ok(Async::Pending)
+                Poll::Pending
             }
         }
     }

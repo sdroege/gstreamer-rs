@@ -19,7 +19,7 @@ gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gs
 gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
-futures-preview = { version = "0.2", optional = true }
+futures-preview = { version = "0.3.0-alpha", optional = true }
 byte-slice-cast = "0.2"
 failure = "0.1"
 failure_derive = "0.1"

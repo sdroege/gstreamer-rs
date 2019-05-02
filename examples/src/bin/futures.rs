@@ -7,8 +7,10 @@ extern crate gstreamer as gst;
 use gst::prelude::*;
 
 extern crate futures;
-use futures::executor::block_on;
+use futures::executor::LocalPool;
+use futures::future;
 use futures::prelude::*;
+use futures::task::SpawnExt;
 
 use std::env;
 
@@ -29,42 +31,45 @@ fn example_main() {
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");
 
-    // BusStream implements the Stream trait, but Stream::for_each is
-    // calling a closure for each item and returns a Future that resolves
-    // when the stream is done or an error has happened
-    let messages = gst::BusStream::new(&bus)
-        .for_each(|msg| {
-            use gst::MessageView;
+    // Use a LocalPool as executor. This runs single threaded on this very thread.
+    let mut pool = LocalPool::new();
 
-            // Determine whether we want to resolve the future, or we still have
-            // to wait. The future is resolved when either an error occurs, or the
-            // pipeline succeeded execution (got an EOS event).
-            let quit = match msg.view() {
-                MessageView::Eos(..) => true,
-                MessageView::Error(err) => {
-                    println!(
-                        "Error from {:?}: {} ({:?})",
-                        err.get_src().map(|s| s.get_path_string()),
-                        err.get_error(),
-                        err.get_debug()
-                    );
-                    true
-                }
-                _ => false,
-            };
+    // We use an AbortHandle for having a Future that runs forever
+    // until we call handle.abort() to quit our event loop
+    let (quit_handle, quit_registration) = future::AbortHandle::new_pair();
+    let quit_future = future::Abortable::new(future::empty::<()>(), quit_registration).map(|_| ());
 
-            if quit {
-                Err(()) // This resolves the future that is returned by for_each
-                        // FIXME: At the moment, EOS messages also result in the future to be resolved
-                        // by an error. This should probably be changed in the future.
-            } else {
-                Ok(()) // Continue - do not resolve the future yet.
+    // BusStream implements the Stream trait. Stream::for_each is calling a closure for each item
+    // and returns a Future that resolves when the stream is done
+    let messages = gst::BusStream::new(&bus).for_each(move |msg| {
+        use gst::MessageView;
+
+        // Determine whether we want to quit: on EOS or error message
+        // we quit, otherwise simply continue.
+        match msg.view() {
+            MessageView::Eos(..) => quit_handle.abort(),
+            MessageView::Error(err) => {
+                println!(
+                    "Error from {:?}: {} ({:?})",
+                    err.get_src().map(|s| s.get_path_string()),
+                    err.get_error(),
+                    err.get_debug()
+                );
+                quit_handle.abort();
             }
-        })
-        .and_then(|_| Ok(()));
+            _ => (),
+        };
 
-    // Synchronously wait on the future we created above.
-    let _ = block_on(messages);
+        // New future to resolve for each message: nothing here
+        future::ready(())
+    });
+
+    // Spawn our message handling stream
+    pool.spawner().spawn(messages).unwrap();
+
+    // And run until something is quitting the loop, i.e. an EOS
+    // or error message is received above
+    pool.run_until(quit_future);
 
     pipeline
         .set_state(gst::State::Null)

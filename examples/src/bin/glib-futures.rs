@@ -4,6 +4,7 @@ use gst::prelude::*;
 extern crate glib;
 
 extern crate futures;
+use futures::future;
 use futures::prelude::*;
 
 use std::env;
@@ -12,12 +13,18 @@ use std::env;
 mod examples_common;
 
 fn example_main() {
+    // Get the default main context and make it also the thread default, then create
+    // a main loop for it
     let ctx = glib::MainContext::default();
+    ctx.push_thread_default();
+    let loop_ = glib::MainLoop::new(Some(&ctx), false);
 
+    // Read the pipeline to launch from the commandline, using the launch syntax.
     let pipeline_str = env::args().collect::<Vec<String>>()[1..].join(" ");
 
     gst::init().unwrap();
 
+    // Create a pipeline from the launch-syntax given on the cli.
     let pipeline = gst::parse_launch(&pipeline_str).unwrap();
     let bus = pipeline.get_bus().unwrap();
 
@@ -25,37 +32,44 @@ fn example_main() {
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");
 
-    let messages = gst::BusStream::new(&bus)
-        .for_each(|msg| {
-            use gst::MessageView;
+    // BusStream implements the Stream trait. Stream::for_each is calling a closure for each item
+    // and returns a Future that resolves when the stream is done
+    let loop_clone = loop_.clone();
+    let messages = gst::BusStream::new(&bus).for_each(move |msg| {
+        use gst::MessageView;
 
-            let quit = match msg.view() {
-                MessageView::Eos(..) => true,
-                MessageView::Error(err) => {
-                    println!(
-                        "Error from {:?}: {} ({:?})",
-                        err.get_src().map(|s| s.get_path_string()),
-                        err.get_error(),
-                        err.get_debug()
-                    );
-                    true
-                }
-                _ => false,
-            };
-
-            if quit {
-                Err(())
-            } else {
-                Ok(())
+        // Determine whether we want to quit: on EOS or error message
+        // we quit, otherwise simply continue.
+        match msg.view() {
+            MessageView::Eos(..) => loop_clone.quit(),
+            MessageView::Error(err) => {
+                println!(
+                    "Error from {:?}: {} ({:?})",
+                    err.get_src().map(|s| s.get_path_string()),
+                    err.get_error(),
+                    err.get_debug()
+                );
+                loop_clone.quit();
             }
-        })
-        .and_then(|_| Ok(()));
+            _ => (),
+        }
 
-    let _ = ctx.block_on(messages);
+        // New future to resolve for each message: nothing here
+        future::ready(())
+    });
+
+    // Spawn our message handling stream
+    ctx.spawn_local(messages);
+
+    // And run until something is quitting the loop, i.e. an EOS
+    // or error message is received above
+    loop_.run();
 
     pipeline
         .set_state(gst::State::Null)
         .expect("Unable to set the pipeline to the `Null` state");
+
+    ctx.pop_thread_default();
 }
 
 fn main() {
