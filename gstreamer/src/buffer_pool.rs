@@ -209,6 +209,28 @@ impl PartialEq for BufferPoolAcquireParams {
 
 impl Eq for BufferPoolAcquireParams {}
 
+#[doc(hidden)]
+impl<'a> ToGlibPtr<'a, *const gst_sys::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
+    type Storage = &'a Self;
+
+    fn to_glib_none(
+        &'a self,
+    ) -> glib::translate::Stash<'a, *const gst_sys::GstBufferPoolAcquireParams, Self> {
+        glib::translate::Stash(&self.0, self)
+    }
+}
+
+#[doc(hidden)]
+impl<'a> ToGlibPtrMut<'a, *mut gst_sys::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
+    type Storage = &'a mut Self;
+
+    fn to_glib_none_mut(
+        &'a mut self,
+    ) -> glib::translate::StashMut<'a, *mut gst_sys::GstBufferPoolAcquireParams, Self> {
+        glib::translate::StashMut(&mut self.0, self)
+    }
+}
+
 impl BufferPool {
     pub fn new() -> BufferPool {
         assert_initialized_main_thread!();
