@@ -296,11 +296,7 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
         &self,
         params: P,
     ) -> Result<::Buffer, ::FlowError> {
-        let params = params.into();
-        let params_ptr = match params {
-            Some(params) => &params.0 as *const _ as *mut _,
-            None => ptr::null_mut(),
-        };
+        let params_ptr = params.into().to_glib_none().0 as *mut _;
 
         unsafe {
             let mut buffer = ptr::null_mut();
