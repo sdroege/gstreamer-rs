@@ -14,7 +14,13 @@ use FlowReturn;
 use PadLinkReturn;
 use StateChangeReturn;
 
-use glib::translate::ToGlib;
+use glib::translate::*;
+use glib::value::FromValue;
+use glib::value::FromValueOptional;
+use glib::value::SetValue;
+use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 
 impl StateChangeReturn {
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
@@ -420,5 +426,178 @@ impl Error for TagError {
         match *self {
             TagError::TypeMismatch => "The value type doesn't match with the specified Tag",
         }
+    }
+}
+
+// This cannot be done automatically because in GStreamer it's exposed as a bitflag but works as an
+// enum instead
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+pub enum MessageType {
+    Unknown,
+    Eos,
+    Error,
+    Warning,
+    Info,
+    Tag,
+    Buffering,
+    StateChanged,
+    StateDirty,
+    StepDone,
+    ClockProvide,
+    ClockLost,
+    NewClock,
+    StructureChange,
+    StreamStatus,
+    Application,
+    Element,
+    SegmentStart,
+    SegmentDone,
+    DurationChanged,
+    Latency,
+    AsyncStart,
+    AsyncDone,
+    RequestState,
+    StepStart,
+    Qos,
+    Progress,
+    Toc,
+    ResetTime,
+    StreamStart,
+    NeedContext,
+    HaveContext,
+    Extended,
+    DeviceAdded,
+    DeviceRemoved,
+    PropertyNotify,
+    StreamCollection,
+    StreamsSelected,
+    Redirect,
+    Any,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for MessageType {
+    type GlibType = gst_sys::GstMessageType;
+
+    fn to_glib(&self) -> gst_sys::GstMessageType {
+        match *self {
+            MessageType::Unknown => gst_sys::GST_MESSAGE_UNKNOWN,
+            MessageType::Eos => gst_sys::GST_MESSAGE_EOS,
+            MessageType::Error => gst_sys::GST_MESSAGE_ERROR,
+            MessageType::Warning => gst_sys::GST_MESSAGE_WARNING,
+            MessageType::Info => gst_sys::GST_MESSAGE_INFO,
+            MessageType::Tag => gst_sys::GST_MESSAGE_TAG,
+            MessageType::Buffering => gst_sys::GST_MESSAGE_BUFFERING,
+            MessageType::StateChanged => gst_sys::GST_MESSAGE_STATE_CHANGED,
+            MessageType::StateDirty => gst_sys::GST_MESSAGE_STATE_DIRTY,
+            MessageType::StepDone => gst_sys::GST_MESSAGE_STEP_DONE,
+            MessageType::ClockProvide => gst_sys::GST_MESSAGE_CLOCK_PROVIDE,
+            MessageType::ClockLost => gst_sys::GST_MESSAGE_CLOCK_LOST,
+            MessageType::NewClock => gst_sys::GST_MESSAGE_NEW_CLOCK,
+            MessageType::StructureChange => gst_sys::GST_MESSAGE_STRUCTURE_CHANGE,
+            MessageType::StreamStatus => gst_sys::GST_MESSAGE_STREAM_STATUS,
+            MessageType::Application => gst_sys::GST_MESSAGE_APPLICATION,
+            MessageType::Element => gst_sys::GST_MESSAGE_ELEMENT,
+            MessageType::SegmentStart => gst_sys::GST_MESSAGE_SEGMENT_START,
+            MessageType::SegmentDone => gst_sys::GST_MESSAGE_SEGMENT_DONE,
+            MessageType::DurationChanged => gst_sys::GST_MESSAGE_DURATION_CHANGED,
+            MessageType::Latency => gst_sys::GST_MESSAGE_LATENCY,
+            MessageType::AsyncStart => gst_sys::GST_MESSAGE_ASYNC_START,
+            MessageType::AsyncDone => gst_sys::GST_MESSAGE_ASYNC_DONE,
+            MessageType::RequestState => gst_sys::GST_MESSAGE_REQUEST_STATE,
+            MessageType::StepStart => gst_sys::GST_MESSAGE_STEP_START,
+            MessageType::Qos => gst_sys::GST_MESSAGE_QOS,
+            MessageType::Progress => gst_sys::GST_MESSAGE_PROGRESS,
+            MessageType::Toc => gst_sys::GST_MESSAGE_TOC,
+            MessageType::ResetTime => gst_sys::GST_MESSAGE_RESET_TIME,
+            MessageType::StreamStart => gst_sys::GST_MESSAGE_STREAM_START,
+            MessageType::NeedContext => gst_sys::GST_MESSAGE_NEED_CONTEXT,
+            MessageType::HaveContext => gst_sys::GST_MESSAGE_HAVE_CONTEXT,
+            MessageType::Extended => gst_sys::GST_MESSAGE_EXTENDED,
+            MessageType::DeviceAdded => gst_sys::GST_MESSAGE_DEVICE_ADDED,
+            MessageType::DeviceRemoved => gst_sys::GST_MESSAGE_DEVICE_REMOVED,
+            MessageType::PropertyNotify => gst_sys::GST_MESSAGE_PROPERTY_NOTIFY,
+            MessageType::StreamCollection => gst_sys::GST_MESSAGE_STREAM_COLLECTION,
+            MessageType::StreamsSelected => gst_sys::GST_MESSAGE_STREAMS_SELECTED,
+            MessageType::Redirect => gst_sys::GST_MESSAGE_REDIRECT,
+            MessageType::Any => gst_sys::GST_MESSAGE_ANY,
+            MessageType::__Unknown(value) => value as u32,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstMessageType> for MessageType {
+    fn from_glib(value: gst_sys::GstMessageType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => MessageType::Unknown,
+            1 => MessageType::Eos,
+            2 => MessageType::Error,
+            4 => MessageType::Warning,
+            8 => MessageType::Info,
+            16 => MessageType::Tag,
+            32 => MessageType::Buffering,
+            64 => MessageType::StateChanged,
+            128 => MessageType::StateDirty,
+            256 => MessageType::StepDone,
+            512 => MessageType::ClockProvide,
+            1024 => MessageType::ClockLost,
+            2048 => MessageType::NewClock,
+            4096 => MessageType::StructureChange,
+            8192 => MessageType::StreamStatus,
+            16384 => MessageType::Application,
+            32768 => MessageType::Element,
+            65536 => MessageType::SegmentStart,
+            131072 => MessageType::SegmentDone,
+            262144 => MessageType::DurationChanged,
+            524288 => MessageType::Latency,
+            1048576 => MessageType::AsyncStart,
+            2097152 => MessageType::AsyncDone,
+            4194304 => MessageType::RequestState,
+            8388608 => MessageType::StepStart,
+            16777216 => MessageType::Qos,
+            33554432 => MessageType::Progress,
+            67108864 => MessageType::Toc,
+            134217728 => MessageType::ResetTime,
+            268435456 => MessageType::StreamStart,
+            536870912 => MessageType::NeedContext,
+            1073741824 => MessageType::HaveContext,
+            2147483648 => MessageType::Extended,
+            2147483649 => MessageType::DeviceAdded,
+            2147483650 => MessageType::DeviceRemoved,
+            2147483651 => MessageType::PropertyNotify,
+            2147483652 => MessageType::StreamCollection,
+            2147483653 => MessageType::StreamsSelected,
+            2147483654 => MessageType::Redirect,
+            4294967295 => MessageType::Any,
+            value => MessageType::__Unknown(value as i32),
+        }
+    }
+}
+
+impl StaticType for MessageType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_message_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for MessageType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for MessageType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for MessageType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }
 }

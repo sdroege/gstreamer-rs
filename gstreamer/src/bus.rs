@@ -19,6 +19,7 @@ use std::ptr;
 use Bus;
 use BusSyncReply;
 use Message;
+use MessageType;
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> Continue + 'static>(
     bus: *mut gst_sys::GstBus,
@@ -179,6 +180,40 @@ impl Bus {
 
     pub fn iter_timed(&self, timeout: ::ClockTime) -> Iter {
         Iter { bus: self, timeout }
+    }
+
+    pub fn iter_filtered<'a>(
+        &'a self,
+        msg_types: &'a [MessageType],
+    ) -> impl Iterator<Item = Message> + 'a {
+        self.iter_timed_filtered(0.into(), msg_types)
+    }
+
+    pub fn iter_timed_filtered<'a>(
+        &'a self,
+        timeout: ::ClockTime,
+        msg_types: &'a [MessageType],
+    ) -> impl Iterator<Item = Message> + 'a {
+        self.iter_timed(timeout)
+            .filter(move |msg| msg_types.contains(&msg.get_type()))
+    }
+
+    pub fn pop_filtered(&self, timeout: ::ClockTime, msg_types: &[MessageType]) -> Option<Message> {
+        loop {
+            let msg = self.timed_pop(timeout)?;
+            if msg_types.contains(&msg.get_type()) {
+                return Some(msg);
+            }
+        }
+    }
+
+    pub fn timed_pop_filtered(&self, msg_types: &[MessageType]) -> Option<Message> {
+        loop {
+            let msg = self.pop()?;
+            if msg_types.contains(&msg.get_type()) {
+                return Some(msg);
+            }
+        }
     }
 }
 

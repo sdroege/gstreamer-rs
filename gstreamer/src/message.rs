@@ -12,6 +12,7 @@ use structure::*;
 use GenericFormattedValue;
 use GroupId;
 use GstObjectExt;
+use MessageType;
 use Object;
 use Seqnum;
 use TagList;
@@ -105,6 +106,10 @@ impl MessageRef {
             gst_sys::GST_MESSAGE_DEVICE_CHANGED => MessageView::DeviceChanged(DeviceChanged(self)),
             _ => MessageView::Other,
         }
+    }
+
+    pub fn get_type(&self) -> MessageType {
+        unsafe { from_glib((*self.as_ptr()).type_) }
     }
 }
 

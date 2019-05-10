@@ -177,6 +177,7 @@ mod date_time_serde;
 mod device_monitor;
 mod device_provider;
 mod enums;
+pub use enums::MessageType;
 mod ghost_pad;
 mod gobject;
 mod iterator;
