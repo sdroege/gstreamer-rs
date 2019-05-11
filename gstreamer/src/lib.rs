@@ -119,6 +119,8 @@ pub mod buffer;
 pub use buffer::{
     Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
 };
+pub mod memory;
+pub use memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
 #[cfg(feature = "ser_de")]
 mod buffer_serde;
 
@@ -154,6 +156,9 @@ mod element;
 mod bin;
 
 mod pipeline;
+
+mod allocation_params;
+pub use self::allocation_params::AllocationParams;
 
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]

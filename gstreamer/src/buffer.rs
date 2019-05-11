@@ -19,6 +19,8 @@ use meta::*;
 use miniobject::*;
 use BufferFlags;
 use ClockTime;
+use Memory;
+use MemoryRef;
 
 use glib;
 use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib};
@@ -403,6 +405,175 @@ impl BufferRef {
 
     pub fn iter_meta_mut<T: MetaAPI>(&mut self) -> MetaIterMut<T> {
         MetaIterMut::new(self)
+    }
+
+    pub fn append_memory(&mut self, mem: Memory) {
+        unsafe { gst_sys::gst_buffer_append_memory(self.as_mut_ptr(), mem.into_ptr()) }
+    }
+
+    pub fn find_memory(&self, offset: usize, size: Option<usize>) -> Option<(u32, u32, usize)> {
+        let mut idx = 0;
+        let mut length = 0;
+        let mut skip = 0;
+        let res;
+        unsafe {
+            res = from_glib(gst_sys::gst_buffer_find_memory(
+                self.as_mut_ptr(),
+                offset,
+                size.unwrap_or(usize::MAX),
+                &mut idx,
+                &mut length,
+                &mut skip,
+            ))
+        }
+        if res {
+            Some((idx, length, skip))
+        } else {
+            None
+        }
+    }
+
+    pub fn get_all_memory(&self) -> Option<Memory> {
+        unsafe {
+            let res = gst_sys::gst_buffer_get_all_memory(self.as_mut_ptr());
+            if res.is_null() {
+                None
+            } else {
+                Some(from_glib_full(res))
+            }
+        }
+    }
+
+    pub fn get_max_memory() -> u32 {
+        unsafe { gst_sys::gst_buffer_get_max_memory() }
+    }
+
+    pub fn get_memory(&self, idx: u32) -> Option<Memory> {
+        if idx >= self.n_memory() {
+            None
+        } else {
+            unsafe {
+                let res = gst_sys::gst_buffer_get_memory(self.as_mut_ptr(), idx);
+                if res.is_null() {
+                    None
+                } else {
+                    Some(from_glib_full(res))
+                }
+            }
+        }
+    }
+
+    pub fn get_memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
+        assert!(idx + length.unwrap_or(0) < self.n_memory());
+        unsafe {
+            let res = gst_sys::gst_buffer_get_memory_range(
+                self.as_mut_ptr(),
+                idx,
+                match length {
+                    Some(val) => val as i32,
+                    None => -1,
+                },
+            );
+            if res.is_null() {
+                None
+            } else {
+                Some(from_glib_full(res))
+            }
+        }
+    }
+
+    pub fn insert_memory(&mut self, idx: Option<u32>, mem: Memory) {
+        unsafe {
+            gst_sys::gst_buffer_insert_memory(
+                self.as_mut_ptr(),
+                match idx {
+                    Some(val) => val as i32,
+                    None => -1,
+                },
+                mem.into_ptr(),
+            )
+        }
+    }
+
+    pub fn is_all_memory_writable(&self) -> bool {
+        unsafe {
+            from_glib(gst_sys::gst_buffer_is_all_memory_writable(
+                self.as_mut_ptr(),
+            ))
+        }
+    }
+
+    pub fn is_memory_range_writable(&self, idx: u32, length: Option<u16>) -> bool {
+        unsafe {
+            from_glib(gst_sys::gst_buffer_is_memory_range_writable(
+                self.as_mut_ptr(),
+                idx,
+                match length {
+                    Some(val) => val as i32,
+                    None => -1,
+                },
+            ))
+        }
+    }
+
+    pub fn n_memory(&self) -> u32 {
+        unsafe { gst_sys::gst_buffer_n_memory(self.as_ptr() as *mut _) }
+    }
+
+    pub fn peek_memory(&self, idx: u32) -> &MemoryRef {
+        assert!(idx < self.n_memory());
+        unsafe { MemoryRef::from_ptr(gst_sys::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
+    }
+
+    pub fn prepend_memory(&mut self, mem: Memory) {
+        unsafe { gst_sys::gst_buffer_prepend_memory(self.as_mut_ptr(), mem.into_ptr()) }
+    }
+
+    pub fn remove_all_memory(&mut self) {
+        unsafe { gst_sys::gst_buffer_remove_all_memory(self.as_mut_ptr()) }
+    }
+
+    pub fn remove_memory(&mut self, idx: u32) {
+        assert!(idx < self.n_memory());
+        unsafe { gst_sys::gst_buffer_remove_memory(self.as_mut_ptr(), idx) }
+    }
+
+    pub fn remove_memory_range(&mut self, idx: u32, length: Option<u32>) {
+        assert!(idx + length.unwrap_or(0) < self.n_memory());
+        unsafe {
+            gst_sys::gst_buffer_remove_memory_range(
+                self.as_mut_ptr(),
+                idx,
+                match length {
+                    Some(val) => val as i32,
+                    None => -1,
+                },
+            )
+        }
+    }
+
+    pub fn replace_all_memory(&mut self, mem: Memory) {
+        unsafe { gst_sys::gst_buffer_replace_all_memory(self.as_mut_ptr(), mem.into_ptr()) }
+    }
+
+    pub fn replace_memory(&mut self, idx: u32, mem: Memory) {
+        assert!(idx < self.n_memory());
+        unsafe { gst_sys::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_ptr()) }
+    }
+
+    pub fn replace_memory_range(&mut self, idx: u32, length: Option<u32>, mem: Memory) {
+        assert!(idx + length.unwrap_or(0) < self.n_memory());
+        unsafe {
+            gst_sys::gst_buffer_replace_memory_range(
+                self.as_mut_ptr(),
+                idx,
+                match length {
+                    Some(val) => val as i32,
+                    None => -1,
+                },
+                mem.into_ptr(),
+            )
+        }
     }
 }
 
