@@ -163,6 +163,7 @@ pub use self::flags::BufferPoolAcquireFlags;
 pub use self::flags::DebugColorFlags;
 pub use self::flags::DebugGraphDetails;
 pub use self::flags::ElementFlags;
+pub use self::flags::MemoryFlags;
 pub use self::flags::ObjectFlags;
 pub use self::flags::PadFlags;
 pub use self::flags::PadLinkCheck;

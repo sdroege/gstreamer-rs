@@ -397,6 +397,59 @@ impl SetValue for ElementFlags {
 }
 
 bitflags! {
+    pub struct MemoryFlags: u32 {
+        const READONLY = 2;
+        const NO_SHARE = 16;
+        const ZERO_PREFIXED = 32;
+        const ZERO_PADDED = 64;
+        const PHYSICALLY_CONTIGUOUS = 128;
+        const NOT_MAPPABLE = 256;
+        const LAST = 1048576;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for MemoryFlags {
+    type GlibType = gst_sys::GstMemoryFlags;
+
+    fn to_glib(&self) -> gst_sys::GstMemoryFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstMemoryFlags> for MemoryFlags {
+    fn from_glib(value: gst_sys::GstMemoryFlags) -> MemoryFlags {
+        skip_assert_initialized!();
+        MemoryFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for MemoryFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_memory_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for MemoryFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for MemoryFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for MemoryFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct ObjectFlags: u32 {
         const MAY_BE_LEAKED = 1;
         const LAST = 16;

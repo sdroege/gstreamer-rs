@@ -59,6 +59,7 @@ generate = [
     "Gst.BinFlags",
     "Gst.PipelineFlags",
     "Gst.PluginFlags",
+    "Gst.MemoryFlags",
     "Gst.PadLinkCheck",
     "Gst.DebugLevel",
     "Gst.DebugColorFlags",
