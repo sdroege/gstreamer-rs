@@ -431,3 +431,196 @@ unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
         imp.set_context(&wrap, &from_glib_borrow(context))
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use glib;
+    use glib::subclass;
+    use std::sync::Mutex;
+
+    struct TestElement {
+        srcpad: ::Pad,
+        sinkpad: ::Pad,
+        n_buffers: Mutex<u32>,
+        reached_playing: Mutex<bool>,
+    }
+
+    impl TestElement {
+        fn set_pad_functions(sinkpad: &::Pad, srcpad: &::Pad) {
+            sinkpad.set_chain_function(|pad, parent, buffer| {
+                TestElement::catch_panic_pad_function(
+                    parent,
+                    || Err(::FlowError::Error),
+                    |identity, element| identity.sink_chain(pad, element, buffer),
+                )
+            });
+            sinkpad.set_event_function(|pad, parent, event| {
+                TestElement::catch_panic_pad_function(
+                    parent,
+                    || false,
+                    |identity, element| identity.sink_event(pad, element, event),
+                )
+            });
+            sinkpad.set_query_function(|pad, parent, query| {
+                TestElement::catch_panic_pad_function(
+                    parent,
+                    || false,
+                    |identity, element| identity.sink_query(pad, element, query),
+                )
+            });
+
+            srcpad.set_event_function(|pad, parent, event| {
+                TestElement::catch_panic_pad_function(
+                    parent,
+                    || false,
+                    |identity, element| identity.src_event(pad, element, event),
+                )
+            });
+            srcpad.set_query_function(|pad, parent, query| {
+                TestElement::catch_panic_pad_function(
+                    parent,
+                    || false,
+                    |identity, element| identity.src_query(pad, element, query),
+                )
+            });
+        }
+
+        fn sink_chain(
+            &self,
+            _pad: &::Pad,
+            _element: &::Element,
+            buffer: ::Buffer,
+        ) -> Result<::FlowSuccess, ::FlowError> {
+            *self.n_buffers.lock().unwrap() += 1;
+            self.srcpad.push(buffer)
+        }
+
+        fn sink_event(&self, _pad: &::Pad, _element: &::Element, event: ::Event) -> bool {
+            self.srcpad.push_event(event)
+        }
+
+        fn sink_query(&self, _pad: &::Pad, _element: &::Element, query: &mut ::QueryRef) -> bool {
+            self.srcpad.peer_query(query)
+        }
+
+        fn src_event(&self, _pad: &::Pad, _element: &::Element, event: ::Event) -> bool {
+            self.sinkpad.push_event(event)
+        }
+
+        fn src_query(&self, _pad: &::Pad, _element: &::Element, query: &mut ::QueryRef) -> bool {
+            self.sinkpad.peer_query(query)
+        }
+    }
+
+    impl ObjectSubclass for TestElement {
+        const NAME: &'static str = "TestElement";
+        type ParentType = ::Element;
+        type Instance = ::subclass::ElementInstanceStruct<Self>;
+        type Class = subclass::simple::ClassStruct<Self>;
+
+        glib_object_subclass!();
+
+        fn new_with_class(klass: &subclass::simple::ClassStruct<Self>) -> Self {
+            let templ = klass.get_pad_template("sink").unwrap();
+            let sinkpad = ::Pad::new_from_template(&templ, Some("sink"));
+            let templ = klass.get_pad_template("src").unwrap();
+            let srcpad = ::Pad::new_from_template(&templ, Some("src"));
+
+            TestElement::set_pad_functions(&sinkpad, &srcpad);
+
+            Self {
+                n_buffers: Mutex::new(0),
+                reached_playing: Mutex::new(false),
+                srcpad,
+                sinkpad,
+            }
+        }
+
+        fn class_init(klass: &mut subclass::simple::ClassStruct<Self>) {
+            klass.set_metadata(
+                "Test Element",
+                "Generic",
+                "Does nothing",
+                "Sebastian Dröge <sebastian@centricular.com>",
+            );
+
+            let caps = ::Caps::new_any();
+            let src_pad_template =
+                ::PadTemplate::new("src", ::PadDirection::Src, ::PadPresence::Always, &caps)
+                    .unwrap();
+            klass.add_pad_template(src_pad_template);
+
+            let sink_pad_template =
+                ::PadTemplate::new("sink", ::PadDirection::Sink, ::PadPresence::Always, &caps)
+                    .unwrap();
+            klass.add_pad_template(sink_pad_template);
+        }
+    }
+
+    impl ObjectImpl for TestElement {
+        glib_object_impl!();
+
+        fn constructed(&self, obj: &glib::Object) {
+            self.parent_constructed(obj);
+
+            let element = obj.downcast_ref::<::Element>().unwrap();
+            element.add_pad(&self.sinkpad).unwrap();
+            element.add_pad(&self.srcpad).unwrap();
+        }
+    }
+
+    impl ElementImpl for TestElement {
+        fn change_state(
+            &self,
+            element: &::Element,
+            transition: ::StateChange,
+        ) -> Result<::StateChangeSuccess, ::StateChangeError> {
+            let res = self.parent_change_state(element, transition)?;
+
+            if transition == ::StateChange::PausedToPlaying {
+                *self.reached_playing.lock().unwrap() = true;
+            }
+
+            Ok(res)
+        }
+    }
+
+    #[test]
+    fn test_element_subclass() {
+        ::init().unwrap();
+
+        let element = glib::Object::new(TestElement::get_type(), &[("name", &"test")])
+            .unwrap()
+            .downcast::<::Element>()
+            .unwrap();
+
+        assert_eq!(element.get_name(), "test");
+
+        assert_eq!(
+            element.get_metadata(&::ELEMENT_METADATA_LONGNAME),
+            Some("Test Element")
+        );
+
+        let pipeline = ::Pipeline::new(None);
+        let src = ::ElementFactory::make("fakesrc", None).unwrap();
+        let sink = ::ElementFactory::make("fakesink", None).unwrap();
+
+        src.set_property("num-buffers", &100i32).unwrap();
+
+        pipeline.add_many(&[&src, &element, &sink]).unwrap();
+        ::Element::link_many(&[&src, &element, &sink]).unwrap();
+
+        pipeline.set_state(::State::Playing).unwrap();
+        let bus = pipeline.get_bus().unwrap();
+
+        let eos = bus.timed_pop_filtered(::CLOCK_TIME_NONE, &[::MessageType::Eos]);
+        assert!(eos.is_some());
+
+        pipeline.set_state(::State::Null).unwrap();
+
+        let imp = TestElement::from_instance(&element);
+        assert_eq!(*imp.n_buffers.lock().unwrap(), 100);
+        assert_eq!(*imp.reached_playing.lock().unwrap(), true);
+    }
+}

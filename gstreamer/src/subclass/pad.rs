@@ -97,3 +97,73 @@ unsafe extern "C" fn pad_unlinked<T: ObjectSubclass>(
 
     imp.unlinked(&wrap, &from_glib_borrow(peer))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::prelude::*;
+    use glib;
+    use glib::subclass;
+    use std::sync::Mutex;
+
+    struct TestPad {
+        linked: Mutex<bool>,
+        unlinked: Mutex<bool>,
+    }
+
+    impl ObjectSubclass for TestPad {
+        const NAME: &'static str = "TestPad";
+        type ParentType = ::Pad;
+        type Instance = subclass::simple::InstanceStruct<Self>;
+        type Class = subclass::simple::ClassStruct<Self>;
+
+        glib_object_subclass!();
+
+        fn new() -> Self {
+            Self {
+                linked: Mutex::new(false),
+                unlinked: Mutex::new(false),
+            }
+        }
+    }
+
+    impl ObjectImpl for TestPad {
+        glib_object_impl!();
+    }
+
+    impl PadImpl for TestPad {
+        fn linked(&self, pad: &Pad, peer: &Pad) {
+            *self.linked.lock().unwrap() = true;
+            self.parent_linked(pad, peer)
+        }
+
+        fn unlinked(&self, pad: &Pad, peer: &Pad) {
+            *self.unlinked.lock().unwrap() = true;
+            self.parent_unlinked(pad, peer)
+        }
+    }
+
+    #[test]
+    fn test_pad_subclass() {
+        ::init().unwrap();
+
+        let pad = glib::Object::new(
+            TestPad::get_type(),
+            &[("name", &"test"), ("direction", &::PadDirection::Src)],
+        )
+        .unwrap()
+        .downcast::<::Pad>()
+        .unwrap();
+
+        assert_eq!(pad.get_name(), "test");
+
+        let otherpad = ::Pad::new(Some("other-test"), ::PadDirection::Sink);
+        pad.link(&otherpad).unwrap();
+        pad.unlink(&otherpad).unwrap();
+
+        let imp = TestPad::from_instance(&pad);
+        assert!(*imp.linked.lock().unwrap());
+        assert!(*imp.unlinked.lock().unwrap());
+    }
+
+}
