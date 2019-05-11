@@ -13,6 +13,55 @@ use gobject_sys;
 use gst_sys;
 
 bitflags! {
+    pub struct BinFlags: u32 {
+        const NO_RESYNC = 16384;
+        const STREAMS_AWARE = 32768;
+        const LAST = 524288;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for BinFlags {
+    type GlibType = gst_sys::GstBinFlags;
+
+    fn to_glib(&self) -> gst_sys::GstBinFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstBinFlags> for BinFlags {
+    fn from_glib(value: gst_sys::GstBinFlags) -> BinFlags {
+        skip_assert_initialized!();
+        BinFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for BinFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_bin_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for BinFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for BinFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for BinFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct BufferCopyFlags: u32 {
         const NONE = 0;
         const FLAGS = 1;
@@ -348,6 +397,114 @@ impl SetValue for ElementFlags {
 }
 
 bitflags! {
+    pub struct ObjectFlags: u32 {
+        const MAY_BE_LEAKED = 1;
+        const LAST = 16;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for ObjectFlags {
+    type GlibType = gst_sys::GstObjectFlags;
+
+    fn to_glib(&self) -> gst_sys::GstObjectFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstObjectFlags> for ObjectFlags {
+    fn from_glib(value: gst_sys::GstObjectFlags) -> ObjectFlags {
+        skip_assert_initialized!();
+        ObjectFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for ObjectFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_object_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for ObjectFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for ObjectFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for ObjectFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
+    pub struct PadFlags: u32 {
+        const BLOCKED = 16;
+        const FLUSHING = 32;
+        const EOS = 64;
+        const BLOCKING = 128;
+        const NEED_PARENT = 256;
+        const NEED_RECONFIGURE = 512;
+        const PENDING_EVENTS = 1024;
+        const FIXED_CAPS = 2048;
+        const PROXY_CAPS = 4096;
+        const PROXY_ALLOCATION = 8192;
+        const PROXY_SCHEDULING = 16384;
+        const ACCEPT_INTERSECT = 32768;
+        const ACCEPT_TEMPLATE = 65536;
+        const LAST = 1048576;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for PadFlags {
+    type GlibType = gst_sys::GstPadFlags;
+
+    fn to_glib(&self) -> gst_sys::GstPadFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstPadFlags> for PadFlags {
+    fn from_glib(value: gst_sys::GstPadFlags) -> PadFlags {
+        skip_assert_initialized!();
+        PadFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for PadFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_pad_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PadFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PadFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for PadFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct PadLinkCheck: u32 {
         const NOTHING = 0;
         const HIERARCHY = 1;
@@ -518,6 +675,54 @@ impl SetValue for ParseFlags {
 }
 
 bitflags! {
+    pub struct PipelineFlags: u32 {
+        const FIXED_CLOCK = 524288;
+        const LAST = 8388608;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for PipelineFlags {
+    type GlibType = gst_sys::GstPipelineFlags;
+
+    fn to_glib(&self) -> gst_sys::GstPipelineFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstPipelineFlags> for PipelineFlags {
+    fn from_glib(value: gst_sys::GstPipelineFlags) -> PipelineFlags {
+        skip_assert_initialized!();
+        PipelineFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for PipelineFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_pipeline_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PipelineFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PipelineFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for PipelineFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct PluginDependencyFlags: u32 {
         const NONE = 0;
         const RECURSE = 1;
@@ -564,6 +769,54 @@ impl<'a> FromValue<'a> for PluginDependencyFlags {
 }
 
 impl SetValue for PluginDependencyFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
+    pub struct PluginFlags: u32 {
+        const CACHED = 16;
+        const BLACKLISTED = 32;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for PluginFlags {
+    type GlibType = gst_sys::GstPluginFlags;
+
+    fn to_glib(&self) -> gst_sys::GstPluginFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstPluginFlags> for PluginFlags {
+    fn from_glib(value: gst_sys::GstPluginFlags) -> PluginFlags {
+        skip_assert_initialized!();
+        PluginFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for PluginFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_plugin_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PluginFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PluginFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for PluginFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
     }

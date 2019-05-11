@@ -9,10 +9,12 @@
 use glib;
 use glib::object::{Cast, ObjectExt};
 use glib::signal::SignalHandlerId;
-use glib::translate::{from_glib_borrow, from_glib_none, ToGlibPtr};
+use glib::translate::*;
 use glib::IsA;
 
 use gobject_sys;
+
+use ObjectFlags;
 
 pub trait GstObjectExtManual: 'static {
     fn connect_deep_notify<
@@ -24,6 +26,10 @@ pub trait GstObjectExtManual: 'static {
         name: P,
         f: F,
     ) -> SignalHandlerId;
+
+    fn set_object_flags(&self, flags: ObjectFlags);
+
+    fn get_object_flags(&self) -> ObjectFlags;
 }
 
 impl<O: IsA<::Object>> GstObjectExtManual for O {
@@ -60,6 +66,22 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
             None
         })
         .unwrap()
+    }
+
+    fn set_object_flags(&self, flags: ObjectFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn get_object_flags(&self) -> ObjectFlags {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            from_glib((*ptr).flags)
+        }
     }
 }
 

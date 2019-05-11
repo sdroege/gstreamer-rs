@@ -20,6 +20,7 @@ use glib::translate::{
 };
 use miniobject::MiniObject;
 use ClockTime;
+use ElementFlags;
 use Event;
 use Format;
 use FormattedValue;
@@ -137,6 +138,10 @@ pub trait ElementExtManual: 'static {
         function: &str,
         line: u32,
     );
+
+    fn set_element_flags(&self, flags: ElementFlags);
+
+    fn get_element_flags(&self) -> ElementFlags;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     #[allow(clippy::too_many_arguments)]
@@ -306,6 +311,22 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn get_pad_template_list(&self) -> Vec<PadTemplate> {
         self.get_element_class().get_pad_template_list()
+    }
+
+    fn set_element_flags(&self, flags: ElementFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn get_element_flags(&self) -> ElementFlags {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            from_glib((*ptr).flags)
+        }
     }
 
     fn message_full<T: ::MessageErrorDomain>(
