@@ -198,7 +198,11 @@ impl Bus {
             .filter(move |msg| msg_types.contains(&msg.get_type()))
     }
 
-    pub fn pop_filtered(&self, timeout: ::ClockTime, msg_types: &[MessageType]) -> Option<Message> {
+    pub fn timed_pop_filtered(
+        &self,
+        timeout: ::ClockTime,
+        msg_types: &[MessageType],
+    ) -> Option<Message> {
         loop {
             let msg = self.timed_pop(timeout)?;
             if msg_types.contains(&msg.get_type()) {
@@ -207,7 +211,7 @@ impl Bus {
         }
     }
 
-    pub fn timed_pop_filtered(&self, msg_types: &[MessageType]) -> Option<Message> {
+    pub fn pop_filtered(&self, msg_types: &[MessageType]) -> Option<Message> {
         loop {
             let msg = self.pop()?;
             if msg_types.contains(&msg.get_type()) {
