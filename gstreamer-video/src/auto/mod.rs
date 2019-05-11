@@ -2,6 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+mod video_decoder;
+pub use self::video_decoder::{VideoDecoder, VideoDecoderClass, NONE_VIDEO_DECODER};
+pub use self::video_decoder::VideoDecoderExt;
+
 mod video_filter;
 pub use self::video_filter::{VideoFilter, VideoFilterClass, NONE_VIDEO_FILTER};
 
@@ -25,6 +29,7 @@ pub use self::enums::VideoTransferFunction;
 
 mod flags;
 pub use self::flags::VideoChromaSite;
+pub use self::flags::VideoCodecFrameFlags;
 pub use self::flags::VideoFlags;
 pub use self::flags::VideoFormatFlags;
 pub use self::flags::VideoFrameFlags;
@@ -35,5 +40,6 @@ pub use self::flags::VideoTimeCodeFlags;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::VideoDecoderExt;
     pub use super::VideoOverlayExt;
 }

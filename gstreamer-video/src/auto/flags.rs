@@ -68,6 +68,32 @@ impl SetValue for VideoChromaSite {
 }
 
 bitflags! {
+    pub struct VideoCodecFrameFlags: u32 {
+        const DECODE_ONLY = 1;
+        const SYNC_POINT = 2;
+        const FORCE_KEYFRAME = 4;
+        const FORCE_KEYFRAME_HEADERS = 8;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoCodecFrameFlags {
+    type GlibType = gst_video_sys::GstVideoCodecFrameFlags;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoCodecFrameFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
+    fn from_glib(value: gst_video_sys::GstVideoCodecFrameFlags) -> VideoCodecFrameFlags {
+        skip_assert_initialized!();
+        VideoCodecFrameFlags::from_bits_truncate(value)
+    }
+}
+
+bitflags! {
     pub struct VideoFlags: u32 {
         const NONE = 0;
         const VARIABLE_FPS = 1;

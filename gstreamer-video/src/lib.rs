@@ -17,6 +17,7 @@ extern crate gobject_sys;
 #[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_base as gst_base;
+extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_sys as gst_sys;
 extern crate gstreamer_video_sys as gst_video_sys;
 
@@ -70,6 +71,13 @@ mod video_time_code_interval;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub use video_time_code_interval::VideoTimeCodeInterval;
 
+mod video_codec_frame;
+mod video_decoder;
+pub use video_codec_frame::VideoCodecFrame;
+pub mod video_codec_state;
+pub use video_codec_state::VideoCodecState;
+mod utils;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
@@ -77,5 +85,9 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
+    pub use video_decoder::VideoDecoderExtManual;
     pub use video_overlay::VideoOverlayExtManual;
 }
+
+#[cfg(feature = "subclassing")]
+pub mod subclass;

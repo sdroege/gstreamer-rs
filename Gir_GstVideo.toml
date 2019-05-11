@@ -18,6 +18,7 @@ external_libraries = [
 ]
 
 generate = [
+    "GstVideo.VideoCodecFrameFlags",
     "GstVideo.VideoFormat",
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoTileMode",
@@ -43,7 +44,16 @@ manual = [
     "GObject.Object",
     "Gst.Object",
     "Gst.Element",
+    "Gst.Buffer",
+    "Gst.BufferPool",
+    "Gst.BufferPoolAcquireParams",
+    "Gst.ClockTimeDiff",
+    "Gst.FlowReturn",
+    "Gst.TagList",
+    "Gst.TagMergeMode",
     "GstBase.BaseTransform",
+    "GstVideo.VideoCodecState",
+    "GstVideo.VideoCodecFrame",
     "GstVideo.VideoInfo",
     "GstVideo.VideoFormatInfo",
     "GstVideo.VideoColorimetry",
@@ -66,3 +76,68 @@ status = "generate"
     name = "set_render_rectangle"
         [object.function.return]
         bool_return_is_error = "Failed to set render rectangle"
+
+[[object]]
+name = "GstVideo.VideoDecoder"
+subclassing = true
+status = "generate"
+
+    [[object.function]]
+    name = "allocate_output_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "allocate_output_frame_with_params"
+    ignore = true
+
+    [[object.function]]
+    name = "finish_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "release_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "drop_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "have_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "set_latency"
+    ignore = true
+
+    [[object.function]]
+    name = "get_latency"
+    ignore = true
+
+    [[object.function]]
+    name = "get_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "get_frames"
+    ignore = true
+
+    [[object.function]]
+    name = "get_oldest_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "get_output_state"
+    ignore = true
+
+    [[object.function]]
+    name = "set_output_state"
+    ignore = true
+
+    [[object.function]]
+    name = "set_interlaced_output_state"
+    ignore = true
+
+    [[object.function]]
+    name = "negotiate"
+    ignore = true
