@@ -270,6 +270,8 @@ pub trait PadExtManual: 'static {
 
     fn set_bin_flags(&self, flags: BinFlags);
 
+    fn unset_bin_flags(&self, flags: BinFlags);
+
     fn get_bin_flags(&self) -> BinFlags;
 }
 
@@ -1006,6 +1008,14 @@ impl<O: IsA<Pad>> PadExtManual for O {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn unset_bin_flags(&self, flags: BinFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags &= !flags.to_glib();
         }
     }
 

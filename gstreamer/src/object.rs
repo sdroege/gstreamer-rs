@@ -29,6 +29,8 @@ pub trait GstObjectExtManual: 'static {
 
     fn set_object_flags(&self, flags: ObjectFlags);
 
+    fn unset_object_flags(&self, flags: ObjectFlags);
+
     fn get_object_flags(&self) -> ObjectFlags;
 }
 
@@ -73,6 +75,14 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn unset_object_flags(&self, flags: ObjectFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags &= !flags.to_glib();
         }
     }
 

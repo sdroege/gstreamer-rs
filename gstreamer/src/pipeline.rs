@@ -19,6 +19,8 @@ use PipelineFlags;
 pub trait GstPipelineExtManual: 'static {
     fn set_pipeline_flags(&self, flags: PipelineFlags);
 
+    fn unset_pipeline_flags(&self, flags: PipelineFlags);
+
     fn get_pipeline_flags(&self) -> PipelineFlags;
 }
 
@@ -28,6 +30,14 @@ impl<O: IsA<::Pipeline>> GstPipelineExtManual for O {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn unset_pipeline_flags(&self, flags: PipelineFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags &= !flags.to_glib();
         }
     }
 

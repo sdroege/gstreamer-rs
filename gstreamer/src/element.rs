@@ -141,6 +141,8 @@ pub trait ElementExtManual: 'static {
 
     fn set_element_flags(&self, flags: ElementFlags);
 
+    fn unset_element_flags(&self, flags: ElementFlags);
+
     fn get_element_flags(&self) -> ElementFlags;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -318,6 +320,14 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
             let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
             (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn unset_element_flags(&self, flags: ElementFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags &= !flags.to_glib();
         }
     }
 
