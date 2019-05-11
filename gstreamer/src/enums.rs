@@ -472,7 +472,6 @@ pub enum MessageType {
     StreamCollection,
     StreamsSelected,
     Redirect,
-    Any,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -522,7 +521,6 @@ impl ToGlib for MessageType {
             MessageType::StreamCollection => gst_sys::GST_MESSAGE_STREAM_COLLECTION,
             MessageType::StreamsSelected => gst_sys::GST_MESSAGE_STREAMS_SELECTED,
             MessageType::Redirect => gst_sys::GST_MESSAGE_REDIRECT,
-            MessageType::Any => gst_sys::GST_MESSAGE_ANY,
             MessageType::__Unknown(value) => value as u32,
         }
     }
@@ -572,7 +570,6 @@ impl FromGlib<gst_sys::GstMessageType> for MessageType {
             2147483652 => MessageType::StreamCollection,
             2147483653 => MessageType::StreamsSelected,
             2147483654 => MessageType::Redirect,
-            4294967295 => MessageType::Any,
             value => MessageType::__Unknown(value as i32),
         }
     }
