@@ -1490,4 +1490,82 @@ mod tests {
 
         assert_eq!(receiver.recv().unwrap(), 3);
     }
+
+    #[test]
+    fn test_probe() {
+        ::init().unwrap();
+
+        let (major, minor, micro, _) = ::version();
+        let pad = ::Pad::new(Some("src"), ::PadDirection::Src);
+        let events = Arc::new(Mutex::new(Vec::new()));
+        let buffers = Arc::new(Mutex::new(Vec::new()));
+
+        let flow_override = if (major, minor, micro) >= (1, 16, 1) {
+            FlowReturn::Eos
+        } else {
+            // Broken on 1.16.0
+            // https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/151
+            FlowReturn::Ok
+        };
+
+        {
+            let events = events.clone();
+            pad.add_probe(::PadProbeType::EVENT_DOWNSTREAM, move |_, info| {
+                if let Some(PadProbeData::Event(event)) = &info.data {
+                    let mut events = events.lock().unwrap();
+                    events.push(event.clone());
+                } else {
+                    unreachable!();
+                }
+                ::PadProbeReturn::Ok
+            });
+        }
+
+        {
+            let buffers = buffers.clone();
+            let flow_override = flow_override;
+            pad.add_probe(::PadProbeType::BUFFER, move |_, info| {
+                if let Some(PadProbeData::Buffer(buffer)) = info.data.take() {
+                    let mut buffers = buffers.lock().unwrap();
+                    info.flow_ret = if buffers.is_empty() {
+                        FlowReturn::Ok
+                    } else {
+                        flow_override
+                    };
+                    buffers.push(buffer);
+                } else {
+                    unreachable!();
+                }
+                ::PadProbeReturn::Handled
+            });
+        }
+
+        pad.set_active(true).unwrap();
+
+        assert!(pad.push_event(::Event::new_stream_start("test").build()));
+        let segment = ::FormattedSegment::<::ClockTime>::new();
+        assert!(pad.push_event(::Event::new_segment(segment.as_ref()).build()));
+
+        assert_eq!(pad.push(::Buffer::new()), Ok(FlowSuccess::Ok));
+        assert_eq!(pad.push(::Buffer::new()), flow_override.into_result());
+
+        let events = events.lock().unwrap();
+        let buffers = buffers.lock().unwrap();
+        assert_eq!(events.len(), 2);
+        assert_eq!(buffers.len(), 2);
+
+        assert_eq!(events[0].get_type(), ::EventType::StreamStart);
+        assert_eq!(events[1].get_type(), ::EventType::Segment);
+
+        assert!(
+            buffers.iter().all(|b| b.is_writable()),
+            "A buffer ref leaked!"
+        );
+
+        drop(pad); // Need to drop the pad first to unref sticky events
+        assert!(
+            events.iter().all(|e| e.is_writable()),
+            "An event ref leaked!"
+        );
+    }
 }
