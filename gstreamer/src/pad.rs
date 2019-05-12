@@ -1098,10 +1098,11 @@ where
             (*info).data = query.as_mut_ptr() as *mut libc::c_void;
         }
         Some(PadProbeData::__Unknown(ptr)) => {
+            assert_eq!(data_type, None);
             (*info).data = ptr as *mut libc::c_void;
         }
         None => {
-            assert_ne!(data_type, Some(Query::static_type()));
+            assert_eq!(data_type, None);
         }
     }
 
