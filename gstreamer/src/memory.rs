@@ -21,6 +21,7 @@ use glib::translate::{from_glib, from_glib_full, from_glib_none, ToGlibPtr};
 use miniobject::MiniObject;
 
 use AllocationParams;
+use Allocator;
 use MemoryFlags;
 
 gst_define_mini_object_wrapper!(Memory, MemoryRef, gst_sys::GstMemory, [Debug,], || {
@@ -43,7 +44,7 @@ impl fmt::Debug for MemoryRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Memory")
             .field("ptr", unsafe { &self.as_ptr() })
-            //.field("allocator", &self.get_allocator())
+            .field("allocator", &self.get_allocator())
             .field("parent", &self.get_parent())
             .field("maxsize", &self.get_maxsize())
             .field("align", &self.get_align())
@@ -168,6 +169,10 @@ impl Memory {
 }
 
 impl MemoryRef {
+    pub fn get_allocator(&self) -> Option<Allocator> {
+        unsafe { from_glib_none(self.0.allocator) }
+    }
+
     pub fn get_parent(&self) -> Option<&MemoryRef> {
         unsafe {
             if self.0.parent.is_null() {

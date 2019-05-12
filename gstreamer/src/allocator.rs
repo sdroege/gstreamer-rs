@@ -10,7 +10,7 @@ use std::ptr;
 
 use gst_sys;
 
-use glib::translate::{from_glib_full, ToGlibPtr};
+use glib::translate::from_glib_full;
 use glib::IsA;
 
 use AllocationParams;
@@ -28,7 +28,7 @@ impl<O: IsA<Allocator>> AllocatorExtManual for O {
                 self.as_ptr() as *mut _,
                 size,
                 match params {
-                    Some(val) => val.to_glib_none().0 as *mut _,
+                    Some(val) => val.as_ptr() as *mut _,
                     None => ptr::null_mut(),
                 },
             );

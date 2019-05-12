@@ -6,6 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use AllocationParams;
+use Allocator;
 use BufferPool;
 use Structure;
 
@@ -144,7 +146,36 @@ impl BufferPoolConfig {
         }
     }
 
-    // TODO: get_allocator / set_allocator
+    pub fn get_allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
+        unsafe {
+            let mut allocator = ptr::null_mut();
+            let mut params = mem::zeroed();
+            let ret = from_glib(gst_sys::gst_buffer_pool_config_get_allocator(
+                self.0.to_glib_none().0,
+                &mut allocator,
+                &mut params,
+            ));
+            if ret {
+                Some((from_glib_none(allocator), params.into()))
+            } else {
+                None
+            }
+        }
+    }
+
+    pub fn set_allocator(&self, allocator: Option<&Allocator>, params: Option<&AllocationParams>) {
+        assert!(allocator.is_some() || params.is_some());
+        unsafe {
+            gst_sys::gst_buffer_pool_config_set_allocator(
+                self.0.to_glib_none().0,
+                allocator.to_glib_none().0,
+                match params {
+                    Some(val) => val.as_ptr(),
+                    None => ptr::null(),
+                },
+            )
+        }
+    }
     // TODO: options iterator
 }
 
