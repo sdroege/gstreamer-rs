@@ -6,13 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use glib;
-use glib::object::{Cast, ObjectExt};
-use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib::IsA;
-
-use gobject_sys;
 
 use PipelineFlags;
 
@@ -49,5 +44,3 @@ impl<O: IsA<::Pipeline>> GstPipelineExtManual for O {
         }
     }
 }
-
-

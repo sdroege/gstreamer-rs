@@ -153,6 +153,8 @@ mod element;
 
 mod bin;
 
+mod pipeline;
+
 // OS dependent Bus extensions (also import the other plateform mod for doc)
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 cfg_if! {
