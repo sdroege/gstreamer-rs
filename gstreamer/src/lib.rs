@@ -155,6 +155,7 @@ mod element;
 
 mod bin;
 
+mod allocator;
 mod pipeline;
 
 mod allocation_params;

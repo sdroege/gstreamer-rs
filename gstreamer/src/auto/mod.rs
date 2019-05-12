@@ -2,6 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+mod allocator;
+pub use self::allocator::{Allocator, AllocatorClass, NONE_ALLOCATOR};
+pub use self::allocator::AllocatorExt;
+
 mod bin;
 pub use self::bin::{Bin, BinClass, NONE_BIN};
 pub use self::bin::GstBinExt;
@@ -189,6 +193,7 @@ pub mod functions;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::AllocatorExt;
     pub use super::GstBinExt;
     pub use super::BufferPoolExt;
     pub use super::ChildProxyExt;
