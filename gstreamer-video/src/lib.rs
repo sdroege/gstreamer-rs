@@ -74,8 +74,9 @@ mod video_time_code_interval;
 pub use video_time_code_interval::VideoTimeCodeInterval;
 mod video_buffer_pool;
 pub use video_buffer_pool::{
-    BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META, BUFFER_POOL_OPTION_VIDEO_ALIGNMENT,
-    BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META, BUFFER_POOL_OPTION_VIDEO_META,
+    VideoAlignment, BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META,
+    BUFFER_POOL_OPTION_VIDEO_ALIGNMENT, BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META,
+    BUFFER_POOL_OPTION_VIDEO_META,
 };
 
 mod video_codec_frame;
@@ -92,6 +93,7 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
+    pub use video_buffer_pool::VideoBufferPoolConfig;
     pub use video_decoder::VideoDecoderExtManual;
     pub use video_overlay::VideoOverlayExtManual;
 }

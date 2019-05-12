@@ -37,11 +37,13 @@ generate = [
     "GstVideo.VideoOverlayFormatFlags",
     "GstVideo.VideoTimeCodeFlags",
     "GstVideo.VideoCaptionType",
+    "GstVideo.VideoBufferPool",
 ]
 
 manual = [
     "GLib.DateTime",
     "GObject.Object",
+    "Gst.BufferPool",
     "Gst.Object",
     "Gst.Element",
     "Gst.Buffer",
