@@ -1080,37 +1080,61 @@ where
         flow_ret: from_glib((*info).ABI.abi.flow_ret),
     };
 
-    let ret = func(&Pad::from_glib_borrow(pad).unsafe_cast(), &mut probe_info).to_glib();
+    let ret = func(&Pad::from_glib_borrow(pad).unsafe_cast(), &mut probe_info);
 
-    match probe_info.data {
-        Some(PadProbeData::Buffer(buffer)) => {
-            assert_eq!(data_type, Some(Buffer::static_type()));
-            (*info).data = buffer.into_ptr() as *mut libc::c_void;
+    if ret == PadProbeReturn::Handled {
+        // Handled queries need to be returned
+        // Handled buffers are consumed
+        // No other types can safely be used here
+
+        match probe_info.data {
+            Some(PadProbeData::Query(query)) => {
+                assert_eq!(data_type, Some(Query::static_type()));
+                (*info).data = query.as_mut_ptr() as *mut libc::c_void;
+            }
+            Some(PadProbeData::Buffer(_)) => {
+                assert_eq!(data_type, Some(Buffer::static_type()));
+                // Buffer not consumed by probe; consume it here
+            }
+            None if data_type == Some(Buffer::static_type()) => {
+                // Buffer consumed by probe
+            }
+            other => panic!(
+                "Bad data for {:?} pad probe returning Handled: {:?}",
+                data_type, other
+            ),
         }
-        Some(PadProbeData::BufferList(bufferlist)) => {
-            assert_eq!(data_type, Some(BufferList::static_type()));
-            (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
-        }
-        Some(PadProbeData::Event(event)) => {
-            assert_eq!(data_type, Some(Event::static_type()));
-            (*info).data = event.into_ptr() as *mut libc::c_void;
-        }
-        Some(PadProbeData::Query(query)) => {
-            assert_eq!(data_type, Some(Query::static_type()));
-            (*info).data = query.as_mut_ptr() as *mut libc::c_void;
-        }
-        Some(PadProbeData::__Unknown(ptr)) => {
-            assert_eq!(data_type, None);
-            (*info).data = ptr as *mut libc::c_void;
-        }
-        None => {
-            assert_eq!(data_type, None);
+    } else {
+        match probe_info.data {
+            Some(PadProbeData::Buffer(buffer)) => {
+                assert_eq!(data_type, Some(Buffer::static_type()));
+                (*info).data = buffer.into_ptr() as *mut libc::c_void;
+            }
+            Some(PadProbeData::BufferList(bufferlist)) => {
+                assert_eq!(data_type, Some(BufferList::static_type()));
+                (*info).data = bufferlist.into_ptr() as *mut libc::c_void;
+            }
+            Some(PadProbeData::Event(event)) => {
+                assert_eq!(data_type, Some(Event::static_type()));
+                (*info).data = event.into_ptr() as *mut libc::c_void;
+            }
+            Some(PadProbeData::Query(query)) => {
+                assert_eq!(data_type, Some(Query::static_type()));
+                (*info).data = query.as_mut_ptr() as *mut libc::c_void;
+            }
+            Some(PadProbeData::__Unknown(ptr)) => {
+                assert_eq!(data_type, None);
+                (*info).data = ptr as *mut libc::c_void;
+            }
+            None => {
+                assert_eq!(data_type, None);
+            }
         }
     }
 
     (*info).ABI.abi.flow_ret = probe_info.flow_ret.to_glib();
 
-    ret
+    ret.to_glib()
 }
 
 unsafe extern "C" fn trampoline_activate_function<
