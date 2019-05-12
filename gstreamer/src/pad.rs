@@ -90,6 +90,7 @@ pub struct PadProbeInfo<'a> {
     pub offset: u64,
     pub size: u32,
     pub data: Option<PadProbeData<'a>>,
+    pub flow_ret: FlowReturn,
 }
 
 #[derive(Debug)]
@@ -1076,6 +1077,7 @@ where
                 Some(PadProbeData::__Unknown(data))
             }
         },
+        flow_ret: from_glib((*info).ABI.abi.flow_ret),
     };
 
     let ret = func(&Pad::from_glib_borrow(pad).unsafe_cast(), &mut probe_info).to_glib();
@@ -1105,6 +1107,8 @@ where
             assert_eq!(data_type, None);
         }
     }
+
+    (*info).ABI.abi.flow_ret = probe_info.flow_ret.to_glib();
 
     ret
 }
