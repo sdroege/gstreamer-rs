@@ -47,6 +47,8 @@ generate = [
     "GstVideo.VideoPrimariesMode",
     "GstVideo.VideoResamplerMethod",
     "GstVideo.VideoDitherMethod",
+    "GstVideo.VideoAFDValue",
+    "GstVideo.VideoAFDSpec",
 ]
 
 manual = [

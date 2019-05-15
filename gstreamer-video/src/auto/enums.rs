@@ -73,6 +73,163 @@ impl SetValue for VideoAlphaMode {
     }
 }
 
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoAFDSpec {
+    DvbEtsi,
+    AtscA53,
+    SmpteSt20161,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoAFDSpec {
+    type GlibType = gst_video_sys::GstVideoAFDSpec;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoAFDSpec {
+        match *self {
+            VideoAFDSpec::DvbEtsi => gst_video_sys::GST_VIDEO_AFD_SPEC_DVB_ETSI,
+            VideoAFDSpec::AtscA53 => gst_video_sys::GST_VIDEO_AFD_SPEC_ATSC_A53,
+            VideoAFDSpec::SmpteSt20161 => gst_video_sys::GST_VIDEO_AFD_SPEC_SMPTE_ST2016_1,
+            VideoAFDSpec::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoAFDSpec> for VideoAFDSpec {
+    fn from_glib(value: gst_video_sys::GstVideoAFDSpec) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoAFDSpec::DvbEtsi,
+            1 => VideoAFDSpec::AtscA53,
+            2 => VideoAFDSpec::SmpteSt20161,
+            value => VideoAFDSpec::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for VideoAFDSpec {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_afd_spec_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoAFDSpec {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoAFDSpec {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoAFDSpec {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum VideoAFDValue {
+    Unavailable,
+    _169TopAligned,
+    _149TopAligned,
+    GreaterThan169,
+    _43Full169Full,
+    _43Full43Pillar,
+    _169Letter169Full,
+    _149Letter149Pillar,
+    _43Full149Center,
+    _169Letter149Center,
+    _169Letter43Center,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for VideoAFDValue {
+    type GlibType = gst_video_sys::GstVideoAFDValue;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoAFDValue {
+        match *self {
+            VideoAFDValue::Unavailable => gst_video_sys::GST_VIDEO_AFD_UNAVAILABLE,
+            VideoAFDValue::_169TopAligned => gst_video_sys::GST_VIDEO_AFD_16_9_TOP_ALIGNED,
+            VideoAFDValue::_149TopAligned => gst_video_sys::GST_VIDEO_AFD_14_9_TOP_ALIGNED,
+            VideoAFDValue::GreaterThan169 => gst_video_sys::GST_VIDEO_AFD_GREATER_THAN_16_9,
+            VideoAFDValue::_43Full169Full => gst_video_sys::GST_VIDEO_AFD_4_3_FULL_16_9_FULL,
+            VideoAFDValue::_43Full43Pillar => gst_video_sys::GST_VIDEO_AFD_4_3_FULL_4_3_PILLAR,
+            VideoAFDValue::_169Letter169Full => gst_video_sys::GST_VIDEO_AFD_16_9_LETTER_16_9_FULL,
+            VideoAFDValue::_149Letter149Pillar => {
+                gst_video_sys::GST_VIDEO_AFD_14_9_LETTER_14_9_PILLAR
+            }
+            VideoAFDValue::_43Full149Center => gst_video_sys::GST_VIDEO_AFD_4_3_FULL_14_9_CENTER,
+            VideoAFDValue::_169Letter149Center => {
+                gst_video_sys::GST_VIDEO_AFD_16_9_LETTER_14_9_CENTER
+            }
+            VideoAFDValue::_169Letter43Center => {
+                gst_video_sys::GST_VIDEO_AFD_16_9_LETTER_4_3_CENTER
+            }
+            VideoAFDValue::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoAFDValue> for VideoAFDValue {
+    fn from_glib(value: gst_video_sys::GstVideoAFDValue) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoAFDValue::Unavailable,
+            2 => VideoAFDValue::_169TopAligned,
+            3 => VideoAFDValue::_149TopAligned,
+            4 => VideoAFDValue::GreaterThan169,
+            8 => VideoAFDValue::_43Full169Full,
+            9 => VideoAFDValue::_43Full43Pillar,
+            10 => VideoAFDValue::_169Letter169Full,
+            11 => VideoAFDValue::_149Letter149Pillar,
+            13 => VideoAFDValue::_43Full149Center,
+            14 => VideoAFDValue::_169Letter149Center,
+            15 => VideoAFDValue::_169Letter43Center,
+            value => VideoAFDValue::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl StaticType for VideoAFDValue {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_afd_value_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for VideoAFDValue {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl<'a> FromValue<'a> for VideoAFDValue {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl SetValue for VideoAFDValue {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]

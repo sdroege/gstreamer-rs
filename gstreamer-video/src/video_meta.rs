@@ -255,6 +255,141 @@ impl fmt::Debug for VideoCaptionMeta {
     }
 }
 
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[repr(C)]
+pub struct VideoAFDMeta(gst_video_sys::GstVideoAFDMeta);
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe impl Send for VideoAFDMeta {}
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe impl Sync for VideoAFDMeta {}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl VideoAFDMeta {
+    pub fn add(
+        buffer: &mut gst::BufferRef,
+        field: u8,
+        spec: ::VideoAFDSpec,
+        afd: ::VideoAFDValue,
+    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let meta = gst_video_sys::gst_buffer_add_video_afd_meta(
+                buffer.as_mut_ptr(),
+                field,
+                spec.to_glib(),
+                afd.to_glib(),
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_field(&self) -> u8 {
+        self.0.field
+    }
+
+    pub fn get_spec(&self) -> ::VideoAFDSpec {
+        from_glib(self.0.spec)
+    }
+
+    pub fn get_afd(&self) -> ::VideoAFDValue {
+        from_glib(self.0.afd)
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe impl MetaAPI for VideoAFDMeta {
+    type GstType = gst_video_sys::GstVideoAFDMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_video_sys::gst_video_afd_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl fmt::Debug for VideoAFDMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoAFDMeta")
+            .field("field", &self.get_field())
+            .field("spec", &self.get_spec())
+            .field("afd", &self.get_afd())
+            .finish()
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+#[repr(C)]
+pub struct VideoBarMeta(gst_video_sys::GstVideoBarMeta);
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe impl Send for VideoBarMeta {}
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe impl Sync for VideoBarMeta {}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl VideoBarMeta {
+    pub fn add(
+        buffer: &mut gst::BufferRef,
+        field: u8,
+        is_letterbox: bool,
+        bar_data1: u32,
+        bar_data2: u32,
+    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let meta = gst_video_sys::gst_buffer_add_video_bar_meta(
+                buffer.as_mut_ptr(),
+                field,
+                is_letterbox.to_glib(),
+                bar_data1,
+                bar_data2,
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_field(&self) -> u8 {
+        self.0.field
+    }
+
+    pub fn is_letterbox(&self) -> bool {
+        from_glib(self.0.is_letterbox)
+    }
+
+    pub fn get_bar_data1(&self) -> u32 {
+        self.0.bar_data1
+    }
+
+    pub fn get_bar_data2(&self) -> u32 {
+        self.0.bar_data2
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+unsafe impl MetaAPI for VideoBarMeta {
+    type GstType = gst_video_sys::GstVideoBarMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_video_sys::gst_video_bar_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+impl fmt::Debug for VideoBarMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoBarMeta")
+            .field("field", &self.get_field())
+            .field("is_letterbox", &self.is_letterbox())
+            .field("bar_data1", &self.get_bar_data1())
+            .field("bar_data2", &self.get_bar_data2())
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

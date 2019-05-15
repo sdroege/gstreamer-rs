@@ -21,6 +21,9 @@ pub use self::video_overlay::VideoOverlayExt;
 pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
 
 mod enums;
+pub use self::enums::VideoAFDSpec;
+#[cfg(any(feature = "v1_18", feature = "dox"))]
+pub use self::enums::VideoAFDValue;
 pub use self::enums::VideoAlphaMode;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 pub use self::enums::VideoCaptionType;
