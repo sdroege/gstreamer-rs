@@ -173,6 +173,11 @@ pub const GES_META_VOLUME_DEFAULT: c_double = 1.000000;
 pub const GES_MULTI_FILE_URI_PREFIX: *const c_char = b"multifile://\0" as *const u8 as *const c_char;
 pub const GES_PADDING: c_int = 4;
 pub const GES_PADDING_LARGE: c_int = 20;
+pub const GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY: u32 = 4294967295;
+pub const GES_VERSION_MAJOR: c_int = 1;
+pub const GES_VERSION_MICRO: c_int = 0;
+pub const GES_VERSION_MINOR: c_int = 16;
+pub const GES_VERSION_NANO: c_int = 0;
 
 // Flags
 pub type GESMetaFlag = c_uint;
@@ -1202,7 +1207,8 @@ pub struct GESTimelineElementClass {
     pub lookup_child: Option<unsafe extern "C" fn(*mut GESTimelineElement, *const c_char, *mut *mut gobject::GObject, *mut *mut gobject::GParamSpec) -> gboolean>,
     pub get_track_types: Option<unsafe extern "C" fn(*mut GESTimelineElement) -> GESTrackType>,
     pub set_child_property: Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut gobject::GObject, *mut gobject::GParamSpec, *mut gobject::GValue)>,
-    pub _ges_reserved: [gpointer; 17],
+    pub get_layer_priority: Option<unsafe extern "C" fn(*mut GESTimelineElement) -> u32>,
+    pub _ges_reserved: [gpointer; 16],
 }
 
 impl ::std::fmt::Debug for GESTimelineElementClass {
@@ -1226,6 +1232,7 @@ impl ::std::fmt::Debug for GESTimelineElementClass {
          .field("lookup_child", &self.lookup_child)
          .field("get_track_types", &self.get_track_types)
          .field("set_child_property", &self.set_child_property)
+         .field("get_layer_priority", &self.get_layer_priority)
          .finish()
     }
 }
@@ -1443,13 +1450,15 @@ pub struct GESUriClipAssetClass {
     pub parent_class: GESClipAssetClass,
     pub discoverer: *mut gst_pbutils::GstDiscoverer,
     pub sync_discoverer: *mut gst_pbutils::GstDiscoverer,
-    pub _ges_reserved: [gpointer; 4],
+    pub discovered: Option<unsafe extern "C" fn(*mut gst_pbutils::GstDiscoverer, *mut gst_pbutils::GstDiscovererInfo, *mut glib::GError, gpointer)>,
+    pub _ges_reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GESUriClipAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriClipAssetClass @ {:?}", self as *const _))
          .field("parent_class", &self.parent_class)
+         .field("discovered", &self.discovered)
          .finish()
     }
 }
@@ -2560,6 +2569,7 @@ extern "C" {
     // GESEdge
     //=========================================================================
     pub fn ges_edge_get_type() -> GType;
+    pub fn ges_edge_name(edge: GESEdge) -> *const c_char;
 
     //=========================================================================
     // GESEditMode
@@ -2957,6 +2967,7 @@ extern "C" {
     //pub fn ges_timeline_element_get_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
     pub fn ges_timeline_element_get_duration(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_inpoint(self_: *mut GESTimelineElement) -> gst::GstClockTime;
+    pub fn ges_timeline_element_get_layer_priority(self_: *mut GESTimelineElement) -> u32;
     pub fn ges_timeline_element_get_max_duration(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_name(self_: *mut GESTimelineElement) -> *mut c_char;
     pub fn ges_timeline_element_get_parent(self_: *mut GESTimelineElement) -> *mut GESTimelineElement;
@@ -2979,13 +2990,13 @@ extern "C" {
     pub fn ges_timeline_element_set_child_property(self_: *mut GESTimelineElement, property_name: *const c_char, value: *const gobject::GValue) -> gboolean;
     pub fn ges_timeline_element_set_child_property_by_pspec(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec, value: *const gobject::GValue);
     //pub fn ges_timeline_element_set_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn ges_timeline_element_set_duration(self_: *mut GESTimelineElement, duration: gst::GstClockTime);
-    pub fn ges_timeline_element_set_inpoint(self_: *mut GESTimelineElement, inpoint: gst::GstClockTime);
-    pub fn ges_timeline_element_set_max_duration(self_: *mut GESTimelineElement, maxduration: gst::GstClockTime);
+    pub fn ges_timeline_element_set_duration(self_: *mut GESTimelineElement, duration: gst::GstClockTime) -> gboolean;
+    pub fn ges_timeline_element_set_inpoint(self_: *mut GESTimelineElement, inpoint: gst::GstClockTime) -> gboolean;
+    pub fn ges_timeline_element_set_max_duration(self_: *mut GESTimelineElement, maxduration: gst::GstClockTime) -> gboolean;
     pub fn ges_timeline_element_set_name(self_: *mut GESTimelineElement, name: *const c_char) -> gboolean;
     pub fn ges_timeline_element_set_parent(self_: *mut GESTimelineElement, parent: *mut GESTimelineElement) -> gboolean;
-    pub fn ges_timeline_element_set_priority(self_: *mut GESTimelineElement, priority: u32);
-    pub fn ges_timeline_element_set_start(self_: *mut GESTimelineElement, start: gst::GstClockTime);
+    pub fn ges_timeline_element_set_priority(self_: *mut GESTimelineElement, priority: u32) -> gboolean;
+    pub fn ges_timeline_element_set_start(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
     pub fn ges_timeline_element_set_timeline(self_: *mut GESTimelineElement, timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_element_trim(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
 
@@ -3054,7 +3065,7 @@ extern "C" {
     // GESTrackElement
     //=========================================================================
     pub fn ges_track_element_get_type() -> GType;
-    pub fn ges_track_element_add_children_props(self_: *mut GESTrackElement, element: *mut gst::GstElement, wanted_categories: *mut *mut c_char, blacklist: *mut *mut c_char, whitelist: *mut *mut c_char);
+    pub fn ges_track_element_add_children_props(self_: *mut GESTrackElement, element: *mut gst::GstElement, wanted_categories: *mut *const c_char, blacklist: *mut *const c_char, whitelist: *mut *const c_char);
     pub fn ges_track_element_edit(object: *mut GESTrackElement, layers: *mut glib::GList, mode: GESEditMode, edge: GESEdge, position: u64) -> gboolean;
     pub fn ges_track_element_get_all_control_bindings(trackelement: *mut GESTrackElement) -> *mut glib::GHashTable;
     pub fn ges_track_element_get_child_properties(object: *mut GESTrackElement, first_property_name: *const c_char, ...);
@@ -3114,6 +3125,7 @@ extern "C" {
     // GESUriClipAsset
     //=========================================================================
     pub fn ges_uri_clip_asset_get_type() -> GType;
+    pub fn ges_uri_clip_asset_finish(res: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut GESUriClipAsset;
     pub fn ges_uri_clip_asset_new(uri: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
     pub fn ges_uri_clip_asset_request_sync(uri: *const c_char, error: *mut *mut glib::GError) -> *mut GESUriClipAsset;
     pub fn ges_uri_clip_asset_get_duration(self_: *mut GESUriClipAsset) -> gst::GstClockTime;
@@ -3225,8 +3237,9 @@ extern "C" {
     pub fn ges_add_missing_uri_relocation_uri(uri: *const c_char, recurse: gboolean) -> gboolean;
     pub fn ges_deinit();
     pub fn ges_init() -> gboolean;
-    pub fn ges_init_check(argc: *mut c_int, argv: *mut *mut c_char, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_init_check(argc: *mut c_int, argv: *mut *mut *mut c_char, error: *mut *mut glib::GError) -> gboolean;
     pub fn ges_init_get_option_group() -> *mut glib::GOptionGroup;
+    pub fn ges_is_initialized() -> gboolean;
     pub fn ges_list_assets(filter: GType) -> *mut glib::GList;
     pub fn ges_play_sink_convert_frame(playsink: *mut gst::GstElement, caps: *mut gst::GstCaps) -> *mut gst::GstSample;
     pub fn ges_pspec_equal(key_spec_1: gconstpointer, key_spec_2: gconstpointer) -> gboolean;
