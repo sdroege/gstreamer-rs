@@ -6,7 +6,6 @@ and/or use gtk-doc annotations.  -->
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <include name="GObject" version="2.0"/>
   <include name="Gio" version="2.0"/>
   <include name="Gst" version="1.0"/>
   <include name="GstPbutils" version="1.0"/>
@@ -138,7 +137,15 @@ it will not work with this method, but you can instead use the specific
         </parameters>
       </function>
       <function name="request_async" c:identifier="ges_asset_request_async">
-        <doc xml:space="preserve">Request a new #GESAsset asyncronously, @callback will be called when the materail is
+        <doc xml:space="preserve">The @callback will be called from a running #GMainLoop which is iterating a #GMainContext.
+Note that, users should ensure the #GMainContext, since this method will notify
+@callback from the thread which was associated with a thread default
+#GMainContext at calling ges_init().
+For example, if a user wants non-default #GMainContext to be associated
+with @callback, ges_init() must be called after g_main_context_push_thread_default ()
+with custom #GMainContext.
+
+Request a new #GESAsset asyncronously, @callback will be called when the materail is
 ready to be used or if an error occured.
 
 Example of request of a GESAsset async:
@@ -1897,7 +1904,7 @@ get stopped internally.</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="child-removed" when="first">
+      <glib:signal name="child-removed" when="last">
         <doc xml:space="preserve">Will be emitted after a child was removed from @container.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -2163,6 +2170,16 @@ return more than one #GESTrackElement(s) for a given #GESTrack.</doc>
         <doc xml:space="preserve">Represent the fact we are not workin with any edge of an
   object.</doc>
       </member>
+      <function name="name" c:identifier="ges_edge_name">
+        <return-value transfer-ownership="none">
+          <type name="utf8" c:type="const gchar*"/>
+        </return-value>
+        <parameters>
+          <parameter name="edge" transfer-ownership="none">
+            <type name="Edge" c:type="GESEdge"/>
+          </parameter>
+        </parameters>
+      </function>
     </enumeration>
     <enumeration name="EditMode"
                  glib:type-name="GESEditMode"
@@ -2976,10 +2993,13 @@ else FALSE.</doc>
     </record>
     <callback name="FormatterLoadFromURIMethod"
               c:type="GESFormatterLoadFromURIMethod"
+              deprecated="1"
+              deprecated-version="1.16"
               throws="1">
       <doc xml:space="preserve">Virtual method for loading a timeline from a given URI.
 
 Every #GESFormatter subclass needs to implement this method.</doc>
+      <doc-deprecated xml:space="preserve">Use @ges_timeline_load_from_uri</doc-deprecated>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if the timeline data was successfully loaded from the URI,
 else FALSE.</doc>
@@ -3004,10 +3024,13 @@ else FALSE.</doc>
     </record>
     <callback name="FormatterSaveToURIMethod"
               c:type="GESFormatterSaveToURIMethod"
+              deprecated="1"
+              deprecated-version="1.16"
               throws="1">
       <doc xml:space="preserve">Virtual method for saving a timeline to a uri.
 
 Every #GESFormatter subclass needs to implement this method.</doc>
+      <doc-deprecated xml:space="preserve">Use @ges_timeline_save_to_uri</doc-deprecated>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">TRUE if the timeline data was successfully saved to the URI
 else FALSE.</doc>
@@ -3738,6 +3761,8 @@ that if there is no metadata, the function won't be called at all.</doc>
         </parameters>
       </method>
       <method name="get_boolean" c:identifier="ges_meta_container_get_boolean">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3754,14 +3779,14 @@ that if there is no metadata, the function won't be called at all.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="gboolean" c:type="gboolean*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_date" c:identifier="ges_meta_container_get_date">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3778,15 +3803,15 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="GLib.Date" c:type="GDate**"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_date_time"
               c:identifier="ges_meta_container_get_date_time">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3803,14 +3828,14 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="Gst.DateTime" c:type="GstDateTime**"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_double" c:identifier="ges_meta_container_get_double">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3827,14 +3852,14 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="gdouble" c:type="gdouble*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_float" c:identifier="ges_meta_container_get_float">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns %FALSE if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3851,14 +3876,14 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns FALSE if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="gfloat" c:type="gfloat*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_int" c:identifier="ges_meta_container_get_int">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3875,14 +3900,14 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_int64" c:identifier="ges_meta_container_get_int64">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns %FALSE if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3899,9 +3924,7 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns %FALSE if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="gint64" c:type="gint64*"/>
           </parameter>
         </parameters>
@@ -3925,6 +3948,8 @@ can not be found.</doc>
         </parameters>
       </method>
       <method name="get_string" c:identifier="ges_meta_container_get_string">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -3934,14 +3959,14 @@ can not be found.</doc>
             <type name="MetaContainer" c:type="GESMetaContainer*"/>
           </instance-parameter>
           <parameter name="meta_item" transfer-ownership="none">
-            <doc xml:space="preserve">Name of the meta item to get
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Name of the meta item to get</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_uint" c:identifier="ges_meta_container_get_uint">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns NULL if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3958,14 +3983,14 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_uint64" c:identifier="ges_meta_container_get_uint64">
+        <doc xml:space="preserve">Gets the value of a given meta item, returns %FALSE if @meta_item
+can not be found.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -3982,9 +4007,7 @@ can not be found.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <doc xml:space="preserve">Destination to which value of meta item will be copied
-Gets the value of a given meta item, returns NULL if @meta_item
-can not be found.</doc>
+            <doc xml:space="preserve">Destination to which value of meta item will be copied</doc>
             <type name="guint64" c:type="guint64*"/>
           </parameter>
         </parameters>
@@ -4010,7 +4033,7 @@ The string must be freed with g_free() when no longer needed.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the static meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the static meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4034,20 +4057,28 @@ type accepted for this meta on that particular @container.</doc>
       </method>
       <method name="register_meta_boolean"
               c:identifier="ges_meta_container_register_meta_boolean">
+        <doc xml:space="preserve">Sets a static meta on @container. This method lets you define static
+metadatas, which means that the type of the registered will be the only
+type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="container" transfer-ownership="none">
+            <doc xml:space="preserve">Target container</doc>
             <type name="MetaContainer" c:type="GESMetaContainer*"/>
           </instance-parameter>
           <parameter name="flags" transfer-ownership="none">
+            <doc xml:space="preserve">The #GESMetaFlag to be used</doc>
             <type name="MetaFlag" c:type="GESMetaFlag"/>
           </parameter>
           <parameter name="meta_item" transfer-ownership="none">
+            <doc xml:space="preserve">Name of the meta item to set</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="value" transfer-ownership="none">
+            <doc xml:space="preserve">Value to set</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
@@ -4058,7 +4089,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4089,7 +4120,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4120,7 +4151,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4148,7 +4179,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4176,7 +4207,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4204,7 +4235,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4232,7 +4263,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4263,7 +4294,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4291,7 +4322,7 @@ type accepted for this meta on that particular @container.</doc>
 metadatas, which means that the type of the registered will be the only
 type accepted for this meta on that particular @container.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be register, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be registered, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4316,7 +4347,7 @@ type accepted for this meta on that particular @container.</doc>
       <method name="set_boolean" c:identifier="ges_meta_container_set_boolean">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4337,7 +4368,7 @@ type accepted for this meta on that particular @container.</doc>
       <method name="set_date" c:identifier="ges_meta_container_set_date">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4359,7 +4390,7 @@ type accepted for this meta on that particular @container.</doc>
               c:identifier="ges_meta_container_set_date_time">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4380,7 +4411,7 @@ type accepted for this meta on that particular @container.</doc>
       <method name="set_double" c:identifier="ges_meta_container_set_double">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4401,7 +4432,7 @@ type accepted for this meta on that particular @container.</doc>
       <method name="set_float" c:identifier="ges_meta_container_set_float">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4422,7 +4453,7 @@ type accepted for this meta on that particular @container.</doc>
       <method name="set_int" c:identifier="ges_meta_container_set_int">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4443,7 +4474,7 @@ type accepted for this meta on that particular @container.</doc>
       <method name="set_int64" c:identifier="ges_meta_container_set_int64">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4462,8 +4493,9 @@ type accepted for this meta on that particular @container.</doc>
         </parameters>
       </method>
       <method name="set_meta" c:identifier="ges_meta_container_set_meta">
+        <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4479,8 +4511,7 @@ type accepted for this meta on that particular @container.</doc>
                      transfer-ownership="none"
                      nullable="1"
                      allow-none="1">
-            <doc xml:space="preserve">Value to set
-Sets the value of a given meta item</doc>
+            <doc xml:space="preserve">Value to set</doc>
             <type name="GObject.Value" c:type="const GValue*"/>
           </parameter>
         </parameters>
@@ -4488,7 +4519,7 @@ Sets the value of a given meta item</doc>
       <method name="set_string" c:identifier="ges_meta_container_set_string">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4509,7 +4540,7 @@ Sets the value of a given meta item</doc>
       <method name="set_uint" c:identifier="ges_meta_container_set_uint">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -4530,7 +4561,7 @@ Sets the value of a given meta item</doc>
       <method name="set_uint64" c:identifier="ges_meta_container_set_uint64">
         <doc xml:space="preserve">Sets the value of a given meta item</doc>
         <return-value transfer-ownership="none">
-          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwize</doc>
+          <doc xml:space="preserve">%TRUE if the meta could be added, %FALSE otherwise</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -5668,7 +5699,7 @@ missing GStreamer plugins, the error will be set to #GST_CORE_ERROR
         </return-value>
         <parameters>
           <parameter name="error" transfer-ownership="none">
-            <doc xml:space="preserve">The #GError defining the error that accured, might be %NULL</doc>
+            <doc xml:space="preserve">The #GError defining the error that occured, might be %NULL</doc>
             <type name="GLib.Error"/>
           </parameter>
           <parameter name="id" transfer-ownership="none">
@@ -5915,6 +5946,12 @@ only to find out what the new location is.</doc>
     </record>
     <record name="SourcePrivate" c:type="GESSourcePrivate" disguised="1">
     </record>
+    <constant name="TIMELINE_ELEMENT_NO_LAYER_PRIORITY"
+              value="4294967295"
+              c:type="GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY">
+      <doc xml:space="preserve">Layer priority when the element is not in a layer</doc>
+      <type name="guint32" c:type="guint32"/>
+    </constant>
     <class name="TestClip"
            c:symbol-prefix="test_clip"
            c:type="GESTestClip"
@@ -7491,33 +7528,41 @@ don't need to do anything in the meantime.</doc>
         </parameters>
       </glib:signal>
       <glib:signal name="snapping-ended" when="last">
+        <doc xml:space="preserve">Will be emitted when the 2 #GESTrackElement ended to snap</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="obj1" transfer-ownership="none">
+            <doc xml:space="preserve">the first #GESTrackElement that was snapping.</doc>
             <type name="TrackElement"/>
           </parameter>
-          <parameter name="p0" transfer-ownership="none">
+          <parameter name="obj2" transfer-ownership="none">
+            <doc xml:space="preserve">the second #GESTrackElement that was snapping.</doc>
             <type name="TrackElement"/>
           </parameter>
-          <parameter name="p1" transfer-ownership="none">
+          <parameter name="position" transfer-ownership="none">
+            <doc xml:space="preserve">the position where the two objects finally snapping.</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="snapping-started" when="last">
+        <doc xml:space="preserve">Will be emitted when the 2 #GESTrackElement first snapped</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="obj1" transfer-ownership="none">
+            <doc xml:space="preserve">the first #GESTrackElement that was snapping.</doc>
             <type name="TrackElement"/>
           </parameter>
-          <parameter name="p0" transfer-ownership="none">
+          <parameter name="obj2" transfer-ownership="none">
+            <doc xml:space="preserve">the second #GESTrackElement that was snapping.</doc>
             <type name="TrackElement"/>
           </parameter>
-          <parameter name="p1" transfer-ownership="none">
+          <parameter name="position" transfer-ownership="none">
+            <doc xml:space="preserve">the position where the two objects finally snapping.</doc>
             <type name="guint64" c:type="guint64"/>
           </parameter>
         </parameters>
@@ -7679,6 +7724,20 @@ responsible for controlling its timing properties.</doc>
           <parameter name="copy" transfer-ownership="none">
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="get_layer_priority" invoker="get_layer_priority">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The priority of the first layer the element is in (note that only
+groups can span over several layers). %GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY
+means that the element is not in a layer.</doc>
+          <type name="guint32" c:type="guint32"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTimelineElement</doc>
+            <type name="TimelineElement" c:type="GESTimelineElement*"/>
+          </instance-parameter>
         </parameters>
       </virtual-method>
       <virtual-method name="get_track_types"
@@ -7872,41 +7931,57 @@ the in-point of @self according</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_duration">
+      <virtual-method name="set_duration" invoker="set_duration">
+        <doc xml:space="preserve">Set the duration of the object
+
+Note that if the timeline snap-distance property of the timeline containing
+@self is set, @self will properly snap to its neighboors.</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @duration could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GESTimelineElement</doc>
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </instance-parameter>
           <parameter name="duration" transfer-ownership="none">
+            <doc xml:space="preserve">the duration in #GstClockTime</doc>
             <type name="Gst.ClockTime" c:type="GstClockTime"/>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_inpoint">
+      <virtual-method name="set_inpoint" invoker="set_inpoint">
+        <doc xml:space="preserve">Set the in-point, that is the moment at which the @self will start
+outputting data from its contents.</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @inpoint could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GESTimelineElement</doc>
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </instance-parameter>
           <parameter name="inpoint" transfer-ownership="none">
+            <doc xml:space="preserve">the in-point in #GstClockTime</doc>
             <type name="Gst.ClockTime" c:type="GstClockTime"/>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_max_duration">
+      <virtual-method name="set_max_duration" invoker="set_max_duration">
+        <doc xml:space="preserve">Set the maximun duration of the object</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @maxduration could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GESTimelineElement</doc>
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </instance-parameter>
           <parameter name="maxduration" transfer-ownership="none">
+            <doc xml:space="preserve">the maximum duration in #GstClockTime</doc>
             <type name="Gst.ClockTime" c:type="GstClockTime"/>
           </parameter>
         </parameters>
@@ -7930,28 +8005,44 @@ already had a parent or @self and @parent are the same.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_priority">
+      <virtual-method name="set_priority"
+                      invoker="set_priority"
+                      deprecated="1">
+        <doc xml:space="preserve">Sets the priority of the object within the containing layer</doc>
+        <doc-deprecated xml:space="preserve">All priority management is done by GES itself now.
+To set #GESEffect priorities #ges_clip_set_top_effect_index should
+be used.</doc-deprecated>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @priority could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GESTimelineElement</doc>
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </instance-parameter>
           <parameter name="priority" transfer-ownership="none">
+            <doc xml:space="preserve">the priority</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="set_start">
+      <virtual-method name="set_start" invoker="set_start">
+        <doc xml:space="preserve">Set the position of the object in its containing layer.
+
+Note that if the snapping-distance property of the timeline containing
+@self is set, @self will properly snap to the edges around @start.</doc>
         <return-value transfer-ownership="none">
+          <doc xml:space="preserve">%TRUE if @start could be set.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">a #GESTimelineElement</doc>
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </instance-parameter>
           <parameter name="start" transfer-ownership="none">
+            <doc xml:space="preserve">the position in #GstClockTime</doc>
             <type name="Gst.ClockTime" c:type="GstClockTime"/>
           </parameter>
         </parameters>
@@ -8144,6 +8235,21 @@ name/return location pairs, followed by NULL</doc>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve">a #GESTimelineElement</doc>
+            <type name="TimelineElement" c:type="GESTimelineElement*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_layer_priority"
+              c:identifier="ges_timeline_element_get_layer_priority">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">The priority of the first layer the element is in (note that only
+groups can span over several layers). %GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY
+means that the element is not in a layer.</doc>
+          <type name="guint32" c:type="guint32"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">A #GESTimelineElement</doc>
             <type name="TimelineElement" c:type="GESTimelineElement*"/>
           </instance-parameter>
         </parameters>
@@ -8556,7 +8662,8 @@ name/return location pairs, followed by NULL</doc>
 Note that if the timeline snap-distance property of the timeline containing
 @self is set, @self will properly snap to its neighboors.</doc>
         <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
+          <doc xml:space="preserve">%TRUE if @duration could be set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
@@ -8574,7 +8681,8 @@ Note that if the timeline snap-distance property of the timeline containing
         <doc xml:space="preserve">Set the in-point, that is the moment at which the @self will start
 outputting data from its contents.</doc>
         <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
+          <doc xml:space="preserve">%TRUE if @inpoint could be set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
@@ -8591,7 +8699,8 @@ outputting data from its contents.</doc>
               c:identifier="ges_timeline_element_set_max_duration">
         <doc xml:space="preserve">Set the maximun duration of the object</doc>
         <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
+          <doc xml:space="preserve">%TRUE if @maxduration could be set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
@@ -8652,7 +8761,8 @@ already had a parent or @self and @parent are the same.</doc>
 To set #GESEffect priorities #ges_clip_set_top_effect_index should
 be used.</doc-deprecated>
         <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
+          <doc xml:space="preserve">%TRUE if @priority could be set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
@@ -8671,7 +8781,8 @@ be used.</doc-deprecated>
 Note that if the snapping-distance property of the timeline containing
 @self is set, @self will properly snap to the edges around @start.</doc>
         <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
+          <doc xml:space="preserve">%TRUE if @start could be set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
@@ -8881,13 +8992,16 @@ already had a parent or @self and @parent are the same.</doc>
       <field name="set_start">
         <callback name="set_start">
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @start could be set.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">a #GESTimelineElement</doc>
               <type name="TimelineElement" c:type="GESTimelineElement*"/>
             </parameter>
             <parameter name="start" transfer-ownership="none">
+              <doc xml:space="preserve">the position in #GstClockTime</doc>
               <type name="Gst.ClockTime" c:type="GstClockTime"/>
             </parameter>
           </parameters>
@@ -8896,13 +9010,16 @@ already had a parent or @self and @parent are the same.</doc>
       <field name="set_inpoint">
         <callback name="set_inpoint">
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @inpoint could be set.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">a #GESTimelineElement</doc>
               <type name="TimelineElement" c:type="GESTimelineElement*"/>
             </parameter>
             <parameter name="inpoint" transfer-ownership="none">
+              <doc xml:space="preserve">the in-point in #GstClockTime</doc>
               <type name="Gst.ClockTime" c:type="GstClockTime"/>
             </parameter>
           </parameters>
@@ -8911,13 +9028,16 @@ already had a parent or @self and @parent are the same.</doc>
       <field name="set_duration">
         <callback name="set_duration">
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @duration could be set.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">a #GESTimelineElement</doc>
               <type name="TimelineElement" c:type="GESTimelineElement*"/>
             </parameter>
             <parameter name="duration" transfer-ownership="none">
+              <doc xml:space="preserve">the duration in #GstClockTime</doc>
               <type name="Gst.ClockTime" c:type="GstClockTime"/>
             </parameter>
           </parameters>
@@ -8926,13 +9046,16 @@ already had a parent or @self and @parent are the same.</doc>
       <field name="set_max_duration">
         <callback name="set_max_duration">
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @maxduration could be set.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">a #GESTimelineElement</doc>
               <type name="TimelineElement" c:type="GESTimelineElement*"/>
             </parameter>
             <parameter name="maxduration" transfer-ownership="none">
+              <doc xml:space="preserve">the maximum duration in #GstClockTime</doc>
               <type name="Gst.ClockTime" c:type="GstClockTime"/>
             </parameter>
           </parameters>
@@ -8941,13 +9064,16 @@ already had a parent or @self and @parent are the same.</doc>
       <field name="set_priority">
         <callback name="set_priority">
           <return-value transfer-ownership="none">
+            <doc xml:space="preserve">%TRUE if @priority could be set.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">a #GESTimelineElement</doc>
               <type name="TimelineElement" c:type="GESTimelineElement*"/>
             </parameter>
             <parameter name="priority" transfer-ownership="none">
+              <doc xml:space="preserve">the priority</doc>
               <type name="guint32" c:type="guint32"/>
             </parameter>
           </parameters>
@@ -9177,8 +9303,24 @@ usage.</doc>
           </parameters>
         </callback>
       </field>
+      <field name="get_layer_priority">
+        <callback name="get_layer_priority">
+          <return-value transfer-ownership="none">
+            <doc xml:space="preserve">The priority of the first layer the element is in (note that only
+groups can span over several layers). %GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY
+means that the element is not in a layer.</doc>
+            <type name="guint32" c:type="guint32"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <doc xml:space="preserve">A #GESTimelineElement</doc>
+              <type name="TimelineElement" c:type="GESTimelineElement*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="_ges_reserved" readable="0" private="1">
-        <array zero-terminated="0" c:type="gpointer" fixed-size="17">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="16">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
@@ -9698,9 +9840,13 @@ You can use the following children properties through the
         </parameters>
       </method>
       <method name="get_font_desc"
-              c:identifier="ges_title_source_get_font_desc">
+              c:identifier="ges_title_source_get_font_desc"
+              deprecated="1"
+              deprecated-version="1.16">
         <doc xml:space="preserve">Get the pango font description used by @source.</doc>
-        <return-value transfer-ownership="none">
+        <doc-deprecated xml:space="preserve">Use ges_timeline_element_get_child_property instead
+(this actually returns a newly allocated string)</doc-deprecated>
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">The pango font description used by this
 @source.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -9726,9 +9872,14 @@ You can use the following children properties through the
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_text" c:identifier="ges_title_source_get_text">
+      <method name="get_text"
+              c:identifier="ges_title_source_get_text"
+              deprecated="1"
+              deprecated-version="1.16">
         <doc xml:space="preserve">Get the text currently set on the @source.</doc>
-        <return-value transfer-ownership="none">
+        <doc-deprecated xml:space="preserve">Use ges_timeline_element_get_child_property instead
+(this actually returns a newly allocated string)</doc-deprecated>
+        <return-value transfer-ownership="full">
           <doc xml:space="preserve">The text currently set on the @source.</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -10469,7 +10620,7 @@ To be used by subclasses only</doc>
             <doc xml:space="preserve">
 An array of categories of GstElement to
 take into account (as defined in the factory meta "klass" field)</doc>
-            <array c:type="gchar**">
+            <array c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -10479,7 +10630,7 @@ take into account (as defined in the factory meta "klass" field)</doc>
                      allow-none="1">
             <doc xml:space="preserve">A
 blacklist of elements factory names to not take into account</doc>
-            <array c:type="gchar**">
+            <array c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -10489,7 +10640,7 @@ blacklist of elements factory names to not take into account</doc>
                      allow-none="1">
             <doc xml:space="preserve">A list
 of propery names to add as children properties</doc>
-            <array c:type="gchar**">
+            <array c:type="const gchar**">
               <type name="utf8" c:type="gchar*"/>
             </array>
           </parameter>
@@ -11014,7 +11165,9 @@ occured</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="binding_type" transfer-ownership="none">
-            <doc xml:space="preserve">The type of binding to create. Only "direct" is available for now.</doc>
+            <doc xml:space="preserve">The type of binding to create. Currently the following values are valid:
+  - "direct": See #gst_direct_control_binding_new
+  - "direct-absolute": See #gst_direct_control_binding_new_absolute</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
@@ -11632,10 +11785,25 @@ before create_track_elements is called.</doc>
       <doc xml:space="preserve">The #GESUriClipAsset is a special #GESAsset that lets you handle
 the media file to use inside the GStreamer Editing Services. It has APIs that
 let you get information about the medias. Also, the tags found in the media file are
-set as Metadatas of the Asser.</doc>
+set as Metadata of the Asset.</doc>
       <implements name="MetaContainer"/>
       <implements name="Gio.AsyncInitable"/>
       <implements name="Gio.Initable"/>
+      <function name="finish"
+                c:identifier="ges_uri_clip_asset_finish"
+                throws="1">
+        <doc xml:space="preserve">Finalize the request of an async #GESUriClipAsset</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">The #GESUriClipAsset previously requested</doc>
+          <type name="UriClipAsset" c:type="GESUriClipAsset*"/>
+        </return-value>
+        <parameters>
+          <parameter name="res" transfer-ownership="none">
+            <doc xml:space="preserve">The #GAsyncResult from which to get the newly created #GESUriClipAsset</doc>
+            <type name="Gio.AsyncResult" c:type="GAsyncResult*"/>
+          </parameter>
+        </parameters>
+      </function>
       <function name="new" c:identifier="ges_uri_clip_asset_new">
         <doc xml:space="preserve">Creates a #GESUriClipAsset for @uri
 
@@ -11648,7 +11816,7 @@ filesource_asset_loaded_cb (GESAsset * source, GAsyncResult * res, gpointer user
   GError *error = NULL;
   GESUriClipAsset *filesource_asset;
 
-  filesource_asset = GES_URI_CLIP_ASSET (ges_asset_request_finish (res, &amp;error));
+  filesource_asset = ges_uri_clip_asset_finish (res, &amp;error);
   if (filesource_asset) {
    g_print ("The file: %s is usable as a FileSource, it is%s an image and lasts %" GST_TIME_FORMAT,
        ges_asset_get_id (GES_ASSET (filesource_asset))
@@ -11703,9 +11871,9 @@ ges_uri_clip_asset_new (uri, (GAsyncReadyCallback) filesource_asset_loaded_cb, u
                 throws="1">
         <doc xml:space="preserve">Creates a #GESUriClipAsset for @uri syncronously. You should avoid
 to use it in application, and rather create #GESUriClipAsset asynchronously</doc>
-        <return-value transfer-ownership="none" nullable="1">
-          <doc xml:space="preserve">A reference to the requested asset or
-%NULL if an error happened</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">A reference to the requested asset or %NULL if
+an error happened</doc>
           <type name="UriClipAsset" c:type="GESUriClipAsset*"/>
         </return-value>
         <parameters>
@@ -11802,8 +11970,34 @@ GESUriClipAsset</doc>
       <field name="sync_discoverer" readable="0" private="1">
         <type name="GstPbutils.Discoverer" c:type="GstDiscoverer*"/>
       </field>
+      <field name="discovered">
+        <callback name="discovered">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="discoverer" transfer-ownership="none">
+              <type name="GstPbutils.Discoverer" c:type="GstDiscoverer*"/>
+            </parameter>
+            <parameter name="info" transfer-ownership="none">
+              <type name="GstPbutils.DiscovererInfo"
+                    c:type="GstDiscovererInfo*"/>
+            </parameter>
+            <parameter name="err" transfer-ownership="none">
+              <type name="GLib.Error" c:type="GError*"/>
+            </parameter>
+            <parameter name="user_data"
+                       transfer-ownership="none"
+                       nullable="1"
+                       allow-none="1"
+                       closure="3">
+              <type name="gpointer" c:type="gpointer"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="_ges_reserved" readable="0" private="1">
-        <array zero-terminated="0" c:type="gpointer" fixed-size="4">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="3">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
@@ -11924,6 +12118,18 @@ by #GESUriClipAsset-s.</doc>
             c:type="GESUriSourceAssetPrivate"
             disguised="1">
     </record>
+    <constant name="VERSION_MAJOR" value="1" c:type="GES_VERSION_MAJOR">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="VERSION_MICRO" value="0" c:type="GES_VERSION_MICRO">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="VERSION_MINOR" value="16" c:type="GES_VERSION_MINOR">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="VERSION_NANO" value="0" c:type="GES_VERSION_NANO">
+      <type name="gint" c:type="gint"/>
+    </constant>
     <class name="VideoSource"
            c:symbol-prefix="video_source"
            c:type="GESVideoSource"
@@ -11981,6 +12187,11 @@ You can use the following children properties through the
  &lt;entry role="property_type"&gt;&lt;link linkend="GstDeinterlaceFieldLayout"&gt;&lt;type&gt;GstDeinterlaceFieldLayout&lt;/type&gt;&lt;/link&gt;&lt;/entry&gt;
  &lt;entry role="property_name"&gt;&lt;link linkend="GESVideoSource--deinterlace-tff"&gt;deinterlace-tff&lt;/link&gt;&lt;/entry&gt;
  &lt;entry&gt;Deinterlace top field first&lt;/entry&gt;
+&lt;/row&gt;
+&lt;row&gt;
+ &lt;entry role="property_type"&gt;&lt;link linkend="GstVideoOrientationMethod"&gt;&lt;type&gt;GstVideoOrientationMethod&lt;/type&gt;&lt;/link&gt;&lt;/entry&gt;
+ &lt;entry role="property_name"&gt;&lt;link linkend="GESVideoSource--video-direction"&gt;video-direction&lt;/link&gt;&lt;/entry&gt;
+ &lt;entry&gt;The desired video rotation and flipping.&lt;/entry&gt;
 &lt;/row&gt;
 &lt;/tbody&gt;
 &lt;/tgroup&gt;
@@ -12963,16 +13174,34 @@ for later use.</doc>
 It is normally not needed to call this function in a normal application as the
 resources will automatically be freed when the program terminates.
 This function is therefore mostly used by testsuites and other memory profiling tools.
+This function should be called from the thread where ges_init() was called.
 
-After this call GES (including this method) should not be used anymore.</doc>
+After this call GES should not be used until another ges_init() call.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
     </function>
+    <function name="edge_name"
+              c:identifier="ges_edge_name"
+              moved-to="Edge.name">
+      <return-value transfer-ownership="none">
+        <type name="utf8" c:type="const gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="edge" transfer-ownership="none">
+          <type name="Edge" c:type="GESEdge"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="init" c:identifier="ges_init">
       <doc xml:space="preserve">Initialize the GStreamer Editing Service. Call this before any usage of
 GES. You should take care of initilizing GStreamer before calling this
-function.</doc>
+function.
+
+MT safety.
+GStreamer Editing Services do not guarantee MT safety.
+An application is required to use GES APIs (including ges_deinit())
+in the thread where ges_init() was called.</doc>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -13004,8 +13233,8 @@ for some reason.</doc>
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve">pointer to application's argv</doc>
-          <array length="0" zero-terminated="0" c:type="char**">
-            <type name="utf8" c:type="char*"/>
+          <array length="0" zero-terminated="0" c:type="char***">
+            <type name="utf8" c:type="char**"/>
           </array>
         </parameter>
       </parameters>
@@ -13028,6 +13257,14 @@ using the ges_init_get_option_group() result.</doc>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve">a pointer to GES's option group.</doc>
         <type name="GLib.OptionGroup" c:type="GOptionGroup*"/>
+      </return-value>
+    </function>
+    <function name="is_initialized" c:identifier="ges_is_initialized">
+      <doc xml:space="preserve">Use this function to check if GES has been initialized with ges_init()
+or ges_init_check().</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">%TRUE if initialization has been done, %FALSE otherwise.</doc>
+        <type name="gboolean" c:type="gboolean"/>
       </return-value>
     </function>
     <function name="list_assets" c:identifier="ges_list_assets">

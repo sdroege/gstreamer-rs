@@ -410,16 +410,16 @@ where P: IsA<Timeline> {
     f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
 }
 
-unsafe extern "C" fn snapping_ended_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ges_sys::GESTimeline, object: *mut ges_sys::GESTrackElement, p0: *mut ges_sys::GESTrackElement, p1: u64, f: glib_sys::gpointer)
+unsafe extern "C" fn snapping_ended_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ges_sys::GESTimeline, obj1: *mut ges_sys::GESTrackElement, obj2: *mut ges_sys::GESTrackElement, position: u64, f: glib_sys::gpointer)
 where P: IsA<Timeline> {
     let f: &F = &*(f as *const F);
-    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(obj1), &from_glib_borrow(obj2), position)
 }
 
-unsafe extern "C" fn snapping_started_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ges_sys::GESTimeline, object: *mut ges_sys::GESTrackElement, p0: *mut ges_sys::GESTrackElement, p1: u64, f: glib_sys::gpointer)
+unsafe extern "C" fn snapping_started_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ges_sys::GESTimeline, obj1: *mut ges_sys::GESTrackElement, obj2: *mut ges_sys::GESTrackElement, position: u64, f: glib_sys::gpointer)
 where P: IsA<Timeline> {
     let f: &F = &*(f as *const F);
-    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &from_glib_borrow(p0), p1)
+    f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(obj1), &from_glib_borrow(obj2), position)
 }
 
 unsafe extern "C" fn track_added_trampoline<P, F: Fn(&P, &Track) + 'static>(this: *mut ges_sys::GESTimeline, track: *mut ges_sys::GESTrack, f: glib_sys::gpointer)

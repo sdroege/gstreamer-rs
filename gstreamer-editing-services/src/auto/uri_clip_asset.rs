@@ -29,16 +29,20 @@ glib_wrapper! {
 }
 
 impl UriClipAsset {
+    //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, Error> {
+    //    unsafe { TODO: call ges_sys:ges_uri_clip_asset_finish() }
+    //}
+
     //pub fn new<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + 'static>(uri: &str, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call ges_sys:ges_uri_clip_asset_new() }
     //}
 
-    pub fn request_sync(uri: &str) -> Result<Option<UriClipAsset>, Error> {
+    pub fn request_sync(uri: &str) -> Result<UriClipAsset, Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ges_sys::ges_uri_clip_asset_request_sync(uri.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
+            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
 }

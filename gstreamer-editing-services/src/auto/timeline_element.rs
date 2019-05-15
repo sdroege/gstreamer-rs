@@ -48,6 +48,8 @@ pub trait TimelineElementExt: 'static {
 
     fn get_inpoint(&self) -> gst::ClockTime;
 
+    fn get_layer_priority(&self) -> u32;
+
     fn get_max_duration(&self) -> gst::ClockTime;
 
     fn get_name(&self) -> Option<GString>;
@@ -88,19 +90,19 @@ pub trait TimelineElementExt: 'static {
 
     //fn set_child_property_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
-    fn set_duration(&self, duration: gst::ClockTime);
+    fn set_duration(&self, duration: gst::ClockTime) -> bool;
 
-    fn set_inpoint(&self, inpoint: gst::ClockTime);
+    fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool;
 
-    fn set_max_duration(&self, maxduration: gst::ClockTime);
+    fn set_max_duration(&self, maxduration: gst::ClockTime) -> bool;
 
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError>;
 
     fn set_parent<P: IsA<TimelineElement>>(&self, parent: &P) -> Result<(), glib::error::BoolError>;
 
-    fn set_priority(&self, priority: u32);
+    fn set_priority(&self, priority: u32) -> bool;
 
-    fn set_start(&self, start: gst::ClockTime);
+    fn set_start(&self, start: gst::ClockTime) -> bool;
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::error::BoolError>;
 
@@ -171,6 +173,12 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     fn get_inpoint(&self) -> gst::ClockTime {
         unsafe {
             from_glib(ges_sys::ges_timeline_element_get_inpoint(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    fn get_layer_priority(&self) -> u32 {
+        unsafe {
+            ges_sys::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -280,21 +288,21 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
     //    unsafe { TODO: call ges_sys:ges_timeline_element_set_child_property_valist() }
     //}
 
-    fn set_duration(&self, duration: gst::ClockTime) {
+    fn set_duration(&self, duration: gst::ClockTime) -> bool {
         unsafe {
-            ges_sys::ges_timeline_element_set_duration(self.as_ref().to_glib_none().0, duration.to_glib());
+            from_glib(ges_sys::ges_timeline_element_set_duration(self.as_ref().to_glib_none().0, duration.to_glib()))
         }
     }
 
-    fn set_inpoint(&self, inpoint: gst::ClockTime) {
+    fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool {
         unsafe {
-            ges_sys::ges_timeline_element_set_inpoint(self.as_ref().to_glib_none().0, inpoint.to_glib());
+            from_glib(ges_sys::ges_timeline_element_set_inpoint(self.as_ref().to_glib_none().0, inpoint.to_glib()))
         }
     }
 
-    fn set_max_duration(&self, maxduration: gst::ClockTime) {
+    fn set_max_duration(&self, maxduration: gst::ClockTime) -> bool {
         unsafe {
-            ges_sys::ges_timeline_element_set_max_duration(self.as_ref().to_glib_none().0, maxduration.to_glib());
+            from_glib(ges_sys::ges_timeline_element_set_max_duration(self.as_ref().to_glib_none().0, maxduration.to_glib()))
         }
     }
 
@@ -310,15 +318,15 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
-    fn set_priority(&self, priority: u32) {
+    fn set_priority(&self, priority: u32) -> bool {
         unsafe {
-            ges_sys::ges_timeline_element_set_priority(self.as_ref().to_glib_none().0, priority);
+            from_glib(ges_sys::ges_timeline_element_set_priority(self.as_ref().to_glib_none().0, priority))
         }
     }
 
-    fn set_start(&self, start: gst::ClockTime) {
+    fn set_start(&self, start: gst::ClockTime) -> bool {
         unsafe {
-            ges_sys::ges_timeline_element_set_start(self.as_ref().to_glib_none().0, start.to_glib());
+            from_glib(ges_sys::ges_timeline_element_set_start(self.as_ref().to_glib_none().0, start.to_glib()))
         }
     }
 
