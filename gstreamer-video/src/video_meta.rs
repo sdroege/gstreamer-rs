@@ -179,6 +179,61 @@ impl fmt::Debug for VideoOverlayCompositionMeta {
     }
 }
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[repr(C)]
+pub struct VideoCaptionMeta(gst_video_sys::GstVideoCaptionMeta);
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl VideoCaptionMeta {
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        caption_type: ::VideoCaptionType,
+        data: &[u8],
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        unsafe {
+            let meta = gst_video_sys::gst_buffer_add_video_caption_meta(
+                buffer.as_mut_ptr(),
+                caption_type.to_glib(),
+                data.as_ptr(),
+                data.len(),
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_caption_type(&self) -> ::VideoCaptionType {
+        from_glib(self.0.caption_type)
+    }
+
+    pub fn get_data(&self) -> &[u8] {
+        unsafe {
+            use std::slice;
+
+            slice::from_raw_parts(self.0.data, self.0.size)
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+unsafe impl MetaAPI for VideoCaptionMeta {
+    type GstType = gst_video_sys::GstVideoCaptionMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_video_sys::gst_video_caption_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl fmt::Debug for VideoCaptionMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoCaptionMeta")
+            .field("caption_type", &self.get_caption_type())
+            .field("data", &self.get_data())
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

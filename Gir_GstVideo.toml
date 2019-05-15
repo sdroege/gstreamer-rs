@@ -35,6 +35,7 @@ generate = [
     "GstVideo.VideoFilter",
     "GstVideo.VideoOverlayFormatFlags",
     "GstVideo.VideoTimeCodeFlags",
+    "GstVideo.VideoCaptionType",
 ]
 
 manual = [

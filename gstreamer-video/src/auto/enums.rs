@@ -12,6 +12,80 @@ use glib::value::Value;
 use gobject_sys;
 use gst_video_sys;
 
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Clone, Copy)]
+pub enum VideoCaptionType {
+    Unknown,
+    Cea608Raw,
+    Cea608S3341a,
+    Cea708Raw,
+    Cea708Cdp,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for VideoCaptionType {
+    type GlibType = gst_video_sys::GstVideoCaptionType;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoCaptionType {
+        match *self {
+            VideoCaptionType::Unknown => gst_video_sys::GST_VIDEO_CAPTION_TYPE_UNKNOWN,
+            VideoCaptionType::Cea608Raw => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA608_RAW,
+            VideoCaptionType::Cea608S3341a => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA608_S334_1A,
+            VideoCaptionType::Cea708Raw => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA708_RAW,
+            VideoCaptionType::Cea708Cdp => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA708_CDP,
+            VideoCaptionType::__Unknown(value) => value
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoCaptionType> for VideoCaptionType {
+    fn from_glib(value: gst_video_sys::GstVideoCaptionType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => VideoCaptionType::Unknown,
+            1 => VideoCaptionType::Cea608Raw,
+            2 => VideoCaptionType::Cea608S3341a,
+            3 => VideoCaptionType::Cea708Raw,
+            4 => VideoCaptionType::Cea708Cdp,
+            value => VideoCaptionType::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl StaticType for VideoCaptionType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_caption_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for VideoCaptionType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl<'a> FromValue<'a> for VideoCaptionType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+impl SetValue for VideoCaptionType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum VideoColorMatrix {

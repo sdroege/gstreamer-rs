@@ -10,6 +10,8 @@ pub use self::video_overlay::{VideoOverlay, NONE_VIDEO_OVERLAY};
 pub use self::video_overlay::VideoOverlayExt;
 
 mod enums;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use self::enums::VideoCaptionType;
 pub use self::enums::VideoColorMatrix;
 pub use self::enums::VideoColorPrimaries;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
