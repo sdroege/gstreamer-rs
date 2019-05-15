@@ -381,6 +381,21 @@ impl SDPMessageRef {
         }
     }
 
+    pub fn get_media_mut(&mut self, idx: u32) -> Option<&mut SDPMediaRef> {
+        if idx >= self.medias_len() {
+            return None;
+        }
+
+        unsafe {
+            let ptr = gst_sdp_sys::gst_sdp_message_get_media(&self.0, idx);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(&mut *(ptr as *mut SDPMediaRef))
+            }
+        }
+    }
+
     pub fn get_origin(&self) -> Option<&SDPOrigin> {
         unsafe {
             let ptr = gst_sdp_sys::gst_sdp_message_get_origin(&self.0);
@@ -862,6 +877,10 @@ impl SDPMessageRef {
         MediasIter::new(self)
     }
 
+    pub fn medias_mut(&mut self) -> MediasIterMut {
+        MediasIterMut::new(self)
+    }
+
     pub fn phones(&self) -> PhonesIter {
         PhonesIter::new(self)
     }
@@ -961,6 +980,83 @@ macro_rules! define_iter(
     }
 );
 
+macro_rules! define_iter_mut(
+    ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
+    #[derive(Debug)]
+    pub struct $name<'a> {
+        message: &'a mut SDPMessageRef,
+        idx: u32,
+        len: u32,
+    }
+
+    impl<'a> $name<'a> {
+        fn new(message: &'a mut SDPMessageRef) -> $name<'a> {
+            skip_assert_initialized!();
+            let len = $get_len(message);
+
+            $name {
+                message,
+                idx: 0,
+                len,
+            }
+        }
+    }
+
+    impl<'a> Iterator for $name<'a> {
+        type Item = $typ;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            // The lifetime of the passed self is not 'a but we need to return a message reference
+            // with that lifetime here. The reason here is that the compiler does not and can't
+            // know that it's statically impossible to mutate the message between different calls
+            // to next(), so it has to assume that every call to next() will invalidate any
+            // returned references.
+            //
+            // In theory we could have a function on the iterator that mutates the message and for
+            // example removes the message that was returned here at an earlier time. The compiler
+            // would be correct to complain in that case, but we don't provide such a function.
+            let message = unsafe {
+                mem::transmute::<(&mut SDPMessageRef), (&'a mut SDPMessageRef)>(&mut self.message)
+            };
+            if self.idx >= self.len {
+                return None;
+            }
+
+            let item = $get_item(message, self.idx)?;
+            self.idx += 1;
+            Some(item)
+        }
+
+        fn size_hint(&self) -> (usize, Option<usize>) {
+            if self.idx == self.len {
+                return (0, Some(0))
+            }
+
+            let remaining = (self.len - self.idx) as usize;
+
+            (remaining, Some(remaining))
+        }
+    }
+
+    impl<'a> DoubleEndedIterator for $name<'a> {
+        fn next_back(&mut self) -> Option<Self::Item> {
+            let message = unsafe {
+                mem::transmute::<(&mut SDPMessageRef), (&'a mut SDPMessageRef)>(&mut self.message)
+            };
+            if self.idx == self.len {
+                return None;
+            }
+
+            self.len -= 1;
+
+            $get_item(message, self.len)
+        }
+    }
+
+    impl<'a> ExactSizeIterator for $name<'a> {}
+    }
+);
+
 define_iter!(
     AttributesIter,
     &'a SDPAttribute,
@@ -984,6 +1080,12 @@ define_iter!(
     &'a SDPMediaRef,
     |message: &'a SDPMessageRef, idx| message.get_media(idx),
     |message: &SDPMessageRef| message.medias_len()
+);
+define_iter_mut!(
+    MediasIterMut,
+    &'a mut SDPMediaRef,
+    |message: &'a mut SDPMessageRef, idx| { message.get_media_mut(idx) },
+    |message: &mut SDPMessageRef| message.medias_len()
 );
 define_iter!(
     PhonesIter,
