@@ -13,7 +13,6 @@ extern crate gobject_sys;
 extern crate gstreamer as gst;
 extern crate gstreamer_app_sys as gst_app_sys;
 extern crate gstreamer_base as gst_base;
-extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_sys as gst_sys;
 
 #[macro_use]

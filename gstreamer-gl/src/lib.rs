@@ -18,7 +18,6 @@ extern crate glib;
 extern crate glib_sys;
 extern crate gobject_sys;
 extern crate gstreamer as gst;
-extern crate gstreamer_base as gst_base;
 extern crate gstreamer_gl_sys as gst_gl_sys;
 extern crate gstreamer_sys as gst_sys;
 extern crate gstreamer_video as gst_video;
