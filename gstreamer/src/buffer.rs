@@ -471,6 +471,18 @@ define_iter!(
 
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use std::cell::RefCell;
+
+        struct DebugIter<I>(RefCell<I>);
+        impl<I: Iterator> fmt::Debug for DebugIter<I>
+        where
+            I::Item: fmt::Debug,
+        {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                f.debug_list().entries(&mut *self.0.borrow_mut()).finish()
+            }
+        }
+
         f.debug_struct("Buffer")
             .field("ptr", unsafe { &self.as_ptr() })
             .field("pts", &self.get_pts().to_string())
@@ -480,6 +492,12 @@ impl fmt::Debug for BufferRef {
             .field("offset", &self.get_offset())
             .field("offset_end", &self.get_offset_end())
             .field("flags", &self.get_flags())
+            .field(
+                "metas",
+                &DebugIter(RefCell::new(
+                    self.iter_meta::<::Meta>().map(|m| m.get_api()),
+                )),
+            )
             .finish()
     }
 }
