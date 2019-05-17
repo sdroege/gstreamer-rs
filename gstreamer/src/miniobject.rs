@@ -855,10 +855,7 @@ macro_rules! gst_define_mini_object_wrapper(
             type Owned = $name;
 
             fn to_owned(&self) -> $name {
-                #[allow(clippy::cast_ptr_alignment)]
-                unsafe {
-                    $name($crate::glib::translate::from_glib_none($crate::miniobject::MiniObject::as_ptr(self)))
-                }
+                self.copy()
             }
         }
 
