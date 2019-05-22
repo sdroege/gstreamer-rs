@@ -166,65 +166,65 @@ pub trait PadExtManual: 'static {
 
     fn set_activate_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static;
+        F: Fn(&Self, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static;
 
     fn set_activatemode_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
+        F: Fn(&Self, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError>
             + Send
             + Sync
             + 'static;
 
     fn set_chain_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_chain_list_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_event_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static;
+        F: Fn(&Self, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static;
 
     fn set_event_full_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
+        F: Fn(&Self, Option<&::Object>, u64, u32) -> Result<::Buffer, ::FlowError>
             + Send
             + Sync
             + 'static;
 
     fn set_iterate_internal_links_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static;
+        F: Fn(&Self, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static;
 
     fn set_link_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+        F: Fn(&Self, Option<&::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
             + Send
             + Sync
             + 'static;
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static;
+        F: Fn(&Self, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static;
 
     fn set_unlink_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>) + Send + Sync + 'static;
+        F: Fn(&Self, Option<&::Object>) + Send + Sync + 'static;
 
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError>;
 
@@ -522,7 +522,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_activate_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+        F: Fn(&Self, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
     {
         #[allow(clippy::type_complexity)]
         unsafe {
@@ -538,7 +538,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_activatemode_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError>
+        F: Fn(&Self, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError>
             + Send
             + Sync
             + 'static,
@@ -557,7 +557,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_chain_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
@@ -575,7 +575,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_chain_list_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
@@ -593,7 +593,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_event_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
+        F: Fn(&Self, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<F> = Box::new(func);
@@ -608,7 +608,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_event_full_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError>
+        F: Fn(&Self, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError>
             + Send
             + Sync
             + 'static,
@@ -626,7 +626,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_getrange_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError>
+        F: Fn(&Self, Option<&::Object>, u64, u32) -> Result<::Buffer, FlowError>
             + Send
             + Sync
             + 'static,
@@ -644,7 +644,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_iterate_internal_links_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
+        F: Fn(&Self, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<F> = Box::new(func);
@@ -659,7 +659,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_link_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+        F: Fn(&Self, Option<&::Object>, &Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
             + Send
             + Sync
             + 'static,
@@ -677,7 +677,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_query_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+        F: Fn(&Self, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<F> = Box::new(func);
@@ -692,7 +692,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
     fn set_unlink_function<F>(&self, func: F)
     where
-        F: Fn(&Self, &Option<::Object>) + Send + Sync + 'static,
+        F: Fn(&Self, Option<&::Object>) + Send + Sync + 'static,
     {
         unsafe {
             let func_box: Box<F> = Box::new(func);
@@ -1139,7 +1139,7 @@ where
 
 unsafe extern "C" fn trampoline_activate_function<
     T,
-    F: Fn(&T, &Option<::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1151,7 +1151,7 @@ where
 
     match func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
     ) {
         Ok(()) => true,
         Err(err) => {
@@ -1164,7 +1164,7 @@ where
 
 unsafe extern "C" fn trampoline_activatemode_function<
     T,
-    F: Fn(&T, &Option<::Object>, ::PadMode, bool) -> Result<(), LoggableError> + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>, ::PadMode, bool) -> Result<(), LoggableError> + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1178,7 +1178,7 @@ where
 
     match func(
         &&Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         from_glib(mode),
         from_glib(active),
     ) {
@@ -1193,7 +1193,7 @@ where
 
 unsafe extern "C" fn trampoline_chain_function<
     T,
-    F: Fn(&T, &Option<::Object>, ::Buffer) -> Result<FlowSuccess, FlowError> + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>, ::Buffer) -> Result<FlowSuccess, FlowError> + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1206,7 +1206,7 @@ where
 
     let res: FlowReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         from_glib_full(buffer),
     )
     .into();
@@ -1215,7 +1215,7 @@ where
 
 unsafe extern "C" fn trampoline_chain_list_function<
     T,
-    F: Fn(&T, &Option<::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
+    F: Fn(&T, Option<&::Object>, ::BufferList) -> Result<FlowSuccess, FlowError>
         + Send
         + Sync
         + 'static,
@@ -1231,7 +1231,7 @@ where
 
     let res: FlowReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         from_glib_full(list),
     )
     .into();
@@ -1240,7 +1240,7 @@ where
 
 unsafe extern "C" fn trampoline_event_function<
     T,
-    F: Fn(&T, &Option<::Object>, ::Event) -> bool + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>, ::Event) -> bool + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1253,7 +1253,7 @@ where
 
     func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         from_glib_full(event),
     )
     .to_glib()
@@ -1261,7 +1261,7 @@ where
 
 unsafe extern "C" fn trampoline_event_full_function<
     T,
-    F: Fn(&T, &Option<::Object>, ::Event) -> Result<FlowSuccess, FlowError> + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>, ::Event) -> Result<FlowSuccess, FlowError> + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1274,7 +1274,7 @@ where
 
     let res: FlowReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         from_glib_full(event),
     )
     .into();
@@ -1283,7 +1283,7 @@ where
 
 unsafe extern "C" fn trampoline_getrange_function<
     T,
-    F: Fn(&T, &Option<::Object>, u64, u32) -> Result<::Buffer, FlowError> + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>, u64, u32) -> Result<::Buffer, FlowError> + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1298,7 +1298,7 @@ where
 
     match func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         offset,
         length,
     ) {
@@ -1312,7 +1312,7 @@ where
 
 unsafe extern "C" fn trampoline_iterate_internal_links_function<
     T,
-    F: Fn(&T, &Option<::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>) -> ::Iterator<Pad> + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1325,7 +1325,7 @@ where
     // Steal the iterator and return it
     let ret = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
     );
     let ptr = ret.to_glib_none().0;
     mem::forget(ret);
@@ -1335,7 +1335,7 @@ where
 
 unsafe extern "C" fn trampoline_link_function<
     T,
-    F: Fn(&T, &Option<::Object>, &::Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
+    F: Fn(&T, Option<&::Object>, &::Pad) -> Result<::PadLinkSuccess, ::PadLinkError>
         + Send
         + Sync
         + 'static,
@@ -1351,7 +1351,7 @@ where
 
     let res: ::PadLinkReturn = func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         &from_glib_borrow(peer),
     )
     .into();
@@ -1360,7 +1360,7 @@ where
 
 unsafe extern "C" fn trampoline_query_function<
     T,
-    F: Fn(&T, &Option<::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>, &mut ::QueryRef) -> bool + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1373,7 +1373,7 @@ where
 
     func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
         ::QueryRef::from_mut_ptr(query),
     )
     .to_glib()
@@ -1381,7 +1381,7 @@ where
 
 unsafe extern "C" fn trampoline_unlink_function<
     T,
-    F: Fn(&T, &Option<::Object>) + Send + Sync + 'static,
+    F: Fn(&T, Option<&::Object>) + Send + Sync + 'static,
 >(
     pad: *mut gst_sys::GstPad,
     parent: *mut gst_sys::GstObject,
@@ -1392,7 +1392,7 @@ unsafe extern "C" fn trampoline_unlink_function<
 
     func(
         &Pad::from_glib_borrow(pad).unsafe_cast(),
-        &from_glib_borrow(parent),
+        Option::<::Object>::from_glib_borrow(parent).as_ref(),
     )
 }
 

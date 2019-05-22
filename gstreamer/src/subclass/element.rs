@@ -100,7 +100,7 @@ pub trait ElementImplExt {
     ) -> R;
 
     fn catch_panic_pad_function<R, F: FnOnce(&Self, &::Element) -> R, G: FnOnce() -> R>(
-        parent: &Option<::Object>,
+        parent: Option<&::Object>,
         fallback: G,
         f: F,
     ) -> R;
@@ -222,7 +222,7 @@ where
     }
 
     fn catch_panic_pad_function<R, F: FnOnce(&Self, &::Element) -> R, G: FnOnce() -> R>(
-        parent: &Option<::Object>,
+        parent: Option<&::Object>,
         fallback: G,
         f: F,
     ) -> R {

@@ -156,7 +156,7 @@ impl SampleRef {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn set_segment(&mut self, segment: &Option<&Segment>) {
+    pub fn set_segment(&mut self, segment: Option<&Segment>) {
         unsafe { gst_sys::gst_sample_set_segment(self.as_mut_ptr(), segment.to_glib_none().0) }
     }
 

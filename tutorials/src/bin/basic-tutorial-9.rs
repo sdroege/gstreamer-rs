@@ -81,10 +81,10 @@ fn print_topology(info: &DiscovererStreamInfo, depth: usize) {
     }
 }
 
-fn on_connect_discovered(
+fn on_discovered(
     _discoverer: &Discoverer,
     discoverer_info: &DiscovererInfo,
-    error: &Option<glib::Error>,
+    error: Option<&glib::Error>,
 ) {
     let uri = discoverer_info.get_uri().unwrap();
     match discoverer_info.get_result() {
@@ -156,7 +156,7 @@ fn run_discoverer() -> Result<(), Error> {
     let loop_ = glib::MainLoop::new(None, false);
     let timeout = 5 * gst::SECOND;
     let discoverer = gst_pbutils::Discoverer::new(timeout)?;
-    discoverer.connect_discovered(on_connect_discovered);
+    discoverer.connect_discovered(on_discovered);
     let loop_clone = loop_.clone();
     discoverer.connect_finished(move |_| {
         println!("\nFinished discovering");

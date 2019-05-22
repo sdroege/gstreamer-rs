@@ -83,7 +83,7 @@ impl Discoverer {
         }
     }
 
-    pub fn connect_discovered<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_discovered<F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"discovered\0".as_ptr() as *const _,
@@ -128,9 +128,9 @@ impl Discoverer {
 unsafe impl Send for Discoverer {}
 unsafe impl Sync for Discoverer {}
 
-unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, &Option<Error>) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, info: *mut gst_pbutils_sys::GstDiscovererInfo, error: *mut glib_sys::GError, f: glib_sys::gpointer) {
+unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, info: *mut gst_pbutils_sys::GstDiscovererInfo, error: *mut glib_sys::GError, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(info), &from_glib_borrow(error))
+    f(&from_glib_borrow(this), &from_glib_borrow(info), Option::<Error>::from_glib_borrow(error).as_ref())
 }
 
 unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, f: glib_sys::gpointer) {
