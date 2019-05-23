@@ -8,6 +8,8 @@
 
 #[macro_use]
 extern crate bitflags;
+#[macro_use]
+extern crate lazy_static;
 extern crate libc;
 
 #[macro_use]
@@ -70,6 +72,11 @@ pub use video_time_code::{ValidVideoTimeCode, VideoTimeCode, VideoTimeCodeMeta};
 mod video_time_code_interval;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub use video_time_code_interval::VideoTimeCodeInterval;
+mod video_buffer_pool;
+pub use video_buffer_pool::{
+    BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META, BUFFER_POOL_OPTION_VIDEO_ALIGNMENT,
+    BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META, BUFFER_POOL_OPTION_VIDEO_META,
+};
 
 mod video_codec_frame;
 mod video_decoder;
