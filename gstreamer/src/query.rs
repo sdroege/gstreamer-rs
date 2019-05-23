@@ -914,6 +914,13 @@ impl<T: AsPtr> Allocation<T> {
         }
     }
 
+    pub fn get_owned(&self) -> (::Caps, bool) {
+        unsafe {
+            let (caps, need_pool) = self.get();
+            (from_glib_none(caps.as_ptr()), need_pool)
+        }
+    }
+
     pub fn get_allocation_pools(&self) -> Vec<(Option<::BufferPool>, u32, u32, u32)> {
         unsafe {
             let n = gst_sys::gst_query_get_n_allocation_pools(self.0.as_ptr());
@@ -1141,6 +1148,10 @@ impl<T: AsPtr> AcceptCaps<T> {
         }
     }
 
+    pub fn get_caps_owned(&self) -> ::Caps {
+        unsafe { from_glib_none(self.get_caps().as_ptr()) }
+    }
+
     pub fn get_result(&self) -> bool {
         unsafe {
             let mut accepted = mem::uninitialized();
@@ -1172,6 +1183,10 @@ impl<T: AsPtr> Caps<T> {
         }
     }
 
+    pub fn get_filter_owned(&self) -> Option<::Caps> {
+        unsafe { self.get_filter().map(|caps| from_glib_none(caps.as_ptr())) }
+    }
+
     pub fn get_result(&self) -> Option<&::CapsRef> {
         unsafe {
             let mut caps = ptr::null_mut();
@@ -1182,6 +1197,10 @@ impl<T: AsPtr> Caps<T> {
                 Some(::CapsRef::from_ptr(caps))
             }
         }
+    }
+
+    pub fn get_result_owned(&self) -> Option<::Caps> {
+        unsafe { self.get_result().map(|caps| from_glib_none(caps.as_ptr())) }
     }
 }
 
@@ -1206,6 +1225,13 @@ impl<T: AsPtr> Context<T> {
             } else {
                 Some(::ContextRef::from_ptr(context))
             }
+        }
+    }
+
+    pub fn get_context_owned(&self) -> Option<::Context> {
+        unsafe {
+            self.get_context()
+                .map(|context| from_glib_none(context.as_ptr()))
         }
     }
 

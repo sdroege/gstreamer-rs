@@ -114,7 +114,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
     fn transform_ip_passthrough(
         &self,
         element: &BaseTransform,
-        buf: &gst::BufferRef,
+        buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_transform_ip_passthrough(element, buf)
     }
@@ -193,7 +193,7 @@ pub trait BaseTransformImplExt {
     fn parent_transform_ip_passthrough(
         &self,
         element: &BaseTransform,
-        buf: &gst::BufferRef,
+        buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
@@ -503,7 +503,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
                 }
             });
 
-            gst::FlowReturn::from_glib(f(element.to_glib_none().0, &mut buf.as_mut_ptr()))
+            gst::FlowReturn::from_glib(f(element.to_glib_none().0, buf.as_mut_ptr() as *mut _))
                 .into_result()
         }
     }
@@ -511,7 +511,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
     fn parent_transform_ip_passthrough(
         &self,
         element: &BaseTransform,
-        buf: &gst::BufferRef,
+        buf: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
@@ -531,8 +531,9 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
                 }
             });
 
-            gst::FlowReturn::from_glib(f(element.to_glib_none().0, &mut buf.as_mut_ptr()))
-                .into_result()
+            // FIXME: Wrong signature in FFI
+            let buf: *mut gst_sys::GstBuffer = buf.to_glib_none().0;
+            gst::FlowReturn::from_glib(f(element.to_glib_none().0, buf as *mut _)).into_result()
         }
     }
 }
@@ -920,7 +921,7 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
         if from_glib(gst_base_sys::gst_base_transform_is_passthrough(ptr)) {
-            imp.transform_ip_passthrough(&wrap, gst::BufferRef::from_ptr(buf))
+            imp.transform_ip_passthrough(&wrap, &from_glib_borrow(buf))
                 .into()
         } else {
             imp.transform_ip(&wrap, gst::BufferRef::from_mut_ptr(buf))

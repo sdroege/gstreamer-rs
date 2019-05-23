@@ -42,7 +42,7 @@ pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync + 'static {
         element: &::Element,
         templ: &::PadTemplate,
         name: Option<String>,
-        caps: Option<&::CapsRef>,
+        caps: Option<&::Caps>,
     ) -> Option<::Pad> {
         self.parent_request_new_pad(element, templ, name, caps)
     }
@@ -76,7 +76,7 @@ pub trait ElementImplExt {
         element: &::Element,
         templ: &::PadTemplate,
         name: Option<String>,
-        caps: Option<&::CapsRef>,
+        caps: Option<&::Caps>,
     ) -> Option<::Pad>;
 
     fn parent_release_pad(&self, element: &::Element, pad: &::Pad);
@@ -132,7 +132,7 @@ where
         element: &::Element,
         templ: &::PadTemplate,
         name: Option<String>,
-        caps: Option<&::CapsRef>,
+        caps: Option<&::Caps>,
     ) -> Option<::Pad> {
         unsafe {
             let data = self.get_type_data();
@@ -145,7 +145,7 @@ where
                         element.to_glib_none().0,
                         templ.to_glib_none().0,
                         name.to_glib_full(),
-                        caps.map(|caps| caps.as_ptr()).unwrap_or(std::ptr::null()),
+                        caps.to_glib_none().0,
                     ))
                 })
                 .unwrap_or(None)
@@ -336,16 +336,17 @@ where
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
 
-    let caps = if caps.is_null() {
-        None
-    } else {
-        Some(::CapsRef::from_ptr(caps))
-    };
+    let caps = Option::<::Caps>::from_glib_borrow(caps);
 
     // XXX: This is effectively unsafe but the best we can do
     // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
     let pad = gst_panic_to_error!(&wrap, &instance.panicked(), None, {
-        imp.request_new_pad(&wrap, &from_glib_borrow(templ), from_glib_none(name), caps)
+        imp.request_new_pad(
+            &wrap,
+            &from_glib_borrow(templ),
+            from_glib_none(name),
+            caps.as_ref(),
+        )
     });
 
     // Ensure that the pad is owned by the element now, if a pad was returned

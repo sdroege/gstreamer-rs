@@ -34,13 +34,13 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl + Send + Sync + 'static {
     fn render(
         &self,
         element: &BaseSink,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn prepare(
         &self,
         element: &BaseSink,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_prepare(element, buffer)
     }
@@ -48,7 +48,7 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl + Send + Sync + 'static {
     fn render_list(
         &self,
         element: &BaseSink,
-        list: &gst::BufferListRef,
+        list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_render_list(element, list)
     }
@@ -56,7 +56,7 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl + Send + Sync + 'static {
     fn prepare_list(
         &self,
         element: &BaseSink,
-        list: &gst::BufferListRef,
+        list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_prepare_list(element, list)
     }
@@ -69,11 +69,11 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl + Send + Sync + 'static {
         self.parent_event(element, event)
     }
 
-    fn get_caps(&self, element: &BaseSink, filter: Option<&gst::CapsRef>) -> Option<gst::Caps> {
+    fn get_caps(&self, element: &BaseSink, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         self.parent_get_caps(element, filter)
     }
 
-    fn set_caps(&self, element: &BaseSink, caps: &gst::CapsRef) -> Result<(), gst::LoggableError> {
+    fn set_caps(&self, element: &BaseSink, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         self.parent_set_caps(element, caps)
     }
 
@@ -98,41 +98,37 @@ pub trait BaseSinkImplExt {
     fn parent_render(
         &self,
         element: &BaseSink,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_prepare(
         &self,
         element: &BaseSink,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_render_list(
         &self,
         element: &BaseSink,
-        list: &gst::BufferListRef,
+        list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_prepare_list(
         &self,
         element: &BaseSink,
-        list: &gst::BufferListRef,
+        list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_query(&self, element: &BaseSink, query: &mut gst::QueryRef) -> bool;
 
     fn parent_event(&self, element: &BaseSink, event: gst::Event) -> bool;
 
-    fn parent_get_caps(
-        &self,
-        element: &BaseSink,
-        filter: Option<&gst::CapsRef>,
-    ) -> Option<gst::Caps>;
+    fn parent_get_caps(&self, element: &BaseSink, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
 
     fn parent_set_caps(
         &self,
         element: &BaseSink,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
 
     fn parent_fixate(&self, element: &BaseSink, caps: gst::Caps) -> gst::Caps;
@@ -188,7 +184,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
     fn parent_render(
         &self,
         element: &BaseSink,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
@@ -197,7 +193,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .render
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer.as_mut_ptr()))
+                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, buffer.to_glib_none().0))
                 })
                 .unwrap_or(gst::FlowReturn::Ok)
                 .into_result()
@@ -207,7 +203,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
     fn parent_prepare(
         &self,
         element: &BaseSink,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
@@ -215,7 +211,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSinkClass;
             (*parent_class)
                 .prepare
-                .map(|f| from_glib(f(element.to_glib_none().0, buffer.as_mut_ptr())))
+                .map(|f| from_glib(f(element.to_glib_none().0, buffer.to_glib_none().0)))
                 .unwrap_or(gst::FlowReturn::Ok)
                 .into_result()
         }
@@ -224,7 +220,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
     fn parent_render_list(
         &self,
         element: &BaseSink,
-        list: &gst::BufferListRef,
+        list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
@@ -233,12 +229,12 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .render_list
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, list.as_mut_ptr()))
+                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, list.to_glib_none().0))
                         .into_result()
                 })
                 .unwrap_or_else(|| {
                     for buffer in list.iter() {
-                        self.render(element, buffer)?;
+                        self.render(element, &from_glib_borrow(buffer.as_ptr()))?;
                     }
                     Ok(gst::FlowSuccess::Ok)
                 })
@@ -248,7 +244,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
     fn parent_prepare_list(
         &self,
         element: &BaseSink,
-        list: &gst::BufferListRef,
+        list: &gst::BufferList,
     ) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
@@ -257,12 +253,12 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
             (*parent_class)
                 .prepare_list
                 .map(|f| {
-                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, list.as_mut_ptr()))
+                    gst::FlowReturn::from_glib(f(element.to_glib_none().0, list.to_glib_none().0))
                         .into_result()
                 })
                 .unwrap_or_else(|| {
                     for buffer in list.iter() {
-                        self.prepare(element, buffer)?;
+                        self.prepare(element, &from_glib_borrow(buffer.as_ptr()))?;
                     }
                     Ok(gst::FlowSuccess::Ok)
                 })
@@ -293,24 +289,15 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
         }
     }
 
-    fn parent_get_caps(
-        &self,
-        element: &BaseSink,
-        filter: Option<&gst::CapsRef>,
-    ) -> Option<gst::Caps> {
+    fn parent_get_caps(&self, element: &BaseSink, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSinkClass;
-            let filter_ptr = if let Some(filter) = filter {
-                filter.as_mut_ptr()
-            } else {
-                ptr::null_mut()
-            };
 
             (*parent_class)
                 .get_caps
-                .map(|f| from_glib_full(f(element.to_glib_none().0, filter_ptr)))
+                .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
                 .unwrap_or(None)
         }
     }
@@ -318,7 +305,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
     fn parent_set_caps(
         &self,
         element: &BaseSink,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
@@ -328,7 +315,7 @@ impl<T: BaseSinkImpl + ObjectImpl> BaseSinkImplExt for T {
                 .set_caps
                 .map(|f| {
                     gst_result_from_gboolean!(
-                        f(element.to_glib_none().0, caps.as_mut_ptr()),
+                        f(element.to_glib_none().0, caps.to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `set_caps` failed"
                     )
@@ -478,10 +465,10 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
-    let buffer = gst::BufferRef::from_ptr(buffer);
+    let buffer = from_glib_borrow(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.render(&wrap, buffer).into()
+        imp.render(&wrap, &buffer).into()
     })
     .to_glib()
 }
@@ -498,10 +485,10 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
-    let buffer = gst::BufferRef::from_ptr(buffer);
+    let buffer = from_glib_borrow(buffer);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.prepare(&wrap, buffer).into()
+        imp.prepare(&wrap, &buffer).into()
     })
     .to_glib()
 }
@@ -518,10 +505,10 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
-    let list = gst::BufferListRef::from_ptr(list);
+    let list = from_glib_borrow(list);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.render_list(&wrap, list).into()
+        imp.render_list(&wrap, &list).into()
     })
     .to_glib()
 }
@@ -538,10 +525,10 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
-    let list = gst::BufferListRef::from_ptr(list);
+    let list = from_glib_borrow(list);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.prepare_list(&wrap, list).into()
+        imp.prepare_list(&wrap, &list).into()
     })
     .to_glib()
 }
@@ -597,14 +584,10 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
-    let filter = if filter.is_null() {
-        None
-    } else {
-        Some(gst::CapsRef::from_ptr(filter))
-    };
+    let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), None, {
-        imp.get_caps(&wrap, filter)
+        imp.get_caps(&wrap, filter.as_ref())
     })
     .map(|caps| caps.into_ptr())
     .unwrap_or(ptr::null_mut())
@@ -622,10 +605,10 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSink = from_glib_borrow(ptr);
-    let caps = gst::CapsRef::from_ptr(caps);
+    let caps = from_glib_borrow(caps);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_caps(&wrap, caps) {
+        match imp.set_caps(&wrap, &caps) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);

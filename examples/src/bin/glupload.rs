@@ -641,7 +641,7 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
 
         // get the last frame in channel
         if let Some(sample) = receiver.try_iter().last() {
-            let buffer = sample.get_buffer().unwrap();
+            let buffer = sample.get_buffer_owned().unwrap();
             let info = sample
                 .get_caps()
                 .and_then(|caps| gst_video::VideoInfo::from_caps(caps))
@@ -660,9 +660,7 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
                 sync_meta.set_sync_point(gst_gl_context.as_ref().unwrap());
             }
 
-            if let Ok(frame) =
-                gst_video::VideoFrame::from_buffer_readable_gl(buffer.to_owned(), &info)
-            {
+            if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
                 curr_frame = Some(frame);
             }
         }

@@ -105,7 +105,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
         aggregator: &Aggregator,
         templ: &gst::PadTemplate,
         req_name: Option<&str>,
-        caps: Option<&gst::CapsRef>,
+        caps: Option<&gst::Caps>,
     ) -> Option<AggregatorPad> {
         self.parent_create_new_pad(aggregator, templ, req_name, caps)
     }
@@ -113,7 +113,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
     fn update_src_caps(
         &self,
         aggregator: &Aggregator,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<gst::Caps, gst::FlowError> {
         self.parent_update_src_caps(aggregator, caps)
     }
@@ -125,7 +125,7 @@ pub trait AggregatorImpl: AggregatorImplExt + ElementImpl + Send + Sync + 'stati
     fn negotiated_src_caps(
         &self,
         aggregator: &Aggregator,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         self.parent_negotiated_src_caps(aggregator, caps)
     }
@@ -189,13 +189,13 @@ pub trait AggregatorImplExt {
         aggregator: &Aggregator,
         templ: &gst::PadTemplate,
         req_name: Option<&str>,
-        caps: Option<&gst::CapsRef>,
+        caps: Option<&gst::Caps>,
     ) -> Option<AggregatorPad>;
 
     fn parent_update_src_caps(
         &self,
         aggregator: &Aggregator,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<gst::Caps, gst::FlowError>;
 
     fn parent_fixate_src_caps(&self, aggregator: &Aggregator, caps: gst::Caps) -> gst::Caps;
@@ -203,7 +203,7 @@ pub trait AggregatorImplExt {
     fn parent_negotiated_src_caps(
         &self,
         aggregator: &Aggregator,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError>;
 }
 
@@ -426,7 +426,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
         aggregator: &Aggregator,
         templ: &gst::PadTemplate,
         req_name: Option<&str>,
-        caps: Option<&gst::CapsRef>,
+        caps: Option<&gst::Caps>,
     ) -> Option<AggregatorPad> {
         unsafe {
             let data = self.get_type_data();
@@ -439,7 +439,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
                 aggregator.to_glib_none().0,
                 templ.to_glib_none().0,
                 req_name.to_glib_none().0,
-                caps.map(|c| c.as_ptr()).unwrap_or(ptr::null()),
+                caps.to_glib_none().0,
             ))
         }
     }
@@ -447,7 +447,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
     fn parent_update_src_caps(
         &self,
         aggregator: &Aggregator,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<gst::Caps, gst::FlowError> {
         unsafe {
             let data = self.get_type_data();
@@ -483,7 +483,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
     fn parent_negotiated_src_caps(
         &self,
         aggregator: &Aggregator,
-        caps: &gst::CapsRef,
+        caps: &gst::Caps,
     ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
@@ -493,7 +493,7 @@ impl<T: AggregatorImpl + ObjectImpl> AggregatorImplExt for T {
                 .negotiated_src_caps
                 .map(|f| {
                     gst_result_from_gboolean!(
-                        f(aggregator.to_glib_none().0, caps.as_mut_ptr()),
+                        f(aggregator.to_glib_none().0, caps.to_glib_none().0),
                         gst::CAT_RUST,
                         "Parent function `negotiated_src_caps` failed"
                     )
@@ -822,11 +822,7 @@ where
             &wrap,
             &from_glib_borrow(templ),
             req_name,
-            if caps.is_null() {
-                None
-            } else {
-                Some(gst::CapsRef::from_ptr(caps))
-            },
+            Option::<gst::Caps>::from_glib_borrow(caps).as_ref(),
         )
     })
     .to_glib_full()
@@ -849,7 +845,7 @@ where
     *res = ptr::null_mut();
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        match imp.update_src_caps(&wrap, gst::CapsRef::from_ptr(caps)) {
+        match imp.update_src_caps(&wrap, &from_glib_borrow(caps)) {
             Ok(res_caps) => {
                 *res = res_caps.into_ptr();
                 gst::FlowReturn::Ok
@@ -893,7 +889,7 @@ where
     let wrap: Aggregator = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.negotiated_src_caps(&wrap, gst::CapsRef::from_ptr(caps)) {
+        match imp.negotiated_src_caps(&wrap, &from_glib_borrow(caps)) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);

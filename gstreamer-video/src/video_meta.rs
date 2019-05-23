@@ -9,7 +9,7 @@
 use std::fmt;
 
 use glib;
-use glib::translate::{from_glib, ToGlib};
+use glib::translate::{from_glib, from_glib_none, ToGlib};
 use gst;
 use gst::prelude::*;
 use gst_sys;
@@ -152,6 +152,10 @@ impl VideoOverlayCompositionMeta {
 
     pub fn get_overlay(&self) -> &::VideoOverlayCompositionRef {
         unsafe { ::VideoOverlayCompositionRef::from_ptr(self.0.overlay) }
+    }
+
+    pub fn get_overlay_owned(&self) -> ::VideoOverlayComposition {
+        unsafe { from_glib_none(self.get_overlay().as_ptr()) }
     }
 
     pub fn set_overlay(&mut self, overlay: &::VideoOverlayComposition) {

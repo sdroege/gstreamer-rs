@@ -34,7 +34,7 @@ pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl + Send + Sync + 'sta
         &self,
         aggregator_pad: &AggregatorPad,
         aggregator: &Aggregator,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> bool {
         self.parent_skip_buffer(aggregator_pad, aggregator, buffer)
     }
@@ -51,7 +51,7 @@ pub trait AggregatorPadImplExt {
         &self,
         aggregator_pad: &AggregatorPad,
         aggregator: &Aggregator,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> bool;
 }
 
@@ -82,7 +82,7 @@ impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
         &self,
         aggregator_pad: &AggregatorPad,
         aggregator: &Aggregator,
-        buffer: &gst::BufferRef,
+        buffer: &gst::Buffer,
     ) -> bool {
         unsafe {
             let data = self.get_type_data();
@@ -94,7 +94,7 @@ impl<T: AggregatorPadImpl + ObjectImpl> AggregatorPadImplExt for T {
                     from_glib(f(
                         aggregator_pad.to_glib_none().0,
                         aggregator.to_glib_none().0,
-                        buffer.as_mut_ptr(),
+                        buffer.to_glib_none().0,
                     ))
                 })
                 .unwrap_or(false)
@@ -144,7 +144,7 @@ where
     imp.skip_buffer(
         &wrap,
         &from_glib_borrow(aggregator),
-        gst::BufferRef::from_ptr(buffer),
+        &from_glib_borrow(buffer),
     )
     .to_glib()
 }

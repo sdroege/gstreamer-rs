@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use glib;
-use glib::translate::from_glib_full;
+use glib::translate::{from_glib_full, from_glib_none};
 use gst_sys;
 use std::fmt;
 
@@ -65,6 +65,13 @@ impl BufferListRef {
         }
     }
 
+    pub fn get_owned(&self, idx: u32) -> Option<Buffer> {
+        unsafe {
+            let ptr = gst_sys::gst_buffer_list_get(self.as_mut_ptr(), idx);
+            from_glib_none(ptr)
+        }
+    }
+
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn get_writable(&mut self, idx: u32) -> Option<&mut BufferRef> {
         unsafe {
@@ -93,6 +100,10 @@ impl BufferListRef {
     pub fn iter(&self) -> Iter {
         Iter::new(self)
     }
+
+    pub fn iter_owned(&self) -> IterOwned {
+        IterOwned::new(self)
+    }
 }
 
 impl Default for BufferList {
@@ -119,58 +130,70 @@ impl fmt::Debug for BufferListRef {
     }
 }
 
-#[derive(Debug)]
-pub struct Iter<'a> {
-    list: &'a BufferListRef,
-    idx: u32,
-    size: u32,
-}
-
-impl<'a> Iter<'a> {
-    fn new(list: &'a BufferListRef) -> Iter<'a> {
-        skip_assert_initialized!();
-        Iter {
-            list,
-            idx: 0,
-            size: list.len() as u32,
-        }
-    }
-}
-
-impl<'a> Iterator for Iter<'a> {
-    type Item = &'a BufferRef;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.idx >= self.size {
-            return None;
-        }
-
-        let item = self.list.get(self.idx);
-        self.idx += 1;
-
-        item
+macro_rules! define_iter(
+    ($name:ident, $styp:ty, $get_item:expr) => {
+    #[derive(Debug)]
+    pub struct $name<'a> {
+        list: &'a BufferListRef,
+        idx: u32,
+        size: u32,
     }
 
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.idx == self.size {
-            return (0, Some(0));
+    impl<'a> $name<'a> {
+        fn new(list: &'a BufferListRef) -> $name<'a> {
+            skip_assert_initialized!();
+            $name {
+                list,
+                idx: 0,
+                size: list.len() as u32,
+            }
+        }
+    }
+
+    impl<'a> Iterator for $name<'a> {
+        type Item = $styp;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.idx >= self.size {
+                return None;
+            }
+
+            let item = $get_item(self.list, self.idx)?;
+            self.idx += 1;
+
+            Some(item)
         }
 
-        let remaining = (self.size - self.idx) as usize;
+        fn size_hint(&self) -> (usize, Option<usize>) {
+            if self.idx == self.size {
+                return (0, Some(0));
+            }
 
-        (remaining, Some(remaining))
-    }
-}
+            let remaining = (self.size - self.idx) as usize;
 
-impl<'a> DoubleEndedIterator for Iter<'a> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        if self.idx == self.size {
-            return None;
+            (remaining, Some(remaining))
         }
-
-        self.size -= 1;
-        self.list.get(self.size)
     }
-}
 
-impl<'a> ExactSizeIterator for Iter<'a> {}
+    impl<'a> DoubleEndedIterator for $name<'a> {
+        fn next_back(&mut self) -> Option<Self::Item> {
+            if self.idx == self.size {
+                return None;
+            }
+
+            self.size -= 1;
+            $get_item(self.list, self.size)
+        }
+    }
+
+    impl<'a> ExactSizeIterator for $name<'a> {}
+    }
+);
+
+define_iter!(Iter, &'a BufferRef, |list: &'a BufferListRef, idx| {
+    list.get(idx)
+});
+
+define_iter!(IterOwned, Buffer, |list: &BufferListRef, idx| {
+    list.get_owned(idx)
+});

@@ -19,7 +19,7 @@ use std::ops::Deref;
 use std::ptr;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, FromGlib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, from_glib_none, FromGlib, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -571,6 +571,10 @@ impl<'a> Caps<'a> {
             ::CapsRef::from_ptr(caps)
         }
     }
+
+    pub fn get_caps_owned(&self) -> ::Caps {
+        unsafe { from_glib_none(self.get_caps().as_ptr()) }
+    }
 }
 
 declare_concrete_event!(Segment);
@@ -607,6 +611,10 @@ impl<'a> Tag<'a> {
             gst_sys::gst_event_parse_tag(self.as_mut_ptr(), &mut tags);
             ::TagListRef::from_ptr(tags)
         }
+    }
+
+    pub fn get_tag_owned(&self) -> ::TagList {
+        unsafe { from_glib_none(self.get_tag().as_ptr()) }
     }
 }
 
@@ -674,6 +682,13 @@ impl<'a> Toc<'a> {
             (::TocRef::from_ptr(toc), from_glib(updated))
         }
     }
+
+    pub fn get_toc_owned(&self) -> (::Toc, bool) {
+        unsafe {
+            let (toc, updated) = self.get_toc();
+            (from_glib_none(toc.as_ptr()), updated)
+        }
+    }
 }
 
 declare_concrete_event!(Protection);
@@ -700,6 +715,13 @@ impl<'a> Protection<'a> {
                     Some(CStr::from_ptr(origin).to_str().unwrap())
                 },
             )
+        }
+    }
+
+    pub fn get_owned(&self) -> (&'a str, ::Buffer, Option<&'a str>) {
+        unsafe {
+            let (system_id, buffer, origin) = self.get();
+            (system_id, from_glib_none(buffer.as_ptr()), origin)
         }
     }
 }

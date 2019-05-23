@@ -11,10 +11,11 @@ use std::marker::PhantomData;
 use std::ops;
 
 use miniobject::MiniObject;
+use Buffer;
 use BufferRef;
 
 use glib;
-use glib::translate::{from_glib, FromGlib};
+use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 use glib_sys;
 use gst_sys;
 
@@ -227,14 +228,11 @@ impl fmt::Debug for Meta {
 pub struct ParentBufferMeta(gst_sys::GstParentBufferMeta);
 
 impl ParentBufferMeta {
-    pub fn add<'a>(
-        buffer: &'a mut BufferRef,
-        parent: &BufferRef,
-    ) -> MetaRefMut<'a, Self, Standalone> {
+    pub fn add<'a>(buffer: &'a mut BufferRef, parent: &Buffer) -> MetaRefMut<'a, Self, Standalone> {
         unsafe {
             let meta = gst_sys::gst_buffer_add_parent_buffer_meta(
                 buffer.as_mut_ptr(),
-                parent.as_mut_ptr(),
+                parent.to_glib_none().0,
             );
 
             Self::from_mut_ptr(buffer, meta)
@@ -243,6 +241,10 @@ impl ParentBufferMeta {
 
     pub fn get_parent(&self) -> &BufferRef {
         unsafe { BufferRef::from_ptr(self.0.buffer) }
+    }
+
+    pub fn get_parent_owned(&self) -> Buffer {
+        unsafe { from_glib_none(self.0.buffer) }
     }
 }
 
@@ -273,7 +275,7 @@ mod tests {
         let mut buffer = ::Buffer::new();
         let parent = ::Buffer::new();
         {
-            let meta = ParentBufferMeta::add(buffer.get_mut().unwrap(), &*parent);
+            let meta = ParentBufferMeta::add(buffer.get_mut().unwrap(), &parent);
             unsafe {
                 assert_eq!(meta.get_parent().as_ptr(), parent.as_ptr());
             }

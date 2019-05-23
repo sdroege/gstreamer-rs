@@ -99,7 +99,7 @@ fn tutorial_main() {
         .expect("Unable to set the playbin to the `Null` state");
 }
 
-fn handle_message(custom_data: &mut CustomData, msg: &gst::GstRc<gst::MessageRef>) {
+fn handle_message(custom_data: &mut CustomData, msg: &gst::Message) {
     match msg.view() {
         MessageView::Error(err) => {
             println!(
