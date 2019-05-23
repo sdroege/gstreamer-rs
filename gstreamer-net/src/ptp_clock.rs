@@ -14,9 +14,8 @@ use glib::translate::*;
 use gst;
 
 impl PtpClock {
-    pub fn new<'a, P: Into<Option<&'a str>>>(name: P, domain: u32) -> PtpClock {
+    pub fn new(name: Option<&str>, domain: u32) -> PtpClock {
         assert_initialized_main_thread!();
-        let name = name.into();
         let name = name.to_glib_none();
         let (major, minor, _, _) = gst::version();
         if (major, minor) > (1, 12) {

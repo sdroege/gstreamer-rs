@@ -45,9 +45,9 @@ struct ErrorMessage {
     cause: glib::Error,
 }
 
-fn make_element<'a, P: Into<Option<&'a str>>>(
+fn make_element(
     factory_name: &'static str,
-    element_name: P,
+    element_name: Option<&str>,
 ) -> Result<gst::Element, Error> {
     match gst::ElementFactory::make(factory_name, element_name.into()) {
         Some(elem) => Ok(elem),

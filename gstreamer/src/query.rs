@@ -135,9 +135,8 @@ impl Query {
         }
     }
 
-    pub fn new_caps<'a, P: Into<Option<&'a ::Caps>>>(filter: P) -> Caps<Self> {
+    pub fn new_caps(filter: Option<&::Caps>) -> Caps<Self> {
         assert_initialized_main_thread!();
-        let filter = filter.into();
         unsafe {
             Caps::<Self>(from_glib_full(gst_sys::gst_query_new_caps(
                 filter.to_glib_none().0,

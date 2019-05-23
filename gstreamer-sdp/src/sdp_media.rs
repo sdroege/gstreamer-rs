@@ -130,8 +130,7 @@ unsafe impl Send for SDPMediaRef {}
 unsafe impl Sync for SDPMediaRef {}
 
 impl SDPMediaRef {
-    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(&mut self, key: &str, value: P) {
-        let value = value.into();
+    pub fn add_attribute(&mut self, key: &str, value: Option<&str>) {
         let value = value.to_glib_none();
         unsafe {
             gst_sdp_sys::gst_sdp_media_add_attribute(&mut self.0, key.to_glib_none().0, value.0)

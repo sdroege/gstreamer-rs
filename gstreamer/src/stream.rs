@@ -15,16 +15,14 @@ use StreamType;
 
 impl Stream {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(
-        stream_id: P,
-        caps: Q,
+    pub fn new(
+        stream_id: Option<&str>,
+        caps: Option<&Caps>,
         type_: StreamType,
         flags: StreamFlags,
     ) -> Stream {
         assert_initialized_main_thread!();
-        let stream_id = stream_id.into();
         let stream_id = stream_id.to_glib_none();
-        let caps = caps.into();
         let caps = caps.to_glib_none();
 
         let (major, minor, _, _) = ::version();

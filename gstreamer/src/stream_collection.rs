@@ -69,9 +69,8 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
 impl<'a> ExactSizeIterator for Iter<'a> {}
 
 impl StreamCollection {
-    pub fn new<'a, P: Into<Option<&'a str>>>(upstream_id: P) -> StreamCollection {
+    pub fn new(upstream_id: Option<&str>) -> StreamCollection {
         assert_initialized_main_thread!();
-        let upstream_id = upstream_id.into();
         let upstream_id = upstream_id.to_glib_none();
         let (major, minor, _, _) = ::version();
         if (major, minor) > (1, 12) {

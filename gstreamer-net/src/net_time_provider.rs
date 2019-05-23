@@ -14,13 +14,8 @@ use glib::IsA;
 use gst;
 
 impl NetTimeProvider {
-    pub fn new<'a, P: IsA<gst::Clock>, Q: Into<Option<&'a str>>>(
-        clock: &P,
-        address: Q,
-        port: i32,
-    ) -> NetTimeProvider {
+    pub fn new<P: IsA<gst::Clock>>(clock: &P, address: Option<&str>, port: i32) -> NetTimeProvider {
         assert_initialized_main_thread!();
-        let address = address.into();
         let address = address.to_glib_none();
 
         let (major, minor, _, _) = gst::version();

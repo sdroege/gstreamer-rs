@@ -83,15 +83,13 @@ impl BufferPoolConfig {
         }
     }
 
-    pub fn set_params<'a, T: Into<Option<&'a ::Caps>>>(
+    pub fn set_params(
         &mut self,
-        caps: T,
+        caps: Option<&::Caps>,
         size: u32,
         min_buffers: u32,
         max_buffers: u32,
     ) {
-        let caps = caps.into();
-
         unsafe {
             gst_sys::gst_buffer_pool_config_set_params(
                 self.0.to_glib_none_mut().0,
@@ -125,15 +123,13 @@ impl BufferPoolConfig {
         }
     }
 
-    pub fn validate_params<'a, T: Into<Option<&'a ::Caps>>>(
+    pub fn validate_params(
         &self,
-        caps: T,
+        caps: Option<&::Caps>,
         size: u32,
         min_buffers: u32,
         max_buffers: u32,
     ) -> Result<(), glib::BoolError> {
-        let caps = caps.into();
-
         unsafe {
             glib_result_from_gboolean!(
                 gst_sys::gst_buffer_pool_config_validate_params(
@@ -256,9 +252,9 @@ pub trait BufferPoolExtManual: 'static {
 
     fn is_flushing(&self) -> bool;
 
-    fn acquire_buffer<'a, P: Into<Option<&'a BufferPoolAcquireParams>>>(
+    fn acquire_buffer(
         &self,
-        params: P,
+        params: Option<&BufferPoolAcquireParams>,
     ) -> Result<::Buffer, ::FlowError>;
     fn release_buffer(&self, buffer: ::Buffer);
 }
@@ -292,11 +288,11 @@ impl<O: IsA<BufferPool>> BufferPoolExtManual for O {
         }
     }
 
-    fn acquire_buffer<'a, P: Into<Option<&'a BufferPoolAcquireParams>>>(
+    fn acquire_buffer(
         &self,
-        params: P,
+        params: Option<&BufferPoolAcquireParams>,
     ) -> Result<::Buffer, ::FlowError> {
-        let params_ptr = params.into().to_glib_none().0 as *mut _;
+        let params_ptr = params.to_glib_none().0 as *mut _;
 
         unsafe {
             let mut buffer = ptr::null_mut();
@@ -338,13 +334,13 @@ mod tests {
 
         let params = ::BufferPoolAcquireParams::with_flags(::BufferPoolAcquireFlags::DONTWAIT);
 
-        let _buf1 = pool.acquire_buffer(&params).unwrap();
-        let buf2 = pool.acquire_buffer(&params).unwrap();
+        let _buf1 = pool.acquire_buffer(Some(&params)).unwrap();
+        let buf2 = pool.acquire_buffer(Some(&params)).unwrap();
 
-        assert!(pool.acquire_buffer(&params).is_err());
+        assert!(pool.acquire_buffer(Some(&params)).is_err());
 
         drop(buf2);
-        let _buf2 = pool.acquire_buffer(&params).unwrap();
+        let _buf2 = pool.acquire_buffer(Some(&params)).unwrap();
 
         pool.set_active(false).unwrap();
     }

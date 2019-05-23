@@ -169,12 +169,12 @@ unsafe impl Send for SDPMessageRef {}
 unsafe impl Sync for SDPMessageRef {}
 
 impl SDPMessageRef {
-    pub fn add_attribute<'a, P: Into<Option<&'a str>>>(&mut self, key: &str, value: P) {
+    pub fn add_attribute(&mut self, key: &str, value: Option<&str>) {
         unsafe {
             gst_sdp_sys::gst_sdp_message_add_attribute(
                 &mut self.0,
                 key.to_glib_none().0,
-                value.into().to_glib_none().0,
+                value.to_glib_none().0,
             );
         }
     }

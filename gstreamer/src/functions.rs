@@ -15,14 +15,13 @@ use Error;
 use ParseContext;
 use ParseFlags;
 
-pub fn parse_bin_from_description_full<'a, P: Into<Option<&'a mut ParseContext>>>(
+pub fn parse_bin_from_description_full(
     bin_description: &str,
     ghost_unlinked_pads: bool,
-    context: P,
+    mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
 ) -> Result<Element, Error> {
     assert_initialized_main_thread!();
-    let mut context = context.into();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = gst_sys::gst_parse_bin_from_description_full(
@@ -40,13 +39,12 @@ pub fn parse_bin_from_description_full<'a, P: Into<Option<&'a mut ParseContext>>
     }
 }
 
-pub fn parse_launch_full<'a, P: Into<Option<&'a mut ParseContext>>>(
+pub fn parse_launch_full(
     pipeline_description: &str,
-    context: P,
+    mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
 ) -> Result<Element, Error> {
     assert_initialized_main_thread!();
-    let mut context = context.into();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = gst_sys::gst_parse_launch_full(
@@ -63,13 +61,12 @@ pub fn parse_launch_full<'a, P: Into<Option<&'a mut ParseContext>>>(
     }
 }
 
-pub fn parse_launchv_full<'a, P: Into<Option<&'a mut ParseContext>>>(
+pub fn parse_launchv_full(
     argv: &[&str],
-    context: P,
+    mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
 ) -> Result<Element, Error> {
     assert_initialized_main_thread!();
-    let mut context = context.into();
     unsafe {
         let mut error = ptr::null_mut();
         let ret = gst_sys::gst_parse_launchv_full(

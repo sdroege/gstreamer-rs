@@ -12,7 +12,7 @@ use RTSPAuth;
 use RTSPToken;
 
 pub trait RTSPAuthExtManual: 'static {
-    fn set_default_token<'a, P: Into<Option<&'a mut RTSPToken>>>(&self, token: P);
+    fn set_default_token(&self, token: Option<&mut RTSPToken>);
 
     fn connect_accept_certificate<
         F: Fn(
@@ -31,8 +31,7 @@ pub trait RTSPAuthExtManual: 'static {
 }
 
 impl<O: IsA<RTSPAuth>> RTSPAuthExtManual for O {
-    fn set_default_token<'a, P: Into<Option<&'a mut RTSPToken>>>(&self, token: P) {
-        let mut token = token.into();
+    fn set_default_token(&self, mut token: Option<&mut RTSPToken>) {
         unsafe {
             gst_rtsp_server_sys::gst_rtsp_auth_set_default_token(
                 self.as_ref().to_glib_none().0,

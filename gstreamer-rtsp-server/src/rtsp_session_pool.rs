@@ -32,23 +32,13 @@ fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static>(func:
 }
 
 pub trait RTSPSessionPoolExtManual: 'static {
-    fn create_watch<'a, N: Into<Option<&'a str>>, F>(
-        &self,
-        name: N,
-        priority: Priority,
-        func: F,
-    ) -> glib::Source
+    fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
         F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static;
 }
 
 impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
-    fn create_watch<'a, N: Into<Option<&'a str>>, F>(
-        &self,
-        name: N,
-        priority: Priority,
-        func: F,
-    ) -> glib::Source
+    fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
         F: FnMut(&RTSPSessionPool) -> Continue + Send + 'static,
     {
@@ -65,7 +55,6 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExtManual for O {
             );
             glib_sys::g_source_set_priority(source, priority.to_glib());
 
-            let name = name.into();
             if let Some(name) = name {
                 glib_sys::g_source_set_name(source, name.to_glib_none().0);
             }

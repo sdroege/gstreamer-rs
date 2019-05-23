@@ -12,17 +12,11 @@ use gst;
 use gst_base_sys;
 use std::mem;
 
-pub fn type_find_helper_for_data<
-    'a,
-    P: IsA<gst::Object> + 'a,
-    Q: Into<Option<&'a P>>,
-    R: AsRef<[u8]>,
->(
-    obj: Q,
+pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
+    obj: Option<&P>,
     data: R,
 ) -> (Option<gst::Caps>, gst::TypeFindProbability) {
     assert_initialized_main_thread!();
-    let obj = obj.into();
     unsafe {
         let mut prob = mem::uninitialized();
         let data = data.as_ref();

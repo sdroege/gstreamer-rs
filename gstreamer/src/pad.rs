@@ -49,12 +49,8 @@ use libc;
 use gst_sys;
 
 impl Pad {
-    pub fn new_from_static_template<'a, P: Into<Option<&'a str>>>(
-        templ: &StaticPadTemplate,
-        name: P,
-    ) -> Pad {
+    pub fn new_from_static_template(templ: &StaticPadTemplate, name: Option<&str>) -> Pad {
         assert_initialized_main_thread!();
-        let name = name.into();
         unsafe {
             from_glib_none(gst_sys::gst_pad_new_from_static_template(
                 mut_override(templ.to_glib_none().0),
@@ -131,28 +127,20 @@ pub trait PadExtManual: 'static {
 
     fn peer_query(&self, query: &mut QueryRef) -> bool;
     fn query(&self, query: &mut QueryRef) -> bool;
-    fn query_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
-        &self,
-        parent: Q,
-        query: &mut QueryRef,
-    ) -> bool;
+    fn query_default<P: IsA<::Object>>(&self, parent: Option<&P>, query: &mut QueryRef) -> bool;
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool;
     fn proxy_query_accept_caps(&self, query: &mut QueryRef) -> bool;
 
-    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
-        &self,
-        parent: Q,
-        event: Event,
-    ) -> bool;
+    fn event_default<P: IsA<::Object>>(&self, parent: Option<&P>, event: Event) -> bool;
     fn push_event(&self, event: Event) -> bool;
     fn send_event(&self, event: Event) -> bool;
 
     fn get_last_flow_return(&self) -> Result<FlowSuccess, FlowError>;
 
     fn iterate_internal_links(&self) -> ::Iterator<Pad>;
-    fn iterate_internal_links_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
+    fn iterate_internal_links_default<P: IsA<::Object>>(
         &self,
-        parent: Q,
+        parent: Option<&P>,
     ) -> ::Iterator<Pad>;
 
     fn link<P: IsA<Pad>>(&self, sinkpad: &P) -> Result<PadLinkSuccess, PadLinkError>;
@@ -389,13 +377,8 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn query_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
-        &self,
-        parent: Q,
-        query: &mut QueryRef,
-    ) -> bool {
+    fn query_default<P: IsA<::Object>>(&self, parent: Option<&P>, query: &mut QueryRef) -> bool {
         skip_assert_initialized!();
-        let parent = parent.into();
         unsafe {
             from_glib(gst_sys::gst_pad_query_default(
                 self.as_ref().to_glib_none().0,
@@ -423,13 +406,8 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn event_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
-        &self,
-        parent: Q,
-        event: Event,
-    ) -> bool {
+    fn event_default<P: IsA<::Object>>(&self, parent: Option<&P>, event: Event) -> bool {
         skip_assert_initialized!();
-        let parent = parent.into();
         unsafe {
             from_glib(gst_sys::gst_pad_event_default(
                 self.as_ref().to_glib_none().0,
@@ -474,11 +452,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
         }
     }
 
-    fn iterate_internal_links_default<'a, P: IsA<::Object> + 'a, Q: Into<Option<&'a P>>>(
+    fn iterate_internal_links_default<P: IsA<::Object>>(
         &self,
-        parent: Q,
+        parent: Option<&P>,
     ) -> ::Iterator<Pad> {
-        let parent = parent.into();
         unsafe {
             from_glib_full(gst_sys::gst_pad_iterate_internal_links_default(
                 self.as_ref().to_glib_none().0,

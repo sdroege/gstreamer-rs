@@ -21,11 +21,7 @@ use glib::IsA;
 pub struct DebugCategory(ptr::NonNull<gst_sys::GstDebugCategory>);
 
 impl DebugCategory {
-    pub fn new<'a, P: Into<Option<&'a str>>>(
-        name: &str,
-        color: ::DebugColorFlags,
-        description: P,
-    ) -> DebugCategory {
+    pub fn new(name: &str, color: ::DebugColorFlags, description: Option<&str>) -> DebugCategory {
         extern "C" {
             fn _gst_debug_category_new(
                 name: *const c_char,
@@ -33,7 +29,6 @@ impl DebugCategory {
                 description: *const c_char,
             ) -> *mut gst_sys::GstDebugCategory;
         }
-        let description = description.into();
 
         // Gets the category if it exists already
         unsafe {
@@ -149,7 +144,7 @@ lazy_static! {
     pub static ref CAT_RUST: DebugCategory = DebugCategory::new(
         "GST_RUST",
         ::DebugColorFlags::UNDERLINE,
-        "GStreamer's Rust binding core",
+        Some("GStreamer's Rust binding core"),
     );
 }
 
@@ -307,7 +302,7 @@ mod tests {
         let cat = DebugCategory::new(
             "test-cat",
             ::DebugColorFlags::empty(),
-            "some debug category",
+            Some("some debug category"),
         );
 
         gst_error!(cat, "meh");

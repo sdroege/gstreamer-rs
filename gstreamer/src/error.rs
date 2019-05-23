@@ -62,24 +62,16 @@ pub struct ErrorMessage {
 }
 
 impl ErrorMessage {
-    pub fn new<
-        'a,
-        'b,
-        T: ::MessageErrorDomain,
-        U: Into<Option<&'a str>>,
-        V: Into<Option<&'b str>>,
-    >(
+    pub fn new<T: ::MessageErrorDomain>(
         error: &T,
-        message: U,
-        debug: V,
+        message: Option<&str>,
+        debug: Option<&str>,
         filename: &'static str,
         function: &'static str,
         line: u32,
     ) -> ErrorMessage {
         let error_domain = T::domain();
         let error_code = error.code();
-        let message = message.into();
-        let debug = debug.into();
 
         ErrorMessage {
             error_domain,

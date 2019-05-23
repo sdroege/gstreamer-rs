@@ -6,12 +6,11 @@ use gst_rtsp_server_sys;
 use RTSPClient;
 
 pub trait RTSPClientExtManual: 'static {
-    fn attach<'a, P: Into<Option<&'a glib::MainContext>>>(&self, context: P) -> SourceId;
+    fn attach(&self, context: Option<&glib::MainContext>) -> SourceId;
 }
 
 impl<O: IsA<RTSPClient>> RTSPClientExtManual for O {
-    fn attach<'a, P: Into<Option<&'a glib::MainContext>>>(&self, context: P) -> SourceId {
-        let context = context.into();
+    fn attach(&self, context: Option<&glib::MainContext>) -> SourceId {
         unsafe {
             from_glib(gst_rtsp_server_sys::gst_rtsp_client_attach(
                 self.as_ref().to_glib_none().0,

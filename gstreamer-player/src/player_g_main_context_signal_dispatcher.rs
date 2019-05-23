@@ -12,11 +12,10 @@ use gst_player_sys;
 use PlayerGMainContextSignalDispatcher;
 
 impl PlayerGMainContextSignalDispatcher {
-    pub fn new<'a, P: Into<Option<&'a glib::MainContext>>>(
-        application_context: P,
+    pub fn new(
+        application_context: Option<&glib::MainContext>,
     ) -> PlayerGMainContextSignalDispatcher {
         assert_initialized_main_thread!();
-        let application_context = application_context.into();
         let application_context = application_context.to_glib_none();
         unsafe {
             from_glib_full(

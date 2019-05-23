@@ -14,14 +14,13 @@ use glib::translate::*;
 use gst;
 
 impl NtpClock {
-    pub fn new<'a, P: Into<Option<&'a str>>>(
-        name: P,
+    pub fn new(
+        name: Option<&str>,
         remote_address: &str,
         remote_port: i32,
         base_time: gst::ClockTime,
     ) -> NtpClock {
         assert_initialized_main_thread!();
-        let name = name.into();
         let name = name.to_glib_none();
         let (major, minor, _, _) = gst::version();
         if (major, minor) > (1, 12) {

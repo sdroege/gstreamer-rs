@@ -54,10 +54,10 @@ impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
 }
 
 pub trait DeviceMonitorExtManual: 'static {
-    fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(
+    fn add_filter(
         &self,
-        classes: P,
-        caps: Q,
+        classes: Option<&str>,
+        caps: Option<&Caps>,
     ) -> Option<DeviceMonitorFilterId>;
 
     fn remove_filter(&self, filter_id: DeviceMonitorFilterId)
@@ -65,13 +65,11 @@ pub trait DeviceMonitorExtManual: 'static {
 }
 
 impl<O: IsA<DeviceMonitor>> DeviceMonitorExtManual for O {
-    fn add_filter<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b Caps>>>(
+    fn add_filter(
         &self,
-        classes: P,
-        caps: Q,
+        classes: Option<&str>,
+        caps: Option<&Caps>,
     ) -> Option<DeviceMonitorFilterId> {
-        let classes = classes.into();
-        let caps = caps.into();
         let id = unsafe {
             gst_sys::gst_device_monitor_add_filter(
                 self.as_ref().to_glib_none().0,

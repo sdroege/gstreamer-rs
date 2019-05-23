@@ -32,28 +32,17 @@ pub trait TypeFindImpl {
 }
 
 impl<'a> TypeFind<'a> {
-    pub fn register<
-        'b,
-        'c,
-        'd,
-        P: Into<Option<&'b Plugin>>,
-        R: Into<Option<&'c str>>,
-        S: Into<Option<&'d Caps>>,
-        F,
-    >(
-        plugin: P,
+    pub fn register<F>(
+        plugin: Option<&Plugin>,
         name: &str,
         rank: u32,
-        extensions: R,
-        possible_caps: S,
+        extensions: Option<&str>,
+        possible_caps: Option<&Caps>,
         func: F,
     ) -> Result<(), glib::error::BoolError>
     where
         F: Fn(&mut TypeFind) + Send + Sync + 'static,
     {
-        let plugin = plugin.into();
-        let extensions = extensions.into();
-        let possible_caps = possible_caps.into();
         unsafe {
             let func: Box<F> = Box::new(func);
             let func = Box::into_raw(func);
@@ -278,7 +267,7 @@ mod tests {
             "test_typefind",
             ::Rank::Primary.to_glib() as u32,
             None,
-            &Caps::new_simple("test/test", &[]),
+            Some(&Caps::new_simple("test/test", &[])),
             |typefind| {
                 let mut found = false;
                 if let Some(data) = typefind.peek(0, 8) {

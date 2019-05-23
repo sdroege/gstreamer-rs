@@ -26,21 +26,21 @@ use auto::EncodingVideoProfile;
 trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);
 
-    fn set_description<'a, P: Into<Option<&'a str>>>(&self, description: P);
+    fn set_description(&self, description: Option<&str>);
 
     fn set_enabled(&self, enabled: bool);
 
     fn set_format(&self, format: &gst::Caps);
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P);
+    fn set_name(&self, name: Option<&str>);
 
     fn set_presence(&self, presence: u32);
 
-    fn set_preset<'a, P: Into<Option<&'a str>>>(&self, preset: P);
+    fn set_preset(&self, preset: Option<&str>);
 
-    fn set_preset_name<'a, P: Into<Option<&'a str>>>(&self, preset_name: P);
+    fn set_preset_name(&self, preset_name: Option<&str>);
 
-    fn set_restriction<'a, P: Into<Option<&'a gst::Caps>>>(&self, restriction: P);
+    fn set_restriction(&self, restriction: Option<&gst::Caps>);
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
@@ -53,8 +53,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    fn set_description<'a, P: Into<Option<&'a str>>>(&self, description: P) {
-        let description = description.into();
+    fn set_description(&self, description: Option<&str>) {
         let description = description.to_glib_none();
         unsafe {
             gst_pbutils_sys::gst_encoding_profile_set_description(
@@ -82,8 +81,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) {
-        let name = name.into();
+    fn set_name(&self, name: Option<&str>) {
         let name = name.to_glib_none();
         unsafe {
             gst_pbutils_sys::gst_encoding_profile_set_name(self.as_ref().to_glib_none().0, name.0);
@@ -99,8 +97,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    fn set_preset<'a, P: Into<Option<&'a str>>>(&self, preset: P) {
-        let preset = preset.into();
+    fn set_preset(&self, preset: Option<&str>) {
         let preset = preset.to_glib_none();
         unsafe {
             gst_pbutils_sys::gst_encoding_profile_set_preset(
@@ -110,8 +107,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    fn set_preset_name<'a, P: Into<Option<&'a str>>>(&self, preset_name: P) {
-        let preset_name = preset_name.into();
+    fn set_preset_name(&self, preset_name: Option<&str>) {
         let preset_name = preset_name.to_glib_none();
         unsafe {
             gst_pbutils_sys::gst_encoding_profile_set_preset_name(
@@ -121,8 +117,7 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
         }
     }
 
-    fn set_restriction<'a, P: Into<Option<&'a gst::Caps>>>(&self, restriction: P) {
-        let restriction = restriction.into();
+    fn set_restriction(&self, restriction: Option<&gst::Caps>) {
         unsafe {
             let restriction = match restriction {
                 Some(restriction) => restriction.to_glib_full(),
@@ -138,16 +133,14 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
 }
 
 impl EncodingAudioProfile {
-    fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b gst::Caps>>>(
+    fn new(
         format: &gst::Caps,
-        preset: P,
-        restriction: Q,
+        preset: Option<&str>,
+        restriction: Option<&gst::Caps>,
         presence: u32,
     ) -> EncodingAudioProfile {
         assert_initialized_main_thread!();
-        let preset = preset.into();
         let preset = preset.to_glib_none();
-        let restriction = restriction.into();
         let restriction = restriction.to_glib_none();
         unsafe {
             from_glib_full(gst_pbutils_sys::gst_encoding_audio_profile_new(
@@ -161,16 +154,14 @@ impl EncodingAudioProfile {
 }
 
 impl EncodingVideoProfile {
-    fn new<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b gst::Caps>>>(
+    fn new(
         format: &gst::Caps,
-        preset: P,
-        restriction: Q,
+        preset: Option<&str>,
+        restriction: Option<&gst::Caps>,
         presence: u32,
     ) -> EncodingVideoProfile {
         assert_initialized_main_thread!();
-        let preset = preset.into();
         let preset = preset.to_glib_none();
-        let restriction = restriction.into();
         let restriction = restriction.to_glib_none();
         unsafe {
             from_glib_full(gst_pbutils_sys::gst_encoding_video_profile_new(
@@ -199,25 +190,15 @@ impl EncodingVideoProfile {
 }
 
 impl EncodingContainerProfile {
-    fn new<
-        'a,
-        'b,
-        'c,
-        P: Into<Option<&'a str>>,
-        Q: Into<Option<&'b str>>,
-        R: Into<Option<&'c str>>,
-    >(
-        name: P,
-        description: Q,
+    fn new(
+        name: Option<&str>,
+        description: Option<&str>,
         format: &gst::Caps,
-        preset: R,
+        preset: Option<&str>,
     ) -> EncodingContainerProfile {
         assert_initialized_main_thread!();
-        let name = name.into();
         let name = name.to_glib_none();
-        let description = description.into();
         let description = description.to_glib_none();
-        let preset = preset.into();
         let preset = preset.to_glib_none();
         unsafe {
             from_glib_full(gst_pbutils_sys::gst_encoding_container_profile_new(

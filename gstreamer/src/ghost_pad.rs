@@ -17,9 +17,8 @@ use PadMode;
 use PadTemplate;
 
 impl GhostPad {
-    pub fn new<'a, P: Into<Option<&'a str>>, Q: IsA<Pad>>(name: P, target: &Q) -> Option<GhostPad> {
+    pub fn new<Q: IsA<Pad>>(name: Option<&str>, target: &Q) -> Option<GhostPad> {
         skip_assert_initialized!();
-        let name = name.into();
         let name = name.to_glib_none();
         unsafe {
             Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new(
@@ -30,13 +29,12 @@ impl GhostPad {
         }
     }
 
-    pub fn new_from_template<'a, P: Into<Option<&'a str>>, Q: IsA<Pad>>(
-        name: P,
+    pub fn new_from_template<Q: IsA<Pad>>(
+        name: Option<&str>,
         target: &Q,
         templ: &PadTemplate,
     ) -> Option<GhostPad> {
         skip_assert_initialized!();
-        let name = name.into();
         let name = name.to_glib_none();
         unsafe {
             Option::<Pad>::from_glib_none(gst_sys::gst_ghost_pad_new_from_template(
@@ -48,19 +46,13 @@ impl GhostPad {
         }
     }
 
-    pub fn activate_mode_default<
-        'a,
-        P: IsA<GhostPad>,
-        Q: IsA<Object> + 'a,
-        R: Into<Option<&'a Q>>,
-    >(
+    pub fn activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
         pad: &P,
-        parent: R,
+        parent: Option<&Q>,
         mode: PadMode,
         active: bool,
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
-        let parent = parent.into();
         unsafe {
             glib_result_from_gboolean!(
                 gst_sys::gst_ghost_pad_activate_mode_default(
@@ -74,19 +66,13 @@ impl GhostPad {
         }
     }
 
-    pub fn internal_activate_mode_default<
-        'a,
-        P: IsA<GhostPad>,
-        Q: IsA<Object> + 'a,
-        R: Into<Option<&'a Q>>,
-    >(
+    pub fn internal_activate_mode_default<P: IsA<GhostPad>, Q: IsA<Object>>(
         pad: &P,
-        parent: R,
+        parent: Option<&Q>,
         mode: PadMode,
         active: bool,
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
-        let parent = parent.into();
         unsafe {
             glib_result_from_gboolean!(
                 gst_sys::gst_ghost_pad_internal_activate_mode_default(

@@ -17,13 +17,9 @@ use gobject_sys;
 use ObjectFlags;
 
 pub trait GstObjectExtManual: 'static {
-    fn connect_deep_notify<
-        'a,
-        P: Into<Option<&'a str>>,
-        F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static,
-    >(
+    fn connect_deep_notify<F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static>(
         &self,
-        name: P,
+        name: Option<&str>,
         f: F,
     ) -> SignalHandlerId;
 
@@ -35,16 +31,11 @@ pub trait GstObjectExtManual: 'static {
 }
 
 impl<O: IsA<::Object>> GstObjectExtManual for O {
-    fn connect_deep_notify<
-        'a,
-        P: Into<Option<&'a str>>,
-        F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static,
-    >(
+    fn connect_deep_notify<F: Fn(&Self, &::Object, &glib::ParamSpec) + Send + Sync + 'static>(
         &self,
-        name: P,
+        name: Option<&str>,
         f: F,
     ) -> SignalHandlerId {
-        let name = name.into();
         let signal_name = if let Some(name) = name {
             format!("deep-notify::{}", name)
         } else {

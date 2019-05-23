@@ -22,13 +22,12 @@ use glib::translate::{from_glib, from_glib_full, ToGlibPtr};
 use gst_sys;
 
 impl ProxyPad {
-    pub fn chain_default<'a, P: IsA<ProxyPad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
+    pub fn chain_default<P: IsA<ProxyPad>, Q: IsA<Object>>(
         pad: &P,
-        parent: R,
+        parent: Option<&Q>,
         buffer: Buffer,
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
-        let parent = parent.into();
         let ret: FlowReturn = unsafe {
             from_glib(gst_sys::gst_proxy_pad_chain_default(
                 pad.as_ptr() as *mut gst_sys::GstPad,
@@ -39,13 +38,12 @@ impl ProxyPad {
         ret.into_result()
     }
 
-    pub fn chain_list_default<'a, P: IsA<ProxyPad>, Q: IsA<Object> + 'a, R: Into<Option<&'a Q>>>(
+    pub fn chain_list_default<P: IsA<ProxyPad>, Q: IsA<Object>>(
         pad: &P,
-        parent: R,
+        parent: Option<&Q>,
         list: BufferList,
     ) -> Result<FlowSuccess, FlowError> {
         skip_assert_initialized!();
-        let parent = parent.into();
         let ret: FlowReturn = unsafe {
             from_glib(gst_sys::gst_proxy_pad_chain_list_default(
                 pad.as_ptr() as *mut gst_sys::GstPad,
@@ -76,17 +74,11 @@ impl ProxyPad {
         }
     }
 
-    pub fn iterate_internal_links_default<
-        'a,
-        P: IsA<ProxyPad>,
-        Q: IsA<Object> + 'a,
-        R: Into<Option<&'a Q>>,
-    >(
+    pub fn iterate_internal_links_default<P: IsA<ProxyPad>, Q: IsA<Object>>(
         pad: &P,
-        parent: R,
+        parent: Option<&Q>,
     ) -> Option<::Iterator<Pad>> {
         skip_assert_initialized!();
-        let parent = parent.into();
         unsafe {
             from_glib_full(gst_sys::gst_proxy_pad_iterate_internal_links_default(
                 pad.as_ptr() as *mut gst_sys::GstPad,

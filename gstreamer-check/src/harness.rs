@@ -38,29 +38,15 @@ impl Drop for Harness {
 unsafe impl Send for Harness {}
 
 impl Harness {
-    pub fn add_element_full<
-        'a,
-        'b,
-        'c,
-        'd,
-        P: IsA<gst::Element>,
-        Q: Into<Option<&'a gst::StaticPadTemplate>>,
-        R: Into<Option<&'b str>>,
-        S: Into<Option<&'c gst::StaticPadTemplate>>,
-        T: Into<Option<&'d str>>,
-    >(
+    pub fn add_element_full<P: IsA<gst::Element>>(
         &mut self,
         element: &P,
-        hsrc: Q,
-        element_sinkpad_name: R,
-        hsink: S,
-        element_srcpad_name: T,
+        hsrc: Option<&gst::StaticPadTemplate>,
+        element_sinkpad_name: Option<&str>,
+        hsink: Option<&gst::StaticPadTemplate>,
+        element_srcpad_name: Option<&str>,
     ) {
-        let hsrc = hsrc.into();
-        let element_sinkpad_name = element_sinkpad_name.into();
         let element_sinkpad_name = element_sinkpad_name.to_glib_none();
-        let hsink = hsink.into();
-        let element_srcpad_name = element_srcpad_name.into();
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {
             gst_check_sys::gst_harness_add_element_full(
@@ -115,10 +101,10 @@ impl Harness {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn add_propose_allocation_meta<'a, P: Into<Option<&'a gst::StructureRef>>>(
+    pub fn add_propose_allocation_meta(
         &mut self,
         api: glib::types::Type,
-        params: P,
+        params: Option<&gst::StructureRef>,
     ) {
         let params = params.into();
         unsafe {
@@ -390,7 +376,7 @@ impl Harness {
         }
     }
 
-    //pub fn set_propose_allocator<'a, 'b, P: Into<Option<&'a /*Ignored*/gst::Allocator>>, Q: Into<Option<&'b /*Ignored*/gst::AllocationParams>>>(&mut self, allocator: P, params: Q) {
+    //pub fn set_propose_allocator<P: IsA<gst::Allocator>>(&mut self, allocator: Option<&P>, params: Option<&gst::AllocationParams>) {
     //    unsafe { TODO: call gst_check_sys::gst_harness_set_propose_allocator() }
     //}
 
@@ -589,29 +575,15 @@ impl Harness {
         unsafe { Self::from_glib_full(gst_check_sys::gst_harness_new_empty()) }
     }
 
-    pub fn new_full<
-        'a,
-        'b,
-        'c,
-        'd,
-        P: IsA<gst::Element>,
-        Q: Into<Option<&'a gst::StaticPadTemplate>>,
-        R: Into<Option<&'b str>>,
-        S: Into<Option<&'c gst::StaticPadTemplate>>,
-        T: Into<Option<&'d str>>,
-    >(
+    pub fn new_full<P: IsA<gst::Element>>(
         element: &P,
-        hsrc: Q,
-        element_sinkpad_name: R,
-        hsink: S,
-        element_srcpad_name: T,
+        hsrc: Option<&gst::StaticPadTemplate>,
+        element_sinkpad_name: Option<&str>,
+        hsink: Option<&gst::StaticPadTemplate>,
+        element_srcpad_name: Option<&str>,
     ) -> Harness {
         assert_initialized_main_thread!();
-        let hsrc = hsrc.into();
-        let element_sinkpad_name = element_sinkpad_name.into();
         let element_sinkpad_name = element_sinkpad_name.to_glib_none();
-        let hsink = hsink.into();
-        let element_srcpad_name = element_srcpad_name.into();
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {
             Self::from_glib_full(gst_check_sys::gst_harness_new_full(
@@ -633,21 +605,13 @@ impl Harness {
         }
     }
 
-    pub fn new_with_element<
-        'a,
-        'b,
-        P: IsA<gst::Element>,
-        Q: Into<Option<&'a str>>,
-        R: Into<Option<&'b str>>,
-    >(
+    pub fn new_with_element<P: IsA<gst::Element>>(
         element: &P,
-        element_sinkpad_name: Q,
-        element_srcpad_name: R,
+        element_sinkpad_name: Option<&str>,
+        element_srcpad_name: Option<&str>,
     ) -> Harness {
         assert_initialized_main_thread!();
-        let element_sinkpad_name = element_sinkpad_name.into();
         let element_sinkpad_name = element_sinkpad_name.to_glib_none();
-        let element_srcpad_name = element_srcpad_name.into();
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {
             Self::from_glib_full(gst_check_sys::gst_harness_new_with_element(
@@ -658,15 +622,13 @@ impl Harness {
         }
     }
 
-    pub fn new_with_padnames<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(
+    pub fn new_with_padnames(
         element_name: &str,
-        element_sinkpad_name: P,
-        element_srcpad_name: Q,
+        element_sinkpad_name: Option<&str>,
+        element_srcpad_name: Option<&str>,
     ) -> Harness {
         assert_initialized_main_thread!();
-        let element_sinkpad_name = element_sinkpad_name.into();
         let element_sinkpad_name = element_sinkpad_name.to_glib_none();
-        let element_srcpad_name = element_srcpad_name.into();
         let element_srcpad_name = element_srcpad_name.to_glib_none();
         unsafe {
             Self::from_glib_full(gst_check_sys::gst_harness_new_with_padnames(
@@ -677,19 +639,12 @@ impl Harness {
         }
     }
 
-    pub fn new_with_templates<
-        'a,
-        'b,
-        P: Into<Option<&'a gst::StaticPadTemplate>>,
-        Q: Into<Option<&'b gst::StaticPadTemplate>>,
-    >(
+    pub fn new_with_templates(
         element_name: &str,
-        hsrc: P,
-        hsink: Q,
+        hsrc: Option<&gst::StaticPadTemplate>,
+        hsink: Option<&gst::StaticPadTemplate>,
     ) -> Harness {
         assert_initialized_main_thread!();
-        let hsrc = hsrc.into();
-        let hsink = hsink.into();
         unsafe {
             Self::from_glib_full(gst_check_sys::gst_harness_new_with_templates(
                 element_name.to_glib_none().0,

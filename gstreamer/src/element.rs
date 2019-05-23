@@ -170,16 +170,16 @@ pub trait ElementExtManual: 'static {
     fn get_src_pads(&self) -> Vec<Pad>;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn add_property_deep_notify_watch<'a, P: Into<Option<&'a str>>>(
+    fn add_property_deep_notify_watch(
         &self,
-        property_name: P,
+        property_name: Option<&str>,
         include_value: bool,
     ) -> NotifyWatchId;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn add_property_notify_watch<'a, P: Into<Option<&'a str>>>(
+    fn add_property_notify_watch(
         &self,
-        property_name: P,
+        property_name: Option<&str>,
         include_value: bool,
     ) -> NotifyWatchId;
 
@@ -479,12 +479,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn add_property_deep_notify_watch<'a, P: Into<Option<&'a str>>>(
+    fn add_property_deep_notify_watch(
         &self,
-        property_name: P,
+        property_name: Option<&str>,
         include_value: bool,
     ) -> NotifyWatchId {
-        let property_name = property_name.into();
         let property_name = property_name.to_glib_none();
         unsafe {
             from_glib(gst_sys::gst_element_add_property_deep_notify_watch(
@@ -496,12 +495,11 @@ impl<O: IsA<Element>> ElementExtManual for O {
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn add_property_notify_watch<'a, P: Into<Option<&'a str>>>(
+    fn add_property_notify_watch(
         &self,
-        property_name: P,
+        property_name: Option<&str>,
         include_value: bool,
     ) -> NotifyWatchId {
-        let property_name = property_name.into();
         let property_name = property_name.to_glib_none();
         unsafe {
             from_glib(gst_sys::gst_element_add_property_notify_watch(

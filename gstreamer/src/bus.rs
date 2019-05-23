@@ -81,12 +81,7 @@ impl Bus {
         }
     }
 
-    pub fn create_watch<'a, N: Into<Option<&'a str>>, F>(
-        &self,
-        name: N,
-        priority: Priority,
-        func: F,
-    ) -> glib::Source
+    pub fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where
         F: FnMut(&Bus, &Message) -> Continue + Send + 'static,
     {
@@ -101,7 +96,6 @@ impl Bus {
             );
             glib_sys::g_source_set_priority(source, priority.to_glib());
 
-            let name = name.into();
             if let Some(name) = name {
                 glib_sys::g_source_set_name(source, name.to_glib_none().0);
             }
