@@ -12,7 +12,7 @@ gstreamer-audio = { path = "../gstreamer-audio" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-pbutils = { path = "../gstreamer-pbutils" }
-byte-slice-cast = "0.2"
+byte-slice-cast = "0.3"
 failure = "0.1.0"
 
 [features]

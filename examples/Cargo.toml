@@ -20,7 +20,7 @@ gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
 futures-preview = { version = "0.3.0-alpha", optional = true }
-byte-slice-cast = "0.2"
+byte-slice-cast = "0.3"
 failure = "0.1"
 failure_derive = "0.1"
 cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
