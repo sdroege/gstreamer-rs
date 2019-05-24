@@ -87,6 +87,7 @@ clippy:
   extends: '.tarball_setup'
   image: "rustlang/rust:nightly-slim"
   stage: 'extras'
+  allow_failure: true
   script:
     - rustup component add clippy-preview
     - cargo clippy --version
