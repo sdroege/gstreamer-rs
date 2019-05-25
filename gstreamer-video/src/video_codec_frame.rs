@@ -139,7 +139,7 @@ impl<'a> VideoCodecFrame<'a> {
             if ptr.is_null() {
                 None
             } else {
-                Some(gst::BufferRef::from_mut_ptr(ptr))
+                Some(gst::BufferRef::from_ptr(ptr))
             }
         }
     }
