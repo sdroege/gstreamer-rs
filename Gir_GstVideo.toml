@@ -43,7 +43,6 @@ generate = [
 manual = [
     "GLib.DateTime",
     "GObject.Object",
-    "Gst.BufferPool",
     "Gst.Object",
     "Gst.Element",
     "Gst.Buffer",
@@ -64,6 +63,11 @@ manual = [
     "GstVideo.VideoTimeCode",
     "GstVideo.VideoTimeCodeInterval",
 ]
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "scalar"
 
 [[object]]
 name = "Gst.Caps"
@@ -138,6 +142,55 @@ status = "generate"
 
     [[object.function]]
     name = "set_interlaced_output_state"
+    ignore = true
+
+    [[object.function]]
+    name = "negotiate"
+    ignore = true
+
+[[object]]
+name = "GstVideo.VideoEncoder"
+subclassing = true
+status = "generate"
+
+    [[object.function]]
+    name = "allocate_output_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "allocate_output_frame_with_params"
+    ignore = true
+
+    [[object.function]]
+    name = "finish_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "set_latency"
+    ignore = true
+
+    [[object.function]]
+    name = "get_latency"
+    ignore = true
+
+    [[object.function]]
+    name = "get_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "get_frames"
+    ignore = true
+
+    [[object.function]]
+    name = "get_oldest_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "get_output_state"
+    ignore = true
+
+    [[object.function]]
+    name = "set_output_state"
     ignore = true
 
     [[object.function]]

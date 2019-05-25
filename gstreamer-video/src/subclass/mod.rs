@@ -8,7 +8,9 @@
 #![cfg_attr(feature = "cargo-clippy", allow(cast_ptr_alignment))]
 
 pub mod video_decoder;
+pub mod video_encoder;
 
 pub mod prelude {
     pub use super::video_decoder::{VideoDecoderImpl, VideoDecoderImplExt};
+    pub use super::video_encoder::{VideoEncoderImpl, VideoEncoderImplExt};
 }

@@ -81,6 +81,7 @@ pub use video_buffer_pool::{
 
 mod video_codec_frame;
 mod video_decoder;
+mod video_encoder;
 pub use video_codec_frame::VideoCodecFrame;
 pub mod video_codec_state;
 pub use video_codec_state::VideoCodecState;
@@ -95,6 +96,7 @@ pub mod prelude {
     pub use auto::traits::*;
     pub use video_buffer_pool::VideoBufferPoolConfig;
     pub use video_decoder::VideoDecoderExtManual;
+    pub use video_encoder::VideoEncoderExtManual;
     pub use video_overlay::VideoOverlayExtManual;
 }
 

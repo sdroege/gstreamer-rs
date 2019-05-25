@@ -2,12 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+mod video_buffer_pool;
+pub use self::video_buffer_pool::{VideoBufferPool, VideoBufferPoolClass, NONE_VIDEO_BUFFER_POOL};
+
 mod video_decoder;
 pub use self::video_decoder::{VideoDecoder, VideoDecoderClass, NONE_VIDEO_DECODER};
 pub use self::video_decoder::VideoDecoderExt;
 
-mod video_buffer_pool;
-pub use self::video_buffer_pool::{VideoBufferPool, VideoBufferPoolClass, NONE_VIDEO_BUFFER_POOL};
+mod video_encoder;
+pub use self::video_encoder::{VideoEncoder, VideoEncoderClass, NONE_VIDEO_ENCODER};
+pub use self::video_encoder::VideoEncoderExt;
 
 mod video_filter;
 pub use self::video_filter::{VideoFilter, VideoFilterClass, NONE_VIDEO_FILTER};
@@ -44,5 +48,6 @@ pub use self::flags::VideoTimeCodeFlags;
 #[doc(hidden)]
 pub mod traits {
     pub use super::VideoDecoderExt;
+    pub use super::VideoEncoderExt;
     pub use super::VideoOverlayExt;
 }
