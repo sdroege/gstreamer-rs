@@ -22,7 +22,7 @@ use URIType;
 
 pub trait URIHandlerImpl: super::element::ElementImpl + Send + Sync + 'static {
     fn get_uri(&self, element: &URIHandler) -> Option<String>;
-    fn set_uri(&self, element: &URIHandler, uri: Option<String>) -> Result<(), glib::Error>;
+    fn set_uri(&self, element: &URIHandler, uri: &str) -> Result<(), glib::Error>;
     fn get_uri_type() -> URIType;
     fn get_protocols() -> Vec<String>;
 }
@@ -97,7 +97,10 @@ where
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 
-    match imp.set_uri(&from_glib_borrow(uri_handler), from_glib_none(uri)) {
+    match imp.set_uri(
+        &from_glib_borrow(uri_handler),
+        glib::GString::from_glib_borrow(uri).as_str(),
+    ) {
         Ok(()) => true.to_glib(),
         Err(error) => {
             *err = error.to_glib_full() as *mut _;
