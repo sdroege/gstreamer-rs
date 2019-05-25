@@ -40,6 +40,10 @@ pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl + Send + Sync + 's
         self.parent_stop(element)
     }
 
+    fn finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError> {
+        self.parent_finish(element)
+    }
+
     fn set_format(
         &self,
         element: &VideoEncoder,
@@ -85,6 +89,8 @@ pub trait VideoEncoderImplExt {
     fn parent_start(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage>;
 
     fn parent_stop(&self, element: &VideoEncoder) -> Result<(), gst::ErrorMessage>;
+
+    fn parent_finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_set_format(
         &self,
@@ -195,6 +201,19 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
                     }
                 })
                 .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_finish(&self, element: &VideoEncoder) -> Result<gst::FlowSuccess, gst::FlowError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoEncoderClass;
+            (*parent_class)
+                .finish
+                .map(|f| gst::FlowReturn::from_glib(f(element.to_glib_none().0)))
+                .unwrap_or(gst::FlowReturn::Ok)
+                .into_result()
         }
     }
 
@@ -314,6 +333,7 @@ where
             klass.close = Some(video_encoder_close::<T>);
             klass.start = Some(video_encoder_start::<T>);
             klass.stop = Some(video_encoder_stop::<T>);
+            klass.finish = Some(video_encoder_finish::<T>);
             klass.set_format = Some(video_encoder_set_format::<T>);
             klass.handle_frame = Some(video_encoder_handle_frame::<T>);
             klass.flush = Some(video_encoder_flush::<T>);
@@ -415,6 +435,24 @@ where
                 false
             }
         }
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn video_encoder_finish<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoEncoder,
+) -> gst_sys::GstFlowReturn
+where
+    T: VideoEncoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoEncoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
+        imp.finish(&wrap).into()
     })
     .to_glib()
 }
