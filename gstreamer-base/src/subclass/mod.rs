@@ -8,6 +8,7 @@
 // except according to those terms.
 #![allow(clippy::cast_ptr_alignment)]
 
+pub mod base_parse;
 pub mod base_sink;
 pub mod base_src;
 pub mod base_transform;
@@ -24,6 +25,7 @@ pub mod prelude {
     pub use super::aggregator::{AggregatorImpl, AggregatorImplExt};
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub use super::aggregator_pad::{AggregatorPadImpl, AggregatorPadImplExt};
+    pub use super::base_parse::{BaseParseImpl, BaseParseImplExt};
     pub use super::base_sink::{BaseSinkImpl, BaseSinkImplExt};
     pub use super::base_src::{BaseSrcImpl, BaseSrcImplExt};
     pub use super::base_transform::{

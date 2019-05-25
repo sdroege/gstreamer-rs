@@ -19,6 +19,10 @@ pub use self::aggregator_pad::{AggregatorPad, AggregatorPadClass, NONE_AGGREGATO
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub use self::aggregator_pad::AggregatorPadExt;
 
+mod base_parse;
+pub use self::base_parse::{BaseParse, BaseParseClass, NONE_BASE_PARSE};
+pub use self::base_parse::BaseParseExt;
+
 mod base_sink;
 pub use self::base_sink::{BaseSink, BaseSinkClass, NONE_BASE_SINK};
 pub use self::base_sink::BaseSinkExt;
@@ -34,6 +38,9 @@ pub use self::base_transform::BaseTransformExt;
 mod push_src;
 pub use self::push_src::{PushSrc, PushSrcClass, NONE_PUSH_SRC};
 
+mod flags;
+pub use self::flags::BaseParseFrameFlags;
+
 pub mod functions;
 
 #[doc(hidden)]
@@ -42,6 +49,7 @@ pub mod traits {
     pub use super::AggregatorExt;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub use super::AggregatorPadExt;
+    pub use super::BaseParseExt;
     pub use super::BaseSinkExt;
     pub use super::BaseSrcExt;
     pub use super::BaseTransformExt;
