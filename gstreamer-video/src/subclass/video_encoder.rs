@@ -469,6 +469,7 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
+    gst_video_sys::gst_video_codec_state_ref(state);
     let mut wrap_state = VideoCodecState::<Readable>::new(state);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
