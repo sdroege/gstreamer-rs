@@ -126,7 +126,7 @@ impl AudioFormatInfo {
                 self.0,
                 flags.to_glib(),
                 dest.as_mut_ptr() as *mut _,
-                src.as_ptr() as *mut _,
+                src.as_ptr() as *const _,
                 nsamples as i32,
             );
         }
@@ -159,7 +159,7 @@ impl AudioFormatInfo {
             (self.0.pack_func.as_ref().unwrap())(
                 self.0,
                 flags.to_glib(),
-                src.as_ptr() as *mut _,
+                src.as_ptr() as *const _,
                 dest.as_mut_ptr() as *mut _,
                 nsamples as i32,
             );
