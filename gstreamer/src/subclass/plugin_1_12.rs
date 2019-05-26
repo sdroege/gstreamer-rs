@@ -12,16 +12,12 @@ pub const MAJOR_VERSION: i32 = 1;
 pub const MINOR_VERSION: i32 = 8;
 #[cfg(all(feature = "v1_10", not(feature = "v1_12")))]
 pub const MINOR_VERSION: i32 = 10;
-#[cfg(all(feature = "v1_12", not(feature = "v1_14")))]
+#[cfg(feature = "v1_12")]
 pub const MINOR_VERSION: i32 = 12;
-#[cfg(all(feature = "v1_14", not(feature = "v1_16")))]
-pub const MINOR_VERSION: i32 = 14;
-#[cfg(all(feature = "v1_16", not(feature = "v1_18")))]
-pub const MINOR_VERSION: i32 = 16;
 
 #[macro_export]
 macro_rules! gst_plugin_define(
-    ($name:expr, $description:expr, $plugin_init:ident,
+    ($name:ident, $description:expr, $plugin_init:ident,
      $version:expr, $license:expr, $source:expr,
      $package:expr, $origin:expr, $release_datetime:expr) => {
         pub mod plugin_desc {
@@ -36,7 +32,7 @@ macro_rules! gst_plugin_define(
             pub static gst_plugin_desc: GstPluginDesc = GstPluginDesc($crate::gst_sys::GstPluginDesc {
                 major_version: $crate::subclass::plugin::MAJOR_VERSION,
                 minor_version: $crate::subclass::plugin::MINOR_VERSION,
-                name: concat!($name, "\0") as *const str as *const _,
+                name: concat!(stringify!($name), "\0") as *const str as *const _,
                 description: concat!($description, "\0") as *const str as *const _,
                 plugin_init: Some(plugin_init_trampoline),
                 version: concat!($version, "\0") as *const str as *const _,
@@ -54,7 +50,7 @@ macro_rules! gst_plugin_define(
                         $crate::gst_sys::gst_plugin_register_static(
                             $crate::subclass::plugin::MAJOR_VERSION,
                             $crate::subclass::plugin::MINOR_VERSION,
-                            concat!($name, "\0") as *const str as *const _,
+                            concat!(stringify!($name), "\0") as *const str as *const _,
                             concat!($description, "\0") as *const str as _,
                             Some(plugin_init_trampoline),
                             concat!($version, "\0") as *const str as *const _,

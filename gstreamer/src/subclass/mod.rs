@@ -10,7 +10,15 @@
 
 #[macro_use]
 pub mod error;
+
+#[cfg(any(feature = "v1_14"))]
 #[macro_use]
+#[path = "plugin_1_14.rs"]
+pub mod plugin;
+
+#[cfg(not(any(feature = "v1_14")))]
+#[macro_use]
+#[path = "plugin_1_12.rs"]
 pub mod plugin;
 
 pub mod bin;
