@@ -27,7 +27,7 @@ muldiv = "0.2"
 serde = { version = "1.0", optional = true }
 serde_bytes = { version = "0.11", optional = true }
 serde_derive = { version = "1.0", optional = true }
-paste = "0.1"
+paste = { version = "0.1", optional = true }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"
@@ -49,4 +49,4 @@ purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-sys/dox", "glib/dox", "futures", "ser_de"]
 futures = ["futures-core-preview"]
 ser_de = ["num-rational/serde", "serde", "serde_bytes", "serde_derive"]
-subclassing = ["glib/subclassing"]
+subclassing = ["glib/subclassing", "paste"]

@@ -60,7 +60,7 @@ macro_rules! gst_plugin_define(
                 }
             }
 
-            paste::item! {
+            $crate::paste::item! {
                 #[no_mangle]
                 pub unsafe extern "C" fn [<gst_plugin_ $name _register>] () {
                     let _ = plugin_register_static();

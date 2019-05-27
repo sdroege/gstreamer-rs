@@ -23,6 +23,9 @@ pub extern crate glib_sys;
 pub extern crate gobject_sys;
 #[doc(hidden)]
 pub extern crate gstreamer_sys as gst_sys;
+#[doc(hidden)]
+#[cfg(feature = "subclassing")]
+pub extern crate paste;
 
 #[macro_use]
 #[doc(hidden)]
