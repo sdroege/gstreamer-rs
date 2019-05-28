@@ -42,6 +42,7 @@ pub use self::flags::VideoFormatFlags;
 pub use self::flags::VideoFrameFlags;
 pub use self::flags::VideoMultiviewFlags;
 pub use self::flags::VideoOverlayFormatFlags;
+pub use self::flags::VideoPackFlags;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 pub use self::flags::VideoTimeCodeFlags;
 

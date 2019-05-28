@@ -145,7 +145,157 @@ impl VideoFormatInfo {
         (-((-(i64::from(height))) >> self.h_sub()[component as usize])) as u32
     }
 
-    // TODO: pack/unpack
+    pub fn unpack(
+        &self,
+        flags: ::VideoPackFlags,
+        dest: &mut [u8],
+        src: &[&[u8]],
+        stride: &[i32],
+        x: i32,
+        y: i32,
+        width: i32,
+    ) {
+        let unpack_format = Self::from_format(self.unpack_format());
+
+        if unpack_format.pixel_stride()[0] == 0 || self.0.unpack_func.is_none() {
+            panic!("No unpack format for {:?}", self);
+        }
+
+        if src.len() != self.n_planes() as usize {
+            panic!(
+                "Wrong number of planes provided for format: {} != {}",
+                src.len(),
+                self.n_planes()
+            );
+        }
+
+        if stride.len() != self.n_planes() as usize {
+            panic!(
+                "Wrong number of strides provided for format: {} != {}",
+                stride.len(),
+                self.n_planes()
+            );
+        }
+
+        if dest.len() < unpack_format.pixel_stride()[0] as usize * width as usize {
+            panic!("Too small destination slice");
+        }
+
+        for plane in 0..(self.n_planes()) {
+            if stride[plane as usize]
+                < self.scale_width(plane as u8, width as u32) as i32
+                    * self.pixel_stride()[plane as usize]
+            {
+                panic!("Too small source stride for plane {}", plane);
+            }
+
+            let plane_size = y * stride[plane as usize]
+                + self.scale_width(plane as u8, (x + width) as u32) as i32
+                    * self.pixel_stride()[plane as usize];
+
+            if src[plane as usize].len() < plane_size as usize {
+                panic!("Too small source plane size for plane {}", plane);
+            }
+        }
+
+        unsafe {
+            use std::ptr;
+
+            let mut src_ptr =
+                [ptr::null() as *const u8; gst_video_sys::GST_VIDEO_MAX_PLANES as usize];
+            for plane in 0..(self.n_planes()) {
+                src_ptr[plane as usize] = src[plane as usize].as_ptr();
+            }
+
+            (self.0.unpack_func.as_ref().unwrap())(
+                self.0,
+                flags.to_glib(),
+                dest.as_mut_ptr() as *mut _,
+                src_ptr.as_ptr() as *const _,
+                stride.as_ptr() as *const i32,
+                x,
+                y,
+                width,
+            );
+        }
+    }
+
+    pub fn pack(
+        &self,
+        flags: ::VideoPackFlags,
+        src: &[u8],
+        src_stride: i32,
+        dest: &mut [&mut [u8]],
+        dest_stride: &[i32],
+        chroma_site: ::VideoChromaSite,
+        y: i32,
+        width: i32,
+    ) {
+        let unpack_format = Self::from_format(self.unpack_format());
+
+        if unpack_format.pixel_stride()[0] == 0 || self.0.unpack_func.is_none() {
+            panic!("No unpack format for {:?}", self);
+        }
+
+        if dest.len() != self.n_planes() as usize {
+            panic!(
+                "Wrong number of planes provided for format: {} != {}",
+                dest.len(),
+                self.n_planes()
+            );
+        }
+
+        if dest_stride.len() != self.n_planes() as usize {
+            panic!(
+                "Wrong number of strides provided for format: {} != {}",
+                dest_stride.len(),
+                self.n_planes()
+            );
+        }
+
+        if src.len() < unpack_format.pixel_stride()[0] as usize * width as usize {
+            panic!("Too small source slice");
+        }
+
+        for plane in 0..(self.n_planes()) {
+            if dest_stride[plane as usize]
+                < self.scale_width(plane as u8, width as u32) as i32
+                    * self.pixel_stride()[plane as usize]
+            {
+                panic!("Too small destination stride for plane {}", plane);
+            }
+
+            let plane_size = y * dest_stride[plane as usize]
+                + self.scale_width(plane as u8, width as u32) as i32
+                    * self.pixel_stride()[plane as usize];
+
+            if dest[plane as usize].len() < plane_size as usize {
+                panic!("Too small destination plane size for plane {}", plane);
+            }
+        }
+
+        unsafe {
+            use std::ptr;
+
+            let mut dest_ptr =
+                [ptr::null_mut() as *mut u8; gst_video_sys::GST_VIDEO_MAX_PLANES as usize];
+            for plane in 0..(self.n_planes()) {
+                dest_ptr[plane as usize] = dest[plane as usize].as_mut_ptr();
+            }
+
+            (self.0.pack_func.as_ref().unwrap())(
+                self.0,
+                flags.to_glib(),
+                src.as_ptr() as *mut _,
+                src_stride,
+                dest_ptr.as_mut_ptr() as *mut _,
+                dest_stride.as_ptr() as *const i32,
+                chroma_site.to_glib(),
+                y,
+                width,
+            );
+        }
+    }
 }
 
 unsafe impl Sync for VideoFormatInfo {}
@@ -236,5 +386,45 @@ mod tests {
         assert_eq!(info.scale_width(0, 128), 128);
         assert_eq!(info.scale_width(1, 128), 64);
         assert_eq!(info.scale_width(2, 128), 64);
+    }
+
+    #[test]
+    fn test_unpack() {
+        gst::init().unwrap();
+
+        // One line black 320 pixel I420
+        let input = &[&[0; 320][..], &[128; 160][..], &[128; 160][..]];
+        // One line of AYUV
+        let intermediate = &mut [0; 320 * 4][..];
+        // One line of 320 pixel I420
+        let output = &mut [&mut [0; 320][..], &mut [0; 160][..], &mut [0; 160][..]];
+
+        let info = VideoFormatInfo::from_format(::VideoFormat::I420);
+        assert_eq!(info.unpack_format(), ::VideoFormat::Ayuv);
+        info.unpack(
+            ::VideoPackFlags::empty(),
+            intermediate,
+            input,
+            &[320, 160, 160][..],
+            0,
+            0,
+            320,
+        );
+
+        for pixel in intermediate.chunks_exact(4) {
+            assert_eq!(&[255, 0, 128, 128][..], pixel);
+        }
+
+        info.pack(
+            ::VideoPackFlags::empty(),
+            &intermediate[..(4 * 320)],
+            4 * 320,
+            output,
+            &[320, 160, 160][..],
+            ::VideoChromaSite::NONE,
+            0,
+            320,
+        );
+        assert_eq!(input, output);
     }
 }

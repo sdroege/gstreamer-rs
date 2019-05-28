@@ -355,6 +355,55 @@ impl SetValue for VideoOverlayFormatFlags {
     }
 }
 
+bitflags! {
+    pub struct VideoPackFlags: u32 {
+        const NONE = 0;
+        const TRUNCATE_RANGE = 1;
+        const INTERLACED = 2;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoPackFlags {
+    type GlibType = gst_video_sys::GstVideoPackFlags;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoPackFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoPackFlags> for VideoPackFlags {
+    fn from_glib(value: gst_video_sys::GstVideoPackFlags) -> VideoPackFlags {
+        skip_assert_initialized!();
+        VideoPackFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for VideoPackFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_pack_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoPackFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoPackFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoPackFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 bitflags! {
     pub struct VideoTimeCodeFlags: u32 {
