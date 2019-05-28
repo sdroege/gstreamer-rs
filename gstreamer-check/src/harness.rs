@@ -106,7 +106,6 @@ impl Harness {
         api: glib::types::Type,
         params: Option<&gst::StructureRef>,
     ) {
-        let params = params.into();
         unsafe {
             let params = params.map(|p| p.as_ptr()).unwrap_or(ptr::null_mut());
             gst_check_sys::gst_harness_add_propose_allocation_meta(
