@@ -224,7 +224,7 @@ macro_rules! impl_op_same(
 
             fn $op_name(self, other: $name) -> $name {
                 match (self.0, other.0) {
-                    (Some(a), Some(b)) => $name(Some($e(a, b))),
+                    (Some(a), Some(b)) => $name($e(a, b)),
                     _ => $name(None),
                 }
             }
@@ -257,7 +257,7 @@ macro_rules! impl_op_same(
         impl ops::$op_assign<$name> for $name {
             fn $op_assign_name(&mut self, other: $name) {
                 match (self.0, other.0) {
-                    (Some(a), Some(b)) => self.0 = Some($e(a, b)),
+                    (Some(a), Some(b)) => self.0 = $e(a, b),
                     _ => self.0 = None,
                 }
             }
@@ -278,7 +278,7 @@ macro_rules! impl_op_u64(
 
             fn $op_name(self, other: u64) -> $name {
                 match self.0 {
-                    Some(a) => $name(Some($e(a, other))),
+                    Some(a) => $name($e(a, other)),
                     _ => $name(None),
                 }
             }
@@ -343,7 +343,7 @@ macro_rules! impl_op_u64(
         impl ops::$op_assign<u64> for $name {
             fn $op_assign_name(&mut self, other: u64) {
                 match self.0 {
-                    Some(a) => self.0 = Some($e(a, other)),
+                    Some(a) => self.0 = $e(a, other),
                     _ => self.0 = None,
                 }
             }
@@ -442,15 +442,15 @@ macro_rules! impl_format_value_traits(
             }
         }
 
-        impl_op_same!($name, Add, add, AddAssign, add_assign, |a, b| a + b);
-        impl_op_same!($name, Sub, sub, SubAssign, sub_assign, |a, b| a - b);
-        impl_op_same!($name, Mul, mul, MulAssign, mul_assign, |a, b| a * b);
-        impl_op_same!($name, Div, div, DivAssign, div_assign, |a, b| a / b);
-        impl_op_same!($name, Rem, rem, RemAssign, rem_assign, |a, b| a % b);
+        impl_op_same!($name, Add, add, AddAssign, add_assign, |a: u64, b: u64| a.checked_add(b));
+        impl_op_same!($name, Sub, sub, SubAssign, sub_assign, |a: u64, b: u64| a.checked_sub(b));
+        impl_op_same!($name, Mul, mul, MulAssign, mul_assign, |a: u64, b: u64| a.checked_mul(b));
+        impl_op_same!($name, Div, div, DivAssign, div_assign, |a: u64, b: u64| a.checked_div(b));
+        impl_op_same!($name, Rem, rem, RemAssign, rem_assign, |a: u64, b: u64| a.checked_rem(b));
 
-        impl_op_u64!($name, Mul, mul, MulAssign, mul_assign, |a, b| a * b);
-        impl_op_u64!($name, Div, div, DivAssign, div_assign, |a, b| a / b);
-        impl_op_u64!($name, Rem, rem, RemAssign, rem_assign, |a, b| a % b);
+        impl_op_u64!($name, Mul, mul, MulAssign, mul_assign, |a: u64, b: u64| a.checked_mul(b));
+        impl_op_u64!($name, Div, div, DivAssign, div_assign, |a: u64, b: u64| a.checked_div(b));
+        impl_op_u64!($name, Rem, rem, RemAssign, rem_assign, |a: u64, b: u64| a.checked_rem(b));
 
         impl MulDiv<$name> for $name {
             type Output = $name;
@@ -595,3 +595,22 @@ impl_format_value_traits!(Default, Default, Default);
 impl_format_value_traits!(Bytes, Bytes, Bytes);
 impl_format_value_traits!(ClockTime, Time, Time);
 impl_format_value_traits!(Buffers, Buffers, Buffers);
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_clock_time() {
+        ::init().unwrap();
+
+        let t1 = ::SECOND;
+        let t2 = 2 * t1;
+        let t3 = &t1 * 2;
+        let mut t4 = t2 + t3;
+        t4 += &t1;
+
+        assert_eq!(t4.nanoseconds(), Some(5_000_000_000));
+
+        let t5 = t4 - 6 * ::SECOND;
+        assert!(t5.is_none());
+    }
+}
