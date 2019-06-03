@@ -17,6 +17,7 @@ use gst::prelude::*;
 
 extern crate glib;
 
+use std::convert::TryInto;
 use std::env;
 
 #[path = "../examples-common.rs"]
@@ -60,7 +61,7 @@ fn example_main() {
 
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
         //let dur = pipeline.query_duration(gst::Format::Time).unwrap_or(-1);
-        let pos = {
+        let pos: gst::ClockTime = {
             // Create a new position query and send it to the pipeline.
             // This will traverse all elements in the pipeline, until one feels
             // capable of answering the query.
@@ -71,10 +72,10 @@ fn example_main() {
                 None
             }
         }
-        .and_then(|pos| pos.try_into_time().ok())
+        .and_then(|pos| pos.try_into().ok())
         .unwrap();
 
-        let dur = {
+        let dur: gst::ClockTime = {
             // Create a new duration query and send it to the pipeline.
             // This will traverse all elements in the pipeline, until one feels
             // capable of answering the query.
@@ -85,7 +86,7 @@ fn example_main() {
                 None
             }
         }
-        .and_then(|dur| dur.try_into_time().ok())
+        .and_then(|dur| dur.try_into().ok())
         .unwrap();
 
         println!("{} / {}", pos, dur);

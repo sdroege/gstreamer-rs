@@ -16,6 +16,7 @@ use gst;
 use gst::prelude::*;
 use gst_video_sys;
 use std::cmp;
+use std::convert::{TryFrom, TryInto};
 use std::fmt;
 use std::mem;
 use std::ptr;
@@ -147,12 +148,16 @@ impl VideoTimeCode {
         assert!(field_count <= 2);
         self.0.field_count = field_count
     }
+}
 
-    pub fn try_into(self) -> Result<ValidVideoTimeCode, VideoTimeCode> {
-        if self.is_valid() {
-            Ok(ValidVideoTimeCode(self.0))
+impl TryFrom<VideoTimeCode> for ValidVideoTimeCode {
+    type Error = VideoTimeCode;
+
+    fn try_from(v: VideoTimeCode) -> Result<ValidVideoTimeCode, VideoTimeCode> {
+        if v.is_valid() {
+            Ok(ValidVideoTimeCode(v.0))
         } else {
-            Err(self)
+            Err(v)
         }
     }
 }

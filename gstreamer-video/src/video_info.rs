@@ -196,8 +196,10 @@ impl From<::VideoMultiviewFramePacking> for ::VideoMultiviewMode {
     }
 }
 
-impl ::VideoMultiviewFramePacking {
-    pub fn try_from(
+impl std::convert::TryFrom<::VideoMultiviewMode> for ::VideoMultiviewFramePacking {
+    type Error = ::VideoMultiviewMode;
+
+    fn try_from(
         v: ::VideoMultiviewMode,
     ) -> Result<::VideoMultiviewFramePacking, ::VideoMultiviewMode> {
         let v2 = from_glib(v.to_glib());

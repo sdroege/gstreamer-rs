@@ -1277,6 +1277,7 @@ declare_concrete_query!(Other, T);
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::convert::TryInto;
 
     #[test]
     fn test_writability() {
@@ -1286,10 +1287,10 @@ mod tests {
             match query.view_mut() {
                 QueryView::Position(ref mut p) => {
                     let pos = p.get_result();
-                    assert_eq!(pos.try_into_time(), Ok(::CLOCK_TIME_NONE));
+                    assert_eq!(pos.try_into(), Ok(::CLOCK_TIME_NONE));
                     p.set(3 * ::SECOND);
                     let pos = p.get_result();
-                    assert_eq!(pos.try_into_time(), Ok(3 * ::SECOND));
+                    assert_eq!(pos.try_into(), Ok(3 * ::SECOND));
                 }
                 _ => panic!("Wrong concrete Query in Query"),
             }
@@ -1299,7 +1300,7 @@ mod tests {
             match query.view() {
                 QueryView::Position(ref p) => {
                     let pos = p.get_result();
-                    assert_eq!(pos.try_into_time(), Ok(3 * ::SECOND));
+                    assert_eq!(pos.try_into(), Ok(3 * ::SECOND));
                     unsafe {
                         assert!(!p.as_mut_ptr().is_null());
                     }
@@ -1310,7 +1311,7 @@ mod tests {
 
         let mut p = Query::new_position(::Format::Time);
         let pos = p.get_result();
-        assert_eq!(pos.try_into_time(), Ok(::CLOCK_TIME_NONE));
+        assert_eq!(pos.try_into(), Ok(::CLOCK_TIME_NONE));
 
         p.get_mut_structure().set("check_mut", &true);
 
@@ -1349,7 +1350,7 @@ mod tests {
         match query.view() {
             QueryView::Duration(ref d) => {
                 let duration = d.get_result();
-                assert_eq!(duration.try_into_time(), Ok(2 * ::SECOND));
+                assert_eq!(duration.try_into(), Ok(2 * ::SECOND));
             }
             _ => (),
         }

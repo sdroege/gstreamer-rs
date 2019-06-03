@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use muldiv::MulDiv;
+use std::convert::TryFrom;
 use std::ops;
 use ClockTime;
 use Format;
@@ -14,42 +15,55 @@ use Format;
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
 pub enum GenericFormattedValue {
-    Undefined(i64),
+    Undefined(Undefined),
     Default(Default),
     Bytes(Bytes),
     Time(ClockTime),
     Buffers(Buffers),
-    Percent(Option<u32>),
+    Percent(Percent),
     Other(Format, i64),
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+pub struct Undefined(pub i64);
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(pub Option<u64>);
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(pub Option<u64>);
+pub type Time = ClockTime;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Buffers(pub Option<u64>);
-pub type Time = ClockTime;
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
+pub struct Percent(pub Option<u32>);
 
-pub trait FormattedValue: Copy + Clone + Sized + 'static {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct TryFromGenericFormattedValueError(());
+
+impl std::error::Error for TryFromGenericFormattedValueError {
+    fn description(&self) -> &str {
+        "invalid generic value format"
+    }
+}
+
+impl std::fmt::Display for TryFromGenericFormattedValueError {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(fmt, "invalid generic value format")
+    }
+}
+
+pub trait FormattedValue: Copy + Clone + Sized + Into<GenericFormattedValue> + 'static {
     fn get_default_format() -> Format;
-    fn try_from(v: GenericFormattedValue) -> Option<Self>;
-
     fn get_format(&self) -> Format;
 
     unsafe fn from_raw(format: Format, value: i64) -> Self;
     unsafe fn to_raw_value(&self) -> i64;
 }
 
-pub trait SpecificFormattedValue: FormattedValue {}
+pub trait SpecificFormattedValue: FormattedValue + TryFrom<GenericFormattedValue> {}
 
 impl FormattedValue for GenericFormattedValue {
     fn get_default_format() -> Format {
         Format::Undefined
-    }
-
-    fn try_from(v: GenericFormattedValue) -> Option<Self> {
-        Some(v)
     }
 
     fn get_format(&self) -> Format {
@@ -68,7 +82,7 @@ impl FormattedValue for GenericFormattedValue {
 impl GenericFormattedValue {
     pub fn new(format: Format, value: i64) -> Self {
         match format {
-            Format::Undefined => GenericFormattedValue::Undefined(value),
+            Format::Undefined => GenericFormattedValue::Undefined(Undefined(value)),
             Format::Default => GenericFormattedValue::Default(if value == -1 {
                 Default(None)
             } else {
@@ -89,41 +103,11 @@ impl GenericFormattedValue {
             } else {
                 Buffers(Some(value as u64))
             }),
-            Format::Percent => GenericFormattedValue::Percent(if value == -1 {
-                None
-            } else {
-                Some(value as u32)
-            }),
+            Format::Percent => {
+                GenericFormattedValue::Percent(unsafe { Percent::from_raw(format, value) })
+            }
             Format::__Unknown(_) => GenericFormattedValue::Other(format, value),
         }
-    }
-
-    pub fn from_undefined(v: i64) -> Self {
-        GenericFormattedValue::Undefined(v)
-    }
-
-    pub fn from_default<V: Into<Default>>(v: V) -> Self {
-        GenericFormattedValue::Default(v.into())
-    }
-
-    pub fn from_bytes<V: Into<Bytes>>(v: V) -> Self {
-        GenericFormattedValue::Bytes(v.into())
-    }
-
-    pub fn from_time<V: Into<ClockTime>>(v: V) -> Self {
-        GenericFormattedValue::Time(v.into())
-    }
-
-    pub fn from_buffers<V: Into<Buffers>>(v: V) -> Self {
-        GenericFormattedValue::Buffers(v.into())
-    }
-
-    pub fn from_percent<V: Into<Option<u32>>>(v: V) -> Self {
-        GenericFormattedValue::Percent(v.into())
-    }
-
-    pub fn from_other(format: Format, v: i64) -> Self {
-        GenericFormattedValue::Other(format, v)
     }
 
     pub fn get_format(&self) -> Format {
@@ -140,79 +124,13 @@ impl GenericFormattedValue {
 
     pub fn get_value(&self) -> i64 {
         match *self {
-            GenericFormattedValue::Undefined(v) => v,
+            GenericFormattedValue::Undefined(v) => v.0,
             GenericFormattedValue::Default(v) => v.map(|v| v as i64).unwrap_or(-1),
             GenericFormattedValue::Bytes(v) => v.map(|v| v as i64).unwrap_or(-1),
             GenericFormattedValue::Time(v) => v.map(|v| v as i64).unwrap_or(-1),
             GenericFormattedValue::Buffers(v) => v.map(|v| v as i64).unwrap_or(-1),
             GenericFormattedValue::Percent(v) => v.map(i64::from).unwrap_or(-1),
             GenericFormattedValue::Other(_, v) => v,
-        }
-    }
-
-    pub fn try_into<F: FormattedValue>(self) -> Result<F, Self> {
-        if F::get_default_format() == self.get_format()
-            || F::get_default_format() == Format::Undefined
-        {
-            Ok(unsafe { F::from_raw(self.get_format(), self.to_raw_value()) })
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_undefined(self) -> Result<i64, Self> {
-        if let GenericFormattedValue::Undefined(v) = self {
-            Ok(v)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_default(self) -> Result<Default, Self> {
-        if let GenericFormattedValue::Default(v) = self {
-            Ok(v)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_bytes(self) -> Result<Bytes, Self> {
-        if let GenericFormattedValue::Bytes(v) = self {
-            Ok(v)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_time(self) -> Result<ClockTime, Self> {
-        if let GenericFormattedValue::Time(v) = self {
-            Ok(v)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_buffers(self) -> Result<Buffers, Self> {
-        if let GenericFormattedValue::Buffers(v) = self {
-            Ok(v)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_percent(self) -> Result<Option<u32>, Self> {
-        if let GenericFormattedValue::Percent(v) = self {
-            Ok(v)
-        } else {
-            Err(self)
-        }
-    }
-
-    pub fn try_into_other(self) -> Result<(Format, i64), Self> {
-        if let GenericFormattedValue::Other(f, v) = self {
-            Ok((f, v))
-        } else {
-            Err(self)
         }
     }
 }
@@ -359,23 +277,9 @@ macro_rules! impl_op_u64(
 
 macro_rules! impl_format_value_traits(
     ($name:ident, $format:ident, $format_value:ident) => {
-        impl From<$name> for GenericFormattedValue {
-            fn from(v: $name) -> GenericFormattedValue {
-                GenericFormattedValue::$format_value(v)
-            }
-        }
-
         impl FormattedValue for $name {
             fn get_default_format() -> Format {
                 Format::$format
-            }
-
-            fn try_from(v: GenericFormattedValue) -> Option<Self> {
-                if let GenericFormattedValue::$format_value(v) = v {
-                    Some(v)
-                } else {
-                    None
-                }
             }
 
             fn get_format(&self) -> Format {
@@ -393,6 +297,24 @@ macro_rules! impl_format_value_traits(
 
             unsafe fn to_raw_value(&self) -> i64 {
                 self.0.map(|v| v as i64).unwrap_or(-1)
+            }
+        }
+
+        impl From<$name> for GenericFormattedValue {
+            fn from(v: $name) -> GenericFormattedValue {
+                GenericFormattedValue::$format_value(v)
+            }
+        }
+
+        impl TryFrom<GenericFormattedValue> for $name {
+            type Error = TryFromGenericFormattedValueError;
+
+            fn try_from(v: GenericFormattedValue) -> Result<$name, TryFromGenericFormattedValueError> {
+                if let GenericFormattedValue::$format_value(v) = v {
+                    Ok(v)
+                } else {
+                    Err(TryFromGenericFormattedValueError(()))
+                }
             }
         }
 
@@ -595,6 +517,195 @@ impl_format_value_traits!(Default, Default, Default);
 impl_format_value_traits!(Bytes, Bytes, Bytes);
 impl_format_value_traits!(ClockTime, Time, Time);
 impl_format_value_traits!(Buffers, Buffers, Buffers);
+
+impl FormattedValue for Undefined {
+    fn get_default_format() -> Format {
+        Format::Undefined
+    }
+
+    fn get_format(&self) -> Format {
+        Format::Undefined
+    }
+
+    unsafe fn from_raw(format: Format, value: i64) -> Self {
+        debug_assert_eq!(format, Format::Undefined);
+        Undefined(value)
+    }
+
+    unsafe fn to_raw_value(&self) -> i64 {
+        self.0
+    }
+}
+
+impl From<Undefined> for GenericFormattedValue {
+    fn from(v: Undefined) -> GenericFormattedValue {
+        GenericFormattedValue::Undefined(v)
+    }
+}
+
+impl TryFrom<GenericFormattedValue> for Undefined {
+    type Error = TryFromGenericFormattedValueError;
+
+    fn try_from(v: GenericFormattedValue) -> Result<Undefined, TryFromGenericFormattedValueError> {
+        if let GenericFormattedValue::Undefined(v) = v {
+            Ok(v)
+        } else {
+            Err(TryFromGenericFormattedValueError(()))
+        }
+    }
+}
+
+impl SpecificFormattedValue for Undefined {}
+
+impl From<i64> for Undefined {
+    fn from(v: i64) -> Undefined {
+        Undefined(v)
+    }
+}
+
+impl Into<i64> for Undefined {
+    fn into(self) -> i64 {
+        self.0
+    }
+}
+
+impl ops::Deref for Undefined {
+    type Target = i64;
+
+    fn deref(&self) -> &i64 {
+        &self.0
+    }
+}
+
+impl ops::DerefMut for Undefined {
+    fn deref_mut(&mut self) -> &mut i64 {
+        &mut self.0
+    }
+}
+
+impl AsRef<i64> for Undefined {
+    fn as_ref(&self) -> &i64 {
+        &self.0
+    }
+}
+
+impl AsMut<i64> for Undefined {
+    fn as_mut(&mut self) -> &mut i64 {
+        &mut self.0
+    }
+}
+
+impl FormattedValue for Percent {
+    fn get_default_format() -> Format {
+        Format::Percent
+    }
+
+    fn get_format(&self) -> Format {
+        Format::Percent
+    }
+
+    unsafe fn from_raw(format: Format, value: i64) -> Self {
+        debug_assert_eq!(format, Format::Percent);
+        if value < 0 || value > gst_sys::GST_FORMAT_PERCENT_MAX {
+            Percent(None)
+        } else {
+            Percent(Some(value as u32))
+        }
+    }
+
+    unsafe fn to_raw_value(&self) -> i64 {
+        self.0.map(|v| v as i64).unwrap_or(-1)
+    }
+}
+
+impl From<Percent> for GenericFormattedValue {
+    fn from(v: Percent) -> GenericFormattedValue {
+        GenericFormattedValue::Percent(v)
+    }
+}
+
+impl TryFrom<GenericFormattedValue> for Percent {
+    type Error = TryFromGenericFormattedValueError;
+
+    fn try_from(v: GenericFormattedValue) -> Result<Percent, TryFromGenericFormattedValueError> {
+        if let GenericFormattedValue::Percent(v) = v {
+            Ok(v)
+        } else {
+            Err(TryFromGenericFormattedValueError(()))
+        }
+    }
+}
+
+impl SpecificFormattedValue for Percent {}
+
+impl ops::Deref for Percent {
+    type Target = Option<u32>;
+
+    fn deref(&self) -> &Option<u32> {
+        &self.0
+    }
+}
+
+impl ops::DerefMut for Percent {
+    fn deref_mut(&mut self) -> &mut Option<u32> {
+        &mut self.0
+    }
+}
+
+impl AsRef<Option<u32>> for Percent {
+    fn as_ref(&self) -> &Option<u32> {
+        &self.0
+    }
+}
+
+impl AsMut<Option<u32>> for Percent {
+    fn as_mut(&mut self) -> &mut Option<u32> {
+        &mut self.0
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct TryPercentFromFloatError(());
+
+impl std::error::Error for TryPercentFromFloatError {
+    fn description(&self) -> &str {
+        "value out of range"
+    }
+}
+
+impl std::fmt::Display for TryPercentFromFloatError {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(fmt, "value out of range")
+    }
+}
+
+impl TryFrom<f64> for Percent {
+    type Error = TryPercentFromFloatError;
+
+    fn try_from(v: f64) -> Result<Self, Self::Error> {
+        if v < 0.0 || v > 1.0 {
+            Err(TryPercentFromFloatError(()))
+        } else {
+            Ok(Percent(Some(
+                (v * gst_sys::GST_FORMAT_PERCENT_SCALE as f64).round() as u32,
+            )))
+        }
+    }
+}
+
+impl TryFrom<f32> for Percent {
+    type Error = TryPercentFromFloatError;
+
+    fn try_from(v: f32) -> Result<Self, Self::Error> {
+        if v < 0.0 || v > 1.0 {
+            Err(TryPercentFromFloatError(()))
+        } else {
+            Ok(Percent(Some(
+                (v * gst_sys::GST_FORMAT_PERCENT_SCALE as f32).round() as u32,
+            )))
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
