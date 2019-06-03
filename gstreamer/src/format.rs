@@ -238,6 +238,22 @@ macro_rules! impl_op_same(
             }
         }
 
+        impl<'a> ops::$op<$name> for &'a $name {
+            type Output = $name;
+
+            fn $op_name(self, other: $name) -> $name {
+                (*self).$op_name(other)
+            }
+        }
+
+        impl<'a, 'b> ops::$op<&'a $name> for &'b $name {
+            type Output = $name;
+
+            fn $op_name(self, other: &'a $name) -> $name {
+                (*self).$op_name(*other)
+            }
+        }
+
         impl ops::$op_assign<$name> for $name {
             fn $op_assign_name(&mut self, other: $name) {
                 match (self.0, other.0) {
@@ -273,6 +289,54 @@ macro_rules! impl_op_u64(
 
             fn $op_name(self, other: &'a u64) -> $name {
                 self.$op_name(*other)
+            }
+        }
+
+        impl<'a> ops::$op<u64> for &'a $name {
+            type Output = $name;
+
+            fn $op_name(self, other: u64) -> $name {
+                (*self).$op_name(other)
+            }
+        }
+
+        impl<'a, 'b> ops::$op<&'a u64> for &'b $name {
+            type Output = $name;
+
+            fn $op_name(self, other: &'a u64) -> $name {
+                self.$op_name(*other)
+            }
+        }
+
+        impl ops::$op<$name> for u64 {
+            type Output = $name;
+
+            fn $op_name(self, other: $name) -> $name {
+                other.$op_name(self)
+            }
+        }
+
+        impl<'a> ops::$op<&'a $name> for u64 {
+            type Output = $name;
+
+            fn $op_name(self, other: &'a $name) -> $name {
+                (*other).$op_name(self)
+            }
+        }
+
+        impl<'a> ops::$op<$name> for &'a u64 {
+            type Output = $name;
+
+            fn $op_name(self, other: $name) -> $name {
+                other.$op_name(*self)
+            }
+        }
+
+        impl<'a, 'b> ops::$op<&'a $name> for &'b u64 {
+            type Output = $name;
+
+            fn $op_name(self, other: &'a $name) -> $name {
+                (*other).$op_name(*self)
             }
         }
 
@@ -388,22 +452,6 @@ macro_rules! impl_format_value_traits(
         impl_op_u64!($name, Div, div, DivAssign, div_assign, |a, b| a / b);
         impl_op_u64!($name, Rem, rem, RemAssign, rem_assign, |a, b| a % b);
 
-        impl ops::Mul<$name> for u64 {
-            type Output = $name;
-
-            fn mul(self, other: $name) -> $name {
-                other.mul(self)
-            }
-        }
-
-        impl<'a> ops::Mul<&'a $name> for u64 {
-            type Output = $name;
-
-            fn mul(self, other: &'a $name) -> $name {
-                other.mul(self)
-            }
-        }
-
         impl MulDiv<$name> for $name {
             type Output = $name;
 
@@ -445,6 +493,38 @@ macro_rules! impl_format_value_traits(
             }
         }
 
+        impl<'a> MulDiv<$name> for &'a $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: $name, denom: $name) -> Option<Self::Output> {
+                (*self).mul_div_floor(num, denom)
+            }
+
+            fn mul_div_round(self, num: $name, denom: $name) -> Option<Self::Output> {
+                (*self).mul_div_round(num, denom)
+            }
+
+            fn mul_div_ceil(self, num: $name, denom: $name) -> Option<Self::Output> {
+                (*self).mul_div_ceil(num, denom)
+            }
+        }
+
+        impl<'a, 'b> MulDiv<&'b $name> for &'a $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: &$name, denom: &$name) -> Option<Self::Output> {
+                (*self).mul_div_floor(*num, *denom)
+            }
+
+            fn mul_div_round(self, num: &$name, denom: &$name) -> Option<Self::Output> {
+                (*self).mul_div_round(*num, *denom)
+            }
+
+            fn mul_div_ceil(self, num: &$name, denom: &$name) -> Option<Self::Output> {
+                (*self).mul_div_ceil(*num, *denom)
+            }
+        }
+
         impl<'a> MulDiv<u64> for $name {
             type Output = $name;
 
@@ -474,6 +554,38 @@ macro_rules! impl_format_value_traits(
 
             fn mul_div_ceil(self, num: &u64, denom: &u64) -> Option<Self::Output> {
                 self.mul_div_ceil(*num, *denom)
+            }
+        }
+
+        impl<'a> MulDiv<u64> for &'a $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: u64, denom: u64) -> Option<Self::Output> {
+                (*self).mul_div_floor(num, denom)
+            }
+
+            fn mul_div_round(self, num: u64, denom: u64) -> Option<Self::Output> {
+                (*self).mul_div_round(num, denom)
+            }
+
+            fn mul_div_ceil(self, num: u64, denom: u64) -> Option<Self::Output> {
+                (*self).mul_div_ceil(num, denom)
+            }
+        }
+
+        impl<'a, 'b> MulDiv<&'a u64> for &'b $name {
+            type Output = $name;
+
+            fn mul_div_floor(self, num: &u64, denom: &u64) -> Option<Self::Output> {
+                (*self).mul_div_floor(*num, *denom)
+            }
+
+            fn mul_div_round(self, num: &u64, denom: &u64) -> Option<Self::Output> {
+                (*self).mul_div_round(*num, *denom)
+            }
+
+            fn mul_div_ceil(self, num: &u64, denom: &u64) -> Option<Self::Output> {
+                (*self).mul_div_ceil(*num, *denom)
             }
         }
     };
