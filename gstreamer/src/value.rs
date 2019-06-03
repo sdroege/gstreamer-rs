@@ -66,87 +66,145 @@ impl AsRef<Rational32> for Fraction {
     }
 }
 
-impl ops::Mul<Fraction> for Fraction {
-    type Output = Fraction;
+macro_rules! impl_fraction_binop {
+    ($name:ident, $f:ident, $name_assign:ident, $f_assign:ident) => {
+        impl ops::$name<Fraction> for Fraction {
+            type Output = Fraction;
 
-    fn mul(self, other: Fraction) -> Fraction {
-        Fraction(self.0.mul(other.0))
-    }
+            fn $f(self, other: Fraction) -> Fraction {
+                Fraction((self.0).$f(other.0))
+            }
+        }
+
+        impl ops::$name<Fraction> for &Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: Fraction) -> Fraction {
+                Fraction((self.0).$f(other.0))
+            }
+        }
+
+        impl ops::$name<&Fraction> for Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: &Fraction) -> Fraction {
+                Fraction((self.0).$f(other.0))
+            }
+        }
+
+        impl ops::$name<&Fraction> for &Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: &Fraction) -> Fraction {
+                Fraction((self.0).$f(other.0))
+            }
+        }
+
+        impl ops::$name<i32> for Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: i32) -> Fraction {
+                self.$f(Fraction::from(other))
+            }
+        }
+
+        impl ops::$name<i32> for &Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: i32) -> Fraction {
+                self.$f(Fraction::from(other))
+            }
+        }
+
+        impl ops::$name<&i32> for Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: &i32) -> Fraction {
+                self.$f(Fraction::from(*other))
+            }
+        }
+
+        impl ops::$name<&i32> for &Fraction {
+            type Output = Fraction;
+
+            fn $f(self, other: &i32) -> Fraction {
+                self.$f(Fraction::from(*other))
+            }
+        }
+
+        impl ops::$name<Fraction> for i32 {
+            type Output = Fraction;
+
+            fn $f(self, other: Fraction) -> Fraction {
+                Fraction::from(self).$f(other)
+            }
+        }
+
+        impl ops::$name<&Fraction> for i32 {
+            type Output = Fraction;
+
+            fn $f(self, other: &Fraction) -> Fraction {
+                Fraction::from(self).$f(other)
+            }
+        }
+
+        impl ops::$name<Fraction> for &i32 {
+            type Output = Fraction;
+
+            fn $f(self, other: Fraction) -> Fraction {
+                Fraction::from(*self).$f(other)
+            }
+        }
+
+        impl ops::$name<&Fraction> for &i32 {
+            type Output = Fraction;
+
+            fn $f(self, other: &Fraction) -> Fraction {
+                Fraction::from(*self).$f(other)
+            }
+        }
+
+        impl ops::$name_assign<Fraction> for Fraction {
+            fn $f_assign(&mut self, other: Fraction) {
+                (self.0).$f_assign(other.0)
+            }
+        }
+
+        impl ops::$name_assign<&Fraction> for Fraction {
+            fn $f_assign(&mut self, other: &Fraction) {
+                (self.0).$f_assign(other.0)
+            }
+        }
+
+        impl ops::$name_assign<i32> for Fraction {
+            fn $f_assign(&mut self, other: i32) {
+                (self.0).$f_assign(other)
+            }
+        }
+
+        impl ops::$name_assign<&i32> for Fraction {
+            fn $f_assign(&mut self, other: &i32) {
+                (self.0).$f_assign(other)
+            }
+        }
+    };
 }
 
-impl ops::Mul<i32> for Fraction {
-    type Output = Fraction;
-
-    fn mul(self, other: i32) -> Fraction {
-        self.mul(Fraction::from(other))
-    }
-}
-
-impl ops::Div<Fraction> for Fraction {
-    type Output = Fraction;
-
-    fn div(self, other: Fraction) -> Fraction {
-        Fraction(self.0.div(other.0))
-    }
-}
-
-impl ops::Div<i32> for Fraction {
-    type Output = Fraction;
-
-    fn div(self, other: i32) -> Fraction {
-        self.div(Fraction::from(other))
-    }
-}
-
-impl ops::Add<Fraction> for Fraction {
-    type Output = Fraction;
-
-    fn add(self, other: Fraction) -> Fraction {
-        Fraction(self.0.add(other.0))
-    }
-}
-
-impl ops::Add<i32> for Fraction {
-    type Output = Fraction;
-
-    fn add(self, other: i32) -> Fraction {
-        self.add(Fraction::from(other))
-    }
-}
-
-impl ops::Sub<Fraction> for Fraction {
-    type Output = Fraction;
-
-    fn sub(self, other: Fraction) -> Fraction {
-        Fraction(self.0.sub(other.0))
-    }
-}
-
-impl ops::Sub<i32> for Fraction {
-    type Output = Fraction;
-
-    fn sub(self, other: i32) -> Fraction {
-        self.sub(Fraction::from(other))
-    }
-}
-
-impl ops::Rem<Fraction> for Fraction {
-    type Output = Fraction;
-
-    fn rem(self, other: Fraction) -> Fraction {
-        Fraction(self.0.rem(other.0))
-    }
-}
-
-impl ops::Rem<i32> for Fraction {
-    type Output = Fraction;
-
-    fn rem(self, other: i32) -> Fraction {
-        self.rem(Fraction::from(other))
-    }
-}
+impl_fraction_binop!(Add, add, AddAssign, add_assign);
+impl_fraction_binop!(Sub, sub, SubAssign, sub_assign);
+impl_fraction_binop!(Div, div, DivAssign, div_assign);
+impl_fraction_binop!(Mul, mul, MulAssign, mul_assign);
+impl_fraction_binop!(Rem, rem, RemAssign, rem_assign);
 
 impl ops::Neg for Fraction {
+    type Output = Fraction;
+
+    fn neg(self) -> Fraction {
+        Fraction(self.0.neg())
+    }
+}
+
+impl ops::Neg for &Fraction {
     type Output = Fraction;
 
     fn neg(self) -> Fraction {
@@ -840,5 +898,22 @@ impl GstValueExt for glib::Value {
                 None
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_fraction() {
+        ::init().unwrap();
+
+        let f1 = ::Fraction::new(1, 2);
+        let f2 = ::Fraction::new(2, 3);
+        let mut f3 = f1 * f2;
+        let f4 = f1 * &f2;
+        f3 *= f2;
+        f3 *= &f4;
+
+        assert_eq!(f3, ::Fraction::new(2, 27));
     }
 }
