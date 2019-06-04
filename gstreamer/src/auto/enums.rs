@@ -1657,7 +1657,7 @@ impl SetValue for QOSType {
     }
 }
 
-    #[derive(Debug, PartialEq, Eq, Hash)]
+    #[derive(Debug)]
 #[derive(Clone, Copy)]
 pub enum Rank {
     None,

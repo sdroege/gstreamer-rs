@@ -6,9 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use std::cmp;
 use std::error::Error;
 use std::fmt;
+use std::{cmp, ops};
 use ClockReturn;
 use FlowReturn;
 use PadLinkReturn;
@@ -397,15 +397,55 @@ impl Ord for ::TypeFindProbability {
     }
 }
 
+impl PartialEq for ::Rank {
+    fn eq(&self, other: &::Rank) -> bool {
+        (self.to_glib() as u32).eq(&(other.to_glib() as u32))
+    }
+}
+
+impl Eq for ::Rank {}
+
 impl PartialOrd for ::Rank {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        self.to_glib().partial_cmp(&other.to_glib())
+        (self.to_glib() as u32).partial_cmp(&(other.to_glib() as u32))
     }
 }
 
 impl Ord for ::Rank {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
-        self.to_glib().cmp(&other.to_glib())
+        (self.to_glib() as u32).cmp(&(other.to_glib() as u32))
+    }
+}
+
+impl ops::Add<u32> for ::Rank {
+    type Output = ::Rank;
+
+    fn add(self, rhs: u32) -> ::Rank {
+        let res = (self.to_glib() as u32).saturating_add(rhs);
+        from_glib(res as i32)
+    }
+}
+
+impl ops::AddAssign<u32> for ::Rank {
+    fn add_assign(&mut self, rhs: u32) {
+        let res = (self.to_glib() as u32).saturating_add(rhs);
+        *self = from_glib(res as i32);
+    }
+}
+
+impl ops::Sub<u32> for ::Rank {
+    type Output = ::Rank;
+
+    fn sub(self, rhs: u32) -> ::Rank {
+        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        from_glib(res as i32)
+    }
+}
+
+impl ops::SubAssign<u32> for ::Rank {
+    fn sub_assign(&mut self, rhs: u32) {
+        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        *self = from_glib(res as i32);
     }
 }
 

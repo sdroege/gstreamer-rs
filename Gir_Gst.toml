@@ -229,7 +229,7 @@ status = "generate"
 name = "Gst.Rank"
 status = "generate"
     [[object.derive]]
-    name = "Debug, PartialEq, Eq, Hash"
+    name = "Debug"
 
 [[object]]
 name = "Gst.TypeFindProbability"
