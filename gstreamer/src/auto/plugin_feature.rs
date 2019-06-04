@@ -29,11 +29,7 @@ pub trait PluginFeatureExt: 'static {
 
     fn get_plugin_name(&self) -> Option<GString>;
 
-    fn get_rank(&self) -> u32;
-
     fn load(&self) -> Option<PluginFeature>;
-
-    fn set_rank(&self, rank: u32);
 }
 
 impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
@@ -55,21 +51,9 @@ impl<O: IsA<PluginFeature>> PluginFeatureExt for O {
         }
     }
 
-    fn get_rank(&self) -> u32 {
-        unsafe {
-            gst_sys::gst_plugin_feature_get_rank(self.as_ref().to_glib_none().0)
-        }
-    }
-
     fn load(&self) -> Option<PluginFeature> {
         unsafe {
             from_glib_full(gst_sys::gst_plugin_feature_load(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn set_rank(&self, rank: u32) {
-        unsafe {
-            gst_sys::gst_plugin_feature_set_rank(self.as_ref().to_glib_none().0, rank);
         }
     }
 }

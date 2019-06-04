@@ -234,6 +234,8 @@ pub use enums::{
 pub use gobject::GObjectExtManualGst;
 pub use pad::{PadExtManual, PadProbeData, PadProbeId, PadProbeInfo};
 pub use parse_context::ParseContext;
+mod plugin_feature;
+pub use plugin_feature::PluginFeatureExtManual;
 pub use tag_setter::TagSetterExtManual;
 
 mod plugin;
@@ -346,6 +348,7 @@ pub mod prelude {
     pub use object::GstObjectExtManual;
     pub use pad::PadExtManual;
     pub use param_spec::GstParamSpecExt;
+    pub use plugin_feature::PluginFeatureExtManual;
     pub use proxy_pad::ProxyPadExtManual;
     pub use tag_setter::TagSetterExtManual;
     pub use value::GstValueExt;

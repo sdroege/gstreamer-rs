@@ -1003,6 +1003,14 @@ status = "generate"
     name = "rank_compare_func"
     ignore = true
 
+    [[object.function]]
+    name = "get_rank"
+    ignore = true
+
+    [[object.function]]
+    name = "set_rank"
+    ignore = true
+
 [[object]]
 name = "Gst.Registry"
 status = "generate"
