@@ -235,7 +235,7 @@ status = "generate"
 name = "Gst.TypeFindProbability"
 status = "generate"
     [[object.derive]]
-    name = "Debug, PartialEq, Eq, Hash"
+    name = "Debug"
 
 [[object]]
 name = "Gst.EventType"

@@ -385,15 +385,55 @@ impl From<Result<ClockSuccess, ClockError>> for ClockReturn {
     }
 }
 
+impl PartialEq for ::TypeFindProbability {
+    fn eq(&self, other: &::TypeFindProbability) -> bool {
+        (self.to_glib() as u32).eq(&(other.to_glib() as u32))
+    }
+}
+
+impl Eq for ::TypeFindProbability {}
+
 impl PartialOrd for ::TypeFindProbability {
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        self.to_glib().partial_cmp(&other.to_glib())
+        (self.to_glib() as u32).partial_cmp(&(other.to_glib() as u32))
     }
 }
 
 impl Ord for ::TypeFindProbability {
     fn cmp(&self, other: &Self) -> cmp::Ordering {
-        self.to_glib().cmp(&other.to_glib())
+        (self.to_glib() as u32).cmp(&(other.to_glib() as u32))
+    }
+}
+
+impl ops::Add<u32> for ::TypeFindProbability {
+    type Output = ::TypeFindProbability;
+
+    fn add(self, rhs: u32) -> ::TypeFindProbability {
+        let res = (self.to_glib() as u32).saturating_add(rhs);
+        from_glib(res as i32)
+    }
+}
+
+impl ops::AddAssign<u32> for ::TypeFindProbability {
+    fn add_assign(&mut self, rhs: u32) {
+        let res = (self.to_glib() as u32).saturating_add(rhs);
+        *self = from_glib(res as i32);
+    }
+}
+
+impl ops::Sub<u32> for ::TypeFindProbability {
+    type Output = ::TypeFindProbability;
+
+    fn sub(self, rhs: u32) -> ::TypeFindProbability {
+        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        from_glib(res as i32)
+    }
+}
+
+impl ops::SubAssign<u32> for ::TypeFindProbability {
+    fn sub_assign(&mut self, rhs: u32) {
+        let res = (self.to_glib() as u32).saturating_sub(rhs);
+        *self = from_glib(res as i32);
     }
 }
 

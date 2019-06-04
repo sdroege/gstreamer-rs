@@ -2848,7 +2848,7 @@ impl SetValue for TocScope {
     }
 }
 
-    #[derive(Debug, PartialEq, Eq, Hash)]
+    #[derive(Debug)]
 #[derive(Clone, Copy)]
 pub enum TypeFindProbability {
     None,
