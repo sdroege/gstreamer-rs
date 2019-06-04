@@ -6,7 +6,6 @@ use Bus;
 use Device;
 use DeviceProviderFactory;
 use Object;
-use Plugin;
 use glib;
 use glib::GString;
 use glib::object::Cast;
@@ -25,15 +24,6 @@ glib_wrapper! {
 
     match fn {
         get_type => || gst_sys::gst_device_provider_get_type(),
-    }
-}
-
-impl DeviceProvider {
-    pub fn register(plugin: Option<&Plugin>, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_device_provider_register(plugin.to_glib_none().0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register device provider factory")
-        }
     }
 }
 

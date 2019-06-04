@@ -14,7 +14,6 @@ use Object;
 use Pad;
 use PadLinkCheck;
 use PadTemplate;
-use Plugin;
 use URIType;
 use glib;
 use glib::object::Cast;
@@ -43,13 +42,6 @@ impl Element {
             let mut error = ptr::null_mut();
             let ret = gst_sys::gst_element_make_from_uri(type_.to_glib(), uri.to_glib_none().0, elementname.to_glib_none().0, &mut error);
             if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
-        }
-    }
-
-    pub fn register(plugin: Option<&Plugin>, name: &str, rank: u32, type_: glib::types::Type) -> Result<(), glib::error::BoolError> {
-        assert_initialized_main_thread!();
-        unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_element_register(plugin.to_glib_none().0, name.to_glib_none().0, rank, type_.to_glib()), "Failed to register element factory")
         }
     }
 }

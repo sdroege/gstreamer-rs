@@ -535,8 +535,7 @@ status = "generate"
 
     [[object.function]]
     name = "register"
-        [object.function.return]
-        bool_return_is_error = "Failed to register element factory"
+    ignore = true
 
 [[object]]
 name = "Gst.ElementFactory"
@@ -568,8 +567,7 @@ status = "generate"
 
     [[object.function]]
     name = "register"
-        [object.function.return]
-        bool_return_is_error = "Failed to register device provider factory"
+    ignore = true
 
     [[object.function]]
     name = "get_metadata"

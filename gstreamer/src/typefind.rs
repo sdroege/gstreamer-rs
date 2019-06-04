@@ -9,6 +9,7 @@
 use gst_sys;
 use Caps;
 use Plugin;
+use Rank;
 use TypeFindFactory;
 use TypeFindProbability;
 
@@ -35,7 +36,7 @@ impl<'a> TypeFind<'a> {
     pub fn register<F>(
         plugin: Option<&Plugin>,
         name: &str,
-        rank: u32,
+        rank: Rank,
         extensions: Option<&str>,
         possible_caps: Option<&Caps>,
         func: F,
@@ -50,7 +51,7 @@ impl<'a> TypeFind<'a> {
             let res = gst_sys::gst_type_find_register(
                 plugin.to_glib_none().0,
                 name.to_glib_none().0,
-                rank,
+                rank.to_glib() as u32,
                 Some(type_find_trampoline::<F>),
                 extensions.to_glib_none().0,
                 possible_caps.to_glib_none().0,
@@ -265,7 +266,7 @@ mod tests {
         TypeFind::register(
             None,
             "test_typefind",
-            ::Rank::Primary.to_glib() as u32,
+            ::Rank::Primary,
             None,
             Some(&Caps::new_simple("test/test", &[])),
             |typefind| {

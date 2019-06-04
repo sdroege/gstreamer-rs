@@ -27,7 +27,9 @@ use FormattedValue;
 use GenericFormattedValue;
 use Pad;
 use PadTemplate;
+use Plugin;
 use QueryRef;
+use Rank;
 use SpecificFormattedValue;
 use State;
 use StateChange;
@@ -72,6 +74,26 @@ impl Element {
                     e[1].as_ref().to_glib_none().0,
                 );
             }
+        }
+    }
+
+    pub fn register(
+        plugin: Option<&Plugin>,
+        name: &str,
+        rank: Rank,
+        type_: glib::types::Type,
+    ) -> Result<(), glib::error::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            glib_result_from_gboolean!(
+                gst_sys::gst_element_register(
+                    plugin.to_glib_none().0,
+                    name.to_glib_none().0,
+                    rank.to_glib() as u32,
+                    type_.to_glib()
+                ),
+                "Failed to register element factory"
+            )
         }
     }
 }
