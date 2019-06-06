@@ -9,7 +9,7 @@
 use serde::de::{Deserialize, Deserializer};
 use serde::ser::{Serialize, Serializer};
 
-use format::{Buffers, Bytes, Default};
+use format::{Buffers, Bytes, Default, Percent, Undefined};
 
 // Manual implementation for some types that would otherwise yield representations such as:
 // "Default((Some(42)))"
@@ -33,6 +33,30 @@ macro_rules! impl_ser_de(
 impl_ser_de!(Buffers);
 impl_ser_de!(Bytes);
 impl_ser_de!(Default);
+
+impl Serialize for Undefined {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        self.0.serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for Undefined {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        i64::deserialize(deserializer).map(Undefined)
+    }
+}
+
+impl Serialize for Percent {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        self.0.serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for Percent {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        Option::<u32>::deserialize(deserializer).map(Percent)
+    }
+}
 
 #[cfg(test)]
 mod tests {
