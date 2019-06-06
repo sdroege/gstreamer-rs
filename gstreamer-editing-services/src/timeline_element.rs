@@ -15,7 +15,11 @@ use TimelineElement;
 
 pub trait TimelineElementExtManual: 'static {
     fn get_child_property(&self, name: &str) -> Option<glib::Value>;
-    fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError>;
+    fn set_child_property(
+        &self,
+        name: &str,
+        value: &dyn glib::ToValue,
+    ) -> Result<(), glib::BoolError>;
 }
 
 impl<O: IsA<TimelineElement>> TimelineElementExtManual for O {
@@ -41,7 +45,11 @@ impl<O: IsA<TimelineElement>> TimelineElementExtManual for O {
         }
     }
 
-    fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError> {
+    fn set_child_property(
+        &self,
+        name: &str,
+        value: &dyn glib::ToValue,
+    ) -> Result<(), glib::BoolError> {
         unsafe {
             let found: bool = from_glib(ges_sys::ges_timeline_element_lookup_child(
                 self.as_ref().to_glib_none().0,

@@ -40,7 +40,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
                 other_fields: self.other_fields.iter().cloned()
                     .chain(other_fields.iter().cloned())
@@ -84,7 +84,7 @@ pub fn new_downstream_force_key_unit_event<'a>() -> DownstreamForceKeyUnitEventB
 pub struct DownstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
     timestamp: gst::ClockTime,
     stream_time: gst::ClockTime,
     running_time: gst::ClockTime,
@@ -197,7 +197,7 @@ pub fn new_upstream_force_key_unit_event<'a>() -> UpstreamForceKeyUnitEventBuild
 pub struct UpstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
     running_time: gst::ClockTime,
     all_headers: bool,
     count: u32,
@@ -299,7 +299,7 @@ pub fn new_still_frame_event<'a>(in_still: bool) -> StillFrameEventBuilder<'a> {
 pub struct StillFrameEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
     in_still: bool,
 }
 

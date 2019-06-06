@@ -88,9 +88,9 @@ impl<'a> TypeFind<'a> {
 unsafe impl<'a> Send for TypeFind<'a> {}
 
 impl TypeFindFactory {
-    pub fn call_function(&self, find: &mut TypeFindImpl) {
+    pub fn call_function(&self, find: &mut dyn TypeFindImpl) {
         unsafe {
-            let find_ptr = &find as *const &mut TypeFindImpl as glib_sys::gpointer;
+            let find_ptr = &find as *const &mut dyn TypeFindImpl as glib_sys::gpointer;
             let mut find = gst_sys::GstTypeFind {
                 peek: Some(type_find_peek),
                 suggest: Some(type_find_suggest),
@@ -119,7 +119,7 @@ unsafe extern "C" fn type_find_closure_drop<F: Fn(&mut TypeFind) + Send + Sync +
 }
 
 unsafe extern "C" fn type_find_peek(data: glib_sys::gpointer, offset: i64, size: u32) -> *const u8 {
-    let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
+    let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
     match find.peek(offset, size) {
         None => ptr::null(),
         Some(data) => data.as_ptr(),
@@ -131,14 +131,14 @@ unsafe extern "C" fn type_find_suggest(
     probability: u32,
     caps: *mut gst_sys::GstCaps,
 ) {
-    let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
+    let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
     find.suggest(from_glib(probability as i32), &from_glib_borrow(caps));
 }
 
 unsafe extern "C" fn type_find_get_length(data: glib_sys::gpointer) -> u64 {
     use std::u64;
 
-    let find: &mut &mut TypeFindImpl = &mut *(data as *mut &mut TypeFindImpl);
+    let find: &mut &mut dyn TypeFindImpl = &mut *(data as *mut &mut dyn TypeFindImpl);
     find.get_length().unwrap_or(u64::MAX)
 }
 

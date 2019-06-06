@@ -22,12 +22,16 @@ use AppSink;
 
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
-    eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
+    eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<
-        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+        RefCell<
+            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
+        >,
     >,
     new_sample: Option<
-        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+        RefCell<
+            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
+        >,
     >,
     callbacks: gst_app_sys::GstAppSinkCallbacks,
 }
@@ -49,12 +53,16 @@ impl AppSinkCallbacks {
 
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacksBuilder {
-    eos: Option<RefCell<Box<FnMut(&AppSink) + Send + 'static>>>,
+    eos: Option<RefCell<Box<dyn FnMut(&AppSink) + Send + 'static>>>,
     new_preroll: Option<
-        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+        RefCell<
+            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
+        >,
     >,
     new_sample: Option<
-        RefCell<Box<FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>>,
+        RefCell<
+            Box<dyn FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static>,
+        >,
     >,
 }
 

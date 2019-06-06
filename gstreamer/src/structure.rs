@@ -46,7 +46,7 @@ impl Structure {
         }
     }
 
-    pub fn new(name: &str, values: &[(&str, &ToSendValue)]) -> Structure {
+    pub fn new(name: &str, values: &[(&str, &dyn ToSendValue)]) -> Structure {
         assert_initialized_main_thread!();
         let mut structure = Structure::new_empty(name);
 

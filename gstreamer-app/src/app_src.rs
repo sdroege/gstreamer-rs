@@ -17,9 +17,9 @@ use AppSrc;
 
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {
-    need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
-    enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
-    seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
+    need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
+    enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
+    seek_data: Option<Box<dyn Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
     callbacks: gst_app_sys::GstAppSrcCallbacks,
 }
 
@@ -41,9 +41,9 @@ impl AppSrcCallbacks {
 
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacksBuilder {
-    need_data: Option<RefCell<Box<FnMut(&AppSrc, u32) + Send + 'static>>>,
-    enough_data: Option<Box<Fn(&AppSrc) + Send + Sync + 'static>>,
-    seek_data: Option<Box<Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
+    need_data: Option<RefCell<Box<dyn FnMut(&AppSrc, u32) + Send + 'static>>>,
+    enough_data: Option<Box<dyn Fn(&AppSrc) + Send + Sync + 'static>>,
+    seek_data: Option<Box<dyn Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>>,
 }
 
 impl AppSrcCallbacksBuilder {

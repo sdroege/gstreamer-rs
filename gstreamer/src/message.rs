@@ -1192,7 +1192,7 @@ struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
     #[allow(unused)]
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
 }
 
 impl<'a> MessageBuilder<'a> {
@@ -1222,7 +1222,7 @@ impl<'a> MessageBuilder<'a> {
     }
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+    fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
         Self {
             other_fields: self
                 .other_fields
@@ -1255,7 +1255,7 @@ macro_rules! message_builder_generic_impl {
 
         #[cfg(any(feature = "v1_14", feature = "dox"))]
         #[allow(clippy::needless_update)]
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
                 .. self
@@ -1746,7 +1746,7 @@ pub struct StreamStatusBuilder<'a> {
     builder: MessageBuilder<'a>,
     type_: ::StreamStatusType,
     owner: &'a ::Element,
-    status_object: Option<&'a glib::ToSendValue>,
+    status_object: Option<&'a dyn glib::ToSendValue>,
 }
 impl<'a> StreamStatusBuilder<'a> {
     fn new(type_: ::StreamStatusType, owner: &'a ::Element) -> Self {
@@ -1759,7 +1759,7 @@ impl<'a> StreamStatusBuilder<'a> {
         }
     }
 
-    pub fn status_object(self, status_object: &'a glib::ToSendValue) -> Self {
+    pub fn status_object(self, status_object: &'a dyn glib::ToSendValue) -> Self {
         Self {
             status_object: Some(status_object),
             ..self
@@ -2225,7 +2225,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 pub struct PropertyNotifyBuilder<'a> {
     builder: MessageBuilder<'a>,
     property_name: &'a str,
-    value: Option<&'a glib::ToSendValue>,
+    value: Option<&'a dyn glib::ToSendValue>,
 }
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 impl<'a> PropertyNotifyBuilder<'a> {
@@ -2238,7 +2238,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
-    pub fn value(self, value: &'a glib::ToSendValue) -> Self {
+    pub fn value(self, value: &'a dyn glib::ToSendValue) -> Self {
         Self {
             value: Some(value),
             ..self

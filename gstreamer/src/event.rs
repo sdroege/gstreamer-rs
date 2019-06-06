@@ -917,7 +917,7 @@ declare_concrete_event!(CustomBothOob);
 struct EventBuilder<'a> {
     seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a ToSendValue)>,
+    other_fields: Vec<(&'a str, &'a dyn ToSendValue)>,
 }
 
 impl<'a> EventBuilder<'a> {
@@ -943,7 +943,7 @@ impl<'a> EventBuilder<'a> {
         }
     }
 
-    fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+    fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
         Self {
             other_fields: self
                 .other_fields
@@ -975,7 +975,7 @@ macro_rules! event_builder_generic_impl {
         }
 
         #[allow(clippy::needless_update)]
-        pub fn other_fields(self, other_fields: &[(&'a str, &'a ToSendValue)]) -> Self {
+        pub fn other_fields(self, other_fields: &[(&'a str, &'a dyn ToSendValue)]) -> Self {
             Self {
                 builder: self.builder.other_fields(other_fields),
                 .. self

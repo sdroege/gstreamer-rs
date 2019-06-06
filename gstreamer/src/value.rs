@@ -580,7 +580,7 @@ pub struct Array<'a>(Cow<'a, [glib::SendValue]>);
 unsafe impl<'a> Send for Array<'a> {}
 
 impl<'a> Array<'a> {
-    pub fn new(values: &[&ToSendValue]) -> Self {
+    pub fn new(values: &[&dyn ToSendValue]) -> Self {
         assert_initialized_main_thread!();
 
         Array(values.iter().map(|v| v.to_send_value()).collect())
@@ -601,8 +601,8 @@ impl<'a> Array<'a> {
     }
 }
 
-impl<'a> From<&'a [&'a ToSendValue]> for Array<'a> {
-    fn from(values: &'a [&'a ToSendValue]) -> Self {
+impl<'a> From<&'a [&'a dyn ToSendValue]> for Array<'a> {
+    fn from(values: &'a [&'a dyn ToSendValue]) -> Self {
         skip_assert_initialized!();
 
         Self::new(values)
@@ -658,7 +658,7 @@ pub struct List<'a>(Cow<'a, [glib::SendValue]>);
 unsafe impl<'a> Send for List<'a> {}
 
 impl<'a> List<'a> {
-    pub fn new(values: &[&ToSendValue]) -> Self {
+    pub fn new(values: &[&dyn ToSendValue]) -> Self {
         assert_initialized_main_thread!();
 
         List(values.iter().map(|v| v.to_send_value()).collect())
@@ -679,8 +679,8 @@ impl<'a> List<'a> {
     }
 }
 
-impl<'a> From<&'a [&'a ToSendValue]> for List<'a> {
-    fn from(values: &'a [&'a ToSendValue]) -> Self {
+impl<'a> From<&'a [&'a dyn ToSendValue]> for List<'a> {
+    fn from(values: &'a [&'a dyn ToSendValue]) -> Self {
         skip_assert_initialized!();
 
         Self::new(values)

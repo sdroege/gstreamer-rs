@@ -91,7 +91,7 @@ where
             let it = self.to_glib_none().0;
             mem::forget(self);
 
-            let func_box: Box<Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
+            let func_box: Box<dyn Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
             let mut closure_value = glib::Value::from_type(from_glib(filter_boxed_get_type::<T>()));
             gobject_sys::g_value_set_boxed(
                 closure_value.to_glib_none_mut().0,
@@ -336,7 +336,7 @@ where
     let func = func as *const gobject_sys::GValue;
     let func = gobject_sys::g_value_get_boxed(func);
     #[allow(clippy::transmute_ptr_to_ref)]
-    let func: &&(Fn(T) -> bool + Send + Sync + 'static) = mem::transmute(func);
+    let func: &&(dyn Fn(T) -> bool + Send + Sync + 'static) = mem::transmute(func);
 
     let value = &*(value as *const glib::Value);
     let value = value.get::<T>().unwrap();
@@ -349,7 +349,7 @@ where
 }
 
 unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
-    let boxed = Arc::from_raw(boxed as *const (Box<Fn(T) -> bool + Send + Sync + 'static>));
+    let boxed = Arc::from_raw(boxed as *const (Box<dyn Fn(T) -> bool + Send + Sync + 'static>));
     let copy = Arc::clone(&boxed);
 
     // Forget it and keep it alive, we will still need it later
@@ -359,7 +359,7 @@ unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
 }
 
 unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
-    let _ = Arc::from_raw(boxed as *const (Box<Fn(T) -> bool + Send + Sync + 'static>));
+    let _ = Arc::from_raw(boxed as *const (Box<dyn Fn(T) -> bool + Send + Sync + 'static>));
 }
 
 unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_sys::GType {

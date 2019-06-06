@@ -240,7 +240,7 @@ impl error::Error for EncodingProfileBuilderError {
         "invalid parameters to build encoding profile"
     }
 
-    fn cause(&self) -> Option<&error::Error> {
+    fn cause(&self) -> Option<&dyn error::Error> {
         None
     }
 }

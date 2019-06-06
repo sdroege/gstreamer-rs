@@ -44,7 +44,7 @@ impl Caps {
         unsafe { from_glib_full(gst_sys::gst_caps_new_any()) }
     }
 
-    pub fn new_simple(name: &str, values: &[(&str, &ToSendValue)]) -> Self {
+    pub fn new_simple(name: &str, values: &[(&str, &dyn ToSendValue)]) -> Self {
         assert_initialized_main_thread!();
         let mut caps = Caps::new_empty();
 
@@ -126,7 +126,7 @@ impl fmt::Display for Caps {
 }
 
 impl CapsRef {
-    pub fn set_simple(&mut self, values: &[(&str, &ToSendValue)]) {
+    pub fn set_simple(&mut self, values: &[(&str, &dyn ToSendValue)]) {
         for &(name, value) in values {
             let value = value.to_value();
 

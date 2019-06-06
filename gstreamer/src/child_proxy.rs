@@ -15,7 +15,11 @@ use ChildProxy;
 
 pub trait ChildProxyExtManual: 'static {
     fn get_child_property(&self, name: &str) -> Option<glib::Value>;
-    fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError>;
+    fn set_child_property(
+        &self,
+        name: &str,
+        value: &dyn glib::ToValue,
+    ) -> Result<(), glib::BoolError>;
 }
 
 impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
@@ -41,7 +45,11 @@ impl<O: IsA<ChildProxy>> ChildProxyExtManual for O {
         }
     }
 
-    fn set_child_property(&self, name: &str, value: &glib::ToValue) -> Result<(), glib::BoolError> {
+    fn set_child_property(
+        &self,
+        name: &str,
+        value: &dyn glib::ToValue,
+    ) -> Result<(), glib::BoolError> {
         unsafe {
             let found: bool = from_glib(gst_sys::gst_child_proxy_lookup(
                 self.as_ref().to_glib_none().0,

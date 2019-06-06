@@ -933,7 +933,7 @@ impl<O: IsA<Pad>> PadExtManual for O {
             user_data: glib_sys::gpointer,
         ) -> glib_sys::gboolean {
             let func =
-                user_data as *mut &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>);
+                user_data as *mut &mut (dyn FnMut(Event) -> Result<Option<Event>, Option<Event>>);
             let res = (*func)(from_glib_full(*event));
 
             match res {
@@ -958,9 +958,10 @@ impl<O: IsA<Pad>> PadExtManual for O {
 
         unsafe {
             let mut func = func;
-            let func_obj: &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>) = &mut func;
+            let func_obj: &mut (dyn FnMut(Event) -> Result<Option<Event>, Option<Event>>) =
+                &mut func;
             let func_ptr = &func_obj
-                as *const &mut (FnMut(Event) -> Result<Option<Event>, Option<Event>>)
+                as *const &mut (dyn FnMut(Event) -> Result<Option<Event>, Option<Event>>)
                 as glib_sys::gpointer;
 
             gst_sys::gst_pad_sticky_events_foreach(
