@@ -36,7 +36,7 @@ lazy_static! {
 }
 
 #[derive(Debug, Clone)]
-pub struct VideoAlignment(gst_video_sys::GstVideoAlignment);
+pub struct VideoAlignment(pub(crate) gst_video_sys::GstVideoAlignment);
 
 impl VideoAlignment {
     pub fn get_padding_top(&self) -> u32 {

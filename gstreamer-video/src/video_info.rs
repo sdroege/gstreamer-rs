@@ -671,6 +671,16 @@ impl VideoInfo {
             }
         }
     }
+
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    pub fn align(&mut self, align: &mut ::VideoAlignment) -> bool {
+        unsafe {
+            from_glib(gst_video_sys::gst_video_info_align(
+                &mut self.0,
+                &mut align.0,
+            ))
+        }
+    }
 }
 
 impl Clone for VideoInfo {
@@ -919,5 +929,24 @@ mod tests {
 
         let info2 = VideoInfo::from_caps(&caps2).unwrap();
         assert!(info == info2);
+    }
+
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[test]
+    fn test_video_align() {
+        gst::init().unwrap();
+
+        let mut info = ::VideoInfo::new(::VideoFormat::Nv16, 1920, 1080)
+            .build()
+            .expect("Failed to create VideoInfo");
+
+        assert_eq!(info.stride(), [1920, 1920]);
+        assert_eq!(info.offset(), [0, 2073600]);
+
+        let mut align = ::VideoAlignment::new(0, 0, 0, 8, &[0; 4]);
+        assert!(info.align(&mut align));
+
+        assert_eq!(info.stride(), [1928, 1928]);
+        assert_eq!(info.offset(), [0, 2082240]);
     }
 }
