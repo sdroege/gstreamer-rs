@@ -116,6 +116,18 @@ impl str::FromStr for ::VideoFormat {
 
 impl fmt::Display for ::VideoFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(self.to_string().as_str())
+        f.write_str(::VideoFormat::to_string(*self))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use gst;
+
+    #[test]
+    fn test_display() {
+        gst::init().unwrap();
+
+        format!("{}", ::VideoFormat::Nv16);
     }
 }
