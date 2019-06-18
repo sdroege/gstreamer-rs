@@ -1,4 +1,5 @@
 stages:
+  - "lint"
   - "test"
 
 .cargo_cache: &cache
@@ -114,12 +115,10 @@ test nightly:
     - cargo check --target $CROSS_TARGET_TRIPLET --all --color=always
     - cargo check --target $CROSS_TARGET_TRIPLET --all --all-features --color=always
 
-test stable-armv7-unknown-linux-gnueabihf:
-  extends: .cargo_cross_check_template
-  variables:
-      CROSS_TARGET_TRIPLET: "armv7-unknown-linux-gnueabihf"
-
-test stable-x86_64-pc-windows-gnu:
-  extends: .cargo_cross_check_template
-  variables:
-      CROSS_TARGET_TRIPLET: "x86_64-pc-windows-gnu"
+rustfmt:
+  image: "rust:slim"
+  stage: "lint"
+  script:
+    - rustup component add rustfmt
+    - cargo fmt --version
+    - cargo fmt -- --color=always --check
