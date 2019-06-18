@@ -73,7 +73,7 @@ impl str::FromStr for ::AudioFormat {
 
 impl fmt::Display for ::AudioFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(self.to_string().as_str())
+        f.write_str(::AudioFormat::to_string(*self))
     }
 }
 
@@ -134,3 +134,15 @@ pub const AUDIO_FORMAT_U18: ::AudioFormat = ::AudioFormat::U18le;
 pub const AUDIO_FORMAT_F32: ::AudioFormat = ::AudioFormat::F32le;
 #[cfg(target_endian = "little")]
 pub const AUDIO_FORMAT_F64: ::AudioFormat = ::AudioFormat::F64le;
+
+#[cfg(test)]
+mod tests {
+    use gst;
+
+    #[test]
+    fn test_display() {
+        gst::init().unwrap();
+
+        format!("{}", ::AudioFormat::S16be);
+    }
+}
