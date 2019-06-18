@@ -2,15 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use RTSPMedia;
-use RTSPStreamTransport;
 use glib;
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst;
 use gst_rtsp_server_sys;
 use std::mem;
+use RTSPMedia;
+use RTSPStreamTransport;
 
 glib_wrapper! {
     pub struct RTSPSessionMedia(Object<gst_rtsp_server_sys::GstRTSPSessionMedia, gst_rtsp_server_sys::GstRTSPSessionMediaClass, RTSPSessionMediaClass>);
@@ -24,7 +24,10 @@ impl RTSPSessionMedia {
     pub fn new<P: IsA<RTSPMedia>>(path: &str, media: &P) -> RTSPSessionMedia {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_media_new(path.to_glib_none().0, media.as_ref().to_glib_full()))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_media_new(
+                path.to_glib_none().0,
+                media.as_ref().to_glib_full(),
+            ))
         }
     }
 }
@@ -66,19 +69,25 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn get_base_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_get_base_time(self.as_ref().to_glib_none().0))
+            from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_get_base_time(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_media(&self) -> Option<RTSPMedia> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_media_get_media(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_media_get_media(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_rtpinfo(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_media_get_rtpinfo(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_session_media_get_rtpinfo(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -88,7 +97,10 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn get_transport(&self, idx: u32) -> Option<RTSPStreamTransport> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_media_get_transport(self.as_ref().to_glib_none().0, idx))
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_media_get_transport(
+                self.as_ref().to_glib_none().0,
+                idx,
+            ))
         }
     }
 
@@ -100,8 +112,16 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
     fn matches(&self, path: &str) -> Option<i32> {
         unsafe {
             let mut matched = mem::uninitialized();
-            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_matches(self.as_ref().to_glib_none().0, path.to_glib_none().0, &mut matched));
-            if ret { Some(matched) } else { None }
+            let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_matches(
+                self.as_ref().to_glib_none().0,
+                path.to_glib_none().0,
+                &mut matched,
+            ));
+            if ret {
+                Some(matched)
+            } else {
+                None
+            }
         }
     }
 
@@ -111,7 +131,13 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn set_state(&self, state: gst::State) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_session_media_set_state(self.as_ref().to_glib_none().0, state.to_glib()), "Failed to set state of session media")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_session_media_set_state(
+                    self.as_ref().to_glib_none().0,
+                    state.to_glib()
+                ),
+                "Failed to set state of session media"
+            )
         }
     }
 

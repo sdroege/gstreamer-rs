@@ -2,9 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use EncodingProfile;
 use glib::translate::*;
 use gst_pbutils_sys;
+use EncodingProfile;
 
 glib_wrapper! {
     pub struct EncodingVideoProfile(Object<gst_pbutils_sys::GstEncodingVideoProfile, gst_pbutils_sys::GstEncodingVideoProfileClass, EncodingVideoProfileClass>) @extends EncodingProfile;
@@ -16,14 +16,16 @@ glib_wrapper! {
 
 impl EncodingVideoProfile {
     pub fn get_pass(&self) -> u32 {
-        unsafe {
-            gst_pbutils_sys::gst_encoding_video_profile_get_pass(self.to_glib_none().0)
-        }
+        unsafe { gst_pbutils_sys::gst_encoding_video_profile_get_pass(self.to_glib_none().0) }
     }
 
     pub fn get_variableframerate(&self) -> bool {
         unsafe {
-            from_glib(gst_pbutils_sys::gst_encoding_video_profile_get_variableframerate(self.to_glib_none().0))
+            from_glib(
+                gst_pbutils_sys::gst_encoding_video_profile_get_variableframerate(
+                    self.to_glib_none().0,
+                ),
+            )
         }
     }
 }

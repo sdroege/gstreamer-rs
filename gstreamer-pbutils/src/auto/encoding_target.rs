@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use EncodingProfile;
-use Error;
-use glib::GString;
 use glib::translate::*;
+use glib::GString;
 use gst_pbutils_sys;
 use std;
 use std::ptr;
+use EncodingProfile;
+use Error;
 
 glib_wrapper! {
     pub struct EncodingTarget(Object<gst_pbutils_sys::GstEncodingTarget, EncodingTargetClass>);
@@ -19,40 +19,61 @@ glib_wrapper! {
 }
 
 impl EncodingTarget {
-    pub fn new(name: &str, category: &str, description: &str, profiles: &[EncodingProfile]) -> EncodingTarget {
+    pub fn new(
+        name: &str,
+        category: &str,
+        description: &str,
+        profiles: &[EncodingProfile],
+    ) -> EncodingTarget {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_target_new(name.to_glib_none().0, category.to_glib_none().0, description.to_glib_none().0, profiles.to_glib_none().0))
+            from_glib_full(gst_pbutils_sys::gst_encoding_target_new(
+                name.to_glib_none().0,
+                category.to_glib_none().0,
+                description.to_glib_none().0,
+                profiles.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_category(&self) -> GString {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_category(self.to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_category(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_description(&self) -> GString {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_description(self.to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_description(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_name(&self) -> GString {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_name(self.to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_encoding_target_get_name(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_profile(&self, name: &str) -> Option<EncodingProfile> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_encoding_target_get_profile(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gst_pbutils_sys::gst_encoding_target_get_profile(
+                self.to_glib_none().0,
+                name.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_profiles(&self) -> Vec<EncodingProfile> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(gst_pbutils_sys::gst_encoding_target_get_profiles(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(gst_pbutils_sys::gst_encoding_target_get_profiles(
+                self.to_glib_none().0,
+            ))
         }
     }
 
@@ -60,15 +81,27 @@ impl EncodingTarget {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_pbutils_sys::gst_encoding_target_save(self.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     pub fn save_to_file<P: AsRef<std::path::Path>>(&self, filepath: P) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = gst_pbutils_sys::gst_encoding_target_save_to_file(self.to_glib_none().0, filepath.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = gst_pbutils_sys::gst_encoding_target_save_to_file(
+                self.to_glib_none().0,
+                filepath.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
@@ -76,8 +109,16 @@ impl EncodingTarget {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = gst_pbutils_sys::gst_encoding_target_load(name.to_glib_none().0, category.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+            let ret = gst_pbutils_sys::gst_encoding_target_load(
+                name.to_glib_none().0,
+                category.to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
@@ -85,8 +126,15 @@ impl EncodingTarget {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = gst_pbutils_sys::gst_encoding_target_load_from_file(filepath.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+            let ret = gst_pbutils_sys::gst_encoding_target_load_from_file(
+                filepath.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 }

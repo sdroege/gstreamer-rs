@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Object;
-use Pad;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_sys;
+use Object;
+use Pad;
 
 glib_wrapper! {
     pub struct ProxyPad(Object<gst_sys::GstProxyPad, gst_sys::GstProxyPadClass, ProxyPadClass>) @extends Pad, Object;
@@ -34,7 +34,9 @@ pub trait ProxyPadExt: 'static {
 impl<O: IsA<ProxyPad>> ProxyPadExt for O {
     fn get_internal(&self) -> Option<ProxyPad> {
         unsafe {
-            from_glib_full(gst_sys::gst_proxy_pad_get_internal(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_proxy_pad_get_internal(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

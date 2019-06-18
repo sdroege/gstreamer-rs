@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use VideoCodecFrame;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_video_sys;
+use VideoCodecFrame;
 
 glib_wrapper! {
     pub struct VideoDecoder(Object<gst_video_sys::GstVideoDecoder, gst_video_sys::GstVideoDecoderClass, VideoDecoderClass>) @extends gst::Element, gst::Object;
@@ -46,7 +46,11 @@ pub trait VideoDecoderExt: 'static {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
-    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> Option<gst::Caps>;
+    fn proxy_getcaps(
+        &self,
+        caps: Option<&gst::Caps>,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps>;
 
     fn set_estimate_rate(&self, enabled: bool);
 
@@ -68,7 +72,9 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn allocate_output_buffer(&self) -> Option<gst::Buffer> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_decoder_allocate_output_buffer(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_video_sys::gst_video_decoder_allocate_output_buffer(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -78,7 +84,9 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_decoder_get_buffer_pool(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_video_sys::gst_video_decoder_get_buffer_pool(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -90,25 +98,30 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn get_max_decode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {
         unsafe {
-            gst_video_sys::gst_video_decoder_get_max_decode_time(self.as_ref().to_glib_none().0, frame.to_glib_none().0)
+            gst_video_sys::gst_video_decoder_get_max_decode_time(
+                self.as_ref().to_glib_none().0,
+                frame.to_glib_none().0,
+            )
         }
     }
 
     fn get_max_errors(&self) -> i32 {
-        unsafe {
-            gst_video_sys::gst_video_decoder_get_max_errors(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gst_video_sys::gst_video_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
 
     fn get_needs_format(&self) -> bool {
         unsafe {
-            from_glib(gst_video_sys::gst_video_decoder_get_needs_format(self.as_ref().to_glib_none().0))
+            from_glib(gst_video_sys::gst_video_decoder_get_needs_format(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_packetized(&self) -> bool {
         unsafe {
-            from_glib(gst_video_sys::gst_video_decoder_get_packetized(self.as_ref().to_glib_none().0))
+            from_glib(gst_video_sys::gst_video_decoder_get_packetized(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -126,19 +139,34 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode) {
         unsafe {
-            gst_video_sys::gst_video_decoder_merge_tags(self.as_ref().to_glib_none().0, tags.to_glib_none().0, mode.to_glib());
+            gst_video_sys::gst_video_decoder_merge_tags(
+                self.as_ref().to_glib_none().0,
+                tags.to_glib_none().0,
+                mode.to_glib(),
+            );
         }
     }
 
-    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+    fn proxy_getcaps(
+        &self,
+        caps: Option<&gst::Caps>,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_decoder_proxy_getcaps(self.as_ref().to_glib_none().0, caps.to_glib_none().0, filter.to_glib_none().0))
+            from_glib_full(gst_video_sys::gst_video_decoder_proxy_getcaps(
+                self.as_ref().to_glib_none().0,
+                caps.to_glib_none().0,
+                filter.to_glib_none().0,
+            ))
         }
     }
 
     fn set_estimate_rate(&self, enabled: bool) {
         unsafe {
-            gst_video_sys::gst_video_decoder_set_estimate_rate(self.as_ref().to_glib_none().0, enabled.to_glib());
+            gst_video_sys::gst_video_decoder_set_estimate_rate(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 
@@ -150,19 +178,28 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
 
     fn set_needs_format(&self, enabled: bool) {
         unsafe {
-            gst_video_sys::gst_video_decoder_set_needs_format(self.as_ref().to_glib_none().0, enabled.to_glib());
+            gst_video_sys::gst_video_decoder_set_needs_format(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 
     fn set_packetized(&self, packetized: bool) {
         unsafe {
-            gst_video_sys::gst_video_decoder_set_packetized(self.as_ref().to_glib_none().0, packetized.to_glib());
+            gst_video_sys::gst_video_decoder_set_packetized(
+                self.as_ref().to_glib_none().0,
+                packetized.to_glib(),
+            );
         }
     }
 
     fn set_use_default_pad_acceptcaps(&self, use_: bool) {
         unsafe {
-            gst_video_sys::gst_video_decoder_set_use_default_pad_acceptcaps(self.as_ref().to_glib_none().0, use_.to_glib());
+            gst_video_sys::gst_video_decoder_set_use_default_pad_acceptcaps(
+                self.as_ref().to_glib_none().0,
+                use_.to_glib(),
+            );
         }
     }
 }

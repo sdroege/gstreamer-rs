@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use GLContext;
 use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_gl_sys;
 use std::mem;
+use GLContext;
 
 glib_wrapper! {
     pub struct GLFramebuffer(Object<gst_gl_sys::GstGLFramebuffer, gst_gl_sys::GstGLFramebufferClass, GLFramebufferClass>) @extends gst::Object;
@@ -21,14 +21,24 @@ impl GLFramebuffer {
     pub fn new<P: IsA<GLContext>>(context: &P) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_framebuffer_new(context.as_ref().to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_framebuffer_new(
+                context.as_ref().to_glib_none().0,
+            ))
         }
     }
 
-    pub fn new_with_default_depth<P: IsA<GLContext>>(context: &P, width: u32, height: u32) -> GLFramebuffer {
+    pub fn new_with_default_depth<P: IsA<GLContext>>(
+        context: &P,
+        width: u32,
+        height: u32,
+    ) -> GLFramebuffer {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_gl_framebuffer_new_with_default_depth(context.as_ref().to_glib_none().0, width, height))
+            from_glib_none(gst_gl_sys::gst_gl_framebuffer_new_with_default_depth(
+                context.as_ref().to_glib_none().0,
+                width,
+                height,
+            ))
         }
     }
 }
@@ -69,14 +79,16 @@ impl<O: IsA<GLFramebuffer>> GLFramebufferExt for O {
         unsafe {
             let mut width = mem::uninitialized();
             let mut height = mem::uninitialized();
-            gst_gl_sys::gst_gl_framebuffer_get_effective_dimensions(self.as_ref().to_glib_none().0, &mut width, &mut height);
+            gst_gl_sys::gst_gl_framebuffer_get_effective_dimensions(
+                self.as_ref().to_glib_none().0,
+                &mut width,
+                &mut height,
+            );
             (width, height)
         }
     }
 
     fn get_id(&self) -> u32 {
-        unsafe {
-            gst_gl_sys::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gst_gl_sys::gst_gl_framebuffer_get_id(self.as_ref().to_glib_none().0) }
     }
 }

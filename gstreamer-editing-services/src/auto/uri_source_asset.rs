@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Asset;
-use UriClipAsset;
 use ges_sys;
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst_pbutils;
+use Asset;
+use UriClipAsset;
 
 glib_wrapper! {
     pub struct UriSourceAsset(Object<ges_sys::GESUriSourceAsset, ges_sys::GESUriSourceAssetClass, UriSourceAssetClass>) @extends Asset;
@@ -31,19 +31,25 @@ pub trait UriSourceAssetExt: 'static {
 impl<O: IsA<UriSourceAsset>> UriSourceAssetExt for O {
     fn get_filesource_asset(&self) -> Option<UriClipAsset> {
         unsafe {
-            from_glib_none(ges_sys::ges_uri_source_asset_get_filesource_asset(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_source_asset_get_filesource_asset(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_stream_info(&self) -> Option<gst_pbutils::DiscovererStreamInfo> {
         unsafe {
-            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_info(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_info(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_stream_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_uri_source_asset_get_stream_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

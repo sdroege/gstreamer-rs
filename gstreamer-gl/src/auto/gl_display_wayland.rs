@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use GLDisplay;
 use glib::translate::*;
 use gst;
 use gst_gl_sys;
+use GLDisplay;
 
 glib_wrapper! {
     pub struct GLDisplayWayland(Object<gst_gl_sys::GstGLDisplayWayland, gst_gl_sys::GstGLDisplayWaylandClass, GLDisplayWaylandClass>) @extends GLDisplay, gst::Object;
@@ -19,7 +19,9 @@ impl GLDisplayWayland {
     pub fn new(name: Option<&str>) -> GLDisplayWayland {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_display_wayland_new(name.to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_display_wayland_new(
+                name.to_glib_none().0,
+            ))
         }
     }
 

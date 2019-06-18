@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_rtsp_server_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPAddressPoolResult {
     Ok,
     Einval,
@@ -32,10 +31,12 @@ impl ToGlib for RTSPAddressPoolResult {
         match *self {
             RTSPAddressPoolResult::Ok => gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_OK,
             RTSPAddressPoolResult::Einval => gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_EINVAL,
-            RTSPAddressPoolResult::Ereserved => gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ERESERVED,
+            RTSPAddressPoolResult::Ereserved => {
+                gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ERESERVED
+            }
             RTSPAddressPoolResult::Erange => gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ERANGE,
             RTSPAddressPoolResult::Elast => gst_rtsp_server_sys::GST_RTSP_ADDRESS_POOL_ELAST,
-            RTSPAddressPoolResult::__Unknown(value) => value
+            RTSPAddressPoolResult::__Unknown(value) => value,
         }
     }
 }
@@ -55,8 +56,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPAddressPoolResult> for RTSPAddressPool
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPFilterResult {
     Remove,
     Keep,
@@ -74,7 +74,7 @@ impl ToGlib for RTSPFilterResult {
             RTSPFilterResult::Remove => gst_rtsp_server_sys::GST_RTSP_FILTER_REMOVE,
             RTSPFilterResult::Keep => gst_rtsp_server_sys::GST_RTSP_FILTER_KEEP,
             RTSPFilterResult::Ref => gst_rtsp_server_sys::GST_RTSP_FILTER_REF,
-            RTSPFilterResult::__Unknown(value) => value
+            RTSPFilterResult::__Unknown(value) => value,
         }
     }
 }
@@ -92,8 +92,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPFilterResult> for RTSPFilterResult {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPMediaStatus {
     Unprepared,
     Unpreparing,
@@ -117,7 +116,7 @@ impl ToGlib for RTSPMediaStatus {
             RTSPMediaStatus::Prepared => gst_rtsp_server_sys::GST_RTSP_MEDIA_STATUS_PREPARED,
             RTSPMediaStatus::Suspended => gst_rtsp_server_sys::GST_RTSP_MEDIA_STATUS_SUSPENDED,
             RTSPMediaStatus::Error => gst_rtsp_server_sys::GST_RTSP_MEDIA_STATUS_ERROR,
-            RTSPMediaStatus::__Unknown(value) => value
+            RTSPMediaStatus::__Unknown(value) => value,
         }
     }
 }
@@ -138,8 +137,7 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPMediaStatus> for RTSPMediaStatus {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPPublishClockMode {
     None,
     Clock,
@@ -156,8 +154,10 @@ impl ToGlib for RTSPPublishClockMode {
         match *self {
             RTSPPublishClockMode::None => gst_rtsp_server_sys::GST_RTSP_PUBLISH_CLOCK_MODE_NONE,
             RTSPPublishClockMode::Clock => gst_rtsp_server_sys::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK,
-            RTSPPublishClockMode::ClockAndOffset => gst_rtsp_server_sys::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET,
-            RTSPPublishClockMode::__Unknown(value) => value
+            RTSPPublishClockMode::ClockAndOffset => {
+                gst_rtsp_server_sys::GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET
+            }
+            RTSPPublishClockMode::__Unknown(value) => value,
         }
     }
 }
@@ -199,8 +199,7 @@ impl SetValue for RTSPPublishClockMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPSuspendMode {
     None,
     Pause,
@@ -218,7 +217,7 @@ impl ToGlib for RTSPSuspendMode {
             RTSPSuspendMode::None => gst_rtsp_server_sys::GST_RTSP_SUSPEND_MODE_NONE,
             RTSPSuspendMode::Pause => gst_rtsp_server_sys::GST_RTSP_SUSPEND_MODE_PAUSE,
             RTSPSuspendMode::Reset => gst_rtsp_server_sys::GST_RTSP_SUSPEND_MODE_RESET,
-            RTSPSuspendMode::__Unknown(value) => value
+            RTSPSuspendMode::__Unknown(value) => value,
         }
     }
 }
@@ -260,8 +259,7 @@ impl SetValue for RTSPSuspendMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPThreadType {
     Client,
     Media,
@@ -277,7 +275,7 @@ impl ToGlib for RTSPThreadType {
         match *self {
             RTSPThreadType::Client => gst_rtsp_server_sys::GST_RTSP_THREAD_TYPE_CLIENT,
             RTSPThreadType::Media => gst_rtsp_server_sys::GST_RTSP_THREAD_TYPE_MEDIA,
-            RTSPThreadType::__Unknown(value) => value
+            RTSPThreadType::__Unknown(value) => value,
         }
     }
 }
@@ -293,4 +291,3 @@ impl FromGlib<gst_rtsp_server_sys::GstRTSPThreadType> for RTSPThreadType {
         }
     }
 }
-

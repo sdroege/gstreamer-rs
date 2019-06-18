@@ -2,20 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::Quark;
-use glib::StaticType;
-use glib::Type;
 use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::Quark;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum BufferingMode {
     Stream,
     Download,
@@ -35,7 +34,7 @@ impl ToGlib for BufferingMode {
             BufferingMode::Download => gst_sys::GST_BUFFERING_DOWNLOAD,
             BufferingMode::Timeshift => gst_sys::GST_BUFFERING_TIMESHIFT,
             BufferingMode::Live => gst_sys::GST_BUFFERING_LIVE,
-            BufferingMode::__Unknown(value) => value
+            BufferingMode::__Unknown(value) => value,
         }
     }
 }
@@ -78,8 +77,7 @@ impl SetValue for BufferingMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum BusSyncReply {
     Drop,
     Pass,
@@ -97,7 +95,7 @@ impl ToGlib for BusSyncReply {
             BusSyncReply::Drop => gst_sys::GST_BUS_DROP,
             BusSyncReply::Pass => gst_sys::GST_BUS_PASS,
             BusSyncReply::Async => gst_sys::GST_BUS_ASYNC,
-            BusSyncReply::__Unknown(value) => value
+            BusSyncReply::__Unknown(value) => value,
         }
     }
 }
@@ -139,8 +137,7 @@ impl SetValue for BusSyncReply {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum CapsIntersectMode {
     ZigZag,
     First,
@@ -156,7 +153,7 @@ impl ToGlib for CapsIntersectMode {
         match *self {
             CapsIntersectMode::ZigZag => gst_sys::GST_CAPS_INTERSECT_ZIG_ZAG,
             CapsIntersectMode::First => gst_sys::GST_CAPS_INTERSECT_FIRST,
-            CapsIntersectMode::__Unknown(value) => value
+            CapsIntersectMode::__Unknown(value) => value,
         }
     }
 }
@@ -198,8 +195,7 @@ impl SetValue for CapsIntersectMode {
 }
 
 #[must_use]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ClockReturn {
     Ok,
     Early,
@@ -227,7 +223,7 @@ impl ToGlib for ClockReturn {
             ClockReturn::Error => gst_sys::GST_CLOCK_ERROR,
             ClockReturn::Unsupported => gst_sys::GST_CLOCK_UNSUPPORTED,
             ClockReturn::Done => gst_sys::GST_CLOCK_DONE,
-            ClockReturn::__Unknown(value) => value
+            ClockReturn::__Unknown(value) => value,
         }
     }
 }
@@ -274,8 +270,7 @@ impl SetValue for ClockReturn {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ClockType {
     Realtime,
     Monotonic,
@@ -293,7 +288,7 @@ impl ToGlib for ClockType {
             ClockType::Realtime => gst_sys::GST_CLOCK_TYPE_REALTIME,
             ClockType::Monotonic => gst_sys::GST_CLOCK_TYPE_MONOTONIC,
             ClockType::Other => gst_sys::GST_CLOCK_TYPE_OTHER,
-            ClockType::__Unknown(value) => value
+            ClockType::__Unknown(value) => value,
         }
     }
 }
@@ -335,8 +330,7 @@ impl SetValue for ClockType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum CoreError {
     Failed,
     TooLazy,
@@ -378,7 +372,7 @@ impl ToGlib for CoreError {
             CoreError::Clock => gst_sys::GST_CORE_ERROR_CLOCK,
             CoreError::Disabled => gst_sys::GST_CORE_ERROR_DISABLED,
             CoreError::NumErrors => gst_sys::GST_CORE_ERROR_NUM_ERRORS,
-            CoreError::__Unknown(value) => value
+            CoreError::__Unknown(value) => value,
         }
     }
 }
@@ -465,8 +459,7 @@ impl SetValue for CoreError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum DebugLevel {
     None,
     Error,
@@ -498,7 +491,7 @@ impl ToGlib for DebugLevel {
             DebugLevel::Trace => gst_sys::GST_LEVEL_TRACE,
             DebugLevel::Memdump => gst_sys::GST_LEVEL_MEMDUMP,
             DebugLevel::Count => gst_sys::GST_LEVEL_COUNT,
-            DebugLevel::__Unknown(value) => value
+            DebugLevel::__Unknown(value) => value,
         }
     }
 }
@@ -547,8 +540,7 @@ impl SetValue for DebugLevel {
     }
 }
 
-    #[derive(Debug, PartialEq, Eq, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum EventType {
     Unknown,
     FlushStart,
@@ -620,7 +612,7 @@ impl ToGlib for EventType {
             EventType::CustomDownstreamSticky => gst_sys::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY,
             EventType::CustomBoth => gst_sys::GST_EVENT_CUSTOM_BOTH,
             EventType::CustomBothOob => gst_sys::GST_EVENT_CUSTOM_BOTH_OOB,
-            EventType::__Unknown(value) => value
+            EventType::__Unknown(value) => value,
         }
     }
 }
@@ -690,8 +682,7 @@ impl SetValue for EventType {
 }
 
 #[must_use]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum FlowReturn {
     CustomSuccess2,
     CustomSuccess1,
@@ -729,7 +720,7 @@ impl ToGlib for FlowReturn {
             FlowReturn::CustomError => gst_sys::GST_FLOW_CUSTOM_ERROR,
             FlowReturn::CustomError1 => gst_sys::GST_FLOW_CUSTOM_ERROR_1,
             FlowReturn::CustomError2 => gst_sys::GST_FLOW_CUSTOM_ERROR_2,
-            FlowReturn::__Unknown(value) => value
+            FlowReturn::__Unknown(value) => value,
         }
     }
 }
@@ -781,9 +772,8 @@ impl SetValue for FlowReturn {
     }
 }
 
-    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub enum Format {
     Undefined,
     Default,
@@ -807,7 +797,7 @@ impl ToGlib for Format {
             Format::Time => gst_sys::GST_FORMAT_TIME,
             Format::Buffers => gst_sys::GST_FORMAT_BUFFERS,
             Format::Percent => gst_sys::GST_FORMAT_PERCENT,
-            Format::__Unknown(value) => value
+            Format::__Unknown(value) => value,
         }
     }
 }
@@ -852,8 +842,7 @@ impl SetValue for Format {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum LibraryError {
     Failed,
     TooLazy,
@@ -879,7 +868,7 @@ impl ToGlib for LibraryError {
             LibraryError::Settings => gst_sys::GST_LIBRARY_ERROR_SETTINGS,
             LibraryError::Encode => gst_sys::GST_LIBRARY_ERROR_ENCODE,
             LibraryError::NumErrors => gst_sys::GST_LIBRARY_ERROR_NUM_ERRORS,
-            LibraryError::__Unknown(value) => value
+            LibraryError::__Unknown(value) => value,
         }
     }
 }
@@ -950,8 +939,7 @@ impl SetValue for LibraryError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PadDirection {
     Unknown,
     Src,
@@ -969,7 +957,7 @@ impl ToGlib for PadDirection {
             PadDirection::Unknown => gst_sys::GST_PAD_UNKNOWN,
             PadDirection::Src => gst_sys::GST_PAD_SRC,
             PadDirection::Sink => gst_sys::GST_PAD_SINK,
-            PadDirection::__Unknown(value) => value
+            PadDirection::__Unknown(value) => value,
         }
     }
 }
@@ -1012,8 +1000,7 @@ impl SetValue for PadDirection {
 }
 
 #[must_use]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PadLinkReturn {
     Ok,
     WrongHierarchy,
@@ -1039,7 +1026,7 @@ impl ToGlib for PadLinkReturn {
             PadLinkReturn::Noformat => gst_sys::GST_PAD_LINK_NOFORMAT,
             PadLinkReturn::Nosched => gst_sys::GST_PAD_LINK_NOSCHED,
             PadLinkReturn::Refused => gst_sys::GST_PAD_LINK_REFUSED,
-            PadLinkReturn::__Unknown(value) => value
+            PadLinkReturn::__Unknown(value) => value,
         }
     }
 }
@@ -1085,8 +1072,7 @@ impl SetValue for PadLinkReturn {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PadMode {
     None,
     Push,
@@ -1104,7 +1090,7 @@ impl ToGlib for PadMode {
             PadMode::None => gst_sys::GST_PAD_MODE_NONE,
             PadMode::Push => gst_sys::GST_PAD_MODE_PUSH,
             PadMode::Pull => gst_sys::GST_PAD_MODE_PULL,
-            PadMode::__Unknown(value) => value
+            PadMode::__Unknown(value) => value,
         }
     }
 }
@@ -1146,8 +1132,7 @@ impl SetValue for PadMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PadPresence {
     Always,
     Sometimes,
@@ -1165,7 +1150,7 @@ impl ToGlib for PadPresence {
             PadPresence::Always => gst_sys::GST_PAD_ALWAYS,
             PadPresence::Sometimes => gst_sys::GST_PAD_SOMETIMES,
             PadPresence::Request => gst_sys::GST_PAD_REQUEST,
-            PadPresence::__Unknown(value) => value
+            PadPresence::__Unknown(value) => value,
         }
     }
 }
@@ -1207,8 +1192,7 @@ impl SetValue for PadPresence {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PadProbeReturn {
     Drop,
     Ok,
@@ -1230,7 +1214,7 @@ impl ToGlib for PadProbeReturn {
             PadProbeReturn::Remove => gst_sys::GST_PAD_PROBE_REMOVE,
             PadProbeReturn::Pass => gst_sys::GST_PAD_PROBE_PASS,
             PadProbeReturn::Handled => gst_sys::GST_PAD_PROBE_HANDLED,
-            PadProbeReturn::__Unknown(value) => value
+            PadProbeReturn::__Unknown(value) => value,
         }
     }
 }
@@ -1274,8 +1258,7 @@ impl SetValue for PadProbeReturn {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ParseError {
     Syntax,
     NoSuchElement,
@@ -1303,7 +1286,7 @@ impl ToGlib for ParseError {
             ParseError::EmptyBin => gst_sys::GST_PARSE_ERROR_EMPTY_BIN,
             ParseError::Empty => gst_sys::GST_PARSE_ERROR_EMPTY,
             ParseError::DelayedLink => gst_sys::GST_PARSE_ERROR_DELAYED_LINK,
-            ParseError::__Unknown(value) => value
+            ParseError::__Unknown(value) => value,
         }
     }
 }
@@ -1376,8 +1359,7 @@ impl SetValue for ParseError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PluginError {
     Module,
     Dependencies,
@@ -1395,7 +1377,7 @@ impl ToGlib for PluginError {
             PluginError::Module => gst_sys::GST_PLUGIN_ERROR_MODULE,
             PluginError::Dependencies => gst_sys::GST_PLUGIN_ERROR_DEPENDENCIES,
             PluginError::NameMismatch => gst_sys::GST_PLUGIN_ERROR_NAME_MISMATCH,
-            PluginError::__Unknown(value) => value
+            PluginError::__Unknown(value) => value,
         }
     }
 }
@@ -1458,8 +1440,7 @@ impl SetValue for PluginError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ProgressType {
     Start,
     Continue,
@@ -1481,7 +1462,7 @@ impl ToGlib for ProgressType {
             ProgressType::Complete => gst_sys::GST_PROGRESS_TYPE_COMPLETE,
             ProgressType::Canceled => gst_sys::GST_PROGRESS_TYPE_CANCELED,
             ProgressType::Error => gst_sys::GST_PROGRESS_TYPE_ERROR,
-            ProgressType::__Unknown(value) => value
+            ProgressType::__Unknown(value) => value,
         }
     }
 }
@@ -1526,8 +1507,7 @@ impl SetValue for ProgressType {
 }
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PromiseResult {
     Pending,
     Interrupted,
@@ -1548,7 +1528,7 @@ impl ToGlib for PromiseResult {
             PromiseResult::Interrupted => gst_sys::GST_PROMISE_RESULT_INTERRUPTED,
             PromiseResult::Replied => gst_sys::GST_PROMISE_RESULT_REPLIED,
             PromiseResult::Expired => gst_sys::GST_PROMISE_RESULT_EXPIRED,
-            PromiseResult::__Unknown(value) => value
+            PromiseResult::__Unknown(value) => value,
         }
     }
 }
@@ -1596,8 +1576,7 @@ impl SetValue for PromiseResult {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum QOSType {
     Overflow,
     Underflow,
@@ -1615,7 +1594,7 @@ impl ToGlib for QOSType {
             QOSType::Overflow => gst_sys::GST_QOS_TYPE_OVERFLOW,
             QOSType::Underflow => gst_sys::GST_QOS_TYPE_UNDERFLOW,
             QOSType::Throttle => gst_sys::GST_QOS_TYPE_THROTTLE,
-            QOSType::__Unknown(value) => value
+            QOSType::__Unknown(value) => value,
         }
     }
 }
@@ -1657,8 +1636,7 @@ impl SetValue for QOSType {
     }
 }
 
-    #[derive(Debug)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum Rank {
     None,
     Marginal,
@@ -1678,7 +1656,7 @@ impl ToGlib for Rank {
             Rank::Marginal => gst_sys::GST_RANK_MARGINAL,
             Rank::Secondary => gst_sys::GST_RANK_SECONDARY,
             Rank::Primary => gst_sys::GST_RANK_PRIMARY,
-            Rank::__Unknown(value) => value
+            Rank::__Unknown(value) => value,
         }
     }
 }
@@ -1721,8 +1699,7 @@ impl SetValue for Rank {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ResourceError {
     Failed,
     TooLazy,
@@ -1766,7 +1743,7 @@ impl ToGlib for ResourceError {
             ResourceError::NoSpaceLeft => gst_sys::GST_RESOURCE_ERROR_NO_SPACE_LEFT,
             ResourceError::NotAuthorized => gst_sys::GST_RESOURCE_ERROR_NOT_AUTHORIZED,
             ResourceError::NumErrors => gst_sys::GST_RESOURCE_ERROR_NUM_ERRORS,
-            ResourceError::__Unknown(value) => value
+            ResourceError::__Unknown(value) => value,
         }
     }
 }
@@ -1855,8 +1832,7 @@ impl SetValue for ResourceError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum SeekType {
     None,
     Set,
@@ -1874,7 +1850,7 @@ impl ToGlib for SeekType {
             SeekType::None => gst_sys::GST_SEEK_TYPE_NONE,
             SeekType::Set => gst_sys::GST_SEEK_TYPE_SET,
             SeekType::End => gst_sys::GST_SEEK_TYPE_END,
-            SeekType::__Unknown(value) => value
+            SeekType::__Unknown(value) => value,
         }
     }
 }
@@ -1916,8 +1892,7 @@ impl SetValue for SeekType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum State {
     VoidPending,
     Null,
@@ -1939,7 +1914,7 @@ impl ToGlib for State {
             State::Ready => gst_sys::GST_STATE_READY,
             State::Paused => gst_sys::GST_STATE_PAUSED,
             State::Playing => gst_sys::GST_STATE_PLAYING,
-            State::__Unknown(value) => value
+            State::__Unknown(value) => value,
         }
     }
 }
@@ -1983,8 +1958,7 @@ impl SetValue for State {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StateChange {
     NullToReady,
     ReadyToPaused,
@@ -2016,7 +1990,7 @@ impl ToGlib for StateChange {
             StateChange::ReadyToReady => gst_sys::GST_STATE_CHANGE_READY_TO_READY,
             StateChange::PausedToPaused => gst_sys::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
             StateChange::PlayingToPlaying => gst_sys::GST_STATE_CHANGE_PLAYING_TO_PLAYING,
-            StateChange::__Unknown(value) => value
+            StateChange::__Unknown(value) => value,
         }
     }
 }
@@ -2066,8 +2040,7 @@ impl SetValue for StateChange {
 }
 
 #[must_use]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StateChangeReturn {
     Failure,
     Success,
@@ -2087,7 +2060,7 @@ impl ToGlib for StateChangeReturn {
             StateChangeReturn::Success => gst_sys::GST_STATE_CHANGE_SUCCESS,
             StateChangeReturn::Async => gst_sys::GST_STATE_CHANGE_ASYNC,
             StateChangeReturn::NoPreroll => gst_sys::GST_STATE_CHANGE_NO_PREROLL,
-            StateChangeReturn::__Unknown(value) => value
+            StateChangeReturn::__Unknown(value) => value,
         }
     }
 }
@@ -2130,8 +2103,7 @@ impl SetValue for StateChangeReturn {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StreamError {
     Failed,
     TooLazy,
@@ -2171,7 +2143,7 @@ impl ToGlib for StreamError {
             StreamError::Decrypt => gst_sys::GST_STREAM_ERROR_DECRYPT,
             StreamError::DecryptNokey => gst_sys::GST_STREAM_ERROR_DECRYPT_NOKEY,
             StreamError::NumErrors => gst_sys::GST_STREAM_ERROR_NUM_ERRORS,
-            StreamError::__Unknown(value) => value
+            StreamError::__Unknown(value) => value,
         }
     }
 }
@@ -2256,8 +2228,7 @@ impl SetValue for StreamError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StreamStatusType {
     Create,
     Enter,
@@ -2283,7 +2254,7 @@ impl ToGlib for StreamStatusType {
             StreamStatusType::Start => gst_sys::GST_STREAM_STATUS_TYPE_START,
             StreamStatusType::Pause => gst_sys::GST_STREAM_STATUS_TYPE_PAUSE,
             StreamStatusType::Stop => gst_sys::GST_STREAM_STATUS_TYPE_STOP,
-            StreamStatusType::__Unknown(value) => value
+            StreamStatusType::__Unknown(value) => value,
         }
     }
 }
@@ -2329,8 +2300,7 @@ impl SetValue for StreamStatusType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StructureChangeType {
     Link,
     Unlink,
@@ -2346,7 +2316,7 @@ impl ToGlib for StructureChangeType {
         match *self {
             StructureChangeType::Link => gst_sys::GST_STRUCTURE_CHANGE_TYPE_PAD_LINK,
             StructureChangeType::Unlink => gst_sys::GST_STRUCTURE_CHANGE_TYPE_PAD_UNLINK,
-            StructureChangeType::__Unknown(value) => value
+            StructureChangeType::__Unknown(value) => value,
         }
     }
 }
@@ -2387,8 +2357,7 @@ impl SetValue for StructureChangeType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum TagFlag {
     Undefined,
     Meta,
@@ -2410,7 +2379,7 @@ impl ToGlib for TagFlag {
             TagFlag::Encoded => gst_sys::GST_TAG_FLAG_ENCODED,
             TagFlag::Decoded => gst_sys::GST_TAG_FLAG_DECODED,
             TagFlag::Count => gst_sys::GST_TAG_FLAG_COUNT,
-            TagFlag::__Unknown(value) => value
+            TagFlag::__Unknown(value) => value,
         }
     }
 }
@@ -2454,8 +2423,7 @@ impl SetValue for TagFlag {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum TagMergeMode {
     Undefined,
     ReplaceAll,
@@ -2483,7 +2451,7 @@ impl ToGlib for TagMergeMode {
             TagMergeMode::Keep => gst_sys::GST_TAG_MERGE_KEEP,
             TagMergeMode::KeepAll => gst_sys::GST_TAG_MERGE_KEEP_ALL,
             TagMergeMode::Count => gst_sys::GST_TAG_MERGE_COUNT,
-            TagMergeMode::__Unknown(value) => value
+            TagMergeMode::__Unknown(value) => value,
         }
     }
 }
@@ -2530,9 +2498,8 @@ impl SetValue for TagMergeMode {
     }
 }
 
-    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub enum TagScope {
     Stream,
     Global,
@@ -2548,7 +2515,7 @@ impl ToGlib for TagScope {
         match *self {
             TagScope::Stream => gst_sys::GST_TAG_SCOPE_STREAM,
             TagScope::Global => gst_sys::GST_TAG_SCOPE_GLOBAL,
-            TagScope::__Unknown(value) => value
+            TagScope::__Unknown(value) => value,
         }
     }
 }
@@ -2589,8 +2556,7 @@ impl SetValue for TagScope {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum TaskState {
     Started,
     Stopped,
@@ -2608,7 +2574,7 @@ impl ToGlib for TaskState {
             TaskState::Started => gst_sys::GST_TASK_STARTED,
             TaskState::Stopped => gst_sys::GST_TASK_STOPPED,
             TaskState::Paused => gst_sys::GST_TASK_PAUSED,
-            TaskState::__Unknown(value) => value
+            TaskState::__Unknown(value) => value,
         }
     }
 }
@@ -2650,9 +2616,8 @@ impl SetValue for TaskState {
     }
 }
 
-    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub enum TocEntryType {
     Angle,
     Version,
@@ -2678,7 +2643,7 @@ impl ToGlib for TocEntryType {
             TocEntryType::Title => gst_sys::GST_TOC_ENTRY_TYPE_TITLE,
             TocEntryType::Track => gst_sys::GST_TOC_ENTRY_TYPE_TRACK,
             TocEntryType::Chapter => gst_sys::GST_TOC_ENTRY_TYPE_CHAPTER,
-            TocEntryType::__Unknown(value) => value
+            TocEntryType::__Unknown(value) => value,
         }
     }
 }
@@ -2724,9 +2689,8 @@ impl SetValue for TocEntryType {
     }
 }
 
-    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub enum TocLoopType {
     None,
     Forward,
@@ -2746,7 +2710,7 @@ impl ToGlib for TocLoopType {
             TocLoopType::Forward => gst_sys::GST_TOC_LOOP_FORWARD,
             TocLoopType::Reverse => gst_sys::GST_TOC_LOOP_REVERSE,
             TocLoopType::PingPong => gst_sys::GST_TOC_LOOP_PING_PONG,
-            TocLoopType::__Unknown(value) => value
+            TocLoopType::__Unknown(value) => value,
         }
     }
 }
@@ -2789,9 +2753,8 @@ impl SetValue for TocLoopType {
     }
 }
 
-    #[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[derive(Clone, Copy)]
+#[cfg_attr(feature = "ser_de", derive(Serialize, Deserialize))]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 pub enum TocScope {
     Global,
     Current,
@@ -2807,7 +2770,7 @@ impl ToGlib for TocScope {
         match *self {
             TocScope::Global => gst_sys::GST_TOC_SCOPE_GLOBAL,
             TocScope::Current => gst_sys::GST_TOC_SCOPE_CURRENT,
-            TocScope::__Unknown(value) => value
+            TocScope::__Unknown(value) => value,
         }
     }
 }
@@ -2848,8 +2811,7 @@ impl SetValue for TocScope {
     }
 }
 
-    #[derive(Debug)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub enum TypeFindProbability {
     None,
     Minimum,
@@ -2873,7 +2835,7 @@ impl ToGlib for TypeFindProbability {
             TypeFindProbability::Likely => gst_sys::GST_TYPE_FIND_LIKELY,
             TypeFindProbability::NearlyCertain => gst_sys::GST_TYPE_FIND_NEARLY_CERTAIN,
             TypeFindProbability::Maximum => gst_sys::GST_TYPE_FIND_MAXIMUM,
-            TypeFindProbability::__Unknown(value) => value
+            TypeFindProbability::__Unknown(value) => value,
         }
     }
 }
@@ -2918,8 +2880,7 @@ impl SetValue for TypeFindProbability {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum URIError {
     UnsupportedProtocol,
     BadUri,
@@ -2939,7 +2900,7 @@ impl ToGlib for URIError {
             URIError::BadUri => gst_sys::GST_URI_ERROR_BAD_URI,
             URIError::BadState => gst_sys::GST_URI_ERROR_BAD_STATE,
             URIError::BadReference => gst_sys::GST_URI_ERROR_BAD_REFERENCE,
-            URIError::__Unknown(value) => value
+            URIError::__Unknown(value) => value,
         }
     }
 }
@@ -3004,8 +2965,7 @@ impl SetValue for URIError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum URIType {
     Unknown,
     Sink,
@@ -3023,7 +2983,7 @@ impl ToGlib for URIType {
             URIType::Unknown => gst_sys::GST_URI_UNKNOWN,
             URIType::Sink => gst_sys::GST_URI_SINK,
             URIType::Src => gst_sys::GST_URI_SRC,
-            URIType::__Unknown(value) => value
+            URIType::__Unknown(value) => value,
         }
     }
 }
@@ -3064,4 +3024,3 @@ impl SetValue for URIType {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

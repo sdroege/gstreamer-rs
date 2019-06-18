@@ -2,20 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::Quark;
-use glib::StaticType;
-use glib::Type;
 use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::Quark;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_gl_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLContextError {
     Failed,
     WrongConfig,
@@ -38,8 +37,10 @@ impl ToGlib for GLContextError {
             GLContextError::WrongApi => gst_gl_sys::GST_GL_CONTEXT_ERROR_WRONG_API,
             GLContextError::OldLibs => gst_gl_sys::GST_GL_CONTEXT_ERROR_OLD_LIBS,
             GLContextError::CreateContext => gst_gl_sys::GST_GL_CONTEXT_ERROR_CREATE_CONTEXT,
-            GLContextError::ResourceUnavailable => gst_gl_sys::GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE,
-            GLContextError::__Unknown(value) => value
+            GLContextError::ResourceUnavailable => {
+                gst_gl_sys::GST_GL_CONTEXT_ERROR_RESOURCE_UNAVAILABLE
+            }
+            GLContextError::__Unknown(value) => value,
         }
     }
 }
@@ -108,8 +109,7 @@ impl SetValue for GLContextError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLFormat {
     Luminance,
     Alpha,
@@ -153,7 +153,7 @@ impl ToGlib for GLFormat {
             GLFormat::Rgba16 => gst_gl_sys::GST_GL_RGBA16,
             GLFormat::DepthComponent16 => gst_gl_sys::GST_GL_DEPTH_COMPONENT16,
             GLFormat::Depth24Stencil8 => gst_gl_sys::GST_GL_DEPTH24_STENCIL8,
-            GLFormat::__Unknown(value) => value
+            GLFormat::__Unknown(value) => value,
         }
     }
 }
@@ -208,8 +208,7 @@ impl SetValue for GLFormat {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLQueryType {
     None,
     TimeElapsed,
@@ -227,7 +226,7 @@ impl ToGlib for GLQueryType {
             GLQueryType::None => gst_gl_sys::GST_GL_QUERY_NONE,
             GLQueryType::TimeElapsed => gst_gl_sys::GST_GL_QUERY_TIME_ELAPSED,
             GLQueryType::Timestamp => gst_gl_sys::GST_GL_QUERY_TIMESTAMP,
-            GLQueryType::__Unknown(value) => value
+            GLQueryType::__Unknown(value) => value,
         }
     }
 }
@@ -269,8 +268,7 @@ impl SetValue for GLQueryType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLSLError {
     Compile,
     Link,
@@ -288,7 +286,7 @@ impl ToGlib for GLSLError {
             GLSLError::Compile => gst_gl_sys::GST_GLSL_ERROR_COMPILE,
             GLSLError::Link => gst_gl_sys::GST_GLSL_ERROR_LINK,
             GLSLError::Program => gst_gl_sys::GST_GLSL_ERROR_PROGRAM,
-            GLSLError::__Unknown(value) => value
+            GLSLError::__Unknown(value) => value,
         }
     }
 }
@@ -351,8 +349,7 @@ impl SetValue for GLSLError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLSLVersion {
     None,
     _100,
@@ -398,7 +395,7 @@ impl ToGlib for GLSLVersion {
             GLSLVersion::_430 => gst_gl_sys::GST_GLSL_VERSION_430,
             GLSLVersion::_440 => gst_gl_sys::GST_GLSL_VERSION_440,
             GLSLVersion::_450 => gst_gl_sys::GST_GLSL_VERSION_450,
-            GLSLVersion::__Unknown(value) => value
+            GLSLVersion::__Unknown(value) => value,
         }
     }
 }
@@ -454,8 +451,7 @@ impl SetValue for GLSLVersion {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLStereoDownmix {
     GreenMagentaDubois,
     RedCyanDubois,
@@ -470,10 +466,16 @@ impl ToGlib for GLStereoDownmix {
 
     fn to_glib(&self) -> gst_gl_sys::GstGLStereoDownmix {
         match *self {
-            GLStereoDownmix::GreenMagentaDubois => gst_gl_sys::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS,
-            GLStereoDownmix::RedCyanDubois => gst_gl_sys::GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS,
-            GLStereoDownmix::AmberBlueDubois => gst_gl_sys::GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS,
-            GLStereoDownmix::__Unknown(value) => value
+            GLStereoDownmix::GreenMagentaDubois => {
+                gst_gl_sys::GST_GL_STEREO_DOWNMIX_ANAGLYPH_GREEN_MAGENTA_DUBOIS
+            }
+            GLStereoDownmix::RedCyanDubois => {
+                gst_gl_sys::GST_GL_STEREO_DOWNMIX_ANAGLYPH_RED_CYAN_DUBOIS
+            }
+            GLStereoDownmix::AmberBlueDubois => {
+                gst_gl_sys::GST_GL_STEREO_DOWNMIX_ANAGLYPH_AMBER_BLUE_DUBOIS
+            }
+            GLStereoDownmix::__Unknown(value) => value,
         }
     }
 }
@@ -515,8 +517,7 @@ impl SetValue for GLStereoDownmix {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLTextureTarget {
     None,
     _2d,
@@ -536,7 +537,7 @@ impl ToGlib for GLTextureTarget {
             GLTextureTarget::_2d => gst_gl_sys::GST_GL_TEXTURE_TARGET_2D,
             GLTextureTarget::Rectangle => gst_gl_sys::GST_GL_TEXTURE_TARGET_RECTANGLE,
             GLTextureTarget::ExternalOes => gst_gl_sys::GST_GL_TEXTURE_TARGET_EXTERNAL_OES,
-            GLTextureTarget::__Unknown(value) => value
+            GLTextureTarget::__Unknown(value) => value,
         }
     }
 }
@@ -579,8 +580,7 @@ impl SetValue for GLTextureTarget {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLUploadReturn {
     Done,
     Error,
@@ -602,7 +602,7 @@ impl ToGlib for GLUploadReturn {
             GLUploadReturn::Unsupported => gst_gl_sys::GST_GL_UPLOAD_UNSUPPORTED,
             GLUploadReturn::Reconfigure => gst_gl_sys::GST_GL_UPLOAD_RECONFIGURE,
             GLUploadReturn::UnsharedGlContext => gst_gl_sys::GST_GL_UPLOAD_UNSHARED_GL_CONTEXT,
-            GLUploadReturn::__Unknown(value) => value
+            GLUploadReturn::__Unknown(value) => value,
         }
     }
 }
@@ -646,8 +646,7 @@ impl SetValue for GLUploadReturn {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum GLWindowError {
     Failed,
     OldLibs,
@@ -664,8 +663,10 @@ impl ToGlib for GLWindowError {
         match *self {
             GLWindowError::Failed => gst_gl_sys::GST_GL_WINDOW_ERROR_FAILED,
             GLWindowError::OldLibs => gst_gl_sys::GST_GL_WINDOW_ERROR_OLD_LIBS,
-            GLWindowError::ResourceUnavailable => gst_gl_sys::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE,
-            GLWindowError::__Unknown(value) => value
+            GLWindowError::ResourceUnavailable => {
+                gst_gl_sys::GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE
+            }
+            GLWindowError::__Unknown(value) => value,
         }
     }
 }
@@ -727,4 +728,3 @@ impl SetValue for GLWindowError {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

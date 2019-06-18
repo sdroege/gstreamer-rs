@@ -3,71 +3,71 @@
 // DO NOT EDIT
 
 mod asset;
-pub use self::asset::{Asset, AssetClass, NONE_ASSET};
 pub use self::asset::AssetExt;
+pub use self::asset::{Asset, AssetClass, NONE_ASSET};
 
 mod base_effect;
 pub use self::base_effect::{BaseEffect, BaseEffectClass, NONE_BASE_EFFECT};
 
 mod clip;
-pub use self::clip::{Clip, ClipClass, NONE_CLIP};
 pub use self::clip::ClipExt;
+pub use self::clip::{Clip, ClipClass, NONE_CLIP};
 
 mod container;
-pub use self::container::{Container, ContainerClass, NONE_CONTAINER};
 pub use self::container::GESContainerExt;
+pub use self::container::{Container, ContainerClass, NONE_CONTAINER};
 
 mod effect;
-pub use self::effect::{Effect, EffectClass, NONE_EFFECT};
 pub use self::effect::EffectExt;
+pub use self::effect::{Effect, EffectClass, NONE_EFFECT};
 
 mod extractable;
-pub use self::extractable::{Extractable, NONE_EXTRACTABLE};
 pub use self::extractable::ExtractableExt;
+pub use self::extractable::{Extractable, NONE_EXTRACTABLE};
 
 mod group;
-pub use self::group::{Group, GroupClass, NONE_GROUP};
 pub use self::group::GroupExt;
+pub use self::group::{Group, GroupClass, NONE_GROUP};
 
 mod layer;
-pub use self::layer::{Layer, LayerClass, NONE_LAYER};
 pub use self::layer::LayerExt;
+pub use self::layer::{Layer, LayerClass, NONE_LAYER};
 
 mod pipeline;
-pub use self::pipeline::{Pipeline, PipelineClass, NONE_PIPELINE};
 pub use self::pipeline::GESPipelineExt;
+pub use self::pipeline::{Pipeline, PipelineClass, NONE_PIPELINE};
 
 mod project;
-pub use self::project::{Project, ProjectClass, NONE_PROJECT};
 pub use self::project::ProjectExt;
+pub use self::project::{Project, ProjectClass, NONE_PROJECT};
 
 mod timeline;
-pub use self::timeline::{Timeline, TimelineClass, NONE_TIMELINE};
 pub use self::timeline::TimelineExt;
+pub use self::timeline::{Timeline, TimelineClass, NONE_TIMELINE};
 
 mod timeline_element;
-pub use self::timeline_element::{TimelineElement, TimelineElementClass, NONE_TIMELINE_ELEMENT};
 pub use self::timeline_element::TimelineElementExt;
+pub use self::timeline_element::{TimelineElement, TimelineElementClass, NONE_TIMELINE_ELEMENT};
 
 mod track;
-pub use self::track::{Track, TrackClass, NONE_TRACK};
 pub use self::track::GESTrackExt;
+pub use self::track::{Track, TrackClass, NONE_TRACK};
 
 mod track_element;
-pub use self::track_element::{TrackElement, TrackElementClass, NONE_TRACK_ELEMENT};
 pub use self::track_element::TrackElementExt;
+pub use self::track_element::{TrackElement, TrackElementClass, NONE_TRACK_ELEMENT};
 
 mod uri_clip;
-pub use self::uri_clip::{UriClip, UriClipClass, NONE_URI_CLIP};
 pub use self::uri_clip::UriClipExt;
+pub use self::uri_clip::{UriClip, UriClipClass, NONE_URI_CLIP};
 
 mod uri_clip_asset;
-pub use self::uri_clip_asset::{UriClipAsset, UriClipAssetClass, NONE_URI_CLIP_ASSET};
 pub use self::uri_clip_asset::UriClipAssetExt;
+pub use self::uri_clip_asset::{UriClipAsset, UriClipAssetClass, NONE_URI_CLIP_ASSET};
 
 mod uri_source_asset;
-pub use self::uri_source_asset::{UriSourceAsset, UriSourceAssetClass, NONE_URI_SOURCE_ASSET};
 pub use self::uri_source_asset::UriSourceAssetExt;
+pub use self::uri_source_asset::{UriSourceAsset, UriSourceAssetClass, NONE_URI_SOURCE_ASSET};
 
 mod enums;
 pub use self::enums::Edge;
@@ -81,18 +81,18 @@ pub use self::flags::TrackType;
 pub mod traits {
     pub use super::AssetExt;
     pub use super::ClipExt;
-    pub use super::GESContainerExt;
     pub use super::EffectExt;
     pub use super::ExtractableExt;
+    pub use super::GESContainerExt;
+    pub use super::GESPipelineExt;
+    pub use super::GESTrackExt;
     pub use super::GroupExt;
     pub use super::LayerExt;
-    pub use super::GESPipelineExt;
     pub use super::ProjectExt;
-    pub use super::TimelineExt;
     pub use super::TimelineElementExt;
-    pub use super::GESTrackExt;
+    pub use super::TimelineExt;
     pub use super::TrackElementExt;
-    pub use super::UriClipExt;
     pub use super::UriClipAssetExt;
+    pub use super::UriClipExt;
     pub use super::UriSourceAssetExt;
 }

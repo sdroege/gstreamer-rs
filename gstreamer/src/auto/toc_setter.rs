@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Element;
-use Object;
-use Toc;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_sys;
+use Element;
+use Object;
+use Toc;
 
 glib_wrapper! {
     pub struct TocSetter(Interface<gst_sys::GstTocSetter>) @requires Element, Object;
@@ -33,7 +33,9 @@ pub trait TocSetterExt: 'static {
 impl<O: IsA<TocSetter>> TocSetterExt for O {
     fn get_toc(&self) -> Option<Toc> {
         unsafe {
-            from_glib_full(gst_sys::gst_toc_setter_get_toc(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_toc_setter_get_toc(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

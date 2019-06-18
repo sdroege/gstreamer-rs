@@ -32,4 +32,3 @@ impl FromGlib<gst_base_sys::GstBaseParseFrameFlags> for BaseParseFrameFlags {
         BaseParseFrameFlags::from_bits_truncate(value)
     }
 }
-

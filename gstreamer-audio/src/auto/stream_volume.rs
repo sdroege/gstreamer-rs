@@ -2,16 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use StreamVolumeFormat;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys;
 use gst_audio_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use StreamVolumeFormat;
 
 glib_wrapper! {
     pub struct StreamVolume(Interface<gst_audio_sys::GstStreamVolume>);
@@ -44,61 +44,101 @@ pub trait StreamVolumeExt: 'static {
 
     fn set_volume(&self, format: StreamVolumeFormat, val: f64);
 
-    fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
     fn get_mute(&self) -> bool {
         unsafe {
-            from_glib(gst_audio_sys::gst_stream_volume_get_mute(self.as_ref().to_glib_none().0))
+            from_glib(gst_audio_sys::gst_stream_volume_get_mute(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_volume(&self, format: StreamVolumeFormat) -> f64 {
         unsafe {
-            gst_audio_sys::gst_stream_volume_get_volume(self.as_ref().to_glib_none().0, format.to_glib())
+            gst_audio_sys::gst_stream_volume_get_volume(
+                self.as_ref().to_glib_none().0,
+                format.to_glib(),
+            )
         }
     }
 
     fn set_mute(&self, mute: bool) {
         unsafe {
-            gst_audio_sys::gst_stream_volume_set_mute(self.as_ref().to_glib_none().0, mute.to_glib());
+            gst_audio_sys::gst_stream_volume_set_mute(
+                self.as_ref().to_glib_none().0,
+                mute.to_glib(),
+            );
         }
     }
 
     fn set_volume(&self, format: StreamVolumeFormat, val: f64) {
         unsafe {
-            gst_audio_sys::gst_stream_volume_set_volume(self.as_ref().to_glib_none().0, format.to_glib(), val);
+            gst_audio_sys::gst_stream_volume_set_volume(
+                self.as_ref().to_glib_none().0,
+                format.to_glib(),
+                val,
+            );
         }
     }
 
-    fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_audio_sys::GstStreamVolume, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<StreamVolume>
+    fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_audio_sys::GstStreamVolume,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<StreamVolume>,
         {
             let f: &F = &*(f as *const F);
             f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::mute\0".as_ptr() as *const _,
-                Some(transmute(notify_mute_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mute\0".as_ptr() as *const _,
+                Some(transmute(notify_mute_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_audio_sys::GstStreamVolume, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<StreamVolume>
+    fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_audio_sys::GstStreamVolume,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<StreamVolume>,
         {
             let f: &F = &*(f as *const F);
             f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::volume\0".as_ptr() as *const _,
-                Some(transmute(notify_volume_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::volume\0".as_ptr() as *const _,
+                Some(transmute(notify_volume_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

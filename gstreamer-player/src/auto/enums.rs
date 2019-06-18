@@ -2,20 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::Quark;
-use glib::StaticType;
-use glib::Type;
 use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::Quark;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_player_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PlayerColorBalanceType {
     Hue,
     Brightness,
@@ -32,10 +31,14 @@ impl ToGlib for PlayerColorBalanceType {
     fn to_glib(&self) -> gst_player_sys::GstPlayerColorBalanceType {
         match *self {
             PlayerColorBalanceType::Hue => gst_player_sys::GST_PLAYER_COLOR_BALANCE_HUE,
-            PlayerColorBalanceType::Brightness => gst_player_sys::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS,
-            PlayerColorBalanceType::Saturation => gst_player_sys::GST_PLAYER_COLOR_BALANCE_SATURATION,
+            PlayerColorBalanceType::Brightness => {
+                gst_player_sys::GST_PLAYER_COLOR_BALANCE_BRIGHTNESS
+            }
+            PlayerColorBalanceType::Saturation => {
+                gst_player_sys::GST_PLAYER_COLOR_BALANCE_SATURATION
+            }
             PlayerColorBalanceType::Contrast => gst_player_sys::GST_PLAYER_COLOR_BALANCE_CONTRAST,
-            PlayerColorBalanceType::__Unknown(value) => value
+            PlayerColorBalanceType::__Unknown(value) => value,
         }
     }
 }
@@ -78,8 +81,7 @@ impl SetValue for PlayerColorBalanceType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PlayerError {
     Failed,
     #[doc(hidden)]
@@ -93,7 +95,7 @@ impl ToGlib for PlayerError {
     fn to_glib(&self) -> gst_player_sys::GstPlayerError {
         match *self {
             PlayerError::Failed => gst_player_sys::GST_PLAYER_ERROR_FAILED,
-            PlayerError::__Unknown(value) => value
+            PlayerError::__Unknown(value) => value,
         }
     }
 }
@@ -152,8 +154,7 @@ impl SetValue for PlayerError {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PlayerSnapshotFormat {
     RawNative,
     RawXrgb,
@@ -175,7 +176,7 @@ impl ToGlib for PlayerSnapshotFormat {
             PlayerSnapshotFormat::RawBgrx => gst_player_sys::GST_PLAYER_THUMBNAIL_RAW_BGRx,
             PlayerSnapshotFormat::Jpg => gst_player_sys::GST_PLAYER_THUMBNAIL_JPG,
             PlayerSnapshotFormat::Png => gst_player_sys::GST_PLAYER_THUMBNAIL_PNG,
-            PlayerSnapshotFormat::__Unknown(value) => value
+            PlayerSnapshotFormat::__Unknown(value) => value,
         }
     }
 }
@@ -195,8 +196,7 @@ impl FromGlib<gst_player_sys::GstPlayerSnapshotFormat> for PlayerSnapshotFormat 
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum PlayerState {
     Stopped,
     Buffering,
@@ -216,7 +216,7 @@ impl ToGlib for PlayerState {
             PlayerState::Buffering => gst_player_sys::GST_PLAYER_STATE_BUFFERING,
             PlayerState::Paused => gst_player_sys::GST_PLAYER_STATE_PAUSED,
             PlayerState::Playing => gst_player_sys::GST_PLAYER_STATE_PLAYING,
-            PlayerState::__Unknown(value) => value
+            PlayerState::__Unknown(value) => value,
         }
     }
 }
@@ -258,4 +258,3 @@ impl SetValue for PlayerState {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

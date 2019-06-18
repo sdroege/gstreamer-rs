@@ -2,6 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::StaticType;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gst_sys;
+use std::boxed::Box as Box_;
+use std::mem::transmute;
 use ChildProxy;
 use Element;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -9,19 +22,6 @@ use ElementFlags;
 use Object;
 use Pad;
 use PadDirection;
-use glib;
-use glib::StaticType;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_sys;
-use gobject_sys;
-use gst_sys;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct Bin(Object<gst_sys::GstBin, gst_sys::GstBinClass, BinClass>) @extends Element, Object, @implements ChildProxy;
@@ -93,24 +93,48 @@ pub trait GstBinExt: 'static {
     fn set_property_message_forward(&self, message_forward: bool);
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<Bin>> GstBinExt for O {
     fn add<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_bin_add(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to add element")
+            glib_result_from_gboolean!(
+                gst_sys::gst_bin_add(
+                    self.as_ref().to_glib_none().0,
+                    element.as_ref().to_glib_none().0
+                ),
+                "Failed to add element"
+            )
         }
     }
 
@@ -120,32 +144,46 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn find_unlinked_pad(&self, direction: PadDirection) -> Option<Pad> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_find_unlinked_pad(self.as_ref().to_glib_none().0, direction.to_glib()))
+            from_glib_full(gst_sys::gst_bin_find_unlinked_pad(
+                self.as_ref().to_glib_none().0,
+                direction.to_glib(),
+            ))
         }
     }
 
     fn get_by_interface(&self, iface: glib::types::Type) -> Option<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_get_by_interface(self.as_ref().to_glib_none().0, iface.to_glib()))
+            from_glib_full(gst_sys::gst_bin_get_by_interface(
+                self.as_ref().to_glib_none().0,
+                iface.to_glib(),
+            ))
         }
     }
 
     fn get_by_name(&self, name: &str) -> Option<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_get_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gst_sys::gst_bin_get_by_name(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+            ))
         }
     }
 
     fn get_by_name_recurse_up(&self, name: &str) -> Option<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_bin_get_by_name_recurse_up(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gst_sys::gst_bin_get_by_name_recurse_up(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn get_suppressed_flags(&self) -> ElementFlags {
         unsafe {
-            from_glib(gst_sys::gst_bin_get_suppressed_flags(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_bin_get_suppressed_flags(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -175,13 +213,22 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn recalculate_latency(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_bin_recalculate_latency(self.as_ref().to_glib_none().0), "Failed to recalculate latency")
+            glib_result_from_gboolean!(
+                gst_sys::gst_bin_recalculate_latency(self.as_ref().to_glib_none().0),
+                "Failed to recalculate latency"
+            )
         }
     }
 
     fn remove<P: IsA<Element>>(&self, element: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_bin_remove(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0), "Failed to remove element")
+            glib_result_from_gboolean!(
+                gst_sys::gst_bin_remove(
+                    self.as_ref().to_glib_none().0,
+                    element.as_ref().to_glib_none().0
+                ),
+                "Failed to remove element"
+            )
         }
     }
 
@@ -198,121 +245,246 @@ impl<O: IsA<Bin>> GstBinExt for O {
 
     fn sync_children_states(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_bin_sync_children_states(self.as_ref().to_glib_none().0), "Failed to sync children states")
+            glib_result_from_gboolean!(
+                gst_sys::gst_bin_sync_children_states(self.as_ref().to_glib_none().0),
+                "Failed to sync children states"
+            )
         }
     }
 
     fn get_property_async_handling(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"async-handling\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"async-handling\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_async_handling(&self, async_handling: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"async-handling\0".as_ptr() as *const _, Value::from(&async_handling).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"async-handling\0".as_ptr() as *const _,
+                Value::from(&async_handling).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_message_forward(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"message-forward\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"message-forward\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_message_forward(&self, message_forward: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"message-forward\0".as_ptr() as *const _, Value::from(&message_forward).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"message-forward\0".as_ptr() as *const _,
+                Value::from(&message_forward).to_glib_none().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn deep_element_added_trampoline<P, F: Fn(&P, &Bin, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, sub_bin: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-            where P: IsA<Bin>
+    fn connect_deep_element_added<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn deep_element_added_trampoline<
+            P,
+            F: Fn(&P, &Bin, &Element) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBin,
+            sub_bin: *mut gst_sys::GstBin,
+            element: *mut gst_sys::GstElement,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Bin>,
         {
             let f: &F = &*(f as *const F);
-            f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
+            f(
+                &Bin::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(sub_bin),
+                &from_glib_borrow(element),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"deep-element-added\0".as_ptr() as *const _,
-                Some(transmute(deep_element_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"deep-element-added\0".as_ptr() as *const _,
+                Some(transmute(deep_element_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn deep_element_removed_trampoline<P, F: Fn(&P, &Bin, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, sub_bin: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-            where P: IsA<Bin>
+    fn connect_deep_element_removed<F: Fn(&Self, &Bin, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn deep_element_removed_trampoline<
+            P,
+            F: Fn(&P, &Bin, &Element) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBin,
+            sub_bin: *mut gst_sys::GstBin,
+            element: *mut gst_sys::GstElement,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Bin>,
         {
             let f: &F = &*(f as *const F);
-            f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sub_bin), &from_glib_borrow(element))
+            f(
+                &Bin::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(sub_bin),
+                &from_glib_borrow(element),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"deep-element-removed\0".as_ptr() as *const _,
-                Some(transmute(deep_element_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"deep-element-removed\0".as_ptr() as *const _,
+                Some(transmute(
+                    deep_element_removed_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn element_added_trampoline<P, F: Fn(&P, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-            where P: IsA<Bin>
+    fn connect_element_added<F: Fn(&Self, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn element_added_trampoline<
+            P,
+            F: Fn(&P, &Element) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBin,
+            element: *mut gst_sys::GstElement,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Bin>,
         {
             let f: &F = &*(f as *const F);
-            f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
+            f(
+                &Bin::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(element),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"element-added\0".as_ptr() as *const _,
-                Some(transmute(element_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"element-added\0".as_ptr() as *const _,
+                Some(transmute(element_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn element_removed_trampoline<P, F: Fn(&P, &Element) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, element: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-            where P: IsA<Bin>
+    fn connect_element_removed<F: Fn(&Self, &Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn element_removed_trampoline<
+            P,
+            F: Fn(&P, &Element) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBin,
+            element: *mut gst_sys::GstElement,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Bin>,
         {
             let f: &F = &*(f as *const F);
-            f(&Bin::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(element))
+            f(
+                &Bin::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(element),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"element-removed\0".as_ptr() as *const _,
-                Some(transmute(element_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"element-removed\0".as_ptr() as *const _,
+                Some(transmute(element_removed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_async_handling_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Bin>
+    fn connect_property_async_handling_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_async_handling_trampoline<
+            P,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBin,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Bin>,
         {
             let f: &F = &*(f as *const F);
             f(&Bin::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::async-handling\0".as_ptr() as *const _,
-                Some(transmute(notify_async_handling_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::async-handling\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_async_handling_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_message_forward_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstBin, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Bin>
+    fn connect_property_message_forward_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_message_forward_trampoline<
+            P,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBin,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Bin>,
         {
             let f: &F = &*(f as *const F);
             f(&Bin::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::message-forward\0".as_ptr() as *const _,
-                Some(transmute(notify_message_forward_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::message-forward\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_message_forward_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

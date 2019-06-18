@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use DiscovererStreamInfo;
-use glib::GString;
 use glib::translate::*;
+use glib::GString;
 use gst_pbutils_sys;
+use DiscovererStreamInfo;
 
 glib_wrapper! {
     pub struct DiscovererSubtitleInfo(Object<gst_pbutils_sys::GstDiscovererSubtitleInfo, DiscovererSubtitleInfoClass>) @extends DiscovererStreamInfo;
@@ -18,7 +18,9 @@ glib_wrapper! {
 impl DiscovererSubtitleInfo {
     pub fn get_language(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_subtitle_info_get_language(self.to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_discoverer_subtitle_info_get_language(
+                self.to_glib_none().0,
+            ))
         }
     }
 }

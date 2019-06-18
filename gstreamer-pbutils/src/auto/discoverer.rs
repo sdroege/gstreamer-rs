@@ -2,17 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use DiscovererInfo;
-use Error;
 use glib;
+use glib::object::ObjectType as ObjectType_;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use glib::StaticType;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use glib::Value;
-use glib::object::ObjectType as ObjectType_;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
 use glib_sys;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use gobject_sys;
@@ -22,6 +20,8 @@ use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
+use DiscovererInfo;
+use Error;
 
 glib_wrapper! {
     pub struct Discoverer(Object<gst_pbutils_sys::GstDiscoverer, gst_pbutils_sys::GstDiscovererClass, DiscovererClass>);
@@ -37,21 +37,39 @@ impl Discoverer {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gst_pbutils_sys::gst_discoverer_new(timeout.to_glib(), &mut error);
-            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     pub fn discover_uri(&self, uri: &str) -> Result<DiscovererInfo, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = gst_pbutils_sys::gst_discoverer_discover_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+            let ret = gst_pbutils_sys::gst_discoverer_discover_uri(
+                self.to_glib_none().0,
+                uri.to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     pub fn discover_uri_async(&self, uri: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_pbutils_sys::gst_discoverer_discover_uri_async(self.to_glib_none().0, uri.to_glib_none().0), "Failed to add URI to list of discovers")
+            glib_result_from_gboolean!(
+                gst_pbutils_sys::gst_discoverer_discover_uri_async(
+                    self.to_glib_none().0,
+                    uri.to_glib_none().0
+                ),
+                "Failed to add URI to list of discovers"
+            )
         }
     }
 
@@ -71,7 +89,11 @@ impl Discoverer {
     pub fn get_property_use_cache(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"use-cache\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"use-cache\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -79,68 +101,138 @@ impl Discoverer {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn set_property_use_cache(&self, use_cache: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"use-cache\0".as_ptr() as *const _, Value::from(&use_cache).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"use-cache\0".as_ptr() as *const _,
+                Value::from(&use_cache).to_glib_none().0,
+            );
         }
     }
 
-    pub fn connect_discovered<F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn discovered_trampoline<F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, info: *mut gst_pbutils_sys::GstDiscovererInfo, error: *mut glib_sys::GError, f: glib_sys::gpointer) {
+    pub fn connect_discovered<
+        F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn discovered_trampoline<
+            F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static,
+        >(
+            this: *mut gst_pbutils_sys::GstDiscoverer,
+            info: *mut gst_pbutils_sys::GstDiscovererInfo,
+            error: *mut glib_sys::GError,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(info), Option::<Error>::from_glib_borrow(error).as_ref())
+            f(
+                &from_glib_borrow(this),
+                &from_glib_borrow(info),
+                Option::<Error>::from_glib_borrow(error).as_ref(),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"discovered\0".as_ptr() as *const _,
-                Some(transmute(discovered_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"discovered\0".as_ptr() as *const _,
+                Some(transmute(discovered_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_finished<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, f: glib_sys::gpointer) {
+    pub fn connect_finished<F: Fn(&Discoverer) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn finished_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(
+            this: *mut gst_pbutils_sys::GstDiscoverer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"finished\0".as_ptr() as *const _,
-                Some(transmute(finished_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"finished\0".as_ptr() as *const _,
+                Some(transmute(finished_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_source_setup<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn source_setup_trampoline<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, source: *mut gst_sys::GstElement, f: glib_sys::gpointer) {
+    pub fn connect_source_setup<F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn source_setup_trampoline<
+            F: Fn(&Discoverer, &gst::Element) + Send + Sync + 'static,
+        >(
+            this: *mut gst_pbutils_sys::GstDiscoverer,
+            source: *mut gst_sys::GstElement,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this), &from_glib_borrow(source))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"source-setup\0".as_ptr() as *const _,
-                Some(transmute(source_setup_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"source-setup\0".as_ptr() as *const _,
+                Some(transmute(source_setup_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_starting<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, f: glib_sys::gpointer) {
+    pub fn connect_starting<F: Fn(&Discoverer) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn starting_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(
+            this: *mut gst_pbutils_sys::GstDiscoverer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"starting\0".as_ptr() as *const _,
-                Some(transmute(starting_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"starting\0".as_ptr() as *const _,
+                Some(transmute(starting_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn connect_property_use_cache_notify<F: Fn(&Discoverer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_use_cache_trampoline<F: Fn(&Discoverer) + Send + Sync + 'static>(this: *mut gst_pbutils_sys::GstDiscoverer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_use_cache_notify<F: Fn(&Discoverer) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_use_cache_trampoline<
+            F: Fn(&Discoverer) + Send + Sync + 'static,
+        >(
+            this: *mut gst_pbutils_sys::GstDiscoverer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::use-cache\0".as_ptr() as *const _,
-                Some(transmute(notify_use_cache_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::use-cache\0".as_ptr() as *const _,
+                Some(transmute(notify_use_cache_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

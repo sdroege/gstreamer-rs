@@ -12,5 +12,4 @@ mod enums;
 pub use self::enums::AppStreamType;
 
 #[doc(hidden)]
-pub mod traits {
-}
+pub mod traits {}

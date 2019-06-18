@@ -19,7 +19,8 @@ impl VideoBufferPool {
     pub fn new() -> VideoBufferPool {
         assert_initialized_main_thread!();
         unsafe {
-            gst::BufferPool::from_glib_full(gst_video_sys::gst_video_buffer_pool_new()).unsafe_cast()
+            gst::BufferPool::from_glib_full(gst_video_sys::gst_video_buffer_pool_new())
+                .unsafe_cast()
         }
     }
 }

@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use RTSPAddress;
-use RTSPAddressFlags;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use gst_rtsp_server_sys;
+use RTSPAddress;
+use RTSPAddressFlags;
 
 glib_wrapper! {
     pub struct RTSPAddressPool(Object<gst_rtsp_server_sys::GstRTSPAddressPool, gst_rtsp_server_sys::GstRTSPAddressPoolClass, RTSPAddressPoolClass>);
@@ -20,9 +20,7 @@ glib_wrapper! {
 impl RTSPAddressPool {
     pub fn new() -> RTSPAddressPool {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_address_pool_new())
-        }
+        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_address_pool_new()) }
     }
 }
 
@@ -40,7 +38,14 @@ pub const NONE_RTSP_ADDRESS_POOL: Option<&RTSPAddressPool> = None;
 pub trait RTSPAddressPoolExt: 'static {
     fn acquire_address(&self, flags: RTSPAddressFlags, n_ports: i32) -> Option<RTSPAddress>;
 
-    fn add_range(&self, min_address: &str, max_address: &str, min_port: u16, max_port: u16, ttl: u8) -> Result<(), glib::error::BoolError>;
+    fn add_range(
+        &self,
+        min_address: &str,
+        max_address: &str,
+        min_port: u16,
+        max_port: u16,
+        ttl: u8,
+    ) -> Result<(), glib::error::BoolError>;
 
     fn clear(&self);
 
@@ -52,13 +57,34 @@ pub trait RTSPAddressPoolExt: 'static {
 impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
     fn acquire_address(&self, flags: RTSPAddressFlags, n_ports: i32) -> Option<RTSPAddress> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_address_pool_acquire_address(self.as_ref().to_glib_none().0, flags.to_glib(), n_ports))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_address_pool_acquire_address(
+                self.as_ref().to_glib_none().0,
+                flags.to_glib(),
+                n_ports,
+            ))
         }
     }
 
-    fn add_range(&self, min_address: &str, max_address: &str, min_port: u16, max_port: u16, ttl: u8) -> Result<(), glib::error::BoolError> {
+    fn add_range(
+        &self,
+        min_address: &str,
+        max_address: &str,
+        min_port: u16,
+        max_port: u16,
+        ttl: u8,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_address_pool_add_range(self.as_ref().to_glib_none().0, min_address.to_glib_none().0, max_address.to_glib_none().0, min_port, max_port, ttl), "Failed to add address range")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_address_pool_add_range(
+                    self.as_ref().to_glib_none().0,
+                    min_address.to_glib_none().0,
+                    max_address.to_glib_none().0,
+                    min_port,
+                    max_port,
+                    ttl
+                ),
+                "Failed to add address range"
+            )
         }
     }
 
@@ -76,7 +102,11 @@ impl<O: IsA<RTSPAddressPool>> RTSPAddressPoolExt for O {
 
     fn has_unicast_addresses(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_address_pool_has_unicast_addresses(self.as_ref().to_glib_none().0))
+            from_glib(
+                gst_rtsp_server_sys::gst_rtsp_address_pool_has_unicast_addresses(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 }

@@ -2,9 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst;
 use gst_pbutils_sys;
 
@@ -42,49 +42,67 @@ pub trait DiscovererStreamInfoExt: 'static {
 impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExt for O {
     fn get_caps(&self) -> Option<gst::Caps> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_caps(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_caps(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_misc(&self) -> Option<gst::Structure> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_misc(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_misc(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_next(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_next(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_next(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_previous(&self) -> Option<DiscovererStreamInfo> {
         unsafe {
-            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_previous(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_pbutils_sys::gst_discoverer_stream_info_get_previous(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_stream_id(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_stream_id(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_stream_id(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_stream_type_nick(&self) -> GString {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_stream_type_nick(self.as_ref().to_glib_none().0))
+            from_glib_none(
+                gst_pbutils_sys::gst_discoverer_stream_info_get_stream_type_nick(
+                    self.as_ref().to_glib_none().0,
+                ),
+            )
         }
     }
 
     fn get_tags(&self) -> Option<gst::TagList> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_tags(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_tags(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_toc(&self) -> Option<gst::Toc> {
         unsafe {
-            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_toc(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_pbutils_sys::gst_discoverer_stream_info_get_toc(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

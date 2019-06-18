@@ -2,22 +2,22 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Asset;
-use Clip;
-use Extractable;
-use Timeline;
-use TrackType;
 use ges_sys;
 use glib;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys;
 use gst;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use Asset;
+use Clip;
+use Extractable;
+use Timeline;
+use TrackType;
 
 glib_wrapper! {
     pub struct Layer(Object<ges_sys::GESLayer, ges_sys::GESLayerClass, LayerClass>) @implements Extractable;
@@ -30,9 +30,7 @@ glib_wrapper! {
 impl Layer {
     pub fn new() -> Layer {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ges_sys::ges_layer_new())
-        }
+        unsafe { from_glib_none(ges_sys::ges_layer_new()) }
     }
 }
 
@@ -45,7 +43,14 @@ impl Default for Layer {
 pub const NONE_LAYER: Option<&Layer> = None;
 
 pub trait LayerExt: 'static {
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P, start: gst::ClockTime, inpoint: gst::ClockTime, duration: gst::ClockTime, track_types: TrackType) -> Option<Clip>;
+    fn add_asset<P: IsA<Asset>>(
+        &self,
+        asset: &P,
+        start: gst::ClockTime,
+        inpoint: gst::ClockTime,
+        duration: gst::ClockTime,
+        track_types: TrackType,
+    ) -> Option<Clip>;
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError>;
 
@@ -76,76 +81,116 @@ pub trait LayerExt: 'static {
 
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v1_16", deprecated)]
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Layer>> LayerExt for O {
-    fn add_asset<P: IsA<Asset>>(&self, asset: &P, start: gst::ClockTime, inpoint: gst::ClockTime, duration: gst::ClockTime, track_types: TrackType) -> Option<Clip> {
+    fn add_asset<P: IsA<Asset>>(
+        &self,
+        asset: &P,
+        start: gst::ClockTime,
+        inpoint: gst::ClockTime,
+        duration: gst::ClockTime,
+        track_types: TrackType,
+    ) -> Option<Clip> {
         unsafe {
-            from_glib_none(ges_sys::ges_layer_add_asset(self.as_ref().to_glib_none().0, asset.as_ref().to_glib_none().0, start.to_glib(), inpoint.to_glib(), duration.to_glib(), track_types.to_glib()))
+            from_glib_none(ges_sys::ges_layer_add_asset(
+                self.as_ref().to_glib_none().0,
+                asset.as_ref().to_glib_none().0,
+                start.to_glib(),
+                inpoint.to_glib(),
+                duration.to_glib(),
+                track_types.to_glib(),
+            ))
         }
     }
 
     fn add_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_layer_add_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to add clip")
+            glib_result_from_gboolean!(
+                ges_sys::ges_layer_add_clip(
+                    self.as_ref().to_glib_none().0,
+                    clip.as_ref().to_glib_none().0
+                ),
+                "Failed to add clip"
+            )
         }
     }
 
     fn get_auto_transition(&self) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_layer_get_auto_transition(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_layer_get_auto_transition(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_clips(&self) -> Vec<Clip> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_clips_in_interval(&self, start: gst::ClockTime, end: gst::ClockTime) -> Vec<Clip> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips_in_interval(self.as_ref().to_glib_none().0, start.to_glib(), end.to_glib()))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_layer_get_clips_in_interval(
+                self.as_ref().to_glib_none().0,
+                start.to_glib(),
+                end.to_glib(),
+            ))
         }
     }
 
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ges_sys::ges_layer_get_duration(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_layer_get_duration(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_priority(&self) -> u32 {
-        unsafe {
-            ges_sys::ges_layer_get_priority(self.as_ref().to_glib_none().0)
-        }
+        unsafe { ges_sys::ges_layer_get_priority(self.as_ref().to_glib_none().0) }
     }
 
     fn get_timeline(&self) -> Option<Timeline> {
         unsafe {
-            from_glib_none(ges_sys::ges_layer_get_timeline(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_layer_get_timeline(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_empty(&self) -> bool {
-        unsafe {
-            from_glib(ges_sys::ges_layer_is_empty(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib(ges_sys::ges_layer_is_empty(self.as_ref().to_glib_none().0)) }
     }
 
     fn remove_clip<P: IsA<Clip>>(&self, clip: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_layer_remove_clip(self.as_ref().to_glib_none().0, clip.as_ref().to_glib_none().0), "Failed to remove clip")
+            glib_result_from_gboolean!(
+                ges_sys::ges_layer_remove_clip(
+                    self.as_ref().to_glib_none().0,
+                    clip.as_ref().to_glib_none().0
+                ),
+                "Failed to remove clip"
+            )
         }
     }
 
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
-            ges_sys::ges_layer_set_auto_transition(self.as_ref().to_glib_none().0, auto_transition.to_glib());
+            ges_sys::ges_layer_set_auto_transition(
+                self.as_ref().to_glib_none().0,
+                auto_transition.to_glib(),
+            );
         }
     }
 
@@ -157,63 +202,109 @@ impl<O: IsA<Layer>> LayerExt for O {
 
     fn set_timeline<P: IsA<Timeline>>(&self, timeline: &P) {
         unsafe {
-            ges_sys::ges_layer_set_timeline(self.as_ref().to_glib_none().0, timeline.as_ref().to_glib_none().0);
+            ges_sys::ges_layer_set_timeline(
+                self.as_ref().to_glib_none().0,
+                timeline.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn connect_clip_added<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ges_sys::GESLayer, clip: *mut ges_sys::GESClip, f: glib_sys::gpointer)
-            where P: IsA<Layer>
+        unsafe extern "C" fn clip_added_trampoline<P, F: Fn(&P, &Clip) + 'static>(
+            this: *mut ges_sys::GESLayer,
+            clip: *mut ges_sys::GESClip,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Layer>,
         {
             let f: &F = &*(f as *const F);
-            f(&Layer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clip))
+            f(
+                &Layer::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(clip),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"clip-added\0".as_ptr() as *const _,
-                Some(transmute(clip_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"clip-added\0".as_ptr() as *const _,
+                Some(transmute(clip_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_clip_removed<F: Fn(&Self, &Clip) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(this: *mut ges_sys::GESLayer, clip: *mut ges_sys::GESClip, f: glib_sys::gpointer)
-            where P: IsA<Layer>
+        unsafe extern "C" fn clip_removed_trampoline<P, F: Fn(&P, &Clip) + 'static>(
+            this: *mut ges_sys::GESLayer,
+            clip: *mut ges_sys::GESClip,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Layer>,
         {
             let f: &F = &*(f as *const F);
-            f(&Layer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clip))
+            f(
+                &Layer::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(clip),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"clip-removed\0".as_ptr() as *const _,
-                Some(transmute(clip_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"clip-removed\0".as_ptr() as *const _,
+                Some(transmute(clip_removed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESLayer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Layer>
+    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESLayer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Layer>,
         {
             let f: &F = &*(f as *const F);
             f(&Layer::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(transmute(notify_auto_transition_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::auto-transition\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_auto_transition_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_priority_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESLayer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Layer>
+        unsafe extern "C" fn notify_priority_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESLayer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Layer>,
         {
             let f: &F = &*(f as *const F);
             f(&Layer::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::priority\0".as_ptr() as *const _,
-                Some(transmute(notify_priority_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::priority\0".as_ptr() as *const _,
+                Some(transmute(notify_priority_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

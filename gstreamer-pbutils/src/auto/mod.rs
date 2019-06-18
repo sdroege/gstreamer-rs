@@ -15,8 +15,10 @@ mod discoverer_info;
 pub use self::discoverer_info::{DiscovererInfo, DiscovererInfoClass};
 
 mod discoverer_stream_info;
-pub use self::discoverer_stream_info::{DiscovererStreamInfo, DiscovererStreamInfoClass, NONE_DISCOVERER_STREAM_INFO};
 pub use self::discoverer_stream_info::DiscovererStreamInfoExt;
+pub use self::discoverer_stream_info::{
+    DiscovererStreamInfo, DiscovererStreamInfoClass, NONE_DISCOVERER_STREAM_INFO,
+};
 
 mod discoverer_subtitle_info;
 pub use self::discoverer_subtitle_info::{DiscovererSubtitleInfo, DiscovererSubtitleInfoClass};
@@ -28,11 +30,13 @@ mod encoding_audio_profile;
 pub use self::encoding_audio_profile::{EncodingAudioProfile, EncodingAudioProfileClass};
 
 mod encoding_container_profile;
-pub use self::encoding_container_profile::{EncodingContainerProfile, EncodingContainerProfileClass};
+pub use self::encoding_container_profile::{
+    EncodingContainerProfile, EncodingContainerProfileClass,
+};
 
 mod encoding_profile;
-pub use self::encoding_profile::{EncodingProfile, EncodingProfileClass, NONE_ENCODING_PROFILE};
 pub use self::encoding_profile::EncodingProfileExt;
+pub use self::encoding_profile::{EncodingProfile, EncodingProfileClass, NONE_ENCODING_PROFILE};
 
 mod encoding_target;
 pub use self::encoding_target::{EncodingTarget, EncodingTargetClass};

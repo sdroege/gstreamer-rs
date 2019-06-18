@@ -2,17 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use ges_sys;
+use glib::object::IsA;
+use glib::translate::*;
+use glib::GString;
+use glib::StaticType;
+use glib::Value;
+use gobject_sys;
 use BaseEffect;
 use Extractable;
 use TimelineElement;
 use TrackElement;
-use ges_sys;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
-use glib::object::IsA;
-use glib::translate::*;
-use gobject_sys;
 
 glib_wrapper! {
     pub struct Effect(Object<ges_sys::GESEffect, ges_sys::GESEffectClass, EffectClass>) @extends BaseEffect, TrackElement, TimelineElement, @implements Extractable;
@@ -25,9 +25,7 @@ glib_wrapper! {
 impl Effect {
     pub fn new(bin_description: &str) -> Option<Effect> {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ges_sys::ges_effect_new(bin_description.to_glib_none().0))
-        }
+        unsafe { from_glib_none(ges_sys::ges_effect_new(bin_description.to_glib_none().0)) }
     }
 }
 
@@ -41,7 +39,11 @@ impl<O: IsA<Effect>> EffectExt for O {
     fn get_property_bin_description(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"bin-description\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"bin-description\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }

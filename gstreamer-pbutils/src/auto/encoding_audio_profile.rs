@@ -2,9 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use EncodingProfile;
 use glib::translate::*;
 use gst_pbutils_sys;
+use EncodingProfile;
 
 glib_wrapper! {
     pub struct EncodingAudioProfile(Object<gst_pbutils_sys::GstEncodingAudioProfile, gst_pbutils_sys::GstEncodingAudioProfileClass, EncodingAudioProfileClass>) @extends EncodingProfile;

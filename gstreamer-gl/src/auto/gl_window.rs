@@ -2,15 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use GLContext;
-use GLDisplay;
 use glib;
-use glib::GString;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::GString;
 use glib_sys;
 use gst;
 use gst_gl_sys;
@@ -18,6 +16,8 @@ use libc;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
+use GLContext;
+use GLDisplay;
 
 glib_wrapper! {
     pub struct GLWindow(Object<gst_gl_sys::GstGLWindow, gst_gl_sys::GstGLWindowClass, GLWindowClass>) @extends gst::Object;
@@ -31,7 +31,9 @@ impl GLWindow {
     pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLWindow {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_window_new(display.as_ref().to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_window_new(
+                display.as_ref().to_glib_none().0,
+            ))
         }
     }
 }
@@ -67,20 +69,34 @@ pub trait GLWindowExt: 'static {
 
     fn set_preferred_size(&self, width: i32, height: i32);
 
-    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError>;
+    fn set_render_rectangle(
+        &self,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+    ) -> Result<(), glib::error::BoolError>;
 
     fn show(&self);
 
-    fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<GLWindow>> GLWindowExt for O {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn controls_viewport(&self) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_window_controls_viewport(self.as_ref().to_glib_none().0))
+            from_glib(gst_gl_sys::gst_gl_window_controls_viewport(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -92,7 +108,9 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     fn get_context(&self) -> Option<GLContext> {
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_window_get_context(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_window_get_context(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -100,14 +118,21 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         unsafe {
             let mut width = mem::uninitialized();
             let mut height = mem::uninitialized();
-            gst_gl_sys::gst_gl_window_get_surface_dimensions(self.as_ref().to_glib_none().0, &mut width, &mut height);
+            gst_gl_sys::gst_gl_window_get_surface_dimensions(
+                self.as_ref().to_glib_none().0,
+                &mut width,
+                &mut height,
+            );
             (width, height)
         }
     }
 
     fn handle_events(&self, handle_events: bool) {
         unsafe {
-            gst_gl_sys::gst_gl_window_handle_events(self.as_ref().to_glib_none().0, handle_events.to_glib());
+            gst_gl_sys::gst_gl_window_handle_events(
+                self.as_ref().to_glib_none().0,
+                handle_events.to_glib(),
+            );
         }
     }
 
@@ -137,25 +162,54 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     fn send_key_event(&self, event_type: &str, key_str: &str) {
         unsafe {
-            gst_gl_sys::gst_gl_window_send_key_event(self.as_ref().to_glib_none().0, event_type.to_glib_none().0, key_str.to_glib_none().0);
+            gst_gl_sys::gst_gl_window_send_key_event(
+                self.as_ref().to_glib_none().0,
+                event_type.to_glib_none().0,
+                key_str.to_glib_none().0,
+            );
         }
     }
 
     fn send_mouse_event(&self, event_type: &str, button: i32, posx: f64, posy: f64) {
         unsafe {
-            gst_gl_sys::gst_gl_window_send_mouse_event(self.as_ref().to_glib_none().0, event_type.to_glib_none().0, button, posx, posy);
+            gst_gl_sys::gst_gl_window_send_mouse_event(
+                self.as_ref().to_glib_none().0,
+                event_type.to_glib_none().0,
+                button,
+                posx,
+                posy,
+            );
         }
     }
 
     fn set_preferred_size(&self, width: i32, height: i32) {
         unsafe {
-            gst_gl_sys::gst_gl_window_set_preferred_size(self.as_ref().to_glib_none().0, width, height);
+            gst_gl_sys::gst_gl_window_set_preferred_size(
+                self.as_ref().to_glib_none().0,
+                width,
+                height,
+            );
         }
     }
 
-    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError> {
+    fn set_render_rectangle(
+        &self,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_gl_sys::gst_gl_window_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height), "Failed to set the specified region")
+            glib_result_from_gboolean!(
+                gst_gl_sys::gst_gl_window_set_render_rectangle(
+                    self.as_ref().to_glib_none().0,
+                    x,
+                    y,
+                    width,
+                    height
+                ),
+                "Failed to set the specified region"
+            )
         }
     }
 
@@ -165,31 +219,73 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
         }
     }
 
-    fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn key_event_trampoline<P, F: Fn(&P, &str, &str) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLWindow, id: *mut libc::c_char, key: *mut libc::c_char, f: glib_sys::gpointer)
-            where P: IsA<GLWindow>
+    fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn key_event_trampoline<
+            P,
+            F: Fn(&P, &str, &str) + Send + Sync + 'static,
+        >(
+            this: *mut gst_gl_sys::GstGLWindow,
+            id: *mut libc::c_char,
+            key: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<GLWindow>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), &GString::from_glib_borrow(key))
+            f(
+                &GLWindow::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(id),
+                &GString::from_glib_borrow(key),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"key-event\0".as_ptr() as *const _,
-                Some(transmute(key_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"key-event\0".as_ptr() as *const _,
+                Some(transmute(key_event_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn mouse_event_trampoline<P, F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLWindow, id: *mut libc::c_char, button: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer)
-            where P: IsA<GLWindow>
+    fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn mouse_event_trampoline<
+            P,
+            F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static,
+        >(
+            this: *mut gst_gl_sys::GstGLWindow,
+            id: *mut libc::c_char,
+            button: libc::c_int,
+            x: libc::c_double,
+            y: libc::c_double,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<GLWindow>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), button, x, y)
+            f(
+                &GLWindow::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(id),
+                button,
+                x,
+                y,
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"mouse-event\0".as_ptr() as *const _,
-                Some(transmute(mouse_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"mouse-event\0".as_ptr() as *const _,
+                Some(transmute(mouse_event_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

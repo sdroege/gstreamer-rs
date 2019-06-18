@@ -2,6 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
+use glib::object::IsA;
+use glib::translate::*;
+use glib::GString;
+use gst_sys;
+use std;
+use std::mem;
+use std::ptr;
 use Bin;
 use ClockTime;
 use DebugGraphDetails;
@@ -10,15 +18,6 @@ use Element;
 use Error;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use StackTraceFlags;
-use glib;
-use glib::GString;
-use glib::object::IsA;
-use glib::translate::*;
-use gst_sys;
-use std;
-use std::mem;
-use std::ptr;
-
 
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
@@ -31,51 +30,62 @@ pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u3
 pub fn debug_bin_to_dot_data<P: IsA<Bin>>(bin: &P, details: DebugGraphDetails) -> GString {
     skip_assert_initialized!();
     unsafe {
-        from_glib_full(gst_sys::gst_debug_bin_to_dot_data(bin.as_ref().to_glib_none().0, details.to_glib()))
+        from_glib_full(gst_sys::gst_debug_bin_to_dot_data(
+            bin.as_ref().to_glib_none().0,
+            details.to_glib(),
+        ))
     }
 }
 
-pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(bin: &P, details: DebugGraphDetails, file_name: Q) {
+pub fn debug_bin_to_dot_file<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
+    bin: &P,
+    details: DebugGraphDetails,
+    file_name: Q,
+) {
     skip_assert_initialized!();
     unsafe {
-        gst_sys::gst_debug_bin_to_dot_file(bin.as_ref().to_glib_none().0, details.to_glib(), file_name.as_ref().to_glib_none().0);
+        gst_sys::gst_debug_bin_to_dot_file(
+            bin.as_ref().to_glib_none().0,
+            details.to_glib(),
+            file_name.as_ref().to_glib_none().0,
+        );
     }
 }
 
-pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(bin: &P, details: DebugGraphDetails, file_name: Q) {
+pub fn debug_bin_to_dot_file_with_ts<P: IsA<Bin>, Q: AsRef<std::path::Path>>(
+    bin: &P,
+    details: DebugGraphDetails,
+    file_name: Q,
+) {
     skip_assert_initialized!();
     unsafe {
-        gst_sys::gst_debug_bin_to_dot_file_with_ts(bin.as_ref().to_glib_none().0, details.to_glib(), file_name.as_ref().to_glib_none().0);
+        gst_sys::gst_debug_bin_to_dot_file_with_ts(
+            bin.as_ref().to_glib_none().0,
+            details.to_glib(),
+            file_name.as_ref().to_glib_none().0,
+        );
     }
 }
 
 pub fn debug_get_default_threshold() -> DebugLevel {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(gst_sys::gst_debug_get_default_threshold())
-    }
+    unsafe { from_glib(gst_sys::gst_debug_get_default_threshold()) }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 pub fn debug_get_stack_trace(flags: StackTraceFlags) -> Option<GString> {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib_full(gst_sys::gst_debug_get_stack_trace(flags.to_glib()))
-    }
+    unsafe { from_glib_full(gst_sys::gst_debug_get_stack_trace(flags.to_glib())) }
 }
 
 pub fn debug_is_active() -> bool {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(gst_sys::gst_debug_is_active())
-    }
+    unsafe { from_glib(gst_sys::gst_debug_is_active()) }
 }
 
 pub fn debug_is_colored() -> bool {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(gst_sys::gst_debug_is_colored())
-    }
+    unsafe { from_glib(gst_sys::gst_debug_is_colored()) }
 }
 
 pub fn debug_print_stack_trace() {
@@ -146,17 +156,26 @@ pub fn debug_unset_threshold_for_name(name: &str) {
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 pub fn get_main_executable_path() -> Option<GString> {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib_none(gst_sys::gst_get_main_executable_path())
-    }
+    unsafe { from_glib_none(gst_sys::gst_get_main_executable_path()) }
 }
 
-pub fn parse_bin_from_description(bin_description: &str, ghost_unlinked_pads: bool) -> Result<Bin, Error> {
+pub fn parse_bin_from_description(
+    bin_description: &str,
+    ghost_unlinked_pads: bool,
+) -> Result<Bin, Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
-        let ret = gst_sys::gst_parse_bin_from_description(bin_description.to_glib_none().0, ghost_unlinked_pads.to_glib(), &mut error);
-        if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
+        let ret = gst_sys::gst_parse_bin_from_description(
+            bin_description.to_glib_none().0,
+            ghost_unlinked_pads.to_glib(),
+            &mut error,
+        );
+        if error.is_null() {
+            Ok(from_glib_none(ret))
+        } else {
+            Err(from_glib_full(error))
+        }
     }
 }
 
@@ -165,7 +184,11 @@ pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
     unsafe {
         let mut error = ptr::null_mut();
         let ret = gst_sys::gst_parse_launch(pipeline_description.to_glib_none().0, &mut error);
-        if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
+        if error.is_null() {
+            Ok(from_glib_none(ret))
+        } else {
+            Err(from_glib_full(error))
+        }
     }
 }
 
@@ -174,22 +197,27 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
     unsafe {
         let mut error = ptr::null_mut();
         let ret = gst_sys::gst_parse_launchv(argv.to_glib_none().0, &mut error);
-        if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
+        if error.is_null() {
+            Ok(from_glib_none(ret))
+        } else {
+            Err(from_glib_full(error))
+        }
     }
 }
 
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
-        glib_result_from_gboolean!(gst_sys::gst_update_registry(), "Failed to update the registry")
+        glib_result_from_gboolean!(
+            gst_sys::gst_update_registry(),
+            "Failed to update the registry"
+        )
     }
 }
 
 pub fn util_get_timestamp() -> ClockTime {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(gst_sys::gst_util_get_timestamp())
-    }
+    unsafe { from_glib(gst_sys::gst_util_get_timestamp()) }
 }
 
 pub fn version() -> (u32, u32, u32, u32) {
@@ -206,7 +234,5 @@ pub fn version() -> (u32, u32, u32, u32) {
 
 pub fn version_string() -> GString {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib_full(gst_sys::gst_version_string())
-    }
+    unsafe { from_glib_full(gst_sys::gst_version_string()) }
 }

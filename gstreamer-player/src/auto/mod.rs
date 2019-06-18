@@ -9,18 +9,22 @@ mod player_audio_info;
 pub use self::player_audio_info::{PlayerAudioInfo, PlayerAudioInfoClass};
 
 mod player_gmain_context_signal_dispatcher;
-pub use self::player_gmain_context_signal_dispatcher::{PlayerGMainContextSignalDispatcher, PlayerGMainContextSignalDispatcherClass};
+pub use self::player_gmain_context_signal_dispatcher::{
+    PlayerGMainContextSignalDispatcher, PlayerGMainContextSignalDispatcherClass,
+};
 
 mod player_media_info;
 pub use self::player_media_info::{PlayerMediaInfo, PlayerMediaInfoClass};
 
 mod player_signal_dispatcher;
-pub use self::player_signal_dispatcher::{PlayerSignalDispatcher, NONE_PLAYER_SIGNAL_DISPATCHER};
 pub use self::player_signal_dispatcher::PlayerSignalDispatcherExt;
+pub use self::player_signal_dispatcher::{PlayerSignalDispatcher, NONE_PLAYER_SIGNAL_DISPATCHER};
 
 mod player_stream_info;
-pub use self::player_stream_info::{PlayerStreamInfo, PlayerStreamInfoClass, NONE_PLAYER_STREAM_INFO};
 pub use self::player_stream_info::PlayerStreamInfoExt;
+pub use self::player_stream_info::{
+    PlayerStreamInfo, PlayerStreamInfoClass, NONE_PLAYER_STREAM_INFO,
+};
 
 mod player_subtitle_info;
 pub use self::player_subtitle_info::{PlayerSubtitleInfo, PlayerSubtitleInfoClass};
@@ -29,11 +33,13 @@ mod player_video_info;
 pub use self::player_video_info::{PlayerVideoInfo, PlayerVideoInfoClass};
 
 mod player_video_overlay_video_renderer;
-pub use self::player_video_overlay_video_renderer::{PlayerVideoOverlayVideoRenderer, PlayerVideoOverlayVideoRendererClass};
+pub use self::player_video_overlay_video_renderer::{
+    PlayerVideoOverlayVideoRenderer, PlayerVideoOverlayVideoRendererClass,
+};
 
 mod player_video_renderer;
-pub use self::player_video_renderer::{PlayerVideoRenderer, NONE_PLAYER_VIDEO_RENDERER};
 pub use self::player_video_renderer::PlayerVideoRendererExt;
+pub use self::player_video_renderer::{PlayerVideoRenderer, NONE_PLAYER_VIDEO_RENDERER};
 
 mod player_visualization;
 pub use self::player_visualization::PlayerVisualization;

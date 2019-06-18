@@ -32,7 +32,6 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
 #[allow(non_snake_case)]
-#[rustfmt::skip]
 mod auto;
 pub use auto::*;
 

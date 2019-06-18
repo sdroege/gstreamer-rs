@@ -27,5 +27,4 @@ pub use self::flags::RTSPProfile;
 pub use self::flags::RTSPTransMode;
 
 #[doc(hidden)]
-pub mod traits {
-}
+pub mod traits {}

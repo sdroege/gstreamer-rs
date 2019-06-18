@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use GLDisplay;
 use glib::translate::*;
 use gst;
 use gst_gl_sys;
+use GLDisplay;
 
 glib_wrapper! {
     pub struct GLDisplayEGL(Object<gst_gl_sys::GstGLDisplayEGL, gst_gl_sys::GstGLDisplayEGLClass, GLDisplayEGLClass>) @extends GLDisplay, gst::Object;
@@ -18,9 +18,7 @@ glib_wrapper! {
 impl GLDisplayEGL {
     pub fn new() -> GLDisplayEGL {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_display_egl_new())
-        }
+        unsafe { from_glib_full(gst_gl_sys::gst_gl_display_egl_new()) }
     }
 
     //pub fn new_with_egl_display(display: /*Unimplemented*/Option<Fundamental: Pointer>) -> GLDisplayEGL {

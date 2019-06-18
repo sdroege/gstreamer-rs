@@ -2,15 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use RTSPStream;
 use glib;
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst;
 use gst_rtsp;
 use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
+use RTSPStream;
 
 glib_wrapper! {
     pub struct RTSPStreamTransport(Object<gst_rtsp_server_sys::GstRTSPStreamTransport, gst_rtsp_server_sys::GstRTSPStreamTransportClass, RTSPStreamTransportClass>);
@@ -75,13 +75,18 @@ pub trait RTSPStreamTransportExt: 'static {
 impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     fn get_rtpinfo(&self, start_time: gst::ClockTime) -> Option<GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_rtpinfo(self.as_ref().to_glib_none().0, start_time.to_glib()))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_rtpinfo(
+                self.as_ref().to_glib_none().0,
+                start_time.to_glib(),
+            ))
         }
     }
 
     fn get_stream(&self) -> Option<RTSPStream> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_stream(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_stream(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -91,32 +96,46 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn get_url(&self) -> Option<gst_rtsp::RTSPUrl> {
         unsafe {
-            from_glib_none(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_url(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_rtsp_server_sys::gst_rtsp_stream_transport_get_url(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_timed_out(&self) -> bool {
         unsafe {
-            from_glib(gst_rtsp_server_sys::gst_rtsp_stream_transport_is_timed_out(self.as_ref().to_glib_none().0))
+            from_glib(gst_rtsp_server_sys::gst_rtsp_stream_transport_is_timed_out(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn keep_alive(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_stream_transport_keep_alive(self.as_ref().to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_keep_alive(
+                self.as_ref().to_glib_none().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn message_sent(&self) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_stream_transport_message_sent(self.as_ref().to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_message_sent(
+                self.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn send_rtcp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtcp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtcp")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtcp(
+                    self.as_ref().to_glib_none().0,
+                    buffer.to_glib_none().0
+                ),
+                "Failed to send rtcp"
+            )
         }
     }
 
@@ -127,7 +146,13 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn send_rtp(&self, buffer: &gst::Buffer) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtp(self.as_ref().to_glib_none().0, buffer.to_glib_none().0), "Failed to send rtp")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_stream_transport_send_rtp(
+                    self.as_ref().to_glib_none().0,
+                    buffer.to_glib_none().0
+                ),
+                "Failed to send rtp"
+            )
         }
     }
 
@@ -138,7 +163,13 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_stream_transport_set_active(self.as_ref().to_glib_none().0, active.to_glib()), "Failed to set active")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_stream_transport_set_active(
+                    self.as_ref().to_glib_none().0,
+                    active.to_glib()
+                ),
+                "Failed to set active"
+            )
         }
     }
 
@@ -159,7 +190,12 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = keep_alive_data;
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_keepalive(self.as_ref().to_glib_none().0, keep_alive, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_keepalive(
+                self.as_ref().to_glib_none().0,
+                keep_alive,
+                Box::into_raw(super_callback0) as *mut _,
+                destroy_call3,
+            );
         }
     }
 
@@ -181,13 +217,21 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = message_sent_data;
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_message_sent(self.as_ref().to_glib_none().0, message_sent, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_message_sent(
+                self.as_ref().to_glib_none().0,
+                message_sent,
+                Box::into_raw(super_callback0) as *mut _,
+                destroy_call3,
+            );
         }
     }
 
     fn set_timed_out(&self, timedout: bool) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_timed_out(self.as_ref().to_glib_none().0, timedout.to_glib());
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_timed_out(
+                self.as_ref().to_glib_none().0,
+                timedout.to_glib(),
+            );
         }
     }
 
@@ -197,7 +241,10 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
 
     fn set_url(&self, url: Option<&gst_rtsp::RTSPUrl>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_url(self.as_ref().to_glib_none().0, url.to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_stream_transport_set_url(
+                self.as_ref().to_glib_none().0,
+                url.to_glib_none().0,
+            );
         }
     }
 }

@@ -33,7 +33,6 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 #[allow(clippy::match_same_arms)]
 #[allow(clippy::type_complexity)]
 #[allow(clippy::cast_ptr_alignment)]
-#[rustfmt::skip]
 mod auto;
 pub use auto::*;
 

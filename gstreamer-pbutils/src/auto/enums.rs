@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_pbutils_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum DiscovererResult {
     Ok,
     UriInvalid,
@@ -37,7 +36,7 @@ impl ToGlib for DiscovererResult {
             DiscovererResult::Timeout => gst_pbutils_sys::GST_DISCOVERER_TIMEOUT,
             DiscovererResult::Busy => gst_pbutils_sys::GST_DISCOVERER_BUSY,
             DiscovererResult::MissingPlugins => gst_pbutils_sys::GST_DISCOVERER_MISSING_PLUGINS,
-            DiscovererResult::__Unknown(value) => value
+            DiscovererResult::__Unknown(value) => value,
         }
     }
 }
@@ -81,4 +80,3 @@ impl SetValue for DiscovererResult {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

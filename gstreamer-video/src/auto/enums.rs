@@ -2,19 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_video_sys;
 
 #[cfg(any(feature = "v1_16", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoCaptionType {
     Unknown,
     Cea608Raw,
@@ -37,7 +36,7 @@ impl ToGlib for VideoCaptionType {
             VideoCaptionType::Cea608S3341a => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA608_S334_1A,
             VideoCaptionType::Cea708Raw => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA708_RAW,
             VideoCaptionType::Cea708Cdp => gst_video_sys::GST_VIDEO_CAPTION_TYPE_CEA708_CDP,
-            VideoCaptionType::__Unknown(value) => value
+            VideoCaptionType::__Unknown(value) => value,
         }
     }
 }
@@ -86,8 +85,7 @@ impl SetValue for VideoCaptionType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoColorMatrix {
     Unknown,
     Rgb,
@@ -113,7 +111,7 @@ impl ToGlib for VideoColorMatrix {
             VideoColorMatrix::Bt601 => gst_video_sys::GST_VIDEO_COLOR_MATRIX_BT601,
             VideoColorMatrix::Smpte240m => gst_video_sys::GST_VIDEO_COLOR_MATRIX_SMPTE240M,
             VideoColorMatrix::Bt2020 => gst_video_sys::GST_VIDEO_COLOR_MATRIX_BT2020,
-            VideoColorMatrix::__Unknown(value) => value
+            VideoColorMatrix::__Unknown(value) => value,
         }
     }
 }
@@ -159,8 +157,7 @@ impl SetValue for VideoColorMatrix {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoColorPrimaries {
     Unknown,
     Bt709,
@@ -198,7 +195,7 @@ impl ToGlib for VideoColorPrimaries {
             VideoColorPrimaries::Smpterp431 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTERP431,
             VideoColorPrimaries::Smpteeg432 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_SMPTEEG432,
             VideoColorPrimaries::Ebu3213 => gst_video_sys::GST_VIDEO_COLOR_PRIMARIES_EBU3213,
-            VideoColorPrimaries::__Unknown(value) => value
+            VideoColorPrimaries::__Unknown(value) => value,
         }
     }
 }
@@ -251,8 +248,7 @@ impl SetValue for VideoColorPrimaries {
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoFieldOrder {
     Unknown,
     TopFieldFirst,
@@ -270,8 +266,10 @@ impl ToGlib for VideoFieldOrder {
         match *self {
             VideoFieldOrder::Unknown => gst_video_sys::GST_VIDEO_FIELD_ORDER_UNKNOWN,
             VideoFieldOrder::TopFieldFirst => gst_video_sys::GST_VIDEO_FIELD_ORDER_TOP_FIELD_FIRST,
-            VideoFieldOrder::BottomFieldFirst => gst_video_sys::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST,
-            VideoFieldOrder::__Unknown(value) => value
+            VideoFieldOrder::BottomFieldFirst => {
+                gst_video_sys::GST_VIDEO_FIELD_ORDER_BOTTOM_FIELD_FIRST
+            }
+            VideoFieldOrder::__Unknown(value) => value,
         }
     }
 }
@@ -318,8 +316,7 @@ impl SetValue for VideoFieldOrder {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoFormat {
     Unknown,
     Encoded,
@@ -503,7 +500,7 @@ impl ToGlib for VideoFormat {
             VideoFormat::Y410 => gst_video_sys::GST_VIDEO_FORMAT_Y410,
             VideoFormat::Vuya => gst_video_sys::GST_VIDEO_FORMAT_VUYA,
             VideoFormat::Bgr10a2Le => gst_video_sys::GST_VIDEO_FORMAT_BGR10A2_LE,
-            VideoFormat::__Unknown(value) => value
+            VideoFormat::__Unknown(value) => value,
         }
     }
 }
@@ -628,8 +625,7 @@ impl SetValue for VideoFormat {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoInterlaceMode {
     Progressive,
     Interleaved,
@@ -651,7 +647,7 @@ impl ToGlib for VideoInterlaceMode {
             VideoInterlaceMode::Mixed => gst_video_sys::GST_VIDEO_INTERLACE_MODE_MIXED,
             VideoInterlaceMode::Fields => gst_video_sys::GST_VIDEO_INTERLACE_MODE_FIELDS,
             VideoInterlaceMode::Alternate => gst_video_sys::GST_VIDEO_INTERLACE_MODE_ALTERNATE,
-            VideoInterlaceMode::__Unknown(value) => value
+            VideoInterlaceMode::__Unknown(value) => value,
         }
     }
 }
@@ -695,8 +691,7 @@ impl SetValue for VideoInterlaceMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoMultiviewFramePacking {
     None,
     Mono,
@@ -718,17 +713,37 @@ impl ToGlib for VideoMultiviewFramePacking {
 
     fn to_glib(&self) -> gst_video_sys::GstVideoMultiviewFramePacking {
         match *self {
-            VideoMultiviewFramePacking::None => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE,
-            VideoMultiviewFramePacking::Mono => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO,
-            VideoMultiviewFramePacking::Left => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT,
-            VideoMultiviewFramePacking::Right => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT,
-            VideoMultiviewFramePacking::SideBySide => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE,
-            VideoMultiviewFramePacking::SideBySideQuincunx => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX,
-            VideoMultiviewFramePacking::ColumnInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED,
-            VideoMultiviewFramePacking::RowInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED,
-            VideoMultiviewFramePacking::TopBottom => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM,
-            VideoMultiviewFramePacking::Checkerboard => gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD,
-            VideoMultiviewFramePacking::__Unknown(value) => value
+            VideoMultiviewFramePacking::None => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_NONE
+            }
+            VideoMultiviewFramePacking::Mono => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_MONO
+            }
+            VideoMultiviewFramePacking::Left => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_LEFT
+            }
+            VideoMultiviewFramePacking::Right => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_RIGHT
+            }
+            VideoMultiviewFramePacking::SideBySide => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE
+            }
+            VideoMultiviewFramePacking::SideBySideQuincunx => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_SIDE_BY_SIDE_QUINCUNX
+            }
+            VideoMultiviewFramePacking::ColumnInterleaved => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_COLUMN_INTERLEAVED
+            }
+            VideoMultiviewFramePacking::RowInterleaved => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_ROW_INTERLEAVED
+            }
+            VideoMultiviewFramePacking::TopBottom => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_TOP_BOTTOM
+            }
+            VideoMultiviewFramePacking::Checkerboard => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_FRAME_PACKING_CHECKERBOARD
+            }
+            VideoMultiviewFramePacking::__Unknown(value) => value,
         }
     }
 }
@@ -777,8 +792,7 @@ impl SetValue for VideoMultiviewFramePacking {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoMultiviewMode {
     None,
     Mono,
@@ -808,15 +822,27 @@ impl ToGlib for VideoMultiviewMode {
             VideoMultiviewMode::Left => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_LEFT,
             VideoMultiviewMode::Right => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_RIGHT,
             VideoMultiviewMode::SideBySide => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE,
-            VideoMultiviewMode::SideBySideQuincunx => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX,
-            VideoMultiviewMode::ColumnInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED,
-            VideoMultiviewMode::RowInterleaved => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED,
+            VideoMultiviewMode::SideBySideQuincunx => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SIDE_BY_SIDE_QUINCUNX
+            }
+            VideoMultiviewMode::ColumnInterleaved => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_COLUMN_INTERLEAVED
+            }
+            VideoMultiviewMode::RowInterleaved => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_ROW_INTERLEAVED
+            }
             VideoMultiviewMode::TopBottom => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_TOP_BOTTOM,
-            VideoMultiviewMode::Checkerboard => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD,
-            VideoMultiviewMode::FrameByFrame => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME,
-            VideoMultiviewMode::MultiviewFrameByFrame => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME,
+            VideoMultiviewMode::Checkerboard => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_CHECKERBOARD
+            }
+            VideoMultiviewMode::FrameByFrame => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_FRAME_BY_FRAME
+            }
+            VideoMultiviewMode::MultiviewFrameByFrame => {
+                gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_MULTIVIEW_FRAME_BY_FRAME
+            }
             VideoMultiviewMode::Separated => gst_video_sys::GST_VIDEO_MULTIVIEW_MODE_SEPARATED,
-            VideoMultiviewMode::__Unknown(value) => value
+            VideoMultiviewMode::__Unknown(value) => value,
         }
     }
 }
@@ -868,8 +894,7 @@ impl SetValue for VideoMultiviewMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoTileMode {
     Unknown,
     Zflipz2x2,
@@ -885,7 +910,7 @@ impl ToGlib for VideoTileMode {
         match *self {
             VideoTileMode::Unknown => gst_video_sys::GST_VIDEO_TILE_MODE_UNKNOWN,
             VideoTileMode::Zflipz2x2 => gst_video_sys::GST_VIDEO_TILE_MODE_ZFLIPZ_2X2,
-            VideoTileMode::__Unknown(value) => value
+            VideoTileMode::__Unknown(value) => value,
         }
     }
 }
@@ -926,8 +951,7 @@ impl SetValue for VideoTileMode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum VideoTransferFunction {
     Unknown,
     Gamma10,
@@ -965,7 +989,7 @@ impl ToGlib for VideoTransferFunction {
             VideoTransferFunction::Log316 => gst_video_sys::GST_VIDEO_TRANSFER_LOG316,
             VideoTransferFunction::Bt202012 => gst_video_sys::GST_VIDEO_TRANSFER_BT2020_12,
             VideoTransferFunction::Adobergb => gst_video_sys::GST_VIDEO_TRANSFER_ADOBERGB,
-            VideoTransferFunction::__Unknown(value) => value
+            VideoTransferFunction::__Unknown(value) => value,
         }
     }
 }
@@ -1016,4 +1040,3 @@ impl SetValue for VideoTransferFunction {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

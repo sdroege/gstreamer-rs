@@ -2,9 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst;
 use gst_player_sys;
 
@@ -36,31 +36,41 @@ pub trait PlayerStreamInfoExt: 'static {
 impl<O: IsA<PlayerStreamInfo>> PlayerStreamInfoExt for O {
     fn get_caps(&self) -> Option<gst::Caps> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_caps(const_override(self.as_ref().to_glib_none().0)))
+            from_glib_none(gst_player_sys::gst_player_stream_info_get_caps(
+                const_override(self.as_ref().to_glib_none().0),
+            ))
         }
     }
 
     fn get_codec(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_codec(const_override(self.as_ref().to_glib_none().0)))
+            from_glib_none(gst_player_sys::gst_player_stream_info_get_codec(
+                const_override(self.as_ref().to_glib_none().0),
+            ))
         }
     }
 
     fn get_index(&self) -> i32 {
         unsafe {
-            gst_player_sys::gst_player_stream_info_get_index(const_override(self.as_ref().to_glib_none().0))
+            gst_player_sys::gst_player_stream_info_get_index(const_override(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_stream_type(&self) -> GString {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_stream_type(const_override(self.as_ref().to_glib_none().0)))
+            from_glib_none(gst_player_sys::gst_player_stream_info_get_stream_type(
+                const_override(self.as_ref().to_glib_none().0),
+            ))
         }
     }
 
     fn get_tags(&self) -> Option<gst::TagList> {
         unsafe {
-            from_glib_none(gst_player_sys::gst_player_stream_info_get_tags(const_override(self.as_ref().to_glib_none().0)))
+            from_glib_none(gst_player_sys::gst_player_stream_info_get_tags(
+                const_override(self.as_ref().to_glib_none().0),
+            ))
         }
     }
 }

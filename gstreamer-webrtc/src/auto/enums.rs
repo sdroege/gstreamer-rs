@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_web_rtc_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCDTLSSetup {
     None,
     Actpass,
@@ -33,7 +32,7 @@ impl ToGlib for WebRTCDTLSSetup {
             WebRTCDTLSSetup::Actpass => gst_web_rtc_sys::GST_WEBRTC_DTLS_SETUP_ACTPASS,
             WebRTCDTLSSetup::Active => gst_web_rtc_sys::GST_WEBRTC_DTLS_SETUP_ACTIVE,
             WebRTCDTLSSetup::Passive => gst_web_rtc_sys::GST_WEBRTC_DTLS_SETUP_PASSIVE,
-            WebRTCDTLSSetup::__Unknown(value) => value
+            WebRTCDTLSSetup::__Unknown(value) => value,
         }
     }
 }
@@ -76,8 +75,7 @@ impl SetValue for WebRTCDTLSSetup {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCDTLSTransportState {
     New,
     Closed,
@@ -95,11 +93,19 @@ impl ToGlib for WebRTCDTLSTransportState {
     fn to_glib(&self) -> gst_web_rtc_sys::GstWebRTCDTLSTransportState {
         match *self {
             WebRTCDTLSTransportState::New => gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_NEW,
-            WebRTCDTLSTransportState::Closed => gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED,
-            WebRTCDTLSTransportState::Failed => gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED,
-            WebRTCDTLSTransportState::Connecting => gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING,
-            WebRTCDTLSTransportState::Connected => gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED,
-            WebRTCDTLSTransportState::__Unknown(value) => value
+            WebRTCDTLSTransportState::Closed => {
+                gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_CLOSED
+            }
+            WebRTCDTLSTransportState::Failed => {
+                gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_FAILED
+            }
+            WebRTCDTLSTransportState::Connecting => {
+                gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTING
+            }
+            WebRTCDTLSTransportState::Connected => {
+                gst_web_rtc_sys::GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED
+            }
+            WebRTCDTLSTransportState::__Unknown(value) => value,
         }
     }
 }
@@ -143,8 +149,7 @@ impl SetValue for WebRTCDTLSTransportState {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCICEComponent {
     Rtp,
     Rtcp,
@@ -160,7 +165,7 @@ impl ToGlib for WebRTCICEComponent {
         match *self {
             WebRTCICEComponent::Rtp => gst_web_rtc_sys::GST_WEBRTC_ICE_COMPONENT_RTP,
             WebRTCICEComponent::Rtcp => gst_web_rtc_sys::GST_WEBRTC_ICE_COMPONENT_RTCP,
-            WebRTCICEComponent::__Unknown(value) => value
+            WebRTCICEComponent::__Unknown(value) => value,
         }
     }
 }
@@ -201,8 +206,7 @@ impl SetValue for WebRTCICEComponent {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCICEConnectionState {
     New,
     Checking,
@@ -222,13 +226,25 @@ impl ToGlib for WebRTCICEConnectionState {
     fn to_glib(&self) -> gst_web_rtc_sys::GstWebRTCICEConnectionState {
         match *self {
             WebRTCICEConnectionState::New => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_NEW,
-            WebRTCICEConnectionState::Checking => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING,
-            WebRTCICEConnectionState::Connected => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_CONNECTED,
-            WebRTCICEConnectionState::Completed => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_COMPLETED,
-            WebRTCICEConnectionState::Failed => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_FAILED,
-            WebRTCICEConnectionState::Disconnected => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_DISCONNECTED,
-            WebRTCICEConnectionState::Closed => gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED,
-            WebRTCICEConnectionState::__Unknown(value) => value
+            WebRTCICEConnectionState::Checking => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING
+            }
+            WebRTCICEConnectionState::Connected => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_CONNECTED
+            }
+            WebRTCICEConnectionState::Completed => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_COMPLETED
+            }
+            WebRTCICEConnectionState::Failed => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_FAILED
+            }
+            WebRTCICEConnectionState::Disconnected => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_DISCONNECTED
+            }
+            WebRTCICEConnectionState::Closed => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_CONNECTION_STATE_CLOSED
+            }
+            WebRTCICEConnectionState::__Unknown(value) => value,
         }
     }
 }
@@ -274,8 +290,7 @@ impl SetValue for WebRTCICEConnectionState {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCICEGatheringState {
     New,
     Gathering,
@@ -291,9 +306,13 @@ impl ToGlib for WebRTCICEGatheringState {
     fn to_glib(&self) -> gst_web_rtc_sys::GstWebRTCICEGatheringState {
         match *self {
             WebRTCICEGatheringState::New => gst_web_rtc_sys::GST_WEBRTC_ICE_GATHERING_STATE_NEW,
-            WebRTCICEGatheringState::Gathering => gst_web_rtc_sys::GST_WEBRTC_ICE_GATHERING_STATE_GATHERING,
-            WebRTCICEGatheringState::Complete => gst_web_rtc_sys::GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE,
-            WebRTCICEGatheringState::__Unknown(value) => value
+            WebRTCICEGatheringState::Gathering => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_GATHERING_STATE_GATHERING
+            }
+            WebRTCICEGatheringState::Complete => {
+                gst_web_rtc_sys::GST_WEBRTC_ICE_GATHERING_STATE_COMPLETE
+            }
+            WebRTCICEGatheringState::__Unknown(value) => value,
         }
     }
 }
@@ -335,8 +354,7 @@ impl SetValue for WebRTCICEGatheringState {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCICERole {
     Controlled,
     Controlling,
@@ -352,7 +370,7 @@ impl ToGlib for WebRTCICERole {
         match *self {
             WebRTCICERole::Controlled => gst_web_rtc_sys::GST_WEBRTC_ICE_ROLE_CONTROLLED,
             WebRTCICERole::Controlling => gst_web_rtc_sys::GST_WEBRTC_ICE_ROLE_CONTROLLING,
-            WebRTCICERole::__Unknown(value) => value
+            WebRTCICERole::__Unknown(value) => value,
         }
     }
 }
@@ -393,8 +411,7 @@ impl SetValue for WebRTCICERole {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCPeerConnectionState {
     New,
     Connecting,
@@ -413,12 +430,22 @@ impl ToGlib for WebRTCPeerConnectionState {
     fn to_glib(&self) -> gst_web_rtc_sys::GstWebRTCPeerConnectionState {
         match *self {
             WebRTCPeerConnectionState::New => gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_NEW,
-            WebRTCPeerConnectionState::Connecting => gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING,
-            WebRTCPeerConnectionState::Connected => gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED,
-            WebRTCPeerConnectionState::Disconnected => gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED,
-            WebRTCPeerConnectionState::Failed => gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_FAILED,
-            WebRTCPeerConnectionState::Closed => gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED,
-            WebRTCPeerConnectionState::__Unknown(value) => value
+            WebRTCPeerConnectionState::Connecting => {
+                gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTING
+            }
+            WebRTCPeerConnectionState::Connected => {
+                gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_CONNECTED
+            }
+            WebRTCPeerConnectionState::Disconnected => {
+                gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_DISCONNECTED
+            }
+            WebRTCPeerConnectionState::Failed => {
+                gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_FAILED
+            }
+            WebRTCPeerConnectionState::Closed => {
+                gst_web_rtc_sys::GST_WEBRTC_PEER_CONNECTION_STATE_CLOSED
+            }
+            WebRTCPeerConnectionState::__Unknown(value) => value,
         }
     }
 }
@@ -463,8 +490,7 @@ impl SetValue for WebRTCPeerConnectionState {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCRTPTransceiverDirection {
     None,
     Inactive,
@@ -481,12 +507,22 @@ impl ToGlib for WebRTCRTPTransceiverDirection {
 
     fn to_glib(&self) -> gst_web_rtc_sys::GstWebRTCRTPTransceiverDirection {
         match *self {
-            WebRTCRTPTransceiverDirection::None => gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE,
-            WebRTCRTPTransceiverDirection::Inactive => gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE,
-            WebRTCRTPTransceiverDirection::Sendonly => gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY,
-            WebRTCRTPTransceiverDirection::Recvonly => gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY,
-            WebRTCRTPTransceiverDirection::Sendrecv => gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV,
-            WebRTCRTPTransceiverDirection::__Unknown(value) => value
+            WebRTCRTPTransceiverDirection::None => {
+                gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_NONE
+            }
+            WebRTCRTPTransceiverDirection::Inactive => {
+                gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_INACTIVE
+            }
+            WebRTCRTPTransceiverDirection::Sendonly => {
+                gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDONLY
+            }
+            WebRTCRTPTransceiverDirection::Recvonly => {
+                gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_RECVONLY
+            }
+            WebRTCRTPTransceiverDirection::Sendrecv => {
+                gst_web_rtc_sys::GST_WEBRTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV
+            }
+            WebRTCRTPTransceiverDirection::__Unknown(value) => value,
         }
     }
 }
@@ -530,8 +566,7 @@ impl SetValue for WebRTCRTPTransceiverDirection {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCSDPType {
     Offer,
     Pranswer,
@@ -551,7 +586,7 @@ impl ToGlib for WebRTCSDPType {
             WebRTCSDPType::Pranswer => gst_web_rtc_sys::GST_WEBRTC_SDP_TYPE_PRANSWER,
             WebRTCSDPType::Answer => gst_web_rtc_sys::GST_WEBRTC_SDP_TYPE_ANSWER,
             WebRTCSDPType::Rollback => gst_web_rtc_sys::GST_WEBRTC_SDP_TYPE_ROLLBACK,
-            WebRTCSDPType::__Unknown(value) => value
+            WebRTCSDPType::__Unknown(value) => value,
         }
     }
 }
@@ -594,8 +629,7 @@ impl SetValue for WebRTCSDPType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCSignalingState {
     Stable,
     Closed,
@@ -615,11 +649,19 @@ impl ToGlib for WebRTCSignalingState {
         match *self {
             WebRTCSignalingState::Stable => gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_STABLE,
             WebRTCSignalingState::Closed => gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_CLOSED,
-            WebRTCSignalingState::HaveLocalOffer => gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER,
-            WebRTCSignalingState::HaveRemoteOffer => gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER,
-            WebRTCSignalingState::HaveLocalPranswer => gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER,
-            WebRTCSignalingState::HaveRemotePranswer => gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER,
-            WebRTCSignalingState::__Unknown(value) => value
+            WebRTCSignalingState::HaveLocalOffer => {
+                gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER
+            }
+            WebRTCSignalingState::HaveRemoteOffer => {
+                gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER
+            }
+            WebRTCSignalingState::HaveLocalPranswer => {
+                gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER
+            }
+            WebRTCSignalingState::HaveRemotePranswer => {
+                gst_web_rtc_sys::GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER
+            }
+            WebRTCSignalingState::__Unknown(value) => value,
         }
     }
 }
@@ -664,8 +706,7 @@ impl SetValue for WebRTCSignalingState {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum WebRTCStatsType {
     Codec,
     InboundRtp,
@@ -694,8 +735,12 @@ impl ToGlib for WebRTCStatsType {
             WebRTCStatsType::Codec => gst_web_rtc_sys::GST_WEBRTC_STATS_CODEC,
             WebRTCStatsType::InboundRtp => gst_web_rtc_sys::GST_WEBRTC_STATS_INBOUND_RTP,
             WebRTCStatsType::OutboundRtp => gst_web_rtc_sys::GST_WEBRTC_STATS_OUTBOUND_RTP,
-            WebRTCStatsType::RemoteInboundRtp => gst_web_rtc_sys::GST_WEBRTC_STATS_REMOTE_INBOUND_RTP,
-            WebRTCStatsType::RemoteOutboundRtp => gst_web_rtc_sys::GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP,
+            WebRTCStatsType::RemoteInboundRtp => {
+                gst_web_rtc_sys::GST_WEBRTC_STATS_REMOTE_INBOUND_RTP
+            }
+            WebRTCStatsType::RemoteOutboundRtp => {
+                gst_web_rtc_sys::GST_WEBRTC_STATS_REMOTE_OUTBOUND_RTP
+            }
             WebRTCStatsType::Csrc => gst_web_rtc_sys::GST_WEBRTC_STATS_CSRC,
             WebRTCStatsType::PeerConnection => gst_web_rtc_sys::GST_WEBRTC_STATS_PEER_CONNECTION,
             WebRTCStatsType::DataChannel => gst_web_rtc_sys::GST_WEBRTC_STATS_DATA_CHANNEL,
@@ -705,7 +750,7 @@ impl ToGlib for WebRTCStatsType {
             WebRTCStatsType::LocalCandidate => gst_web_rtc_sys::GST_WEBRTC_STATS_LOCAL_CANDIDATE,
             WebRTCStatsType::RemoteCandidate => gst_web_rtc_sys::GST_WEBRTC_STATS_REMOTE_CANDIDATE,
             WebRTCStatsType::Certificate => gst_web_rtc_sys::GST_WEBRTC_STATS_CERTIFICATE,
-            WebRTCStatsType::__Unknown(value) => value
+            WebRTCStatsType::__Unknown(value) => value,
         }
     }
 }
@@ -757,4 +802,3 @@ impl SetValue for WebRTCStatsType {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

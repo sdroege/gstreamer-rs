@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_video_sys;
 
@@ -431,4 +431,3 @@ impl FromGlib<gst_video_sys::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
         VideoTimeCodeFlags::from_bits_truncate(value)
     }
 }
-

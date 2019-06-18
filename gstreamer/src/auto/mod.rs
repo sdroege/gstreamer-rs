@@ -3,83 +3,83 @@
 // DO NOT EDIT
 
 mod allocator;
-pub use self::allocator::{Allocator, AllocatorClass, NONE_ALLOCATOR};
 pub use self::allocator::AllocatorExt;
+pub use self::allocator::{Allocator, AllocatorClass, NONE_ALLOCATOR};
 
 mod bin;
-pub use self::bin::{Bin, BinClass, NONE_BIN};
 pub use self::bin::GstBinExt;
+pub use self::bin::{Bin, BinClass, NONE_BIN};
 
 mod buffer_pool;
-pub use self::buffer_pool::{BufferPool, BufferPoolClass, NONE_BUFFER_POOL};
 pub use self::buffer_pool::BufferPoolExt;
+pub use self::buffer_pool::{BufferPool, BufferPoolClass, NONE_BUFFER_POOL};
 
 mod bus;
 pub use self::bus::{Bus, BusClass};
 
 mod child_proxy;
-pub use self::child_proxy::{ChildProxy, NONE_CHILD_PROXY};
 pub use self::child_proxy::ChildProxyExt;
+pub use self::child_proxy::{ChildProxy, NONE_CHILD_PROXY};
 
 mod clock;
-pub use self::clock::{Clock, ClockClass, NONE_CLOCK};
 pub use self::clock::ClockExt;
+pub use self::clock::{Clock, ClockClass, NONE_CLOCK};
 
 mod device;
-pub use self::device::{Device, DeviceClass, NONE_DEVICE};
 pub use self::device::DeviceExt;
+pub use self::device::{Device, DeviceClass, NONE_DEVICE};
 
 mod device_monitor;
-pub use self::device_monitor::{DeviceMonitor, DeviceMonitorClass, NONE_DEVICE_MONITOR};
 pub use self::device_monitor::DeviceMonitorExt;
+pub use self::device_monitor::{DeviceMonitor, DeviceMonitorClass, NONE_DEVICE_MONITOR};
 
 mod device_provider;
-pub use self::device_provider::{DeviceProvider, DeviceProviderClass, NONE_DEVICE_PROVIDER};
 pub use self::device_provider::DeviceProviderExt;
+pub use self::device_provider::{DeviceProvider, DeviceProviderClass, NONE_DEVICE_PROVIDER};
 
 mod device_provider_factory;
 pub use self::device_provider_factory::{DeviceProviderFactory, DeviceProviderFactoryClass};
 
 mod element;
-pub use self::element::{Element, ElementClass, NONE_ELEMENT};
 pub use self::element::ElementExt;
+pub use self::element::{Element, ElementClass, NONE_ELEMENT};
 
 mod element_factory;
 pub use self::element_factory::{ElementFactory, ElementFactoryClass};
 
 mod ghost_pad;
-pub use self::ghost_pad::{GhostPad, GhostPadClass, NONE_GHOST_PAD};
 pub use self::ghost_pad::GhostPadExt;
+pub use self::ghost_pad::{GhostPad, GhostPadClass, NONE_GHOST_PAD};
 
 mod object;
-pub use self::object::{Object, ObjectClass, NONE_OBJECT};
 pub use self::object::GstObjectExt;
+pub use self::object::{Object, ObjectClass, NONE_OBJECT};
 
 mod pad;
-pub use self::pad::{Pad, PadClass, NONE_PAD};
 pub use self::pad::PadExt;
+pub use self::pad::{Pad, PadClass, NONE_PAD};
 
 mod pad_template;
 pub use self::pad_template::{PadTemplate, PadTemplateClass};
 
 mod pipeline;
-pub use self::pipeline::{Pipeline, PipelineClass, NONE_PIPELINE};
 pub use self::pipeline::PipelineExt;
+pub use self::pipeline::{Pipeline, PipelineClass, NONE_PIPELINE};
 
 mod plugin;
 pub use self::plugin::{Plugin, PluginClass};
 
 mod plugin_feature;
-pub use self::plugin_feature::{PluginFeature, PluginFeatureClass, NONE_PLUGIN_FEATURE};
 pub use self::plugin_feature::PluginFeatureExt;
+pub use self::plugin_feature::{PluginFeature, PluginFeatureClass, NONE_PLUGIN_FEATURE};
 
 mod preset;
-pub use self::preset::{Preset, NONE_PRESET};
 pub use self::preset::PresetExt;
+pub use self::preset::{Preset, NONE_PRESET};
 
 mod proxy_pad;
-pub use self::proxy_pad::{ProxyPad, ProxyPadClass, NONE_PROXY_PAD};
 pub use self::proxy_pad::ProxyPadExt;
+pub use self::proxy_pad::{ProxyPad, ProxyPadClass, NONE_PROXY_PAD};
 
 mod registry;
 pub use self::registry::{Registry, RegistryClass};
@@ -95,23 +95,23 @@ mod stream_collection;
 pub use self::stream_collection::{StreamCollection, StreamCollectionClass};
 
 mod system_clock;
-pub use self::system_clock::{SystemClock, SystemClockClass, NONE_SYSTEM_CLOCK};
 pub use self::system_clock::SystemClockExt;
+pub use self::system_clock::{SystemClock, SystemClockClass, NONE_SYSTEM_CLOCK};
 
 mod tag_setter;
-pub use self::tag_setter::{TagSetter, NONE_TAG_SETTER};
 pub use self::tag_setter::TagSetterExt;
+pub use self::tag_setter::{TagSetter, NONE_TAG_SETTER};
 
 mod toc_setter;
-pub use self::toc_setter::{TocSetter, NONE_TOC_SETTER};
 pub use self::toc_setter::TocSetterExt;
+pub use self::toc_setter::{TocSetter, NONE_TOC_SETTER};
 
 mod type_find_factory;
 pub use self::type_find_factory::{TypeFindFactory, TypeFindFactoryClass};
 
 mod uri_handler;
-pub use self::uri_handler::{URIHandler, NONE_URI_HANDLER};
 pub use self::uri_handler::URIHandlerExt;
+pub use self::uri_handler::{URIHandler, NONE_URI_HANDLER};
 
 mod date_time;
 pub use self::date_time::DateTime;
@@ -194,7 +194,6 @@ pub mod functions;
 #[doc(hidden)]
 pub mod traits {
     pub use super::AllocatorExt;
-    pub use super::GstBinExt;
     pub use super::BufferPoolExt;
     pub use super::ChildProxyExt;
     pub use super::ClockExt;
@@ -203,6 +202,7 @@ pub mod traits {
     pub use super::DeviceProviderExt;
     pub use super::ElementExt;
     pub use super::GhostPadExt;
+    pub use super::GstBinExt;
     pub use super::GstObjectExt;
     pub use super::PadExt;
     pub use super::PipelineExt;

@@ -3,5 +3,4 @@
 // DO NOT EDIT
 
 #[doc(hidden)]
-pub mod traits {
-}
+pub mod traits {}

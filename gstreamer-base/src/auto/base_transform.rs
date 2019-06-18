@@ -3,13 +3,13 @@
 // DO NOT EDIT
 
 use glib;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::StaticType;
+use glib::Value;
 use glib_sys;
 use gobject_sys;
 use gst;
@@ -63,7 +63,10 @@ pub trait BaseTransformExt: 'static {
 
     fn set_property_qos(&self, qos: bool);
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<BaseTransform>> BaseTransformExt for O {
@@ -73,25 +76,33 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
 
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
-            from_glib_full(gst_base_sys::gst_base_transform_get_buffer_pool(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_base_sys::gst_base_transform_get_buffer_pool(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_in_place(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_transform_is_in_place(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_transform_is_in_place(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_passthrough(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_transform_is_passthrough(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_transform_is_passthrough(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_qos_enabled(&self) -> bool {
         unsafe {
-            from_glib(gst_base_sys::gst_base_transform_is_qos_enabled(self.as_ref().to_glib_none().0))
+            from_glib(gst_base_sys::gst_base_transform_is_qos_enabled(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -109,71 +120,116 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
 
     fn set_gap_aware(&self, gap_aware: bool) {
         unsafe {
-            gst_base_sys::gst_base_transform_set_gap_aware(self.as_ref().to_glib_none().0, gap_aware.to_glib());
+            gst_base_sys::gst_base_transform_set_gap_aware(
+                self.as_ref().to_glib_none().0,
+                gap_aware.to_glib(),
+            );
         }
     }
 
     fn set_in_place(&self, in_place: bool) {
         unsafe {
-            gst_base_sys::gst_base_transform_set_in_place(self.as_ref().to_glib_none().0, in_place.to_glib());
+            gst_base_sys::gst_base_transform_set_in_place(
+                self.as_ref().to_glib_none().0,
+                in_place.to_glib(),
+            );
         }
     }
 
     fn set_passthrough(&self, passthrough: bool) {
         unsafe {
-            gst_base_sys::gst_base_transform_set_passthrough(self.as_ref().to_glib_none().0, passthrough.to_glib());
+            gst_base_sys::gst_base_transform_set_passthrough(
+                self.as_ref().to_glib_none().0,
+                passthrough.to_glib(),
+            );
         }
     }
 
     fn set_prefer_passthrough(&self, prefer_passthrough: bool) {
         unsafe {
-            gst_base_sys::gst_base_transform_set_prefer_passthrough(self.as_ref().to_glib_none().0, prefer_passthrough.to_glib());
+            gst_base_sys::gst_base_transform_set_prefer_passthrough(
+                self.as_ref().to_glib_none().0,
+                prefer_passthrough.to_glib(),
+            );
         }
     }
 
     fn set_qos_enabled(&self, enabled: bool) {
         unsafe {
-            gst_base_sys::gst_base_transform_set_qos_enabled(self.as_ref().to_glib_none().0, enabled.to_glib());
+            gst_base_sys::gst_base_transform_set_qos_enabled(
+                self.as_ref().to_glib_none().0,
+                enabled.to_glib(),
+            );
         }
     }
 
     fn update_qos(&self, proportion: f64, diff: gst::ClockTimeDiff, timestamp: gst::ClockTime) {
         unsafe {
-            gst_base_sys::gst_base_transform_update_qos(self.as_ref().to_glib_none().0, proportion, diff, timestamp.to_glib());
+            gst_base_sys::gst_base_transform_update_qos(
+                self.as_ref().to_glib_none().0,
+                proportion,
+                diff,
+                timestamp.to_glib(),
+            );
         }
     }
 
     fn update_src_caps(&self, updated_caps: &gst::Caps) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_base_sys::gst_base_transform_update_src_caps(self.as_ref().to_glib_none().0, updated_caps.to_glib_none().0), "Failed to update src caps")
+            glib_result_from_gboolean!(
+                gst_base_sys::gst_base_transform_update_src_caps(
+                    self.as_ref().to_glib_none().0,
+                    updated_caps.to_glib_none().0
+                ),
+                "Failed to update src caps"
+            )
         }
     }
 
     fn get_property_qos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"qos\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"qos\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_qos(&self, qos: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"qos\0".as_ptr() as *const _, Value::from(&qos).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"qos\0".as_ptr() as *const _,
+                Value::from(&qos).to_glib_none().0,
+            );
         }
     }
 
-    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseTransform, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<BaseTransform>
+    fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_base_sys::GstBaseTransform,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<BaseTransform>,
         {
             let f: &F = &*(f as *const F);
             f(&BaseTransform::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::qos\0".as_ptr() as *const _,
-                Some(transmute(notify_qos_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::qos\0".as_ptr() as *const _,
+                Some(transmute(notify_qos_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Object;
 use glib;
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst_sys;
+use Object;
 
 glib_wrapper! {
     pub struct BufferPool(Object<gst_sys::GstBufferPool, gst_sys::GstBufferPoolClass, BufferPoolClass>) @extends Object;
@@ -37,31 +37,47 @@ pub trait BufferPoolExt: 'static {
 impl<O: IsA<BufferPool>> BufferPoolExt for O {
     fn get_options(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(gst_sys::gst_buffer_pool_get_options(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(gst_sys::gst_buffer_pool_get_options(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn has_option(&self, option: &str) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_buffer_pool_has_option(self.as_ref().to_glib_none().0, option.to_glib_none().0))
+            from_glib(gst_sys::gst_buffer_pool_has_option(
+                self.as_ref().to_glib_none().0,
+                option.to_glib_none().0,
+            ))
         }
     }
 
     fn is_active(&self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_buffer_pool_is_active(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_buffer_pool_is_active(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_active(&self, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_buffer_pool_set_active(self.as_ref().to_glib_none().0, active.to_glib()), "Failed to activate buffer pool")
+            glib_result_from_gboolean!(
+                gst_sys::gst_buffer_pool_set_active(
+                    self.as_ref().to_glib_none().0,
+                    active.to_glib()
+                ),
+                "Failed to activate buffer pool"
+            )
         }
     }
 
     fn set_flushing(&self, flushing: bool) {
         unsafe {
-            gst_sys::gst_buffer_pool_set_flushing(self.as_ref().to_glib_none().0, flushing.to_glib());
+            gst_sys::gst_buffer_pool_set_flushing(
+                self.as_ref().to_glib_none().0,
+                flushing.to_glib(),
+            );
         }
     }
 }

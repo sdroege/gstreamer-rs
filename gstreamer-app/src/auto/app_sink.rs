@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::ObjectType as ObjectType_;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType as ObjectType_;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
 use glib_sys;
 use gobject_sys;
 use gst;
@@ -28,62 +28,63 @@ impl AppSink {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn get_buffer_list_support(&self) -> bool {
         unsafe {
-            from_glib(gst_app_sys::gst_app_sink_get_buffer_list_support(self.to_glib_none().0))
+            from_glib(gst_app_sys::gst_app_sink_get_buffer_list_support(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_caps(&self) -> Option<gst::Caps> {
-        unsafe {
-            from_glib_full(gst_app_sys::gst_app_sink_get_caps(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(gst_app_sys::gst_app_sink_get_caps(self.to_glib_none().0)) }
     }
 
     pub fn get_drop(&self) -> bool {
-        unsafe {
-            from_glib(gst_app_sys::gst_app_sink_get_drop(self.to_glib_none().0))
-        }
+        unsafe { from_glib(gst_app_sys::gst_app_sink_get_drop(self.to_glib_none().0)) }
     }
 
     pub fn get_emit_signals(&self) -> bool {
         unsafe {
-            from_glib(gst_app_sys::gst_app_sink_get_emit_signals(self.to_glib_none().0))
+            from_glib(gst_app_sys::gst_app_sink_get_emit_signals(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_max_buffers(&self) -> u32 {
-        unsafe {
-            gst_app_sys::gst_app_sink_get_max_buffers(self.to_glib_none().0)
-        }
+        unsafe { gst_app_sys::gst_app_sink_get_max_buffers(self.to_glib_none().0) }
     }
 
     pub fn get_wait_on_eos(&self) -> bool {
         unsafe {
-            from_glib(gst_app_sys::gst_app_sink_get_wait_on_eos(self.to_glib_none().0))
+            from_glib(gst_app_sys::gst_app_sink_get_wait_on_eos(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn is_eos(&self) -> bool {
-        unsafe {
-            from_glib(gst_app_sys::gst_app_sink_is_eos(self.to_glib_none().0))
-        }
+        unsafe { from_glib(gst_app_sys::gst_app_sink_is_eos(self.to_glib_none().0)) }
     }
 
     pub fn pull_preroll(&self) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(gst_app_sys::gst_app_sink_pull_preroll(self.to_glib_none().0))
+            from_glib_full(gst_app_sys::gst_app_sink_pull_preroll(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn pull_sample(&self) -> Option<gst::Sample> {
-        unsafe {
-            from_glib_full(gst_app_sys::gst_app_sink_pull_sample(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(gst_app_sys::gst_app_sink_pull_sample(self.to_glib_none().0)) }
     }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn set_buffer_list_support(&self, enable_lists: bool) {
         unsafe {
-            gst_app_sys::gst_app_sink_set_buffer_list_support(self.to_glib_none().0, enable_lists.to_glib());
+            gst_app_sys::gst_app_sink_set_buffer_list_support(
+                self.to_glib_none().0,
+                enable_lists.to_glib(),
+            );
         }
     }
 
@@ -124,132 +125,242 @@ impl AppSink {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn try_pull_preroll(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(gst_app_sys::gst_app_sink_try_pull_preroll(self.to_glib_none().0, timeout.to_glib()))
+            from_glib_full(gst_app_sys::gst_app_sink_try_pull_preroll(
+                self.to_glib_none().0,
+                timeout.to_glib(),
+            ))
         }
     }
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn try_pull_sample(&self, timeout: gst::ClockTime) -> Option<gst::Sample> {
         unsafe {
-            from_glib_full(gst_app_sys::gst_app_sink_try_pull_sample(self.to_glib_none().0, timeout.to_glib()))
+            from_glib_full(gst_app_sys::gst_app_sink_try_pull_sample(
+                self.to_glib_none().0,
+                timeout.to_glib(),
+            ))
         }
     }
 
     pub fn get_property_buffer_list(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"buffer-list\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"buffer-list\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     pub fn set_property_buffer_list(&self, buffer_list: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"buffer-list\0".as_ptr() as *const _, Value::from(&buffer_list).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"buffer-list\0".as_ptr() as *const _,
+                Value::from(&buffer_list).to_glib_none().0,
+            );
         }
     }
 
     pub fn get_property_eos(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"eos\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"eos\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     pub fn connect_eos<F: Fn(&AppSink) + Send + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(this: *mut gst_app_sys::GstAppSink, f: glib_sys::gpointer) {
+        unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(
+            this: *mut gst_app_sys::GstAppSink,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"eos\0".as_ptr() as *const _,
-                Some(transmute(eos_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"eos\0".as_ptr() as *const _,
+                Some(transmute(eos_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_buffer_list_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_buffer_list_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::buffer-list\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_list_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::buffer-list\0".as_ptr() as *const _,
+                Some(transmute(notify_buffer_list_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_caps_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_caps_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::caps\0".as_ptr() as *const _,
-                Some(transmute(notify_caps_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::caps\0".as_ptr() as *const _,
+                Some(transmute(notify_caps_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_drop_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_drop_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::drop\0".as_ptr() as *const _,
-                Some(transmute(notify_drop_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::drop\0".as_ptr() as *const _,
+                Some(transmute(notify_drop_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_emit_signals_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_emit_signals_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::emit-signals\0".as_ptr() as *const _,
-                Some(transmute(notify_emit_signals_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::emit-signals\0".as_ptr() as *const _,
+                Some(transmute(notify_emit_signals_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::eos\0".as_ptr() as *const _,
-                Some(transmute(notify_eos_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::eos\0".as_ptr() as *const _,
+                Some(transmute(notify_eos_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_max_buffers_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_buffers_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::max-buffers\0".as_ptr() as *const _,
-                Some(transmute(notify_max_buffers_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-buffers\0".as_ptr() as *const _,
+                Some(transmute(notify_max_buffers_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_property_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_wait_on_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+    pub fn connect_property_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wait_on_eos_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut gst_app_sys::GstAppSink,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::wait-on-eos\0".as_ptr() as *const _,
-                Some(transmute(notify_wait_on_eos_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::wait-on-eos\0".as_ptr() as *const _,
+                Some(transmute(notify_wait_on_eos_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

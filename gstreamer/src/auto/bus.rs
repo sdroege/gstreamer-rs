@@ -2,18 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ClockTime;
-use Message;
-use Object;
 use glib;
 use glib::object::ObjectType as ObjectType_;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
 use glib_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use ClockTime;
+use Message;
+use Object;
 
 glib_wrapper! {
     pub struct Bus(Object<gst_sys::GstBus, gst_sys::GstBusClass, BusClass>) @extends Object;
@@ -26,9 +26,7 @@ glib_wrapper! {
 impl Bus {
     pub fn new() -> Bus {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_sys::gst_bus_new())
-        }
+        unsafe { from_glib_full(gst_sys::gst_bus_new()) }
     }
 
     pub fn add_signal_watch(&self) {
@@ -59,26 +57,23 @@ impl Bus {
     //}
 
     pub fn have_pending(&self) -> bool {
-        unsafe {
-            from_glib(gst_sys::gst_bus_have_pending(self.to_glib_none().0))
-        }
+        unsafe { from_glib(gst_sys::gst_bus_have_pending(self.to_glib_none().0)) }
     }
 
     pub fn peek(&self) -> Option<Message> {
-        unsafe {
-            from_glib_full(gst_sys::gst_bus_peek(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(gst_sys::gst_bus_peek(self.to_glib_none().0)) }
     }
 
     pub fn pop(&self) -> Option<Message> {
-        unsafe {
-            from_glib_full(gst_sys::gst_bus_pop(self.to_glib_none().0))
-        }
+        unsafe { from_glib_full(gst_sys::gst_bus_pop(self.to_glib_none().0)) }
     }
 
     pub fn post(&self, message: &Message) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_bus_post(self.to_glib_none().0, message.to_glib_full()), "Failed to post message")
+            glib_result_from_gboolean!(
+                gst_sys::gst_bus_post(self.to_glib_none().0, message.to_glib_full()),
+                "Failed to post message"
+            )
         }
     }
 
@@ -90,7 +85,10 @@ impl Bus {
 
     pub fn remove_watch(&self) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_bus_remove_watch(self.to_glib_none().0), "Bus has no event source")
+            glib_result_from_gboolean!(
+                gst_sys::gst_bus_remove_watch(self.to_glib_none().0),
+                "Bus has no event source"
+            )
         }
     }
 
@@ -106,31 +104,55 @@ impl Bus {
 
     pub fn timed_pop(&self, timeout: ClockTime) -> Option<Message> {
         unsafe {
-            from_glib_full(gst_sys::gst_bus_timed_pop(self.to_glib_none().0, timeout.to_glib()))
+            from_glib_full(gst_sys::gst_bus_timed_pop(
+                self.to_glib_none().0,
+                timeout.to_glib(),
+            ))
         }
     }
 
     pub fn connect_message<F: Fn(&Bus, &Message) + Send + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
+        unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(
+            this: *mut gst_sys::GstBus,
+            message: *mut gst_sys::GstMessage,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this), &from_glib_borrow(message))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"message\0".as_ptr() as *const _,
-                Some(transmute(message_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"message\0".as_ptr() as *const _,
+                Some(transmute(message_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn sync_message_trampoline<F: Fn(&Bus, &Message) + Send + Sync + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
+    pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn sync_message_trampoline<
+            F: Fn(&Bus, &Message) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstBus,
+            message: *mut gst_sys::GstMessage,
+            f: glib_sys::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
             f(&from_glib_borrow(this), &from_glib_borrow(message))
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"sync-message\0".as_ptr() as *const _,
-                Some(transmute(sync_message_trampoline::<F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"sync-message\0".as_ptr() as *const _,
+                Some(transmute(sync_message_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

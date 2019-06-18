@@ -15,5 +15,4 @@ mod ptp_clock;
 pub use self::ptp_clock::{PtpClock, PtpClockClass};
 
 #[doc(hidden)]
-pub mod traits {
-}
+pub mod traits {}

@@ -2,22 +2,22 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ClockTime;
-use Object;
 use glib;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::StaticType;
+use glib::Value;
 use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
+use ClockTime;
+use Object;
 
 glib_wrapper! {
     pub struct Clock(Object<gst_sys::GstClock, gst_sys::GstClockClass, ClockClass>) @extends Object;
@@ -75,7 +75,11 @@ pub const NONE_CLOCK: Option<&Clock> = None;
 pub trait ClockExt: 'static {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64>;
 
-    fn add_observation_unapplied(&self, slave: ClockTime, master: ClockTime) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
+    fn add_observation_unapplied(
+        &self,
+        slave: ClockTime,
+        master: ClockTime,
+    ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)>;
 
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime;
 
@@ -99,7 +103,13 @@ pub trait ClockExt: 'static {
 
     //fn periodic_id_reinit(&self, id: /*Unimplemented*/ClockID, start_time: ClockTime, interval: ClockTime) -> bool;
 
-    fn set_calibration(&self, internal: ClockTime, external: ClockTime, rate_num: ClockTime, rate_denom: ClockTime);
+    fn set_calibration(
+        &self,
+        internal: ClockTime,
+        external: ClockTime,
+        rate_num: ClockTime,
+        rate_denom: ClockTime,
+    );
 
     fn set_master<P: IsA<Clock>>(&self, master: Option<&P>) -> Result<(), glib::error::BoolError>;
 
@@ -125,37 +135,81 @@ pub trait ClockExt: 'static {
 
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<Clock>> ClockExt for O {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {
             let mut r_squared = mem::uninitialized();
-            let ret = from_glib(gst_sys::gst_clock_add_observation(self.as_ref().to_glib_none().0, slave.to_glib(), master.to_glib(), &mut r_squared));
-            if ret { Some(r_squared) } else { None }
+            let ret = from_glib(gst_sys::gst_clock_add_observation(
+                self.as_ref().to_glib_none().0,
+                slave.to_glib(),
+                master.to_glib(),
+                &mut r_squared,
+            ));
+            if ret {
+                Some(r_squared)
+            } else {
+                None
+            }
         }
     }
 
-    fn add_observation_unapplied(&self, slave: ClockTime, master: ClockTime) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)> {
+    fn add_observation_unapplied(
+        &self,
+        slave: ClockTime,
+        master: ClockTime,
+    ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)> {
         unsafe {
             let mut r_squared = mem::uninitialized();
             let mut internal = mem::uninitialized();
             let mut external = mem::uninitialized();
             let mut rate_num = mem::uninitialized();
             let mut rate_denom = mem::uninitialized();
-            let ret = from_glib(gst_sys::gst_clock_add_observation_unapplied(self.as_ref().to_glib_none().0, slave.to_glib(), master.to_glib(), &mut r_squared, &mut internal, &mut external, &mut rate_num, &mut rate_denom));
-            if ret { Some((r_squared, from_glib(internal), from_glib(external), from_glib(rate_num), from_glib(rate_denom))) } else { None }
+            let ret = from_glib(gst_sys::gst_clock_add_observation_unapplied(
+                self.as_ref().to_glib_none().0,
+                slave.to_glib(),
+                master.to_glib(),
+                &mut r_squared,
+                &mut internal,
+                &mut external,
+                &mut rate_num,
+                &mut rate_denom,
+            ));
+            if ret {
+                Some((
+                    r_squared,
+                    from_glib(internal),
+                    from_glib(external),
+                    from_glib(rate_num),
+                    from_glib(rate_denom),
+                ))
+            } else {
+                None
+            }
         }
     }
 
     fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_clock_adjust_unlocked(self.as_ref().to_glib_none().0, internal.to_glib()))
+            from_glib(gst_sys::gst_clock_adjust_unlocked(
+                self.as_ref().to_glib_none().0,
+                internal.to_glib(),
+            ))
         }
     }
 
@@ -165,45 +219,60 @@ impl<O: IsA<Clock>> ClockExt for O {
             let mut external = mem::uninitialized();
             let mut rate_num = mem::uninitialized();
             let mut rate_denom = mem::uninitialized();
-            gst_sys::gst_clock_get_calibration(self.as_ref().to_glib_none().0, &mut internal, &mut external, &mut rate_num, &mut rate_denom);
-            (from_glib(internal), from_glib(external), from_glib(rate_num), from_glib(rate_denom))
+            gst_sys::gst_clock_get_calibration(
+                self.as_ref().to_glib_none().0,
+                &mut internal,
+                &mut external,
+                &mut rate_num,
+                &mut rate_denom,
+            );
+            (
+                from_glib(internal),
+                from_glib(external),
+                from_glib(rate_num),
+                from_glib(rate_denom),
+            )
         }
     }
 
     fn get_internal_time(&self) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_clock_get_internal_time(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_clock_get_internal_time(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_master(&self) -> Option<Clock> {
         unsafe {
-            from_glib_full(gst_sys::gst_clock_get_master(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_sys::gst_clock_get_master(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_resolution(&self) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_clock_get_resolution(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_clock_get_resolution(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_time(&self) -> ClockTime {
-        unsafe {
-            from_glib(gst_sys::gst_clock_get_time(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib(gst_sys::gst_clock_get_time(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_timeout(&self) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_clock_get_timeout(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_clock_get_timeout(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_synced(&self) -> bool {
-        unsafe {
-            from_glib(gst_sys::gst_clock_is_synced(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib(gst_sys::gst_clock_is_synced(self.as_ref().to_glib_none().0)) }
     }
 
     //fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> /*Unimplemented*/Option<ClockID> {
@@ -218,21 +287,42 @@ impl<O: IsA<Clock>> ClockExt for O {
     //    unsafe { TODO: call gst_sys:gst_clock_periodic_id_reinit() }
     //}
 
-    fn set_calibration(&self, internal: ClockTime, external: ClockTime, rate_num: ClockTime, rate_denom: ClockTime) {
+    fn set_calibration(
+        &self,
+        internal: ClockTime,
+        external: ClockTime,
+        rate_num: ClockTime,
+        rate_denom: ClockTime,
+    ) {
         unsafe {
-            gst_sys::gst_clock_set_calibration(self.as_ref().to_glib_none().0, internal.to_glib(), external.to_glib(), rate_num.to_glib(), rate_denom.to_glib());
+            gst_sys::gst_clock_set_calibration(
+                self.as_ref().to_glib_none().0,
+                internal.to_glib(),
+                external.to_glib(),
+                rate_num.to_glib(),
+                rate_denom.to_glib(),
+            );
         }
     }
 
     fn set_master<P: IsA<Clock>>(&self, master: Option<&P>) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_clock_set_master(self.as_ref().to_glib_none().0, master.map(|p| p.as_ref()).to_glib_none().0), "Failed to set master clock")
+            glib_result_from_gboolean!(
+                gst_sys::gst_clock_set_master(
+                    self.as_ref().to_glib_none().0,
+                    master.map(|p| p.as_ref()).to_glib_none().0
+                ),
+                "Failed to set master clock"
+            )
         }
     }
 
     fn set_resolution(&self, resolution: ClockTime) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_clock_set_resolution(self.as_ref().to_glib_none().0, resolution.to_glib()))
+            from_glib(gst_sys::gst_clock_set_resolution(
+                self.as_ref().to_glib_none().0,
+                resolution.to_glib(),
+            ))
         }
     }
 
@@ -254,97 +344,168 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime {
         unsafe {
-            from_glib(gst_sys::gst_clock_unadjust_unlocked(self.as_ref().to_glib_none().0, external.to_glib()))
+            from_glib(gst_sys::gst_clock_unadjust_unlocked(
+                self.as_ref().to_glib_none().0,
+                external.to_glib(),
+            ))
         }
     }
 
     fn wait_for_sync(&self, timeout: ClockTime) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_clock_wait_for_sync(self.as_ref().to_glib_none().0, timeout.to_glib()), "Timed out waiting for sync")
+            glib_result_from_gboolean!(
+                gst_sys::gst_clock_wait_for_sync(self.as_ref().to_glib_none().0, timeout.to_glib()),
+                "Timed out waiting for sync"
+            )
         }
     }
 
     fn get_property_window_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"window-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"window-size\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_window_size(&self, window_size: i32) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"window-size\0".as_ptr() as *const _, Value::from(&window_size).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"window-size\0".as_ptr() as *const _,
+                Value::from(&window_size).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_window_threshold(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"window-threshold\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"window-threshold\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_window_threshold(&self, window_threshold: i32) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"window-threshold\0".as_ptr() as *const _, Value::from(&window_threshold).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"window-threshold\0".as_ptr() as *const _,
+                Value::from(&window_threshold).to_glib_none().0,
+            );
         }
     }
 
     fn connect_synced<F: Fn(&Self, bool) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn synced_trampoline<P, F: Fn(&P, bool) + Send + Sync + 'static>(this: *mut gst_sys::GstClock, synced: glib_sys::gboolean, f: glib_sys::gpointer)
-            where P: IsA<Clock>
+        unsafe extern "C" fn synced_trampoline<P, F: Fn(&P, bool) + Send + Sync + 'static>(
+            this: *mut gst_sys::GstClock,
+            synced: glib_sys::gboolean,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Clock>,
         {
             let f: &F = &*(f as *const F);
-            f(&Clock::from_glib_borrow(this).unsafe_cast(), from_glib(synced))
+            f(
+                &Clock::from_glib_borrow(this).unsafe_cast(),
+                from_glib(synced),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"synced\0".as_ptr() as *const _,
-                Some(transmute(synced_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"synced\0".as_ptr() as *const _,
+                Some(transmute(synced_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Clock>
+    fn connect_property_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_sys::GstClock,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Clock>,
         {
             let f: &F = &*(f as *const F);
             f(&Clock::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::timeout\0".as_ptr() as *const _,
-                Some(transmute(notify_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::timeout\0".as_ptr() as *const _,
+                Some(transmute(notify_timeout_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_window_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Clock>
+    fn connect_property_window_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_window_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_sys::GstClock,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Clock>,
         {
             let f: &F = &*(f as *const F);
             f(&Clock::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::window-size\0".as_ptr() as *const _,
-                Some(transmute(notify_window_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::window-size\0".as_ptr() as *const _,
+                Some(transmute(notify_window_size_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_window_threshold_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Clock>
+    fn connect_property_window_threshold_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_window_threshold_trampoline<
+            P,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut gst_sys::GstClock,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Clock>,
         {
             let f: &F = &*(f as *const F);
             f(&Clock::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::window-threshold\0".as_ptr() as *const _,
-                Some(transmute(notify_window_threshold_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::window-threshold\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_window_threshold_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

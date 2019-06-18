@@ -2,21 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Clock;
-use ClockType;
-use Object;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::StaticType;
+use glib::Value;
 use glib_sys;
 use gobject_sys;
 use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use Clock;
+use ClockType;
+use Object;
 
 glib_wrapper! {
     pub struct SystemClock(Object<gst_sys::GstSystemClock, gst_sys::GstSystemClockClass, SystemClockClass>) @extends Clock, Object;
@@ -29,9 +29,7 @@ glib_wrapper! {
 impl SystemClock {
     pub fn obtain() -> Clock {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_sys::gst_system_clock_obtain())
-        }
+        unsafe { from_glib_full(gst_sys::gst_system_clock_obtain()) }
     }
 
     pub fn set_default<P: IsA<Clock>>(new_clock: Option<&P>) {
@@ -52,35 +50,57 @@ pub trait SystemClockExt: 'static {
 
     fn set_property_clock_type(&self, clock_type: ClockType);
 
-    fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<SystemClock>> SystemClockExt for O {
     fn get_property_clock_type(&self) -> ClockType {
         unsafe {
             let mut value = Value::from_type(<ClockType as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"clock-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"clock-type\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_clock_type(&self, clock_type: ClockType) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"clock-type\0".as_ptr() as *const _, Value::from(&clock_type).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"clock-type\0".as_ptr() as *const _,
+                Value::from(&clock_type).to_glib_none().0,
+            );
         }
     }
 
-    fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_clock_type_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstSystemClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<SystemClock>
+    fn connect_property_clock_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_clock_type_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_sys::GstSystemClock,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SystemClock>,
         {
             let f: &F = &*(f as *const F);
             f(&SystemClock::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::clock-type\0".as_ptr() as *const _,
-                Some(transmute(notify_clock_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::clock-type\0".as_ptr() as *const _,
+                Some(transmute(notify_clock_type_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

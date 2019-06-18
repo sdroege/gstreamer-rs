@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_audio_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum AudioChannelPosition {
     None,
     Mono,
@@ -60,34 +59,70 @@ impl ToGlib for AudioChannelPosition {
             AudioChannelPosition::Mono => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_MONO,
             AudioChannelPosition::Invalid => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID,
             AudioChannelPosition::FrontLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
-            AudioChannelPosition::FrontRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT,
-            AudioChannelPosition::FrontCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
+            AudioChannelPosition::FrontRight => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT
+            }
+            AudioChannelPosition::FrontCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER
+            }
             AudioChannelPosition::Lfe1 => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_LFE1,
             AudioChannelPosition::RearLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_LEFT,
             AudioChannelPosition::RearRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_RIGHT,
-            AudioChannelPosition::FrontLeftOfCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER,
-            AudioChannelPosition::FrontRightOfCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER,
-            AudioChannelPosition::RearCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_CENTER,
+            AudioChannelPosition::FrontLeftOfCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT_OF_CENTER
+            }
+            AudioChannelPosition::FrontRightOfCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT_OF_CENTER
+            }
+            AudioChannelPosition::RearCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_REAR_CENTER
+            }
             AudioChannelPosition::Lfe2 => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_LFE2,
             AudioChannelPosition::SideLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SIDE_LEFT,
             AudioChannelPosition::SideRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SIDE_RIGHT,
-            AudioChannelPosition::TopFrontLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_LEFT,
-            AudioChannelPosition::TopFrontRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_RIGHT,
-            AudioChannelPosition::TopFrontCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_CENTER,
+            AudioChannelPosition::TopFrontLeft => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_LEFT
+            }
+            AudioChannelPosition::TopFrontRight => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_RIGHT
+            }
+            AudioChannelPosition::TopFrontCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_FRONT_CENTER
+            }
             AudioChannelPosition::TopCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_CENTER,
-            AudioChannelPosition::TopRearLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_LEFT,
-            AudioChannelPosition::TopRearRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_RIGHT,
-            AudioChannelPosition::TopSideLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_LEFT,
-            AudioChannelPosition::TopSideRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_RIGHT,
-            AudioChannelPosition::TopRearCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_CENTER,
-            AudioChannelPosition::BottomFrontCenter => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_CENTER,
-            AudioChannelPosition::BottomFrontLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_LEFT,
-            AudioChannelPosition::BottomFrontRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_RIGHT,
+            AudioChannelPosition::TopRearLeft => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_LEFT
+            }
+            AudioChannelPosition::TopRearRight => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_RIGHT
+            }
+            AudioChannelPosition::TopSideLeft => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_LEFT
+            }
+            AudioChannelPosition::TopSideRight => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_SIDE_RIGHT
+            }
+            AudioChannelPosition::TopRearCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_TOP_REAR_CENTER
+            }
+            AudioChannelPosition::BottomFrontCenter => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_CENTER
+            }
+            AudioChannelPosition::BottomFrontLeft => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_LEFT
+            }
+            AudioChannelPosition::BottomFrontRight => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_BOTTOM_FRONT_RIGHT
+            }
             AudioChannelPosition::WideLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_WIDE_LEFT,
             AudioChannelPosition::WideRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_WIDE_RIGHT,
-            AudioChannelPosition::SurroundLeft => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT,
-            AudioChannelPosition::SurroundRight => gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT,
-            AudioChannelPosition::__Unknown(value) => value
+            AudioChannelPosition::SurroundLeft => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT
+            }
+            AudioChannelPosition::SurroundRight => {
+                gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT
+            }
+            AudioChannelPosition::__Unknown(value) => value,
         }
     }
 }
@@ -157,8 +192,7 @@ impl SetValue for AudioChannelPosition {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum AudioFormat {
     Unknown,
     Encoded,
@@ -234,7 +268,7 @@ impl ToGlib for AudioFormat {
             AudioFormat::F32be => gst_audio_sys::GST_AUDIO_FORMAT_F32BE,
             AudioFormat::F64le => gst_audio_sys::GST_AUDIO_FORMAT_F64LE,
             AudioFormat::F64be => gst_audio_sys::GST_AUDIO_FORMAT_F64BE,
-            AudioFormat::__Unknown(value) => value
+            AudioFormat::__Unknown(value) => value,
         }
     }
 }
@@ -305,8 +339,7 @@ impl SetValue for AudioFormat {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum AudioLayout {
     Interleaved,
     NonInterleaved,
@@ -322,7 +355,7 @@ impl ToGlib for AudioLayout {
         match *self {
             AudioLayout::Interleaved => gst_audio_sys::GST_AUDIO_LAYOUT_INTERLEAVED,
             AudioLayout::NonInterleaved => gst_audio_sys::GST_AUDIO_LAYOUT_NON_INTERLEAVED,
-            AudioLayout::__Unknown(value) => value
+            AudioLayout::__Unknown(value) => value,
         }
     }
 }
@@ -363,8 +396,7 @@ impl SetValue for AudioLayout {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StreamVolumeFormat {
     Linear,
     Cubic,
@@ -382,7 +414,7 @@ impl ToGlib for StreamVolumeFormat {
             StreamVolumeFormat::Linear => gst_audio_sys::GST_STREAM_VOLUME_FORMAT_LINEAR,
             StreamVolumeFormat::Cubic => gst_audio_sys::GST_STREAM_VOLUME_FORMAT_CUBIC,
             StreamVolumeFormat::Db => gst_audio_sys::GST_STREAM_VOLUME_FORMAT_DB,
-            StreamVolumeFormat::__Unknown(value) => value
+            StreamVolumeFormat::__Unknown(value) => value,
         }
     }
 }
@@ -399,4 +431,3 @@ impl FromGlib<gst_audio_sys::GstStreamVolumeFormat> for StreamVolumeFormat {
         }
     }
 }
-

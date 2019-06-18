@@ -3,9 +3,9 @@
 // DO NOT EDIT
 
 use glib;
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gst_sys;
 use std;
 use std::ptr;
@@ -21,15 +21,18 @@ glib_wrapper! {
 impl Preset {
     pub fn get_app_dir() -> Option<std::path::PathBuf> {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(gst_sys::gst_preset_get_app_dir())
-        }
+        unsafe { from_glib_none(gst_sys::gst_preset_get_app_dir()) }
     }
 
-    pub fn set_app_dir<P: AsRef<std::path::Path>>(app_dir: P) -> Result<(), glib::error::BoolError> {
+    pub fn set_app_dir<P: AsRef<std::path::Path>>(
+        app_dir: P,
+    ) -> Result<(), glib::error::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_preset_set_app_dir(app_dir.as_ref().to_glib_none().0), "Failed to set app preset directory")
+            glib_result_from_gboolean!(
+                gst_sys::gst_preset_set_app_dir(app_dir.as_ref().to_glib_none().0),
+                "Failed to set app preset directory"
+            )
         }
     }
 }
@@ -56,63 +59,121 @@ pub trait PresetExt: 'static {
 
     fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError>;
 
-    fn set_meta(&self, name: &str, tag: &str, value: Option<&str>) -> Result<(), glib::error::BoolError>;
+    fn set_meta(
+        &self,
+        name: &str,
+        tag: &str,
+        value: Option<&str>,
+    ) -> Result<(), glib::error::BoolError>;
 }
 
 impl<O: IsA<Preset>> PresetExt for O {
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_preset_delete_preset(self.as_ref().to_glib_none().0, name.to_glib_none().0), "Failed to delete preset")
+            glib_result_from_gboolean!(
+                gst_sys::gst_preset_delete_preset(
+                    self.as_ref().to_glib_none().0,
+                    name.to_glib_none().0
+                ),
+                "Failed to delete preset"
+            )
         }
     }
 
     fn get_meta(&self, name: &str, tag: &str) -> Option<GString> {
         unsafe {
             let mut value = ptr::null_mut();
-            let ret = from_glib(gst_sys::gst_preset_get_meta(self.as_ref().to_glib_none().0, name.to_glib_none().0, tag.to_glib_none().0, &mut value));
-            if ret { Some(from_glib_full(value)) } else { None }
+            let ret = from_glib(gst_sys::gst_preset_get_meta(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+                tag.to_glib_none().0,
+                &mut value,
+            ));
+            if ret {
+                Some(from_glib_full(value))
+            } else {
+                None
+            }
         }
     }
 
     fn get_preset_names(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_preset_get_preset_names(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_preset_get_preset_names(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_property_names(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_sys::gst_preset_get_property_names(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_sys::gst_preset_get_property_names(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_editable(&self) -> bool {
         unsafe {
-            from_glib(gst_sys::gst_preset_is_editable(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_preset_is_editable(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn load_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_preset_load_preset(self.as_ref().to_glib_none().0, name.to_glib_none().0), "Failed to load preset")
+            glib_result_from_gboolean!(
+                gst_sys::gst_preset_load_preset(
+                    self.as_ref().to_glib_none().0,
+                    name.to_glib_none().0
+                ),
+                "Failed to load preset"
+            )
         }
     }
 
     fn rename_preset(&self, old_name: &str, new_name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_preset_rename_preset(self.as_ref().to_glib_none().0, old_name.to_glib_none().0, new_name.to_glib_none().0), "Failed to rename preset")
+            glib_result_from_gboolean!(
+                gst_sys::gst_preset_rename_preset(
+                    self.as_ref().to_glib_none().0,
+                    old_name.to_glib_none().0,
+                    new_name.to_glib_none().0
+                ),
+                "Failed to rename preset"
+            )
         }
     }
 
     fn save_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_preset_save_preset(self.as_ref().to_glib_none().0, name.to_glib_none().0), "Failed to save preset")
+            glib_result_from_gboolean!(
+                gst_sys::gst_preset_save_preset(
+                    self.as_ref().to_glib_none().0,
+                    name.to_glib_none().0
+                ),
+                "Failed to save preset"
+            )
         }
     }
 
-    fn set_meta(&self, name: &str, tag: &str, value: Option<&str>) -> Result<(), glib::error::BoolError> {
+    fn set_meta(
+        &self,
+        name: &str,
+        tag: &str,
+        value: Option<&str>,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_sys::gst_preset_set_meta(self.as_ref().to_glib_none().0, name.to_glib_none().0, tag.to_glib_none().0, value.to_glib_none().0), "Failed to set preset meta")
+            glib_result_from_gboolean!(
+                gst_sys::gst_preset_set_meta(
+                    self.as_ref().to_glib_none().0,
+                    name.to_glib_none().0,
+                    tag.to_glib_none().0,
+                    value.to_glib_none().0
+                ),
+                "Failed to set preset meta"
+            )
         }
     }
 }

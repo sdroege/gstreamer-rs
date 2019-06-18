@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use NetClientClock;
 use glib::translate::*;
 use gst;
 use gst_net_sys;
+use NetClientClock;
 
 glib_wrapper! {
     pub struct NtpClock(Object<gst_net_sys::GstNtpClock, gst_net_sys::GstNtpClockClass, NtpClockClass>) @extends NetClientClock, gst::Clock, gst::Object;

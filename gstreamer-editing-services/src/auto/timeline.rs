@@ -2,6 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use ges_sys;
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib_sys;
+use gst;
+use std::boxed::Box as Box_;
+use std::mem::transmute;
+use std::ptr;
 use Asset;
 use Error;
 use Extractable;
@@ -10,18 +22,6 @@ use Layer;
 use TimelineElement;
 use Track;
 use TrackElement;
-use ges_sys;
-use glib;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_sys;
-use gst;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Timeline(Object<ges_sys::GESTimeline, ges_sys::GESTimelineClass, TimelineClass>) @extends gst::Element, gst::Object, @implements Extractable;
@@ -34,16 +34,12 @@ glib_wrapper! {
 impl Timeline {
     pub fn new() -> Timeline {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ges_sys::ges_timeline_new())
-        }
+        unsafe { from_glib_none(ges_sys::ges_timeline_new()) }
     }
 
     pub fn new_audio_video() -> Timeline {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ges_sys::ges_timeline_new_audio_video())
-        }
+        unsafe { from_glib_none(ges_sys::ges_timeline_new_audio_video()) }
     }
 
     pub fn new_from_uri(uri: &str) -> Result<Option<Timeline>, Error> {
@@ -51,7 +47,11 @@ impl Timeline {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ges_sys::ges_timeline_new_from_uri(uri.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_none(ret)) } else { Err(from_glib_full(error)) }
+            if error.is_null() {
+                Ok(from_glib_none(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 }
@@ -99,15 +99,29 @@ pub trait TimelineExt: 'static {
 
     fn load_from_uri(&self, uri: &str) -> Result<(), Error>;
 
-    fn move_layer<P: IsA<Layer>>(&self, layer: &P, new_layer_priority: u32) -> Result<(), glib::error::BoolError>;
+    fn move_layer<P: IsA<Layer>>(
+        &self,
+        layer: &P,
+        new_layer_priority: u32,
+    ) -> Result<(), glib::error::BoolError>;
 
-    fn paste_element<P: IsA<TimelineElement>>(&self, element: &P, position: gst::ClockTime, layer_priority: i32) -> Option<TimelineElement>;
+    fn paste_element<P: IsA<TimelineElement>>(
+        &self,
+        element: &P,
+        position: gst::ClockTime,
+        layer_priority: i32,
+    ) -> Option<TimelineElement>;
 
     fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError>;
 
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError>;
 
-    fn save_to_uri<P: IsA<Asset>>(&self, uri: &str, formatter_asset: Option<&P>, overwrite: bool) -> Result<(), Error>;
+    fn save_to_uri<P: IsA<Asset>>(
+        &self,
+        uri: &str,
+        formatter_asset: Option<&P>,
+        overwrite: bool,
+    ) -> Result<(), Error>;
 
     fn set_auto_transition(&self, auto_transition: bool);
 
@@ -125,195 +139,327 @@ pub trait TimelineExt: 'static {
 
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<Timeline>> TimelineExt for O {
     fn add_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_timeline_add_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0), "Failed to add layer")
+            glib_result_from_gboolean!(
+                ges_sys::ges_timeline_add_layer(
+                    self.as_ref().to_glib_none().0,
+                    layer.as_ref().to_glib_none().0
+                ),
+                "Failed to add layer"
+            )
         }
     }
 
     fn add_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_timeline_add_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_full()), "Failed to add track")
+            glib_result_from_gboolean!(
+                ges_sys::ges_timeline_add_track(
+                    self.as_ref().to_glib_none().0,
+                    track.as_ref().to_glib_full()
+                ),
+                "Failed to add track"
+            )
         }
     }
 
     fn append_layer(&self) -> Layer {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_append_layer(self.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_timeline_append_layer(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn commit(&self) -> bool {
-        unsafe {
-            from_glib(ges_sys::ges_timeline_commit(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib(ges_sys::ges_timeline_commit(self.as_ref().to_glib_none().0)) }
     }
 
     fn commit_sync(&self) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_timeline_commit_sync(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_timeline_commit_sync(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_auto_transition(&self) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_timeline_get_auto_transition(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_timeline_get_auto_transition(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_duration(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ges_sys::ges_timeline_get_duration(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_timeline_get_duration(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_element(&self, name: &str) -> Option<TimelineElement> {
         unsafe {
-            from_glib_full(ges_sys::ges_timeline_get_element(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(ges_sys::ges_timeline_get_element(
+                self.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+            ))
         }
     }
 
     fn get_groups(&self) -> Vec<Group> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ges_sys::ges_timeline_get_groups(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ges_sys::ges_timeline_get_groups(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_layer(&self, priority: u32) -> Option<Layer> {
         unsafe {
-            from_glib_full(ges_sys::ges_timeline_get_layer(self.as_ref().to_glib_none().0, priority))
+            from_glib_full(ges_sys::ges_timeline_get_layer(
+                self.as_ref().to_glib_none().0,
+                priority,
+            ))
         }
     }
 
     fn get_layers(&self) -> Vec<Layer> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_timeline_get_layers(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_timeline_get_layers(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_pad_for_track<P: IsA<Track>>(&self, track: &P) -> Option<gst::Pad> {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_get_pad_for_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_timeline_get_pad_for_track(
+                self.as_ref().to_glib_none().0,
+                track.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_snapping_distance(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ges_sys::ges_timeline_get_snapping_distance(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_timeline_get_snapping_distance(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_track_for_pad<P: IsA<gst::Pad>>(&self, pad: &P) -> Option<Track> {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_get_track_for_pad(self.as_ref().to_glib_none().0, pad.as_ref().to_glib_none().0))
+            from_glib_none(ges_sys::ges_timeline_get_track_for_pad(
+                self.as_ref().to_glib_none().0,
+                pad.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_tracks(&self) -> Vec<Track> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ges_sys::ges_timeline_get_tracks(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ges_sys::ges_timeline_get_tracks(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_empty(&self) -> bool {
         unsafe {
-            from_glib(ges_sys::ges_timeline_is_empty(self.as_ref().to_glib_none().0))
+            from_glib(ges_sys::ges_timeline_is_empty(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn load_from_uri(&self, uri: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_timeline_load_from_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ges_sys::ges_timeline_load_from_uri(
+                self.as_ref().to_glib_none().0,
+                uri.to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
-    fn move_layer<P: IsA<Layer>>(&self, layer: &P, new_layer_priority: u32) -> Result<(), glib::error::BoolError> {
+    fn move_layer<P: IsA<Layer>>(
+        &self,
+        layer: &P,
+        new_layer_priority: u32,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_timeline_move_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0, new_layer_priority), "Failed to move layer")
+            glib_result_from_gboolean!(
+                ges_sys::ges_timeline_move_layer(
+                    self.as_ref().to_glib_none().0,
+                    layer.as_ref().to_glib_none().0,
+                    new_layer_priority
+                ),
+                "Failed to move layer"
+            )
         }
     }
 
-    fn paste_element<P: IsA<TimelineElement>>(&self, element: &P, position: gst::ClockTime, layer_priority: i32) -> Option<TimelineElement> {
+    fn paste_element<P: IsA<TimelineElement>>(
+        &self,
+        element: &P,
+        position: gst::ClockTime,
+        layer_priority: i32,
+    ) -> Option<TimelineElement> {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_paste_element(self.as_ref().to_glib_none().0, element.as_ref().to_glib_none().0, position.to_glib(), layer_priority))
+            from_glib_none(ges_sys::ges_timeline_paste_element(
+                self.as_ref().to_glib_none().0,
+                element.as_ref().to_glib_none().0,
+                position.to_glib(),
+                layer_priority,
+            ))
         }
     }
 
     fn remove_layer<P: IsA<Layer>>(&self, layer: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_timeline_remove_layer(self.as_ref().to_glib_none().0, layer.as_ref().to_glib_none().0), "Failed to remove layer")
+            glib_result_from_gboolean!(
+                ges_sys::ges_timeline_remove_layer(
+                    self.as_ref().to_glib_none().0,
+                    layer.as_ref().to_glib_none().0
+                ),
+                "Failed to remove layer"
+            )
         }
     }
 
     fn remove_track<P: IsA<Track>>(&self, track: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(ges_sys::ges_timeline_remove_track(self.as_ref().to_glib_none().0, track.as_ref().to_glib_none().0), "Failed to remove track")
+            glib_result_from_gboolean!(
+                ges_sys::ges_timeline_remove_track(
+                    self.as_ref().to_glib_none().0,
+                    track.as_ref().to_glib_none().0
+                ),
+                "Failed to remove track"
+            )
         }
     }
 
-    fn save_to_uri<P: IsA<Asset>>(&self, uri: &str, formatter_asset: Option<&P>, overwrite: bool) -> Result<(), Error> {
+    fn save_to_uri<P: IsA<Asset>>(
+        &self,
+        uri: &str,
+        formatter_asset: Option<&P>,
+        overwrite: bool,
+    ) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ges_sys::ges_timeline_save_to_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, formatter_asset.map(|p| p.as_ref()).to_glib_none().0, overwrite.to_glib(), &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ges_sys::ges_timeline_save_to_uri(
+                self.as_ref().to_glib_none().0,
+                uri.to_glib_none().0,
+                formatter_asset.map(|p| p.as_ref()).to_glib_none().0,
+                overwrite.to_glib(),
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
-            ges_sys::ges_timeline_set_auto_transition(self.as_ref().to_glib_none().0, auto_transition.to_glib());
+            ges_sys::ges_timeline_set_auto_transition(
+                self.as_ref().to_glib_none().0,
+                auto_transition.to_glib(),
+            );
         }
     }
 
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime) {
         unsafe {
-            ges_sys::ges_timeline_set_snapping_distance(self.as_ref().to_glib_none().0, snapping_distance.to_glib());
+            ges_sys::ges_timeline_set_snapping_distance(
+                self.as_ref().to_glib_none().0,
+                snapping_distance.to_glib(),
+            );
         }
     }
 
     fn connect_commited<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTimeline, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn commited_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"commited\0".as_ptr() as *const _,
-                Some(transmute(commited_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"commited\0".as_ptr() as *const _,
+                Some(transmute(commited_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_group_added<F: Fn(&Self, &Group) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn group_added_trampoline<P, F: Fn(&P, &Group) + 'static>(this: *mut ges_sys::GESTimeline, group: *mut ges_sys::GESGroup, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn group_added_trampoline<P, F: Fn(&P, &Group) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            group: *mut ges_sys::GESGroup,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(group))
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(group),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"group-added\0".as_ptr() as *const _,
-                Some(transmute(group_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"group-added\0".as_ptr() as *const _,
+                Some(transmute(group_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
@@ -322,30 +468,52 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     //}
 
     fn connect_layer_added<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn layer_added_trampoline<P, F: Fn(&P, &Layer) + 'static>(this: *mut ges_sys::GESTimeline, layer: *mut ges_sys::GESLayer, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn layer_added_trampoline<P, F: Fn(&P, &Layer) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            layer: *mut ges_sys::GESLayer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(layer),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"layer-added\0".as_ptr() as *const _,
-                Some(transmute(layer_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"layer-added\0".as_ptr() as *const _,
+                Some(transmute(layer_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_layer_removed<F: Fn(&Self, &Layer) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn layer_removed_trampoline<P, F: Fn(&P, &Layer) + 'static>(this: *mut ges_sys::GESTimeline, layer: *mut ges_sys::GESLayer, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn layer_removed_trampoline<P, F: Fn(&P, &Layer) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            layer: *mut ges_sys::GESLayer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(layer))
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(layer),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"layer-removed\0".as_ptr() as *const _,
-                Some(transmute(layer_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"layer-removed\0".as_ptr() as *const _,
+                Some(transmute(layer_removed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
@@ -353,101 +521,199 @@ impl<O: IsA<Timeline>> TimelineExt for O {
     //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 16 }
     //}
 
-    fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn snapping_ended_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ges_sys::GESTimeline, obj1: *mut ges_sys::GESTrackElement, obj2: *mut ges_sys::GESTrackElement, position: u64, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+    fn connect_snapping_ended<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn snapping_ended_trampoline<
+            P,
+            F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static,
+        >(
+            this: *mut ges_sys::GESTimeline,
+            obj1: *mut ges_sys::GESTrackElement,
+            obj2: *mut ges_sys::GESTrackElement,
+            position: u64,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(obj1), &from_glib_borrow(obj2), position)
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(obj1),
+                &from_glib_borrow(obj2),
+                position,
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"snapping-ended\0".as_ptr() as *const _,
-                Some(transmute(snapping_ended_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"snapping-ended\0".as_ptr() as *const _,
+                Some(transmute(snapping_ended_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn snapping_started_trampoline<P, F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static>(this: *mut ges_sys::GESTimeline, obj1: *mut ges_sys::GESTrackElement, obj2: *mut ges_sys::GESTrackElement, position: u64, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+    fn connect_snapping_started<F: Fn(&Self, &TrackElement, &TrackElement, u64) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn snapping_started_trampoline<
+            P,
+            F: Fn(&P, &TrackElement, &TrackElement, u64) + 'static,
+        >(
+            this: *mut ges_sys::GESTimeline,
+            obj1: *mut ges_sys::GESTrackElement,
+            obj2: *mut ges_sys::GESTrackElement,
+            position: u64,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(obj1), &from_glib_borrow(obj2), position)
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(obj1),
+                &from_glib_borrow(obj2),
+                position,
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"snapping-started\0".as_ptr() as *const _,
-                Some(transmute(snapping_started_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"snapping-started\0".as_ptr() as *const _,
+                Some(transmute(snapping_started_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_track_added<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn track_added_trampoline<P, F: Fn(&P, &Track) + 'static>(this: *mut ges_sys::GESTimeline, track: *mut ges_sys::GESTrack, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn track_added_trampoline<P, F: Fn(&P, &Track) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            track: *mut ges_sys::GESTrack,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(track))
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(track),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"track-added\0".as_ptr() as *const _,
-                Some(transmute(track_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"track-added\0".as_ptr() as *const _,
+                Some(transmute(track_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_track_removed<F: Fn(&Self, &Track) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn track_removed_trampoline<P, F: Fn(&P, &Track) + 'static>(this: *mut ges_sys::GESTimeline, track: *mut ges_sys::GESTrack, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn track_removed_trampoline<P, F: Fn(&P, &Track) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            track: *mut ges_sys::GESTrack,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
-            f(&Timeline::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(track))
+            f(
+                &Timeline::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(track),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"track-removed\0".as_ptr() as *const _,
-                Some(transmute(track_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"track-removed\0".as_ptr() as *const _,
+                Some(transmute(track_removed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTimeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+    fn connect_property_auto_transition_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_auto_transition_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(transmute(notify_auto_transition_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::auto-transition\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_auto_transition_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTimeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+        unsafe extern "C" fn notify_duration_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute(notify_duration_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::duration\0".as_ptr() as *const _,
+                Some(transmute(notify_duration_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_snapping_distance_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESTimeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Timeline>
+    fn connect_property_snapping_distance_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_snapping_distance_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut ges_sys::GESTimeline,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Timeline>,
         {
             let f: &F = &*(f as *const F);
             f(&Timeline::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::snapping-distance\0".as_ptr() as *const _,
-                Some(transmute(notify_snapping_distance_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::snapping-distance\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_snapping_distance_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

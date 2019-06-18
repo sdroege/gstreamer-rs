@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::IsA;
+use glib::translate::*;
+use gst_sys;
 use Element;
 use Object;
 use TagList;
 use TagMergeMode;
-use glib::object::IsA;
-use glib::translate::*;
-use gst_sys;
 
 glib_wrapper! {
     pub struct TagSetter(Interface<gst_sys::GstTagSetter>) @requires Element, Object;
@@ -68,19 +68,27 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
 
     fn get_tag_list(&self) -> Option<TagList> {
         unsafe {
-            from_glib_none(gst_sys::gst_tag_setter_get_tag_list(self.as_ref().to_glib_none().0))
+            from_glib_none(gst_sys::gst_tag_setter_get_tag_list(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_tag_merge_mode(&self) -> TagMergeMode {
         unsafe {
-            from_glib(gst_sys::gst_tag_setter_get_tag_merge_mode(self.as_ref().to_glib_none().0))
+            from_glib(gst_sys::gst_tag_setter_get_tag_merge_mode(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn merge_tags(&self, list: &TagList, mode: TagMergeMode) {
         unsafe {
-            gst_sys::gst_tag_setter_merge_tags(self.as_ref().to_glib_none().0, list.to_glib_none().0, mode.to_glib());
+            gst_sys::gst_tag_setter_merge_tags(
+                self.as_ref().to_glib_none().0,
+                list.to_glib_none().0,
+                mode.to_glib(),
+            );
         }
     }
 
@@ -92,7 +100,10 @@ impl<O: IsA<TagSetter>> TagSetterExt for O {
 
     fn set_tag_merge_mode(&self, mode: TagMergeMode) {
         unsafe {
-            gst_sys::gst_tag_setter_set_tag_merge_mode(self.as_ref().to_glib_none().0, mode.to_glib());
+            gst_sys::gst_tag_setter_set_tag_merge_mode(
+                self.as_ref().to_glib_none().0,
+                mode.to_glib(),
+            );
         }
     }
 }

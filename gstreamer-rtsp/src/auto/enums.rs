@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_rtsp_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPAuthMethod {
     None,
     Basic,
@@ -31,7 +30,7 @@ impl ToGlib for RTSPAuthMethod {
             RTSPAuthMethod::None => gst_rtsp_sys::GST_RTSP_AUTH_NONE,
             RTSPAuthMethod::Basic => gst_rtsp_sys::GST_RTSP_AUTH_BASIC,
             RTSPAuthMethod::Digest => gst_rtsp_sys::GST_RTSP_AUTH_DIGEST,
-            RTSPAuthMethod::__Unknown(value) => value
+            RTSPAuthMethod::__Unknown(value) => value,
         }
     }
 }
@@ -73,8 +72,7 @@ impl SetValue for RTSPAuthMethod {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPFamily {
     None,
     Inet,
@@ -92,7 +90,7 @@ impl ToGlib for RTSPFamily {
             RTSPFamily::None => gst_rtsp_sys::GST_RTSP_FAM_NONE,
             RTSPFamily::Inet => gst_rtsp_sys::GST_RTSP_FAM_INET,
             RTSPFamily::Inet6 => gst_rtsp_sys::GST_RTSP_FAM_INET6,
-            RTSPFamily::__Unknown(value) => value
+            RTSPFamily::__Unknown(value) => value,
         }
     }
 }
@@ -134,8 +132,7 @@ impl SetValue for RTSPFamily {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPHeaderField {
     Invalid,
     Accept,
@@ -296,20 +293,28 @@ impl ToGlib for RTSPHeaderField {
             RTSPHeaderField::AcceptCharset => gst_rtsp_sys::GST_RTSP_HDR_ACCEPT_CHARSET,
             RTSPHeaderField::Supported => gst_rtsp_sys::GST_RTSP_HDR_SUPPORTED,
             RTSPHeaderField::Vary => gst_rtsp_sys::GST_RTSP_HDR_VARY,
-            RTSPHeaderField::XAccelerateStreaming => gst_rtsp_sys::GST_RTSP_HDR_X_ACCELERATE_STREAMING,
+            RTSPHeaderField::XAccelerateStreaming => {
+                gst_rtsp_sys::GST_RTSP_HDR_X_ACCELERATE_STREAMING
+            }
             RTSPHeaderField::XAcceptAuthent => gst_rtsp_sys::GST_RTSP_HDR_X_ACCEPT_AUTHENT,
-            RTSPHeaderField::XAcceptProxyAuthent => gst_rtsp_sys::GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT,
+            RTSPHeaderField::XAcceptProxyAuthent => {
+                gst_rtsp_sys::GST_RTSP_HDR_X_ACCEPT_PROXY_AUTHENT
+            }
             RTSPHeaderField::XBroadcastId => gst_rtsp_sys::GST_RTSP_HDR_X_BROADCAST_ID,
             RTSPHeaderField::XBurstStreaming => gst_rtsp_sys::GST_RTSP_HDR_X_BURST_STREAMING,
             RTSPHeaderField::XNotice => gst_rtsp_sys::GST_RTSP_HDR_X_NOTICE,
             RTSPHeaderField::XPlayerLagTime => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYER_LAG_TIME,
             RTSPHeaderField::XPlaylist => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST,
-            RTSPHeaderField::XPlaylistChangeNotice => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE,
+            RTSPHeaderField::XPlaylistChangeNotice => {
+                gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_CHANGE_NOTICE
+            }
             RTSPHeaderField::XPlaylistGenId => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_GEN_ID,
             RTSPHeaderField::XPlaylistSeekId => gst_rtsp_sys::GST_RTSP_HDR_X_PLAYLIST_SEEK_ID,
             RTSPHeaderField::XProxyClientAgent => gst_rtsp_sys::GST_RTSP_HDR_X_PROXY_CLIENT_AGENT,
             RTSPHeaderField::XProxyClientVerb => gst_rtsp_sys::GST_RTSP_HDR_X_PROXY_CLIENT_VERB,
-            RTSPHeaderField::XRecedingPlaylistchange => gst_rtsp_sys::GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE,
+            RTSPHeaderField::XRecedingPlaylistchange => {
+                gst_rtsp_sys::GST_RTSP_HDR_X_RECEDING_PLAYLISTCHANGE
+            }
             RTSPHeaderField::XRtpInfo => gst_rtsp_sys::GST_RTSP_HDR_X_RTP_INFO,
             RTSPHeaderField::XStartupprofile => gst_rtsp_sys::GST_RTSP_HDR_X_STARTUPPROFILE,
             RTSPHeaderField::Timestamp => gst_rtsp_sys::GST_RTSP_HDR_TIMESTAMP,
@@ -327,7 +332,7 @@ impl ToGlib for RTSPHeaderField {
             RTSPHeaderField::Frames => gst_rtsp_sys::GST_RTSP_HDR_FRAMES,
             RTSPHeaderField::RateControl => gst_rtsp_sys::GST_RTSP_HDR_RATE_CONTROL,
             RTSPHeaderField::Last => gst_rtsp_sys::GST_RTSP_HDR_LAST,
-            RTSPHeaderField::__Unknown(value) => value
+            RTSPHeaderField::__Unknown(value) => value,
         }
     }
 }
@@ -456,8 +461,7 @@ impl SetValue for RTSPHeaderField {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPMsgType {
     Invalid,
     Request,
@@ -481,7 +485,7 @@ impl ToGlib for RTSPMsgType {
             RTSPMsgType::HttpRequest => gst_rtsp_sys::GST_RTSP_MESSAGE_HTTP_REQUEST,
             RTSPMsgType::HttpResponse => gst_rtsp_sys::GST_RTSP_MESSAGE_HTTP_RESPONSE,
             RTSPMsgType::Data => gst_rtsp_sys::GST_RTSP_MESSAGE_DATA,
-            RTSPMsgType::__Unknown(value) => value
+            RTSPMsgType::__Unknown(value) => value,
         }
     }
 }
@@ -526,8 +530,7 @@ impl SetValue for RTSPMsgType {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPRangeUnit {
     Smpte,
     Smpte30Drop,
@@ -549,7 +552,7 @@ impl ToGlib for RTSPRangeUnit {
             RTSPRangeUnit::Smpte25 => gst_rtsp_sys::GST_RTSP_RANGE_SMPTE_25,
             RTSPRangeUnit::Npt => gst_rtsp_sys::GST_RTSP_RANGE_NPT,
             RTSPRangeUnit::Clock => gst_rtsp_sys::GST_RTSP_RANGE_CLOCK,
-            RTSPRangeUnit::__Unknown(value) => value
+            RTSPRangeUnit::__Unknown(value) => value,
         }
     }
 }
@@ -593,8 +596,7 @@ impl SetValue for RTSPRangeUnit {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPResult {
     Ok,
     Error,
@@ -642,7 +644,7 @@ impl ToGlib for RTSPResult {
             RTSPResult::Etget => gst_rtsp_sys::GST_RTSP_ETGET,
             RTSPResult::Etpost => gst_rtsp_sys::GST_RTSP_ETPOST,
             RTSPResult::Elast => gst_rtsp_sys::GST_RTSP_ELAST,
-            RTSPResult::__Unknown(value) => value
+            RTSPResult::__Unknown(value) => value,
         }
     }
 }
@@ -699,8 +701,7 @@ impl SetValue for RTSPResult {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPState {
     Invalid,
     Init,
@@ -724,7 +725,7 @@ impl ToGlib for RTSPState {
             RTSPState::Seeking => gst_rtsp_sys::GST_RTSP_STATE_SEEKING,
             RTSPState::Playing => gst_rtsp_sys::GST_RTSP_STATE_PLAYING,
             RTSPState::Recording => gst_rtsp_sys::GST_RTSP_STATE_RECORDING,
-            RTSPState::__Unknown(value) => value
+            RTSPState::__Unknown(value) => value,
         }
     }
 }
@@ -769,8 +770,7 @@ impl SetValue for RTSPState {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPStatusCode {
     Invalid,
     Continue,
@@ -851,30 +851,52 @@ impl ToGlib for RTSPStatusCode {
             RTSPStatusCode::Gone => gst_rtsp_sys::GST_RTSP_STS_GONE,
             RTSPStatusCode::LengthRequired => gst_rtsp_sys::GST_RTSP_STS_LENGTH_REQUIRED,
             RTSPStatusCode::PreconditionFailed => gst_rtsp_sys::GST_RTSP_STS_PRECONDITION_FAILED,
-            RTSPStatusCode::RequestEntityTooLarge => gst_rtsp_sys::GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE,
+            RTSPStatusCode::RequestEntityTooLarge => {
+                gst_rtsp_sys::GST_RTSP_STS_REQUEST_ENTITY_TOO_LARGE
+            }
             RTSPStatusCode::RequestUriTooLarge => gst_rtsp_sys::GST_RTSP_STS_REQUEST_URI_TOO_LARGE,
-            RTSPStatusCode::UnsupportedMediaType => gst_rtsp_sys::GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE,
-            RTSPStatusCode::ParameterNotUnderstood => gst_rtsp_sys::GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD,
+            RTSPStatusCode::UnsupportedMediaType => {
+                gst_rtsp_sys::GST_RTSP_STS_UNSUPPORTED_MEDIA_TYPE
+            }
+            RTSPStatusCode::ParameterNotUnderstood => {
+                gst_rtsp_sys::GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD
+            }
             RTSPStatusCode::ConferenceNotFound => gst_rtsp_sys::GST_RTSP_STS_CONFERENCE_NOT_FOUND,
             RTSPStatusCode::NotEnoughBandwidth => gst_rtsp_sys::GST_RTSP_STS_NOT_ENOUGH_BANDWIDTH,
             RTSPStatusCode::SessionNotFound => gst_rtsp_sys::GST_RTSP_STS_SESSION_NOT_FOUND,
-            RTSPStatusCode::MethodNotValidInThisState => gst_rtsp_sys::GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE,
-            RTSPStatusCode::HeaderFieldNotValidForResource => gst_rtsp_sys::GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE,
+            RTSPStatusCode::MethodNotValidInThisState => {
+                gst_rtsp_sys::GST_RTSP_STS_METHOD_NOT_VALID_IN_THIS_STATE
+            }
+            RTSPStatusCode::HeaderFieldNotValidForResource => {
+                gst_rtsp_sys::GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE
+            }
             RTSPStatusCode::InvalidRange => gst_rtsp_sys::GST_RTSP_STS_INVALID_RANGE,
             RTSPStatusCode::ParameterIsReadonly => gst_rtsp_sys::GST_RTSP_STS_PARAMETER_IS_READONLY,
-            RTSPStatusCode::AggregateOperationNotAllowed => gst_rtsp_sys::GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED,
-            RTSPStatusCode::OnlyAggregateOperationAllowed => gst_rtsp_sys::GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED,
-            RTSPStatusCode::UnsupportedTransport => gst_rtsp_sys::GST_RTSP_STS_UNSUPPORTED_TRANSPORT,
-            RTSPStatusCode::DestinationUnreachable => gst_rtsp_sys::GST_RTSP_STS_DESTINATION_UNREACHABLE,
-            RTSPStatusCode::KeyManagementFailure => gst_rtsp_sys::GST_RTSP_STS_KEY_MANAGEMENT_FAILURE,
+            RTSPStatusCode::AggregateOperationNotAllowed => {
+                gst_rtsp_sys::GST_RTSP_STS_AGGREGATE_OPERATION_NOT_ALLOWED
+            }
+            RTSPStatusCode::OnlyAggregateOperationAllowed => {
+                gst_rtsp_sys::GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED
+            }
+            RTSPStatusCode::UnsupportedTransport => {
+                gst_rtsp_sys::GST_RTSP_STS_UNSUPPORTED_TRANSPORT
+            }
+            RTSPStatusCode::DestinationUnreachable => {
+                gst_rtsp_sys::GST_RTSP_STS_DESTINATION_UNREACHABLE
+            }
+            RTSPStatusCode::KeyManagementFailure => {
+                gst_rtsp_sys::GST_RTSP_STS_KEY_MANAGEMENT_FAILURE
+            }
             RTSPStatusCode::InternalServerError => gst_rtsp_sys::GST_RTSP_STS_INTERNAL_SERVER_ERROR,
             RTSPStatusCode::NotImplemented => gst_rtsp_sys::GST_RTSP_STS_NOT_IMPLEMENTED,
             RTSPStatusCode::BadGateway => gst_rtsp_sys::GST_RTSP_STS_BAD_GATEWAY,
             RTSPStatusCode::ServiceUnavailable => gst_rtsp_sys::GST_RTSP_STS_SERVICE_UNAVAILABLE,
             RTSPStatusCode::GatewayTimeout => gst_rtsp_sys::GST_RTSP_STS_GATEWAY_TIMEOUT,
-            RTSPStatusCode::RtspVersionNotSupported => gst_rtsp_sys::GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED,
+            RTSPStatusCode::RtspVersionNotSupported => {
+                gst_rtsp_sys::GST_RTSP_STS_RTSP_VERSION_NOT_SUPPORTED
+            }
             RTSPStatusCode::OptionNotSupported => gst_rtsp_sys::GST_RTSP_STS_OPTION_NOT_SUPPORTED,
-            RTSPStatusCode::__Unknown(value) => value
+            RTSPStatusCode::__Unknown(value) => value,
         }
     }
 }
@@ -959,8 +981,7 @@ impl SetValue for RTSPStatusCode {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum RTSPTimeType {
     Seconds,
     Now,
@@ -982,7 +1003,7 @@ impl ToGlib for RTSPTimeType {
             RTSPTimeType::End => gst_rtsp_sys::GST_RTSP_TIME_END,
             RTSPTimeType::Frames => gst_rtsp_sys::GST_RTSP_TIME_FRAMES,
             RTSPTimeType::Utc => gst_rtsp_sys::GST_RTSP_TIME_UTC,
-            RTSPTimeType::__Unknown(value) => value
+            RTSPTimeType::__Unknown(value) => value,
         }
     }
 }
@@ -1025,4 +1046,3 @@ impl SetValue for RTSPTimeType {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

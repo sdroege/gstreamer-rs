@@ -41,7 +41,13 @@ pub trait VideoOverlayExt: 'static {
 
     fn prepare_window_handle(&self);
 
-    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError>;
+    fn set_render_rectangle(
+        &self,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+    ) -> Result<(), glib::error::BoolError>;
 
     //fn set_window_handle(&self, handle: /*Unimplemented*/Fundamental: UIntPtr);
 }
@@ -59,7 +65,10 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
 
     fn handle_events(&self, handle_events: bool) {
         unsafe {
-            gst_video_sys::gst_video_overlay_handle_events(self.as_ref().to_glib_none().0, handle_events.to_glib());
+            gst_video_sys::gst_video_overlay_handle_events(
+                self.as_ref().to_glib_none().0,
+                handle_events.to_glib(),
+            );
         }
     }
 
@@ -69,9 +78,24 @@ impl<O: IsA<VideoOverlay>> VideoOverlayExt for O {
         }
     }
 
-    fn set_render_rectangle(&self, x: i32, y: i32, width: i32, height: i32) -> Result<(), glib::error::BoolError> {
+    fn set_render_rectangle(
+        &self,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_video_sys::gst_video_overlay_set_render_rectangle(self.as_ref().to_glib_none().0, x, y, width, height), "Failed to set render rectangle")
+            glib_result_from_gboolean!(
+                gst_video_sys::gst_video_overlay_set_render_rectangle(
+                    self.as_ref().to_glib_none().0,
+                    x,
+                    y,
+                    width,
+                    height
+                ),
+                "Failed to set render rectangle"
+            )
         }
     }
 

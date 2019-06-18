@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use RTSPResult;
-use glib::GString;
 use glib::translate::*;
+use glib::GString;
 use gst_rtsp_sys;
 use std::ptr;
+use RTSPResult;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -22,19 +22,26 @@ glib_wrapper! {
 impl RTSPUrl {
     pub fn decode_path_components(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_rtsp_sys::gst_rtsp_url_decode_path_components(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(gst_rtsp_sys::gst_rtsp_url_decode_path_components(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_request_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(gst_rtsp_sys::gst_rtsp_url_get_request_uri(self.to_glib_none().0))
+            from_glib_full(gst_rtsp_sys::gst_rtsp_url_get_request_uri(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn set_port(&mut self, port: u16) -> RTSPResult {
         unsafe {
-            from_glib(gst_rtsp_sys::gst_rtsp_url_set_port(self.to_glib_none_mut().0, port))
+            from_glib(gst_rtsp_sys::gst_rtsp_url_set_port(
+                self.to_glib_none_mut().0,
+                port,
+            ))
         }
     }
 
@@ -42,7 +49,10 @@ impl RTSPUrl {
         assert_initialized_main_thread!();
         unsafe {
             let mut url = ptr::null_mut();
-            let ret = from_glib(gst_rtsp_sys::gst_rtsp_url_parse(urlstr.to_glib_none().0, &mut url));
+            let ret = from_glib(gst_rtsp_sys::gst_rtsp_url_parse(
+                urlstr.to_glib_none().0,
+                &mut url,
+            ));
             (ret, from_glib_full(url))
         }
     }

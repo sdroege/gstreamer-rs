@@ -2,17 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
+use glib::object::IsA;
+use glib::translate::*;
+use glib::GString;
+use gst;
+use gst_gl_sys;
+use std::ptr;
 use Error;
 use GLContext;
 use GLSLProfile;
 use GLSLVersion;
-use glib;
-use glib::GString;
-use glib::object::IsA;
-use glib::translate::*;
-use gst;
-use gst_gl_sys;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GLSLStage(Object<gst_gl_sys::GstGLSLStage, gst_gl_sys::GstGLSLStageClass, GLSLStageClass>) @extends gst::Object;
@@ -26,36 +26,68 @@ impl GLSLStage {
     pub fn new<P: IsA<GLContext>>(context: &P, type_: u32) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new(context.as_ref().to_glib_none().0, type_))
+            from_glib_none(gst_gl_sys::gst_glsl_stage_new(
+                context.as_ref().to_glib_none().0,
+                type_,
+            ))
         }
     }
 
     pub fn new_default_fragment<P: IsA<GLContext>>(context: &P) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_default_fragment(context.as_ref().to_glib_none().0))
+            from_glib_none(gst_gl_sys::gst_glsl_stage_new_default_fragment(
+                context.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     pub fn new_default_vertex<P: IsA<GLContext>>(context: &P) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_default_vertex(context.as_ref().to_glib_none().0))
+            from_glib_none(gst_gl_sys::gst_glsl_stage_new_default_vertex(
+                context.as_ref().to_glib_none().0,
+            ))
         }
     }
 
-    pub fn new_with_string<P: IsA<GLContext>>(context: &P, type_: u32, version: GLSLVersion, profile: GLSLProfile, str: &str) -> GLSLStage {
+    pub fn new_with_string<P: IsA<GLContext>>(
+        context: &P,
+        type_: u32,
+        version: GLSLVersion,
+        profile: GLSLProfile,
+        str: &str,
+    ) -> GLSLStage {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_with_string(context.as_ref().to_glib_none().0, type_, version.to_glib(), profile.to_glib(), str.to_glib_none().0))
+            from_glib_none(gst_gl_sys::gst_glsl_stage_new_with_string(
+                context.as_ref().to_glib_none().0,
+                type_,
+                version.to_glib(),
+                profile.to_glib(),
+                str.to_glib_none().0,
+            ))
         }
     }
 
-    pub fn new_with_strings<P: IsA<GLContext>>(context: &P, type_: u32, version: GLSLVersion, profile: GLSLProfile, str: &[&str]) -> GLSLStage {
+    pub fn new_with_strings<P: IsA<GLContext>>(
+        context: &P,
+        type_: u32,
+        version: GLSLVersion,
+        profile: GLSLProfile,
+        str: &[&str],
+    ) -> GLSLStage {
         skip_assert_initialized!();
         let n_strings = str.len() as i32;
         unsafe {
-            from_glib_none(gst_gl_sys::gst_glsl_stage_new_with_strings(context.as_ref().to_glib_none().0, type_, version.to_glib(), profile.to_glib(), n_strings, str.to_glib_none().0))
+            from_glib_none(gst_gl_sys::gst_glsl_stage_new_with_strings(
+                context.as_ref().to_glib_none().0,
+                type_,
+                version.to_glib(),
+                profile.to_glib(),
+                n_strings,
+                str.to_glib_none().0,
+            ))
         }
     }
 
@@ -63,38 +95,56 @@ impl GLSLStage {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_gl_sys::gst_glsl_stage_compile(self.to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     pub fn get_handle(&self) -> u32 {
-        unsafe {
-            gst_gl_sys::gst_glsl_stage_get_handle(self.to_glib_none().0)
-        }
+        unsafe { gst_gl_sys::gst_glsl_stage_get_handle(self.to_glib_none().0) }
     }
 
     pub fn get_profile(&self) -> GLSLProfile {
         unsafe {
-            from_glib(gst_gl_sys::gst_glsl_stage_get_profile(self.to_glib_none().0))
+            from_glib(gst_gl_sys::gst_glsl_stage_get_profile(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_shader_type(&self) -> u32 {
-        unsafe {
-            gst_gl_sys::gst_glsl_stage_get_shader_type(self.to_glib_none().0)
-        }
+        unsafe { gst_gl_sys::gst_glsl_stage_get_shader_type(self.to_glib_none().0) }
     }
 
     pub fn get_version(&self) -> GLSLVersion {
         unsafe {
-            from_glib(gst_gl_sys::gst_glsl_stage_get_version(self.to_glib_none().0))
+            from_glib(gst_gl_sys::gst_glsl_stage_get_version(
+                self.to_glib_none().0,
+            ))
         }
     }
 
-    pub fn set_strings(&self, version: GLSLVersion, profile: GLSLProfile, str: &[&str]) -> Result<(), glib::error::BoolError> {
+    pub fn set_strings(
+        &self,
+        version: GLSLVersion,
+        profile: GLSLProfile,
+        str: &[&str],
+    ) -> Result<(), glib::error::BoolError> {
         let n_strings = str.len() as i32;
         unsafe {
-            glib_result_from_gboolean!(gst_gl_sys::gst_glsl_stage_set_strings(self.to_glib_none().0, version.to_glib(), profile.to_glib(), n_strings, str.to_glib_none().0), "Failed to attach stage to set strings")
+            glib_result_from_gboolean!(
+                gst_gl_sys::gst_glsl_stage_set_strings(
+                    self.to_glib_none().0,
+                    version.to_glib(),
+                    profile.to_glib(),
+                    n_strings,
+                    str.to_glib_none().0
+                ),
+                "Failed to attach stage to set strings"
+            )
         }
     }
 }

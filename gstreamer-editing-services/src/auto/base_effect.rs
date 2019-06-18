@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use ges_sys;
+use glib::translate::*;
 use Extractable;
 use TimelineElement;
 use TrackElement;
-use ges_sys;
-use glib::translate::*;
 
 glib_wrapper! {
     pub struct BaseEffect(Object<ges_sys::GESBaseEffect, ges_sys::GESBaseEffectClass, BaseEffectClass>) @extends TrackElement, TimelineElement, @implements Extractable;

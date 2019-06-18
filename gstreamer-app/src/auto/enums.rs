@@ -2,18 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 use gst_app_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum AppStreamType {
     Stream,
     Seekable,
@@ -31,7 +30,7 @@ impl ToGlib for AppStreamType {
             AppStreamType::Stream => gst_app_sys::GST_APP_STREAM_TYPE_STREAM,
             AppStreamType::Seekable => gst_app_sys::GST_APP_STREAM_TYPE_SEEKABLE,
             AppStreamType::RandomAccess => gst_app_sys::GST_APP_STREAM_TYPE_RANDOM_ACCESS,
-            AppStreamType::__Unknown(value) => value
+            AppStreamType::__Unknown(value) => value,
         }
     }
 }
@@ -72,4 +71,3 @@ impl SetValue for AppStreamType {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-

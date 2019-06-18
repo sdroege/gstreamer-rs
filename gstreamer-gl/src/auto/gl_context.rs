@@ -2,13 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Error;
-use GLAPI;
-use GLDisplay;
-use GLPlatform;
-use GLSLProfile;
-use GLSLVersion;
-use GLWindow;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
@@ -16,6 +9,13 @@ use gst;
 use gst_gl_sys;
 use std::mem;
 use std::ptr;
+use Error;
+use GLDisplay;
+use GLPlatform;
+use GLSLProfile;
+use GLSLVersion;
+use GLWindow;
+use GLAPI;
 
 glib_wrapper! {
     pub struct GLContext(Object<gst_gl_sys::GstGLContext, gst_gl_sys::GstGLContextClass, GLContextClass>) @extends gst::Object;
@@ -29,15 +29,15 @@ impl GLContext {
     pub fn new<P: IsA<GLDisplay>>(display: &P) -> GLContext {
         skip_assert_initialized!();
         unsafe {
-            from_glib_none(gst_gl_sys::gst_gl_context_new(display.as_ref().to_glib_none().0))
+            from_glib_none(gst_gl_sys::gst_gl_context_new(
+                display.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_current() -> Option<GLContext> {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(gst_gl_sys::gst_gl_context_get_current())
-        }
+        unsafe { from_glib_none(gst_gl_sys::gst_gl_context_get_current()) }
     }
 
     pub fn get_current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
@@ -45,7 +45,11 @@ impl GLContext {
         unsafe {
             let mut major = mem::uninitialized();
             let mut minor = mem::uninitialized();
-            let ret = from_glib(gst_gl_sys::gst_gl_context_get_current_gl_api(platform.to_glib(), &mut major, &mut minor));
+            let ret = from_glib(gst_gl_sys::gst_gl_context_get_current_gl_api(
+                platform.to_glib(),
+                &mut major,
+                &mut minor,
+            ));
             (ret, major, minor)
         }
     }
@@ -109,31 +113,51 @@ pub trait GLContextExt: 'static {
 impl<O: IsA<GLContext>> GLContextExt for O {
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_gl_sys::gst_gl_context_activate(self.as_ref().to_glib_none().0, activate.to_glib()), "Failed to activate OpenGL context")
+            glib_result_from_gboolean!(
+                gst_gl_sys::gst_gl_context_activate(
+                    self.as_ref().to_glib_none().0,
+                    activate.to_glib()
+                ),
+                "Failed to activate OpenGL context"
+            )
         }
     }
 
     fn can_share<P: IsA<GLContext>>(&self, other_context: &P) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_can_share(self.as_ref().to_glib_none().0, other_context.as_ref().to_glib_none().0))
+            from_glib(gst_gl_sys::gst_gl_context_can_share(
+                self.as_ref().to_glib_none().0,
+                other_context.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn check_feature(&self, feature: &str) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_check_feature(self.as_ref().to_glib_none().0, feature.to_glib_none().0))
+            from_glib(gst_gl_sys::gst_gl_context_check_feature(
+                self.as_ref().to_glib_none().0,
+                feature.to_glib_none().0,
+            ))
         }
     }
 
     fn check_framebuffer_status(&self, fbo_target: u32) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_check_framebuffer_status(self.as_ref().to_glib_none().0, fbo_target))
+            from_glib(gst_gl_sys::gst_gl_context_check_framebuffer_status(
+                self.as_ref().to_glib_none().0,
+                fbo_target,
+            ))
         }
     }
 
     fn check_gl_version(&self, api: GLAPI, maj: i32, min: i32) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_check_gl_version(self.as_ref().to_glib_none().0, api.to_glib(), maj, min))
+            from_glib(gst_gl_sys::gst_gl_context_check_gl_version(
+                self.as_ref().to_glib_none().0,
+                api.to_glib(),
+                maj,
+                min,
+            ))
         }
     }
 
@@ -152,8 +176,16 @@ impl<O: IsA<GLContext>> GLContextExt for O {
     fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = gst_gl_sys::gst_gl_context_create(self.as_ref().to_glib_none().0, other_context.map(|p| p.as_ref()).to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = gst_gl_sys::gst_gl_context_create(
+                self.as_ref().to_glib_none().0,
+                other_context.map(|p| p.as_ref()).to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
@@ -166,26 +198,37 @@ impl<O: IsA<GLContext>> GLContextExt for O {
     fn fill_info(&self) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = gst_gl_sys::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ =
+                gst_gl_sys::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn get_display(&self) -> GLDisplay {
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_context_get_display(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_context_get_display(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_gl_api(&self) -> GLAPI {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_get_gl_api(self.as_ref().to_glib_none().0))
+            from_glib(gst_gl_sys::gst_gl_context_get_gl_api(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_gl_platform(&self) -> GLPlatform {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_get_gl_platform(self.as_ref().to_glib_none().0))
+            from_glib(gst_gl_sys::gst_gl_context_get_gl_platform(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -193,7 +236,11 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             let mut major = mem::uninitialized();
             let mut minor = mem::uninitialized();
-            gst_gl_sys::gst_gl_context_get_gl_platform_version(self.as_ref().to_glib_none().0, &mut major, &mut minor);
+            gst_gl_sys::gst_gl_context_get_gl_platform_version(
+                self.as_ref().to_glib_none().0,
+                &mut major,
+                &mut minor,
+            );
             (major, minor)
         }
     }
@@ -202,52 +249,81 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         unsafe {
             let mut maj = mem::uninitialized();
             let mut min = mem::uninitialized();
-            gst_gl_sys::gst_gl_context_get_gl_version(self.as_ref().to_glib_none().0, &mut maj, &mut min);
+            gst_gl_sys::gst_gl_context_get_gl_version(
+                self.as_ref().to_glib_none().0,
+                &mut maj,
+                &mut min,
+            );
             (maj, min)
         }
     }
 
     fn get_window(&self) -> Option<GLWindow> {
         unsafe {
-            from_glib_full(gst_gl_sys::gst_gl_context_get_window(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_gl_sys::gst_gl_context_get_window(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_shared(&self) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_is_shared(self.as_ref().to_glib_none().0))
+            from_glib(gst_gl_sys::gst_gl_context_is_shared(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_shared_with<P: IsA<GLContext>>(&self, share: &P) {
         unsafe {
-            gst_gl_sys::gst_gl_context_set_shared_with(self.as_ref().to_glib_none().0, share.as_ref().to_glib_none().0);
+            gst_gl_sys::gst_gl_context_set_shared_with(
+                self.as_ref().to_glib_none().0,
+                share.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn set_window<P: IsA<GLWindow>>(&self, window: &P) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_gl_sys::gst_gl_context_set_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_full()), "Failed to set window")
+            glib_result_from_gboolean!(
+                gst_gl_sys::gst_gl_context_set_window(
+                    self.as_ref().to_glib_none().0,
+                    window.as_ref().to_glib_full()
+                ),
+                "Failed to set window"
+            )
         }
     }
 
     fn supports_glsl_profile_version(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_supports_glsl_profile_version(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+            from_glib(gst_gl_sys::gst_gl_context_supports_glsl_profile_version(
+                self.as_ref().to_glib_none().0,
+                version.to_glib(),
+                profile.to_glib(),
+            ))
         }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn supports_precision(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_supports_precision(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+            from_glib(gst_gl_sys::gst_gl_context_supports_precision(
+                self.as_ref().to_glib_none().0,
+                version.to_glib(),
+                profile.to_glib(),
+            ))
         }
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn supports_precision_highp(&self, version: GLSLVersion, profile: GLSLProfile) -> bool {
         unsafe {
-            from_glib(gst_gl_sys::gst_gl_context_supports_precision_highp(self.as_ref().to_glib_none().0, version.to_glib(), profile.to_glib()))
+            from_glib(gst_gl_sys::gst_gl_context_supports_precision_highp(
+                self.as_ref().to_glib_none().0,
+                version.to_glib(),
+                profile.to_glib(),
+            ))
         }
     }
 

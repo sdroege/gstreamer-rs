@@ -2,6 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gio;
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::GString;
+use glib_sys;
+use gst_rtsp_server_sys;
+use std::boxed::Box as Box_;
+use std::mem::transmute;
+use std::ptr;
 use Error;
 use RTSPAuth;
 use RTSPClient;
@@ -9,19 +22,6 @@ use RTSPFilterResult;
 use RTSPMountPoints;
 use RTSPSessionPool;
 use RTSPThreadPool;
-use gio;
-use glib;
-use glib::GString;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_sys;
-use gst_rtsp_server_sys;
-use std::boxed::Box as Box_;
-use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RTSPServer(Object<gst_rtsp_server_sys::GstRTSPServer, gst_rtsp_server_sys::GstRTSPServerClass, RTSPServerClass>);
@@ -34,15 +34,24 @@ glib_wrapper! {
 impl RTSPServer {
     pub fn new() -> RTSPServer {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_new())
-        }
+        unsafe { from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_new()) }
     }
 
-    pub fn io_func<P: IsA<gio::Socket>, Q: IsA<RTSPServer>>(socket: &P, condition: glib::IOCondition, server: &Q) -> Result<(), glib::error::BoolError> {
+    pub fn io_func<P: IsA<gio::Socket>, Q: IsA<RTSPServer>>(
+        socket: &P,
+        condition: glib::IOCondition,
+        server: &Q,
+    ) -> Result<(), glib::error::BoolError> {
         skip_assert_initialized!();
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_server_io_func(socket.as_ref().to_glib_none().0, condition.to_glib(), server.as_ref().to_glib_none().0), "Failed to connect the source")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_server_io_func(
+                    socket.as_ref().to_glib_none().0,
+                    condition.to_glib(),
+                    server.as_ref().to_glib_none().0
+                ),
+                "Failed to connect the source"
+            )
         }
     }
 }
@@ -59,11 +68,20 @@ unsafe impl Sync for RTSPServer {}
 pub const NONE_RTSP_SERVER: Option<&RTSPServer> = None;
 
 pub trait RTSPServerExt: 'static {
-    fn client_filter(&self, func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>) -> Vec<RTSPClient>;
+    fn client_filter(
+        &self,
+        func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>,
+    ) -> Vec<RTSPClient>;
 
-    fn create_socket<P: IsA<gio::Cancellable>>(&self, cancellable: Option<&P>) -> Result<gio::Socket, Error>;
+    fn create_socket<P: IsA<gio::Cancellable>>(
+        &self,
+        cancellable: Option<&P>,
+    ) -> Result<gio::Socket, Error>;
 
-    fn create_source<P: IsA<gio::Cancellable>>(&self, cancellable: Option<&P>) -> Result<glib::Source, Error>;
+    fn create_source<P: IsA<gio::Cancellable>>(
+        &self,
+        cancellable: Option<&P>,
+    ) -> Result<glib::Source, Error>;
 
     fn get_address(&self) -> Option<GString>;
 
@@ -95,30 +113,68 @@ pub trait RTSPServerExt: 'static {
 
     fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>);
 
-    fn transfer_connection<P: IsA<gio::Socket>>(&self, socket: &P, ip: &str, port: i32, initial_buffer: Option<&str>) -> Result<(), glib::error::BoolError>;
+    fn transfer_connection<P: IsA<gio::Socket>>(
+        &self,
+        socket: &P,
+        ip: &str,
+        port: i32,
+        initial_buffer: Option<&str>,
+    ) -> Result<(), glib::error::BoolError>;
 
-    fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<RTSPServer>> RTSPServerExt for O {
-    fn client_filter(&self, func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>) -> Vec<RTSPClient> {
-        let func_data: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> = func;
-        unsafe extern "C" fn func_func(server: *mut gst_rtsp_server_sys::GstRTSPServer, client: *mut gst_rtsp_server_sys::GstRTSPClient, user_data: glib_sys::gpointer) -> gst_rtsp_server_sys::GstRTSPFilterResult {
+    fn client_filter(
+        &self,
+        func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>,
+    ) -> Vec<RTSPClient> {
+        let func_data: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> =
+            func;
+        unsafe extern "C" fn func_func(
+            server: *mut gst_rtsp_server_sys::GstRTSPServer,
+            client: *mut gst_rtsp_server_sys::GstRTSPClient,
+            user_data: glib_sys::gpointer,
+        ) -> gst_rtsp_server_sys::GstRTSPFilterResult {
             let server = from_glib_borrow(server);
             let client = from_glib_borrow(client);
-            let callback: *mut Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> = user_data as *const _ as usize as *mut Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>;
+            let callback: *mut Option<
+                &mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult),
+            > = user_data as *const _ as usize
+                as *mut Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>;
             let res = if let Some(ref mut callback) = *callback {
                 callback(&server, &client)
             } else {
@@ -126,45 +182,81 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
             };
             res.to_glib()
         }
-        let func = if func_data.is_some() { Some(func_func as _) } else { None };
-        let super_callback0: &Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> = &func_data;
+        let func = if func_data.is_some() {
+            Some(func_func as _)
+        } else {
+            None
+        };
+        let super_callback0: &Option<
+            &mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult),
+        > = &func_data;
         unsafe {
-            FromGlibPtrContainer::from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_client_filter(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _))
+            FromGlibPtrContainer::from_glib_full(
+                gst_rtsp_server_sys::gst_rtsp_server_client_filter(
+                    self.as_ref().to_glib_none().0,
+                    func,
+                    super_callback0 as *const _ as usize as *mut _,
+                ),
+            )
         }
     }
 
-    fn create_socket<P: IsA<gio::Cancellable>>(&self, cancellable: Option<&P>) -> Result<gio::Socket, Error> {
+    fn create_socket<P: IsA<gio::Cancellable>>(
+        &self,
+        cancellable: Option<&P>,
+    ) -> Result<gio::Socket, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = gst_rtsp_server_sys::gst_rtsp_server_create_socket(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+            let ret = gst_rtsp_server_sys::gst_rtsp_server_create_socket(
+                self.as_ref().to_glib_none().0,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
-    fn create_source<P: IsA<gio::Cancellable>>(&self, cancellable: Option<&P>) -> Result<glib::Source, Error> {
+    fn create_source<P: IsA<gio::Cancellable>>(
+        &self,
+        cancellable: Option<&P>,
+    ) -> Result<glib::Source, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = gst_rtsp_server_sys::gst_rtsp_server_create_source(self.as_ref().to_glib_none().0, cancellable.map(|p| p.as_ref()).to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+            let ret = gst_rtsp_server_sys::gst_rtsp_server_create_source(
+                self.as_ref().to_glib_none().0,
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn get_address(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_address(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_address(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_auth(&self) -> Option<RTSPAuth> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_auth(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_auth(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_backlog(&self) -> i32 {
-        unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_get_backlog(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gst_rtsp_server_sys::gst_rtsp_server_get_backlog(self.as_ref().to_glib_none().0) }
     }
 
     fn get_bound_port(&self) -> i32 {
@@ -175,171 +267,302 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
 
     fn get_mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_mount_points(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_mount_points(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_service(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_service(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_service(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_session_pool(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_session_pool(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_thread_pool(&self) -> Option<RTSPThreadPool> {
         unsafe {
-            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_thread_pool(self.as_ref().to_glib_none().0))
+            from_glib_full(gst_rtsp_server_sys::gst_rtsp_server_get_thread_pool(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_address(&self, address: &str) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_address(self.as_ref().to_glib_none().0, address.to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_server_set_address(
+                self.as_ref().to_glib_none().0,
+                address.to_glib_none().0,
+            );
         }
     }
 
     fn set_auth<P: IsA<RTSPAuth>>(&self, auth: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_auth(self.as_ref().to_glib_none().0, auth.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_server_set_auth(
+                self.as_ref().to_glib_none().0,
+                auth.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
     fn set_backlog(&self, backlog: i32) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_backlog(self.as_ref().to_glib_none().0, backlog);
+            gst_rtsp_server_sys::gst_rtsp_server_set_backlog(
+                self.as_ref().to_glib_none().0,
+                backlog,
+            );
         }
     }
 
     fn set_mount_points<P: IsA<RTSPMountPoints>>(&self, mounts: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_mount_points(self.as_ref().to_glib_none().0, mounts.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_server_set_mount_points(
+                self.as_ref().to_glib_none().0,
+                mounts.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
     fn set_service(&self, service: &str) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_service(self.as_ref().to_glib_none().0, service.to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_server_set_service(
+                self.as_ref().to_glib_none().0,
+                service.to_glib_none().0,
+            );
         }
     }
 
     fn set_session_pool<P: IsA<RTSPSessionPool>>(&self, pool: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_session_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_server_set_session_pool(
+                self.as_ref().to_glib_none().0,
+                pool.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
     fn set_thread_pool<P: IsA<RTSPThreadPool>>(&self, pool: Option<&P>) {
         unsafe {
-            gst_rtsp_server_sys::gst_rtsp_server_set_thread_pool(self.as_ref().to_glib_none().0, pool.map(|p| p.as_ref()).to_glib_none().0);
+            gst_rtsp_server_sys::gst_rtsp_server_set_thread_pool(
+                self.as_ref().to_glib_none().0,
+                pool.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
-    fn transfer_connection<P: IsA<gio::Socket>>(&self, socket: &P, ip: &str, port: i32, initial_buffer: Option<&str>) -> Result<(), glib::error::BoolError> {
+    fn transfer_connection<P: IsA<gio::Socket>>(
+        &self,
+        socket: &P,
+        ip: &str,
+        port: i32,
+        initial_buffer: Option<&str>,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            glib_result_from_gboolean!(gst_rtsp_server_sys::gst_rtsp_server_transfer_connection(self.as_ref().to_glib_none().0, socket.as_ref().to_glib_full(), ip.to_glib_none().0, port, initial_buffer.to_glib_none().0), "Failed to transfer to the connection")
+            glib_result_from_gboolean!(
+                gst_rtsp_server_sys::gst_rtsp_server_transfer_connection(
+                    self.as_ref().to_glib_none().0,
+                    socket.as_ref().to_glib_full(),
+                    ip.to_glib_none().0,
+                    port,
+                    initial_buffer.to_glib_none().0
+                ),
+                "Failed to transfer to the connection"
+            )
         }
     }
 
-    fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn client_connected_trampoline<P, F: Fn(&P, &RTSPClient) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, object: *mut gst_rtsp_server_sys::GstRTSPClient, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
+    fn connect_client_connected<F: Fn(&Self, &RTSPClient) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn client_connected_trampoline<
+            P,
+            F: Fn(&P, &RTSPClient) + Send + Sync + 'static,
+        >(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            object: *mut gst_rtsp_server_sys::GstRTSPClient,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+            f(
+                &RTSPServer::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(object),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"client-connected\0".as_ptr() as *const _,
-                Some(transmute(client_connected_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"client-connected\0".as_ptr() as *const _,
+                Some(transmute(client_connected_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
-        {
-            let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::address\0".as_ptr() as *const _,
-                Some(transmute(notify_address_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
-        {
-            let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::backlog\0".as_ptr() as *const _,
-                Some(transmute(notify_backlog_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_bound_port_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
-        {
-            let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::bound-port\0".as_ptr() as *const _,
-                Some(transmute(notify_bound_port_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
-        {
-            let f: &F = &*(f as *const F);
-            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::mount-points\0".as_ptr() as *const _,
-                Some(transmute(notify_mount_points_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_service_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
+    fn connect_property_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
             f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::service\0".as_ptr() as *const _,
-                Some(transmute(notify_service_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::address\0".as_ptr() as *const _,
+                Some(transmute(notify_address_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPServer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<RTSPServer>
+    fn connect_property_backlog_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_backlog_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
         {
             let f: &F = &*(f as *const F);
             f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::session-pool\0".as_ptr() as *const _,
-                Some(transmute(notify_session_pool_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::backlog\0".as_ptr() as *const _,
+                Some(transmute(notify_backlog_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_bound_port_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_bound_port_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::bound-port\0".as_ptr() as *const _,
+                Some(transmute(notify_bound_port_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_mount_points_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mount_points_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mount-points\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_mount_points_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_service_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_service_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::service\0".as_ptr() as *const _,
+                Some(transmute(notify_service_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_session_pool_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_session_pool_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(
+            this: *mut gst_rtsp_server_sys::GstRTSPServer,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<RTSPServer>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPServer::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::session-pool\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_session_pool_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

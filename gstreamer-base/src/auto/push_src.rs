@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use BaseSrc;
 use glib::translate::*;
 use gst;
 use gst_base_sys;
+use BaseSrc;
 
 glib_wrapper! {
     pub struct PushSrc(Object<gst_base_sys::GstPushSrc, gst_base_sys::GstPushSrcClass, PushSrcClass>) @extends BaseSrc, gst::Element, gst::Object;

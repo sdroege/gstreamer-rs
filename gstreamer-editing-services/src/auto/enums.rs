@@ -3,17 +3,16 @@
 // DO NOT EDIT
 
 use ges_sys;
-use glib::StaticType;
-use glib::Type;
 use glib::translate::*;
 use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
+use glib::StaticType;
+use glib::Type;
 use gobject_sys;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum Edge {
     EdgeStart,
     EdgeEnd,
@@ -31,7 +30,7 @@ impl ToGlib for Edge {
             Edge::EdgeStart => ges_sys::GES_EDGE_START,
             Edge::EdgeEnd => ges_sys::GES_EDGE_END,
             Edge::EdgeNone => ges_sys::GES_EDGE_NONE,
-            Edge::__Unknown(value) => value
+            Edge::__Unknown(value) => value,
         }
     }
 }
@@ -73,8 +72,7 @@ impl SetValue for Edge {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum EditMode {
     EditNormal,
     EditRipple,
@@ -96,7 +94,7 @@ impl ToGlib for EditMode {
             EditMode::EditRoll => ges_sys::GES_EDIT_MODE_ROLL,
             EditMode::EditTrim => ges_sys::GES_EDIT_MODE_TRIM,
             EditMode::EditSlide => ges_sys::GES_EDIT_MODE_SLIDE,
-            EditMode::__Unknown(value) => value
+            EditMode::__Unknown(value) => value,
         }
     }
 }
@@ -139,4 +137,3 @@ impl SetValue for EditMode {
         gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
-
