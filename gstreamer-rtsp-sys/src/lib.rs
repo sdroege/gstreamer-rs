@@ -3,19 +3,24 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
+extern crate gio_sys as gio;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
-extern crate gio_sys as gio;
-extern crate gstreamer_sys as gst;
 extern crate gstreamer_sdp_sys as gst_sdp;
+extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -282,16 +287,26 @@ pub union GstRTSPMessage_type_data {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data @ {:?}", self as *const _))
-         .field("request", unsafe { &self.request })
-         .field("response", unsafe { &self.response })
-         .field("data", unsafe { &self.data })
-         .finish()
+        f.debug_struct(&format!(
+            "GstRTSPMessage_type_data @ {:?}",
+            self as *const _
+        ))
+        .field("request", unsafe { &self.request })
+        .field("response", unsafe { &self.response })
+        .field("data", unsafe { &self.data })
+        .finish()
     }
 }
 
 // Callbacks
-pub type GstRTSPConnectionAcceptCertificateFunc = Option<unsafe extern "C" fn(*mut gio::GTlsConnection, *mut gio::GTlsCertificate, gio::GTlsCertificateFlags, gpointer) -> gboolean>;
+pub type GstRTSPConnectionAcceptCertificateFunc = Option<
+    unsafe extern "C" fn(
+        *mut gio::GTlsConnection,
+        *mut gio::GTlsCertificate,
+        gio::GTlsCertificateFlags,
+        gpointer,
+    ) -> gboolean,
+>;
 
 // Records
 #[repr(C)]
@@ -305,10 +320,10 @@ pub struct GstRTSPAuthCredential {
 impl ::std::fmt::Debug for GstRTSPAuthCredential {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPAuthCredential @ {:?}", self as *const _))
-         .field("scheme", &self.scheme)
-         .field("params", &self.params)
-         .field("authorization", &self.authorization)
-         .finish()
+            .field("scheme", &self.scheme)
+            .field("params", &self.params)
+            .field("authorization", &self.authorization)
+            .finish()
     }
 }
 
@@ -322,9 +337,9 @@ pub struct GstRTSPAuthParam {
 impl ::std::fmt::Debug for GstRTSPAuthParam {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPAuthParam @ {:?}", self as *const _))
-         .field("name", &self.name)
-         .field("value", &self.value)
-         .finish()
+            .field("name", &self.name)
+            .field("value", &self.value)
+            .finish()
     }
 }
 
@@ -337,34 +352,68 @@ pub type GstRTSPConnection = *mut _GstRTSPConnection;
 #[derive(Copy, Clone)]
 pub struct GstRTSPExtensionInterface {
     pub parent: gobject::GTypeInterface,
-    pub detect_server: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage) -> gboolean>,
-    pub before_send: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage) -> GstRTSPResult>,
-    pub after_send: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage, *mut GstRTSPMessage) -> GstRTSPResult>,
-    pub parse_sdp: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut gst_sdp::GstSDPMessage, *mut gst::GstStructure) -> GstRTSPResult>,
-    pub setup_media: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut gst_sdp::GstSDPMedia) -> GstRTSPResult>,
-    pub configure_stream: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut gst::GstCaps) -> gboolean>,
-    pub get_transports: Option<unsafe extern "C" fn(*mut GstRTSPExtension, GstRTSPLowerTrans, *mut *mut c_char) -> GstRTSPResult>,
-    pub stream_select: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPUrl) -> GstRTSPResult>,
-    pub send: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage, *mut GstRTSPMessage) -> GstRTSPResult>,
-    pub receive_request: Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage) -> GstRTSPResult>,
+    pub detect_server:
+        Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage) -> gboolean>,
+    pub before_send:
+        Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage) -> GstRTSPResult>,
+    pub after_send: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPExtension,
+            *mut GstRTSPMessage,
+            *mut GstRTSPMessage,
+        ) -> GstRTSPResult,
+    >,
+    pub parse_sdp: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPExtension,
+            *mut gst_sdp::GstSDPMessage,
+            *mut gst::GstStructure,
+        ) -> GstRTSPResult,
+    >,
+    pub setup_media: Option<
+        unsafe extern "C" fn(*mut GstRTSPExtension, *mut gst_sdp::GstSDPMedia) -> GstRTSPResult,
+    >,
+    pub configure_stream:
+        Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut gst::GstCaps) -> gboolean>,
+    pub get_transports: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPExtension,
+            GstRTSPLowerTrans,
+            *mut *mut c_char,
+        ) -> GstRTSPResult,
+    >,
+    pub stream_select:
+        Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPUrl) -> GstRTSPResult>,
+    pub send: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPExtension,
+            *mut GstRTSPMessage,
+            *mut GstRTSPMessage,
+        ) -> GstRTSPResult,
+    >,
+    pub receive_request:
+        Option<unsafe extern "C" fn(*mut GstRTSPExtension, *mut GstRTSPMessage) -> GstRTSPResult>,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstRTSPExtensionInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPExtensionInterface @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("detect_server", &self.detect_server)
-         .field("before_send", &self.before_send)
-         .field("after_send", &self.after_send)
-         .field("parse_sdp", &self.parse_sdp)
-         .field("setup_media", &self.setup_media)
-         .field("configure_stream", &self.configure_stream)
-         .field("get_transports", &self.get_transports)
-         .field("stream_select", &self.stream_select)
-         .field("send", &self.send)
-         .field("receive_request", &self.receive_request)
-         .finish()
+        f.debug_struct(&format!(
+            "GstRTSPExtensionInterface @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .field("detect_server", &self.detect_server)
+        .field("before_send", &self.before_send)
+        .field("after_send", &self.after_send)
+        .field("parse_sdp", &self.parse_sdp)
+        .field("setup_media", &self.setup_media)
+        .field("configure_stream", &self.configure_stream)
+        .field("get_transports", &self.get_transports)
+        .field("stream_select", &self.stream_select)
+        .field("send", &self.send)
+        .field("receive_request", &self.receive_request)
+        .finish()
     }
 }
 
@@ -383,9 +432,9 @@ pub struct GstRTSPMessage {
 impl ::std::fmt::Debug for GstRTSPMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPMessage @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("type_data", &self.type_data)
-         .finish()
+            .field("type_", &self.type_)
+            .field("type_data", &self.type_data)
+            .finish()
     }
 }
 
@@ -397,9 +446,12 @@ pub struct GstRTSPMessage_type_data_data {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data_data {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data_data @ {:?}", self as *const _))
-         .field("channel", &self.channel)
-         .finish()
+        f.debug_struct(&format!(
+            "GstRTSPMessage_type_data_data @ {:?}",
+            self as *const _
+        ))
+        .field("channel", &self.channel)
+        .finish()
     }
 }
 
@@ -413,11 +465,14 @@ pub struct GstRTSPMessage_type_data_request {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data_request {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data_request @ {:?}", self as *const _))
-         .field("method", &self.method)
-         .field("uri", &self.uri)
-         .field("version", &self.version)
-         .finish()
+        f.debug_struct(&format!(
+            "GstRTSPMessage_type_data_request @ {:?}",
+            self as *const _
+        ))
+        .field("method", &self.method)
+        .field("uri", &self.uri)
+        .field("version", &self.version)
+        .finish()
     }
 }
 
@@ -431,11 +486,14 @@ pub struct GstRTSPMessage_type_data_response {
 
 impl ::std::fmt::Debug for GstRTSPMessage_type_data_response {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstRTSPMessage_type_data_response @ {:?}", self as *const _))
-         .field("code", &self.code)
-         .field("reason", &self.reason)
-         .field("version", &self.version)
-         .finish()
+        f.debug_struct(&format!(
+            "GstRTSPMessage_type_data_response @ {:?}",
+            self as *const _
+        ))
+        .field("code", &self.code)
+        .field("reason", &self.reason)
+        .field("version", &self.version)
+        .finish()
     }
 }
 
@@ -449,9 +507,9 @@ pub struct GstRTSPRange {
 impl ::std::fmt::Debug for GstRTSPRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPRange @ {:?}", self as *const _))
-         .field("min", &self.min)
-         .field("max", &self.max)
-         .finish()
+            .field("min", &self.min)
+            .field("max", &self.max)
+            .finish()
     }
 }
 
@@ -465,9 +523,9 @@ pub struct GstRTSPTime {
 impl ::std::fmt::Debug for GstRTSPTime {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPTime @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("seconds", &self.seconds)
-         .finish()
+            .field("type_", &self.type_)
+            .field("seconds", &self.seconds)
+            .finish()
     }
 }
 
@@ -483,11 +541,11 @@ pub struct GstRTSPTime2 {
 impl ::std::fmt::Debug for GstRTSPTime2 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPTime2 @ {:?}", self as *const _))
-         .field("frames", &self.frames)
-         .field("year", &self.year)
-         .field("month", &self.month)
-         .field("day", &self.day)
-         .finish()
+            .field("frames", &self.frames)
+            .field("year", &self.year)
+            .field("month", &self.month)
+            .field("day", &self.day)
+            .finish()
     }
 }
 
@@ -504,12 +562,12 @@ pub struct GstRTSPTimeRange {
 impl ::std::fmt::Debug for GstRTSPTimeRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPTimeRange @ {:?}", self as *const _))
-         .field("unit", &self.unit)
-         .field("min", &self.min)
-         .field("max", &self.max)
-         .field("min2", &self.min2)
-         .field("max2", &self.max2)
-         .finish()
+            .field("unit", &self.unit)
+            .field("min", &self.min)
+            .field("max", &self.max)
+            .field("min2", &self.min2)
+            .field("max2", &self.max2)
+            .finish()
     }
 }
 
@@ -537,22 +595,22 @@ pub struct GstRTSPTransport {
 impl ::std::fmt::Debug for GstRTSPTransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPTransport @ {:?}", self as *const _))
-         .field("trans", &self.trans)
-         .field("profile", &self.profile)
-         .field("lower_transport", &self.lower_transport)
-         .field("destination", &self.destination)
-         .field("source", &self.source)
-         .field("layers", &self.layers)
-         .field("mode_play", &self.mode_play)
-         .field("mode_record", &self.mode_record)
-         .field("append", &self.append)
-         .field("interleaved", &self.interleaved)
-         .field("ttl", &self.ttl)
-         .field("port", &self.port)
-         .field("client_port", &self.client_port)
-         .field("server_port", &self.server_port)
-         .field("ssrc", &self.ssrc)
-         .finish()
+            .field("trans", &self.trans)
+            .field("profile", &self.profile)
+            .field("lower_transport", &self.lower_transport)
+            .field("destination", &self.destination)
+            .field("source", &self.source)
+            .field("layers", &self.layers)
+            .field("mode_play", &self.mode_play)
+            .field("mode_record", &self.mode_record)
+            .field("append", &self.append)
+            .field("interleaved", &self.interleaved)
+            .field("ttl", &self.ttl)
+            .field("port", &self.port)
+            .field("client_port", &self.client_port)
+            .field("server_port", &self.server_port)
+            .field("ssrc", &self.ssrc)
+            .finish()
     }
 }
 
@@ -572,15 +630,15 @@ pub struct GstRTSPUrl {
 impl ::std::fmt::Debug for GstRTSPUrl {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPUrl @ {:?}", self as *const _))
-         .field("transports", &self.transports)
-         .field("family", &self.family)
-         .field("user", &self.user)
-         .field("passwd", &self.passwd)
-         .field("host", &self.host)
-         .field("port", &self.port)
-         .field("abspath", &self.abspath)
-         .field("query", &self.query)
-         .finish()
+            .field("transports", &self.transports)
+            .field("family", &self.family)
+            .field("user", &self.user)
+            .field("passwd", &self.passwd)
+            .field("host", &self.host)
+            .field("port", &self.port)
+            .field("abspath", &self.abspath)
+            .field("query", &self.query)
+            .finish()
     }
 }
 
@@ -592,31 +650,51 @@ pub type GstRTSPWatch = *mut _GstRTSPWatch;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct GstRTSPWatchFuncs {
-    pub message_received: Option<unsafe extern "C" fn(*mut GstRTSPWatch, *mut GstRTSPMessage, gpointer) -> GstRTSPResult>,
-    pub message_sent: Option<unsafe extern "C" fn(*mut GstRTSPWatch, c_uint, gpointer) -> GstRTSPResult>,
+    pub message_received: Option<
+        unsafe extern "C" fn(*mut GstRTSPWatch, *mut GstRTSPMessage, gpointer) -> GstRTSPResult,
+    >,
+    pub message_sent:
+        Option<unsafe extern "C" fn(*mut GstRTSPWatch, c_uint, gpointer) -> GstRTSPResult>,
     pub closed: Option<unsafe extern "C" fn(*mut GstRTSPWatch, gpointer) -> GstRTSPResult>,
-    pub error: Option<unsafe extern "C" fn(*mut GstRTSPWatch, GstRTSPResult, gpointer) -> GstRTSPResult>,
-    pub tunnel_start: Option<unsafe extern "C" fn(*mut GstRTSPWatch, gpointer) -> GstRTSPStatusCode>,
+    pub error:
+        Option<unsafe extern "C" fn(*mut GstRTSPWatch, GstRTSPResult, gpointer) -> GstRTSPResult>,
+    pub tunnel_start:
+        Option<unsafe extern "C" fn(*mut GstRTSPWatch, gpointer) -> GstRTSPStatusCode>,
     pub tunnel_complete: Option<unsafe extern "C" fn(*mut GstRTSPWatch, gpointer) -> GstRTSPResult>,
-    pub error_full: Option<unsafe extern "C" fn(*mut GstRTSPWatch, GstRTSPResult, *mut GstRTSPMessage, c_uint, gpointer) -> GstRTSPResult>,
+    pub error_full: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPWatch,
+            GstRTSPResult,
+            *mut GstRTSPMessage,
+            c_uint,
+            gpointer,
+        ) -> GstRTSPResult,
+    >,
     pub tunnel_lost: Option<unsafe extern "C" fn(*mut GstRTSPWatch, gpointer) -> GstRTSPResult>,
-    pub tunnel_http_response: Option<unsafe extern "C" fn(*mut GstRTSPWatch, *mut GstRTSPMessage, *mut GstRTSPMessage, gpointer) -> GstRTSPResult>,
+    pub tunnel_http_response: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPWatch,
+            *mut GstRTSPMessage,
+            *mut GstRTSPMessage,
+            gpointer,
+        ) -> GstRTSPResult,
+    >,
     pub _gst_reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GstRTSPWatchFuncs {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRTSPWatchFuncs @ {:?}", self as *const _))
-         .field("message_received", &self.message_received)
-         .field("message_sent", &self.message_sent)
-         .field("closed", &self.closed)
-         .field("error", &self.error)
-         .field("tunnel_start", &self.tunnel_start)
-         .field("tunnel_complete", &self.tunnel_complete)
-         .field("error_full", &self.error_full)
-         .field("tunnel_lost", &self.tunnel_lost)
-         .field("tunnel_http_response", &self.tunnel_http_response)
-         .finish()
+            .field("message_received", &self.message_received)
+            .field("message_sent", &self.message_sent)
+            .field("closed", &self.closed)
+            .field("error", &self.error)
+            .field("tunnel_start", &self.tunnel_start)
+            .field("tunnel_complete", &self.tunnel_complete)
+            .field("error_full", &self.error_full)
+            .field("tunnel_lost", &self.tunnel_lost)
+            .field("tunnel_http_response", &self.tunnel_http_response)
+            .finish()
     }
 }
 
@@ -629,7 +707,6 @@ impl ::std::fmt::Debug for GstRTSPExtension {
         write!(f, "GstRTSPExtension @ {:?}", self as *const _)
     }
 }
-
 
 extern "C" {
 
@@ -727,111 +804,314 @@ extern "C" {
     //=========================================================================
     pub fn gst_rtsp_connection_clear_auth_params(conn: *mut GstRTSPConnection);
     pub fn gst_rtsp_connection_close(conn: *mut GstRTSPConnection) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_connect(conn: *mut GstRTSPConnection, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_connect(
+        conn: *mut GstRTSPConnection,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_rtsp_connection_connect_with_response(conn: *mut GstRTSPConnection, timeout: *mut glib::GTimeVal, response: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_do_tunnel(conn: *mut GstRTSPConnection, conn2: *mut GstRTSPConnection) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_flush(conn: *mut GstRTSPConnection, flush: gboolean) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_connect_with_response(
+        conn: *mut GstRTSPConnection,
+        timeout: *mut glib::GTimeVal,
+        response: *mut GstRTSPMessage,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_do_tunnel(
+        conn: *mut GstRTSPConnection,
+        conn2: *mut GstRTSPConnection,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_flush(
+        conn: *mut GstRTSPConnection,
+        flush: gboolean,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_connection_free(conn: *mut GstRTSPConnection) -> GstRTSPResult;
     pub fn gst_rtsp_connection_get_ip(conn: *const GstRTSPConnection) -> *const c_char;
-    pub fn gst_rtsp_connection_get_read_socket(conn: *const GstRTSPConnection) -> *mut gio::GSocket;
+    pub fn gst_rtsp_connection_get_read_socket(conn: *const GstRTSPConnection)
+        -> *mut gio::GSocket;
     pub fn gst_rtsp_connection_get_remember_session_id(conn: *mut GstRTSPConnection) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_rtsp_connection_get_tls(conn: *mut GstRTSPConnection, error: *mut *mut glib::GError) -> *mut gio::GTlsConnection;
+    pub fn gst_rtsp_connection_get_tls(
+        conn: *mut GstRTSPConnection,
+        error: *mut *mut glib::GError,
+    ) -> *mut gio::GTlsConnection;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_rtsp_connection_get_tls_database(conn: *mut GstRTSPConnection) -> *mut gio::GTlsDatabase;
+    pub fn gst_rtsp_connection_get_tls_database(
+        conn: *mut GstRTSPConnection,
+    ) -> *mut gio::GTlsDatabase;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_rtsp_connection_get_tls_interaction(conn: *mut GstRTSPConnection) -> *mut gio::GTlsInteraction;
+    pub fn gst_rtsp_connection_get_tls_interaction(
+        conn: *mut GstRTSPConnection,
+    ) -> *mut gio::GTlsInteraction;
     #[cfg(any(feature = "v1_2_1", feature = "dox"))]
-    pub fn gst_rtsp_connection_get_tls_validation_flags(conn: *mut GstRTSPConnection) -> gio::GTlsCertificateFlags;
+    pub fn gst_rtsp_connection_get_tls_validation_flags(
+        conn: *mut GstRTSPConnection,
+    ) -> gio::GTlsCertificateFlags;
     pub fn gst_rtsp_connection_get_tunnelid(conn: *const GstRTSPConnection) -> *const c_char;
     pub fn gst_rtsp_connection_get_url(conn: *const GstRTSPConnection) -> *mut GstRTSPUrl;
-    pub fn gst_rtsp_connection_get_write_socket(conn: *const GstRTSPConnection) -> *mut gio::GSocket;
+    pub fn gst_rtsp_connection_get_write_socket(
+        conn: *const GstRTSPConnection,
+    ) -> *mut gio::GSocket;
     pub fn gst_rtsp_connection_is_tunneled(conn: *const GstRTSPConnection) -> gboolean;
-    pub fn gst_rtsp_connection_next_timeout(conn: *mut GstRTSPConnection, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_poll(conn: *mut GstRTSPConnection, events: GstRTSPEvent, revents: *mut GstRTSPEvent, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_read(conn: *mut GstRTSPConnection, data: *mut u8, size: c_uint, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_receive(conn: *mut GstRTSPConnection, message: *mut GstRTSPMessage, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_next_timeout(
+        conn: *mut GstRTSPConnection,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_poll(
+        conn: *mut GstRTSPConnection,
+        events: GstRTSPEvent,
+        revents: *mut GstRTSPEvent,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_read(
+        conn: *mut GstRTSPConnection,
+        data: *mut u8,
+        size: c_uint,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_receive(
+        conn: *mut GstRTSPConnection,
+        message: *mut GstRTSPMessage,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_connection_reset_timeout(conn: *mut GstRTSPConnection) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_send(conn: *mut GstRTSPConnection, message: *mut GstRTSPMessage, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_send(
+        conn: *mut GstRTSPConnection,
+        message: *mut GstRTSPMessage,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_connection_send_messages(conn: *mut GstRTSPConnection, messages: *mut GstRTSPMessage, n_messages: c_uint, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_send_messages(
+        conn: *mut GstRTSPConnection,
+        messages: *mut GstRTSPMessage,
+        n_messages: c_uint,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_rtsp_connection_set_accept_certificate_func(conn: *mut GstRTSPConnection, func: GstRTSPConnectionAcceptCertificateFunc, user_data: gpointer, destroy_notify: glib::GDestroyNotify);
-    pub fn gst_rtsp_connection_set_auth(conn: *mut GstRTSPConnection, method: GstRTSPAuthMethod, user: *const c_char, pass: *const c_char) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_set_auth_param(conn: *mut GstRTSPConnection, param: *const c_char, value: *const c_char);
+    pub fn gst_rtsp_connection_set_accept_certificate_func(
+        conn: *mut GstRTSPConnection,
+        func: GstRTSPConnectionAcceptCertificateFunc,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    pub fn gst_rtsp_connection_set_auth(
+        conn: *mut GstRTSPConnection,
+        method: GstRTSPAuthMethod,
+        user: *const c_char,
+        pass: *const c_char,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_set_auth_param(
+        conn: *mut GstRTSPConnection,
+        param: *const c_char,
+        value: *const c_char,
+    );
     pub fn gst_rtsp_connection_set_http_mode(conn: *mut GstRTSPConnection, enable: gboolean);
     pub fn gst_rtsp_connection_set_ip(conn: *mut GstRTSPConnection, ip: *const c_char);
-    pub fn gst_rtsp_connection_set_proxy(conn: *mut GstRTSPConnection, host: *const c_char, port: c_uint) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_set_qos_dscp(conn: *mut GstRTSPConnection, qos_dscp: c_uint) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_set_remember_session_id(conn: *mut GstRTSPConnection, remember: gboolean);
+    pub fn gst_rtsp_connection_set_proxy(
+        conn: *mut GstRTSPConnection,
+        host: *const c_char,
+        port: c_uint,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_set_qos_dscp(
+        conn: *mut GstRTSPConnection,
+        qos_dscp: c_uint,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_set_remember_session_id(
+        conn: *mut GstRTSPConnection,
+        remember: gboolean,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_rtsp_connection_set_tls_database(conn: *mut GstRTSPConnection, database: *mut gio::GTlsDatabase);
+    pub fn gst_rtsp_connection_set_tls_database(
+        conn: *mut GstRTSPConnection,
+        database: *mut gio::GTlsDatabase,
+    );
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_rtsp_connection_set_tls_interaction(conn: *mut GstRTSPConnection, interaction: *mut gio::GTlsInteraction);
+    pub fn gst_rtsp_connection_set_tls_interaction(
+        conn: *mut GstRTSPConnection,
+        interaction: *mut gio::GTlsInteraction,
+    );
     #[cfg(any(feature = "v1_2_1", feature = "dox"))]
-    pub fn gst_rtsp_connection_set_tls_validation_flags(conn: *mut GstRTSPConnection, flags: gio::GTlsCertificateFlags) -> gboolean;
+    pub fn gst_rtsp_connection_set_tls_validation_flags(
+        conn: *mut GstRTSPConnection,
+        flags: gio::GTlsCertificateFlags,
+    ) -> gboolean;
     pub fn gst_rtsp_connection_set_tunneled(conn: *mut GstRTSPConnection, tunneled: gboolean);
-    pub fn gst_rtsp_connection_write(conn: *mut GstRTSPConnection, data: *const u8, size: c_uint, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_accept(socket: *mut gio::GSocket, conn: *mut *mut GstRTSPConnection, cancellable: *mut gio::GCancellable) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_create(url: *const GstRTSPUrl, conn: *mut *mut GstRTSPConnection) -> GstRTSPResult;
-    pub fn gst_rtsp_connection_create_from_socket(socket: *mut gio::GSocket, ip: *const c_char, port: u16, initial_buffer: *const c_char, conn: *mut *mut GstRTSPConnection) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_write(
+        conn: *mut GstRTSPConnection,
+        data: *const u8,
+        size: c_uint,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_accept(
+        socket: *mut gio::GSocket,
+        conn: *mut *mut GstRTSPConnection,
+        cancellable: *mut gio::GCancellable,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_create(
+        url: *const GstRTSPUrl,
+        conn: *mut *mut GstRTSPConnection,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_connection_create_from_socket(
+        socket: *mut gio::GSocket,
+        ip: *const c_char,
+        port: u16,
+        initial_buffer: *const c_char,
+        conn: *mut *mut GstRTSPConnection,
+    ) -> GstRTSPResult;
 
     //=========================================================================
     // GstRTSPMessage
     //=========================================================================
     pub fn gst_rtsp_msg_get_type() -> GType;
-    pub fn gst_rtsp_message_add_header(msg: *mut GstRTSPMessage, field: GstRTSPHeaderField, value: *const c_char) -> GstRTSPResult;
+    pub fn gst_rtsp_message_add_header(
+        msg: *mut GstRTSPMessage,
+        field: GstRTSPHeaderField,
+        value: *const c_char,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_rtsp_message_add_header_by_name(msg: *mut GstRTSPMessage, header: *const c_char, value: *const c_char) -> GstRTSPResult;
-    pub fn gst_rtsp_message_append_headers(msg: *const GstRTSPMessage, str: *mut glib::GString) -> GstRTSPResult;
+    pub fn gst_rtsp_message_add_header_by_name(
+        msg: *mut GstRTSPMessage,
+        header: *const c_char,
+        value: *const c_char,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_append_headers(
+        msg: *const GstRTSPMessage,
+        str: *mut glib::GString,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_rtsp_message_copy(msg: *const GstRTSPMessage, copy: *mut *mut GstRTSPMessage) -> GstRTSPResult;
+    pub fn gst_rtsp_message_copy(
+        msg: *const GstRTSPMessage,
+        copy: *mut *mut GstRTSPMessage,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_message_dump(msg: *mut GstRTSPMessage) -> GstRTSPResult;
     pub fn gst_rtsp_message_free(msg: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_message_get_body(msg: *const GstRTSPMessage, data: *mut *mut u8, size: *mut c_uint) -> GstRTSPResult;
+    pub fn gst_rtsp_message_get_body(
+        msg: *const GstRTSPMessage,
+        data: *mut *mut u8,
+        size: *mut c_uint,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_message_get_body_buffer(msg: *const GstRTSPMessage, buffer: *mut *mut gst::GstBuffer) -> GstRTSPResult;
-    pub fn gst_rtsp_message_get_header(msg: *const GstRTSPMessage, field: GstRTSPHeaderField, value: *mut *mut c_char, indx: c_int) -> GstRTSPResult;
+    pub fn gst_rtsp_message_get_body_buffer(
+        msg: *const GstRTSPMessage,
+        buffer: *mut *mut gst::GstBuffer,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_get_header(
+        msg: *const GstRTSPMessage,
+        field: GstRTSPHeaderField,
+        value: *mut *mut c_char,
+        indx: c_int,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_rtsp_message_get_header_by_name(msg: *mut GstRTSPMessage, header: *const c_char, value: *mut *mut c_char, index: c_int) -> GstRTSPResult;
+    pub fn gst_rtsp_message_get_header_by_name(
+        msg: *mut GstRTSPMessage,
+        header: *const c_char,
+        value: *mut *mut c_char,
+        index: c_int,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_message_get_type(msg: *mut GstRTSPMessage) -> GstRTSPMsgType;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_rtsp_message_has_body_buffer(msg: *const GstRTSPMessage) -> gboolean;
     pub fn gst_rtsp_message_init(msg: *mut GstRTSPMessage) -> GstRTSPResult;
     pub fn gst_rtsp_message_init_data(msg: *mut GstRTSPMessage, channel: u8) -> GstRTSPResult;
-    pub fn gst_rtsp_message_init_request(msg: *mut GstRTSPMessage, method: GstRTSPMethod, uri: *const c_char) -> GstRTSPResult;
-    pub fn gst_rtsp_message_init_response(msg: *mut GstRTSPMessage, code: GstRTSPStatusCode, reason: *const c_char, request: *const GstRTSPMessage) -> GstRTSPResult;
+    pub fn gst_rtsp_message_init_request(
+        msg: *mut GstRTSPMessage,
+        method: GstRTSPMethod,
+        uri: *const c_char,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_init_response(
+        msg: *mut GstRTSPMessage,
+        code: GstRTSPStatusCode,
+        reason: *const c_char,
+        request: *const GstRTSPMessage,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_rtsp_message_parse_auth_credentials(msg: *mut GstRTSPMessage, field: GstRTSPHeaderField) -> *mut *mut GstRTSPAuthCredential;
-    pub fn gst_rtsp_message_parse_data(msg: *mut GstRTSPMessage, channel: *mut u8) -> GstRTSPResult;
-    pub fn gst_rtsp_message_parse_request(msg: *mut GstRTSPMessage, method: *mut GstRTSPMethod, uri: *mut *const c_char, version: *mut GstRTSPVersion) -> GstRTSPResult;
-    pub fn gst_rtsp_message_parse_response(msg: *mut GstRTSPMessage, code: *mut GstRTSPStatusCode, reason: *mut *const c_char, version: *mut GstRTSPVersion) -> GstRTSPResult;
-    pub fn gst_rtsp_message_remove_header(msg: *mut GstRTSPMessage, field: GstRTSPHeaderField, indx: c_int) -> GstRTSPResult;
+    pub fn gst_rtsp_message_parse_auth_credentials(
+        msg: *mut GstRTSPMessage,
+        field: GstRTSPHeaderField,
+    ) -> *mut *mut GstRTSPAuthCredential;
+    pub fn gst_rtsp_message_parse_data(msg: *mut GstRTSPMessage, channel: *mut u8)
+        -> GstRTSPResult;
+    pub fn gst_rtsp_message_parse_request(
+        msg: *mut GstRTSPMessage,
+        method: *mut GstRTSPMethod,
+        uri: *mut *const c_char,
+        version: *mut GstRTSPVersion,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_parse_response(
+        msg: *mut GstRTSPMessage,
+        code: *mut GstRTSPStatusCode,
+        reason: *mut *const c_char,
+        version: *mut GstRTSPVersion,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_remove_header(
+        msg: *mut GstRTSPMessage,
+        field: GstRTSPHeaderField,
+        indx: c_int,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_rtsp_message_remove_header_by_name(msg: *mut GstRTSPMessage, header: *const c_char, index: c_int) -> GstRTSPResult;
-    pub fn gst_rtsp_message_set_body(msg: *mut GstRTSPMessage, data: *const u8, size: c_uint) -> GstRTSPResult;
+    pub fn gst_rtsp_message_remove_header_by_name(
+        msg: *mut GstRTSPMessage,
+        header: *const c_char,
+        index: c_int,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_set_body(
+        msg: *mut GstRTSPMessage,
+        data: *const u8,
+        size: c_uint,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_message_set_body_buffer(msg: *mut GstRTSPMessage, buffer: *mut gst::GstBuffer) -> GstRTSPResult;
-    pub fn gst_rtsp_message_steal_body(msg: *mut GstRTSPMessage, data: *mut *mut u8, size: *mut c_uint) -> GstRTSPResult;
+    pub fn gst_rtsp_message_set_body_buffer(
+        msg: *mut GstRTSPMessage,
+        buffer: *mut gst::GstBuffer,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_steal_body(
+        msg: *mut GstRTSPMessage,
+        data: *mut *mut u8,
+        size: *mut c_uint,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_message_steal_body_buffer(msg: *mut GstRTSPMessage, buffer: *mut *mut gst::GstBuffer) -> GstRTSPResult;
-    pub fn gst_rtsp_message_take_body(msg: *mut GstRTSPMessage, data: *mut u8, size: c_uint) -> GstRTSPResult;
+    pub fn gst_rtsp_message_steal_body_buffer(
+        msg: *mut GstRTSPMessage,
+        buffer: *mut *mut gst::GstBuffer,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_take_body(
+        msg: *mut GstRTSPMessage,
+        data: *mut u8,
+        size: c_uint,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_message_take_body_buffer(msg: *mut GstRTSPMessage, buffer: *mut gst::GstBuffer) -> GstRTSPResult;
-    pub fn gst_rtsp_message_take_header(msg: *mut GstRTSPMessage, field: GstRTSPHeaderField, value: *mut c_char) -> GstRTSPResult;
+    pub fn gst_rtsp_message_take_body_buffer(
+        msg: *mut GstRTSPMessage,
+        buffer: *mut gst::GstBuffer,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_take_header(
+        msg: *mut GstRTSPMessage,
+        field: GstRTSPHeaderField,
+        value: *mut c_char,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_rtsp_message_take_header_by_name(msg: *mut GstRTSPMessage, header: *const c_char, value: *mut c_char) -> GstRTSPResult;
+    pub fn gst_rtsp_message_take_header_by_name(
+        msg: *mut GstRTSPMessage,
+        header: *const c_char,
+        value: *mut c_char,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_message_unset(msg: *mut GstRTSPMessage) -> GstRTSPResult;
 
     //=========================================================================
     // GstRTSPRange
     //=========================================================================
-    pub fn gst_rtsp_range_convert_units(range: *mut GstRTSPTimeRange, unit: GstRTSPRangeUnit) -> gboolean;
+    pub fn gst_rtsp_range_convert_units(
+        range: *mut GstRTSPTimeRange,
+        unit: GstRTSPRangeUnit,
+    ) -> gboolean;
     pub fn gst_rtsp_range_free(range: *mut GstRTSPTimeRange);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_rtsp_range_get_times(range: *const GstRTSPTimeRange, min: *mut gst::GstClockTime, max: *mut gst::GstClockTime) -> gboolean;
-    pub fn gst_rtsp_range_parse(rangestr: *const c_char, range: *mut *mut GstRTSPTimeRange) -> GstRTSPResult;
+    pub fn gst_rtsp_range_get_times(
+        range: *const GstRTSPTimeRange,
+        min: *mut gst::GstClockTime,
+        max: *mut gst::GstClockTime,
+    ) -> gboolean;
+    pub fn gst_rtsp_range_parse(
+        rangestr: *const c_char,
+        range: *mut *mut GstRTSPTimeRange,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_range_to_string(range: *const GstRTSPTimeRange) -> *mut c_char;
 
     //=========================================================================
@@ -840,12 +1120,25 @@ extern "C" {
     pub fn gst_rtsp_transport_as_text(transport: *mut GstRTSPTransport) -> *mut c_char;
     pub fn gst_rtsp_transport_free(transport: *mut GstRTSPTransport) -> GstRTSPResult;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_rtsp_transport_get_media_type(transport: *mut GstRTSPTransport, media_type: *mut *const c_char) -> GstRTSPResult;
+    pub fn gst_rtsp_transport_get_media_type(
+        transport: *mut GstRTSPTransport,
+        media_type: *mut *const c_char,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_transport_init(transport: *mut GstRTSPTransport) -> GstRTSPResult;
-    pub fn gst_rtsp_transport_get_manager(trans: GstRTSPTransMode, manager: *mut *const c_char, option: c_uint) -> GstRTSPResult;
-    pub fn gst_rtsp_transport_get_mime(trans: GstRTSPTransMode, mime: *mut *const c_char) -> GstRTSPResult;
+    pub fn gst_rtsp_transport_get_manager(
+        trans: GstRTSPTransMode,
+        manager: *mut *const c_char,
+        option: c_uint,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_transport_get_mime(
+        trans: GstRTSPTransMode,
+        mime: *mut *const c_char,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_transport_new(transport: *mut *mut GstRTSPTransport) -> GstRTSPResult;
-    pub fn gst_rtsp_transport_parse(str: *const c_char, transport: *mut GstRTSPTransport) -> GstRTSPResult;
+    pub fn gst_rtsp_transport_parse(
+        str: *const c_char,
+        transport: *mut GstRTSPTransport,
+    ) -> GstRTSPResult;
 
     //=========================================================================
     // GstRTSPUrl
@@ -862,37 +1155,104 @@ extern "C" {
     //=========================================================================
     // GstRTSPWatch
     //=========================================================================
-    pub fn gst_rtsp_watch_attach(watch: *mut GstRTSPWatch, context: *mut glib::GMainContext) -> c_uint;
+    pub fn gst_rtsp_watch_attach(
+        watch: *mut GstRTSPWatch,
+        context: *mut glib::GMainContext,
+    ) -> c_uint;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_rtsp_watch_get_send_backlog(watch: *mut GstRTSPWatch, bytes: *mut size_t, messages: *mut c_uint);
+    pub fn gst_rtsp_watch_get_send_backlog(
+        watch: *mut GstRTSPWatch,
+        bytes: *mut size_t,
+        messages: *mut c_uint,
+    );
     pub fn gst_rtsp_watch_reset(watch: *mut GstRTSPWatch);
-    pub fn gst_rtsp_watch_send_message(watch: *mut GstRTSPWatch, message: *mut GstRTSPMessage, id: *mut c_uint) -> GstRTSPResult;
+    pub fn gst_rtsp_watch_send_message(
+        watch: *mut GstRTSPWatch,
+        message: *mut GstRTSPMessage,
+        id: *mut c_uint,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_watch_send_messages(watch: *mut GstRTSPWatch, messages: *mut GstRTSPMessage, n_messages: c_uint, id: *mut c_uint) -> GstRTSPResult;
+    pub fn gst_rtsp_watch_send_messages(
+        watch: *mut GstRTSPWatch,
+        messages: *mut GstRTSPMessage,
+        n_messages: c_uint,
+        id: *mut c_uint,
+    ) -> GstRTSPResult;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_rtsp_watch_set_flushing(watch: *mut GstRTSPWatch, flushing: gboolean);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_rtsp_watch_set_send_backlog(watch: *mut GstRTSPWatch, bytes: size_t, messages: c_uint);
+    pub fn gst_rtsp_watch_set_send_backlog(
+        watch: *mut GstRTSPWatch,
+        bytes: size_t,
+        messages: c_uint,
+    );
     pub fn gst_rtsp_watch_unref(watch: *mut GstRTSPWatch);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_rtsp_watch_wait_backlog(watch: *mut GstRTSPWatch, timeout: *mut glib::GTimeVal) -> GstRTSPResult;
-    pub fn gst_rtsp_watch_write_data(watch: *mut GstRTSPWatch, data: *const u8, size: c_uint, id: *mut c_uint) -> GstRTSPResult;
-    pub fn gst_rtsp_watch_new(conn: *mut GstRTSPConnection, funcs: *mut GstRTSPWatchFuncs, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstRTSPWatch;
+    pub fn gst_rtsp_watch_wait_backlog(
+        watch: *mut GstRTSPWatch,
+        timeout: *mut glib::GTimeVal,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_watch_write_data(
+        watch: *mut GstRTSPWatch,
+        data: *const u8,
+        size: c_uint,
+        id: *mut c_uint,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_watch_new(
+        conn: *mut GstRTSPConnection,
+        funcs: *mut GstRTSPWatchFuncs,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstRTSPWatch;
 
     //=========================================================================
     // GstRTSPExtension
     //=========================================================================
     pub fn gst_rtsp_extension_get_type() -> GType;
-    pub fn gst_rtsp_extension_after_send(ext: *mut GstRTSPExtension, req: *mut GstRTSPMessage, resp: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_before_send(ext: *mut GstRTSPExtension, req: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_configure_stream(ext: *mut GstRTSPExtension, caps: *mut gst::GstCaps) -> gboolean;
-    pub fn gst_rtsp_extension_detect_server(ext: *mut GstRTSPExtension, resp: *mut GstRTSPMessage) -> gboolean;
-    pub fn gst_rtsp_extension_get_transports(ext: *mut GstRTSPExtension, protocols: GstRTSPLowerTrans, transport: *mut *mut c_char) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_parse_sdp(ext: *mut GstRTSPExtension, sdp: *mut gst_sdp::GstSDPMessage, s: *mut gst::GstStructure) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_receive_request(ext: *mut GstRTSPExtension, req: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_send(ext: *mut GstRTSPExtension, req: *mut GstRTSPMessage, resp: *mut GstRTSPMessage) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_setup_media(ext: *mut GstRTSPExtension, media: *mut gst_sdp::GstSDPMedia) -> GstRTSPResult;
-    pub fn gst_rtsp_extension_stream_select(ext: *mut GstRTSPExtension, url: *mut GstRTSPUrl) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_after_send(
+        ext: *mut GstRTSPExtension,
+        req: *mut GstRTSPMessage,
+        resp: *mut GstRTSPMessage,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_before_send(
+        ext: *mut GstRTSPExtension,
+        req: *mut GstRTSPMessage,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_configure_stream(
+        ext: *mut GstRTSPExtension,
+        caps: *mut gst::GstCaps,
+    ) -> gboolean;
+    pub fn gst_rtsp_extension_detect_server(
+        ext: *mut GstRTSPExtension,
+        resp: *mut GstRTSPMessage,
+    ) -> gboolean;
+    pub fn gst_rtsp_extension_get_transports(
+        ext: *mut GstRTSPExtension,
+        protocols: GstRTSPLowerTrans,
+        transport: *mut *mut c_char,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_parse_sdp(
+        ext: *mut GstRTSPExtension,
+        sdp: *mut gst_sdp::GstSDPMessage,
+        s: *mut gst::GstStructure,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_receive_request(
+        ext: *mut GstRTSPExtension,
+        req: *mut GstRTSPMessage,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_send(
+        ext: *mut GstRTSPExtension,
+        req: *mut GstRTSPMessage,
+        resp: *mut GstRTSPMessage,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_setup_media(
+        ext: *mut GstRTSPExtension,
+        media: *mut gst_sdp::GstSDPMedia,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_extension_stream_select(
+        ext: *mut GstRTSPExtension,
+        url: *mut GstRTSPUrl,
+    ) -> GstRTSPResult;
 
     //=========================================================================
     // Other functions
@@ -902,15 +1262,38 @@ extern "C" {
     pub fn gst_rtsp_find_header_field(header: *const c_char) -> GstRTSPHeaderField;
     pub fn gst_rtsp_find_method(method: *const c_char) -> GstRTSPMethod;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_rtsp_generate_digest_auth_response(algorithm: *const c_char, method: *const c_char, realm: *const c_char, username: *const c_char, password: *const c_char, uri: *const c_char, nonce: *const c_char) -> *mut c_char;
+    pub fn gst_rtsp_generate_digest_auth_response(
+        algorithm: *const c_char,
+        method: *const c_char,
+        realm: *const c_char,
+        username: *const c_char,
+        password: *const c_char,
+        uri: *const c_char,
+        nonce: *const c_char,
+    ) -> *mut c_char;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_rtsp_generate_digest_auth_response_from_md5(algorithm: *const c_char, method: *const c_char, md5: *const c_char, uri: *const c_char, nonce: *const c_char) -> *mut c_char;
+    pub fn gst_rtsp_generate_digest_auth_response_from_md5(
+        algorithm: *const c_char,
+        method: *const c_char,
+        md5: *const c_char,
+        uri: *const c_char,
+        nonce: *const c_char,
+    ) -> *mut c_char;
     pub fn gst_rtsp_header_allow_multiple(field: GstRTSPHeaderField) -> gboolean;
     pub fn gst_rtsp_header_as_text(field: GstRTSPHeaderField) -> *const c_char;
     pub fn gst_rtsp_message_new(msg: *mut *mut GstRTSPMessage) -> GstRTSPResult;
     pub fn gst_rtsp_message_new_data(msg: *mut *mut GstRTSPMessage, channel: u8) -> GstRTSPResult;
-    pub fn gst_rtsp_message_new_request(msg: *mut *mut GstRTSPMessage, method: GstRTSPMethod, uri: *const c_char) -> GstRTSPResult;
-    pub fn gst_rtsp_message_new_response(msg: *mut *mut GstRTSPMessage, code: GstRTSPStatusCode, reason: *const c_char, request: *const GstRTSPMessage) -> GstRTSPResult;
+    pub fn gst_rtsp_message_new_request(
+        msg: *mut *mut GstRTSPMessage,
+        method: GstRTSPMethod,
+        uri: *const c_char,
+    ) -> GstRTSPResult;
+    pub fn gst_rtsp_message_new_response(
+        msg: *mut *mut GstRTSPMessage,
+        code: GstRTSPStatusCode,
+        reason: *const c_char,
+        request: *const GstRTSPMessage,
+    ) -> GstRTSPResult;
     pub fn gst_rtsp_options_as_text(options: GstRTSPMethod) -> *mut c_char;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_rtsp_options_from_text(options: *const c_char) -> GstRTSPMethod;

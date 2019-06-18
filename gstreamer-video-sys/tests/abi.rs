@@ -5,13 +5,13 @@
 extern crate gstreamer_video_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_video_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_video_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-video-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,113 +229,666 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstColorBalanceChannel", Layout {size: size_of::<GstColorBalanceChannel>(), alignment: align_of::<GstColorBalanceChannel>()}),
-    ("GstColorBalanceChannelClass", Layout {size: size_of::<GstColorBalanceChannelClass>(), alignment: align_of::<GstColorBalanceChannelClass>()}),
-    ("GstColorBalanceInterface", Layout {size: size_of::<GstColorBalanceInterface>(), alignment: align_of::<GstColorBalanceInterface>()}),
-    ("GstColorBalanceType", Layout {size: size_of::<GstColorBalanceType>(), alignment: align_of::<GstColorBalanceType>()}),
-    ("GstNavigationCommand", Layout {size: size_of::<GstNavigationCommand>(), alignment: align_of::<GstNavigationCommand>()}),
-    ("GstNavigationEventType", Layout {size: size_of::<GstNavigationEventType>(), alignment: align_of::<GstNavigationEventType>()}),
-    ("GstNavigationInterface", Layout {size: size_of::<GstNavigationInterface>(), alignment: align_of::<GstNavigationInterface>()}),
-    ("GstNavigationMessageType", Layout {size: size_of::<GstNavigationMessageType>(), alignment: align_of::<GstNavigationMessageType>()}),
-    ("GstNavigationQueryType", Layout {size: size_of::<GstNavigationQueryType>(), alignment: align_of::<GstNavigationQueryType>()}),
-    ("GstVideoAffineTransformationMeta", Layout {size: size_of::<GstVideoAffineTransformationMeta>(), alignment: align_of::<GstVideoAffineTransformationMeta>()}),
-    ("GstVideoAggregator", Layout {size: size_of::<GstVideoAggregator>(), alignment: align_of::<GstVideoAggregator>()}),
-    ("GstVideoAggregatorClass", Layout {size: size_of::<GstVideoAggregatorClass>(), alignment: align_of::<GstVideoAggregatorClass>()}),
-    ("GstVideoAggregatorConvertPad", Layout {size: size_of::<GstVideoAggregatorConvertPad>(), alignment: align_of::<GstVideoAggregatorConvertPad>()}),
-    ("GstVideoAggregatorConvertPadClass", Layout {size: size_of::<GstVideoAggregatorConvertPadClass>(), alignment: align_of::<GstVideoAggregatorConvertPadClass>()}),
-    ("GstVideoAggregatorPad", Layout {size: size_of::<GstVideoAggregatorPad>(), alignment: align_of::<GstVideoAggregatorPad>()}),
-    ("GstVideoAggregatorPadClass", Layout {size: size_of::<GstVideoAggregatorPadClass>(), alignment: align_of::<GstVideoAggregatorPadClass>()}),
-    ("GstVideoAlignment", Layout {size: size_of::<GstVideoAlignment>(), alignment: align_of::<GstVideoAlignment>()}),
-    ("GstVideoAlphaMode", Layout {size: size_of::<GstVideoAlphaMode>(), alignment: align_of::<GstVideoAlphaMode>()}),
-    ("GstVideoAncillary", Layout {size: size_of::<GstVideoAncillary>(), alignment: align_of::<GstVideoAncillary>()}),
-    ("GstVideoAncillaryDID", Layout {size: size_of::<GstVideoAncillaryDID>(), alignment: align_of::<GstVideoAncillaryDID>()}),
-    ("GstVideoAncillaryDID16", Layout {size: size_of::<GstVideoAncillaryDID16>(), alignment: align_of::<GstVideoAncillaryDID16>()}),
-    ("GstVideoBufferFlags", Layout {size: size_of::<GstVideoBufferFlags>(), alignment: align_of::<GstVideoBufferFlags>()}),
-    ("GstVideoBufferPool", Layout {size: size_of::<GstVideoBufferPool>(), alignment: align_of::<GstVideoBufferPool>()}),
-    ("GstVideoBufferPoolClass", Layout {size: size_of::<GstVideoBufferPoolClass>(), alignment: align_of::<GstVideoBufferPoolClass>()}),
-    ("GstVideoCaptionMeta", Layout {size: size_of::<GstVideoCaptionMeta>(), alignment: align_of::<GstVideoCaptionMeta>()}),
-    ("GstVideoCaptionType", Layout {size: size_of::<GstVideoCaptionType>(), alignment: align_of::<GstVideoCaptionType>()}),
-    ("GstVideoChromaFlags", Layout {size: size_of::<GstVideoChromaFlags>(), alignment: align_of::<GstVideoChromaFlags>()}),
-    ("GstVideoChromaMethod", Layout {size: size_of::<GstVideoChromaMethod>(), alignment: align_of::<GstVideoChromaMethod>()}),
-    ("GstVideoChromaMode", Layout {size: size_of::<GstVideoChromaMode>(), alignment: align_of::<GstVideoChromaMode>()}),
-    ("GstVideoChromaSite", Layout {size: size_of::<GstVideoChromaSite>(), alignment: align_of::<GstVideoChromaSite>()}),
-    ("GstVideoCodecFrame", Layout {size: size_of::<GstVideoCodecFrame>(), alignment: align_of::<GstVideoCodecFrame>()}),
-    ("GstVideoCodecFrameFlags", Layout {size: size_of::<GstVideoCodecFrameFlags>(), alignment: align_of::<GstVideoCodecFrameFlags>()}),
-    ("GstVideoCodecState", Layout {size: size_of::<GstVideoCodecState>(), alignment: align_of::<GstVideoCodecState>()}),
-    ("GstVideoColorMatrix", Layout {size: size_of::<GstVideoColorMatrix>(), alignment: align_of::<GstVideoColorMatrix>()}),
-    ("GstVideoColorPrimaries", Layout {size: size_of::<GstVideoColorPrimaries>(), alignment: align_of::<GstVideoColorPrimaries>()}),
-    ("GstVideoColorPrimariesInfo", Layout {size: size_of::<GstVideoColorPrimariesInfo>(), alignment: align_of::<GstVideoColorPrimariesInfo>()}),
-    ("GstVideoColorRange", Layout {size: size_of::<GstVideoColorRange>(), alignment: align_of::<GstVideoColorRange>()}),
-    ("GstVideoColorimetry", Layout {size: size_of::<GstVideoColorimetry>(), alignment: align_of::<GstVideoColorimetry>()}),
-    ("GstVideoCropMeta", Layout {size: size_of::<GstVideoCropMeta>(), alignment: align_of::<GstVideoCropMeta>()}),
-    ("GstVideoDecoder", Layout {size: size_of::<GstVideoDecoder>(), alignment: align_of::<GstVideoDecoder>()}),
-    ("GstVideoDecoderClass", Layout {size: size_of::<GstVideoDecoderClass>(), alignment: align_of::<GstVideoDecoderClass>()}),
-    ("GstVideoDirectionInterface", Layout {size: size_of::<GstVideoDirectionInterface>(), alignment: align_of::<GstVideoDirectionInterface>()}),
-    ("GstVideoDitherFlags", Layout {size: size_of::<GstVideoDitherFlags>(), alignment: align_of::<GstVideoDitherFlags>()}),
-    ("GstVideoDitherMethod", Layout {size: size_of::<GstVideoDitherMethod>(), alignment: align_of::<GstVideoDitherMethod>()}),
-    ("GstVideoEncoder", Layout {size: size_of::<GstVideoEncoder>(), alignment: align_of::<GstVideoEncoder>()}),
-    ("GstVideoEncoderClass", Layout {size: size_of::<GstVideoEncoderClass>(), alignment: align_of::<GstVideoEncoderClass>()}),
-    ("GstVideoFieldOrder", Layout {size: size_of::<GstVideoFieldOrder>(), alignment: align_of::<GstVideoFieldOrder>()}),
-    ("GstVideoFilter", Layout {size: size_of::<GstVideoFilter>(), alignment: align_of::<GstVideoFilter>()}),
-    ("GstVideoFilterClass", Layout {size: size_of::<GstVideoFilterClass>(), alignment: align_of::<GstVideoFilterClass>()}),
-    ("GstVideoFlags", Layout {size: size_of::<GstVideoFlags>(), alignment: align_of::<GstVideoFlags>()}),
-    ("GstVideoFormat", Layout {size: size_of::<GstVideoFormat>(), alignment: align_of::<GstVideoFormat>()}),
-    ("GstVideoFormatFlags", Layout {size: size_of::<GstVideoFormatFlags>(), alignment: align_of::<GstVideoFormatFlags>()}),
-    ("GstVideoFormatInfo", Layout {size: size_of::<GstVideoFormatInfo>(), alignment: align_of::<GstVideoFormatInfo>()}),
-    ("GstVideoFrame", Layout {size: size_of::<GstVideoFrame>(), alignment: align_of::<GstVideoFrame>()}),
-    ("GstVideoFrameFlags", Layout {size: size_of::<GstVideoFrameFlags>(), alignment: align_of::<GstVideoFrameFlags>()}),
-    ("GstVideoFrameMapFlags", Layout {size: size_of::<GstVideoFrameMapFlags>(), alignment: align_of::<GstVideoFrameMapFlags>()}),
-    ("GstVideoGLTextureOrientation", Layout {size: size_of::<GstVideoGLTextureOrientation>(), alignment: align_of::<GstVideoGLTextureOrientation>()}),
-    ("GstVideoGLTextureType", Layout {size: size_of::<GstVideoGLTextureType>(), alignment: align_of::<GstVideoGLTextureType>()}),
-    ("GstVideoGLTextureUploadMeta", Layout {size: size_of::<GstVideoGLTextureUploadMeta>(), alignment: align_of::<GstVideoGLTextureUploadMeta>()}),
-    ("GstVideoGammaMode", Layout {size: size_of::<GstVideoGammaMode>(), alignment: align_of::<GstVideoGammaMode>()}),
-    ("GstVideoInfo", Layout {size: size_of::<GstVideoInfo>(), alignment: align_of::<GstVideoInfo>()}),
-    ("GstVideoInterlaceMode", Layout {size: size_of::<GstVideoInterlaceMode>(), alignment: align_of::<GstVideoInterlaceMode>()}),
-    ("GstVideoMatrixMode", Layout {size: size_of::<GstVideoMatrixMode>(), alignment: align_of::<GstVideoMatrixMode>()}),
-    ("GstVideoMeta", Layout {size: size_of::<GstVideoMeta>(), alignment: align_of::<GstVideoMeta>()}),
-    ("GstVideoMetaTransform", Layout {size: size_of::<GstVideoMetaTransform>(), alignment: align_of::<GstVideoMetaTransform>()}),
-    ("GstVideoMultiviewFlags", Layout {size: size_of::<GstVideoMultiviewFlags>(), alignment: align_of::<GstVideoMultiviewFlags>()}),
-    ("GstVideoMultiviewFramePacking", Layout {size: size_of::<GstVideoMultiviewFramePacking>(), alignment: align_of::<GstVideoMultiviewFramePacking>()}),
-    ("GstVideoMultiviewMode", Layout {size: size_of::<GstVideoMultiviewMode>(), alignment: align_of::<GstVideoMultiviewMode>()}),
-    ("GstVideoOrientationInterface", Layout {size: size_of::<GstVideoOrientationInterface>(), alignment: align_of::<GstVideoOrientationInterface>()}),
-    ("GstVideoOrientationMethod", Layout {size: size_of::<GstVideoOrientationMethod>(), alignment: align_of::<GstVideoOrientationMethod>()}),
-    ("GstVideoOverlayCompositionMeta", Layout {size: size_of::<GstVideoOverlayCompositionMeta>(), alignment: align_of::<GstVideoOverlayCompositionMeta>()}),
-    ("GstVideoOverlayFormatFlags", Layout {size: size_of::<GstVideoOverlayFormatFlags>(), alignment: align_of::<GstVideoOverlayFormatFlags>()}),
-    ("GstVideoOverlayInterface", Layout {size: size_of::<GstVideoOverlayInterface>(), alignment: align_of::<GstVideoOverlayInterface>()}),
-    ("GstVideoPackFlags", Layout {size: size_of::<GstVideoPackFlags>(), alignment: align_of::<GstVideoPackFlags>()}),
-    ("GstVideoPrimariesMode", Layout {size: size_of::<GstVideoPrimariesMode>(), alignment: align_of::<GstVideoPrimariesMode>()}),
-    ("GstVideoRectangle", Layout {size: size_of::<GstVideoRectangle>(), alignment: align_of::<GstVideoRectangle>()}),
-    ("GstVideoRegionOfInterestMeta", Layout {size: size_of::<GstVideoRegionOfInterestMeta>(), alignment: align_of::<GstVideoRegionOfInterestMeta>()}),
-    ("GstVideoResampler", Layout {size: size_of::<GstVideoResampler>(), alignment: align_of::<GstVideoResampler>()}),
-    ("GstVideoResamplerFlags", Layout {size: size_of::<GstVideoResamplerFlags>(), alignment: align_of::<GstVideoResamplerFlags>()}),
-    ("GstVideoResamplerMethod", Layout {size: size_of::<GstVideoResamplerMethod>(), alignment: align_of::<GstVideoResamplerMethod>()}),
-    ("GstVideoScalerFlags", Layout {size: size_of::<GstVideoScalerFlags>(), alignment: align_of::<GstVideoScalerFlags>()}),
-    ("GstVideoSink", Layout {size: size_of::<GstVideoSink>(), alignment: align_of::<GstVideoSink>()}),
-    ("GstVideoSinkClass", Layout {size: size_of::<GstVideoSinkClass>(), alignment: align_of::<GstVideoSinkClass>()}),
-    ("GstVideoTileMode", Layout {size: size_of::<GstVideoTileMode>(), alignment: align_of::<GstVideoTileMode>()}),
-    ("GstVideoTileType", Layout {size: size_of::<GstVideoTileType>(), alignment: align_of::<GstVideoTileType>()}),
-    ("GstVideoTimeCode", Layout {size: size_of::<GstVideoTimeCode>(), alignment: align_of::<GstVideoTimeCode>()}),
-    ("GstVideoTimeCodeConfig", Layout {size: size_of::<GstVideoTimeCodeConfig>(), alignment: align_of::<GstVideoTimeCodeConfig>()}),
-    ("GstVideoTimeCodeFlags", Layout {size: size_of::<GstVideoTimeCodeFlags>(), alignment: align_of::<GstVideoTimeCodeFlags>()}),
-    ("GstVideoTimeCodeInterval", Layout {size: size_of::<GstVideoTimeCodeInterval>(), alignment: align_of::<GstVideoTimeCodeInterval>()}),
-    ("GstVideoTimeCodeMeta", Layout {size: size_of::<GstVideoTimeCodeMeta>(), alignment: align_of::<GstVideoTimeCodeMeta>()}),
-    ("GstVideoTransferFunction", Layout {size: size_of::<GstVideoTransferFunction>(), alignment: align_of::<GstVideoTransferFunction>()}),
-    ("GstVideoVBIParserResult", Layout {size: size_of::<GstVideoVBIParserResult>(), alignment: align_of::<GstVideoVBIParserResult>()}),
+    (
+        "GstColorBalanceChannel",
+        Layout {
+            size: size_of::<GstColorBalanceChannel>(),
+            alignment: align_of::<GstColorBalanceChannel>(),
+        },
+    ),
+    (
+        "GstColorBalanceChannelClass",
+        Layout {
+            size: size_of::<GstColorBalanceChannelClass>(),
+            alignment: align_of::<GstColorBalanceChannelClass>(),
+        },
+    ),
+    (
+        "GstColorBalanceInterface",
+        Layout {
+            size: size_of::<GstColorBalanceInterface>(),
+            alignment: align_of::<GstColorBalanceInterface>(),
+        },
+    ),
+    (
+        "GstColorBalanceType",
+        Layout {
+            size: size_of::<GstColorBalanceType>(),
+            alignment: align_of::<GstColorBalanceType>(),
+        },
+    ),
+    (
+        "GstNavigationCommand",
+        Layout {
+            size: size_of::<GstNavigationCommand>(),
+            alignment: align_of::<GstNavigationCommand>(),
+        },
+    ),
+    (
+        "GstNavigationEventType",
+        Layout {
+            size: size_of::<GstNavigationEventType>(),
+            alignment: align_of::<GstNavigationEventType>(),
+        },
+    ),
+    (
+        "GstNavigationInterface",
+        Layout {
+            size: size_of::<GstNavigationInterface>(),
+            alignment: align_of::<GstNavigationInterface>(),
+        },
+    ),
+    (
+        "GstNavigationMessageType",
+        Layout {
+            size: size_of::<GstNavigationMessageType>(),
+            alignment: align_of::<GstNavigationMessageType>(),
+        },
+    ),
+    (
+        "GstNavigationQueryType",
+        Layout {
+            size: size_of::<GstNavigationQueryType>(),
+            alignment: align_of::<GstNavigationQueryType>(),
+        },
+    ),
+    (
+        "GstVideoAffineTransformationMeta",
+        Layout {
+            size: size_of::<GstVideoAffineTransformationMeta>(),
+            alignment: align_of::<GstVideoAffineTransformationMeta>(),
+        },
+    ),
+    (
+        "GstVideoAggregator",
+        Layout {
+            size: size_of::<GstVideoAggregator>(),
+            alignment: align_of::<GstVideoAggregator>(),
+        },
+    ),
+    (
+        "GstVideoAggregatorClass",
+        Layout {
+            size: size_of::<GstVideoAggregatorClass>(),
+            alignment: align_of::<GstVideoAggregatorClass>(),
+        },
+    ),
+    (
+        "GstVideoAggregatorConvertPad",
+        Layout {
+            size: size_of::<GstVideoAggregatorConvertPad>(),
+            alignment: align_of::<GstVideoAggregatorConvertPad>(),
+        },
+    ),
+    (
+        "GstVideoAggregatorConvertPadClass",
+        Layout {
+            size: size_of::<GstVideoAggregatorConvertPadClass>(),
+            alignment: align_of::<GstVideoAggregatorConvertPadClass>(),
+        },
+    ),
+    (
+        "GstVideoAggregatorPad",
+        Layout {
+            size: size_of::<GstVideoAggregatorPad>(),
+            alignment: align_of::<GstVideoAggregatorPad>(),
+        },
+    ),
+    (
+        "GstVideoAggregatorPadClass",
+        Layout {
+            size: size_of::<GstVideoAggregatorPadClass>(),
+            alignment: align_of::<GstVideoAggregatorPadClass>(),
+        },
+    ),
+    (
+        "GstVideoAlignment",
+        Layout {
+            size: size_of::<GstVideoAlignment>(),
+            alignment: align_of::<GstVideoAlignment>(),
+        },
+    ),
+    (
+        "GstVideoAlphaMode",
+        Layout {
+            size: size_of::<GstVideoAlphaMode>(),
+            alignment: align_of::<GstVideoAlphaMode>(),
+        },
+    ),
+    (
+        "GstVideoAncillary",
+        Layout {
+            size: size_of::<GstVideoAncillary>(),
+            alignment: align_of::<GstVideoAncillary>(),
+        },
+    ),
+    (
+        "GstVideoAncillaryDID",
+        Layout {
+            size: size_of::<GstVideoAncillaryDID>(),
+            alignment: align_of::<GstVideoAncillaryDID>(),
+        },
+    ),
+    (
+        "GstVideoAncillaryDID16",
+        Layout {
+            size: size_of::<GstVideoAncillaryDID16>(),
+            alignment: align_of::<GstVideoAncillaryDID16>(),
+        },
+    ),
+    (
+        "GstVideoBufferFlags",
+        Layout {
+            size: size_of::<GstVideoBufferFlags>(),
+            alignment: align_of::<GstVideoBufferFlags>(),
+        },
+    ),
+    (
+        "GstVideoBufferPool",
+        Layout {
+            size: size_of::<GstVideoBufferPool>(),
+            alignment: align_of::<GstVideoBufferPool>(),
+        },
+    ),
+    (
+        "GstVideoBufferPoolClass",
+        Layout {
+            size: size_of::<GstVideoBufferPoolClass>(),
+            alignment: align_of::<GstVideoBufferPoolClass>(),
+        },
+    ),
+    (
+        "GstVideoCaptionMeta",
+        Layout {
+            size: size_of::<GstVideoCaptionMeta>(),
+            alignment: align_of::<GstVideoCaptionMeta>(),
+        },
+    ),
+    (
+        "GstVideoCaptionType",
+        Layout {
+            size: size_of::<GstVideoCaptionType>(),
+            alignment: align_of::<GstVideoCaptionType>(),
+        },
+    ),
+    (
+        "GstVideoChromaFlags",
+        Layout {
+            size: size_of::<GstVideoChromaFlags>(),
+            alignment: align_of::<GstVideoChromaFlags>(),
+        },
+    ),
+    (
+        "GstVideoChromaMethod",
+        Layout {
+            size: size_of::<GstVideoChromaMethod>(),
+            alignment: align_of::<GstVideoChromaMethod>(),
+        },
+    ),
+    (
+        "GstVideoChromaMode",
+        Layout {
+            size: size_of::<GstVideoChromaMode>(),
+            alignment: align_of::<GstVideoChromaMode>(),
+        },
+    ),
+    (
+        "GstVideoChromaSite",
+        Layout {
+            size: size_of::<GstVideoChromaSite>(),
+            alignment: align_of::<GstVideoChromaSite>(),
+        },
+    ),
+    (
+        "GstVideoCodecFrame",
+        Layout {
+            size: size_of::<GstVideoCodecFrame>(),
+            alignment: align_of::<GstVideoCodecFrame>(),
+        },
+    ),
+    (
+        "GstVideoCodecFrameFlags",
+        Layout {
+            size: size_of::<GstVideoCodecFrameFlags>(),
+            alignment: align_of::<GstVideoCodecFrameFlags>(),
+        },
+    ),
+    (
+        "GstVideoCodecState",
+        Layout {
+            size: size_of::<GstVideoCodecState>(),
+            alignment: align_of::<GstVideoCodecState>(),
+        },
+    ),
+    (
+        "GstVideoColorMatrix",
+        Layout {
+            size: size_of::<GstVideoColorMatrix>(),
+            alignment: align_of::<GstVideoColorMatrix>(),
+        },
+    ),
+    (
+        "GstVideoColorPrimaries",
+        Layout {
+            size: size_of::<GstVideoColorPrimaries>(),
+            alignment: align_of::<GstVideoColorPrimaries>(),
+        },
+    ),
+    (
+        "GstVideoColorPrimariesInfo",
+        Layout {
+            size: size_of::<GstVideoColorPrimariesInfo>(),
+            alignment: align_of::<GstVideoColorPrimariesInfo>(),
+        },
+    ),
+    (
+        "GstVideoColorRange",
+        Layout {
+            size: size_of::<GstVideoColorRange>(),
+            alignment: align_of::<GstVideoColorRange>(),
+        },
+    ),
+    (
+        "GstVideoColorimetry",
+        Layout {
+            size: size_of::<GstVideoColorimetry>(),
+            alignment: align_of::<GstVideoColorimetry>(),
+        },
+    ),
+    (
+        "GstVideoCropMeta",
+        Layout {
+            size: size_of::<GstVideoCropMeta>(),
+            alignment: align_of::<GstVideoCropMeta>(),
+        },
+    ),
+    (
+        "GstVideoDecoder",
+        Layout {
+            size: size_of::<GstVideoDecoder>(),
+            alignment: align_of::<GstVideoDecoder>(),
+        },
+    ),
+    (
+        "GstVideoDecoderClass",
+        Layout {
+            size: size_of::<GstVideoDecoderClass>(),
+            alignment: align_of::<GstVideoDecoderClass>(),
+        },
+    ),
+    (
+        "GstVideoDirectionInterface",
+        Layout {
+            size: size_of::<GstVideoDirectionInterface>(),
+            alignment: align_of::<GstVideoDirectionInterface>(),
+        },
+    ),
+    (
+        "GstVideoDitherFlags",
+        Layout {
+            size: size_of::<GstVideoDitherFlags>(),
+            alignment: align_of::<GstVideoDitherFlags>(),
+        },
+    ),
+    (
+        "GstVideoDitherMethod",
+        Layout {
+            size: size_of::<GstVideoDitherMethod>(),
+            alignment: align_of::<GstVideoDitherMethod>(),
+        },
+    ),
+    (
+        "GstVideoEncoder",
+        Layout {
+            size: size_of::<GstVideoEncoder>(),
+            alignment: align_of::<GstVideoEncoder>(),
+        },
+    ),
+    (
+        "GstVideoEncoderClass",
+        Layout {
+            size: size_of::<GstVideoEncoderClass>(),
+            alignment: align_of::<GstVideoEncoderClass>(),
+        },
+    ),
+    (
+        "GstVideoFieldOrder",
+        Layout {
+            size: size_of::<GstVideoFieldOrder>(),
+            alignment: align_of::<GstVideoFieldOrder>(),
+        },
+    ),
+    (
+        "GstVideoFilter",
+        Layout {
+            size: size_of::<GstVideoFilter>(),
+            alignment: align_of::<GstVideoFilter>(),
+        },
+    ),
+    (
+        "GstVideoFilterClass",
+        Layout {
+            size: size_of::<GstVideoFilterClass>(),
+            alignment: align_of::<GstVideoFilterClass>(),
+        },
+    ),
+    (
+        "GstVideoFlags",
+        Layout {
+            size: size_of::<GstVideoFlags>(),
+            alignment: align_of::<GstVideoFlags>(),
+        },
+    ),
+    (
+        "GstVideoFormat",
+        Layout {
+            size: size_of::<GstVideoFormat>(),
+            alignment: align_of::<GstVideoFormat>(),
+        },
+    ),
+    (
+        "GstVideoFormatFlags",
+        Layout {
+            size: size_of::<GstVideoFormatFlags>(),
+            alignment: align_of::<GstVideoFormatFlags>(),
+        },
+    ),
+    (
+        "GstVideoFormatInfo",
+        Layout {
+            size: size_of::<GstVideoFormatInfo>(),
+            alignment: align_of::<GstVideoFormatInfo>(),
+        },
+    ),
+    (
+        "GstVideoFrame",
+        Layout {
+            size: size_of::<GstVideoFrame>(),
+            alignment: align_of::<GstVideoFrame>(),
+        },
+    ),
+    (
+        "GstVideoFrameFlags",
+        Layout {
+            size: size_of::<GstVideoFrameFlags>(),
+            alignment: align_of::<GstVideoFrameFlags>(),
+        },
+    ),
+    (
+        "GstVideoFrameMapFlags",
+        Layout {
+            size: size_of::<GstVideoFrameMapFlags>(),
+            alignment: align_of::<GstVideoFrameMapFlags>(),
+        },
+    ),
+    (
+        "GstVideoGLTextureOrientation",
+        Layout {
+            size: size_of::<GstVideoGLTextureOrientation>(),
+            alignment: align_of::<GstVideoGLTextureOrientation>(),
+        },
+    ),
+    (
+        "GstVideoGLTextureType",
+        Layout {
+            size: size_of::<GstVideoGLTextureType>(),
+            alignment: align_of::<GstVideoGLTextureType>(),
+        },
+    ),
+    (
+        "GstVideoGLTextureUploadMeta",
+        Layout {
+            size: size_of::<GstVideoGLTextureUploadMeta>(),
+            alignment: align_of::<GstVideoGLTextureUploadMeta>(),
+        },
+    ),
+    (
+        "GstVideoGammaMode",
+        Layout {
+            size: size_of::<GstVideoGammaMode>(),
+            alignment: align_of::<GstVideoGammaMode>(),
+        },
+    ),
+    (
+        "GstVideoInfo",
+        Layout {
+            size: size_of::<GstVideoInfo>(),
+            alignment: align_of::<GstVideoInfo>(),
+        },
+    ),
+    (
+        "GstVideoInterlaceMode",
+        Layout {
+            size: size_of::<GstVideoInterlaceMode>(),
+            alignment: align_of::<GstVideoInterlaceMode>(),
+        },
+    ),
+    (
+        "GstVideoMatrixMode",
+        Layout {
+            size: size_of::<GstVideoMatrixMode>(),
+            alignment: align_of::<GstVideoMatrixMode>(),
+        },
+    ),
+    (
+        "GstVideoMeta",
+        Layout {
+            size: size_of::<GstVideoMeta>(),
+            alignment: align_of::<GstVideoMeta>(),
+        },
+    ),
+    (
+        "GstVideoMetaTransform",
+        Layout {
+            size: size_of::<GstVideoMetaTransform>(),
+            alignment: align_of::<GstVideoMetaTransform>(),
+        },
+    ),
+    (
+        "GstVideoMultiviewFlags",
+        Layout {
+            size: size_of::<GstVideoMultiviewFlags>(),
+            alignment: align_of::<GstVideoMultiviewFlags>(),
+        },
+    ),
+    (
+        "GstVideoMultiviewFramePacking",
+        Layout {
+            size: size_of::<GstVideoMultiviewFramePacking>(),
+            alignment: align_of::<GstVideoMultiviewFramePacking>(),
+        },
+    ),
+    (
+        "GstVideoMultiviewMode",
+        Layout {
+            size: size_of::<GstVideoMultiviewMode>(),
+            alignment: align_of::<GstVideoMultiviewMode>(),
+        },
+    ),
+    (
+        "GstVideoOrientationInterface",
+        Layout {
+            size: size_of::<GstVideoOrientationInterface>(),
+            alignment: align_of::<GstVideoOrientationInterface>(),
+        },
+    ),
+    (
+        "GstVideoOrientationMethod",
+        Layout {
+            size: size_of::<GstVideoOrientationMethod>(),
+            alignment: align_of::<GstVideoOrientationMethod>(),
+        },
+    ),
+    (
+        "GstVideoOverlayCompositionMeta",
+        Layout {
+            size: size_of::<GstVideoOverlayCompositionMeta>(),
+            alignment: align_of::<GstVideoOverlayCompositionMeta>(),
+        },
+    ),
+    (
+        "GstVideoOverlayFormatFlags",
+        Layout {
+            size: size_of::<GstVideoOverlayFormatFlags>(),
+            alignment: align_of::<GstVideoOverlayFormatFlags>(),
+        },
+    ),
+    (
+        "GstVideoOverlayInterface",
+        Layout {
+            size: size_of::<GstVideoOverlayInterface>(),
+            alignment: align_of::<GstVideoOverlayInterface>(),
+        },
+    ),
+    (
+        "GstVideoPackFlags",
+        Layout {
+            size: size_of::<GstVideoPackFlags>(),
+            alignment: align_of::<GstVideoPackFlags>(),
+        },
+    ),
+    (
+        "GstVideoPrimariesMode",
+        Layout {
+            size: size_of::<GstVideoPrimariesMode>(),
+            alignment: align_of::<GstVideoPrimariesMode>(),
+        },
+    ),
+    (
+        "GstVideoRectangle",
+        Layout {
+            size: size_of::<GstVideoRectangle>(),
+            alignment: align_of::<GstVideoRectangle>(),
+        },
+    ),
+    (
+        "GstVideoRegionOfInterestMeta",
+        Layout {
+            size: size_of::<GstVideoRegionOfInterestMeta>(),
+            alignment: align_of::<GstVideoRegionOfInterestMeta>(),
+        },
+    ),
+    (
+        "GstVideoResampler",
+        Layout {
+            size: size_of::<GstVideoResampler>(),
+            alignment: align_of::<GstVideoResampler>(),
+        },
+    ),
+    (
+        "GstVideoResamplerFlags",
+        Layout {
+            size: size_of::<GstVideoResamplerFlags>(),
+            alignment: align_of::<GstVideoResamplerFlags>(),
+        },
+    ),
+    (
+        "GstVideoResamplerMethod",
+        Layout {
+            size: size_of::<GstVideoResamplerMethod>(),
+            alignment: align_of::<GstVideoResamplerMethod>(),
+        },
+    ),
+    (
+        "GstVideoScalerFlags",
+        Layout {
+            size: size_of::<GstVideoScalerFlags>(),
+            alignment: align_of::<GstVideoScalerFlags>(),
+        },
+    ),
+    (
+        "GstVideoSink",
+        Layout {
+            size: size_of::<GstVideoSink>(),
+            alignment: align_of::<GstVideoSink>(),
+        },
+    ),
+    (
+        "GstVideoSinkClass",
+        Layout {
+            size: size_of::<GstVideoSinkClass>(),
+            alignment: align_of::<GstVideoSinkClass>(),
+        },
+    ),
+    (
+        "GstVideoTileMode",
+        Layout {
+            size: size_of::<GstVideoTileMode>(),
+            alignment: align_of::<GstVideoTileMode>(),
+        },
+    ),
+    (
+        "GstVideoTileType",
+        Layout {
+            size: size_of::<GstVideoTileType>(),
+            alignment: align_of::<GstVideoTileType>(),
+        },
+    ),
+    (
+        "GstVideoTimeCode",
+        Layout {
+            size: size_of::<GstVideoTimeCode>(),
+            alignment: align_of::<GstVideoTimeCode>(),
+        },
+    ),
+    (
+        "GstVideoTimeCodeConfig",
+        Layout {
+            size: size_of::<GstVideoTimeCodeConfig>(),
+            alignment: align_of::<GstVideoTimeCodeConfig>(),
+        },
+    ),
+    (
+        "GstVideoTimeCodeFlags",
+        Layout {
+            size: size_of::<GstVideoTimeCodeFlags>(),
+            alignment: align_of::<GstVideoTimeCodeFlags>(),
+        },
+    ),
+    (
+        "GstVideoTimeCodeInterval",
+        Layout {
+            size: size_of::<GstVideoTimeCodeInterval>(),
+            alignment: align_of::<GstVideoTimeCodeInterval>(),
+        },
+    ),
+    (
+        "GstVideoTimeCodeMeta",
+        Layout {
+            size: size_of::<GstVideoTimeCodeMeta>(),
+            alignment: align_of::<GstVideoTimeCodeMeta>(),
+        },
+    ),
+    (
+        "GstVideoTransferFunction",
+        Layout {
+            size: size_of::<GstVideoTransferFunction>(),
+            alignment: align_of::<GstVideoTransferFunction>(),
+        },
+    ),
+    (
+        "GstVideoVBIParserResult",
+        Layout {
+            size: size_of::<GstVideoVBIParserResult>(),
+            alignment: align_of::<GstVideoVBIParserResult>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -735,5 +1294,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_VIDEO_VBI_PARSER_RESULT_ERROR", "2"),
     ("(gint) GST_VIDEO_VBI_PARSER_RESULT_OK", "1"),
 ];
-
-

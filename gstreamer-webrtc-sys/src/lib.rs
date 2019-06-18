@@ -3,18 +3,23 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
-extern crate gstreamer_sys as gst;
 extern crate gstreamer_sdp_sys as gst_sdp;
+extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -143,10 +148,13 @@ pub struct GstWebRTCDTLSTransportClass {
 
 impl ::std::fmt::Debug for GstWebRTCDTLSTransportClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCDTLSTransportClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_padding", &self._padding)
-         .finish()
+        f.debug_struct(&format!(
+            "GstWebRTCDTLSTransportClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("_padding", &self._padding)
+        .finish()
     }
 }
 
@@ -160,11 +168,14 @@ pub struct GstWebRTCICETransportClass {
 
 impl ::std::fmt::Debug for GstWebRTCICETransportClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCICETransportClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("gather_candidates", &self.gather_candidates)
-         .field("_padding", &self._padding)
-         .finish()
+        f.debug_struct(&format!(
+            "GstWebRTCICETransportClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("gather_candidates", &self.gather_candidates)
+        .field("_padding", &self._padding)
+        .finish()
     }
 }
 
@@ -177,10 +188,13 @@ pub struct GstWebRTCRTPReceiverClass {
 
 impl ::std::fmt::Debug for GstWebRTCRTPReceiverClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCRTPReceiverClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_padding", &self._padding)
-         .finish()
+        f.debug_struct(&format!(
+            "GstWebRTCRTPReceiverClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("_padding", &self._padding)
+        .finish()
     }
 }
 
@@ -194,9 +208,9 @@ pub struct GstWebRTCRTPSenderClass {
 impl ::std::fmt::Debug for GstWebRTCRTPSenderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstWebRTCRTPSenderClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -209,10 +223,13 @@ pub struct GstWebRTCRTPTransceiverClass {
 
 impl ::std::fmt::Debug for GstWebRTCRTPTransceiverClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCRTPTransceiverClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_padding", &self._padding)
-         .finish()
+        f.debug_struct(&format!(
+            "GstWebRTCRTPTransceiverClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("_padding", &self._padding)
+        .finish()
     }
 }
 
@@ -225,10 +242,13 @@ pub struct GstWebRTCSessionDescription {
 
 impl ::std::fmt::Debug for GstWebRTCSessionDescription {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstWebRTCSessionDescription @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("sdp", &self.sdp)
-         .finish()
+        f.debug_struct(&format!(
+            "GstWebRTCSessionDescription @ {:?}",
+            self as *const _
+        ))
+        .field("type_", &self.type_)
+        .field("sdp", &self.sdp)
+        .finish()
     }
 }
 
@@ -250,16 +270,16 @@ pub struct GstWebRTCDTLSTransport {
 impl ::std::fmt::Debug for GstWebRTCDTLSTransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstWebRTCDTLSTransport @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("transport", &self.transport)
-         .field("state", &self.state)
-         .field("is_rtcp", &self.is_rtcp)
-         .field("client", &self.client)
-         .field("session_id", &self.session_id)
-         .field("dtlssrtpenc", &self.dtlssrtpenc)
-         .field("dtlssrtpdec", &self.dtlssrtpdec)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("parent", &self.parent)
+            .field("transport", &self.transport)
+            .field("state", &self.state)
+            .field("is_rtcp", &self.is_rtcp)
+            .field("client", &self.client)
+            .field("session_id", &self.session_id)
+            .field("dtlssrtpenc", &self.dtlssrtpenc)
+            .field("dtlssrtpdec", &self.dtlssrtpdec)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -279,15 +299,15 @@ pub struct GstWebRTCICETransport {
 impl ::std::fmt::Debug for GstWebRTCICETransport {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstWebRTCICETransport @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("role", &self.role)
-         .field("component", &self.component)
-         .field("state", &self.state)
-         .field("gathering_state", &self.gathering_state)
-         .field("src", &self.src)
-         .field("sink", &self.sink)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("parent", &self.parent)
+            .field("role", &self.role)
+            .field("component", &self.component)
+            .field("state", &self.state)
+            .field("gathering_state", &self.gathering_state)
+            .field("src", &self.src)
+            .field("sink", &self.sink)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -303,11 +323,11 @@ pub struct GstWebRTCRTPReceiver {
 impl ::std::fmt::Debug for GstWebRTCRTPReceiver {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstWebRTCRTPReceiver @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("transport", &self.transport)
-         .field("rtcp_transport", &self.rtcp_transport)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("parent", &self.parent)
+            .field("transport", &self.transport)
+            .field("rtcp_transport", &self.rtcp_transport)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -324,12 +344,12 @@ pub struct GstWebRTCRTPSender {
 impl ::std::fmt::Debug for GstWebRTCRTPSender {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstWebRTCRTPSender @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("transport", &self.transport)
-         .field("rtcp_transport", &self.rtcp_transport)
-         .field("send_encodings", &self.send_encodings)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("parent", &self.parent)
+            .field("transport", &self.transport)
+            .field("rtcp_transport", &self.rtcp_transport)
+            .field("send_encodings", &self.send_encodings)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -351,17 +371,17 @@ pub struct GstWebRTCRTPTransceiver {
 impl ::std::fmt::Debug for GstWebRTCRTPTransceiver {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstWebRTCRTPTransceiver @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("mline", &self.mline)
-         .field("mid", &self.mid)
-         .field("stopped", &self.stopped)
-         .field("sender", &self.sender)
-         .field("receiver", &self.receiver)
-         .field("direction", &self.direction)
-         .field("current_direction", &self.current_direction)
-         .field("codec_preferences", &self.codec_preferences)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("parent", &self.parent)
+            .field("mline", &self.mline)
+            .field("mid", &self.mid)
+            .field("stopped", &self.stopped)
+            .field("sender", &self.sender)
+            .field("receiver", &self.receiver)
+            .field("direction", &self.direction)
+            .field("current_direction", &self.current_direction)
+            .field("codec_preferences", &self.codec_preferences)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -457,24 +477,46 @@ extern "C" {
     // GstWebRTCSessionDescription
     //=========================================================================
     pub fn gst_webrtc_session_description_get_type() -> GType;
-    pub fn gst_webrtc_session_description_new(type_: GstWebRTCSDPType, sdp: *mut gst_sdp::GstSDPMessage) -> *mut GstWebRTCSessionDescription;
-    pub fn gst_webrtc_session_description_copy(src: *const GstWebRTCSessionDescription) -> *mut GstWebRTCSessionDescription;
+    pub fn gst_webrtc_session_description_new(
+        type_: GstWebRTCSDPType,
+        sdp: *mut gst_sdp::GstSDPMessage,
+    ) -> *mut GstWebRTCSessionDescription;
+    pub fn gst_webrtc_session_description_copy(
+        src: *const GstWebRTCSessionDescription,
+    ) -> *mut GstWebRTCSessionDescription;
     pub fn gst_webrtc_session_description_free(desc: *mut GstWebRTCSessionDescription);
 
     //=========================================================================
     // GstWebRTCDTLSTransport
     //=========================================================================
     pub fn gst_webrtc_dtls_transport_get_type() -> GType;
-    pub fn gst_webrtc_dtls_transport_new(session_id: c_uint, rtcp: gboolean) -> *mut GstWebRTCDTLSTransport;
-    pub fn gst_webrtc_dtls_transport_set_transport(transport: *mut GstWebRTCDTLSTransport, ice: *mut GstWebRTCICETransport);
+    pub fn gst_webrtc_dtls_transport_new(
+        session_id: c_uint,
+        rtcp: gboolean,
+    ) -> *mut GstWebRTCDTLSTransport;
+    pub fn gst_webrtc_dtls_transport_set_transport(
+        transport: *mut GstWebRTCDTLSTransport,
+        ice: *mut GstWebRTCICETransport,
+    );
 
     //=========================================================================
     // GstWebRTCICETransport
     //=========================================================================
     pub fn gst_webrtc_ice_transport_get_type() -> GType;
-    pub fn gst_webrtc_ice_transport_connection_state_change(ice: *mut GstWebRTCICETransport, new_state: GstWebRTCICEConnectionState);
-    pub fn gst_webrtc_ice_transport_gathering_state_change(ice: *mut GstWebRTCICETransport, new_state: GstWebRTCICEGatheringState);
-    pub fn gst_webrtc_ice_transport_new_candidate(ice: *mut GstWebRTCICETransport, stream_id: c_uint, component: GstWebRTCICEComponent, attr: *mut c_char);
+    pub fn gst_webrtc_ice_transport_connection_state_change(
+        ice: *mut GstWebRTCICETransport,
+        new_state: GstWebRTCICEConnectionState,
+    );
+    pub fn gst_webrtc_ice_transport_gathering_state_change(
+        ice: *mut GstWebRTCICETransport,
+        new_state: GstWebRTCICEGatheringState,
+    );
+    pub fn gst_webrtc_ice_transport_new_candidate(
+        ice: *mut GstWebRTCICETransport,
+        stream_id: c_uint,
+        component: GstWebRTCICEComponent,
+        attr: *mut c_char,
+    );
     pub fn gst_webrtc_ice_transport_selected_pair_change(ice: *mut GstWebRTCICETransport);
 
     //=========================================================================
@@ -482,16 +524,28 @@ extern "C" {
     //=========================================================================
     pub fn gst_webrtc_rtp_receiver_get_type() -> GType;
     pub fn gst_webrtc_rtp_receiver_new() -> *mut GstWebRTCRTPReceiver;
-    pub fn gst_webrtc_rtp_receiver_set_rtcp_transport(receiver: *mut GstWebRTCRTPReceiver, transport: *mut GstWebRTCDTLSTransport);
-    pub fn gst_webrtc_rtp_receiver_set_transport(receiver: *mut GstWebRTCRTPReceiver, transport: *mut GstWebRTCDTLSTransport);
+    pub fn gst_webrtc_rtp_receiver_set_rtcp_transport(
+        receiver: *mut GstWebRTCRTPReceiver,
+        transport: *mut GstWebRTCDTLSTransport,
+    );
+    pub fn gst_webrtc_rtp_receiver_set_transport(
+        receiver: *mut GstWebRTCRTPReceiver,
+        transport: *mut GstWebRTCDTLSTransport,
+    );
 
     //=========================================================================
     // GstWebRTCRTPSender
     //=========================================================================
     pub fn gst_webrtc_rtp_sender_get_type() -> GType;
     pub fn gst_webrtc_rtp_sender_new() -> *mut GstWebRTCRTPSender;
-    pub fn gst_webrtc_rtp_sender_set_rtcp_transport(sender: *mut GstWebRTCRTPSender, transport: *mut GstWebRTCDTLSTransport);
-    pub fn gst_webrtc_rtp_sender_set_transport(sender: *mut GstWebRTCRTPSender, transport: *mut GstWebRTCDTLSTransport);
+    pub fn gst_webrtc_rtp_sender_set_rtcp_transport(
+        sender: *mut GstWebRTCRTPSender,
+        transport: *mut GstWebRTCDTLSTransport,
+    );
+    pub fn gst_webrtc_rtp_sender_set_transport(
+        sender: *mut GstWebRTCRTPSender,
+        transport: *mut GstWebRTCDTLSTransport,
+    );
 
     //=========================================================================
     // GstWebRTCRTPTransceiver

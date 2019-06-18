@@ -5,13 +5,13 @@
 extern crate gstreamer_rtsp_server_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_rtsp_server_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_rtsp_server_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-rtsp-server-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,71 +229,372 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstRTSPAddress", Layout {size: size_of::<GstRTSPAddress>(), alignment: align_of::<GstRTSPAddress>()}),
-    ("GstRTSPAddressFlags", Layout {size: size_of::<GstRTSPAddressFlags>(), alignment: align_of::<GstRTSPAddressFlags>()}),
-    ("GstRTSPAddressPool", Layout {size: size_of::<GstRTSPAddressPool>(), alignment: align_of::<GstRTSPAddressPool>()}),
-    ("GstRTSPAddressPoolClass", Layout {size: size_of::<GstRTSPAddressPoolClass>(), alignment: align_of::<GstRTSPAddressPoolClass>()}),
-    ("GstRTSPAddressPoolResult", Layout {size: size_of::<GstRTSPAddressPoolResult>(), alignment: align_of::<GstRTSPAddressPoolResult>()}),
-    ("GstRTSPAuth", Layout {size: size_of::<GstRTSPAuth>(), alignment: align_of::<GstRTSPAuth>()}),
-    ("GstRTSPAuthClass", Layout {size: size_of::<GstRTSPAuthClass>(), alignment: align_of::<GstRTSPAuthClass>()}),
-    ("GstRTSPClient", Layout {size: size_of::<GstRTSPClient>(), alignment: align_of::<GstRTSPClient>()}),
-    ("GstRTSPClientClass", Layout {size: size_of::<GstRTSPClientClass>(), alignment: align_of::<GstRTSPClientClass>()}),
-    ("GstRTSPContext", Layout {size: size_of::<GstRTSPContext>(), alignment: align_of::<GstRTSPContext>()}),
-    ("GstRTSPFilterResult", Layout {size: size_of::<GstRTSPFilterResult>(), alignment: align_of::<GstRTSPFilterResult>()}),
-    ("GstRTSPMedia", Layout {size: size_of::<GstRTSPMedia>(), alignment: align_of::<GstRTSPMedia>()}),
-    ("GstRTSPMediaClass", Layout {size: size_of::<GstRTSPMediaClass>(), alignment: align_of::<GstRTSPMediaClass>()}),
-    ("GstRTSPMediaFactory", Layout {size: size_of::<GstRTSPMediaFactory>(), alignment: align_of::<GstRTSPMediaFactory>()}),
-    ("GstRTSPMediaFactoryClass", Layout {size: size_of::<GstRTSPMediaFactoryClass>(), alignment: align_of::<GstRTSPMediaFactoryClass>()}),
-    ("GstRTSPMediaFactoryURI", Layout {size: size_of::<GstRTSPMediaFactoryURI>(), alignment: align_of::<GstRTSPMediaFactoryURI>()}),
-    ("GstRTSPMediaFactoryURIClass", Layout {size: size_of::<GstRTSPMediaFactoryURIClass>(), alignment: align_of::<GstRTSPMediaFactoryURIClass>()}),
-    ("GstRTSPMediaStatus", Layout {size: size_of::<GstRTSPMediaStatus>(), alignment: align_of::<GstRTSPMediaStatus>()}),
-    ("GstRTSPMountPoints", Layout {size: size_of::<GstRTSPMountPoints>(), alignment: align_of::<GstRTSPMountPoints>()}),
-    ("GstRTSPMountPointsClass", Layout {size: size_of::<GstRTSPMountPointsClass>(), alignment: align_of::<GstRTSPMountPointsClass>()}),
-    ("GstRTSPOnvifClient", Layout {size: size_of::<GstRTSPOnvifClient>(), alignment: align_of::<GstRTSPOnvifClient>()}),
-    ("GstRTSPOnvifClientClass", Layout {size: size_of::<GstRTSPOnvifClientClass>(), alignment: align_of::<GstRTSPOnvifClientClass>()}),
-    ("GstRTSPOnvifMedia", Layout {size: size_of::<GstRTSPOnvifMedia>(), alignment: align_of::<GstRTSPOnvifMedia>()}),
-    ("GstRTSPOnvifMediaClass", Layout {size: size_of::<GstRTSPOnvifMediaClass>(), alignment: align_of::<GstRTSPOnvifMediaClass>()}),
-    ("GstRTSPOnvifMediaFactory", Layout {size: size_of::<GstRTSPOnvifMediaFactory>(), alignment: align_of::<GstRTSPOnvifMediaFactory>()}),
-    ("GstRTSPOnvifMediaFactoryClass", Layout {size: size_of::<GstRTSPOnvifMediaFactoryClass>(), alignment: align_of::<GstRTSPOnvifMediaFactoryClass>()}),
-    ("GstRTSPOnvifServer", Layout {size: size_of::<GstRTSPOnvifServer>(), alignment: align_of::<GstRTSPOnvifServer>()}),
-    ("GstRTSPOnvifServerClass", Layout {size: size_of::<GstRTSPOnvifServerClass>(), alignment: align_of::<GstRTSPOnvifServerClass>()}),
-    ("GstRTSPPermissions", Layout {size: size_of::<GstRTSPPermissions>(), alignment: align_of::<GstRTSPPermissions>()}),
-    ("GstRTSPPublishClockMode", Layout {size: size_of::<GstRTSPPublishClockMode>(), alignment: align_of::<GstRTSPPublishClockMode>()}),
-    ("GstRTSPServer", Layout {size: size_of::<GstRTSPServer>(), alignment: align_of::<GstRTSPServer>()}),
-    ("GstRTSPServerClass", Layout {size: size_of::<GstRTSPServerClass>(), alignment: align_of::<GstRTSPServerClass>()}),
-    ("GstRTSPSession", Layout {size: size_of::<GstRTSPSession>(), alignment: align_of::<GstRTSPSession>()}),
-    ("GstRTSPSessionClass", Layout {size: size_of::<GstRTSPSessionClass>(), alignment: align_of::<GstRTSPSessionClass>()}),
-    ("GstRTSPSessionMedia", Layout {size: size_of::<GstRTSPSessionMedia>(), alignment: align_of::<GstRTSPSessionMedia>()}),
-    ("GstRTSPSessionMediaClass", Layout {size: size_of::<GstRTSPSessionMediaClass>(), alignment: align_of::<GstRTSPSessionMediaClass>()}),
-    ("GstRTSPSessionPool", Layout {size: size_of::<GstRTSPSessionPool>(), alignment: align_of::<GstRTSPSessionPool>()}),
-    ("GstRTSPSessionPoolClass", Layout {size: size_of::<GstRTSPSessionPoolClass>(), alignment: align_of::<GstRTSPSessionPoolClass>()}),
-    ("GstRTSPStream", Layout {size: size_of::<GstRTSPStream>(), alignment: align_of::<GstRTSPStream>()}),
-    ("GstRTSPStreamClass", Layout {size: size_of::<GstRTSPStreamClass>(), alignment: align_of::<GstRTSPStreamClass>()}),
-    ("GstRTSPStreamTransport", Layout {size: size_of::<GstRTSPStreamTransport>(), alignment: align_of::<GstRTSPStreamTransport>()}),
-    ("GstRTSPStreamTransportClass", Layout {size: size_of::<GstRTSPStreamTransportClass>(), alignment: align_of::<GstRTSPStreamTransportClass>()}),
-    ("GstRTSPSuspendMode", Layout {size: size_of::<GstRTSPSuspendMode>(), alignment: align_of::<GstRTSPSuspendMode>()}),
-    ("GstRTSPThread", Layout {size: size_of::<GstRTSPThread>(), alignment: align_of::<GstRTSPThread>()}),
-    ("GstRTSPThreadPool", Layout {size: size_of::<GstRTSPThreadPool>(), alignment: align_of::<GstRTSPThreadPool>()}),
-    ("GstRTSPThreadPoolClass", Layout {size: size_of::<GstRTSPThreadPoolClass>(), alignment: align_of::<GstRTSPThreadPoolClass>()}),
-    ("GstRTSPThreadType", Layout {size: size_of::<GstRTSPThreadType>(), alignment: align_of::<GstRTSPThreadType>()}),
-    ("GstRTSPToken", Layout {size: size_of::<GstRTSPToken>(), alignment: align_of::<GstRTSPToken>()}),
-    ("GstRTSPTransportMode", Layout {size: size_of::<GstRTSPTransportMode>(), alignment: align_of::<GstRTSPTransportMode>()}),
-    ("GstSDPInfo", Layout {size: size_of::<GstSDPInfo>(), alignment: align_of::<GstSDPInfo>()}),
+    (
+        "GstRTSPAddress",
+        Layout {
+            size: size_of::<GstRTSPAddress>(),
+            alignment: align_of::<GstRTSPAddress>(),
+        },
+    ),
+    (
+        "GstRTSPAddressFlags",
+        Layout {
+            size: size_of::<GstRTSPAddressFlags>(),
+            alignment: align_of::<GstRTSPAddressFlags>(),
+        },
+    ),
+    (
+        "GstRTSPAddressPool",
+        Layout {
+            size: size_of::<GstRTSPAddressPool>(),
+            alignment: align_of::<GstRTSPAddressPool>(),
+        },
+    ),
+    (
+        "GstRTSPAddressPoolClass",
+        Layout {
+            size: size_of::<GstRTSPAddressPoolClass>(),
+            alignment: align_of::<GstRTSPAddressPoolClass>(),
+        },
+    ),
+    (
+        "GstRTSPAddressPoolResult",
+        Layout {
+            size: size_of::<GstRTSPAddressPoolResult>(),
+            alignment: align_of::<GstRTSPAddressPoolResult>(),
+        },
+    ),
+    (
+        "GstRTSPAuth",
+        Layout {
+            size: size_of::<GstRTSPAuth>(),
+            alignment: align_of::<GstRTSPAuth>(),
+        },
+    ),
+    (
+        "GstRTSPAuthClass",
+        Layout {
+            size: size_of::<GstRTSPAuthClass>(),
+            alignment: align_of::<GstRTSPAuthClass>(),
+        },
+    ),
+    (
+        "GstRTSPClient",
+        Layout {
+            size: size_of::<GstRTSPClient>(),
+            alignment: align_of::<GstRTSPClient>(),
+        },
+    ),
+    (
+        "GstRTSPClientClass",
+        Layout {
+            size: size_of::<GstRTSPClientClass>(),
+            alignment: align_of::<GstRTSPClientClass>(),
+        },
+    ),
+    (
+        "GstRTSPContext",
+        Layout {
+            size: size_of::<GstRTSPContext>(),
+            alignment: align_of::<GstRTSPContext>(),
+        },
+    ),
+    (
+        "GstRTSPFilterResult",
+        Layout {
+            size: size_of::<GstRTSPFilterResult>(),
+            alignment: align_of::<GstRTSPFilterResult>(),
+        },
+    ),
+    (
+        "GstRTSPMedia",
+        Layout {
+            size: size_of::<GstRTSPMedia>(),
+            alignment: align_of::<GstRTSPMedia>(),
+        },
+    ),
+    (
+        "GstRTSPMediaClass",
+        Layout {
+            size: size_of::<GstRTSPMediaClass>(),
+            alignment: align_of::<GstRTSPMediaClass>(),
+        },
+    ),
+    (
+        "GstRTSPMediaFactory",
+        Layout {
+            size: size_of::<GstRTSPMediaFactory>(),
+            alignment: align_of::<GstRTSPMediaFactory>(),
+        },
+    ),
+    (
+        "GstRTSPMediaFactoryClass",
+        Layout {
+            size: size_of::<GstRTSPMediaFactoryClass>(),
+            alignment: align_of::<GstRTSPMediaFactoryClass>(),
+        },
+    ),
+    (
+        "GstRTSPMediaFactoryURI",
+        Layout {
+            size: size_of::<GstRTSPMediaFactoryURI>(),
+            alignment: align_of::<GstRTSPMediaFactoryURI>(),
+        },
+    ),
+    (
+        "GstRTSPMediaFactoryURIClass",
+        Layout {
+            size: size_of::<GstRTSPMediaFactoryURIClass>(),
+            alignment: align_of::<GstRTSPMediaFactoryURIClass>(),
+        },
+    ),
+    (
+        "GstRTSPMediaStatus",
+        Layout {
+            size: size_of::<GstRTSPMediaStatus>(),
+            alignment: align_of::<GstRTSPMediaStatus>(),
+        },
+    ),
+    (
+        "GstRTSPMountPoints",
+        Layout {
+            size: size_of::<GstRTSPMountPoints>(),
+            alignment: align_of::<GstRTSPMountPoints>(),
+        },
+    ),
+    (
+        "GstRTSPMountPointsClass",
+        Layout {
+            size: size_of::<GstRTSPMountPointsClass>(),
+            alignment: align_of::<GstRTSPMountPointsClass>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifClient",
+        Layout {
+            size: size_of::<GstRTSPOnvifClient>(),
+            alignment: align_of::<GstRTSPOnvifClient>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifClientClass",
+        Layout {
+            size: size_of::<GstRTSPOnvifClientClass>(),
+            alignment: align_of::<GstRTSPOnvifClientClass>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifMedia",
+        Layout {
+            size: size_of::<GstRTSPOnvifMedia>(),
+            alignment: align_of::<GstRTSPOnvifMedia>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifMediaClass",
+        Layout {
+            size: size_of::<GstRTSPOnvifMediaClass>(),
+            alignment: align_of::<GstRTSPOnvifMediaClass>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifMediaFactory",
+        Layout {
+            size: size_of::<GstRTSPOnvifMediaFactory>(),
+            alignment: align_of::<GstRTSPOnvifMediaFactory>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifMediaFactoryClass",
+        Layout {
+            size: size_of::<GstRTSPOnvifMediaFactoryClass>(),
+            alignment: align_of::<GstRTSPOnvifMediaFactoryClass>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifServer",
+        Layout {
+            size: size_of::<GstRTSPOnvifServer>(),
+            alignment: align_of::<GstRTSPOnvifServer>(),
+        },
+    ),
+    (
+        "GstRTSPOnvifServerClass",
+        Layout {
+            size: size_of::<GstRTSPOnvifServerClass>(),
+            alignment: align_of::<GstRTSPOnvifServerClass>(),
+        },
+    ),
+    (
+        "GstRTSPPermissions",
+        Layout {
+            size: size_of::<GstRTSPPermissions>(),
+            alignment: align_of::<GstRTSPPermissions>(),
+        },
+    ),
+    (
+        "GstRTSPPublishClockMode",
+        Layout {
+            size: size_of::<GstRTSPPublishClockMode>(),
+            alignment: align_of::<GstRTSPPublishClockMode>(),
+        },
+    ),
+    (
+        "GstRTSPServer",
+        Layout {
+            size: size_of::<GstRTSPServer>(),
+            alignment: align_of::<GstRTSPServer>(),
+        },
+    ),
+    (
+        "GstRTSPServerClass",
+        Layout {
+            size: size_of::<GstRTSPServerClass>(),
+            alignment: align_of::<GstRTSPServerClass>(),
+        },
+    ),
+    (
+        "GstRTSPSession",
+        Layout {
+            size: size_of::<GstRTSPSession>(),
+            alignment: align_of::<GstRTSPSession>(),
+        },
+    ),
+    (
+        "GstRTSPSessionClass",
+        Layout {
+            size: size_of::<GstRTSPSessionClass>(),
+            alignment: align_of::<GstRTSPSessionClass>(),
+        },
+    ),
+    (
+        "GstRTSPSessionMedia",
+        Layout {
+            size: size_of::<GstRTSPSessionMedia>(),
+            alignment: align_of::<GstRTSPSessionMedia>(),
+        },
+    ),
+    (
+        "GstRTSPSessionMediaClass",
+        Layout {
+            size: size_of::<GstRTSPSessionMediaClass>(),
+            alignment: align_of::<GstRTSPSessionMediaClass>(),
+        },
+    ),
+    (
+        "GstRTSPSessionPool",
+        Layout {
+            size: size_of::<GstRTSPSessionPool>(),
+            alignment: align_of::<GstRTSPSessionPool>(),
+        },
+    ),
+    (
+        "GstRTSPSessionPoolClass",
+        Layout {
+            size: size_of::<GstRTSPSessionPoolClass>(),
+            alignment: align_of::<GstRTSPSessionPoolClass>(),
+        },
+    ),
+    (
+        "GstRTSPStream",
+        Layout {
+            size: size_of::<GstRTSPStream>(),
+            alignment: align_of::<GstRTSPStream>(),
+        },
+    ),
+    (
+        "GstRTSPStreamClass",
+        Layout {
+            size: size_of::<GstRTSPStreamClass>(),
+            alignment: align_of::<GstRTSPStreamClass>(),
+        },
+    ),
+    (
+        "GstRTSPStreamTransport",
+        Layout {
+            size: size_of::<GstRTSPStreamTransport>(),
+            alignment: align_of::<GstRTSPStreamTransport>(),
+        },
+    ),
+    (
+        "GstRTSPStreamTransportClass",
+        Layout {
+            size: size_of::<GstRTSPStreamTransportClass>(),
+            alignment: align_of::<GstRTSPStreamTransportClass>(),
+        },
+    ),
+    (
+        "GstRTSPSuspendMode",
+        Layout {
+            size: size_of::<GstRTSPSuspendMode>(),
+            alignment: align_of::<GstRTSPSuspendMode>(),
+        },
+    ),
+    (
+        "GstRTSPThread",
+        Layout {
+            size: size_of::<GstRTSPThread>(),
+            alignment: align_of::<GstRTSPThread>(),
+        },
+    ),
+    (
+        "GstRTSPThreadPool",
+        Layout {
+            size: size_of::<GstRTSPThreadPool>(),
+            alignment: align_of::<GstRTSPThreadPool>(),
+        },
+    ),
+    (
+        "GstRTSPThreadPoolClass",
+        Layout {
+            size: size_of::<GstRTSPThreadPoolClass>(),
+            alignment: align_of::<GstRTSPThreadPoolClass>(),
+        },
+    ),
+    (
+        "GstRTSPThreadType",
+        Layout {
+            size: size_of::<GstRTSPThreadType>(),
+            alignment: align_of::<GstRTSPThreadType>(),
+        },
+    ),
+    (
+        "GstRTSPToken",
+        Layout {
+            size: size_of::<GstRTSPToken>(),
+            alignment: align_of::<GstRTSPToken>(),
+        },
+    ),
+    (
+        "GstRTSPTransportMode",
+        Layout {
+            size: size_of::<GstRTSPTransportMode>(),
+            alignment: align_of::<GstRTSPTransportMode>(),
+        },
+    ),
+    (
+        "GstSDPInfo",
+        Layout {
+            size: size_of::<GstSDPInfo>(),
+            alignment: align_of::<GstSDPInfo>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -305,9 +612,18 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_ADDRESS_POOL_ERESERVED", "-2"),
     ("(gint) GST_RTSP_ADDRESS_POOL_OK", "0"),
     ("GST_RTSP_AUTH_CHECK_CONNECT", "auth.check.connect"),
-    ("GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS", "auth.check.media.factory.access"),
-    ("GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT", "auth.check.media.factory.construct"),
-    ("GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS", "auth.check.transport.client-settings"),
+    (
+        "GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_ACCESS",
+        "auth.check.media.factory.access",
+    ),
+    (
+        "GST_RTSP_AUTH_CHECK_MEDIA_FACTORY_CONSTRUCT",
+        "auth.check.media.factory.construct",
+    ),
+    (
+        "GST_RTSP_AUTH_CHECK_TRANSPORT_CLIENT_SETTINGS",
+        "auth.check.transport.client-settings",
+    ),
     ("GST_RTSP_AUTH_CHECK_URL", "auth.check.url"),
     ("(gint) GST_RTSP_FILTER_KEEP", "1"),
     ("(gint) GST_RTSP_FILTER_REF", "2"),
@@ -318,9 +634,15 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_MEDIA_STATUS_SUSPENDED", "4"),
     ("(gint) GST_RTSP_MEDIA_STATUS_UNPREPARED", "0"),
     ("(gint) GST_RTSP_MEDIA_STATUS_UNPREPARING", "1"),
-    ("GST_RTSP_ONVIF_BACKCHANNEL_REQUIREMENT", "www.onvif.org/ver20/backchannel"),
+    (
+        "GST_RTSP_ONVIF_BACKCHANNEL_REQUIREMENT",
+        "www.onvif.org/ver20/backchannel",
+    ),
     ("GST_RTSP_PERM_MEDIA_FACTORY_ACCESS", "media.factory.access"),
-    ("GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT", "media.factory.construct"),
+    (
+        "GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT",
+        "media.factory.construct",
+    ),
     ("(gint) GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK", "1"),
     ("(gint) GST_RTSP_PUBLISH_CLOCK_MODE_CLOCK_AND_OFFSET", "2"),
     ("(gint) GST_RTSP_PUBLISH_CLOCK_MODE_NONE", "0"),
@@ -330,9 +652,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_THREAD_TYPE_CLIENT", "0"),
     ("(gint) GST_RTSP_THREAD_TYPE_MEDIA", "1"),
     ("GST_RTSP_TOKEN_MEDIA_FACTORY_ROLE", "media.factory.role"),
-    ("GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS", "transport.client-settings"),
+    (
+        "GST_RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS",
+        "transport.client-settings",
+    ),
     ("(guint) GST_RTSP_TRANSPORT_MODE_PLAY", "1"),
     ("(guint) GST_RTSP_TRANSPORT_MODE_RECORD", "2"),
 ];
-
-

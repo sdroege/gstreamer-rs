@@ -5,13 +5,13 @@
 extern crate gstreamer_webrtc_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_webrtc_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_webrtc_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-webrtc-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,49 +229,218 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstWebRTCBundlePolicy", Layout {size: size_of::<GstWebRTCBundlePolicy>(), alignment: align_of::<GstWebRTCBundlePolicy>()}),
-    ("GstWebRTCDTLSSetup", Layout {size: size_of::<GstWebRTCDTLSSetup>(), alignment: align_of::<GstWebRTCDTLSSetup>()}),
-    ("GstWebRTCDTLSTransport", Layout {size: size_of::<GstWebRTCDTLSTransport>(), alignment: align_of::<GstWebRTCDTLSTransport>()}),
-    ("GstWebRTCDTLSTransportClass", Layout {size: size_of::<GstWebRTCDTLSTransportClass>(), alignment: align_of::<GstWebRTCDTLSTransportClass>()}),
-    ("GstWebRTCDTLSTransportState", Layout {size: size_of::<GstWebRTCDTLSTransportState>(), alignment: align_of::<GstWebRTCDTLSTransportState>()}),
-    ("GstWebRTCDataChannelState", Layout {size: size_of::<GstWebRTCDataChannelState>(), alignment: align_of::<GstWebRTCDataChannelState>()}),
-    ("GstWebRTCFECType", Layout {size: size_of::<GstWebRTCFECType>(), alignment: align_of::<GstWebRTCFECType>()}),
-    ("GstWebRTCICEComponent", Layout {size: size_of::<GstWebRTCICEComponent>(), alignment: align_of::<GstWebRTCICEComponent>()}),
-    ("GstWebRTCICEConnectionState", Layout {size: size_of::<GstWebRTCICEConnectionState>(), alignment: align_of::<GstWebRTCICEConnectionState>()}),
-    ("GstWebRTCICEGatheringState", Layout {size: size_of::<GstWebRTCICEGatheringState>(), alignment: align_of::<GstWebRTCICEGatheringState>()}),
-    ("GstWebRTCICERole", Layout {size: size_of::<GstWebRTCICERole>(), alignment: align_of::<GstWebRTCICERole>()}),
-    ("GstWebRTCICETransport", Layout {size: size_of::<GstWebRTCICETransport>(), alignment: align_of::<GstWebRTCICETransport>()}),
-    ("GstWebRTCICETransportClass", Layout {size: size_of::<GstWebRTCICETransportClass>(), alignment: align_of::<GstWebRTCICETransportClass>()}),
-    ("GstWebRTCICETransportPolicy", Layout {size: size_of::<GstWebRTCICETransportPolicy>(), alignment: align_of::<GstWebRTCICETransportPolicy>()}),
-    ("GstWebRTCPeerConnectionState", Layout {size: size_of::<GstWebRTCPeerConnectionState>(), alignment: align_of::<GstWebRTCPeerConnectionState>()}),
-    ("GstWebRTCPriorityType", Layout {size: size_of::<GstWebRTCPriorityType>(), alignment: align_of::<GstWebRTCPriorityType>()}),
-    ("GstWebRTCRTPReceiver", Layout {size: size_of::<GstWebRTCRTPReceiver>(), alignment: align_of::<GstWebRTCRTPReceiver>()}),
-    ("GstWebRTCRTPReceiverClass", Layout {size: size_of::<GstWebRTCRTPReceiverClass>(), alignment: align_of::<GstWebRTCRTPReceiverClass>()}),
-    ("GstWebRTCRTPSender", Layout {size: size_of::<GstWebRTCRTPSender>(), alignment: align_of::<GstWebRTCRTPSender>()}),
-    ("GstWebRTCRTPSenderClass", Layout {size: size_of::<GstWebRTCRTPSenderClass>(), alignment: align_of::<GstWebRTCRTPSenderClass>()}),
-    ("GstWebRTCRTPTransceiver", Layout {size: size_of::<GstWebRTCRTPTransceiver>(), alignment: align_of::<GstWebRTCRTPTransceiver>()}),
-    ("GstWebRTCRTPTransceiverClass", Layout {size: size_of::<GstWebRTCRTPTransceiverClass>(), alignment: align_of::<GstWebRTCRTPTransceiverClass>()}),
-    ("GstWebRTCRTPTransceiverDirection", Layout {size: size_of::<GstWebRTCRTPTransceiverDirection>(), alignment: align_of::<GstWebRTCRTPTransceiverDirection>()}),
-    ("GstWebRTCSCTPTransportState", Layout {size: size_of::<GstWebRTCSCTPTransportState>(), alignment: align_of::<GstWebRTCSCTPTransportState>()}),
-    ("GstWebRTCSDPType", Layout {size: size_of::<GstWebRTCSDPType>(), alignment: align_of::<GstWebRTCSDPType>()}),
-    ("GstWebRTCSessionDescription", Layout {size: size_of::<GstWebRTCSessionDescription>(), alignment: align_of::<GstWebRTCSessionDescription>()}),
-    ("GstWebRTCSignalingState", Layout {size: size_of::<GstWebRTCSignalingState>(), alignment: align_of::<GstWebRTCSignalingState>()}),
-    ("GstWebRTCStatsType", Layout {size: size_of::<GstWebRTCStatsType>(), alignment: align_of::<GstWebRTCStatsType>()}),
+    (
+        "GstWebRTCBundlePolicy",
+        Layout {
+            size: size_of::<GstWebRTCBundlePolicy>(),
+            alignment: align_of::<GstWebRTCBundlePolicy>(),
+        },
+    ),
+    (
+        "GstWebRTCDTLSSetup",
+        Layout {
+            size: size_of::<GstWebRTCDTLSSetup>(),
+            alignment: align_of::<GstWebRTCDTLSSetup>(),
+        },
+    ),
+    (
+        "GstWebRTCDTLSTransport",
+        Layout {
+            size: size_of::<GstWebRTCDTLSTransport>(),
+            alignment: align_of::<GstWebRTCDTLSTransport>(),
+        },
+    ),
+    (
+        "GstWebRTCDTLSTransportClass",
+        Layout {
+            size: size_of::<GstWebRTCDTLSTransportClass>(),
+            alignment: align_of::<GstWebRTCDTLSTransportClass>(),
+        },
+    ),
+    (
+        "GstWebRTCDTLSTransportState",
+        Layout {
+            size: size_of::<GstWebRTCDTLSTransportState>(),
+            alignment: align_of::<GstWebRTCDTLSTransportState>(),
+        },
+    ),
+    (
+        "GstWebRTCDataChannelState",
+        Layout {
+            size: size_of::<GstWebRTCDataChannelState>(),
+            alignment: align_of::<GstWebRTCDataChannelState>(),
+        },
+    ),
+    (
+        "GstWebRTCFECType",
+        Layout {
+            size: size_of::<GstWebRTCFECType>(),
+            alignment: align_of::<GstWebRTCFECType>(),
+        },
+    ),
+    (
+        "GstWebRTCICEComponent",
+        Layout {
+            size: size_of::<GstWebRTCICEComponent>(),
+            alignment: align_of::<GstWebRTCICEComponent>(),
+        },
+    ),
+    (
+        "GstWebRTCICEConnectionState",
+        Layout {
+            size: size_of::<GstWebRTCICEConnectionState>(),
+            alignment: align_of::<GstWebRTCICEConnectionState>(),
+        },
+    ),
+    (
+        "GstWebRTCICEGatheringState",
+        Layout {
+            size: size_of::<GstWebRTCICEGatheringState>(),
+            alignment: align_of::<GstWebRTCICEGatheringState>(),
+        },
+    ),
+    (
+        "GstWebRTCICERole",
+        Layout {
+            size: size_of::<GstWebRTCICERole>(),
+            alignment: align_of::<GstWebRTCICERole>(),
+        },
+    ),
+    (
+        "GstWebRTCICETransport",
+        Layout {
+            size: size_of::<GstWebRTCICETransport>(),
+            alignment: align_of::<GstWebRTCICETransport>(),
+        },
+    ),
+    (
+        "GstWebRTCICETransportClass",
+        Layout {
+            size: size_of::<GstWebRTCICETransportClass>(),
+            alignment: align_of::<GstWebRTCICETransportClass>(),
+        },
+    ),
+    (
+        "GstWebRTCICETransportPolicy",
+        Layout {
+            size: size_of::<GstWebRTCICETransportPolicy>(),
+            alignment: align_of::<GstWebRTCICETransportPolicy>(),
+        },
+    ),
+    (
+        "GstWebRTCPeerConnectionState",
+        Layout {
+            size: size_of::<GstWebRTCPeerConnectionState>(),
+            alignment: align_of::<GstWebRTCPeerConnectionState>(),
+        },
+    ),
+    (
+        "GstWebRTCPriorityType",
+        Layout {
+            size: size_of::<GstWebRTCPriorityType>(),
+            alignment: align_of::<GstWebRTCPriorityType>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPReceiver",
+        Layout {
+            size: size_of::<GstWebRTCRTPReceiver>(),
+            alignment: align_of::<GstWebRTCRTPReceiver>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPReceiverClass",
+        Layout {
+            size: size_of::<GstWebRTCRTPReceiverClass>(),
+            alignment: align_of::<GstWebRTCRTPReceiverClass>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPSender",
+        Layout {
+            size: size_of::<GstWebRTCRTPSender>(),
+            alignment: align_of::<GstWebRTCRTPSender>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPSenderClass",
+        Layout {
+            size: size_of::<GstWebRTCRTPSenderClass>(),
+            alignment: align_of::<GstWebRTCRTPSenderClass>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPTransceiver",
+        Layout {
+            size: size_of::<GstWebRTCRTPTransceiver>(),
+            alignment: align_of::<GstWebRTCRTPTransceiver>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPTransceiverClass",
+        Layout {
+            size: size_of::<GstWebRTCRTPTransceiverClass>(),
+            alignment: align_of::<GstWebRTCRTPTransceiverClass>(),
+        },
+    ),
+    (
+        "GstWebRTCRTPTransceiverDirection",
+        Layout {
+            size: size_of::<GstWebRTCRTPTransceiverDirection>(),
+            alignment: align_of::<GstWebRTCRTPTransceiverDirection>(),
+        },
+    ),
+    (
+        "GstWebRTCSCTPTransportState",
+        Layout {
+            size: size_of::<GstWebRTCSCTPTransportState>(),
+            alignment: align_of::<GstWebRTCSCTPTransportState>(),
+        },
+    ),
+    (
+        "GstWebRTCSDPType",
+        Layout {
+            size: size_of::<GstWebRTCSDPType>(),
+            alignment: align_of::<GstWebRTCSDPType>(),
+        },
+    ),
+    (
+        "GstWebRTCSessionDescription",
+        Layout {
+            size: size_of::<GstWebRTCSessionDescription>(),
+            alignment: align_of::<GstWebRTCSessionDescription>(),
+        },
+    ),
+    (
+        "GstWebRTCSignalingState",
+        Layout {
+            size: size_of::<GstWebRTCSignalingState>(),
+            alignment: align_of::<GstWebRTCSignalingState>(),
+        },
+    ),
+    (
+        "GstWebRTCStatsType",
+        Layout {
+            size: size_of::<GstWebRTCStatsType>(),
+            alignment: align_of::<GstWebRTCStatsType>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -332,7 +507,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_OFFER", "2"),
     ("(gint) GST_WEBRTC_SIGNALING_STATE_HAVE_LOCAL_PRANSWER", "4"),
     ("(gint) GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_OFFER", "3"),
-    ("(gint) GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER", "5"),
+    (
+        "(gint) GST_WEBRTC_SIGNALING_STATE_HAVE_REMOTE_PRANSWER",
+        "5",
+    ),
     ("(gint) GST_WEBRTC_SIGNALING_STATE_STABLE", "0"),
     ("(gint) GST_WEBRTC_STATS_CANDIDATE_PAIR", "11"),
     ("(gint) GST_WEBRTC_STATS_CERTIFICATE", "14"),
@@ -349,5 +527,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_WEBRTC_STATS_STREAM", "9"),
     ("(gint) GST_WEBRTC_STATS_TRANSPORT", "10"),
 ];
-
-

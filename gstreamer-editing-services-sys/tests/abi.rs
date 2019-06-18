@@ -5,13 +5,13 @@
 extern crate gstreamer_editing_services_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_editing_services_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_editing_services_sys::*;
 
 static PACKAGES: &[&str] = &["gst-editing-services-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,137 +229,834 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GESAsset", Layout {size: size_of::<GESAsset>(), alignment: align_of::<GESAsset>()}),
-    ("GESAssetClass", Layout {size: size_of::<GESAssetClass>(), alignment: align_of::<GESAssetClass>()}),
-    ("GESAssetLoadingReturn", Layout {size: size_of::<GESAssetLoadingReturn>(), alignment: align_of::<GESAssetLoadingReturn>()}),
-    ("GESAudioSource", Layout {size: size_of::<GESAudioSource>(), alignment: align_of::<GESAudioSource>()}),
-    ("GESAudioSourceClass", Layout {size: size_of::<GESAudioSourceClass>(), alignment: align_of::<GESAudioSourceClass>()}),
-    ("GESAudioTestSource", Layout {size: size_of::<GESAudioTestSource>(), alignment: align_of::<GESAudioTestSource>()}),
-    ("GESAudioTestSourceClass", Layout {size: size_of::<GESAudioTestSourceClass>(), alignment: align_of::<GESAudioTestSourceClass>()}),
-    ("GESAudioTrack", Layout {size: size_of::<GESAudioTrack>(), alignment: align_of::<GESAudioTrack>()}),
-    ("GESAudioTrackClass", Layout {size: size_of::<GESAudioTrackClass>(), alignment: align_of::<GESAudioTrackClass>()}),
-    ("GESAudioTransition", Layout {size: size_of::<GESAudioTransition>(), alignment: align_of::<GESAudioTransition>()}),
-    ("GESAudioTransitionClass", Layout {size: size_of::<GESAudioTransitionClass>(), alignment: align_of::<GESAudioTransitionClass>()}),
-    ("GESAudioUriSource", Layout {size: size_of::<GESAudioUriSource>(), alignment: align_of::<GESAudioUriSource>()}),
-    ("GESAudioUriSourceClass", Layout {size: size_of::<GESAudioUriSourceClass>(), alignment: align_of::<GESAudioUriSourceClass>()}),
-    ("GESBaseEffect", Layout {size: size_of::<GESBaseEffect>(), alignment: align_of::<GESBaseEffect>()}),
-    ("GESBaseEffectClass", Layout {size: size_of::<GESBaseEffectClass>(), alignment: align_of::<GESBaseEffectClass>()}),
-    ("GESBaseEffectClip", Layout {size: size_of::<GESBaseEffectClip>(), alignment: align_of::<GESBaseEffectClip>()}),
-    ("GESBaseEffectClipClass", Layout {size: size_of::<GESBaseEffectClipClass>(), alignment: align_of::<GESBaseEffectClipClass>()}),
-    ("GESBaseTransitionClip", Layout {size: size_of::<GESBaseTransitionClip>(), alignment: align_of::<GESBaseTransitionClip>()}),
-    ("GESBaseTransitionClipClass", Layout {size: size_of::<GESBaseTransitionClipClass>(), alignment: align_of::<GESBaseTransitionClipClass>()}),
-    ("GESBaseXmlFormatter", Layout {size: size_of::<GESBaseXmlFormatter>(), alignment: align_of::<GESBaseXmlFormatter>()}),
-    ("GESBaseXmlFormatterClass", Layout {size: size_of::<GESBaseXmlFormatterClass>(), alignment: align_of::<GESBaseXmlFormatterClass>()}),
-    ("GESChildrenControlMode", Layout {size: size_of::<GESChildrenControlMode>(), alignment: align_of::<GESChildrenControlMode>()}),
-    ("GESClip", Layout {size: size_of::<GESClip>(), alignment: align_of::<GESClip>()}),
-    ("GESClipAsset", Layout {size: size_of::<GESClipAsset>(), alignment: align_of::<GESClipAsset>()}),
-    ("GESClipAssetClass", Layout {size: size_of::<GESClipAssetClass>(), alignment: align_of::<GESClipAssetClass>()}),
-    ("GESClipClass", Layout {size: size_of::<GESClipClass>(), alignment: align_of::<GESClipClass>()}),
-    ("GESCommandLineFormatter", Layout {size: size_of::<GESCommandLineFormatter>(), alignment: align_of::<GESCommandLineFormatter>()}),
-    ("GESCommandLineFormatterClass", Layout {size: size_of::<GESCommandLineFormatterClass>(), alignment: align_of::<GESCommandLineFormatterClass>()}),
-    ("GESContainer", Layout {size: size_of::<GESContainer>(), alignment: align_of::<GESContainer>()}),
-    ("GESContainerClass", Layout {size: size_of::<GESContainerClass>(), alignment: align_of::<GESContainerClass>()}),
-    ("GESEdge", Layout {size: size_of::<GESEdge>(), alignment: align_of::<GESEdge>()}),
-    ("GESEditMode", Layout {size: size_of::<GESEditMode>(), alignment: align_of::<GESEditMode>()}),
-    ("GESEffect", Layout {size: size_of::<GESEffect>(), alignment: align_of::<GESEffect>()}),
-    ("GESEffectAsset", Layout {size: size_of::<GESEffectAsset>(), alignment: align_of::<GESEffectAsset>()}),
-    ("GESEffectAssetClass", Layout {size: size_of::<GESEffectAssetClass>(), alignment: align_of::<GESEffectAssetClass>()}),
-    ("GESEffectClass", Layout {size: size_of::<GESEffectClass>(), alignment: align_of::<GESEffectClass>()}),
-    ("GESEffectClip", Layout {size: size_of::<GESEffectClip>(), alignment: align_of::<GESEffectClip>()}),
-    ("GESEffectClipClass", Layout {size: size_of::<GESEffectClipClass>(), alignment: align_of::<GESEffectClipClass>()}),
-    ("GESError", Layout {size: size_of::<GESError>(), alignment: align_of::<GESError>()}),
-    ("GESExtractableInterface", Layout {size: size_of::<GESExtractableInterface>(), alignment: align_of::<GESExtractableInterface>()}),
-    ("GESFormatter", Layout {size: size_of::<GESFormatter>(), alignment: align_of::<GESFormatter>()}),
-    ("GESFormatterClass", Layout {size: size_of::<GESFormatterClass>(), alignment: align_of::<GESFormatterClass>()}),
-    ("GESGroup", Layout {size: size_of::<GESGroup>(), alignment: align_of::<GESGroup>()}),
-    ("GESGroupClass", Layout {size: size_of::<GESGroupClass>(), alignment: align_of::<GESGroupClass>()}),
-    ("GESImageSource", Layout {size: size_of::<GESImageSource>(), alignment: align_of::<GESImageSource>()}),
-    ("GESImageSourceClass", Layout {size: size_of::<GESImageSourceClass>(), alignment: align_of::<GESImageSourceClass>()}),
-    ("GESLayer", Layout {size: size_of::<GESLayer>(), alignment: align_of::<GESLayer>()}),
-    ("GESLayerClass", Layout {size: size_of::<GESLayerClass>(), alignment: align_of::<GESLayerClass>()}),
-    ("GESMetaContainerInterface", Layout {size: size_of::<GESMetaContainerInterface>(), alignment: align_of::<GESMetaContainerInterface>()}),
-    ("GESMetaFlag", Layout {size: size_of::<GESMetaFlag>(), alignment: align_of::<GESMetaFlag>()}),
-    ("GESMultiFileSource", Layout {size: size_of::<GESMultiFileSource>(), alignment: align_of::<GESMultiFileSource>()}),
-    ("GESMultiFileSourceClass", Layout {size: size_of::<GESMultiFileSourceClass>(), alignment: align_of::<GESMultiFileSourceClass>()}),
-    ("GESOperation", Layout {size: size_of::<GESOperation>(), alignment: align_of::<GESOperation>()}),
-    ("GESOperationClass", Layout {size: size_of::<GESOperationClass>(), alignment: align_of::<GESOperationClass>()}),
-    ("GESOperationClip", Layout {size: size_of::<GESOperationClip>(), alignment: align_of::<GESOperationClip>()}),
-    ("GESOperationClipClass", Layout {size: size_of::<GESOperationClipClass>(), alignment: align_of::<GESOperationClipClass>()}),
-    ("GESOverlayClip", Layout {size: size_of::<GESOverlayClip>(), alignment: align_of::<GESOverlayClip>()}),
-    ("GESOverlayClipClass", Layout {size: size_of::<GESOverlayClipClass>(), alignment: align_of::<GESOverlayClipClass>()}),
-    ("GESPipeline", Layout {size: size_of::<GESPipeline>(), alignment: align_of::<GESPipeline>()}),
-    ("GESPipelineClass", Layout {size: size_of::<GESPipelineClass>(), alignment: align_of::<GESPipelineClass>()}),
-    ("GESPipelineFlags", Layout {size: size_of::<GESPipelineFlags>(), alignment: align_of::<GESPipelineFlags>()}),
-    ("GESPitiviFormatter", Layout {size: size_of::<GESPitiviFormatter>(), alignment: align_of::<GESPitiviFormatter>()}),
-    ("GESPitiviFormatterClass", Layout {size: size_of::<GESPitiviFormatterClass>(), alignment: align_of::<GESPitiviFormatterClass>()}),
-    ("GESProject", Layout {size: size_of::<GESProject>(), alignment: align_of::<GESProject>()}),
-    ("GESProjectClass", Layout {size: size_of::<GESProjectClass>(), alignment: align_of::<GESProjectClass>()}),
-    ("GESSource", Layout {size: size_of::<GESSource>(), alignment: align_of::<GESSource>()}),
-    ("GESSourceClass", Layout {size: size_of::<GESSourceClass>(), alignment: align_of::<GESSourceClass>()}),
-    ("GESSourceClip", Layout {size: size_of::<GESSourceClip>(), alignment: align_of::<GESSourceClip>()}),
-    ("GESSourceClipClass", Layout {size: size_of::<GESSourceClipClass>(), alignment: align_of::<GESSourceClipClass>()}),
-    ("GESTestClip", Layout {size: size_of::<GESTestClip>(), alignment: align_of::<GESTestClip>()}),
-    ("GESTestClipClass", Layout {size: size_of::<GESTestClipClass>(), alignment: align_of::<GESTestClipClass>()}),
-    ("GESTextHAlign", Layout {size: size_of::<GESTextHAlign>(), alignment: align_of::<GESTextHAlign>()}),
-    ("GESTextOverlay", Layout {size: size_of::<GESTextOverlay>(), alignment: align_of::<GESTextOverlay>()}),
-    ("GESTextOverlayClass", Layout {size: size_of::<GESTextOverlayClass>(), alignment: align_of::<GESTextOverlayClass>()}),
-    ("GESTextOverlayClip", Layout {size: size_of::<GESTextOverlayClip>(), alignment: align_of::<GESTextOverlayClip>()}),
-    ("GESTextOverlayClipClass", Layout {size: size_of::<GESTextOverlayClipClass>(), alignment: align_of::<GESTextOverlayClipClass>()}),
-    ("GESTextVAlign", Layout {size: size_of::<GESTextVAlign>(), alignment: align_of::<GESTextVAlign>()}),
-    ("GESTimeline", Layout {size: size_of::<GESTimeline>(), alignment: align_of::<GESTimeline>()}),
-    ("GESTimelineClass", Layout {size: size_of::<GESTimelineClass>(), alignment: align_of::<GESTimelineClass>()}),
-    ("GESTimelineElement", Layout {size: size_of::<GESTimelineElement>(), alignment: align_of::<GESTimelineElement>()}),
-    ("GESTimelineElementClass", Layout {size: size_of::<GESTimelineElementClass>(), alignment: align_of::<GESTimelineElementClass>()}),
-    ("GESTitleClip", Layout {size: size_of::<GESTitleClip>(), alignment: align_of::<GESTitleClip>()}),
-    ("GESTitleClipClass", Layout {size: size_of::<GESTitleClipClass>(), alignment: align_of::<GESTitleClipClass>()}),
-    ("GESTitleSource", Layout {size: size_of::<GESTitleSource>(), alignment: align_of::<GESTitleSource>()}),
-    ("GESTitleSourceClass", Layout {size: size_of::<GESTitleSourceClass>(), alignment: align_of::<GESTitleSourceClass>()}),
-    ("GESTrack", Layout {size: size_of::<GESTrack>(), alignment: align_of::<GESTrack>()}),
-    ("GESTrackClass", Layout {size: size_of::<GESTrackClass>(), alignment: align_of::<GESTrackClass>()}),
-    ("GESTrackElement", Layout {size: size_of::<GESTrackElement>(), alignment: align_of::<GESTrackElement>()}),
-    ("GESTrackElementAsset", Layout {size: size_of::<GESTrackElementAsset>(), alignment: align_of::<GESTrackElementAsset>()}),
-    ("GESTrackElementAssetClass", Layout {size: size_of::<GESTrackElementAssetClass>(), alignment: align_of::<GESTrackElementAssetClass>()}),
-    ("GESTrackElementClass", Layout {size: size_of::<GESTrackElementClass>(), alignment: align_of::<GESTrackElementClass>()}),
-    ("GESTrackType", Layout {size: size_of::<GESTrackType>(), alignment: align_of::<GESTrackType>()}),
-    ("GESTransition", Layout {size: size_of::<GESTransition>(), alignment: align_of::<GESTransition>()}),
-    ("GESTransitionClass", Layout {size: size_of::<GESTransitionClass>(), alignment: align_of::<GESTransitionClass>()}),
-    ("GESTransitionClip", Layout {size: size_of::<GESTransitionClip>(), alignment: align_of::<GESTransitionClip>()}),
-    ("GESTransitionClipClass", Layout {size: size_of::<GESTransitionClipClass>(), alignment: align_of::<GESTransitionClipClass>()}),
-    ("GESUriClip", Layout {size: size_of::<GESUriClip>(), alignment: align_of::<GESUriClip>()}),
-    ("GESUriClipAsset", Layout {size: size_of::<GESUriClipAsset>(), alignment: align_of::<GESUriClipAsset>()}),
-    ("GESUriClipAssetClass", Layout {size: size_of::<GESUriClipAssetClass>(), alignment: align_of::<GESUriClipAssetClass>()}),
-    ("GESUriClipClass", Layout {size: size_of::<GESUriClipClass>(), alignment: align_of::<GESUriClipClass>()}),
-    ("GESUriSourceAsset", Layout {size: size_of::<GESUriSourceAsset>(), alignment: align_of::<GESUriSourceAsset>()}),
-    ("GESUriSourceAssetClass", Layout {size: size_of::<GESUriSourceAssetClass>(), alignment: align_of::<GESUriSourceAssetClass>()}),
-    ("GESVideoSource", Layout {size: size_of::<GESVideoSource>(), alignment: align_of::<GESVideoSource>()}),
-    ("GESVideoSourceClass", Layout {size: size_of::<GESVideoSourceClass>(), alignment: align_of::<GESVideoSourceClass>()}),
-    ("GESVideoStandardTransitionType", Layout {size: size_of::<GESVideoStandardTransitionType>(), alignment: align_of::<GESVideoStandardTransitionType>()}),
-    ("GESVideoTestPattern", Layout {size: size_of::<GESVideoTestPattern>(), alignment: align_of::<GESVideoTestPattern>()}),
-    ("GESVideoTestSource", Layout {size: size_of::<GESVideoTestSource>(), alignment: align_of::<GESVideoTestSource>()}),
-    ("GESVideoTestSourceClass", Layout {size: size_of::<GESVideoTestSourceClass>(), alignment: align_of::<GESVideoTestSourceClass>()}),
-    ("GESVideoTrack", Layout {size: size_of::<GESVideoTrack>(), alignment: align_of::<GESVideoTrack>()}),
-    ("GESVideoTrackClass", Layout {size: size_of::<GESVideoTrackClass>(), alignment: align_of::<GESVideoTrackClass>()}),
-    ("GESVideoTransition", Layout {size: size_of::<GESVideoTransition>(), alignment: align_of::<GESVideoTransition>()}),
-    ("GESVideoTransitionClass", Layout {size: size_of::<GESVideoTransitionClass>(), alignment: align_of::<GESVideoTransitionClass>()}),
-    ("GESVideoUriSource", Layout {size: size_of::<GESVideoUriSource>(), alignment: align_of::<GESVideoUriSource>()}),
-    ("GESVideoUriSourceClass", Layout {size: size_of::<GESVideoUriSourceClass>(), alignment: align_of::<GESVideoUriSourceClass>()}),
-    ("GESXmlFormatter", Layout {size: size_of::<GESXmlFormatter>(), alignment: align_of::<GESXmlFormatter>()}),
-    ("GESXmlFormatterClass", Layout {size: size_of::<GESXmlFormatterClass>(), alignment: align_of::<GESXmlFormatterClass>()}),
+    (
+        "GESAsset",
+        Layout {
+            size: size_of::<GESAsset>(),
+            alignment: align_of::<GESAsset>(),
+        },
+    ),
+    (
+        "GESAssetClass",
+        Layout {
+            size: size_of::<GESAssetClass>(),
+            alignment: align_of::<GESAssetClass>(),
+        },
+    ),
+    (
+        "GESAssetLoadingReturn",
+        Layout {
+            size: size_of::<GESAssetLoadingReturn>(),
+            alignment: align_of::<GESAssetLoadingReturn>(),
+        },
+    ),
+    (
+        "GESAudioSource",
+        Layout {
+            size: size_of::<GESAudioSource>(),
+            alignment: align_of::<GESAudioSource>(),
+        },
+    ),
+    (
+        "GESAudioSourceClass",
+        Layout {
+            size: size_of::<GESAudioSourceClass>(),
+            alignment: align_of::<GESAudioSourceClass>(),
+        },
+    ),
+    (
+        "GESAudioTestSource",
+        Layout {
+            size: size_of::<GESAudioTestSource>(),
+            alignment: align_of::<GESAudioTestSource>(),
+        },
+    ),
+    (
+        "GESAudioTestSourceClass",
+        Layout {
+            size: size_of::<GESAudioTestSourceClass>(),
+            alignment: align_of::<GESAudioTestSourceClass>(),
+        },
+    ),
+    (
+        "GESAudioTrack",
+        Layout {
+            size: size_of::<GESAudioTrack>(),
+            alignment: align_of::<GESAudioTrack>(),
+        },
+    ),
+    (
+        "GESAudioTrackClass",
+        Layout {
+            size: size_of::<GESAudioTrackClass>(),
+            alignment: align_of::<GESAudioTrackClass>(),
+        },
+    ),
+    (
+        "GESAudioTransition",
+        Layout {
+            size: size_of::<GESAudioTransition>(),
+            alignment: align_of::<GESAudioTransition>(),
+        },
+    ),
+    (
+        "GESAudioTransitionClass",
+        Layout {
+            size: size_of::<GESAudioTransitionClass>(),
+            alignment: align_of::<GESAudioTransitionClass>(),
+        },
+    ),
+    (
+        "GESAudioUriSource",
+        Layout {
+            size: size_of::<GESAudioUriSource>(),
+            alignment: align_of::<GESAudioUriSource>(),
+        },
+    ),
+    (
+        "GESAudioUriSourceClass",
+        Layout {
+            size: size_of::<GESAudioUriSourceClass>(),
+            alignment: align_of::<GESAudioUriSourceClass>(),
+        },
+    ),
+    (
+        "GESBaseEffect",
+        Layout {
+            size: size_of::<GESBaseEffect>(),
+            alignment: align_of::<GESBaseEffect>(),
+        },
+    ),
+    (
+        "GESBaseEffectClass",
+        Layout {
+            size: size_of::<GESBaseEffectClass>(),
+            alignment: align_of::<GESBaseEffectClass>(),
+        },
+    ),
+    (
+        "GESBaseEffectClip",
+        Layout {
+            size: size_of::<GESBaseEffectClip>(),
+            alignment: align_of::<GESBaseEffectClip>(),
+        },
+    ),
+    (
+        "GESBaseEffectClipClass",
+        Layout {
+            size: size_of::<GESBaseEffectClipClass>(),
+            alignment: align_of::<GESBaseEffectClipClass>(),
+        },
+    ),
+    (
+        "GESBaseTransitionClip",
+        Layout {
+            size: size_of::<GESBaseTransitionClip>(),
+            alignment: align_of::<GESBaseTransitionClip>(),
+        },
+    ),
+    (
+        "GESBaseTransitionClipClass",
+        Layout {
+            size: size_of::<GESBaseTransitionClipClass>(),
+            alignment: align_of::<GESBaseTransitionClipClass>(),
+        },
+    ),
+    (
+        "GESBaseXmlFormatter",
+        Layout {
+            size: size_of::<GESBaseXmlFormatter>(),
+            alignment: align_of::<GESBaseXmlFormatter>(),
+        },
+    ),
+    (
+        "GESBaseXmlFormatterClass",
+        Layout {
+            size: size_of::<GESBaseXmlFormatterClass>(),
+            alignment: align_of::<GESBaseXmlFormatterClass>(),
+        },
+    ),
+    (
+        "GESChildrenControlMode",
+        Layout {
+            size: size_of::<GESChildrenControlMode>(),
+            alignment: align_of::<GESChildrenControlMode>(),
+        },
+    ),
+    (
+        "GESClip",
+        Layout {
+            size: size_of::<GESClip>(),
+            alignment: align_of::<GESClip>(),
+        },
+    ),
+    (
+        "GESClipAsset",
+        Layout {
+            size: size_of::<GESClipAsset>(),
+            alignment: align_of::<GESClipAsset>(),
+        },
+    ),
+    (
+        "GESClipAssetClass",
+        Layout {
+            size: size_of::<GESClipAssetClass>(),
+            alignment: align_of::<GESClipAssetClass>(),
+        },
+    ),
+    (
+        "GESClipClass",
+        Layout {
+            size: size_of::<GESClipClass>(),
+            alignment: align_of::<GESClipClass>(),
+        },
+    ),
+    (
+        "GESCommandLineFormatter",
+        Layout {
+            size: size_of::<GESCommandLineFormatter>(),
+            alignment: align_of::<GESCommandLineFormatter>(),
+        },
+    ),
+    (
+        "GESCommandLineFormatterClass",
+        Layout {
+            size: size_of::<GESCommandLineFormatterClass>(),
+            alignment: align_of::<GESCommandLineFormatterClass>(),
+        },
+    ),
+    (
+        "GESContainer",
+        Layout {
+            size: size_of::<GESContainer>(),
+            alignment: align_of::<GESContainer>(),
+        },
+    ),
+    (
+        "GESContainerClass",
+        Layout {
+            size: size_of::<GESContainerClass>(),
+            alignment: align_of::<GESContainerClass>(),
+        },
+    ),
+    (
+        "GESEdge",
+        Layout {
+            size: size_of::<GESEdge>(),
+            alignment: align_of::<GESEdge>(),
+        },
+    ),
+    (
+        "GESEditMode",
+        Layout {
+            size: size_of::<GESEditMode>(),
+            alignment: align_of::<GESEditMode>(),
+        },
+    ),
+    (
+        "GESEffect",
+        Layout {
+            size: size_of::<GESEffect>(),
+            alignment: align_of::<GESEffect>(),
+        },
+    ),
+    (
+        "GESEffectAsset",
+        Layout {
+            size: size_of::<GESEffectAsset>(),
+            alignment: align_of::<GESEffectAsset>(),
+        },
+    ),
+    (
+        "GESEffectAssetClass",
+        Layout {
+            size: size_of::<GESEffectAssetClass>(),
+            alignment: align_of::<GESEffectAssetClass>(),
+        },
+    ),
+    (
+        "GESEffectClass",
+        Layout {
+            size: size_of::<GESEffectClass>(),
+            alignment: align_of::<GESEffectClass>(),
+        },
+    ),
+    (
+        "GESEffectClip",
+        Layout {
+            size: size_of::<GESEffectClip>(),
+            alignment: align_of::<GESEffectClip>(),
+        },
+    ),
+    (
+        "GESEffectClipClass",
+        Layout {
+            size: size_of::<GESEffectClipClass>(),
+            alignment: align_of::<GESEffectClipClass>(),
+        },
+    ),
+    (
+        "GESError",
+        Layout {
+            size: size_of::<GESError>(),
+            alignment: align_of::<GESError>(),
+        },
+    ),
+    (
+        "GESExtractableInterface",
+        Layout {
+            size: size_of::<GESExtractableInterface>(),
+            alignment: align_of::<GESExtractableInterface>(),
+        },
+    ),
+    (
+        "GESFormatter",
+        Layout {
+            size: size_of::<GESFormatter>(),
+            alignment: align_of::<GESFormatter>(),
+        },
+    ),
+    (
+        "GESFormatterClass",
+        Layout {
+            size: size_of::<GESFormatterClass>(),
+            alignment: align_of::<GESFormatterClass>(),
+        },
+    ),
+    (
+        "GESGroup",
+        Layout {
+            size: size_of::<GESGroup>(),
+            alignment: align_of::<GESGroup>(),
+        },
+    ),
+    (
+        "GESGroupClass",
+        Layout {
+            size: size_of::<GESGroupClass>(),
+            alignment: align_of::<GESGroupClass>(),
+        },
+    ),
+    (
+        "GESImageSource",
+        Layout {
+            size: size_of::<GESImageSource>(),
+            alignment: align_of::<GESImageSource>(),
+        },
+    ),
+    (
+        "GESImageSourceClass",
+        Layout {
+            size: size_of::<GESImageSourceClass>(),
+            alignment: align_of::<GESImageSourceClass>(),
+        },
+    ),
+    (
+        "GESLayer",
+        Layout {
+            size: size_of::<GESLayer>(),
+            alignment: align_of::<GESLayer>(),
+        },
+    ),
+    (
+        "GESLayerClass",
+        Layout {
+            size: size_of::<GESLayerClass>(),
+            alignment: align_of::<GESLayerClass>(),
+        },
+    ),
+    (
+        "GESMetaContainerInterface",
+        Layout {
+            size: size_of::<GESMetaContainerInterface>(),
+            alignment: align_of::<GESMetaContainerInterface>(),
+        },
+    ),
+    (
+        "GESMetaFlag",
+        Layout {
+            size: size_of::<GESMetaFlag>(),
+            alignment: align_of::<GESMetaFlag>(),
+        },
+    ),
+    (
+        "GESMultiFileSource",
+        Layout {
+            size: size_of::<GESMultiFileSource>(),
+            alignment: align_of::<GESMultiFileSource>(),
+        },
+    ),
+    (
+        "GESMultiFileSourceClass",
+        Layout {
+            size: size_of::<GESMultiFileSourceClass>(),
+            alignment: align_of::<GESMultiFileSourceClass>(),
+        },
+    ),
+    (
+        "GESOperation",
+        Layout {
+            size: size_of::<GESOperation>(),
+            alignment: align_of::<GESOperation>(),
+        },
+    ),
+    (
+        "GESOperationClass",
+        Layout {
+            size: size_of::<GESOperationClass>(),
+            alignment: align_of::<GESOperationClass>(),
+        },
+    ),
+    (
+        "GESOperationClip",
+        Layout {
+            size: size_of::<GESOperationClip>(),
+            alignment: align_of::<GESOperationClip>(),
+        },
+    ),
+    (
+        "GESOperationClipClass",
+        Layout {
+            size: size_of::<GESOperationClipClass>(),
+            alignment: align_of::<GESOperationClipClass>(),
+        },
+    ),
+    (
+        "GESOverlayClip",
+        Layout {
+            size: size_of::<GESOverlayClip>(),
+            alignment: align_of::<GESOverlayClip>(),
+        },
+    ),
+    (
+        "GESOverlayClipClass",
+        Layout {
+            size: size_of::<GESOverlayClipClass>(),
+            alignment: align_of::<GESOverlayClipClass>(),
+        },
+    ),
+    (
+        "GESPipeline",
+        Layout {
+            size: size_of::<GESPipeline>(),
+            alignment: align_of::<GESPipeline>(),
+        },
+    ),
+    (
+        "GESPipelineClass",
+        Layout {
+            size: size_of::<GESPipelineClass>(),
+            alignment: align_of::<GESPipelineClass>(),
+        },
+    ),
+    (
+        "GESPipelineFlags",
+        Layout {
+            size: size_of::<GESPipelineFlags>(),
+            alignment: align_of::<GESPipelineFlags>(),
+        },
+    ),
+    (
+        "GESPitiviFormatter",
+        Layout {
+            size: size_of::<GESPitiviFormatter>(),
+            alignment: align_of::<GESPitiviFormatter>(),
+        },
+    ),
+    (
+        "GESPitiviFormatterClass",
+        Layout {
+            size: size_of::<GESPitiviFormatterClass>(),
+            alignment: align_of::<GESPitiviFormatterClass>(),
+        },
+    ),
+    (
+        "GESProject",
+        Layout {
+            size: size_of::<GESProject>(),
+            alignment: align_of::<GESProject>(),
+        },
+    ),
+    (
+        "GESProjectClass",
+        Layout {
+            size: size_of::<GESProjectClass>(),
+            alignment: align_of::<GESProjectClass>(),
+        },
+    ),
+    (
+        "GESSource",
+        Layout {
+            size: size_of::<GESSource>(),
+            alignment: align_of::<GESSource>(),
+        },
+    ),
+    (
+        "GESSourceClass",
+        Layout {
+            size: size_of::<GESSourceClass>(),
+            alignment: align_of::<GESSourceClass>(),
+        },
+    ),
+    (
+        "GESSourceClip",
+        Layout {
+            size: size_of::<GESSourceClip>(),
+            alignment: align_of::<GESSourceClip>(),
+        },
+    ),
+    (
+        "GESSourceClipClass",
+        Layout {
+            size: size_of::<GESSourceClipClass>(),
+            alignment: align_of::<GESSourceClipClass>(),
+        },
+    ),
+    (
+        "GESTestClip",
+        Layout {
+            size: size_of::<GESTestClip>(),
+            alignment: align_of::<GESTestClip>(),
+        },
+    ),
+    (
+        "GESTestClipClass",
+        Layout {
+            size: size_of::<GESTestClipClass>(),
+            alignment: align_of::<GESTestClipClass>(),
+        },
+    ),
+    (
+        "GESTextHAlign",
+        Layout {
+            size: size_of::<GESTextHAlign>(),
+            alignment: align_of::<GESTextHAlign>(),
+        },
+    ),
+    (
+        "GESTextOverlay",
+        Layout {
+            size: size_of::<GESTextOverlay>(),
+            alignment: align_of::<GESTextOverlay>(),
+        },
+    ),
+    (
+        "GESTextOverlayClass",
+        Layout {
+            size: size_of::<GESTextOverlayClass>(),
+            alignment: align_of::<GESTextOverlayClass>(),
+        },
+    ),
+    (
+        "GESTextOverlayClip",
+        Layout {
+            size: size_of::<GESTextOverlayClip>(),
+            alignment: align_of::<GESTextOverlayClip>(),
+        },
+    ),
+    (
+        "GESTextOverlayClipClass",
+        Layout {
+            size: size_of::<GESTextOverlayClipClass>(),
+            alignment: align_of::<GESTextOverlayClipClass>(),
+        },
+    ),
+    (
+        "GESTextVAlign",
+        Layout {
+            size: size_of::<GESTextVAlign>(),
+            alignment: align_of::<GESTextVAlign>(),
+        },
+    ),
+    (
+        "GESTimeline",
+        Layout {
+            size: size_of::<GESTimeline>(),
+            alignment: align_of::<GESTimeline>(),
+        },
+    ),
+    (
+        "GESTimelineClass",
+        Layout {
+            size: size_of::<GESTimelineClass>(),
+            alignment: align_of::<GESTimelineClass>(),
+        },
+    ),
+    (
+        "GESTimelineElement",
+        Layout {
+            size: size_of::<GESTimelineElement>(),
+            alignment: align_of::<GESTimelineElement>(),
+        },
+    ),
+    (
+        "GESTimelineElementClass",
+        Layout {
+            size: size_of::<GESTimelineElementClass>(),
+            alignment: align_of::<GESTimelineElementClass>(),
+        },
+    ),
+    (
+        "GESTitleClip",
+        Layout {
+            size: size_of::<GESTitleClip>(),
+            alignment: align_of::<GESTitleClip>(),
+        },
+    ),
+    (
+        "GESTitleClipClass",
+        Layout {
+            size: size_of::<GESTitleClipClass>(),
+            alignment: align_of::<GESTitleClipClass>(),
+        },
+    ),
+    (
+        "GESTitleSource",
+        Layout {
+            size: size_of::<GESTitleSource>(),
+            alignment: align_of::<GESTitleSource>(),
+        },
+    ),
+    (
+        "GESTitleSourceClass",
+        Layout {
+            size: size_of::<GESTitleSourceClass>(),
+            alignment: align_of::<GESTitleSourceClass>(),
+        },
+    ),
+    (
+        "GESTrack",
+        Layout {
+            size: size_of::<GESTrack>(),
+            alignment: align_of::<GESTrack>(),
+        },
+    ),
+    (
+        "GESTrackClass",
+        Layout {
+            size: size_of::<GESTrackClass>(),
+            alignment: align_of::<GESTrackClass>(),
+        },
+    ),
+    (
+        "GESTrackElement",
+        Layout {
+            size: size_of::<GESTrackElement>(),
+            alignment: align_of::<GESTrackElement>(),
+        },
+    ),
+    (
+        "GESTrackElementAsset",
+        Layout {
+            size: size_of::<GESTrackElementAsset>(),
+            alignment: align_of::<GESTrackElementAsset>(),
+        },
+    ),
+    (
+        "GESTrackElementAssetClass",
+        Layout {
+            size: size_of::<GESTrackElementAssetClass>(),
+            alignment: align_of::<GESTrackElementAssetClass>(),
+        },
+    ),
+    (
+        "GESTrackElementClass",
+        Layout {
+            size: size_of::<GESTrackElementClass>(),
+            alignment: align_of::<GESTrackElementClass>(),
+        },
+    ),
+    (
+        "GESTrackType",
+        Layout {
+            size: size_of::<GESTrackType>(),
+            alignment: align_of::<GESTrackType>(),
+        },
+    ),
+    (
+        "GESTransition",
+        Layout {
+            size: size_of::<GESTransition>(),
+            alignment: align_of::<GESTransition>(),
+        },
+    ),
+    (
+        "GESTransitionClass",
+        Layout {
+            size: size_of::<GESTransitionClass>(),
+            alignment: align_of::<GESTransitionClass>(),
+        },
+    ),
+    (
+        "GESTransitionClip",
+        Layout {
+            size: size_of::<GESTransitionClip>(),
+            alignment: align_of::<GESTransitionClip>(),
+        },
+    ),
+    (
+        "GESTransitionClipClass",
+        Layout {
+            size: size_of::<GESTransitionClipClass>(),
+            alignment: align_of::<GESTransitionClipClass>(),
+        },
+    ),
+    (
+        "GESUriClip",
+        Layout {
+            size: size_of::<GESUriClip>(),
+            alignment: align_of::<GESUriClip>(),
+        },
+    ),
+    (
+        "GESUriClipAsset",
+        Layout {
+            size: size_of::<GESUriClipAsset>(),
+            alignment: align_of::<GESUriClipAsset>(),
+        },
+    ),
+    (
+        "GESUriClipAssetClass",
+        Layout {
+            size: size_of::<GESUriClipAssetClass>(),
+            alignment: align_of::<GESUriClipAssetClass>(),
+        },
+    ),
+    (
+        "GESUriClipClass",
+        Layout {
+            size: size_of::<GESUriClipClass>(),
+            alignment: align_of::<GESUriClipClass>(),
+        },
+    ),
+    (
+        "GESUriSourceAsset",
+        Layout {
+            size: size_of::<GESUriSourceAsset>(),
+            alignment: align_of::<GESUriSourceAsset>(),
+        },
+    ),
+    (
+        "GESUriSourceAssetClass",
+        Layout {
+            size: size_of::<GESUriSourceAssetClass>(),
+            alignment: align_of::<GESUriSourceAssetClass>(),
+        },
+    ),
+    (
+        "GESVideoSource",
+        Layout {
+            size: size_of::<GESVideoSource>(),
+            alignment: align_of::<GESVideoSource>(),
+        },
+    ),
+    (
+        "GESVideoSourceClass",
+        Layout {
+            size: size_of::<GESVideoSourceClass>(),
+            alignment: align_of::<GESVideoSourceClass>(),
+        },
+    ),
+    (
+        "GESVideoStandardTransitionType",
+        Layout {
+            size: size_of::<GESVideoStandardTransitionType>(),
+            alignment: align_of::<GESVideoStandardTransitionType>(),
+        },
+    ),
+    (
+        "GESVideoTestPattern",
+        Layout {
+            size: size_of::<GESVideoTestPattern>(),
+            alignment: align_of::<GESVideoTestPattern>(),
+        },
+    ),
+    (
+        "GESVideoTestSource",
+        Layout {
+            size: size_of::<GESVideoTestSource>(),
+            alignment: align_of::<GESVideoTestSource>(),
+        },
+    ),
+    (
+        "GESVideoTestSourceClass",
+        Layout {
+            size: size_of::<GESVideoTestSourceClass>(),
+            alignment: align_of::<GESVideoTestSourceClass>(),
+        },
+    ),
+    (
+        "GESVideoTrack",
+        Layout {
+            size: size_of::<GESVideoTrack>(),
+            alignment: align_of::<GESVideoTrack>(),
+        },
+    ),
+    (
+        "GESVideoTrackClass",
+        Layout {
+            size: size_of::<GESVideoTrackClass>(),
+            alignment: align_of::<GESVideoTrackClass>(),
+        },
+    ),
+    (
+        "GESVideoTransition",
+        Layout {
+            size: size_of::<GESVideoTransition>(),
+            alignment: align_of::<GESVideoTransition>(),
+        },
+    ),
+    (
+        "GESVideoTransitionClass",
+        Layout {
+            size: size_of::<GESVideoTransitionClass>(),
+            alignment: align_of::<GESVideoTransitionClass>(),
+        },
+    ),
+    (
+        "GESVideoUriSource",
+        Layout {
+            size: size_of::<GESVideoUriSource>(),
+            alignment: align_of::<GESVideoUriSource>(),
+        },
+    ),
+    (
+        "GESVideoUriSourceClass",
+        Layout {
+            size: size_of::<GESVideoUriSourceClass>(),
+            alignment: align_of::<GESVideoUriSourceClass>(),
+        },
+    ),
+    (
+        "GESXmlFormatter",
+        Layout {
+            size: size_of::<GESXmlFormatter>(),
+            alignment: align_of::<GESXmlFormatter>(),
+        },
+    ),
+    (
+        "GESXmlFormatterClass",
+        Layout {
+            size: size_of::<GESXmlFormatterClass>(),
+            alignment: align_of::<GESXmlFormatterClass>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -417,8 +1120,14 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GES_VERSION_MICRO", "0"),
     ("GES_VERSION_MINOR", "16"),
     ("GES_VERSION_NANO", "0"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DBL", "45"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DTL", "46"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DBL",
+        "45",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_DTL",
+        "46",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_H", "22"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNDOOR_V", "21"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BARNVEE_D", "65"),
@@ -429,66 +1138,186 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BAR_WIPE_TB", "2"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOWTIE_H", "44"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOWTIE_V", "43"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BC", "25"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BC",
+        "25",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BL", "6"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_BR", "5"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_LC", "26"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_RC", "24"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TC", "23"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_LC",
+        "26",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_RC",
+        "24",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TC",
+        "23",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TL", "3"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_BOX_WIPE_TR", "4"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW12", "201"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW12",
+        "201",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW3", "202"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW6", "203"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_CLOCK_CW9", "204"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_CROSSFADE", "512"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TL", "41"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TR", "42"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIH", "236"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIV", "235"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOH", "214"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOV", "213"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OH", "228"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OV", "227"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PD", "226"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDBL", "246"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDTL", "245"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PV", "225"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TL",
+        "41",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DIAGONAL_TR",
+        "42",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIH",
+        "236",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FIV",
+        "235",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOH",
+        "214",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLEFAN_FOV",
+        "213",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OH",
+        "228",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_OV",
+        "227",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PD",
+        "226",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDBL",
+        "246",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PDTL",
+        "245",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_DOUBLESWEEP_PV",
+        "225",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_B", "233"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_CR", "212"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_CT", "211"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_L", "234"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_R", "232"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FAN_T", "231"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CI", "7"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CO", "8"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CI",
+        "7",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_FOUR_BOX_WIPE_CO",
+        "8",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_IRIS_RECT", "101"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DBD", "47"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DD", "48"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DBD",
+        "47",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_MISC_DIAGONAL_DD",
+        "48",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_NONE", "0"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_FB", "207"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBH", "206"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBV", "205"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_B", "253"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_L", "252"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_R", "254"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_T", "251"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWB", "223"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBL", "242"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBR", "243"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWL", "224"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWR", "222"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWT", "221"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTL", "241"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTR", "244"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_FB",
+        "207",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBH",
+        "206",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_PINWHEEL_TBV",
+        "205",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_B",
+        "253",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_L",
+        "252",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_R",
+        "254",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SALOONDOOR_T",
+        "251",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWB",
+        "223",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBL",
+        "242",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWBR",
+        "243",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWL",
+        "224",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWR",
+        "222",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWT",
+        "221",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTL",
+        "241",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_SINGLESWEEP_CWTR",
+        "244",
+    ),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_D", "61"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_L", "62"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_R", "64"),
     ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_VEE_U", "63"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H", "264"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_R", "261"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_U", "262"),
-    ("(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V", "263"),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_H",
+        "264",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_R",
+        "261",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_U",
+        "262",
+    ),
+    (
+        "(gint) GES_VIDEO_STANDARD_TRANSITION_TYPE_WINDSHIELD_V",
+        "263",
+    ),
     ("(gint) GES_VIDEO_TEST_CHROMA_ZONE_PLATE", "16"),
     ("(gint) GES_VIDEO_TEST_GAMUT", "15"),
     ("(gint) GES_VIDEO_TEST_PATTERN_BLACK", "2"),
@@ -508,5 +1337,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GES_VIDEO_TEST_PATTERN_WHITE", "3"),
     ("(gint) GES_VIDEO_TEST_ZONE_PLATE", "14"),
 ];
-
-

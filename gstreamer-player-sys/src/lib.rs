@@ -3,18 +3,23 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
 extern crate gstreamer_sys as gst;
 extern crate gstreamer_video_sys as gst_video;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -59,7 +64,8 @@ pub type GstPlayerClass = *mut _GstPlayerClass;
 #[repr(C)]
 pub struct _GstPlayerGMainContextSignalDispatcherClass(c_void);
 
-pub type GstPlayerGMainContextSignalDispatcherClass = *mut _GstPlayerGMainContextSignalDispatcherClass;
+pub type GstPlayerGMainContextSignalDispatcherClass =
+    *mut _GstPlayerGMainContextSignalDispatcherClass;
 
 #[repr(C)]
 pub struct _GstPlayerMediaInfoClass(c_void);
@@ -70,15 +76,26 @@ pub type GstPlayerMediaInfoClass = *mut _GstPlayerMediaInfoClass;
 #[derive(Copy, Clone)]
 pub struct GstPlayerSignalDispatcherInterface {
     pub parent_iface: gobject::GTypeInterface,
-    pub dispatch: Option<unsafe extern "C" fn(*mut GstPlayerSignalDispatcher, *mut GstPlayer, GstPlayerSignalDispatcherFunc, gpointer, glib::GDestroyNotify)>,
+    pub dispatch: Option<
+        unsafe extern "C" fn(
+            *mut GstPlayerSignalDispatcher,
+            *mut GstPlayer,
+            GstPlayerSignalDispatcherFunc,
+            gpointer,
+            glib::GDestroyNotify,
+        ),
+    >,
 }
 
 impl ::std::fmt::Debug for GstPlayerSignalDispatcherInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerSignalDispatcherInterface @ {:?}", self as *const _))
-         .field("parent_iface", &self.parent_iface)
-         .field("dispatch", &self.dispatch)
-         .finish()
+        f.debug_struct(&format!(
+            "GstPlayerSignalDispatcherInterface @ {:?}",
+            self as *const _
+        ))
+        .field("parent_iface", &self.parent_iface)
+        .field("dispatch", &self.dispatch)
+        .finish()
     }
 }
 
@@ -106,15 +123,20 @@ pub type GstPlayerVideoOverlayVideoRendererClass = *mut _GstPlayerVideoOverlayVi
 #[derive(Copy, Clone)]
 pub struct GstPlayerVideoRendererInterface {
     pub parent_iface: gobject::GTypeInterface,
-    pub create_video_sink: Option<unsafe extern "C" fn(*mut GstPlayerVideoRenderer, *mut GstPlayer) -> *mut gst::GstElement>,
+    pub create_video_sink: Option<
+        unsafe extern "C" fn(*mut GstPlayerVideoRenderer, *mut GstPlayer) -> *mut gst::GstElement,
+    >,
 }
 
 impl ::std::fmt::Debug for GstPlayerVideoRendererInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerVideoRendererInterface @ {:?}", self as *const _))
-         .field("parent_iface", &self.parent_iface)
-         .field("create_video_sink", &self.create_video_sink)
-         .finish()
+        f.debug_struct(&format!(
+            "GstPlayerVideoRendererInterface @ {:?}",
+            self as *const _
+        ))
+        .field("parent_iface", &self.parent_iface)
+        .field("create_video_sink", &self.create_video_sink)
+        .finish()
     }
 }
 
@@ -128,9 +150,9 @@ pub struct GstPlayerVisualization {
 impl ::std::fmt::Debug for GstPlayerVisualization {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayerVisualization @ {:?}", self as *const _))
-         .field("name", &self.name)
-         .field("description", &self.description)
-         .finish()
+            .field("name", &self.name)
+            .field("description", &self.description)
+            .finish()
     }
 }
 
@@ -141,7 +163,7 @@ pub struct GstPlayer(c_void);
 impl ::std::fmt::Debug for GstPlayer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayer @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -151,7 +173,7 @@ pub struct GstPlayerAudioInfo(c_void);
 impl ::std::fmt::Debug for GstPlayerAudioInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayerAudioInfo @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -160,8 +182,11 @@ pub struct GstPlayerGMainContextSignalDispatcher(c_void);
 
 impl ::std::fmt::Debug for GstPlayerGMainContextSignalDispatcher {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerGMainContextSignalDispatcher @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!(
+            "GstPlayerGMainContextSignalDispatcher @ {:?}",
+            self as *const _
+        ))
+        .finish()
     }
 }
 
@@ -171,7 +196,7 @@ pub struct GstPlayerMediaInfo(c_void);
 impl ::std::fmt::Debug for GstPlayerMediaInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayerMediaInfo @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -181,7 +206,7 @@ pub struct GstPlayerStreamInfo(c_void);
 impl ::std::fmt::Debug for GstPlayerStreamInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayerStreamInfo @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -191,7 +216,7 @@ pub struct GstPlayerSubtitleInfo(c_void);
 impl ::std::fmt::Debug for GstPlayerSubtitleInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayerSubtitleInfo @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -201,7 +226,7 @@ pub struct GstPlayerVideoInfo(c_void);
 impl ::std::fmt::Debug for GstPlayerVideoInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlayerVideoInfo @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -210,8 +235,11 @@ pub struct GstPlayerVideoOverlayVideoRenderer(c_void);
 
 impl ::std::fmt::Debug for GstPlayerVideoOverlayVideoRenderer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstPlayerVideoOverlayVideoRenderer @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!(
+            "GstPlayerVideoOverlayVideoRenderer @ {:?}",
+            self as *const _
+        ))
+        .finish()
     }
 }
 
@@ -234,14 +262,15 @@ impl ::std::fmt::Debug for GstPlayerVideoRenderer {
     }
 }
 
-
 extern "C" {
 
     //=========================================================================
     // GstPlayerColorBalanceType
     //=========================================================================
     pub fn gst_player_color_balance_type_get_type() -> GType;
-    pub fn gst_player_color_balance_type_get_name(type_: GstPlayerColorBalanceType) -> *const c_char;
+    pub fn gst_player_color_balance_type_get_name(
+        type_: GstPlayerColorBalanceType,
+    ) -> *const c_char;
 
     //=========================================================================
     // GstPlayerError
@@ -260,18 +289,28 @@ extern "C" {
     // GstPlayerVisualization
     //=========================================================================
     pub fn gst_player_visualization_get_type() -> GType;
-    pub fn gst_player_visualization_copy(vis: *const GstPlayerVisualization) -> *mut GstPlayerVisualization;
+    pub fn gst_player_visualization_copy(
+        vis: *const GstPlayerVisualization,
+    ) -> *mut GstPlayerVisualization;
     pub fn gst_player_visualization_free(vis: *mut GstPlayerVisualization);
 
     //=========================================================================
     // GstPlayer
     //=========================================================================
     pub fn gst_player_get_type() -> GType;
-    pub fn gst_player_new(video_renderer: *mut GstPlayerVideoRenderer, signal_dispatcher: *mut GstPlayerSignalDispatcher) -> *mut GstPlayer;
-    pub fn gst_player_config_get_position_update_interval(config: *const gst::GstStructure) -> c_uint;
+    pub fn gst_player_new(
+        video_renderer: *mut GstPlayerVideoRenderer,
+        signal_dispatcher: *mut GstPlayerSignalDispatcher,
+    ) -> *mut GstPlayer;
+    pub fn gst_player_config_get_position_update_interval(
+        config: *const gst::GstStructure,
+    ) -> c_uint;
     pub fn gst_player_config_get_seek_accurate(config: *const gst::GstStructure) -> gboolean;
     pub fn gst_player_config_get_user_agent(config: *const gst::GstStructure) -> *mut c_char;
-    pub fn gst_player_config_set_position_update_interval(config: *mut gst::GstStructure, interval: c_uint);
+    pub fn gst_player_config_set_position_update_interval(
+        config: *mut gst::GstStructure,
+        interval: c_uint,
+    );
     pub fn gst_player_config_set_seek_accurate(config: *mut gst::GstStructure, accurate: gboolean);
     pub fn gst_player_config_set_user_agent(config: *mut gst::GstStructure, agent: *const c_char);
     pub fn gst_player_get_audio_streams(info: *const GstPlayerMediaInfo) -> *mut glib::GList;
@@ -280,16 +319,25 @@ extern "C" {
     pub fn gst_player_visualizations_free(viss: *mut *mut GstPlayerVisualization);
     pub fn gst_player_visualizations_get() -> *mut *mut GstPlayerVisualization;
     pub fn gst_player_get_audio_video_offset(player: *mut GstPlayer) -> i64;
-    pub fn gst_player_get_color_balance(player: *mut GstPlayer, type_: GstPlayerColorBalanceType) -> c_double;
+    pub fn gst_player_get_color_balance(
+        player: *mut GstPlayer,
+        type_: GstPlayerColorBalanceType,
+    ) -> c_double;
     pub fn gst_player_get_config(player: *mut GstPlayer) -> *mut gst::GstStructure;
     pub fn gst_player_get_current_audio_track(player: *mut GstPlayer) -> *mut GstPlayerAudioInfo;
-    pub fn gst_player_get_current_subtitle_track(player: *mut GstPlayer) -> *mut GstPlayerSubtitleInfo;
+    pub fn gst_player_get_current_subtitle_track(
+        player: *mut GstPlayer,
+    ) -> *mut GstPlayerSubtitleInfo;
     pub fn gst_player_get_current_video_track(player: *mut GstPlayer) -> *mut GstPlayerVideoInfo;
     pub fn gst_player_get_current_visualization(player: *mut GstPlayer) -> *mut c_char;
     pub fn gst_player_get_duration(player: *mut GstPlayer) -> gst::GstClockTime;
     pub fn gst_player_get_media_info(player: *mut GstPlayer) -> *mut GstPlayerMediaInfo;
-    pub fn gst_player_get_multiview_flags(player: *mut GstPlayer) -> gst_video::GstVideoMultiviewFlags;
-    pub fn gst_player_get_multiview_mode(player: *mut GstPlayer) -> gst_video::GstVideoMultiviewFramePacking;
+    pub fn gst_player_get_multiview_flags(
+        player: *mut GstPlayer,
+    ) -> gst_video::GstVideoMultiviewFlags;
+    pub fn gst_player_get_multiview_mode(
+        player: *mut GstPlayer,
+    ) -> gst_video::GstVideoMultiviewFramePacking;
     pub fn gst_player_get_mute(player: *mut GstPlayer) -> gboolean;
     pub fn gst_player_get_pipeline(player: *mut GstPlayer) -> *mut gst::GstElement;
     pub fn gst_player_get_position(player: *mut GstPlayer) -> gst::GstClockTime;
@@ -298,7 +346,11 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_player_get_subtitle_video_offset(player: *mut GstPlayer) -> i64;
     pub fn gst_player_get_uri(player: *mut GstPlayer) -> *mut c_char;
-    pub fn gst_player_get_video_snapshot(player: *mut GstPlayer, format: GstPlayerSnapshotFormat, config: *const gst::GstStructure) -> *mut gst::GstSample;
+    pub fn gst_player_get_video_snapshot(
+        player: *mut GstPlayer,
+        format: GstPlayerSnapshotFormat,
+        config: *const gst::GstStructure,
+    ) -> *mut gst::GstSample;
     pub fn gst_player_get_volume(player: *mut GstPlayer) -> c_double;
     pub fn gst_player_has_color_balance(player: *mut GstPlayer) -> gboolean;
     pub fn gst_player_pause(player: *mut GstPlayer);
@@ -307,10 +359,23 @@ extern "C" {
     pub fn gst_player_set_audio_track(player: *mut GstPlayer, stream_index: c_int) -> gboolean;
     pub fn gst_player_set_audio_track_enabled(player: *mut GstPlayer, enabled: gboolean);
     pub fn gst_player_set_audio_video_offset(player: *mut GstPlayer, offset: i64);
-    pub fn gst_player_set_color_balance(player: *mut GstPlayer, type_: GstPlayerColorBalanceType, value: c_double);
-    pub fn gst_player_set_config(player: *mut GstPlayer, config: *mut gst::GstStructure) -> gboolean;
-    pub fn gst_player_set_multiview_flags(player: *mut GstPlayer, flags: gst_video::GstVideoMultiviewFlags);
-    pub fn gst_player_set_multiview_mode(player: *mut GstPlayer, mode: gst_video::GstVideoMultiviewFramePacking);
+    pub fn gst_player_set_color_balance(
+        player: *mut GstPlayer,
+        type_: GstPlayerColorBalanceType,
+        value: c_double,
+    );
+    pub fn gst_player_set_config(
+        player: *mut GstPlayer,
+        config: *mut gst::GstStructure,
+    ) -> gboolean;
+    pub fn gst_player_set_multiview_flags(
+        player: *mut GstPlayer,
+        flags: gst_video::GstVideoMultiviewFlags,
+    );
+    pub fn gst_player_set_multiview_mode(
+        player: *mut GstPlayer,
+        mode: gst_video::GstVideoMultiviewFramePacking,
+    );
     pub fn gst_player_set_mute(player: *mut GstPlayer, val: gboolean);
     pub fn gst_player_set_rate(player: *mut GstPlayer, rate: c_double);
     pub fn gst_player_set_subtitle_track(player: *mut GstPlayer, stream_index: c_int) -> gboolean;
@@ -340,26 +405,47 @@ extern "C" {
     // GstPlayerGMainContextSignalDispatcher
     //=========================================================================
     pub fn gst_player_g_main_context_signal_dispatcher_get_type() -> GType;
-    pub fn gst_player_g_main_context_signal_dispatcher_new(application_context: *mut glib::GMainContext) -> *mut GstPlayerSignalDispatcher;
+    pub fn gst_player_g_main_context_signal_dispatcher_new(
+        application_context: *mut glib::GMainContext,
+    ) -> *mut GstPlayerSignalDispatcher;
 
     //=========================================================================
     // GstPlayerMediaInfo
     //=========================================================================
     pub fn gst_player_media_info_get_type() -> GType;
-    pub fn gst_player_media_info_get_audio_streams(info: *const GstPlayerMediaInfo) -> *mut glib::GList;
-    pub fn gst_player_media_info_get_container_format(info: *const GstPlayerMediaInfo) -> *const c_char;
-    pub fn gst_player_media_info_get_duration(info: *const GstPlayerMediaInfo) -> gst::GstClockTime;
-    pub fn gst_player_media_info_get_image_sample(info: *const GstPlayerMediaInfo) -> *mut gst::GstSample;
-    pub fn gst_player_media_info_get_number_of_audio_streams(info: *const GstPlayerMediaInfo) -> c_uint;
+    pub fn gst_player_media_info_get_audio_streams(
+        info: *const GstPlayerMediaInfo,
+    ) -> *mut glib::GList;
+    pub fn gst_player_media_info_get_container_format(
+        info: *const GstPlayerMediaInfo,
+    ) -> *const c_char;
+    pub fn gst_player_media_info_get_duration(info: *const GstPlayerMediaInfo)
+        -> gst::GstClockTime;
+    pub fn gst_player_media_info_get_image_sample(
+        info: *const GstPlayerMediaInfo,
+    ) -> *mut gst::GstSample;
+    pub fn gst_player_media_info_get_number_of_audio_streams(
+        info: *const GstPlayerMediaInfo,
+    ) -> c_uint;
     pub fn gst_player_media_info_get_number_of_streams(info: *const GstPlayerMediaInfo) -> c_uint;
-    pub fn gst_player_media_info_get_number_of_subtitle_streams(info: *const GstPlayerMediaInfo) -> c_uint;
-    pub fn gst_player_media_info_get_number_of_video_streams(info: *const GstPlayerMediaInfo) -> c_uint;
-    pub fn gst_player_media_info_get_stream_list(info: *const GstPlayerMediaInfo) -> *mut glib::GList;
-    pub fn gst_player_media_info_get_subtitle_streams(info: *const GstPlayerMediaInfo) -> *mut glib::GList;
+    pub fn gst_player_media_info_get_number_of_subtitle_streams(
+        info: *const GstPlayerMediaInfo,
+    ) -> c_uint;
+    pub fn gst_player_media_info_get_number_of_video_streams(
+        info: *const GstPlayerMediaInfo,
+    ) -> c_uint;
+    pub fn gst_player_media_info_get_stream_list(
+        info: *const GstPlayerMediaInfo,
+    ) -> *mut glib::GList;
+    pub fn gst_player_media_info_get_subtitle_streams(
+        info: *const GstPlayerMediaInfo,
+    ) -> *mut glib::GList;
     pub fn gst_player_media_info_get_tags(info: *const GstPlayerMediaInfo) -> *mut gst::GstTagList;
     pub fn gst_player_media_info_get_title(info: *const GstPlayerMediaInfo) -> *const c_char;
     pub fn gst_player_media_info_get_uri(info: *const GstPlayerMediaInfo) -> *const c_char;
-    pub fn gst_player_media_info_get_video_streams(info: *const GstPlayerMediaInfo) -> *mut glib::GList;
+    pub fn gst_player_media_info_get_video_streams(
+        info: *const GstPlayerMediaInfo,
+    ) -> *mut glib::GList;
     pub fn gst_player_media_info_is_live(info: *const GstPlayerMediaInfo) -> gboolean;
     pub fn gst_player_media_info_is_seekable(info: *const GstPlayerMediaInfo) -> gboolean;
 
@@ -370,37 +456,75 @@ extern "C" {
     pub fn gst_player_stream_info_get_caps(info: *const GstPlayerStreamInfo) -> *mut gst::GstCaps;
     pub fn gst_player_stream_info_get_codec(info: *const GstPlayerStreamInfo) -> *const c_char;
     pub fn gst_player_stream_info_get_index(info: *const GstPlayerStreamInfo) -> c_int;
-    pub fn gst_player_stream_info_get_stream_type(info: *const GstPlayerStreamInfo) -> *const c_char;
-    pub fn gst_player_stream_info_get_tags(info: *const GstPlayerStreamInfo) -> *mut gst::GstTagList;
+    pub fn gst_player_stream_info_get_stream_type(
+        info: *const GstPlayerStreamInfo,
+    ) -> *const c_char;
+    pub fn gst_player_stream_info_get_tags(
+        info: *const GstPlayerStreamInfo,
+    ) -> *mut gst::GstTagList;
 
     //=========================================================================
     // GstPlayerSubtitleInfo
     //=========================================================================
     pub fn gst_player_subtitle_info_get_type() -> GType;
-    pub fn gst_player_subtitle_info_get_language(info: *const GstPlayerSubtitleInfo) -> *const c_char;
+    pub fn gst_player_subtitle_info_get_language(
+        info: *const GstPlayerSubtitleInfo,
+    ) -> *const c_char;
 
     //=========================================================================
     // GstPlayerVideoInfo
     //=========================================================================
     pub fn gst_player_video_info_get_type() -> GType;
     pub fn gst_player_video_info_get_bitrate(info: *const GstPlayerVideoInfo) -> c_int;
-    pub fn gst_player_video_info_get_framerate(info: *const GstPlayerVideoInfo, fps_n: *mut c_int, fps_d: *mut c_int);
+    pub fn gst_player_video_info_get_framerate(
+        info: *const GstPlayerVideoInfo,
+        fps_n: *mut c_int,
+        fps_d: *mut c_int,
+    );
     pub fn gst_player_video_info_get_height(info: *const GstPlayerVideoInfo) -> c_int;
     pub fn gst_player_video_info_get_max_bitrate(info: *const GstPlayerVideoInfo) -> c_int;
-    pub fn gst_player_video_info_get_pixel_aspect_ratio(info: *const GstPlayerVideoInfo, par_n: *mut c_uint, par_d: *mut c_uint);
+    pub fn gst_player_video_info_get_pixel_aspect_ratio(
+        info: *const GstPlayerVideoInfo,
+        par_n: *mut c_uint,
+        par_d: *mut c_uint,
+    );
     pub fn gst_player_video_info_get_width(info: *const GstPlayerVideoInfo) -> c_int;
 
     //=========================================================================
     // GstPlayerVideoOverlayVideoRenderer
     //=========================================================================
     pub fn gst_player_video_overlay_video_renderer_get_type() -> GType;
-    pub fn gst_player_video_overlay_video_renderer_new(window_handle: gpointer) -> *mut GstPlayerVideoRenderer;
-    pub fn gst_player_video_overlay_video_renderer_new_with_sink(window_handle: gpointer, video_sink: *mut gst::GstElement) -> *mut GstPlayerVideoRenderer;
-    pub fn gst_player_video_overlay_video_renderer_expose(self_: *mut GstPlayerVideoOverlayVideoRenderer);
-    pub fn gst_player_video_overlay_video_renderer_get_render_rectangle(self_: *mut GstPlayerVideoOverlayVideoRenderer, x: *mut c_int, y: *mut c_int, width: *mut c_int, height: *mut c_int);
-    pub fn gst_player_video_overlay_video_renderer_get_window_handle(self_: *mut GstPlayerVideoOverlayVideoRenderer) -> gpointer;
-    pub fn gst_player_video_overlay_video_renderer_set_render_rectangle(self_: *mut GstPlayerVideoOverlayVideoRenderer, x: c_int, y: c_int, width: c_int, height: c_int);
-    pub fn gst_player_video_overlay_video_renderer_set_window_handle(self_: *mut GstPlayerVideoOverlayVideoRenderer, window_handle: gpointer);
+    pub fn gst_player_video_overlay_video_renderer_new(
+        window_handle: gpointer,
+    ) -> *mut GstPlayerVideoRenderer;
+    pub fn gst_player_video_overlay_video_renderer_new_with_sink(
+        window_handle: gpointer,
+        video_sink: *mut gst::GstElement,
+    ) -> *mut GstPlayerVideoRenderer;
+    pub fn gst_player_video_overlay_video_renderer_expose(
+        self_: *mut GstPlayerVideoOverlayVideoRenderer,
+    );
+    pub fn gst_player_video_overlay_video_renderer_get_render_rectangle(
+        self_: *mut GstPlayerVideoOverlayVideoRenderer,
+        x: *mut c_int,
+        y: *mut c_int,
+        width: *mut c_int,
+        height: *mut c_int,
+    );
+    pub fn gst_player_video_overlay_video_renderer_get_window_handle(
+        self_: *mut GstPlayerVideoOverlayVideoRenderer,
+    ) -> gpointer;
+    pub fn gst_player_video_overlay_video_renderer_set_render_rectangle(
+        self_: *mut GstPlayerVideoOverlayVideoRenderer,
+        x: c_int,
+        y: c_int,
+        width: c_int,
+        height: c_int,
+    );
+    pub fn gst_player_video_overlay_video_renderer_set_window_handle(
+        self_: *mut GstPlayerVideoOverlayVideoRenderer,
+        window_handle: gpointer,
+    );
 
     //=========================================================================
     // GstPlayerSignalDispatcher

@@ -5,13 +5,13 @@
 extern crate gstreamer_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,194 +229,1233 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstAllocationParams", Layout {size: size_of::<GstAllocationParams>(), alignment: align_of::<GstAllocationParams>()}),
-    ("GstAllocator", Layout {size: size_of::<GstAllocator>(), alignment: align_of::<GstAllocator>()}),
-    ("GstAllocatorClass", Layout {size: size_of::<GstAllocatorClass>(), alignment: align_of::<GstAllocatorClass>()}),
-    ("GstAllocatorFlags", Layout {size: size_of::<GstAllocatorFlags>(), alignment: align_of::<GstAllocatorFlags>()}),
-    ("GstBin", Layout {size: size_of::<GstBin>(), alignment: align_of::<GstBin>()}),
-    ("GstBinClass", Layout {size: size_of::<GstBinClass>(), alignment: align_of::<GstBinClass>()}),
-    ("GstBinFlags", Layout {size: size_of::<GstBinFlags>(), alignment: align_of::<GstBinFlags>()}),
-    ("GstBuffer", Layout {size: size_of::<GstBuffer>(), alignment: align_of::<GstBuffer>()}),
-    ("GstBufferCopyFlags", Layout {size: size_of::<GstBufferCopyFlags>(), alignment: align_of::<GstBufferCopyFlags>()}),
-    ("GstBufferFlags", Layout {size: size_of::<GstBufferFlags>(), alignment: align_of::<GstBufferFlags>()}),
-    ("GstBufferPool", Layout {size: size_of::<GstBufferPool>(), alignment: align_of::<GstBufferPool>()}),
-    ("GstBufferPoolAcquireFlags", Layout {size: size_of::<GstBufferPoolAcquireFlags>(), alignment: align_of::<GstBufferPoolAcquireFlags>()}),
-    ("GstBufferPoolAcquireParams", Layout {size: size_of::<GstBufferPoolAcquireParams>(), alignment: align_of::<GstBufferPoolAcquireParams>()}),
-    ("GstBufferPoolClass", Layout {size: size_of::<GstBufferPoolClass>(), alignment: align_of::<GstBufferPoolClass>()}),
-    ("GstBufferingMode", Layout {size: size_of::<GstBufferingMode>(), alignment: align_of::<GstBufferingMode>()}),
-    ("GstBus", Layout {size: size_of::<GstBus>(), alignment: align_of::<GstBus>()}),
-    ("GstBusClass", Layout {size: size_of::<GstBusClass>(), alignment: align_of::<GstBusClass>()}),
-    ("GstBusFlags", Layout {size: size_of::<GstBusFlags>(), alignment: align_of::<GstBusFlags>()}),
-    ("GstBusSyncReply", Layout {size: size_of::<GstBusSyncReply>(), alignment: align_of::<GstBusSyncReply>()}),
-    ("GstCaps", Layout {size: size_of::<GstCaps>(), alignment: align_of::<GstCaps>()}),
-    ("GstCapsFlags", Layout {size: size_of::<GstCapsFlags>(), alignment: align_of::<GstCapsFlags>()}),
-    ("GstCapsIntersectMode", Layout {size: size_of::<GstCapsIntersectMode>(), alignment: align_of::<GstCapsIntersectMode>()}),
-    ("GstChildProxyInterface", Layout {size: size_of::<GstChildProxyInterface>(), alignment: align_of::<GstChildProxyInterface>()}),
-    ("GstClock", Layout {size: size_of::<GstClock>(), alignment: align_of::<GstClock>()}),
-    ("GstClockClass", Layout {size: size_of::<GstClockClass>(), alignment: align_of::<GstClockClass>()}),
-    ("GstClockEntry", Layout {size: size_of::<GstClockEntry>(), alignment: align_of::<GstClockEntry>()}),
-    ("GstClockEntryType", Layout {size: size_of::<GstClockEntryType>(), alignment: align_of::<GstClockEntryType>()}),
-    ("GstClockFlags", Layout {size: size_of::<GstClockFlags>(), alignment: align_of::<GstClockFlags>()}),
-    ("GstClockID", Layout {size: size_of::<GstClockID>(), alignment: align_of::<GstClockID>()}),
-    ("GstClockReturn", Layout {size: size_of::<GstClockReturn>(), alignment: align_of::<GstClockReturn>()}),
-    ("GstClockTime", Layout {size: size_of::<GstClockTime>(), alignment: align_of::<GstClockTime>()}),
-    ("GstClockTimeDiff", Layout {size: size_of::<GstClockTimeDiff>(), alignment: align_of::<GstClockTimeDiff>()}),
-    ("GstClockType", Layout {size: size_of::<GstClockType>(), alignment: align_of::<GstClockType>()}),
-    ("GstControlBinding", Layout {size: size_of::<GstControlBinding>(), alignment: align_of::<GstControlBinding>()}),
-    ("GstControlBindingClass", Layout {size: size_of::<GstControlBindingClass>(), alignment: align_of::<GstControlBindingClass>()}),
-    ("GstControlSource", Layout {size: size_of::<GstControlSource>(), alignment: align_of::<GstControlSource>()}),
-    ("GstControlSourceClass", Layout {size: size_of::<GstControlSourceClass>(), alignment: align_of::<GstControlSourceClass>()}),
-    ("GstCoreError", Layout {size: size_of::<GstCoreError>(), alignment: align_of::<GstCoreError>()}),
-    ("GstDebugCategory", Layout {size: size_of::<GstDebugCategory>(), alignment: align_of::<GstDebugCategory>()}),
-    ("GstDebugColorFlags", Layout {size: size_of::<GstDebugColorFlags>(), alignment: align_of::<GstDebugColorFlags>()}),
-    ("GstDebugColorMode", Layout {size: size_of::<GstDebugColorMode>(), alignment: align_of::<GstDebugColorMode>()}),
-    ("GstDebugGraphDetails", Layout {size: size_of::<GstDebugGraphDetails>(), alignment: align_of::<GstDebugGraphDetails>()}),
-    ("GstDebugLevel", Layout {size: size_of::<GstDebugLevel>(), alignment: align_of::<GstDebugLevel>()}),
-    ("GstDevice", Layout {size: size_of::<GstDevice>(), alignment: align_of::<GstDevice>()}),
-    ("GstDeviceClass", Layout {size: size_of::<GstDeviceClass>(), alignment: align_of::<GstDeviceClass>()}),
-    ("GstDeviceMonitor", Layout {size: size_of::<GstDeviceMonitor>(), alignment: align_of::<GstDeviceMonitor>()}),
-    ("GstDeviceMonitorClass", Layout {size: size_of::<GstDeviceMonitorClass>(), alignment: align_of::<GstDeviceMonitorClass>()}),
-    ("GstDeviceProvider", Layout {size: size_of::<GstDeviceProvider>(), alignment: align_of::<GstDeviceProvider>()}),
-    ("GstDeviceProviderClass", Layout {size: size_of::<GstDeviceProviderClass>(), alignment: align_of::<GstDeviceProviderClass>()}),
-    ("GstElement", Layout {size: size_of::<GstElement>(), alignment: align_of::<GstElement>()}),
-    ("GstElementClass", Layout {size: size_of::<GstElementClass>(), alignment: align_of::<GstElementClass>()}),
-    ("GstElementFactoryListType", Layout {size: size_of::<GstElementFactoryListType>(), alignment: align_of::<GstElementFactoryListType>()}),
-    ("GstElementFlags", Layout {size: size_of::<GstElementFlags>(), alignment: align_of::<GstElementFlags>()}),
-    ("GstEvent", Layout {size: size_of::<GstEvent>(), alignment: align_of::<GstEvent>()}),
-    ("GstEventType", Layout {size: size_of::<GstEventType>(), alignment: align_of::<GstEventType>()}),
-    ("GstEventTypeFlags", Layout {size: size_of::<GstEventTypeFlags>(), alignment: align_of::<GstEventTypeFlags>()}),
-    ("GstFlowReturn", Layout {size: size_of::<GstFlowReturn>(), alignment: align_of::<GstFlowReturn>()}),
-    ("GstFormat", Layout {size: size_of::<GstFormat>(), alignment: align_of::<GstFormat>()}),
-    ("GstFormatDefinition", Layout {size: size_of::<GstFormatDefinition>(), alignment: align_of::<GstFormatDefinition>()}),
-    ("GstGhostPad", Layout {size: size_of::<GstGhostPad>(), alignment: align_of::<GstGhostPad>()}),
-    ("GstGhostPadClass", Layout {size: size_of::<GstGhostPadClass>(), alignment: align_of::<GstGhostPadClass>()}),
-    ("GstIterator", Layout {size: size_of::<GstIterator>(), alignment: align_of::<GstIterator>()}),
-    ("GstIteratorItem", Layout {size: size_of::<GstIteratorItem>(), alignment: align_of::<GstIteratorItem>()}),
-    ("GstIteratorResult", Layout {size: size_of::<GstIteratorResult>(), alignment: align_of::<GstIteratorResult>()}),
-    ("GstLibraryError", Layout {size: size_of::<GstLibraryError>(), alignment: align_of::<GstLibraryError>()}),
-    ("GstLockFlags", Layout {size: size_of::<GstLockFlags>(), alignment: align_of::<GstLockFlags>()}),
-    ("GstMapFlags", Layout {size: size_of::<GstMapFlags>(), alignment: align_of::<GstMapFlags>()}),
-    ("GstMapInfo", Layout {size: size_of::<GstMapInfo>(), alignment: align_of::<GstMapInfo>()}),
-    ("GstMemory", Layout {size: size_of::<GstMemory>(), alignment: align_of::<GstMemory>()}),
-    ("GstMemoryFlags", Layout {size: size_of::<GstMemoryFlags>(), alignment: align_of::<GstMemoryFlags>()}),
-    ("GstMessage", Layout {size: size_of::<GstMessage>(), alignment: align_of::<GstMessage>()}),
-    ("GstMessageType", Layout {size: size_of::<GstMessageType>(), alignment: align_of::<GstMessageType>()}),
-    ("GstMeta", Layout {size: size_of::<GstMeta>(), alignment: align_of::<GstMeta>()}),
-    ("GstMetaFlags", Layout {size: size_of::<GstMetaFlags>(), alignment: align_of::<GstMetaFlags>()}),
-    ("GstMetaInfo", Layout {size: size_of::<GstMetaInfo>(), alignment: align_of::<GstMetaInfo>()}),
-    ("GstMetaTransformCopy", Layout {size: size_of::<GstMetaTransformCopy>(), alignment: align_of::<GstMetaTransformCopy>()}),
-    ("GstMiniObject", Layout {size: size_of::<GstMiniObject>(), alignment: align_of::<GstMiniObject>()}),
-    ("GstMiniObjectFlags", Layout {size: size_of::<GstMiniObjectFlags>(), alignment: align_of::<GstMiniObjectFlags>()}),
-    ("GstObject", Layout {size: size_of::<GstObject>(), alignment: align_of::<GstObject>()}),
-    ("GstObjectClass", Layout {size: size_of::<GstObjectClass>(), alignment: align_of::<GstObjectClass>()}),
-    ("GstObjectFlags", Layout {size: size_of::<GstObjectFlags>(), alignment: align_of::<GstObjectFlags>()}),
-    ("GstPad", Layout {size: size_of::<GstPad>(), alignment: align_of::<GstPad>()}),
-    ("GstPadClass", Layout {size: size_of::<GstPadClass>(), alignment: align_of::<GstPadClass>()}),
-    ("GstPadDirection", Layout {size: size_of::<GstPadDirection>(), alignment: align_of::<GstPadDirection>()}),
-    ("GstPadFlags", Layout {size: size_of::<GstPadFlags>(), alignment: align_of::<GstPadFlags>()}),
-    ("GstPadLinkCheck", Layout {size: size_of::<GstPadLinkCheck>(), alignment: align_of::<GstPadLinkCheck>()}),
-    ("GstPadLinkReturn", Layout {size: size_of::<GstPadLinkReturn>(), alignment: align_of::<GstPadLinkReturn>()}),
-    ("GstPadMode", Layout {size: size_of::<GstPadMode>(), alignment: align_of::<GstPadMode>()}),
-    ("GstPadPresence", Layout {size: size_of::<GstPadPresence>(), alignment: align_of::<GstPadPresence>()}),
-    ("GstPadProbeInfo", Layout {size: size_of::<GstPadProbeInfo>(), alignment: align_of::<GstPadProbeInfo>()}),
-    ("GstPadProbeReturn", Layout {size: size_of::<GstPadProbeReturn>(), alignment: align_of::<GstPadProbeReturn>()}),
-    ("GstPadProbeType", Layout {size: size_of::<GstPadProbeType>(), alignment: align_of::<GstPadProbeType>()}),
-    ("GstPadTemplate", Layout {size: size_of::<GstPadTemplate>(), alignment: align_of::<GstPadTemplate>()}),
-    ("GstPadTemplateClass", Layout {size: size_of::<GstPadTemplateClass>(), alignment: align_of::<GstPadTemplateClass>()}),
-    ("GstPadTemplateFlags", Layout {size: size_of::<GstPadTemplateFlags>(), alignment: align_of::<GstPadTemplateFlags>()}),
-    ("GstParamSpecArray", Layout {size: size_of::<GstParamSpecArray>(), alignment: align_of::<GstParamSpecArray>()}),
-    ("GstParamSpecFraction", Layout {size: size_of::<GstParamSpecFraction>(), alignment: align_of::<GstParamSpecFraction>()}),
-    ("GstParentBufferMeta", Layout {size: size_of::<GstParentBufferMeta>(), alignment: align_of::<GstParentBufferMeta>()}),
-    ("GstParseError", Layout {size: size_of::<GstParseError>(), alignment: align_of::<GstParseError>()}),
-    ("GstParseFlags", Layout {size: size_of::<GstParseFlags>(), alignment: align_of::<GstParseFlags>()}),
-    ("GstPipeline", Layout {size: size_of::<GstPipeline>(), alignment: align_of::<GstPipeline>()}),
-    ("GstPipelineClass", Layout {size: size_of::<GstPipelineClass>(), alignment: align_of::<GstPipelineClass>()}),
-    ("GstPipelineFlags", Layout {size: size_of::<GstPipelineFlags>(), alignment: align_of::<GstPipelineFlags>()}),
-    ("GstPluginDependencyFlags", Layout {size: size_of::<GstPluginDependencyFlags>(), alignment: align_of::<GstPluginDependencyFlags>()}),
-    ("GstPluginDesc", Layout {size: size_of::<GstPluginDesc>(), alignment: align_of::<GstPluginDesc>()}),
-    ("GstPluginError", Layout {size: size_of::<GstPluginError>(), alignment: align_of::<GstPluginError>()}),
-    ("GstPluginFlags", Layout {size: size_of::<GstPluginFlags>(), alignment: align_of::<GstPluginFlags>()}),
-    ("GstPollFD", Layout {size: size_of::<GstPollFD>(), alignment: align_of::<GstPollFD>()}),
-    ("GstPresetInterface", Layout {size: size_of::<GstPresetInterface>(), alignment: align_of::<GstPresetInterface>()}),
-    ("GstProgressType", Layout {size: size_of::<GstProgressType>(), alignment: align_of::<GstProgressType>()}),
-    ("GstPromise", Layout {size: size_of::<GstPromise>(), alignment: align_of::<GstPromise>()}),
-    ("GstPromiseResult", Layout {size: size_of::<GstPromiseResult>(), alignment: align_of::<GstPromiseResult>()}),
-    ("GstProtectionMeta", Layout {size: size_of::<GstProtectionMeta>(), alignment: align_of::<GstProtectionMeta>()}),
-    ("GstProxyPad", Layout {size: size_of::<GstProxyPad>(), alignment: align_of::<GstProxyPad>()}),
-    ("GstProxyPadClass", Layout {size: size_of::<GstProxyPadClass>(), alignment: align_of::<GstProxyPadClass>()}),
-    ("GstQOSType", Layout {size: size_of::<GstQOSType>(), alignment: align_of::<GstQOSType>()}),
-    ("GstQuery", Layout {size: size_of::<GstQuery>(), alignment: align_of::<GstQuery>()}),
-    ("GstQueryType", Layout {size: size_of::<GstQueryType>(), alignment: align_of::<GstQueryType>()}),
-    ("GstQueryTypeFlags", Layout {size: size_of::<GstQueryTypeFlags>(), alignment: align_of::<GstQueryTypeFlags>()}),
-    ("GstRank", Layout {size: size_of::<GstRank>(), alignment: align_of::<GstRank>()}),
-    ("GstReferenceTimestampMeta", Layout {size: size_of::<GstReferenceTimestampMeta>(), alignment: align_of::<GstReferenceTimestampMeta>()}),
-    ("GstRegistry", Layout {size: size_of::<GstRegistry>(), alignment: align_of::<GstRegistry>()}),
-    ("GstRegistryClass", Layout {size: size_of::<GstRegistryClass>(), alignment: align_of::<GstRegistryClass>()}),
-    ("GstResourceError", Layout {size: size_of::<GstResourceError>(), alignment: align_of::<GstResourceError>()}),
-    ("GstSchedulingFlags", Layout {size: size_of::<GstSchedulingFlags>(), alignment: align_of::<GstSchedulingFlags>()}),
-    ("GstSearchMode", Layout {size: size_of::<GstSearchMode>(), alignment: align_of::<GstSearchMode>()}),
-    ("GstSeekFlags", Layout {size: size_of::<GstSeekFlags>(), alignment: align_of::<GstSeekFlags>()}),
-    ("GstSeekType", Layout {size: size_of::<GstSeekType>(), alignment: align_of::<GstSeekType>()}),
-    ("GstSegment", Layout {size: size_of::<GstSegment>(), alignment: align_of::<GstSegment>()}),
-    ("GstSegmentFlags", Layout {size: size_of::<GstSegmentFlags>(), alignment: align_of::<GstSegmentFlags>()}),
-    ("GstStackTraceFlags", Layout {size: size_of::<GstStackTraceFlags>(), alignment: align_of::<GstStackTraceFlags>()}),
-    ("GstState", Layout {size: size_of::<GstState>(), alignment: align_of::<GstState>()}),
-    ("GstStateChange", Layout {size: size_of::<GstStateChange>(), alignment: align_of::<GstStateChange>()}),
-    ("GstStateChangeReturn", Layout {size: size_of::<GstStateChangeReturn>(), alignment: align_of::<GstStateChangeReturn>()}),
-    ("GstStaticCaps", Layout {size: size_of::<GstStaticCaps>(), alignment: align_of::<GstStaticCaps>()}),
-    ("GstStaticPadTemplate", Layout {size: size_of::<GstStaticPadTemplate>(), alignment: align_of::<GstStaticPadTemplate>()}),
-    ("GstStream", Layout {size: size_of::<GstStream>(), alignment: align_of::<GstStream>()}),
-    ("GstStreamClass", Layout {size: size_of::<GstStreamClass>(), alignment: align_of::<GstStreamClass>()}),
-    ("GstStreamCollection", Layout {size: size_of::<GstStreamCollection>(), alignment: align_of::<GstStreamCollection>()}),
-    ("GstStreamCollectionClass", Layout {size: size_of::<GstStreamCollectionClass>(), alignment: align_of::<GstStreamCollectionClass>()}),
-    ("GstStreamError", Layout {size: size_of::<GstStreamError>(), alignment: align_of::<GstStreamError>()}),
-    ("GstStreamFlags", Layout {size: size_of::<GstStreamFlags>(), alignment: align_of::<GstStreamFlags>()}),
-    ("GstStreamStatusType", Layout {size: size_of::<GstStreamStatusType>(), alignment: align_of::<GstStreamStatusType>()}),
-    ("GstStreamType", Layout {size: size_of::<GstStreamType>(), alignment: align_of::<GstStreamType>()}),
-    ("GstStructure", Layout {size: size_of::<GstStructure>(), alignment: align_of::<GstStructure>()}),
-    ("GstStructureChangeType", Layout {size: size_of::<GstStructureChangeType>(), alignment: align_of::<GstStructureChangeType>()}),
-    ("GstSystemClock", Layout {size: size_of::<GstSystemClock>(), alignment: align_of::<GstSystemClock>()}),
-    ("GstSystemClockClass", Layout {size: size_of::<GstSystemClockClass>(), alignment: align_of::<GstSystemClockClass>()}),
-    ("GstTagFlag", Layout {size: size_of::<GstTagFlag>(), alignment: align_of::<GstTagFlag>()}),
-    ("GstTagList", Layout {size: size_of::<GstTagList>(), alignment: align_of::<GstTagList>()}),
-    ("GstTagMergeMode", Layout {size: size_of::<GstTagMergeMode>(), alignment: align_of::<GstTagMergeMode>()}),
-    ("GstTagScope", Layout {size: size_of::<GstTagScope>(), alignment: align_of::<GstTagScope>()}),
-    ("GstTagSetterInterface", Layout {size: size_of::<GstTagSetterInterface>(), alignment: align_of::<GstTagSetterInterface>()}),
-    ("GstTask", Layout {size: size_of::<GstTask>(), alignment: align_of::<GstTask>()}),
-    ("GstTaskClass", Layout {size: size_of::<GstTaskClass>(), alignment: align_of::<GstTaskClass>()}),
-    ("GstTaskPool", Layout {size: size_of::<GstTaskPool>(), alignment: align_of::<GstTaskPool>()}),
-    ("GstTaskPoolClass", Layout {size: size_of::<GstTaskPoolClass>(), alignment: align_of::<GstTaskPoolClass>()}),
-    ("GstTaskState", Layout {size: size_of::<GstTaskState>(), alignment: align_of::<GstTaskState>()}),
-    ("GstTimedValue", Layout {size: size_of::<GstTimedValue>(), alignment: align_of::<GstTimedValue>()}),
-    ("GstTocEntryType", Layout {size: size_of::<GstTocEntryType>(), alignment: align_of::<GstTocEntryType>()}),
-    ("GstTocLoopType", Layout {size: size_of::<GstTocLoopType>(), alignment: align_of::<GstTocLoopType>()}),
-    ("GstTocScope", Layout {size: size_of::<GstTocScope>(), alignment: align_of::<GstTocScope>()}),
-    ("GstTocSetterInterface", Layout {size: size_of::<GstTocSetterInterface>(), alignment: align_of::<GstTocSetterInterface>()}),
-    ("GstTracer", Layout {size: size_of::<GstTracer>(), alignment: align_of::<GstTracer>()}),
-    ("GstTracerClass", Layout {size: size_of::<GstTracerClass>(), alignment: align_of::<GstTracerClass>()}),
-    ("GstTracerValueFlags", Layout {size: size_of::<GstTracerValueFlags>(), alignment: align_of::<GstTracerValueFlags>()}),
-    ("GstTracerValueScope", Layout {size: size_of::<GstTracerValueScope>(), alignment: align_of::<GstTracerValueScope>()}),
-    ("GstTypeFind", Layout {size: size_of::<GstTypeFind>(), alignment: align_of::<GstTypeFind>()}),
-    ("GstTypeFindProbability", Layout {size: size_of::<GstTypeFindProbability>(), alignment: align_of::<GstTypeFindProbability>()}),
-    ("GstURIError", Layout {size: size_of::<GstURIError>(), alignment: align_of::<GstURIError>()}),
-    ("GstURIHandlerInterface", Layout {size: size_of::<GstURIHandlerInterface>(), alignment: align_of::<GstURIHandlerInterface>()}),
-    ("GstURIType", Layout {size: size_of::<GstURIType>(), alignment: align_of::<GstURIType>()}),
-    ("GstValueTable", Layout {size: size_of::<GstValueTable>(), alignment: align_of::<GstValueTable>()}),
+    (
+        "GstAllocationParams",
+        Layout {
+            size: size_of::<GstAllocationParams>(),
+            alignment: align_of::<GstAllocationParams>(),
+        },
+    ),
+    (
+        "GstAllocator",
+        Layout {
+            size: size_of::<GstAllocator>(),
+            alignment: align_of::<GstAllocator>(),
+        },
+    ),
+    (
+        "GstAllocatorClass",
+        Layout {
+            size: size_of::<GstAllocatorClass>(),
+            alignment: align_of::<GstAllocatorClass>(),
+        },
+    ),
+    (
+        "GstAllocatorFlags",
+        Layout {
+            size: size_of::<GstAllocatorFlags>(),
+            alignment: align_of::<GstAllocatorFlags>(),
+        },
+    ),
+    (
+        "GstBin",
+        Layout {
+            size: size_of::<GstBin>(),
+            alignment: align_of::<GstBin>(),
+        },
+    ),
+    (
+        "GstBinClass",
+        Layout {
+            size: size_of::<GstBinClass>(),
+            alignment: align_of::<GstBinClass>(),
+        },
+    ),
+    (
+        "GstBinFlags",
+        Layout {
+            size: size_of::<GstBinFlags>(),
+            alignment: align_of::<GstBinFlags>(),
+        },
+    ),
+    (
+        "GstBuffer",
+        Layout {
+            size: size_of::<GstBuffer>(),
+            alignment: align_of::<GstBuffer>(),
+        },
+    ),
+    (
+        "GstBufferCopyFlags",
+        Layout {
+            size: size_of::<GstBufferCopyFlags>(),
+            alignment: align_of::<GstBufferCopyFlags>(),
+        },
+    ),
+    (
+        "GstBufferFlags",
+        Layout {
+            size: size_of::<GstBufferFlags>(),
+            alignment: align_of::<GstBufferFlags>(),
+        },
+    ),
+    (
+        "GstBufferPool",
+        Layout {
+            size: size_of::<GstBufferPool>(),
+            alignment: align_of::<GstBufferPool>(),
+        },
+    ),
+    (
+        "GstBufferPoolAcquireFlags",
+        Layout {
+            size: size_of::<GstBufferPoolAcquireFlags>(),
+            alignment: align_of::<GstBufferPoolAcquireFlags>(),
+        },
+    ),
+    (
+        "GstBufferPoolAcquireParams",
+        Layout {
+            size: size_of::<GstBufferPoolAcquireParams>(),
+            alignment: align_of::<GstBufferPoolAcquireParams>(),
+        },
+    ),
+    (
+        "GstBufferPoolClass",
+        Layout {
+            size: size_of::<GstBufferPoolClass>(),
+            alignment: align_of::<GstBufferPoolClass>(),
+        },
+    ),
+    (
+        "GstBufferingMode",
+        Layout {
+            size: size_of::<GstBufferingMode>(),
+            alignment: align_of::<GstBufferingMode>(),
+        },
+    ),
+    (
+        "GstBus",
+        Layout {
+            size: size_of::<GstBus>(),
+            alignment: align_of::<GstBus>(),
+        },
+    ),
+    (
+        "GstBusClass",
+        Layout {
+            size: size_of::<GstBusClass>(),
+            alignment: align_of::<GstBusClass>(),
+        },
+    ),
+    (
+        "GstBusFlags",
+        Layout {
+            size: size_of::<GstBusFlags>(),
+            alignment: align_of::<GstBusFlags>(),
+        },
+    ),
+    (
+        "GstBusSyncReply",
+        Layout {
+            size: size_of::<GstBusSyncReply>(),
+            alignment: align_of::<GstBusSyncReply>(),
+        },
+    ),
+    (
+        "GstCaps",
+        Layout {
+            size: size_of::<GstCaps>(),
+            alignment: align_of::<GstCaps>(),
+        },
+    ),
+    (
+        "GstCapsFlags",
+        Layout {
+            size: size_of::<GstCapsFlags>(),
+            alignment: align_of::<GstCapsFlags>(),
+        },
+    ),
+    (
+        "GstCapsIntersectMode",
+        Layout {
+            size: size_of::<GstCapsIntersectMode>(),
+            alignment: align_of::<GstCapsIntersectMode>(),
+        },
+    ),
+    (
+        "GstChildProxyInterface",
+        Layout {
+            size: size_of::<GstChildProxyInterface>(),
+            alignment: align_of::<GstChildProxyInterface>(),
+        },
+    ),
+    (
+        "GstClock",
+        Layout {
+            size: size_of::<GstClock>(),
+            alignment: align_of::<GstClock>(),
+        },
+    ),
+    (
+        "GstClockClass",
+        Layout {
+            size: size_of::<GstClockClass>(),
+            alignment: align_of::<GstClockClass>(),
+        },
+    ),
+    (
+        "GstClockEntry",
+        Layout {
+            size: size_of::<GstClockEntry>(),
+            alignment: align_of::<GstClockEntry>(),
+        },
+    ),
+    (
+        "GstClockEntryType",
+        Layout {
+            size: size_of::<GstClockEntryType>(),
+            alignment: align_of::<GstClockEntryType>(),
+        },
+    ),
+    (
+        "GstClockFlags",
+        Layout {
+            size: size_of::<GstClockFlags>(),
+            alignment: align_of::<GstClockFlags>(),
+        },
+    ),
+    (
+        "GstClockID",
+        Layout {
+            size: size_of::<GstClockID>(),
+            alignment: align_of::<GstClockID>(),
+        },
+    ),
+    (
+        "GstClockReturn",
+        Layout {
+            size: size_of::<GstClockReturn>(),
+            alignment: align_of::<GstClockReturn>(),
+        },
+    ),
+    (
+        "GstClockTime",
+        Layout {
+            size: size_of::<GstClockTime>(),
+            alignment: align_of::<GstClockTime>(),
+        },
+    ),
+    (
+        "GstClockTimeDiff",
+        Layout {
+            size: size_of::<GstClockTimeDiff>(),
+            alignment: align_of::<GstClockTimeDiff>(),
+        },
+    ),
+    (
+        "GstClockType",
+        Layout {
+            size: size_of::<GstClockType>(),
+            alignment: align_of::<GstClockType>(),
+        },
+    ),
+    (
+        "GstControlBinding",
+        Layout {
+            size: size_of::<GstControlBinding>(),
+            alignment: align_of::<GstControlBinding>(),
+        },
+    ),
+    (
+        "GstControlBindingClass",
+        Layout {
+            size: size_of::<GstControlBindingClass>(),
+            alignment: align_of::<GstControlBindingClass>(),
+        },
+    ),
+    (
+        "GstControlSource",
+        Layout {
+            size: size_of::<GstControlSource>(),
+            alignment: align_of::<GstControlSource>(),
+        },
+    ),
+    (
+        "GstControlSourceClass",
+        Layout {
+            size: size_of::<GstControlSourceClass>(),
+            alignment: align_of::<GstControlSourceClass>(),
+        },
+    ),
+    (
+        "GstCoreError",
+        Layout {
+            size: size_of::<GstCoreError>(),
+            alignment: align_of::<GstCoreError>(),
+        },
+    ),
+    (
+        "GstDebugCategory",
+        Layout {
+            size: size_of::<GstDebugCategory>(),
+            alignment: align_of::<GstDebugCategory>(),
+        },
+    ),
+    (
+        "GstDebugColorFlags",
+        Layout {
+            size: size_of::<GstDebugColorFlags>(),
+            alignment: align_of::<GstDebugColorFlags>(),
+        },
+    ),
+    (
+        "GstDebugColorMode",
+        Layout {
+            size: size_of::<GstDebugColorMode>(),
+            alignment: align_of::<GstDebugColorMode>(),
+        },
+    ),
+    (
+        "GstDebugGraphDetails",
+        Layout {
+            size: size_of::<GstDebugGraphDetails>(),
+            alignment: align_of::<GstDebugGraphDetails>(),
+        },
+    ),
+    (
+        "GstDebugLevel",
+        Layout {
+            size: size_of::<GstDebugLevel>(),
+            alignment: align_of::<GstDebugLevel>(),
+        },
+    ),
+    (
+        "GstDevice",
+        Layout {
+            size: size_of::<GstDevice>(),
+            alignment: align_of::<GstDevice>(),
+        },
+    ),
+    (
+        "GstDeviceClass",
+        Layout {
+            size: size_of::<GstDeviceClass>(),
+            alignment: align_of::<GstDeviceClass>(),
+        },
+    ),
+    (
+        "GstDeviceMonitor",
+        Layout {
+            size: size_of::<GstDeviceMonitor>(),
+            alignment: align_of::<GstDeviceMonitor>(),
+        },
+    ),
+    (
+        "GstDeviceMonitorClass",
+        Layout {
+            size: size_of::<GstDeviceMonitorClass>(),
+            alignment: align_of::<GstDeviceMonitorClass>(),
+        },
+    ),
+    (
+        "GstDeviceProvider",
+        Layout {
+            size: size_of::<GstDeviceProvider>(),
+            alignment: align_of::<GstDeviceProvider>(),
+        },
+    ),
+    (
+        "GstDeviceProviderClass",
+        Layout {
+            size: size_of::<GstDeviceProviderClass>(),
+            alignment: align_of::<GstDeviceProviderClass>(),
+        },
+    ),
+    (
+        "GstElement",
+        Layout {
+            size: size_of::<GstElement>(),
+            alignment: align_of::<GstElement>(),
+        },
+    ),
+    (
+        "GstElementClass",
+        Layout {
+            size: size_of::<GstElementClass>(),
+            alignment: align_of::<GstElementClass>(),
+        },
+    ),
+    (
+        "GstElementFactoryListType",
+        Layout {
+            size: size_of::<GstElementFactoryListType>(),
+            alignment: align_of::<GstElementFactoryListType>(),
+        },
+    ),
+    (
+        "GstElementFlags",
+        Layout {
+            size: size_of::<GstElementFlags>(),
+            alignment: align_of::<GstElementFlags>(),
+        },
+    ),
+    (
+        "GstEvent",
+        Layout {
+            size: size_of::<GstEvent>(),
+            alignment: align_of::<GstEvent>(),
+        },
+    ),
+    (
+        "GstEventType",
+        Layout {
+            size: size_of::<GstEventType>(),
+            alignment: align_of::<GstEventType>(),
+        },
+    ),
+    (
+        "GstEventTypeFlags",
+        Layout {
+            size: size_of::<GstEventTypeFlags>(),
+            alignment: align_of::<GstEventTypeFlags>(),
+        },
+    ),
+    (
+        "GstFlowReturn",
+        Layout {
+            size: size_of::<GstFlowReturn>(),
+            alignment: align_of::<GstFlowReturn>(),
+        },
+    ),
+    (
+        "GstFormat",
+        Layout {
+            size: size_of::<GstFormat>(),
+            alignment: align_of::<GstFormat>(),
+        },
+    ),
+    (
+        "GstFormatDefinition",
+        Layout {
+            size: size_of::<GstFormatDefinition>(),
+            alignment: align_of::<GstFormatDefinition>(),
+        },
+    ),
+    (
+        "GstGhostPad",
+        Layout {
+            size: size_of::<GstGhostPad>(),
+            alignment: align_of::<GstGhostPad>(),
+        },
+    ),
+    (
+        "GstGhostPadClass",
+        Layout {
+            size: size_of::<GstGhostPadClass>(),
+            alignment: align_of::<GstGhostPadClass>(),
+        },
+    ),
+    (
+        "GstIterator",
+        Layout {
+            size: size_of::<GstIterator>(),
+            alignment: align_of::<GstIterator>(),
+        },
+    ),
+    (
+        "GstIteratorItem",
+        Layout {
+            size: size_of::<GstIteratorItem>(),
+            alignment: align_of::<GstIteratorItem>(),
+        },
+    ),
+    (
+        "GstIteratorResult",
+        Layout {
+            size: size_of::<GstIteratorResult>(),
+            alignment: align_of::<GstIteratorResult>(),
+        },
+    ),
+    (
+        "GstLibraryError",
+        Layout {
+            size: size_of::<GstLibraryError>(),
+            alignment: align_of::<GstLibraryError>(),
+        },
+    ),
+    (
+        "GstLockFlags",
+        Layout {
+            size: size_of::<GstLockFlags>(),
+            alignment: align_of::<GstLockFlags>(),
+        },
+    ),
+    (
+        "GstMapFlags",
+        Layout {
+            size: size_of::<GstMapFlags>(),
+            alignment: align_of::<GstMapFlags>(),
+        },
+    ),
+    (
+        "GstMapInfo",
+        Layout {
+            size: size_of::<GstMapInfo>(),
+            alignment: align_of::<GstMapInfo>(),
+        },
+    ),
+    (
+        "GstMemory",
+        Layout {
+            size: size_of::<GstMemory>(),
+            alignment: align_of::<GstMemory>(),
+        },
+    ),
+    (
+        "GstMemoryFlags",
+        Layout {
+            size: size_of::<GstMemoryFlags>(),
+            alignment: align_of::<GstMemoryFlags>(),
+        },
+    ),
+    (
+        "GstMessage",
+        Layout {
+            size: size_of::<GstMessage>(),
+            alignment: align_of::<GstMessage>(),
+        },
+    ),
+    (
+        "GstMessageType",
+        Layout {
+            size: size_of::<GstMessageType>(),
+            alignment: align_of::<GstMessageType>(),
+        },
+    ),
+    (
+        "GstMeta",
+        Layout {
+            size: size_of::<GstMeta>(),
+            alignment: align_of::<GstMeta>(),
+        },
+    ),
+    (
+        "GstMetaFlags",
+        Layout {
+            size: size_of::<GstMetaFlags>(),
+            alignment: align_of::<GstMetaFlags>(),
+        },
+    ),
+    (
+        "GstMetaInfo",
+        Layout {
+            size: size_of::<GstMetaInfo>(),
+            alignment: align_of::<GstMetaInfo>(),
+        },
+    ),
+    (
+        "GstMetaTransformCopy",
+        Layout {
+            size: size_of::<GstMetaTransformCopy>(),
+            alignment: align_of::<GstMetaTransformCopy>(),
+        },
+    ),
+    (
+        "GstMiniObject",
+        Layout {
+            size: size_of::<GstMiniObject>(),
+            alignment: align_of::<GstMiniObject>(),
+        },
+    ),
+    (
+        "GstMiniObjectFlags",
+        Layout {
+            size: size_of::<GstMiniObjectFlags>(),
+            alignment: align_of::<GstMiniObjectFlags>(),
+        },
+    ),
+    (
+        "GstObject",
+        Layout {
+            size: size_of::<GstObject>(),
+            alignment: align_of::<GstObject>(),
+        },
+    ),
+    (
+        "GstObjectClass",
+        Layout {
+            size: size_of::<GstObjectClass>(),
+            alignment: align_of::<GstObjectClass>(),
+        },
+    ),
+    (
+        "GstObjectFlags",
+        Layout {
+            size: size_of::<GstObjectFlags>(),
+            alignment: align_of::<GstObjectFlags>(),
+        },
+    ),
+    (
+        "GstPad",
+        Layout {
+            size: size_of::<GstPad>(),
+            alignment: align_of::<GstPad>(),
+        },
+    ),
+    (
+        "GstPadClass",
+        Layout {
+            size: size_of::<GstPadClass>(),
+            alignment: align_of::<GstPadClass>(),
+        },
+    ),
+    (
+        "GstPadDirection",
+        Layout {
+            size: size_of::<GstPadDirection>(),
+            alignment: align_of::<GstPadDirection>(),
+        },
+    ),
+    (
+        "GstPadFlags",
+        Layout {
+            size: size_of::<GstPadFlags>(),
+            alignment: align_of::<GstPadFlags>(),
+        },
+    ),
+    (
+        "GstPadLinkCheck",
+        Layout {
+            size: size_of::<GstPadLinkCheck>(),
+            alignment: align_of::<GstPadLinkCheck>(),
+        },
+    ),
+    (
+        "GstPadLinkReturn",
+        Layout {
+            size: size_of::<GstPadLinkReturn>(),
+            alignment: align_of::<GstPadLinkReturn>(),
+        },
+    ),
+    (
+        "GstPadMode",
+        Layout {
+            size: size_of::<GstPadMode>(),
+            alignment: align_of::<GstPadMode>(),
+        },
+    ),
+    (
+        "GstPadPresence",
+        Layout {
+            size: size_of::<GstPadPresence>(),
+            alignment: align_of::<GstPadPresence>(),
+        },
+    ),
+    (
+        "GstPadProbeInfo",
+        Layout {
+            size: size_of::<GstPadProbeInfo>(),
+            alignment: align_of::<GstPadProbeInfo>(),
+        },
+    ),
+    (
+        "GstPadProbeReturn",
+        Layout {
+            size: size_of::<GstPadProbeReturn>(),
+            alignment: align_of::<GstPadProbeReturn>(),
+        },
+    ),
+    (
+        "GstPadProbeType",
+        Layout {
+            size: size_of::<GstPadProbeType>(),
+            alignment: align_of::<GstPadProbeType>(),
+        },
+    ),
+    (
+        "GstPadTemplate",
+        Layout {
+            size: size_of::<GstPadTemplate>(),
+            alignment: align_of::<GstPadTemplate>(),
+        },
+    ),
+    (
+        "GstPadTemplateClass",
+        Layout {
+            size: size_of::<GstPadTemplateClass>(),
+            alignment: align_of::<GstPadTemplateClass>(),
+        },
+    ),
+    (
+        "GstPadTemplateFlags",
+        Layout {
+            size: size_of::<GstPadTemplateFlags>(),
+            alignment: align_of::<GstPadTemplateFlags>(),
+        },
+    ),
+    (
+        "GstParamSpecArray",
+        Layout {
+            size: size_of::<GstParamSpecArray>(),
+            alignment: align_of::<GstParamSpecArray>(),
+        },
+    ),
+    (
+        "GstParamSpecFraction",
+        Layout {
+            size: size_of::<GstParamSpecFraction>(),
+            alignment: align_of::<GstParamSpecFraction>(),
+        },
+    ),
+    (
+        "GstParentBufferMeta",
+        Layout {
+            size: size_of::<GstParentBufferMeta>(),
+            alignment: align_of::<GstParentBufferMeta>(),
+        },
+    ),
+    (
+        "GstParseError",
+        Layout {
+            size: size_of::<GstParseError>(),
+            alignment: align_of::<GstParseError>(),
+        },
+    ),
+    (
+        "GstParseFlags",
+        Layout {
+            size: size_of::<GstParseFlags>(),
+            alignment: align_of::<GstParseFlags>(),
+        },
+    ),
+    (
+        "GstPipeline",
+        Layout {
+            size: size_of::<GstPipeline>(),
+            alignment: align_of::<GstPipeline>(),
+        },
+    ),
+    (
+        "GstPipelineClass",
+        Layout {
+            size: size_of::<GstPipelineClass>(),
+            alignment: align_of::<GstPipelineClass>(),
+        },
+    ),
+    (
+        "GstPipelineFlags",
+        Layout {
+            size: size_of::<GstPipelineFlags>(),
+            alignment: align_of::<GstPipelineFlags>(),
+        },
+    ),
+    (
+        "GstPluginDependencyFlags",
+        Layout {
+            size: size_of::<GstPluginDependencyFlags>(),
+            alignment: align_of::<GstPluginDependencyFlags>(),
+        },
+    ),
+    (
+        "GstPluginDesc",
+        Layout {
+            size: size_of::<GstPluginDesc>(),
+            alignment: align_of::<GstPluginDesc>(),
+        },
+    ),
+    (
+        "GstPluginError",
+        Layout {
+            size: size_of::<GstPluginError>(),
+            alignment: align_of::<GstPluginError>(),
+        },
+    ),
+    (
+        "GstPluginFlags",
+        Layout {
+            size: size_of::<GstPluginFlags>(),
+            alignment: align_of::<GstPluginFlags>(),
+        },
+    ),
+    (
+        "GstPollFD",
+        Layout {
+            size: size_of::<GstPollFD>(),
+            alignment: align_of::<GstPollFD>(),
+        },
+    ),
+    (
+        "GstPresetInterface",
+        Layout {
+            size: size_of::<GstPresetInterface>(),
+            alignment: align_of::<GstPresetInterface>(),
+        },
+    ),
+    (
+        "GstProgressType",
+        Layout {
+            size: size_of::<GstProgressType>(),
+            alignment: align_of::<GstProgressType>(),
+        },
+    ),
+    (
+        "GstPromise",
+        Layout {
+            size: size_of::<GstPromise>(),
+            alignment: align_of::<GstPromise>(),
+        },
+    ),
+    (
+        "GstPromiseResult",
+        Layout {
+            size: size_of::<GstPromiseResult>(),
+            alignment: align_of::<GstPromiseResult>(),
+        },
+    ),
+    (
+        "GstProtectionMeta",
+        Layout {
+            size: size_of::<GstProtectionMeta>(),
+            alignment: align_of::<GstProtectionMeta>(),
+        },
+    ),
+    (
+        "GstProxyPad",
+        Layout {
+            size: size_of::<GstProxyPad>(),
+            alignment: align_of::<GstProxyPad>(),
+        },
+    ),
+    (
+        "GstProxyPadClass",
+        Layout {
+            size: size_of::<GstProxyPadClass>(),
+            alignment: align_of::<GstProxyPadClass>(),
+        },
+    ),
+    (
+        "GstQOSType",
+        Layout {
+            size: size_of::<GstQOSType>(),
+            alignment: align_of::<GstQOSType>(),
+        },
+    ),
+    (
+        "GstQuery",
+        Layout {
+            size: size_of::<GstQuery>(),
+            alignment: align_of::<GstQuery>(),
+        },
+    ),
+    (
+        "GstQueryType",
+        Layout {
+            size: size_of::<GstQueryType>(),
+            alignment: align_of::<GstQueryType>(),
+        },
+    ),
+    (
+        "GstQueryTypeFlags",
+        Layout {
+            size: size_of::<GstQueryTypeFlags>(),
+            alignment: align_of::<GstQueryTypeFlags>(),
+        },
+    ),
+    (
+        "GstRank",
+        Layout {
+            size: size_of::<GstRank>(),
+            alignment: align_of::<GstRank>(),
+        },
+    ),
+    (
+        "GstReferenceTimestampMeta",
+        Layout {
+            size: size_of::<GstReferenceTimestampMeta>(),
+            alignment: align_of::<GstReferenceTimestampMeta>(),
+        },
+    ),
+    (
+        "GstRegistry",
+        Layout {
+            size: size_of::<GstRegistry>(),
+            alignment: align_of::<GstRegistry>(),
+        },
+    ),
+    (
+        "GstRegistryClass",
+        Layout {
+            size: size_of::<GstRegistryClass>(),
+            alignment: align_of::<GstRegistryClass>(),
+        },
+    ),
+    (
+        "GstResourceError",
+        Layout {
+            size: size_of::<GstResourceError>(),
+            alignment: align_of::<GstResourceError>(),
+        },
+    ),
+    (
+        "GstSchedulingFlags",
+        Layout {
+            size: size_of::<GstSchedulingFlags>(),
+            alignment: align_of::<GstSchedulingFlags>(),
+        },
+    ),
+    (
+        "GstSearchMode",
+        Layout {
+            size: size_of::<GstSearchMode>(),
+            alignment: align_of::<GstSearchMode>(),
+        },
+    ),
+    (
+        "GstSeekFlags",
+        Layout {
+            size: size_of::<GstSeekFlags>(),
+            alignment: align_of::<GstSeekFlags>(),
+        },
+    ),
+    (
+        "GstSeekType",
+        Layout {
+            size: size_of::<GstSeekType>(),
+            alignment: align_of::<GstSeekType>(),
+        },
+    ),
+    (
+        "GstSegment",
+        Layout {
+            size: size_of::<GstSegment>(),
+            alignment: align_of::<GstSegment>(),
+        },
+    ),
+    (
+        "GstSegmentFlags",
+        Layout {
+            size: size_of::<GstSegmentFlags>(),
+            alignment: align_of::<GstSegmentFlags>(),
+        },
+    ),
+    (
+        "GstStackTraceFlags",
+        Layout {
+            size: size_of::<GstStackTraceFlags>(),
+            alignment: align_of::<GstStackTraceFlags>(),
+        },
+    ),
+    (
+        "GstState",
+        Layout {
+            size: size_of::<GstState>(),
+            alignment: align_of::<GstState>(),
+        },
+    ),
+    (
+        "GstStateChange",
+        Layout {
+            size: size_of::<GstStateChange>(),
+            alignment: align_of::<GstStateChange>(),
+        },
+    ),
+    (
+        "GstStateChangeReturn",
+        Layout {
+            size: size_of::<GstStateChangeReturn>(),
+            alignment: align_of::<GstStateChangeReturn>(),
+        },
+    ),
+    (
+        "GstStaticCaps",
+        Layout {
+            size: size_of::<GstStaticCaps>(),
+            alignment: align_of::<GstStaticCaps>(),
+        },
+    ),
+    (
+        "GstStaticPadTemplate",
+        Layout {
+            size: size_of::<GstStaticPadTemplate>(),
+            alignment: align_of::<GstStaticPadTemplate>(),
+        },
+    ),
+    (
+        "GstStream",
+        Layout {
+            size: size_of::<GstStream>(),
+            alignment: align_of::<GstStream>(),
+        },
+    ),
+    (
+        "GstStreamClass",
+        Layout {
+            size: size_of::<GstStreamClass>(),
+            alignment: align_of::<GstStreamClass>(),
+        },
+    ),
+    (
+        "GstStreamCollection",
+        Layout {
+            size: size_of::<GstStreamCollection>(),
+            alignment: align_of::<GstStreamCollection>(),
+        },
+    ),
+    (
+        "GstStreamCollectionClass",
+        Layout {
+            size: size_of::<GstStreamCollectionClass>(),
+            alignment: align_of::<GstStreamCollectionClass>(),
+        },
+    ),
+    (
+        "GstStreamError",
+        Layout {
+            size: size_of::<GstStreamError>(),
+            alignment: align_of::<GstStreamError>(),
+        },
+    ),
+    (
+        "GstStreamFlags",
+        Layout {
+            size: size_of::<GstStreamFlags>(),
+            alignment: align_of::<GstStreamFlags>(),
+        },
+    ),
+    (
+        "GstStreamStatusType",
+        Layout {
+            size: size_of::<GstStreamStatusType>(),
+            alignment: align_of::<GstStreamStatusType>(),
+        },
+    ),
+    (
+        "GstStreamType",
+        Layout {
+            size: size_of::<GstStreamType>(),
+            alignment: align_of::<GstStreamType>(),
+        },
+    ),
+    (
+        "GstStructure",
+        Layout {
+            size: size_of::<GstStructure>(),
+            alignment: align_of::<GstStructure>(),
+        },
+    ),
+    (
+        "GstStructureChangeType",
+        Layout {
+            size: size_of::<GstStructureChangeType>(),
+            alignment: align_of::<GstStructureChangeType>(),
+        },
+    ),
+    (
+        "GstSystemClock",
+        Layout {
+            size: size_of::<GstSystemClock>(),
+            alignment: align_of::<GstSystemClock>(),
+        },
+    ),
+    (
+        "GstSystemClockClass",
+        Layout {
+            size: size_of::<GstSystemClockClass>(),
+            alignment: align_of::<GstSystemClockClass>(),
+        },
+    ),
+    (
+        "GstTagFlag",
+        Layout {
+            size: size_of::<GstTagFlag>(),
+            alignment: align_of::<GstTagFlag>(),
+        },
+    ),
+    (
+        "GstTagList",
+        Layout {
+            size: size_of::<GstTagList>(),
+            alignment: align_of::<GstTagList>(),
+        },
+    ),
+    (
+        "GstTagMergeMode",
+        Layout {
+            size: size_of::<GstTagMergeMode>(),
+            alignment: align_of::<GstTagMergeMode>(),
+        },
+    ),
+    (
+        "GstTagScope",
+        Layout {
+            size: size_of::<GstTagScope>(),
+            alignment: align_of::<GstTagScope>(),
+        },
+    ),
+    (
+        "GstTagSetterInterface",
+        Layout {
+            size: size_of::<GstTagSetterInterface>(),
+            alignment: align_of::<GstTagSetterInterface>(),
+        },
+    ),
+    (
+        "GstTask",
+        Layout {
+            size: size_of::<GstTask>(),
+            alignment: align_of::<GstTask>(),
+        },
+    ),
+    (
+        "GstTaskClass",
+        Layout {
+            size: size_of::<GstTaskClass>(),
+            alignment: align_of::<GstTaskClass>(),
+        },
+    ),
+    (
+        "GstTaskPool",
+        Layout {
+            size: size_of::<GstTaskPool>(),
+            alignment: align_of::<GstTaskPool>(),
+        },
+    ),
+    (
+        "GstTaskPoolClass",
+        Layout {
+            size: size_of::<GstTaskPoolClass>(),
+            alignment: align_of::<GstTaskPoolClass>(),
+        },
+    ),
+    (
+        "GstTaskState",
+        Layout {
+            size: size_of::<GstTaskState>(),
+            alignment: align_of::<GstTaskState>(),
+        },
+    ),
+    (
+        "GstTimedValue",
+        Layout {
+            size: size_of::<GstTimedValue>(),
+            alignment: align_of::<GstTimedValue>(),
+        },
+    ),
+    (
+        "GstTocEntryType",
+        Layout {
+            size: size_of::<GstTocEntryType>(),
+            alignment: align_of::<GstTocEntryType>(),
+        },
+    ),
+    (
+        "GstTocLoopType",
+        Layout {
+            size: size_of::<GstTocLoopType>(),
+            alignment: align_of::<GstTocLoopType>(),
+        },
+    ),
+    (
+        "GstTocScope",
+        Layout {
+            size: size_of::<GstTocScope>(),
+            alignment: align_of::<GstTocScope>(),
+        },
+    ),
+    (
+        "GstTocSetterInterface",
+        Layout {
+            size: size_of::<GstTocSetterInterface>(),
+            alignment: align_of::<GstTocSetterInterface>(),
+        },
+    ),
+    (
+        "GstTracer",
+        Layout {
+            size: size_of::<GstTracer>(),
+            alignment: align_of::<GstTracer>(),
+        },
+    ),
+    (
+        "GstTracerClass",
+        Layout {
+            size: size_of::<GstTracerClass>(),
+            alignment: align_of::<GstTracerClass>(),
+        },
+    ),
+    (
+        "GstTracerValueFlags",
+        Layout {
+            size: size_of::<GstTracerValueFlags>(),
+            alignment: align_of::<GstTracerValueFlags>(),
+        },
+    ),
+    (
+        "GstTracerValueScope",
+        Layout {
+            size: size_of::<GstTracerValueScope>(),
+            alignment: align_of::<GstTracerValueScope>(),
+        },
+    ),
+    (
+        "GstTypeFind",
+        Layout {
+            size: size_of::<GstTypeFind>(),
+            alignment: align_of::<GstTypeFind>(),
+        },
+    ),
+    (
+        "GstTypeFindProbability",
+        Layout {
+            size: size_of::<GstTypeFindProbability>(),
+            alignment: align_of::<GstTypeFindProbability>(),
+        },
+    ),
+    (
+        "GstURIError",
+        Layout {
+            size: size_of::<GstURIError>(),
+            alignment: align_of::<GstURIError>(),
+        },
+    ),
+    (
+        "GstURIHandlerInterface",
+        Layout {
+            size: size_of::<GstURIHandlerInterface>(),
+            alignment: align_of::<GstURIHandlerInterface>(),
+        },
+    ),
+    (
+        "GstURIType",
+        Layout {
+            size: size_of::<GstURIType>(),
+            alignment: align_of::<GstURIType>(),
+        },
+    ),
+    (
+        "GstValueTable",
+        Layout {
+            size: size_of::<GstValueTable>(),
+            alignment: align_of::<GstValueTable>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -459,7 +1504,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_BUS_FLUSHING", "16"),
     ("(gint) GST_BUS_PASS", "1"),
     ("GST_CAN_INLINE", "1"),
-    ("GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY", "memory:SystemMemory"),
+    (
+        "GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY",
+        "memory:SystemMemory",
+    ),
     ("(guint) GST_CAPS_FLAG_ANY", "16"),
     ("(gint) GST_CAPS_INTERSECT_FIRST", "1"),
     ("(gint) GST_CAPS_INTERSECT_ZIG_ZAG", "0"),
@@ -550,7 +1598,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_ELEMENT_FACTORY_KLASS_SINK", "Sink"),
     ("GST_ELEMENT_FACTORY_KLASS_SRC", "Source"),
     ("GST_ELEMENT_FACTORY_TYPE_ANY", "562949953421311"),
-    ("GST_ELEMENT_FACTORY_TYPE_AUDIOVIDEO_SINKS", "3940649673949188"),
+    (
+        "GST_ELEMENT_FACTORY_TYPE_AUDIOVIDEO_SINKS",
+        "3940649673949188",
+    ),
     ("GST_ELEMENT_FACTORY_TYPE_AUDIO_ENCODER", "1125899906842626"),
     ("GST_ELEMENT_FACTORY_TYPE_DECODABLE", "1377"),
     ("GST_ELEMENT_FACTORY_TYPE_DECODER", "1"),
@@ -564,8 +1615,14 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_ELEMENT_FACTORY_TYPE_MEDIA_ANY", "18446462598732840960"),
     ("GST_ELEMENT_FACTORY_TYPE_MEDIA_AUDIO", "1125899906842624"),
     ("GST_ELEMENT_FACTORY_TYPE_MEDIA_IMAGE", "2251799813685248"),
-    ("GST_ELEMENT_FACTORY_TYPE_MEDIA_METADATA", "9007199254740992"),
-    ("GST_ELEMENT_FACTORY_TYPE_MEDIA_SUBTITLE", "4503599627370496"),
+    (
+        "GST_ELEMENT_FACTORY_TYPE_MEDIA_METADATA",
+        "9007199254740992",
+    ),
+    (
+        "GST_ELEMENT_FACTORY_TYPE_MEDIA_SUBTITLE",
+        "4503599627370496",
+    ),
     ("GST_ELEMENT_FACTORY_TYPE_MEDIA_VIDEO", "562949953421312"),
     ("GST_ELEMENT_FACTORY_TYPE_MUXER", "16"),
     ("GST_ELEMENT_FACTORY_TYPE_PARSER", "64"),
@@ -825,11 +1882,23 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_PARSE_FLAG_PLACE_IN_BIN", "4"),
     ("(guint) GST_PIPELINE_FLAG_FIXED_CLOCK", "524288"),
     ("(guint) GST_PIPELINE_FLAG_LAST", "8388608"),
-    ("(guint) GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_PREFIX", "8"),
-    ("(guint) GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_SUFFIX", "4"),
+    (
+        "(guint) GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_PREFIX",
+        "8",
+    ),
+    (
+        "(guint) GST_PLUGIN_DEPENDENCY_FLAG_FILE_NAME_IS_SUFFIX",
+        "4",
+    ),
     ("(guint) GST_PLUGIN_DEPENDENCY_FLAG_NONE", "0"),
-    ("(guint) GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_DEFAULT_ONLY", "2"),
-    ("(guint) GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_RELATIVE_TO_EXE", "16"),
+    (
+        "(guint) GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_DEFAULT_ONLY",
+        "2",
+    ),
+    (
+        "(guint) GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_RELATIVE_TO_EXE",
+        "16",
+    ),
     ("(guint) GST_PLUGIN_DEPENDENCY_FLAG_RECURSE", "1"),
     ("(gint) GST_PLUGIN_ERROR_DEPENDENCIES", "1"),
     ("(gint) GST_PLUGIN_ERROR_MODULE", "0"),
@@ -846,7 +1915,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_PROMISE_RESULT_PENDING", "0"),
     ("(gint) GST_PROMISE_RESULT_REPLIED", "2"),
     ("GST_PROTECTION_SYSTEM_ID_CAPS_FIELD", "protection-system"),
-    ("GST_PROTECTION_UNSPECIFIED_SYSTEM_ID", "unspecified-system-id"),
+    (
+        "GST_PROTECTION_UNSPECIFIED_SYSTEM_ID",
+        "unspecified-system-id",
+    ),
     ("(gint) GST_QOS_TYPE_OVERFLOW", "0"),
     ("(gint) GST_QOS_TYPE_THROTTLE", "2"),
     ("(gint) GST_QOS_TYPE_UNDERFLOW", "1"),
@@ -1018,17 +2090,32 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_TAG_FLAG_META", "1"),
     ("(gint) GST_TAG_FLAG_UNDEFINED", "0"),
     ("GST_TAG_GENRE", "genre"),
-    ("GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION", "geo-location-capture-direction"),
+    (
+        "GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION",
+        "geo-location-capture-direction",
+    ),
     ("GST_TAG_GEO_LOCATION_CITY", "geo-location-city"),
     ("GST_TAG_GEO_LOCATION_COUNTRY", "geo-location-country"),
     ("GST_TAG_GEO_LOCATION_ELEVATION", "geo-location-elevation"),
-    ("GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR", "geo-location-horizontal-error"),
+    (
+        "GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR",
+        "geo-location-horizontal-error",
+    ),
     ("GST_TAG_GEO_LOCATION_LATITUDE", "geo-location-latitude"),
     ("GST_TAG_GEO_LOCATION_LONGITUDE", "geo-location-longitude"),
-    ("GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION", "geo-location-movement-direction"),
-    ("GST_TAG_GEO_LOCATION_MOVEMENT_SPEED", "geo-location-movement-speed"),
+    (
+        "GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION",
+        "geo-location-movement-direction",
+    ),
+    (
+        "GST_TAG_GEO_LOCATION_MOVEMENT_SPEED",
+        "geo-location-movement-speed",
+    ),
     ("GST_TAG_GEO_LOCATION_NAME", "geo-location-name"),
-    ("GST_TAG_GEO_LOCATION_SUBLOCATION", "geo-location-sublocation"),
+    (
+        "GST_TAG_GEO_LOCATION_SUBLOCATION",
+        "geo-location-sublocation",
+    ),
     ("GST_TAG_GROUPING", "grouping"),
     ("GST_TAG_HOMEPAGE", "homepage"),
     ("GST_TAG_IMAGE", "image"),
@@ -1121,5 +2208,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_VALUE_LESS_THAN", "-1"),
     ("GST_VALUE_UNORDERED", "2"),
 ];
-
-

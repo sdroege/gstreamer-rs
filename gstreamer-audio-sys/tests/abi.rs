@@ -5,13 +5,13 @@
 extern crate gstreamer_audio_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_audio_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_audio_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-audio-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,78 +229,421 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstAudioAggregator", Layout {size: size_of::<GstAudioAggregator>(), alignment: align_of::<GstAudioAggregator>()}),
-    ("GstAudioAggregatorClass", Layout {size: size_of::<GstAudioAggregatorClass>(), alignment: align_of::<GstAudioAggregatorClass>()}),
-    ("GstAudioAggregatorConvertPad", Layout {size: size_of::<GstAudioAggregatorConvertPad>(), alignment: align_of::<GstAudioAggregatorConvertPad>()}),
-    ("GstAudioAggregatorConvertPadClass", Layout {size: size_of::<GstAudioAggregatorConvertPadClass>(), alignment: align_of::<GstAudioAggregatorConvertPadClass>()}),
-    ("GstAudioAggregatorPad", Layout {size: size_of::<GstAudioAggregatorPad>(), alignment: align_of::<GstAudioAggregatorPad>()}),
-    ("GstAudioAggregatorPadClass", Layout {size: size_of::<GstAudioAggregatorPadClass>(), alignment: align_of::<GstAudioAggregatorPadClass>()}),
-    ("GstAudioBaseSink", Layout {size: size_of::<GstAudioBaseSink>(), alignment: align_of::<GstAudioBaseSink>()}),
-    ("GstAudioBaseSinkClass", Layout {size: size_of::<GstAudioBaseSinkClass>(), alignment: align_of::<GstAudioBaseSinkClass>()}),
-    ("GstAudioBaseSinkDiscontReason", Layout {size: size_of::<GstAudioBaseSinkDiscontReason>(), alignment: align_of::<GstAudioBaseSinkDiscontReason>()}),
-    ("GstAudioBaseSinkSlaveMethod", Layout {size: size_of::<GstAudioBaseSinkSlaveMethod>(), alignment: align_of::<GstAudioBaseSinkSlaveMethod>()}),
-    ("GstAudioBaseSrc", Layout {size: size_of::<GstAudioBaseSrc>(), alignment: align_of::<GstAudioBaseSrc>()}),
-    ("GstAudioBaseSrcClass", Layout {size: size_of::<GstAudioBaseSrcClass>(), alignment: align_of::<GstAudioBaseSrcClass>()}),
-    ("GstAudioBaseSrcSlaveMethod", Layout {size: size_of::<GstAudioBaseSrcSlaveMethod>(), alignment: align_of::<GstAudioBaseSrcSlaveMethod>()}),
-    ("GstAudioBuffer", Layout {size: size_of::<GstAudioBuffer>(), alignment: align_of::<GstAudioBuffer>()}),
-    ("GstAudioCdSrc", Layout {size: size_of::<GstAudioCdSrc>(), alignment: align_of::<GstAudioCdSrc>()}),
-    ("GstAudioCdSrcClass", Layout {size: size_of::<GstAudioCdSrcClass>(), alignment: align_of::<GstAudioCdSrcClass>()}),
-    ("GstAudioCdSrcMode", Layout {size: size_of::<GstAudioCdSrcMode>(), alignment: align_of::<GstAudioCdSrcMode>()}),
-    ("GstAudioCdSrcTrack", Layout {size: size_of::<GstAudioCdSrcTrack>(), alignment: align_of::<GstAudioCdSrcTrack>()}),
-    ("GstAudioChannelMixerFlags", Layout {size: size_of::<GstAudioChannelMixerFlags>(), alignment: align_of::<GstAudioChannelMixerFlags>()}),
-    ("GstAudioChannelPosition", Layout {size: size_of::<GstAudioChannelPosition>(), alignment: align_of::<GstAudioChannelPosition>()}),
-    ("GstAudioClippingMeta", Layout {size: size_of::<GstAudioClippingMeta>(), alignment: align_of::<GstAudioClippingMeta>()}),
-    ("GstAudioClock", Layout {size: size_of::<GstAudioClock>(), alignment: align_of::<GstAudioClock>()}),
-    ("GstAudioClockClass", Layout {size: size_of::<GstAudioClockClass>(), alignment: align_of::<GstAudioClockClass>()}),
-    ("GstAudioConverterFlags", Layout {size: size_of::<GstAudioConverterFlags>(), alignment: align_of::<GstAudioConverterFlags>()}),
-    ("GstAudioDecoder", Layout {size: size_of::<GstAudioDecoder>(), alignment: align_of::<GstAudioDecoder>()}),
-    ("GstAudioDecoderClass", Layout {size: size_of::<GstAudioDecoderClass>(), alignment: align_of::<GstAudioDecoderClass>()}),
-    ("GstAudioDitherMethod", Layout {size: size_of::<GstAudioDitherMethod>(), alignment: align_of::<GstAudioDitherMethod>()}),
-    ("GstAudioDownmixMeta", Layout {size: size_of::<GstAudioDownmixMeta>(), alignment: align_of::<GstAudioDownmixMeta>()}),
-    ("GstAudioEncoder", Layout {size: size_of::<GstAudioEncoder>(), alignment: align_of::<GstAudioEncoder>()}),
-    ("GstAudioEncoderClass", Layout {size: size_of::<GstAudioEncoderClass>(), alignment: align_of::<GstAudioEncoderClass>()}),
-    ("GstAudioFilter", Layout {size: size_of::<GstAudioFilter>(), alignment: align_of::<GstAudioFilter>()}),
-    ("GstAudioFilterClass", Layout {size: size_of::<GstAudioFilterClass>(), alignment: align_of::<GstAudioFilterClass>()}),
-    ("GstAudioFlags", Layout {size: size_of::<GstAudioFlags>(), alignment: align_of::<GstAudioFlags>()}),
-    ("GstAudioFormat", Layout {size: size_of::<GstAudioFormat>(), alignment: align_of::<GstAudioFormat>()}),
-    ("GstAudioFormatFlags", Layout {size: size_of::<GstAudioFormatFlags>(), alignment: align_of::<GstAudioFormatFlags>()}),
-    ("GstAudioFormatInfo", Layout {size: size_of::<GstAudioFormatInfo>(), alignment: align_of::<GstAudioFormatInfo>()}),
-    ("GstAudioInfo", Layout {size: size_of::<GstAudioInfo>(), alignment: align_of::<GstAudioInfo>()}),
-    ("GstAudioLayout", Layout {size: size_of::<GstAudioLayout>(), alignment: align_of::<GstAudioLayout>()}),
-    ("GstAudioMeta", Layout {size: size_of::<GstAudioMeta>(), alignment: align_of::<GstAudioMeta>()}),
-    ("GstAudioNoiseShapingMethod", Layout {size: size_of::<GstAudioNoiseShapingMethod>(), alignment: align_of::<GstAudioNoiseShapingMethod>()}),
-    ("GstAudioPackFlags", Layout {size: size_of::<GstAudioPackFlags>(), alignment: align_of::<GstAudioPackFlags>()}),
-    ("GstAudioQuantizeFlags", Layout {size: size_of::<GstAudioQuantizeFlags>(), alignment: align_of::<GstAudioQuantizeFlags>()}),
-    ("GstAudioResamplerFilterInterpolation", Layout {size: size_of::<GstAudioResamplerFilterInterpolation>(), alignment: align_of::<GstAudioResamplerFilterInterpolation>()}),
-    ("GstAudioResamplerFilterMode", Layout {size: size_of::<GstAudioResamplerFilterMode>(), alignment: align_of::<GstAudioResamplerFilterMode>()}),
-    ("GstAudioResamplerFlags", Layout {size: size_of::<GstAudioResamplerFlags>(), alignment: align_of::<GstAudioResamplerFlags>()}),
-    ("GstAudioResamplerMethod", Layout {size: size_of::<GstAudioResamplerMethod>(), alignment: align_of::<GstAudioResamplerMethod>()}),
-    ("GstAudioRingBuffer", Layout {size: size_of::<GstAudioRingBuffer>(), alignment: align_of::<GstAudioRingBuffer>()}),
-    ("GstAudioRingBufferClass", Layout {size: size_of::<GstAudioRingBufferClass>(), alignment: align_of::<GstAudioRingBufferClass>()}),
-    ("GstAudioRingBufferFormatType", Layout {size: size_of::<GstAudioRingBufferFormatType>(), alignment: align_of::<GstAudioRingBufferFormatType>()}),
-    ("GstAudioRingBufferSpec", Layout {size: size_of::<GstAudioRingBufferSpec>(), alignment: align_of::<GstAudioRingBufferSpec>()}),
-    ("GstAudioRingBufferState", Layout {size: size_of::<GstAudioRingBufferState>(), alignment: align_of::<GstAudioRingBufferState>()}),
-    ("GstAudioSink", Layout {size: size_of::<GstAudioSink>(), alignment: align_of::<GstAudioSink>()}),
-    ("GstAudioSinkClass", Layout {size: size_of::<GstAudioSinkClass>(), alignment: align_of::<GstAudioSinkClass>()}),
-    ("GstAudioSrc", Layout {size: size_of::<GstAudioSrc>(), alignment: align_of::<GstAudioSrc>()}),
-    ("GstAudioSrcClass", Layout {size: size_of::<GstAudioSrcClass>(), alignment: align_of::<GstAudioSrcClass>()}),
-    ("GstStreamVolumeFormat", Layout {size: size_of::<GstStreamVolumeFormat>(), alignment: align_of::<GstStreamVolumeFormat>()}),
-    ("GstStreamVolumeInterface", Layout {size: size_of::<GstStreamVolumeInterface>(), alignment: align_of::<GstStreamVolumeInterface>()}),
+    (
+        "GstAudioAggregator",
+        Layout {
+            size: size_of::<GstAudioAggregator>(),
+            alignment: align_of::<GstAudioAggregator>(),
+        },
+    ),
+    (
+        "GstAudioAggregatorClass",
+        Layout {
+            size: size_of::<GstAudioAggregatorClass>(),
+            alignment: align_of::<GstAudioAggregatorClass>(),
+        },
+    ),
+    (
+        "GstAudioAggregatorConvertPad",
+        Layout {
+            size: size_of::<GstAudioAggregatorConvertPad>(),
+            alignment: align_of::<GstAudioAggregatorConvertPad>(),
+        },
+    ),
+    (
+        "GstAudioAggregatorConvertPadClass",
+        Layout {
+            size: size_of::<GstAudioAggregatorConvertPadClass>(),
+            alignment: align_of::<GstAudioAggregatorConvertPadClass>(),
+        },
+    ),
+    (
+        "GstAudioAggregatorPad",
+        Layout {
+            size: size_of::<GstAudioAggregatorPad>(),
+            alignment: align_of::<GstAudioAggregatorPad>(),
+        },
+    ),
+    (
+        "GstAudioAggregatorPadClass",
+        Layout {
+            size: size_of::<GstAudioAggregatorPadClass>(),
+            alignment: align_of::<GstAudioAggregatorPadClass>(),
+        },
+    ),
+    (
+        "GstAudioBaseSink",
+        Layout {
+            size: size_of::<GstAudioBaseSink>(),
+            alignment: align_of::<GstAudioBaseSink>(),
+        },
+    ),
+    (
+        "GstAudioBaseSinkClass",
+        Layout {
+            size: size_of::<GstAudioBaseSinkClass>(),
+            alignment: align_of::<GstAudioBaseSinkClass>(),
+        },
+    ),
+    (
+        "GstAudioBaseSinkDiscontReason",
+        Layout {
+            size: size_of::<GstAudioBaseSinkDiscontReason>(),
+            alignment: align_of::<GstAudioBaseSinkDiscontReason>(),
+        },
+    ),
+    (
+        "GstAudioBaseSinkSlaveMethod",
+        Layout {
+            size: size_of::<GstAudioBaseSinkSlaveMethod>(),
+            alignment: align_of::<GstAudioBaseSinkSlaveMethod>(),
+        },
+    ),
+    (
+        "GstAudioBaseSrc",
+        Layout {
+            size: size_of::<GstAudioBaseSrc>(),
+            alignment: align_of::<GstAudioBaseSrc>(),
+        },
+    ),
+    (
+        "GstAudioBaseSrcClass",
+        Layout {
+            size: size_of::<GstAudioBaseSrcClass>(),
+            alignment: align_of::<GstAudioBaseSrcClass>(),
+        },
+    ),
+    (
+        "GstAudioBaseSrcSlaveMethod",
+        Layout {
+            size: size_of::<GstAudioBaseSrcSlaveMethod>(),
+            alignment: align_of::<GstAudioBaseSrcSlaveMethod>(),
+        },
+    ),
+    (
+        "GstAudioBuffer",
+        Layout {
+            size: size_of::<GstAudioBuffer>(),
+            alignment: align_of::<GstAudioBuffer>(),
+        },
+    ),
+    (
+        "GstAudioCdSrc",
+        Layout {
+            size: size_of::<GstAudioCdSrc>(),
+            alignment: align_of::<GstAudioCdSrc>(),
+        },
+    ),
+    (
+        "GstAudioCdSrcClass",
+        Layout {
+            size: size_of::<GstAudioCdSrcClass>(),
+            alignment: align_of::<GstAudioCdSrcClass>(),
+        },
+    ),
+    (
+        "GstAudioCdSrcMode",
+        Layout {
+            size: size_of::<GstAudioCdSrcMode>(),
+            alignment: align_of::<GstAudioCdSrcMode>(),
+        },
+    ),
+    (
+        "GstAudioCdSrcTrack",
+        Layout {
+            size: size_of::<GstAudioCdSrcTrack>(),
+            alignment: align_of::<GstAudioCdSrcTrack>(),
+        },
+    ),
+    (
+        "GstAudioChannelMixerFlags",
+        Layout {
+            size: size_of::<GstAudioChannelMixerFlags>(),
+            alignment: align_of::<GstAudioChannelMixerFlags>(),
+        },
+    ),
+    (
+        "GstAudioChannelPosition",
+        Layout {
+            size: size_of::<GstAudioChannelPosition>(),
+            alignment: align_of::<GstAudioChannelPosition>(),
+        },
+    ),
+    (
+        "GstAudioClippingMeta",
+        Layout {
+            size: size_of::<GstAudioClippingMeta>(),
+            alignment: align_of::<GstAudioClippingMeta>(),
+        },
+    ),
+    (
+        "GstAudioClock",
+        Layout {
+            size: size_of::<GstAudioClock>(),
+            alignment: align_of::<GstAudioClock>(),
+        },
+    ),
+    (
+        "GstAudioClockClass",
+        Layout {
+            size: size_of::<GstAudioClockClass>(),
+            alignment: align_of::<GstAudioClockClass>(),
+        },
+    ),
+    (
+        "GstAudioConverterFlags",
+        Layout {
+            size: size_of::<GstAudioConverterFlags>(),
+            alignment: align_of::<GstAudioConverterFlags>(),
+        },
+    ),
+    (
+        "GstAudioDecoder",
+        Layout {
+            size: size_of::<GstAudioDecoder>(),
+            alignment: align_of::<GstAudioDecoder>(),
+        },
+    ),
+    (
+        "GstAudioDecoderClass",
+        Layout {
+            size: size_of::<GstAudioDecoderClass>(),
+            alignment: align_of::<GstAudioDecoderClass>(),
+        },
+    ),
+    (
+        "GstAudioDitherMethod",
+        Layout {
+            size: size_of::<GstAudioDitherMethod>(),
+            alignment: align_of::<GstAudioDitherMethod>(),
+        },
+    ),
+    (
+        "GstAudioDownmixMeta",
+        Layout {
+            size: size_of::<GstAudioDownmixMeta>(),
+            alignment: align_of::<GstAudioDownmixMeta>(),
+        },
+    ),
+    (
+        "GstAudioEncoder",
+        Layout {
+            size: size_of::<GstAudioEncoder>(),
+            alignment: align_of::<GstAudioEncoder>(),
+        },
+    ),
+    (
+        "GstAudioEncoderClass",
+        Layout {
+            size: size_of::<GstAudioEncoderClass>(),
+            alignment: align_of::<GstAudioEncoderClass>(),
+        },
+    ),
+    (
+        "GstAudioFilter",
+        Layout {
+            size: size_of::<GstAudioFilter>(),
+            alignment: align_of::<GstAudioFilter>(),
+        },
+    ),
+    (
+        "GstAudioFilterClass",
+        Layout {
+            size: size_of::<GstAudioFilterClass>(),
+            alignment: align_of::<GstAudioFilterClass>(),
+        },
+    ),
+    (
+        "GstAudioFlags",
+        Layout {
+            size: size_of::<GstAudioFlags>(),
+            alignment: align_of::<GstAudioFlags>(),
+        },
+    ),
+    (
+        "GstAudioFormat",
+        Layout {
+            size: size_of::<GstAudioFormat>(),
+            alignment: align_of::<GstAudioFormat>(),
+        },
+    ),
+    (
+        "GstAudioFormatFlags",
+        Layout {
+            size: size_of::<GstAudioFormatFlags>(),
+            alignment: align_of::<GstAudioFormatFlags>(),
+        },
+    ),
+    (
+        "GstAudioFormatInfo",
+        Layout {
+            size: size_of::<GstAudioFormatInfo>(),
+            alignment: align_of::<GstAudioFormatInfo>(),
+        },
+    ),
+    (
+        "GstAudioInfo",
+        Layout {
+            size: size_of::<GstAudioInfo>(),
+            alignment: align_of::<GstAudioInfo>(),
+        },
+    ),
+    (
+        "GstAudioLayout",
+        Layout {
+            size: size_of::<GstAudioLayout>(),
+            alignment: align_of::<GstAudioLayout>(),
+        },
+    ),
+    (
+        "GstAudioMeta",
+        Layout {
+            size: size_of::<GstAudioMeta>(),
+            alignment: align_of::<GstAudioMeta>(),
+        },
+    ),
+    (
+        "GstAudioNoiseShapingMethod",
+        Layout {
+            size: size_of::<GstAudioNoiseShapingMethod>(),
+            alignment: align_of::<GstAudioNoiseShapingMethod>(),
+        },
+    ),
+    (
+        "GstAudioPackFlags",
+        Layout {
+            size: size_of::<GstAudioPackFlags>(),
+            alignment: align_of::<GstAudioPackFlags>(),
+        },
+    ),
+    (
+        "GstAudioQuantizeFlags",
+        Layout {
+            size: size_of::<GstAudioQuantizeFlags>(),
+            alignment: align_of::<GstAudioQuantizeFlags>(),
+        },
+    ),
+    (
+        "GstAudioResamplerFilterInterpolation",
+        Layout {
+            size: size_of::<GstAudioResamplerFilterInterpolation>(),
+            alignment: align_of::<GstAudioResamplerFilterInterpolation>(),
+        },
+    ),
+    (
+        "GstAudioResamplerFilterMode",
+        Layout {
+            size: size_of::<GstAudioResamplerFilterMode>(),
+            alignment: align_of::<GstAudioResamplerFilterMode>(),
+        },
+    ),
+    (
+        "GstAudioResamplerFlags",
+        Layout {
+            size: size_of::<GstAudioResamplerFlags>(),
+            alignment: align_of::<GstAudioResamplerFlags>(),
+        },
+    ),
+    (
+        "GstAudioResamplerMethod",
+        Layout {
+            size: size_of::<GstAudioResamplerMethod>(),
+            alignment: align_of::<GstAudioResamplerMethod>(),
+        },
+    ),
+    (
+        "GstAudioRingBuffer",
+        Layout {
+            size: size_of::<GstAudioRingBuffer>(),
+            alignment: align_of::<GstAudioRingBuffer>(),
+        },
+    ),
+    (
+        "GstAudioRingBufferClass",
+        Layout {
+            size: size_of::<GstAudioRingBufferClass>(),
+            alignment: align_of::<GstAudioRingBufferClass>(),
+        },
+    ),
+    (
+        "GstAudioRingBufferFormatType",
+        Layout {
+            size: size_of::<GstAudioRingBufferFormatType>(),
+            alignment: align_of::<GstAudioRingBufferFormatType>(),
+        },
+    ),
+    (
+        "GstAudioRingBufferSpec",
+        Layout {
+            size: size_of::<GstAudioRingBufferSpec>(),
+            alignment: align_of::<GstAudioRingBufferSpec>(),
+        },
+    ),
+    (
+        "GstAudioRingBufferState",
+        Layout {
+            size: size_of::<GstAudioRingBufferState>(),
+            alignment: align_of::<GstAudioRingBufferState>(),
+        },
+    ),
+    (
+        "GstAudioSink",
+        Layout {
+            size: size_of::<GstAudioSink>(),
+            alignment: align_of::<GstAudioSink>(),
+        },
+    ),
+    (
+        "GstAudioSinkClass",
+        Layout {
+            size: size_of::<GstAudioSinkClass>(),
+            alignment: align_of::<GstAudioSinkClass>(),
+        },
+    ),
+    (
+        "GstAudioSrc",
+        Layout {
+            size: size_of::<GstAudioSrc>(),
+            alignment: align_of::<GstAudioSrc>(),
+        },
+    ),
+    (
+        "GstAudioSrcClass",
+        Layout {
+            size: size_of::<GstAudioSrcClass>(),
+            alignment: align_of::<GstAudioSrcClass>(),
+        },
+    ),
+    (
+        "GstStreamVolumeFormat",
+        Layout {
+            size: size_of::<GstStreamVolumeFormat>(),
+            alignment: align_of::<GstStreamVolumeFormat>(),
+        },
+    ),
+    (
+        "GstStreamVolumeInterface",
+        Layout {
+            size: size_of::<GstStreamVolumeInterface>(),
+            alignment: align_of::<GstStreamVolumeInterface>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -492,5 +841,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_STREAM_VOLUME_FORMAT_DB", "2"),
     ("(gint) GST_STREAM_VOLUME_FORMAT_LINEAR", "0"),
 ];
-
-

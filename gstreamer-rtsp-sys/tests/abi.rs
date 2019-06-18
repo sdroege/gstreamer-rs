@@ -5,13 +5,13 @@
 extern crate gstreamer_rtsp_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_rtsp_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_rtsp_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-rtsp-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,47 +229,204 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstRTSPAuthCredential", Layout {size: size_of::<GstRTSPAuthCredential>(), alignment: align_of::<GstRTSPAuthCredential>()}),
-    ("GstRTSPAuthMethod", Layout {size: size_of::<GstRTSPAuthMethod>(), alignment: align_of::<GstRTSPAuthMethod>()}),
-    ("GstRTSPAuthParam", Layout {size: size_of::<GstRTSPAuthParam>(), alignment: align_of::<GstRTSPAuthParam>()}),
-    ("GstRTSPEvent", Layout {size: size_of::<GstRTSPEvent>(), alignment: align_of::<GstRTSPEvent>()}),
-    ("GstRTSPExtensionInterface", Layout {size: size_of::<GstRTSPExtensionInterface>(), alignment: align_of::<GstRTSPExtensionInterface>()}),
-    ("GstRTSPFamily", Layout {size: size_of::<GstRTSPFamily>(), alignment: align_of::<GstRTSPFamily>()}),
-    ("GstRTSPHeaderField", Layout {size: size_of::<GstRTSPHeaderField>(), alignment: align_of::<GstRTSPHeaderField>()}),
-    ("GstRTSPLowerTrans", Layout {size: size_of::<GstRTSPLowerTrans>(), alignment: align_of::<GstRTSPLowerTrans>()}),
-    ("GstRTSPMessage", Layout {size: size_of::<GstRTSPMessage>(), alignment: align_of::<GstRTSPMessage>()}),
-    ("GstRTSPMethod", Layout {size: size_of::<GstRTSPMethod>(), alignment: align_of::<GstRTSPMethod>()}),
-    ("GstRTSPMsgType", Layout {size: size_of::<GstRTSPMsgType>(), alignment: align_of::<GstRTSPMsgType>()}),
-    ("GstRTSPProfile", Layout {size: size_of::<GstRTSPProfile>(), alignment: align_of::<GstRTSPProfile>()}),
-    ("GstRTSPRange", Layout {size: size_of::<GstRTSPRange>(), alignment: align_of::<GstRTSPRange>()}),
-    ("GstRTSPRangeUnit", Layout {size: size_of::<GstRTSPRangeUnit>(), alignment: align_of::<GstRTSPRangeUnit>()}),
-    ("GstRTSPResult", Layout {size: size_of::<GstRTSPResult>(), alignment: align_of::<GstRTSPResult>()}),
-    ("GstRTSPState", Layout {size: size_of::<GstRTSPState>(), alignment: align_of::<GstRTSPState>()}),
-    ("GstRTSPStatusCode", Layout {size: size_of::<GstRTSPStatusCode>(), alignment: align_of::<GstRTSPStatusCode>()}),
-    ("GstRTSPTime", Layout {size: size_of::<GstRTSPTime>(), alignment: align_of::<GstRTSPTime>()}),
-    ("GstRTSPTime2", Layout {size: size_of::<GstRTSPTime2>(), alignment: align_of::<GstRTSPTime2>()}),
-    ("GstRTSPTimeRange", Layout {size: size_of::<GstRTSPTimeRange>(), alignment: align_of::<GstRTSPTimeRange>()}),
-    ("GstRTSPTimeType", Layout {size: size_of::<GstRTSPTimeType>(), alignment: align_of::<GstRTSPTimeType>()}),
-    ("GstRTSPTransMode", Layout {size: size_of::<GstRTSPTransMode>(), alignment: align_of::<GstRTSPTransMode>()}),
-    ("GstRTSPTransport", Layout {size: size_of::<GstRTSPTransport>(), alignment: align_of::<GstRTSPTransport>()}),
-    ("GstRTSPUrl", Layout {size: size_of::<GstRTSPUrl>(), alignment: align_of::<GstRTSPUrl>()}),
-    ("GstRTSPVersion", Layout {size: size_of::<GstRTSPVersion>(), alignment: align_of::<GstRTSPVersion>()}),
-    ("GstRTSPWatchFuncs", Layout {size: size_of::<GstRTSPWatchFuncs>(), alignment: align_of::<GstRTSPWatchFuncs>()}),
+    (
+        "GstRTSPAuthCredential",
+        Layout {
+            size: size_of::<GstRTSPAuthCredential>(),
+            alignment: align_of::<GstRTSPAuthCredential>(),
+        },
+    ),
+    (
+        "GstRTSPAuthMethod",
+        Layout {
+            size: size_of::<GstRTSPAuthMethod>(),
+            alignment: align_of::<GstRTSPAuthMethod>(),
+        },
+    ),
+    (
+        "GstRTSPAuthParam",
+        Layout {
+            size: size_of::<GstRTSPAuthParam>(),
+            alignment: align_of::<GstRTSPAuthParam>(),
+        },
+    ),
+    (
+        "GstRTSPEvent",
+        Layout {
+            size: size_of::<GstRTSPEvent>(),
+            alignment: align_of::<GstRTSPEvent>(),
+        },
+    ),
+    (
+        "GstRTSPExtensionInterface",
+        Layout {
+            size: size_of::<GstRTSPExtensionInterface>(),
+            alignment: align_of::<GstRTSPExtensionInterface>(),
+        },
+    ),
+    (
+        "GstRTSPFamily",
+        Layout {
+            size: size_of::<GstRTSPFamily>(),
+            alignment: align_of::<GstRTSPFamily>(),
+        },
+    ),
+    (
+        "GstRTSPHeaderField",
+        Layout {
+            size: size_of::<GstRTSPHeaderField>(),
+            alignment: align_of::<GstRTSPHeaderField>(),
+        },
+    ),
+    (
+        "GstRTSPLowerTrans",
+        Layout {
+            size: size_of::<GstRTSPLowerTrans>(),
+            alignment: align_of::<GstRTSPLowerTrans>(),
+        },
+    ),
+    (
+        "GstRTSPMessage",
+        Layout {
+            size: size_of::<GstRTSPMessage>(),
+            alignment: align_of::<GstRTSPMessage>(),
+        },
+    ),
+    (
+        "GstRTSPMethod",
+        Layout {
+            size: size_of::<GstRTSPMethod>(),
+            alignment: align_of::<GstRTSPMethod>(),
+        },
+    ),
+    (
+        "GstRTSPMsgType",
+        Layout {
+            size: size_of::<GstRTSPMsgType>(),
+            alignment: align_of::<GstRTSPMsgType>(),
+        },
+    ),
+    (
+        "GstRTSPProfile",
+        Layout {
+            size: size_of::<GstRTSPProfile>(),
+            alignment: align_of::<GstRTSPProfile>(),
+        },
+    ),
+    (
+        "GstRTSPRange",
+        Layout {
+            size: size_of::<GstRTSPRange>(),
+            alignment: align_of::<GstRTSPRange>(),
+        },
+    ),
+    (
+        "GstRTSPRangeUnit",
+        Layout {
+            size: size_of::<GstRTSPRangeUnit>(),
+            alignment: align_of::<GstRTSPRangeUnit>(),
+        },
+    ),
+    (
+        "GstRTSPResult",
+        Layout {
+            size: size_of::<GstRTSPResult>(),
+            alignment: align_of::<GstRTSPResult>(),
+        },
+    ),
+    (
+        "GstRTSPState",
+        Layout {
+            size: size_of::<GstRTSPState>(),
+            alignment: align_of::<GstRTSPState>(),
+        },
+    ),
+    (
+        "GstRTSPStatusCode",
+        Layout {
+            size: size_of::<GstRTSPStatusCode>(),
+            alignment: align_of::<GstRTSPStatusCode>(),
+        },
+    ),
+    (
+        "GstRTSPTime",
+        Layout {
+            size: size_of::<GstRTSPTime>(),
+            alignment: align_of::<GstRTSPTime>(),
+        },
+    ),
+    (
+        "GstRTSPTime2",
+        Layout {
+            size: size_of::<GstRTSPTime2>(),
+            alignment: align_of::<GstRTSPTime2>(),
+        },
+    ),
+    (
+        "GstRTSPTimeRange",
+        Layout {
+            size: size_of::<GstRTSPTimeRange>(),
+            alignment: align_of::<GstRTSPTimeRange>(),
+        },
+    ),
+    (
+        "GstRTSPTimeType",
+        Layout {
+            size: size_of::<GstRTSPTimeType>(),
+            alignment: align_of::<GstRTSPTimeType>(),
+        },
+    ),
+    (
+        "GstRTSPTransMode",
+        Layout {
+            size: size_of::<GstRTSPTransMode>(),
+            alignment: align_of::<GstRTSPTransMode>(),
+        },
+    ),
+    (
+        "GstRTSPTransport",
+        Layout {
+            size: size_of::<GstRTSPTransport>(),
+            alignment: align_of::<GstRTSPTransport>(),
+        },
+    ),
+    (
+        "GstRTSPUrl",
+        Layout {
+            size: size_of::<GstRTSPUrl>(),
+            alignment: align_of::<GstRTSPUrl>(),
+        },
+    ),
+    (
+        "GstRTSPVersion",
+        Layout {
+            size: size_of::<GstRTSPVersion>(),
+            alignment: align_of::<GstRTSPVersion>(),
+        },
+    ),
+    (
+        "GstRTSPWatchFuncs",
+        Layout {
+            size: size_of::<GstRTSPWatchFuncs>(),
+            alignment: align_of::<GstRTSPWatchFuncs>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -435,7 +598,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_STS_FORBIDDEN", "403"),
     ("(gint) GST_RTSP_STS_GATEWAY_TIMEOUT", "504"),
     ("(gint) GST_RTSP_STS_GONE", "410"),
-    ("(gint) GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE", "456"),
+    (
+        "(gint) GST_RTSP_STS_HEADER_FIELD_NOT_VALID_FOR_RESOURCE",
+        "456",
+    ),
     ("(gint) GST_RTSP_STS_INTERNAL_SERVER_ERROR", "500"),
     ("(gint) GST_RTSP_STS_INVALID", "0"),
     ("(gint) GST_RTSP_STS_INVALID_RANGE", "457"),
@@ -453,7 +619,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_STS_NOT_IMPLEMENTED", "501"),
     ("(gint) GST_RTSP_STS_NOT_MODIFIED", "304"),
     ("(gint) GST_RTSP_STS_OK", "200"),
-    ("(gint) GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED", "460"),
+    (
+        "(gint) GST_RTSP_STS_ONLY_AGGREGATE_OPERATION_ALLOWED",
+        "460",
+    ),
     ("(gint) GST_RTSP_STS_OPTION_NOT_SUPPORTED", "551"),
     ("(gint) GST_RTSP_STS_PARAMETER_IS_READONLY", "458"),
     ("(gint) GST_RTSP_STS_PARAMETER_NOT_UNDERSTOOD", "451"),
@@ -485,5 +654,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_VERSION_2_0", "32"),
     ("(gint) GST_RTSP_VERSION_INVALID", "0"),
 ];
-
-

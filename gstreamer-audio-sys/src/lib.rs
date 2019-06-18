@@ -3,18 +3,23 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
-extern crate gstreamer_sys as gst;
 extern crate gstreamer_base_sys as gst_base;
+extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -174,12 +179,18 @@ pub const GST_STREAM_VOLUME_FORMAT_CUBIC: GstStreamVolumeFormat = 1;
 pub const GST_STREAM_VOLUME_FORMAT_DB: GstStreamVolumeFormat = 2;
 
 // Constants
-pub const GST_AUDIO_CHANNELS_RANGE: *const c_char = b"(int) [ 1, max ]\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_DITHER_METHOD: *const c_char = b"GstAudioConverter.dither-method\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_MIX_MATRIX: *const c_char = b"GstAudioConverter.mix-matrix\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_NOISE_SHAPING_METHOD: *const c_char = b"GstAudioConverter.noise-shaping-method\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_QUANTIZATION: *const c_char = b"GstAudioConverter.quantization\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD: *const c_char = b"GstAudioConverter.resampler-method\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CHANNELS_RANGE: *const c_char =
+    b"(int) [ 1, max ]\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CONVERTER_OPT_DITHER_METHOD: *const c_char =
+    b"GstAudioConverter.dither-method\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CONVERTER_OPT_MIX_MATRIX: *const c_char =
+    b"GstAudioConverter.mix-matrix\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CONVERTER_OPT_NOISE_SHAPING_METHOD: *const c_char =
+    b"GstAudioConverter.noise-shaping-method\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CONVERTER_OPT_QUANTIZATION: *const c_char =
+    b"GstAudioConverter.quantization\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_CONVERTER_OPT_RESAMPLER_METHOD: *const c_char =
+    b"GstAudioConverter.resampler-method\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_DECODER_MAX_ERRORS: c_int = 10;
 pub const GST_AUDIO_DECODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_DECODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
@@ -190,21 +201,33 @@ pub const GST_AUDIO_ENCODER_SINK_NAME: *const c_char = b"sink\0" as *const u8 as
 pub const GST_AUDIO_ENCODER_SRC_NAME: *const c_char = b"src\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_FORMATS_ALL: *const c_char = b" { S8, U8, S16LE, S16BE, U16LE, U16BE, S24_32LE, S24_32BE, U24_32LE, U24_32BE, S32LE, S32BE, U32LE, U32BE, S24LE, S24BE, U24LE, U24BE, S20LE, S20BE, U20LE, U20BE, S18LE, S18BE, U18LE, U18BE, F32LE, F32BE, F64LE, F64BE }\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_RATE_RANGE: *const c_char = b"(int) [ 1, max ]\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_B: *const c_char = b"GstAudioResampler.cubic-b\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_C: *const c_char = b"GstAudioResampler.cubic-c\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_CUTOFF: *const c_char = b"GstAudioResampler.cutoff\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_INTERPOLATION: *const c_char = b"GstAudioResampler.filter-interpolation\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE: *const c_char = b"GstAudioResampler.filter-mode\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE_THRESHOLD: *const c_char = b"GstAudioResampler.filter-mode-threshold\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_FILTER_OVERSAMPLE: *const c_char = b"GstAudioResampler.filter-oversample\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_MAX_PHASE_ERROR: *const c_char = b"GstAudioResampler.max-phase-error\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_N_TAPS: *const c_char = b"GstAudioResampler.n-taps\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_STOP_ATTENUATION: *const c_char = b"GstAudioResampler.stop-attenutation\0" as *const u8 as *const c_char;
-pub const GST_AUDIO_RESAMPLER_OPT_TRANSITION_BANDWIDTH: *const c_char = b"GstAudioResampler.transition-bandwidth\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_B: *const c_char =
+    b"GstAudioResampler.cubic-b\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_C: *const c_char =
+    b"GstAudioResampler.cubic-c\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_CUTOFF: *const c_char =
+    b"GstAudioResampler.cutoff\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_INTERPOLATION: *const c_char =
+    b"GstAudioResampler.filter-interpolation\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE: *const c_char =
+    b"GstAudioResampler.filter-mode\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_MODE_THRESHOLD: *const c_char =
+    b"GstAudioResampler.filter-mode-threshold\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_FILTER_OVERSAMPLE: *const c_char =
+    b"GstAudioResampler.filter-oversample\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_MAX_PHASE_ERROR: *const c_char =
+    b"GstAudioResampler.max-phase-error\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_N_TAPS: *const c_char =
+    b"GstAudioResampler.n-taps\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_STOP_ATTENUATION: *const c_char =
+    b"GstAudioResampler.stop-attenutation\0" as *const u8 as *const c_char;
+pub const GST_AUDIO_RESAMPLER_OPT_TRANSITION_BANDWIDTH: *const c_char =
+    b"GstAudioResampler.transition-bandwidth\0" as *const u8 as *const c_char;
 pub const GST_AUDIO_RESAMPLER_QUALITY_DEFAULT: c_int = 4;
 pub const GST_AUDIO_RESAMPLER_QUALITY_MAX: c_int = 10;
 pub const GST_AUDIO_RESAMPLER_QUALITY_MIN: c_int = 0;
-pub const GST_META_TAG_AUDIO_CHANNELS_STR: *const c_char = b"channels\0" as *const u8 as *const c_char;
+pub const GST_META_TAG_AUDIO_CHANNELS_STR: *const c_char =
+    b"channels\0" as *const u8 as *const c_char;
 pub const GST_META_TAG_AUDIO_RATE_STR: *const c_char = b"rate\0" as *const u8 as *const c_char;
 pub const GST_META_TAG_AUDIO_STR: *const c_char = b"audio\0" as *const u8 as *const c_char;
 
@@ -247,29 +270,67 @@ pub const GST_AUDIO_RESAMPLER_FLAG_NON_INTERLEAVED_OUT: GstAudioResamplerFlags =
 pub const GST_AUDIO_RESAMPLER_FLAG_VARIABLE_RATE: GstAudioResamplerFlags = 4;
 
 // Callbacks
-pub type GstAudioBaseSinkCustomSlavingCallback = Option<unsafe extern "C" fn(*mut GstAudioBaseSink, gst::GstClockTime, gst::GstClockTime, *mut gst::GstClockTimeDiff, GstAudioBaseSinkDiscontReason, gpointer)>;
-pub type GstAudioClockGetTimeFunc = Option<unsafe extern "C" fn(*mut gst::GstClock, gpointer) -> gst::GstClockTime>;
-pub type GstAudioFormatPack = Option<unsafe extern "C" fn(*const GstAudioFormatInfo, GstAudioPackFlags, gconstpointer, gpointer, c_int)>;
-pub type GstAudioFormatUnpack = Option<unsafe extern "C" fn(*const GstAudioFormatInfo, GstAudioPackFlags, gpointer, gconstpointer, c_int)>;
-pub type GstAudioRingBufferCallback = Option<unsafe extern "C" fn(*mut GstAudioRingBuffer, *mut u8, c_uint, gpointer)>;
+pub type GstAudioBaseSinkCustomSlavingCallback = Option<
+    unsafe extern "C" fn(
+        *mut GstAudioBaseSink,
+        gst::GstClockTime,
+        gst::GstClockTime,
+        *mut gst::GstClockTimeDiff,
+        GstAudioBaseSinkDiscontReason,
+        gpointer,
+    ),
+>;
+pub type GstAudioClockGetTimeFunc =
+    Option<unsafe extern "C" fn(*mut gst::GstClock, gpointer) -> gst::GstClockTime>;
+pub type GstAudioFormatPack = Option<
+    unsafe extern "C" fn(
+        *const GstAudioFormatInfo,
+        GstAudioPackFlags,
+        gconstpointer,
+        gpointer,
+        c_int,
+    ),
+>;
+pub type GstAudioFormatUnpack = Option<
+    unsafe extern "C" fn(
+        *const GstAudioFormatInfo,
+        GstAudioPackFlags,
+        gpointer,
+        gconstpointer,
+        c_int,
+    ),
+>;
+pub type GstAudioRingBufferCallback =
+    Option<unsafe extern "C" fn(*mut GstAudioRingBuffer, *mut u8, c_uint, gpointer)>;
 
 // Records
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct GstAudioAggregatorClass {
     pub parent_class: gst_base::GstAggregatorClass,
-    pub create_output_buffer: Option<unsafe extern "C" fn(*mut GstAudioAggregator, c_uint) -> *mut gst::GstBuffer>,
-    pub aggregate_one_buffer: Option<unsafe extern "C" fn(*mut GstAudioAggregator, *mut GstAudioAggregatorPad, *mut gst::GstBuffer, c_uint, *mut gst::GstBuffer, c_uint, c_uint) -> gboolean>,
+    pub create_output_buffer:
+        Option<unsafe extern "C" fn(*mut GstAudioAggregator, c_uint) -> *mut gst::GstBuffer>,
+    pub aggregate_one_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstAudioAggregator,
+            *mut GstAudioAggregatorPad,
+            *mut gst::GstBuffer,
+            c_uint,
+            *mut gst::GstBuffer,
+            c_uint,
+            c_uint,
+        ) -> gboolean,
+    >,
     pub _gst_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GstAudioAggregatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioAggregatorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("create_output_buffer", &self.create_output_buffer)
-         .field("aggregate_one_buffer", &self.aggregate_one_buffer)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("create_output_buffer", &self.create_output_buffer)
+            .field("aggregate_one_buffer", &self.aggregate_one_buffer)
+            .finish()
     }
 }
 
@@ -282,9 +343,12 @@ pub struct GstAudioAggregatorConvertPadClass {
 
 impl ::std::fmt::Debug for GstAudioAggregatorConvertPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorConvertPadClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+        f.debug_struct(&format!(
+            "GstAudioAggregatorConvertPadClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .finish()
     }
 }
 
@@ -297,18 +361,28 @@ pub type GstAudioAggregatorConvertPadPrivate = *mut _GstAudioAggregatorConvertPa
 #[derive(Copy, Clone)]
 pub struct GstAudioAggregatorPadClass {
     pub parent_class: gst_base::GstAggregatorPadClass,
-    pub convert_buffer: Option<unsafe extern "C" fn(*mut GstAudioAggregatorPad, *mut GstAudioInfo, *mut GstAudioInfo, *mut gst::GstBuffer) -> *mut gst::GstBuffer>,
+    pub convert_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstAudioAggregatorPad,
+            *mut GstAudioInfo,
+            *mut GstAudioInfo,
+            *mut gst::GstBuffer,
+        ) -> *mut gst::GstBuffer,
+    >,
     pub update_conversion_info: Option<unsafe extern "C" fn(*mut GstAudioAggregatorPad)>,
     pub _gst_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GstAudioAggregatorPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorPadClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("convert_buffer", &self.convert_buffer)
-         .field("update_conversion_info", &self.update_conversion_info)
-         .finish()
+        f.debug_struct(&format!(
+            "GstAudioAggregatorPadClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("convert_buffer", &self.convert_buffer)
+        .field("update_conversion_info", &self.update_conversion_info)
+        .finish()
     }
 }
 
@@ -326,18 +400,21 @@ pub type GstAudioAggregatorPrivate = *mut _GstAudioAggregatorPrivate;
 #[derive(Copy, Clone)]
 pub struct GstAudioBaseSinkClass {
     pub parent_class: gst_base::GstBaseSinkClass,
-    pub create_ringbuffer: Option<unsafe extern "C" fn(*mut GstAudioBaseSink) -> *mut GstAudioRingBuffer>,
-    pub payload: Option<unsafe extern "C" fn(*mut GstAudioBaseSink, *mut gst::GstBuffer) -> *mut gst::GstBuffer>,
+    pub create_ringbuffer:
+        Option<unsafe extern "C" fn(*mut GstAudioBaseSink) -> *mut GstAudioRingBuffer>,
+    pub payload: Option<
+        unsafe extern "C" fn(*mut GstAudioBaseSink, *mut gst::GstBuffer) -> *mut gst::GstBuffer,
+    >,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstAudioBaseSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioBaseSinkClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("create_ringbuffer", &self.create_ringbuffer)
-         .field("payload", &self.payload)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("create_ringbuffer", &self.create_ringbuffer)
+            .field("payload", &self.payload)
+            .finish()
     }
 }
 
@@ -350,16 +427,17 @@ pub type GstAudioBaseSinkPrivate = *mut _GstAudioBaseSinkPrivate;
 #[derive(Copy, Clone)]
 pub struct GstAudioBaseSrcClass {
     pub parent_class: gst_base::GstPushSrcClass,
-    pub create_ringbuffer: Option<unsafe extern "C" fn(*mut GstAudioBaseSrc) -> *mut GstAudioRingBuffer>,
+    pub create_ringbuffer:
+        Option<unsafe extern "C" fn(*mut GstAudioBaseSrc) -> *mut GstAudioRingBuffer>,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstAudioBaseSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioBaseSrcClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("create_ringbuffer", &self.create_ringbuffer)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("create_ringbuffer", &self.create_ringbuffer)
+            .finish()
     }
 }
 
@@ -385,12 +463,12 @@ pub struct GstAudioBuffer {
 impl ::std::fmt::Debug for GstAudioBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioBuffer @ {:?}", self as *const _))
-         .field("info", &self.info)
-         .field("n_samples", &self.n_samples)
-         .field("n_planes", &self.n_planes)
-         .field("planes", &self.planes)
-         .field("buffer", &self.buffer)
-         .finish()
+            .field("info", &self.info)
+            .field("n_samples", &self.n_samples)
+            .field("n_planes", &self.n_planes)
+            .field("planes", &self.planes)
+            .field("buffer", &self.buffer)
+            .finish()
     }
 }
 
@@ -407,11 +485,11 @@ pub struct GstAudioCdSrcClass {
 impl ::std::fmt::Debug for GstAudioCdSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioCdSrcClass @ {:?}", self as *const _))
-         .field("pushsrc_class", &self.pushsrc_class)
-         .field("open", &self.open)
-         .field("close", &self.close)
-         .field("read_sector", &self.read_sector)
-         .finish()
+            .field("pushsrc_class", &self.pushsrc_class)
+            .field("open", &self.open)
+            .field("close", &self.close)
+            .field("read_sector", &self.read_sector)
+            .finish()
     }
 }
 
@@ -435,12 +513,12 @@ pub struct GstAudioCdSrcTrack {
 impl ::std::fmt::Debug for GstAudioCdSrcTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioCdSrcTrack @ {:?}", self as *const _))
-         .field("is_audio", &self.is_audio)
-         .field("num", &self.num)
-         .field("start", &self.start)
-         .field("end", &self.end)
-         .field("tags", &self.tags)
-         .finish()
+            .field("is_audio", &self.is_audio)
+            .field("num", &self.num)
+            .field("start", &self.start)
+            .field("end", &self.end)
+            .field("tags", &self.tags)
+            .finish()
     }
 }
 
@@ -461,11 +539,11 @@ pub struct GstAudioClippingMeta {
 impl ::std::fmt::Debug for GstAudioClippingMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioClippingMeta @ {:?}", self as *const _))
-         .field("meta", &self.meta)
-         .field("format", &self.format)
-         .field("start", &self.start)
-         .field("end", &self.end)
-         .finish()
+            .field("meta", &self.meta)
+            .field("format", &self.format)
+            .field("start", &self.start)
+            .field("end", &self.end)
+            .finish()
     }
 }
 
@@ -479,8 +557,8 @@ pub struct GstAudioClockClass {
 impl ::std::fmt::Debug for GstAudioClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioClockClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -490,7 +568,7 @@ pub struct GstAudioConverter(c_void);
 impl ::std::fmt::Debug for GstAudioConverter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioConverter @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -500,48 +578,74 @@ pub struct GstAudioDecoderClass {
     pub element_class: gst::GstElementClass,
     pub start: Option<unsafe extern "C" fn(*mut GstAudioDecoder) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstAudioDecoder) -> gboolean>,
-    pub set_format: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstCaps) -> gboolean>,
-    pub parse: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst_base::GstAdapter, *mut c_int, *mut c_int) -> gst::GstFlowReturn>,
-    pub handle_frame: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub set_format:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstCaps) -> gboolean>,
+    pub parse: Option<
+        unsafe extern "C" fn(
+            *mut GstAudioDecoder,
+            *mut gst_base::GstAdapter,
+            *mut c_int,
+            *mut c_int,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub handle_frame: Option<
+        unsafe extern "C" fn(*mut GstAudioDecoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
+    >,
     pub flush: Option<unsafe extern "C" fn(*mut GstAudioDecoder, gboolean)>,
-    pub pre_push: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub sink_event: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstEvent) -> gboolean>,
-    pub src_event: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstEvent) -> gboolean>,
+    pub pre_push: Option<
+        unsafe extern "C" fn(*mut GstAudioDecoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
+    >,
+    pub sink_event:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstEvent) -> gboolean>,
+    pub src_event:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstEvent) -> gboolean>,
     pub open: Option<unsafe extern "C" fn(*mut GstAudioDecoder) -> gboolean>,
     pub close: Option<unsafe extern "C" fn(*mut GstAudioDecoder) -> gboolean>,
     pub negotiate: Option<unsafe extern "C" fn(*mut GstAudioDecoder) -> gboolean>,
-    pub decide_allocation: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
-    pub propose_allocation: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
-    pub sink_query: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
-    pub src_query: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
-    pub getcaps: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstCaps) -> *mut gst::GstCaps>,
-    pub transform_meta: Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstBuffer, *mut gst::GstMeta, *mut gst::GstBuffer) -> gboolean>,
+    pub decide_allocation:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
+    pub propose_allocation:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
+    pub sink_query:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
+    pub src_query:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstQuery) -> gboolean>,
+    pub getcaps:
+        Option<unsafe extern "C" fn(*mut GstAudioDecoder, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub transform_meta: Option<
+        unsafe extern "C" fn(
+            *mut GstAudioDecoder,
+            *mut gst::GstBuffer,
+            *mut gst::GstMeta,
+            *mut gst::GstBuffer,
+        ) -> gboolean,
+    >,
     pub _gst_reserved: [gpointer; 16],
 }
 
 impl ::std::fmt::Debug for GstAudioDecoderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioDecoderClass @ {:?}", self as *const _))
-         .field("element_class", &self.element_class)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("set_format", &self.set_format)
-         .field("parse", &self.parse)
-         .field("handle_frame", &self.handle_frame)
-         .field("flush", &self.flush)
-         .field("pre_push", &self.pre_push)
-         .field("sink_event", &self.sink_event)
-         .field("src_event", &self.src_event)
-         .field("open", &self.open)
-         .field("close", &self.close)
-         .field("negotiate", &self.negotiate)
-         .field("decide_allocation", &self.decide_allocation)
-         .field("propose_allocation", &self.propose_allocation)
-         .field("sink_query", &self.sink_query)
-         .field("src_query", &self.src_query)
-         .field("getcaps", &self.getcaps)
-         .field("transform_meta", &self.transform_meta)
-         .finish()
+            .field("element_class", &self.element_class)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("set_format", &self.set_format)
+            .field("parse", &self.parse)
+            .field("handle_frame", &self.handle_frame)
+            .field("flush", &self.flush)
+            .field("pre_push", &self.pre_push)
+            .field("sink_event", &self.sink_event)
+            .field("src_event", &self.src_event)
+            .field("open", &self.open)
+            .field("close", &self.close)
+            .field("negotiate", &self.negotiate)
+            .field("decide_allocation", &self.decide_allocation)
+            .field("propose_allocation", &self.propose_allocation)
+            .field("sink_query", &self.sink_query)
+            .field("src_query", &self.src_query)
+            .field("getcaps", &self.getcaps)
+            .field("transform_meta", &self.transform_meta)
+            .finish()
     }
 }
 
@@ -564,13 +668,13 @@ pub struct GstAudioDownmixMeta {
 impl ::std::fmt::Debug for GstAudioDownmixMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioDownmixMeta @ {:?}", self as *const _))
-         .field("meta", &self.meta)
-         .field("from_position", &self.from_position)
-         .field("to_position", &self.to_position)
-         .field("from_channels", &self.from_channels)
-         .field("to_channels", &self.to_channels)
-         .field("matrix", &self.matrix)
-         .finish()
+            .field("meta", &self.meta)
+            .field("from_position", &self.from_position)
+            .field("to_position", &self.to_position)
+            .field("from_channels", &self.from_channels)
+            .field("to_channels", &self.to_channels)
+            .field("matrix", &self.matrix)
+            .finish()
     }
 }
 
@@ -580,46 +684,65 @@ pub struct GstAudioEncoderClass {
     pub element_class: gst::GstElementClass,
     pub start: Option<unsafe extern "C" fn(*mut GstAudioEncoder) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstAudioEncoder) -> gboolean>,
-    pub set_format: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut GstAudioInfo) -> gboolean>,
-    pub handle_frame: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub set_format:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut GstAudioInfo) -> gboolean>,
+    pub handle_frame: Option<
+        unsafe extern "C" fn(*mut GstAudioEncoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
+    >,
     pub flush: Option<unsafe extern "C" fn(*mut GstAudioEncoder)>,
-    pub pre_push: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub sink_event: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstEvent) -> gboolean>,
-    pub src_event: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstEvent) -> gboolean>,
-    pub getcaps: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub pre_push: Option<
+        unsafe extern "C" fn(*mut GstAudioEncoder, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
+    >,
+    pub sink_event:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstEvent) -> gboolean>,
+    pub src_event:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstEvent) -> gboolean>,
+    pub getcaps:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstCaps) -> *mut gst::GstCaps>,
     pub open: Option<unsafe extern "C" fn(*mut GstAudioEncoder) -> gboolean>,
     pub close: Option<unsafe extern "C" fn(*mut GstAudioEncoder) -> gboolean>,
     pub negotiate: Option<unsafe extern "C" fn(*mut GstAudioEncoder) -> gboolean>,
-    pub decide_allocation: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
-    pub propose_allocation: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
-    pub transform_meta: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstBuffer, *mut gst::GstMeta, *mut gst::GstBuffer) -> gboolean>,
-    pub sink_query: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
-    pub src_query: Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
+    pub decide_allocation:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
+    pub propose_allocation:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
+    pub transform_meta: Option<
+        unsafe extern "C" fn(
+            *mut GstAudioEncoder,
+            *mut gst::GstBuffer,
+            *mut gst::GstMeta,
+            *mut gst::GstBuffer,
+        ) -> gboolean,
+    >,
+    pub sink_query:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
+    pub src_query:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
     pub _gst_reserved: [gpointer; 17],
 }
 
 impl ::std::fmt::Debug for GstAudioEncoderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioEncoderClass @ {:?}", self as *const _))
-         .field("element_class", &self.element_class)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("set_format", &self.set_format)
-         .field("handle_frame", &self.handle_frame)
-         .field("flush", &self.flush)
-         .field("pre_push", &self.pre_push)
-         .field("sink_event", &self.sink_event)
-         .field("src_event", &self.src_event)
-         .field("getcaps", &self.getcaps)
-         .field("open", &self.open)
-         .field("close", &self.close)
-         .field("negotiate", &self.negotiate)
-         .field("decide_allocation", &self.decide_allocation)
-         .field("propose_allocation", &self.propose_allocation)
-         .field("transform_meta", &self.transform_meta)
-         .field("sink_query", &self.sink_query)
-         .field("src_query", &self.src_query)
-         .finish()
+            .field("element_class", &self.element_class)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("set_format", &self.set_format)
+            .field("handle_frame", &self.handle_frame)
+            .field("flush", &self.flush)
+            .field("pre_push", &self.pre_push)
+            .field("sink_event", &self.sink_event)
+            .field("src_event", &self.src_event)
+            .field("getcaps", &self.getcaps)
+            .field("open", &self.open)
+            .field("close", &self.close)
+            .field("negotiate", &self.negotiate)
+            .field("decide_allocation", &self.decide_allocation)
+            .field("propose_allocation", &self.propose_allocation)
+            .field("transform_meta", &self.transform_meta)
+            .field("sink_query", &self.sink_query)
+            .field("src_query", &self.src_query)
+            .finish()
     }
 }
 
@@ -639,9 +762,9 @@ pub struct GstAudioFilterClass {
 impl ::std::fmt::Debug for GstAudioFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioFilterClass @ {:?}", self as *const _))
-         .field("basetransformclass", &self.basetransformclass)
-         .field("setup", &self.setup)
-         .finish()
+            .field("basetransformclass", &self.basetransformclass)
+            .field("setup", &self.setup)
+            .finish()
     }
 }
 
@@ -665,18 +788,18 @@ pub struct GstAudioFormatInfo {
 impl ::std::fmt::Debug for GstAudioFormatInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioFormatInfo @ {:?}", self as *const _))
-         .field("format", &self.format)
-         .field("name", &self.name)
-         .field("description", &self.description)
-         .field("flags", &self.flags)
-         .field("endianness", &self.endianness)
-         .field("width", &self.width)
-         .field("depth", &self.depth)
-         .field("silence", &self.silence)
-         .field("unpack_format", &self.unpack_format)
-         .field("unpack_func", &self.unpack_func)
-         .field("pack_func", &self.pack_func)
-         .finish()
+            .field("format", &self.format)
+            .field("name", &self.name)
+            .field("description", &self.description)
+            .field("flags", &self.flags)
+            .field("endianness", &self.endianness)
+            .field("width", &self.width)
+            .field("depth", &self.depth)
+            .field("silence", &self.silence)
+            .field("unpack_format", &self.unpack_format)
+            .field("unpack_func", &self.unpack_func)
+            .field("pack_func", &self.pack_func)
+            .finish()
     }
 }
 
@@ -696,13 +819,13 @@ pub struct GstAudioInfo {
 impl ::std::fmt::Debug for GstAudioInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioInfo @ {:?}", self as *const _))
-         .field("finfo", &self.finfo)
-         .field("flags", &self.flags)
-         .field("layout", &self.layout)
-         .field("rate", &self.rate)
-         .field("channels", &self.channels)
-         .field("bpf", &self.bpf)
-         .finish()
+            .field("finfo", &self.finfo)
+            .field("flags", &self.flags)
+            .field("layout", &self.layout)
+            .field("rate", &self.rate)
+            .field("channels", &self.channels)
+            .field("bpf", &self.bpf)
+            .finish()
     }
 }
 
@@ -720,11 +843,11 @@ pub struct GstAudioMeta {
 impl ::std::fmt::Debug for GstAudioMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioMeta @ {:?}", self as *const _))
-         .field("meta", &self.meta)
-         .field("info", &self.info)
-         .field("samples", &self.samples)
-         .field("offsets", &self.offsets)
-         .finish()
+            .field("meta", &self.meta)
+            .field("info", &self.info)
+            .field("samples", &self.samples)
+            .field("offsets", &self.offsets)
+            .finish()
     }
 }
 
@@ -743,7 +866,9 @@ pub type GstAudioResampler = *mut _GstAudioResampler;
 pub struct GstAudioRingBufferClass {
     pub parent_class: gst::GstObjectClass,
     pub open_device: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer) -> gboolean>,
-    pub acquire: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer, *mut GstAudioRingBufferSpec) -> gboolean>,
+    pub acquire: Option<
+        unsafe extern "C" fn(*mut GstAudioRingBuffer, *mut GstAudioRingBufferSpec) -> gboolean,
+    >,
     pub release: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer) -> gboolean>,
     pub close_device: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer) -> gboolean>,
     pub start: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer) -> gboolean>,
@@ -752,7 +877,16 @@ pub struct GstAudioRingBufferClass {
     pub stop: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer) -> gboolean>,
     pub delay: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer) -> c_uint>,
     pub activate: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer, gboolean) -> gboolean>,
-    pub commit: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer, *mut u64, *mut u8, c_int, c_int, *mut c_int) -> c_uint>,
+    pub commit: Option<
+        unsafe extern "C" fn(
+            *mut GstAudioRingBuffer,
+            *mut u64,
+            *mut u8,
+            c_int,
+            c_int,
+            *mut c_int,
+        ) -> c_uint,
+    >,
     pub clear_all: Option<unsafe extern "C" fn(*mut GstAudioRingBuffer)>,
     pub _gst_reserved: [gpointer; 4],
 }
@@ -760,20 +894,20 @@ pub struct GstAudioRingBufferClass {
 impl ::std::fmt::Debug for GstAudioRingBufferClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioRingBufferClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("open_device", &self.open_device)
-         .field("acquire", &self.acquire)
-         .field("release", &self.release)
-         .field("close_device", &self.close_device)
-         .field("start", &self.start)
-         .field("pause", &self.pause)
-         .field("resume", &self.resume)
-         .field("stop", &self.stop)
-         .field("delay", &self.delay)
-         .field("activate", &self.activate)
-         .field("commit", &self.commit)
-         .field("clear_all", &self.clear_all)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("open_device", &self.open_device)
+            .field("acquire", &self.acquire)
+            .field("release", &self.release)
+            .field("close_device", &self.close_device)
+            .field("start", &self.start)
+            .field("pause", &self.pause)
+            .field("resume", &self.resume)
+            .field("stop", &self.stop)
+            .field("delay", &self.delay)
+            .field("activate", &self.activate)
+            .field("commit", &self.commit)
+            .field("clear_all", &self.clear_all)
+            .finish()
     }
 }
 
@@ -794,15 +928,15 @@ pub struct GstAudioRingBufferSpec {
 impl ::std::fmt::Debug for GstAudioRingBufferSpec {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioRingBufferSpec @ {:?}", self as *const _))
-         .field("caps", &self.caps)
-         .field("type_", &self.type_)
-         .field("info", &self.info)
-         .field("latency_time", &self.latency_time)
-         .field("buffer_time", &self.buffer_time)
-         .field("segsize", &self.segsize)
-         .field("segtotal", &self.segtotal)
-         .field("seglatency", &self.seglatency)
-         .finish()
+            .field("caps", &self.caps)
+            .field("type_", &self.type_)
+            .field("info", &self.info)
+            .field("latency_time", &self.latency_time)
+            .field("buffer_time", &self.buffer_time)
+            .field("segsize", &self.segsize)
+            .field("segtotal", &self.segtotal)
+            .field("seglatency", &self.seglatency)
+            .finish()
     }
 }
 
@@ -811,7 +945,8 @@ impl ::std::fmt::Debug for GstAudioRingBufferSpec {
 pub struct GstAudioSinkClass {
     pub parent_class: GstAudioBaseSinkClass,
     pub open: Option<unsafe extern "C" fn(*mut GstAudioSink) -> gboolean>,
-    pub prepare: Option<unsafe extern "C" fn(*mut GstAudioSink, *mut GstAudioRingBufferSpec) -> gboolean>,
+    pub prepare:
+        Option<unsafe extern "C" fn(*mut GstAudioSink, *mut GstAudioRingBufferSpec) -> gboolean>,
     pub unprepare: Option<unsafe extern "C" fn(*mut GstAudioSink) -> gboolean>,
     pub close: Option<unsafe extern "C" fn(*mut GstAudioSink) -> gboolean>,
     pub write: Option<unsafe extern "C" fn(*mut GstAudioSink, gpointer, c_uint) -> c_int>,
@@ -823,15 +958,15 @@ pub struct GstAudioSinkClass {
 impl ::std::fmt::Debug for GstAudioSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioSinkClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("open", &self.open)
-         .field("prepare", &self.prepare)
-         .field("unprepare", &self.unprepare)
-         .field("close", &self.close)
-         .field("write", &self.write)
-         .field("delay", &self.delay)
-         .field("reset", &self.reset)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("open", &self.open)
+            .field("prepare", &self.prepare)
+            .field("unprepare", &self.unprepare)
+            .field("close", &self.close)
+            .field("write", &self.write)
+            .field("delay", &self.delay)
+            .field("reset", &self.reset)
+            .finish()
     }
 }
 
@@ -840,10 +975,13 @@ impl ::std::fmt::Debug for GstAudioSinkClass {
 pub struct GstAudioSrcClass {
     pub parent_class: GstAudioBaseSrcClass,
     pub open: Option<unsafe extern "C" fn(*mut GstAudioSrc) -> gboolean>,
-    pub prepare: Option<unsafe extern "C" fn(*mut GstAudioSrc, *mut GstAudioRingBufferSpec) -> gboolean>,
+    pub prepare:
+        Option<unsafe extern "C" fn(*mut GstAudioSrc, *mut GstAudioRingBufferSpec) -> gboolean>,
     pub unprepare: Option<unsafe extern "C" fn(*mut GstAudioSrc) -> gboolean>,
     pub close: Option<unsafe extern "C" fn(*mut GstAudioSrc) -> gboolean>,
-    pub read: Option<unsafe extern "C" fn(*mut GstAudioSrc, gpointer, c_uint, *mut gst::GstClockTime) -> c_uint>,
+    pub read: Option<
+        unsafe extern "C" fn(*mut GstAudioSrc, gpointer, c_uint, *mut gst::GstClockTime) -> c_uint,
+    >,
     pub delay: Option<unsafe extern "C" fn(*mut GstAudioSrc) -> c_uint>,
     pub reset: Option<unsafe extern "C" fn(*mut GstAudioSrc)>,
     pub _gst_reserved: [gpointer; 4],
@@ -852,15 +990,15 @@ pub struct GstAudioSrcClass {
 impl ::std::fmt::Debug for GstAudioSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioSrcClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("open", &self.open)
-         .field("prepare", &self.prepare)
-         .field("unprepare", &self.unprepare)
-         .field("close", &self.close)
-         .field("read", &self.read)
-         .field("delay", &self.delay)
-         .field("reset", &self.reset)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("open", &self.open)
+            .field("prepare", &self.prepare)
+            .field("unprepare", &self.unprepare)
+            .field("close", &self.close)
+            .field("read", &self.read)
+            .field("delay", &self.delay)
+            .field("reset", &self.reset)
+            .finish()
     }
 }
 
@@ -870,7 +1008,7 @@ pub struct GstAudioStreamAlign(c_void);
 impl ::std::fmt::Debug for GstAudioStreamAlign {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioStreamAlign @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -882,9 +1020,12 @@ pub struct GstStreamVolumeInterface {
 
 impl ::std::fmt::Debug for GstStreamVolumeInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStreamVolumeInterface @ {:?}", self as *const _))
-         .field("iface", &self.iface)
-         .finish()
+        f.debug_struct(&format!(
+            "GstStreamVolumeInterface @ {:?}",
+            self as *const _
+        ))
+        .field("iface", &self.iface)
+        .finish()
     }
 }
 
@@ -901,9 +1042,9 @@ pub struct GstAudioAggregator {
 impl ::std::fmt::Debug for GstAudioAggregator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioAggregator @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("current_caps", &self.current_caps)
-         .finish()
+            .field("parent", &self.parent)
+            .field("current_caps", &self.current_caps)
+            .finish()
     }
 }
 
@@ -917,8 +1058,11 @@ pub struct GstAudioAggregatorConvertPad {
 
 impl ::std::fmt::Debug for GstAudioAggregatorConvertPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAudioAggregatorConvertPad @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!(
+            "GstAudioAggregatorConvertPad @ {:?}",
+            self as *const _
+        ))
+        .finish()
     }
 }
 
@@ -934,9 +1078,9 @@ pub struct GstAudioAggregatorPad {
 impl ::std::fmt::Debug for GstAudioAggregatorPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioAggregatorPad @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("info", &self.info)
-         .finish()
+            .field("parent", &self.parent)
+            .field("info", &self.info)
+            .finish()
     }
 }
 
@@ -957,14 +1101,14 @@ pub struct GstAudioBaseSink {
 impl ::std::fmt::Debug for GstAudioBaseSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioBaseSink @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("ringbuffer", &self.ringbuffer)
-         .field("buffer_time", &self.buffer_time)
-         .field("latency_time", &self.latency_time)
-         .field("next_sample", &self.next_sample)
-         .field("provided_clock", &self.provided_clock)
-         .field("eos_rendering", &self.eos_rendering)
-         .finish()
+            .field("element", &self.element)
+            .field("ringbuffer", &self.ringbuffer)
+            .field("buffer_time", &self.buffer_time)
+            .field("latency_time", &self.latency_time)
+            .field("next_sample", &self.next_sample)
+            .field("provided_clock", &self.provided_clock)
+            .field("eos_rendering", &self.eos_rendering)
+            .finish()
     }
 }
 
@@ -984,13 +1128,13 @@ pub struct GstAudioBaseSrc {
 impl ::std::fmt::Debug for GstAudioBaseSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioBaseSrc @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("ringbuffer", &self.ringbuffer)
-         .field("buffer_time", &self.buffer_time)
-         .field("latency_time", &self.latency_time)
-         .field("next_sample", &self.next_sample)
-         .field("clock", &self.clock)
-         .finish()
+            .field("element", &self.element)
+            .field("ringbuffer", &self.ringbuffer)
+            .field("buffer_time", &self.buffer_time)
+            .field("latency_time", &self.latency_time)
+            .field("next_sample", &self.next_sample)
+            .field("clock", &self.clock)
+            .finish()
     }
 }
 
@@ -1007,9 +1151,9 @@ pub struct GstAudioCdSrc {
 impl ::std::fmt::Debug for GstAudioCdSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioCdSrc @ {:?}", self as *const _))
-         .field("pushsrc", &self.pushsrc)
-         .field("tags", &self.tags)
-         .finish()
+            .field("pushsrc", &self.pushsrc)
+            .field("tags", &self.tags)
+            .finish()
     }
 }
 
@@ -1028,11 +1172,11 @@ pub struct GstAudioClock {
 impl ::std::fmt::Debug for GstAudioClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioClock @ {:?}", self as *const _))
-         .field("clock", &self.clock)
-         .field("func", &self.func)
-         .field("user_data", &self.user_data)
-         .field("destroy_notify", &self.destroy_notify)
-         .finish()
+            .field("clock", &self.clock)
+            .field("func", &self.func)
+            .field("user_data", &self.user_data)
+            .field("destroy_notify", &self.destroy_notify)
+            .finish()
     }
 }
 
@@ -1052,13 +1196,13 @@ pub struct GstAudioDecoder {
 impl ::std::fmt::Debug for GstAudioDecoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioDecoder @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("sinkpad", &self.sinkpad)
-         .field("srcpad", &self.srcpad)
-         .field("stream_lock", &self.stream_lock)
-         .field("input_segment", &self.input_segment)
-         .field("output_segment", &self.output_segment)
-         .finish()
+            .field("element", &self.element)
+            .field("sinkpad", &self.sinkpad)
+            .field("srcpad", &self.srcpad)
+            .field("stream_lock", &self.stream_lock)
+            .field("input_segment", &self.input_segment)
+            .field("output_segment", &self.output_segment)
+            .finish()
     }
 }
 
@@ -1078,13 +1222,13 @@ pub struct GstAudioEncoder {
 impl ::std::fmt::Debug for GstAudioEncoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioEncoder @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("sinkpad", &self.sinkpad)
-         .field("srcpad", &self.srcpad)
-         .field("stream_lock", &self.stream_lock)
-         .field("input_segment", &self.input_segment)
-         .field("output_segment", &self.output_segment)
-         .finish()
+            .field("element", &self.element)
+            .field("sinkpad", &self.sinkpad)
+            .field("srcpad", &self.srcpad)
+            .field("stream_lock", &self.stream_lock)
+            .field("input_segment", &self.input_segment)
+            .field("output_segment", &self.output_segment)
+            .finish()
     }
 }
 
@@ -1099,9 +1243,9 @@ pub struct GstAudioFilter {
 impl ::std::fmt::Debug for GstAudioFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioFilter @ {:?}", self as *const _))
-         .field("basetransform", &self.basetransform)
-         .field("info", &self.info)
-         .finish()
+            .field("basetransform", &self.basetransform)
+            .field("info", &self.info)
+            .finish()
     }
 }
 
@@ -1136,20 +1280,20 @@ pub struct GstAudioRingBuffer {
 impl ::std::fmt::Debug for GstAudioRingBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioRingBuffer @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("cond", &self.cond)
-         .field("open", &self.open)
-         .field("acquired", &self.acquired)
-         .field("memory", &self.memory)
-         .field("size", &self.size)
-         .field("spec", &self.spec)
-         .field("samples_per_seg", &self.samples_per_seg)
-         .field("empty_seg", &self.empty_seg)
-         .field("state", &self.state)
-         .field("segdone", &self.segdone)
-         .field("segbase", &self.segbase)
-         .field("waiting", &self.waiting)
-         .finish()
+            .field("object", &self.object)
+            .field("cond", &self.cond)
+            .field("open", &self.open)
+            .field("acquired", &self.acquired)
+            .field("memory", &self.memory)
+            .field("size", &self.size)
+            .field("spec", &self.spec)
+            .field("samples_per_seg", &self.samples_per_seg)
+            .field("empty_seg", &self.empty_seg)
+            .field("state", &self.state)
+            .field("segdone", &self.segdone)
+            .field("segbase", &self.segbase)
+            .field("waiting", &self.waiting)
+            .finish()
     }
 }
 
@@ -1164,8 +1308,8 @@ pub struct GstAudioSink {
 impl ::std::fmt::Debug for GstAudioSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioSink @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .finish()
+            .field("element", &self.element)
+            .finish()
     }
 }
 
@@ -1180,8 +1324,8 @@ pub struct GstAudioSrc {
 impl ::std::fmt::Debug for GstAudioSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAudioSrc @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .finish()
+            .field("element", &self.element)
+            .finish()
     }
 }
 
@@ -1194,7 +1338,6 @@ impl ::std::fmt::Debug for GstStreamVolume {
         write!(f, "GstStreamVolume @ {:?}", self as *const _)
     }
 }
-
 
 extern "C" {
 
@@ -1232,8 +1375,17 @@ extern "C" {
     // GstAudioFormat
     //=========================================================================
     pub fn gst_audio_format_get_type() -> GType;
-    pub fn gst_audio_format_build_integer(sign: gboolean, endianness: c_int, width: c_int, depth: c_int) -> GstAudioFormat;
-    pub fn gst_audio_format_fill_silence(info: *const GstAudioFormatInfo, dest: gpointer, length: size_t);
+    pub fn gst_audio_format_build_integer(
+        sign: gboolean,
+        endianness: c_int,
+        width: c_int,
+        depth: c_int,
+    ) -> GstAudioFormat;
+    pub fn gst_audio_format_fill_silence(
+        info: *const GstAudioFormatInfo,
+        dest: gpointer,
+        length: size_t,
+    );
     pub fn gst_audio_format_from_string(format: *const c_char) -> GstAudioFormat;
     pub fn gst_audio_format_get_info(format: GstAudioFormat) -> *const GstAudioFormatInfo;
     pub fn gst_audio_format_to_string(format: GstAudioFormat) -> *const c_char;
@@ -1312,23 +1464,62 @@ extern "C" {
     // GstAudioBuffer
     //=========================================================================
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_audio_buffer_map(buffer: *mut GstAudioBuffer, info: *const GstAudioInfo, gstbuffer: *mut gst::GstBuffer, flags: gst::GstMapFlags) -> gboolean;
+    pub fn gst_audio_buffer_map(
+        buffer: *mut GstAudioBuffer,
+        info: *const GstAudioInfo,
+        gstbuffer: *mut gst::GstBuffer,
+        flags: gst::GstMapFlags,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_audio_buffer_unmap(buffer: *mut GstAudioBuffer);
-    pub fn gst_audio_buffer_clip(buffer: *mut gst::GstBuffer, segment: *const gst::GstSegment, rate: c_int, bpf: c_int) -> *mut gst::GstBuffer;
-    pub fn gst_audio_buffer_reorder_channels(buffer: *mut gst::GstBuffer, format: GstAudioFormat, channels: c_int, from: *const GstAudioChannelPosition, to: *const GstAudioChannelPosition) -> gboolean;
+    pub fn gst_audio_buffer_clip(
+        buffer: *mut gst::GstBuffer,
+        segment: *const gst::GstSegment,
+        rate: c_int,
+        bpf: c_int,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_audio_buffer_reorder_channels(
+        buffer: *mut gst::GstBuffer,
+        format: GstAudioFormat,
+        channels: c_int,
+        from: *const GstAudioChannelPosition,
+        to: *const GstAudioChannelPosition,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_audio_buffer_truncate(buffer: *mut gst::GstBuffer, bpf: c_int, trim: size_t, samples: size_t) -> *mut gst::GstBuffer;
+    pub fn gst_audio_buffer_truncate(
+        buffer: *mut gst::GstBuffer,
+        bpf: c_int,
+        trim: size_t,
+        samples: size_t,
+    ) -> *mut gst::GstBuffer;
 
     //=========================================================================
     // GstAudioChannelMixer
     //=========================================================================
     pub fn gst_audio_channel_mixer_free(mix: *mut GstAudioChannelMixer);
     pub fn gst_audio_channel_mixer_is_passthrough(mix: *mut GstAudioChannelMixer) -> gboolean;
-    pub fn gst_audio_channel_mixer_samples(mix: *mut GstAudioChannelMixer, in_: *const gpointer, out: *mut gpointer, samples: c_int);
-    pub fn gst_audio_channel_mixer_new(flags: GstAudioChannelMixerFlags, format: GstAudioFormat, in_channels: c_int, in_position: *mut GstAudioChannelPosition, out_channels: c_int, out_position: *mut GstAudioChannelPosition) -> *mut GstAudioChannelMixer;
+    pub fn gst_audio_channel_mixer_samples(
+        mix: *mut GstAudioChannelMixer,
+        in_: *const gpointer,
+        out: *mut gpointer,
+        samples: c_int,
+    );
+    pub fn gst_audio_channel_mixer_new(
+        flags: GstAudioChannelMixerFlags,
+        format: GstAudioFormat,
+        in_channels: c_int,
+        in_position: *mut GstAudioChannelPosition,
+        out_channels: c_int,
+        out_position: *mut GstAudioChannelPosition,
+    ) -> *mut GstAudioChannelMixer;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_channel_mixer_new_with_matrix(flags: GstAudioChannelMixerFlags, format: GstAudioFormat, in_channels: c_int, out_channels: c_int, matrix: *mut *mut c_float) -> *mut GstAudioChannelMixer;
+    pub fn gst_audio_channel_mixer_new_with_matrix(
+        flags: GstAudioChannelMixerFlags,
+        format: GstAudioFormat,
+        in_channels: c_int,
+        out_channels: c_int,
+        matrix: *mut *mut c_float,
+    ) -> *mut GstAudioChannelMixer;
 
     //=========================================================================
     // GstAudioClippingMeta
@@ -1339,20 +1530,54 @@ extern "C" {
     // GstAudioConverter
     //=========================================================================
     pub fn gst_audio_converter_get_type() -> GType;
-    pub fn gst_audio_converter_new(flags: GstAudioConverterFlags, in_info: *mut GstAudioInfo, out_info: *mut GstAudioInfo, config: *mut gst::GstStructure) -> *mut GstAudioConverter;
+    pub fn gst_audio_converter_new(
+        flags: GstAudioConverterFlags,
+        in_info: *mut GstAudioInfo,
+        out_info: *mut GstAudioInfo,
+        config: *mut gst::GstStructure,
+    ) -> *mut GstAudioConverter;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_converter_convert(convert: *mut GstAudioConverter, flags: GstAudioConverterFlags, in_: gpointer, in_size: size_t, out: *mut u8, out_size: *mut size_t) -> gboolean;
+    pub fn gst_audio_converter_convert(
+        convert: *mut GstAudioConverter,
+        flags: GstAudioConverterFlags,
+        in_: gpointer,
+        in_size: size_t,
+        out: *mut u8,
+        out_size: *mut size_t,
+    ) -> gboolean;
     pub fn gst_audio_converter_free(convert: *mut GstAudioConverter);
-    pub fn gst_audio_converter_get_config(convert: *mut GstAudioConverter, in_rate: *mut c_int, out_rate: *mut c_int) -> *const gst::GstStructure;
-    pub fn gst_audio_converter_get_in_frames(convert: *mut GstAudioConverter, out_frames: size_t) -> size_t;
+    pub fn gst_audio_converter_get_config(
+        convert: *mut GstAudioConverter,
+        in_rate: *mut c_int,
+        out_rate: *mut c_int,
+    ) -> *const gst::GstStructure;
+    pub fn gst_audio_converter_get_in_frames(
+        convert: *mut GstAudioConverter,
+        out_frames: size_t,
+    ) -> size_t;
     pub fn gst_audio_converter_get_max_latency(convert: *mut GstAudioConverter) -> size_t;
-    pub fn gst_audio_converter_get_out_frames(convert: *mut GstAudioConverter, in_frames: size_t) -> size_t;
+    pub fn gst_audio_converter_get_out_frames(
+        convert: *mut GstAudioConverter,
+        in_frames: size_t,
+    ) -> size_t;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_audio_converter_is_passthrough(convert: *mut GstAudioConverter) -> gboolean;
     pub fn gst_audio_converter_reset(convert: *mut GstAudioConverter);
-    pub fn gst_audio_converter_samples(convert: *mut GstAudioConverter, flags: GstAudioConverterFlags, in_: *mut gpointer, in_frames: size_t, out: *mut gpointer, out_frames: size_t) -> gboolean;
+    pub fn gst_audio_converter_samples(
+        convert: *mut GstAudioConverter,
+        flags: GstAudioConverterFlags,
+        in_: *mut gpointer,
+        in_frames: size_t,
+        out: *mut gpointer,
+        out_frames: size_t,
+    ) -> gboolean;
     pub fn gst_audio_converter_supports_inplace(convert: *mut GstAudioConverter) -> gboolean;
-    pub fn gst_audio_converter_update_config(convert: *mut GstAudioConverter, in_rate: c_int, out_rate: c_int, config: *mut gst::GstStructure) -> gboolean;
+    pub fn gst_audio_converter_update_config(
+        convert: *mut GstAudioConverter,
+        in_rate: c_int,
+        out_rate: c_int,
+        config: *mut gst::GstStructure,
+    ) -> gboolean;
 
     //=========================================================================
     // GstAudioDownmixMeta
@@ -1362,21 +1587,40 @@ extern "C" {
     //=========================================================================
     // GstAudioFilterClass
     //=========================================================================
-    pub fn gst_audio_filter_class_add_pad_templates(klass: *mut GstAudioFilterClass, allowed_caps: *mut gst::GstCaps);
+    pub fn gst_audio_filter_class_add_pad_templates(
+        klass: *mut GstAudioFilterClass,
+        allowed_caps: *mut gst::GstCaps,
+    );
 
     //=========================================================================
     // GstAudioInfo
     //=========================================================================
     pub fn gst_audio_info_get_type() -> GType;
     pub fn gst_audio_info_new() -> *mut GstAudioInfo;
-    pub fn gst_audio_info_convert(info: *const GstAudioInfo, src_fmt: gst::GstFormat, src_val: i64, dest_fmt: gst::GstFormat, dest_val: *mut i64) -> gboolean;
+    pub fn gst_audio_info_convert(
+        info: *const GstAudioInfo,
+        src_fmt: gst::GstFormat,
+        src_val: i64,
+        dest_fmt: gst::GstFormat,
+        dest_val: *mut i64,
+    ) -> gboolean;
     pub fn gst_audio_info_copy(info: *const GstAudioInfo) -> *mut GstAudioInfo;
     pub fn gst_audio_info_free(info: *mut GstAudioInfo);
-    pub fn gst_audio_info_from_caps(info: *mut GstAudioInfo, caps: *const gst::GstCaps) -> gboolean;
+    pub fn gst_audio_info_from_caps(info: *mut GstAudioInfo, caps: *const gst::GstCaps)
+        -> gboolean;
     pub fn gst_audio_info_init(info: *mut GstAudioInfo);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_audio_info_is_equal(info: *const GstAudioInfo, other: *const GstAudioInfo) -> gboolean;
-    pub fn gst_audio_info_set_format(info: *mut GstAudioInfo, format: GstAudioFormat, rate: c_int, channels: c_int, position: *const [GstAudioChannelPosition; 64]);
+    pub fn gst_audio_info_is_equal(
+        info: *const GstAudioInfo,
+        other: *const GstAudioInfo,
+    ) -> gboolean;
+    pub fn gst_audio_info_set_format(
+        info: *mut GstAudioInfo,
+        format: GstAudioFormat,
+        rate: c_int,
+        channels: c_int,
+        position: *const [GstAudioChannelPosition; 64],
+    );
     pub fn gst_audio_info_to_caps(info: *const GstAudioInfo) -> *mut gst::GstCaps;
 
     //=========================================================================
@@ -1389,53 +1633,123 @@ extern "C" {
     //=========================================================================
     pub fn gst_audio_quantize_free(quant: *mut GstAudioQuantize);
     pub fn gst_audio_quantize_reset(quant: *mut GstAudioQuantize);
-    pub fn gst_audio_quantize_samples(quant: *mut GstAudioQuantize, in_: *const gpointer, out: *mut gpointer, samples: c_uint);
-    pub fn gst_audio_quantize_new(dither: GstAudioDitherMethod, ns: GstAudioNoiseShapingMethod, flags: GstAudioQuantizeFlags, format: GstAudioFormat, channels: c_uint, quantizer: c_uint) -> *mut GstAudioQuantize;
+    pub fn gst_audio_quantize_samples(
+        quant: *mut GstAudioQuantize,
+        in_: *const gpointer,
+        out: *mut gpointer,
+        samples: c_uint,
+    );
+    pub fn gst_audio_quantize_new(
+        dither: GstAudioDitherMethod,
+        ns: GstAudioNoiseShapingMethod,
+        flags: GstAudioQuantizeFlags,
+        format: GstAudioFormat,
+        channels: c_uint,
+        quantizer: c_uint,
+    ) -> *mut GstAudioQuantize;
 
     //=========================================================================
     // GstAudioResampler
     //=========================================================================
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_audio_resampler_free(resampler: *mut GstAudioResampler);
-    pub fn gst_audio_resampler_get_in_frames(resampler: *mut GstAudioResampler, out_frames: size_t) -> size_t;
+    pub fn gst_audio_resampler_get_in_frames(
+        resampler: *mut GstAudioResampler,
+        out_frames: size_t,
+    ) -> size_t;
     pub fn gst_audio_resampler_get_max_latency(resampler: *mut GstAudioResampler) -> size_t;
-    pub fn gst_audio_resampler_get_out_frames(resampler: *mut GstAudioResampler, in_frames: size_t) -> size_t;
-    pub fn gst_audio_resampler_resample(resampler: *mut GstAudioResampler, in_: *mut gpointer, in_frames: size_t, out: *mut gpointer, out_frames: size_t);
+    pub fn gst_audio_resampler_get_out_frames(
+        resampler: *mut GstAudioResampler,
+        in_frames: size_t,
+    ) -> size_t;
+    pub fn gst_audio_resampler_resample(
+        resampler: *mut GstAudioResampler,
+        in_: *mut gpointer,
+        in_frames: size_t,
+        out: *mut gpointer,
+        out_frames: size_t,
+    );
     pub fn gst_audio_resampler_reset(resampler: *mut GstAudioResampler);
-    pub fn gst_audio_resampler_update(resampler: *mut GstAudioResampler, in_rate: c_int, out_rate: c_int, options: *mut gst::GstStructure) -> gboolean;
+    pub fn gst_audio_resampler_update(
+        resampler: *mut GstAudioResampler,
+        in_rate: c_int,
+        out_rate: c_int,
+        options: *mut gst::GstStructure,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_audio_resampler_new(method: GstAudioResamplerMethod, flags: GstAudioResamplerFlags, format: GstAudioFormat, channels: c_int, in_rate: c_int, out_rate: c_int, options: *mut gst::GstStructure) -> *mut GstAudioResampler;
+    pub fn gst_audio_resampler_new(
+        method: GstAudioResamplerMethod,
+        flags: GstAudioResamplerFlags,
+        format: GstAudioFormat,
+        channels: c_int,
+        in_rate: c_int,
+        out_rate: c_int,
+        options: *mut gst::GstStructure,
+    ) -> *mut GstAudioResampler;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_audio_resampler_options_set_quality(method: GstAudioResamplerMethod, quality: c_uint, in_rate: c_int, out_rate: c_int, options: *mut gst::GstStructure);
+    pub fn gst_audio_resampler_options_set_quality(
+        method: GstAudioResamplerMethod,
+        quality: c_uint,
+        in_rate: c_int,
+        out_rate: c_int,
+        options: *mut gst::GstStructure,
+    );
 
     //=========================================================================
     // GstAudioStreamAlign
     //=========================================================================
     pub fn gst_audio_stream_align_get_type() -> GType;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_new(rate: c_int, alignment_threshold: gst::GstClockTime, discont_wait: gst::GstClockTime) -> *mut GstAudioStreamAlign;
+    pub fn gst_audio_stream_align_new(
+        rate: c_int,
+        alignment_threshold: gst::GstClockTime,
+        discont_wait: gst::GstClockTime,
+    ) -> *mut GstAudioStreamAlign;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_copy(align: *const GstAudioStreamAlign) -> *mut GstAudioStreamAlign;
+    pub fn gst_audio_stream_align_copy(
+        align: *const GstAudioStreamAlign,
+    ) -> *mut GstAudioStreamAlign;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_audio_stream_align_free(align: *mut GstAudioStreamAlign);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_get_alignment_threshold(align: *mut GstAudioStreamAlign) -> gst::GstClockTime;
+    pub fn gst_audio_stream_align_get_alignment_threshold(
+        align: *mut GstAudioStreamAlign,
+    ) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_get_discont_wait(align: *mut GstAudioStreamAlign) -> gst::GstClockTime;
+    pub fn gst_audio_stream_align_get_discont_wait(
+        align: *mut GstAudioStreamAlign,
+    ) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_audio_stream_align_get_rate(align: *mut GstAudioStreamAlign) -> c_int;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_get_samples_since_discont(align: *mut GstAudioStreamAlign) -> u64;
+    pub fn gst_audio_stream_align_get_samples_since_discont(align: *mut GstAudioStreamAlign)
+        -> u64;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_get_timestamp_at_discont(align: *mut GstAudioStreamAlign) -> gst::GstClockTime;
+    pub fn gst_audio_stream_align_get_timestamp_at_discont(
+        align: *mut GstAudioStreamAlign,
+    ) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_audio_stream_align_mark_discont(align: *mut GstAudioStreamAlign);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_process(align: *mut GstAudioStreamAlign, discont: gboolean, timestamp: gst::GstClockTime, n_samples: c_uint, out_timestamp: *mut gst::GstClockTime, out_duration: *mut gst::GstClockTime, out_sample_position: *mut u64) -> gboolean;
+    pub fn gst_audio_stream_align_process(
+        align: *mut GstAudioStreamAlign,
+        discont: gboolean,
+        timestamp: gst::GstClockTime,
+        n_samples: c_uint,
+        out_timestamp: *mut gst::GstClockTime,
+        out_duration: *mut gst::GstClockTime,
+        out_sample_position: *mut u64,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_set_alignment_threshold(align: *mut GstAudioStreamAlign, alignment_threshold: gst::GstClockTime);
+    pub fn gst_audio_stream_align_set_alignment_threshold(
+        align: *mut GstAudioStreamAlign,
+        alignment_threshold: gst::GstClockTime,
+    );
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_stream_align_set_discont_wait(align: *mut GstAudioStreamAlign, discont_wait: gst::GstClockTime);
+    pub fn gst_audio_stream_align_set_discont_wait(
+        align: *mut GstAudioStreamAlign,
+        discont_wait: gst::GstClockTime,
+    );
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_audio_stream_align_set_rate(align: *mut GstAudioStreamAlign, rate: c_int);
 
@@ -1444,7 +1758,11 @@ extern "C" {
     //=========================================================================
     pub fn gst_audio_aggregator_get_type() -> GType;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_audio_aggregator_set_sink_caps(aagg: *mut GstAudioAggregator, pad: *mut GstAudioAggregatorPad, caps: *mut gst::GstCaps);
+    pub fn gst_audio_aggregator_set_sink_caps(
+        aagg: *mut GstAudioAggregator,
+        pad: *mut GstAudioAggregatorPad,
+        caps: *mut gst::GstCaps,
+    );
 
     //=========================================================================
     // GstAudioAggregatorConvertPad
@@ -1460,44 +1778,85 @@ extern "C" {
     // GstAudioBaseSink
     //=========================================================================
     pub fn gst_audio_base_sink_get_type() -> GType;
-    pub fn gst_audio_base_sink_create_ringbuffer(sink: *mut GstAudioBaseSink) -> *mut GstAudioRingBuffer;
-    pub fn gst_audio_base_sink_get_alignment_threshold(sink: *mut GstAudioBaseSink) -> gst::GstClockTime;
+    pub fn gst_audio_base_sink_create_ringbuffer(
+        sink: *mut GstAudioBaseSink,
+    ) -> *mut GstAudioRingBuffer;
+    pub fn gst_audio_base_sink_get_alignment_threshold(
+        sink: *mut GstAudioBaseSink,
+    ) -> gst::GstClockTime;
     pub fn gst_audio_base_sink_get_discont_wait(sink: *mut GstAudioBaseSink) -> gst::GstClockTime;
     pub fn gst_audio_base_sink_get_drift_tolerance(sink: *mut GstAudioBaseSink) -> i64;
     pub fn gst_audio_base_sink_get_provide_clock(sink: *mut GstAudioBaseSink) -> gboolean;
-    pub fn gst_audio_base_sink_get_slave_method(sink: *mut GstAudioBaseSink) -> GstAudioBaseSinkSlaveMethod;
+    pub fn gst_audio_base_sink_get_slave_method(
+        sink: *mut GstAudioBaseSink,
+    ) -> GstAudioBaseSinkSlaveMethod;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_audio_base_sink_report_device_failure(sink: *mut GstAudioBaseSink);
-    pub fn gst_audio_base_sink_set_alignment_threshold(sink: *mut GstAudioBaseSink, alignment_threshold: gst::GstClockTime);
+    pub fn gst_audio_base_sink_set_alignment_threshold(
+        sink: *mut GstAudioBaseSink,
+        alignment_threshold: gst::GstClockTime,
+    );
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_audio_base_sink_set_custom_slaving_callback(sink: *mut GstAudioBaseSink, callback: GstAudioBaseSinkCustomSlavingCallback, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_audio_base_sink_set_discont_wait(sink: *mut GstAudioBaseSink, discont_wait: gst::GstClockTime);
-    pub fn gst_audio_base_sink_set_drift_tolerance(sink: *mut GstAudioBaseSink, drift_tolerance: i64);
+    pub fn gst_audio_base_sink_set_custom_slaving_callback(
+        sink: *mut GstAudioBaseSink,
+        callback: GstAudioBaseSinkCustomSlavingCallback,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_audio_base_sink_set_discont_wait(
+        sink: *mut GstAudioBaseSink,
+        discont_wait: gst::GstClockTime,
+    );
+    pub fn gst_audio_base_sink_set_drift_tolerance(
+        sink: *mut GstAudioBaseSink,
+        drift_tolerance: i64,
+    );
     pub fn gst_audio_base_sink_set_provide_clock(sink: *mut GstAudioBaseSink, provide: gboolean);
-    pub fn gst_audio_base_sink_set_slave_method(sink: *mut GstAudioBaseSink, method: GstAudioBaseSinkSlaveMethod);
+    pub fn gst_audio_base_sink_set_slave_method(
+        sink: *mut GstAudioBaseSink,
+        method: GstAudioBaseSinkSlaveMethod,
+    );
 
     //=========================================================================
     // GstAudioBaseSrc
     //=========================================================================
     pub fn gst_audio_base_src_get_type() -> GType;
-    pub fn gst_audio_base_src_create_ringbuffer(src: *mut GstAudioBaseSrc) -> *mut GstAudioRingBuffer;
+    pub fn gst_audio_base_src_create_ringbuffer(
+        src: *mut GstAudioBaseSrc,
+    ) -> *mut GstAudioRingBuffer;
     pub fn gst_audio_base_src_get_provide_clock(src: *mut GstAudioBaseSrc) -> gboolean;
-    pub fn gst_audio_base_src_get_slave_method(src: *mut GstAudioBaseSrc) -> GstAudioBaseSrcSlaveMethod;
+    pub fn gst_audio_base_src_get_slave_method(
+        src: *mut GstAudioBaseSrc,
+    ) -> GstAudioBaseSrcSlaveMethod;
     pub fn gst_audio_base_src_set_provide_clock(src: *mut GstAudioBaseSrc, provide: gboolean);
-    pub fn gst_audio_base_src_set_slave_method(src: *mut GstAudioBaseSrc, method: GstAudioBaseSrcSlaveMethod);
+    pub fn gst_audio_base_src_set_slave_method(
+        src: *mut GstAudioBaseSrc,
+        method: GstAudioBaseSrcSlaveMethod,
+    );
 
     //=========================================================================
     // GstAudioCdSrc
     //=========================================================================
     pub fn gst_audio_cd_src_get_type() -> GType;
-    pub fn gst_audio_cd_src_add_track(src: *mut GstAudioCdSrc, track: *mut GstAudioCdSrcTrack) -> gboolean;
+    pub fn gst_audio_cd_src_add_track(
+        src: *mut GstAudioCdSrc,
+        track: *mut GstAudioCdSrcTrack,
+    ) -> gboolean;
 
     //=========================================================================
     // GstAudioClock
     //=========================================================================
     pub fn gst_audio_clock_get_type() -> GType;
-    pub fn gst_audio_clock_new(name: *const c_char, func: GstAudioClockGetTimeFunc, user_data: gpointer, destroy_notify: glib::GDestroyNotify) -> *mut gst::GstClock;
-    pub fn gst_audio_clock_adjust(clock: *mut GstAudioClock, time: gst::GstClockTime) -> gst::GstClockTime;
+    pub fn gst_audio_clock_new(
+        name: *const c_char,
+        func: GstAudioClockGetTimeFunc,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    ) -> *mut gst::GstClock;
+    pub fn gst_audio_clock_adjust(
+        clock: *mut GstAudioClock,
+        time: gst::GstClockTime,
+    ) -> gst::GstClockTime;
     pub fn gst_audio_clock_get_time(clock: *mut GstAudioClock) -> gst::GstClockTime;
     pub fn gst_audio_clock_invalidate(clock: *mut GstAudioClock);
     pub fn gst_audio_clock_reset(clock: *mut GstAudioClock, time: gst::GstClockTime);
@@ -1506,51 +1865,108 @@ extern "C" {
     // GstAudioDecoder
     //=========================================================================
     pub fn gst_audio_decoder_get_type() -> GType;
-    pub fn gst_audio_decoder_allocate_output_buffer(dec: *mut GstAudioDecoder, size: size_t) -> *mut gst::GstBuffer;
-    pub fn gst_audio_decoder_finish_frame(dec: *mut GstAudioDecoder, buf: *mut gst::GstBuffer, frames: c_int) -> gst::GstFlowReturn;
+    pub fn gst_audio_decoder_allocate_output_buffer(
+        dec: *mut GstAudioDecoder,
+        size: size_t,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_audio_decoder_finish_frame(
+        dec: *mut GstAudioDecoder,
+        buf: *mut gst::GstBuffer,
+        frames: c_int,
+    ) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_audio_decoder_finish_subframe(dec: *mut GstAudioDecoder, buf: *mut gst::GstBuffer) -> gst::GstFlowReturn;
-    pub fn gst_audio_decoder_get_allocator(dec: *mut GstAudioDecoder, allocator: *mut *mut gst::GstAllocator, params: *mut gst::GstAllocationParams);
+    pub fn gst_audio_decoder_finish_subframe(
+        dec: *mut GstAudioDecoder,
+        buf: *mut gst::GstBuffer,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_audio_decoder_get_allocator(
+        dec: *mut GstAudioDecoder,
+        allocator: *mut *mut gst::GstAllocator,
+        params: *mut gst::GstAllocationParams,
+    );
     pub fn gst_audio_decoder_get_audio_info(dec: *mut GstAudioDecoder) -> *mut GstAudioInfo;
     pub fn gst_audio_decoder_get_delay(dec: *mut GstAudioDecoder) -> c_int;
     pub fn gst_audio_decoder_get_drainable(dec: *mut GstAudioDecoder) -> gboolean;
     pub fn gst_audio_decoder_get_estimate_rate(dec: *mut GstAudioDecoder) -> c_int;
-    pub fn gst_audio_decoder_get_latency(dec: *mut GstAudioDecoder, min: *mut gst::GstClockTime, max: *mut gst::GstClockTime);
+    pub fn gst_audio_decoder_get_latency(
+        dec: *mut GstAudioDecoder,
+        min: *mut gst::GstClockTime,
+        max: *mut gst::GstClockTime,
+    );
     pub fn gst_audio_decoder_get_max_errors(dec: *mut GstAudioDecoder) -> c_int;
     pub fn gst_audio_decoder_get_min_latency(dec: *mut GstAudioDecoder) -> gst::GstClockTime;
     pub fn gst_audio_decoder_get_needs_format(dec: *mut GstAudioDecoder) -> gboolean;
-    pub fn gst_audio_decoder_get_parse_state(dec: *mut GstAudioDecoder, sync: *mut gboolean, eos: *mut gboolean);
+    pub fn gst_audio_decoder_get_parse_state(
+        dec: *mut GstAudioDecoder,
+        sync: *mut gboolean,
+        eos: *mut gboolean,
+    );
     pub fn gst_audio_decoder_get_plc(dec: *mut GstAudioDecoder) -> gboolean;
     pub fn gst_audio_decoder_get_plc_aware(dec: *mut GstAudioDecoder) -> c_int;
     pub fn gst_audio_decoder_get_tolerance(dec: *mut GstAudioDecoder) -> gst::GstClockTime;
-    pub fn gst_audio_decoder_merge_tags(dec: *mut GstAudioDecoder, tags: *const gst::GstTagList, mode: gst::GstTagMergeMode);
+    pub fn gst_audio_decoder_merge_tags(
+        dec: *mut GstAudioDecoder,
+        tags: *const gst::GstTagList,
+        mode: gst::GstTagMergeMode,
+    );
     pub fn gst_audio_decoder_negotiate(dec: *mut GstAudioDecoder) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_audio_decoder_proxy_getcaps(decoder: *mut GstAudioDecoder, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
+    pub fn gst_audio_decoder_proxy_getcaps(
+        decoder: *mut GstAudioDecoder,
+        caps: *mut gst::GstCaps,
+        filter: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_audio_decoder_set_allocation_caps(dec: *mut GstAudioDecoder, allocation_caps: *mut gst::GstCaps);
+    pub fn gst_audio_decoder_set_allocation_caps(
+        dec: *mut GstAudioDecoder,
+        allocation_caps: *mut gst::GstCaps,
+    );
     pub fn gst_audio_decoder_set_drainable(dec: *mut GstAudioDecoder, enabled: gboolean);
     pub fn gst_audio_decoder_set_estimate_rate(dec: *mut GstAudioDecoder, enabled: gboolean);
-    pub fn gst_audio_decoder_set_latency(dec: *mut GstAudioDecoder, min: gst::GstClockTime, max: gst::GstClockTime);
+    pub fn gst_audio_decoder_set_latency(
+        dec: *mut GstAudioDecoder,
+        min: gst::GstClockTime,
+        max: gst::GstClockTime,
+    );
     pub fn gst_audio_decoder_set_max_errors(dec: *mut GstAudioDecoder, num: c_int);
     pub fn gst_audio_decoder_set_min_latency(dec: *mut GstAudioDecoder, num: gst::GstClockTime);
     pub fn gst_audio_decoder_set_needs_format(dec: *mut GstAudioDecoder, enabled: gboolean);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_audio_decoder_set_output_caps(dec: *mut GstAudioDecoder, caps: *mut gst::GstCaps) -> gboolean;
-    pub fn gst_audio_decoder_set_output_format(dec: *mut GstAudioDecoder, info: *const GstAudioInfo) -> gboolean;
+    pub fn gst_audio_decoder_set_output_caps(
+        dec: *mut GstAudioDecoder,
+        caps: *mut gst::GstCaps,
+    ) -> gboolean;
+    pub fn gst_audio_decoder_set_output_format(
+        dec: *mut GstAudioDecoder,
+        info: *const GstAudioInfo,
+    ) -> gboolean;
     pub fn gst_audio_decoder_set_plc(dec: *mut GstAudioDecoder, enabled: gboolean);
     pub fn gst_audio_decoder_set_plc_aware(dec: *mut GstAudioDecoder, plc: gboolean);
     pub fn gst_audio_decoder_set_tolerance(dec: *mut GstAudioDecoder, tolerance: gst::GstClockTime);
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_audio_decoder_set_use_default_pad_acceptcaps(decoder: *mut GstAudioDecoder, use_: gboolean);
+    pub fn gst_audio_decoder_set_use_default_pad_acceptcaps(
+        decoder: *mut GstAudioDecoder,
+        use_: gboolean,
+    );
 
     //=========================================================================
     // GstAudioEncoder
     //=========================================================================
     pub fn gst_audio_encoder_get_type() -> GType;
-    pub fn gst_audio_encoder_allocate_output_buffer(enc: *mut GstAudioEncoder, size: size_t) -> *mut gst::GstBuffer;
-    pub fn gst_audio_encoder_finish_frame(enc: *mut GstAudioEncoder, buffer: *mut gst::GstBuffer, samples: c_int) -> gst::GstFlowReturn;
-    pub fn gst_audio_encoder_get_allocator(enc: *mut GstAudioEncoder, allocator: *mut *mut gst::GstAllocator, params: *mut gst::GstAllocationParams);
+    pub fn gst_audio_encoder_allocate_output_buffer(
+        enc: *mut GstAudioEncoder,
+        size: size_t,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_audio_encoder_finish_frame(
+        enc: *mut GstAudioEncoder,
+        buffer: *mut gst::GstBuffer,
+        samples: c_int,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_audio_encoder_get_allocator(
+        enc: *mut GstAudioEncoder,
+        allocator: *mut *mut gst::GstAllocator,
+        params: *mut gst::GstAllocationParams,
+    );
     pub fn gst_audio_encoder_get_audio_info(enc: *mut GstAudioEncoder) -> *mut GstAudioInfo;
     pub fn gst_audio_encoder_get_drainable(enc: *mut GstAudioEncoder) -> gboolean;
     pub fn gst_audio_encoder_get_frame_max(enc: *mut GstAudioEncoder) -> c_int;
@@ -1558,16 +1974,31 @@ extern "C" {
     pub fn gst_audio_encoder_get_frame_samples_min(enc: *mut GstAudioEncoder) -> c_int;
     pub fn gst_audio_encoder_get_hard_min(enc: *mut GstAudioEncoder) -> gboolean;
     pub fn gst_audio_encoder_get_hard_resync(enc: *mut GstAudioEncoder) -> gboolean;
-    pub fn gst_audio_encoder_get_latency(enc: *mut GstAudioEncoder, min: *mut gst::GstClockTime, max: *mut gst::GstClockTime);
+    pub fn gst_audio_encoder_get_latency(
+        enc: *mut GstAudioEncoder,
+        min: *mut gst::GstClockTime,
+        max: *mut gst::GstClockTime,
+    );
     pub fn gst_audio_encoder_get_lookahead(enc: *mut GstAudioEncoder) -> c_int;
     pub fn gst_audio_encoder_get_mark_granule(enc: *mut GstAudioEncoder) -> gboolean;
     pub fn gst_audio_encoder_get_perfect_timestamp(enc: *mut GstAudioEncoder) -> gboolean;
     pub fn gst_audio_encoder_get_tolerance(enc: *mut GstAudioEncoder) -> gst::GstClockTime;
-    pub fn gst_audio_encoder_merge_tags(enc: *mut GstAudioEncoder, tags: *const gst::GstTagList, mode: gst::GstTagMergeMode);
+    pub fn gst_audio_encoder_merge_tags(
+        enc: *mut GstAudioEncoder,
+        tags: *const gst::GstTagList,
+        mode: gst::GstTagMergeMode,
+    );
     pub fn gst_audio_encoder_negotiate(enc: *mut GstAudioEncoder) -> gboolean;
-    pub fn gst_audio_encoder_proxy_getcaps(enc: *mut GstAudioEncoder, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
+    pub fn gst_audio_encoder_proxy_getcaps(
+        enc: *mut GstAudioEncoder,
+        caps: *mut gst::GstCaps,
+        filter: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_audio_encoder_set_allocation_caps(enc: *mut GstAudioEncoder, allocation_caps: *mut gst::GstCaps);
+    pub fn gst_audio_encoder_set_allocation_caps(
+        enc: *mut GstAudioEncoder,
+        allocation_caps: *mut gst::GstCaps,
+    );
     pub fn gst_audio_encoder_set_drainable(enc: *mut GstAudioEncoder, enabled: gboolean);
     pub fn gst_audio_encoder_set_frame_max(enc: *mut GstAudioEncoder, num: c_int);
     pub fn gst_audio_encoder_set_frame_samples_max(enc: *mut GstAudioEncoder, num: c_int);
@@ -1575,10 +2006,17 @@ extern "C" {
     pub fn gst_audio_encoder_set_hard_min(enc: *mut GstAudioEncoder, enabled: gboolean);
     pub fn gst_audio_encoder_set_hard_resync(enc: *mut GstAudioEncoder, enabled: gboolean);
     pub fn gst_audio_encoder_set_headers(enc: *mut GstAudioEncoder, headers: *mut glib::GList);
-    pub fn gst_audio_encoder_set_latency(enc: *mut GstAudioEncoder, min: gst::GstClockTime, max: gst::GstClockTime);
+    pub fn gst_audio_encoder_set_latency(
+        enc: *mut GstAudioEncoder,
+        min: gst::GstClockTime,
+        max: gst::GstClockTime,
+    );
     pub fn gst_audio_encoder_set_lookahead(enc: *mut GstAudioEncoder, num: c_int);
     pub fn gst_audio_encoder_set_mark_granule(enc: *mut GstAudioEncoder, enabled: gboolean);
-    pub fn gst_audio_encoder_set_output_format(enc: *mut GstAudioEncoder, caps: *mut gst::GstCaps) -> gboolean;
+    pub fn gst_audio_encoder_set_output_format(
+        enc: *mut GstAudioEncoder,
+        caps: *mut gst::GstCaps,
+    ) -> gboolean;
     pub fn gst_audio_encoder_set_perfect_timestamp(enc: *mut GstAudioEncoder, enabled: gboolean);
     pub fn gst_audio_encoder_set_tolerance(enc: *mut GstAudioEncoder, tolerance: gst::GstClockTime);
 
@@ -1593,15 +2031,37 @@ extern "C" {
     pub fn gst_audio_ring_buffer_get_type() -> GType;
     pub fn gst_audio_ring_buffer_debug_spec_buff(spec: *mut GstAudioRingBufferSpec);
     pub fn gst_audio_ring_buffer_debug_spec_caps(spec: *mut GstAudioRingBufferSpec);
-    pub fn gst_audio_ring_buffer_parse_caps(spec: *mut GstAudioRingBufferSpec, caps: *mut gst::GstCaps) -> gboolean;
-    pub fn gst_audio_ring_buffer_acquire(buf: *mut GstAudioRingBuffer, spec: *mut GstAudioRingBufferSpec) -> gboolean;
-    pub fn gst_audio_ring_buffer_activate(buf: *mut GstAudioRingBuffer, active: gboolean) -> gboolean;
+    pub fn gst_audio_ring_buffer_parse_caps(
+        spec: *mut GstAudioRingBufferSpec,
+        caps: *mut gst::GstCaps,
+    ) -> gboolean;
+    pub fn gst_audio_ring_buffer_acquire(
+        buf: *mut GstAudioRingBuffer,
+        spec: *mut GstAudioRingBufferSpec,
+    ) -> gboolean;
+    pub fn gst_audio_ring_buffer_activate(
+        buf: *mut GstAudioRingBuffer,
+        active: gboolean,
+    ) -> gboolean;
     pub fn gst_audio_ring_buffer_advance(buf: *mut GstAudioRingBuffer, advance: c_uint);
     pub fn gst_audio_ring_buffer_clear(buf: *mut GstAudioRingBuffer, segment: c_int);
     pub fn gst_audio_ring_buffer_clear_all(buf: *mut GstAudioRingBuffer);
     pub fn gst_audio_ring_buffer_close_device(buf: *mut GstAudioRingBuffer) -> gboolean;
-    pub fn gst_audio_ring_buffer_commit(buf: *mut GstAudioRingBuffer, sample: *mut u64, data: *mut u8, in_samples: c_int, out_samples: c_int, accum: *mut c_int) -> c_uint;
-    pub fn gst_audio_ring_buffer_convert(buf: *mut GstAudioRingBuffer, src_fmt: gst::GstFormat, src_val: i64, dest_fmt: gst::GstFormat, dest_val: *mut i64) -> gboolean;
+    pub fn gst_audio_ring_buffer_commit(
+        buf: *mut GstAudioRingBuffer,
+        sample: *mut u64,
+        data: *mut u8,
+        in_samples: c_int,
+        out_samples: c_int,
+        accum: *mut c_int,
+    ) -> c_uint;
+    pub fn gst_audio_ring_buffer_convert(
+        buf: *mut GstAudioRingBuffer,
+        src_fmt: gst::GstFormat,
+        src_val: i64,
+        dest_fmt: gst::GstFormat,
+        dest_val: *mut i64,
+    ) -> gboolean;
     pub fn gst_audio_ring_buffer_delay(buf: *mut GstAudioRingBuffer) -> c_uint;
     pub fn gst_audio_ring_buffer_device_is_open(buf: *mut GstAudioRingBuffer) -> gboolean;
     pub fn gst_audio_ring_buffer_is_acquired(buf: *mut GstAudioRingBuffer) -> gboolean;
@@ -1610,17 +2070,44 @@ extern "C" {
     pub fn gst_audio_ring_buffer_may_start(buf: *mut GstAudioRingBuffer, allowed: gboolean);
     pub fn gst_audio_ring_buffer_open_device(buf: *mut GstAudioRingBuffer) -> gboolean;
     pub fn gst_audio_ring_buffer_pause(buf: *mut GstAudioRingBuffer) -> gboolean;
-    pub fn gst_audio_ring_buffer_prepare_read(buf: *mut GstAudioRingBuffer, segment: *mut c_int, readptr: *mut *mut u8, len: *mut c_int) -> gboolean;
-    pub fn gst_audio_ring_buffer_read(buf: *mut GstAudioRingBuffer, sample: u64, data: *mut u8, len: c_uint, timestamp: *mut gst::GstClockTime) -> c_uint;
+    pub fn gst_audio_ring_buffer_prepare_read(
+        buf: *mut GstAudioRingBuffer,
+        segment: *mut c_int,
+        readptr: *mut *mut u8,
+        len: *mut c_int,
+    ) -> gboolean;
+    pub fn gst_audio_ring_buffer_read(
+        buf: *mut GstAudioRingBuffer,
+        sample: u64,
+        data: *mut u8,
+        len: c_uint,
+        timestamp: *mut gst::GstClockTime,
+    ) -> c_uint;
     pub fn gst_audio_ring_buffer_release(buf: *mut GstAudioRingBuffer) -> gboolean;
     pub fn gst_audio_ring_buffer_samples_done(buf: *mut GstAudioRingBuffer) -> u64;
-    pub fn gst_audio_ring_buffer_set_callback(buf: *mut GstAudioRingBuffer, cb: GstAudioRingBufferCallback, user_data: gpointer);
+    pub fn gst_audio_ring_buffer_set_callback(
+        buf: *mut GstAudioRingBuffer,
+        cb: GstAudioRingBufferCallback,
+        user_data: gpointer,
+    );
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_audio_ring_buffer_set_callback_full(buf: *mut GstAudioRingBuffer, cb: GstAudioRingBufferCallback, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_audio_ring_buffer_set_channel_positions(buf: *mut GstAudioRingBuffer, position: *const GstAudioChannelPosition);
+    pub fn gst_audio_ring_buffer_set_callback_full(
+        buf: *mut GstAudioRingBuffer,
+        cb: GstAudioRingBufferCallback,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_audio_ring_buffer_set_channel_positions(
+        buf: *mut GstAudioRingBuffer,
+        position: *const GstAudioChannelPosition,
+    );
     pub fn gst_audio_ring_buffer_set_flushing(buf: *mut GstAudioRingBuffer, flushing: gboolean);
     pub fn gst_audio_ring_buffer_set_sample(buf: *mut GstAudioRingBuffer, sample: u64);
-    pub fn gst_audio_ring_buffer_set_timestamp(buf: *mut GstAudioRingBuffer, readseg: c_int, timestamp: gst::GstClockTime);
+    pub fn gst_audio_ring_buffer_set_timestamp(
+        buf: *mut GstAudioRingBuffer,
+        readseg: c_int,
+        timestamp: gst::GstClockTime,
+    );
     pub fn gst_audio_ring_buffer_start(buf: *mut GstAudioRingBuffer) -> gboolean;
     pub fn gst_audio_ring_buffer_stop(buf: *mut GstAudioRingBuffer) -> gboolean;
 
@@ -1638,36 +2125,106 @@ extern "C" {
     // GstStreamVolume
     //=========================================================================
     pub fn gst_stream_volume_get_type() -> GType;
-    pub fn gst_stream_volume_convert_volume(from: GstStreamVolumeFormat, to: GstStreamVolumeFormat, val: c_double) -> c_double;
+    pub fn gst_stream_volume_convert_volume(
+        from: GstStreamVolumeFormat,
+        to: GstStreamVolumeFormat,
+        val: c_double,
+    ) -> c_double;
     pub fn gst_stream_volume_get_mute(volume: *mut GstStreamVolume) -> gboolean;
-    pub fn gst_stream_volume_get_volume(volume: *mut GstStreamVolume, format: GstStreamVolumeFormat) -> c_double;
+    pub fn gst_stream_volume_get_volume(
+        volume: *mut GstStreamVolume,
+        format: GstStreamVolumeFormat,
+    ) -> c_double;
     pub fn gst_stream_volume_set_mute(volume: *mut GstStreamVolume, mute: gboolean);
-    pub fn gst_stream_volume_set_volume(volume: *mut GstStreamVolume, format: GstStreamVolumeFormat, val: c_double);
+    pub fn gst_stream_volume_set_volume(
+        volume: *mut GstStreamVolume,
+        format: GstStreamVolumeFormat,
+        val: c_double,
+    );
 
     //=========================================================================
     // Other functions
     //=========================================================================
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_audio_channel_get_fallback_mask(channels: c_int) -> u64;
-    pub fn gst_audio_channel_positions_from_mask(channels: c_int, channel_mask: u64, position: *mut GstAudioChannelPosition) -> gboolean;
-    pub fn gst_audio_channel_positions_to_mask(position: *const GstAudioChannelPosition, channels: c_int, force_order: gboolean, channel_mask: *mut u64) -> gboolean;
+    pub fn gst_audio_channel_positions_from_mask(
+        channels: c_int,
+        channel_mask: u64,
+        position: *mut GstAudioChannelPosition,
+    ) -> gboolean;
+    pub fn gst_audio_channel_positions_to_mask(
+        position: *const GstAudioChannelPosition,
+        channels: c_int,
+        force_order: gboolean,
+        channel_mask: *mut u64,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_audio_channel_positions_to_string(position: *const GstAudioChannelPosition, channels: c_int) -> *mut c_char;
-    pub fn gst_audio_channel_positions_to_valid_order(position: *mut GstAudioChannelPosition, channels: c_int) -> gboolean;
-    pub fn gst_audio_check_valid_channel_positions(position: *const GstAudioChannelPosition, channels: c_int, force_order: gboolean) -> gboolean;
+    pub fn gst_audio_channel_positions_to_string(
+        position: *const GstAudioChannelPosition,
+        channels: c_int,
+    ) -> *mut c_char;
+    pub fn gst_audio_channel_positions_to_valid_order(
+        position: *mut GstAudioChannelPosition,
+        channels: c_int,
+    ) -> gboolean;
+    pub fn gst_audio_check_valid_channel_positions(
+        position: *const GstAudioChannelPosition,
+        channels: c_int,
+        force_order: gboolean,
+    ) -> gboolean;
     pub fn gst_audio_clipping_meta_api_get_type() -> GType;
     pub fn gst_audio_downmix_meta_api_get_type() -> GType;
     pub fn gst_audio_format_info_get_type() -> GType;
-    pub fn gst_audio_get_channel_reorder_map(channels: c_int, from: *const GstAudioChannelPosition, to: *const GstAudioChannelPosition, reorder_map: *mut c_int) -> gboolean;
+    pub fn gst_audio_get_channel_reorder_map(
+        channels: c_int,
+        from: *const GstAudioChannelPosition,
+        to: *const GstAudioChannelPosition,
+        reorder_map: *mut c_int,
+    ) -> gboolean;
     pub fn gst_audio_iec61937_frame_size(spec: *const GstAudioRingBufferSpec) -> c_uint;
-    pub fn gst_audio_iec61937_payload(src: *const u8, src_n: c_uint, dst: *mut u8, dst_n: c_uint, spec: *const GstAudioRingBufferSpec, endianness: c_int) -> gboolean;
+    pub fn gst_audio_iec61937_payload(
+        src: *const u8,
+        src_n: c_uint,
+        dst: *mut u8,
+        dst_n: c_uint,
+        spec: *const GstAudioRingBufferSpec,
+        endianness: c_int,
+    ) -> gboolean;
     pub fn gst_audio_meta_api_get_type() -> GType;
-    pub fn gst_audio_reorder_channels(data: gpointer, size: size_t, format: GstAudioFormat, channels: c_int, from: *const GstAudioChannelPosition, to: *const GstAudioChannelPosition) -> gboolean;
+    pub fn gst_audio_reorder_channels(
+        data: gpointer,
+        size: size_t,
+        format: GstAudioFormat,
+        channels: c_int,
+        from: *const GstAudioChannelPosition,
+        to: *const GstAudioChannelPosition,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_buffer_add_audio_clipping_meta(buffer: *mut gst::GstBuffer, format: gst::GstFormat, start: u64, end: u64) -> *mut GstAudioClippingMeta;
-    pub fn gst_buffer_add_audio_downmix_meta(buffer: *mut gst::GstBuffer, from_position: *const GstAudioChannelPosition, from_channels: c_int, to_position: *const GstAudioChannelPosition, to_channels: c_int, matrix: *mut *const c_float) -> *mut GstAudioDownmixMeta;
+    pub fn gst_buffer_add_audio_clipping_meta(
+        buffer: *mut gst::GstBuffer,
+        format: gst::GstFormat,
+        start: u64,
+        end: u64,
+    ) -> *mut GstAudioClippingMeta;
+    pub fn gst_buffer_add_audio_downmix_meta(
+        buffer: *mut gst::GstBuffer,
+        from_position: *const GstAudioChannelPosition,
+        from_channels: c_int,
+        to_position: *const GstAudioChannelPosition,
+        to_channels: c_int,
+        matrix: *mut *const c_float,
+    ) -> *mut GstAudioDownmixMeta;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_buffer_add_audio_meta(buffer: *mut gst::GstBuffer, info: *const GstAudioInfo, samples: size_t, offsets: *mut size_t) -> *mut GstAudioMeta;
-    pub fn gst_buffer_get_audio_downmix_meta_for_channels(buffer: *mut gst::GstBuffer, to_position: *const GstAudioChannelPosition, to_channels: c_int) -> *mut GstAudioDownmixMeta;
+    pub fn gst_buffer_add_audio_meta(
+        buffer: *mut gst::GstBuffer,
+        info: *const GstAudioInfo,
+        samples: size_t,
+        offsets: *mut size_t,
+    ) -> *mut GstAudioMeta;
+    pub fn gst_buffer_get_audio_downmix_meta_for_channels(
+        buffer: *mut gst::GstBuffer,
+        to_position: *const GstAudioChannelPosition,
+        to_channels: c_int,
+    ) -> *mut GstAudioDownmixMeta;
 
 }

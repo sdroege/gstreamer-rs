@@ -5,13 +5,13 @@
 extern crate gstreamer_mpegts_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_mpegts_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_mpegts_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-mpegts-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,115 +229,620 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstMpegtsATSCDescriptorType", Layout {size: size_of::<GstMpegtsATSCDescriptorType>(), alignment: align_of::<GstMpegtsATSCDescriptorType>()}),
-    ("GstMpegtsAtscEIT", Layout {size: size_of::<GstMpegtsAtscEIT>(), alignment: align_of::<GstMpegtsAtscEIT>()}),
-    ("GstMpegtsAtscEITEvent", Layout {size: size_of::<GstMpegtsAtscEITEvent>(), alignment: align_of::<GstMpegtsAtscEITEvent>()}),
-    ("GstMpegtsAtscETT", Layout {size: size_of::<GstMpegtsAtscETT>(), alignment: align_of::<GstMpegtsAtscETT>()}),
-    ("GstMpegtsAtscMGT", Layout {size: size_of::<GstMpegtsAtscMGT>(), alignment: align_of::<GstMpegtsAtscMGT>()}),
-    ("GstMpegtsAtscMGTTable", Layout {size: size_of::<GstMpegtsAtscMGTTable>(), alignment: align_of::<GstMpegtsAtscMGTTable>()}),
-    ("GstMpegtsAtscMGTTableType", Layout {size: size_of::<GstMpegtsAtscMGTTableType>(), alignment: align_of::<GstMpegtsAtscMGTTableType>()}),
-    ("GstMpegtsAtscMultString", Layout {size: size_of::<GstMpegtsAtscMultString>(), alignment: align_of::<GstMpegtsAtscMultString>()}),
-    ("GstMpegtsAtscSTT", Layout {size: size_of::<GstMpegtsAtscSTT>(), alignment: align_of::<GstMpegtsAtscSTT>()}),
-    ("GstMpegtsAtscStringSegment", Layout {size: size_of::<GstMpegtsAtscStringSegment>(), alignment: align_of::<GstMpegtsAtscStringSegment>()}),
-    ("GstMpegtsAtscVCT", Layout {size: size_of::<GstMpegtsAtscVCT>(), alignment: align_of::<GstMpegtsAtscVCT>()}),
-    ("GstMpegtsAtscVCTSource", Layout {size: size_of::<GstMpegtsAtscVCTSource>(), alignment: align_of::<GstMpegtsAtscVCTSource>()}),
-    ("GstMpegtsBAT", Layout {size: size_of::<GstMpegtsBAT>(), alignment: align_of::<GstMpegtsBAT>()}),
-    ("GstMpegtsBATStream", Layout {size: size_of::<GstMpegtsBATStream>(), alignment: align_of::<GstMpegtsBATStream>()}),
-    ("GstMpegtsCableDeliverySystemDescriptor", Layout {size: size_of::<GstMpegtsCableDeliverySystemDescriptor>(), alignment: align_of::<GstMpegtsCableDeliverySystemDescriptor>()}),
-    ("GstMpegtsCableOuterFECScheme", Layout {size: size_of::<GstMpegtsCableOuterFECScheme>(), alignment: align_of::<GstMpegtsCableOuterFECScheme>()}),
-    ("GstMpegtsComponentDescriptor", Layout {size: size_of::<GstMpegtsComponentDescriptor>(), alignment: align_of::<GstMpegtsComponentDescriptor>()}),
-    ("GstMpegtsComponentStreamContent", Layout {size: size_of::<GstMpegtsComponentStreamContent>(), alignment: align_of::<GstMpegtsComponentStreamContent>()}),
-    ("GstMpegtsContent", Layout {size: size_of::<GstMpegtsContent>(), alignment: align_of::<GstMpegtsContent>()}),
-    ("GstMpegtsContentNibbleHi", Layout {size: size_of::<GstMpegtsContentNibbleHi>(), alignment: align_of::<GstMpegtsContentNibbleHi>()}),
-    ("GstMpegtsDVBCodeRate", Layout {size: size_of::<GstMpegtsDVBCodeRate>(), alignment: align_of::<GstMpegtsDVBCodeRate>()}),
-    ("GstMpegtsDVBDescriptorType", Layout {size: size_of::<GstMpegtsDVBDescriptorType>(), alignment: align_of::<GstMpegtsDVBDescriptorType>()}),
-    ("GstMpegtsDVBExtendedDescriptorType", Layout {size: size_of::<GstMpegtsDVBExtendedDescriptorType>(), alignment: align_of::<GstMpegtsDVBExtendedDescriptorType>()}),
-    ("GstMpegtsDVBLinkageDescriptor", Layout {size: size_of::<GstMpegtsDVBLinkageDescriptor>(), alignment: align_of::<GstMpegtsDVBLinkageDescriptor>()}),
-    ("GstMpegtsDVBLinkageEvent", Layout {size: size_of::<GstMpegtsDVBLinkageEvent>(), alignment: align_of::<GstMpegtsDVBLinkageEvent>()}),
-    ("GstMpegtsDVBLinkageExtendedEvent", Layout {size: size_of::<GstMpegtsDVBLinkageExtendedEvent>(), alignment: align_of::<GstMpegtsDVBLinkageExtendedEvent>()}),
-    ("GstMpegtsDVBLinkageHandOverType", Layout {size: size_of::<GstMpegtsDVBLinkageHandOverType>(), alignment: align_of::<GstMpegtsDVBLinkageHandOverType>()}),
-    ("GstMpegtsDVBLinkageMobileHandOver", Layout {size: size_of::<GstMpegtsDVBLinkageMobileHandOver>(), alignment: align_of::<GstMpegtsDVBLinkageMobileHandOver>()}),
-    ("GstMpegtsDVBLinkageType", Layout {size: size_of::<GstMpegtsDVBLinkageType>(), alignment: align_of::<GstMpegtsDVBLinkageType>()}),
-    ("GstMpegtsDVBParentalRatingItem", Layout {size: size_of::<GstMpegtsDVBParentalRatingItem>(), alignment: align_of::<GstMpegtsDVBParentalRatingItem>()}),
-    ("GstMpegtsDVBScramblingModeType", Layout {size: size_of::<GstMpegtsDVBScramblingModeType>(), alignment: align_of::<GstMpegtsDVBScramblingModeType>()}),
-    ("GstMpegtsDVBServiceListItem", Layout {size: size_of::<GstMpegtsDVBServiceListItem>(), alignment: align_of::<GstMpegtsDVBServiceListItem>()}),
-    ("GstMpegtsDVBServiceType", Layout {size: size_of::<GstMpegtsDVBServiceType>(), alignment: align_of::<GstMpegtsDVBServiceType>()}),
-    ("GstMpegtsDVBTeletextType", Layout {size: size_of::<GstMpegtsDVBTeletextType>(), alignment: align_of::<GstMpegtsDVBTeletextType>()}),
-    ("GstMpegtsDataBroadcastDescriptor", Layout {size: size_of::<GstMpegtsDataBroadcastDescriptor>(), alignment: align_of::<GstMpegtsDataBroadcastDescriptor>()}),
-    ("GstMpegtsDescriptor", Layout {size: size_of::<GstMpegtsDescriptor>(), alignment: align_of::<GstMpegtsDescriptor>()}),
-    ("GstMpegtsDescriptorType", Layout {size: size_of::<GstMpegtsDescriptorType>(), alignment: align_of::<GstMpegtsDescriptorType>()}),
-    ("GstMpegtsDvbMultilingualBouquetNameItem", Layout {size: size_of::<GstMpegtsDvbMultilingualBouquetNameItem>(), alignment: align_of::<GstMpegtsDvbMultilingualBouquetNameItem>()}),
-    ("GstMpegtsDvbMultilingualComponentItem", Layout {size: size_of::<GstMpegtsDvbMultilingualComponentItem>(), alignment: align_of::<GstMpegtsDvbMultilingualComponentItem>()}),
-    ("GstMpegtsDvbMultilingualNetworkNameItem", Layout {size: size_of::<GstMpegtsDvbMultilingualNetworkNameItem>(), alignment: align_of::<GstMpegtsDvbMultilingualNetworkNameItem>()}),
-    ("GstMpegtsDvbMultilingualServiceNameItem", Layout {size: size_of::<GstMpegtsDvbMultilingualServiceNameItem>(), alignment: align_of::<GstMpegtsDvbMultilingualServiceNameItem>()}),
-    ("GstMpegtsEIT", Layout {size: size_of::<GstMpegtsEIT>(), alignment: align_of::<GstMpegtsEIT>()}),
-    ("GstMpegtsEITEvent", Layout {size: size_of::<GstMpegtsEITEvent>(), alignment: align_of::<GstMpegtsEITEvent>()}),
-    ("GstMpegtsExtendedEventDescriptor", Layout {size: size_of::<GstMpegtsExtendedEventDescriptor>(), alignment: align_of::<GstMpegtsExtendedEventDescriptor>()}),
-    ("GstMpegtsExtendedEventItem", Layout {size: size_of::<GstMpegtsExtendedEventItem>(), alignment: align_of::<GstMpegtsExtendedEventItem>()}),
-    ("GstMpegtsISDBDescriptorType", Layout {size: size_of::<GstMpegtsISDBDescriptorType>(), alignment: align_of::<GstMpegtsISDBDescriptorType>()}),
-    ("GstMpegtsISO639LanguageDescriptor", Layout {size: size_of::<GstMpegtsISO639LanguageDescriptor>(), alignment: align_of::<GstMpegtsISO639LanguageDescriptor>()}),
-    ("GstMpegtsIso639AudioType", Layout {size: size_of::<GstMpegtsIso639AudioType>(), alignment: align_of::<GstMpegtsIso639AudioType>()}),
-    ("GstMpegtsLogicalChannel", Layout {size: size_of::<GstMpegtsLogicalChannel>(), alignment: align_of::<GstMpegtsLogicalChannel>()}),
-    ("GstMpegtsLogicalChannelDescriptor", Layout {size: size_of::<GstMpegtsLogicalChannelDescriptor>(), alignment: align_of::<GstMpegtsLogicalChannelDescriptor>()}),
-    ("GstMpegtsMiscDescriptorType", Layout {size: size_of::<GstMpegtsMiscDescriptorType>(), alignment: align_of::<GstMpegtsMiscDescriptorType>()}),
-    ("GstMpegtsModulationType", Layout {size: size_of::<GstMpegtsModulationType>(), alignment: align_of::<GstMpegtsModulationType>()}),
-    ("GstMpegtsNIT", Layout {size: size_of::<GstMpegtsNIT>(), alignment: align_of::<GstMpegtsNIT>()}),
-    ("GstMpegtsNITStream", Layout {size: size_of::<GstMpegtsNITStream>(), alignment: align_of::<GstMpegtsNITStream>()}),
-    ("GstMpegtsPMT", Layout {size: size_of::<GstMpegtsPMT>(), alignment: align_of::<GstMpegtsPMT>()}),
-    ("GstMpegtsPMTStream", Layout {size: size_of::<GstMpegtsPMTStream>(), alignment: align_of::<GstMpegtsPMTStream>()}),
-    ("GstMpegtsPatProgram", Layout {size: size_of::<GstMpegtsPatProgram>(), alignment: align_of::<GstMpegtsPatProgram>()}),
-    ("GstMpegtsRunningStatus", Layout {size: size_of::<GstMpegtsRunningStatus>(), alignment: align_of::<GstMpegtsRunningStatus>()}),
-    ("GstMpegtsSDT", Layout {size: size_of::<GstMpegtsSDT>(), alignment: align_of::<GstMpegtsSDT>()}),
-    ("GstMpegtsSDTService", Layout {size: size_of::<GstMpegtsSDTService>(), alignment: align_of::<GstMpegtsSDTService>()}),
-    ("GstMpegtsSatelliteDeliverySystemDescriptor", Layout {size: size_of::<GstMpegtsSatelliteDeliverySystemDescriptor>(), alignment: align_of::<GstMpegtsSatelliteDeliverySystemDescriptor>()}),
-    ("GstMpegtsSatellitePolarizationType", Layout {size: size_of::<GstMpegtsSatellitePolarizationType>(), alignment: align_of::<GstMpegtsSatellitePolarizationType>()}),
-    ("GstMpegtsSatelliteRolloff", Layout {size: size_of::<GstMpegtsSatelliteRolloff>(), alignment: align_of::<GstMpegtsSatelliteRolloff>()}),
-    ("GstMpegtsScteStreamType", Layout {size: size_of::<GstMpegtsScteStreamType>(), alignment: align_of::<GstMpegtsScteStreamType>()}),
-    ("GstMpegtsSection", Layout {size: size_of::<GstMpegtsSection>(), alignment: align_of::<GstMpegtsSection>()}),
-    ("GstMpegtsSectionATSCTableID", Layout {size: size_of::<GstMpegtsSectionATSCTableID>(), alignment: align_of::<GstMpegtsSectionATSCTableID>()}),
-    ("GstMpegtsSectionDVBTableID", Layout {size: size_of::<GstMpegtsSectionDVBTableID>(), alignment: align_of::<GstMpegtsSectionDVBTableID>()}),
-    ("GstMpegtsSectionSCTETableID", Layout {size: size_of::<GstMpegtsSectionSCTETableID>(), alignment: align_of::<GstMpegtsSectionSCTETableID>()}),
-    ("GstMpegtsSectionTableID", Layout {size: size_of::<GstMpegtsSectionTableID>(), alignment: align_of::<GstMpegtsSectionTableID>()}),
-    ("GstMpegtsSectionType", Layout {size: size_of::<GstMpegtsSectionType>(), alignment: align_of::<GstMpegtsSectionType>()}),
-    ("GstMpegtsStreamType", Layout {size: size_of::<GstMpegtsStreamType>(), alignment: align_of::<GstMpegtsStreamType>()}),
-    ("GstMpegtsT2DeliverySystemCell", Layout {size: size_of::<GstMpegtsT2DeliverySystemCell>(), alignment: align_of::<GstMpegtsT2DeliverySystemCell>()}),
-    ("GstMpegtsT2DeliverySystemCellExtension", Layout {size: size_of::<GstMpegtsT2DeliverySystemCellExtension>(), alignment: align_of::<GstMpegtsT2DeliverySystemCellExtension>()}),
-    ("GstMpegtsT2DeliverySystemDescriptor", Layout {size: size_of::<GstMpegtsT2DeliverySystemDescriptor>(), alignment: align_of::<GstMpegtsT2DeliverySystemDescriptor>()}),
-    ("GstMpegtsTOT", Layout {size: size_of::<GstMpegtsTOT>(), alignment: align_of::<GstMpegtsTOT>()}),
-    ("GstMpegtsTerrestrialDeliverySystemDescriptor", Layout {size: size_of::<GstMpegtsTerrestrialDeliverySystemDescriptor>(), alignment: align_of::<GstMpegtsTerrestrialDeliverySystemDescriptor>()}),
-    ("GstMpegtsTerrestrialGuardInterval", Layout {size: size_of::<GstMpegtsTerrestrialGuardInterval>(), alignment: align_of::<GstMpegtsTerrestrialGuardInterval>()}),
-    ("GstMpegtsTerrestrialHierarchy", Layout {size: size_of::<GstMpegtsTerrestrialHierarchy>(), alignment: align_of::<GstMpegtsTerrestrialHierarchy>()}),
-    ("GstMpegtsTerrestrialTransmissionMode", Layout {size: size_of::<GstMpegtsTerrestrialTransmissionMode>(), alignment: align_of::<GstMpegtsTerrestrialTransmissionMode>()}),
+    (
+        "GstMpegtsATSCDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsATSCDescriptorType>(),
+            alignment: align_of::<GstMpegtsATSCDescriptorType>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscEIT",
+        Layout {
+            size: size_of::<GstMpegtsAtscEIT>(),
+            alignment: align_of::<GstMpegtsAtscEIT>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscEITEvent",
+        Layout {
+            size: size_of::<GstMpegtsAtscEITEvent>(),
+            alignment: align_of::<GstMpegtsAtscEITEvent>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscETT",
+        Layout {
+            size: size_of::<GstMpegtsAtscETT>(),
+            alignment: align_of::<GstMpegtsAtscETT>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscMGT",
+        Layout {
+            size: size_of::<GstMpegtsAtscMGT>(),
+            alignment: align_of::<GstMpegtsAtscMGT>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscMGTTable",
+        Layout {
+            size: size_of::<GstMpegtsAtscMGTTable>(),
+            alignment: align_of::<GstMpegtsAtscMGTTable>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscMGTTableType",
+        Layout {
+            size: size_of::<GstMpegtsAtscMGTTableType>(),
+            alignment: align_of::<GstMpegtsAtscMGTTableType>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscMultString",
+        Layout {
+            size: size_of::<GstMpegtsAtscMultString>(),
+            alignment: align_of::<GstMpegtsAtscMultString>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscSTT",
+        Layout {
+            size: size_of::<GstMpegtsAtscSTT>(),
+            alignment: align_of::<GstMpegtsAtscSTT>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscStringSegment",
+        Layout {
+            size: size_of::<GstMpegtsAtscStringSegment>(),
+            alignment: align_of::<GstMpegtsAtscStringSegment>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscVCT",
+        Layout {
+            size: size_of::<GstMpegtsAtscVCT>(),
+            alignment: align_of::<GstMpegtsAtscVCT>(),
+        },
+    ),
+    (
+        "GstMpegtsAtscVCTSource",
+        Layout {
+            size: size_of::<GstMpegtsAtscVCTSource>(),
+            alignment: align_of::<GstMpegtsAtscVCTSource>(),
+        },
+    ),
+    (
+        "GstMpegtsBAT",
+        Layout {
+            size: size_of::<GstMpegtsBAT>(),
+            alignment: align_of::<GstMpegtsBAT>(),
+        },
+    ),
+    (
+        "GstMpegtsBATStream",
+        Layout {
+            size: size_of::<GstMpegtsBATStream>(),
+            alignment: align_of::<GstMpegtsBATStream>(),
+        },
+    ),
+    (
+        "GstMpegtsCableDeliverySystemDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsCableDeliverySystemDescriptor>(),
+            alignment: align_of::<GstMpegtsCableDeliverySystemDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsCableOuterFECScheme",
+        Layout {
+            size: size_of::<GstMpegtsCableOuterFECScheme>(),
+            alignment: align_of::<GstMpegtsCableOuterFECScheme>(),
+        },
+    ),
+    (
+        "GstMpegtsComponentDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsComponentDescriptor>(),
+            alignment: align_of::<GstMpegtsComponentDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsComponentStreamContent",
+        Layout {
+            size: size_of::<GstMpegtsComponentStreamContent>(),
+            alignment: align_of::<GstMpegtsComponentStreamContent>(),
+        },
+    ),
+    (
+        "GstMpegtsContent",
+        Layout {
+            size: size_of::<GstMpegtsContent>(),
+            alignment: align_of::<GstMpegtsContent>(),
+        },
+    ),
+    (
+        "GstMpegtsContentNibbleHi",
+        Layout {
+            size: size_of::<GstMpegtsContentNibbleHi>(),
+            alignment: align_of::<GstMpegtsContentNibbleHi>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBCodeRate",
+        Layout {
+            size: size_of::<GstMpegtsDVBCodeRate>(),
+            alignment: align_of::<GstMpegtsDVBCodeRate>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsDVBDescriptorType>(),
+            alignment: align_of::<GstMpegtsDVBDescriptorType>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBExtendedDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsDVBExtendedDescriptorType>(),
+            alignment: align_of::<GstMpegtsDVBExtendedDescriptorType>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBLinkageDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsDVBLinkageDescriptor>(),
+            alignment: align_of::<GstMpegtsDVBLinkageDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBLinkageEvent",
+        Layout {
+            size: size_of::<GstMpegtsDVBLinkageEvent>(),
+            alignment: align_of::<GstMpegtsDVBLinkageEvent>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBLinkageExtendedEvent",
+        Layout {
+            size: size_of::<GstMpegtsDVBLinkageExtendedEvent>(),
+            alignment: align_of::<GstMpegtsDVBLinkageExtendedEvent>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBLinkageHandOverType",
+        Layout {
+            size: size_of::<GstMpegtsDVBLinkageHandOverType>(),
+            alignment: align_of::<GstMpegtsDVBLinkageHandOverType>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBLinkageMobileHandOver",
+        Layout {
+            size: size_of::<GstMpegtsDVBLinkageMobileHandOver>(),
+            alignment: align_of::<GstMpegtsDVBLinkageMobileHandOver>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBLinkageType",
+        Layout {
+            size: size_of::<GstMpegtsDVBLinkageType>(),
+            alignment: align_of::<GstMpegtsDVBLinkageType>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBParentalRatingItem",
+        Layout {
+            size: size_of::<GstMpegtsDVBParentalRatingItem>(),
+            alignment: align_of::<GstMpegtsDVBParentalRatingItem>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBScramblingModeType",
+        Layout {
+            size: size_of::<GstMpegtsDVBScramblingModeType>(),
+            alignment: align_of::<GstMpegtsDVBScramblingModeType>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBServiceListItem",
+        Layout {
+            size: size_of::<GstMpegtsDVBServiceListItem>(),
+            alignment: align_of::<GstMpegtsDVBServiceListItem>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBServiceType",
+        Layout {
+            size: size_of::<GstMpegtsDVBServiceType>(),
+            alignment: align_of::<GstMpegtsDVBServiceType>(),
+        },
+    ),
+    (
+        "GstMpegtsDVBTeletextType",
+        Layout {
+            size: size_of::<GstMpegtsDVBTeletextType>(),
+            alignment: align_of::<GstMpegtsDVBTeletextType>(),
+        },
+    ),
+    (
+        "GstMpegtsDataBroadcastDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsDataBroadcastDescriptor>(),
+            alignment: align_of::<GstMpegtsDataBroadcastDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsDescriptor>(),
+            alignment: align_of::<GstMpegtsDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsDescriptorType>(),
+            alignment: align_of::<GstMpegtsDescriptorType>(),
+        },
+    ),
+    (
+        "GstMpegtsDvbMultilingualBouquetNameItem",
+        Layout {
+            size: size_of::<GstMpegtsDvbMultilingualBouquetNameItem>(),
+            alignment: align_of::<GstMpegtsDvbMultilingualBouquetNameItem>(),
+        },
+    ),
+    (
+        "GstMpegtsDvbMultilingualComponentItem",
+        Layout {
+            size: size_of::<GstMpegtsDvbMultilingualComponentItem>(),
+            alignment: align_of::<GstMpegtsDvbMultilingualComponentItem>(),
+        },
+    ),
+    (
+        "GstMpegtsDvbMultilingualNetworkNameItem",
+        Layout {
+            size: size_of::<GstMpegtsDvbMultilingualNetworkNameItem>(),
+            alignment: align_of::<GstMpegtsDvbMultilingualNetworkNameItem>(),
+        },
+    ),
+    (
+        "GstMpegtsDvbMultilingualServiceNameItem",
+        Layout {
+            size: size_of::<GstMpegtsDvbMultilingualServiceNameItem>(),
+            alignment: align_of::<GstMpegtsDvbMultilingualServiceNameItem>(),
+        },
+    ),
+    (
+        "GstMpegtsEIT",
+        Layout {
+            size: size_of::<GstMpegtsEIT>(),
+            alignment: align_of::<GstMpegtsEIT>(),
+        },
+    ),
+    (
+        "GstMpegtsEITEvent",
+        Layout {
+            size: size_of::<GstMpegtsEITEvent>(),
+            alignment: align_of::<GstMpegtsEITEvent>(),
+        },
+    ),
+    (
+        "GstMpegtsExtendedEventDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsExtendedEventDescriptor>(),
+            alignment: align_of::<GstMpegtsExtendedEventDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsExtendedEventItem",
+        Layout {
+            size: size_of::<GstMpegtsExtendedEventItem>(),
+            alignment: align_of::<GstMpegtsExtendedEventItem>(),
+        },
+    ),
+    (
+        "GstMpegtsISDBDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsISDBDescriptorType>(),
+            alignment: align_of::<GstMpegtsISDBDescriptorType>(),
+        },
+    ),
+    (
+        "GstMpegtsISO639LanguageDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsISO639LanguageDescriptor>(),
+            alignment: align_of::<GstMpegtsISO639LanguageDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsIso639AudioType",
+        Layout {
+            size: size_of::<GstMpegtsIso639AudioType>(),
+            alignment: align_of::<GstMpegtsIso639AudioType>(),
+        },
+    ),
+    (
+        "GstMpegtsLogicalChannel",
+        Layout {
+            size: size_of::<GstMpegtsLogicalChannel>(),
+            alignment: align_of::<GstMpegtsLogicalChannel>(),
+        },
+    ),
+    (
+        "GstMpegtsLogicalChannelDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsLogicalChannelDescriptor>(),
+            alignment: align_of::<GstMpegtsLogicalChannelDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsMiscDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsMiscDescriptorType>(),
+            alignment: align_of::<GstMpegtsMiscDescriptorType>(),
+        },
+    ),
+    (
+        "GstMpegtsModulationType",
+        Layout {
+            size: size_of::<GstMpegtsModulationType>(),
+            alignment: align_of::<GstMpegtsModulationType>(),
+        },
+    ),
+    (
+        "GstMpegtsNIT",
+        Layout {
+            size: size_of::<GstMpegtsNIT>(),
+            alignment: align_of::<GstMpegtsNIT>(),
+        },
+    ),
+    (
+        "GstMpegtsNITStream",
+        Layout {
+            size: size_of::<GstMpegtsNITStream>(),
+            alignment: align_of::<GstMpegtsNITStream>(),
+        },
+    ),
+    (
+        "GstMpegtsPMT",
+        Layout {
+            size: size_of::<GstMpegtsPMT>(),
+            alignment: align_of::<GstMpegtsPMT>(),
+        },
+    ),
+    (
+        "GstMpegtsPMTStream",
+        Layout {
+            size: size_of::<GstMpegtsPMTStream>(),
+            alignment: align_of::<GstMpegtsPMTStream>(),
+        },
+    ),
+    (
+        "GstMpegtsPatProgram",
+        Layout {
+            size: size_of::<GstMpegtsPatProgram>(),
+            alignment: align_of::<GstMpegtsPatProgram>(),
+        },
+    ),
+    (
+        "GstMpegtsRunningStatus",
+        Layout {
+            size: size_of::<GstMpegtsRunningStatus>(),
+            alignment: align_of::<GstMpegtsRunningStatus>(),
+        },
+    ),
+    (
+        "GstMpegtsSDT",
+        Layout {
+            size: size_of::<GstMpegtsSDT>(),
+            alignment: align_of::<GstMpegtsSDT>(),
+        },
+    ),
+    (
+        "GstMpegtsSDTService",
+        Layout {
+            size: size_of::<GstMpegtsSDTService>(),
+            alignment: align_of::<GstMpegtsSDTService>(),
+        },
+    ),
+    (
+        "GstMpegtsSatelliteDeliverySystemDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsSatelliteDeliverySystemDescriptor>(),
+            alignment: align_of::<GstMpegtsSatelliteDeliverySystemDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsSatellitePolarizationType",
+        Layout {
+            size: size_of::<GstMpegtsSatellitePolarizationType>(),
+            alignment: align_of::<GstMpegtsSatellitePolarizationType>(),
+        },
+    ),
+    (
+        "GstMpegtsSatelliteRolloff",
+        Layout {
+            size: size_of::<GstMpegtsSatelliteRolloff>(),
+            alignment: align_of::<GstMpegtsSatelliteRolloff>(),
+        },
+    ),
+    (
+        "GstMpegtsScteStreamType",
+        Layout {
+            size: size_of::<GstMpegtsScteStreamType>(),
+            alignment: align_of::<GstMpegtsScteStreamType>(),
+        },
+    ),
+    (
+        "GstMpegtsSection",
+        Layout {
+            size: size_of::<GstMpegtsSection>(),
+            alignment: align_of::<GstMpegtsSection>(),
+        },
+    ),
+    (
+        "GstMpegtsSectionATSCTableID",
+        Layout {
+            size: size_of::<GstMpegtsSectionATSCTableID>(),
+            alignment: align_of::<GstMpegtsSectionATSCTableID>(),
+        },
+    ),
+    (
+        "GstMpegtsSectionDVBTableID",
+        Layout {
+            size: size_of::<GstMpegtsSectionDVBTableID>(),
+            alignment: align_of::<GstMpegtsSectionDVBTableID>(),
+        },
+    ),
+    (
+        "GstMpegtsSectionSCTETableID",
+        Layout {
+            size: size_of::<GstMpegtsSectionSCTETableID>(),
+            alignment: align_of::<GstMpegtsSectionSCTETableID>(),
+        },
+    ),
+    (
+        "GstMpegtsSectionTableID",
+        Layout {
+            size: size_of::<GstMpegtsSectionTableID>(),
+            alignment: align_of::<GstMpegtsSectionTableID>(),
+        },
+    ),
+    (
+        "GstMpegtsSectionType",
+        Layout {
+            size: size_of::<GstMpegtsSectionType>(),
+            alignment: align_of::<GstMpegtsSectionType>(),
+        },
+    ),
+    (
+        "GstMpegtsStreamType",
+        Layout {
+            size: size_of::<GstMpegtsStreamType>(),
+            alignment: align_of::<GstMpegtsStreamType>(),
+        },
+    ),
+    (
+        "GstMpegtsT2DeliverySystemCell",
+        Layout {
+            size: size_of::<GstMpegtsT2DeliverySystemCell>(),
+            alignment: align_of::<GstMpegtsT2DeliverySystemCell>(),
+        },
+    ),
+    (
+        "GstMpegtsT2DeliverySystemCellExtension",
+        Layout {
+            size: size_of::<GstMpegtsT2DeliverySystemCellExtension>(),
+            alignment: align_of::<GstMpegtsT2DeliverySystemCellExtension>(),
+        },
+    ),
+    (
+        "GstMpegtsT2DeliverySystemDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsT2DeliverySystemDescriptor>(),
+            alignment: align_of::<GstMpegtsT2DeliverySystemDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsTOT",
+        Layout {
+            size: size_of::<GstMpegtsTOT>(),
+            alignment: align_of::<GstMpegtsTOT>(),
+        },
+    ),
+    (
+        "GstMpegtsTerrestrialDeliverySystemDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsTerrestrialDeliverySystemDescriptor>(),
+            alignment: align_of::<GstMpegtsTerrestrialDeliverySystemDescriptor>(),
+        },
+    ),
+    (
+        "GstMpegtsTerrestrialGuardInterval",
+        Layout {
+            size: size_of::<GstMpegtsTerrestrialGuardInterval>(),
+            alignment: align_of::<GstMpegtsTerrestrialGuardInterval>(),
+        },
+    ),
+    (
+        "GstMpegtsTerrestrialHierarchy",
+        Layout {
+            size: size_of::<GstMpegtsTerrestrialHierarchy>(),
+            alignment: align_of::<GstMpegtsTerrestrialHierarchy>(),
+        },
+    ),
+    (
+        "GstMpegtsTerrestrialTransmissionMode",
+        Layout {
+            size: size_of::<GstMpegtsTerrestrialTransmissionMode>(),
+            alignment: align_of::<GstMpegtsTerrestrialTransmissionMode>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) ADDITIONAL_INFO_PAGE", "3"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_DIGITAL_RADIO_SOUND", "10"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_HD_DIGITAL_TELEVISION", "25"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_HD_NVOD_REFERENCE", "27"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_HD_NVOD_TIME_SHIFTED", "26"),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_DIGITAL_RADIO_SOUND",
+        "10",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_HD_DIGITAL_TELEVISION",
+        "25",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_HD_NVOD_REFERENCE",
+        "27",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_HD_NVOD_TIME_SHIFTED",
+        "26",
+    ),
     ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_MOSAIC", "11"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_SD_DIGITAL_TELEVISION", "22"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_SD_NVOD_REFERENCE", "24"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_SD_NVOD_TIME_SHIFTED", "23"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_STEREO_HD_DIGITAL_TELEVISION", "28"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_STEREO_HD_NVOD_REFERENCE", "30"),
-    ("(gint) GST_DVB_SERVICE_ADVANCED_CODEC_STEREO_HD_NVOD_TIME_SHIFTED", "29"),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_SD_DIGITAL_TELEVISION",
+        "22",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_SD_NVOD_REFERENCE",
+        "24",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_SD_NVOD_TIME_SHIFTED",
+        "23",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_STEREO_HD_DIGITAL_TELEVISION",
+        "28",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_STEREO_HD_NVOD_REFERENCE",
+        "30",
+    ),
+    (
+        "(gint) GST_DVB_SERVICE_ADVANCED_CODEC_STEREO_HD_NVOD_TIME_SHIFTED",
+        "29",
+    ),
     ("(gint) GST_DVB_SERVICE_DATA_BROADCAST", "12"),
     ("(gint) GST_DVB_SERVICE_DIGITAL_RADIO_SOUND", "2"),
     ("(gint) GST_DVB_SERVICE_DIGITAL_TELEVISION", "1"),
@@ -356,7 +867,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_AUDIO_TYPE_CLEAN_EFFECTS", "1"),
     ("(gint) GST_MPEGTS_AUDIO_TYPE_HEARING_IMPAIRED", "2"),
     ("(gint) GST_MPEGTS_AUDIO_TYPE_UNDEFINED", "0"),
-    ("(gint) GST_MPEGTS_AUDIO_TYPE_VISUAL_IMPAIRED_COMMENTARY", "3"),
+    (
+        "(gint) GST_MPEGTS_AUDIO_TYPE_VISUAL_IMPAIRED_COMMENTARY",
+        "3",
+    ),
     ("(gint) GST_MPEGTS_CABLE_OUTER_FEC_NONE", "1"),
     ("(gint) GST_MPEGTS_CABLE_OUTER_FEC_RS_204_188", "2"),
     ("(gint) GST_MPEGTS_CABLE_OUTER_FEC_UNDEFINED", "0"),
@@ -378,7 +892,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_DVB_LINKAGE_EXTENDED_EVENT", "14"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_HAND_OVER_ASSOCIATED", "3"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_HAND_OVER_IDENTICAL", "1"),
-    ("(gint) GST_MPEGTS_DVB_LINKAGE_HAND_OVER_LOCAL_VARIATION", "2"),
+    (
+        "(gint) GST_MPEGTS_DVB_LINKAGE_HAND_OVER_LOCAL_VARIATION",
+        "2",
+    ),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_HAND_OVER_RESERVED", "0"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_INFORMATION", "1"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_IP_MAC_NOTIFICATION", "11"),
@@ -387,7 +904,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_DVB_LINKAGE_RESERVED_00", "0"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_SERVICE_REPLACEMENT", "5"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_SYSTEM_SOFTWARE_UPDATE", "9"),
-    ("(gint) GST_MPEGTS_DVB_LINKAGE_TS_CONTAINING_COMPLETE_SI", "4"),
+    (
+        "(gint) GST_MPEGTS_DVB_LINKAGE_TS_CONTAINING_COMPLETE_SI",
+        "4",
+    ),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_TS_CONTAINING_INT", "12"),
     ("(gint) GST_MPEGTS_DVB_LINKAGE_TS_CONTAINING_SSU", "10"),
     ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_ATIS_0", "112"),
@@ -395,8 +915,14 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CISSA", "16"),
     ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA1", "1"),
     ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA2", "2"),
-    ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA3_FULL_ENHANCED", "5"),
-    ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA3_MINIMAL_ENHANCED", "4"),
+    (
+        "(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA3_FULL_ENHANCED",
+        "5",
+    ),
+    (
+        "(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA3_MINIMAL_ENHANCED",
+        "4",
+    ),
     ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_CSA3_STANDARD", "3"),
     ("(gint) GST_MPEGTS_DVB_SCRAMBLING_MODE_RESERVED", "0"),
     ("(gint) GST_MPEGTS_FEC_1_2", "1"),
@@ -456,7 +982,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_RUNNING_STATUS_OFF_AIR", "5"),
     ("(gint) GST_MPEGTS_RUNNING_STATUS_PAUSING", "3"),
     ("(gint) GST_MPEGTS_RUNNING_STATUS_RUNNING", "4"),
-    ("(gint) GST_MPEGTS_RUNNING_STATUS_STARTS_IN_FEW_SECONDS", "2"),
+    (
+        "(gint) GST_MPEGTS_RUNNING_STATUS_STARTS_IN_FEW_SECONDS",
+        "2",
+    ),
     ("(gint) GST_MPEGTS_RUNNING_STATUS_UNDEFINED", "0"),
     ("(gint) GST_MPEGTS_SECTION_ATSC_CVCT", "12"),
     ("(gint) GST_MPEGTS_SECTION_ATSC_EIT", "15"),
@@ -497,10 +1026,16 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_STREAM_TYPE_H_222_1", "9"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_IPMP_STREAM", "127"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_METADATA_DATA_CAROUSEL", "23"),
-    ("(gint) GST_MPEGTS_STREAM_TYPE_METADATA_OBJECT_CAROUSEL", "24"),
+    (
+        "(gint) GST_MPEGTS_STREAM_TYPE_METADATA_OBJECT_CAROUSEL",
+        "24",
+    ),
     ("(gint) GST_MPEGTS_STREAM_TYPE_METADATA_PES_PACKETS", "21"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_METADATA_SECTIONS", "22"),
-    ("(gint) GST_MPEGTS_STREAM_TYPE_METADATA_SYNCHRONIZED_DOWNLOAD", "25"),
+    (
+        "(gint) GST_MPEGTS_STREAM_TYPE_METADATA_SYNCHRONIZED_DOWNLOAD",
+        "25",
+    ),
     ("(gint) GST_MPEGTS_STREAM_TYPE_MHEG", "7"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_MPEG2_IPMP", "26"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_MPEG4_TIMED_TEXT", "29"),
@@ -518,14 +1053,26 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_STREAM_TYPE_SL_FLEXMUX_SECTIONS", "19"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_SYNCHRONIZED_DOWNLOAD", "20"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264", "27"),
-    ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264_MVC_SUB_BITSTREAM", "32"),
-    ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264_STEREO_ADDITIONAL_VIEW", "35"),
-    ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264_SVC_SUB_BITSTREAM", "31"),
+    (
+        "(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264_MVC_SUB_BITSTREAM",
+        "32",
+    ),
+    (
+        "(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264_STEREO_ADDITIONAL_VIEW",
+        "35",
+    ),
+    (
+        "(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_H264_SVC_SUB_BITSTREAM",
+        "31",
+    ),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_HEVC", "36"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_JP2K", "33"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG1", "1"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG2", "2"),
-    ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG2_STEREO_ADDITIONAL_VIEW", "34"),
+    (
+        "(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG2_STEREO_ADDITIONAL_VIEW",
+        "34",
+    ),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG4", "16"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_RVC", "30"),
     ("(gint) GST_MPEGTS_TRANSMISSION_MODE_16K", "5"),
@@ -553,7 +1100,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_DESC_ATSC_GENRE", "171"),
     ("(gint) GST_MTS_DESC_ATSC_GROUP_LINK", "184"),
     ("(gint) GST_MTS_DESC_ATSC_MODULE_LINK", "180"),
-    ("(gint) GST_MTS_DESC_ATSC_MULTIPROTOCOL_ENCAPSULATION", "167"),
+    (
+        "(gint) GST_MTS_DESC_ATSC_MULTIPROTOCOL_ENCAPSULATION",
+        "167",
+    ),
     ("(gint) GST_MTS_DESC_ATSC_PID_COUNT", "165"),
     ("(gint) GST_MTS_DESC_ATSC_PRIVATE_INFORMATION", "173"),
     ("(gint) GST_MTS_DESC_ATSC_REDISTRIBUTION_CONTROL", "170"),
@@ -616,7 +1166,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_DESC_DVB_PDC", "105"),
     ("(gint) GST_MTS_DESC_DVB_PRIVATE_DATA_SPECIFIER", "95"),
     ("(gint) GST_MTS_DESC_DVB_RELATED_CONTENT", "116"),
-    ("(gint) GST_MTS_DESC_DVB_S2_SATELLITE_DELIVERY_SYSTEM", "121"),
+    (
+        "(gint) GST_MTS_DESC_DVB_S2_SATELLITE_DELIVERY_SYSTEM",
+        "121",
+    ),
     ("(gint) GST_MTS_DESC_DVB_SATELLITE_DELIVERY_SYSTEM", "67"),
     ("(gint) GST_MTS_DESC_DVB_SCRAMBLING", "101"),
     ("(gint) GST_MTS_DESC_DVB_SERVICE", "72"),
@@ -732,24 +1285,48 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_DESC_VIDEO_WINDOW", "8"),
     ("(gint) GST_MTS_TABLE_ID_14496_OBJET_DESCRIPTOR", "5"),
     ("(gint) GST_MTS_TABLE_ID_14496_SCENE_DESCRIPTION", "4"),
-    ("(gint) GST_MTS_TABLE_ID_APPLICATION_INFORMATION_TABLE", "116"),
+    (
+        "(gint) GST_MTS_TABLE_ID_APPLICATION_INFORMATION_TABLE",
+        "116",
+    ),
     ("(gint) GST_MTS_TABLE_ID_ATSC_AGGREGATE_DATA_EVENT", "217"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_AGGREGATE_EVENT_INFORMATION", "214"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_AGGREGATE_EXTENDED_TEXT", "215"),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_AGGREGATE_EVENT_INFORMATION",
+        "214",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_AGGREGATE_EXTENDED_TEXT",
+        "215",
+    ),
     ("(gint) GST_MTS_TABLE_ID_ATSC_CABLE_VIRTUAL_CHANNEL", "201"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_CHANNEL_OR_EVENT_EXTENDED_TEXT", "204"),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_CHANNEL_OR_EVENT_EXTENDED_TEXT",
+        "204",
+    ),
     ("(gint) GST_MTS_TABLE_ID_ATSC_DATA_EVENT", "206"),
     ("(gint) GST_MTS_TABLE_ID_ATSC_DATA_SERVICE", "207"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_DIRECTED_CHANNEL_CHANGE", "211"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_DIRECTED_CHANNEL_CHANGE_SECTION_CODE", "212"),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_DIRECTED_CHANNEL_CHANGE",
+        "211",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_DIRECTED_CHANNEL_CHANGE_SECTION_CODE",
+        "212",
+    ),
     ("(gint) GST_MTS_TABLE_ID_ATSC_EVENT_INFORMATION", "203"),
     ("(gint) GST_MTS_TABLE_ID_ATSC_LONG_TERM_SERVICE", "210"),
     ("(gint) GST_MTS_TABLE_ID_ATSC_MASTER_GUIDE", "199"),
     ("(gint) GST_MTS_TABLE_ID_ATSC_NETWORK_RESOURCE", "209"),
     ("(gint) GST_MTS_TABLE_ID_ATSC_RATING_REGION", "202"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_SATELLITE_VIRTUAL_CHANNEL", "218"),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_SATELLITE_VIRTUAL_CHANNEL",
+        "218",
+    ),
     ("(gint) GST_MTS_TABLE_ID_ATSC_SYSTEM_TIME", "205"),
-    ("(gint) GST_MTS_TABLE_ID_ATSC_TERRESTRIAL_VIRTUAL_CHANNEL", "200"),
+    (
+        "(gint) GST_MTS_TABLE_ID_ATSC_TERRESTRIAL_VIRTUAL_CHANNEL",
+        "200",
+    ),
     ("(gint) GST_MTS_TABLE_ID_BOUQUET_ASSOCIATION", "74"),
     ("(gint) GST_MTS_TABLE_ID_CA_MESSAGE_ECM_0", "128"),
     ("(gint) GST_MTS_TABLE_ID_CA_MESSAGE_ECM_1", "129"),
@@ -761,25 +1338,55 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_TABLE_ID_CONTENT_IDENTIFIER", "119"),
     ("(gint) GST_MTS_TABLE_ID_DISCONTINUITY_INFORMATION", "126"),
     ("(gint) GST_MTS_TABLE_ID_DSM_CC_ADDRESSABLE_SECTIONS", "63"),
-    ("(gint) GST_MTS_TABLE_ID_DSM_CC_DOWNLOAD_DATA_MESSAGES", "60"),
-    ("(gint) GST_MTS_TABLE_ID_DSM_CC_MULTIPROTO_ENCAPSULATED_DATA", "58"),
+    (
+        "(gint) GST_MTS_TABLE_ID_DSM_CC_DOWNLOAD_DATA_MESSAGES",
+        "60",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_DSM_CC_MULTIPROTO_ENCAPSULATED_DATA",
+        "58",
+    ),
     ("(gint) GST_MTS_TABLE_ID_DSM_CC_PRIVATE_DATA", "62"),
     ("(gint) GST_MTS_TABLE_ID_DSM_CC_STREAM_DESCRIPTORS", "61"),
     ("(gint) GST_MTS_TABLE_ID_DSM_CC_U_N_MESSAGES", "59"),
-    ("(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_PRESENT", "78"),
-    ("(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_SCHEDULE_1", "80"),
-    ("(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_SCHEDULE_N", "95"),
-    ("(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_PRESENT", "79"),
-    ("(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_SCHEDULE_1", "96"),
-    ("(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_SCHEDULE_N", "111"),
+    (
+        "(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_PRESENT",
+        "78",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_SCHEDULE_1",
+        "80",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_ACTUAL_TS_SCHEDULE_N",
+        "95",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_PRESENT",
+        "79",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_SCHEDULE_1",
+        "96",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_EVENT_INFORMATION_OTHER_TS_SCHEDULE_N",
+        "111",
+    ),
     ("(gint) GST_MTS_TABLE_ID_FCT", "161"),
     ("(gint) GST_MTS_TABLE_ID_IPMP_CONTROL_INFORMATION", "7"),
     ("(gint) GST_MTS_TABLE_ID_LL_FEC_PARITY_DATA_TABLE", "177"),
     ("(gint) GST_MTS_TABLE_ID_METADATA", "6"),
     ("(gint) GST_MTS_TABLE_ID_MPE_FEC", "120"),
     ("(gint) GST_MTS_TABLE_ID_MPE_IFEC", "122"),
-    ("(gint) GST_MTS_TABLE_ID_NETWORK_INFORMATION_ACTUAL_NETWORK", "64"),
-    ("(gint) GST_MTS_TABLE_ID_NETWORK_INFORMATION_OTHER_NETWORK", "65"),
+    (
+        "(gint) GST_MTS_TABLE_ID_NETWORK_INFORMATION_ACTUAL_NETWORK",
+        "64",
+    ),
+    (
+        "(gint) GST_MTS_TABLE_ID_NETWORK_INFORMATION_OTHER_NETWORK",
+        "65",
+    ),
     ("(gint) GST_MTS_TABLE_ID_PCR_PACKET_PAYLOAD", "166"),
     ("(gint) GST_MTS_TABLE_ID_PROGRAM_ASSOCIATION", "0"),
     ("(gint) GST_MTS_TABLE_ID_RELATED_CONTENT", "118"),
@@ -794,7 +1401,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_TABLE_ID_SCTE_RESERVED", "225"),
     ("(gint) GST_MTS_TABLE_ID_SCTE_SPLICE", "252"),
     ("(gint) GST_MTS_TABLE_ID_SELECTION_INFORMATION", "127"),
-    ("(gint) GST_MTS_TABLE_ID_SERVICE_DESCRIPTION_ACTUAL_TS", "66"),
+    (
+        "(gint) GST_MTS_TABLE_ID_SERVICE_DESCRIPTION_ACTUAL_TS",
+        "66",
+    ),
     ("(gint) GST_MTS_TABLE_ID_SERVICE_DESCRIPTION_OTHER_TS", "70"),
     ("(gint) GST_MTS_TABLE_ID_SPT", "163"),
     ("(gint) GST_MTS_TABLE_ID_STUFFING", "114"),
@@ -803,7 +1413,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_TABLE_ID_TIM", "176"),
     ("(gint) GST_MTS_TABLE_ID_TIME_DATE", "112"),
     ("(gint) GST_MTS_TABLE_ID_TIME_OFFSET", "115"),
-    ("(gint) GST_MTS_TABLE_ID_TRANSMISSION_MODE_SUPPORT_PAYLOAD", "170"),
+    (
+        "(gint) GST_MTS_TABLE_ID_TRANSMISSION_MODE_SUPPORT_PAYLOAD",
+        "170",
+    ),
     ("(gint) GST_MTS_TABLE_ID_TS_DESCRIPTION", "3"),
     ("(gint) GST_MTS_TABLE_ID_TS_PROGRAM_MAP", "2"),
     ("(gint) GST_MTS_TABLE_ID_UNSET", "255"),
@@ -812,5 +1425,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) PROGRAMME_SCHEDULE_PAGE", "4"),
     ("(gint) SUBTITLE_PAGE", "2"),
 ];
-
-

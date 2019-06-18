@@ -3,20 +3,25 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
+extern crate gio_sys as gio;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
-extern crate gio_sys as gio;
-extern crate gstreamer_sys as gst;
 extern crate gstreamer_base_sys as gst_base;
 extern crate gstreamer_pbutils_sys as gst_pbutils;
+extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -162,15 +167,18 @@ pub const GES_VIDEO_TEST_PATTERN_SOLID: GESVideoTestPattern = 17;
 
 // Constants
 pub const GES_META_DESCRIPTION: *const c_char = b"description\0" as *const u8 as *const c_char;
-pub const GES_META_FORMATTER_EXTENSION: *const c_char = b"extension\0" as *const u8 as *const c_char;
+pub const GES_META_FORMATTER_EXTENSION: *const c_char =
+    b"extension\0" as *const u8 as *const c_char;
 pub const GES_META_FORMATTER_MIMETYPE: *const c_char = b"mimetype\0" as *const u8 as *const c_char;
 pub const GES_META_FORMATTER_NAME: *const c_char = b"name\0" as *const u8 as *const c_char;
 pub const GES_META_FORMATTER_RANK: *const c_char = b"rank\0" as *const u8 as *const c_char;
 pub const GES_META_FORMATTER_VERSION: *const c_char = b"version\0" as *const u8 as *const c_char;
-pub const GES_META_FORMAT_VERSION: *const c_char = b"format-version\0" as *const u8 as *const c_char;
+pub const GES_META_FORMAT_VERSION: *const c_char =
+    b"format-version\0" as *const u8 as *const c_char;
 pub const GES_META_VOLUME: *const c_char = b"volume\0" as *const u8 as *const c_char;
 pub const GES_META_VOLUME_DEFAULT: c_double = 1.000000;
-pub const GES_MULTI_FILE_URI_PREFIX: *const c_char = b"multifile://\0" as *const u8 as *const c_char;
+pub const GES_MULTI_FILE_URI_PREFIX: *const c_char =
+    b"multifile://\0" as *const u8 as *const c_char;
 pub const GES_PADDING: c_int = 4;
 pub const GES_PADDING_LARGE: c_int = 20;
 pub const GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY: u32 = 4294967295;
@@ -210,47 +218,77 @@ pub union GESVideoSourceClass_ABI {
 impl ::std::fmt::Debug for GESVideoSourceClass_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoSourceClass_ABI @ {:?}", self as *const _))
-         .field("_ges_reserved", unsafe { &self._ges_reserved })
-         .field("abi", unsafe { &self.abi })
-         .finish()
+            .field("_ges_reserved", unsafe { &self._ges_reserved })
+            .field("abi", unsafe { &self.abi })
+            .finish()
     }
 }
 
 // Callbacks
-pub type GESCreateElementForGapFunc = Option<unsafe extern "C" fn(*mut GESTrack) -> *mut gst::GstElement>;
-pub type GESCreateTrackElementFunc = Option<unsafe extern "C" fn(*mut GESClip, GESTrackType) -> *mut GESTrackElement>;
-pub type GESCreateTrackElementsFunc = Option<unsafe extern "C" fn(*mut GESClip, GESTrackType) -> *mut glib::GList>;
-pub type GESExtractableCheckId = Option<unsafe extern "C" fn(GType, *const c_char, *mut *mut glib::GError) -> *mut c_char>;
-pub type GESFillTrackElementFunc = Option<unsafe extern "C" fn(*mut GESClip, *mut GESTrackElement, *mut gst::GstElement) -> gboolean>;
-pub type GESFormatterCanLoadURIMethod = Option<unsafe extern "C" fn(*mut GESFormatter, *const c_char, *mut *mut glib::GError) -> gboolean>;
-pub type GESFormatterLoadFromURIMethod = Option<unsafe extern "C" fn(*mut GESFormatter, *mut GESTimeline, *const c_char, *mut *mut glib::GError) -> gboolean>;
-pub type GESFormatterSaveToURIMethod = Option<unsafe extern "C" fn(*mut GESFormatter, *mut GESTimeline, *const c_char, gboolean, *mut *mut glib::GError) -> gboolean>;
-pub type GESMetaForeachFunc = Option<unsafe extern "C" fn(*const GESMetaContainer, *const c_char, *const gobject::GValue, gpointer)>;
+pub type GESCreateElementForGapFunc =
+    Option<unsafe extern "C" fn(*mut GESTrack) -> *mut gst::GstElement>;
+pub type GESCreateTrackElementFunc =
+    Option<unsafe extern "C" fn(*mut GESClip, GESTrackType) -> *mut GESTrackElement>;
+pub type GESCreateTrackElementsFunc =
+    Option<unsafe extern "C" fn(*mut GESClip, GESTrackType) -> *mut glib::GList>;
+pub type GESExtractableCheckId =
+    Option<unsafe extern "C" fn(GType, *const c_char, *mut *mut glib::GError) -> *mut c_char>;
+pub type GESFillTrackElementFunc = Option<
+    unsafe extern "C" fn(*mut GESClip, *mut GESTrackElement, *mut gst::GstElement) -> gboolean,
+>;
+pub type GESFormatterCanLoadURIMethod = Option<
+    unsafe extern "C" fn(*mut GESFormatter, *const c_char, *mut *mut glib::GError) -> gboolean,
+>;
+pub type GESFormatterLoadFromURIMethod = Option<
+    unsafe extern "C" fn(
+        *mut GESFormatter,
+        *mut GESTimeline,
+        *const c_char,
+        *mut *mut glib::GError,
+    ) -> gboolean,
+>;
+pub type GESFormatterSaveToURIMethod = Option<
+    unsafe extern "C" fn(
+        *mut GESFormatter,
+        *mut GESTimeline,
+        *const c_char,
+        gboolean,
+        *mut *mut glib::GError,
+    ) -> gboolean,
+>;
+pub type GESMetaForeachFunc = Option<
+    unsafe extern "C" fn(*const GESMetaContainer, *const c_char, *const gobject::GValue, gpointer),
+>;
 
 // Records
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct GESAssetClass {
     pub parent: gobject::GObjectClass,
-    pub start_loading: Option<unsafe extern "C" fn(*mut GESAsset, *mut *mut glib::GError) -> GESAssetLoadingReturn>,
-    pub extract: Option<unsafe extern "C" fn(*mut GESAsset, *mut *mut glib::GError) -> *mut GESExtractable>,
+    pub start_loading: Option<
+        unsafe extern "C" fn(*mut GESAsset, *mut *mut glib::GError) -> GESAssetLoadingReturn,
+    >,
+    pub extract:
+        Option<unsafe extern "C" fn(*mut GESAsset, *mut *mut glib::GError) -> *mut GESExtractable>,
     pub inform_proxy: Option<unsafe extern "C" fn(*mut GESAsset, *const c_char)>,
     pub proxied: Option<unsafe extern "C" fn(*mut GESAsset, *mut GESAsset)>,
-    pub request_id_update: Option<unsafe extern "C" fn(*mut GESAsset, *mut *mut c_char, *mut glib::GError) -> gboolean>,
+    pub request_id_update: Option<
+        unsafe extern "C" fn(*mut GESAsset, *mut *mut c_char, *mut glib::GError) -> gboolean,
+    >,
     pub _ges_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GESAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAssetClass @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("start_loading", &self.start_loading)
-         .field("extract", &self.extract)
-         .field("inform_proxy", &self.inform_proxy)
-         .field("proxied", &self.proxied)
-         .field("request_id_update", &self.request_id_update)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent", &self.parent)
+            .field("start_loading", &self.start_loading)
+            .field("extract", &self.extract)
+            .field("inform_proxy", &self.inform_proxy)
+            .field("proxied", &self.proxied)
+            .field("request_id_update", &self.request_id_update)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -270,8 +308,8 @@ pub struct GESAudioSourceClass {
 impl ::std::fmt::Debug for GESAudioSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioSourceClass @ {:?}", self as *const _))
-         .field("create_source", &self.create_source)
-         .finish()
+            .field("create_source", &self.create_source)
+            .finish()
     }
 }
 
@@ -290,7 +328,7 @@ pub struct GESAudioTestSourceClass {
 impl ::std::fmt::Debug for GESAudioTestSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioTestSourceClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -309,9 +347,9 @@ pub struct GESAudioTrackClass {
 impl ::std::fmt::Debug for GESAudioTrackClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioTrackClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -330,9 +368,9 @@ pub struct GESAudioTransitionClass {
 impl ::std::fmt::Debug for GESAudioTransitionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioTransitionClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -351,7 +389,7 @@ pub struct GESAudioUriSourceClass {
 impl ::std::fmt::Debug for GESAudioUriSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioUriSourceClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -370,7 +408,7 @@ pub struct GESBaseEffectClass {
 impl ::std::fmt::Debug for GESBaseEffectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESBaseEffectClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -384,7 +422,7 @@ pub struct GESBaseEffectClipClass {
 impl ::std::fmt::Debug for GESBaseEffectClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESBaseEffectClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -407,8 +445,11 @@ pub struct GESBaseTransitionClipClass {
 
 impl ::std::fmt::Debug for GESBaseTransitionClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseTransitionClipClass @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!(
+            "GESBaseTransitionClipClass @ {:?}",
+            self as *const _
+        ))
+        .finish()
     }
 }
 
@@ -422,18 +463,27 @@ pub type GESBaseTransitionClipPrivate = *mut _GESBaseTransitionClipPrivate;
 pub struct GESBaseXmlFormatterClass {
     pub parent: GESFormatterClass,
     pub content_parser: glib::GMarkupParser,
-    pub save: Option<unsafe extern "C" fn(*mut GESFormatter, *mut GESTimeline, *mut *mut glib::GError) -> *mut glib::GString>,
+    pub save: Option<
+        unsafe extern "C" fn(
+            *mut GESFormatter,
+            *mut GESTimeline,
+            *mut *mut glib::GError,
+        ) -> *mut glib::GString,
+    >,
     pub _ges_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GESBaseXmlFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESBaseXmlFormatterClass @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("content_parser", &self.content_parser)
-         .field("save", &self.save)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+        f.debug_struct(&format!(
+            "GESBaseXmlFormatterClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .field("content_parser", &self.content_parser)
+        .field("save", &self.save)
+        .field("_ges_reserved", &self._ges_reserved)
+        .finish()
     }
 }
 
@@ -452,9 +502,9 @@ pub struct GESClipAssetClass {
 impl ::std::fmt::Debug for GESClipAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESClipAssetClass @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent", &self.parent)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -475,9 +525,9 @@ pub struct GESClipClass {
 impl ::std::fmt::Debug for GESClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESClipClass @ {:?}", self as *const _))
-         .field("create_track_element", &self.create_track_element)
-         .field("create_track_elements", &self.create_track_elements)
-         .finish()
+            .field("create_track_element", &self.create_track_element)
+            .field("create_track_elements", &self.create_track_elements)
+            .finish()
     }
 }
 
@@ -494,9 +544,12 @@ pub struct GESCommandLineFormatterClass {
 
 impl ::std::fmt::Debug for GESCommandLineFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESCommandLineFormatterClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+        f.debug_struct(&format!(
+            "GESCommandLineFormatterClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .finish()
     }
 }
 
@@ -511,11 +564,22 @@ pub struct GESContainerClass {
     pub parent_class: GESTimelineElementClass,
     pub child_added: Option<unsafe extern "C" fn(*mut GESContainer, *mut GESTimelineElement)>,
     pub child_removed: Option<unsafe extern "C" fn(*mut GESContainer, *mut GESTimelineElement)>,
-    pub add_child: Option<unsafe extern "C" fn(*mut GESContainer, *mut GESTimelineElement) -> gboolean>,
-    pub remove_child: Option<unsafe extern "C" fn(*mut GESContainer, *mut GESTimelineElement) -> gboolean>,
+    pub add_child:
+        Option<unsafe extern "C" fn(*mut GESContainer, *mut GESTimelineElement) -> gboolean>,
+    pub remove_child:
+        Option<unsafe extern "C" fn(*mut GESContainer, *mut GESTimelineElement) -> gboolean>,
     pub ungroup: Option<unsafe extern "C" fn(*mut GESContainer, gboolean) -> *mut glib::GList>,
     pub group: Option<unsafe extern "C" fn(*mut glib::GList) -> *mut GESContainer>,
-    pub edit: Option<unsafe extern "C" fn(*mut GESContainer, *mut glib::GList, c_int, GESEditMode, GESEdge, u64) -> gboolean>,
+    pub edit: Option<
+        unsafe extern "C" fn(
+            *mut GESContainer,
+            *mut glib::GList,
+            c_int,
+            GESEditMode,
+            GESEdge,
+            u64,
+        ) -> gboolean,
+    >,
     pub grouping_priority: c_uint,
     pub _ges_reserved: [gpointer; 20],
 }
@@ -523,14 +587,14 @@ pub struct GESContainerClass {
 impl ::std::fmt::Debug for GESContainerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESContainerClass @ {:?}", self as *const _))
-         .field("child_added", &self.child_added)
-         .field("child_removed", &self.child_removed)
-         .field("add_child", &self.add_child)
-         .field("remove_child", &self.remove_child)
-         .field("ungroup", &self.ungroup)
-         .field("group", &self.group)
-         .field("edit", &self.edit)
-         .finish()
+            .field("child_added", &self.child_added)
+            .field("child_removed", &self.child_removed)
+            .field("add_child", &self.add_child)
+            .field("remove_child", &self.remove_child)
+            .field("ungroup", &self.ungroup)
+            .field("group", &self.group)
+            .field("edit", &self.edit)
+            .finish()
     }
 }
 
@@ -549,9 +613,9 @@ pub struct GESEffectAssetClass {
 impl ::std::fmt::Debug for GESEffectAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESEffectAssetClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -571,7 +635,7 @@ pub struct GESEffectClass {
 impl ::std::fmt::Debug for GESEffectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESEffectClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -585,7 +649,7 @@ pub struct GESEffectClipClass {
 impl ::std::fmt::Debug for GESEffectClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESEffectClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -607,29 +671,37 @@ pub struct GESExtractableInterface {
     pub check_id: GESExtractableCheckId,
     pub can_update_asset: gboolean,
     pub set_asset: Option<unsafe extern "C" fn(*mut GESExtractable, *mut GESAsset)>,
-    pub set_asset_full: Option<unsafe extern "C" fn(*mut GESExtractable, *mut GESAsset) -> gboolean>,
-    pub get_parameters_from_id: Option<unsafe extern "C" fn(*const c_char, *mut c_uint) -> *mut gobject::GParameter>,
+    pub set_asset_full:
+        Option<unsafe extern "C" fn(*mut GESExtractable, *mut GESAsset) -> gboolean>,
+    pub get_parameters_from_id:
+        Option<unsafe extern "C" fn(*const c_char, *mut c_uint) -> *mut gobject::GParameter>,
     pub get_id: Option<unsafe extern "C" fn(*mut GESExtractable) -> *mut c_char>,
     pub get_real_extractable_type: Option<unsafe extern "C" fn(GType, *const c_char) -> GType>,
-    pub register_metas: Option<unsafe extern "C" fn(*mut GESExtractableInterface, *mut gobject::GObjectClass, *mut GESAsset) -> gboolean>,
+    pub register_metas: Option<
+        unsafe extern "C" fn(
+            *mut GESExtractableInterface,
+            *mut gobject::GObjectClass,
+            *mut GESAsset,
+        ) -> gboolean,
+    >,
     pub _ges_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GESExtractableInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESExtractableInterface @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("asset_type", &self.asset_type)
-         .field("check_id", &self.check_id)
-         .field("can_update_asset", &self.can_update_asset)
-         .field("set_asset", &self.set_asset)
-         .field("set_asset_full", &self.set_asset_full)
-         .field("get_parameters_from_id", &self.get_parameters_from_id)
-         .field("get_id", &self.get_id)
-         .field("get_real_extractable_type", &self.get_real_extractable_type)
-         .field("register_metas", &self.register_metas)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent", &self.parent)
+            .field("asset_type", &self.asset_type)
+            .field("check_id", &self.check_id)
+            .field("can_update_asset", &self.can_update_asset)
+            .field("set_asset", &self.set_asset)
+            .field("set_asset_full", &self.set_asset_full)
+            .field("get_parameters_from_id", &self.get_parameters_from_id)
+            .field("get_id", &self.get_id)
+            .field("get_real_extractable_type", &self.get_real_extractable_type)
+            .field("register_metas", &self.register_metas)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -652,11 +724,11 @@ pub struct GESFormatterClass {
 impl ::std::fmt::Debug for GESFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESFormatterClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("can_load_uri", &self.can_load_uri)
-         .field("load_from_uri", &self.load_from_uri)
-         .field("save_to_uri", &self.save_to_uri)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("can_load_uri", &self.can_load_uri)
+            .field("load_from_uri", &self.load_from_uri)
+            .field("save_to_uri", &self.save_to_uri)
+            .finish()
     }
 }
 
@@ -675,9 +747,9 @@ pub struct GESGroupClass {
 impl ::std::fmt::Debug for GESGroupClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESGroupClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -696,9 +768,9 @@ pub struct GESImageSourceClass {
 impl ::std::fmt::Debug for GESImageSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESImageSourceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -720,10 +792,10 @@ pub struct GESLayerClass {
 impl ::std::fmt::Debug for GESLayerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESLayerClass @ {:?}", self as *const _))
-         .field("get_objects", &self.get_objects)
-         .field("object_added", &self.object_added)
-         .field("object_removed", &self.object_removed)
-         .finish()
+            .field("get_objects", &self.get_objects)
+            .field("object_added", &self.object_added)
+            .field("object_removed", &self.object_removed)
+            .finish()
     }
 }
 
@@ -741,10 +813,13 @@ pub struct GESMetaContainerInterface {
 
 impl ::std::fmt::Debug for GESMetaContainerInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESMetaContainerInterface @ {:?}", self as *const _))
-         .field("parent_iface", &self.parent_iface)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+        f.debug_struct(&format!(
+            "GESMetaContainerInterface @ {:?}",
+            self as *const _
+        ))
+        .field("parent_iface", &self.parent_iface)
+        .field("_ges_reserved", &self._ges_reserved)
+        .finish()
     }
 }
 
@@ -758,9 +833,9 @@ pub struct GESMultiFileSourceClass {
 impl ::std::fmt::Debug for GESMultiFileSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESMultiFileSourceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -779,7 +854,7 @@ pub struct GESOperationClass {
 impl ::std::fmt::Debug for GESOperationClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESOperationClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -793,7 +868,7 @@ pub struct GESOperationClipClass {
 impl ::std::fmt::Debug for GESOperationClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESOperationClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -817,8 +892,8 @@ pub struct GESOverlayClipClass {
 impl ::std::fmt::Debug for GESOverlayClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESOverlayClipClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -837,7 +912,7 @@ pub struct GESPipelineClass {
 impl ::std::fmt::Debug for GESPipelineClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESPipelineClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -856,7 +931,7 @@ pub struct GESPitiviFormatterClass {
 impl ::std::fmt::Debug for GESPitiviFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESPitiviFormatterClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -872,8 +947,12 @@ pub struct GESProjectClass {
     pub asset_added: Option<unsafe extern "C" fn(*mut GESProject, *mut GESAsset)>,
     pub asset_loading: Option<unsafe extern "C" fn(*mut GESProject, *mut GESAsset)>,
     pub asset_removed: Option<unsafe extern "C" fn(*mut GESProject, *mut GESAsset)>,
-    pub missing_uri: Option<unsafe extern "C" fn(*mut GESProject, *mut glib::GError, *mut GESAsset) -> *mut c_char>,
-    pub loading_error: Option<unsafe extern "C" fn(*mut GESProject, *mut glib::GError, *mut c_char, GType) -> gboolean>,
+    pub missing_uri: Option<
+        unsafe extern "C" fn(*mut GESProject, *mut glib::GError, *mut GESAsset) -> *mut c_char,
+    >,
+    pub loading_error: Option<
+        unsafe extern "C" fn(*mut GESProject, *mut glib::GError, *mut c_char, GType) -> gboolean,
+    >,
     pub loaded: Option<unsafe extern "C" fn(*mut GESProject, *mut GESTimeline) -> gboolean>,
     pub _ges_reserved: [gpointer; 4],
 }
@@ -881,15 +960,15 @@ pub struct GESProjectClass {
 impl ::std::fmt::Debug for GESProjectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESProjectClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("asset_added", &self.asset_added)
-         .field("asset_loading", &self.asset_loading)
-         .field("asset_removed", &self.asset_removed)
-         .field("missing_uri", &self.missing_uri)
-         .field("loading_error", &self.loading_error)
-         .field("loaded", &self.loaded)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("asset_added", &self.asset_added)
+            .field("asset_loading", &self.asset_loading)
+            .field("asset_removed", &self.asset_removed)
+            .field("missing_uri", &self.missing_uri)
+            .field("loading_error", &self.loading_error)
+            .field("loaded", &self.loaded)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -908,7 +987,7 @@ pub struct GESSourceClass {
 impl ::std::fmt::Debug for GESSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESSourceClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -922,7 +1001,7 @@ pub struct GESSourceClipClass {
 impl ::std::fmt::Debug for GESSourceClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESSourceClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -946,7 +1025,7 @@ pub struct GESTestClipClass {
 impl ::std::fmt::Debug for GESTestClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTestClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -965,8 +1044,8 @@ pub struct GESTextOverlayClass {
 impl ::std::fmt::Debug for GESTextOverlayClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTextOverlayClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -980,7 +1059,7 @@ pub struct GESTextOverlayClipClass {
 impl ::std::fmt::Debug for GESTextOverlayClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTextOverlayClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1003,21 +1082,22 @@ pub struct GESTimelineClass {
     pub layer_added: Option<unsafe extern "C" fn(*mut GESTimeline, *mut GESLayer)>,
     pub layer_removed: Option<unsafe extern "C" fn(*mut GESTimeline, *mut GESLayer)>,
     pub group_added: Option<unsafe extern "C" fn(*mut GESTimeline, *mut GESGroup)>,
-    pub group_removed: Option<unsafe extern "C" fn(*mut GESTimeline, *mut GESGroup, *mut glib::GPtrArray)>,
+    pub group_removed:
+        Option<unsafe extern "C" fn(*mut GESTimeline, *mut GESGroup, *mut glib::GPtrArray)>,
     pub _ges_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GESTimelineClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTimelineClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("track_added", &self.track_added)
-         .field("track_removed", &self.track_removed)
-         .field("layer_added", &self.layer_added)
-         .field("layer_removed", &self.layer_removed)
-         .field("group_added", &self.group_added)
-         .field("group_removed", &self.group_removed)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("track_added", &self.track_added)
+            .field("track_removed", &self.track_removed)
+            .field("layer_added", &self.layer_added)
+            .field("layer_removed", &self.layer_removed)
+            .field("group_added", &self.group_added)
+            .field("group_removed", &self.group_removed)
+            .finish()
     }
 }
 
@@ -1025,11 +1105,16 @@ impl ::std::fmt::Debug for GESTimelineClass {
 #[derive(Copy, Clone)]
 pub struct GESTimelineElementClass {
     pub parent_class: gobject::GInitiallyUnownedClass,
-    pub set_parent: Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut GESTimelineElement) -> gboolean>,
-    pub set_start: Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
-    pub set_inpoint: Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
-    pub set_duration: Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
-    pub set_max_duration: Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
+    pub set_parent:
+        Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut GESTimelineElement) -> gboolean>,
+    pub set_start:
+        Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
+    pub set_inpoint:
+        Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
+    pub set_duration:
+        Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
+    pub set_max_duration:
+        Option<unsafe extern "C" fn(*mut GESTimelineElement, gst::GstClockTime) -> gboolean>,
     pub set_priority: Option<unsafe extern "C" fn(*mut GESTimelineElement, u32) -> gboolean>,
     pub ripple: Option<unsafe extern "C" fn(*mut GESTimelineElement, u64) -> gboolean>,
     pub ripple_end: Option<unsafe extern "C" fn(*mut GESTimelineElement, u64) -> gboolean>,
@@ -1037,11 +1122,33 @@ pub struct GESTimelineElementClass {
     pub roll_end: Option<unsafe extern "C" fn(*mut GESTimelineElement, u64) -> gboolean>,
     pub trim: Option<unsafe extern "C" fn(*mut GESTimelineElement, u64) -> gboolean>,
     pub deep_copy: Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut GESTimelineElement)>,
-    pub paste: Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut GESTimelineElement, gst::GstClockTime) -> *mut GESTimelineElement>,
-    pub list_children_properties: Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut c_uint) -> *mut *mut gobject::GParamSpec>,
-    pub lookup_child: Option<unsafe extern "C" fn(*mut GESTimelineElement, *const c_char, *mut *mut gobject::GObject, *mut *mut gobject::GParamSpec) -> gboolean>,
+    pub paste: Option<
+        unsafe extern "C" fn(
+            *mut GESTimelineElement,
+            *mut GESTimelineElement,
+            gst::GstClockTime,
+        ) -> *mut GESTimelineElement,
+    >,
+    pub list_children_properties: Option<
+        unsafe extern "C" fn(*mut GESTimelineElement, *mut c_uint) -> *mut *mut gobject::GParamSpec,
+    >,
+    pub lookup_child: Option<
+        unsafe extern "C" fn(
+            *mut GESTimelineElement,
+            *const c_char,
+            *mut *mut gobject::GObject,
+            *mut *mut gobject::GParamSpec,
+        ) -> gboolean,
+    >,
     pub get_track_types: Option<unsafe extern "C" fn(*mut GESTimelineElement) -> GESTrackType>,
-    pub set_child_property: Option<unsafe extern "C" fn(*mut GESTimelineElement, *mut gobject::GObject, *mut gobject::GParamSpec, *mut gobject::GValue)>,
+    pub set_child_property: Option<
+        unsafe extern "C" fn(
+            *mut GESTimelineElement,
+            *mut gobject::GObject,
+            *mut gobject::GParamSpec,
+            *mut gobject::GValue,
+        ),
+    >,
     pub get_layer_priority: Option<unsafe extern "C" fn(*mut GESTimelineElement) -> u32>,
     pub _ges_reserved: [gpointer; 16],
 }
@@ -1049,26 +1156,26 @@ pub struct GESTimelineElementClass {
 impl ::std::fmt::Debug for GESTimelineElementClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTimelineElementClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("set_parent", &self.set_parent)
-         .field("set_start", &self.set_start)
-         .field("set_inpoint", &self.set_inpoint)
-         .field("set_duration", &self.set_duration)
-         .field("set_max_duration", &self.set_max_duration)
-         .field("set_priority", &self.set_priority)
-         .field("ripple", &self.ripple)
-         .field("ripple_end", &self.ripple_end)
-         .field("roll_start", &self.roll_start)
-         .field("roll_end", &self.roll_end)
-         .field("trim", &self.trim)
-         .field("deep_copy", &self.deep_copy)
-         .field("paste", &self.paste)
-         .field("list_children_properties", &self.list_children_properties)
-         .field("lookup_child", &self.lookup_child)
-         .field("get_track_types", &self.get_track_types)
-         .field("set_child_property", &self.set_child_property)
-         .field("get_layer_priority", &self.get_layer_priority)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("set_parent", &self.set_parent)
+            .field("set_start", &self.set_start)
+            .field("set_inpoint", &self.set_inpoint)
+            .field("set_duration", &self.set_duration)
+            .field("set_max_duration", &self.set_max_duration)
+            .field("set_priority", &self.set_priority)
+            .field("ripple", &self.ripple)
+            .field("ripple_end", &self.ripple_end)
+            .field("roll_start", &self.roll_start)
+            .field("roll_end", &self.roll_end)
+            .field("trim", &self.trim)
+            .field("deep_copy", &self.deep_copy)
+            .field("paste", &self.paste)
+            .field("list_children_properties", &self.list_children_properties)
+            .field("lookup_child", &self.lookup_child)
+            .field("get_track_types", &self.get_track_types)
+            .field("set_child_property", &self.set_child_property)
+            .field("get_layer_priority", &self.get_layer_priority)
+            .finish()
     }
 }
 
@@ -1092,7 +1199,7 @@ pub struct GESTitleClipClass {
 impl ::std::fmt::Debug for GESTitleClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTitleClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1111,8 +1218,8 @@ pub struct GESTitleSourceClass {
 impl ::std::fmt::Debug for GESTitleSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTitleSourceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -1132,8 +1239,8 @@ pub struct GESTrackClass {
 impl ::std::fmt::Debug for GESTrackClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTrackClass @ {:?}", self as *const _))
-         .field("get_mixing_element", &self.get_mixing_element)
-         .finish()
+            .field("get_mixing_element", &self.get_mixing_element)
+            .finish()
     }
 }
 
@@ -1146,10 +1253,13 @@ pub struct GESTrackElementAssetClass {
 
 impl ::std::fmt::Debug for GESTrackElementAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESTrackElementAssetClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+        f.debug_struct(&format!(
+            "GESTrackElementAssetClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("_ges_reserved", &self._ges_reserved)
+        .finish()
     }
 }
 
@@ -1163,26 +1273,36 @@ pub type GESTrackElementAssetPrivate = *mut _GESTrackElementAssetPrivate;
 pub struct GESTrackElementClass {
     pub parent_class: GESTimelineElementClass,
     pub nleobject_factorytype: *const c_char,
-    pub create_gnl_object: Option<unsafe extern "C" fn(*mut GESTrackElement) -> *mut gst::GstElement>,
+    pub create_gnl_object:
+        Option<unsafe extern "C" fn(*mut GESTrackElement) -> *mut gst::GstElement>,
     pub create_element: Option<unsafe extern "C" fn(*mut GESTrackElement) -> *mut gst::GstElement>,
     pub active_changed: Option<unsafe extern "C" fn(*mut GESTrackElement, gboolean)>,
     pub changed: Option<unsafe extern "C" fn(*mut GESTrackElement)>,
-    pub list_children_properties: Option<unsafe extern "C" fn(*mut GESTrackElement, *mut c_uint) -> *mut *mut gobject::GParamSpec>,
-    pub lookup_child: Option<unsafe extern "C" fn(*mut GESTrackElement, *const c_char, *mut *mut gst::GstElement, *mut *mut gobject::GParamSpec) -> gboolean>,
+    pub list_children_properties: Option<
+        unsafe extern "C" fn(*mut GESTrackElement, *mut c_uint) -> *mut *mut gobject::GParamSpec,
+    >,
+    pub lookup_child: Option<
+        unsafe extern "C" fn(
+            *mut GESTrackElement,
+            *const c_char,
+            *mut *mut gst::GstElement,
+            *mut *mut gobject::GParamSpec,
+        ) -> gboolean,
+    >,
     pub _ges_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GESTrackElementClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTrackElementClass @ {:?}", self as *const _))
-         .field("nleobject_factorytype", &self.nleobject_factorytype)
-         .field("create_gnl_object", &self.create_gnl_object)
-         .field("create_element", &self.create_element)
-         .field("active_changed", &self.active_changed)
-         .field("changed", &self.changed)
-         .field("list_children_properties", &self.list_children_properties)
-         .field("lookup_child", &self.lookup_child)
-         .finish()
+            .field("nleobject_factorytype", &self.nleobject_factorytype)
+            .field("create_gnl_object", &self.create_gnl_object)
+            .field("create_element", &self.create_element)
+            .field("active_changed", &self.active_changed)
+            .field("changed", &self.changed)
+            .field("list_children_properties", &self.list_children_properties)
+            .field("lookup_child", &self.lookup_child)
+            .finish()
     }
 }
 
@@ -1206,7 +1326,7 @@ pub struct GESTransitionClass {
 impl ::std::fmt::Debug for GESTransitionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTransitionClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1220,7 +1340,7 @@ pub struct GESTransitionClipClass {
 impl ::std::fmt::Debug for GESTransitionClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTransitionClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1240,16 +1360,23 @@ pub struct GESUriClipAssetClass {
     pub parent_class: GESClipAssetClass,
     pub discoverer: *mut gst_pbutils::GstDiscoverer,
     pub sync_discoverer: *mut gst_pbutils::GstDiscoverer,
-    pub discovered: Option<unsafe extern "C" fn(*mut gst_pbutils::GstDiscoverer, *mut gst_pbutils::GstDiscovererInfo, *mut glib::GError, gpointer)>,
+    pub discovered: Option<
+        unsafe extern "C" fn(
+            *mut gst_pbutils::GstDiscoverer,
+            *mut gst_pbutils::GstDiscovererInfo,
+            *mut glib::GError,
+            gpointer,
+        ),
+    >,
     pub _ges_reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GESUriClipAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriClipAssetClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("discovered", &self.discovered)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("discovered", &self.discovered)
+            .finish()
     }
 }
 
@@ -1268,7 +1395,7 @@ pub struct GESUriClipClass {
 impl ::std::fmt::Debug for GESUriClipClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriClipClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1287,9 +1414,9 @@ pub struct GESUriSourceAssetClass {
 impl ::std::fmt::Debug for GESUriSourceAssetClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriSourceAssetClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -1309,9 +1436,9 @@ pub struct GESVideoSourceClass {
 impl ::std::fmt::Debug for GESVideoSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoSourceClass @ {:?}", self as *const _))
-         .field("create_source", &self.create_source)
-         .field("ABI", &self.ABI)
-         .finish()
+            .field("create_source", &self.create_source)
+            .field("ABI", &self.ABI)
+            .finish()
     }
 }
 
@@ -1323,9 +1450,15 @@ pub struct GESVideoSourceClass_ABI_abi {
 
 impl ::std::fmt::Debug for GESVideoSourceClass_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESVideoSourceClass_ABI_abi @ {:?}", self as *const _))
-         .field("disable_scale_in_compositor", &self.disable_scale_in_compositor)
-         .finish()
+        f.debug_struct(&format!(
+            "GESVideoSourceClass_ABI_abi @ {:?}",
+            self as *const _
+        ))
+        .field(
+            "disable_scale_in_compositor",
+            &self.disable_scale_in_compositor,
+        )
+        .finish()
     }
 }
 
@@ -1344,9 +1477,9 @@ pub struct GESVideoTestSourceClass {
 impl ::std::fmt::Debug for GESVideoTestSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoTestSourceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -1365,9 +1498,9 @@ pub struct GESVideoTrackClass {
 impl ::std::fmt::Debug for GESVideoTrackClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoTrackClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -1386,8 +1519,8 @@ pub struct GESVideoTransitionClass {
 impl ::std::fmt::Debug for GESVideoTransitionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoTransitionClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -1406,7 +1539,7 @@ pub struct GESVideoUriSourceClass {
 impl ::std::fmt::Debug for GESVideoUriSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoUriSourceClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1425,9 +1558,9 @@ pub struct GESXmlFormatterClass {
 impl ::std::fmt::Debug for GESXmlFormatterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESXmlFormatterClass @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent", &self.parent)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -1448,8 +1581,8 @@ pub struct GESAsset {
 impl ::std::fmt::Debug for GESAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAsset @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1464,7 +1597,7 @@ pub struct GESAudioSource {
 impl ::std::fmt::Debug for GESAudioSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1479,8 +1612,8 @@ pub struct GESAudioTestSource {
 impl ::std::fmt::Debug for GESAudioTestSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioTestSource @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1495,8 +1628,8 @@ pub struct GESAudioTrack {
 impl ::std::fmt::Debug for GESAudioTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioTrack @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .finish()
     }
 }
 
@@ -1511,8 +1644,8 @@ pub struct GESAudioTransition {
 impl ::std::fmt::Debug for GESAudioTransition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioTransition @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1528,7 +1661,7 @@ pub struct GESAudioUriSource {
 impl ::std::fmt::Debug for GESAudioUriSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESAudioUriSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1543,7 +1676,7 @@ pub struct GESBaseEffect {
 impl ::std::fmt::Debug for GESBaseEffect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESBaseEffect @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1558,7 +1691,7 @@ pub struct GESBaseEffectClip {
 impl ::std::fmt::Debug for GESBaseEffectClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESBaseEffectClip @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1573,7 +1706,7 @@ pub struct GESBaseTransitionClip {
 impl ::std::fmt::Debug for GESBaseTransitionClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESBaseTransitionClip @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1588,8 +1721,8 @@ pub struct GESBaseXmlFormatter {
 impl ::std::fmt::Debug for GESBaseXmlFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESBaseXmlFormatter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1604,8 +1737,8 @@ pub struct GESClip {
 impl ::std::fmt::Debug for GESClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESClip @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1620,8 +1753,8 @@ pub struct GESClipAsset {
 impl ::std::fmt::Debug for GESClipAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESClipAsset @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1635,9 +1768,9 @@ pub struct GESCommandLineFormatter {
 impl ::std::fmt::Debug for GESCommandLineFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESCommandLineFormatter @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
@@ -1656,12 +1789,12 @@ pub struct GESContainer {
 impl ::std::fmt::Debug for GESContainer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESContainer @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("children", &self.children)
-         .field("height", &self.height)
-         .field("children_control_mode", &self.children_control_mode)
-         .field("initiated_move", &self.initiated_move)
-         .finish()
+            .field("parent", &self.parent)
+            .field("children", &self.children)
+            .field("height", &self.height)
+            .field("children_control_mode", &self.children_control_mode)
+            .field("initiated_move", &self.initiated_move)
+            .finish()
     }
 }
 
@@ -1676,7 +1809,7 @@ pub struct GESEffect {
 impl ::std::fmt::Debug for GESEffect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESEffect @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1691,10 +1824,10 @@ pub struct GESEffectAsset {
 impl ::std::fmt::Debug for GESEffectAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESEffectAsset @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -1709,7 +1842,7 @@ pub struct GESEffectClip {
 impl ::std::fmt::Debug for GESEffectClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESEffectClip @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1726,8 +1859,8 @@ pub struct GESFormatter {
 impl ::std::fmt::Debug for GESFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESFormatter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1742,8 +1875,8 @@ pub struct GESGroup {
 impl ::std::fmt::Debug for GESGroup {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESGroup @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1759,7 +1892,7 @@ pub struct GESImageSource {
 impl ::std::fmt::Debug for GESImageSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESImageSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1777,13 +1910,13 @@ pub struct GESLayer {
 impl ::std::fmt::Debug for GESLayer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESLayer @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("timeline", &self.timeline)
-         .field("min_nle_priority", &self.min_nle_priority)
-         .field("max_nle_priority", &self.max_nle_priority)
-         .field("priv_", &self.priv_)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent", &self.parent)
+            .field("timeline", &self.timeline)
+            .field("min_nle_priority", &self.min_nle_priority)
+            .field("max_nle_priority", &self.max_nle_priority)
+            .field("priv_", &self.priv_)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -1799,7 +1932,7 @@ pub struct GESMultiFileSource {
 impl ::std::fmt::Debug for GESMultiFileSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESMultiFileSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1814,7 +1947,7 @@ pub struct GESOperation {
 impl ::std::fmt::Debug for GESOperation {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESOperation @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1829,7 +1962,7 @@ pub struct GESOperationClip {
 impl ::std::fmt::Debug for GESOperationClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESOperationClip @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1844,7 +1977,7 @@ pub struct GESOverlayClip {
 impl ::std::fmt::Debug for GESOverlayClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESOverlayClip @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1859,7 +1992,7 @@ pub struct GESPipeline {
 impl ::std::fmt::Debug for GESPipeline {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESPipeline @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1874,8 +2007,8 @@ pub struct GESPitiviFormatter {
 impl ::std::fmt::Debug for GESPitiviFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESPitiviFormatter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1890,8 +2023,8 @@ pub struct GESProject {
 impl ::std::fmt::Debug for GESProject {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESProject @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1906,7 +2039,7 @@ pub struct GESSource {
 impl ::std::fmt::Debug for GESSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1921,8 +2054,8 @@ pub struct GESSourceClip {
 impl ::std::fmt::Debug for GESSourceClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESSourceClip @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1937,8 +2070,8 @@ pub struct GESTestClip {
 impl ::std::fmt::Debug for GESTestClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTestClip @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1953,8 +2086,8 @@ pub struct GESTextOverlay {
 impl ::std::fmt::Debug for GESTextOverlay {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTextOverlay @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1969,8 +2102,8 @@ pub struct GESTextOverlayClip {
 impl ::std::fmt::Debug for GESTextOverlayClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTextOverlayClip @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1987,10 +2120,10 @@ pub struct GESTimeline {
 impl ::std::fmt::Debug for GESTimeline {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTimeline @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("layers", &self.layers)
-         .field("tracks", &self.tracks)
-         .finish()
+            .field("parent", &self.parent)
+            .field("layers", &self.layers)
+            .field("tracks", &self.tracks)
+            .finish()
     }
 }
 
@@ -2014,17 +2147,17 @@ pub struct GESTimelineElement {
 impl ::std::fmt::Debug for GESTimelineElement {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTimelineElement @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("parent", &self.parent)
-         .field("asset", &self.asset)
-         .field("start", &self.start)
-         .field("inpoint", &self.inpoint)
-         .field("duration", &self.duration)
-         .field("maxduration", &self.maxduration)
-         .field("priority", &self.priority)
-         .field("timeline", &self.timeline)
-         .field("name", &self.name)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .field("parent", &self.parent)
+            .field("asset", &self.asset)
+            .field("start", &self.start)
+            .field("inpoint", &self.inpoint)
+            .field("duration", &self.duration)
+            .field("maxduration", &self.maxduration)
+            .field("priority", &self.priority)
+            .field("timeline", &self.timeline)
+            .field("name", &self.name)
+            .finish()
     }
 }
 
@@ -2039,8 +2172,8 @@ pub struct GESTitleClip {
 impl ::std::fmt::Debug for GESTitleClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTitleClip @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2055,8 +2188,8 @@ pub struct GESTitleSource {
 impl ::std::fmt::Debug for GESTitleSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTitleSource @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2072,9 +2205,9 @@ pub struct GESTrack {
 impl ::std::fmt::Debug for GESTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTrack @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("type_", &self.type_)
-         .finish()
+            .field("parent", &self.parent)
+            .field("type_", &self.type_)
+            .finish()
     }
 }
 
@@ -2091,8 +2224,8 @@ pub struct GESTrackElement {
 impl ::std::fmt::Debug for GESTrackElement {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTrackElement @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2107,8 +2240,8 @@ pub struct GESTrackElementAsset {
 impl ::std::fmt::Debug for GESTrackElementAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTrackElementAsset @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2123,7 +2256,7 @@ pub struct GESTransition {
 impl ::std::fmt::Debug for GESTransition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTransition @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2139,8 +2272,8 @@ pub struct GESTransitionClip {
 impl ::std::fmt::Debug for GESTransitionClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESTransitionClip @ {:?}", self as *const _))
-         .field("vtype", &self.vtype)
-         .finish()
+            .field("vtype", &self.vtype)
+            .finish()
     }
 }
 
@@ -2155,8 +2288,8 @@ pub struct GESUriClip {
 impl ::std::fmt::Debug for GESUriClip {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriClip @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2171,8 +2304,8 @@ pub struct GESUriClipAsset {
 impl ::std::fmt::Debug for GESUriClipAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriClipAsset @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2187,8 +2320,8 @@ pub struct GESUriSourceAsset {
 impl ::std::fmt::Debug for GESUriSourceAsset {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESUriSourceAsset @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2203,7 +2336,7 @@ pub struct GESVideoSource {
 impl ::std::fmt::Debug for GESVideoSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2218,7 +2351,7 @@ pub struct GESVideoTestSource {
 impl ::std::fmt::Debug for GESVideoTestSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoTestSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2233,8 +2366,8 @@ pub struct GESVideoTrack {
 impl ::std::fmt::Debug for GESVideoTrack {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoTrack @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .finish()
     }
 }
 
@@ -2249,8 +2382,8 @@ pub struct GESVideoTransition {
 impl ::std::fmt::Debug for GESVideoTransition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoTransition @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2266,7 +2399,7 @@ pub struct GESVideoUriSource {
 impl ::std::fmt::Debug for GESVideoUriSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESVideoUriSource @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2281,10 +2414,10 @@ pub struct GESXmlFormatter {
 impl ::std::fmt::Debug for GESXmlFormatter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESXmlFormatter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("priv_", &self.priv_)
-         .field("_ges_reserved", &self._ges_reserved)
-         .finish()
+            .field("parent", &self.parent)
+            .field("priv_", &self.priv_)
+            .field("_ges_reserved", &self._ges_reserved)
+            .finish()
     }
 }
 
@@ -2306,7 +2439,6 @@ impl ::std::fmt::Debug for GESMetaContainer {
         write!(f, "GESMetaContainer @ {:?}", self as *const _)
     }
 }
-
 
 extern "C" {
 
@@ -2360,27 +2492,58 @@ extern "C" {
     //=========================================================================
     // GESEffectClass
     //=========================================================================
-    pub fn ges_effect_class_register_rate_property(klass: *mut GESEffectClass, element_name: *const c_char, property_name: *const c_char) -> gboolean;
+    pub fn ges_effect_class_register_rate_property(
+        klass: *mut GESEffectClass,
+        element_name: *const c_char,
+        property_name: *const c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GESFormatterClass
     //=========================================================================
-    pub fn ges_formatter_class_register_metas(klass: *mut GESFormatterClass, name: *const c_char, description: *const c_char, extension: *const c_char, mimetype: *const c_char, version: c_double, rank: gst::GstRank);
+    pub fn ges_formatter_class_register_metas(
+        klass: *mut GESFormatterClass,
+        name: *const c_char,
+        description: *const c_char,
+        extension: *const c_char,
+        mimetype: *const c_char,
+        version: c_double,
+        rank: gst::GstRank,
+    );
 
     //=========================================================================
     // GESUriClipAssetClass
     //=========================================================================
-    pub fn ges_uri_clip_asset_class_set_timeout(klass: *mut GESUriClipAssetClass, timeout: gst::GstClockTime);
+    pub fn ges_uri_clip_asset_class_set_timeout(
+        klass: *mut GESUriClipAssetClass,
+        timeout: gst::GstClockTime,
+    );
 
     //=========================================================================
     // GESAsset
     //=========================================================================
     pub fn ges_asset_get_type() -> GType;
     pub fn ges_asset_needs_reload(extractable_type: GType, id: *const c_char) -> gboolean;
-    pub fn ges_asset_request(extractable_type: GType, id: *const c_char, error: *mut *mut glib::GError) -> *mut GESAsset;
-    pub fn ges_asset_request_async(extractable_type: GType, id: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
-    pub fn ges_asset_request_finish(res: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut GESAsset;
-    pub fn ges_asset_extract(self_: *mut GESAsset, error: *mut *mut glib::GError) -> *mut GESExtractable;
+    pub fn ges_asset_request(
+        extractable_type: GType,
+        id: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESAsset;
+    pub fn ges_asset_request_async(
+        extractable_type: GType,
+        id: *const c_char,
+        cancellable: *mut gio::GCancellable,
+        callback: gio::GAsyncReadyCallback,
+        user_data: gpointer,
+    );
+    pub fn ges_asset_request_finish(
+        res: *mut gio::GAsyncResult,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESAsset;
+    pub fn ges_asset_extract(
+        self_: *mut GESAsset,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESExtractable;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn ges_asset_get_error(self_: *mut GESAsset) -> *mut glib::GError;
     pub fn ges_asset_get_extractable_type(self_: *mut GESAsset) -> GType;
@@ -2447,17 +2610,37 @@ extern "C" {
     //=========================================================================
     pub fn ges_clip_get_type() -> GType;
     pub fn ges_clip_add_asset(clip: *mut GESClip, asset: *mut GESAsset) -> *mut GESTrackElement;
-    pub fn ges_clip_find_track_element(clip: *mut GESClip, track: *mut GESTrack, type_: GType) -> *mut GESTrackElement;
-    pub fn ges_clip_find_track_elements(clip: *mut GESClip, track: *mut GESTrack, track_type: GESTrackType, type_: GType) -> *mut glib::GList;
+    pub fn ges_clip_find_track_element(
+        clip: *mut GESClip,
+        track: *mut GESTrack,
+        type_: GType,
+    ) -> *mut GESTrackElement;
+    pub fn ges_clip_find_track_elements(
+        clip: *mut GESClip,
+        track: *mut GESTrack,
+        track_type: GESTrackType,
+        type_: GType,
+    ) -> *mut glib::GList;
     pub fn ges_clip_get_layer(clip: *mut GESClip) -> *mut GESLayer;
     pub fn ges_clip_get_supported_formats(clip: *mut GESClip) -> GESTrackType;
     pub fn ges_clip_get_top_effect_index(clip: *mut GESClip, effect: *mut GESBaseEffect) -> c_int;
-    pub fn ges_clip_get_top_effect_position(clip: *mut GESClip, effect: *mut GESBaseEffect) -> c_int;
+    pub fn ges_clip_get_top_effect_position(
+        clip: *mut GESClip,
+        effect: *mut GESBaseEffect,
+    ) -> c_int;
     pub fn ges_clip_get_top_effects(clip: *mut GESClip) -> *mut glib::GList;
     pub fn ges_clip_move_to_layer(clip: *mut GESClip, layer: *mut GESLayer) -> gboolean;
     pub fn ges_clip_set_supported_formats(clip: *mut GESClip, supportedformats: GESTrackType);
-    pub fn ges_clip_set_top_effect_index(clip: *mut GESClip, effect: *mut GESBaseEffect, newindex: c_uint) -> gboolean;
-    pub fn ges_clip_set_top_effect_priority(clip: *mut GESClip, effect: *mut GESBaseEffect, newpriority: c_uint) -> gboolean;
+    pub fn ges_clip_set_top_effect_index(
+        clip: *mut GESClip,
+        effect: *mut GESBaseEffect,
+        newindex: c_uint,
+    ) -> gboolean;
+    pub fn ges_clip_set_top_effect_priority(
+        clip: *mut GESClip,
+        effect: *mut GESBaseEffect,
+        newpriority: c_uint,
+    ) -> gboolean;
     pub fn ges_clip_split(clip: *mut GESClip, position: u64) -> *mut GESClip;
 
     //=========================================================================
@@ -2465,24 +2648,49 @@ extern "C" {
     //=========================================================================
     pub fn ges_clip_asset_get_type() -> GType;
     pub fn ges_clip_asset_get_supported_formats(self_: *mut GESClipAsset) -> GESTrackType;
-    pub fn ges_clip_asset_set_supported_formats(self_: *mut GESClipAsset, supportedformats: GESTrackType);
+    pub fn ges_clip_asset_set_supported_formats(
+        self_: *mut GESClipAsset,
+        supportedformats: GESTrackType,
+    );
 
     //=========================================================================
     // GESCommandLineFormatter
     //=========================================================================
     pub fn ges_command_line_formatter_get_type() -> GType;
-    pub fn ges_command_line_formatter_get_help(nargs: c_int, commands: *mut *mut c_char) -> *mut c_char;
+    pub fn ges_command_line_formatter_get_help(
+        nargs: c_int,
+        commands: *mut *mut c_char,
+    ) -> *mut c_char;
 
     //=========================================================================
     // GESContainer
     //=========================================================================
     pub fn ges_container_get_type() -> GType;
     pub fn ges_container_group(containers: *mut glib::GList) -> *mut GESContainer;
-    pub fn ges_container_add(container: *mut GESContainer, child: *mut GESTimelineElement) -> gboolean;
-    pub fn ges_container_edit(container: *mut GESContainer, layers: *mut glib::GList, new_layer_priority: c_int, mode: GESEditMode, edge: GESEdge, position: u64) -> gboolean;
-    pub fn ges_container_get_children(container: *mut GESContainer, recursive: gboolean) -> *mut glib::GList;
-    pub fn ges_container_remove(container: *mut GESContainer, child: *mut GESTimelineElement) -> gboolean;
-    pub fn ges_container_ungroup(container: *mut GESContainer, recursive: gboolean) -> *mut glib::GList;
+    pub fn ges_container_add(
+        container: *mut GESContainer,
+        child: *mut GESTimelineElement,
+    ) -> gboolean;
+    pub fn ges_container_edit(
+        container: *mut GESContainer,
+        layers: *mut glib::GList,
+        new_layer_priority: c_int,
+        mode: GESEditMode,
+        edge: GESEdge,
+        position: u64,
+    ) -> gboolean;
+    pub fn ges_container_get_children(
+        container: *mut GESContainer,
+        recursive: gboolean,
+    ) -> *mut glib::GList;
+    pub fn ges_container_remove(
+        container: *mut GESContainer,
+        child: *mut GESTimelineElement,
+    ) -> gboolean;
+    pub fn ges_container_ungroup(
+        container: *mut GESContainer,
+        recursive: gboolean,
+    ) -> *mut glib::GList;
 
     //=========================================================================
     // GESEffect
@@ -2499,17 +2707,37 @@ extern "C" {
     // GESEffectClip
     //=========================================================================
     pub fn ges_effect_clip_get_type() -> GType;
-    pub fn ges_effect_clip_new(video_bin_description: *const c_char, audio_bin_description: *const c_char) -> *mut GESEffectClip;
+    pub fn ges_effect_clip_new(
+        video_bin_description: *const c_char,
+        audio_bin_description: *const c_char,
+    ) -> *mut GESEffectClip;
 
     //=========================================================================
     // GESFormatter
     //=========================================================================
     pub fn ges_formatter_get_type() -> GType;
-    pub fn ges_formatter_can_load_uri(uri: *const c_char, error: *mut *mut glib::GError) -> gboolean;
-    pub fn ges_formatter_can_save_uri(uri: *const c_char, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_formatter_can_load_uri(
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
+    pub fn ges_formatter_can_save_uri(
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn ges_formatter_get_default() -> *mut GESAsset;
-    pub fn ges_formatter_load_from_uri(formatter: *mut GESFormatter, timeline: *mut GESTimeline, uri: *const c_char, error: *mut *mut glib::GError) -> gboolean;
-    pub fn ges_formatter_save_to_uri(formatter: *mut GESFormatter, timeline: *mut GESTimeline, uri: *const c_char, overwrite: gboolean, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_formatter_load_from_uri(
+        formatter: *mut GESFormatter,
+        timeline: *mut GESTimeline,
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
+    pub fn ges_formatter_save_to_uri(
+        formatter: *mut GESFormatter,
+        timeline: *mut GESTimeline,
+        uri: *const c_char,
+        overwrite: gboolean,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
 
     //=========================================================================
     // GESGroup
@@ -2527,11 +2755,22 @@ extern "C" {
     //=========================================================================
     pub fn ges_layer_get_type() -> GType;
     pub fn ges_layer_new() -> *mut GESLayer;
-    pub fn ges_layer_add_asset(layer: *mut GESLayer, asset: *mut GESAsset, start: gst::GstClockTime, inpoint: gst::GstClockTime, duration: gst::GstClockTime, track_types: GESTrackType) -> *mut GESClip;
+    pub fn ges_layer_add_asset(
+        layer: *mut GESLayer,
+        asset: *mut GESAsset,
+        start: gst::GstClockTime,
+        inpoint: gst::GstClockTime,
+        duration: gst::GstClockTime,
+        track_types: GESTrackType,
+    ) -> *mut GESClip;
     pub fn ges_layer_add_clip(layer: *mut GESLayer, clip: *mut GESClip) -> gboolean;
     pub fn ges_layer_get_auto_transition(layer: *mut GESLayer) -> gboolean;
     pub fn ges_layer_get_clips(layer: *mut GESLayer) -> *mut glib::GList;
-    pub fn ges_layer_get_clips_in_interval(layer: *mut GESLayer, start: gst::GstClockTime, end: gst::GstClockTime) -> *mut glib::GList;
+    pub fn ges_layer_get_clips_in_interval(
+        layer: *mut GESLayer,
+        start: gst::GstClockTime,
+        end: gst::GstClockTime,
+    ) -> *mut glib::GList;
     pub fn ges_layer_get_duration(layer: *mut GESLayer) -> gst::GstClockTime;
     pub fn ges_layer_get_priority(layer: *mut GESLayer) -> c_uint;
     pub fn ges_layer_get_timeline(layer: *mut GESLayer) -> *mut GESTimeline;
@@ -2568,16 +2807,37 @@ extern "C" {
     pub fn ges_pipeline_get_type() -> GType;
     pub fn ges_pipeline_new() -> *mut GESPipeline;
     pub fn ges_pipeline_get_mode(pipeline: *mut GESPipeline) -> GESPipelineFlags;
-    pub fn ges_pipeline_get_thumbnail(self_: *mut GESPipeline, caps: *mut gst::GstCaps) -> *mut gst::GstSample;
-    pub fn ges_pipeline_get_thumbnail_rgb24(self_: *mut GESPipeline, width: c_int, height: c_int) -> *mut gst::GstSample;
+    pub fn ges_pipeline_get_thumbnail(
+        self_: *mut GESPipeline,
+        caps: *mut gst::GstCaps,
+    ) -> *mut gst::GstSample;
+    pub fn ges_pipeline_get_thumbnail_rgb24(
+        self_: *mut GESPipeline,
+        width: c_int,
+        height: c_int,
+    ) -> *mut gst::GstSample;
     pub fn ges_pipeline_preview_get_audio_sink(self_: *mut GESPipeline) -> *mut gst::GstElement;
     pub fn ges_pipeline_preview_get_video_sink(self_: *mut GESPipeline) -> *mut gst::GstElement;
     pub fn ges_pipeline_preview_set_audio_sink(self_: *mut GESPipeline, sink: *mut gst::GstElement);
     pub fn ges_pipeline_preview_set_video_sink(self_: *mut GESPipeline, sink: *mut gst::GstElement);
-    pub fn ges_pipeline_save_thumbnail(self_: *mut GESPipeline, width: c_int, height: c_int, format: *const c_char, location: *const c_char, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_pipeline_save_thumbnail(
+        self_: *mut GESPipeline,
+        width: c_int,
+        height: c_int,
+        format: *const c_char,
+        location: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn ges_pipeline_set_mode(pipeline: *mut GESPipeline, mode: GESPipelineFlags) -> gboolean;
-    pub fn ges_pipeline_set_render_settings(pipeline: *mut GESPipeline, output_uri: *const c_char, profile: *mut gst_pbutils::GstEncodingProfile) -> gboolean;
-    pub fn ges_pipeline_set_timeline(pipeline: *mut GESPipeline, timeline: *mut GESTimeline) -> gboolean;
+    pub fn ges_pipeline_set_render_settings(
+        pipeline: *mut GESPipeline,
+        output_uri: *const c_char,
+        profile: *mut gst_pbutils::GstEncodingProfile,
+    ) -> gboolean;
+    pub fn ges_pipeline_set_timeline(
+        pipeline: *mut GESPipeline,
+        timeline: *mut GESTimeline,
+    ) -> gboolean;
 
     //=========================================================================
     // GESPitiviFormatter
@@ -2591,17 +2851,44 @@ extern "C" {
     pub fn ges_project_get_type() -> GType;
     pub fn ges_project_new(uri: *const c_char) -> *mut GESProject;
     pub fn ges_project_add_asset(project: *mut GESProject, asset: *mut GESAsset) -> gboolean;
-    pub fn ges_project_add_encoding_profile(project: *mut GESProject, profile: *mut gst_pbutils::GstEncodingProfile) -> gboolean;
-    pub fn ges_project_create_asset(project: *mut GESProject, id: *const c_char, extractable_type: GType) -> gboolean;
-    pub fn ges_project_create_asset_sync(project: *mut GESProject, id: *const c_char, extractable_type: GType, error: *mut *mut glib::GError) -> *mut GESAsset;
-    pub fn ges_project_get_asset(project: *mut GESProject, id: *const c_char, extractable_type: GType) -> *mut GESAsset;
+    pub fn ges_project_add_encoding_profile(
+        project: *mut GESProject,
+        profile: *mut gst_pbutils::GstEncodingProfile,
+    ) -> gboolean;
+    pub fn ges_project_create_asset(
+        project: *mut GESProject,
+        id: *const c_char,
+        extractable_type: GType,
+    ) -> gboolean;
+    pub fn ges_project_create_asset_sync(
+        project: *mut GESProject,
+        id: *const c_char,
+        extractable_type: GType,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESAsset;
+    pub fn ges_project_get_asset(
+        project: *mut GESProject,
+        id: *const c_char,
+        extractable_type: GType,
+    ) -> *mut GESAsset;
     pub fn ges_project_get_loading_assets(project: *mut GESProject) -> *mut glib::GList;
     pub fn ges_project_get_uri(project: *mut GESProject) -> *mut c_char;
     pub fn ges_project_list_assets(project: *mut GESProject, filter: GType) -> *mut glib::GList;
     pub fn ges_project_list_encoding_profiles(project: *mut GESProject) -> *const glib::GList;
-    pub fn ges_project_load(project: *mut GESProject, timeline: *mut GESTimeline, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_project_load(
+        project: *mut GESProject,
+        timeline: *mut GESTimeline,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn ges_project_remove_asset(project: *mut GESProject, asset: *mut GESAsset) -> gboolean;
-    pub fn ges_project_save(project: *mut GESProject, timeline: *mut GESTimeline, uri: *const c_char, formatter_asset: *mut GESAsset, overwrite: gboolean, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_project_save(
+        project: *mut GESProject,
+        timeline: *mut GESTimeline,
+        uri: *const c_char,
+        formatter_asset: *mut GESAsset,
+        overwrite: gboolean,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
 
     //=========================================================================
     // GESSource
@@ -2661,7 +2948,10 @@ extern "C" {
     pub fn ges_text_overlay_clip_get_xpos(self_: *mut GESTextOverlayClip) -> c_double;
     pub fn ges_text_overlay_clip_get_ypos(self_: *mut GESTextOverlayClip) -> c_double;
     pub fn ges_text_overlay_clip_set_color(self_: *mut GESTextOverlayClip, color: u32);
-    pub fn ges_text_overlay_clip_set_font_desc(self_: *mut GESTextOverlayClip, font_desc: *const c_char);
+    pub fn ges_text_overlay_clip_set_font_desc(
+        self_: *mut GESTextOverlayClip,
+        font_desc: *const c_char,
+    );
     pub fn ges_text_overlay_clip_set_halign(self_: *mut GESTextOverlayClip, halign: GESTextHAlign);
     pub fn ges_text_overlay_clip_set_text(self_: *mut GESTextOverlayClip, text: *const c_char);
     pub fn ges_text_overlay_clip_set_valign(self_: *mut GESTextOverlayClip, valign: GESTextVAlign);
@@ -2674,7 +2964,10 @@ extern "C" {
     pub fn ges_timeline_get_type() -> GType;
     pub fn ges_timeline_new() -> *mut GESTimeline;
     pub fn ges_timeline_new_audio_video() -> *mut GESTimeline;
-    pub fn ges_timeline_new_from_uri(uri: *const c_char, error: *mut *mut glib::GError) -> *mut GESTimeline;
+    pub fn ges_timeline_new_from_uri(
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESTimeline;
     pub fn ges_timeline_add_layer(timeline: *mut GESTimeline, layer: *mut GESLayer) -> gboolean;
     pub fn ges_timeline_add_track(timeline: *mut GESTimeline, track: *mut GESTrack) -> gboolean;
     pub fn ges_timeline_append_layer(timeline: *mut GESTimeline) -> *mut GESLayer;
@@ -2682,68 +2975,189 @@ extern "C" {
     pub fn ges_timeline_commit_sync(timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_get_auto_transition(timeline: *mut GESTimeline) -> gboolean;
     pub fn ges_timeline_get_duration(timeline: *mut GESTimeline) -> gst::GstClockTime;
-    pub fn ges_timeline_get_element(timeline: *mut GESTimeline, name: *const c_char) -> *mut GESTimelineElement;
+    pub fn ges_timeline_get_element(
+        timeline: *mut GESTimeline,
+        name: *const c_char,
+    ) -> *mut GESTimelineElement;
     pub fn ges_timeline_get_groups(timeline: *mut GESTimeline) -> *mut glib::GList;
     pub fn ges_timeline_get_layer(timeline: *mut GESTimeline, priority: c_uint) -> *mut GESLayer;
     pub fn ges_timeline_get_layers(timeline: *mut GESTimeline) -> *mut glib::GList;
-    pub fn ges_timeline_get_pad_for_track(timeline: *mut GESTimeline, track: *mut GESTrack) -> *mut gst::GstPad;
+    pub fn ges_timeline_get_pad_for_track(
+        timeline: *mut GESTimeline,
+        track: *mut GESTrack,
+    ) -> *mut gst::GstPad;
     pub fn ges_timeline_get_snapping_distance(timeline: *mut GESTimeline) -> gst::GstClockTime;
-    pub fn ges_timeline_get_track_for_pad(timeline: *mut GESTimeline, pad: *mut gst::GstPad) -> *mut GESTrack;
+    pub fn ges_timeline_get_track_for_pad(
+        timeline: *mut GESTimeline,
+        pad: *mut gst::GstPad,
+    ) -> *mut GESTrack;
     pub fn ges_timeline_get_tracks(timeline: *mut GESTimeline) -> *mut glib::GList;
     pub fn ges_timeline_is_empty(timeline: *mut GESTimeline) -> gboolean;
-    pub fn ges_timeline_load_from_uri(timeline: *mut GESTimeline, uri: *const c_char, error: *mut *mut glib::GError) -> gboolean;
-    pub fn ges_timeline_move_layer(timeline: *mut GESTimeline, layer: *mut GESLayer, new_layer_priority: c_uint) -> gboolean;
-    pub fn ges_timeline_paste_element(timeline: *mut GESTimeline, element: *mut GESTimelineElement, position: gst::GstClockTime, layer_priority: c_int) -> *mut GESTimelineElement;
+    pub fn ges_timeline_load_from_uri(
+        timeline: *mut GESTimeline,
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
+    pub fn ges_timeline_move_layer(
+        timeline: *mut GESTimeline,
+        layer: *mut GESLayer,
+        new_layer_priority: c_uint,
+    ) -> gboolean;
+    pub fn ges_timeline_paste_element(
+        timeline: *mut GESTimeline,
+        element: *mut GESTimelineElement,
+        position: gst::GstClockTime,
+        layer_priority: c_int,
+    ) -> *mut GESTimelineElement;
     pub fn ges_timeline_remove_layer(timeline: *mut GESTimeline, layer: *mut GESLayer) -> gboolean;
     pub fn ges_timeline_remove_track(timeline: *mut GESTimeline, track: *mut GESTrack) -> gboolean;
-    pub fn ges_timeline_save_to_uri(timeline: *mut GESTimeline, uri: *const c_char, formatter_asset: *mut GESAsset, overwrite: gboolean, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_timeline_save_to_uri(
+        timeline: *mut GESTimeline,
+        uri: *const c_char,
+        formatter_asset: *mut GESAsset,
+        overwrite: gboolean,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn ges_timeline_set_auto_transition(timeline: *mut GESTimeline, auto_transition: gboolean);
-    pub fn ges_timeline_set_snapping_distance(timeline: *mut GESTimeline, snapping_distance: gst::GstClockTime);
+    pub fn ges_timeline_set_snapping_distance(
+        timeline: *mut GESTimeline,
+        snapping_distance: gst::GstClockTime,
+    );
 
     //=========================================================================
     // GESTimelineElement
     //=========================================================================
     pub fn ges_timeline_element_get_type() -> GType;
-    pub fn ges_timeline_element_add_child_property(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec, child: *mut gobject::GObject) -> gboolean;
-    pub fn ges_timeline_element_copy(self_: *mut GESTimelineElement, deep: gboolean) -> *mut GESTimelineElement;
-    pub fn ges_timeline_element_get_child_properties(self_: *mut GESTimelineElement, first_property_name: *const c_char, ...);
-    pub fn ges_timeline_element_get_child_property(self_: *mut GESTimelineElement, property_name: *const c_char, value: *mut gobject::GValue) -> gboolean;
-    pub fn ges_timeline_element_get_child_property_by_pspec(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec, value: *mut gobject::GValue);
+    pub fn ges_timeline_element_add_child_property(
+        self_: *mut GESTimelineElement,
+        pspec: *mut gobject::GParamSpec,
+        child: *mut gobject::GObject,
+    ) -> gboolean;
+    pub fn ges_timeline_element_copy(
+        self_: *mut GESTimelineElement,
+        deep: gboolean,
+    ) -> *mut GESTimelineElement;
+    pub fn ges_timeline_element_get_child_properties(
+        self_: *mut GESTimelineElement,
+        first_property_name: *const c_char,
+        ...
+    );
+    pub fn ges_timeline_element_get_child_property(
+        self_: *mut GESTimelineElement,
+        property_name: *const c_char,
+        value: *mut gobject::GValue,
+    ) -> gboolean;
+    pub fn ges_timeline_element_get_child_property_by_pspec(
+        self_: *mut GESTimelineElement,
+        pspec: *mut gobject::GParamSpec,
+        value: *mut gobject::GValue,
+    );
     //pub fn ges_timeline_element_get_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
     pub fn ges_timeline_element_get_duration(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_inpoint(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_layer_priority(self_: *mut GESTimelineElement) -> u32;
-    pub fn ges_timeline_element_get_max_duration(self_: *mut GESTimelineElement) -> gst::GstClockTime;
+    pub fn ges_timeline_element_get_max_duration(
+        self_: *mut GESTimelineElement,
+    ) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_name(self_: *mut GESTimelineElement) -> *mut c_char;
-    pub fn ges_timeline_element_get_parent(self_: *mut GESTimelineElement) -> *mut GESTimelineElement;
+    pub fn ges_timeline_element_get_parent(
+        self_: *mut GESTimelineElement,
+    ) -> *mut GESTimelineElement;
     pub fn ges_timeline_element_get_priority(self_: *mut GESTimelineElement) -> u32;
     pub fn ges_timeline_element_get_start(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_timeline(self_: *mut GESTimelineElement) -> *mut GESTimeline;
-    pub fn ges_timeline_element_get_toplevel_parent(self_: *mut GESTimelineElement) -> *mut GESTimelineElement;
+    pub fn ges_timeline_element_get_toplevel_parent(
+        self_: *mut GESTimelineElement,
+    ) -> *mut GESTimelineElement;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn ges_timeline_element_get_track_types(self_: *mut GESTimelineElement) -> GESTrackType;
-    pub fn ges_timeline_element_list_children_properties(self_: *mut GESTimelineElement, n_properties: *mut c_uint) -> *mut *mut gobject::GParamSpec;
-    pub fn ges_timeline_element_lookup_child(self_: *mut GESTimelineElement, prop_name: *const c_char, child: *mut *mut gobject::GObject, pspec: *mut *mut gobject::GParamSpec) -> gboolean;
+    pub fn ges_timeline_element_list_children_properties(
+        self_: *mut GESTimelineElement,
+        n_properties: *mut c_uint,
+    ) -> *mut *mut gobject::GParamSpec;
+    pub fn ges_timeline_element_lookup_child(
+        self_: *mut GESTimelineElement,
+        prop_name: *const c_char,
+        child: *mut *mut gobject::GObject,
+        pspec: *mut *mut gobject::GParamSpec,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn ges_timeline_element_paste(self_: *mut GESTimelineElement, paste_position: gst::GstClockTime) -> *mut GESTimelineElement;
-    pub fn ges_timeline_element_remove_child_property(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec) -> gboolean;
-    pub fn ges_timeline_element_ripple(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_ripple_end(self_: *mut GESTimelineElement, end: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_roll_end(self_: *mut GESTimelineElement, end: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_roll_start(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_set_child_properties(self_: *mut GESTimelineElement, first_property_name: *const c_char, ...);
-    pub fn ges_timeline_element_set_child_property(self_: *mut GESTimelineElement, property_name: *const c_char, value: *const gobject::GValue) -> gboolean;
-    pub fn ges_timeline_element_set_child_property_by_pspec(self_: *mut GESTimelineElement, pspec: *mut gobject::GParamSpec, value: *const gobject::GValue);
+    pub fn ges_timeline_element_paste(
+        self_: *mut GESTimelineElement,
+        paste_position: gst::GstClockTime,
+    ) -> *mut GESTimelineElement;
+    pub fn ges_timeline_element_remove_child_property(
+        self_: *mut GESTimelineElement,
+        pspec: *mut gobject::GParamSpec,
+    ) -> gboolean;
+    pub fn ges_timeline_element_ripple(
+        self_: *mut GESTimelineElement,
+        start: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_ripple_end(
+        self_: *mut GESTimelineElement,
+        end: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_roll_end(
+        self_: *mut GESTimelineElement,
+        end: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_roll_start(
+        self_: *mut GESTimelineElement,
+        start: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_child_properties(
+        self_: *mut GESTimelineElement,
+        first_property_name: *const c_char,
+        ...
+    );
+    pub fn ges_timeline_element_set_child_property(
+        self_: *mut GESTimelineElement,
+        property_name: *const c_char,
+        value: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_child_property_by_pspec(
+        self_: *mut GESTimelineElement,
+        pspec: *mut gobject::GParamSpec,
+        value: *const gobject::GValue,
+    );
     //pub fn ges_timeline_element_set_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn ges_timeline_element_set_duration(self_: *mut GESTimelineElement, duration: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_set_inpoint(self_: *mut GESTimelineElement, inpoint: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_set_max_duration(self_: *mut GESTimelineElement, maxduration: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_set_name(self_: *mut GESTimelineElement, name: *const c_char) -> gboolean;
-    pub fn ges_timeline_element_set_parent(self_: *mut GESTimelineElement, parent: *mut GESTimelineElement) -> gboolean;
-    pub fn ges_timeline_element_set_priority(self_: *mut GESTimelineElement, priority: u32) -> gboolean;
-    pub fn ges_timeline_element_set_start(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
-    pub fn ges_timeline_element_set_timeline(self_: *mut GESTimelineElement, timeline: *mut GESTimeline) -> gboolean;
-    pub fn ges_timeline_element_trim(self_: *mut GESTimelineElement, start: gst::GstClockTime) -> gboolean;
+    pub fn ges_timeline_element_set_duration(
+        self_: *mut GESTimelineElement,
+        duration: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_inpoint(
+        self_: *mut GESTimelineElement,
+        inpoint: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_max_duration(
+        self_: *mut GESTimelineElement,
+        maxduration: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_name(
+        self_: *mut GESTimelineElement,
+        name: *const c_char,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_parent(
+        self_: *mut GESTimelineElement,
+        parent: *mut GESTimelineElement,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_priority(
+        self_: *mut GESTimelineElement,
+        priority: u32,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_start(
+        self_: *mut GESTimelineElement,
+        start: gst::GstClockTime,
+    ) -> gboolean;
+    pub fn ges_timeline_element_set_timeline(
+        self_: *mut GESTimelineElement,
+        timeline: *mut GESTimeline,
+    ) -> gboolean;
+    pub fn ges_timeline_element_trim(
+        self_: *mut GESTimelineElement,
+        start: gst::GstClockTime,
+    ) -> gboolean;
 
     //=========================================================================
     // GESTitleClip
@@ -2799,8 +3213,12 @@ extern "C" {
     pub fn ges_track_get_elements(track: *mut GESTrack) -> *mut glib::GList;
     pub fn ges_track_get_mixing(track: *mut GESTrack) -> gboolean;
     pub fn ges_track_get_timeline(track: *mut GESTrack) -> *const GESTimeline;
-    pub fn ges_track_remove_element(track: *mut GESTrack, object: *mut GESTrackElement) -> gboolean;
-    pub fn ges_track_set_create_element_for_gap_func(track: *mut GESTrack, func: GESCreateElementForGapFunc);
+    pub fn ges_track_remove_element(track: *mut GESTrack, object: *mut GESTrackElement)
+        -> gboolean;
+    pub fn ges_track_set_create_element_for_gap_func(
+        track: *mut GESTrack,
+        func: GESCreateElementForGapFunc,
+    );
     pub fn ges_track_set_mixing(track: *mut GESTrack, mixing: gboolean);
     pub fn ges_track_set_restriction_caps(track: *mut GESTrack, caps: *const gst::GstCaps);
     pub fn ges_track_set_timeline(track: *mut GESTrack, timeline: *mut GESTimeline);
@@ -2810,14 +3228,43 @@ extern "C" {
     // GESTrackElement
     //=========================================================================
     pub fn ges_track_element_get_type() -> GType;
-    pub fn ges_track_element_add_children_props(self_: *mut GESTrackElement, element: *mut gst::GstElement, wanted_categories: *mut *const c_char, blacklist: *mut *const c_char, whitelist: *mut *const c_char);
-    pub fn ges_track_element_edit(object: *mut GESTrackElement, layers: *mut glib::GList, mode: GESEditMode, edge: GESEdge, position: u64) -> gboolean;
-    pub fn ges_track_element_get_all_control_bindings(trackelement: *mut GESTrackElement) -> *mut glib::GHashTable;
-    pub fn ges_track_element_get_child_properties(object: *mut GESTrackElement, first_property_name: *const c_char, ...);
-    pub fn ges_track_element_get_child_property(object: *mut GESTrackElement, property_name: *const c_char, value: *mut gobject::GValue) -> gboolean;
-    pub fn ges_track_element_get_child_property_by_pspec(object: *mut GESTrackElement, pspec: *mut gobject::GParamSpec, value: *mut gobject::GValue);
+    pub fn ges_track_element_add_children_props(
+        self_: *mut GESTrackElement,
+        element: *mut gst::GstElement,
+        wanted_categories: *mut *const c_char,
+        blacklist: *mut *const c_char,
+        whitelist: *mut *const c_char,
+    );
+    pub fn ges_track_element_edit(
+        object: *mut GESTrackElement,
+        layers: *mut glib::GList,
+        mode: GESEditMode,
+        edge: GESEdge,
+        position: u64,
+    ) -> gboolean;
+    pub fn ges_track_element_get_all_control_bindings(
+        trackelement: *mut GESTrackElement,
+    ) -> *mut glib::GHashTable;
+    pub fn ges_track_element_get_child_properties(
+        object: *mut GESTrackElement,
+        first_property_name: *const c_char,
+        ...
+    );
+    pub fn ges_track_element_get_child_property(
+        object: *mut GESTrackElement,
+        property_name: *const c_char,
+        value: *mut gobject::GValue,
+    ) -> gboolean;
+    pub fn ges_track_element_get_child_property_by_pspec(
+        object: *mut GESTrackElement,
+        pspec: *mut gobject::GParamSpec,
+        value: *mut gobject::GValue,
+    );
     //pub fn ges_track_element_get_child_property_valist(object: *mut GESTrackElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn ges_track_element_get_control_binding(object: *mut GESTrackElement, property_name: *const c_char) -> *mut gst::GstControlBinding;
+    pub fn ges_track_element_get_control_binding(
+        object: *mut GESTrackElement,
+        property_name: *const c_char,
+    ) -> *mut gst::GstControlBinding;
     pub fn ges_track_element_get_element(object: *mut GESTrackElement) -> *mut gst::GstElement;
     pub fn ges_track_element_get_gnlobject(object: *mut GESTrackElement) -> *mut gst::GstElement;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
@@ -2825,23 +3272,56 @@ extern "C" {
     pub fn ges_track_element_get_track(object: *mut GESTrackElement) -> *mut GESTrack;
     pub fn ges_track_element_get_track_type(object: *mut GESTrackElement) -> GESTrackType;
     pub fn ges_track_element_is_active(object: *mut GESTrackElement) -> gboolean;
-    pub fn ges_track_element_list_children_properties(object: *mut GESTrackElement, n_properties: *mut c_uint) -> *mut *mut gobject::GParamSpec;
-    pub fn ges_track_element_lookup_child(object: *mut GESTrackElement, prop_name: *const c_char, element: *mut *mut gst::GstElement, pspec: *mut *mut gobject::GParamSpec) -> gboolean;
-    pub fn ges_track_element_remove_control_binding(object: *mut GESTrackElement, property_name: *const c_char) -> gboolean;
-    pub fn ges_track_element_set_active(object: *mut GESTrackElement, active: gboolean) -> gboolean;
-    pub fn ges_track_element_set_child_properties(object: *mut GESTrackElement, first_property_name: *const c_char, ...);
-    pub fn ges_track_element_set_child_property(object: *mut GESTrackElement, property_name: *const c_char, value: *mut gobject::GValue) -> gboolean;
-    pub fn ges_track_element_set_child_property_by_pspec(object: *mut GESTrackElement, pspec: *mut gobject::GParamSpec, value: *mut gobject::GValue);
+    pub fn ges_track_element_list_children_properties(
+        object: *mut GESTrackElement,
+        n_properties: *mut c_uint,
+    ) -> *mut *mut gobject::GParamSpec;
+    pub fn ges_track_element_lookup_child(
+        object: *mut GESTrackElement,
+        prop_name: *const c_char,
+        element: *mut *mut gst::GstElement,
+        pspec: *mut *mut gobject::GParamSpec,
+    ) -> gboolean;
+    pub fn ges_track_element_remove_control_binding(
+        object: *mut GESTrackElement,
+        property_name: *const c_char,
+    ) -> gboolean;
+    pub fn ges_track_element_set_active(object: *mut GESTrackElement, active: gboolean)
+        -> gboolean;
+    pub fn ges_track_element_set_child_properties(
+        object: *mut GESTrackElement,
+        first_property_name: *const c_char,
+        ...
+    );
+    pub fn ges_track_element_set_child_property(
+        object: *mut GESTrackElement,
+        property_name: *const c_char,
+        value: *mut gobject::GValue,
+    ) -> gboolean;
+    pub fn ges_track_element_set_child_property_by_pspec(
+        object: *mut GESTrackElement,
+        pspec: *mut gobject::GParamSpec,
+        value: *mut gobject::GValue,
+    );
     //pub fn ges_track_element_set_child_property_valist(object: *mut GESTrackElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn ges_track_element_set_control_source(object: *mut GESTrackElement, source: *mut gst::GstControlSource, property_name: *const c_char, binding_type: *const c_char) -> gboolean;
+    pub fn ges_track_element_set_control_source(
+        object: *mut GESTrackElement,
+        source: *mut gst::GstControlSource,
+        property_name: *const c_char,
+        binding_type: *const c_char,
+    ) -> gboolean;
     pub fn ges_track_element_set_track_type(object: *mut GESTrackElement, type_: GESTrackType);
 
     //=========================================================================
     // GESTrackElementAsset
     //=========================================================================
     pub fn ges_track_element_asset_get_type() -> GType;
-    pub fn ges_track_element_asset_get_track_type(asset: *mut GESTrackElementAsset) -> GESTrackType;
-    pub fn ges_track_element_asset_set_track_type(asset: *mut GESTrackElementAsset, type_: GESTrackType);
+    pub fn ges_track_element_asset_get_track_type(asset: *mut GESTrackElementAsset)
+        -> GESTrackType;
+    pub fn ges_track_element_asset_set_track_type(
+        asset: *mut GESTrackElementAsset,
+        type_: GESTrackType,
+    );
 
     //=========================================================================
     // GESTransition
@@ -2852,7 +3332,8 @@ extern "C" {
     // GESTransitionClip
     //=========================================================================
     pub fn ges_transition_clip_get_type() -> GType;
-    pub fn ges_transition_clip_new(vtype: GESVideoStandardTransitionType) -> *mut GESTransitionClip;
+    pub fn ges_transition_clip_new(vtype: GESVideoStandardTransitionType)
+        -> *mut GESTransitionClip;
     pub fn ges_transition_clip_new_for_nick(nick: *mut c_char) -> *mut GESTransitionClip;
 
     //=========================================================================
@@ -2870,11 +3351,24 @@ extern "C" {
     // GESUriClipAsset
     //=========================================================================
     pub fn ges_uri_clip_asset_get_type() -> GType;
-    pub fn ges_uri_clip_asset_finish(res: *mut gio::GAsyncResult, error: *mut *mut glib::GError) -> *mut GESUriClipAsset;
-    pub fn ges_uri_clip_asset_new(uri: *const c_char, cancellable: *mut gio::GCancellable, callback: gio::GAsyncReadyCallback, user_data: gpointer);
-    pub fn ges_uri_clip_asset_request_sync(uri: *const c_char, error: *mut *mut glib::GError) -> *mut GESUriClipAsset;
+    pub fn ges_uri_clip_asset_finish(
+        res: *mut gio::GAsyncResult,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESUriClipAsset;
+    pub fn ges_uri_clip_asset_new(
+        uri: *const c_char,
+        cancellable: *mut gio::GCancellable,
+        callback: gio::GAsyncReadyCallback,
+        user_data: gpointer,
+    );
+    pub fn ges_uri_clip_asset_request_sync(
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESUriClipAsset;
     pub fn ges_uri_clip_asset_get_duration(self_: *mut GESUriClipAsset) -> gst::GstClockTime;
-    pub fn ges_uri_clip_asset_get_info(self_: *const GESUriClipAsset) -> *mut gst_pbutils::GstDiscovererInfo;
+    pub fn ges_uri_clip_asset_get_info(
+        self_: *const GESUriClipAsset,
+    ) -> *mut gst_pbutils::GstDiscovererInfo;
     pub fn ges_uri_clip_asset_get_stream_assets(self_: *mut GESUriClipAsset) -> *const glib::GList;
     pub fn ges_uri_clip_asset_is_image(self_: *mut GESUriClipAsset) -> gboolean;
 
@@ -2882,8 +3376,12 @@ extern "C" {
     // GESUriSourceAsset
     //=========================================================================
     pub fn ges_uri_source_asset_get_type() -> GType;
-    pub fn ges_uri_source_asset_get_filesource_asset(asset: *mut GESUriSourceAsset) -> *const GESUriClipAsset;
-    pub fn ges_uri_source_asset_get_stream_info(asset: *mut GESUriSourceAsset) -> *mut gst_pbutils::GstDiscovererStreamInfo;
+    pub fn ges_uri_source_asset_get_filesource_asset(
+        asset: *mut GESUriSourceAsset,
+    ) -> *const GESUriClipAsset;
+    pub fn ges_uri_source_asset_get_stream_info(
+        asset: *mut GESUriSourceAsset,
+    ) -> *mut gst_pbutils::GstDiscovererStreamInfo;
     pub fn ges_uri_source_asset_get_stream_uri(asset: *mut GESUriSourceAsset) -> *const c_char;
 
     //=========================================================================
@@ -2895,8 +3393,13 @@ extern "C" {
     // GESVideoTestSource
     //=========================================================================
     pub fn ges_video_test_source_get_type() -> GType;
-    pub fn ges_video_test_source_get_pattern(source: *mut GESVideoTestSource) -> GESVideoTestPattern;
-    pub fn ges_video_test_source_set_pattern(self_: *mut GESVideoTestSource, pattern: GESVideoTestPattern);
+    pub fn ges_video_test_source_get_pattern(
+        source: *mut GESVideoTestSource,
+    ) -> GESVideoTestPattern;
+    pub fn ges_video_test_source_set_pattern(
+        self_: *mut GESVideoTestSource,
+        pattern: GESVideoTestPattern,
+    );
 
     //=========================================================================
     // GESVideoTrack
@@ -2910,11 +3413,16 @@ extern "C" {
     pub fn ges_video_transition_get_type() -> GType;
     pub fn ges_video_transition_new() -> *mut GESVideoTransition;
     pub fn ges_video_transition_get_border(self_: *mut GESVideoTransition) -> c_int;
-    pub fn ges_video_transition_get_transition_type(trans: *mut GESVideoTransition) -> GESVideoStandardTransitionType;
+    pub fn ges_video_transition_get_transition_type(
+        trans: *mut GESVideoTransition,
+    ) -> GESVideoStandardTransitionType;
     pub fn ges_video_transition_is_inverted(self_: *mut GESVideoTransition) -> gboolean;
     pub fn ges_video_transition_set_border(self_: *mut GESVideoTransition, value: c_uint);
     pub fn ges_video_transition_set_inverted(self_: *mut GESVideoTransition, inverted: gboolean);
-    pub fn ges_video_transition_set_transition_type(self_: *mut GESVideoTransition, type_: GESVideoStandardTransitionType) -> gboolean;
+    pub fn ges_video_transition_set_transition_type(
+        self_: *mut GESVideoTransition,
+        type_: GESVideoStandardTransitionType,
+    ) -> gboolean;
 
     //=========================================================================
     // GESVideoUriSource
@@ -2938,43 +3446,196 @@ extern "C" {
     // GESMetaContainer
     //=========================================================================
     pub fn ges_meta_container_get_type() -> GType;
-    pub fn ges_meta_container_add_metas_from_string(container: *mut GESMetaContainer, str: *const c_char) -> gboolean;
-    pub fn ges_meta_container_check_meta_registered(container: *mut GESMetaContainer, meta_item: *const c_char, flags: *mut GESMetaFlag, type_: *mut GType) -> gboolean;
-    pub fn ges_meta_container_foreach(container: *mut GESMetaContainer, func: GESMetaForeachFunc, user_data: gpointer);
-    pub fn ges_meta_container_get_boolean(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut gboolean) -> gboolean;
-    pub fn ges_meta_container_get_date(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut *mut glib::GDate) -> gboolean;
-    pub fn ges_meta_container_get_date_time(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut *mut gst::GstDateTime) -> gboolean;
-    pub fn ges_meta_container_get_double(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut c_double) -> gboolean;
-    pub fn ges_meta_container_get_float(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut c_float) -> gboolean;
-    pub fn ges_meta_container_get_int(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut c_int) -> gboolean;
-    pub fn ges_meta_container_get_int64(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut i64) -> gboolean;
-    pub fn ges_meta_container_get_meta(container: *mut GESMetaContainer, key: *const c_char) -> *const gobject::GValue;
-    pub fn ges_meta_container_get_string(container: *mut GESMetaContainer, meta_item: *const c_char) -> *const c_char;
-    pub fn ges_meta_container_get_uint(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut c_uint) -> gboolean;
-    pub fn ges_meta_container_get_uint64(container: *mut GESMetaContainer, meta_item: *const c_char, dest: *mut u64) -> gboolean;
+    pub fn ges_meta_container_add_metas_from_string(
+        container: *mut GESMetaContainer,
+        str: *const c_char,
+    ) -> gboolean;
+    pub fn ges_meta_container_check_meta_registered(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        flags: *mut GESMetaFlag,
+        type_: *mut GType,
+    ) -> gboolean;
+    pub fn ges_meta_container_foreach(
+        container: *mut GESMetaContainer,
+        func: GESMetaForeachFunc,
+        user_data: gpointer,
+    );
+    pub fn ges_meta_container_get_boolean(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut gboolean,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_date(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut *mut glib::GDate,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_date_time(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut *mut gst::GstDateTime,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_double(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut c_double,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_float(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut c_float,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_int(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut c_int,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_int64(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut i64,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_meta(
+        container: *mut GESMetaContainer,
+        key: *const c_char,
+    ) -> *const gobject::GValue;
+    pub fn ges_meta_container_get_string(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+    ) -> *const c_char;
+    pub fn ges_meta_container_get_uint(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut c_uint,
+    ) -> gboolean;
+    pub fn ges_meta_container_get_uint64(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        dest: *mut u64,
+    ) -> gboolean;
     pub fn ges_meta_container_metas_to_string(container: *mut GESMetaContainer) -> *mut c_char;
-    pub fn ges_meta_container_register_meta(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: *const gobject::GValue) -> gboolean;
-    pub fn ges_meta_container_register_meta_boolean(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: gboolean) -> gboolean;
-    pub fn ges_meta_container_register_meta_date(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: *const glib::GDate) -> gboolean;
-    pub fn ges_meta_container_register_meta_date_time(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: *const gst::GstDateTime) -> gboolean;
-    pub fn ges_meta_container_register_meta_double(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: c_double) -> gboolean;
-    pub fn ges_meta_container_register_meta_float(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: c_float) -> gboolean;
-    pub fn ges_meta_container_register_meta_int(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: c_int) -> gboolean;
-    pub fn ges_meta_container_register_meta_int64(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: i64) -> gboolean;
-    pub fn ges_meta_container_register_meta_string(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: *const c_char) -> gboolean;
-    pub fn ges_meta_container_register_meta_uint(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: c_uint) -> gboolean;
-    pub fn ges_meta_container_register_meta_uint64(container: *mut GESMetaContainer, flags: GESMetaFlag, meta_item: *const c_char, value: u64) -> gboolean;
-    pub fn ges_meta_container_set_boolean(container: *mut GESMetaContainer, meta_item: *const c_char, value: gboolean) -> gboolean;
-    pub fn ges_meta_container_set_date(container: *mut GESMetaContainer, meta_item: *const c_char, value: *const glib::GDate) -> gboolean;
-    pub fn ges_meta_container_set_date_time(container: *mut GESMetaContainer, meta_item: *const c_char, value: *const gst::GstDateTime) -> gboolean;
-    pub fn ges_meta_container_set_double(container: *mut GESMetaContainer, meta_item: *const c_char, value: c_double) -> gboolean;
-    pub fn ges_meta_container_set_float(container: *mut GESMetaContainer, meta_item: *const c_char, value: c_float) -> gboolean;
-    pub fn ges_meta_container_set_int(container: *mut GESMetaContainer, meta_item: *const c_char, value: c_int) -> gboolean;
-    pub fn ges_meta_container_set_int64(container: *mut GESMetaContainer, meta_item: *const c_char, value: i64) -> gboolean;
-    pub fn ges_meta_container_set_meta(container: *mut GESMetaContainer, meta_item: *const c_char, value: *const gobject::GValue) -> gboolean;
-    pub fn ges_meta_container_set_string(container: *mut GESMetaContainer, meta_item: *const c_char, value: *const c_char) -> gboolean;
-    pub fn ges_meta_container_set_uint(container: *mut GESMetaContainer, meta_item: *const c_char, value: c_uint) -> gboolean;
-    pub fn ges_meta_container_set_uint64(container: *mut GESMetaContainer, meta_item: *const c_char, value: u64) -> gboolean;
+    pub fn ges_meta_container_register_meta(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_boolean(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: gboolean,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_date(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: *const glib::GDate,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_date_time(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: *const gst::GstDateTime,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_double(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: c_double,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_float(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: c_float,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_int(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: c_int,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_int64(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: i64,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_string(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: *const c_char,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_uint(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: c_uint,
+    ) -> gboolean;
+    pub fn ges_meta_container_register_meta_uint64(
+        container: *mut GESMetaContainer,
+        flags: GESMetaFlag,
+        meta_item: *const c_char,
+        value: u64,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_boolean(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: gboolean,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_date(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: *const glib::GDate,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_date_time(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: *const gst::GstDateTime,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_double(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: c_double,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_float(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: c_float,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_int(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: c_int,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_int64(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: i64,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_meta(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_string(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: *const c_char,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_uint(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: c_uint,
+    ) -> gboolean;
+    pub fn ges_meta_container_set_uint64(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+        value: u64,
+    ) -> gboolean;
 
     //=========================================================================
     // Other functions
@@ -2982,14 +3643,26 @@ extern "C" {
     pub fn ges_add_missing_uri_relocation_uri(uri: *const c_char, recurse: gboolean) -> gboolean;
     pub fn ges_deinit();
     pub fn ges_init() -> gboolean;
-    pub fn ges_init_check(argc: *mut c_int, argv: *mut *mut *mut c_char, error: *mut *mut glib::GError) -> gboolean;
+    pub fn ges_init_check(
+        argc: *mut c_int,
+        argv: *mut *mut *mut c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn ges_init_get_option_group() -> *mut glib::GOptionGroup;
     pub fn ges_is_initialized() -> gboolean;
     pub fn ges_list_assets(filter: GType) -> *mut glib::GList;
-    pub fn ges_play_sink_convert_frame(playsink: *mut gst::GstElement, caps: *mut gst::GstCaps) -> *mut gst::GstSample;
+    pub fn ges_play_sink_convert_frame(
+        playsink: *mut gst::GstElement,
+        caps: *mut gst::GstCaps,
+    ) -> *mut gst::GstSample;
     pub fn ges_pspec_equal(key_spec_1: gconstpointer, key_spec_2: gconstpointer) -> gboolean;
     pub fn ges_pspec_hash(key_spec: gconstpointer) -> c_uint;
     pub fn ges_validate_register_action_types() -> gboolean;
-    pub fn ges_version(major: *mut c_uint, minor: *mut c_uint, micro: *mut c_uint, nano: *mut c_uint);
+    pub fn ges_version(
+        major: *mut c_uint,
+        minor: *mut c_uint,
+        micro: *mut c_uint,
+        nano: *mut c_uint,
+    );
 
 }

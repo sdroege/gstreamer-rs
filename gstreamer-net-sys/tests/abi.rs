@@ -5,13 +5,13 @@
 extern crate gstreamer_net_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_net_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_net_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-net-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,41 +229,118 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstNetAddressMeta", Layout {size: size_of::<GstNetAddressMeta>(), alignment: align_of::<GstNetAddressMeta>()}),
-    ("GstNetClientClock", Layout {size: size_of::<GstNetClientClock>(), alignment: align_of::<GstNetClientClock>()}),
-    ("GstNetClientClockClass", Layout {size: size_of::<GstNetClientClockClass>(), alignment: align_of::<GstNetClientClockClass>()}),
-    ("GstNetControlMessageMeta", Layout {size: size_of::<GstNetControlMessageMeta>(), alignment: align_of::<GstNetControlMessageMeta>()}),
-    ("GstNetTimePacket", Layout {size: size_of::<GstNetTimePacket>(), alignment: align_of::<GstNetTimePacket>()}),
-    ("GstNetTimeProvider", Layout {size: size_of::<GstNetTimeProvider>(), alignment: align_of::<GstNetTimeProvider>()}),
-    ("GstNetTimeProviderClass", Layout {size: size_of::<GstNetTimeProviderClass>(), alignment: align_of::<GstNetTimeProviderClass>()}),
-    ("GstNtpClock", Layout {size: size_of::<GstNtpClock>(), alignment: align_of::<GstNtpClock>()}),
-    ("GstNtpClockClass", Layout {size: size_of::<GstNtpClockClass>(), alignment: align_of::<GstNtpClockClass>()}),
-    ("GstPtpClock", Layout {size: size_of::<GstPtpClock>(), alignment: align_of::<GstPtpClock>()}),
-    ("GstPtpClockClass", Layout {size: size_of::<GstPtpClockClass>(), alignment: align_of::<GstPtpClockClass>()}),
+    (
+        "GstNetAddressMeta",
+        Layout {
+            size: size_of::<GstNetAddressMeta>(),
+            alignment: align_of::<GstNetAddressMeta>(),
+        },
+    ),
+    (
+        "GstNetClientClock",
+        Layout {
+            size: size_of::<GstNetClientClock>(),
+            alignment: align_of::<GstNetClientClock>(),
+        },
+    ),
+    (
+        "GstNetClientClockClass",
+        Layout {
+            size: size_of::<GstNetClientClockClass>(),
+            alignment: align_of::<GstNetClientClockClass>(),
+        },
+    ),
+    (
+        "GstNetControlMessageMeta",
+        Layout {
+            size: size_of::<GstNetControlMessageMeta>(),
+            alignment: align_of::<GstNetControlMessageMeta>(),
+        },
+    ),
+    (
+        "GstNetTimePacket",
+        Layout {
+            size: size_of::<GstNetTimePacket>(),
+            alignment: align_of::<GstNetTimePacket>(),
+        },
+    ),
+    (
+        "GstNetTimeProvider",
+        Layout {
+            size: size_of::<GstNetTimeProvider>(),
+            alignment: align_of::<GstNetTimeProvider>(),
+        },
+    ),
+    (
+        "GstNetTimeProviderClass",
+        Layout {
+            size: size_of::<GstNetTimeProviderClass>(),
+            alignment: align_of::<GstNetTimeProviderClass>(),
+        },
+    ),
+    (
+        "GstNtpClock",
+        Layout {
+            size: size_of::<GstNtpClock>(),
+            alignment: align_of::<GstNtpClock>(),
+        },
+    ),
+    (
+        "GstNtpClockClass",
+        Layout {
+            size: size_of::<GstNtpClockClass>(),
+            alignment: align_of::<GstNtpClockClass>(),
+        },
+    ),
+    (
+        "GstPtpClock",
+        Layout {
+            size: size_of::<GstPtpClock>(),
+            alignment: align_of::<GstPtpClock>(),
+        },
+    ),
+    (
+        "GstPtpClockClass",
+        Layout {
+            size: size_of::<GstPtpClockClass>(),
+            alignment: align_of::<GstPtpClockClass>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_NET_TIME_PACKET_SIZE", "16"),
     ("GST_PTP_CLOCK_ID_NONE", "18446744073709551615"),
-    ("GST_PTP_STATISTICS_BEST_MASTER_CLOCK_SELECTED", "GstPtpStatisticsBestMasterClockSelected"),
-    ("GST_PTP_STATISTICS_NEW_DOMAIN_FOUND", "GstPtpStatisticsNewDomainFound"),
-    ("GST_PTP_STATISTICS_PATH_DELAY_MEASURED", "GstPtpStatisticsPathDelayMeasured"),
-    ("GST_PTP_STATISTICS_TIME_UPDATED", "GstPtpStatisticsTimeUpdated"),
+    (
+        "GST_PTP_STATISTICS_BEST_MASTER_CLOCK_SELECTED",
+        "GstPtpStatisticsBestMasterClockSelected",
+    ),
+    (
+        "GST_PTP_STATISTICS_NEW_DOMAIN_FOUND",
+        "GstPtpStatisticsNewDomainFound",
+    ),
+    (
+        "GST_PTP_STATISTICS_PATH_DELAY_MEASURED",
+        "GstPtpStatisticsPathDelayMeasured",
+    ),
+    (
+        "GST_PTP_STATISTICS_TIME_UPDATED",
+        "GstPtpStatisticsTimeUpdated",
+    ),
 ];
-
-

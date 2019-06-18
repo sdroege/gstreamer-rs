@@ -3,16 +3,21 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -417,27 +422,43 @@ pub const GST_BUFFER_COPY_ALL: GstBufferCopyFlags = 15;
 pub const GST_BUFFER_COPY_METADATA: GstBufferCopyFlags = 7;
 pub const GST_BUFFER_OFFSET_NONE: u64 = 18446744073709551615;
 pub const GST_CAN_INLINE: c_int = 1;
-pub const GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: *const c_char = b"memory:SystemMemory\0" as *const u8 as *const c_char;
+pub const GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: *const c_char =
+    b"memory:SystemMemory\0" as *const u8 as *const c_char;
 pub const GST_CLOCK_TIME_NONE: GstClockTime = 18446744073709551615;
 pub const GST_DEBUG_BG_MASK: c_int = 240;
 pub const GST_DEBUG_FG_MASK: c_int = 15;
 pub const GST_DEBUG_FORMAT_MASK: c_int = 65280;
-pub const GST_ELEMENT_FACTORY_KLASS_DECODER: *const c_char = b"Decoder\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_DECRYPTOR: *const c_char = b"Decryptor\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_DEMUXER: *const c_char = b"Demuxer\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_DEPAYLOADER: *const c_char = b"Depayloader\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_ENCODER: *const c_char = b"Encoder\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_ENCRYPTOR: *const c_char = b"Encryptor\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_FORMATTER: *const c_char = b"Formatter\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_HARDWARE: *const c_char = b"Hardware\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_AUDIO: *const c_char = b"Audio\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_IMAGE: *const c_char = b"Image\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_METADATA: *const c_char = b"Metadata\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_SUBTITLE: *const c_char = b"Subtitle\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_VIDEO: *const c_char = b"Video\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_DECODER: *const c_char =
+    b"Decoder\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_DECRYPTOR: *const c_char =
+    b"Decryptor\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_DEMUXER: *const c_char =
+    b"Demuxer\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_DEPAYLOADER: *const c_char =
+    b"Depayloader\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_ENCODER: *const c_char =
+    b"Encoder\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_ENCRYPTOR: *const c_char =
+    b"Encryptor\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_FORMATTER: *const c_char =
+    b"Formatter\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_HARDWARE: *const c_char =
+    b"Hardware\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_AUDIO: *const c_char =
+    b"Audio\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_IMAGE: *const c_char =
+    b"Image\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_METADATA: *const c_char =
+    b"Metadata\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_SUBTITLE: *const c_char =
+    b"Subtitle\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_MEDIA_VIDEO: *const c_char =
+    b"Video\0" as *const u8 as *const c_char;
 pub const GST_ELEMENT_FACTORY_KLASS_MUXER: *const c_char = b"Muxer\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_PARSER: *const c_char = b"Parser\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_FACTORY_KLASS_PAYLOADER: *const c_char = b"Payloader\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_PARSER: *const c_char =
+    b"Parser\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_FACTORY_KLASS_PAYLOADER: *const c_char =
+    b"Payloader\0" as *const u8 as *const c_char;
 pub const GST_ELEMENT_FACTORY_KLASS_SINK: *const c_char = b"Sink\0" as *const u8 as *const c_char;
 pub const GST_ELEMENT_FACTORY_KLASS_SRC: *const c_char = b"Source\0" as *const u8 as *const c_char;
 pub const GST_ELEMENT_FACTORY_TYPE_ANY: GstElementFactoryListType = 562949953421311;
@@ -465,11 +486,14 @@ pub const GST_ELEMENT_FACTORY_TYPE_SINK: GstElementFactoryListType = 4;
 pub const GST_ELEMENT_FACTORY_TYPE_SRC: GstElementFactoryListType = 8;
 pub const GST_ELEMENT_FACTORY_TYPE_VIDEO_ENCODER: GstElementFactoryListType = 2814749767106562;
 pub const GST_ELEMENT_METADATA_AUTHOR: *const c_char = b"author\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_DESCRIPTION: *const c_char = b"description\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_METADATA_DESCRIPTION: *const c_char =
+    b"description\0" as *const u8 as *const c_char;
 pub const GST_ELEMENT_METADATA_DOC_URI: *const c_char = b"doc-uri\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_ICON_NAME: *const c_char = b"icon-name\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_METADATA_ICON_NAME: *const c_char =
+    b"icon-name\0" as *const u8 as *const c_char;
 pub const GST_ELEMENT_METADATA_KLASS: *const c_char = b"klass\0" as *const u8 as *const c_char;
-pub const GST_ELEMENT_METADATA_LONGNAME: *const c_char = b"long-name\0" as *const u8 as *const c_char;
+pub const GST_ELEMENT_METADATA_LONGNAME: *const c_char =
+    b"long-name\0" as *const u8 as *const c_char;
 pub const GST_EVENT_NUM_SHIFT: c_int = 8;
 pub const GST_EVENT_TYPE_BOTH: GstEventTypeFlags = 3;
 pub const GST_FLAG_SET_MASK_EXACT: c_uint = 4294967295;
@@ -487,63 +511,91 @@ pub const GST_PARAM_MUTABLE_PAUSED: c_int = 2048;
 pub const GST_PARAM_MUTABLE_PLAYING: c_int = 4096;
 pub const GST_PARAM_MUTABLE_READY: c_int = 1024;
 pub const GST_PARAM_USER_SHIFT: c_int = 65536;
-pub const GST_PROTECTION_SYSTEM_ID_CAPS_FIELD: *const c_char = b"protection-system\0" as *const u8 as *const c_char;
-pub const GST_PROTECTION_UNSPECIFIED_SYSTEM_ID: *const c_char = b"unspecified-system-id\0" as *const u8 as *const c_char;
+pub const GST_PROTECTION_SYSTEM_ID_CAPS_FIELD: *const c_char =
+    b"protection-system\0" as *const u8 as *const c_char;
+pub const GST_PROTECTION_UNSPECIFIED_SYSTEM_ID: *const c_char =
+    b"unspecified-system-id\0" as *const u8 as *const c_char;
 pub const GST_QUERY_NUM_SHIFT: c_int = 8;
 pub const GST_QUERY_TYPE_BOTH: GstQueryTypeFlags = 3;
 pub const GST_SECOND: GstClockTimeDiff = 1000000000;
 pub const GST_SEQNUM_INVALID: c_int = 0;
 pub const GST_TAG_ALBUM: *const c_char = b"album\0" as *const u8 as *const c_char;
 pub const GST_TAG_ALBUM_ARTIST: *const c_char = b"album-artist\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_ARTIST_SORTNAME: *const c_char = b"album-artist-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_GAIN: *const c_char = b"replaygain-album-gain\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_PEAK: *const c_char = b"replaygain-album-peak\0" as *const u8 as *const c_char;
+pub const GST_TAG_ALBUM_ARTIST_SORTNAME: *const c_char =
+    b"album-artist-sortname\0" as *const u8 as *const c_char;
+pub const GST_TAG_ALBUM_GAIN: *const c_char =
+    b"replaygain-album-gain\0" as *const u8 as *const c_char;
+pub const GST_TAG_ALBUM_PEAK: *const c_char =
+    b"replaygain-album-peak\0" as *const u8 as *const c_char;
 pub const GST_TAG_ALBUM_SORTNAME: *const c_char = b"album-sortname\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_VOLUME_COUNT: *const c_char = b"album-disc-count\0" as *const u8 as *const c_char;
-pub const GST_TAG_ALBUM_VOLUME_NUMBER: *const c_char = b"album-disc-number\0" as *const u8 as *const c_char;
-pub const GST_TAG_APPLICATION_DATA: *const c_char = b"application-data\0" as *const u8 as *const c_char;
-pub const GST_TAG_APPLICATION_NAME: *const c_char = b"application-name\0" as *const u8 as *const c_char;
+pub const GST_TAG_ALBUM_VOLUME_COUNT: *const c_char =
+    b"album-disc-count\0" as *const u8 as *const c_char;
+pub const GST_TAG_ALBUM_VOLUME_NUMBER: *const c_char =
+    b"album-disc-number\0" as *const u8 as *const c_char;
+pub const GST_TAG_APPLICATION_DATA: *const c_char =
+    b"application-data\0" as *const u8 as *const c_char;
+pub const GST_TAG_APPLICATION_NAME: *const c_char =
+    b"application-name\0" as *const u8 as *const c_char;
 pub const GST_TAG_ARTIST: *const c_char = b"artist\0" as *const u8 as *const c_char;
-pub const GST_TAG_ARTIST_SORTNAME: *const c_char = b"artist-sortname\0" as *const u8 as *const c_char;
+pub const GST_TAG_ARTIST_SORTNAME: *const c_char =
+    b"artist-sortname\0" as *const u8 as *const c_char;
 pub const GST_TAG_ATTACHMENT: *const c_char = b"attachment\0" as *const u8 as *const c_char;
 pub const GST_TAG_AUDIO_CODEC: *const c_char = b"audio-codec\0" as *const u8 as *const c_char;
-pub const GST_TAG_BEATS_PER_MINUTE: *const c_char = b"beats-per-minute\0" as *const u8 as *const c_char;
+pub const GST_TAG_BEATS_PER_MINUTE: *const c_char =
+    b"beats-per-minute\0" as *const u8 as *const c_char;
 pub const GST_TAG_BITRATE: *const c_char = b"bitrate\0" as *const u8 as *const c_char;
 pub const GST_TAG_CODEC: *const c_char = b"codec\0" as *const u8 as *const c_char;
 pub const GST_TAG_COMMENT: *const c_char = b"comment\0" as *const u8 as *const c_char;
 pub const GST_TAG_COMPOSER: *const c_char = b"composer\0" as *const u8 as *const c_char;
-pub const GST_TAG_COMPOSER_SORTNAME: *const c_char = b"composer-sortname\0" as *const u8 as *const c_char;
+pub const GST_TAG_COMPOSER_SORTNAME: *const c_char =
+    b"composer-sortname\0" as *const u8 as *const c_char;
 pub const GST_TAG_CONDUCTOR: *const c_char = b"conductor\0" as *const u8 as *const c_char;
 pub const GST_TAG_CONTACT: *const c_char = b"contact\0" as *const u8 as *const c_char;
-pub const GST_TAG_CONTAINER_FORMAT: *const c_char = b"container-format\0" as *const u8 as *const c_char;
+pub const GST_TAG_CONTAINER_FORMAT: *const c_char =
+    b"container-format\0" as *const u8 as *const c_char;
 pub const GST_TAG_COPYRIGHT: *const c_char = b"copyright\0" as *const u8 as *const c_char;
 pub const GST_TAG_COPYRIGHT_URI: *const c_char = b"copyright-uri\0" as *const u8 as *const c_char;
 pub const GST_TAG_DATE: *const c_char = b"date\0" as *const u8 as *const c_char;
 pub const GST_TAG_DATE_TIME: *const c_char = b"datetime\0" as *const u8 as *const c_char;
 pub const GST_TAG_DESCRIPTION: *const c_char = b"description\0" as *const u8 as *const c_char;
-pub const GST_TAG_DEVICE_MANUFACTURER: *const c_char = b"device-manufacturer\0" as *const u8 as *const c_char;
+pub const GST_TAG_DEVICE_MANUFACTURER: *const c_char =
+    b"device-manufacturer\0" as *const u8 as *const c_char;
 pub const GST_TAG_DEVICE_MODEL: *const c_char = b"device-model\0" as *const u8 as *const c_char;
 pub const GST_TAG_DURATION: *const c_char = b"duration\0" as *const u8 as *const c_char;
 pub const GST_TAG_ENCODED_BY: *const c_char = b"encoded-by\0" as *const u8 as *const c_char;
 pub const GST_TAG_ENCODER: *const c_char = b"encoder\0" as *const u8 as *const c_char;
-pub const GST_TAG_ENCODER_VERSION: *const c_char = b"encoder-version\0" as *const u8 as *const c_char;
-pub const GST_TAG_EXTENDED_COMMENT: *const c_char = b"extended-comment\0" as *const u8 as *const c_char;
+pub const GST_TAG_ENCODER_VERSION: *const c_char =
+    b"encoder-version\0" as *const u8 as *const c_char;
+pub const GST_TAG_EXTENDED_COMMENT: *const c_char =
+    b"extended-comment\0" as *const u8 as *const c_char;
 pub const GST_TAG_GENRE: *const c_char = b"genre\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION: *const c_char = b"geo-location-capture-direction\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_CITY: *const c_char = b"geo-location-city\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_COUNTRY: *const c_char = b"geo-location-country\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_ELEVATION: *const c_char = b"geo-location-elevation\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR: *const c_char = b"geo-location-horizontal-error\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_LATITUDE: *const c_char = b"geo-location-latitude\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_LONGITUDE: *const c_char = b"geo-location-longitude\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION: *const c_char = b"geo-location-movement-direction\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_MOVEMENT_SPEED: *const c_char = b"geo-location-movement-speed\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_NAME: *const c_char = b"geo-location-name\0" as *const u8 as *const c_char;
-pub const GST_TAG_GEO_LOCATION_SUBLOCATION: *const c_char = b"geo-location-sublocation\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION: *const c_char =
+    b"geo-location-capture-direction\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_CITY: *const c_char =
+    b"geo-location-city\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_COUNTRY: *const c_char =
+    b"geo-location-country\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_ELEVATION: *const c_char =
+    b"geo-location-elevation\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_HORIZONTAL_ERROR: *const c_char =
+    b"geo-location-horizontal-error\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_LATITUDE: *const c_char =
+    b"geo-location-latitude\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_LONGITUDE: *const c_char =
+    b"geo-location-longitude\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION: *const c_char =
+    b"geo-location-movement-direction\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_MOVEMENT_SPEED: *const c_char =
+    b"geo-location-movement-speed\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_NAME: *const c_char =
+    b"geo-location-name\0" as *const u8 as *const c_char;
+pub const GST_TAG_GEO_LOCATION_SUBLOCATION: *const c_char =
+    b"geo-location-sublocation\0" as *const u8 as *const c_char;
 pub const GST_TAG_GROUPING: *const c_char = b"grouping\0" as *const u8 as *const c_char;
 pub const GST_TAG_HOMEPAGE: *const c_char = b"homepage\0" as *const u8 as *const c_char;
 pub const GST_TAG_IMAGE: *const c_char = b"image\0" as *const u8 as *const c_char;
-pub const GST_TAG_IMAGE_ORIENTATION: *const c_char = b"image-orientation\0" as *const u8 as *const c_char;
+pub const GST_TAG_IMAGE_ORIENTATION: *const c_char =
+    b"image-orientation\0" as *const u8 as *const c_char;
 pub const GST_TAG_INTERPRETED_BY: *const c_char = b"interpreted-by\0" as *const u8 as *const c_char;
 pub const GST_TAG_ISRC: *const c_char = b"isrc\0" as *const u8 as *const c_char;
 pub const GST_TAG_KEYWORDS: *const c_char = b"keywords\0" as *const u8 as *const c_char;
@@ -553,28 +605,36 @@ pub const GST_TAG_LICENSE: *const c_char = b"license\0" as *const u8 as *const c
 pub const GST_TAG_LICENSE_URI: *const c_char = b"license-uri\0" as *const u8 as *const c_char;
 pub const GST_TAG_LOCATION: *const c_char = b"location\0" as *const u8 as *const c_char;
 pub const GST_TAG_LYRICS: *const c_char = b"lyrics\0" as *const u8 as *const c_char;
-pub const GST_TAG_MAXIMUM_BITRATE: *const c_char = b"maximum-bitrate\0" as *const u8 as *const c_char;
+pub const GST_TAG_MAXIMUM_BITRATE: *const c_char =
+    b"maximum-bitrate\0" as *const u8 as *const c_char;
 pub const GST_TAG_MIDI_BASE_NOTE: *const c_char = b"midi-base-note\0" as *const u8 as *const c_char;
-pub const GST_TAG_MINIMUM_BITRATE: *const c_char = b"minimum-bitrate\0" as *const u8 as *const c_char;
-pub const GST_TAG_NOMINAL_BITRATE: *const c_char = b"nominal-bitrate\0" as *const u8 as *const c_char;
+pub const GST_TAG_MINIMUM_BITRATE: *const c_char =
+    b"minimum-bitrate\0" as *const u8 as *const c_char;
+pub const GST_TAG_NOMINAL_BITRATE: *const c_char =
+    b"nominal-bitrate\0" as *const u8 as *const c_char;
 pub const GST_TAG_ORGANIZATION: *const c_char = b"organization\0" as *const u8 as *const c_char;
 pub const GST_TAG_PERFORMER: *const c_char = b"performer\0" as *const u8 as *const c_char;
 pub const GST_TAG_PREVIEW_IMAGE: *const c_char = b"preview-image\0" as *const u8 as *const c_char;
 pub const GST_TAG_PRIVATE_DATA: *const c_char = b"private-data\0" as *const u8 as *const c_char;
 pub const GST_TAG_PUBLISHER: *const c_char = b"publisher\0" as *const u8 as *const c_char;
-pub const GST_TAG_REFERENCE_LEVEL: *const c_char = b"replaygain-reference-level\0" as *const u8 as *const c_char;
+pub const GST_TAG_REFERENCE_LEVEL: *const c_char =
+    b"replaygain-reference-level\0" as *const u8 as *const c_char;
 pub const GST_TAG_SERIAL: *const c_char = b"serial\0" as *const u8 as *const c_char;
-pub const GST_TAG_SHOW_EPISODE_NUMBER: *const c_char = b"show-episode-number\0" as *const u8 as *const c_char;
+pub const GST_TAG_SHOW_EPISODE_NUMBER: *const c_char =
+    b"show-episode-number\0" as *const u8 as *const c_char;
 pub const GST_TAG_SHOW_NAME: *const c_char = b"show-name\0" as *const u8 as *const c_char;
-pub const GST_TAG_SHOW_SEASON_NUMBER: *const c_char = b"show-season-number\0" as *const u8 as *const c_char;
+pub const GST_TAG_SHOW_SEASON_NUMBER: *const c_char =
+    b"show-season-number\0" as *const u8 as *const c_char;
 pub const GST_TAG_SHOW_SORTNAME: *const c_char = b"show-sortname\0" as *const u8 as *const c_char;
 pub const GST_TAG_SUBTITLE_CODEC: *const c_char = b"subtitle-codec\0" as *const u8 as *const c_char;
 pub const GST_TAG_TITLE: *const c_char = b"title\0" as *const u8 as *const c_char;
 pub const GST_TAG_TITLE_SORTNAME: *const c_char = b"title-sortname\0" as *const u8 as *const c_char;
 pub const GST_TAG_TRACK_COUNT: *const c_char = b"track-count\0" as *const u8 as *const c_char;
-pub const GST_TAG_TRACK_GAIN: *const c_char = b"replaygain-track-gain\0" as *const u8 as *const c_char;
+pub const GST_TAG_TRACK_GAIN: *const c_char =
+    b"replaygain-track-gain\0" as *const u8 as *const c_char;
 pub const GST_TAG_TRACK_NUMBER: *const c_char = b"track-number\0" as *const u8 as *const c_char;
-pub const GST_TAG_TRACK_PEAK: *const c_char = b"replaygain-track-peak\0" as *const u8 as *const c_char;
+pub const GST_TAG_TRACK_PEAK: *const c_char =
+    b"replaygain-track-peak\0" as *const u8 as *const c_char;
 pub const GST_TAG_USER_RATING: *const c_char = b"user-rating\0" as *const u8 as *const c_char;
 pub const GST_TAG_VERSION: *const c_char = b"version\0" as *const u8 as *const c_char;
 pub const GST_TAG_VIDEO_CODEC: *const c_char = b"video-codec\0" as *const u8 as *const c_char;
@@ -908,9 +968,9 @@ pub union GstControlBinding_ABI {
 impl ::std::fmt::Debug for GstControlBinding_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstControlBinding_ABI @ {:?}", self as *const _))
-         .field("abi", unsafe { &self.abi })
-         .field("_gst_reserved", unsafe { &self._gst_reserved })
-         .finish()
+            .field("abi", unsafe { &self.abi })
+            .field("_gst_reserved", unsafe { &self._gst_reserved })
+            .finish()
     }
 }
 
@@ -924,9 +984,9 @@ pub union GstPadProbeInfo_ABI {
 impl ::std::fmt::Debug for GstPadProbeInfo_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadProbeInfo_ABI @ {:?}", self as *const _))
-         .field("_gst_reserved", unsafe { &self._gst_reserved })
-         .field("abi", unsafe { &self.abi })
-         .finish()
+            .field("_gst_reserved", unsafe { &self._gst_reserved })
+            .field("abi", unsafe { &self.abi })
+            .finish()
     }
 }
 
@@ -940,9 +1000,9 @@ pub union GstPadTemplate_ABI {
 impl ::std::fmt::Debug for GstPadTemplate_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadTemplate_ABI @ {:?}", self as *const _))
-         .field("_gst_reserved", unsafe { &self._gst_reserved })
-         .field("abi", unsafe { &self.abi })
-         .finish()
+            .field("_gst_reserved", unsafe { &self._gst_reserved })
+            .field("abi", unsafe { &self.abi })
+            .finish()
     }
 }
 
@@ -956,80 +1016,161 @@ pub union GstPad_ABI {
 impl ::std::fmt::Debug for GstPad_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPad_ABI @ {:?}", self as *const _))
-         .field("_gst_reserved", unsafe { &self._gst_reserved })
-         .field("abi", unsafe { &self.abi })
-         .finish()
+            .field("_gst_reserved", unsafe { &self._gst_reserved })
+            .field("abi", unsafe { &self.abi })
+            .finish()
     }
 }
 
 // Callbacks
-pub type GstBufferForeachMetaFunc = Option<unsafe extern "C" fn(*mut GstBuffer, *mut *mut GstMeta, gpointer) -> gboolean>;
-pub type GstBufferListFunc = Option<unsafe extern "C" fn(*mut *mut GstBuffer, c_uint, gpointer) -> gboolean>;
-pub type GstBusFunc = Option<unsafe extern "C" fn(*mut GstBus, *mut GstMessage, gpointer) -> gboolean>;
-pub type GstBusSyncHandler = Option<unsafe extern "C" fn(*mut GstBus, *mut GstMessage, gpointer) -> GstBusSyncReply>;
-pub type GstCapsFilterMapFunc = Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
-pub type GstCapsForeachFunc = Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
-pub type GstCapsMapFunc = Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
-pub type GstClockCallback = Option<unsafe extern "C" fn(*mut GstClock, GstClockTime, GstClockID, gpointer) -> gboolean>;
-pub type GstControlBindingConvert = Option<unsafe extern "C" fn(*mut GstControlBinding, c_double, *mut gobject::GValue)>;
-pub type GstControlSourceGetValue = Option<unsafe extern "C" fn(*mut GstControlSource, GstClockTime, *mut c_double) -> gboolean>;
-pub type GstControlSourceGetValueArray = Option<unsafe extern "C" fn(*mut GstControlSource, GstClockTime, GstClockTime, c_uint, *mut c_double) -> gboolean>;
+pub type GstBufferForeachMetaFunc =
+    Option<unsafe extern "C" fn(*mut GstBuffer, *mut *mut GstMeta, gpointer) -> gboolean>;
+pub type GstBufferListFunc =
+    Option<unsafe extern "C" fn(*mut *mut GstBuffer, c_uint, gpointer) -> gboolean>;
+pub type GstBusFunc =
+    Option<unsafe extern "C" fn(*mut GstBus, *mut GstMessage, gpointer) -> gboolean>;
+pub type GstBusSyncHandler =
+    Option<unsafe extern "C" fn(*mut GstBus, *mut GstMessage, gpointer) -> GstBusSyncReply>;
+pub type GstCapsFilterMapFunc =
+    Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
+pub type GstCapsForeachFunc =
+    Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
+pub type GstCapsMapFunc =
+    Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
+pub type GstClockCallback =
+    Option<unsafe extern "C" fn(*mut GstClock, GstClockTime, GstClockID, gpointer) -> gboolean>;
+pub type GstControlBindingConvert =
+    Option<unsafe extern "C" fn(*mut GstControlBinding, c_double, *mut gobject::GValue)>;
+pub type GstControlSourceGetValue =
+    Option<unsafe extern "C" fn(*mut GstControlSource, GstClockTime, *mut c_double) -> gboolean>;
+pub type GstControlSourceGetValueArray = Option<
+    unsafe extern "C" fn(
+        *mut GstControlSource,
+        GstClockTime,
+        GstClockTime,
+        c_uint,
+        *mut c_double,
+    ) -> gboolean,
+>;
 pub type GstDebugFuncPtr = Option<unsafe extern "C" fn()>;
 pub type GstElementCallAsyncFunc = Option<unsafe extern "C" fn(*mut GstElement, gpointer)>;
-pub type GstElementForeachPadFunc = Option<unsafe extern "C" fn(*mut GstElement, *mut GstPad, gpointer) -> gboolean>;
-pub type GstIteratorCopyFunction = Option<unsafe extern "C" fn(*const GstIterator, *mut GstIterator)>;
-pub type GstIteratorFoldFunction = Option<unsafe extern "C" fn(*const gobject::GValue, *mut gobject::GValue, gpointer) -> gboolean>;
-pub type GstIteratorForeachFunction = Option<unsafe extern "C" fn(*const gobject::GValue, gpointer)>;
+pub type GstElementForeachPadFunc =
+    Option<unsafe extern "C" fn(*mut GstElement, *mut GstPad, gpointer) -> gboolean>;
+pub type GstIteratorCopyFunction =
+    Option<unsafe extern "C" fn(*const GstIterator, *mut GstIterator)>;
+pub type GstIteratorFoldFunction = Option<
+    unsafe extern "C" fn(*const gobject::GValue, *mut gobject::GValue, gpointer) -> gboolean,
+>;
+pub type GstIteratorForeachFunction =
+    Option<unsafe extern "C" fn(*const gobject::GValue, gpointer)>;
 pub type GstIteratorFreeFunction = Option<unsafe extern "C" fn(*mut GstIterator)>;
-pub type GstIteratorItemFunction = Option<unsafe extern "C" fn(*mut GstIterator, *const gobject::GValue) -> GstIteratorItem>;
-pub type GstIteratorNextFunction = Option<unsafe extern "C" fn(*mut GstIterator, *mut gobject::GValue) -> GstIteratorResult>;
+pub type GstIteratorItemFunction =
+    Option<unsafe extern "C" fn(*mut GstIterator, *const gobject::GValue) -> GstIteratorItem>;
+pub type GstIteratorNextFunction =
+    Option<unsafe extern "C" fn(*mut GstIterator, *mut gobject::GValue) -> GstIteratorResult>;
 pub type GstIteratorResyncFunction = Option<unsafe extern "C" fn(*mut GstIterator)>;
-pub type GstLogFunction = Option<unsafe extern "C" fn(*mut GstDebugCategory, GstDebugLevel, *const c_char, *const c_char, c_int, *mut gobject::GObject, *mut GstDebugMessage, gpointer)>;
-pub type GstMemoryCopyFunction = Option<unsafe extern "C" fn(*mut GstMemory, ssize_t, ssize_t) -> *mut GstMemory>;
-pub type GstMemoryIsSpanFunction = Option<unsafe extern "C" fn(*mut GstMemory, *mut GstMemory, *mut size_t) -> gboolean>;
-pub type GstMemoryMapFullFunction = Option<unsafe extern "C" fn(*mut GstMemory, *mut GstMapInfo, size_t) -> gpointer>;
-pub type GstMemoryMapFunction = Option<unsafe extern "C" fn(*mut GstMemory, size_t, GstMapFlags) -> gpointer>;
-pub type GstMemoryShareFunction = Option<unsafe extern "C" fn(*mut GstMemory, ssize_t, ssize_t) -> *mut GstMemory>;
+pub type GstLogFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstDebugCategory,
+        GstDebugLevel,
+        *const c_char,
+        *const c_char,
+        c_int,
+        *mut gobject::GObject,
+        *mut GstDebugMessage,
+        gpointer,
+    ),
+>;
+pub type GstMemoryCopyFunction =
+    Option<unsafe extern "C" fn(*mut GstMemory, ssize_t, ssize_t) -> *mut GstMemory>;
+pub type GstMemoryIsSpanFunction =
+    Option<unsafe extern "C" fn(*mut GstMemory, *mut GstMemory, *mut size_t) -> gboolean>;
+pub type GstMemoryMapFullFunction =
+    Option<unsafe extern "C" fn(*mut GstMemory, *mut GstMapInfo, size_t) -> gpointer>;
+pub type GstMemoryMapFunction =
+    Option<unsafe extern "C" fn(*mut GstMemory, size_t, GstMapFlags) -> gpointer>;
+pub type GstMemoryShareFunction =
+    Option<unsafe extern "C" fn(*mut GstMemory, ssize_t, ssize_t) -> *mut GstMemory>;
 pub type GstMemoryUnmapFullFunction = Option<unsafe extern "C" fn(*mut GstMemory, *mut GstMapInfo)>;
 pub type GstMemoryUnmapFunction = Option<unsafe extern "C" fn(*mut GstMemory)>;
 pub type GstMetaFreeFunction = Option<unsafe extern "C" fn(*mut GstMeta, *mut GstBuffer)>;
-pub type GstMetaInitFunction = Option<unsafe extern "C" fn(*mut GstMeta, gpointer, *mut GstBuffer) -> gboolean>;
-pub type GstMetaTransformFunction = Option<unsafe extern "C" fn(*mut GstBuffer, *mut GstMeta, *mut GstBuffer, glib::GQuark, gpointer) -> gboolean>;
-pub type GstMiniObjectCopyFunction = Option<unsafe extern "C" fn(*const GstMiniObject) -> *mut GstMiniObject>;
-pub type GstMiniObjectDisposeFunction = Option<unsafe extern "C" fn(*mut GstMiniObject) -> gboolean>;
+pub type GstMetaInitFunction =
+    Option<unsafe extern "C" fn(*mut GstMeta, gpointer, *mut GstBuffer) -> gboolean>;
+pub type GstMetaTransformFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstBuffer,
+        *mut GstMeta,
+        *mut GstBuffer,
+        glib::GQuark,
+        gpointer,
+    ) -> gboolean,
+>;
+pub type GstMiniObjectCopyFunction =
+    Option<unsafe extern "C" fn(*const GstMiniObject) -> *mut GstMiniObject>;
+pub type GstMiniObjectDisposeFunction =
+    Option<unsafe extern "C" fn(*mut GstMiniObject) -> gboolean>;
 pub type GstMiniObjectFreeFunction = Option<unsafe extern "C" fn(*mut GstMiniObject)>;
 pub type GstMiniObjectNotify = Option<unsafe extern "C" fn(gpointer, *mut GstMiniObject)>;
-pub type GstPadActivateFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject) -> gboolean>;
-pub type GstPadActivateModeFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, GstPadMode, gboolean) -> gboolean>;
-pub type GstPadChainFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstBuffer) -> GstFlowReturn>;
-pub type GstPadChainListFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstBufferList) -> GstFlowReturn>;
-pub type GstPadEventFullFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstEvent) -> GstFlowReturn>;
-pub type GstPadEventFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstEvent) -> gboolean>;
+pub type GstPadActivateFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject) -> gboolean>;
+pub type GstPadActivateModeFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, GstPadMode, gboolean) -> gboolean>;
+pub type GstPadChainFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstBuffer) -> GstFlowReturn>;
+pub type GstPadChainListFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstBufferList) -> GstFlowReturn>;
+pub type GstPadEventFullFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstEvent) -> GstFlowReturn>;
+pub type GstPadEventFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstEvent) -> gboolean>;
 pub type GstPadForwardFunction = Option<unsafe extern "C" fn(*mut GstPad, gpointer) -> gboolean>;
-pub type GstPadGetRangeFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, u64, c_uint, *mut *mut GstBuffer) -> GstFlowReturn>;
-pub type GstPadIterIntLinkFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject) -> *mut GstIterator>;
-pub type GstPadLinkFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstPad) -> GstPadLinkReturn>;
-pub type GstPadProbeCallback = Option<unsafe extern "C" fn(*mut GstPad, *mut GstPadProbeInfo, gpointer) -> GstPadProbeReturn>;
-pub type GstPadQueryFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstQuery) -> gboolean>;
-pub type GstPadStickyEventsForeachFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut *mut GstEvent, gpointer) -> gboolean>;
+pub type GstPadGetRangeFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstPad,
+        *mut GstObject,
+        u64,
+        c_uint,
+        *mut *mut GstBuffer,
+    ) -> GstFlowReturn,
+>;
+pub type GstPadIterIntLinkFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject) -> *mut GstIterator>;
+pub type GstPadLinkFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstPad) -> GstPadLinkReturn>;
+pub type GstPadProbeCallback =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstPadProbeInfo, gpointer) -> GstPadProbeReturn>;
+pub type GstPadQueryFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject, *mut GstQuery) -> gboolean>;
+pub type GstPadStickyEventsForeachFunction =
+    Option<unsafe extern "C" fn(*mut GstPad, *mut *mut GstEvent, gpointer) -> gboolean>;
 pub type GstPadUnlinkFunction = Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject)>;
-pub type GstPluginFeatureFilter = Option<unsafe extern "C" fn(*mut GstPluginFeature, gpointer) -> gboolean>;
+pub type GstPluginFeatureFilter =
+    Option<unsafe extern "C" fn(*mut GstPluginFeature, gpointer) -> gboolean>;
 pub type GstPluginFilter = Option<unsafe extern "C" fn(*mut GstPlugin, gpointer) -> gboolean>;
 pub type GstPluginInitFullFunc = Option<unsafe extern "C" fn(*mut GstPlugin, gpointer) -> gboolean>;
 pub type GstPluginInitFunc = Option<unsafe extern "C" fn(*mut GstPlugin) -> gboolean>;
 pub type GstPromiseChangeFunc = Option<unsafe extern "C" fn(*mut GstPromise, gpointer)>;
-pub type GstStructureFilterMapFunc = Option<unsafe extern "C" fn(glib::GQuark, *mut gobject::GValue, gpointer) -> gboolean>;
-pub type GstStructureForeachFunc = Option<unsafe extern "C" fn(glib::GQuark, *const gobject::GValue, gpointer) -> gboolean>;
-pub type GstStructureMapFunc = Option<unsafe extern "C" fn(glib::GQuark, *mut gobject::GValue, gpointer) -> gboolean>;
-pub type GstTagForeachFunc = Option<unsafe extern "C" fn(*const GstTagList, *const c_char, gpointer)>;
-pub type GstTagMergeFunc = Option<unsafe extern "C" fn(*mut gobject::GValue, *const gobject::GValue)>;
+pub type GstStructureFilterMapFunc =
+    Option<unsafe extern "C" fn(glib::GQuark, *mut gobject::GValue, gpointer) -> gboolean>;
+pub type GstStructureForeachFunc =
+    Option<unsafe extern "C" fn(glib::GQuark, *const gobject::GValue, gpointer) -> gboolean>;
+pub type GstStructureMapFunc =
+    Option<unsafe extern "C" fn(glib::GQuark, *mut gobject::GValue, gpointer) -> gboolean>;
+pub type GstTagForeachFunc =
+    Option<unsafe extern "C" fn(*const GstTagList, *const c_char, gpointer)>;
+pub type GstTagMergeFunc =
+    Option<unsafe extern "C" fn(*mut gobject::GValue, *const gobject::GValue)>;
 pub type GstTaskFunction = Option<unsafe extern "C" fn(gpointer)>;
 pub type GstTaskPoolFunction = Option<unsafe extern "C" fn(*mut c_void)>;
-pub type GstTaskThreadFunc = Option<unsafe extern "C" fn(*mut GstTask, *mut glib::GThread, gpointer)>;
+pub type GstTaskThreadFunc =
+    Option<unsafe extern "C" fn(*mut GstTask, *mut glib::GThread, gpointer)>;
 pub type GstTypeFindFunction = Option<unsafe extern "C" fn(*mut GstTypeFind, gpointer)>;
-pub type GstValueCompareFunc = Option<unsafe extern "C" fn(*const gobject::GValue, *const gobject::GValue) -> c_int>;
-pub type GstValueDeserializeFunc = Option<unsafe extern "C" fn(*mut gobject::GValue, *const c_char) -> gboolean>;
-pub type GstValueSerializeFunc = Option<unsafe extern "C" fn(*const gobject::GValue) -> *mut c_char>;
+pub type GstValueCompareFunc =
+    Option<unsafe extern "C" fn(*const gobject::GValue, *const gobject::GValue) -> c_int>;
+pub type GstValueDeserializeFunc =
+    Option<unsafe extern "C" fn(*mut gobject::GValue, *const c_char) -> gboolean>;
+pub type GstValueSerializeFunc =
+    Option<unsafe extern "C" fn(*const gobject::GValue) -> *mut c_char>;
 
 // Records
 #[repr(C)]
@@ -1045,11 +1186,11 @@ pub struct GstAllocationParams {
 impl ::std::fmt::Debug for GstAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAllocationParams @ {:?}", self as *const _))
-         .field("flags", &self.flags)
-         .field("align", &self.align)
-         .field("prefix", &self.prefix)
-         .field("padding", &self.padding)
-         .finish()
+            .field("flags", &self.flags)
+            .field("align", &self.align)
+            .field("prefix", &self.prefix)
+            .field("padding", &self.padding)
+            .finish()
     }
 }
 
@@ -1057,7 +1198,9 @@ impl ::std::fmt::Debug for GstAllocationParams {
 #[derive(Copy, Clone)]
 pub struct GstAllocatorClass {
     pub object_class: GstObjectClass,
-    pub alloc: Option<unsafe extern "C" fn(*mut GstAllocator, size_t, *mut GstAllocationParams) -> *mut GstMemory>,
+    pub alloc: Option<
+        unsafe extern "C" fn(*mut GstAllocator, size_t, *mut GstAllocationParams) -> *mut GstMemory,
+    >,
     pub free: Option<unsafe extern "C" fn(*mut GstAllocator, *mut GstMemory)>,
     pub _gst_reserved: [gpointer; 4],
 }
@@ -1065,10 +1208,10 @@ pub struct GstAllocatorClass {
 impl ::std::fmt::Debug for GstAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAllocatorClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .field("alloc", &self.alloc)
-         .field("free", &self.free)
-         .finish()
+            .field("object_class", &self.object_class)
+            .field("alloc", &self.alloc)
+            .field("free", &self.free)
+            .finish()
     }
 }
 
@@ -1083,7 +1226,7 @@ pub struct GstAtomicQueue(c_void);
 impl ::std::fmt::Debug for GstAtomicQueue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAtomicQueue @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1099,23 +1242,24 @@ pub struct GstBinClass {
     pub handle_message: Option<unsafe extern "C" fn(*mut GstBin, *mut GstMessage)>,
     pub do_latency: Option<unsafe extern "C" fn(*mut GstBin) -> gboolean>,
     pub deep_element_added: Option<unsafe extern "C" fn(*mut GstBin, *mut GstBin, *mut GstElement)>,
-    pub deep_element_removed: Option<unsafe extern "C" fn(*mut GstBin, *mut GstBin, *mut GstElement)>,
+    pub deep_element_removed:
+        Option<unsafe extern "C" fn(*mut GstBin, *mut GstBin, *mut GstElement)>,
     pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstBinClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBinClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("element_added", &self.element_added)
-         .field("element_removed", &self.element_removed)
-         .field("add_element", &self.add_element)
-         .field("remove_element", &self.remove_element)
-         .field("handle_message", &self.handle_message)
-         .field("do_latency", &self.do_latency)
-         .field("deep_element_added", &self.deep_element_added)
-         .field("deep_element_removed", &self.deep_element_removed)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("element_added", &self.element_added)
+            .field("element_removed", &self.element_removed)
+            .field("add_element", &self.add_element)
+            .field("remove_element", &self.remove_element)
+            .field("handle_message", &self.handle_message)
+            .field("do_latency", &self.do_latency)
+            .field("deep_element_added", &self.deep_element_added)
+            .field("deep_element_removed", &self.deep_element_removed)
+            .finish()
     }
 }
 
@@ -1139,14 +1283,14 @@ pub struct GstBuffer {
 impl ::std::fmt::Debug for GstBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBuffer @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .field("pool", &self.pool)
-         .field("pts", &self.pts)
-         .field("dts", &self.dts)
-         .field("duration", &self.duration)
-         .field("offset", &self.offset)
-         .field("offset_end", &self.offset_end)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .field("pool", &self.pool)
+            .field("pts", &self.pts)
+            .field("dts", &self.dts)
+            .field("duration", &self.duration)
+            .field("offset", &self.offset)
+            .field("offset_end", &self.offset_end)
+            .finish()
     }
 }
 
@@ -1156,7 +1300,7 @@ pub struct GstBufferList(c_void);
 impl ::std::fmt::Debug for GstBufferList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBufferList @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1172,12 +1316,15 @@ pub struct GstBufferPoolAcquireParams {
 
 impl ::std::fmt::Debug for GstBufferPoolAcquireParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstBufferPoolAcquireParams @ {:?}", self as *const _))
-         .field("format", &self.format)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("flags", &self.flags)
-         .finish()
+        f.debug_struct(&format!(
+            "GstBufferPoolAcquireParams @ {:?}",
+            self as *const _
+        ))
+        .field("format", &self.format)
+        .field("start", &self.start)
+        .field("stop", &self.stop)
+        .field("flags", &self.flags)
+        .finish()
     }
 }
 
@@ -1189,8 +1336,20 @@ pub struct GstBufferPoolClass {
     pub set_config: Option<unsafe extern "C" fn(*mut GstBufferPool, *mut GstStructure) -> gboolean>,
     pub start: Option<unsafe extern "C" fn(*mut GstBufferPool) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstBufferPool) -> gboolean>,
-    pub acquire_buffer: Option<unsafe extern "C" fn(*mut GstBufferPool, *mut *mut GstBuffer, *mut GstBufferPoolAcquireParams) -> GstFlowReturn>,
-    pub alloc_buffer: Option<unsafe extern "C" fn(*mut GstBufferPool, *mut *mut GstBuffer, *mut GstBufferPoolAcquireParams) -> GstFlowReturn>,
+    pub acquire_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstBufferPool,
+            *mut *mut GstBuffer,
+            *mut GstBufferPoolAcquireParams,
+        ) -> GstFlowReturn,
+    >,
+    pub alloc_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstBufferPool,
+            *mut *mut GstBuffer,
+            *mut GstBufferPoolAcquireParams,
+        ) -> GstFlowReturn,
+    >,
     pub reset_buffer: Option<unsafe extern "C" fn(*mut GstBufferPool, *mut GstBuffer)>,
     pub release_buffer: Option<unsafe extern "C" fn(*mut GstBufferPool, *mut GstBuffer)>,
     pub free_buffer: Option<unsafe extern "C" fn(*mut GstBufferPool, *mut GstBuffer)>,
@@ -1202,19 +1361,19 @@ pub struct GstBufferPoolClass {
 impl ::std::fmt::Debug for GstBufferPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBufferPoolClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .field("get_options", &self.get_options)
-         .field("set_config", &self.set_config)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("acquire_buffer", &self.acquire_buffer)
-         .field("alloc_buffer", &self.alloc_buffer)
-         .field("reset_buffer", &self.reset_buffer)
-         .field("release_buffer", &self.release_buffer)
-         .field("free_buffer", &self.free_buffer)
-         .field("flush_start", &self.flush_start)
-         .field("flush_stop", &self.flush_stop)
-         .finish()
+            .field("object_class", &self.object_class)
+            .field("get_options", &self.get_options)
+            .field("set_config", &self.set_config)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("acquire_buffer", &self.acquire_buffer)
+            .field("alloc_buffer", &self.alloc_buffer)
+            .field("reset_buffer", &self.reset_buffer)
+            .field("release_buffer", &self.release_buffer)
+            .field("free_buffer", &self.free_buffer)
+            .field("flush_start", &self.flush_start)
+            .field("flush_stop", &self.flush_stop)
+            .finish()
     }
 }
 
@@ -1235,10 +1394,10 @@ pub struct GstBusClass {
 impl ::std::fmt::Debug for GstBusClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBusClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("message", &self.message)
-         .field("sync_message", &self.sync_message)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("message", &self.message)
+            .field("sync_message", &self.sync_message)
+            .finish()
     }
 }
 
@@ -1256,8 +1415,8 @@ pub struct GstCaps {
 impl ::std::fmt::Debug for GstCaps {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCaps @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .finish()
     }
 }
 
@@ -1267,7 +1426,7 @@ pub struct GstCapsFeatures(c_void);
 impl ::std::fmt::Debug for GstCapsFeatures {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCapsFeatures @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1275,24 +1434,28 @@ impl ::std::fmt::Debug for GstCapsFeatures {
 #[derive(Copy, Clone)]
 pub struct GstChildProxyInterface {
     pub parent: gobject::GTypeInterface,
-    pub get_child_by_name: Option<unsafe extern "C" fn(*mut GstChildProxy, *const c_char) -> *mut gobject::GObject>,
-    pub get_child_by_index: Option<unsafe extern "C" fn(*mut GstChildProxy, c_uint) -> *mut gobject::GObject>,
+    pub get_child_by_name:
+        Option<unsafe extern "C" fn(*mut GstChildProxy, *const c_char) -> *mut gobject::GObject>,
+    pub get_child_by_index:
+        Option<unsafe extern "C" fn(*mut GstChildProxy, c_uint) -> *mut gobject::GObject>,
     pub get_children_count: Option<unsafe extern "C" fn(*mut GstChildProxy) -> c_uint>,
-    pub child_added: Option<unsafe extern "C" fn(*mut GstChildProxy, *mut gobject::GObject, *const c_char)>,
-    pub child_removed: Option<unsafe extern "C" fn(*mut GstChildProxy, *mut gobject::GObject, *const c_char)>,
+    pub child_added:
+        Option<unsafe extern "C" fn(*mut GstChildProxy, *mut gobject::GObject, *const c_char)>,
+    pub child_removed:
+        Option<unsafe extern "C" fn(*mut GstChildProxy, *mut gobject::GObject, *const c_char)>,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstChildProxyInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstChildProxyInterface @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("get_child_by_name", &self.get_child_by_name)
-         .field("get_child_by_index", &self.get_child_by_index)
-         .field("get_children_count", &self.get_children_count)
-         .field("child_added", &self.child_added)
-         .field("child_removed", &self.child_removed)
-         .finish()
+            .field("parent", &self.parent)
+            .field("get_child_by_name", &self.get_child_by_name)
+            .field("get_child_by_index", &self.get_child_by_index)
+            .field("get_children_count", &self.get_children_count)
+            .field("child_added", &self.child_added)
+            .field("child_removed", &self.child_removed)
+            .finish()
     }
 }
 
@@ -1300,11 +1463,19 @@ impl ::std::fmt::Debug for GstChildProxyInterface {
 #[derive(Copy, Clone)]
 pub struct GstClockClass {
     pub parent_class: GstObjectClass,
-    pub change_resolution: Option<unsafe extern "C" fn(*mut GstClock, GstClockTime, GstClockTime) -> GstClockTime>,
+    pub change_resolution:
+        Option<unsafe extern "C" fn(*mut GstClock, GstClockTime, GstClockTime) -> GstClockTime>,
     pub get_resolution: Option<unsafe extern "C" fn(*mut GstClock) -> GstClockTime>,
     pub get_internal_time: Option<unsafe extern "C" fn(*mut GstClock) -> GstClockTime>,
-    pub wait: Option<unsafe extern "C" fn(*mut GstClock, *mut GstClockEntry, *mut GstClockTimeDiff) -> GstClockReturn>,
-    pub wait_async: Option<unsafe extern "C" fn(*mut GstClock, *mut GstClockEntry) -> GstClockReturn>,
+    pub wait: Option<
+        unsafe extern "C" fn(
+            *mut GstClock,
+            *mut GstClockEntry,
+            *mut GstClockTimeDiff,
+        ) -> GstClockReturn,
+    >,
+    pub wait_async:
+        Option<unsafe extern "C" fn(*mut GstClock, *mut GstClockEntry) -> GstClockReturn>,
     pub unschedule: Option<unsafe extern "C" fn(*mut GstClock, *mut GstClockEntry)>,
     pub _gst_reserved: [gpointer; 4],
 }
@@ -1312,14 +1483,14 @@ pub struct GstClockClass {
 impl ::std::fmt::Debug for GstClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstClockClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("change_resolution", &self.change_resolution)
-         .field("get_resolution", &self.get_resolution)
-         .field("get_internal_time", &self.get_internal_time)
-         .field("wait", &self.wait)
-         .field("wait_async", &self.wait_async)
-         .field("unschedule", &self.unschedule)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("change_resolution", &self.change_resolution)
+            .field("get_resolution", &self.get_resolution)
+            .field("get_internal_time", &self.get_internal_time)
+            .field("wait", &self.wait)
+            .field("wait_async", &self.wait_async)
+            .field("unschedule", &self.unschedule)
+            .finish()
     }
 }
 
@@ -1343,18 +1514,18 @@ pub struct GstClockEntry {
 impl ::std::fmt::Debug for GstClockEntry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstClockEntry @ {:?}", self as *const _))
-         .field("refcount", &self.refcount)
-         .field("clock", &self.clock)
-         .field("type_", &self.type_)
-         .field("time", &self.time)
-         .field("interval", &self.interval)
-         .field("status", &self.status)
-         .field("func", &self.func)
-         .field("user_data", &self.user_data)
-         .field("destroy_data", &self.destroy_data)
-         .field("unscheduled", &self.unscheduled)
-         .field("woken_up", &self.woken_up)
-         .finish()
+            .field("refcount", &self.refcount)
+            .field("clock", &self.clock)
+            .field("type_", &self.type_)
+            .field("time", &self.time)
+            .field("interval", &self.interval)
+            .field("status", &self.status)
+            .field("func", &self.func)
+            .field("user_data", &self.user_data)
+            .field("destroy_data", &self.destroy_data)
+            .field("unscheduled", &self.unscheduled)
+            .field("woken_up", &self.woken_up)
+            .finish()
     }
 }
 
@@ -1369,7 +1540,7 @@ pub struct GstContext(c_void);
 impl ::std::fmt::Debug for GstContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstContext @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1377,22 +1548,46 @@ impl ::std::fmt::Debug for GstContext {
 #[derive(Copy, Clone)]
 pub struct GstControlBindingClass {
     pub parent_class: GstObjectClass,
-    pub sync_values: Option<unsafe extern "C" fn(*mut GstControlBinding, *mut GstObject, GstClockTime, GstClockTime) -> gboolean>,
-    pub get_value: Option<unsafe extern "C" fn(*mut GstControlBinding, GstClockTime) -> *mut gobject::GValue>,
-    pub get_value_array: Option<unsafe extern "C" fn(*mut GstControlBinding, GstClockTime, GstClockTime, c_uint, gpointer) -> gboolean>,
-    pub get_g_value_array: Option<unsafe extern "C" fn(*mut GstControlBinding, GstClockTime, GstClockTime, c_uint, *mut gobject::GValue) -> gboolean>,
+    pub sync_values: Option<
+        unsafe extern "C" fn(
+            *mut GstControlBinding,
+            *mut GstObject,
+            GstClockTime,
+            GstClockTime,
+        ) -> gboolean,
+    >,
+    pub get_value:
+        Option<unsafe extern "C" fn(*mut GstControlBinding, GstClockTime) -> *mut gobject::GValue>,
+    pub get_value_array: Option<
+        unsafe extern "C" fn(
+            *mut GstControlBinding,
+            GstClockTime,
+            GstClockTime,
+            c_uint,
+            gpointer,
+        ) -> gboolean,
+    >,
+    pub get_g_value_array: Option<
+        unsafe extern "C" fn(
+            *mut GstControlBinding,
+            GstClockTime,
+            GstClockTime,
+            c_uint,
+            *mut gobject::GValue,
+        ) -> gboolean,
+    >,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstControlBindingClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstControlBindingClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("sync_values", &self.sync_values)
-         .field("get_value", &self.get_value)
-         .field("get_value_array", &self.get_value_array)
-         .field("get_g_value_array", &self.get_g_value_array)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("sync_values", &self.sync_values)
+            .field("get_value", &self.get_value)
+            .field("get_value_array", &self.get_value_array)
+            .field("get_g_value_array", &self.get_g_value_array)
+            .finish()
     }
 }
 
@@ -1409,9 +1604,12 @@ pub struct GstControlBinding_ABI_abi {
 
 impl ::std::fmt::Debug for GstControlBinding_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstControlBinding_ABI_abi @ {:?}", self as *const _))
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!(
+            "GstControlBinding_ABI_abi @ {:?}",
+            self as *const _
+        ))
+        .field("priv_", &self.priv_)
+        .finish()
     }
 }
 
@@ -1425,8 +1623,8 @@ pub struct GstControlSourceClass {
 impl ::std::fmt::Debug for GstControlSourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstControlSourceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -1436,7 +1634,7 @@ pub struct GstDateTime(c_void);
 impl ::std::fmt::Debug for GstDateTime {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDateTime @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1452,7 +1650,7 @@ pub struct GstDebugCategory {
 impl ::std::fmt::Debug for GstDebugCategory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDebugCategory @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1465,18 +1663,20 @@ pub type GstDebugMessage = *mut _GstDebugMessage;
 #[derive(Copy, Clone)]
 pub struct GstDeviceClass {
     pub parent_class: GstObjectClass,
-    pub create_element: Option<unsafe extern "C" fn(*mut GstDevice, *const c_char) -> *mut GstElement>,
-    pub reconfigure_element: Option<unsafe extern "C" fn(*mut GstDevice, *mut GstElement) -> gboolean>,
+    pub create_element:
+        Option<unsafe extern "C" fn(*mut GstDevice, *const c_char) -> *mut GstElement>,
+    pub reconfigure_element:
+        Option<unsafe extern "C" fn(*mut GstDevice, *mut GstElement) -> gboolean>,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstDeviceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDeviceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("create_element", &self.create_element)
-         .field("reconfigure_element", &self.reconfigure_element)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("create_element", &self.create_element)
+            .field("reconfigure_element", &self.reconfigure_element)
+            .finish()
     }
 }
 
@@ -1490,8 +1690,8 @@ pub struct GstDeviceMonitorClass {
 impl ::std::fmt::Debug for GstDeviceMonitorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDeviceMonitorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -1520,12 +1720,12 @@ pub struct GstDeviceProviderClass {
 impl ::std::fmt::Debug for GstDeviceProviderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDeviceProviderClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("factory", &self.factory)
-         .field("probe", &self.probe)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("factory", &self.factory)
+            .field("probe", &self.probe)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .finish()
     }
 }
 
@@ -1556,11 +1756,26 @@ pub struct GstElementClass {
     pub pad_added: Option<unsafe extern "C" fn(*mut GstElement, *mut GstPad)>,
     pub pad_removed: Option<unsafe extern "C" fn(*mut GstElement, *mut GstPad)>,
     pub no_more_pads: Option<unsafe extern "C" fn(*mut GstElement)>,
-    pub request_new_pad: Option<unsafe extern "C" fn(*mut GstElement, *mut GstPadTemplate, *const c_char, *const GstCaps) -> *mut GstPad>,
+    pub request_new_pad: Option<
+        unsafe extern "C" fn(
+            *mut GstElement,
+            *mut GstPadTemplate,
+            *const c_char,
+            *const GstCaps,
+        ) -> *mut GstPad,
+    >,
     pub release_pad: Option<unsafe extern "C" fn(*mut GstElement, *mut GstPad)>,
-    pub get_state: Option<unsafe extern "C" fn(*mut GstElement, *mut GstState, *mut GstState, GstClockTime) -> GstStateChangeReturn>,
+    pub get_state: Option<
+        unsafe extern "C" fn(
+            *mut GstElement,
+            *mut GstState,
+            *mut GstState,
+            GstClockTime,
+        ) -> GstStateChangeReturn,
+    >,
     pub set_state: Option<unsafe extern "C" fn(*mut GstElement, GstState) -> GstStateChangeReturn>,
-    pub change_state: Option<unsafe extern "C" fn(*mut GstElement, GstStateChange) -> GstStateChangeReturn>,
+    pub change_state:
+        Option<unsafe extern "C" fn(*mut GstElement, GstStateChange) -> GstStateChangeReturn>,
     pub state_changed: Option<unsafe extern "C" fn(*mut GstElement, GstState, GstState, GstState)>,
     pub set_bus: Option<unsafe extern "C" fn(*mut GstElement, *mut GstBus)>,
     pub provide_clock: Option<unsafe extern "C" fn(*mut GstElement) -> *mut GstClock>,
@@ -1575,29 +1790,29 @@ pub struct GstElementClass {
 impl ::std::fmt::Debug for GstElementClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstElementClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("metadata", &self.metadata)
-         .field("elementfactory", &self.elementfactory)
-         .field("padtemplates", &self.padtemplates)
-         .field("numpadtemplates", &self.numpadtemplates)
-         .field("pad_templ_cookie", &self.pad_templ_cookie)
-         .field("pad_added", &self.pad_added)
-         .field("pad_removed", &self.pad_removed)
-         .field("no_more_pads", &self.no_more_pads)
-         .field("request_new_pad", &self.request_new_pad)
-         .field("release_pad", &self.release_pad)
-         .field("get_state", &self.get_state)
-         .field("set_state", &self.set_state)
-         .field("change_state", &self.change_state)
-         .field("state_changed", &self.state_changed)
-         .field("set_bus", &self.set_bus)
-         .field("provide_clock", &self.provide_clock)
-         .field("set_clock", &self.set_clock)
-         .field("send_event", &self.send_event)
-         .field("query", &self.query)
-         .field("post_message", &self.post_message)
-         .field("set_context", &self.set_context)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("metadata", &self.metadata)
+            .field("elementfactory", &self.elementfactory)
+            .field("padtemplates", &self.padtemplates)
+            .field("numpadtemplates", &self.numpadtemplates)
+            .field("pad_templ_cookie", &self.pad_templ_cookie)
+            .field("pad_added", &self.pad_added)
+            .field("pad_removed", &self.pad_removed)
+            .field("no_more_pads", &self.no_more_pads)
+            .field("request_new_pad", &self.request_new_pad)
+            .field("release_pad", &self.release_pad)
+            .field("get_state", &self.get_state)
+            .field("set_state", &self.set_state)
+            .field("change_state", &self.change_state)
+            .field("state_changed", &self.state_changed)
+            .field("set_bus", &self.set_bus)
+            .field("provide_clock", &self.provide_clock)
+            .field("set_clock", &self.set_clock)
+            .field("send_event", &self.send_event)
+            .field("query", &self.query)
+            .field("post_message", &self.post_message)
+            .field("set_context", &self.set_context)
+            .finish()
     }
 }
 
@@ -1618,11 +1833,11 @@ pub struct GstEvent {
 impl ::std::fmt::Debug for GstEvent {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstEvent @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .field("type_", &self.type_)
-         .field("timestamp", &self.timestamp)
-         .field("seqnum", &self.seqnum)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .field("type_", &self.type_)
+            .field("timestamp", &self.timestamp)
+            .field("seqnum", &self.seqnum)
+            .finish()
     }
 }
 
@@ -1638,11 +1853,11 @@ pub struct GstFormatDefinition {
 impl ::std::fmt::Debug for GstFormatDefinition {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstFormatDefinition @ {:?}", self as *const _))
-         .field("value", &self.value)
-         .field("nick", &self.nick)
-         .field("description", &self.description)
-         .field("quark", &self.quark)
-         .finish()
+            .field("value", &self.value)
+            .field("nick", &self.nick)
+            .field("description", &self.description)
+            .field("quark", &self.quark)
+            .finish()
     }
 }
 
@@ -1656,8 +1871,8 @@ pub struct GstGhostPadClass {
 impl ::std::fmt::Debug for GstGhostPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGhostPadClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -1686,18 +1901,18 @@ pub struct GstIterator {
 impl ::std::fmt::Debug for GstIterator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstIterator @ {:?}", self as *const _))
-         .field("copy", &self.copy)
-         .field("next", &self.next)
-         .field("item", &self.item)
-         .field("resync", &self.resync)
-         .field("free", &self.free)
-         .field("pushed", &self.pushed)
-         .field("type_", &self.type_)
-         .field("lock", &self.lock)
-         .field("cookie", &self.cookie)
-         .field("master_cookie", &self.master_cookie)
-         .field("size", &self.size)
-         .finish()
+            .field("copy", &self.copy)
+            .field("next", &self.next)
+            .field("item", &self.item)
+            .field("resync", &self.resync)
+            .field("free", &self.free)
+            .field("pushed", &self.pushed)
+            .field("type_", &self.type_)
+            .field("lock", &self.lock)
+            .field("cookie", &self.cookie)
+            .field("master_cookie", &self.master_cookie)
+            .field("size", &self.size)
+            .finish()
     }
 }
 
@@ -1716,13 +1931,13 @@ pub struct GstMapInfo {
 impl ::std::fmt::Debug for GstMapInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMapInfo @ {:?}", self as *const _))
-         .field("memory", &self.memory)
-         .field("flags", &self.flags)
-         .field("data", &self.data)
-         .field("size", &self.size)
-         .field("maxsize", &self.maxsize)
-         .field("user_data", &self.user_data)
-         .finish()
+            .field("memory", &self.memory)
+            .field("flags", &self.flags)
+            .field("data", &self.data)
+            .field("size", &self.size)
+            .field("maxsize", &self.maxsize)
+            .field("user_data", &self.user_data)
+            .finish()
     }
 }
 
@@ -1741,14 +1956,14 @@ pub struct GstMemory {
 impl ::std::fmt::Debug for GstMemory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMemory @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .field("allocator", &self.allocator)
-         .field("parent", &self.parent)
-         .field("maxsize", &self.maxsize)
-         .field("align", &self.align)
-         .field("offset", &self.offset)
-         .field("size", &self.size)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .field("allocator", &self.allocator)
+            .field("parent", &self.parent)
+            .field("maxsize", &self.maxsize)
+            .field("align", &self.align)
+            .field("offset", &self.offset)
+            .field("size", &self.size)
+            .finish()
     }
 }
 
@@ -1767,12 +1982,12 @@ pub struct GstMessage {
 impl ::std::fmt::Debug for GstMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMessage @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .field("type_", &self.type_)
-         .field("timestamp", &self.timestamp)
-         .field("src", &self.src)
-         .field("seqnum", &self.seqnum)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .field("type_", &self.type_)
+            .field("timestamp", &self.timestamp)
+            .field("src", &self.src)
+            .field("seqnum", &self.seqnum)
+            .finish()
     }
 }
 
@@ -1786,9 +2001,9 @@ pub struct GstMeta {
 impl ::std::fmt::Debug for GstMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMeta @ {:?}", self as *const _))
-         .field("flags", &self.flags)
-         .field("info", &self.info)
-         .finish()
+            .field("flags", &self.flags)
+            .field("info", &self.info)
+            .finish()
     }
 }
 
@@ -1806,13 +2021,13 @@ pub struct GstMetaInfo {
 impl ::std::fmt::Debug for GstMetaInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMetaInfo @ {:?}", self as *const _))
-         .field("api", &self.api)
-         .field("type_", &self.type_)
-         .field("size", &self.size)
-         .field("init_func", &self.init_func)
-         .field("free_func", &self.free_func)
-         .field("transform_func", &self.transform_func)
-         .finish()
+            .field("api", &self.api)
+            .field("type_", &self.type_)
+            .field("size", &self.size)
+            .field("init_func", &self.init_func)
+            .field("free_func", &self.free_func)
+            .field("transform_func", &self.transform_func)
+            .finish()
     }
 }
 
@@ -1827,10 +2042,10 @@ pub struct GstMetaTransformCopy {
 impl ::std::fmt::Debug for GstMetaTransformCopy {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMetaTransformCopy @ {:?}", self as *const _))
-         .field("region", &self.region)
-         .field("offset", &self.offset)
-         .field("size", &self.size)
-         .finish()
+            .field("region", &self.region)
+            .field("offset", &self.offset)
+            .field("size", &self.size)
+            .finish()
     }
 }
 
@@ -1851,14 +2066,14 @@ pub struct GstMiniObject {
 impl ::std::fmt::Debug for GstMiniObject {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMiniObject @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("refcount", &self.refcount)
-         .field("lockstate", &self.lockstate)
-         .field("flags", &self.flags)
-         .field("copy", &self.copy)
-         .field("dispose", &self.dispose)
-         .field("free", &self.free)
-         .finish()
+            .field("type_", &self.type_)
+            .field("refcount", &self.refcount)
+            .field("lockstate", &self.lockstate)
+            .field("flags", &self.flags)
+            .field("copy", &self.copy)
+            .field("dispose", &self.dispose)
+            .field("free", &self.free)
+            .finish()
     }
 }
 
@@ -1867,17 +2082,18 @@ impl ::std::fmt::Debug for GstMiniObject {
 pub struct GstObjectClass {
     pub parent_class: gobject::GInitiallyUnownedClass,
     pub path_string_separator: *const c_char,
-    pub deep_notify: Option<unsafe extern "C" fn(*mut GstObject, *mut GstObject, *mut gobject::GParamSpec)>,
+    pub deep_notify:
+        Option<unsafe extern "C" fn(*mut GstObject, *mut GstObject, *mut gobject::GParamSpec)>,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstObjectClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstObjectClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("path_string_separator", &self.path_string_separator)
-         .field("deep_notify", &self.deep_notify)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("path_string_separator", &self.path_string_separator)
+            .field("deep_notify", &self.deep_notify)
+            .finish()
     }
 }
 
@@ -1893,10 +2109,10 @@ pub struct GstPadClass {
 impl ::std::fmt::Debug for GstPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("linked", &self.linked)
-         .field("unlinked", &self.unlinked)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("linked", &self.linked)
+            .field("unlinked", &self.unlinked)
+            .finish()
     }
 }
 
@@ -1919,13 +2135,13 @@ pub struct GstPadProbeInfo {
 impl ::std::fmt::Debug for GstPadProbeInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadProbeInfo @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("id", &self.id)
-         .field("data", &self.data)
-         .field("offset", &self.offset)
-         .field("size", &self.size)
-         .field("ABI", &self.ABI)
-         .finish()
+            .field("type_", &self.type_)
+            .field("id", &self.id)
+            .field("data", &self.data)
+            .field("offset", &self.offset)
+            .field("size", &self.size)
+            .field("ABI", &self.ABI)
+            .finish()
     }
 }
 
@@ -1938,8 +2154,8 @@ pub struct GstPadProbeInfo_ABI_abi {
 impl ::std::fmt::Debug for GstPadProbeInfo_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadProbeInfo_ABI_abi @ {:?}", self as *const _))
-         .field("flow_ret", &self.flow_ret)
-         .finish()
+            .field("flow_ret", &self.flow_ret)
+            .finish()
     }
 }
 
@@ -1954,9 +2170,9 @@ pub struct GstPadTemplateClass {
 impl ::std::fmt::Debug for GstPadTemplateClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadTemplateClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("pad_created", &self.pad_created)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("pad_created", &self.pad_created)
+            .finish()
     }
 }
 
@@ -1969,8 +2185,8 @@ pub struct GstPadTemplate_ABI_abi {
 impl ::std::fmt::Debug for GstPadTemplate_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadTemplate_ABI_abi @ {:?}", self as *const _))
-         .field("gtype", &self.gtype)
-         .finish()
+            .field("gtype", &self.gtype)
+            .finish()
     }
 }
 
@@ -1984,9 +2200,9 @@ pub struct GstPad_ABI_abi {
 impl ::std::fmt::Debug for GstPad_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPad_ABI_abi @ {:?}", self as *const _))
-         .field("last_flowret", &self.last_flowret)
-         .field("eventfullfunc", &self.eventfullfunc)
-         .finish()
+            .field("last_flowret", &self.last_flowret)
+            .field("eventfullfunc", &self.eventfullfunc)
+            .finish()
     }
 }
 
@@ -2000,9 +2216,9 @@ pub struct GstParamSpecArray {
 impl ::std::fmt::Debug for GstParamSpecArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstParamSpecArray @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("element_spec", &self.element_spec)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .field("element_spec", &self.element_spec)
+            .finish()
     }
 }
 
@@ -2021,14 +2237,14 @@ pub struct GstParamSpecFraction {
 impl ::std::fmt::Debug for GstParamSpecFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstParamSpecFraction @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("min_num", &self.min_num)
-         .field("min_den", &self.min_den)
-         .field("max_num", &self.max_num)
-         .field("max_den", &self.max_den)
-         .field("def_num", &self.def_num)
-         .field("def_den", &self.def_den)
-         .finish()
+            .field("parent_instance", &self.parent_instance)
+            .field("min_num", &self.min_num)
+            .field("min_den", &self.min_den)
+            .field("max_num", &self.max_num)
+            .field("max_den", &self.max_den)
+            .field("def_num", &self.def_num)
+            .field("def_den", &self.def_den)
+            .finish()
     }
 }
 
@@ -2042,9 +2258,9 @@ pub struct GstParentBufferMeta {
 impl ::std::fmt::Debug for GstParentBufferMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstParentBufferMeta @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("buffer", &self.buffer)
-         .finish()
+            .field("parent", &self.parent)
+            .field("buffer", &self.buffer)
+            .finish()
     }
 }
 
@@ -2054,7 +2270,7 @@ pub struct GstParseContext(c_void);
 impl ::std::fmt::Debug for GstParseContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstParseContext @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2068,8 +2284,8 @@ pub struct GstPipelineClass {
 impl ::std::fmt::Debug for GstPipelineClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPipelineClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2103,18 +2319,18 @@ pub struct GstPluginDesc {
 impl ::std::fmt::Debug for GstPluginDesc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPluginDesc @ {:?}", self as *const _))
-         .field("major_version", &self.major_version)
-         .field("minor_version", &self.minor_version)
-         .field("name", &self.name)
-         .field("description", &self.description)
-         .field("plugin_init", &self.plugin_init)
-         .field("version", &self.version)
-         .field("license", &self.license)
-         .field("source", &self.source)
-         .field("package", &self.package)
-         .field("origin", &self.origin)
-         .field("release_datetime", &self.release_datetime)
-         .finish()
+            .field("major_version", &self.major_version)
+            .field("minor_version", &self.minor_version)
+            .field("name", &self.name)
+            .field("description", &self.description)
+            .field("plugin_init", &self.plugin_init)
+            .field("version", &self.version)
+            .field("license", &self.license)
+            .field("source", &self.source)
+            .field("package", &self.package)
+            .field("origin", &self.origin)
+            .field("release_datetime", &self.release_datetime)
+            .finish()
     }
 }
 
@@ -2138,8 +2354,8 @@ pub struct GstPollFD {
 impl ::std::fmt::Debug for GstPollFD {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPollFD @ {:?}", self as *const _))
-         .field("fd", &self.fd)
-         .finish()
+            .field("fd", &self.fd)
+            .finish()
     }
 }
 
@@ -2151,26 +2367,41 @@ pub struct GstPresetInterface {
     pub get_property_names: Option<unsafe extern "C" fn(*mut GstPreset) -> *mut *mut c_char>,
     pub load_preset: Option<unsafe extern "C" fn(*mut GstPreset, *const c_char) -> gboolean>,
     pub save_preset: Option<unsafe extern "C" fn(*mut GstPreset, *const c_char) -> gboolean>,
-    pub rename_preset: Option<unsafe extern "C" fn(*mut GstPreset, *const c_char, *const c_char) -> gboolean>,
+    pub rename_preset:
+        Option<unsafe extern "C" fn(*mut GstPreset, *const c_char, *const c_char) -> gboolean>,
     pub delete_preset: Option<unsafe extern "C" fn(*mut GstPreset, *const c_char) -> gboolean>,
-    pub set_meta: Option<unsafe extern "C" fn(*mut GstPreset, *const c_char, *const c_char, *mut *mut c_char) -> gboolean>,
-    pub get_meta: Option<unsafe extern "C" fn(*mut GstPreset, *const c_char, *const c_char, *mut *mut c_char) -> gboolean>,
+    pub set_meta: Option<
+        unsafe extern "C" fn(
+            *mut GstPreset,
+            *const c_char,
+            *const c_char,
+            *mut *mut c_char,
+        ) -> gboolean,
+    >,
+    pub get_meta: Option<
+        unsafe extern "C" fn(
+            *mut GstPreset,
+            *const c_char,
+            *const c_char,
+            *mut *mut c_char,
+        ) -> gboolean,
+    >,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstPresetInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPresetInterface @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("get_preset_names", &self.get_preset_names)
-         .field("get_property_names", &self.get_property_names)
-         .field("load_preset", &self.load_preset)
-         .field("save_preset", &self.save_preset)
-         .field("rename_preset", &self.rename_preset)
-         .field("delete_preset", &self.delete_preset)
-         .field("set_meta", &self.set_meta)
-         .field("get_meta", &self.get_meta)
-         .finish()
+            .field("parent", &self.parent)
+            .field("get_preset_names", &self.get_preset_names)
+            .field("get_property_names", &self.get_property_names)
+            .field("load_preset", &self.load_preset)
+            .field("save_preset", &self.save_preset)
+            .field("rename_preset", &self.rename_preset)
+            .field("delete_preset", &self.delete_preset)
+            .field("set_meta", &self.set_meta)
+            .field("get_meta", &self.get_meta)
+            .finish()
     }
 }
 
@@ -2183,8 +2414,8 @@ pub struct GstPromise {
 impl ::std::fmt::Debug for GstPromise {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPromise @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2198,9 +2429,9 @@ pub struct GstProtectionMeta {
 impl ::std::fmt::Debug for GstProtectionMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstProtectionMeta @ {:?}", self as *const _))
-         .field("meta", &self.meta)
-         .field("info", &self.info)
-         .finish()
+            .field("meta", &self.meta)
+            .field("info", &self.info)
+            .finish()
     }
 }
 
@@ -2214,8 +2445,8 @@ pub struct GstProxyPadClass {
 impl ::std::fmt::Debug for GstProxyPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstProxyPadClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2234,9 +2465,9 @@ pub struct GstQuery {
 impl ::std::fmt::Debug for GstQuery {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstQuery @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .field("type_", &self.type_)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .field("type_", &self.type_)
+            .finish()
     }
 }
 
@@ -2251,12 +2482,15 @@ pub struct GstReferenceTimestampMeta {
 
 impl ::std::fmt::Debug for GstReferenceTimestampMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstReferenceTimestampMeta @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("reference", &self.reference)
-         .field("timestamp", &self.timestamp)
-         .field("duration", &self.duration)
-         .finish()
+        f.debug_struct(&format!(
+            "GstReferenceTimestampMeta @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .field("reference", &self.reference)
+        .field("timestamp", &self.timestamp)
+        .field("duration", &self.duration)
+        .finish()
     }
 }
 
@@ -2269,8 +2503,8 @@ pub struct GstRegistryClass {
 impl ::std::fmt::Debug for GstRegistryClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRegistryClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2285,7 +2519,7 @@ pub struct GstSample(c_void);
 impl ::std::fmt::Debug for GstSample {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSample @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2309,18 +2543,18 @@ pub struct GstSegment {
 impl ::std::fmt::Debug for GstSegment {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSegment @ {:?}", self as *const _))
-         .field("flags", &self.flags)
-         .field("rate", &self.rate)
-         .field("applied_rate", &self.applied_rate)
-         .field("format", &self.format)
-         .field("base", &self.base)
-         .field("offset", &self.offset)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("time", &self.time)
-         .field("position", &self.position)
-         .field("duration", &self.duration)
-         .finish()
+            .field("flags", &self.flags)
+            .field("rate", &self.rate)
+            .field("applied_rate", &self.applied_rate)
+            .field("format", &self.format)
+            .field("base", &self.base)
+            .field("offset", &self.offset)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("time", &self.time)
+            .field("position", &self.position)
+            .field("duration", &self.duration)
+            .finish()
     }
 }
 
@@ -2335,9 +2569,9 @@ pub struct GstStaticCaps {
 impl ::std::fmt::Debug for GstStaticCaps {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstStaticCaps @ {:?}", self as *const _))
-         .field("caps", &self.caps)
-         .field("string", &self.string)
-         .finish()
+            .field("caps", &self.caps)
+            .field("string", &self.string)
+            .finish()
     }
 }
 
@@ -2353,11 +2587,11 @@ pub struct GstStaticPadTemplate {
 impl ::std::fmt::Debug for GstStaticPadTemplate {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstStaticPadTemplate @ {:?}", self as *const _))
-         .field("name_template", &self.name_template)
-         .field("direction", &self.direction)
-         .field("presence", &self.presence)
-         .field("static_caps", &self.static_caps)
-         .finish()
+            .field("name_template", &self.name_template)
+            .field("direction", &self.direction)
+            .field("presence", &self.presence)
+            .field("static_caps", &self.static_caps)
+            .finish()
     }
 }
 
@@ -2371,8 +2605,8 @@ pub struct GstStreamClass {
 impl ::std::fmt::Debug for GstStreamClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstStreamClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2380,16 +2614,21 @@ impl ::std::fmt::Debug for GstStreamClass {
 #[derive(Copy, Clone)]
 pub struct GstStreamCollectionClass {
     pub parent_class: GstObjectClass,
-    pub stream_notify: Option<unsafe extern "C" fn(*mut GstStreamCollection, *mut GstStream, *mut gobject::GParamSpec)>,
+    pub stream_notify: Option<
+        unsafe extern "C" fn(*mut GstStreamCollection, *mut GstStream, *mut gobject::GParamSpec),
+    >,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstStreamCollectionClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstStreamCollectionClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("stream_notify", &self.stream_notify)
-         .finish()
+        f.debug_struct(&format!(
+            "GstStreamCollectionClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("stream_notify", &self.stream_notify)
+        .finish()
     }
 }
 
@@ -2413,8 +2652,8 @@ pub struct GstStructure {
 impl ::std::fmt::Debug for GstStructure {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstStructure @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .finish()
+            .field("type_", &self.type_)
+            .finish()
     }
 }
 
@@ -2428,8 +2667,8 @@ pub struct GstSystemClockClass {
 impl ::std::fmt::Debug for GstSystemClockClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSystemClockClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2447,8 +2686,8 @@ pub struct GstTagList {
 impl ::std::fmt::Debug for GstTagList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTagList @ {:?}", self as *const _))
-         .field("mini_object", &self.mini_object)
-         .finish()
+            .field("mini_object", &self.mini_object)
+            .finish()
     }
 }
 
@@ -2461,8 +2700,8 @@ pub struct GstTagSetterInterface {
 impl ::std::fmt::Debug for GstTagSetterInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTagSetterInterface @ {:?}", self as *const _))
-         .field("g_iface", &self.g_iface)
-         .finish()
+            .field("g_iface", &self.g_iface)
+            .finish()
     }
 }
 
@@ -2477,8 +2716,8 @@ pub struct GstTaskClass {
 impl ::std::fmt::Debug for GstTaskClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTaskClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2488,7 +2727,14 @@ pub struct GstTaskPoolClass {
     pub parent_class: GstObjectClass,
     pub prepare: Option<unsafe extern "C" fn(*mut GstTaskPool, *mut *mut glib::GError)>,
     pub cleanup: Option<unsafe extern "C" fn(*mut GstTaskPool)>,
-    pub push: Option<unsafe extern "C" fn(*mut GstTaskPool, GstTaskPoolFunction, gpointer, *mut *mut glib::GError) -> gpointer>,
+    pub push: Option<
+        unsafe extern "C" fn(
+            *mut GstTaskPool,
+            GstTaskPoolFunction,
+            gpointer,
+            *mut *mut glib::GError,
+        ) -> gpointer,
+    >,
     pub join: Option<unsafe extern "C" fn(*mut GstTaskPool, gpointer)>,
     pub _gst_reserved: [gpointer; 4],
 }
@@ -2496,12 +2742,12 @@ pub struct GstTaskPoolClass {
 impl ::std::fmt::Debug for GstTaskPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTaskPoolClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("prepare", &self.prepare)
-         .field("cleanup", &self.cleanup)
-         .field("push", &self.push)
-         .field("join", &self.join)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("prepare", &self.prepare)
+            .field("cleanup", &self.cleanup)
+            .field("push", &self.push)
+            .field("join", &self.join)
+            .finish()
     }
 }
 
@@ -2520,9 +2766,9 @@ pub struct GstTimedValue {
 impl ::std::fmt::Debug for GstTimedValue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTimedValue @ {:?}", self as *const _))
-         .field("timestamp", &self.timestamp)
-         .field("value", &self.value)
-         .finish()
+            .field("timestamp", &self.timestamp)
+            .field("value", &self.value)
+            .finish()
     }
 }
 
@@ -2532,7 +2778,7 @@ pub struct GstToc(c_void);
 impl ::std::fmt::Debug for GstToc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstToc @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2542,7 +2788,7 @@ pub struct GstTocEntry(c_void);
 impl ::std::fmt::Debug for GstTocEntry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTocEntry @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2555,8 +2801,8 @@ pub struct GstTocSetterInterface {
 impl ::std::fmt::Debug for GstTocSetterInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTocSetterInterface @ {:?}", self as *const _))
-         .field("g_iface", &self.g_iface)
-         .finish()
+            .field("g_iface", &self.g_iface)
+            .finish()
     }
 }
 
@@ -2570,8 +2816,8 @@ pub struct GstTracerClass {
 impl ::std::fmt::Debug for GstTracerClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTracerClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -2603,11 +2849,11 @@ pub struct GstTypeFind {
 impl ::std::fmt::Debug for GstTypeFind {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTypeFind @ {:?}", self as *const _))
-         .field("peek", &self.peek)
-         .field("suggest", &self.suggest)
-         .field("data", &self.data)
-         .field("get_length", &self.get_length)
-         .finish()
+            .field("peek", &self.peek)
+            .field("suggest", &self.suggest)
+            .field("data", &self.data)
+            .field("get_length", &self.get_length)
+            .finish()
     }
 }
 
@@ -2623,18 +2869,20 @@ pub struct GstURIHandlerInterface {
     pub get_type: Option<unsafe extern "C" fn(GType) -> GstURIType>,
     pub get_protocols: Option<unsafe extern "C" fn(GType) -> *const *const c_char>,
     pub get_uri: Option<unsafe extern "C" fn(*mut GstURIHandler) -> *mut c_char>,
-    pub set_uri: Option<unsafe extern "C" fn(*mut GstURIHandler, *const c_char, *mut *mut glib::GError) -> gboolean>,
+    pub set_uri: Option<
+        unsafe extern "C" fn(*mut GstURIHandler, *const c_char, *mut *mut glib::GError) -> gboolean,
+    >,
 }
 
 impl ::std::fmt::Debug for GstURIHandlerInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstURIHandlerInterface @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("get_type", &self.get_type)
-         .field("get_protocols", &self.get_protocols)
-         .field("get_uri", &self.get_uri)
-         .field("set_uri", &self.set_uri)
-         .finish()
+            .field("parent", &self.parent)
+            .field("get_type", &self.get_type)
+            .field("get_protocols", &self.get_protocols)
+            .field("get_uri", &self.get_uri)
+            .field("set_uri", &self.set_uri)
+            .finish()
     }
 }
 
@@ -2644,7 +2892,7 @@ pub struct GstUri(c_void);
 impl ::std::fmt::Debug for GstUri {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstUri @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2661,11 +2909,11 @@ pub struct GstValueTable {
 impl ::std::fmt::Debug for GstValueTable {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstValueTable @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("compare", &self.compare)
-         .field("serialize", &self.serialize)
-         .field("deserialize", &self.deserialize)
-         .finish()
+            .field("type_", &self.type_)
+            .field("compare", &self.compare)
+            .field("serialize", &self.serialize)
+            .field("deserialize", &self.deserialize)
+            .finish()
     }
 }
 
@@ -2689,16 +2937,16 @@ pub struct GstAllocator {
 impl ::std::fmt::Debug for GstAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAllocator @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("mem_type", &self.mem_type)
-         .field("mem_map", &self.mem_map)
-         .field("mem_unmap", &self.mem_unmap)
-         .field("mem_copy", &self.mem_copy)
-         .field("mem_share", &self.mem_share)
-         .field("mem_is_span", &self.mem_is_span)
-         .field("mem_map_full", &self.mem_map_full)
-         .field("mem_unmap_full", &self.mem_unmap_full)
-         .finish()
+            .field("object", &self.object)
+            .field("mem_type", &self.mem_type)
+            .field("mem_map", &self.mem_map)
+            .field("mem_unmap", &self.mem_unmap)
+            .field("mem_copy", &self.mem_copy)
+            .field("mem_share", &self.mem_share)
+            .field("mem_is_span", &self.mem_is_span)
+            .field("mem_map_full", &self.mem_map_full)
+            .field("mem_unmap_full", &self.mem_unmap_full)
+            .finish()
     }
 }
 
@@ -2723,18 +2971,18 @@ pub struct GstBin {
 impl ::std::fmt::Debug for GstBin {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBin @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("numchildren", &self.numchildren)
-         .field("children", &self.children)
-         .field("children_cookie", &self.children_cookie)
-         .field("child_bus", &self.child_bus)
-         .field("messages", &self.messages)
-         .field("polling", &self.polling)
-         .field("state_dirty", &self.state_dirty)
-         .field("clock_dirty", &self.clock_dirty)
-         .field("provided_clock", &self.provided_clock)
-         .field("clock_provider", &self.clock_provider)
-         .finish()
+            .field("element", &self.element)
+            .field("numchildren", &self.numchildren)
+            .field("children", &self.children)
+            .field("children_cookie", &self.children_cookie)
+            .field("child_bus", &self.child_bus)
+            .field("messages", &self.messages)
+            .field("polling", &self.polling)
+            .field("state_dirty", &self.state_dirty)
+            .field("clock_dirty", &self.clock_dirty)
+            .field("provided_clock", &self.provided_clock)
+            .field("clock_provider", &self.clock_provider)
+            .finish()
     }
 }
 
@@ -2744,7 +2992,7 @@ pub struct GstBitmask(c_void);
 impl ::std::fmt::Debug for GstBitmask {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBitmask @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2760,9 +3008,9 @@ pub struct GstBufferPool {
 impl ::std::fmt::Debug for GstBufferPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBufferPool @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("flushing", &self.flushing)
-         .finish()
+            .field("object", &self.object)
+            .field("flushing", &self.flushing)
+            .finish()
     }
 }
 
@@ -2777,8 +3025,8 @@ pub struct GstBus {
 impl ::std::fmt::Debug for GstBus {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBus @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .finish()
+            .field("object", &self.object)
+            .finish()
     }
 }
 
@@ -2793,8 +3041,8 @@ pub struct GstClock {
 impl ::std::fmt::Debug for GstClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstClock @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .finish()
+            .field("object", &self.object)
+            .finish()
     }
 }
 
@@ -2812,11 +3060,11 @@ pub struct GstControlBinding {
 impl ::std::fmt::Debug for GstControlBinding {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstControlBinding @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("name", &self.name)
-         .field("pspec", &self.pspec)
-         .field("ABI", &self.ABI)
-         .finish()
+            .field("parent", &self.parent)
+            .field("name", &self.name)
+            .field("pspec", &self.pspec)
+            .field("ABI", &self.ABI)
+            .finish()
     }
 }
 
@@ -2832,10 +3080,10 @@ pub struct GstControlSource {
 impl ::std::fmt::Debug for GstControlSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstControlSource @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("get_value", &self.get_value)
-         .field("get_value_array", &self.get_value_array)
-         .finish()
+            .field("parent", &self.parent)
+            .field("get_value", &self.get_value)
+            .field("get_value_array", &self.get_value_array)
+            .finish()
     }
 }
 
@@ -2850,8 +3098,8 @@ pub struct GstDevice {
 impl ::std::fmt::Debug for GstDevice {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDevice @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2866,8 +3114,8 @@ pub struct GstDeviceMonitor {
 impl ::std::fmt::Debug for GstDeviceMonitor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDeviceMonitor @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -2883,9 +3131,9 @@ pub struct GstDeviceProvider {
 impl ::std::fmt::Debug for GstDeviceProvider {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDeviceProvider @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("devices", &self.devices)
-         .finish()
+            .field("parent", &self.parent)
+            .field("devices", &self.devices)
+            .finish()
     }
 }
 
@@ -2894,8 +3142,11 @@ pub struct GstDeviceProviderFactory(c_void);
 
 impl ::std::fmt::Debug for GstDeviceProviderFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstDeviceProviderFactory @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!(
+            "GstDeviceProviderFactory @ {:?}",
+            self as *const _
+        ))
+        .finish()
     }
 }
 
@@ -2905,7 +3156,7 @@ pub struct GstDoubleRange(c_void);
 impl ::std::fmt::Debug for GstDoubleRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDoubleRange @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2915,7 +3166,7 @@ pub struct GstDynamicTypeFactory(c_void);
 impl ::std::fmt::Debug for GstDynamicTypeFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDynamicTypeFactory @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2949,28 +3200,28 @@ pub struct GstElement {
 impl ::std::fmt::Debug for GstElement {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstElement @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("state_lock", &self.state_lock)
-         .field("state_cond", &self.state_cond)
-         .field("state_cookie", &self.state_cookie)
-         .field("target_state", &self.target_state)
-         .field("current_state", &self.current_state)
-         .field("next_state", &self.next_state)
-         .field("pending_state", &self.pending_state)
-         .field("last_return", &self.last_return)
-         .field("bus", &self.bus)
-         .field("clock", &self.clock)
-         .field("base_time", &self.base_time)
-         .field("start_time", &self.start_time)
-         .field("numpads", &self.numpads)
-         .field("pads", &self.pads)
-         .field("numsrcpads", &self.numsrcpads)
-         .field("srcpads", &self.srcpads)
-         .field("numsinkpads", &self.numsinkpads)
-         .field("sinkpads", &self.sinkpads)
-         .field("pads_cookie", &self.pads_cookie)
-         .field("contexts", &self.contexts)
-         .finish()
+            .field("object", &self.object)
+            .field("state_lock", &self.state_lock)
+            .field("state_cond", &self.state_cond)
+            .field("state_cookie", &self.state_cookie)
+            .field("target_state", &self.target_state)
+            .field("current_state", &self.current_state)
+            .field("next_state", &self.next_state)
+            .field("pending_state", &self.pending_state)
+            .field("last_return", &self.last_return)
+            .field("bus", &self.bus)
+            .field("clock", &self.clock)
+            .field("base_time", &self.base_time)
+            .field("start_time", &self.start_time)
+            .field("numpads", &self.numpads)
+            .field("pads", &self.pads)
+            .field("numsrcpads", &self.numsrcpads)
+            .field("srcpads", &self.srcpads)
+            .field("numsinkpads", &self.numsinkpads)
+            .field("sinkpads", &self.sinkpads)
+            .field("pads_cookie", &self.pads_cookie)
+            .field("contexts", &self.contexts)
+            .finish()
     }
 }
 
@@ -2980,7 +3231,7 @@ pub struct GstElementFactory(c_void);
 impl ::std::fmt::Debug for GstElementFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstElementFactory @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -2990,7 +3241,7 @@ pub struct GstFlagSet(c_void);
 impl ::std::fmt::Debug for GstFlagSet {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstFlagSet @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3000,7 +3251,7 @@ pub struct GstFraction(c_void);
 impl ::std::fmt::Debug for GstFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstFraction @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3010,7 +3261,7 @@ pub struct GstFractionRange(c_void);
 impl ::std::fmt::Debug for GstFractionRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstFractionRange @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3024,8 +3275,8 @@ pub struct GstGhostPad {
 impl ::std::fmt::Debug for GstGhostPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGhostPad @ {:?}", self as *const _))
-         .field("pad", &self.pad)
-         .finish()
+            .field("pad", &self.pad)
+            .finish()
     }
 }
 
@@ -3035,7 +3286,7 @@ pub struct GstInt64Range(c_void);
 impl ::std::fmt::Debug for GstInt64Range {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstInt64Range @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3045,7 +3296,7 @@ pub struct GstIntRange(c_void);
 impl ::std::fmt::Debug for GstIntRange {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstIntRange @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3066,12 +3317,12 @@ pub struct GstObject {
 impl ::std::fmt::Debug for GstObject {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstObject @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("lock", &self.lock)
-         .field("name", &self.name)
-         .field("parent", &self.parent)
-         .field("flags", &self.flags)
-         .finish()
+            .field("object", &self.object)
+            .field("lock", &self.lock)
+            .field("name", &self.name)
+            .field("parent", &self.parent)
+            .field("flags", &self.flags)
+            .finish()
     }
 }
 
@@ -3128,12 +3379,12 @@ pub struct GstPad {
 impl ::std::fmt::Debug for GstPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPad @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("element_private", &self.element_private)
-         .field("padtemplate", &self.padtemplate)
-         .field("direction", &self.direction)
-         .field("ABI", &self.ABI)
-         .finish()
+            .field("object", &self.object)
+            .field("element_private", &self.element_private)
+            .field("padtemplate", &self.padtemplate)
+            .field("direction", &self.direction)
+            .field("ABI", &self.ABI)
+            .finish()
     }
 }
 
@@ -3151,13 +3402,13 @@ pub struct GstPadTemplate {
 impl ::std::fmt::Debug for GstPadTemplate {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPadTemplate @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("name_template", &self.name_template)
-         .field("direction", &self.direction)
-         .field("presence", &self.presence)
-         .field("caps", &self.caps)
-         .field("ABI", &self.ABI)
-         .finish()
+            .field("object", &self.object)
+            .field("name_template", &self.name_template)
+            .field("direction", &self.direction)
+            .field("presence", &self.presence)
+            .field("caps", &self.caps)
+            .field("ABI", &self.ABI)
+            .finish()
     }
 }
 
@@ -3167,7 +3418,7 @@ pub struct GstParamArray(c_void);
 impl ::std::fmt::Debug for GstParamArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstParamArray @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3177,7 +3428,7 @@ pub struct GstParamFraction(c_void);
 impl ::std::fmt::Debug for GstParamFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstParamFraction @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3195,11 +3446,11 @@ pub struct GstPipeline {
 impl ::std::fmt::Debug for GstPipeline {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPipeline @ {:?}", self as *const _))
-         .field("bin", &self.bin)
-         .field("fixed_clock", &self.fixed_clock)
-         .field("stream_time", &self.stream_time)
-         .field("delay", &self.delay)
-         .finish()
+            .field("bin", &self.bin)
+            .field("fixed_clock", &self.fixed_clock)
+            .field("stream_time", &self.stream_time)
+            .field("delay", &self.delay)
+            .finish()
     }
 }
 
@@ -3209,7 +3460,7 @@ pub struct GstPlugin(c_void);
 impl ::std::fmt::Debug for GstPlugin {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPlugin @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3219,7 +3470,7 @@ pub struct GstPluginFeature(c_void);
 impl ::std::fmt::Debug for GstPluginFeature {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPluginFeature @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3233,8 +3484,8 @@ pub struct GstProxyPad {
 impl ::std::fmt::Debug for GstProxyPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstProxyPad @ {:?}", self as *const _))
-         .field("pad", &self.pad)
-         .finish()
+            .field("pad", &self.pad)
+            .finish()
     }
 }
 
@@ -3248,8 +3499,8 @@ pub struct GstRegistry {
 impl ::std::fmt::Debug for GstRegistry {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstRegistry @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .finish()
+            .field("object", &self.object)
+            .finish()
     }
 }
 
@@ -3265,8 +3516,8 @@ pub struct GstStream {
 impl ::std::fmt::Debug for GstStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstStream @ {:?}", self as *const _))
-         .field("stream_id", &self.stream_id)
-         .finish()
+            .field("stream_id", &self.stream_id)
+            .finish()
     }
 }
 
@@ -3282,7 +3533,7 @@ pub struct GstStreamCollection {
 impl ::std::fmt::Debug for GstStreamCollection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstStreamCollection @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3297,8 +3548,8 @@ pub struct GstSystemClock {
 impl ::std::fmt::Debug for GstSystemClock {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSystemClock @ {:?}", self as *const _))
-         .field("clock", &self.clock)
-         .finish()
+            .field("clock", &self.clock)
+            .finish()
     }
 }
 
@@ -3321,15 +3572,15 @@ pub struct GstTask {
 impl ::std::fmt::Debug for GstTask {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTask @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("state", &self.state)
-         .field("cond", &self.cond)
-         .field("lock", &self.lock)
-         .field("func", &self.func)
-         .field("user_data", &self.user_data)
-         .field("notify", &self.notify)
-         .field("running", &self.running)
-         .finish()
+            .field("object", &self.object)
+            .field("state", &self.state)
+            .field("cond", &self.cond)
+            .field("lock", &self.lock)
+            .field("func", &self.func)
+            .field("user_data", &self.user_data)
+            .field("notify", &self.notify)
+            .field("running", &self.running)
+            .finish()
     }
 }
 
@@ -3344,8 +3595,8 @@ pub struct GstTaskPool {
 impl ::std::fmt::Debug for GstTaskPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTaskPool @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .finish()
+            .field("object", &self.object)
+            .finish()
     }
 }
 
@@ -3360,8 +3611,8 @@ pub struct GstTracer {
 impl ::std::fmt::Debug for GstTracer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTracer @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -3371,7 +3622,7 @@ pub struct GstTracerFactory(c_void);
 impl ::std::fmt::Debug for GstTracerFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTracerFactory @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3381,7 +3632,7 @@ pub struct GstTracerRecord(c_void);
 impl ::std::fmt::Debug for GstTracerRecord {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTracerRecord @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3391,7 +3642,7 @@ pub struct GstTypeFindFactory(c_void);
 impl ::std::fmt::Debug for GstTypeFindFactory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstTypeFindFactory @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3401,7 +3652,7 @@ pub struct GstValueArray(c_void);
 impl ::std::fmt::Debug for GstValueArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstValueArray @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3411,7 +3662,7 @@ pub struct GstValueList(c_void);
 impl ::std::fmt::Debug for GstValueList {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstValueList @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -3460,7 +3711,6 @@ impl ::std::fmt::Debug for GstURIHandler {
         write!(f, "GstURIHandler @ {:?}", self as *const _)
     }
 }
-
 
 extern "C" {
 
@@ -3906,7 +4156,9 @@ extern "C" {
     // GstAllocationParams
     //=========================================================================
     pub fn gst_allocation_params_get_type() -> GType;
-    pub fn gst_allocation_params_copy(params: *const GstAllocationParams) -> *mut GstAllocationParams;
+    pub fn gst_allocation_params_copy(
+        params: *const GstAllocationParams,
+    ) -> *mut GstAllocationParams;
     pub fn gst_allocation_params_free(params: *mut GstAllocationParams);
     pub fn gst_allocation_params_init(params: *mut GstAllocationParams);
 
@@ -3927,57 +4179,172 @@ extern "C" {
     //=========================================================================
     pub fn gst_buffer_get_type() -> GType;
     pub fn gst_buffer_new() -> *mut GstBuffer;
-    pub fn gst_buffer_new_allocate(allocator: *mut GstAllocator, size: size_t, params: *mut GstAllocationParams) -> *mut GstBuffer;
+    pub fn gst_buffer_new_allocate(
+        allocator: *mut GstAllocator,
+        size: size_t,
+        params: *mut GstAllocationParams,
+    ) -> *mut GstBuffer;
     pub fn gst_buffer_new_wrapped(data: gpointer, size: size_t) -> *mut GstBuffer;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_buffer_new_wrapped_bytes(bytes: *mut glib::GBytes) -> *mut GstBuffer;
-    pub fn gst_buffer_new_wrapped_full(flags: GstMemoryFlags, data: gpointer, maxsize: size_t, offset: size_t, size: size_t, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstBuffer;
-    pub fn gst_buffer_add_meta(buffer: *mut GstBuffer, info: *const GstMetaInfo, params: gpointer) -> *mut GstMeta;
+    pub fn gst_buffer_new_wrapped_full(
+        flags: GstMemoryFlags,
+        data: gpointer,
+        maxsize: size_t,
+        offset: size_t,
+        size: size_t,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstBuffer;
+    pub fn gst_buffer_add_meta(
+        buffer: *mut GstBuffer,
+        info: *const GstMetaInfo,
+        params: gpointer,
+    ) -> *mut GstMeta;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_buffer_add_parent_buffer_meta(buffer: *mut GstBuffer, ref_: *mut GstBuffer) -> *mut GstParentBufferMeta;
+    pub fn gst_buffer_add_parent_buffer_meta(
+        buffer: *mut GstBuffer,
+        ref_: *mut GstBuffer,
+    ) -> *mut GstParentBufferMeta;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_buffer_add_protection_meta(buffer: *mut GstBuffer, info: *mut GstStructure) -> *mut GstProtectionMeta;
+    pub fn gst_buffer_add_protection_meta(
+        buffer: *mut GstBuffer,
+        info: *mut GstStructure,
+    ) -> *mut GstProtectionMeta;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_buffer_add_reference_timestamp_meta(buffer: *mut GstBuffer, reference: *mut GstCaps, timestamp: GstClockTime, duration: GstClockTime) -> *mut GstReferenceTimestampMeta;
+    pub fn gst_buffer_add_reference_timestamp_meta(
+        buffer: *mut GstBuffer,
+        reference: *mut GstCaps,
+        timestamp: GstClockTime,
+        duration: GstClockTime,
+    ) -> *mut GstReferenceTimestampMeta;
     pub fn gst_buffer_append(buf1: *mut GstBuffer, buf2: *mut GstBuffer) -> *mut GstBuffer;
     pub fn gst_buffer_append_memory(buffer: *mut GstBuffer, mem: *mut GstMemory);
-    pub fn gst_buffer_append_region(buf1: *mut GstBuffer, buf2: *mut GstBuffer, offset: ssize_t, size: ssize_t) -> *mut GstBuffer;
+    pub fn gst_buffer_append_region(
+        buf1: *mut GstBuffer,
+        buf2: *mut GstBuffer,
+        offset: ssize_t,
+        size: ssize_t,
+    ) -> *mut GstBuffer;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_buffer_copy_deep(buf: *const GstBuffer) -> *mut GstBuffer;
-    pub fn gst_buffer_copy_into(dest: *mut GstBuffer, src: *mut GstBuffer, flags: GstBufferCopyFlags, offset: size_t, size: size_t) -> gboolean;
-    pub fn gst_buffer_copy_region(parent: *mut GstBuffer, flags: GstBufferCopyFlags, offset: size_t, size: size_t) -> *mut GstBuffer;
-    pub fn gst_buffer_extract(buffer: *mut GstBuffer, offset: size_t, dest: gpointer, size: size_t) -> size_t;
+    pub fn gst_buffer_copy_into(
+        dest: *mut GstBuffer,
+        src: *mut GstBuffer,
+        flags: GstBufferCopyFlags,
+        offset: size_t,
+        size: size_t,
+    ) -> gboolean;
+    pub fn gst_buffer_copy_region(
+        parent: *mut GstBuffer,
+        flags: GstBufferCopyFlags,
+        offset: size_t,
+        size: size_t,
+    ) -> *mut GstBuffer;
+    pub fn gst_buffer_extract(
+        buffer: *mut GstBuffer,
+        offset: size_t,
+        dest: gpointer,
+        size: size_t,
+    ) -> size_t;
     #[cfg(any(feature = "v1_0_10", feature = "dox"))]
-    pub fn gst_buffer_extract_dup(buffer: *mut GstBuffer, offset: size_t, size: size_t, dest: *mut u8, dest_size: *mut size_t);
-    pub fn gst_buffer_fill(buffer: *mut GstBuffer, offset: size_t, src: gconstpointer, size: size_t) -> size_t;
-    pub fn gst_buffer_find_memory(buffer: *mut GstBuffer, offset: size_t, size: size_t, idx: *mut c_uint, length: *mut c_uint, skip: *mut size_t) -> gboolean;
-    pub fn gst_buffer_foreach_meta(buffer: *mut GstBuffer, func: GstBufferForeachMetaFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_buffer_extract_dup(
+        buffer: *mut GstBuffer,
+        offset: size_t,
+        size: size_t,
+        dest: *mut u8,
+        dest_size: *mut size_t,
+    );
+    pub fn gst_buffer_fill(
+        buffer: *mut GstBuffer,
+        offset: size_t,
+        src: gconstpointer,
+        size: size_t,
+    ) -> size_t;
+    pub fn gst_buffer_find_memory(
+        buffer: *mut GstBuffer,
+        offset: size_t,
+        size: size_t,
+        idx: *mut c_uint,
+        length: *mut c_uint,
+        skip: *mut size_t,
+    ) -> gboolean;
+    pub fn gst_buffer_foreach_meta(
+        buffer: *mut GstBuffer,
+        func: GstBufferForeachMetaFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_buffer_get_all_memory(buffer: *mut GstBuffer) -> *mut GstMemory;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_buffer_get_flags(buffer: *mut GstBuffer) -> GstBufferFlags;
     pub fn gst_buffer_get_memory(buffer: *mut GstBuffer, idx: c_uint) -> *mut GstMemory;
-    pub fn gst_buffer_get_memory_range(buffer: *mut GstBuffer, idx: c_uint, length: c_int) -> *mut GstMemory;
+    pub fn gst_buffer_get_memory_range(
+        buffer: *mut GstBuffer,
+        idx: c_uint,
+        length: c_int,
+    ) -> *mut GstMemory;
     pub fn gst_buffer_get_meta(buffer: *mut GstBuffer, api: GType) -> *mut GstMeta;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_buffer_get_n_meta(buffer: *mut GstBuffer, api_type: GType) -> c_uint;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_buffer_get_reference_timestamp_meta(buffer: *mut GstBuffer, reference: *mut GstCaps) -> *mut GstReferenceTimestampMeta;
+    pub fn gst_buffer_get_reference_timestamp_meta(
+        buffer: *mut GstBuffer,
+        reference: *mut GstCaps,
+    ) -> *mut GstReferenceTimestampMeta;
     pub fn gst_buffer_get_size(buffer: *mut GstBuffer) -> size_t;
-    pub fn gst_buffer_get_sizes(buffer: *mut GstBuffer, offset: *mut size_t, maxsize: *mut size_t) -> size_t;
-    pub fn gst_buffer_get_sizes_range(buffer: *mut GstBuffer, idx: c_uint, length: c_int, offset: *mut size_t, maxsize: *mut size_t) -> size_t;
+    pub fn gst_buffer_get_sizes(
+        buffer: *mut GstBuffer,
+        offset: *mut size_t,
+        maxsize: *mut size_t,
+    ) -> size_t;
+    pub fn gst_buffer_get_sizes_range(
+        buffer: *mut GstBuffer,
+        idx: c_uint,
+        length: c_int,
+        offset: *mut size_t,
+        maxsize: *mut size_t,
+    ) -> size_t;
     pub fn gst_buffer_has_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_insert_memory(buffer: *mut GstBuffer, idx: c_int, mem: *mut GstMemory);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_buffer_is_all_memory_writable(buffer: *mut GstBuffer) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_buffer_is_memory_range_writable(buffer: *mut GstBuffer, idx: c_uint, length: c_int) -> gboolean;
+    pub fn gst_buffer_is_memory_range_writable(
+        buffer: *mut GstBuffer,
+        idx: c_uint,
+        length: c_int,
+    ) -> gboolean;
     pub fn gst_buffer_iterate_meta(buffer: *mut GstBuffer, state: *mut gpointer) -> *mut GstMeta;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_buffer_iterate_meta_filtered(buffer: *mut GstBuffer, state: *mut gpointer, meta_api_type: GType) -> *mut GstMeta;
-    pub fn gst_buffer_map(buffer: *mut GstBuffer, info: *mut GstMapInfo, flags: GstMapFlags) -> gboolean;
-    pub fn gst_buffer_map_range(buffer: *mut GstBuffer, idx: c_uint, length: c_int, info: *mut GstMapInfo, flags: GstMapFlags) -> gboolean;
-    pub fn gst_buffer_memcmp(buffer: *mut GstBuffer, offset: size_t, mem: gconstpointer, size: size_t) -> c_int;
-    pub fn gst_buffer_memset(buffer: *mut GstBuffer, offset: size_t, val: u8, size: size_t) -> size_t;
+    pub fn gst_buffer_iterate_meta_filtered(
+        buffer: *mut GstBuffer,
+        state: *mut gpointer,
+        meta_api_type: GType,
+    ) -> *mut GstMeta;
+    pub fn gst_buffer_map(
+        buffer: *mut GstBuffer,
+        info: *mut GstMapInfo,
+        flags: GstMapFlags,
+    ) -> gboolean;
+    pub fn gst_buffer_map_range(
+        buffer: *mut GstBuffer,
+        idx: c_uint,
+        length: c_int,
+        info: *mut GstMapInfo,
+        flags: GstMapFlags,
+    ) -> gboolean;
+    pub fn gst_buffer_memcmp(
+        buffer: *mut GstBuffer,
+        offset: size_t,
+        mem: gconstpointer,
+        size: size_t,
+    ) -> c_int;
+    pub fn gst_buffer_memset(
+        buffer: *mut GstBuffer,
+        offset: size_t,
+        val: u8,
+        size: size_t,
+    ) -> size_t;
     pub fn gst_buffer_n_memory(buffer: *mut GstBuffer) -> c_uint;
     pub fn gst_buffer_peek_memory(buffer: *mut GstBuffer, idx: c_uint) -> *mut GstMemory;
     pub fn gst_buffer_prepend_memory(buffer: *mut GstBuffer, mem: *mut GstMemory);
@@ -3987,9 +4354,20 @@ extern "C" {
     pub fn gst_buffer_remove_meta(buffer: *mut GstBuffer, meta: *mut GstMeta) -> gboolean;
     pub fn gst_buffer_replace_all_memory(buffer: *mut GstBuffer, mem: *mut GstMemory);
     pub fn gst_buffer_replace_memory(buffer: *mut GstBuffer, idx: c_uint, mem: *mut GstMemory);
-    pub fn gst_buffer_replace_memory_range(buffer: *mut GstBuffer, idx: c_uint, length: c_int, mem: *mut GstMemory);
+    pub fn gst_buffer_replace_memory_range(
+        buffer: *mut GstBuffer,
+        idx: c_uint,
+        length: c_int,
+        mem: *mut GstMemory,
+    );
     pub fn gst_buffer_resize(buffer: *mut GstBuffer, offset: ssize_t, size: ssize_t);
-    pub fn gst_buffer_resize_range(buffer: *mut GstBuffer, idx: c_uint, length: c_int, offset: ssize_t, size: ssize_t) -> gboolean;
+    pub fn gst_buffer_resize_range(
+        buffer: *mut GstBuffer,
+        idx: c_uint,
+        length: c_int,
+        offset: ssize_t,
+        size: ssize_t,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_buffer_set_flags(buffer: *mut GstBuffer, flags: GstBufferFlags) -> gboolean;
     pub fn gst_buffer_set_size(buffer: *mut GstBuffer, size: ssize_t);
@@ -4009,7 +4387,11 @@ extern "C" {
     pub fn gst_buffer_list_calculate_size(list: *mut GstBufferList) -> size_t;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_buffer_list_copy_deep(list: *const GstBufferList) -> *mut GstBufferList;
-    pub fn gst_buffer_list_foreach(list: *mut GstBufferList, func: GstBufferListFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_buffer_list_foreach(
+        list: *mut GstBufferList,
+        func: GstBufferListFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_buffer_list_get(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_buffer_list_get_writable(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
@@ -4026,26 +4408,46 @@ extern "C" {
     pub fn gst_caps_new_empty_simple(media_type: *const c_char) -> *mut GstCaps;
     pub fn gst_caps_new_full(struct1: *mut GstStructure, ...) -> *mut GstCaps;
     //pub fn gst_caps_new_full_valist(structure: *mut GstStructure, var_args: /*Unimplemented*/va_list) -> *mut GstCaps;
-    pub fn gst_caps_new_simple(media_type: *const c_char, fieldname: *const c_char, ...) -> *mut GstCaps;
+    pub fn gst_caps_new_simple(
+        media_type: *const c_char,
+        fieldname: *const c_char,
+        ...
+    ) -> *mut GstCaps;
     pub fn gst_caps_append(caps1: *mut GstCaps, caps2: *mut GstCaps);
     pub fn gst_caps_append_structure(caps: *mut GstCaps, structure: *mut GstStructure);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_append_structure_full(caps: *mut GstCaps, structure: *mut GstStructure, features: *mut GstCapsFeatures);
+    pub fn gst_caps_append_structure_full(
+        caps: *mut GstCaps,
+        structure: *mut GstStructure,
+        features: *mut GstCapsFeatures,
+    );
     pub fn gst_caps_can_intersect(caps1: *const GstCaps, caps2: *const GstCaps) -> gboolean;
     pub fn gst_caps_copy(caps: *const GstCaps) -> *mut GstCaps;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_caps_copy_nth(caps: *const GstCaps, nth: c_uint) -> *mut GstCaps;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_caps_filter_and_map_in_place(caps: *mut GstCaps, func: GstCapsFilterMapFunc, user_data: gpointer);
+    pub fn gst_caps_filter_and_map_in_place(
+        caps: *mut GstCaps,
+        func: GstCapsFilterMapFunc,
+        user_data: gpointer,
+    );
     pub fn gst_caps_fixate(caps: *mut GstCaps) -> *mut GstCaps;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_caps_foreach(caps: *const GstCaps, func: GstCapsForeachFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_caps_foreach(
+        caps: *const GstCaps,
+        func: GstCapsForeachFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_get_features(caps: *const GstCaps, index: c_uint) -> *mut GstCapsFeatures;
     pub fn gst_caps_get_size(caps: *const GstCaps) -> c_uint;
     pub fn gst_caps_get_structure(caps: *const GstCaps, index: c_uint) -> *mut GstStructure;
     pub fn gst_caps_intersect(caps1: *mut GstCaps, caps2: *mut GstCaps) -> *mut GstCaps;
-    pub fn gst_caps_intersect_full(caps1: *mut GstCaps, caps2: *mut GstCaps, mode: GstCapsIntersectMode) -> *mut GstCaps;
+    pub fn gst_caps_intersect_full(
+        caps1: *mut GstCaps,
+        caps2: *mut GstCaps,
+        mode: GstCapsIntersectMode,
+    ) -> *mut GstCaps;
     pub fn gst_caps_is_always_compatible(caps1: *const GstCaps, caps2: *const GstCaps) -> gboolean;
     pub fn gst_caps_is_any(caps: *const GstCaps) -> gboolean;
     pub fn gst_caps_is_empty(caps: *const GstCaps) -> gboolean;
@@ -4054,15 +4456,33 @@ extern "C" {
     pub fn gst_caps_is_fixed(caps: *const GstCaps) -> gboolean;
     pub fn gst_caps_is_strictly_equal(caps1: *const GstCaps, caps2: *const GstCaps) -> gboolean;
     pub fn gst_caps_is_subset(subset: *const GstCaps, superset: *const GstCaps) -> gboolean;
-    pub fn gst_caps_is_subset_structure(caps: *const GstCaps, structure: *const GstStructure) -> gboolean;
+    pub fn gst_caps_is_subset_structure(
+        caps: *const GstCaps,
+        structure: *const GstStructure,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_is_subset_structure_full(caps: *const GstCaps, structure: *const GstStructure, features: *const GstCapsFeatures) -> gboolean;
+    pub fn gst_caps_is_subset_structure_full(
+        caps: *const GstCaps,
+        structure: *const GstStructure,
+        features: *const GstCapsFeatures,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_caps_map_in_place(caps: *mut GstCaps, func: GstCapsMapFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_caps_map_in_place(
+        caps: *mut GstCaps,
+        func: GstCapsMapFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_caps_merge(caps1: *mut GstCaps, caps2: *mut GstCaps) -> *mut GstCaps;
-    pub fn gst_caps_merge_structure(caps: *mut GstCaps, structure: *mut GstStructure) -> *mut GstCaps;
+    pub fn gst_caps_merge_structure(
+        caps: *mut GstCaps,
+        structure: *mut GstStructure,
+    ) -> *mut GstCaps;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_merge_structure_full(caps: *mut GstCaps, structure: *mut GstStructure, features: *mut GstCapsFeatures) -> *mut GstCaps;
+    pub fn gst_caps_merge_structure_full(
+        caps: *mut GstCaps,
+        structure: *mut GstStructure,
+        features: *mut GstCapsFeatures,
+    ) -> *mut GstCaps;
     pub fn gst_caps_normalize(caps: *mut GstCaps) -> *mut GstCaps;
     pub fn gst_caps_remove_structure(caps: *mut GstCaps, idx: c_uint);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -4071,7 +4491,11 @@ extern "C" {
     pub fn gst_caps_set_features_simple(caps: *mut GstCaps, features: *mut GstCapsFeatures);
     pub fn gst_caps_set_simple(caps: *mut GstCaps, field: *const c_char, ...);
     //pub fn gst_caps_set_simple_valist(caps: *mut GstCaps, field: *const c_char, varargs: /*Unimplemented*/va_list);
-    pub fn gst_caps_set_value(caps: *mut GstCaps, field: *const c_char, value: *const gobject::GValue);
+    pub fn gst_caps_set_value(
+        caps: *mut GstCaps,
+        field: *const c_char,
+        value: *const gobject::GValue,
+    );
     pub fn gst_caps_simplify(caps: *mut GstCaps) -> *mut GstCaps;
     pub fn gst_caps_steal_structure(caps: *mut GstCaps, index: c_uint) -> *mut GstStructure;
     pub fn gst_caps_subtract(minuend: *mut GstCaps, subtrahend: *mut GstCaps) -> *mut GstCaps;
@@ -4100,9 +4524,15 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_add_id(features: *mut GstCapsFeatures, feature: glib::GQuark);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_features_contains(features: *const GstCapsFeatures, feature: *const c_char) -> gboolean;
+    pub fn gst_caps_features_contains(
+        features: *const GstCapsFeatures,
+        feature: *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_features_contains_id(features: *const GstCapsFeatures, feature: glib::GQuark) -> gboolean;
+    pub fn gst_caps_features_contains_id(
+        features: *const GstCapsFeatures,
+        feature: glib::GQuark,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_copy(features: *const GstCapsFeatures) -> *mut GstCapsFeatures;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -4110,19 +4540,28 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_get_nth(features: *const GstCapsFeatures, i: c_uint) -> *const c_char;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_features_get_nth_id(features: *const GstCapsFeatures, i: c_uint) -> glib::GQuark;
+    pub fn gst_caps_features_get_nth_id(
+        features: *const GstCapsFeatures,
+        i: c_uint,
+    ) -> glib::GQuark;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_get_size(features: *const GstCapsFeatures) -> c_uint;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_is_any(features: *const GstCapsFeatures) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_features_is_equal(features1: *const GstCapsFeatures, features2: *const GstCapsFeatures) -> gboolean;
+    pub fn gst_caps_features_is_equal(
+        features1: *const GstCapsFeatures,
+        features2: *const GstCapsFeatures,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_remove(features: *mut GstCapsFeatures, feature: *const c_char);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_remove_id(features: *mut GstCapsFeatures, feature: glib::GQuark);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_caps_features_set_parent_refcount(features: *mut GstCapsFeatures, refcount: *mut c_int) -> gboolean;
+    pub fn gst_caps_features_set_parent_refcount(
+        features: *mut GstCapsFeatures,
+        refcount: *mut c_int,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_caps_features_to_string(features: *const GstCapsFeatures) -> *mut c_char;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -4139,7 +4578,10 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_context_get_structure(context: *const GstContext) -> *const GstStructure;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_context_has_context_type(context: *const GstContext, context_type: *const c_char) -> gboolean;
+    pub fn gst_context_has_context_type(
+        context: *const GstContext,
+        context_type: *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_context_is_persistent(context: *const GstContext) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -4149,12 +4591,27 @@ extern "C" {
     // GstDateTime
     //=========================================================================
     pub fn gst_date_time_get_type() -> GType;
-    pub fn gst_date_time_new(tzoffset: c_float, year: c_int, month: c_int, day: c_int, hour: c_int, minute: c_int, seconds: c_double) -> *mut GstDateTime;
+    pub fn gst_date_time_new(
+        tzoffset: c_float,
+        year: c_int,
+        month: c_int,
+        day: c_int,
+        hour: c_int,
+        minute: c_int,
+        seconds: c_double,
+    ) -> *mut GstDateTime;
     pub fn gst_date_time_new_from_g_date_time(dt: *mut glib::GDateTime) -> *mut GstDateTime;
     pub fn gst_date_time_new_from_iso8601_string(string: *const c_char) -> *mut GstDateTime;
     pub fn gst_date_time_new_from_unix_epoch_local_time(secs: i64) -> *mut GstDateTime;
     pub fn gst_date_time_new_from_unix_epoch_utc(secs: i64) -> *mut GstDateTime;
-    pub fn gst_date_time_new_local_time(year: c_int, month: c_int, day: c_int, hour: c_int, minute: c_int, seconds: c_double) -> *mut GstDateTime;
+    pub fn gst_date_time_new_local_time(
+        year: c_int,
+        month: c_int,
+        day: c_int,
+        hour: c_int,
+        minute: c_int,
+        seconds: c_double,
+    ) -> *mut GstDateTime;
     pub fn gst_date_time_new_now_local_time() -> *mut GstDateTime;
     pub fn gst_date_time_new_now_utc() -> *mut GstDateTime;
     pub fn gst_date_time_new_y(year: c_int) -> *mut GstDateTime;
@@ -4198,39 +4655,106 @@ extern "C" {
     // GstDeviceProviderClass
     //=========================================================================
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_class_add_metadata(klass: *mut GstDeviceProviderClass, key: *const c_char, value: *const c_char);
+    pub fn gst_device_provider_class_add_metadata(
+        klass: *mut GstDeviceProviderClass,
+        key: *const c_char,
+        value: *const c_char,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_class_add_static_metadata(klass: *mut GstDeviceProviderClass, key: *const c_char, value: *const c_char);
+    pub fn gst_device_provider_class_add_static_metadata(
+        klass: *mut GstDeviceProviderClass,
+        key: *const c_char,
+        value: *const c_char,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_class_get_metadata(klass: *mut GstDeviceProviderClass, key: *const c_char) -> *const c_char;
+    pub fn gst_device_provider_class_get_metadata(
+        klass: *mut GstDeviceProviderClass,
+        key: *const c_char,
+    ) -> *const c_char;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_class_set_metadata(klass: *mut GstDeviceProviderClass, longname: *const c_char, classification: *const c_char, description: *const c_char, author: *const c_char);
+    pub fn gst_device_provider_class_set_metadata(
+        klass: *mut GstDeviceProviderClass,
+        longname: *const c_char,
+        classification: *const c_char,
+        description: *const c_char,
+        author: *const c_char,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_class_set_static_metadata(klass: *mut GstDeviceProviderClass, longname: *const c_char, classification: *const c_char, description: *const c_char, author: *const c_char);
+    pub fn gst_device_provider_class_set_static_metadata(
+        klass: *mut GstDeviceProviderClass,
+        longname: *const c_char,
+        classification: *const c_char,
+        description: *const c_char,
+        author: *const c_char,
+    );
 
     //=========================================================================
     // GstElementClass
     //=========================================================================
-    pub fn gst_element_class_add_metadata(klass: *mut GstElementClass, key: *const c_char, value: *const c_char);
-    pub fn gst_element_class_add_pad_template(klass: *mut GstElementClass, templ: *mut GstPadTemplate);
-    pub fn gst_element_class_add_static_metadata(klass: *mut GstElementClass, key: *const c_char, value: *const c_char);
+    pub fn gst_element_class_add_metadata(
+        klass: *mut GstElementClass,
+        key: *const c_char,
+        value: *const c_char,
+    );
+    pub fn gst_element_class_add_pad_template(
+        klass: *mut GstElementClass,
+        templ: *mut GstPadTemplate,
+    );
+    pub fn gst_element_class_add_static_metadata(
+        klass: *mut GstElementClass,
+        key: *const c_char,
+        value: *const c_char,
+    );
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_element_class_add_static_pad_template(klass: *mut GstElementClass, static_templ: *mut GstStaticPadTemplate);
+    pub fn gst_element_class_add_static_pad_template(
+        klass: *mut GstElementClass,
+        static_templ: *mut GstStaticPadTemplate,
+    );
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_element_class_add_static_pad_template_with_gtype(klass: *mut GstElementClass, static_templ: *mut GstStaticPadTemplate, pad_type: GType);
-    pub fn gst_element_class_get_metadata(klass: *mut GstElementClass, key: *const c_char) -> *const c_char;
-    pub fn gst_element_class_get_pad_template(element_class: *mut GstElementClass, name: *const c_char) -> *mut GstPadTemplate;
-    pub fn gst_element_class_get_pad_template_list(element_class: *mut GstElementClass) -> *mut glib::GList;
-    pub fn gst_element_class_set_metadata(klass: *mut GstElementClass, longname: *const c_char, classification: *const c_char, description: *const c_char, author: *const c_char);
-    pub fn gst_element_class_set_static_metadata(klass: *mut GstElementClass, longname: *const c_char, classification: *const c_char, description: *const c_char, author: *const c_char);
+    pub fn gst_element_class_add_static_pad_template_with_gtype(
+        klass: *mut GstElementClass,
+        static_templ: *mut GstStaticPadTemplate,
+        pad_type: GType,
+    );
+    pub fn gst_element_class_get_metadata(
+        klass: *mut GstElementClass,
+        key: *const c_char,
+    ) -> *const c_char;
+    pub fn gst_element_class_get_pad_template(
+        element_class: *mut GstElementClass,
+        name: *const c_char,
+    ) -> *mut GstPadTemplate;
+    pub fn gst_element_class_get_pad_template_list(
+        element_class: *mut GstElementClass,
+    ) -> *mut glib::GList;
+    pub fn gst_element_class_set_metadata(
+        klass: *mut GstElementClass,
+        longname: *const c_char,
+        classification: *const c_char,
+        description: *const c_char,
+        author: *const c_char,
+    );
+    pub fn gst_element_class_set_static_metadata(
+        klass: *mut GstElementClass,
+        longname: *const c_char,
+        classification: *const c_char,
+        description: *const c_char,
+        author: *const c_char,
+    );
 
     //=========================================================================
     // GstEvent
     //=========================================================================
     pub fn gst_event_get_type() -> GType;
-    pub fn gst_event_new_buffer_size(format: GstFormat, minsize: i64, maxsize: i64, async: gboolean) -> *mut GstEvent;
+    pub fn gst_event_new_buffer_size(
+        format: GstFormat,
+        minsize: i64,
+        maxsize: i64,
+        async: gboolean,
+    ) -> *mut GstEvent;
     pub fn gst_event_new_caps(caps: *mut GstCaps) -> *mut GstEvent;
-    pub fn gst_event_new_custom(type_: GstEventType, structure: *mut GstStructure) -> *mut GstEvent;
+    pub fn gst_event_new_custom(type_: GstEventType, structure: *mut GstStructure)
+        -> *mut GstEvent;
     pub fn gst_event_new_eos() -> *mut GstEvent;
     pub fn gst_event_new_flush_start() -> *mut GstEvent;
     pub fn gst_event_new_flush_stop(reset_time: gboolean) -> *mut GstEvent;
@@ -4238,16 +4762,39 @@ extern "C" {
     pub fn gst_event_new_latency(latency: GstClockTime) -> *mut GstEvent;
     pub fn gst_event_new_navigation(structure: *mut GstStructure) -> *mut GstEvent;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_event_new_protection(system_id: *const c_char, data: *mut GstBuffer, origin: *const c_char) -> *mut GstEvent;
-    pub fn gst_event_new_qos(type_: GstQOSType, proportion: c_double, diff: GstClockTimeDiff, timestamp: GstClockTime) -> *mut GstEvent;
+    pub fn gst_event_new_protection(
+        system_id: *const c_char,
+        data: *mut GstBuffer,
+        origin: *const c_char,
+    ) -> *mut GstEvent;
+    pub fn gst_event_new_qos(
+        type_: GstQOSType,
+        proportion: c_double,
+        diff: GstClockTimeDiff,
+        timestamp: GstClockTime,
+    ) -> *mut GstEvent;
     pub fn gst_event_new_reconfigure() -> *mut GstEvent;
-    pub fn gst_event_new_seek(rate: c_double, format: GstFormat, flags: GstSeekFlags, start_type: GstSeekType, start: i64, stop_type: GstSeekType, stop: i64) -> *mut GstEvent;
+    pub fn gst_event_new_seek(
+        rate: c_double,
+        format: GstFormat,
+        flags: GstSeekFlags,
+        start_type: GstSeekType,
+        start: i64,
+        stop_type: GstSeekType,
+        stop: i64,
+    ) -> *mut GstEvent;
     pub fn gst_event_new_segment(segment: *const GstSegment) -> *mut GstEvent;
     pub fn gst_event_new_segment_done(format: GstFormat, position: i64) -> *mut GstEvent;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_event_new_select_streams(streams: *mut glib::GList) -> *mut GstEvent;
     pub fn gst_event_new_sink_message(name: *const c_char, msg: *mut GstMessage) -> *mut GstEvent;
-    pub fn gst_event_new_step(format: GstFormat, amount: u64, rate: c_double, flush: gboolean, intermediate: gboolean) -> *mut GstEvent;
+    pub fn gst_event_new_step(
+        format: GstFormat,
+        amount: u64,
+        rate: c_double,
+        flush: gboolean,
+        intermediate: gboolean,
+    ) -> *mut GstEvent;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_event_new_stream_collection(collection: *mut GstStreamCollection) -> *mut GstEvent;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -4262,29 +4809,76 @@ extern "C" {
     pub fn gst_event_get_seqnum(event: *mut GstEvent) -> u32;
     pub fn gst_event_get_structure(event: *mut GstEvent) -> *const GstStructure;
     pub fn gst_event_has_name(event: *mut GstEvent, name: *const c_char) -> gboolean;
-    pub fn gst_event_parse_buffer_size(event: *mut GstEvent, format: *mut GstFormat, minsize: *mut i64, maxsize: *mut i64, async: *mut gboolean);
+    pub fn gst_event_parse_buffer_size(
+        event: *mut GstEvent,
+        format: *mut GstFormat,
+        minsize: *mut i64,
+        maxsize: *mut i64,
+        async: *mut gboolean,
+    );
     pub fn gst_event_parse_caps(event: *mut GstEvent, caps: *mut *mut GstCaps);
     pub fn gst_event_parse_flush_stop(event: *mut GstEvent, reset_time: *mut gboolean);
-    pub fn gst_event_parse_gap(event: *mut GstEvent, timestamp: *mut GstClockTime, duration: *mut GstClockTime);
+    pub fn gst_event_parse_gap(
+        event: *mut GstEvent,
+        timestamp: *mut GstClockTime,
+        duration: *mut GstClockTime,
+    );
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_event_parse_group_id(event: *mut GstEvent, group_id: *mut c_uint) -> gboolean;
     pub fn gst_event_parse_latency(event: *mut GstEvent, latency: *mut GstClockTime);
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_event_parse_protection(event: *mut GstEvent, system_id: *mut *const c_char, data: *mut *mut GstBuffer, origin: *mut *const c_char);
-    pub fn gst_event_parse_qos(event: *mut GstEvent, type_: *mut GstQOSType, proportion: *mut c_double, diff: *mut GstClockTimeDiff, timestamp: *mut GstClockTime);
-    pub fn gst_event_parse_seek(event: *mut GstEvent, rate: *mut c_double, format: *mut GstFormat, flags: *mut GstSeekFlags, start_type: *mut GstSeekType, start: *mut i64, stop_type: *mut GstSeekType, stop: *mut i64);
+    pub fn gst_event_parse_protection(
+        event: *mut GstEvent,
+        system_id: *mut *const c_char,
+        data: *mut *mut GstBuffer,
+        origin: *mut *const c_char,
+    );
+    pub fn gst_event_parse_qos(
+        event: *mut GstEvent,
+        type_: *mut GstQOSType,
+        proportion: *mut c_double,
+        diff: *mut GstClockTimeDiff,
+        timestamp: *mut GstClockTime,
+    );
+    pub fn gst_event_parse_seek(
+        event: *mut GstEvent,
+        rate: *mut c_double,
+        format: *mut GstFormat,
+        flags: *mut GstSeekFlags,
+        start_type: *mut GstSeekType,
+        start: *mut i64,
+        stop_type: *mut GstSeekType,
+        stop: *mut i64,
+    );
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_event_parse_seek_trickmode_interval(event: *mut GstEvent, interval: *mut GstClockTime);
+    pub fn gst_event_parse_seek_trickmode_interval(
+        event: *mut GstEvent,
+        interval: *mut GstClockTime,
+    );
     pub fn gst_event_parse_segment(event: *mut GstEvent, segment: *mut *const GstSegment);
-    pub fn gst_event_parse_segment_done(event: *mut GstEvent, format: *mut GstFormat, position: *mut i64);
+    pub fn gst_event_parse_segment_done(
+        event: *mut GstEvent,
+        format: *mut GstFormat,
+        position: *mut i64,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_event_parse_select_streams(event: *mut GstEvent, streams: *mut *mut glib::GList);
     pub fn gst_event_parse_sink_message(event: *mut GstEvent, msg: *mut *mut GstMessage);
-    pub fn gst_event_parse_step(event: *mut GstEvent, format: *mut GstFormat, amount: *mut u64, rate: *mut c_double, flush: *mut gboolean, intermediate: *mut gboolean);
+    pub fn gst_event_parse_step(
+        event: *mut GstEvent,
+        format: *mut GstFormat,
+        amount: *mut u64,
+        rate: *mut c_double,
+        flush: *mut gboolean,
+        intermediate: *mut gboolean,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_event_parse_stream(event: *mut GstEvent, stream: *mut *mut GstStream);
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_event_parse_stream_collection(event: *mut GstEvent, collection: *mut *mut GstStreamCollection);
+    pub fn gst_event_parse_stream_collection(
+        event: *mut GstEvent,
+        collection: *mut *mut GstStreamCollection,
+    );
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_event_parse_stream_flags(event: *mut GstEvent, flags: *mut GstStreamFlags);
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -4310,16 +4904,55 @@ extern "C" {
     // GstIterator
     //=========================================================================
     pub fn gst_iterator_get_type() -> GType;
-    pub fn gst_iterator_new(size: c_uint, type_: GType, lock: *mut glib::GMutex, master_cookie: *mut u32, copy: GstIteratorCopyFunction, next: GstIteratorNextFunction, item: GstIteratorItemFunction, resync: GstIteratorResyncFunction, free: GstIteratorFreeFunction) -> *mut GstIterator;
-    pub fn gst_iterator_new_list(type_: GType, lock: *mut glib::GMutex, master_cookie: *mut u32, list: *mut *mut glib::GList, owner: *mut gobject::GObject, item: GstIteratorItemFunction) -> *mut GstIterator;
-    pub fn gst_iterator_new_single(type_: GType, object: *const gobject::GValue) -> *mut GstIterator;
+    pub fn gst_iterator_new(
+        size: c_uint,
+        type_: GType,
+        lock: *mut glib::GMutex,
+        master_cookie: *mut u32,
+        copy: GstIteratorCopyFunction,
+        next: GstIteratorNextFunction,
+        item: GstIteratorItemFunction,
+        resync: GstIteratorResyncFunction,
+        free: GstIteratorFreeFunction,
+    ) -> *mut GstIterator;
+    pub fn gst_iterator_new_list(
+        type_: GType,
+        lock: *mut glib::GMutex,
+        master_cookie: *mut u32,
+        list: *mut *mut glib::GList,
+        owner: *mut gobject::GObject,
+        item: GstIteratorItemFunction,
+    ) -> *mut GstIterator;
+    pub fn gst_iterator_new_single(
+        type_: GType,
+        object: *const gobject::GValue,
+    ) -> *mut GstIterator;
     pub fn gst_iterator_copy(it: *const GstIterator) -> *mut GstIterator;
-    pub fn gst_iterator_filter(it: *mut GstIterator, func: glib::GCompareFunc, user_data: *const gobject::GValue) -> *mut GstIterator;
-    pub fn gst_iterator_find_custom(it: *mut GstIterator, func: glib::GCompareFunc, elem: *mut gobject::GValue, user_data: gpointer) -> gboolean;
-    pub fn gst_iterator_fold(it: *mut GstIterator, func: GstIteratorFoldFunction, ret: *mut gobject::GValue, user_data: gpointer) -> GstIteratorResult;
-    pub fn gst_iterator_foreach(it: *mut GstIterator, func: GstIteratorForeachFunction, user_data: gpointer) -> GstIteratorResult;
+    pub fn gst_iterator_filter(
+        it: *mut GstIterator,
+        func: glib::GCompareFunc,
+        user_data: *const gobject::GValue,
+    ) -> *mut GstIterator;
+    pub fn gst_iterator_find_custom(
+        it: *mut GstIterator,
+        func: glib::GCompareFunc,
+        elem: *mut gobject::GValue,
+        user_data: gpointer,
+    ) -> gboolean;
+    pub fn gst_iterator_fold(
+        it: *mut GstIterator,
+        func: GstIteratorFoldFunction,
+        ret: *mut gobject::GValue,
+        user_data: gpointer,
+    ) -> GstIteratorResult;
+    pub fn gst_iterator_foreach(
+        it: *mut GstIterator,
+        func: GstIteratorForeachFunction,
+        user_data: gpointer,
+    ) -> GstIteratorResult;
     pub fn gst_iterator_free(it: *mut GstIterator);
-    pub fn gst_iterator_next(it: *mut GstIterator, elem: *mut gobject::GValue) -> GstIteratorResult;
+    pub fn gst_iterator_next(it: *mut GstIterator, elem: *mut gobject::GValue)
+        -> GstIteratorResult;
     pub fn gst_iterator_push(it: *mut GstIterator, other: *mut GstIterator);
     pub fn gst_iterator_resync(it: *mut GstIterator);
 
@@ -4327,15 +4960,48 @@ extern "C" {
     // GstMemory
     //=========================================================================
     pub fn gst_memory_get_type() -> GType;
-    pub fn gst_memory_new_wrapped(flags: GstMemoryFlags, data: gpointer, maxsize: size_t, offset: size_t, size: size_t, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstMemory;
+    pub fn gst_memory_new_wrapped(
+        flags: GstMemoryFlags,
+        data: gpointer,
+        maxsize: size_t,
+        offset: size_t,
+        size: size_t,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstMemory;
     pub fn gst_memory_copy(mem: *mut GstMemory, offset: ssize_t, size: ssize_t) -> *mut GstMemory;
-    pub fn gst_memory_get_sizes(mem: *mut GstMemory, offset: *mut size_t, maxsize: *mut size_t) -> size_t;
-    pub fn gst_memory_init(mem: *mut GstMemory, flags: GstMemoryFlags, allocator: *mut GstAllocator, parent: *mut GstMemory, maxsize: size_t, align: size_t, offset: size_t, size: size_t);
-    pub fn gst_memory_is_span(mem1: *mut GstMemory, mem2: *mut GstMemory, offset: *mut size_t) -> gboolean;
+    pub fn gst_memory_get_sizes(
+        mem: *mut GstMemory,
+        offset: *mut size_t,
+        maxsize: *mut size_t,
+    ) -> size_t;
+    pub fn gst_memory_init(
+        mem: *mut GstMemory,
+        flags: GstMemoryFlags,
+        allocator: *mut GstAllocator,
+        parent: *mut GstMemory,
+        maxsize: size_t,
+        align: size_t,
+        offset: size_t,
+        size: size_t,
+    );
+    pub fn gst_memory_is_span(
+        mem1: *mut GstMemory,
+        mem2: *mut GstMemory,
+        offset: *mut size_t,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_memory_is_type(mem: *mut GstMemory, mem_type: *const c_char) -> gboolean;
-    pub fn gst_memory_make_mapped(mem: *mut GstMemory, info: *mut GstMapInfo, flags: GstMapFlags) -> *mut GstMemory;
-    pub fn gst_memory_map(mem: *mut GstMemory, info: *mut GstMapInfo, flags: GstMapFlags) -> gboolean;
+    pub fn gst_memory_make_mapped(
+        mem: *mut GstMemory,
+        info: *mut GstMapInfo,
+        flags: GstMapFlags,
+    ) -> *mut GstMemory;
+    pub fn gst_memory_map(
+        mem: *mut GstMemory,
+        info: *mut GstMapInfo,
+        flags: GstMapFlags,
+    ) -> gboolean;
     pub fn gst_memory_resize(mem: *mut GstMemory, offset: ssize_t, size: size_t);
     pub fn gst_memory_share(mem: *mut GstMemory, offset: ssize_t, size: ssize_t) -> *mut GstMemory;
     pub fn gst_memory_unmap(mem: *mut GstMemory, info: *mut GstMapInfo);
@@ -4344,131 +5010,413 @@ extern "C" {
     // GstMessage
     //=========================================================================
     pub fn gst_message_get_type() -> GType;
-    pub fn gst_message_new_application(src: *mut GstObject, structure: *mut GstStructure) -> *mut GstMessage;
-    pub fn gst_message_new_async_done(src: *mut GstObject, running_time: GstClockTime) -> *mut GstMessage;
+    pub fn gst_message_new_application(
+        src: *mut GstObject,
+        structure: *mut GstStructure,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_async_done(
+        src: *mut GstObject,
+        running_time: GstClockTime,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_async_start(src: *mut GstObject) -> *mut GstMessage;
     pub fn gst_message_new_buffering(src: *mut GstObject, percent: c_int) -> *mut GstMessage;
-    pub fn gst_message_new_clock_lost(src: *mut GstObject, clock: *mut GstClock) -> *mut GstMessage;
-    pub fn gst_message_new_clock_provide(src: *mut GstObject, clock: *mut GstClock, ready: gboolean) -> *mut GstMessage;
-    pub fn gst_message_new_custom(type_: GstMessageType, src: *mut GstObject, structure: *mut GstStructure) -> *mut GstMessage;
+    pub fn gst_message_new_clock_lost(src: *mut GstObject, clock: *mut GstClock)
+        -> *mut GstMessage;
+    pub fn gst_message_new_clock_provide(
+        src: *mut GstObject,
+        clock: *mut GstClock,
+        ready: gboolean,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_custom(
+        type_: GstMessageType,
+        src: *mut GstObject,
+        structure: *mut GstStructure,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_message_new_device_added(src: *mut GstObject, device: *mut GstDevice) -> *mut GstMessage;
+    pub fn gst_message_new_device_added(
+        src: *mut GstObject,
+        device: *mut GstDevice,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_message_new_device_changed(src: *mut GstObject, device: *mut GstDevice, changed_device: *mut GstDevice) -> *mut GstMessage;
+    pub fn gst_message_new_device_changed(
+        src: *mut GstObject,
+        device: *mut GstDevice,
+        changed_device: *mut GstDevice,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_message_new_device_removed(src: *mut GstObject, device: *mut GstDevice) -> *mut GstMessage;
+    pub fn gst_message_new_device_removed(
+        src: *mut GstObject,
+        device: *mut GstDevice,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_duration_changed(src: *mut GstObject) -> *mut GstMessage;
-    pub fn gst_message_new_element(src: *mut GstObject, structure: *mut GstStructure) -> *mut GstMessage;
+    pub fn gst_message_new_element(
+        src: *mut GstObject,
+        structure: *mut GstStructure,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_eos(src: *mut GstObject) -> *mut GstMessage;
-    pub fn gst_message_new_error(src: *mut GstObject, error: *mut glib::GError, debug: *const c_char) -> *mut GstMessage;
+    pub fn gst_message_new_error(
+        src: *mut GstObject,
+        error: *mut glib::GError,
+        debug: *const c_char,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_error_with_details(src: *mut GstObject, error: *mut glib::GError, debug: *const c_char, details: *mut GstStructure) -> *mut GstMessage;
+    pub fn gst_message_new_error_with_details(
+        src: *mut GstObject,
+        error: *mut glib::GError,
+        debug: *const c_char,
+        details: *mut GstStructure,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_message_new_have_context(src: *mut GstObject, context: *mut GstContext) -> *mut GstMessage;
-    pub fn gst_message_new_info(src: *mut GstObject, error: *mut glib::GError, debug: *const c_char) -> *mut GstMessage;
+    pub fn gst_message_new_have_context(
+        src: *mut GstObject,
+        context: *mut GstContext,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_info(
+        src: *mut GstObject,
+        error: *mut glib::GError,
+        debug: *const c_char,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_info_with_details(src: *mut GstObject, error: *mut glib::GError, debug: *const c_char, details: *mut GstStructure) -> *mut GstMessage;
+    pub fn gst_message_new_info_with_details(
+        src: *mut GstObject,
+        error: *mut glib::GError,
+        debug: *const c_char,
+        details: *mut GstStructure,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_latency(src: *mut GstObject) -> *mut GstMessage;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_message_new_need_context(src: *mut GstObject, context_type: *const c_char) -> *mut GstMessage;
+    pub fn gst_message_new_need_context(
+        src: *mut GstObject,
+        context_type: *const c_char,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_new_clock(src: *mut GstObject, clock: *mut GstClock) -> *mut GstMessage;
-    pub fn gst_message_new_progress(src: *mut GstObject, type_: GstProgressType, code: *const c_char, text: *const c_char) -> *mut GstMessage;
+    pub fn gst_message_new_progress(
+        src: *mut GstObject,
+        type_: GstProgressType,
+        code: *const c_char,
+        text: *const c_char,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_property_notify(src: *mut GstObject, property_name: *const c_char, val: *mut gobject::GValue) -> *mut GstMessage;
-    pub fn gst_message_new_qos(src: *mut GstObject, live: gboolean, running_time: u64, stream_time: u64, timestamp: u64, duration: u64) -> *mut GstMessage;
+    pub fn gst_message_new_property_notify(
+        src: *mut GstObject,
+        property_name: *const c_char,
+        val: *mut gobject::GValue,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_qos(
+        src: *mut GstObject,
+        live: gboolean,
+        running_time: u64,
+        stream_time: u64,
+        timestamp: u64,
+        duration: u64,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_redirect(src: *mut GstObject, location: *const c_char, tag_list: *mut GstTagList, entry_struct: *const GstStructure) -> *mut GstMessage;
+    pub fn gst_message_new_redirect(
+        src: *mut GstObject,
+        location: *const c_char,
+        tag_list: *mut GstTagList,
+        entry_struct: *const GstStructure,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_request_state(src: *mut GstObject, state: GstState) -> *mut GstMessage;
-    pub fn gst_message_new_reset_time(src: *mut GstObject, running_time: GstClockTime) -> *mut GstMessage;
-    pub fn gst_message_new_segment_done(src: *mut GstObject, format: GstFormat, position: i64) -> *mut GstMessage;
-    pub fn gst_message_new_segment_start(src: *mut GstObject, format: GstFormat, position: i64) -> *mut GstMessage;
-    pub fn gst_message_new_state_changed(src: *mut GstObject, oldstate: GstState, newstate: GstState, pending: GstState) -> *mut GstMessage;
+    pub fn gst_message_new_reset_time(
+        src: *mut GstObject,
+        running_time: GstClockTime,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_segment_done(
+        src: *mut GstObject,
+        format: GstFormat,
+        position: i64,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_segment_start(
+        src: *mut GstObject,
+        format: GstFormat,
+        position: i64,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_state_changed(
+        src: *mut GstObject,
+        oldstate: GstState,
+        newstate: GstState,
+        pending: GstState,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_state_dirty(src: *mut GstObject) -> *mut GstMessage;
-    pub fn gst_message_new_step_done(src: *mut GstObject, format: GstFormat, amount: u64, rate: c_double, flush: gboolean, intermediate: gboolean, duration: u64, eos: gboolean) -> *mut GstMessage;
-    pub fn gst_message_new_step_start(src: *mut GstObject, active: gboolean, format: GstFormat, amount: u64, rate: c_double, flush: gboolean, intermediate: gboolean) -> *mut GstMessage;
+    pub fn gst_message_new_step_done(
+        src: *mut GstObject,
+        format: GstFormat,
+        amount: u64,
+        rate: c_double,
+        flush: gboolean,
+        intermediate: gboolean,
+        duration: u64,
+        eos: gboolean,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_step_start(
+        src: *mut GstObject,
+        active: gboolean,
+        format: GstFormat,
+        amount: u64,
+        rate: c_double,
+        flush: gboolean,
+        intermediate: gboolean,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_stream_collection(src: *mut GstObject, collection: *mut GstStreamCollection) -> *mut GstMessage;
+    pub fn gst_message_new_stream_collection(
+        src: *mut GstObject,
+        collection: *mut GstStreamCollection,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_stream_start(src: *mut GstObject) -> *mut GstMessage;
-    pub fn gst_message_new_stream_status(src: *mut GstObject, type_: GstStreamStatusType, owner: *mut GstElement) -> *mut GstMessage;
+    pub fn gst_message_new_stream_status(
+        src: *mut GstObject,
+        type_: GstStreamStatusType,
+        owner: *mut GstElement,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_streams_selected(src: *mut GstObject, collection: *mut GstStreamCollection) -> *mut GstMessage;
-    pub fn gst_message_new_structure_change(src: *mut GstObject, type_: GstStructureChangeType, owner: *mut GstElement, busy: gboolean) -> *mut GstMessage;
+    pub fn gst_message_new_streams_selected(
+        src: *mut GstObject,
+        collection: *mut GstStreamCollection,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_structure_change(
+        src: *mut GstObject,
+        type_: GstStructureChangeType,
+        owner: *mut GstElement,
+        busy: gboolean,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_tag(src: *mut GstObject, tag_list: *mut GstTagList) -> *mut GstMessage;
-    pub fn gst_message_new_toc(src: *mut GstObject, toc: *mut GstToc, updated: gboolean) -> *mut GstMessage;
-    pub fn gst_message_new_warning(src: *mut GstObject, error: *mut glib::GError, debug: *const c_char) -> *mut GstMessage;
+    pub fn gst_message_new_toc(
+        src: *mut GstObject,
+        toc: *mut GstToc,
+        updated: gboolean,
+    ) -> *mut GstMessage;
+    pub fn gst_message_new_warning(
+        src: *mut GstObject,
+        error: *mut glib::GError,
+        debug: *const c_char,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_new_warning_with_details(src: *mut GstObject, error: *mut glib::GError, debug: *const c_char, details: *mut GstStructure) -> *mut GstMessage;
+    pub fn gst_message_new_warning_with_details(
+        src: *mut GstObject,
+        error: *mut glib::GError,
+        debug: *const c_char,
+        details: *mut GstStructure,
+    ) -> *mut GstMessage;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_add_redirect_entry(message: *mut GstMessage, location: *const c_char, tag_list: *mut GstTagList, entry_struct: *const GstStructure);
+    pub fn gst_message_add_redirect_entry(
+        message: *mut GstMessage,
+        location: *const c_char,
+        tag_list: *mut GstTagList,
+        entry_struct: *const GstStructure,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_message_get_num_redirect_entries(message: *mut GstMessage) -> size_t;
     pub fn gst_message_get_seqnum(message: *mut GstMessage) -> u32;
-    pub fn gst_message_get_stream_status_object(message: *mut GstMessage) -> *const gobject::GValue;
+    pub fn gst_message_get_stream_status_object(message: *mut GstMessage)
+        -> *const gobject::GValue;
     pub fn gst_message_get_structure(message: *mut GstMessage) -> *const GstStructure;
     pub fn gst_message_has_name(message: *mut GstMessage, name: *const c_char) -> gboolean;
     pub fn gst_message_parse_async_done(message: *mut GstMessage, running_time: *mut GstClockTime);
     pub fn gst_message_parse_buffering(message: *mut GstMessage, percent: *mut c_int);
-    pub fn gst_message_parse_buffering_stats(message: *mut GstMessage, mode: *mut GstBufferingMode, avg_in: *mut c_int, avg_out: *mut c_int, buffering_left: *mut i64);
+    pub fn gst_message_parse_buffering_stats(
+        message: *mut GstMessage,
+        mode: *mut GstBufferingMode,
+        avg_in: *mut c_int,
+        avg_out: *mut c_int,
+        buffering_left: *mut i64,
+    );
     pub fn gst_message_parse_clock_lost(message: *mut GstMessage, clock: *mut *mut GstClock);
-    pub fn gst_message_parse_clock_provide(message: *mut GstMessage, clock: *mut *mut GstClock, ready: *mut gboolean);
+    pub fn gst_message_parse_clock_provide(
+        message: *mut GstMessage,
+        clock: *mut *mut GstClock,
+        ready: *mut gboolean,
+    );
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_message_parse_context_type(message: *mut GstMessage, context_type: *mut *const c_char) -> gboolean;
+    pub fn gst_message_parse_context_type(
+        message: *mut GstMessage,
+        context_type: *mut *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_message_parse_device_added(message: *mut GstMessage, device: *mut *mut GstDevice);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_message_parse_device_changed(message: *mut GstMessage, device: *mut *mut GstDevice, changed_device: *mut *mut GstDevice);
+    pub fn gst_message_parse_device_changed(
+        message: *mut GstMessage,
+        device: *mut *mut GstDevice,
+        changed_device: *mut *mut GstDevice,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_message_parse_device_removed(message: *mut GstMessage, device: *mut *mut GstDevice);
-    pub fn gst_message_parse_error(message: *mut GstMessage, gerror: *mut *mut glib::GError, debug: *mut *mut c_char);
+    pub fn gst_message_parse_error(
+        message: *mut GstMessage,
+        gerror: *mut *mut glib::GError,
+        debug: *mut *mut c_char,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_error_details(message: *mut GstMessage, structure: *mut *const GstStructure);
+    pub fn gst_message_parse_error_details(
+        message: *mut GstMessage,
+        structure: *mut *const GstStructure,
+    );
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_message_parse_group_id(message: *mut GstMessage, group_id: *mut c_uint) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_message_parse_have_context(message: *mut GstMessage, context: *mut *mut GstContext);
-    pub fn gst_message_parse_info(message: *mut GstMessage, gerror: *mut *mut glib::GError, debug: *mut *mut c_char);
+    pub fn gst_message_parse_info(
+        message: *mut GstMessage,
+        gerror: *mut *mut glib::GError,
+        debug: *mut *mut c_char,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_info_details(message: *mut GstMessage, structure: *mut *const GstStructure);
+    pub fn gst_message_parse_info_details(
+        message: *mut GstMessage,
+        structure: *mut *const GstStructure,
+    );
     pub fn gst_message_parse_new_clock(message: *mut GstMessage, clock: *mut *mut GstClock);
-    pub fn gst_message_parse_progress(message: *mut GstMessage, type_: *mut GstProgressType, code: *mut *mut c_char, text: *mut *mut c_char);
+    pub fn gst_message_parse_progress(
+        message: *mut GstMessage,
+        type_: *mut GstProgressType,
+        code: *mut *mut c_char,
+        text: *mut *mut c_char,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_property_notify(message: *mut GstMessage, object: *mut *mut GstObject, property_name: *mut *const c_char, property_value: *mut *const gobject::GValue);
-    pub fn gst_message_parse_qos(message: *mut GstMessage, live: *mut gboolean, running_time: *mut u64, stream_time: *mut u64, timestamp: *mut u64, duration: *mut u64);
-    pub fn gst_message_parse_qos_stats(message: *mut GstMessage, format: *mut GstFormat, processed: *mut u64, dropped: *mut u64);
-    pub fn gst_message_parse_qos_values(message: *mut GstMessage, jitter: *mut i64, proportion: *mut c_double, quality: *mut c_int);
+    pub fn gst_message_parse_property_notify(
+        message: *mut GstMessage,
+        object: *mut *mut GstObject,
+        property_name: *mut *const c_char,
+        property_value: *mut *const gobject::GValue,
+    );
+    pub fn gst_message_parse_qos(
+        message: *mut GstMessage,
+        live: *mut gboolean,
+        running_time: *mut u64,
+        stream_time: *mut u64,
+        timestamp: *mut u64,
+        duration: *mut u64,
+    );
+    pub fn gst_message_parse_qos_stats(
+        message: *mut GstMessage,
+        format: *mut GstFormat,
+        processed: *mut u64,
+        dropped: *mut u64,
+    );
+    pub fn gst_message_parse_qos_values(
+        message: *mut GstMessage,
+        jitter: *mut i64,
+        proportion: *mut c_double,
+        quality: *mut c_int,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_redirect_entry(message: *mut GstMessage, entry_index: size_t, location: *mut *const c_char, tag_list: *mut *mut GstTagList, entry_struct: *mut *const GstStructure);
+    pub fn gst_message_parse_redirect_entry(
+        message: *mut GstMessage,
+        entry_index: size_t,
+        location: *mut *const c_char,
+        tag_list: *mut *mut GstTagList,
+        entry_struct: *mut *const GstStructure,
+    );
     pub fn gst_message_parse_request_state(message: *mut GstMessage, state: *mut GstState);
     pub fn gst_message_parse_reset_time(message: *mut GstMessage, running_time: *mut GstClockTime);
-    pub fn gst_message_parse_segment_done(message: *mut GstMessage, format: *mut GstFormat, position: *mut i64);
-    pub fn gst_message_parse_segment_start(message: *mut GstMessage, format: *mut GstFormat, position: *mut i64);
-    pub fn gst_message_parse_state_changed(message: *mut GstMessage, oldstate: *mut GstState, newstate: *mut GstState, pending: *mut GstState);
-    pub fn gst_message_parse_step_done(message: *mut GstMessage, format: *mut GstFormat, amount: *mut u64, rate: *mut c_double, flush: *mut gboolean, intermediate: *mut gboolean, duration: *mut u64, eos: *mut gboolean);
-    pub fn gst_message_parse_step_start(message: *mut GstMessage, active: *mut gboolean, format: *mut GstFormat, amount: *mut u64, rate: *mut c_double, flush: *mut gboolean, intermediate: *mut gboolean);
+    pub fn gst_message_parse_segment_done(
+        message: *mut GstMessage,
+        format: *mut GstFormat,
+        position: *mut i64,
+    );
+    pub fn gst_message_parse_segment_start(
+        message: *mut GstMessage,
+        format: *mut GstFormat,
+        position: *mut i64,
+    );
+    pub fn gst_message_parse_state_changed(
+        message: *mut GstMessage,
+        oldstate: *mut GstState,
+        newstate: *mut GstState,
+        pending: *mut GstState,
+    );
+    pub fn gst_message_parse_step_done(
+        message: *mut GstMessage,
+        format: *mut GstFormat,
+        amount: *mut u64,
+        rate: *mut c_double,
+        flush: *mut gboolean,
+        intermediate: *mut gboolean,
+        duration: *mut u64,
+        eos: *mut gboolean,
+    );
+    pub fn gst_message_parse_step_start(
+        message: *mut GstMessage,
+        active: *mut gboolean,
+        format: *mut GstFormat,
+        amount: *mut u64,
+        rate: *mut c_double,
+        flush: *mut gboolean,
+        intermediate: *mut gboolean,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_stream_collection(message: *mut GstMessage, collection: *mut *mut GstStreamCollection);
-    pub fn gst_message_parse_stream_status(message: *mut GstMessage, type_: *mut GstStreamStatusType, owner: *mut *mut GstElement);
+    pub fn gst_message_parse_stream_collection(
+        message: *mut GstMessage,
+        collection: *mut *mut GstStreamCollection,
+    );
+    pub fn gst_message_parse_stream_status(
+        message: *mut GstMessage,
+        type_: *mut GstStreamStatusType,
+        owner: *mut *mut GstElement,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_streams_selected(message: *mut GstMessage, collection: *mut *mut GstStreamCollection);
-    pub fn gst_message_parse_structure_change(message: *mut GstMessage, type_: *mut GstStructureChangeType, owner: *mut *mut GstElement, busy: *mut gboolean);
+    pub fn gst_message_parse_streams_selected(
+        message: *mut GstMessage,
+        collection: *mut *mut GstStreamCollection,
+    );
+    pub fn gst_message_parse_structure_change(
+        message: *mut GstMessage,
+        type_: *mut GstStructureChangeType,
+        owner: *mut *mut GstElement,
+        busy: *mut gboolean,
+    );
     pub fn gst_message_parse_tag(message: *mut GstMessage, tag_list: *mut *mut GstTagList);
-    pub fn gst_message_parse_toc(message: *mut GstMessage, toc: *mut *mut GstToc, updated: *mut gboolean);
-    pub fn gst_message_parse_warning(message: *mut GstMessage, gerror: *mut *mut glib::GError, debug: *mut *mut c_char);
+    pub fn gst_message_parse_toc(
+        message: *mut GstMessage,
+        toc: *mut *mut GstToc,
+        updated: *mut gboolean,
+    );
+    pub fn gst_message_parse_warning(
+        message: *mut GstMessage,
+        gerror: *mut *mut glib::GError,
+        debug: *mut *mut c_char,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_parse_warning_details(message: *mut GstMessage, structure: *mut *const GstStructure);
-    pub fn gst_message_set_buffering_stats(message: *mut GstMessage, mode: GstBufferingMode, avg_in: c_int, avg_out: c_int, buffering_left: i64);
+    pub fn gst_message_parse_warning_details(
+        message: *mut GstMessage,
+        structure: *mut *const GstStructure,
+    );
+    pub fn gst_message_set_buffering_stats(
+        message: *mut GstMessage,
+        mode: GstBufferingMode,
+        avg_in: c_int,
+        avg_out: c_int,
+        buffering_left: i64,
+    );
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_message_set_group_id(message: *mut GstMessage, group_id: c_uint);
-    pub fn gst_message_set_qos_stats(message: *mut GstMessage, format: GstFormat, processed: u64, dropped: u64);
-    pub fn gst_message_set_qos_values(message: *mut GstMessage, jitter: i64, proportion: c_double, quality: c_int);
+    pub fn gst_message_set_qos_stats(
+        message: *mut GstMessage,
+        format: GstFormat,
+        processed: u64,
+        dropped: u64,
+    );
+    pub fn gst_message_set_qos_values(
+        message: *mut GstMessage,
+        jitter: i64,
+        proportion: c_double,
+        quality: c_int,
+    );
     pub fn gst_message_set_seqnum(message: *mut GstMessage, seqnum: u32);
-    pub fn gst_message_set_stream_status_object(message: *mut GstMessage, object: *const gobject::GValue);
+    pub fn gst_message_set_stream_status_object(
+        message: *mut GstMessage,
+        object: *const gobject::GValue,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_message_streams_selected_add(message: *mut GstMessage, stream: *mut GstStream);
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_message_streams_selected_get_size(message: *mut GstMessage) -> c_uint;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_message_streams_selected_get_stream(message: *mut GstMessage, idx: c_uint) -> *mut GstStream;
+    pub fn gst_message_streams_selected_get_stream(
+        message: *mut GstMessage,
+        idx: c_uint,
+    ) -> *mut GstStream;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_message_writable_structure(message: *mut GstMessage) -> *mut GstStructure;
 
@@ -4484,7 +5432,14 @@ extern "C" {
     pub fn gst_meta_api_type_has_tag(api: GType, tag: glib::GQuark) -> gboolean;
     pub fn gst_meta_api_type_register(api: *const c_char, tags: *mut *const c_char) -> GType;
     pub fn gst_meta_get_info(impl_: *const c_char) -> *const GstMetaInfo;
-    pub fn gst_meta_register(api: GType, impl_: *const c_char, size: size_t, init_func: GstMetaInitFunction, free_func: GstMetaFreeFunction, transform_func: GstMetaTransformFunction) -> *const GstMetaInfo;
+    pub fn gst_meta_register(
+        api: GType,
+        impl_: *const c_char,
+        size: size_t,
+        init_func: GstMetaInitFunction,
+        free_func: GstMetaFreeFunction,
+        transform_func: GstMetaTransformFunction,
+    ) -> *const GstMetaInfo;
 
     //=========================================================================
     // GstMiniObject
@@ -4493,22 +5448,49 @@ extern "C" {
     pub fn gst_mini_object_add_parent(object: *mut GstMiniObject, parent: *mut GstMiniObject);
     pub fn gst_mini_object_copy(mini_object: *const GstMiniObject) -> *mut GstMiniObject;
     pub fn gst_mini_object_get_qdata(object: *mut GstMiniObject, quark: glib::GQuark) -> gpointer;
-    pub fn gst_mini_object_init(mini_object: *mut GstMiniObject, flags: c_uint, type_: GType, copy_func: GstMiniObjectCopyFunction, dispose_func: GstMiniObjectDisposeFunction, free_func: GstMiniObjectFreeFunction);
+    pub fn gst_mini_object_init(
+        mini_object: *mut GstMiniObject,
+        flags: c_uint,
+        type_: GType,
+        copy_func: GstMiniObjectCopyFunction,
+        dispose_func: GstMiniObjectDisposeFunction,
+        free_func: GstMiniObjectFreeFunction,
+    );
     pub fn gst_mini_object_is_writable(mini_object: *const GstMiniObject) -> gboolean;
     pub fn gst_mini_object_lock(object: *mut GstMiniObject, flags: GstLockFlags) -> gboolean;
     pub fn gst_mini_object_make_writable(mini_object: *mut GstMiniObject) -> *mut GstMiniObject;
     pub fn gst_mini_object_ref(mini_object: *mut GstMiniObject) -> *mut GstMiniObject;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_mini_object_remove_parent(object: *mut GstMiniObject, parent: *mut GstMiniObject);
-    pub fn gst_mini_object_set_qdata(object: *mut GstMiniObject, quark: glib::GQuark, data: gpointer, destroy: glib::GDestroyNotify);
-    pub fn gst_mini_object_steal_qdata(object: *mut GstMiniObject, quark: glib::GQuark) -> gpointer;
+    pub fn gst_mini_object_set_qdata(
+        object: *mut GstMiniObject,
+        quark: glib::GQuark,
+        data: gpointer,
+        destroy: glib::GDestroyNotify,
+    );
+    pub fn gst_mini_object_steal_qdata(object: *mut GstMiniObject, quark: glib::GQuark)
+        -> gpointer;
     pub fn gst_mini_object_unlock(object: *mut GstMiniObject, flags: GstLockFlags);
     pub fn gst_mini_object_unref(mini_object: *mut GstMiniObject);
-    pub fn gst_mini_object_weak_ref(object: *mut GstMiniObject, notify: GstMiniObjectNotify, data: gpointer);
-    pub fn gst_mini_object_weak_unref(object: *mut GstMiniObject, notify: GstMiniObjectNotify, data: gpointer);
-    pub fn gst_mini_object_replace(olddata: *mut *mut GstMiniObject, newdata: *mut GstMiniObject) -> gboolean;
+    pub fn gst_mini_object_weak_ref(
+        object: *mut GstMiniObject,
+        notify: GstMiniObjectNotify,
+        data: gpointer,
+    );
+    pub fn gst_mini_object_weak_unref(
+        object: *mut GstMiniObject,
+        notify: GstMiniObjectNotify,
+        data: gpointer,
+    );
+    pub fn gst_mini_object_replace(
+        olddata: *mut *mut GstMiniObject,
+        newdata: *mut GstMiniObject,
+    ) -> gboolean;
     pub fn gst_mini_object_steal(olddata: *mut *mut GstMiniObject) -> *mut GstMiniObject;
-    pub fn gst_mini_object_take(olddata: *mut *mut GstMiniObject, newdata: *mut GstMiniObject) -> gboolean;
+    pub fn gst_mini_object_take(
+        olddata: *mut *mut GstMiniObject,
+        newdata: *mut GstMiniObject,
+    ) -> gboolean;
 
     //=========================================================================
     // GstPadProbeInfo
@@ -4531,7 +5513,9 @@ extern "C" {
     pub fn gst_parse_context_new() -> *mut GstParseContext;
     pub fn gst_parse_context_copy(context: *const GstParseContext) -> *mut GstParseContext;
     pub fn gst_parse_context_free(context: *mut GstParseContext);
-    pub fn gst_parse_context_get_missing_elements(context: *mut GstParseContext) -> *mut *mut c_char;
+    pub fn gst_parse_context_get_missing_elements(
+        context: *mut GstParseContext,
+    ) -> *mut *mut c_char;
 
     //=========================================================================
     // GstPoll
@@ -4540,9 +5524,18 @@ extern "C" {
     pub fn gst_poll_fd_can_read(set: *const GstPoll, fd: *mut GstPollFD) -> gboolean;
     pub fn gst_poll_fd_can_write(set: *const GstPoll, fd: *mut GstPollFD) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_poll_fd_ctl_pri(set: *mut GstPoll, fd: *mut GstPollFD, active: gboolean) -> gboolean;
-    pub fn gst_poll_fd_ctl_read(set: *mut GstPoll, fd: *mut GstPollFD, active: gboolean) -> gboolean;
-    pub fn gst_poll_fd_ctl_write(set: *mut GstPoll, fd: *mut GstPollFD, active: gboolean) -> gboolean;
+    pub fn gst_poll_fd_ctl_pri(set: *mut GstPoll, fd: *mut GstPollFD, active: gboolean)
+        -> gboolean;
+    pub fn gst_poll_fd_ctl_read(
+        set: *mut GstPoll,
+        fd: *mut GstPollFD,
+        active: gboolean,
+    ) -> gboolean;
+    pub fn gst_poll_fd_ctl_write(
+        set: *mut GstPoll,
+        fd: *mut GstPollFD,
+        active: gboolean,
+    ) -> gboolean;
     pub fn gst_poll_fd_has_closed(set: *const GstPoll, fd: *mut GstPollFD) -> gboolean;
     pub fn gst_poll_fd_has_error(set: *const GstPoll, fd: *mut GstPollFD) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -4572,7 +5565,11 @@ extern "C" {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_promise_new() -> *mut GstPromise;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_promise_new_with_change_func(func: GstPromiseChangeFunc, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstPromise;
+    pub fn gst_promise_new_with_change_func(
+        func: GstPromiseChangeFunc,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstPromise;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_promise_expire(promise: *mut GstPromise);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
@@ -4601,8 +5598,13 @@ extern "C" {
     pub fn gst_query_new_caps(filter: *mut GstCaps) -> *mut GstQuery;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_query_new_context(context_type: *const c_char) -> *mut GstQuery;
-    pub fn gst_query_new_convert(src_format: GstFormat, value: i64, dest_format: GstFormat) -> *mut GstQuery;
-    pub fn gst_query_new_custom(type_: GstQueryType, structure: *mut GstStructure) -> *mut GstQuery;
+    pub fn gst_query_new_convert(
+        src_format: GstFormat,
+        value: i64,
+        dest_format: GstFormat,
+    ) -> *mut GstQuery;
+    pub fn gst_query_new_custom(type_: GstQueryType, structure: *mut GstStructure)
+        -> *mut GstQuery;
     pub fn gst_query_new_drain() -> *mut GstQuery;
     pub fn gst_query_new_duration(format: GstFormat) -> *mut GstQuery;
     pub fn gst_query_new_formats() -> *mut GstQuery;
@@ -4612,12 +5614,30 @@ extern "C" {
     pub fn gst_query_new_seeking(format: GstFormat) -> *mut GstQuery;
     pub fn gst_query_new_segment(format: GstFormat) -> *mut GstQuery;
     pub fn gst_query_new_uri() -> *mut GstQuery;
-    pub fn gst_query_add_allocation_meta(query: *mut GstQuery, api: GType, params: *const GstStructure);
-    pub fn gst_query_add_allocation_param(query: *mut GstQuery, allocator: *mut GstAllocator, params: *const GstAllocationParams);
-    pub fn gst_query_add_allocation_pool(query: *mut GstQuery, pool: *mut GstBufferPool, size: c_uint, min_buffers: c_uint, max_buffers: c_uint);
+    pub fn gst_query_add_allocation_meta(
+        query: *mut GstQuery,
+        api: GType,
+        params: *const GstStructure,
+    );
+    pub fn gst_query_add_allocation_param(
+        query: *mut GstQuery,
+        allocator: *mut GstAllocator,
+        params: *const GstAllocationParams,
+    );
+    pub fn gst_query_add_allocation_pool(
+        query: *mut GstQuery,
+        pool: *mut GstBufferPool,
+        size: c_uint,
+        min_buffers: c_uint,
+        max_buffers: c_uint,
+    );
     pub fn gst_query_add_buffering_range(query: *mut GstQuery, start: i64, stop: i64) -> gboolean;
     pub fn gst_query_add_scheduling_mode(query: *mut GstQuery, mode: GstPadMode);
-    pub fn gst_query_find_allocation_meta(query: *mut GstQuery, api: GType, index: *mut c_uint) -> gboolean;
+    pub fn gst_query_find_allocation_meta(
+        query: *mut GstQuery,
+        api: GType,
+        index: *mut c_uint,
+    ) -> gboolean;
     pub fn gst_query_get_n_allocation_metas(query: *mut GstQuery) -> c_uint;
     pub fn gst_query_get_n_allocation_params(query: *mut GstQuery) -> c_uint;
     pub fn gst_query_get_n_allocation_pools(query: *mut GstQuery) -> c_uint;
@@ -4625,40 +5645,124 @@ extern "C" {
     pub fn gst_query_get_n_scheduling_modes(query: *mut GstQuery) -> c_uint;
     pub fn gst_query_get_structure(query: *mut GstQuery) -> *const GstStructure;
     pub fn gst_query_has_scheduling_mode(query: *mut GstQuery, mode: GstPadMode) -> gboolean;
-    pub fn gst_query_has_scheduling_mode_with_flags(query: *mut GstQuery, mode: GstPadMode, flags: GstSchedulingFlags) -> gboolean;
+    pub fn gst_query_has_scheduling_mode_with_flags(
+        query: *mut GstQuery,
+        mode: GstPadMode,
+        flags: GstSchedulingFlags,
+    ) -> gboolean;
     pub fn gst_query_parse_accept_caps(query: *mut GstQuery, caps: *mut *mut GstCaps);
     pub fn gst_query_parse_accept_caps_result(query: *mut GstQuery, result: *mut gboolean);
-    pub fn gst_query_parse_allocation(query: *mut GstQuery, caps: *mut *mut GstCaps, need_pool: *mut gboolean);
+    pub fn gst_query_parse_allocation(
+        query: *mut GstQuery,
+        caps: *mut *mut GstCaps,
+        need_pool: *mut gboolean,
+    );
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_query_parse_bitrate(query: *mut GstQuery, nominal_bitrate: *mut c_uint);
-    pub fn gst_query_parse_buffering_percent(query: *mut GstQuery, busy: *mut gboolean, percent: *mut c_int);
-    pub fn gst_query_parse_buffering_range(query: *mut GstQuery, format: *mut GstFormat, start: *mut i64, stop: *mut i64, estimated_total: *mut i64);
-    pub fn gst_query_parse_buffering_stats(query: *mut GstQuery, mode: *mut GstBufferingMode, avg_in: *mut c_int, avg_out: *mut c_int, buffering_left: *mut i64);
+    pub fn gst_query_parse_buffering_percent(
+        query: *mut GstQuery,
+        busy: *mut gboolean,
+        percent: *mut c_int,
+    );
+    pub fn gst_query_parse_buffering_range(
+        query: *mut GstQuery,
+        format: *mut GstFormat,
+        start: *mut i64,
+        stop: *mut i64,
+        estimated_total: *mut i64,
+    );
+    pub fn gst_query_parse_buffering_stats(
+        query: *mut GstQuery,
+        mode: *mut GstBufferingMode,
+        avg_in: *mut c_int,
+        avg_out: *mut c_int,
+        buffering_left: *mut i64,
+    );
     pub fn gst_query_parse_caps(query: *mut GstQuery, filter: *mut *mut GstCaps);
     pub fn gst_query_parse_caps_result(query: *mut GstQuery, caps: *mut *mut GstCaps);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_query_parse_context(query: *mut GstQuery, context: *mut *mut GstContext);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_query_parse_context_type(query: *mut GstQuery, context_type: *mut *const c_char) -> gboolean;
-    pub fn gst_query_parse_convert(query: *mut GstQuery, src_format: *mut GstFormat, src_value: *mut i64, dest_format: *mut GstFormat, dest_value: *mut i64);
-    pub fn gst_query_parse_duration(query: *mut GstQuery, format: *mut GstFormat, duration: *mut i64);
-    pub fn gst_query_parse_latency(query: *mut GstQuery, live: *mut gboolean, min_latency: *mut GstClockTime, max_latency: *mut GstClockTime);
+    pub fn gst_query_parse_context_type(
+        query: *mut GstQuery,
+        context_type: *mut *const c_char,
+    ) -> gboolean;
+    pub fn gst_query_parse_convert(
+        query: *mut GstQuery,
+        src_format: *mut GstFormat,
+        src_value: *mut i64,
+        dest_format: *mut GstFormat,
+        dest_value: *mut i64,
+    );
+    pub fn gst_query_parse_duration(
+        query: *mut GstQuery,
+        format: *mut GstFormat,
+        duration: *mut i64,
+    );
+    pub fn gst_query_parse_latency(
+        query: *mut GstQuery,
+        live: *mut gboolean,
+        min_latency: *mut GstClockTime,
+        max_latency: *mut GstClockTime,
+    );
     pub fn gst_query_parse_n_formats(query: *mut GstQuery, n_formats: *mut c_uint);
-    pub fn gst_query_parse_nth_allocation_meta(query: *mut GstQuery, index: c_uint, params: *mut *const GstStructure) -> GType;
-    pub fn gst_query_parse_nth_allocation_param(query: *mut GstQuery, index: c_uint, allocator: *mut *mut GstAllocator, params: *mut GstAllocationParams);
-    pub fn gst_query_parse_nth_allocation_pool(query: *mut GstQuery, index: c_uint, pool: *mut *mut GstBufferPool, size: *mut c_uint, min_buffers: *mut c_uint, max_buffers: *mut c_uint);
-    pub fn gst_query_parse_nth_buffering_range(query: *mut GstQuery, index: c_uint, start: *mut i64, stop: *mut i64) -> gboolean;
+    pub fn gst_query_parse_nth_allocation_meta(
+        query: *mut GstQuery,
+        index: c_uint,
+        params: *mut *const GstStructure,
+    ) -> GType;
+    pub fn gst_query_parse_nth_allocation_param(
+        query: *mut GstQuery,
+        index: c_uint,
+        allocator: *mut *mut GstAllocator,
+        params: *mut GstAllocationParams,
+    );
+    pub fn gst_query_parse_nth_allocation_pool(
+        query: *mut GstQuery,
+        index: c_uint,
+        pool: *mut *mut GstBufferPool,
+        size: *mut c_uint,
+        min_buffers: *mut c_uint,
+        max_buffers: *mut c_uint,
+    );
+    pub fn gst_query_parse_nth_buffering_range(
+        query: *mut GstQuery,
+        index: c_uint,
+        start: *mut i64,
+        stop: *mut i64,
+    ) -> gboolean;
     pub fn gst_query_parse_nth_format(query: *mut GstQuery, nth: c_uint, format: *mut GstFormat);
     pub fn gst_query_parse_nth_scheduling_mode(query: *mut GstQuery, index: c_uint) -> GstPadMode;
     pub fn gst_query_parse_position(query: *mut GstQuery, format: *mut GstFormat, cur: *mut i64);
-    pub fn gst_query_parse_scheduling(query: *mut GstQuery, flags: *mut GstSchedulingFlags, minsize: *mut c_int, maxsize: *mut c_int, align: *mut c_int);
-    pub fn gst_query_parse_seeking(query: *mut GstQuery, format: *mut GstFormat, seekable: *mut gboolean, segment_start: *mut i64, segment_end: *mut i64);
-    pub fn gst_query_parse_segment(query: *mut GstQuery, rate: *mut c_double, format: *mut GstFormat, start_value: *mut i64, stop_value: *mut i64);
+    pub fn gst_query_parse_scheduling(
+        query: *mut GstQuery,
+        flags: *mut GstSchedulingFlags,
+        minsize: *mut c_int,
+        maxsize: *mut c_int,
+        align: *mut c_int,
+    );
+    pub fn gst_query_parse_seeking(
+        query: *mut GstQuery,
+        format: *mut GstFormat,
+        seekable: *mut gboolean,
+        segment_start: *mut i64,
+        segment_end: *mut i64,
+    );
+    pub fn gst_query_parse_segment(
+        query: *mut GstQuery,
+        rate: *mut c_double,
+        format: *mut GstFormat,
+        start_value: *mut i64,
+        stop_value: *mut i64,
+    );
     pub fn gst_query_parse_uri(query: *mut GstQuery, uri: *mut *mut c_char);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_query_parse_uri_redirection(query: *mut GstQuery, uri: *mut *mut c_char);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_query_parse_uri_redirection_permanent(query: *mut GstQuery, permanent: *mut gboolean);
+    pub fn gst_query_parse_uri_redirection_permanent(
+        query: *mut GstQuery,
+        permanent: *mut gboolean,
+    );
     pub fn gst_query_remove_nth_allocation_meta(query: *mut GstQuery, index: c_uint);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_query_remove_nth_allocation_param(query: *mut GstQuery, index: c_uint);
@@ -4668,22 +5772,79 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_query_set_bitrate(query: *mut GstQuery, nominal_bitrate: c_uint);
     pub fn gst_query_set_buffering_percent(query: *mut GstQuery, busy: gboolean, percent: c_int);
-    pub fn gst_query_set_buffering_range(query: *mut GstQuery, format: GstFormat, start: i64, stop: i64, estimated_total: i64);
-    pub fn gst_query_set_buffering_stats(query: *mut GstQuery, mode: GstBufferingMode, avg_in: c_int, avg_out: c_int, buffering_left: i64);
+    pub fn gst_query_set_buffering_range(
+        query: *mut GstQuery,
+        format: GstFormat,
+        start: i64,
+        stop: i64,
+        estimated_total: i64,
+    );
+    pub fn gst_query_set_buffering_stats(
+        query: *mut GstQuery,
+        mode: GstBufferingMode,
+        avg_in: c_int,
+        avg_out: c_int,
+        buffering_left: i64,
+    );
     pub fn gst_query_set_caps_result(query: *mut GstQuery, caps: *mut GstCaps);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_query_set_context(query: *mut GstQuery, context: *mut GstContext);
-    pub fn gst_query_set_convert(query: *mut GstQuery, src_format: GstFormat, src_value: i64, dest_format: GstFormat, dest_value: i64);
+    pub fn gst_query_set_convert(
+        query: *mut GstQuery,
+        src_format: GstFormat,
+        src_value: i64,
+        dest_format: GstFormat,
+        dest_value: i64,
+    );
     pub fn gst_query_set_duration(query: *mut GstQuery, format: GstFormat, duration: i64);
     pub fn gst_query_set_formats(query: *mut GstQuery, n_formats: c_int, ...);
-    pub fn gst_query_set_formatsv(query: *mut GstQuery, n_formats: c_int, formats: *const GstFormat);
-    pub fn gst_query_set_latency(query: *mut GstQuery, live: gboolean, min_latency: GstClockTime, max_latency: GstClockTime);
-    pub fn gst_query_set_nth_allocation_param(query: *mut GstQuery, index: c_uint, allocator: *mut GstAllocator, params: *const GstAllocationParams);
-    pub fn gst_query_set_nth_allocation_pool(query: *mut GstQuery, index: c_uint, pool: *mut GstBufferPool, size: c_uint, min_buffers: c_uint, max_buffers: c_uint);
+    pub fn gst_query_set_formatsv(
+        query: *mut GstQuery,
+        n_formats: c_int,
+        formats: *const GstFormat,
+    );
+    pub fn gst_query_set_latency(
+        query: *mut GstQuery,
+        live: gboolean,
+        min_latency: GstClockTime,
+        max_latency: GstClockTime,
+    );
+    pub fn gst_query_set_nth_allocation_param(
+        query: *mut GstQuery,
+        index: c_uint,
+        allocator: *mut GstAllocator,
+        params: *const GstAllocationParams,
+    );
+    pub fn gst_query_set_nth_allocation_pool(
+        query: *mut GstQuery,
+        index: c_uint,
+        pool: *mut GstBufferPool,
+        size: c_uint,
+        min_buffers: c_uint,
+        max_buffers: c_uint,
+    );
     pub fn gst_query_set_position(query: *mut GstQuery, format: GstFormat, cur: i64);
-    pub fn gst_query_set_scheduling(query: *mut GstQuery, flags: GstSchedulingFlags, minsize: c_int, maxsize: c_int, align: c_int);
-    pub fn gst_query_set_seeking(query: *mut GstQuery, format: GstFormat, seekable: gboolean, segment_start: i64, segment_end: i64);
-    pub fn gst_query_set_segment(query: *mut GstQuery, rate: c_double, format: GstFormat, start_value: i64, stop_value: i64);
+    pub fn gst_query_set_scheduling(
+        query: *mut GstQuery,
+        flags: GstSchedulingFlags,
+        minsize: c_int,
+        maxsize: c_int,
+        align: c_int,
+    );
+    pub fn gst_query_set_seeking(
+        query: *mut GstQuery,
+        format: GstFormat,
+        seekable: gboolean,
+        segment_start: i64,
+        segment_end: i64,
+    );
+    pub fn gst_query_set_segment(
+        query: *mut GstQuery,
+        rate: c_double,
+        format: GstFormat,
+        start_value: i64,
+        stop_value: i64,
+    );
     pub fn gst_query_set_uri(query: *mut GstQuery, uri: *const c_char);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_query_set_uri_redirection(query: *mut GstQuery, uri: *const c_char);
@@ -4701,7 +5862,12 @@ extern "C" {
     // GstSample
     //=========================================================================
     pub fn gst_sample_get_type() -> GType;
-    pub fn gst_sample_new(buffer: *mut GstBuffer, caps: *mut GstCaps, segment: *const GstSegment, info: *mut GstStructure) -> *mut GstSample;
+    pub fn gst_sample_new(
+        buffer: *mut GstBuffer,
+        caps: *mut GstCaps,
+        segment: *const GstSegment,
+        info: *mut GstStructure,
+    ) -> *mut GstSample;
     pub fn gst_sample_get_buffer(sample: *mut GstSample) -> *mut GstBuffer;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_sample_get_buffer_list(sample: *mut GstSample) -> *mut GstBufferList;
@@ -4724,33 +5890,98 @@ extern "C" {
     //=========================================================================
     pub fn gst_segment_get_type() -> GType;
     pub fn gst_segment_new() -> *mut GstSegment;
-    pub fn gst_segment_clip(segment: *const GstSegment, format: GstFormat, start: u64, stop: u64, clip_start: *mut u64, clip_stop: *mut u64) -> gboolean;
+    pub fn gst_segment_clip(
+        segment: *const GstSegment,
+        format: GstFormat,
+        start: u64,
+        stop: u64,
+        clip_start: *mut u64,
+        clip_stop: *mut u64,
+    ) -> gboolean;
     pub fn gst_segment_copy(segment: *const GstSegment) -> *mut GstSegment;
     pub fn gst_segment_copy_into(src: *const GstSegment, dest: *mut GstSegment);
-    pub fn gst_segment_do_seek(segment: *mut GstSegment, rate: c_double, format: GstFormat, flags: GstSeekFlags, start_type: GstSeekType, start: u64, stop_type: GstSeekType, stop: u64, update: *mut gboolean) -> gboolean;
+    pub fn gst_segment_do_seek(
+        segment: *mut GstSegment,
+        rate: c_double,
+        format: GstFormat,
+        flags: GstSeekFlags,
+        start_type: GstSeekType,
+        start: u64,
+        stop_type: GstSeekType,
+        stop: u64,
+        update: *mut gboolean,
+    ) -> gboolean;
     pub fn gst_segment_free(segment: *mut GstSegment);
     pub fn gst_segment_init(segment: *mut GstSegment, format: GstFormat);
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_segment_is_equal(s0: *const GstSegment, s1: *const GstSegment) -> gboolean;
     #[cfg(any(feature = "v1_2_3", feature = "dox"))]
-    pub fn gst_segment_offset_running_time(segment: *mut GstSegment, format: GstFormat, offset: i64) -> gboolean;
+    pub fn gst_segment_offset_running_time(
+        segment: *mut GstSegment,
+        format: GstFormat,
+        offset: i64,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_segment_position_from_running_time(segment: *const GstSegment, format: GstFormat, running_time: u64) -> u64;
+    pub fn gst_segment_position_from_running_time(
+        segment: *const GstSegment,
+        format: GstFormat,
+        running_time: u64,
+    ) -> u64;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_segment_position_from_running_time_full(segment: *const GstSegment, format: GstFormat, running_time: u64, position: *mut u64) -> c_int;
+    pub fn gst_segment_position_from_running_time_full(
+        segment: *const GstSegment,
+        format: GstFormat,
+        running_time: u64,
+        position: *mut u64,
+    ) -> c_int;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_segment_position_from_stream_time(segment: *const GstSegment, format: GstFormat, stream_time: u64) -> u64;
+    pub fn gst_segment_position_from_stream_time(
+        segment: *const GstSegment,
+        format: GstFormat,
+        stream_time: u64,
+    ) -> u64;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_segment_position_from_stream_time_full(segment: *const GstSegment, format: GstFormat, stream_time: u64, position: *mut u64) -> c_int;
-    pub fn gst_segment_set_running_time(segment: *mut GstSegment, format: GstFormat, running_time: u64) -> gboolean;
-    pub fn gst_segment_to_position(segment: *const GstSegment, format: GstFormat, running_time: u64) -> u64;
-    pub fn gst_segment_to_running_time(segment: *const GstSegment, format: GstFormat, position: u64) -> u64;
+    pub fn gst_segment_position_from_stream_time_full(
+        segment: *const GstSegment,
+        format: GstFormat,
+        stream_time: u64,
+        position: *mut u64,
+    ) -> c_int;
+    pub fn gst_segment_set_running_time(
+        segment: *mut GstSegment,
+        format: GstFormat,
+        running_time: u64,
+    ) -> gboolean;
+    pub fn gst_segment_to_position(
+        segment: *const GstSegment,
+        format: GstFormat,
+        running_time: u64,
+    ) -> u64;
+    pub fn gst_segment_to_running_time(
+        segment: *const GstSegment,
+        format: GstFormat,
+        position: u64,
+    ) -> u64;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_segment_to_running_time_full(segment: *const GstSegment, format: GstFormat, position: u64, running_time: *mut u64) -> c_int;
+    pub fn gst_segment_to_running_time_full(
+        segment: *const GstSegment,
+        format: GstFormat,
+        position: u64,
+        running_time: *mut u64,
+    ) -> c_int;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_segment_to_stream_time(segment: *const GstSegment, format: GstFormat, position: u64) -> u64;
+    pub fn gst_segment_to_stream_time(
+        segment: *const GstSegment,
+        format: GstFormat,
+        position: u64,
+    ) -> u64;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_segment_to_stream_time_full(segment: *const GstSegment, format: GstFormat, position: u64, stream_time: *mut u64) -> c_int;
+    pub fn gst_segment_to_stream_time_full(
+        segment: *const GstSegment,
+        format: GstFormat,
+        position: u64,
+        stream_time: *mut u64,
+    ) -> c_int;
 
     //=========================================================================
     // GstStaticCaps
@@ -4761,92 +5992,276 @@ extern "C" {
     //=========================================================================
     // GstStaticPadTemplate
     //=========================================================================
-    pub fn gst_static_pad_template_get(pad_template: *mut GstStaticPadTemplate) -> *mut GstPadTemplate;
+    pub fn gst_static_pad_template_get(
+        pad_template: *mut GstStaticPadTemplate,
+    ) -> *mut GstPadTemplate;
     pub fn gst_static_pad_template_get_caps(templ: *mut GstStaticPadTemplate) -> *mut GstCaps;
 
     //=========================================================================
     // GstStructure
     //=========================================================================
     pub fn gst_structure_get_type() -> GType;
-    pub fn gst_structure_new(name: *const c_char, firstfield: *const c_char, ...) -> *mut GstStructure;
+    pub fn gst_structure_new(
+        name: *const c_char,
+        firstfield: *const c_char,
+        ...
+    ) -> *mut GstStructure;
     pub fn gst_structure_new_empty(name: *const c_char) -> *mut GstStructure;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_structure_new_from_string(string: *const c_char) -> *mut GstStructure;
-    pub fn gst_structure_new_id(name_quark: glib::GQuark, field_quark: glib::GQuark, ...) -> *mut GstStructure;
+    pub fn gst_structure_new_id(
+        name_quark: glib::GQuark,
+        field_quark: glib::GQuark,
+        ...
+    ) -> *mut GstStructure;
     pub fn gst_structure_new_id_empty(quark: glib::GQuark) -> *mut GstStructure;
     //pub fn gst_structure_new_valist(name: *const c_char, firstfield: *const c_char, varargs: /*Unimplemented*/va_list) -> *mut GstStructure;
-    pub fn gst_structure_can_intersect(struct1: *const GstStructure, struct2: *const GstStructure) -> gboolean;
+    pub fn gst_structure_can_intersect(
+        struct1: *const GstStructure,
+        struct2: *const GstStructure,
+    ) -> gboolean;
     pub fn gst_structure_copy(structure: *const GstStructure) -> *mut GstStructure;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_structure_filter_and_map_in_place(structure: *mut GstStructure, func: GstStructureFilterMapFunc, user_data: gpointer);
+    pub fn gst_structure_filter_and_map_in_place(
+        structure: *mut GstStructure,
+        func: GstStructureFilterMapFunc,
+        user_data: gpointer,
+    );
     pub fn gst_structure_fixate(structure: *mut GstStructure);
-    pub fn gst_structure_fixate_field(structure: *mut GstStructure, field_name: *const c_char) -> gboolean;
-    pub fn gst_structure_fixate_field_boolean(structure: *mut GstStructure, field_name: *const c_char, target: gboolean) -> gboolean;
-    pub fn gst_structure_fixate_field_nearest_double(structure: *mut GstStructure, field_name: *const c_char, target: c_double) -> gboolean;
-    pub fn gst_structure_fixate_field_nearest_fraction(structure: *mut GstStructure, field_name: *const c_char, target_numerator: c_int, target_denominator: c_int) -> gboolean;
-    pub fn gst_structure_fixate_field_nearest_int(structure: *mut GstStructure, field_name: *const c_char, target: c_int) -> gboolean;
-    pub fn gst_structure_fixate_field_string(structure: *mut GstStructure, field_name: *const c_char, target: *const c_char) -> gboolean;
-    pub fn gst_structure_foreach(structure: *const GstStructure, func: GstStructureForeachFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_structure_fixate_field(
+        structure: *mut GstStructure,
+        field_name: *const c_char,
+    ) -> gboolean;
+    pub fn gst_structure_fixate_field_boolean(
+        structure: *mut GstStructure,
+        field_name: *const c_char,
+        target: gboolean,
+    ) -> gboolean;
+    pub fn gst_structure_fixate_field_nearest_double(
+        structure: *mut GstStructure,
+        field_name: *const c_char,
+        target: c_double,
+    ) -> gboolean;
+    pub fn gst_structure_fixate_field_nearest_fraction(
+        structure: *mut GstStructure,
+        field_name: *const c_char,
+        target_numerator: c_int,
+        target_denominator: c_int,
+    ) -> gboolean;
+    pub fn gst_structure_fixate_field_nearest_int(
+        structure: *mut GstStructure,
+        field_name: *const c_char,
+        target: c_int,
+    ) -> gboolean;
+    pub fn gst_structure_fixate_field_string(
+        structure: *mut GstStructure,
+        field_name: *const c_char,
+        target: *const c_char,
+    ) -> gboolean;
+    pub fn gst_structure_foreach(
+        structure: *const GstStructure,
+        func: GstStructureForeachFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_structure_free(structure: *mut GstStructure);
-    pub fn gst_structure_get(structure: *const GstStructure, first_fieldname: *const c_char, ...) -> gboolean;
-    pub fn gst_structure_get_array(structure: *mut GstStructure, fieldname: *const c_char, array: *mut *mut gobject::GValueArray) -> gboolean;
-    pub fn gst_structure_get_boolean(structure: *const GstStructure, fieldname: *const c_char, value: *mut gboolean) -> gboolean;
-    pub fn gst_structure_get_clock_time(structure: *const GstStructure, fieldname: *const c_char, value: *mut GstClockTime) -> gboolean;
-    pub fn gst_structure_get_date(structure: *const GstStructure, fieldname: *const c_char, value: *mut *mut glib::GDate) -> gboolean;
-    pub fn gst_structure_get_date_time(structure: *const GstStructure, fieldname: *const c_char, value: *mut *mut GstDateTime) -> gboolean;
-    pub fn gst_structure_get_double(structure: *const GstStructure, fieldname: *const c_char, value: *mut c_double) -> gboolean;
-    pub fn gst_structure_get_enum(structure: *const GstStructure, fieldname: *const c_char, enumtype: GType, value: *mut c_int) -> gboolean;
-    pub fn gst_structure_get_field_type(structure: *const GstStructure, fieldname: *const c_char) -> GType;
+    pub fn gst_structure_get(
+        structure: *const GstStructure,
+        first_fieldname: *const c_char,
+        ...
+    ) -> gboolean;
+    pub fn gst_structure_get_array(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        array: *mut *mut gobject::GValueArray,
+    ) -> gboolean;
+    pub fn gst_structure_get_boolean(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut gboolean,
+    ) -> gboolean;
+    pub fn gst_structure_get_clock_time(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut GstClockTime,
+    ) -> gboolean;
+    pub fn gst_structure_get_date(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut *mut glib::GDate,
+    ) -> gboolean;
+    pub fn gst_structure_get_date_time(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut *mut GstDateTime,
+    ) -> gboolean;
+    pub fn gst_structure_get_double(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut c_double,
+    ) -> gboolean;
+    pub fn gst_structure_get_enum(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        enumtype: GType,
+        value: *mut c_int,
+    ) -> gboolean;
+    pub fn gst_structure_get_field_type(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+    ) -> GType;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_structure_get_flagset(structure: *const GstStructure, fieldname: *const c_char, value_flags: *mut c_uint, value_mask: *mut c_uint) -> gboolean;
-    pub fn gst_structure_get_fraction(structure: *const GstStructure, fieldname: *const c_char, value_numerator: *mut c_int, value_denominator: *mut c_int) -> gboolean;
-    pub fn gst_structure_get_int(structure: *const GstStructure, fieldname: *const c_char, value: *mut c_int) -> gboolean;
+    pub fn gst_structure_get_flagset(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value_flags: *mut c_uint,
+        value_mask: *mut c_uint,
+    ) -> gboolean;
+    pub fn gst_structure_get_fraction(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value_numerator: *mut c_int,
+        value_denominator: *mut c_int,
+    ) -> gboolean;
+    pub fn gst_structure_get_int(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut c_int,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_structure_get_int64(structure: *const GstStructure, fieldname: *const c_char, value: *mut i64) -> gboolean;
+    pub fn gst_structure_get_int64(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut i64,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_structure_get_list(structure: *mut GstStructure, fieldname: *const c_char, array: *mut *mut gobject::GValueArray) -> gboolean;
+    pub fn gst_structure_get_list(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        array: *mut *mut gobject::GValueArray,
+    ) -> gboolean;
     pub fn gst_structure_get_name(structure: *const GstStructure) -> *const c_char;
     pub fn gst_structure_get_name_id(structure: *const GstStructure) -> glib::GQuark;
-    pub fn gst_structure_get_string(structure: *const GstStructure, fieldname: *const c_char) -> *const c_char;
-    pub fn gst_structure_get_uint(structure: *const GstStructure, fieldname: *const c_char, value: *mut c_uint) -> gboolean;
+    pub fn gst_structure_get_string(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+    ) -> *const c_char;
+    pub fn gst_structure_get_uint(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_structure_get_uint64(structure: *const GstStructure, fieldname: *const c_char, value: *mut u64) -> gboolean;
+    pub fn gst_structure_get_uint64(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        value: *mut u64,
+    ) -> gboolean;
     //pub fn gst_structure_get_valist(structure: *const GstStructure, first_fieldname: *const c_char, args: /*Unimplemented*/va_list) -> gboolean;
-    pub fn gst_structure_get_value(structure: *const GstStructure, fieldname: *const c_char) -> *const gobject::GValue;
-    pub fn gst_structure_has_field(structure: *const GstStructure, fieldname: *const c_char) -> gboolean;
-    pub fn gst_structure_has_field_typed(structure: *const GstStructure, fieldname: *const c_char, type_: GType) -> gboolean;
+    pub fn gst_structure_get_value(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+    ) -> *const gobject::GValue;
+    pub fn gst_structure_has_field(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+    ) -> gboolean;
+    pub fn gst_structure_has_field_typed(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        type_: GType,
+    ) -> gboolean;
     pub fn gst_structure_has_name(structure: *const GstStructure, name: *const c_char) -> gboolean;
-    pub fn gst_structure_id_get(structure: *const GstStructure, first_field_id: glib::GQuark, ...) -> gboolean;
+    pub fn gst_structure_id_get(
+        structure: *const GstStructure,
+        first_field_id: glib::GQuark,
+        ...
+    ) -> gboolean;
     //pub fn gst_structure_id_get_valist(structure: *const GstStructure, first_field_id: glib::GQuark, args: /*Unimplemented*/va_list) -> gboolean;
-    pub fn gst_structure_id_get_value(structure: *const GstStructure, field: glib::GQuark) -> *const gobject::GValue;
-    pub fn gst_structure_id_has_field(structure: *const GstStructure, field: glib::GQuark) -> gboolean;
-    pub fn gst_structure_id_has_field_typed(structure: *const GstStructure, field: glib::GQuark, type_: GType) -> gboolean;
+    pub fn gst_structure_id_get_value(
+        structure: *const GstStructure,
+        field: glib::GQuark,
+    ) -> *const gobject::GValue;
+    pub fn gst_structure_id_has_field(
+        structure: *const GstStructure,
+        field: glib::GQuark,
+    ) -> gboolean;
+    pub fn gst_structure_id_has_field_typed(
+        structure: *const GstStructure,
+        field: glib::GQuark,
+        type_: GType,
+    ) -> gboolean;
     pub fn gst_structure_id_set(structure: *mut GstStructure, fieldname: glib::GQuark, ...);
     //pub fn gst_structure_id_set_valist(structure: *mut GstStructure, fieldname: glib::GQuark, varargs: /*Unimplemented*/va_list);
-    pub fn gst_structure_id_set_value(structure: *mut GstStructure, field: glib::GQuark, value: *const gobject::GValue);
-    pub fn gst_structure_id_take_value(structure: *mut GstStructure, field: glib::GQuark, value: *mut gobject::GValue);
-    pub fn gst_structure_intersect(struct1: *const GstStructure, struct2: *const GstStructure) -> *mut GstStructure;
-    pub fn gst_structure_is_equal(structure1: *const GstStructure, structure2: *const GstStructure) -> gboolean;
-    pub fn gst_structure_is_subset(subset: *const GstStructure, superset: *const GstStructure) -> gboolean;
-    pub fn gst_structure_map_in_place(structure: *mut GstStructure, func: GstStructureMapFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_structure_id_set_value(
+        structure: *mut GstStructure,
+        field: glib::GQuark,
+        value: *const gobject::GValue,
+    );
+    pub fn gst_structure_id_take_value(
+        structure: *mut GstStructure,
+        field: glib::GQuark,
+        value: *mut gobject::GValue,
+    );
+    pub fn gst_structure_intersect(
+        struct1: *const GstStructure,
+        struct2: *const GstStructure,
+    ) -> *mut GstStructure;
+    pub fn gst_structure_is_equal(
+        structure1: *const GstStructure,
+        structure2: *const GstStructure,
+    ) -> gboolean;
+    pub fn gst_structure_is_subset(
+        subset: *const GstStructure,
+        superset: *const GstStructure,
+    ) -> gboolean;
+    pub fn gst_structure_map_in_place(
+        structure: *mut GstStructure,
+        func: GstStructureMapFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_structure_n_fields(structure: *const GstStructure) -> c_int;
-    pub fn gst_structure_nth_field_name(structure: *const GstStructure, index: c_uint) -> *const c_char;
+    pub fn gst_structure_nth_field_name(
+        structure: *const GstStructure,
+        index: c_uint,
+    ) -> *const c_char;
     pub fn gst_structure_remove_all_fields(structure: *mut GstStructure);
     pub fn gst_structure_remove_field(structure: *mut GstStructure, fieldname: *const c_char);
     pub fn gst_structure_remove_fields(structure: *mut GstStructure, fieldname: *const c_char, ...);
     //pub fn gst_structure_remove_fields_valist(structure: *mut GstStructure, fieldname: *const c_char, varargs: /*Unimplemented*/va_list);
     pub fn gst_structure_set(structure: *mut GstStructure, fieldname: *const c_char, ...);
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_structure_set_array(structure: *mut GstStructure, fieldname: *const c_char, array: *const gobject::GValueArray);
+    pub fn gst_structure_set_array(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        array: *const gobject::GValueArray,
+    );
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_structure_set_list(structure: *mut GstStructure, fieldname: *const c_char, array: *const gobject::GValueArray);
+    pub fn gst_structure_set_list(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        array: *const gobject::GValueArray,
+    );
     pub fn gst_structure_set_name(structure: *mut GstStructure, name: *const c_char);
-    pub fn gst_structure_set_parent_refcount(structure: *mut GstStructure, refcount: *mut c_int) -> gboolean;
+    pub fn gst_structure_set_parent_refcount(
+        structure: *mut GstStructure,
+        refcount: *mut c_int,
+    ) -> gboolean;
     //pub fn gst_structure_set_valist(structure: *mut GstStructure, fieldname: *const c_char, varargs: /*Unimplemented*/va_list);
-    pub fn gst_structure_set_value(structure: *mut GstStructure, fieldname: *const c_char, value: *const gobject::GValue);
-    pub fn gst_structure_take_value(structure: *mut GstStructure, fieldname: *const c_char, value: *mut gobject::GValue);
+    pub fn gst_structure_set_value(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        value: *const gobject::GValue,
+    );
+    pub fn gst_structure_take_value(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        value: *mut gobject::GValue,
+    );
     pub fn gst_structure_to_string(structure: *const GstStructure) -> *mut c_char;
-    pub fn gst_structure_from_string(string: *const c_char, end: *mut *mut c_char) -> *mut GstStructure;
+    pub fn gst_structure_from_string(
+        string: *const c_char,
+        end: *mut *mut c_char,
+    ) -> *mut GstStructure;
 
     //=========================================================================
     // GstTagList
@@ -4859,47 +6274,190 @@ extern "C" {
     pub fn gst_tag_list_add(list: *mut GstTagList, mode: GstTagMergeMode, tag: *const c_char, ...);
     //pub fn gst_tag_list_add_valist(list: *mut GstTagList, mode: GstTagMergeMode, tag: *const c_char, var_args: /*Unimplemented*/va_list);
     //pub fn gst_tag_list_add_valist_values(list: *mut GstTagList, mode: GstTagMergeMode, tag: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn gst_tag_list_add_value(list: *mut GstTagList, mode: GstTagMergeMode, tag: *const c_char, value: *const gobject::GValue);
-    pub fn gst_tag_list_add_values(list: *mut GstTagList, mode: GstTagMergeMode, tag: *const c_char, ...);
-    pub fn gst_tag_list_foreach(list: *const GstTagList, func: GstTagForeachFunc, user_data: gpointer);
-    pub fn gst_tag_list_get_boolean(list: *const GstTagList, tag: *const c_char, value: *mut gboolean) -> gboolean;
-    pub fn gst_tag_list_get_boolean_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut gboolean) -> gboolean;
-    pub fn gst_tag_list_get_date(list: *const GstTagList, tag: *const c_char, value: *mut *mut glib::GDate) -> gboolean;
-    pub fn gst_tag_list_get_date_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut *mut glib::GDate) -> gboolean;
-    pub fn gst_tag_list_get_date_time(list: *const GstTagList, tag: *const c_char, value: *mut *mut GstDateTime) -> gboolean;
-    pub fn gst_tag_list_get_date_time_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut *mut GstDateTime) -> gboolean;
-    pub fn gst_tag_list_get_double(list: *const GstTagList, tag: *const c_char, value: *mut c_double) -> gboolean;
-    pub fn gst_tag_list_get_double_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut c_double) -> gboolean;
-    pub fn gst_tag_list_get_float(list: *const GstTagList, tag: *const c_char, value: *mut c_float) -> gboolean;
-    pub fn gst_tag_list_get_float_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut c_float) -> gboolean;
-    pub fn gst_tag_list_get_int(list: *const GstTagList, tag: *const c_char, value: *mut c_int) -> gboolean;
-    pub fn gst_tag_list_get_int64(list: *const GstTagList, tag: *const c_char, value: *mut i64) -> gboolean;
-    pub fn gst_tag_list_get_int64_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut i64) -> gboolean;
-    pub fn gst_tag_list_get_int_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut c_int) -> gboolean;
-    pub fn gst_tag_list_get_pointer(list: *const GstTagList, tag: *const c_char, value: *mut gpointer) -> gboolean;
-    pub fn gst_tag_list_get_pointer_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut gpointer) -> gboolean;
-    pub fn gst_tag_list_get_sample(list: *const GstTagList, tag: *const c_char, sample: *mut *mut GstSample) -> gboolean;
-    pub fn gst_tag_list_get_sample_index(list: *const GstTagList, tag: *const c_char, index: c_uint, sample: *mut *mut GstSample) -> gboolean;
+    pub fn gst_tag_list_add_value(
+        list: *mut GstTagList,
+        mode: GstTagMergeMode,
+        tag: *const c_char,
+        value: *const gobject::GValue,
+    );
+    pub fn gst_tag_list_add_values(
+        list: *mut GstTagList,
+        mode: GstTagMergeMode,
+        tag: *const c_char,
+        ...
+    );
+    pub fn gst_tag_list_foreach(
+        list: *const GstTagList,
+        func: GstTagForeachFunc,
+        user_data: gpointer,
+    );
+    pub fn gst_tag_list_get_boolean(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut gboolean,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_boolean_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut gboolean,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_date(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut *mut glib::GDate,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_date_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut *mut glib::GDate,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_date_time(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut *mut GstDateTime,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_date_time_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut *mut GstDateTime,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_double(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut c_double,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_double_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut c_double,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_float(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut c_float,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_float_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut c_float,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_int(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut c_int,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_int64(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut i64,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_int64_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut i64,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_int_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut c_int,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_pointer(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut gpointer,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_pointer_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut gpointer,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_sample(
+        list: *const GstTagList,
+        tag: *const c_char,
+        sample: *mut *mut GstSample,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_sample_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        sample: *mut *mut GstSample,
+    ) -> gboolean;
     pub fn gst_tag_list_get_scope(list: *const GstTagList) -> GstTagScope;
-    pub fn gst_tag_list_get_string(list: *const GstTagList, tag: *const c_char, value: *mut *mut c_char) -> gboolean;
-    pub fn gst_tag_list_get_string_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut *mut c_char) -> gboolean;
+    pub fn gst_tag_list_get_string(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut *mut c_char,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_string_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut *mut c_char,
+    ) -> gboolean;
     pub fn gst_tag_list_get_tag_size(list: *const GstTagList, tag: *const c_char) -> c_uint;
-    pub fn gst_tag_list_get_uint(list: *const GstTagList, tag: *const c_char, value: *mut c_uint) -> gboolean;
-    pub fn gst_tag_list_get_uint64(list: *const GstTagList, tag: *const c_char, value: *mut u64) -> gboolean;
-    pub fn gst_tag_list_get_uint64_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut u64) -> gboolean;
-    pub fn gst_tag_list_get_uint_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut c_uint) -> gboolean;
-    pub fn gst_tag_list_get_value_index(list: *const GstTagList, tag: *const c_char, index: c_uint) -> *const gobject::GValue;
-    pub fn gst_tag_list_insert(into: *mut GstTagList, from: *const GstTagList, mode: GstTagMergeMode);
+    pub fn gst_tag_list_get_uint(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut c_uint,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_uint64(
+        list: *const GstTagList,
+        tag: *const c_char,
+        value: *mut u64,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_uint64_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut u64,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_uint_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut c_uint,
+    ) -> gboolean;
+    pub fn gst_tag_list_get_value_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+    ) -> *const gobject::GValue;
+    pub fn gst_tag_list_insert(
+        into: *mut GstTagList,
+        from: *const GstTagList,
+        mode: GstTagMergeMode,
+    );
     pub fn gst_tag_list_is_empty(list: *const GstTagList) -> gboolean;
     pub fn gst_tag_list_is_equal(list1: *const GstTagList, list2: *const GstTagList) -> gboolean;
-    pub fn gst_tag_list_merge(list1: *const GstTagList, list2: *const GstTagList, mode: GstTagMergeMode) -> *mut GstTagList;
+    pub fn gst_tag_list_merge(
+        list1: *const GstTagList,
+        list2: *const GstTagList,
+        mode: GstTagMergeMode,
+    ) -> *mut GstTagList;
     pub fn gst_tag_list_n_tags(list: *const GstTagList) -> c_int;
     pub fn gst_tag_list_nth_tag_name(list: *const GstTagList, index: c_uint) -> *const c_char;
-    pub fn gst_tag_list_peek_string_index(list: *const GstTagList, tag: *const c_char, index: c_uint, value: *mut *const c_char) -> gboolean;
+    pub fn gst_tag_list_peek_string_index(
+        list: *const GstTagList,
+        tag: *const c_char,
+        index: c_uint,
+        value: *mut *const c_char,
+    ) -> gboolean;
     pub fn gst_tag_list_remove_tag(list: *mut GstTagList, tag: *const c_char);
     pub fn gst_tag_list_set_scope(list: *mut GstTagList, scope: GstTagScope);
     pub fn gst_tag_list_to_string(list: *const GstTagList) -> *mut c_char;
-    pub fn gst_tag_list_copy_value(dest: *mut gobject::GValue, list: *const GstTagList, tag: *const c_char) -> gboolean;
+    pub fn gst_tag_list_copy_value(
+        dest: *mut gobject::GValue,
+        list: *const GstTagList,
+        tag: *const c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GstToc
@@ -4923,18 +6481,34 @@ extern "C" {
     pub fn gst_toc_entry_append_sub_entry(entry: *mut GstTocEntry, subentry: *mut GstTocEntry);
     pub fn gst_toc_entry_get_entry_type(entry: *const GstTocEntry) -> GstTocEntryType;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_toc_entry_get_loop(entry: *const GstTocEntry, loop_type: *mut GstTocLoopType, repeat_count: *mut c_int) -> gboolean;
+    pub fn gst_toc_entry_get_loop(
+        entry: *const GstTocEntry,
+        loop_type: *mut GstTocLoopType,
+        repeat_count: *mut c_int,
+    ) -> gboolean;
     pub fn gst_toc_entry_get_parent(entry: *mut GstTocEntry) -> *mut GstTocEntry;
-    pub fn gst_toc_entry_get_start_stop_times(entry: *const GstTocEntry, start: *mut i64, stop: *mut i64) -> gboolean;
+    pub fn gst_toc_entry_get_start_stop_times(
+        entry: *const GstTocEntry,
+        start: *mut i64,
+        stop: *mut i64,
+    ) -> gboolean;
     pub fn gst_toc_entry_get_sub_entries(entry: *const GstTocEntry) -> *mut glib::GList;
     pub fn gst_toc_entry_get_tags(entry: *const GstTocEntry) -> *mut GstTagList;
     pub fn gst_toc_entry_get_toc(entry: *mut GstTocEntry) -> *mut GstToc;
     pub fn gst_toc_entry_get_uid(entry: *const GstTocEntry) -> *const c_char;
     pub fn gst_toc_entry_is_alternative(entry: *const GstTocEntry) -> gboolean;
     pub fn gst_toc_entry_is_sequence(entry: *const GstTocEntry) -> gboolean;
-    pub fn gst_toc_entry_merge_tags(entry: *mut GstTocEntry, tags: *mut GstTagList, mode: GstTagMergeMode);
+    pub fn gst_toc_entry_merge_tags(
+        entry: *mut GstTocEntry,
+        tags: *mut GstTagList,
+        mode: GstTagMergeMode,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_toc_entry_set_loop(entry: *mut GstTocEntry, loop_type: GstTocLoopType, repeat_count: c_int);
+    pub fn gst_toc_entry_set_loop(
+        entry: *mut GstTocEntry,
+        loop_type: GstTocLoopType,
+        repeat_count: c_int,
+    );
     pub fn gst_toc_entry_set_start_stop_times(entry: *mut GstTocEntry, start: i64, stop: i64);
     pub fn gst_toc_entry_set_tags(entry: *mut GstTocEntry, tags: *mut GstTagList);
 
@@ -4944,15 +6518,38 @@ extern "C" {
     pub fn gst_type_find_get_length(find: *mut GstTypeFind) -> u64;
     pub fn gst_type_find_peek(find: *mut GstTypeFind, offset: i64, size: c_uint) -> *const u8;
     pub fn gst_type_find_suggest(find: *mut GstTypeFind, probability: c_uint, caps: *mut GstCaps);
-    pub fn gst_type_find_suggest_simple(find: *mut GstTypeFind, probability: c_uint, media_type: *const c_char, fieldname: *const c_char, ...);
-    pub fn gst_type_find_register(plugin: *mut GstPlugin, name: *const c_char, rank: c_uint, func: GstTypeFindFunction, extensions: *const c_char, possible_caps: *mut GstCaps, data: gpointer, data_notify: glib::GDestroyNotify) -> gboolean;
+    pub fn gst_type_find_suggest_simple(
+        find: *mut GstTypeFind,
+        probability: c_uint,
+        media_type: *const c_char,
+        fieldname: *const c_char,
+        ...
+    );
+    pub fn gst_type_find_register(
+        plugin: *mut GstPlugin,
+        name: *const c_char,
+        rank: c_uint,
+        func: GstTypeFindFunction,
+        extensions: *const c_char,
+        possible_caps: *mut GstCaps,
+        data: gpointer,
+        data_notify: glib::GDestroyNotify,
+    ) -> gboolean;
 
     //=========================================================================
     // GstUri
     //=========================================================================
     pub fn gst_uri_get_type() -> GType;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_uri_new(scheme: *const c_char, userinfo: *const c_char, host: *const c_char, port: c_uint, path: *const c_char, query: *const c_char, fragment: *const c_char) -> *mut GstUri;
+    pub fn gst_uri_new(
+        scheme: *const c_char,
+        userinfo: *const c_char,
+        host: *const c_char,
+        port: c_uint,
+        path: *const c_char,
+        query: *const c_char,
+        fragment: *const c_char,
+    ) -> *mut GstUri;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_append_path(uri: *mut GstUri, relative_path: *const c_char) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
@@ -4995,7 +6592,16 @@ extern "C" {
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_make_writable(uri: *mut GstUri) -> *mut GstUri;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_uri_new_with_base(base: *mut GstUri, scheme: *const c_char, userinfo: *const c_char, host: *const c_char, port: c_uint, path: *const c_char, query: *const c_char, fragment: *const c_char) -> *mut GstUri;
+    pub fn gst_uri_new_with_base(
+        base: *mut GstUri,
+        scheme: *const c_char,
+        userinfo: *const c_char,
+        host: *const c_char,
+        port: c_uint,
+        path: *const c_char,
+        query: *const c_char,
+        fragment: *const c_char,
+    ) -> *mut GstUri;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_normalize(uri: *mut GstUri) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
@@ -5009,7 +6615,8 @@ extern "C" {
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_set_path(uri: *mut GstUri, path: *const c_char) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_uri_set_path_segments(uri: *mut GstUri, path_segments: *mut glib::GList) -> gboolean;
+    pub fn gst_uri_set_path_segments(uri: *mut GstUri, path_segments: *mut glib::GList)
+        -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_set_path_string(uri: *mut GstUri, path: *const c_char) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
@@ -5017,9 +6624,16 @@ extern "C" {
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_set_query_string(uri: *mut GstUri, query: *const c_char) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_uri_set_query_table(uri: *mut GstUri, query_table: *mut glib::GHashTable) -> gboolean;
+    pub fn gst_uri_set_query_table(
+        uri: *mut GstUri,
+        query_table: *mut glib::GHashTable,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_uri_set_query_value(uri: *mut GstUri, query_key: *const c_char, query_value: *const c_char) -> gboolean;
+    pub fn gst_uri_set_query_value(
+        uri: *mut GstUri,
+        query_key: *const c_char,
+        query_value: *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_uri_set_scheme(uri: *mut GstUri, scheme: *const c_char) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
@@ -5044,7 +6658,11 @@ extern "C" {
     pub fn gst_allocator_get_type() -> GType;
     pub fn gst_allocator_find(name: *const c_char) -> *mut GstAllocator;
     pub fn gst_allocator_register(name: *const c_char, allocator: *mut GstAllocator);
-    pub fn gst_allocator_alloc(allocator: *mut GstAllocator, size: size_t, params: *mut GstAllocationParams) -> *mut GstMemory;
+    pub fn gst_allocator_alloc(
+        allocator: *mut GstAllocator,
+        size: size_t,
+        params: *mut GstAllocationParams,
+    ) -> *mut GstMemory;
     pub fn gst_allocator_free(allocator: *mut GstAllocator, memory: *mut GstMemory);
     pub fn gst_allocator_set_default(allocator: *mut GstAllocator);
 
@@ -5058,7 +6676,8 @@ extern "C" {
     pub fn gst_bin_find_unlinked_pad(bin: *mut GstBin, direction: GstPadDirection) -> *mut GstPad;
     pub fn gst_bin_get_by_interface(bin: *mut GstBin, iface: GType) -> *mut GstElement;
     pub fn gst_bin_get_by_name(bin: *mut GstBin, name: *const c_char) -> *mut GstElement;
-    pub fn gst_bin_get_by_name_recurse_up(bin: *mut GstBin, name: *const c_char) -> *mut GstElement;
+    pub fn gst_bin_get_by_name_recurse_up(bin: *mut GstBin, name: *const c_char)
+        -> *mut GstElement;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_bin_get_suppressed_flags(bin: *mut GstBin) -> GstElementFlags;
     pub fn gst_bin_iterate_all_by_interface(bin: *mut GstBin, iface: GType) -> *mut GstIterator;
@@ -5086,23 +6705,62 @@ extern "C" {
     pub fn gst_buffer_pool_get_type() -> GType;
     pub fn gst_buffer_pool_new() -> *mut GstBufferPool;
     pub fn gst_buffer_pool_config_add_option(config: *mut GstStructure, option: *const c_char);
-    pub fn gst_buffer_pool_config_get_allocator(config: *mut GstStructure, allocator: *mut *mut GstAllocator, params: *mut GstAllocationParams) -> gboolean;
-    pub fn gst_buffer_pool_config_get_option(config: *mut GstStructure, index: c_uint) -> *const c_char;
-    pub fn gst_buffer_pool_config_get_params(config: *mut GstStructure, caps: *mut *mut GstCaps, size: *mut c_uint, min_buffers: *mut c_uint, max_buffers: *mut c_uint) -> gboolean;
-    pub fn gst_buffer_pool_config_has_option(config: *mut GstStructure, option: *const c_char) -> gboolean;
+    pub fn gst_buffer_pool_config_get_allocator(
+        config: *mut GstStructure,
+        allocator: *mut *mut GstAllocator,
+        params: *mut GstAllocationParams,
+    ) -> gboolean;
+    pub fn gst_buffer_pool_config_get_option(
+        config: *mut GstStructure,
+        index: c_uint,
+    ) -> *const c_char;
+    pub fn gst_buffer_pool_config_get_params(
+        config: *mut GstStructure,
+        caps: *mut *mut GstCaps,
+        size: *mut c_uint,
+        min_buffers: *mut c_uint,
+        max_buffers: *mut c_uint,
+    ) -> gboolean;
+    pub fn gst_buffer_pool_config_has_option(
+        config: *mut GstStructure,
+        option: *const c_char,
+    ) -> gboolean;
     pub fn gst_buffer_pool_config_n_options(config: *mut GstStructure) -> c_uint;
-    pub fn gst_buffer_pool_config_set_allocator(config: *mut GstStructure, allocator: *mut GstAllocator, params: *const GstAllocationParams);
-    pub fn gst_buffer_pool_config_set_params(config: *mut GstStructure, caps: *mut GstCaps, size: c_uint, min_buffers: c_uint, max_buffers: c_uint);
+    pub fn gst_buffer_pool_config_set_allocator(
+        config: *mut GstStructure,
+        allocator: *mut GstAllocator,
+        params: *const GstAllocationParams,
+    );
+    pub fn gst_buffer_pool_config_set_params(
+        config: *mut GstStructure,
+        caps: *mut GstCaps,
+        size: c_uint,
+        min_buffers: c_uint,
+        max_buffers: c_uint,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_buffer_pool_config_validate_params(config: *mut GstStructure, caps: *mut GstCaps, size: c_uint, min_buffers: c_uint, max_buffers: c_uint) -> gboolean;
-    pub fn gst_buffer_pool_acquire_buffer(pool: *mut GstBufferPool, buffer: *mut *mut GstBuffer, params: *mut GstBufferPoolAcquireParams) -> GstFlowReturn;
+    pub fn gst_buffer_pool_config_validate_params(
+        config: *mut GstStructure,
+        caps: *mut GstCaps,
+        size: c_uint,
+        min_buffers: c_uint,
+        max_buffers: c_uint,
+    ) -> gboolean;
+    pub fn gst_buffer_pool_acquire_buffer(
+        pool: *mut GstBufferPool,
+        buffer: *mut *mut GstBuffer,
+        params: *mut GstBufferPoolAcquireParams,
+    ) -> GstFlowReturn;
     pub fn gst_buffer_pool_get_config(pool: *mut GstBufferPool) -> *mut GstStructure;
     pub fn gst_buffer_pool_get_options(pool: *mut GstBufferPool) -> *mut *const c_char;
     pub fn gst_buffer_pool_has_option(pool: *mut GstBufferPool, option: *const c_char) -> gboolean;
     pub fn gst_buffer_pool_is_active(pool: *mut GstBufferPool) -> gboolean;
     pub fn gst_buffer_pool_release_buffer(pool: *mut GstBufferPool, buffer: *mut GstBuffer);
     pub fn gst_buffer_pool_set_active(pool: *mut GstBufferPool, active: gboolean) -> gboolean;
-    pub fn gst_buffer_pool_set_config(pool: *mut GstBufferPool, config: *mut GstStructure) -> gboolean;
+    pub fn gst_buffer_pool_set_config(
+        pool: *mut GstBufferPool,
+        config: *mut GstStructure,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_buffer_pool_set_flushing(pool: *mut GstBufferPool, flushing: gboolean);
 
@@ -5114,8 +6772,18 @@ extern "C" {
     pub fn gst_bus_add_signal_watch(bus: *mut GstBus);
     pub fn gst_bus_add_signal_watch_full(bus: *mut GstBus, priority: c_int);
     pub fn gst_bus_add_watch(bus: *mut GstBus, func: GstBusFunc, user_data: gpointer) -> c_uint;
-    pub fn gst_bus_add_watch_full(bus: *mut GstBus, priority: c_int, func: GstBusFunc, user_data: gpointer, notify: glib::GDestroyNotify) -> c_uint;
-    pub fn gst_bus_async_signal_func(bus: *mut GstBus, message: *mut GstMessage, data: gpointer) -> gboolean;
+    pub fn gst_bus_add_watch_full(
+        bus: *mut GstBus,
+        priority: c_int,
+        func: GstBusFunc,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> c_uint;
+    pub fn gst_bus_async_signal_func(
+        bus: *mut GstBus,
+        message: *mut GstMessage,
+        data: gpointer,
+    ) -> gboolean;
     pub fn gst_bus_create_watch(bus: *mut GstBus) -> *mut glib::GSource;
     pub fn gst_bus_disable_sync_message_emission(bus: *mut GstBus);
     pub fn gst_bus_enable_sync_message_emission(bus: *mut GstBus);
@@ -5123,7 +6791,11 @@ extern "C" {
     pub fn gst_bus_get_pollfd(bus: *mut GstBus, fd: *mut glib::GPollFD);
     pub fn gst_bus_have_pending(bus: *mut GstBus) -> gboolean;
     pub fn gst_bus_peek(bus: *mut GstBus) -> *mut GstMessage;
-    pub fn gst_bus_poll(bus: *mut GstBus, events: GstMessageType, timeout: GstClockTime) -> *mut GstMessage;
+    pub fn gst_bus_poll(
+        bus: *mut GstBus,
+        events: GstMessageType,
+        timeout: GstClockTime,
+    ) -> *mut GstMessage;
     pub fn gst_bus_pop(bus: *mut GstBus) -> *mut GstMessage;
     pub fn gst_bus_pop_filtered(bus: *mut GstBus, types: GstMessageType) -> *mut GstMessage;
     pub fn gst_bus_post(bus: *mut GstBus, message: *mut GstMessage) -> gboolean;
@@ -5131,10 +6803,23 @@ extern "C" {
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_bus_remove_watch(bus: *mut GstBus) -> gboolean;
     pub fn gst_bus_set_flushing(bus: *mut GstBus, flushing: gboolean);
-    pub fn gst_bus_set_sync_handler(bus: *mut GstBus, func: GstBusSyncHandler, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_bus_sync_signal_handler(bus: *mut GstBus, message: *mut GstMessage, data: gpointer) -> GstBusSyncReply;
+    pub fn gst_bus_set_sync_handler(
+        bus: *mut GstBus,
+        func: GstBusSyncHandler,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_bus_sync_signal_handler(
+        bus: *mut GstBus,
+        message: *mut GstMessage,
+        data: gpointer,
+    ) -> GstBusSyncReply;
     pub fn gst_bus_timed_pop(bus: *mut GstBus, timeout: GstClockTime) -> *mut GstMessage;
-    pub fn gst_bus_timed_pop_filtered(bus: *mut GstBus, timeout: GstClockTime, types: GstMessageType) -> *mut GstMessage;
+    pub fn gst_bus_timed_pop_filtered(
+        bus: *mut GstBus,
+        timeout: GstClockTime,
+        types: GstMessageType,
+    ) -> *mut GstMessage;
 
     //=========================================================================
     // GstClock
@@ -5150,14 +6835,46 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_clock_id_uses_clock(id: GstClockID, clock: *mut GstClock) -> gboolean;
     pub fn gst_clock_id_wait(id: GstClockID, jitter: *mut GstClockTimeDiff) -> GstClockReturn;
-    pub fn gst_clock_id_wait_async(id: GstClockID, func: GstClockCallback, user_data: gpointer, destroy_data: glib::GDestroyNotify) -> GstClockReturn;
-    pub fn gst_clock_add_observation(clock: *mut GstClock, slave: GstClockTime, master: GstClockTime, r_squared: *mut c_double) -> gboolean;
+    pub fn gst_clock_id_wait_async(
+        id: GstClockID,
+        func: GstClockCallback,
+        user_data: gpointer,
+        destroy_data: glib::GDestroyNotify,
+    ) -> GstClockReturn;
+    pub fn gst_clock_add_observation(
+        clock: *mut GstClock,
+        slave: GstClockTime,
+        master: GstClockTime,
+        r_squared: *mut c_double,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_clock_add_observation_unapplied(clock: *mut GstClock, slave: GstClockTime, master: GstClockTime, r_squared: *mut c_double, internal: *mut GstClockTime, external: *mut GstClockTime, rate_num: *mut GstClockTime, rate_denom: *mut GstClockTime) -> gboolean;
+    pub fn gst_clock_add_observation_unapplied(
+        clock: *mut GstClock,
+        slave: GstClockTime,
+        master: GstClockTime,
+        r_squared: *mut c_double,
+        internal: *mut GstClockTime,
+        external: *mut GstClockTime,
+        rate_num: *mut GstClockTime,
+        rate_denom: *mut GstClockTime,
+    ) -> gboolean;
     pub fn gst_clock_adjust_unlocked(clock: *mut GstClock, internal: GstClockTime) -> GstClockTime;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_clock_adjust_with_calibration(clock: *mut GstClock, internal_target: GstClockTime, cinternal: GstClockTime, cexternal: GstClockTime, cnum: GstClockTime, cdenom: GstClockTime) -> GstClockTime;
-    pub fn gst_clock_get_calibration(clock: *mut GstClock, internal: *mut GstClockTime, external: *mut GstClockTime, rate_num: *mut GstClockTime, rate_denom: *mut GstClockTime);
+    pub fn gst_clock_adjust_with_calibration(
+        clock: *mut GstClock,
+        internal_target: GstClockTime,
+        cinternal: GstClockTime,
+        cexternal: GstClockTime,
+        cnum: GstClockTime,
+        cdenom: GstClockTime,
+    ) -> GstClockTime;
+    pub fn gst_clock_get_calibration(
+        clock: *mut GstClock,
+        internal: *mut GstClockTime,
+        external: *mut GstClockTime,
+        rate_num: *mut GstClockTime,
+        rate_denom: *mut GstClockTime,
+    );
     pub fn gst_clock_get_internal_time(clock: *mut GstClock) -> GstClockTime;
     pub fn gst_clock_get_master(clock: *mut GstClock) -> *mut GstClock;
     pub fn gst_clock_get_resolution(clock: *mut GstClock) -> GstClockTime;
@@ -5165,19 +6882,49 @@ extern "C" {
     pub fn gst_clock_get_timeout(clock: *mut GstClock) -> GstClockTime;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_clock_is_synced(clock: *mut GstClock) -> gboolean;
-    pub fn gst_clock_new_periodic_id(clock: *mut GstClock, start_time: GstClockTime, interval: GstClockTime) -> GstClockID;
+    pub fn gst_clock_new_periodic_id(
+        clock: *mut GstClock,
+        start_time: GstClockTime,
+        interval: GstClockTime,
+    ) -> GstClockID;
     pub fn gst_clock_new_single_shot_id(clock: *mut GstClock, time: GstClockTime) -> GstClockID;
-    pub fn gst_clock_periodic_id_reinit(clock: *mut GstClock, id: GstClockID, start_time: GstClockTime, interval: GstClockTime) -> gboolean;
-    pub fn gst_clock_set_calibration(clock: *mut GstClock, internal: GstClockTime, external: GstClockTime, rate_num: GstClockTime, rate_denom: GstClockTime);
+    pub fn gst_clock_periodic_id_reinit(
+        clock: *mut GstClock,
+        id: GstClockID,
+        start_time: GstClockTime,
+        interval: GstClockTime,
+    ) -> gboolean;
+    pub fn gst_clock_set_calibration(
+        clock: *mut GstClock,
+        internal: GstClockTime,
+        external: GstClockTime,
+        rate_num: GstClockTime,
+        rate_denom: GstClockTime,
+    );
     pub fn gst_clock_set_master(clock: *mut GstClock, master: *mut GstClock) -> gboolean;
-    pub fn gst_clock_set_resolution(clock: *mut GstClock, resolution: GstClockTime) -> GstClockTime;
+    pub fn gst_clock_set_resolution(clock: *mut GstClock, resolution: GstClockTime)
+        -> GstClockTime;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_clock_set_synced(clock: *mut GstClock, synced: gboolean);
     pub fn gst_clock_set_timeout(clock: *mut GstClock, timeout: GstClockTime);
-    pub fn gst_clock_single_shot_id_reinit(clock: *mut GstClock, id: GstClockID, time: GstClockTime) -> gboolean;
-    pub fn gst_clock_unadjust_unlocked(clock: *mut GstClock, external: GstClockTime) -> GstClockTime;
+    pub fn gst_clock_single_shot_id_reinit(
+        clock: *mut GstClock,
+        id: GstClockID,
+        time: GstClockTime,
+    ) -> gboolean;
+    pub fn gst_clock_unadjust_unlocked(
+        clock: *mut GstClock,
+        external: GstClockTime,
+    ) -> GstClockTime;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_clock_unadjust_with_calibration(clock: *mut GstClock, external_target: GstClockTime, cinternal: GstClockTime, cexternal: GstClockTime, cnum: GstClockTime, cdenom: GstClockTime) -> GstClockTime;
+    pub fn gst_clock_unadjust_with_calibration(
+        clock: *mut GstClock,
+        external_target: GstClockTime,
+        cinternal: GstClockTime,
+        cexternal: GstClockTime,
+        cnum: GstClockTime,
+        cdenom: GstClockTime,
+    ) -> GstClockTime;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_clock_wait_for_sync(clock: *mut GstClock, timeout: GstClockTime) -> gboolean;
 
@@ -5185,26 +6932,59 @@ extern "C" {
     // GstControlBinding
     //=========================================================================
     pub fn gst_control_binding_get_type() -> GType;
-    pub fn gst_control_binding_get_g_value_array(binding: *mut GstControlBinding, timestamp: GstClockTime, interval: GstClockTime, n_values: c_uint, values: *mut gobject::GValue) -> gboolean;
-    pub fn gst_control_binding_get_value(binding: *mut GstControlBinding, timestamp: GstClockTime) -> *mut gobject::GValue;
-    pub fn gst_control_binding_get_value_array(binding: *mut GstControlBinding, timestamp: GstClockTime, interval: GstClockTime, n_values: c_uint, values: gpointer) -> gboolean;
+    pub fn gst_control_binding_get_g_value_array(
+        binding: *mut GstControlBinding,
+        timestamp: GstClockTime,
+        interval: GstClockTime,
+        n_values: c_uint,
+        values: *mut gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_control_binding_get_value(
+        binding: *mut GstControlBinding,
+        timestamp: GstClockTime,
+    ) -> *mut gobject::GValue;
+    pub fn gst_control_binding_get_value_array(
+        binding: *mut GstControlBinding,
+        timestamp: GstClockTime,
+        interval: GstClockTime,
+        n_values: c_uint,
+        values: gpointer,
+    ) -> gboolean;
     pub fn gst_control_binding_is_disabled(binding: *mut GstControlBinding) -> gboolean;
     pub fn gst_control_binding_set_disabled(binding: *mut GstControlBinding, disabled: gboolean);
-    pub fn gst_control_binding_sync_values(binding: *mut GstControlBinding, object: *mut GstObject, timestamp: GstClockTime, last_sync: GstClockTime) -> gboolean;
+    pub fn gst_control_binding_sync_values(
+        binding: *mut GstControlBinding,
+        object: *mut GstObject,
+        timestamp: GstClockTime,
+        last_sync: GstClockTime,
+    ) -> gboolean;
 
     //=========================================================================
     // GstControlSource
     //=========================================================================
     pub fn gst_control_source_get_type() -> GType;
-    pub fn gst_control_source_get_value(self_: *mut GstControlSource, timestamp: GstClockTime, value: *mut c_double) -> gboolean;
-    pub fn gst_control_source_get_value_array(self_: *mut GstControlSource, timestamp: GstClockTime, interval: GstClockTime, n_values: c_uint, values: *mut c_double) -> gboolean;
+    pub fn gst_control_source_get_value(
+        self_: *mut GstControlSource,
+        timestamp: GstClockTime,
+        value: *mut c_double,
+    ) -> gboolean;
+    pub fn gst_control_source_get_value_array(
+        self_: *mut GstControlSource,
+        timestamp: GstClockTime,
+        interval: GstClockTime,
+        n_values: c_uint,
+        values: *mut c_double,
+    ) -> gboolean;
 
     //=========================================================================
     // GstDevice
     //=========================================================================
     pub fn gst_device_get_type() -> GType;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_create_element(device: *mut GstDevice, name: *const c_char) -> *mut GstElement;
+    pub fn gst_device_create_element(
+        device: *mut GstDevice,
+        name: *const c_char,
+    ) -> *mut GstElement;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_get_caps(device: *mut GstDevice) -> *mut GstCaps;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
@@ -5218,7 +6998,10 @@ extern "C" {
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_has_classesv(device: *mut GstDevice, classes: *mut *mut c_char) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_reconfigure_element(device: *mut GstDevice, element: *mut GstElement) -> gboolean;
+    pub fn gst_device_reconfigure_element(
+        device: *mut GstDevice,
+        element: *mut GstElement,
+    ) -> gboolean;
 
     //=========================================================================
     // GstDeviceMonitor
@@ -5227,7 +7010,11 @@ extern "C" {
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_monitor_new() -> *mut GstDeviceMonitor;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_monitor_add_filter(monitor: *mut GstDeviceMonitor, classes: *const c_char, caps: *mut GstCaps) -> c_uint;
+    pub fn gst_device_monitor_add_filter(
+        monitor: *mut GstDeviceMonitor,
+        classes: *const c_char,
+        caps: *mut GstCaps,
+    ) -> c_uint;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_monitor_get_bus(monitor: *mut GstDeviceMonitor) -> *mut GstBus;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
@@ -5237,9 +7024,15 @@ extern "C" {
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_device_monitor_get_show_all_devices(monitor: *mut GstDeviceMonitor) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_monitor_remove_filter(monitor: *mut GstDeviceMonitor, filter_id: c_uint) -> gboolean;
+    pub fn gst_device_monitor_remove_filter(
+        monitor: *mut GstDeviceMonitor,
+        filter_id: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_device_monitor_set_show_all_devices(monitor: *mut GstDeviceMonitor, show_all: gboolean);
+    pub fn gst_device_monitor_set_show_all_devices(
+        monitor: *mut GstDeviceMonitor,
+        show_all: gboolean,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_monitor_start(monitor: *mut GstDeviceMonitor) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
@@ -5250,25 +7043,44 @@ extern "C" {
     //=========================================================================
     pub fn gst_device_provider_get_type() -> GType;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_register(plugin: *mut GstPlugin, name: *const c_char, rank: c_uint, type_: GType) -> gboolean;
+    pub fn gst_device_provider_register(
+        plugin: *mut GstPlugin,
+        name: *const c_char,
+        rank: c_uint,
+        type_: GType,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_provider_can_monitor(provider: *mut GstDeviceProvider) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_provider_device_add(provider: *mut GstDeviceProvider, device: *mut GstDevice);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_device_provider_device_changed(provider: *mut GstDeviceProvider, device: *mut GstDevice, changed_device: *mut GstDevice);
+    pub fn gst_device_provider_device_changed(
+        provider: *mut GstDeviceProvider,
+        device: *mut GstDevice,
+        changed_device: *mut GstDevice,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_device_remove(provider: *mut GstDeviceProvider, device: *mut GstDevice);
+    pub fn gst_device_provider_device_remove(
+        provider: *mut GstDeviceProvider,
+        device: *mut GstDevice,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_provider_get_bus(provider: *mut GstDeviceProvider) -> *mut GstBus;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_provider_get_devices(provider: *mut GstDeviceProvider) -> *mut glib::GList;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_get_factory(provider: *mut GstDeviceProvider) -> *mut GstDeviceProviderFactory;
+    pub fn gst_device_provider_get_factory(
+        provider: *mut GstDeviceProvider,
+    ) -> *mut GstDeviceProviderFactory;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_device_provider_get_hidden_providers(provider: *mut GstDeviceProvider) -> *mut *mut c_char;
+    pub fn gst_device_provider_get_hidden_providers(
+        provider: *mut GstDeviceProvider,
+    ) -> *mut *mut c_char;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_device_provider_get_metadata(provider: *mut GstDeviceProvider, key: *const c_char) -> *const c_char;
+    pub fn gst_device_provider_get_metadata(
+        provider: *mut GstDeviceProvider,
+        key: *const c_char,
+    ) -> *const c_char;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_device_provider_hide_provider(provider: *mut GstDeviceProvider, name: *const c_char);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
@@ -5276,7 +7088,10 @@ extern "C" {
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_provider_stop(provider: *mut GstDeviceProvider);
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_device_provider_unhide_provider(provider: *mut GstDeviceProvider, name: *const c_char);
+    pub fn gst_device_provider_unhide_provider(
+        provider: *mut GstDeviceProvider,
+        name: *const c_char,
+    );
 
     //=========================================================================
     // GstDeviceProviderFactory
@@ -5285,21 +7100,40 @@ extern "C" {
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_device_provider_factory_find(name: *const c_char) -> *mut GstDeviceProviderFactory;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_get_by_name(factoryname: *const c_char) -> *mut GstDeviceProvider;
+    pub fn gst_device_provider_factory_get_by_name(
+        factoryname: *const c_char,
+    ) -> *mut GstDeviceProvider;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_list_get_device_providers(minrank: GstRank) -> *mut glib::GList;
+    pub fn gst_device_provider_factory_list_get_device_providers(
+        minrank: GstRank,
+    ) -> *mut glib::GList;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_get(factory: *mut GstDeviceProviderFactory) -> *mut GstDeviceProvider;
+    pub fn gst_device_provider_factory_get(
+        factory: *mut GstDeviceProviderFactory,
+    ) -> *mut GstDeviceProvider;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_get_device_provider_type(factory: *mut GstDeviceProviderFactory) -> GType;
+    pub fn gst_device_provider_factory_get_device_provider_type(
+        factory: *mut GstDeviceProviderFactory,
+    ) -> GType;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_get_metadata(factory: *mut GstDeviceProviderFactory, key: *const c_char) -> *const c_char;
+    pub fn gst_device_provider_factory_get_metadata(
+        factory: *mut GstDeviceProviderFactory,
+        key: *const c_char,
+    ) -> *const c_char;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_get_metadata_keys(factory: *mut GstDeviceProviderFactory) -> *mut *mut c_char;
+    pub fn gst_device_provider_factory_get_metadata_keys(
+        factory: *mut GstDeviceProviderFactory,
+    ) -> *mut *mut c_char;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_has_classes(factory: *mut GstDeviceProviderFactory, classes: *const c_char) -> gboolean;
+    pub fn gst_device_provider_factory_has_classes(
+        factory: *mut GstDeviceProviderFactory,
+        classes: *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_device_provider_factory_has_classesv(factory: *mut GstDeviceProviderFactory, classes: *mut *mut c_char) -> gboolean;
+    pub fn gst_device_provider_factory_has_classesv(
+        factory: *mut GstDeviceProviderFactory,
+        classes: *mut *mut c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GstDoubleRange
@@ -5316,112 +7150,310 @@ extern "C" {
     // GstElement
     //=========================================================================
     pub fn gst_element_get_type() -> GType;
-    pub fn gst_element_make_from_uri(type_: GstURIType, uri: *const c_char, elementname: *const c_char, error: *mut *mut glib::GError) -> *mut GstElement;
-    pub fn gst_element_register(plugin: *mut GstPlugin, name: *const c_char, rank: c_uint, type_: GType) -> gboolean;
-    pub fn gst_element_state_change_return_get_name(state_ret: GstStateChangeReturn) -> *const c_char;
+    pub fn gst_element_make_from_uri(
+        type_: GstURIType,
+        uri: *const c_char,
+        elementname: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstElement;
+    pub fn gst_element_register(
+        plugin: *mut GstPlugin,
+        name: *const c_char,
+        rank: c_uint,
+        type_: GType,
+    ) -> gboolean;
+    pub fn gst_element_state_change_return_get_name(
+        state_ret: GstStateChangeReturn,
+    ) -> *const c_char;
     pub fn gst_element_state_get_name(state: GstState) -> *const c_char;
     pub fn gst_element_abort_state(element: *mut GstElement);
     pub fn gst_element_add_pad(element: *mut GstElement, pad: *mut GstPad) -> gboolean;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_element_add_property_deep_notify_watch(element: *mut GstElement, property_name: *const c_char, include_value: gboolean) -> c_ulong;
+    pub fn gst_element_add_property_deep_notify_watch(
+        element: *mut GstElement,
+        property_name: *const c_char,
+        include_value: gboolean,
+    ) -> c_ulong;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_element_add_property_notify_watch(element: *mut GstElement, property_name: *const c_char, include_value: gboolean) -> c_ulong;
+    pub fn gst_element_add_property_notify_watch(
+        element: *mut GstElement,
+        property_name: *const c_char,
+        include_value: gboolean,
+    ) -> c_ulong;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_element_call_async(element: *mut GstElement, func: GstElementCallAsyncFunc, user_data: gpointer, destroy_notify: glib::GDestroyNotify);
-    pub fn gst_element_change_state(element: *mut GstElement, transition: GstStateChange) -> GstStateChangeReturn;
-    pub fn gst_element_continue_state(element: *mut GstElement, ret: GstStateChangeReturn) -> GstStateChangeReturn;
+    pub fn gst_element_call_async(
+        element: *mut GstElement,
+        func: GstElementCallAsyncFunc,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    pub fn gst_element_change_state(
+        element: *mut GstElement,
+        transition: GstStateChange,
+    ) -> GstStateChangeReturn;
+    pub fn gst_element_continue_state(
+        element: *mut GstElement,
+        ret: GstStateChangeReturn,
+    ) -> GstStateChangeReturn;
     pub fn gst_element_create_all_pads(element: *mut GstElement);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_element_foreach_pad(element: *mut GstElement, func: GstElementForeachPadFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_element_foreach_pad(
+        element: *mut GstElement,
+        func: GstElementForeachPadFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_element_foreach_sink_pad(element: *mut GstElement, func: GstElementForeachPadFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_element_foreach_sink_pad(
+        element: *mut GstElement,
+        func: GstElementForeachPadFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_element_foreach_src_pad(element: *mut GstElement, func: GstElementForeachPadFunc, user_data: gpointer) -> gboolean;
+    pub fn gst_element_foreach_src_pad(
+        element: *mut GstElement,
+        func: GstElementForeachPadFunc,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_element_get_base_time(element: *mut GstElement) -> GstClockTime;
     pub fn gst_element_get_bus(element: *mut GstElement) -> *mut GstBus;
     pub fn gst_element_get_clock(element: *mut GstElement) -> *mut GstClock;
-    pub fn gst_element_get_compatible_pad(element: *mut GstElement, pad: *mut GstPad, caps: *mut GstCaps) -> *mut GstPad;
-    pub fn gst_element_get_compatible_pad_template(element: *mut GstElement, compattempl: *mut GstPadTemplate) -> *mut GstPadTemplate;
+    pub fn gst_element_get_compatible_pad(
+        element: *mut GstElement,
+        pad: *mut GstPad,
+        caps: *mut GstCaps,
+    ) -> *mut GstPad;
+    pub fn gst_element_get_compatible_pad_template(
+        element: *mut GstElement,
+        compattempl: *mut GstPadTemplate,
+    ) -> *mut GstPadTemplate;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_element_get_context(element: *mut GstElement, context_type: *const c_char) -> *mut GstContext;
+    pub fn gst_element_get_context(
+        element: *mut GstElement,
+        context_type: *const c_char,
+    ) -> *mut GstContext;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_element_get_context_unlocked(element: *mut GstElement, context_type: *const c_char) -> *mut GstContext;
+    pub fn gst_element_get_context_unlocked(
+        element: *mut GstElement,
+        context_type: *const c_char,
+    ) -> *mut GstContext;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_element_get_contexts(element: *mut GstElement) -> *mut glib::GList;
     pub fn gst_element_get_factory(element: *mut GstElement) -> *mut GstElementFactory;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_element_get_metadata(element: *mut GstElement, key: *const c_char) -> *const c_char;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_element_get_pad_template(element: *mut GstElement, name: *const c_char) -> *mut GstPadTemplate;
+    pub fn gst_element_get_pad_template(
+        element: *mut GstElement,
+        name: *const c_char,
+    ) -> *mut GstPadTemplate;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_element_get_pad_template_list(element: *mut GstElement) -> *mut glib::GList;
-    pub fn gst_element_get_request_pad(element: *mut GstElement, name: *const c_char) -> *mut GstPad;
+    pub fn gst_element_get_request_pad(
+        element: *mut GstElement,
+        name: *const c_char,
+    ) -> *mut GstPad;
     pub fn gst_element_get_start_time(element: *mut GstElement) -> GstClockTime;
-    pub fn gst_element_get_state(element: *mut GstElement, state: *mut GstState, pending: *mut GstState, timeout: GstClockTime) -> GstStateChangeReturn;
-    pub fn gst_element_get_static_pad(element: *mut GstElement, name: *const c_char) -> *mut GstPad;
+    pub fn gst_element_get_state(
+        element: *mut GstElement,
+        state: *mut GstState,
+        pending: *mut GstState,
+        timeout: GstClockTime,
+    ) -> GstStateChangeReturn;
+    pub fn gst_element_get_static_pad(element: *mut GstElement, name: *const c_char)
+        -> *mut GstPad;
     pub fn gst_element_is_locked_state(element: *mut GstElement) -> gboolean;
     pub fn gst_element_iterate_pads(element: *mut GstElement) -> *mut GstIterator;
     pub fn gst_element_iterate_sink_pads(element: *mut GstElement) -> *mut GstIterator;
     pub fn gst_element_iterate_src_pads(element: *mut GstElement) -> *mut GstIterator;
     pub fn gst_element_link(src: *mut GstElement, dest: *mut GstElement) -> gboolean;
-    pub fn gst_element_link_filtered(src: *mut GstElement, dest: *mut GstElement, filter: *mut GstCaps) -> gboolean;
-    pub fn gst_element_link_many(element_1: *mut GstElement, element_2: *mut GstElement, ...) -> gboolean;
-    pub fn gst_element_link_pads(src: *mut GstElement, srcpadname: *const c_char, dest: *mut GstElement, destpadname: *const c_char) -> gboolean;
-    pub fn gst_element_link_pads_filtered(src: *mut GstElement, srcpadname: *const c_char, dest: *mut GstElement, destpadname: *const c_char, filter: *mut GstCaps) -> gboolean;
-    pub fn gst_element_link_pads_full(src: *mut GstElement, srcpadname: *const c_char, dest: *mut GstElement, destpadname: *const c_char, flags: GstPadLinkCheck) -> gboolean;
+    pub fn gst_element_link_filtered(
+        src: *mut GstElement,
+        dest: *mut GstElement,
+        filter: *mut GstCaps,
+    ) -> gboolean;
+    pub fn gst_element_link_many(
+        element_1: *mut GstElement,
+        element_2: *mut GstElement,
+        ...
+    ) -> gboolean;
+    pub fn gst_element_link_pads(
+        src: *mut GstElement,
+        srcpadname: *const c_char,
+        dest: *mut GstElement,
+        destpadname: *const c_char,
+    ) -> gboolean;
+    pub fn gst_element_link_pads_filtered(
+        src: *mut GstElement,
+        srcpadname: *const c_char,
+        dest: *mut GstElement,
+        destpadname: *const c_char,
+        filter: *mut GstCaps,
+    ) -> gboolean;
+    pub fn gst_element_link_pads_full(
+        src: *mut GstElement,
+        srcpadname: *const c_char,
+        dest: *mut GstElement,
+        destpadname: *const c_char,
+        flags: GstPadLinkCheck,
+    ) -> gboolean;
     pub fn gst_element_lost_state(element: *mut GstElement);
-    pub fn gst_element_message_full(element: *mut GstElement, type_: GstMessageType, domain: glib::GQuark, code: c_int, text: *mut c_char, debug: *mut c_char, file: *const c_char, function: *const c_char, line: c_int);
+    pub fn gst_element_message_full(
+        element: *mut GstElement,
+        type_: GstMessageType,
+        domain: glib::GQuark,
+        code: c_int,
+        text: *mut c_char,
+        debug: *mut c_char,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+    );
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_element_message_full_with_details(element: *mut GstElement, type_: GstMessageType, domain: glib::GQuark, code: c_int, text: *mut c_char, debug: *mut c_char, file: *const c_char, function: *const c_char, line: c_int, structure: *mut GstStructure);
+    pub fn gst_element_message_full_with_details(
+        element: *mut GstElement,
+        type_: GstMessageType,
+        domain: glib::GQuark,
+        code: c_int,
+        text: *mut c_char,
+        debug: *mut c_char,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        structure: *mut GstStructure,
+    );
     pub fn gst_element_no_more_pads(element: *mut GstElement);
-    pub fn gst_element_post_message(element: *mut GstElement, message: *mut GstMessage) -> gboolean;
+    pub fn gst_element_post_message(element: *mut GstElement, message: *mut GstMessage)
+        -> gboolean;
     pub fn gst_element_provide_clock(element: *mut GstElement) -> *mut GstClock;
     pub fn gst_element_query(element: *mut GstElement, query: *mut GstQuery) -> gboolean;
-    pub fn gst_element_query_convert(element: *mut GstElement, src_format: GstFormat, src_val: i64, dest_format: GstFormat, dest_val: *mut i64) -> gboolean;
-    pub fn gst_element_query_duration(element: *mut GstElement, format: GstFormat, duration: *mut i64) -> gboolean;
-    pub fn gst_element_query_position(element: *mut GstElement, format: GstFormat, cur: *mut i64) -> gboolean;
+    pub fn gst_element_query_convert(
+        element: *mut GstElement,
+        src_format: GstFormat,
+        src_val: i64,
+        dest_format: GstFormat,
+        dest_val: *mut i64,
+    ) -> gboolean;
+    pub fn gst_element_query_duration(
+        element: *mut GstElement,
+        format: GstFormat,
+        duration: *mut i64,
+    ) -> gboolean;
+    pub fn gst_element_query_position(
+        element: *mut GstElement,
+        format: GstFormat,
+        cur: *mut i64,
+    ) -> gboolean;
     pub fn gst_element_release_request_pad(element: *mut GstElement, pad: *mut GstPad);
     pub fn gst_element_remove_pad(element: *mut GstElement, pad: *mut GstPad) -> gboolean;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_element_remove_property_notify_watch(element: *mut GstElement, watch_id: c_ulong);
-    pub fn gst_element_request_pad(element: *mut GstElement, templ: *mut GstPadTemplate, name: *const c_char, caps: *const GstCaps) -> *mut GstPad;
-    pub fn gst_element_seek(element: *mut GstElement, rate: c_double, format: GstFormat, flags: GstSeekFlags, start_type: GstSeekType, start: i64, stop_type: GstSeekType, stop: i64) -> gboolean;
-    pub fn gst_element_seek_simple(element: *mut GstElement, format: GstFormat, seek_flags: GstSeekFlags, seek_pos: i64) -> gboolean;
+    pub fn gst_element_request_pad(
+        element: *mut GstElement,
+        templ: *mut GstPadTemplate,
+        name: *const c_char,
+        caps: *const GstCaps,
+    ) -> *mut GstPad;
+    pub fn gst_element_seek(
+        element: *mut GstElement,
+        rate: c_double,
+        format: GstFormat,
+        flags: GstSeekFlags,
+        start_type: GstSeekType,
+        start: i64,
+        stop_type: GstSeekType,
+        stop: i64,
+    ) -> gboolean;
+    pub fn gst_element_seek_simple(
+        element: *mut GstElement,
+        format: GstFormat,
+        seek_flags: GstSeekFlags,
+        seek_pos: i64,
+    ) -> gboolean;
     pub fn gst_element_send_event(element: *mut GstElement, event: *mut GstEvent) -> gboolean;
     pub fn gst_element_set_base_time(element: *mut GstElement, time: GstClockTime);
     pub fn gst_element_set_bus(element: *mut GstElement, bus: *mut GstBus);
     pub fn gst_element_set_clock(element: *mut GstElement, clock: *mut GstClock) -> gboolean;
     pub fn gst_element_set_context(element: *mut GstElement, context: *mut GstContext);
-    pub fn gst_element_set_locked_state(element: *mut GstElement, locked_state: gboolean) -> gboolean;
+    pub fn gst_element_set_locked_state(
+        element: *mut GstElement,
+        locked_state: gboolean,
+    ) -> gboolean;
     pub fn gst_element_set_start_time(element: *mut GstElement, time: GstClockTime);
-    pub fn gst_element_set_state(element: *mut GstElement, state: GstState) -> GstStateChangeReturn;
+    pub fn gst_element_set_state(element: *mut GstElement, state: GstState)
+        -> GstStateChangeReturn;
     pub fn gst_element_sync_state_with_parent(element: *mut GstElement) -> gboolean;
     pub fn gst_element_unlink(src: *mut GstElement, dest: *mut GstElement);
     pub fn gst_element_unlink_many(element_1: *mut GstElement, element_2: *mut GstElement, ...);
-    pub fn gst_element_unlink_pads(src: *mut GstElement, srcpadname: *const c_char, dest: *mut GstElement, destpadname: *const c_char);
+    pub fn gst_element_unlink_pads(
+        src: *mut GstElement,
+        srcpadname: *const c_char,
+        dest: *mut GstElement,
+        destpadname: *const c_char,
+    );
 
     //=========================================================================
     // GstElementFactory
     //=========================================================================
     pub fn gst_element_factory_get_type() -> GType;
     pub fn gst_element_factory_find(name: *const c_char) -> *mut GstElementFactory;
-    pub fn gst_element_factory_list_filter(list: *mut glib::GList, caps: *const GstCaps, direction: GstPadDirection, subsetonly: gboolean) -> *mut glib::GList;
-    pub fn gst_element_factory_list_get_elements(type_: GstElementFactoryListType, minrank: GstRank) -> *mut glib::GList;
-    pub fn gst_element_factory_make(factoryname: *const c_char, name: *const c_char) -> *mut GstElement;
-    pub fn gst_element_factory_can_sink_all_caps(factory: *mut GstElementFactory, caps: *const GstCaps) -> gboolean;
-    pub fn gst_element_factory_can_sink_any_caps(factory: *mut GstElementFactory, caps: *const GstCaps) -> gboolean;
-    pub fn gst_element_factory_can_src_all_caps(factory: *mut GstElementFactory, caps: *const GstCaps) -> gboolean;
-    pub fn gst_element_factory_can_src_any_caps(factory: *mut GstElementFactory, caps: *const GstCaps) -> gboolean;
-    pub fn gst_element_factory_create(factory: *mut GstElementFactory, name: *const c_char) -> *mut GstElement;
+    pub fn gst_element_factory_list_filter(
+        list: *mut glib::GList,
+        caps: *const GstCaps,
+        direction: GstPadDirection,
+        subsetonly: gboolean,
+    ) -> *mut glib::GList;
+    pub fn gst_element_factory_list_get_elements(
+        type_: GstElementFactoryListType,
+        minrank: GstRank,
+    ) -> *mut glib::GList;
+    pub fn gst_element_factory_make(
+        factoryname: *const c_char,
+        name: *const c_char,
+    ) -> *mut GstElement;
+    pub fn gst_element_factory_can_sink_all_caps(
+        factory: *mut GstElementFactory,
+        caps: *const GstCaps,
+    ) -> gboolean;
+    pub fn gst_element_factory_can_sink_any_caps(
+        factory: *mut GstElementFactory,
+        caps: *const GstCaps,
+    ) -> gboolean;
+    pub fn gst_element_factory_can_src_all_caps(
+        factory: *mut GstElementFactory,
+        caps: *const GstCaps,
+    ) -> gboolean;
+    pub fn gst_element_factory_can_src_any_caps(
+        factory: *mut GstElementFactory,
+        caps: *const GstCaps,
+    ) -> gboolean;
+    pub fn gst_element_factory_create(
+        factory: *mut GstElementFactory,
+        name: *const c_char,
+    ) -> *mut GstElement;
     pub fn gst_element_factory_get_element_type(factory: *mut GstElementFactory) -> GType;
-    pub fn gst_element_factory_get_metadata(factory: *mut GstElementFactory, key: *const c_char) -> *const c_char;
-    pub fn gst_element_factory_get_metadata_keys(factory: *mut GstElementFactory) -> *mut *mut c_char;
+    pub fn gst_element_factory_get_metadata(
+        factory: *mut GstElementFactory,
+        key: *const c_char,
+    ) -> *const c_char;
+    pub fn gst_element_factory_get_metadata_keys(
+        factory: *mut GstElementFactory,
+    ) -> *mut *mut c_char;
     pub fn gst_element_factory_get_num_pad_templates(factory: *mut GstElementFactory) -> c_uint;
-    pub fn gst_element_factory_get_static_pad_templates(factory: *mut GstElementFactory) -> *const glib::GList;
-    pub fn gst_element_factory_get_uri_protocols(factory: *mut GstElementFactory) -> *const *const c_char;
+    pub fn gst_element_factory_get_static_pad_templates(
+        factory: *mut GstElementFactory,
+    ) -> *const glib::GList;
+    pub fn gst_element_factory_get_uri_protocols(
+        factory: *mut GstElementFactory,
+    ) -> *const *const c_char;
     pub fn gst_element_factory_get_uri_type(factory: *mut GstElementFactory) -> GstURIType;
-    pub fn gst_element_factory_has_interface(factory: *mut GstElementFactory, interfacename: *const c_char) -> gboolean;
-    pub fn gst_element_factory_list_is_type(factory: *mut GstElementFactory, type_: GstElementFactoryListType) -> gboolean;
+    pub fn gst_element_factory_has_interface(
+        factory: *mut GstElementFactory,
+        interfacename: *const c_char,
+    ) -> gboolean;
+    pub fn gst_element_factory_list_is_type(
+        factory: *mut GstElementFactory,
+        type_: GstElementFactoryListType,
+    ) -> gboolean;
 
     //=========================================================================
     // GstFlagSet
@@ -5445,11 +7477,28 @@ extern "C" {
     //=========================================================================
     pub fn gst_ghost_pad_get_type() -> GType;
     pub fn gst_ghost_pad_new(name: *const c_char, target: *mut GstPad) -> *mut GstPad;
-    pub fn gst_ghost_pad_new_from_template(name: *const c_char, target: *mut GstPad, templ: *mut GstPadTemplate) -> *mut GstPad;
+    pub fn gst_ghost_pad_new_from_template(
+        name: *const c_char,
+        target: *mut GstPad,
+        templ: *mut GstPadTemplate,
+    ) -> *mut GstPad;
     pub fn gst_ghost_pad_new_no_target(name: *const c_char, dir: GstPadDirection) -> *mut GstPad;
-    pub fn gst_ghost_pad_new_no_target_from_template(name: *const c_char, templ: *mut GstPadTemplate) -> *mut GstPad;
-    pub fn gst_ghost_pad_activate_mode_default(pad: *mut GstPad, parent: *mut GstObject, mode: GstPadMode, active: gboolean) -> gboolean;
-    pub fn gst_ghost_pad_internal_activate_mode_default(pad: *mut GstPad, parent: *mut GstObject, mode: GstPadMode, active: gboolean) -> gboolean;
+    pub fn gst_ghost_pad_new_no_target_from_template(
+        name: *const c_char,
+        templ: *mut GstPadTemplate,
+    ) -> *mut GstPad;
+    pub fn gst_ghost_pad_activate_mode_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        mode: GstPadMode,
+        active: gboolean,
+    ) -> gboolean;
+    pub fn gst_ghost_pad_internal_activate_mode_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        mode: GstPadMode,
+        active: gboolean,
+    ) -> gboolean;
     pub fn gst_ghost_pad_construct(gpad: *mut GstGhostPad) -> gboolean;
     pub fn gst_ghost_pad_get_target(gpad: *mut GstGhostPad) -> *mut GstPad;
     pub fn gst_ghost_pad_set_target(gpad: *mut GstGhostPad, newtarget: *mut GstPad) -> gboolean;
@@ -5469,27 +7518,68 @@ extern "C" {
     //=========================================================================
     pub fn gst_object_get_type() -> GType;
     pub fn gst_object_check_uniqueness(list: *mut glib::GList, name: *const c_char) -> gboolean;
-    pub fn gst_object_default_deep_notify(object: *mut gobject::GObject, orig: *mut GstObject, pspec: *mut gobject::GParamSpec, excluded_props: *mut *mut c_char);
+    pub fn gst_object_default_deep_notify(
+        object: *mut gobject::GObject,
+        orig: *mut GstObject,
+        pspec: *mut gobject::GParamSpec,
+        excluded_props: *mut *mut c_char,
+    );
     pub fn gst_object_ref_sink(object: gpointer) -> gpointer;
     pub fn gst_object_replace(oldobj: *mut *mut GstObject, newobj: *mut GstObject) -> gboolean;
-    pub fn gst_object_add_control_binding(object: *mut GstObject, binding: *mut GstControlBinding) -> gboolean;
-    pub fn gst_object_default_error(source: *mut GstObject, error: *const glib::GError, debug: *const c_char);
-    pub fn gst_object_get_control_binding(object: *mut GstObject, property_name: *const c_char) -> *mut GstControlBinding;
+    pub fn gst_object_add_control_binding(
+        object: *mut GstObject,
+        binding: *mut GstControlBinding,
+    ) -> gboolean;
+    pub fn gst_object_default_error(
+        source: *mut GstObject,
+        error: *const glib::GError,
+        debug: *const c_char,
+    );
+    pub fn gst_object_get_control_binding(
+        object: *mut GstObject,
+        property_name: *const c_char,
+    ) -> *mut GstControlBinding;
     pub fn gst_object_get_control_rate(object: *mut GstObject) -> GstClockTime;
-    pub fn gst_object_get_g_value_array(object: *mut GstObject, property_name: *const c_char, timestamp: GstClockTime, interval: GstClockTime, n_values: c_uint, values: *mut gobject::GValue) -> gboolean;
+    pub fn gst_object_get_g_value_array(
+        object: *mut GstObject,
+        property_name: *const c_char,
+        timestamp: GstClockTime,
+        interval: GstClockTime,
+        n_values: c_uint,
+        values: *mut gobject::GValue,
+    ) -> gboolean;
     pub fn gst_object_get_name(object: *mut GstObject) -> *mut c_char;
     pub fn gst_object_get_parent(object: *mut GstObject) -> *mut GstObject;
     pub fn gst_object_get_path_string(object: *mut GstObject) -> *mut c_char;
-    pub fn gst_object_get_value(object: *mut GstObject, property_name: *const c_char, timestamp: GstClockTime) -> *mut gobject::GValue;
-    pub fn gst_object_get_value_array(object: *mut GstObject, property_name: *const c_char, timestamp: GstClockTime, interval: GstClockTime, n_values: c_uint, values: gpointer) -> gboolean;
+    pub fn gst_object_get_value(
+        object: *mut GstObject,
+        property_name: *const c_char,
+        timestamp: GstClockTime,
+    ) -> *mut gobject::GValue;
+    pub fn gst_object_get_value_array(
+        object: *mut GstObject,
+        property_name: *const c_char,
+        timestamp: GstClockTime,
+        interval: GstClockTime,
+        n_values: c_uint,
+        values: gpointer,
+    ) -> gboolean;
     pub fn gst_object_has_active_control_bindings(object: *mut GstObject) -> gboolean;
     pub fn gst_object_has_ancestor(object: *mut GstObject, ancestor: *mut GstObject) -> gboolean;
-    pub fn gst_object_has_as_ancestor(object: *mut GstObject, ancestor: *mut GstObject) -> gboolean;
+    pub fn gst_object_has_as_ancestor(object: *mut GstObject, ancestor: *mut GstObject)
+        -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_object_has_as_parent(object: *mut GstObject, parent: *mut GstObject) -> gboolean;
     pub fn gst_object_ref(object: *mut GstObject) -> *mut GstObject;
-    pub fn gst_object_remove_control_binding(object: *mut GstObject, binding: *mut GstControlBinding) -> gboolean;
-    pub fn gst_object_set_control_binding_disabled(object: *mut GstObject, property_name: *const c_char, disabled: gboolean);
+    pub fn gst_object_remove_control_binding(
+        object: *mut GstObject,
+        binding: *mut GstControlBinding,
+    ) -> gboolean;
+    pub fn gst_object_set_control_binding_disabled(
+        object: *mut GstObject,
+        property_name: *const c_char,
+        disabled: gboolean,
+    );
     pub fn gst_object_set_control_bindings_disabled(object: *mut GstObject, disabled: gboolean);
     pub fn gst_object_set_control_rate(object: *mut GstObject, control_rate: GstClockTime);
     pub fn gst_object_set_name(object: *mut GstObject, name: *const c_char) -> gboolean;
@@ -5504,21 +7594,50 @@ extern "C" {
     //=========================================================================
     pub fn gst_pad_get_type() -> GType;
     pub fn gst_pad_new(name: *const c_char, direction: GstPadDirection) -> *mut GstPad;
-    pub fn gst_pad_new_from_static_template(templ: *mut GstStaticPadTemplate, name: *const c_char) -> *mut GstPad;
-    pub fn gst_pad_new_from_template(templ: *mut GstPadTemplate, name: *const c_char) -> *mut GstPad;
+    pub fn gst_pad_new_from_static_template(
+        templ: *mut GstStaticPadTemplate,
+        name: *const c_char,
+    ) -> *mut GstPad;
+    pub fn gst_pad_new_from_template(
+        templ: *mut GstPadTemplate,
+        name: *const c_char,
+    ) -> *mut GstPad;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_pad_link_get_name(ret: GstPadLinkReturn) -> *const c_char;
     pub fn gst_pad_activate_mode(pad: *mut GstPad, mode: GstPadMode, active: gboolean) -> gboolean;
-    pub fn gst_pad_add_probe(pad: *mut GstPad, mask: GstPadProbeType, callback: GstPadProbeCallback, user_data: gpointer, destroy_data: glib::GDestroyNotify) -> c_ulong;
+    pub fn gst_pad_add_probe(
+        pad: *mut GstPad,
+        mask: GstPadProbeType,
+        callback: GstPadProbeCallback,
+        user_data: gpointer,
+        destroy_data: glib::GDestroyNotify,
+    ) -> c_ulong;
     pub fn gst_pad_can_link(srcpad: *mut GstPad, sinkpad: *mut GstPad) -> gboolean;
     pub fn gst_pad_chain(pad: *mut GstPad, buffer: *mut GstBuffer) -> GstFlowReturn;
     pub fn gst_pad_chain_list(pad: *mut GstPad, list: *mut GstBufferList) -> GstFlowReturn;
     pub fn gst_pad_check_reconfigure(pad: *mut GstPad) -> gboolean;
-    pub fn gst_pad_create_stream_id(pad: *mut GstPad, parent: *mut GstElement, stream_id: *const c_char) -> *mut c_char;
-    pub fn gst_pad_create_stream_id_printf(pad: *mut GstPad, parent: *mut GstElement, stream_id: *const c_char, ...) -> *mut c_char;
+    pub fn gst_pad_create_stream_id(
+        pad: *mut GstPad,
+        parent: *mut GstElement,
+        stream_id: *const c_char,
+    ) -> *mut c_char;
+    pub fn gst_pad_create_stream_id_printf(
+        pad: *mut GstPad,
+        parent: *mut GstElement,
+        stream_id: *const c_char,
+        ...
+    ) -> *mut c_char;
     //pub fn gst_pad_create_stream_id_printf_valist(pad: *mut GstPad, parent: *mut GstElement, stream_id: *const c_char, var_args: /*Unimplemented*/va_list) -> *mut c_char;
-    pub fn gst_pad_event_default(pad: *mut GstPad, parent: *mut GstObject, event: *mut GstEvent) -> gboolean;
-    pub fn gst_pad_forward(pad: *mut GstPad, forward: GstPadForwardFunction, user_data: gpointer) -> gboolean;
+    pub fn gst_pad_event_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        event: *mut GstEvent,
+    ) -> gboolean;
+    pub fn gst_pad_forward(
+        pad: *mut GstPad,
+        forward: GstPadForwardFunction,
+        user_data: gpointer,
+    ) -> gboolean;
     pub fn gst_pad_get_allowed_caps(pad: *mut GstPad) -> *mut GstCaps;
     pub fn gst_pad_get_current_caps(pad: *mut GstPad) -> *mut GstCaps;
     pub fn gst_pad_get_direction(pad: *mut GstPad) -> GstPadDirection;
@@ -5530,8 +7649,17 @@ extern "C" {
     pub fn gst_pad_get_pad_template_caps(pad: *mut GstPad) -> *mut GstCaps;
     pub fn gst_pad_get_parent_element(pad: *mut GstPad) -> *mut GstElement;
     pub fn gst_pad_get_peer(pad: *mut GstPad) -> *mut GstPad;
-    pub fn gst_pad_get_range(pad: *mut GstPad, offset: u64, size: c_uint, buffer: *mut *mut GstBuffer) -> GstFlowReturn;
-    pub fn gst_pad_get_sticky_event(pad: *mut GstPad, event_type: GstEventType, idx: c_uint) -> *mut GstEvent;
+    pub fn gst_pad_get_range(
+        pad: *mut GstPad,
+        offset: u64,
+        size: c_uint,
+        buffer: *mut *mut GstBuffer,
+    ) -> GstFlowReturn;
+    pub fn gst_pad_get_sticky_event(
+        pad: *mut GstPad,
+        event_type: GstEventType,
+        idx: c_uint,
+    ) -> *mut GstEvent;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_pad_get_stream(pad: *mut GstPad) -> *mut GstStream;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -5544,54 +7672,162 @@ extern "C" {
     pub fn gst_pad_is_blocking(pad: *mut GstPad) -> gboolean;
     pub fn gst_pad_is_linked(pad: *mut GstPad) -> gboolean;
     pub fn gst_pad_iterate_internal_links(pad: *mut GstPad) -> *mut GstIterator;
-    pub fn gst_pad_iterate_internal_links_default(pad: *mut GstPad, parent: *mut GstObject) -> *mut GstIterator;
+    pub fn gst_pad_iterate_internal_links_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+    ) -> *mut GstIterator;
     pub fn gst_pad_link(srcpad: *mut GstPad, sinkpad: *mut GstPad) -> GstPadLinkReturn;
-    pub fn gst_pad_link_full(srcpad: *mut GstPad, sinkpad: *mut GstPad, flags: GstPadLinkCheck) -> GstPadLinkReturn;
+    pub fn gst_pad_link_full(
+        srcpad: *mut GstPad,
+        sinkpad: *mut GstPad,
+        flags: GstPadLinkCheck,
+    ) -> GstPadLinkReturn;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_pad_link_maybe_ghosting(src: *mut GstPad, sink: *mut GstPad) -> gboolean;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_pad_link_maybe_ghosting_full(src: *mut GstPad, sink: *mut GstPad, flags: GstPadLinkCheck) -> gboolean;
+    pub fn gst_pad_link_maybe_ghosting_full(
+        src: *mut GstPad,
+        sink: *mut GstPad,
+        flags: GstPadLinkCheck,
+    ) -> gboolean;
     pub fn gst_pad_mark_reconfigure(pad: *mut GstPad);
     pub fn gst_pad_needs_reconfigure(pad: *mut GstPad) -> gboolean;
     pub fn gst_pad_pause_task(pad: *mut GstPad) -> gboolean;
     pub fn gst_pad_peer_query(pad: *mut GstPad, query: *mut GstQuery) -> gboolean;
     pub fn gst_pad_peer_query_accept_caps(pad: *mut GstPad, caps: *mut GstCaps) -> gboolean;
     pub fn gst_pad_peer_query_caps(pad: *mut GstPad, filter: *mut GstCaps) -> *mut GstCaps;
-    pub fn gst_pad_peer_query_convert(pad: *mut GstPad, src_format: GstFormat, src_val: i64, dest_format: GstFormat, dest_val: *mut i64) -> gboolean;
-    pub fn gst_pad_peer_query_duration(pad: *mut GstPad, format: GstFormat, duration: *mut i64) -> gboolean;
-    pub fn gst_pad_peer_query_position(pad: *mut GstPad, format: GstFormat, cur: *mut i64) -> gboolean;
+    pub fn gst_pad_peer_query_convert(
+        pad: *mut GstPad,
+        src_format: GstFormat,
+        src_val: i64,
+        dest_format: GstFormat,
+        dest_val: *mut i64,
+    ) -> gboolean;
+    pub fn gst_pad_peer_query_duration(
+        pad: *mut GstPad,
+        format: GstFormat,
+        duration: *mut i64,
+    ) -> gboolean;
+    pub fn gst_pad_peer_query_position(
+        pad: *mut GstPad,
+        format: GstFormat,
+        cur: *mut i64,
+    ) -> gboolean;
     pub fn gst_pad_proxy_query_accept_caps(pad: *mut GstPad, query: *mut GstQuery) -> gboolean;
     pub fn gst_pad_proxy_query_caps(pad: *mut GstPad, query: *mut GstQuery) -> gboolean;
-    pub fn gst_pad_pull_range(pad: *mut GstPad, offset: u64, size: c_uint, buffer: *mut *mut GstBuffer) -> GstFlowReturn;
+    pub fn gst_pad_pull_range(
+        pad: *mut GstPad,
+        offset: u64,
+        size: c_uint,
+        buffer: *mut *mut GstBuffer,
+    ) -> GstFlowReturn;
     pub fn gst_pad_push(pad: *mut GstPad, buffer: *mut GstBuffer) -> GstFlowReturn;
     pub fn gst_pad_push_event(pad: *mut GstPad, event: *mut GstEvent) -> gboolean;
     pub fn gst_pad_push_list(pad: *mut GstPad, list: *mut GstBufferList) -> GstFlowReturn;
     pub fn gst_pad_query(pad: *mut GstPad, query: *mut GstQuery) -> gboolean;
     pub fn gst_pad_query_accept_caps(pad: *mut GstPad, caps: *mut GstCaps) -> gboolean;
     pub fn gst_pad_query_caps(pad: *mut GstPad, filter: *mut GstCaps) -> *mut GstCaps;
-    pub fn gst_pad_query_convert(pad: *mut GstPad, src_format: GstFormat, src_val: i64, dest_format: GstFormat, dest_val: *mut i64) -> gboolean;
-    pub fn gst_pad_query_default(pad: *mut GstPad, parent: *mut GstObject, query: *mut GstQuery) -> gboolean;
-    pub fn gst_pad_query_duration(pad: *mut GstPad, format: GstFormat, duration: *mut i64) -> gboolean;
+    pub fn gst_pad_query_convert(
+        pad: *mut GstPad,
+        src_format: GstFormat,
+        src_val: i64,
+        dest_format: GstFormat,
+        dest_val: *mut i64,
+    ) -> gboolean;
+    pub fn gst_pad_query_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        query: *mut GstQuery,
+    ) -> gboolean;
+    pub fn gst_pad_query_duration(
+        pad: *mut GstPad,
+        format: GstFormat,
+        duration: *mut i64,
+    ) -> gboolean;
     pub fn gst_pad_query_position(pad: *mut GstPad, format: GstFormat, cur: *mut i64) -> gboolean;
     pub fn gst_pad_remove_probe(pad: *mut GstPad, id: c_ulong);
     pub fn gst_pad_send_event(pad: *mut GstPad, event: *mut GstEvent) -> gboolean;
-    pub fn gst_pad_set_activate_function_full(pad: *mut GstPad, activate: GstPadActivateFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_activatemode_function_full(pad: *mut GstPad, activatemode: GstPadActivateModeFunction, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_pad_set_activate_function_full(
+        pad: *mut GstPad,
+        activate: GstPadActivateFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_activatemode_function_full(
+        pad: *mut GstPad,
+        activatemode: GstPadActivateModeFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_pad_set_active(pad: *mut GstPad, active: gboolean) -> gboolean;
-    pub fn gst_pad_set_chain_function_full(pad: *mut GstPad, chain: GstPadChainFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_chain_list_function_full(pad: *mut GstPad, chainlist: GstPadChainListFunction, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_pad_set_chain_function_full(
+        pad: *mut GstPad,
+        chain: GstPadChainFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_chain_list_function_full(
+        pad: *mut GstPad,
+        chainlist: GstPadChainListFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_pad_set_element_private(pad: *mut GstPad, priv_: gpointer);
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_pad_set_event_full_function_full(pad: *mut GstPad, event: GstPadEventFullFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_event_function_full(pad: *mut GstPad, event: GstPadEventFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_getrange_function_full(pad: *mut GstPad, get: GstPadGetRangeFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_iterate_internal_links_function_full(pad: *mut GstPad, iterintlink: GstPadIterIntLinkFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_link_function_full(pad: *mut GstPad, link: GstPadLinkFunction, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_pad_set_event_full_function_full(
+        pad: *mut GstPad,
+        event: GstPadEventFullFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_event_function_full(
+        pad: *mut GstPad,
+        event: GstPadEventFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_getrange_function_full(
+        pad: *mut GstPad,
+        get: GstPadGetRangeFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_iterate_internal_links_function_full(
+        pad: *mut GstPad,
+        iterintlink: GstPadIterIntLinkFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_link_function_full(
+        pad: *mut GstPad,
+        link: GstPadLinkFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_pad_set_offset(pad: *mut GstPad, offset: i64);
-    pub fn gst_pad_set_query_function_full(pad: *mut GstPad, query: GstPadQueryFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_set_unlink_function_full(pad: *mut GstPad, unlink: GstPadUnlinkFunction, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_pad_start_task(pad: *mut GstPad, func: GstTaskFunction, user_data: gpointer, notify: glib::GDestroyNotify) -> gboolean;
-    pub fn gst_pad_sticky_events_foreach(pad: *mut GstPad, foreach_func: GstPadStickyEventsForeachFunction, user_data: gpointer);
+    pub fn gst_pad_set_query_function_full(
+        pad: *mut GstPad,
+        query: GstPadQueryFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_set_unlink_function_full(
+        pad: *mut GstPad,
+        unlink: GstPadUnlinkFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_pad_start_task(
+        pad: *mut GstPad,
+        func: GstTaskFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> gboolean;
+    pub fn gst_pad_sticky_events_foreach(
+        pad: *mut GstPad,
+        foreach_func: GstPadStickyEventsForeachFunction,
+        user_data: gpointer,
+    );
     pub fn gst_pad_stop_task(pad: *mut GstPad) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_pad_store_sticky_event(pad: *mut GstPad, event: *mut GstEvent) -> GstFlowReturn;
@@ -5602,11 +7838,25 @@ extern "C" {
     // GstPadTemplate
     //=========================================================================
     pub fn gst_pad_template_get_type() -> GType;
-    pub fn gst_pad_template_new(name_template: *const c_char, direction: GstPadDirection, presence: GstPadPresence, caps: *mut GstCaps) -> *mut GstPadTemplate;
+    pub fn gst_pad_template_new(
+        name_template: *const c_char,
+        direction: GstPadDirection,
+        presence: GstPadPresence,
+        caps: *mut GstCaps,
+    ) -> *mut GstPadTemplate;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_pad_template_new_from_static_pad_template_with_gtype(pad_template: *mut GstStaticPadTemplate, pad_type: GType) -> *mut GstPadTemplate;
+    pub fn gst_pad_template_new_from_static_pad_template_with_gtype(
+        pad_template: *mut GstStaticPadTemplate,
+        pad_type: GType,
+    ) -> *mut GstPadTemplate;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_pad_template_new_with_gtype(name_template: *const c_char, direction: GstPadDirection, presence: GstPadPresence, caps: *mut GstCaps, pad_type: GType) -> *mut GstPadTemplate;
+    pub fn gst_pad_template_new_with_gtype(
+        name_template: *const c_char,
+        direction: GstPadDirection,
+        presence: GstPadPresence,
+        caps: *mut GstCaps,
+        pad_type: GType,
+    ) -> *mut GstPadTemplate;
     pub fn gst_pad_template_get_caps(templ: *mut GstPadTemplate) -> *mut GstCaps;
     pub fn gst_pad_template_pad_created(templ: *mut GstPadTemplate, pad: *mut GstPad);
 
@@ -5647,11 +7897,49 @@ extern "C" {
     pub fn gst_plugin_get_type() -> GType;
     pub fn gst_plugin_list_free(list: *mut glib::GList);
     pub fn gst_plugin_load_by_name(name: *const c_char) -> *mut GstPlugin;
-    pub fn gst_plugin_load_file(filename: *const c_char, error: *mut *mut glib::GError) -> *mut GstPlugin;
-    pub fn gst_plugin_register_static(major_version: c_int, minor_version: c_int, name: *const c_char, description: *const c_char, init_func: GstPluginInitFunc, version: *const c_char, license: *const c_char, source: *const c_char, package: *const c_char, origin: *const c_char) -> gboolean;
-    pub fn gst_plugin_register_static_full(major_version: c_int, minor_version: c_int, name: *const c_char, description: *const c_char, init_full_func: GstPluginInitFullFunc, version: *const c_char, license: *const c_char, source: *const c_char, package: *const c_char, origin: *const c_char, user_data: gpointer) -> gboolean;
-    pub fn gst_plugin_add_dependency(plugin: *mut GstPlugin, env_vars: *mut *const c_char, paths: *mut *const c_char, names: *mut *const c_char, flags: GstPluginDependencyFlags);
-    pub fn gst_plugin_add_dependency_simple(plugin: *mut GstPlugin, env_vars: *const c_char, paths: *const c_char, names: *const c_char, flags: GstPluginDependencyFlags);
+    pub fn gst_plugin_load_file(
+        filename: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstPlugin;
+    pub fn gst_plugin_register_static(
+        major_version: c_int,
+        minor_version: c_int,
+        name: *const c_char,
+        description: *const c_char,
+        init_func: GstPluginInitFunc,
+        version: *const c_char,
+        license: *const c_char,
+        source: *const c_char,
+        package: *const c_char,
+        origin: *const c_char,
+    ) -> gboolean;
+    pub fn gst_plugin_register_static_full(
+        major_version: c_int,
+        minor_version: c_int,
+        name: *const c_char,
+        description: *const c_char,
+        init_full_func: GstPluginInitFullFunc,
+        version: *const c_char,
+        license: *const c_char,
+        source: *const c_char,
+        package: *const c_char,
+        origin: *const c_char,
+        user_data: gpointer,
+    ) -> gboolean;
+    pub fn gst_plugin_add_dependency(
+        plugin: *mut GstPlugin,
+        env_vars: *mut *const c_char,
+        paths: *mut *const c_char,
+        names: *mut *const c_char,
+        flags: GstPluginDependencyFlags,
+    );
+    pub fn gst_plugin_add_dependency_simple(
+        plugin: *mut GstPlugin,
+        env_vars: *const c_char,
+        paths: *const c_char,
+        names: *const c_char,
+        flags: GstPluginDependencyFlags,
+    );
     pub fn gst_plugin_get_cache_data(plugin: *mut GstPlugin) -> *const GstStructure;
     pub fn gst_plugin_get_description(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_filename(plugin: *mut GstPlugin) -> *const c_char;
@@ -5674,7 +7962,12 @@ extern "C" {
     pub fn gst_plugin_feature_list_debug(list: *mut glib::GList);
     pub fn gst_plugin_feature_list_free(list: *mut glib::GList);
     pub fn gst_plugin_feature_rank_compare_func(p1: gconstpointer, p2: gconstpointer) -> c_int;
-    pub fn gst_plugin_feature_check_version(feature: *mut GstPluginFeature, min_major: c_uint, min_minor: c_uint, min_micro: c_uint) -> gboolean;
+    pub fn gst_plugin_feature_check_version(
+        feature: *mut GstPluginFeature,
+        min_major: c_uint,
+        min_minor: c_uint,
+        min_micro: c_uint,
+    ) -> gboolean;
     pub fn gst_plugin_feature_get_plugin(feature: *mut GstPluginFeature) -> *mut GstPlugin;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_plugin_feature_get_plugin_name(feature: *mut GstPluginFeature) -> *const c_char;
@@ -5686,10 +7979,27 @@ extern "C" {
     // GstProxyPad
     //=========================================================================
     pub fn gst_proxy_pad_get_type() -> GType;
-    pub fn gst_proxy_pad_chain_default(pad: *mut GstPad, parent: *mut GstObject, buffer: *mut GstBuffer) -> GstFlowReturn;
-    pub fn gst_proxy_pad_chain_list_default(pad: *mut GstPad, parent: *mut GstObject, list: *mut GstBufferList) -> GstFlowReturn;
-    pub fn gst_proxy_pad_getrange_default(pad: *mut GstPad, parent: *mut GstObject, offset: u64, size: c_uint, buffer: *mut *mut GstBuffer) -> GstFlowReturn;
-    pub fn gst_proxy_pad_iterate_internal_links_default(pad: *mut GstPad, parent: *mut GstObject) -> *mut GstIterator;
+    pub fn gst_proxy_pad_chain_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        buffer: *mut GstBuffer,
+    ) -> GstFlowReturn;
+    pub fn gst_proxy_pad_chain_list_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        list: *mut GstBufferList,
+    ) -> GstFlowReturn;
+    pub fn gst_proxy_pad_getrange_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+        offset: u64,
+        size: c_uint,
+        buffer: *mut *mut GstBuffer,
+    ) -> GstFlowReturn;
+    pub fn gst_proxy_pad_iterate_internal_links_default(
+        pad: *mut GstPad,
+        parent: *mut GstObject,
+    ) -> *mut GstIterator;
     pub fn gst_proxy_pad_get_internal(pad: *mut GstProxyPad) -> *mut GstProxyPad;
 
     //=========================================================================
@@ -5699,19 +8009,57 @@ extern "C" {
     pub fn gst_registry_fork_is_enabled() -> gboolean;
     pub fn gst_registry_fork_set_enabled(enabled: gboolean);
     pub fn gst_registry_get() -> *mut GstRegistry;
-    pub fn gst_registry_add_feature(registry: *mut GstRegistry, feature: *mut GstPluginFeature) -> gboolean;
+    pub fn gst_registry_add_feature(
+        registry: *mut GstRegistry,
+        feature: *mut GstPluginFeature,
+    ) -> gboolean;
     pub fn gst_registry_add_plugin(registry: *mut GstRegistry, plugin: *mut GstPlugin) -> gboolean;
-    pub fn gst_registry_check_feature_version(registry: *mut GstRegistry, feature_name: *const c_char, min_major: c_uint, min_minor: c_uint, min_micro: c_uint) -> gboolean;
-    pub fn gst_registry_feature_filter(registry: *mut GstRegistry, filter: GstPluginFeatureFilter, first: gboolean, user_data: gpointer) -> *mut glib::GList;
-    pub fn gst_registry_find_feature(registry: *mut GstRegistry, name: *const c_char, type_: GType) -> *mut GstPluginFeature;
-    pub fn gst_registry_find_plugin(registry: *mut GstRegistry, name: *const c_char) -> *mut GstPlugin;
-    pub fn gst_registry_get_feature_list(registry: *mut GstRegistry, type_: GType) -> *mut glib::GList;
-    pub fn gst_registry_get_feature_list_by_plugin(registry: *mut GstRegistry, name: *const c_char) -> *mut glib::GList;
+    pub fn gst_registry_check_feature_version(
+        registry: *mut GstRegistry,
+        feature_name: *const c_char,
+        min_major: c_uint,
+        min_minor: c_uint,
+        min_micro: c_uint,
+    ) -> gboolean;
+    pub fn gst_registry_feature_filter(
+        registry: *mut GstRegistry,
+        filter: GstPluginFeatureFilter,
+        first: gboolean,
+        user_data: gpointer,
+    ) -> *mut glib::GList;
+    pub fn gst_registry_find_feature(
+        registry: *mut GstRegistry,
+        name: *const c_char,
+        type_: GType,
+    ) -> *mut GstPluginFeature;
+    pub fn gst_registry_find_plugin(
+        registry: *mut GstRegistry,
+        name: *const c_char,
+    ) -> *mut GstPlugin;
+    pub fn gst_registry_get_feature_list(
+        registry: *mut GstRegistry,
+        type_: GType,
+    ) -> *mut glib::GList;
+    pub fn gst_registry_get_feature_list_by_plugin(
+        registry: *mut GstRegistry,
+        name: *const c_char,
+    ) -> *mut glib::GList;
     pub fn gst_registry_get_feature_list_cookie(registry: *mut GstRegistry) -> u32;
     pub fn gst_registry_get_plugin_list(registry: *mut GstRegistry) -> *mut glib::GList;
-    pub fn gst_registry_lookup(registry: *mut GstRegistry, filename: *const c_char) -> *mut GstPlugin;
-    pub fn gst_registry_lookup_feature(registry: *mut GstRegistry, name: *const c_char) -> *mut GstPluginFeature;
-    pub fn gst_registry_plugin_filter(registry: *mut GstRegistry, filter: GstPluginFilter, first: gboolean, user_data: gpointer) -> *mut glib::GList;
+    pub fn gst_registry_lookup(
+        registry: *mut GstRegistry,
+        filename: *const c_char,
+    ) -> *mut GstPlugin;
+    pub fn gst_registry_lookup_feature(
+        registry: *mut GstRegistry,
+        name: *const c_char,
+    ) -> *mut GstPluginFeature;
+    pub fn gst_registry_plugin_filter(
+        registry: *mut GstRegistry,
+        filter: GstPluginFilter,
+        first: gboolean,
+        user_data: gpointer,
+    ) -> *mut glib::GList;
     pub fn gst_registry_remove_feature(registry: *mut GstRegistry, feature: *mut GstPluginFeature);
     pub fn gst_registry_remove_plugin(registry: *mut GstRegistry, plugin: *mut GstPlugin);
     pub fn gst_registry_scan_path(registry: *mut GstRegistry, path: *const c_char) -> gboolean;
@@ -5721,7 +8069,12 @@ extern "C" {
     //=========================================================================
     pub fn gst_stream_get_type() -> GType;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_stream_new(stream_id: *const c_char, caps: *mut GstCaps, type_: GstStreamType, flags: GstStreamFlags) -> *mut GstStream;
+    pub fn gst_stream_new(
+        stream_id: *const c_char,
+        caps: *mut GstCaps,
+        type_: GstStreamType,
+        flags: GstStreamFlags,
+    ) -> *mut GstStream;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_stream_get_caps(stream: *mut GstStream) -> *mut GstCaps;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -5748,13 +8101,21 @@ extern "C" {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_stream_collection_new(upstream_id: *const c_char) -> *mut GstStreamCollection;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_stream_collection_add_stream(collection: *mut GstStreamCollection, stream: *mut GstStream) -> gboolean;
+    pub fn gst_stream_collection_add_stream(
+        collection: *mut GstStreamCollection,
+        stream: *mut GstStream,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_stream_collection_get_size(collection: *mut GstStreamCollection) -> c_uint;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_stream_collection_get_stream(collection: *mut GstStreamCollection, index: c_uint) -> *mut GstStream;
+    pub fn gst_stream_collection_get_stream(
+        collection: *mut GstStreamCollection,
+        index: c_uint,
+    ) -> *mut GstStream;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_stream_collection_get_upstream_id(collection: *mut GstStreamCollection) -> *const c_char;
+    pub fn gst_stream_collection_get_upstream_id(
+        collection: *mut GstStreamCollection,
+    ) -> *const c_char;
 
     //=========================================================================
     // GstSystemClock
@@ -5768,14 +8129,28 @@ extern "C" {
     // GstTask
     //=========================================================================
     pub fn gst_task_get_type() -> GType;
-    pub fn gst_task_new(func: GstTaskFunction, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstTask;
+    pub fn gst_task_new(
+        func: GstTaskFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstTask;
     pub fn gst_task_cleanup_all();
     pub fn gst_task_get_pool(task: *mut GstTask) -> *mut GstTaskPool;
     pub fn gst_task_get_state(task: *mut GstTask) -> GstTaskState;
     pub fn gst_task_join(task: *mut GstTask) -> gboolean;
     pub fn gst_task_pause(task: *mut GstTask) -> gboolean;
-    pub fn gst_task_set_enter_callback(task: *mut GstTask, enter_func: GstTaskThreadFunc, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_task_set_leave_callback(task: *mut GstTask, leave_func: GstTaskThreadFunc, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_task_set_enter_callback(
+        task: *mut GstTask,
+        enter_func: GstTaskThreadFunc,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_task_set_leave_callback(
+        task: *mut GstTask,
+        leave_func: GstTaskThreadFunc,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_task_set_lock(task: *mut GstTask, mutex: *mut glib::GRecMutex);
     pub fn gst_task_set_pool(task: *mut GstTask, pool: *mut GstTaskPool);
     pub fn gst_task_set_state(task: *mut GstTask, state: GstTaskState) -> gboolean;
@@ -5790,7 +8165,12 @@ extern "C" {
     pub fn gst_task_pool_cleanup(pool: *mut GstTaskPool);
     pub fn gst_task_pool_join(pool: *mut GstTaskPool, id: gpointer);
     pub fn gst_task_pool_prepare(pool: *mut GstTaskPool, error: *mut *mut glib::GError);
-    pub fn gst_task_pool_push(pool: *mut GstTaskPool, func: GstTaskPoolFunction, user_data: gpointer, error: *mut *mut glib::GError) -> gpointer;
+    pub fn gst_task_pool_push(
+        pool: *mut GstTaskPool,
+        func: GstTaskPoolFunction,
+        user_data: gpointer,
+        error: *mut *mut glib::GError,
+    ) -> gpointer;
 
     //=========================================================================
     // GstTracer
@@ -5816,9 +8196,14 @@ extern "C" {
     //=========================================================================
     pub fn gst_type_find_factory_get_type() -> GType;
     pub fn gst_type_find_factory_get_list() -> *mut glib::GList;
-    pub fn gst_type_find_factory_call_function(factory: *mut GstTypeFindFactory, find: *mut GstTypeFind);
+    pub fn gst_type_find_factory_call_function(
+        factory: *mut GstTypeFindFactory,
+        find: *mut GstTypeFind,
+    );
     pub fn gst_type_find_factory_get_caps(factory: *mut GstTypeFindFactory) -> *mut GstCaps;
-    pub fn gst_type_find_factory_get_extensions(factory: *mut GstTypeFindFactory) -> *const *const c_char;
+    pub fn gst_type_find_factory_get_extensions(
+        factory: *mut GstTypeFindFactory,
+    ) -> *const *const c_char;
     pub fn gst_type_find_factory_has_function(factory: *mut GstTypeFindFactory) -> gboolean;
 
     //=========================================================================
@@ -5826,40 +8211,99 @@ extern "C" {
     //=========================================================================
     pub fn gst_value_array_get_type() -> GType;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_value_array_append_and_take_value(value: *mut gobject::GValue, append_value: *mut gobject::GValue);
-    pub fn gst_value_array_append_value(value: *mut gobject::GValue, append_value: *const gobject::GValue);
+    pub fn gst_value_array_append_and_take_value(
+        value: *mut gobject::GValue,
+        append_value: *mut gobject::GValue,
+    );
+    pub fn gst_value_array_append_value(
+        value: *mut gobject::GValue,
+        append_value: *const gobject::GValue,
+    );
     pub fn gst_value_array_get_size(value: *const gobject::GValue) -> c_uint;
-    pub fn gst_value_array_get_value(value: *const gobject::GValue, index: c_uint) -> *const gobject::GValue;
-    pub fn gst_value_array_prepend_value(value: *mut gobject::GValue, prepend_value: *const gobject::GValue);
+    pub fn gst_value_array_get_value(
+        value: *const gobject::GValue,
+        index: c_uint,
+    ) -> *const gobject::GValue;
+    pub fn gst_value_array_prepend_value(
+        value: *mut gobject::GValue,
+        prepend_value: *const gobject::GValue,
+    );
 
     //=========================================================================
     // GstValueList
     //=========================================================================
     pub fn gst_value_list_get_type() -> GType;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_value_list_append_and_take_value(value: *mut gobject::GValue, append_value: *mut gobject::GValue);
-    pub fn gst_value_list_append_value(value: *mut gobject::GValue, append_value: *const gobject::GValue);
-    pub fn gst_value_list_concat(dest: *mut gobject::GValue, value1: *const gobject::GValue, value2: *const gobject::GValue);
+    pub fn gst_value_list_append_and_take_value(
+        value: *mut gobject::GValue,
+        append_value: *mut gobject::GValue,
+    );
+    pub fn gst_value_list_append_value(
+        value: *mut gobject::GValue,
+        append_value: *const gobject::GValue,
+    );
+    pub fn gst_value_list_concat(
+        dest: *mut gobject::GValue,
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    );
     pub fn gst_value_list_get_size(value: *const gobject::GValue) -> c_uint;
-    pub fn gst_value_list_get_value(value: *const gobject::GValue, index: c_uint) -> *const gobject::GValue;
-    pub fn gst_value_list_merge(dest: *mut gobject::GValue, value1: *const gobject::GValue, value2: *const gobject::GValue);
-    pub fn gst_value_list_prepend_value(value: *mut gobject::GValue, prepend_value: *const gobject::GValue);
+    pub fn gst_value_list_get_value(
+        value: *const gobject::GValue,
+        index: c_uint,
+    ) -> *const gobject::GValue;
+    pub fn gst_value_list_merge(
+        dest: *mut gobject::GValue,
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    );
+    pub fn gst_value_list_prepend_value(
+        value: *mut gobject::GValue,
+        prepend_value: *const gobject::GValue,
+    );
 
     //=========================================================================
     // GstChildProxy
     //=========================================================================
     pub fn gst_child_proxy_get_type() -> GType;
-    pub fn gst_child_proxy_child_added(parent: *mut GstChildProxy, child: *mut gobject::GObject, name: *const c_char);
-    pub fn gst_child_proxy_child_removed(parent: *mut GstChildProxy, child: *mut gobject::GObject, name: *const c_char);
+    pub fn gst_child_proxy_child_added(
+        parent: *mut GstChildProxy,
+        child: *mut gobject::GObject,
+        name: *const c_char,
+    );
+    pub fn gst_child_proxy_child_removed(
+        parent: *mut GstChildProxy,
+        child: *mut gobject::GObject,
+        name: *const c_char,
+    );
     pub fn gst_child_proxy_get(object: *mut GstChildProxy, first_property_name: *const c_char, ...);
-    pub fn gst_child_proxy_get_child_by_index(parent: *mut GstChildProxy, index: c_uint) -> *mut gobject::GObject;
-    pub fn gst_child_proxy_get_child_by_name(parent: *mut GstChildProxy, name: *const c_char) -> *mut gobject::GObject;
+    pub fn gst_child_proxy_get_child_by_index(
+        parent: *mut GstChildProxy,
+        index: c_uint,
+    ) -> *mut gobject::GObject;
+    pub fn gst_child_proxy_get_child_by_name(
+        parent: *mut GstChildProxy,
+        name: *const c_char,
+    ) -> *mut gobject::GObject;
     pub fn gst_child_proxy_get_children_count(parent: *mut GstChildProxy) -> c_uint;
-    pub fn gst_child_proxy_get_property(object: *mut GstChildProxy, name: *const c_char, value: *mut gobject::GValue);
+    pub fn gst_child_proxy_get_property(
+        object: *mut GstChildProxy,
+        name: *const c_char,
+        value: *mut gobject::GValue,
+    );
     //pub fn gst_child_proxy_get_valist(object: *mut GstChildProxy, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn gst_child_proxy_lookup(object: *mut GstChildProxy, name: *const c_char, target: *mut *mut gobject::GObject, pspec: *mut *mut gobject::GParamSpec) -> gboolean;
+    pub fn gst_child_proxy_lookup(
+        object: *mut GstChildProxy,
+        name: *const c_char,
+        target: *mut *mut gobject::GObject,
+        pspec: *mut *mut gobject::GParamSpec,
+    ) -> gboolean;
     pub fn gst_child_proxy_set(object: *mut GstChildProxy, first_property_name: *const c_char, ...);
-    pub fn gst_child_proxy_set_property(object: *mut GstChildProxy, name: *const c_char, value: *const gobject::GValue);
+    pub fn gst_child_proxy_set_property(
+        object: *mut GstChildProxy,
+        name: *const c_char,
+        value: *const gobject::GValue,
+    );
     //pub fn gst_child_proxy_set_valist(object: *mut GstChildProxy, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
 
     //=========================================================================
@@ -5869,15 +8313,29 @@ extern "C" {
     pub fn gst_preset_get_app_dir() -> *const c_char;
     pub fn gst_preset_set_app_dir(app_dir: *const c_char) -> gboolean;
     pub fn gst_preset_delete_preset(preset: *mut GstPreset, name: *const c_char) -> gboolean;
-    pub fn gst_preset_get_meta(preset: *mut GstPreset, name: *const c_char, tag: *const c_char, value: *mut *mut c_char) -> gboolean;
+    pub fn gst_preset_get_meta(
+        preset: *mut GstPreset,
+        name: *const c_char,
+        tag: *const c_char,
+        value: *mut *mut c_char,
+    ) -> gboolean;
     pub fn gst_preset_get_preset_names(preset: *mut GstPreset) -> *mut *mut c_char;
     pub fn gst_preset_get_property_names(preset: *mut GstPreset) -> *mut *mut c_char;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_preset_is_editable(preset: *mut GstPreset) -> gboolean;
     pub fn gst_preset_load_preset(preset: *mut GstPreset, name: *const c_char) -> gboolean;
-    pub fn gst_preset_rename_preset(preset: *mut GstPreset, old_name: *const c_char, new_name: *const c_char) -> gboolean;
+    pub fn gst_preset_rename_preset(
+        preset: *mut GstPreset,
+        old_name: *const c_char,
+        new_name: *const c_char,
+    ) -> gboolean;
     pub fn gst_preset_save_preset(preset: *mut GstPreset, name: *const c_char) -> gboolean;
-    pub fn gst_preset_set_meta(preset: *mut GstPreset, name: *const c_char, tag: *const c_char, value: *const c_char) -> gboolean;
+    pub fn gst_preset_set_meta(
+        preset: *mut GstPreset,
+        name: *const c_char,
+        tag: *const c_char,
+        value: *const c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GstTagSetter
@@ -5885,12 +8343,31 @@ extern "C" {
     pub fn gst_tag_setter_get_type() -> GType;
     //pub fn gst_tag_setter_add_tag_valist(setter: *mut GstTagSetter, mode: GstTagMergeMode, tag: *const c_char, var_args: /*Unimplemented*/va_list);
     //pub fn gst_tag_setter_add_tag_valist_values(setter: *mut GstTagSetter, mode: GstTagMergeMode, tag: *const c_char, var_args: /*Unimplemented*/va_list);
-    pub fn gst_tag_setter_add_tag_value(setter: *mut GstTagSetter, mode: GstTagMergeMode, tag: *const c_char, value: *const gobject::GValue);
-    pub fn gst_tag_setter_add_tag_values(setter: *mut GstTagSetter, mode: GstTagMergeMode, tag: *const c_char, ...);
-    pub fn gst_tag_setter_add_tags(setter: *mut GstTagSetter, mode: GstTagMergeMode, tag: *const c_char, ...);
+    pub fn gst_tag_setter_add_tag_value(
+        setter: *mut GstTagSetter,
+        mode: GstTagMergeMode,
+        tag: *const c_char,
+        value: *const gobject::GValue,
+    );
+    pub fn gst_tag_setter_add_tag_values(
+        setter: *mut GstTagSetter,
+        mode: GstTagMergeMode,
+        tag: *const c_char,
+        ...
+    );
+    pub fn gst_tag_setter_add_tags(
+        setter: *mut GstTagSetter,
+        mode: GstTagMergeMode,
+        tag: *const c_char,
+        ...
+    );
     pub fn gst_tag_setter_get_tag_list(setter: *mut GstTagSetter) -> *const GstTagList;
     pub fn gst_tag_setter_get_tag_merge_mode(setter: *mut GstTagSetter) -> GstTagMergeMode;
-    pub fn gst_tag_setter_merge_tags(setter: *mut GstTagSetter, list: *const GstTagList, mode: GstTagMergeMode);
+    pub fn gst_tag_setter_merge_tags(
+        setter: *mut GstTagSetter,
+        list: *const GstTagList,
+        mode: GstTagMergeMode,
+    );
     pub fn gst_tag_setter_reset_tags(setter: *mut GstTagSetter);
     pub fn gst_tag_setter_set_tag_merge_mode(setter: *mut GstTagSetter, mode: GstTagMergeMode);
 
@@ -5909,25 +8386,53 @@ extern "C" {
     pub fn gst_uri_handler_get_protocols(handler: *mut GstURIHandler) -> *const *const c_char;
     pub fn gst_uri_handler_get_uri(handler: *mut GstURIHandler) -> *mut c_char;
     pub fn gst_uri_handler_get_uri_type(handler: *mut GstURIHandler) -> GstURIType;
-    pub fn gst_uri_handler_set_uri(handler: *mut GstURIHandler, uri: *const c_char, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_uri_handler_set_uri(
+        handler: *mut GstURIHandler,
+        uri: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
 
     //=========================================================================
     // Other functions
     //=========================================================================
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_calculate_linear_regression(xy: *const GstClockTime, temp: *mut GstClockTime, n: c_uint, m_num: *mut GstClockTime, m_denom: *mut GstClockTime, b: *mut GstClockTime, xbase: *mut GstClockTime, r_squared: *mut c_double) -> gboolean;
+    pub fn gst_calculate_linear_regression(
+        xy: *const GstClockTime,
+        temp: *mut GstClockTime,
+        n: c_uint,
+        m_num: *mut GstClockTime,
+        m_denom: *mut GstClockTime,
+        b: *mut GstClockTime,
+        xbase: *mut GstClockTime,
+        r_squared: *mut c_double,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_clear_mini_object(object_ptr: *mut *mut GstMiniObject);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_clear_object(object_ptr: *mut *mut GstObject);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_clear_structure(structure_ptr: *mut *mut GstStructure);
-    pub fn gst_debug_add_log_function(func: GstLogFunction, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_debug_add_log_function(
+        func: GstLogFunction,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_debug_add_ring_buffer_logger(max_size_per_thread: c_uint, thread_timeout: c_uint);
-    pub fn gst_debug_bin_to_dot_data(bin: *mut GstBin, details: GstDebugGraphDetails) -> *mut c_char;
-    pub fn gst_debug_bin_to_dot_file(bin: *mut GstBin, details: GstDebugGraphDetails, file_name: *const c_char);
-    pub fn gst_debug_bin_to_dot_file_with_ts(bin: *mut GstBin, details: GstDebugGraphDetails, file_name: *const c_char);
+    pub fn gst_debug_bin_to_dot_data(
+        bin: *mut GstBin,
+        details: GstDebugGraphDetails,
+    ) -> *mut c_char;
+    pub fn gst_debug_bin_to_dot_file(
+        bin: *mut GstBin,
+        details: GstDebugGraphDetails,
+        file_name: *const c_char,
+    );
+    pub fn gst_debug_bin_to_dot_file_with_ts(
+        bin: *mut GstBin,
+        details: GstDebugGraphDetails,
+        file_name: *const c_char,
+    );
     pub fn gst_debug_construct_term_color(colorinfo: c_uint) -> *mut c_char;
     pub fn gst_debug_construct_win_color(colorinfo: c_uint) -> c_int;
     pub fn gst_debug_get_all_categories() -> *mut glib::GSList;
@@ -5938,8 +8443,26 @@ extern "C" {
     pub fn gst_debug_get_stack_trace(flags: GstStackTraceFlags) -> *mut c_char;
     pub fn gst_debug_is_active() -> gboolean;
     pub fn gst_debug_is_colored() -> gboolean;
-    pub fn gst_debug_log(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, ...);
-    pub fn gst_debug_log_default(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, message: *mut GstDebugMessage, user_data: gpointer);
+    pub fn gst_debug_log(
+        category: *mut GstDebugCategory,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        object: *mut gobject::GObject,
+        format: *const c_char,
+        ...
+    );
+    pub fn gst_debug_log_default(
+        category: *mut GstDebugCategory,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        object: *mut gobject::GObject,
+        message: *mut GstDebugMessage,
+        user_data: gpointer,
+    );
     //pub fn gst_debug_log_valist(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, args: /*Unimplemented*/va_list);
     pub fn gst_debug_print_stack_trace();
     pub fn gst_debug_remove_log_function(func: GstLogFunction) -> c_uint;
@@ -5962,7 +8485,10 @@ extern "C" {
     pub fn gst_deinit();
     pub fn gst_dynamic_type_register(plugin: *mut GstPlugin, type_: GType) -> gboolean;
     pub fn gst_error_get_message(domain: glib::GQuark, code: c_int) -> *mut c_char;
-    pub fn gst_filename_to_uri(filename: *const c_char, error: *mut *mut glib::GError) -> *mut c_char;
+    pub fn gst_filename_to_uri(
+        filename: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut c_char;
     pub fn gst_flow_get_name(ret: GstFlowReturn) -> *const c_char;
     pub fn gst_flow_to_quark(ret: GstFlowReturn) -> glib::GQuark;
     pub fn gst_formats_contains(formats: *const GstFormat, format: GstFormat) -> gboolean;
@@ -5975,21 +8501,68 @@ extern "C" {
     //#[cfg(any(feature = "v1_8", feature = "dox"))]
     //pub fn gst_info_vasprintf(result: *mut *mut c_char, format: *const c_char, args: /*Unimplemented*/va_list) -> c_int;
     pub fn gst_init(argc: *mut c_int, argv: *mut *mut *mut c_char);
-    pub fn gst_init_check(argc: *mut c_int, argv: *mut *mut *mut c_char, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_init_check(
+        argc: *mut c_int,
+        argv: *mut *mut *mut c_char,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_init_get_option_group() -> *mut glib::GOptionGroup;
     pub fn gst_is_caps_features(obj: gconstpointer) -> gboolean;
     pub fn gst_is_initialized() -> gboolean;
     pub fn gst_make_element_message_details(name: *const c_char, ...) -> *mut GstStructure;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_param_spec_array(name: *const c_char, nick: *const c_char, blurb: *const c_char, element_spec: *mut gobject::GParamSpec, flags: gobject::GParamFlags) -> *mut gobject::GParamSpec;
-    pub fn gst_param_spec_fraction(name: *const c_char, nick: *const c_char, blurb: *const c_char, min_num: c_int, min_denom: c_int, max_num: c_int, max_denom: c_int, default_num: c_int, default_denom: c_int, flags: gobject::GParamFlags) -> *mut gobject::GParamSpec;
+    pub fn gst_param_spec_array(
+        name: *const c_char,
+        nick: *const c_char,
+        blurb: *const c_char,
+        element_spec: *mut gobject::GParamSpec,
+        flags: gobject::GParamFlags,
+    ) -> *mut gobject::GParamSpec;
+    pub fn gst_param_spec_fraction(
+        name: *const c_char,
+        nick: *const c_char,
+        blurb: *const c_char,
+        min_num: c_int,
+        min_denom: c_int,
+        max_num: c_int,
+        max_denom: c_int,
+        default_num: c_int,
+        default_denom: c_int,
+        flags: gobject::GParamFlags,
+    ) -> *mut gobject::GParamSpec;
     pub fn gst_parent_buffer_meta_api_get_type() -> GType;
-    pub fn gst_parse_bin_from_description(bin_description: *const c_char, ghost_unlinked_pads: gboolean, error: *mut *mut glib::GError) -> *mut GstBin;
-    pub fn gst_parse_bin_from_description_full(bin_description: *const c_char, ghost_unlinked_pads: gboolean, context: *mut GstParseContext, flags: GstParseFlags, error: *mut *mut glib::GError) -> *mut GstElement;
-    pub fn gst_parse_launch(pipeline_description: *const c_char, error: *mut *mut glib::GError) -> *mut GstElement;
-    pub fn gst_parse_launch_full(pipeline_description: *const c_char, context: *mut GstParseContext, flags: GstParseFlags, error: *mut *mut glib::GError) -> *mut GstElement;
-    pub fn gst_parse_launchv(argv: *mut *const c_char, error: *mut *mut glib::GError) -> *mut GstElement;
-    pub fn gst_parse_launchv_full(argv: *mut *const c_char, context: *mut GstParseContext, flags: GstParseFlags, error: *mut *mut glib::GError) -> *mut GstElement;
+    pub fn gst_parse_bin_from_description(
+        bin_description: *const c_char,
+        ghost_unlinked_pads: gboolean,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstBin;
+    pub fn gst_parse_bin_from_description_full(
+        bin_description: *const c_char,
+        ghost_unlinked_pads: gboolean,
+        context: *mut GstParseContext,
+        flags: GstParseFlags,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstElement;
+    pub fn gst_parse_launch(
+        pipeline_description: *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstElement;
+    pub fn gst_parse_launch_full(
+        pipeline_description: *const c_char,
+        context: *mut GstParseContext,
+        flags: GstParseFlags,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstElement;
+    pub fn gst_parse_launchv(
+        argv: *mut *const c_char,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstElement;
+    pub fn gst_parse_launchv_full(
+        argv: *mut *const c_char,
+        context: *mut GstParseContext,
+        flags: GstParseFlags,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstElement;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_print(format: *const c_char, ...);
     #[cfg(any(feature = "v1_12", feature = "dox"))]
@@ -5999,7 +8572,9 @@ extern "C" {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_println(format: *const c_char, ...);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_protection_filter_systems_by_available_decryptors(system_identifiers: *mut *const c_char) -> *mut *mut c_char;
+    pub fn gst_protection_filter_systems_by_available_decryptors(
+        system_identifiers: *mut *const c_char,
+    ) -> *mut *mut c_char;
     pub fn gst_protection_meta_api_get_type() -> GType;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_protection_select_system(system_identifiers: *mut *const c_char) -> *const c_char;
@@ -6014,24 +8589,67 @@ extern "C" {
     pub fn gst_tag_get_nick(tag: *const c_char) -> *const c_char;
     pub fn gst_tag_get_type(tag: *const c_char) -> GType;
     pub fn gst_tag_is_fixed(tag: *const c_char) -> gboolean;
-    pub fn gst_tag_merge_strings_with_comma(dest: *mut gobject::GValue, src: *const gobject::GValue);
+    pub fn gst_tag_merge_strings_with_comma(
+        dest: *mut gobject::GValue,
+        src: *const gobject::GValue,
+    );
     pub fn gst_tag_merge_use_first(dest: *mut gobject::GValue, src: *const gobject::GValue);
-    pub fn gst_tag_register(name: *const c_char, flag: GstTagFlag, type_: GType, nick: *const c_char, blurb: *const c_char, func: GstTagMergeFunc);
-    pub fn gst_tag_register_static(name: *const c_char, flag: GstTagFlag, type_: GType, nick: *const c_char, blurb: *const c_char, func: GstTagMergeFunc);
+    pub fn gst_tag_register(
+        name: *const c_char,
+        flag: GstTagFlag,
+        type_: GType,
+        nick: *const c_char,
+        blurb: *const c_char,
+        func: GstTagMergeFunc,
+    );
+    pub fn gst_tag_register_static(
+        name: *const c_char,
+        flag: GstTagFlag,
+        type_: GType,
+        nick: *const c_char,
+        blurb: *const c_char,
+        func: GstTagMergeFunc,
+    );
     pub fn gst_type_find_get_type() -> GType;
     pub fn gst_update_registry() -> gboolean;
-    pub fn gst_util_array_binary_search(array: gpointer, num_elements: c_uint, element_size: size_t, search_func: glib::GCompareDataFunc, mode: GstSearchMode, search_data: gconstpointer, user_data: gpointer) -> gpointer;
+    pub fn gst_util_array_binary_search(
+        array: gpointer,
+        num_elements: c_uint,
+        element_size: size_t,
+        search_func: glib::GCompareDataFunc,
+        mode: GstSearchMode,
+        search_data: gconstpointer,
+        user_data: gpointer,
+    ) -> gpointer;
     pub fn gst_util_double_to_fraction(src: c_double, dest_n: *mut c_int, dest_d: *mut c_int);
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_util_dump_buffer(buf: *mut GstBuffer);
     pub fn gst_util_dump_mem(mem: *const u8, size: c_uint);
-    pub fn gst_util_fraction_add(a_n: c_int, a_d: c_int, b_n: c_int, b_d: c_int, res_n: *mut c_int, res_d: *mut c_int) -> gboolean;
+    pub fn gst_util_fraction_add(
+        a_n: c_int,
+        a_d: c_int,
+        b_n: c_int,
+        b_d: c_int,
+        res_n: *mut c_int,
+        res_d: *mut c_int,
+    ) -> gboolean;
     pub fn gst_util_fraction_compare(a_n: c_int, a_d: c_int, b_n: c_int, b_d: c_int) -> c_int;
-    pub fn gst_util_fraction_multiply(a_n: c_int, a_d: c_int, b_n: c_int, b_d: c_int, res_n: *mut c_int, res_d: *mut c_int) -> gboolean;
+    pub fn gst_util_fraction_multiply(
+        a_n: c_int,
+        a_d: c_int,
+        b_n: c_int,
+        b_d: c_int,
+        res_n: *mut c_int,
+        res_d: *mut c_int,
+    ) -> gboolean;
     pub fn gst_util_fraction_to_double(src_n: c_int, src_d: c_int, dest: *mut c_double);
     pub fn gst_util_gdouble_to_guint64(value: c_double) -> u64;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_util_get_object_array(object: *mut gobject::GObject, name: *const c_char, array: *mut *mut gobject::GValueArray) -> gboolean;
+    pub fn gst_util_get_object_array(
+        object: *mut gobject::GObject,
+        name: *const c_char,
+        array: *mut *mut gobject::GValueArray,
+    ) -> gboolean;
     pub fn gst_util_get_timestamp() -> GstClockTime;
     pub fn gst_util_greatest_common_divisor(a: c_int, b: c_int) -> c_int;
     pub fn gst_util_greatest_common_divisor_int64(a: i64, b: i64) -> i64;
@@ -6039,9 +8657,17 @@ extern "C" {
     pub fn gst_util_guint64_to_gdouble(value: u64) -> c_double;
     pub fn gst_util_seqnum_compare(s1: u32, s2: u32) -> i32;
     pub fn gst_util_seqnum_next() -> u32;
-    pub fn gst_util_set_object_arg(object: *mut gobject::GObject, name: *const c_char, value: *const c_char);
+    pub fn gst_util_set_object_arg(
+        object: *mut gobject::GObject,
+        name: *const c_char,
+        value: *const c_char,
+    );
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_util_set_object_array(object: *mut gobject::GObject, name: *const c_char, array: *const gobject::GValueArray) -> gboolean;
+    pub fn gst_util_set_object_array(
+        object: *mut gobject::GObject,
+        name: *const c_char,
+        array: *const gobject::GValueArray,
+    ) -> gboolean;
     pub fn gst_util_set_value_from_string(value: *mut gobject::GValue, value_str: *const c_char);
     pub fn gst_util_uint64_scale(val: u64, num: u64, denom: u64) -> u64;
     pub fn gst_util_uint64_scale_ceil(val: u64, num: u64, denom: u64) -> u64;
@@ -6049,15 +8675,38 @@ extern "C" {
     pub fn gst_util_uint64_scale_int_ceil(val: u64, num: c_int, denom: c_int) -> u64;
     pub fn gst_util_uint64_scale_int_round(val: u64, num: c_int, denom: c_int) -> u64;
     pub fn gst_util_uint64_scale_round(val: u64, num: u64, denom: u64) -> u64;
-    pub fn gst_value_can_compare(value1: *const gobject::GValue, value2: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_can_intersect(value1: *const gobject::GValue, value2: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_can_subtract(minuend: *const gobject::GValue, subtrahend: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_can_union(value1: *const gobject::GValue, value2: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_compare(value1: *const gobject::GValue, value2: *const gobject::GValue) -> c_int;
+    pub fn gst_value_can_compare(
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_value_can_intersect(
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_value_can_subtract(
+        minuend: *const gobject::GValue,
+        subtrahend: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_value_can_union(
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_value_compare(
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> c_int;
     pub fn gst_value_deserialize(dest: *mut gobject::GValue, src: *const c_char) -> gboolean;
     pub fn gst_value_fixate(dest: *mut gobject::GValue, src: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_fraction_multiply(product: *mut gobject::GValue, factor1: *const gobject::GValue, factor2: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_fraction_subtract(dest: *mut gobject::GValue, minuend: *const gobject::GValue, subtrahend: *const gobject::GValue) -> gboolean;
+    pub fn gst_value_fraction_multiply(
+        product: *mut gobject::GValue,
+        factor1: *const gobject::GValue,
+        factor2: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_value_fraction_subtract(
+        dest: *mut gobject::GValue,
+        minuend: *const gobject::GValue,
+        subtrahend: *const gobject::GValue,
+    ) -> gboolean;
     pub fn gst_value_get_bitmask(value: *const gobject::GValue) -> u64;
     pub fn gst_value_get_caps(value: *const gobject::GValue) -> *const GstCaps;
     pub fn gst_value_get_caps_features(value: *const gobject::GValue) -> *const GstCapsFeatures;
@@ -6069,8 +8718,12 @@ extern "C" {
     pub fn gst_value_get_flagset_mask(value: *const gobject::GValue) -> c_uint;
     pub fn gst_value_get_fraction_denominator(value: *const gobject::GValue) -> c_int;
     pub fn gst_value_get_fraction_numerator(value: *const gobject::GValue) -> c_int;
-    pub fn gst_value_get_fraction_range_max(value: *const gobject::GValue) -> *const gobject::GValue;
-    pub fn gst_value_get_fraction_range_min(value: *const gobject::GValue) -> *const gobject::GValue;
+    pub fn gst_value_get_fraction_range_max(
+        value: *const gobject::GValue,
+    ) -> *const gobject::GValue;
+    pub fn gst_value_get_fraction_range_min(
+        value: *const gobject::GValue,
+    ) -> *const gobject::GValue;
     pub fn gst_value_get_int64_range_max(value: *const gobject::GValue) -> i64;
     pub fn gst_value_get_int64_range_min(value: *const gobject::GValue) -> i64;
     pub fn gst_value_get_int64_range_step(value: *const gobject::GValue) -> i64;
@@ -6079,28 +8732,75 @@ extern "C" {
     pub fn gst_value_get_int_range_step(value: *const gobject::GValue) -> c_int;
     pub fn gst_value_get_structure(value: *const gobject::GValue) -> *const GstStructure;
     pub fn gst_value_init_and_copy(dest: *mut gobject::GValue, src: *const gobject::GValue);
-    pub fn gst_value_intersect(dest: *mut gobject::GValue, value1: *const gobject::GValue, value2: *const gobject::GValue) -> gboolean;
+    pub fn gst_value_intersect(
+        dest: *mut gobject::GValue,
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> gboolean;
     pub fn gst_value_is_fixed(value: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_is_subset(value1: *const gobject::GValue, value2: *const gobject::GValue) -> gboolean;
+    pub fn gst_value_is_subset(
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> gboolean;
     pub fn gst_value_register(table: *const GstValueTable);
     pub fn gst_value_serialize(value: *const gobject::GValue) -> *mut c_char;
     pub fn gst_value_set_bitmask(value: *mut gobject::GValue, bitmask: u64);
     pub fn gst_value_set_caps(value: *mut gobject::GValue, caps: *const GstCaps);
-    pub fn gst_value_set_caps_features(value: *mut gobject::GValue, features: *const GstCapsFeatures);
+    pub fn gst_value_set_caps_features(
+        value: *mut gobject::GValue,
+        features: *const GstCapsFeatures,
+    );
     pub fn gst_value_set_double_range(value: *mut gobject::GValue, start: c_double, end: c_double);
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_value_set_flagset(value: *mut gobject::GValue, flags: c_uint, mask: c_uint);
-    pub fn gst_value_set_fraction(value: *mut gobject::GValue, numerator: c_int, denominator: c_int);
-    pub fn gst_value_set_fraction_range(value: *mut gobject::GValue, start: *const gobject::GValue, end: *const gobject::GValue);
-    pub fn gst_value_set_fraction_range_full(value: *mut gobject::GValue, numerator_start: c_int, denominator_start: c_int, numerator_end: c_int, denominator_end: c_int);
+    pub fn gst_value_set_fraction(
+        value: *mut gobject::GValue,
+        numerator: c_int,
+        denominator: c_int,
+    );
+    pub fn gst_value_set_fraction_range(
+        value: *mut gobject::GValue,
+        start: *const gobject::GValue,
+        end: *const gobject::GValue,
+    );
+    pub fn gst_value_set_fraction_range_full(
+        value: *mut gobject::GValue,
+        numerator_start: c_int,
+        denominator_start: c_int,
+        numerator_end: c_int,
+        denominator_end: c_int,
+    );
     pub fn gst_value_set_int64_range(value: *mut gobject::GValue, start: i64, end: i64);
-    pub fn gst_value_set_int64_range_step(value: *mut gobject::GValue, start: i64, end: i64, step: i64);
+    pub fn gst_value_set_int64_range_step(
+        value: *mut gobject::GValue,
+        start: i64,
+        end: i64,
+        step: i64,
+    );
     pub fn gst_value_set_int_range(value: *mut gobject::GValue, start: c_int, end: c_int);
-    pub fn gst_value_set_int_range_step(value: *mut gobject::GValue, start: c_int, end: c_int, step: c_int);
+    pub fn gst_value_set_int_range_step(
+        value: *mut gobject::GValue,
+        start: c_int,
+        end: c_int,
+        step: c_int,
+    );
     pub fn gst_value_set_structure(value: *mut gobject::GValue, structure: *const GstStructure);
-    pub fn gst_value_subtract(dest: *mut gobject::GValue, minuend: *const gobject::GValue, subtrahend: *const gobject::GValue) -> gboolean;
-    pub fn gst_value_union(dest: *mut gobject::GValue, value1: *const gobject::GValue, value2: *const gobject::GValue) -> gboolean;
-    pub fn gst_version(major: *mut c_uint, minor: *mut c_uint, micro: *mut c_uint, nano: *mut c_uint);
+    pub fn gst_value_subtract(
+        dest: *mut gobject::GValue,
+        minuend: *const gobject::GValue,
+        subtrahend: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_value_union(
+        dest: *mut gobject::GValue,
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    ) -> gboolean;
+    pub fn gst_version(
+        major: *mut c_uint,
+        minor: *mut c_uint,
+        micro: *mut c_uint,
+        nano: *mut c_uint,
+    );
     pub fn gst_version_string() -> *mut c_char;
 
 }

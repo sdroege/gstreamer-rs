@@ -3,17 +3,22 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
 extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -135,10 +140,10 @@ pub struct GstMIKEYMapSRTP {
 impl ::std::fmt::Debug for GstMIKEYMapSRTP {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYMapSRTP @ {:?}", self as *const _))
-         .field("policy", &self.policy)
-         .field("ssrc", &self.ssrc)
-         .field("roc", &self.roc)
-         .finish()
+            .field("policy", &self.policy)
+            .field("ssrc", &self.ssrc)
+            .field("roc", &self.roc)
+            .finish()
     }
 }
 
@@ -159,15 +164,15 @@ pub struct GstMIKEYMessage {
 impl ::std::fmt::Debug for GstMIKEYMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYMessage @ {:?}", self as *const _))
-         .field("version", &self.version)
-         .field("type_", &self.type_)
-         .field("V", &self.V)
-         .field("prf_func", &self.prf_func)
-         .field("CSB_id", &self.CSB_id)
-         .field("map_type", &self.map_type)
-         .field("map_info", &self.map_info)
-         .field("payloads", &self.payloads)
-         .finish()
+            .field("version", &self.version)
+            .field("type_", &self.type_)
+            .field("V", &self.V)
+            .field("prf_func", &self.prf_func)
+            .field("CSB_id", &self.CSB_id)
+            .field("map_type", &self.map_type)
+            .field("map_info", &self.map_info)
+            .field("payloads", &self.payloads)
+            .finish()
     }
 }
 
@@ -182,9 +187,9 @@ pub struct GstMIKEYPayload {
 impl ::std::fmt::Debug for GstMIKEYPayload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayload @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("len", &self.len)
-         .finish()
+            .field("type_", &self.type_)
+            .field("len", &self.len)
+            .finish()
     }
 }
 
@@ -200,11 +205,11 @@ pub struct GstMIKEYPayloadKEMAC {
 impl ::std::fmt::Debug for GstMIKEYPayloadKEMAC {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadKEMAC @ {:?}", self as *const _))
-         .field("pt", &self.pt)
-         .field("enc_alg", &self.enc_alg)
-         .field("mac_alg", &self.mac_alg)
-         .field("subpayloads", &self.subpayloads)
-         .finish()
+            .field("pt", &self.pt)
+            .field("enc_alg", &self.enc_alg)
+            .field("mac_alg", &self.mac_alg)
+            .field("subpayloads", &self.subpayloads)
+            .finish()
     }
 }
 
@@ -225,16 +230,16 @@ pub struct GstMIKEYPayloadKeyData {
 impl ::std::fmt::Debug for GstMIKEYPayloadKeyData {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadKeyData @ {:?}", self as *const _))
-         .field("pt", &self.pt)
-         .field("key_type", &self.key_type)
-         .field("key_len", &self.key_len)
-         .field("key_data", &self.key_data)
-         .field("salt_len", &self.salt_len)
-         .field("salt_data", &self.salt_data)
-         .field("kv_type", &self.kv_type)
-         .field("kv_len", &self.kv_len)
-         .field("kv_data", &self.kv_data)
-         .finish()
+            .field("pt", &self.pt)
+            .field("key_type", &self.key_type)
+            .field("key_len", &self.key_len)
+            .field("key_data", &self.key_data)
+            .field("salt_len", &self.salt_len)
+            .field("salt_data", &self.salt_data)
+            .field("kv_type", &self.kv_type)
+            .field("kv_len", &self.kv_len)
+            .field("kv_data", &self.kv_data)
+            .finish()
     }
 }
 
@@ -250,11 +255,11 @@ pub struct GstMIKEYPayloadPKE {
 impl ::std::fmt::Debug for GstMIKEYPayloadPKE {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadPKE @ {:?}", self as *const _))
-         .field("pt", &self.pt)
-         .field("C", &self.C)
-         .field("data_len", &self.data_len)
-         .field("data", &self.data)
-         .finish()
+            .field("pt", &self.pt)
+            .field("C", &self.C)
+            .field("data_len", &self.data_len)
+            .field("data", &self.data)
+            .finish()
     }
 }
 
@@ -269,10 +274,10 @@ pub struct GstMIKEYPayloadRAND {
 impl ::std::fmt::Debug for GstMIKEYPayloadRAND {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadRAND @ {:?}", self as *const _))
-         .field("pt", &self.pt)
-         .field("len", &self.len)
-         .field("rand", &self.rand)
-         .finish()
+            .field("pt", &self.pt)
+            .field("len", &self.len)
+            .field("rand", &self.rand)
+            .finish()
     }
 }
 
@@ -288,11 +293,11 @@ pub struct GstMIKEYPayloadSP {
 impl ::std::fmt::Debug for GstMIKEYPayloadSP {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadSP @ {:?}", self as *const _))
-         .field("pt", &self.pt)
-         .field("policy", &self.policy)
-         .field("proto", &self.proto)
-         .field("params", &self.params)
-         .finish()
+            .field("pt", &self.pt)
+            .field("policy", &self.policy)
+            .field("proto", &self.proto)
+            .field("params", &self.params)
+            .finish()
     }
 }
 
@@ -307,10 +312,10 @@ pub struct GstMIKEYPayloadSPParam {
 impl ::std::fmt::Debug for GstMIKEYPayloadSPParam {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadSPParam @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("len", &self.len)
-         .field("val", &self.val)
-         .finish()
+            .field("type_", &self.type_)
+            .field("len", &self.len)
+            .field("val", &self.val)
+            .finish()
     }
 }
 
@@ -325,10 +330,10 @@ pub struct GstMIKEYPayloadT {
 impl ::std::fmt::Debug for GstMIKEYPayloadT {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstMIKEYPayloadT @ {:?}", self as *const _))
-         .field("pt", &self.pt)
-         .field("type_", &self.type_)
-         .field("ts_value", &self.ts_value)
-         .finish()
+            .field("pt", &self.pt)
+            .field("type_", &self.type_)
+            .field("ts_value", &self.ts_value)
+            .finish()
     }
 }
 
@@ -342,9 +347,9 @@ pub struct GstSDPAttribute {
 impl ::std::fmt::Debug for GstSDPAttribute {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPAttribute @ {:?}", self as *const _))
-         .field("key", &self.key)
-         .field("value", &self.value)
-         .finish()
+            .field("key", &self.key)
+            .field("value", &self.value)
+            .finish()
     }
 }
 
@@ -358,9 +363,9 @@ pub struct GstSDPBandwidth {
 impl ::std::fmt::Debug for GstSDPBandwidth {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPBandwidth @ {:?}", self as *const _))
-         .field("bwtype", &self.bwtype)
-         .field("bandwidth", &self.bandwidth)
-         .finish()
+            .field("bwtype", &self.bwtype)
+            .field("bandwidth", &self.bandwidth)
+            .finish()
     }
 }
 
@@ -377,12 +382,12 @@ pub struct GstSDPConnection {
 impl ::std::fmt::Debug for GstSDPConnection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPConnection @ {:?}", self as *const _))
-         .field("nettype", &self.nettype)
-         .field("addrtype", &self.addrtype)
-         .field("address", &self.address)
-         .field("ttl", &self.ttl)
-         .field("addr_number", &self.addr_number)
-         .finish()
+            .field("nettype", &self.nettype)
+            .field("addrtype", &self.addrtype)
+            .field("address", &self.address)
+            .field("ttl", &self.ttl)
+            .field("addr_number", &self.addr_number)
+            .finish()
     }
 }
 
@@ -396,9 +401,9 @@ pub struct GstSDPKey {
 impl ::std::fmt::Debug for GstSDPKey {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPKey @ {:?}", self as *const _))
-         .field("type_", &self.type_)
-         .field("data", &self.data)
-         .finish()
+            .field("type_", &self.type_)
+            .field("data", &self.data)
+            .finish()
     }
 }
 
@@ -420,17 +425,17 @@ pub struct GstSDPMedia {
 impl ::std::fmt::Debug for GstSDPMedia {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPMedia @ {:?}", self as *const _))
-         .field("media", &self.media)
-         .field("port", &self.port)
-         .field("num_ports", &self.num_ports)
-         .field("proto", &self.proto)
-         .field("fmts", &self.fmts)
-         .field("information", &self.information)
-         .field("connections", &self.connections)
-         .field("bandwidths", &self.bandwidths)
-         .field("key", &self.key)
-         .field("attributes", &self.attributes)
-         .finish()
+            .field("media", &self.media)
+            .field("port", &self.port)
+            .field("num_ports", &self.num_ports)
+            .field("proto", &self.proto)
+            .field("fmts", &self.fmts)
+            .field("information", &self.information)
+            .field("connections", &self.connections)
+            .field("bandwidths", &self.bandwidths)
+            .field("key", &self.key)
+            .field("attributes", &self.attributes)
+            .finish()
     }
 }
 
@@ -456,21 +461,21 @@ pub struct GstSDPMessage {
 impl ::std::fmt::Debug for GstSDPMessage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPMessage @ {:?}", self as *const _))
-         .field("version", &self.version)
-         .field("origin", &self.origin)
-         .field("session_name", &self.session_name)
-         .field("information", &self.information)
-         .field("uri", &self.uri)
-         .field("emails", &self.emails)
-         .field("phones", &self.phones)
-         .field("connection", &self.connection)
-         .field("bandwidths", &self.bandwidths)
-         .field("times", &self.times)
-         .field("zones", &self.zones)
-         .field("key", &self.key)
-         .field("attributes", &self.attributes)
-         .field("medias", &self.medias)
-         .finish()
+            .field("version", &self.version)
+            .field("origin", &self.origin)
+            .field("session_name", &self.session_name)
+            .field("information", &self.information)
+            .field("uri", &self.uri)
+            .field("emails", &self.emails)
+            .field("phones", &self.phones)
+            .field("connection", &self.connection)
+            .field("bandwidths", &self.bandwidths)
+            .field("times", &self.times)
+            .field("zones", &self.zones)
+            .field("key", &self.key)
+            .field("attributes", &self.attributes)
+            .field("medias", &self.medias)
+            .finish()
     }
 }
 
@@ -488,13 +493,13 @@ pub struct GstSDPOrigin {
 impl ::std::fmt::Debug for GstSDPOrigin {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPOrigin @ {:?}", self as *const _))
-         .field("username", &self.username)
-         .field("sess_id", &self.sess_id)
-         .field("sess_version", &self.sess_version)
-         .field("nettype", &self.nettype)
-         .field("addrtype", &self.addrtype)
-         .field("addr", &self.addr)
-         .finish()
+            .field("username", &self.username)
+            .field("sess_id", &self.sess_id)
+            .field("sess_version", &self.sess_version)
+            .field("nettype", &self.nettype)
+            .field("addrtype", &self.addrtype)
+            .field("addr", &self.addr)
+            .finish()
     }
 }
 
@@ -509,10 +514,10 @@ pub struct GstSDPTime {
 impl ::std::fmt::Debug for GstSDPTime {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPTime @ {:?}", self as *const _))
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("repeat", &self.repeat)
-         .finish()
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("repeat", &self.repeat)
+            .finish()
     }
 }
 
@@ -526,9 +531,9 @@ pub struct GstSDPZone {
 impl ::std::fmt::Debug for GstSDPZone {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstSDPZone @ {:?}", self as *const _))
-         .field("time", &self.time)
-         .field("typed_time", &self.typed_time)
-         .finish()
+            .field("time", &self.time)
+            .field("typed_time", &self.typed_time)
+            .finish()
     }
 }
 
@@ -541,55 +546,126 @@ extern "C" {
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_new() -> *mut GstMIKEYMessage;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_new_from_bytes(bytes: *mut glib::GBytes, info: *mut GstMIKEYDecryptInfo, error: *mut *mut glib::GError) -> *mut GstMIKEYMessage;
+    pub fn gst_mikey_message_new_from_bytes(
+        bytes: *mut glib::GBytes,
+        info: *mut GstMIKEYDecryptInfo,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstMIKEYMessage;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_mikey_message_new_from_caps(caps: *mut gst::GstCaps) -> *mut GstMIKEYMessage;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_new_from_data(data: gconstpointer, size: size_t, info: *mut GstMIKEYDecryptInfo, error: *mut *mut glib::GError) -> *mut GstMIKEYMessage;
+    pub fn gst_mikey_message_new_from_data(
+        data: gconstpointer,
+        size: size_t,
+        info: *mut GstMIKEYDecryptInfo,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstMIKEYMessage;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_add_cs_srtp(msg: *mut GstMIKEYMessage, policy: u8, ssrc: u32, roc: u32) -> gboolean;
+    pub fn gst_mikey_message_add_cs_srtp(
+        msg: *mut GstMIKEYMessage,
+        policy: u8,
+        ssrc: u32,
+        roc: u32,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_add_payload(msg: *mut GstMIKEYMessage, payload: *mut GstMIKEYPayload) -> gboolean;
+    pub fn gst_mikey_message_add_payload(
+        msg: *mut GstMIKEYMessage,
+        payload: *mut GstMIKEYPayload,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_add_pke(msg: *mut GstMIKEYMessage, C: GstMIKEYCacheType, data_len: u16, data: *const u8) -> gboolean;
+    pub fn gst_mikey_message_add_pke(
+        msg: *mut GstMIKEYMessage,
+        C: GstMIKEYCacheType,
+        data_len: u16,
+        data: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_add_rand(msg: *mut GstMIKEYMessage, len: u8, rand: *const u8) -> gboolean;
+    pub fn gst_mikey_message_add_rand(
+        msg: *mut GstMIKEYMessage,
+        len: u8,
+        rand: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_add_rand_len(msg: *mut GstMIKEYMessage, len: u8) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_add_t(msg: *mut GstMIKEYMessage, type_: GstMIKEYTSType, ts_value: *const u8) -> gboolean;
+    pub fn gst_mikey_message_add_t(
+        msg: *mut GstMIKEYMessage,
+        type_: GstMIKEYTSType,
+        ts_value: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_add_t_now_ntp_utc(msg: *mut GstMIKEYMessage) -> gboolean;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_mikey_message_base64_encode(msg: *mut GstMIKEYMessage) -> *mut c_char;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_find_payload(msg: *const GstMIKEYMessage, type_: GstMIKEYPayloadType, nth: c_uint) -> *const GstMIKEYPayload;
+    pub fn gst_mikey_message_find_payload(
+        msg: *const GstMIKEYMessage,
+        type_: GstMIKEYPayloadType,
+        nth: c_uint,
+    ) -> *const GstMIKEYPayload;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_get_cs_srtp(msg: *const GstMIKEYMessage, idx: c_uint) -> *const GstMIKEYMapSRTP;
+    pub fn gst_mikey_message_get_cs_srtp(
+        msg: *const GstMIKEYMessage,
+        idx: c_uint,
+    ) -> *const GstMIKEYMapSRTP;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_get_n_cs(msg: *const GstMIKEYMessage) -> c_uint;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_get_n_payloads(msg: *const GstMIKEYMessage) -> c_uint;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_get_payload(msg: *const GstMIKEYMessage, idx: c_uint) -> *const GstMIKEYPayload;
+    pub fn gst_mikey_message_get_payload(
+        msg: *const GstMIKEYMessage,
+        idx: c_uint,
+    ) -> *const GstMIKEYPayload;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_insert_cs_srtp(msg: *mut GstMIKEYMessage, idx: c_int, map: *const GstMIKEYMapSRTP) -> gboolean;
+    pub fn gst_mikey_message_insert_cs_srtp(
+        msg: *mut GstMIKEYMessage,
+        idx: c_int,
+        map: *const GstMIKEYMapSRTP,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_insert_payload(msg: *mut GstMIKEYMessage, idx: c_uint, payload: *mut GstMIKEYPayload) -> gboolean;
+    pub fn gst_mikey_message_insert_payload(
+        msg: *mut GstMIKEYMessage,
+        idx: c_uint,
+        payload: *mut GstMIKEYPayload,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_remove_cs_srtp(msg: *mut GstMIKEYMessage, idx: c_int) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_message_remove_payload(msg: *mut GstMIKEYMessage, idx: c_uint) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_replace_cs_srtp(msg: *mut GstMIKEYMessage, idx: c_int, map: *const GstMIKEYMapSRTP) -> gboolean;
+    pub fn gst_mikey_message_replace_cs_srtp(
+        msg: *mut GstMIKEYMessage,
+        idx: c_int,
+        map: *const GstMIKEYMapSRTP,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_replace_payload(msg: *mut GstMIKEYMessage, idx: c_uint, payload: *mut GstMIKEYPayload) -> gboolean;
+    pub fn gst_mikey_message_replace_payload(
+        msg: *mut GstMIKEYMessage,
+        idx: c_uint,
+        payload: *mut GstMIKEYPayload,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_set_info(msg: *mut GstMIKEYMessage, version: u8, type_: GstMIKEYType, V: gboolean, prf_func: GstMIKEYPRFFunc, CSB_id: u32, map_type: GstMIKEYMapType) -> gboolean;
+    pub fn gst_mikey_message_set_info(
+        msg: *mut GstMIKEYMessage,
+        version: u8,
+        type_: GstMIKEYType,
+        V: gboolean,
+        prf_func: GstMIKEYPRFFunc,
+        CSB_id: u32,
+        map_type: GstMIKEYMapType,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_message_to_bytes(msg: *mut GstMIKEYMessage, info: *mut GstMIKEYEncryptInfo, error: *mut *mut glib::GError) -> *mut glib::GBytes;
+    pub fn gst_mikey_message_to_bytes(
+        msg: *mut GstMIKEYMessage,
+        info: *mut GstMIKEYEncryptInfo,
+        error: *mut *mut glib::GError,
+    ) -> *mut glib::GBytes;
     #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn gst_mikey_message_to_caps(msg: *const GstMIKEYMessage, caps: *mut gst::GstCaps) -> gboolean;
+    pub fn gst_mikey_message_to_caps(
+        msg: *const GstMIKEYMessage,
+        caps: *mut gst::GstCaps,
+    ) -> gboolean;
 
     //=========================================================================
     // GstMIKEYPayload
@@ -598,39 +674,99 @@ extern "C" {
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_payload_new(type_: GstMIKEYPayloadType) -> *mut GstMIKEYPayload;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_kemac_add_sub(payload: *mut GstMIKEYPayload, newpay: *mut GstMIKEYPayload) -> gboolean;
+    pub fn gst_mikey_payload_kemac_add_sub(
+        payload: *mut GstMIKEYPayload,
+        newpay: *mut GstMIKEYPayload,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_payload_kemac_get_n_sub(payload: *const GstMIKEYPayload) -> c_uint;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_kemac_get_sub(payload: *const GstMIKEYPayload, idx: c_uint) -> *const GstMIKEYPayload;
+    pub fn gst_mikey_payload_kemac_get_sub(
+        payload: *const GstMIKEYPayload,
+        idx: c_uint,
+    ) -> *const GstMIKEYPayload;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_kemac_remove_sub(payload: *mut GstMIKEYPayload, idx: c_uint) -> gboolean;
+    pub fn gst_mikey_payload_kemac_remove_sub(
+        payload: *mut GstMIKEYPayload,
+        idx: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_kemac_set(payload: *mut GstMIKEYPayload, enc_alg: GstMIKEYEncAlg, mac_alg: GstMIKEYMacAlg) -> gboolean;
+    pub fn gst_mikey_payload_kemac_set(
+        payload: *mut GstMIKEYPayload,
+        enc_alg: GstMIKEYEncAlg,
+        mac_alg: GstMIKEYMacAlg,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_key_data_set_interval(payload: *mut GstMIKEYPayload, vf_len: u8, vf_data: *const u8, vt_len: u8, vt_data: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_key_data_set_interval(
+        payload: *mut GstMIKEYPayload,
+        vf_len: u8,
+        vf_data: *const u8,
+        vt_len: u8,
+        vt_data: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_key_data_set_key(payload: *mut GstMIKEYPayload, key_type: GstMIKEYKeyDataType, key_len: u16, key_data: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_key_data_set_key(
+        payload: *mut GstMIKEYPayload,
+        key_type: GstMIKEYKeyDataType,
+        key_len: u16,
+        key_data: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_key_data_set_salt(payload: *mut GstMIKEYPayload, salt_len: u16, salt_data: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_key_data_set_salt(
+        payload: *mut GstMIKEYPayload,
+        salt_len: u16,
+        salt_data: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_key_data_set_spi(payload: *mut GstMIKEYPayload, spi_len: u8, spi_data: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_key_data_set_spi(
+        payload: *mut GstMIKEYPayload,
+        spi_len: u8,
+        spi_data: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_pke_set(payload: *mut GstMIKEYPayload, C: GstMIKEYCacheType, data_len: u16, data: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_pke_set(
+        payload: *mut GstMIKEYPayload,
+        C: GstMIKEYCacheType,
+        data_len: u16,
+        data: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_rand_set(payload: *mut GstMIKEYPayload, len: u8, rand: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_rand_set(
+        payload: *mut GstMIKEYPayload,
+        len: u8,
+        rand: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_sp_add_param(payload: *mut GstMIKEYPayload, type_: u8, len: u8, val: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_sp_add_param(
+        payload: *mut GstMIKEYPayload,
+        type_: u8,
+        len: u8,
+        val: *const u8,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_mikey_payload_sp_get_n_params(payload: *const GstMIKEYPayload) -> c_uint;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_sp_get_param(payload: *const GstMIKEYPayload, idx: c_uint) -> *const GstMIKEYPayloadSPParam;
+    pub fn gst_mikey_payload_sp_get_param(
+        payload: *const GstMIKEYPayload,
+        idx: c_uint,
+    ) -> *const GstMIKEYPayloadSPParam;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_sp_remove_param(payload: *mut GstMIKEYPayload, idx: c_uint) -> gboolean;
+    pub fn gst_mikey_payload_sp_remove_param(
+        payload: *mut GstMIKEYPayload,
+        idx: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_sp_set(payload: *mut GstMIKEYPayload, policy: c_uint, proto: GstMIKEYSecProto) -> gboolean;
+    pub fn gst_mikey_payload_sp_set(
+        payload: *mut GstMIKEYPayload,
+        policy: c_uint,
+        proto: GstMIKEYSecProto,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_mikey_payload_t_set(payload: *mut GstMIKEYPayload, type_: GstMIKEYTSType, ts_value: *const u8) -> gboolean;
+    pub fn gst_mikey_payload_t_set(
+        payload: *mut GstMIKEYPayload,
+        type_: GstMIKEYTSType,
+        ts_value: *const u8,
+    ) -> gboolean;
 
     //=========================================================================
     // GstSDPAttribute
@@ -638,7 +774,11 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_attribute_clear(attr: *mut GstSDPAttribute) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_attribute_set(attr: *mut GstSDPAttribute, key: *const c_char, value: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_attribute_set(
+        attr: *mut GstSDPAttribute,
+        key: *const c_char,
+        value: *const c_char,
+    ) -> GstSDPResult;
 
     //=========================================================================
     // GstSDPBandwidth
@@ -646,7 +786,11 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_bandwidth_clear(bw: *mut GstSDPBandwidth) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_bandwidth_set(bw: *mut GstSDPBandwidth, bwtype: *const c_char, bandwidth: c_uint) -> GstSDPResult;
+    pub fn gst_sdp_bandwidth_set(
+        bw: *mut GstSDPBandwidth,
+        bwtype: *const c_char,
+        bandwidth: c_uint,
+    ) -> GstSDPResult;
 
     //=========================================================================
     // GstSDPConnection
@@ -654,32 +798,80 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_connection_clear(conn: *mut GstSDPConnection) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_connection_set(conn: *mut GstSDPConnection, nettype: *const c_char, addrtype: *const c_char, address: *const c_char, ttl: c_uint, addr_number: c_uint) -> GstSDPResult;
+    pub fn gst_sdp_connection_set(
+        conn: *mut GstSDPConnection,
+        nettype: *const c_char,
+        addrtype: *const c_char,
+        address: *const c_char,
+        ttl: c_uint,
+        addr_number: c_uint,
+    ) -> GstSDPResult;
 
     //=========================================================================
     // GstSDPMedia
     //=========================================================================
-    pub fn gst_sdp_media_add_attribute(media: *mut GstSDPMedia, key: *const c_char, value: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_media_add_bandwidth(media: *mut GstSDPMedia, bwtype: *const c_char, bandwidth: c_uint) -> GstSDPResult;
-    pub fn gst_sdp_media_add_connection(media: *mut GstSDPMedia, nettype: *const c_char, addrtype: *const c_char, address: *const c_char, ttl: c_uint, addr_number: c_uint) -> GstSDPResult;
-    pub fn gst_sdp_media_add_format(media: *mut GstSDPMedia, format: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_media_add_attribute(
+        media: *mut GstSDPMedia,
+        key: *const c_char,
+        value: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_media_add_bandwidth(
+        media: *mut GstSDPMedia,
+        bwtype: *const c_char,
+        bandwidth: c_uint,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_media_add_connection(
+        media: *mut GstSDPMedia,
+        nettype: *const c_char,
+        addrtype: *const c_char,
+        address: *const c_char,
+        ttl: c_uint,
+        addr_number: c_uint,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_media_add_format(media: *mut GstSDPMedia, format: *const c_char)
+        -> GstSDPResult;
     pub fn gst_sdp_media_as_text(media: *const GstSDPMedia) -> *mut c_char;
     pub fn gst_sdp_media_attributes_len(media: *const GstSDPMedia) -> c_uint;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_sdp_media_attributes_to_caps(media: *const GstSDPMedia, caps: *mut gst::GstCaps) -> GstSDPResult;
+    pub fn gst_sdp_media_attributes_to_caps(
+        media: *const GstSDPMedia,
+        caps: *mut gst::GstCaps,
+    ) -> GstSDPResult;
     pub fn gst_sdp_media_bandwidths_len(media: *const GstSDPMedia) -> c_uint;
     pub fn gst_sdp_media_connections_len(media: *const GstSDPMedia) -> c_uint;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_copy(media: *const GstSDPMedia, copy: *mut *mut GstSDPMedia) -> GstSDPResult;
+    pub fn gst_sdp_media_copy(
+        media: *const GstSDPMedia,
+        copy: *mut *mut GstSDPMedia,
+    ) -> GstSDPResult;
     pub fn gst_sdp_media_formats_len(media: *const GstSDPMedia) -> c_uint;
     pub fn gst_sdp_media_free(media: *mut GstSDPMedia) -> GstSDPResult;
-    pub fn gst_sdp_media_get_attribute(media: *const GstSDPMedia, idx: c_uint) -> *const GstSDPAttribute;
-    pub fn gst_sdp_media_get_attribute_val(media: *const GstSDPMedia, key: *const c_char) -> *const c_char;
-    pub fn gst_sdp_media_get_attribute_val_n(media: *const GstSDPMedia, key: *const c_char, nth: c_uint) -> *const c_char;
-    pub fn gst_sdp_media_get_bandwidth(media: *const GstSDPMedia, idx: c_uint) -> *const GstSDPBandwidth;
+    pub fn gst_sdp_media_get_attribute(
+        media: *const GstSDPMedia,
+        idx: c_uint,
+    ) -> *const GstSDPAttribute;
+    pub fn gst_sdp_media_get_attribute_val(
+        media: *const GstSDPMedia,
+        key: *const c_char,
+    ) -> *const c_char;
+    pub fn gst_sdp_media_get_attribute_val_n(
+        media: *const GstSDPMedia,
+        key: *const c_char,
+        nth: c_uint,
+    ) -> *const c_char;
+    pub fn gst_sdp_media_get_bandwidth(
+        media: *const GstSDPMedia,
+        idx: c_uint,
+    ) -> *const GstSDPBandwidth;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_sdp_media_get_caps_from_media(media: *const GstSDPMedia, pt: c_int) -> *mut gst::GstCaps;
-    pub fn gst_sdp_media_get_connection(media: *const GstSDPMedia, idx: c_uint) -> *const GstSDPConnection;
+    pub fn gst_sdp_media_get_caps_from_media(
+        media: *const GstSDPMedia,
+        pt: c_int,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_sdp_media_get_connection(
+        media: *const GstSDPMedia,
+        idx: c_uint,
+    ) -> *const GstSDPConnection;
     pub fn gst_sdp_media_get_format(media: *const GstSDPMedia, idx: c_uint) -> *const c_char;
     pub fn gst_sdp_media_get_information(media: *const GstSDPMedia) -> *const c_char;
     pub fn gst_sdp_media_get_key(media: *const GstSDPMedia) -> *const GstSDPKey;
@@ -689,15 +881,34 @@ extern "C" {
     pub fn gst_sdp_media_get_proto(media: *const GstSDPMedia) -> *const c_char;
     pub fn gst_sdp_media_init(media: *mut GstSDPMedia) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_insert_attribute(media: *mut GstSDPMedia, idx: c_int, attr: *mut GstSDPAttribute) -> GstSDPResult;
+    pub fn gst_sdp_media_insert_attribute(
+        media: *mut GstSDPMedia,
+        idx: c_int,
+        attr: *mut GstSDPAttribute,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_insert_bandwidth(media: *mut GstSDPMedia, idx: c_int, bw: *mut GstSDPBandwidth) -> GstSDPResult;
+    pub fn gst_sdp_media_insert_bandwidth(
+        media: *mut GstSDPMedia,
+        idx: c_int,
+        bw: *mut GstSDPBandwidth,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_insert_connection(media: *mut GstSDPMedia, idx: c_int, conn: *mut GstSDPConnection) -> GstSDPResult;
+    pub fn gst_sdp_media_insert_connection(
+        media: *mut GstSDPMedia,
+        idx: c_int,
+        conn: *mut GstSDPConnection,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_insert_format(media: *mut GstSDPMedia, idx: c_int, format: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_media_insert_format(
+        media: *mut GstSDPMedia,
+        idx: c_int,
+        format: *const c_char,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn gst_sdp_media_parse_keymgmt(media: *const GstSDPMedia, mikey: *mut *mut GstMIKEYMessage) -> GstSDPResult;
+    pub fn gst_sdp_media_parse_keymgmt(
+        media: *const GstSDPMedia,
+        mikey: *mut *mut GstMIKEYMessage,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_media_remove_attribute(media: *mut GstSDPMedia, idx: c_uint) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -707,48 +918,119 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_media_remove_format(media: *mut GstSDPMedia, idx: c_uint) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_replace_attribute(media: *mut GstSDPMedia, idx: c_uint, attr: *mut GstSDPAttribute) -> GstSDPResult;
+    pub fn gst_sdp_media_replace_attribute(
+        media: *mut GstSDPMedia,
+        idx: c_uint,
+        attr: *mut GstSDPAttribute,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_replace_bandwidth(media: *mut GstSDPMedia, idx: c_uint, bw: *mut GstSDPBandwidth) -> GstSDPResult;
+    pub fn gst_sdp_media_replace_bandwidth(
+        media: *mut GstSDPMedia,
+        idx: c_uint,
+        bw: *mut GstSDPBandwidth,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_replace_connection(media: *mut GstSDPMedia, idx: c_uint, conn: *mut GstSDPConnection) -> GstSDPResult;
+    pub fn gst_sdp_media_replace_connection(
+        media: *mut GstSDPMedia,
+        idx: c_uint,
+        conn: *mut GstSDPConnection,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_media_replace_format(media: *mut GstSDPMedia, idx: c_uint, format: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_media_set_information(media: *mut GstSDPMedia, information: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_media_set_key(media: *mut GstSDPMedia, type_: *const c_char, data: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_media_replace_format(
+        media: *mut GstSDPMedia,
+        idx: c_uint,
+        format: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_media_set_information(
+        media: *mut GstSDPMedia,
+        information: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_media_set_key(
+        media: *mut GstSDPMedia,
+        type_: *const c_char,
+        data: *const c_char,
+    ) -> GstSDPResult;
     pub fn gst_sdp_media_set_media(media: *mut GstSDPMedia, med: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_media_set_port_info(media: *mut GstSDPMedia, port: c_uint, num_ports: c_uint) -> GstSDPResult;
+    pub fn gst_sdp_media_set_port_info(
+        media: *mut GstSDPMedia,
+        port: c_uint,
+        num_ports: c_uint,
+    ) -> GstSDPResult;
     pub fn gst_sdp_media_set_proto(media: *mut GstSDPMedia, proto: *const c_char) -> GstSDPResult;
     pub fn gst_sdp_media_uninit(media: *mut GstSDPMedia) -> GstSDPResult;
     pub fn gst_sdp_media_new(media: *mut *mut GstSDPMedia) -> GstSDPResult;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_sdp_media_set_media_from_caps(caps: *const gst::GstCaps, media: *mut GstSDPMedia) -> GstSDPResult;
+    pub fn gst_sdp_media_set_media_from_caps(
+        caps: *const gst::GstCaps,
+        media: *mut GstSDPMedia,
+    ) -> GstSDPResult;
 
     //=========================================================================
     // GstSDPMessage
     //=========================================================================
     pub fn gst_sdp_message_get_type() -> GType;
-    pub fn gst_sdp_message_add_attribute(msg: *mut GstSDPMessage, key: *const c_char, value: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_add_bandwidth(msg: *mut GstSDPMessage, bwtype: *const c_char, bandwidth: c_uint) -> GstSDPResult;
-    pub fn gst_sdp_message_add_email(msg: *mut GstSDPMessage, email: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_add_media(msg: *mut GstSDPMessage, media: *mut GstSDPMedia) -> GstSDPResult;
-    pub fn gst_sdp_message_add_phone(msg: *mut GstSDPMessage, phone: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_add_time(msg: *mut GstSDPMessage, start: *const c_char, stop: *const c_char, repeat: *mut *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_add_zone(msg: *mut GstSDPMessage, adj_time: *const c_char, typed_time: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_add_attribute(
+        msg: *mut GstSDPMessage,
+        key: *const c_char,
+        value: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_add_bandwidth(
+        msg: *mut GstSDPMessage,
+        bwtype: *const c_char,
+        bandwidth: c_uint,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_add_email(msg: *mut GstSDPMessage, email: *const c_char)
+        -> GstSDPResult;
+    pub fn gst_sdp_message_add_media(
+        msg: *mut GstSDPMessage,
+        media: *mut GstSDPMedia,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_add_phone(msg: *mut GstSDPMessage, phone: *const c_char)
+        -> GstSDPResult;
+    pub fn gst_sdp_message_add_time(
+        msg: *mut GstSDPMessage,
+        start: *const c_char,
+        stop: *const c_char,
+        repeat: *mut *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_add_zone(
+        msg: *mut GstSDPMessage,
+        adj_time: *const c_char,
+        typed_time: *const c_char,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_as_text(msg: *const GstSDPMessage) -> *mut c_char;
     pub fn gst_sdp_message_attributes_len(msg: *const GstSDPMessage) -> c_uint;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
-    pub fn gst_sdp_message_attributes_to_caps(msg: *const GstSDPMessage, caps: *mut gst::GstCaps) -> GstSDPResult;
+    pub fn gst_sdp_message_attributes_to_caps(
+        msg: *const GstSDPMessage,
+        caps: *mut gst::GstCaps,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_bandwidths_len(msg: *const GstSDPMessage) -> c_uint;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_copy(msg: *const GstSDPMessage, copy: *mut *mut GstSDPMessage) -> GstSDPResult;
+    pub fn gst_sdp_message_copy(
+        msg: *const GstSDPMessage,
+        copy: *mut *mut GstSDPMessage,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_dump(msg: *const GstSDPMessage) -> GstSDPResult;
     pub fn gst_sdp_message_emails_len(msg: *const GstSDPMessage) -> c_uint;
     pub fn gst_sdp_message_free(msg: *mut GstSDPMessage) -> GstSDPResult;
-    pub fn gst_sdp_message_get_attribute(msg: *const GstSDPMessage, idx: c_uint) -> *const GstSDPAttribute;
-    pub fn gst_sdp_message_get_attribute_val(msg: *const GstSDPMessage, key: *const c_char) -> *const c_char;
-    pub fn gst_sdp_message_get_attribute_val_n(msg: *const GstSDPMessage, key: *const c_char, nth: c_uint) -> *const c_char;
-    pub fn gst_sdp_message_get_bandwidth(msg: *const GstSDPMessage, idx: c_uint) -> *const GstSDPBandwidth;
+    pub fn gst_sdp_message_get_attribute(
+        msg: *const GstSDPMessage,
+        idx: c_uint,
+    ) -> *const GstSDPAttribute;
+    pub fn gst_sdp_message_get_attribute_val(
+        msg: *const GstSDPMessage,
+        key: *const c_char,
+    ) -> *const c_char;
+    pub fn gst_sdp_message_get_attribute_val_n(
+        msg: *const GstSDPMessage,
+        key: *const c_char,
+        nth: c_uint,
+    ) -> *const c_char;
+    pub fn gst_sdp_message_get_bandwidth(
+        msg: *const GstSDPMessage,
+        idx: c_uint,
+    ) -> *const GstSDPBandwidth;
     pub fn gst_sdp_message_get_connection(msg: *const GstSDPMessage) -> *const GstSDPConnection;
     pub fn gst_sdp_message_get_email(msg: *const GstSDPMessage, idx: c_uint) -> *const c_char;
     pub fn gst_sdp_message_get_information(msg: *const GstSDPMessage) -> *const c_char;
@@ -763,20 +1045,47 @@ extern "C" {
     pub fn gst_sdp_message_get_zone(msg: *const GstSDPMessage, idx: c_uint) -> *const GstSDPZone;
     pub fn gst_sdp_message_init(msg: *mut GstSDPMessage) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_insert_attribute(msg: *mut GstSDPMessage, idx: c_int, attr: *mut GstSDPAttribute) -> GstSDPResult;
+    pub fn gst_sdp_message_insert_attribute(
+        msg: *mut GstSDPMessage,
+        idx: c_int,
+        attr: *mut GstSDPAttribute,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_insert_bandwidth(msg: *mut GstSDPMessage, idx: c_int, bw: *mut GstSDPBandwidth) -> GstSDPResult;
+    pub fn gst_sdp_message_insert_bandwidth(
+        msg: *mut GstSDPMessage,
+        idx: c_int,
+        bw: *mut GstSDPBandwidth,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_insert_email(msg: *mut GstSDPMessage, idx: c_int, email: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_insert_email(
+        msg: *mut GstSDPMessage,
+        idx: c_int,
+        email: *const c_char,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_insert_phone(msg: *mut GstSDPMessage, idx: c_int, phone: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_insert_phone(
+        msg: *mut GstSDPMessage,
+        idx: c_int,
+        phone: *const c_char,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_insert_time(msg: *mut GstSDPMessage, idx: c_int, t: *mut GstSDPTime) -> GstSDPResult;
+    pub fn gst_sdp_message_insert_time(
+        msg: *mut GstSDPMessage,
+        idx: c_int,
+        t: *mut GstSDPTime,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_insert_zone(msg: *mut GstSDPMessage, idx: c_int, zone: *mut GstSDPZone) -> GstSDPResult;
+    pub fn gst_sdp_message_insert_zone(
+        msg: *mut GstSDPMessage,
+        idx: c_int,
+        zone: *mut GstSDPZone,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_medias_len(msg: *const GstSDPMessage) -> c_uint;
     #[cfg(any(feature = "v1_8_1", feature = "dox"))]
-    pub fn gst_sdp_message_parse_keymgmt(msg: *const GstSDPMessage, mikey: *mut *mut GstMIKEYMessage) -> GstSDPResult;
+    pub fn gst_sdp_message_parse_keymgmt(
+        msg: *const GstSDPMessage,
+        mikey: *mut *mut GstMIKEYMessage,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_phones_len(msg: *const GstSDPMessage) -> c_uint;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_message_remove_attribute(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
@@ -791,32 +1100,91 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_message_remove_zone(msg: *mut GstSDPMessage, idx: c_uint) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_replace_attribute(msg: *mut GstSDPMessage, idx: c_uint, attr: *mut GstSDPAttribute) -> GstSDPResult;
+    pub fn gst_sdp_message_replace_attribute(
+        msg: *mut GstSDPMessage,
+        idx: c_uint,
+        attr: *mut GstSDPAttribute,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_replace_bandwidth(msg: *mut GstSDPMessage, idx: c_uint, bw: *mut GstSDPBandwidth) -> GstSDPResult;
+    pub fn gst_sdp_message_replace_bandwidth(
+        msg: *mut GstSDPMessage,
+        idx: c_uint,
+        bw: *mut GstSDPBandwidth,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_replace_email(msg: *mut GstSDPMessage, idx: c_uint, email: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_replace_email(
+        msg: *mut GstSDPMessage,
+        idx: c_uint,
+        email: *const c_char,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_replace_phone(msg: *mut GstSDPMessage, idx: c_uint, phone: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_replace_phone(
+        msg: *mut GstSDPMessage,
+        idx: c_uint,
+        phone: *const c_char,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_replace_time(msg: *mut GstSDPMessage, idx: c_uint, t: *mut GstSDPTime) -> GstSDPResult;
+    pub fn gst_sdp_message_replace_time(
+        msg: *mut GstSDPMessage,
+        idx: c_uint,
+        t: *mut GstSDPTime,
+    ) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_message_replace_zone(msg: *mut GstSDPMessage, idx: c_uint, zone: *mut GstSDPZone) -> GstSDPResult;
-    pub fn gst_sdp_message_set_connection(msg: *mut GstSDPMessage, nettype: *const c_char, addrtype: *const c_char, address: *const c_char, ttl: c_uint, addr_number: c_uint) -> GstSDPResult;
-    pub fn gst_sdp_message_set_information(msg: *mut GstSDPMessage, information: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_set_key(msg: *mut GstSDPMessage, type_: *const c_char, data: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_set_origin(msg: *mut GstSDPMessage, username: *const c_char, sess_id: *const c_char, sess_version: *const c_char, nettype: *const c_char, addrtype: *const c_char, addr: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_set_session_name(msg: *mut GstSDPMessage, session_name: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_replace_zone(
+        msg: *mut GstSDPMessage,
+        idx: c_uint,
+        zone: *mut GstSDPZone,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_set_connection(
+        msg: *mut GstSDPMessage,
+        nettype: *const c_char,
+        addrtype: *const c_char,
+        address: *const c_char,
+        ttl: c_uint,
+        addr_number: c_uint,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_set_information(
+        msg: *mut GstSDPMessage,
+        information: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_set_key(
+        msg: *mut GstSDPMessage,
+        type_: *const c_char,
+        data: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_set_origin(
+        msg: *mut GstSDPMessage,
+        username: *const c_char,
+        sess_id: *const c_char,
+        sess_version: *const c_char,
+        nettype: *const c_char,
+        addrtype: *const c_char,
+        addr: *const c_char,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_set_session_name(
+        msg: *mut GstSDPMessage,
+        session_name: *const c_char,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_set_uri(msg: *mut GstSDPMessage, uri: *const c_char) -> GstSDPResult;
-    pub fn gst_sdp_message_set_version(msg: *mut GstSDPMessage, version: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_message_set_version(
+        msg: *mut GstSDPMessage,
+        version: *const c_char,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_times_len(msg: *const GstSDPMessage) -> c_uint;
     pub fn gst_sdp_message_uninit(msg: *mut GstSDPMessage) -> GstSDPResult;
     pub fn gst_sdp_message_zones_len(msg: *const GstSDPMessage) -> c_uint;
     pub fn gst_sdp_message_as_uri(scheme: *const c_char, msg: *const GstSDPMessage) -> *mut c_char;
     pub fn gst_sdp_message_new(msg: *mut *mut GstSDPMessage) -> GstSDPResult;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_sdp_message_new_from_text(text: *const c_char, msg: *mut *mut GstSDPMessage) -> GstSDPResult;
-    pub fn gst_sdp_message_parse_buffer(data: *const u8, size: c_uint, msg: *mut GstSDPMessage) -> GstSDPResult;
+    pub fn gst_sdp_message_new_from_text(
+        text: *const c_char,
+        msg: *mut *mut GstSDPMessage,
+    ) -> GstSDPResult;
+    pub fn gst_sdp_message_parse_buffer(
+        data: *const u8,
+        size: c_uint,
+        msg: *mut GstSDPMessage,
+    ) -> GstSDPResult;
     pub fn gst_sdp_message_parse_uri(uri: *const c_char, msg: *mut GstSDPMessage) -> GstSDPResult;
 
     //=========================================================================
@@ -825,7 +1193,12 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_time_clear(t: *mut GstSDPTime) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_time_set(t: *mut GstSDPTime, start: *const c_char, stop: *const c_char, repeat: *mut *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_time_set(
+        t: *mut GstSDPTime,
+        start: *const c_char,
+        stop: *const c_char,
+        repeat: *mut *const c_char,
+    ) -> GstSDPResult;
 
     //=========================================================================
     // GstSDPZone
@@ -833,12 +1206,20 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_sdp_zone_clear(zone: *mut GstSDPZone) -> GstSDPResult;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_sdp_zone_set(zone: *mut GstSDPZone, adj_time: *const c_char, typed_time: *const c_char) -> GstSDPResult;
+    pub fn gst_sdp_zone_set(
+        zone: *mut GstSDPZone,
+        adj_time: *const c_char,
+        typed_time: *const c_char,
+    ) -> GstSDPResult;
 
     //=========================================================================
     // Other functions
     //=========================================================================
-    pub fn gst_sdp_address_is_multicast(nettype: *const c_char, addrtype: *const c_char, addr: *const c_char) -> gboolean;
+    pub fn gst_sdp_address_is_multicast(
+        nettype: *const c_char,
+        addrtype: *const c_char,
+        addr: *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_sdp_make_keymgmt(uri: *const c_char, base64: *const c_char) -> *mut c_char;
 

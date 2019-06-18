@@ -3,23 +3,28 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
-extern crate gstreamer_sys as gst;
 extern crate gstreamer_base_sys as gst_base;
+extern crate gstreamer_sys as gst;
 extern crate gstreamer_video_sys as gst_video;
+extern crate libc;
 
 mod manual;
 
 pub use manual::*;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -109,12 +114,18 @@ pub const GST_GL_WINDOW_ERROR_OLD_LIBS: GstGLWindowError = 1;
 pub const GST_GL_WINDOW_ERROR_RESOURCE_UNAVAILABLE: GstGLWindowError = 2;
 
 // Constants
-pub const GST_BUFFER_POOL_OPTION_GL_SYNC_META: *const c_char = b"GstBufferPoolOptionGLSyncMeta\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_2D: *const c_char = b"GstBufferPoolOptionGLTextureTarget2D\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_EXTERNAL_OES: *const c_char = b"GstBufferPoolOptionGLTextureTargetExternalOES\0" as *const u8 as *const c_char;
-pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_RECTANGLE: *const c_char = b"GstBufferPoolOptionGLTextureTargetRectangle\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_MEMORY_GL_BUFFER: *const c_char = b"memory:GLBuffer\0" as *const u8 as *const c_char;
-pub const GST_CAPS_FEATURE_MEMORY_GL_MEMORY: *const c_char = b"memory:GLMemory\0" as *const u8 as *const c_char;
+pub const GST_BUFFER_POOL_OPTION_GL_SYNC_META: *const c_char =
+    b"GstBufferPoolOptionGLSyncMeta\0" as *const u8 as *const c_char;
+pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_2D: *const c_char =
+    b"GstBufferPoolOptionGLTextureTarget2D\0" as *const u8 as *const c_char;
+pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_EXTERNAL_OES: *const c_char =
+    b"GstBufferPoolOptionGLTextureTargetExternalOES\0" as *const u8 as *const c_char;
+pub const GST_BUFFER_POOL_OPTION_GL_TEXTURE_TARGET_RECTANGLE: *const c_char =
+    b"GstBufferPoolOptionGLTextureTargetRectangle\0" as *const u8 as *const c_char;
+pub const GST_CAPS_FEATURE_MEMORY_GL_BUFFER: *const c_char =
+    b"memory:GLBuffer\0" as *const u8 as *const c_char;
+pub const GST_CAPS_FEATURE_MEMORY_GL_MEMORY: *const c_char =
+    b"memory:GLMemory\0" as *const u8 as *const c_char;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_ALLOC: c_int = 1;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_BUFFER: c_int = 16;
 pub const GST_GL_ALLOCATION_PARAMS_ALLOC_FLAG_USER: c_int = 65536;
@@ -125,22 +136,33 @@ pub const GST_GL_API_GLES1_NAME: *const c_char = b"gles1\0" as *const u8 as *con
 pub const GST_GL_API_GLES2_NAME: *const c_char = b"gles2\0" as *const u8 as *const c_char;
 pub const GST_GL_API_OPENGL3_NAME: *const c_char = b"opengl3\0" as *const u8 as *const c_char;
 pub const GST_GL_API_OPENGL_NAME: *const c_char = b"opengl\0" as *const u8 as *const c_char;
-pub const GST_GL_BASE_MEMORY_ALLOCATOR_NAME: *const c_char = b"GLBaseMemory\0" as *const u8 as *const c_char;
+pub const GST_GL_BASE_MEMORY_ALLOCATOR_NAME: *const c_char =
+    b"GLBaseMemory\0" as *const u8 as *const c_char;
 pub const GST_GL_BUFFER_ALLOCATOR_NAME: *const c_char = b"GLBuffer\0" as *const u8 as *const c_char;
 pub const GST_GL_COLOR_CONVERT_FORMATS: *const c_char = b"{ RGBA, RGB, RGBx, BGR, BGRx, BGRA, xRGB, xBGR, ARGB, ABGR, Y444, I420, YV12, Y42B, Y41B, NV12, NV21, YUY2, UYVY, AYUV, VUYA, GRAY8, GRAY16_LE, GRAY16_BE, RGB16, BGR16, ARGB64 }\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_CGL: *const c_char = b"gst.gl.context.CGL\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_EAGL: *const c_char = b"gst.gl.context.EAGL\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_EGL: *const c_char = b"gst.gl.context.EGL\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_GLX: *const c_char = b"gst.gl.context.GLX\0" as *const u8 as *const c_char;
-pub const GST_GL_CONTEXT_TYPE_WGL: *const c_char = b"gst.gl.context.WGL\0" as *const u8 as *const c_char;
-pub const GST_GL_DISPLAY_CONTEXT_TYPE: *const c_char = b"gst.gl.GLDisplay\0" as *const u8 as *const c_char;
+pub const GST_GL_CONTEXT_TYPE_CGL: *const c_char =
+    b"gst.gl.context.CGL\0" as *const u8 as *const c_char;
+pub const GST_GL_CONTEXT_TYPE_EAGL: *const c_char =
+    b"gst.gl.context.EAGL\0" as *const u8 as *const c_char;
+pub const GST_GL_CONTEXT_TYPE_EGL: *const c_char =
+    b"gst.gl.context.EGL\0" as *const u8 as *const c_char;
+pub const GST_GL_CONTEXT_TYPE_GLX: *const c_char =
+    b"gst.gl.context.GLX\0" as *const u8 as *const c_char;
+pub const GST_GL_CONTEXT_TYPE_WGL: *const c_char =
+    b"gst.gl.context.WGL\0" as *const u8 as *const c_char;
+pub const GST_GL_DISPLAY_CONTEXT_TYPE: *const c_char =
+    b"gst.gl.GLDisplay\0" as *const u8 as *const c_char;
 pub const GST_GL_MEMORY_ALLOCATOR_NAME: *const c_char = b"GLMemory\0" as *const u8 as *const c_char;
-pub const GST_GL_MEMORY_PBO_ALLOCATOR_NAME: *const c_char = b"GLMemoryPBO\0" as *const u8 as *const c_char;
+pub const GST_GL_MEMORY_PBO_ALLOCATOR_NAME: *const c_char =
+    b"GLMemoryPBO\0" as *const u8 as *const c_char;
 pub const GST_GL_MEMORY_VIDEO_FORMATS_STR: *const c_char = b"{ RGBA, BGRA, RGBx, BGRx, ARGB, ABGR, xRGB, xBGR, RGB, BGR, RGB16, BGR16, AYUV, VUYA, I420, YV12, NV12, NV21, YUY2, UYVY, Y41B, Y42B, Y444, GRAY8, GRAY16_LE, GRAY16_BE, ARGB64 }\0" as *const u8 as *const c_char;
-pub const GST_GL_RENDERBUFFER_ALLOCATOR_NAME: *const c_char = b"GLRenderbuffer\0" as *const u8 as *const c_char;
+pub const GST_GL_RENDERBUFFER_ALLOCATOR_NAME: *const c_char =
+    b"GLRenderbuffer\0" as *const u8 as *const c_char;
 pub const GST_GL_TEXTURE_TARGET_2D_STR: *const c_char = b"2D\0" as *const u8 as *const c_char;
-pub const GST_GL_TEXTURE_TARGET_EXTERNAL_OES_STR: *const c_char = b"external-oes\0" as *const u8 as *const c_char;
-pub const GST_GL_TEXTURE_TARGET_RECTANGLE_STR: *const c_char = b"rectangle\0" as *const u8 as *const c_char;
+pub const GST_GL_TEXTURE_TARGET_EXTERNAL_OES_STR: *const c_char =
+    b"external-oes\0" as *const u8 as *const c_char;
+pub const GST_GL_TEXTURE_TARGET_RECTANGLE_STR: *const c_char =
+    b"rectangle\0" as *const u8 as *const c_char;
 pub const GST_MAP_GL: c_int = 131072;
 
 // Flags
@@ -185,17 +207,29 @@ pub const GST_GLSL_PROFILE_COMPATIBILITY: GstGLSLProfile = 4;
 pub const GST_GLSL_PROFILE_ANY: GstGLSLProfile = 4294967295;
 
 // Callbacks
-pub type GstGLAllocationParamsCopyFunc = Option<unsafe extern "C" fn(*mut GstGLAllocationParams, *mut GstGLAllocationParams)>;
+pub type GstGLAllocationParamsCopyFunc =
+    Option<unsafe extern "C" fn(*mut GstGLAllocationParams, *mut GstGLAllocationParams)>;
 pub type GstGLAllocationParamsFreeFunc = Option<unsafe extern "C" fn(gpointer)>;
 pub type GstGLAsyncDebugLogGetMessage = Option<unsafe extern "C" fn(gpointer) -> *mut c_char>;
-pub type GstGLBaseMemoryAllocatorAllocFunction = Option<unsafe extern "C" fn(*mut GstGLBaseMemoryAllocator, *mut GstGLAllocationParams) -> *mut GstGLBaseMemory>;
-pub type GstGLBaseMemoryAllocatorCopyFunction = Option<unsafe extern "C" fn(*mut GstGLBaseMemory, ssize_t, ssize_t) -> *mut GstGLBaseMemory>;
-pub type GstGLBaseMemoryAllocatorCreateFunction = Option<unsafe extern "C" fn(*mut GstGLBaseMemory, *mut *mut glib::GError) -> gboolean>;
-pub type GstGLBaseMemoryAllocatorDestroyFunction = Option<unsafe extern "C" fn(*mut GstGLBaseMemory)>;
-pub type GstGLBaseMemoryAllocatorMapFunction = Option<unsafe extern "C" fn(*mut GstGLBaseMemory, *mut gst::GstMapInfo, size_t) -> gpointer>;
-pub type GstGLBaseMemoryAllocatorUnmapFunction = Option<unsafe extern "C" fn(*mut GstGLBaseMemory, *mut gst::GstMapInfo)>;
+pub type GstGLBaseMemoryAllocatorAllocFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstGLBaseMemoryAllocator,
+        *mut GstGLAllocationParams,
+    ) -> *mut GstGLBaseMemory,
+>;
+pub type GstGLBaseMemoryAllocatorCopyFunction =
+    Option<unsafe extern "C" fn(*mut GstGLBaseMemory, ssize_t, ssize_t) -> *mut GstGLBaseMemory>;
+pub type GstGLBaseMemoryAllocatorCreateFunction =
+    Option<unsafe extern "C" fn(*mut GstGLBaseMemory, *mut *mut glib::GError) -> gboolean>;
+pub type GstGLBaseMemoryAllocatorDestroyFunction =
+    Option<unsafe extern "C" fn(*mut GstGLBaseMemory)>;
+pub type GstGLBaseMemoryAllocatorMapFunction =
+    Option<unsafe extern "C" fn(*mut GstGLBaseMemory, *mut gst::GstMapInfo, size_t) -> gpointer>;
+pub type GstGLBaseMemoryAllocatorUnmapFunction =
+    Option<unsafe extern "C" fn(*mut GstGLBaseMemory, *mut gst::GstMapInfo)>;
 pub type GstGLContextThreadFunc = Option<unsafe extern "C" fn(*mut GstGLContext, gpointer)>;
-pub type GstGLFilterRenderFunc = Option<unsafe extern "C" fn(*mut GstGLFilter, *mut GstGLMemory, gpointer) -> gboolean>;
+pub type GstGLFilterRenderFunc =
+    Option<unsafe extern "C" fn(*mut GstGLFilter, *mut GstGLMemory, gpointer) -> gboolean>;
 pub type GstGLFramebufferFunc = Option<unsafe extern "C" fn(gpointer) -> gboolean>;
 pub type GstGLWindowCB = Option<unsafe extern "C" fn(gpointer)>;
 pub type GstGLWindowResizeCB = Option<unsafe extern "C" fn(gpointer, c_uint, c_uint)>;
@@ -221,18 +255,18 @@ pub struct GstGLAllocationParams {
 impl ::std::fmt::Debug for GstGLAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLAllocationParams @ {:?}", self as *const _))
-         .field("struct_size", &self.struct_size)
-         .field("copy", &self.copy)
-         .field("free", &self.free)
-         .field("alloc_flags", &self.alloc_flags)
-         .field("alloc_size", &self.alloc_size)
-         .field("alloc_params", &self.alloc_params)
-         .field("context", &self.context)
-         .field("notify", &self.notify)
-         .field("user_data", &self.user_data)
-         .field("wrapped_data", &self.wrapped_data)
-         .field("gl_handle", &self.gl_handle)
-         .finish()
+            .field("struct_size", &self.struct_size)
+            .field("copy", &self.copy)
+            .field("free", &self.free)
+            .field("alloc_flags", &self.alloc_flags)
+            .field("alloc_size", &self.alloc_size)
+            .field("alloc_params", &self.alloc_params)
+            .field("context", &self.context)
+            .field("notify", &self.notify)
+            .field("user_data", &self.user_data)
+            .field("wrapped_data", &self.wrapped_data)
+            .field("gl_handle", &self.gl_handle)
+            .finish()
     }
 }
 
@@ -256,7 +290,7 @@ pub struct GstGLAsyncDebug {
 impl ::std::fmt::Debug for GstGLAsyncDebug {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLAsyncDebug @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -267,19 +301,25 @@ pub struct GstGLBaseFilterClass {
     pub supported_gl_api: GstGLAPI,
     pub gl_start: Option<unsafe extern "C" fn(*mut GstGLBaseFilter) -> gboolean>,
     pub gl_stop: Option<unsafe extern "C" fn(*mut GstGLBaseFilter)>,
-    pub gl_set_caps: Option<unsafe extern "C" fn(*mut GstGLBaseFilter, *mut gst::GstCaps, *mut gst::GstCaps) -> gboolean>,
+    pub gl_set_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstGLBaseFilter,
+            *mut gst::GstCaps,
+            *mut gst::GstCaps,
+        ) -> gboolean,
+    >,
     pub _padding: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstGLBaseFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBaseFilterClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("supported_gl_api", &self.supported_gl_api)
-         .field("gl_start", &self.gl_start)
-         .field("gl_stop", &self.gl_stop)
-         .field("gl_set_caps", &self.gl_set_caps)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("supported_gl_api", &self.supported_gl_api)
+            .field("gl_start", &self.gl_start)
+            .field("gl_stop", &self.gl_stop)
+            .field("gl_set_caps", &self.gl_set_caps)
+            .finish()
     }
 }
 
@@ -309,15 +349,15 @@ pub struct GstGLBaseMemory {
 impl ::std::fmt::Debug for GstGLBaseMemory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBaseMemory @ {:?}", self as *const _))
-         .field("mem", &self.mem)
-         .field("context", &self.context)
-         .field("lock", &self.lock)
-         .field("map_flags", &self.map_flags)
-         .field("map_count", &self.map_count)
-         .field("gl_map_count", &self.gl_map_count)
-         .field("data", &self.data)
-         .field("query", &self.query)
-         .finish()
+            .field("mem", &self.mem)
+            .field("context", &self.context)
+            .field("lock", &self.lock)
+            .field("map_flags", &self.map_flags)
+            .field("map_count", &self.map_count)
+            .field("gl_map_count", &self.gl_map_count)
+            .field("data", &self.data)
+            .field("query", &self.query)
+            .finish()
     }
 }
 
@@ -336,15 +376,18 @@ pub struct GstGLBaseMemoryAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLBaseMemoryAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseMemoryAllocatorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("alloc", &self.alloc)
-         .field("create", &self.create)
-         .field("map", &self.map)
-         .field("unmap", &self.unmap)
-         .field("copy", &self.copy)
-         .field("destroy", &self.destroy)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLBaseMemoryAllocatorClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .field("alloc", &self.alloc)
+        .field("create", &self.create)
+        .field("map", &self.map)
+        .field("unmap", &self.unmap)
+        .field("copy", &self.copy)
+        .field("destroy", &self.destroy)
+        .finish()
     }
 }
 
@@ -360,11 +403,11 @@ pub struct GstGLBuffer {
 impl ::std::fmt::Debug for GstGLBuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBuffer @ {:?}", self as *const _))
-         .field("mem", &self.mem)
-         .field("id", &self.id)
-         .field("target", &self.target)
-         .field("usage_hints", &self.usage_hints)
-         .finish()
+            .field("mem", &self.mem)
+            .field("id", &self.id)
+            .field("target", &self.target)
+            .field("usage_hints", &self.usage_hints)
+            .finish()
     }
 }
 
@@ -379,11 +422,14 @@ pub struct GstGLBufferAllocationParams {
 
 impl ::std::fmt::Debug for GstGLBufferAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferAllocationParams @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("gl_target", &self.gl_target)
-         .field("gl_usage", &self.gl_usage)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLBufferAllocationParams @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .field("gl_target", &self.gl_target)
+        .field("gl_usage", &self.gl_usage)
+        .finish()
     }
 }
 
@@ -396,9 +442,12 @@ pub struct GstGLBufferAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLBufferAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBufferAllocatorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLBufferAllocatorClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .finish()
     }
 }
 
@@ -412,8 +461,8 @@ pub struct GstGLBufferPoolClass {
 impl ::std::fmt::Debug for GstGLBufferPoolClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBufferPoolClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -432,7 +481,7 @@ pub struct GstGLColorConvertClass {
 impl ::std::fmt::Debug for GstGLColorConvertClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLColorConvertClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -451,32 +500,41 @@ pub struct GstGLContextClass {
     pub get_gl_platform: Option<unsafe extern "C" fn(*mut GstGLContext) -> GstGLPlatform>,
     pub get_proc_address: Option<unsafe extern "C" fn(GstGLAPI, *const c_char) -> gpointer>,
     pub activate: Option<unsafe extern "C" fn(*mut GstGLContext, gboolean) -> gboolean>,
-    pub choose_format: Option<unsafe extern "C" fn(*mut GstGLContext, *mut *mut glib::GError) -> gboolean>,
-    pub create_context: Option<unsafe extern "C" fn(*mut GstGLContext, GstGLAPI, *mut GstGLContext, *mut *mut glib::GError) -> gboolean>,
+    pub choose_format:
+        Option<unsafe extern "C" fn(*mut GstGLContext, *mut *mut glib::GError) -> gboolean>,
+    pub create_context: Option<
+        unsafe extern "C" fn(
+            *mut GstGLContext,
+            GstGLAPI,
+            *mut GstGLContext,
+            *mut *mut glib::GError,
+        ) -> gboolean,
+    >,
     pub destroy_context: Option<unsafe extern "C" fn(*mut GstGLContext)>,
     pub swap_buffers: Option<unsafe extern "C" fn(*mut GstGLContext)>,
     pub check_feature: Option<unsafe extern "C" fn(*mut GstGLContext, *const c_char) -> gboolean>,
-    pub get_gl_platform_version: Option<unsafe extern "C" fn(*mut GstGLContext, *mut c_int, *mut c_int)>,
+    pub get_gl_platform_version:
+        Option<unsafe extern "C" fn(*mut GstGLContext, *mut c_int, *mut c_int)>,
     pub _reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstGLContextClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLContextClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("get_current_context", &self.get_current_context)
-         .field("get_gl_context", &self.get_gl_context)
-         .field("get_gl_api", &self.get_gl_api)
-         .field("get_gl_platform", &self.get_gl_platform)
-         .field("get_proc_address", &self.get_proc_address)
-         .field("activate", &self.activate)
-         .field("choose_format", &self.choose_format)
-         .field("create_context", &self.create_context)
-         .field("destroy_context", &self.destroy_context)
-         .field("swap_buffers", &self.swap_buffers)
-         .field("check_feature", &self.check_feature)
-         .field("get_gl_platform_version", &self.get_gl_platform_version)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("get_current_context", &self.get_current_context)
+            .field("get_gl_context", &self.get_gl_context)
+            .field("get_gl_api", &self.get_gl_api)
+            .field("get_gl_platform", &self.get_gl_platform)
+            .field("get_proc_address", &self.get_proc_address)
+            .field("activate", &self.activate)
+            .field("choose_format", &self.choose_format)
+            .field("create_context", &self.create_context)
+            .field("destroy_context", &self.destroy_context)
+            .field("swap_buffers", &self.swap_buffers)
+            .field("check_feature", &self.check_feature)
+            .field("get_gl_platform_version", &self.get_gl_platform_version)
+            .finish()
     }
 }
 
@@ -497,10 +555,10 @@ pub struct GstGLDisplayClass {
 impl ::std::fmt::Debug for GstGLDisplayClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplayClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .field("get_handle", &self.get_handle)
-         .field("create_window", &self.create_window)
-         .finish()
+            .field("object_class", &self.object_class)
+            .field("get_handle", &self.get_handle)
+            .field("create_window", &self.create_window)
+            .finish()
     }
 }
 
@@ -516,9 +574,9 @@ pub struct GstGLDisplayEGLClass {
 impl ::std::fmt::Debug for GstGLDisplayEGLClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplayEGLClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("object_class", &self.object_class)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -538,10 +596,13 @@ pub struct GstGLDisplayWaylandClass {
 #[cfg(any(feature = "wayland", feature = "dox"))]
 impl ::std::fmt::Debug for GstGLDisplayWaylandClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLDisplayWaylandClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .field("_padding", &self._padding)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLDisplayWaylandClass @ {:?}",
+            self as *const _
+        ))
+        .field("object_class", &self.object_class)
+        .field("_padding", &self._padding)
+        .finish()
     }
 }
 
@@ -557,9 +618,9 @@ pub struct GstGLDisplayX11Class {
 impl ::std::fmt::Debug for GstGLDisplayX11Class {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplayX11Class @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .field("_padding", &self._padding)
-         .finish()
+            .field("object_class", &self.object_class)
+            .field("_padding", &self._padding)
+            .finish()
     }
 }
 
@@ -567,24 +628,41 @@ impl ::std::fmt::Debug for GstGLDisplayX11Class {
 #[derive(Copy, Clone)]
 pub struct GstGLFilterClass {
     pub parent_class: GstGLBaseFilterClass,
-    pub set_caps: Option<unsafe extern "C" fn(*mut GstGLFilter, *mut gst::GstCaps, *mut gst::GstCaps) -> gboolean>,
-    pub filter: Option<unsafe extern "C" fn(*mut GstGLFilter, *mut gst::GstBuffer, *mut gst::GstBuffer) -> gboolean>,
-    pub filter_texture: Option<unsafe extern "C" fn(*mut GstGLFilter, *mut GstGLMemory, *mut GstGLMemory) -> gboolean>,
+    pub set_caps: Option<
+        unsafe extern "C" fn(*mut GstGLFilter, *mut gst::GstCaps, *mut gst::GstCaps) -> gboolean,
+    >,
+    pub filter: Option<
+        unsafe extern "C" fn(
+            *mut GstGLFilter,
+            *mut gst::GstBuffer,
+            *mut gst::GstBuffer,
+        ) -> gboolean,
+    >,
+    pub filter_texture: Option<
+        unsafe extern "C" fn(*mut GstGLFilter, *mut GstGLMemory, *mut GstGLMemory) -> gboolean,
+    >,
     pub init_fbo: Option<unsafe extern "C" fn(*mut GstGLFilter) -> gboolean>,
-    pub transform_internal_caps: Option<unsafe extern "C" fn(*mut GstGLFilter, gst::GstPadDirection, *mut gst::GstCaps, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub transform_internal_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstGLFilter,
+            gst::GstPadDirection,
+            *mut gst::GstCaps,
+            *mut gst::GstCaps,
+        ) -> *mut gst::GstCaps,
+    >,
     pub _padding: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstGLFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLFilterClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("set_caps", &self.set_caps)
-         .field("filter", &self.filter)
-         .field("filter_texture", &self.filter_texture)
-         .field("init_fbo", &self.init_fbo)
-         .field("transform_internal_caps", &self.transform_internal_caps)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("set_caps", &self.set_caps)
+            .field("filter", &self.filter)
+            .field("filter_texture", &self.filter_texture)
+            .field("init_fbo", &self.init_fbo)
+            .field("transform_internal_caps", &self.transform_internal_caps)
+            .finish()
     }
 }
 
@@ -598,7 +676,7 @@ pub struct GstGLFramebufferClass {
 impl ::std::fmt::Debug for GstGLFramebufferClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLFramebufferClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -632,18 +710,18 @@ pub struct GstGLMemory {
 impl ::std::fmt::Debug for GstGLMemory {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLMemory @ {:?}", self as *const _))
-         .field("mem", &self.mem)
-         .field("tex_id", &self.tex_id)
-         .field("tex_target", &self.tex_target)
-         .field("tex_format", &self.tex_format)
-         .field("info", &self.info)
-         .field("valign", &self.valign)
-         .field("plane", &self.plane)
-         .field("tex_scaling", &self.tex_scaling)
-         .field("texture_wrapped", &self.texture_wrapped)
-         .field("unpack_length", &self.unpack_length)
-         .field("tex_width", &self.tex_width)
-         .finish()
+            .field("mem", &self.mem)
+            .field("tex_id", &self.tex_id)
+            .field("tex_target", &self.tex_target)
+            .field("tex_format", &self.tex_format)
+            .field("info", &self.info)
+            .field("valign", &self.valign)
+            .field("plane", &self.plane)
+            .field("tex_scaling", &self.tex_scaling)
+            .field("texture_wrapped", &self.texture_wrapped)
+            .field("unpack_length", &self.unpack_length)
+            .field("tex_width", &self.tex_width)
+            .finish()
     }
 }
 
@@ -659,11 +737,14 @@ pub struct GstGLMemoryAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLMemoryAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryAllocatorClass @ {:?}", self as *const _))
-         .field("map", &self.map)
-         .field("copy", &self.copy)
-         .field("unmap", &self.unmap)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLMemoryAllocatorClass @ {:?}",
+            self as *const _
+        ))
+        .field("map", &self.map)
+        .field("copy", &self.copy)
+        .field("unmap", &self.unmap)
+        .finish()
     }
 }
 
@@ -678,7 +759,7 @@ pub struct GstGLMemoryPBO {
 impl ::std::fmt::Debug for GstGLMemoryPBO {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLMemoryPBO @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -691,9 +772,12 @@ pub struct GstGLMemoryPBOAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLMemoryPBOAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLMemoryPBOAllocatorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLMemoryPBOAllocatorClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .finish()
     }
 }
 
@@ -706,9 +790,12 @@ pub struct GstGLOverlayCompositorClass {
 
 impl ::std::fmt::Debug for GstGLOverlayCompositorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLOverlayCompositorClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLOverlayCompositorClass @ {:?}",
+            self as *const _
+        ))
+        .field("object_class", &self.object_class)
+        .finish()
     }
 }
 
@@ -727,7 +814,7 @@ pub struct GstGLQuery {
 impl ::std::fmt::Debug for GstGLQuery {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLQuery @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -746,12 +833,12 @@ pub struct GstGLRenderbuffer {
 impl ::std::fmt::Debug for GstGLRenderbuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLRenderbuffer @ {:?}", self as *const _))
-         .field("renderbuffer_id", &self.renderbuffer_id)
-         .field("renderbuffer_format", &self.renderbuffer_format)
-         .field("width", &self.width)
-         .field("height", &self.height)
-         .field("renderbuffer_wrapped", &self.renderbuffer_wrapped)
-         .finish()
+            .field("renderbuffer_id", &self.renderbuffer_id)
+            .field("renderbuffer_format", &self.renderbuffer_format)
+            .field("width", &self.width)
+            .field("height", &self.height)
+            .field("renderbuffer_wrapped", &self.renderbuffer_wrapped)
+            .finish()
     }
 }
 
@@ -767,11 +854,14 @@ pub struct GstGLRenderbufferAllocationParams {
 
 impl ::std::fmt::Debug for GstGLRenderbufferAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbufferAllocationParams @ {:?}", self as *const _))
-         .field("renderbuffer_format", &self.renderbuffer_format)
-         .field("width", &self.width)
-         .field("height", &self.height)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLRenderbufferAllocationParams @ {:?}",
+            self as *const _
+        ))
+        .field("renderbuffer_format", &self.renderbuffer_format)
+        .field("width", &self.width)
+        .field("height", &self.height)
+        .finish()
     }
 }
 
@@ -784,9 +874,12 @@ pub struct GstGLRenderbufferAllocatorClass {
 
 impl ::std::fmt::Debug for GstGLRenderbufferAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbufferAllocatorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLRenderbufferAllocatorClass @ {:?}",
+            self as *const _
+        ))
+        .field("parent_class", &self.parent_class)
+        .finish()
     }
 }
 
@@ -800,7 +893,7 @@ pub struct GstGLSLStageClass {
 impl ::std::fmt::Debug for GstGLSLStageClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLSLStageClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -818,7 +911,7 @@ pub struct GstGLShaderClass {
 impl ::std::fmt::Debug for GstGLShaderClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLShaderClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -839,7 +932,14 @@ pub struct GstGLSyncMeta {
     pub wait_gl: Option<unsafe extern "C" fn(*mut GstGLSyncMeta, *mut GstGLContext)>,
     pub wait_cpu: Option<unsafe extern "C" fn(*mut GstGLSyncMeta, *mut GstGLContext)>,
     pub wait_cpu_gl: Option<unsafe extern "C" fn(*mut GstGLSyncMeta, *mut GstGLContext)>,
-    pub copy: Option<unsafe extern "C" fn(*mut GstGLSyncMeta, *mut gst::GstBuffer, *mut GstGLSyncMeta, *mut gst::GstBuffer)>,
+    pub copy: Option<
+        unsafe extern "C" fn(
+            *mut GstGLSyncMeta,
+            *mut gst::GstBuffer,
+            *mut GstGLSyncMeta,
+            *mut gst::GstBuffer,
+        ),
+    >,
     pub free: Option<unsafe extern "C" fn(*mut GstGLSyncMeta, *mut GstGLContext)>,
     pub free_gl: Option<unsafe extern "C" fn(*mut GstGLSyncMeta, *mut GstGLContext)>,
 }
@@ -847,19 +947,19 @@ pub struct GstGLSyncMeta {
 impl ::std::fmt::Debug for GstGLSyncMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLSyncMeta @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("context", &self.context)
-         .field("data", &self.data)
-         .field("set_sync", &self.set_sync)
-         .field("set_sync_gl", &self.set_sync_gl)
-         .field("wait", &self.wait)
-         .field("wait_gl", &self.wait_gl)
-         .field("wait_cpu", &self.wait_cpu)
-         .field("wait_cpu_gl", &self.wait_cpu_gl)
-         .field("copy", &self.copy)
-         .field("free", &self.free)
-         .field("free_gl", &self.free_gl)
-         .finish()
+            .field("parent", &self.parent)
+            .field("context", &self.context)
+            .field("data", &self.data)
+            .field("set_sync", &self.set_sync)
+            .field("set_sync_gl", &self.set_sync_gl)
+            .field("wait", &self.wait)
+            .field("wait_gl", &self.wait_gl)
+            .field("wait_cpu", &self.wait_cpu)
+            .field("wait_cpu_gl", &self.wait_cpu_gl)
+            .field("copy", &self.copy)
+            .field("free", &self.free)
+            .field("free_gl", &self.free_gl)
+            .finish()
     }
 }
 
@@ -873,8 +973,8 @@ pub struct GstGLUploadClass {
 impl ::std::fmt::Debug for GstGLUploadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLUploadClass @ {:?}", self as *const _))
-         .field("object_class", &self.object_class)
-         .finish()
+            .field("object_class", &self.object_class)
+            .finish()
     }
 }
 
@@ -897,14 +997,17 @@ pub struct GstGLVideoAllocationParams {
 
 impl ::std::fmt::Debug for GstGLVideoAllocationParams {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLVideoAllocationParams @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("v_info", &self.v_info)
-         .field("plane", &self.plane)
-         .field("valign", &self.valign)
-         .field("target", &self.target)
-         .field("tex_format", &self.tex_format)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLVideoAllocationParams @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .field("v_info", &self.v_info)
+        .field("plane", &self.plane)
+        .field("valign", &self.valign)
+        .field("target", &self.target)
+        .field("tex_format", &self.tex_format)
+        .finish()
     }
 }
 
@@ -918,7 +1021,7 @@ pub struct GstGLViewConvertClass {
 impl ::std::fmt::Debug for GstGLViewConvertClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLViewConvertClass @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -938,13 +1041,16 @@ pub struct GstGLWindowClass {
     pub run: Option<unsafe extern "C" fn(*mut GstGLWindow)>,
     pub quit: Option<unsafe extern "C" fn(*mut GstGLWindow)>,
     pub send_message: Option<unsafe extern "C" fn(*mut GstGLWindow, GstGLWindowCB, gpointer)>,
-    pub send_message_async: Option<unsafe extern "C" fn(*mut GstGLWindow, GstGLWindowCB, gpointer, glib::GDestroyNotify)>,
+    pub send_message_async: Option<
+        unsafe extern "C" fn(*mut GstGLWindow, GstGLWindowCB, gpointer, glib::GDestroyNotify),
+    >,
     pub open: Option<unsafe extern "C" fn(*mut GstGLWindow, *mut *mut glib::GError) -> gboolean>,
     pub close: Option<unsafe extern "C" fn(*mut GstGLWindow)>,
     pub handle_events: Option<unsafe extern "C" fn(*mut GstGLWindow, gboolean)>,
     pub set_preferred_size: Option<unsafe extern "C" fn(*mut GstGLWindow, c_int, c_int)>,
     pub show: Option<unsafe extern "C" fn(*mut GstGLWindow)>,
-    pub set_render_rectangle: Option<unsafe extern "C" fn(*mut GstGLWindow, c_int, c_int, c_int, c_int) -> gboolean>,
+    pub set_render_rectangle:
+        Option<unsafe extern "C" fn(*mut GstGLWindow, c_int, c_int, c_int, c_int) -> gboolean>,
     pub queue_resize: Option<unsafe extern "C" fn(*mut GstGLWindow)>,
     pub controls_viewport: Option<unsafe extern "C" fn(*mut GstGLWindow) -> gboolean>,
     pub _reserved: [gpointer; 3],
@@ -953,24 +1059,24 @@ pub struct GstGLWindowClass {
 impl ::std::fmt::Debug for GstGLWindowClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLWindowClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("get_display", &self.get_display)
-         .field("set_window_handle", &self.set_window_handle)
-         .field("get_window_handle", &self.get_window_handle)
-         .field("draw", &self.draw)
-         .field("run", &self.run)
-         .field("quit", &self.quit)
-         .field("send_message", &self.send_message)
-         .field("send_message_async", &self.send_message_async)
-         .field("open", &self.open)
-         .field("close", &self.close)
-         .field("handle_events", &self.handle_events)
-         .field("set_preferred_size", &self.set_preferred_size)
-         .field("show", &self.show)
-         .field("set_render_rectangle", &self.set_render_rectangle)
-         .field("queue_resize", &self.queue_resize)
-         .field("controls_viewport", &self.controls_viewport)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("get_display", &self.get_display)
+            .field("set_window_handle", &self.set_window_handle)
+            .field("get_window_handle", &self.get_window_handle)
+            .field("draw", &self.draw)
+            .field("run", &self.run)
+            .field("quit", &self.quit)
+            .field("send_message", &self.send_message)
+            .field("send_message_async", &self.send_message_async)
+            .field("open", &self.open)
+            .field("close", &self.close)
+            .field("handle_events", &self.handle_events)
+            .field("set_preferred_size", &self.set_preferred_size)
+            .field("show", &self.show)
+            .field("set_render_rectangle", &self.set_render_rectangle)
+            .field("queue_resize", &self.queue_resize)
+            .field("controls_viewport", &self.controls_viewport)
+            .finish()
     }
 }
 
@@ -995,12 +1101,12 @@ pub struct GstGLBaseFilter {
 impl ::std::fmt::Debug for GstGLBaseFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBaseFilter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("display", &self.display)
-         .field("context", &self.context)
-         .field("in_caps", &self.in_caps)
-         .field("out_caps", &self.out_caps)
-         .finish()
+            .field("parent", &self.parent)
+            .field("display", &self.display)
+            .field("context", &self.context)
+            .field("in_caps", &self.in_caps)
+            .field("out_caps", &self.out_caps)
+            .finish()
     }
 }
 
@@ -1014,8 +1120,11 @@ pub struct GstGLBaseMemoryAllocator {
 
 impl ::std::fmt::Debug for GstGLBaseMemoryAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLBaseMemoryAllocator @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLBaseMemoryAllocator @ {:?}",
+            self as *const _
+        ))
+        .finish()
     }
 }
 
@@ -1029,8 +1138,8 @@ pub struct GstGLBufferAllocator {
 impl ::std::fmt::Debug for GstGLBufferAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBufferAllocator @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1046,9 +1155,9 @@ pub struct GstGLBufferPool {
 impl ::std::fmt::Debug for GstGLBufferPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLBufferPool @ {:?}", self as *const _))
-         .field("bufferpool", &self.bufferpool)
-         .field("context", &self.context)
-         .finish()
+            .field("bufferpool", &self.bufferpool)
+            .field("context", &self.context)
+            .finish()
     }
 }
 
@@ -1072,7 +1181,7 @@ pub struct GstGLColorConvert {
 impl ::std::fmt::Debug for GstGLColorConvert {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLColorConvert @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1090,8 +1199,8 @@ pub struct GstGLContext {
 impl ::std::fmt::Debug for GstGLContext {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLContext @ {:?}", self as *const _))
-         .field("gl_vtable", &self.gl_vtable)
-         .finish()
+            .field("gl_vtable", &self.gl_vtable)
+            .finish()
     }
 }
 
@@ -1110,7 +1219,7 @@ pub struct GstGLDisplay {
 impl ::std::fmt::Debug for GstGLDisplay {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplay @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1128,8 +1237,8 @@ pub struct GstGLDisplayEGL {
 impl ::std::fmt::Debug for GstGLDisplayEGL {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplayEGL @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1151,13 +1260,13 @@ pub struct GstGLDisplayWayland {
 impl ::std::fmt::Debug for GstGLDisplayWayland {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplayWayland @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("display", &self.display)
-         .field("registry", &self.registry)
-         .field("compositor", &self.compositor)
-         .field("subcompositor", &self.subcompositor)
-         .field("wl_shell", &self.wl_shell)
-         .finish()
+            .field("parent", &self.parent)
+            .field("display", &self.display)
+            .field("registry", &self.registry)
+            .field("compositor", &self.compositor)
+            .field("subcompositor", &self.subcompositor)
+            .field("wl_shell", &self.wl_shell)
+            .finish()
     }
 }
 
@@ -1177,7 +1286,7 @@ pub struct GstGLDisplayX11 {
 impl ::std::fmt::Debug for GstGLDisplayX11 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLDisplayX11 @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1207,14 +1316,14 @@ pub struct GstGLFilter {
 impl ::std::fmt::Debug for GstGLFilter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLFilter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("in_info", &self.in_info)
-         .field("out_info", &self.out_info)
-         .field("in_texture_target", &self.in_texture_target)
-         .field("out_texture_target", &self.out_texture_target)
-         .field("out_caps", &self.out_caps)
-         .field("fbo", &self.fbo)
-         .finish()
+            .field("parent", &self.parent)
+            .field("in_info", &self.in_info)
+            .field("out_info", &self.out_info)
+            .field("in_texture_target", &self.in_texture_target)
+            .field("out_texture_target", &self.out_texture_target)
+            .field("out_caps", &self.out_caps)
+            .field("fbo", &self.fbo)
+            .finish()
     }
 }
 
@@ -1232,7 +1341,7 @@ pub struct GstGLFramebuffer {
 impl ::std::fmt::Debug for GstGLFramebuffer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLFramebuffer @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1246,7 +1355,7 @@ pub struct GstGLMemoryAllocator {
 impl ::std::fmt::Debug for GstGLMemoryAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLMemoryAllocator @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1260,8 +1369,8 @@ pub struct GstGLMemoryPBOAllocator {
 impl ::std::fmt::Debug for GstGLMemoryPBOAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLMemoryPBOAllocator @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -1282,7 +1391,7 @@ pub struct GstGLOverlayCompositor {
 impl ::std::fmt::Debug for GstGLOverlayCompositor {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLOverlayCompositor @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1295,9 +1404,12 @@ pub struct GstGLRenderbufferAllocator {
 
 impl ::std::fmt::Debug for GstGLRenderbufferAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstGLRenderbufferAllocator @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+        f.debug_struct(&format!(
+            "GstGLRenderbufferAllocator @ {:?}",
+            self as *const _
+        ))
+        .field("parent", &self.parent)
+        .finish()
     }
 }
 
@@ -1313,7 +1425,7 @@ pub struct GstGLSLStage {
 impl ::std::fmt::Debug for GstGLSLStage {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLSLStage @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1329,9 +1441,9 @@ pub struct GstGLShader {
 impl ::std::fmt::Debug for GstGLShader {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLShader @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("context", &self.context)
-         .finish()
+            .field("parent", &self.parent)
+            .field("context", &self.context)
+            .finish()
     }
 }
 
@@ -1347,9 +1459,9 @@ pub struct GstGLUpload {
 impl ::std::fmt::Debug for GstGLUpload {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLUpload @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("context", &self.context)
-         .finish()
+            .field("parent", &self.parent)
+            .field("context", &self.context)
+            .finish()
     }
 }
 
@@ -1379,23 +1491,23 @@ pub struct GstGLViewConvert {
 impl ::std::fmt::Debug for GstGLViewConvert {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLViewConvert @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("context", &self.context)
-         .field("shader", &self.shader)
-         .field("input_mode_override", &self.input_mode_override)
-         .field("input_flags_override", &self.input_flags_override)
-         .field("output_mode_override", &self.output_mode_override)
-         .field("output_flags_override", &self.output_flags_override)
-         .field("downmix_mode", &self.downmix_mode)
-         .field("in_info", &self.in_info)
-         .field("out_info", &self.out_info)
-         .field("from_texture_target", &self.from_texture_target)
-         .field("to_texture_target", &self.to_texture_target)
-         .field("caps_passthrough", &self.caps_passthrough)
-         .field("initted", &self.initted)
-         .field("reconfigure", &self.reconfigure)
-         .field("fbo", &self.fbo)
-         .finish()
+            .field("object", &self.object)
+            .field("context", &self.context)
+            .field("shader", &self.shader)
+            .field("input_mode_override", &self.input_mode_override)
+            .field("input_flags_override", &self.input_flags_override)
+            .field("output_mode_override", &self.output_mode_override)
+            .field("output_flags_override", &self.output_flags_override)
+            .field("downmix_mode", &self.downmix_mode)
+            .field("in_info", &self.in_info)
+            .field("out_info", &self.out_info)
+            .field("from_texture_target", &self.from_texture_target)
+            .field("to_texture_target", &self.to_texture_target)
+            .field("caps_passthrough", &self.caps_passthrough)
+            .field("initted", &self.initted)
+            .field("reconfigure", &self.reconfigure)
+            .field("fbo", &self.fbo)
+            .finish()
     }
 }
 
@@ -1425,7 +1537,7 @@ pub struct GstGLWindow {
 impl ::std::fmt::Debug for GstGLWindow {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstGLWindow @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -1447,11 +1559,19 @@ extern "C" {
     // GstGLFormat
     //=========================================================================
     pub fn gst_gl_format_get_type() -> GType;
-    pub fn gst_gl_format_from_video_info(context: *mut GstGLContext, vinfo: *mut gst_video::GstVideoInfo, plane: c_uint) -> GstGLFormat;
+    pub fn gst_gl_format_from_video_info(
+        context: *mut GstGLContext,
+        vinfo: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+    ) -> GstGLFormat;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_gl_format_is_supported(context: *mut GstGLContext, format: GstGLFormat) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_gl_format_type_from_sized_gl_format(format: GstGLFormat, unsized_format: *mut GstGLFormat, gl_type: *mut c_uint);
+    pub fn gst_gl_format_type_from_sized_gl_format(
+        format: GstGLFormat,
+        unsized_format: *mut GstGLFormat,
+        gl_type: *mut c_uint,
+    );
     pub fn gst_gl_format_type_n_bytes(format: c_uint, type_: c_uint) -> c_uint;
 
     //=========================================================================
@@ -1470,8 +1590,15 @@ extern "C" {
     //=========================================================================
     pub fn gst_glsl_version_get_type() -> GType;
     pub fn gst_glsl_version_from_string(string: *const c_char) -> GstGLSLVersion;
-    pub fn gst_glsl_version_profile_from_string(string: *const c_char, version_ret: *mut GstGLSLVersion, profile_ret: *mut GstGLSLProfile) -> gboolean;
-    pub fn gst_glsl_version_profile_to_string(version: GstGLSLVersion, profile: GstGLSLProfile) -> *mut c_char;
+    pub fn gst_glsl_version_profile_from_string(
+        string: *const c_char,
+        version_ret: *mut GstGLSLVersion,
+        profile_ret: *mut GstGLSLProfile,
+    ) -> gboolean;
+    pub fn gst_glsl_version_profile_to_string(
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> *mut c_char;
     pub fn gst_glsl_version_to_string(version: GstGLSLVersion) -> *const c_char;
 
     //=========================================================================
@@ -1485,7 +1612,8 @@ extern "C" {
     pub fn gst_gl_texture_target_get_type() -> GType;
     pub fn gst_gl_texture_target_from_gl(target: c_uint) -> GstGLTextureTarget;
     pub fn gst_gl_texture_target_from_string(str: *const c_char) -> GstGLTextureTarget;
-    pub fn gst_gl_texture_target_to_buffer_pool_option(target: GstGLTextureTarget) -> *const c_char;
+    pub fn gst_gl_texture_target_to_buffer_pool_option(target: GstGLTextureTarget)
+        -> *const c_char;
     pub fn gst_gl_texture_target_to_gl(target: GstGLTextureTarget) -> c_uint;
     pub fn gst_gl_texture_target_to_string(target: GstGLTextureTarget) -> *const c_char;
 
@@ -1535,11 +1663,29 @@ extern "C" {
     // GstGLAllocationParams
     //=========================================================================
     pub fn gst_gl_allocation_params_get_type() -> GType;
-    pub fn gst_gl_allocation_params_copy(src: *mut GstGLAllocationParams) -> *mut GstGLAllocationParams;
-    pub fn gst_gl_allocation_params_copy_data(src: *mut GstGLAllocationParams, dest: *mut GstGLAllocationParams);
+    pub fn gst_gl_allocation_params_copy(
+        src: *mut GstGLAllocationParams,
+    ) -> *mut GstGLAllocationParams;
+    pub fn gst_gl_allocation_params_copy_data(
+        src: *mut GstGLAllocationParams,
+        dest: *mut GstGLAllocationParams,
+    );
     pub fn gst_gl_allocation_params_free(params: *mut GstGLAllocationParams);
     pub fn gst_gl_allocation_params_free_data(params: *mut GstGLAllocationParams);
-    pub fn gst_gl_allocation_params_init(params: *mut GstGLAllocationParams, struct_size: size_t, alloc_flags: c_uint, copy: GstGLAllocationParamsCopyFunc, free: GstGLAllocationParamsFreeFunc, context: *mut GstGLContext, alloc_size: size_t, alloc_params: *mut gst::GstAllocationParams, wrapped_data: gpointer, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> gboolean;
+    pub fn gst_gl_allocation_params_init(
+        params: *mut GstGLAllocationParams,
+        struct_size: size_t,
+        alloc_flags: c_uint,
+        copy: GstGLAllocationParamsCopyFunc,
+        free: GstGLAllocationParamsFreeFunc,
+        context: *mut GstGLContext,
+        alloc_size: size_t,
+        alloc_params: *mut gst::GstAllocationParams,
+        wrapped_data: gpointer,
+        gl_handle: gpointer,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> gboolean;
 
     //=========================================================================
     // GstGLAsyncDebug
@@ -1548,7 +1694,17 @@ extern "C" {
     pub fn gst_gl_async_debug_freeze(ad: *mut GstGLAsyncDebug);
     pub fn gst_gl_async_debug_init(ad: *mut GstGLAsyncDebug);
     pub fn gst_gl_async_debug_output_log_msg(ad: *mut GstGLAsyncDebug);
-    pub fn gst_gl_async_debug_store_log_msg(ad: *mut GstGLAsyncDebug, cat: *mut gst::GstDebugCategory, level: gst::GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, ...);
+    pub fn gst_gl_async_debug_store_log_msg(
+        ad: *mut GstGLAsyncDebug,
+        cat: *mut gst::GstDebugCategory,
+        level: gst::GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        object: *mut gobject::GObject,
+        format: *const c_char,
+        ...
+    );
     //pub fn gst_gl_async_debug_store_log_msg_valist(ad: *mut GstGLAsyncDebug, cat: *mut gst::GstDebugCategory, level: gst::GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, varargs: /*Unimplemented*/va_list);
     pub fn gst_gl_async_debug_thaw(ad: *mut GstGLAsyncDebug);
     pub fn gst_gl_async_debug_unset(ad: *mut GstGLAsyncDebug);
@@ -1559,9 +1715,26 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_base_memory_get_type() -> GType;
     pub fn gst_gl_base_memory_alloc_data(gl_mem: *mut GstGLBaseMemory) -> gboolean;
-    pub fn gst_gl_base_memory_init(mem: *mut GstGLBaseMemory, allocator: *mut gst::GstAllocator, parent: *mut gst::GstMemory, context: *mut GstGLContext, params: *mut gst::GstAllocationParams, size: size_t, user_data: gpointer, notify: glib::GDestroyNotify);
-    pub fn gst_gl_base_memory_memcpy(src: *mut GstGLBaseMemory, dest: *mut GstGLBaseMemory, offset: ssize_t, size: ssize_t) -> gboolean;
-    pub fn gst_gl_base_memory_alloc(allocator: *mut GstGLBaseMemoryAllocator, params: *mut GstGLAllocationParams) -> *mut GstGLBaseMemory;
+    pub fn gst_gl_base_memory_init(
+        mem: *mut GstGLBaseMemory,
+        allocator: *mut gst::GstAllocator,
+        parent: *mut gst::GstMemory,
+        context: *mut GstGLContext,
+        params: *mut gst::GstAllocationParams,
+        size: size_t,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
+    pub fn gst_gl_base_memory_memcpy(
+        src: *mut GstGLBaseMemory,
+        dest: *mut GstGLBaseMemory,
+        offset: ssize_t,
+        size: ssize_t,
+    ) -> gboolean;
+    pub fn gst_gl_base_memory_alloc(
+        allocator: *mut GstGLBaseMemoryAllocator,
+        params: *mut GstGLAllocationParams,
+    ) -> *mut GstGLBaseMemory;
     pub fn gst_gl_base_memory_init_once();
 
     //=========================================================================
@@ -1573,28 +1746,77 @@ extern "C" {
     // GstGLBufferAllocationParams
     //=========================================================================
     pub fn gst_gl_buffer_allocation_params_get_type() -> GType;
-    pub fn gst_gl_buffer_allocation_params_new(context: *mut GstGLContext, alloc_size: size_t, alloc_params: *mut gst::GstAllocationParams, gl_target: c_uint, gl_usage: c_uint) -> *mut GstGLBufferAllocationParams;
+    pub fn gst_gl_buffer_allocation_params_new(
+        context: *mut GstGLContext,
+        alloc_size: size_t,
+        alloc_params: *mut gst::GstAllocationParams,
+        gl_target: c_uint,
+        gl_usage: c_uint,
+    ) -> *mut GstGLBufferAllocationParams;
 
     //=========================================================================
     // GstGLMemory
     //=========================================================================
-    pub fn gst_gl_memory_copy_into(gl_mem: *mut GstGLMemory, tex_id: c_uint, target: GstGLTextureTarget, tex_format: GstGLFormat, width: c_int, height: c_int) -> gboolean;
-    pub fn gst_gl_memory_copy_teximage(src: *mut GstGLMemory, tex_id: c_uint, out_target: GstGLTextureTarget, out_tex_format: GstGLFormat, out_width: c_int, out_height: c_int) -> gboolean;
+    pub fn gst_gl_memory_copy_into(
+        gl_mem: *mut GstGLMemory,
+        tex_id: c_uint,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        width: c_int,
+        height: c_int,
+    ) -> gboolean;
+    pub fn gst_gl_memory_copy_teximage(
+        src: *mut GstGLMemory,
+        tex_id: c_uint,
+        out_target: GstGLTextureTarget,
+        out_tex_format: GstGLFormat,
+        out_width: c_int,
+        out_height: c_int,
+    ) -> gboolean;
     pub fn gst_gl_memory_get_texture_format(gl_mem: *mut GstGLMemory) -> GstGLFormat;
     pub fn gst_gl_memory_get_texture_height(gl_mem: *mut GstGLMemory) -> c_int;
     pub fn gst_gl_memory_get_texture_id(gl_mem: *mut GstGLMemory) -> c_uint;
     pub fn gst_gl_memory_get_texture_target(gl_mem: *mut GstGLMemory) -> GstGLTextureTarget;
     pub fn gst_gl_memory_get_texture_width(gl_mem: *mut GstGLMemory) -> c_int;
-    pub fn gst_gl_memory_init(mem: *mut GstGLMemory, allocator: *mut gst::GstAllocator, parent: *mut gst::GstMemory, context: *mut GstGLContext, target: GstGLTextureTarget, tex_format: GstGLFormat, params: *mut gst::GstAllocationParams, info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_gl_memory_init(
+        mem: *mut GstGLMemory,
+        allocator: *mut gst::GstAllocator,
+        parent: *mut gst::GstMemory,
+        context: *mut GstGLContext,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        params: *mut gst::GstAllocationParams,
+        info: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+        valign: *mut gst_video::GstVideoAlignment,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_gl_memory_read_pixels(gl_mem: *mut GstGLMemory, read_pointer: gpointer) -> gboolean;
     pub fn gst_gl_memory_texsubimage(gl_mem: *mut GstGLMemory, read_pointer: gpointer);
     pub fn gst_gl_memory_init_once();
-    pub fn gst_gl_memory_setup_buffer(allocator: *mut GstGLMemoryAllocator, buffer: *mut gst::GstBuffer, params: *mut GstGLVideoAllocationParams, tex_formats: *mut GstGLFormat, wrapped_data: *mut gpointer, n_wrapped_pointers: size_t) -> gboolean;
+    pub fn gst_gl_memory_setup_buffer(
+        allocator: *mut GstGLMemoryAllocator,
+        buffer: *mut gst::GstBuffer,
+        params: *mut GstGLVideoAllocationParams,
+        tex_formats: *mut GstGLFormat,
+        wrapped_data: *mut gpointer,
+        n_wrapped_pointers: size_t,
+    ) -> gboolean;
 
     //=========================================================================
     // GstGLMemoryPBO
     //=========================================================================
-    pub fn gst_gl_memory_pbo_copy_into_texture(gl_mem: *mut GstGLMemoryPBO, tex_id: c_uint, target: GstGLTextureTarget, tex_format: GstGLFormat, width: c_int, height: c_int, stride: c_int, respecify: gboolean) -> gboolean;
+    pub fn gst_gl_memory_pbo_copy_into_texture(
+        gl_mem: *mut GstGLMemoryPBO,
+        tex_id: c_uint,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        width: c_int,
+        height: c_int,
+        stride: c_int,
+        respecify: gboolean,
+    ) -> gboolean;
     pub fn gst_gl_memory_pbo_download_transfer(gl_mem: *mut GstGLMemoryPBO);
     pub fn gst_gl_memory_pbo_upload_transfer(gl_mem: *mut GstGLMemoryPBO);
     pub fn gst_gl_memory_pbo_init_once();
@@ -1605,12 +1827,23 @@ extern "C" {
     pub fn gst_gl_query_counter(query: *mut GstGLQuery);
     pub fn gst_gl_query_end(query: *mut GstGLQuery);
     pub fn gst_gl_query_free(query: *mut GstGLQuery);
-    pub fn gst_gl_query_init(query: *mut GstGLQuery, context: *mut GstGLContext, query_type: GstGLQueryType);
+    pub fn gst_gl_query_init(
+        query: *mut GstGLQuery,
+        context: *mut GstGLContext,
+        query_type: GstGLQueryType,
+    );
     pub fn gst_gl_query_result(query: *mut GstGLQuery) -> u64;
     pub fn gst_gl_query_start(query: *mut GstGLQuery);
     pub fn gst_gl_query_unset(query: *mut GstGLQuery);
-    pub fn gst_gl_query_local_gl_context(element: *mut gst::GstElement, direction: gst::GstPadDirection, context_ptr: *mut *mut GstGLContext) -> gboolean;
-    pub fn gst_gl_query_new(context: *mut GstGLContext, query_type: GstGLQueryType) -> *mut GstGLQuery;
+    pub fn gst_gl_query_local_gl_context(
+        element: *mut gst::GstElement,
+        direction: gst::GstPadDirection,
+        context_ptr: *mut *mut GstGLContext,
+    ) -> gboolean;
+    pub fn gst_gl_query_new(
+        context: *mut GstGLContext,
+        query_type: GstGLQueryType,
+    ) -> *mut GstGLQuery;
 
     //=========================================================================
     // GstGLRenderbuffer
@@ -1625,13 +1858,31 @@ extern "C" {
     // GstGLRenderbufferAllocationParams
     //=========================================================================
     pub fn gst_gl_renderbuffer_allocation_params_get_type() -> GType;
-    pub fn gst_gl_renderbuffer_allocation_params_new(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, renderbuffer_format: GstGLFormat, width: c_uint, height: c_uint) -> *mut GstGLRenderbufferAllocationParams;
-    pub fn gst_gl_renderbuffer_allocation_params_new_wrapped(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, renderbuffer_format: GstGLFormat, width: c_uint, height: c_uint, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLRenderbufferAllocationParams;
+    pub fn gst_gl_renderbuffer_allocation_params_new(
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        renderbuffer_format: GstGLFormat,
+        width: c_uint,
+        height: c_uint,
+    ) -> *mut GstGLRenderbufferAllocationParams;
+    pub fn gst_gl_renderbuffer_allocation_params_new_wrapped(
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        renderbuffer_format: GstGLFormat,
+        width: c_uint,
+        height: c_uint,
+        gl_handle: gpointer,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstGLRenderbufferAllocationParams;
 
     //=========================================================================
     // GstGLSyncMeta
     //=========================================================================
-    pub fn gst_gl_sync_meta_set_sync_point(sync_meta: *mut GstGLSyncMeta, context: *mut GstGLContext);
+    pub fn gst_gl_sync_meta_set_sync_point(
+        sync_meta: *mut GstGLSyncMeta,
+        context: *mut GstGLContext,
+    );
     pub fn gst_gl_sync_meta_wait(sync_meta: *mut GstGLSyncMeta, context: *mut GstGLContext);
     pub fn gst_gl_sync_meta_wait_cpu(sync_meta: *mut GstGLSyncMeta, context: *mut GstGLContext);
     pub fn gst_gl_sync_meta_get_info() -> *const gst::GstMetaInfo;
@@ -1640,13 +1891,74 @@ extern "C" {
     // GstGLVideoAllocationParams
     //=========================================================================
     pub fn gst_gl_video_allocation_params_get_type() -> GType;
-    pub fn gst_gl_video_allocation_params_new(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat) -> *mut GstGLVideoAllocationParams;
-    pub fn gst_gl_video_allocation_params_new_wrapped_data(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, wrapped_data: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLVideoAllocationParams;
-    pub fn gst_gl_video_allocation_params_new_wrapped_gl_handle(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLVideoAllocationParams;
-    pub fn gst_gl_video_allocation_params_new_wrapped_texture(context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, tex_id: c_uint, user_data: gpointer, notify: glib::GDestroyNotify) -> *mut GstGLVideoAllocationParams;
-    pub fn gst_gl_video_allocation_params_copy_data(src_vid: *mut GstGLVideoAllocationParams, dest_vid: *mut GstGLVideoAllocationParams);
+    pub fn gst_gl_video_allocation_params_new(
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        v_info: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+        valign: *mut gst_video::GstVideoAlignment,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+    ) -> *mut GstGLVideoAllocationParams;
+    pub fn gst_gl_video_allocation_params_new_wrapped_data(
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        v_info: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+        valign: *mut gst_video::GstVideoAlignment,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        wrapped_data: gpointer,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstGLVideoAllocationParams;
+    pub fn gst_gl_video_allocation_params_new_wrapped_gl_handle(
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        v_info: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+        valign: *mut gst_video::GstVideoAlignment,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        gl_handle: gpointer,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstGLVideoAllocationParams;
+    pub fn gst_gl_video_allocation_params_new_wrapped_texture(
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        v_info: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+        valign: *mut gst_video::GstVideoAlignment,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        tex_id: c_uint,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut GstGLVideoAllocationParams;
+    pub fn gst_gl_video_allocation_params_copy_data(
+        src_vid: *mut GstGLVideoAllocationParams,
+        dest_vid: *mut GstGLVideoAllocationParams,
+    );
     pub fn gst_gl_video_allocation_params_free_data(params: *mut GstGLVideoAllocationParams);
-    pub fn gst_gl_video_allocation_params_init_full(params: *mut GstGLVideoAllocationParams, struct_size: size_t, alloc_flags: c_uint, copy: GstGLAllocationParamsCopyFunc, free: GstGLAllocationParamsFreeFunc, context: *mut GstGLContext, alloc_params: *mut gst::GstAllocationParams, v_info: *mut gst_video::GstVideoInfo, plane: c_uint, valign: *mut gst_video::GstVideoAlignment, target: GstGLTextureTarget, tex_format: GstGLFormat, wrapped_data: gpointer, gl_handle: gpointer, user_data: gpointer, notify: glib::GDestroyNotify) -> gboolean;
+    pub fn gst_gl_video_allocation_params_init_full(
+        params: *mut GstGLVideoAllocationParams,
+        struct_size: size_t,
+        alloc_flags: c_uint,
+        copy: GstGLAllocationParamsCopyFunc,
+        free: GstGLAllocationParamsFreeFunc,
+        context: *mut GstGLContext,
+        alloc_params: *mut gst::GstAllocationParams,
+        v_info: *mut gst_video::GstVideoInfo,
+        plane: c_uint,
+        valign: *mut gst_video::GstVideoAlignment,
+        target: GstGLTextureTarget,
+        tex_format: GstGLFormat,
+        wrapped_data: gpointer,
+        gl_handle: gpointer,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> gboolean;
 
     //=========================================================================
     // GstGLBaseFilter
@@ -1676,69 +1988,174 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_color_convert_get_type() -> GType;
     pub fn gst_gl_color_convert_new(context: *mut GstGLContext) -> *mut GstGLColorConvert;
-    pub fn gst_gl_color_convert_fixate_caps(context: *mut GstGLContext, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, other: *mut gst::GstCaps) -> *mut gst::GstCaps;
-    pub fn gst_gl_color_convert_transform_caps(context: *mut GstGLContext, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
-    pub fn gst_gl_color_convert_decide_allocation(convert: *mut GstGLColorConvert, query: *mut gst::GstQuery) -> gboolean;
-    pub fn gst_gl_color_convert_perform(convert: *mut GstGLColorConvert, inbuf: *mut gst::GstBuffer) -> *mut gst::GstBuffer;
-    pub fn gst_gl_color_convert_set_caps(convert: *mut GstGLColorConvert, in_caps: *mut gst::GstCaps, out_caps: *mut gst::GstCaps) -> gboolean;
+    pub fn gst_gl_color_convert_fixate_caps(
+        context: *mut GstGLContext,
+        direction: gst::GstPadDirection,
+        caps: *mut gst::GstCaps,
+        other: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_gl_color_convert_transform_caps(
+        context: *mut GstGLContext,
+        direction: gst::GstPadDirection,
+        caps: *mut gst::GstCaps,
+        filter: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_gl_color_convert_decide_allocation(
+        convert: *mut GstGLColorConvert,
+        query: *mut gst::GstQuery,
+    ) -> gboolean;
+    pub fn gst_gl_color_convert_perform(
+        convert: *mut GstGLColorConvert,
+        inbuf: *mut gst::GstBuffer,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_gl_color_convert_set_caps(
+        convert: *mut GstGLColorConvert,
+        in_caps: *mut gst::GstCaps,
+        out_caps: *mut gst::GstCaps,
+    ) -> gboolean;
 
     //=========================================================================
     // GstGLContext
     //=========================================================================
     pub fn gst_gl_context_get_type() -> GType;
     pub fn gst_gl_context_new(display: *mut GstGLDisplay) -> *mut GstGLContext;
-    pub fn gst_gl_context_new_wrapped(display: *mut GstGLDisplay, handle: uintptr_t, context_type: GstGLPlatform, available_apis: GstGLAPI) -> *mut GstGLContext;
-    pub fn gst_gl_context_default_get_proc_address(gl_api: GstGLAPI, name: *const c_char) -> gpointer;
+    pub fn gst_gl_context_new_wrapped(
+        display: *mut GstGLDisplay,
+        handle: uintptr_t,
+        context_type: GstGLPlatform,
+        available_apis: GstGLAPI,
+    ) -> *mut GstGLContext;
+    pub fn gst_gl_context_default_get_proc_address(
+        gl_api: GstGLAPI,
+        name: *const c_char,
+    ) -> gpointer;
     pub fn gst_gl_context_get_current() -> *mut GstGLContext;
-    pub fn gst_gl_context_get_current_gl_api(platform: GstGLPlatform, major: *mut c_uint, minor: *mut c_uint) -> GstGLAPI;
+    pub fn gst_gl_context_get_current_gl_api(
+        platform: GstGLPlatform,
+        major: *mut c_uint,
+        minor: *mut c_uint,
+    ) -> GstGLAPI;
     pub fn gst_gl_context_get_current_gl_context(context_type: GstGLPlatform) -> uintptr_t;
-    pub fn gst_gl_context_get_proc_address_with_platform(context_type: GstGLPlatform, gl_api: GstGLAPI, name: *const c_char) -> gpointer;
+    pub fn gst_gl_context_get_proc_address_with_platform(
+        context_type: GstGLPlatform,
+        gl_api: GstGLAPI,
+        name: *const c_char,
+    ) -> gpointer;
     pub fn gst_gl_context_activate(context: *mut GstGLContext, activate: gboolean) -> gboolean;
-    pub fn gst_gl_context_can_share(context: *mut GstGLContext, other_context: *mut GstGLContext) -> gboolean;
-    pub fn gst_gl_context_check_feature(context: *mut GstGLContext, feature: *const c_char) -> gboolean;
-    pub fn gst_gl_context_check_framebuffer_status(context: *mut GstGLContext, fbo_target: c_uint) -> gboolean;
-    pub fn gst_gl_context_check_gl_version(context: *mut GstGLContext, api: GstGLAPI, maj: c_int, min: c_int) -> gboolean;
+    pub fn gst_gl_context_can_share(
+        context: *mut GstGLContext,
+        other_context: *mut GstGLContext,
+    ) -> gboolean;
+    pub fn gst_gl_context_check_feature(
+        context: *mut GstGLContext,
+        feature: *const c_char,
+    ) -> gboolean;
+    pub fn gst_gl_context_check_framebuffer_status(
+        context: *mut GstGLContext,
+        fbo_target: c_uint,
+    ) -> gboolean;
+    pub fn gst_gl_context_check_gl_version(
+        context: *mut GstGLContext,
+        api: GstGLAPI,
+        maj: c_int,
+        min: c_int,
+    ) -> gboolean;
     pub fn gst_gl_context_clear_framebuffer(context: *mut GstGLContext);
     pub fn gst_gl_context_clear_shader(context: *mut GstGLContext);
-    pub fn gst_gl_context_create(context: *mut GstGLContext, other_context: *mut GstGLContext, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_gl_context_create(
+        context: *mut GstGLContext,
+        other_context: *mut GstGLContext,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_gl_context_destroy(context: *mut GstGLContext);
-    pub fn gst_gl_context_fill_info(context: *mut GstGLContext, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_gl_context_fill_info(
+        context: *mut GstGLContext,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_gl_context_get_display(context: *mut GstGLContext) -> *mut GstGLDisplay;
     pub fn gst_gl_context_get_gl_api(context: *mut GstGLContext) -> GstGLAPI;
     pub fn gst_gl_context_get_gl_context(context: *mut GstGLContext) -> uintptr_t;
     pub fn gst_gl_context_get_gl_platform(context: *mut GstGLContext) -> GstGLPlatform;
-    pub fn gst_gl_context_get_gl_platform_version(context: *mut GstGLContext, major: *mut c_int, minor: *mut c_int);
-    pub fn gst_gl_context_get_gl_version(context: *mut GstGLContext, maj: *mut c_int, min: *mut c_int);
-    pub fn gst_gl_context_get_proc_address(context: *mut GstGLContext, name: *const c_char) -> gpointer;
+    pub fn gst_gl_context_get_gl_platform_version(
+        context: *mut GstGLContext,
+        major: *mut c_int,
+        minor: *mut c_int,
+    );
+    pub fn gst_gl_context_get_gl_version(
+        context: *mut GstGLContext,
+        maj: *mut c_int,
+        min: *mut c_int,
+    );
+    pub fn gst_gl_context_get_proc_address(
+        context: *mut GstGLContext,
+        name: *const c_char,
+    ) -> gpointer;
     pub fn gst_gl_context_get_thread(context: *mut GstGLContext) -> *mut glib::GThread;
     pub fn gst_gl_context_get_window(context: *mut GstGLContext) -> *mut GstGLWindow;
     pub fn gst_gl_context_is_shared(context: *mut GstGLContext) -> gboolean;
     pub fn gst_gl_context_set_shared_with(context: *mut GstGLContext, share: *mut GstGLContext);
-    pub fn gst_gl_context_set_window(context: *mut GstGLContext, window: *mut GstGLWindow) -> gboolean;
-    pub fn gst_gl_context_supports_glsl_profile_version(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> gboolean;
+    pub fn gst_gl_context_set_window(
+        context: *mut GstGLContext,
+        window: *mut GstGLWindow,
+    ) -> gboolean;
+    pub fn gst_gl_context_supports_glsl_profile_version(
+        context: *mut GstGLContext,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_gl_context_supports_precision(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> gboolean;
+    pub fn gst_gl_context_supports_precision(
+        context: *mut GstGLContext,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_gl_context_supports_precision_highp(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> gboolean;
+    pub fn gst_gl_context_supports_precision_highp(
+        context: *mut GstGLContext,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> gboolean;
     pub fn gst_gl_context_swap_buffers(context: *mut GstGLContext);
-    pub fn gst_gl_context_thread_add(context: *mut GstGLContext, func: GstGLContextThreadFunc, data: gpointer);
+    pub fn gst_gl_context_thread_add(
+        context: *mut GstGLContext,
+        func: GstGLContextThreadFunc,
+        data: gpointer,
+    );
 
     //=========================================================================
     // GstGLDisplay
     //=========================================================================
     pub fn gst_gl_display_get_type() -> GType;
     pub fn gst_gl_display_new() -> *mut GstGLDisplay;
-    pub fn gst_gl_display_add_context(display: *mut GstGLDisplay, context: *mut GstGLContext) -> gboolean;
-    pub fn gst_gl_display_create_context(display: *mut GstGLDisplay, other_context: *mut GstGLContext, p_context: *mut *mut GstGLContext, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_gl_display_add_context(
+        display: *mut GstGLDisplay,
+        context: *mut GstGLContext,
+    ) -> gboolean;
+    pub fn gst_gl_display_create_context(
+        display: *mut GstGLDisplay,
+        other_context: *mut GstGLContext,
+        p_context: *mut *mut GstGLContext,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_gl_display_create_window(display: *mut GstGLDisplay) -> *mut GstGLWindow;
     pub fn gst_gl_display_filter_gl_api(display: *mut GstGLDisplay, gl_api: GstGLAPI);
-    pub fn gst_gl_display_find_window(display: *mut GstGLDisplay, data: gpointer, compare_func: glib::GCompareFunc) -> *mut GstGLWindow;
+    pub fn gst_gl_display_find_window(
+        display: *mut GstGLDisplay,
+        data: gpointer,
+        compare_func: glib::GCompareFunc,
+    ) -> *mut GstGLWindow;
     pub fn gst_gl_display_get_gl_api(display: *mut GstGLDisplay) -> GstGLAPI;
     pub fn gst_gl_display_get_gl_api_unlocked(display: *mut GstGLDisplay) -> GstGLAPI;
-    pub fn gst_gl_display_get_gl_context_for_thread(display: *mut GstGLDisplay, thread: *mut glib::GThread) -> *mut GstGLContext;
+    pub fn gst_gl_display_get_gl_context_for_thread(
+        display: *mut GstGLDisplay,
+        thread: *mut glib::GThread,
+    ) -> *mut GstGLContext;
     pub fn gst_gl_display_get_handle(display: *mut GstGLDisplay) -> uintptr_t;
     pub fn gst_gl_display_get_handle_type(display: *mut GstGLDisplay) -> GstGLDisplayType;
-    pub fn gst_gl_display_remove_window(display: *mut GstGLDisplay, window: *mut GstGLWindow) -> gboolean;
+    pub fn gst_gl_display_remove_window(
+        display: *mut GstGLDisplay,
+        window: *mut GstGLWindow,
+    ) -> gboolean;
 
     //=========================================================================
     // GstGLDisplayEGL
@@ -1750,7 +2167,10 @@ extern "C" {
     #[cfg(any(feature = "egl", feature = "dox"))]
     pub fn gst_gl_display_egl_new_with_egl_display(display: gpointer) -> *mut GstGLDisplayEGL;
     #[cfg(any(feature = "egl", feature = "dox"))]
-    pub fn gst_gl_display_egl_get_from_native(type_: GstGLDisplayType, display: uintptr_t) -> gpointer;
+    pub fn gst_gl_display_egl_get_from_native(
+        type_: GstGLDisplayType,
+        display: uintptr_t,
+    ) -> gpointer;
 
     //=========================================================================
     // GstGLDisplayWayland
@@ -1778,27 +2198,61 @@ extern "C" {
     pub fn gst_gl_filter_get_type() -> GType;
     pub fn gst_gl_filter_add_rgba_pad_templates(klass: *mut GstGLFilterClass);
     pub fn gst_gl_filter_draw_fullscreen_quad(filter: *mut GstGLFilter);
-    pub fn gst_gl_filter_filter_texture(filter: *mut GstGLFilter, inbuf: *mut gst::GstBuffer, outbuf: *mut gst::GstBuffer) -> gboolean;
-    pub fn gst_gl_filter_render_to_target(filter: *mut GstGLFilter, input: *mut GstGLMemory, output: *mut GstGLMemory, func: GstGLFilterRenderFunc, data: gpointer) -> gboolean;
-    pub fn gst_gl_filter_render_to_target_with_shader(filter: *mut GstGLFilter, input: *mut GstGLMemory, output: *mut GstGLMemory, shader: *mut GstGLShader);
+    pub fn gst_gl_filter_filter_texture(
+        filter: *mut GstGLFilter,
+        inbuf: *mut gst::GstBuffer,
+        outbuf: *mut gst::GstBuffer,
+    ) -> gboolean;
+    pub fn gst_gl_filter_render_to_target(
+        filter: *mut GstGLFilter,
+        input: *mut GstGLMemory,
+        output: *mut GstGLMemory,
+        func: GstGLFilterRenderFunc,
+        data: gpointer,
+    ) -> gboolean;
+    pub fn gst_gl_filter_render_to_target_with_shader(
+        filter: *mut GstGLFilter,
+        input: *mut GstGLMemory,
+        output: *mut GstGLMemory,
+        shader: *mut GstGLShader,
+    );
 
     //=========================================================================
     // GstGLFramebuffer
     //=========================================================================
     pub fn gst_gl_framebuffer_get_type() -> GType;
     pub fn gst_gl_framebuffer_new(context: *mut GstGLContext) -> *mut GstGLFramebuffer;
-    pub fn gst_gl_framebuffer_new_with_default_depth(context: *mut GstGLContext, width: c_uint, height: c_uint) -> *mut GstGLFramebuffer;
-    pub fn gst_gl_framebuffer_attach(fb: *mut GstGLFramebuffer, attachment_point: c_uint, mem: *mut GstGLBaseMemory);
+    pub fn gst_gl_framebuffer_new_with_default_depth(
+        context: *mut GstGLContext,
+        width: c_uint,
+        height: c_uint,
+    ) -> *mut GstGLFramebuffer;
+    pub fn gst_gl_framebuffer_attach(
+        fb: *mut GstGLFramebuffer,
+        attachment_point: c_uint,
+        mem: *mut GstGLBaseMemory,
+    );
     pub fn gst_gl_framebuffer_bind(fb: *mut GstGLFramebuffer);
-    pub fn gst_gl_framebuffer_draw_to_texture(fb: *mut GstGLFramebuffer, mem: *mut GstGLMemory, func: GstGLFramebufferFunc, user_data: gpointer) -> gboolean;
-    pub fn gst_gl_framebuffer_get_effective_dimensions(fb: *mut GstGLFramebuffer, width: *mut c_uint, height: *mut c_uint);
+    pub fn gst_gl_framebuffer_draw_to_texture(
+        fb: *mut GstGLFramebuffer,
+        mem: *mut GstGLMemory,
+        func: GstGLFramebufferFunc,
+        user_data: gpointer,
+    ) -> gboolean;
+    pub fn gst_gl_framebuffer_get_effective_dimensions(
+        fb: *mut GstGLFramebuffer,
+        width: *mut c_uint,
+        height: *mut c_uint,
+    );
     pub fn gst_gl_framebuffer_get_id(fb: *mut GstGLFramebuffer) -> c_uint;
 
     //=========================================================================
     // GstGLMemoryAllocator
     //=========================================================================
     pub fn gst_gl_memory_allocator_get_type() -> GType;
-    pub fn gst_gl_memory_allocator_get_default(context: *mut GstGLContext) -> *mut GstGLMemoryAllocator;
+    pub fn gst_gl_memory_allocator_get_default(
+        context: *mut GstGLContext,
+    ) -> *mut GstGLMemoryAllocator;
 
     //=========================================================================
     // GstGLMemoryPBOAllocator
@@ -1809,11 +2263,15 @@ extern "C" {
     // GstGLOverlayCompositor
     //=========================================================================
     pub fn gst_gl_overlay_compositor_get_type() -> GType;
-    pub fn gst_gl_overlay_compositor_new(context: *mut GstGLContext) -> *mut GstGLOverlayCompositor;
+    pub fn gst_gl_overlay_compositor_new(context: *mut GstGLContext)
+        -> *mut GstGLOverlayCompositor;
     pub fn gst_gl_overlay_compositor_add_caps(caps: *mut gst::GstCaps) -> *mut gst::GstCaps;
     pub fn gst_gl_overlay_compositor_draw_overlays(compositor: *mut GstGLOverlayCompositor);
     pub fn gst_gl_overlay_compositor_free_overlays(compositor: *mut GstGLOverlayCompositor);
-    pub fn gst_gl_overlay_compositor_upload_overlays(compositor: *mut GstGLOverlayCompositor, buf: *mut gst::GstBuffer);
+    pub fn gst_gl_overlay_compositor_upload_overlays(
+        compositor: *mut GstGLOverlayCompositor,
+        buf: *mut gst::GstBuffer,
+    );
 
     //=========================================================================
     // GstGLRenderbufferAllocator
@@ -1827,67 +2285,268 @@ extern "C" {
     pub fn gst_glsl_stage_new(context: *mut GstGLContext, type_: c_uint) -> *mut GstGLSLStage;
     pub fn gst_glsl_stage_new_default_fragment(context: *mut GstGLContext) -> *mut GstGLSLStage;
     pub fn gst_glsl_stage_new_default_vertex(context: *mut GstGLContext) -> *mut GstGLSLStage;
-    pub fn gst_glsl_stage_new_with_string(context: *mut GstGLContext, type_: c_uint, version: GstGLSLVersion, profile: GstGLSLProfile, str: *const c_char) -> *mut GstGLSLStage;
-    pub fn gst_glsl_stage_new_with_strings(context: *mut GstGLContext, type_: c_uint, version: GstGLSLVersion, profile: GstGLSLProfile, n_strings: c_int, str: *mut *const c_char) -> *mut GstGLSLStage;
-    pub fn gst_glsl_stage_compile(stage: *mut GstGLSLStage, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_glsl_stage_new_with_string(
+        context: *mut GstGLContext,
+        type_: c_uint,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+        str: *const c_char,
+    ) -> *mut GstGLSLStage;
+    pub fn gst_glsl_stage_new_with_strings(
+        context: *mut GstGLContext,
+        type_: c_uint,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+        n_strings: c_int,
+        str: *mut *const c_char,
+    ) -> *mut GstGLSLStage;
+    pub fn gst_glsl_stage_compile(
+        stage: *mut GstGLSLStage,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_glsl_stage_get_handle(stage: *mut GstGLSLStage) -> c_uint;
     pub fn gst_glsl_stage_get_profile(stage: *mut GstGLSLStage) -> GstGLSLProfile;
     pub fn gst_glsl_stage_get_shader_type(stage: *mut GstGLSLStage) -> c_uint;
     pub fn gst_glsl_stage_get_version(stage: *mut GstGLSLStage) -> GstGLSLVersion;
-    pub fn gst_glsl_stage_set_strings(stage: *mut GstGLSLStage, version: GstGLSLVersion, profile: GstGLSLProfile, n_strings: c_int, str: *mut *const c_char) -> gboolean;
+    pub fn gst_glsl_stage_set_strings(
+        stage: *mut GstGLSLStage,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+        n_strings: c_int,
+        str: *mut *const c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GstGLShader
     //=========================================================================
     pub fn gst_gl_shader_get_type() -> GType;
     pub fn gst_gl_shader_new(context: *mut GstGLContext) -> *mut GstGLShader;
-    pub fn gst_gl_shader_new_default(context: *mut GstGLContext, error: *mut *mut glib::GError) -> *mut GstGLShader;
-    pub fn gst_gl_shader_new_link_with_stages(context: *mut GstGLContext, error: *mut *mut glib::GError, ...) -> *mut GstGLShader;
-    pub fn gst_gl_shader_new_with_stages(context: *mut GstGLContext, error: *mut *mut glib::GError, ...) -> *mut GstGLShader;
+    pub fn gst_gl_shader_new_default(
+        context: *mut GstGLContext,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstGLShader;
+    pub fn gst_gl_shader_new_link_with_stages(
+        context: *mut GstGLContext,
+        error: *mut *mut glib::GError,
+        ...
+    ) -> *mut GstGLShader;
+    pub fn gst_gl_shader_new_with_stages(
+        context: *mut GstGLContext,
+        error: *mut *mut glib::GError,
+        ...
+    ) -> *mut GstGLShader;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_gl_shader_string_fragment_external_oes_get_default(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> *mut c_char;
+    pub fn gst_gl_shader_string_fragment_external_oes_get_default(
+        context: *mut GstGLContext,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> *mut c_char;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_gl_shader_string_fragment_get_default(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> *mut c_char;
+    pub fn gst_gl_shader_string_fragment_get_default(
+        context: *mut GstGLContext,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> *mut c_char;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_gl_shader_string_get_highest_precision(context: *mut GstGLContext, version: GstGLSLVersion, profile: GstGLSLProfile) -> *const c_char;
+    pub fn gst_gl_shader_string_get_highest_precision(
+        context: *mut GstGLContext,
+        version: GstGLSLVersion,
+        profile: GstGLSLProfile,
+    ) -> *const c_char;
     pub fn gst_gl_shader_attach(shader: *mut GstGLShader, stage: *mut GstGLSLStage) -> gboolean;
-    pub fn gst_gl_shader_attach_unlocked(shader: *mut GstGLShader, stage: *mut GstGLSLStage) -> gboolean;
-    pub fn gst_gl_shader_bind_attribute_location(shader: *mut GstGLShader, index: c_uint, name: *const c_char);
-    pub fn gst_gl_shader_bind_frag_data_location(shader: *mut GstGLShader, index: c_uint, name: *const c_char);
-    pub fn gst_gl_shader_compile_attach_stage(shader: *mut GstGLShader, stage: *mut GstGLSLStage, error: *mut *mut glib::GError) -> gboolean;
+    pub fn gst_gl_shader_attach_unlocked(
+        shader: *mut GstGLShader,
+        stage: *mut GstGLSLStage,
+    ) -> gboolean;
+    pub fn gst_gl_shader_bind_attribute_location(
+        shader: *mut GstGLShader,
+        index: c_uint,
+        name: *const c_char,
+    );
+    pub fn gst_gl_shader_bind_frag_data_location(
+        shader: *mut GstGLShader,
+        index: c_uint,
+        name: *const c_char,
+    );
+    pub fn gst_gl_shader_compile_attach_stage(
+        shader: *mut GstGLShader,
+        stage: *mut GstGLSLStage,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
     pub fn gst_gl_shader_detach(shader: *mut GstGLShader, stage: *mut GstGLSLStage);
     pub fn gst_gl_shader_detach_unlocked(shader: *mut GstGLShader, stage: *mut GstGLSLStage);
-    pub fn gst_gl_shader_get_attribute_location(shader: *mut GstGLShader, name: *const c_char) -> c_int;
+    pub fn gst_gl_shader_get_attribute_location(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+    ) -> c_int;
     pub fn gst_gl_shader_get_program_handle(shader: *mut GstGLShader) -> c_int;
     pub fn gst_gl_shader_is_linked(shader: *mut GstGLShader) -> gboolean;
     pub fn gst_gl_shader_link(shader: *mut GstGLShader, error: *mut *mut glib::GError) -> gboolean;
     pub fn gst_gl_shader_release(shader: *mut GstGLShader);
     pub fn gst_gl_shader_release_unlocked(shader: *mut GstGLShader);
-    pub fn gst_gl_shader_set_uniform_1f(shader: *mut GstGLShader, name: *const c_char, value: c_float);
-    pub fn gst_gl_shader_set_uniform_1fv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_1i(shader: *mut GstGLShader, name: *const c_char, value: c_int);
-    pub fn gst_gl_shader_set_uniform_1iv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_int);
-    pub fn gst_gl_shader_set_uniform_2f(shader: *mut GstGLShader, name: *const c_char, v0: c_float, v1: c_float);
-    pub fn gst_gl_shader_set_uniform_2fv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_2i(shader: *mut GstGLShader, name: *const c_char, v0: c_int, v1: c_int);
-    pub fn gst_gl_shader_set_uniform_2iv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_int);
-    pub fn gst_gl_shader_set_uniform_3f(shader: *mut GstGLShader, name: *const c_char, v0: c_float, v1: c_float, v2: c_float);
-    pub fn gst_gl_shader_set_uniform_3fv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_3i(shader: *mut GstGLShader, name: *const c_char, v0: c_int, v1: c_int, v2: c_int);
-    pub fn gst_gl_shader_set_uniform_3iv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_int);
-    pub fn gst_gl_shader_set_uniform_4f(shader: *mut GstGLShader, name: *const c_char, v0: c_float, v1: c_float, v2: c_float, v3: c_float);
-    pub fn gst_gl_shader_set_uniform_4fv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_4i(shader: *mut GstGLShader, name: *const c_char, v0: c_int, v1: c_int, v2: c_int, v3: c_int);
-    pub fn gst_gl_shader_set_uniform_4iv(shader: *mut GstGLShader, name: *const c_char, count: c_uint, value: *const c_int);
-    pub fn gst_gl_shader_set_uniform_matrix_2fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_2x3fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_2x4fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_3fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_3x2fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_3x4fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_4fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_4x2fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
-    pub fn gst_gl_shader_set_uniform_matrix_4x3fv(shader: *mut GstGLShader, name: *const c_char, count: c_int, transpose: gboolean, value: *const c_float);
+    pub fn gst_gl_shader_set_uniform_1f(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        value: c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_1fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_1i(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        value: c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_1iv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_2f(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        v0: c_float,
+        v1: c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_2fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_2i(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        v0: c_int,
+        v1: c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_2iv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_3f(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        v0: c_float,
+        v1: c_float,
+        v2: c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_3fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_3i(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        v0: c_int,
+        v1: c_int,
+        v2: c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_3iv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_4f(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        v0: c_float,
+        v1: c_float,
+        v2: c_float,
+        v3: c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_4fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_4i(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        v0: c_int,
+        v1: c_int,
+        v2: c_int,
+        v3: c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_4iv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_uint,
+        value: *const c_int,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_2fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_2x3fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_2x4fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_3fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_3x2fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_3x4fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_4fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_4x2fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
+    pub fn gst_gl_shader_set_uniform_matrix_4x3fv(
+        shader: *mut GstGLShader,
+        name: *const c_char,
+        count: c_int,
+        transpose: gboolean,
+        value: *const c_float,
+    );
     pub fn gst_gl_shader_use(shader: *mut GstGLShader);
 
     //=========================================================================
@@ -1896,26 +2555,75 @@ extern "C" {
     pub fn gst_gl_upload_get_type() -> GType;
     pub fn gst_gl_upload_new(context: *mut GstGLContext) -> *mut GstGLUpload;
     pub fn gst_gl_upload_get_input_template_caps() -> *mut gst::GstCaps;
-    pub fn gst_gl_upload_get_caps(upload: *mut GstGLUpload, in_caps: *mut *mut gst::GstCaps, out_caps: *mut *mut gst::GstCaps);
-    pub fn gst_gl_upload_perform_with_buffer(upload: *mut GstGLUpload, buffer: *mut gst::GstBuffer, outbuf_ptr: *mut *mut gst::GstBuffer) -> GstGLUploadReturn;
-    pub fn gst_gl_upload_propose_allocation(upload: *mut GstGLUpload, decide_query: *mut gst::GstQuery, query: *mut gst::GstQuery);
-    pub fn gst_gl_upload_set_caps(upload: *mut GstGLUpload, in_caps: *mut gst::GstCaps, out_caps: *mut gst::GstCaps) -> gboolean;
+    pub fn gst_gl_upload_get_caps(
+        upload: *mut GstGLUpload,
+        in_caps: *mut *mut gst::GstCaps,
+        out_caps: *mut *mut gst::GstCaps,
+    );
+    pub fn gst_gl_upload_perform_with_buffer(
+        upload: *mut GstGLUpload,
+        buffer: *mut gst::GstBuffer,
+        outbuf_ptr: *mut *mut gst::GstBuffer,
+    ) -> GstGLUploadReturn;
+    pub fn gst_gl_upload_propose_allocation(
+        upload: *mut GstGLUpload,
+        decide_query: *mut gst::GstQuery,
+        query: *mut gst::GstQuery,
+    );
+    pub fn gst_gl_upload_set_caps(
+        upload: *mut GstGLUpload,
+        in_caps: *mut gst::GstCaps,
+        out_caps: *mut gst::GstCaps,
+    ) -> gboolean;
     pub fn gst_gl_upload_set_context(upload: *mut GstGLUpload, context: *mut GstGLContext);
-    pub fn gst_gl_upload_transform_caps(upload: *mut GstGLUpload, context: *mut GstGLContext, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
+    pub fn gst_gl_upload_transform_caps(
+        upload: *mut GstGLUpload,
+        context: *mut GstGLContext,
+        direction: gst::GstPadDirection,
+        caps: *mut gst::GstCaps,
+        filter: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
 
     //=========================================================================
     // GstGLViewConvert
     //=========================================================================
     pub fn gst_gl_view_convert_get_type() -> GType;
     pub fn gst_gl_view_convert_new() -> *mut GstGLViewConvert;
-    pub fn gst_gl_view_convert_fixate_caps(viewconvert: *mut GstGLViewConvert, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, othercaps: *mut gst::GstCaps) -> *mut gst::GstCaps;
-    pub fn gst_gl_view_convert_get_output(viewconvert: *mut GstGLViewConvert, outbuf_ptr: *mut *mut gst::GstBuffer) -> gst::GstFlowReturn;
-    pub fn gst_gl_view_convert_perform(viewconvert: *mut GstGLViewConvert, inbuf: *mut gst::GstBuffer) -> *mut gst::GstBuffer;
+    pub fn gst_gl_view_convert_fixate_caps(
+        viewconvert: *mut GstGLViewConvert,
+        direction: gst::GstPadDirection,
+        caps: *mut gst::GstCaps,
+        othercaps: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_gl_view_convert_get_output(
+        viewconvert: *mut GstGLViewConvert,
+        outbuf_ptr: *mut *mut gst::GstBuffer,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_gl_view_convert_perform(
+        viewconvert: *mut GstGLViewConvert,
+        inbuf: *mut gst::GstBuffer,
+    ) -> *mut gst::GstBuffer;
     pub fn gst_gl_view_convert_reset(viewconvert: *mut GstGLViewConvert);
-    pub fn gst_gl_view_convert_set_caps(viewconvert: *mut GstGLViewConvert, in_caps: *mut gst::GstCaps, out_caps: *mut gst::GstCaps) -> gboolean;
-    pub fn gst_gl_view_convert_set_context(viewconvert: *mut GstGLViewConvert, context: *mut GstGLContext);
-    pub fn gst_gl_view_convert_submit_input_buffer(viewconvert: *mut GstGLViewConvert, is_discont: gboolean, input: *mut gst::GstBuffer) -> gst::GstFlowReturn;
-    pub fn gst_gl_view_convert_transform_caps(viewconvert: *mut GstGLViewConvert, direction: gst::GstPadDirection, caps: *mut gst::GstCaps, filter: *mut gst::GstCaps) -> *mut gst::GstCaps;
+    pub fn gst_gl_view_convert_set_caps(
+        viewconvert: *mut GstGLViewConvert,
+        in_caps: *mut gst::GstCaps,
+        out_caps: *mut gst::GstCaps,
+    ) -> gboolean;
+    pub fn gst_gl_view_convert_set_context(
+        viewconvert: *mut GstGLViewConvert,
+        context: *mut GstGLContext,
+    );
+    pub fn gst_gl_view_convert_submit_input_buffer(
+        viewconvert: *mut GstGLViewConvert,
+        is_discont: gboolean,
+        input: *mut gst::GstBuffer,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_gl_view_convert_transform_caps(
+        viewconvert: *mut GstGLViewConvert,
+        direction: gst::GstPadDirection,
+        caps: *mut gst::GstCaps,
+        filter: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
 
     //=========================================================================
     // GstGLWindow
@@ -1927,50 +2635,155 @@ extern "C" {
     pub fn gst_gl_window_draw(window: *mut GstGLWindow);
     pub fn gst_gl_window_get_context(window: *mut GstGLWindow) -> *mut GstGLContext;
     pub fn gst_gl_window_get_display(window: *mut GstGLWindow) -> uintptr_t;
-    pub fn gst_gl_window_get_surface_dimensions(window: *mut GstGLWindow, width: *mut c_uint, height: *mut c_uint);
+    pub fn gst_gl_window_get_surface_dimensions(
+        window: *mut GstGLWindow,
+        width: *mut c_uint,
+        height: *mut c_uint,
+    );
     pub fn gst_gl_window_get_window_handle(window: *mut GstGLWindow) -> uintptr_t;
     pub fn gst_gl_window_handle_events(window: *mut GstGLWindow, handle_events: gboolean);
     pub fn gst_gl_window_queue_resize(window: *mut GstGLWindow);
     pub fn gst_gl_window_quit(window: *mut GstGLWindow);
     pub fn gst_gl_window_resize(window: *mut GstGLWindow, width: c_uint, height: c_uint);
     pub fn gst_gl_window_run(window: *mut GstGLWindow);
-    pub fn gst_gl_window_send_key_event(window: *mut GstGLWindow, event_type: *const c_char, key_str: *const c_char);
-    pub fn gst_gl_window_send_message(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer);
-    pub fn gst_gl_window_send_message_async(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer, destroy: glib::GDestroyNotify);
-    pub fn gst_gl_window_send_mouse_event(window: *mut GstGLWindow, event_type: *const c_char, button: c_int, posx: c_double, posy: c_double);
-    pub fn gst_gl_window_set_close_callback(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer, destroy_notify: glib::GDestroyNotify);
-    pub fn gst_gl_window_set_draw_callback(window: *mut GstGLWindow, callback: GstGLWindowCB, data: gpointer, destroy_notify: glib::GDestroyNotify);
+    pub fn gst_gl_window_send_key_event(
+        window: *mut GstGLWindow,
+        event_type: *const c_char,
+        key_str: *const c_char,
+    );
+    pub fn gst_gl_window_send_message(
+        window: *mut GstGLWindow,
+        callback: GstGLWindowCB,
+        data: gpointer,
+    );
+    pub fn gst_gl_window_send_message_async(
+        window: *mut GstGLWindow,
+        callback: GstGLWindowCB,
+        data: gpointer,
+        destroy: glib::GDestroyNotify,
+    );
+    pub fn gst_gl_window_send_mouse_event(
+        window: *mut GstGLWindow,
+        event_type: *const c_char,
+        button: c_int,
+        posx: c_double,
+        posy: c_double,
+    );
+    pub fn gst_gl_window_set_close_callback(
+        window: *mut GstGLWindow,
+        callback: GstGLWindowCB,
+        data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    pub fn gst_gl_window_set_draw_callback(
+        window: *mut GstGLWindow,
+        callback: GstGLWindowCB,
+        data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
     pub fn gst_gl_window_set_preferred_size(window: *mut GstGLWindow, width: c_int, height: c_int);
-    pub fn gst_gl_window_set_render_rectangle(window: *mut GstGLWindow, x: c_int, y: c_int, width: c_int, height: c_int) -> gboolean;
-    pub fn gst_gl_window_set_resize_callback(window: *mut GstGLWindow, callback: GstGLWindowResizeCB, data: gpointer, destroy_notify: glib::GDestroyNotify);
+    pub fn gst_gl_window_set_render_rectangle(
+        window: *mut GstGLWindow,
+        x: c_int,
+        y: c_int,
+        width: c_int,
+        height: c_int,
+    ) -> gboolean;
+    pub fn gst_gl_window_set_resize_callback(
+        window: *mut GstGLWindow,
+        callback: GstGLWindowResizeCB,
+        data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
     pub fn gst_gl_window_set_window_handle(window: *mut GstGLWindow, handle: uintptr_t);
     pub fn gst_gl_window_show(window: *mut GstGLWindow);
 
     //=========================================================================
     // Other functions
     //=========================================================================
-    pub fn gst_buffer_add_gl_sync_meta(context: *mut GstGLContext, buffer: *mut gst::GstBuffer) -> *mut GstGLSyncMeta;
-    pub fn gst_buffer_add_gl_sync_meta_full(context: *mut GstGLContext, buffer: *mut gst::GstBuffer, data: gpointer) -> *mut GstGLSyncMeta;
-    pub fn gst_buffer_pool_config_get_gl_allocation_params(config: *mut gst::GstStructure) -> *mut GstGLAllocationParams;
-    pub fn gst_buffer_pool_config_set_gl_allocation_params(config: *mut gst::GstStructure, params: *mut GstGLAllocationParams);
-    pub fn gst_context_get_gl_display(context: *mut gst::GstContext, display: *mut *mut GstGLDisplay) -> gboolean;
+    pub fn gst_buffer_add_gl_sync_meta(
+        context: *mut GstGLContext,
+        buffer: *mut gst::GstBuffer,
+    ) -> *mut GstGLSyncMeta;
+    pub fn gst_buffer_add_gl_sync_meta_full(
+        context: *mut GstGLContext,
+        buffer: *mut gst::GstBuffer,
+        data: gpointer,
+    ) -> *mut GstGLSyncMeta;
+    pub fn gst_buffer_pool_config_get_gl_allocation_params(
+        config: *mut gst::GstStructure,
+    ) -> *mut GstGLAllocationParams;
+    pub fn gst_buffer_pool_config_set_gl_allocation_params(
+        config: *mut gst::GstStructure,
+        params: *mut GstGLAllocationParams,
+    );
+    pub fn gst_context_get_gl_display(
+        context: *mut gst::GstContext,
+        display: *mut *mut GstGLDisplay,
+    ) -> gboolean;
     pub fn gst_context_set_gl_display(context: *mut gst::GstContext, display: *mut GstGLDisplay);
     pub fn gst_gl_check_extension(name: *const c_char, ext: *const c_char) -> gboolean;
-    pub fn gst_gl_element_propagate_display_context(element: *mut gst::GstElement, display: *mut GstGLDisplay);
-    pub fn gst_gl_ensure_element_data(element: gpointer, display_ptr: *mut *mut GstGLDisplay, other_context_ptr: *mut *mut GstGLContext) -> gboolean;
-    pub fn gst_gl_get_plane_data_size(info: *mut gst_video::GstVideoInfo, align: *mut gst_video::GstVideoAlignment, plane: c_uint) -> size_t;
-    pub fn gst_gl_get_plane_start(info: *mut gst_video::GstVideoInfo, valign: *mut gst_video::GstVideoAlignment, plane: c_uint) -> size_t;
-    pub fn gst_gl_handle_context_query(element: *mut gst::GstElement, query: *mut gst::GstQuery, display: *mut GstGLDisplay, context: *mut GstGLContext, other_context: *mut GstGLContext) -> gboolean;
-    pub fn gst_gl_handle_set_context(element: *mut gst::GstElement, context: *mut gst::GstContext, display: *mut *mut GstGLDisplay, other_context: *mut *mut GstGLContext) -> gboolean;
+    pub fn gst_gl_element_propagate_display_context(
+        element: *mut gst::GstElement,
+        display: *mut GstGLDisplay,
+    );
+    pub fn gst_gl_ensure_element_data(
+        element: gpointer,
+        display_ptr: *mut *mut GstGLDisplay,
+        other_context_ptr: *mut *mut GstGLContext,
+    ) -> gboolean;
+    pub fn gst_gl_get_plane_data_size(
+        info: *mut gst_video::GstVideoInfo,
+        align: *mut gst_video::GstVideoAlignment,
+        plane: c_uint,
+    ) -> size_t;
+    pub fn gst_gl_get_plane_start(
+        info: *mut gst_video::GstVideoInfo,
+        valign: *mut gst_video::GstVideoAlignment,
+        plane: c_uint,
+    ) -> size_t;
+    pub fn gst_gl_handle_context_query(
+        element: *mut gst::GstElement,
+        query: *mut gst::GstQuery,
+        display: *mut GstGLDisplay,
+        context: *mut GstGLContext,
+        other_context: *mut GstGLContext,
+    ) -> gboolean;
+    pub fn gst_gl_handle_set_context(
+        element: *mut gst::GstElement,
+        context: *mut gst::GstContext,
+        display: *mut *mut GstGLDisplay,
+        other_context: *mut *mut GstGLContext,
+    ) -> gboolean;
     pub fn gst_gl_insert_debug_marker(context: *mut GstGLContext, format: *const c_char, ...);
-    pub fn gst_gl_sized_gl_format_from_gl_format_type(context: *mut GstGLContext, format: c_uint, type_: c_uint) -> c_uint;
+    pub fn gst_gl_sized_gl_format_from_gl_format_type(
+        context: *mut GstGLContext,
+        format: c_uint,
+        type_: c_uint,
+    ) -> c_uint;
     pub fn gst_gl_stereo_downmix_mode_get_type() -> GType;
     pub fn gst_gl_sync_meta_api_get_type() -> GType;
-    pub fn gst_gl_value_get_texture_target_mask(value: *const gobject::GValue) -> GstGLTextureTarget;
-    pub fn gst_gl_value_set_texture_target(value: *mut gobject::GValue, target: GstGLTextureTarget) -> gboolean;
-    pub fn gst_gl_value_set_texture_target_from_mask(value: *mut gobject::GValue, target_mask: GstGLTextureTarget) -> gboolean;
-    pub fn gst_gl_version_to_glsl_version(gl_api: GstGLAPI, maj: c_int, min: c_int) -> GstGLSLVersion;
-    pub fn gst_glsl_string_get_version_profile(s: *const c_char, version: *mut GstGLSLVersion, profile: *mut GstGLSLProfile) -> gboolean;
+    pub fn gst_gl_value_get_texture_target_mask(
+        value: *const gobject::GValue,
+    ) -> GstGLTextureTarget;
+    pub fn gst_gl_value_set_texture_target(
+        value: *mut gobject::GValue,
+        target: GstGLTextureTarget,
+    ) -> gboolean;
+    pub fn gst_gl_value_set_texture_target_from_mask(
+        value: *mut gobject::GValue,
+        target_mask: GstGLTextureTarget,
+    ) -> gboolean;
+    pub fn gst_gl_version_to_glsl_version(
+        gl_api: GstGLAPI,
+        maj: c_int,
+        min: c_int,
+    ) -> GstGLSLVersion;
+    pub fn gst_glsl_string_get_version_profile(
+        s: *const c_char,
+        version: *mut GstGLSLVersion,
+        profile: *mut GstGLSLProfile,
+    ) -> gboolean;
     pub fn gst_is_gl_base_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_gl_buffer(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_gl_memory(mem: *mut gst::GstMemory) -> gboolean;

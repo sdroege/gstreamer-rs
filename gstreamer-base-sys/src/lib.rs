@@ -3,17 +3,22 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
 extern crate gobject_sys as gobject;
 extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -56,24 +61,72 @@ pub union GstCollectData_ABI {
 impl ::std::fmt::Debug for GstCollectData_ABI {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCollectData_ABI @ {:?}", self as *const _))
-         .field("abi", unsafe { &self.abi })
-         .finish()
+            .field("abi", unsafe { &self.abi })
+            .finish()
     }
 }
 
 // Callbacks
 pub type GstCollectDataDestroyNotify = Option<unsafe extern "C" fn(*mut GstCollectData)>;
-pub type GstCollectPadsBufferFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, *mut GstCollectData, *mut gst::GstBuffer, gpointer) -> gst::GstFlowReturn>;
-pub type GstCollectPadsClipFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, *mut GstCollectData, *mut gst::GstBuffer, *mut *mut gst::GstBuffer, gpointer) -> gst::GstFlowReturn>;
-pub type GstCollectPadsCompareFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, *mut GstCollectData, gst::GstClockTime, *mut GstCollectData, gst::GstClockTime, gpointer) -> c_int>;
-pub type GstCollectPadsEventFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, *mut GstCollectData, *mut gst::GstEvent, gpointer) -> gboolean>;
+pub type GstCollectPadsBufferFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstCollectPads,
+        *mut GstCollectData,
+        *mut gst::GstBuffer,
+        gpointer,
+    ) -> gst::GstFlowReturn,
+>;
+pub type GstCollectPadsClipFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstCollectPads,
+        *mut GstCollectData,
+        *mut gst::GstBuffer,
+        *mut *mut gst::GstBuffer,
+        gpointer,
+    ) -> gst::GstFlowReturn,
+>;
+pub type GstCollectPadsCompareFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstCollectPads,
+        *mut GstCollectData,
+        gst::GstClockTime,
+        *mut GstCollectData,
+        gst::GstClockTime,
+        gpointer,
+    ) -> c_int,
+>;
+pub type GstCollectPadsEventFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstCollectPads,
+        *mut GstCollectData,
+        *mut gst::GstEvent,
+        gpointer,
+    ) -> gboolean,
+>;
 pub type GstCollectPadsFlushFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, gpointer)>;
-pub type GstCollectPadsFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, gpointer) -> gst::GstFlowReturn>;
-pub type GstCollectPadsQueryFunction = Option<unsafe extern "C" fn(*mut GstCollectPads, *mut GstCollectData, *mut gst::GstQuery, gpointer) -> gboolean>;
-pub type GstDataQueueCheckFullFunction = Option<unsafe extern "C" fn(*mut GstDataQueue, c_uint, c_uint, u64, gpointer) -> gboolean>;
+pub type GstCollectPadsFunction =
+    Option<unsafe extern "C" fn(*mut GstCollectPads, gpointer) -> gst::GstFlowReturn>;
+pub type GstCollectPadsQueryFunction = Option<
+    unsafe extern "C" fn(
+        *mut GstCollectPads,
+        *mut GstCollectData,
+        *mut gst::GstQuery,
+        gpointer,
+    ) -> gboolean,
+>;
+pub type GstDataQueueCheckFullFunction =
+    Option<unsafe extern "C" fn(*mut GstDataQueue, c_uint, c_uint, u64, gpointer) -> gboolean>;
 pub type GstDataQueueEmptyCallback = Option<unsafe extern "C" fn(*mut GstDataQueue, gpointer)>;
 pub type GstDataQueueFullCallback = Option<unsafe extern "C" fn(*mut GstDataQueue, gpointer)>;
-pub type GstTypeFindHelperGetRangeFunction = Option<unsafe extern "C" fn(*mut gst::GstObject, *mut gst::GstObject, u64, c_uint, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>;
+pub type GstTypeFindHelperGetRangeFunction = Option<
+    unsafe extern "C" fn(
+        *mut gst::GstObject,
+        *mut gst::GstObject,
+        u64,
+        c_uint,
+        *mut *mut gst::GstBuffer,
+    ) -> gst::GstFlowReturn,
+>;
 
 // Records
 #[repr(C)]
@@ -86,49 +139,92 @@ pub type GstAdapterClass = *mut _GstAdapterClass;
 pub struct GstAggregatorClass {
     pub parent_class: gst::GstElementClass,
     pub flush: Option<unsafe extern "C" fn(*mut GstAggregator) -> gst::GstFlowReturn>,
-    pub clip: Option<unsafe extern "C" fn(*mut GstAggregator, *mut GstAggregatorPad, *mut gst::GstBuffer) -> *mut gst::GstBuffer>,
-    pub finish_buffer: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub sink_event: Option<unsafe extern "C" fn(*mut GstAggregator, *mut GstAggregatorPad, *mut gst::GstEvent) -> gboolean>,
-    pub sink_query: Option<unsafe extern "C" fn(*mut GstAggregator, *mut GstAggregatorPad, *mut gst::GstQuery) -> gboolean>,
+    pub clip: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregator,
+            *mut GstAggregatorPad,
+            *mut gst::GstBuffer,
+        ) -> *mut gst::GstBuffer,
+    >,
+    pub finish_buffer:
+        Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub sink_event: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregator,
+            *mut GstAggregatorPad,
+            *mut gst::GstEvent,
+        ) -> gboolean,
+    >,
+    pub sink_query: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregator,
+            *mut GstAggregatorPad,
+            *mut gst::GstQuery,
+        ) -> gboolean,
+    >,
     pub src_event: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstEvent) -> gboolean>,
     pub src_query: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstQuery) -> gboolean>,
-    pub src_activate: Option<unsafe extern "C" fn(*mut GstAggregator, gst::GstPadMode, gboolean) -> gboolean>,
+    pub src_activate:
+        Option<unsafe extern "C" fn(*mut GstAggregator, gst::GstPadMode, gboolean) -> gboolean>,
     pub aggregate: Option<unsafe extern "C" fn(*mut GstAggregator, gboolean) -> gst::GstFlowReturn>,
     pub stop: Option<unsafe extern "C" fn(*mut GstAggregator) -> gboolean>,
     pub start: Option<unsafe extern "C" fn(*mut GstAggregator) -> gboolean>,
     pub get_next_time: Option<unsafe extern "C" fn(*mut GstAggregator) -> gst::GstClockTime>,
-    pub create_new_pad: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstPadTemplate, *const c_char, *const gst::GstCaps) -> *mut GstAggregatorPad>,
-    pub update_src_caps: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstCaps, *mut *mut gst::GstCaps) -> gst::GstFlowReturn>,
-    pub fixate_src_caps: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstCaps) -> *mut gst::GstCaps>,
-    pub negotiated_src_caps: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstCaps) -> gboolean>,
-    pub decide_allocation: Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstQuery) -> gboolean>,
-    pub propose_allocation: Option<unsafe extern "C" fn(*mut GstAggregator, *mut GstAggregatorPad, *mut gst::GstQuery, *mut gst::GstQuery) -> gboolean>,
+    pub create_new_pad: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregator,
+            *mut gst::GstPadTemplate,
+            *const c_char,
+            *const gst::GstCaps,
+        ) -> *mut GstAggregatorPad,
+    >,
+    pub update_src_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregator,
+            *mut gst::GstCaps,
+            *mut *mut gst::GstCaps,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub fixate_src_caps:
+        Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub negotiated_src_caps:
+        Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstCaps) -> gboolean>,
+    pub decide_allocation:
+        Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstQuery) -> gboolean>,
+    pub propose_allocation: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregator,
+            *mut GstAggregatorPad,
+            *mut gst::GstQuery,
+            *mut gst::GstQuery,
+        ) -> gboolean,
+    >,
     pub _gst_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GstAggregatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAggregatorClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("flush", &self.flush)
-         .field("clip", &self.clip)
-         .field("finish_buffer", &self.finish_buffer)
-         .field("sink_event", &self.sink_event)
-         .field("sink_query", &self.sink_query)
-         .field("src_event", &self.src_event)
-         .field("src_query", &self.src_query)
-         .field("src_activate", &self.src_activate)
-         .field("aggregate", &self.aggregate)
-         .field("stop", &self.stop)
-         .field("start", &self.start)
-         .field("get_next_time", &self.get_next_time)
-         .field("create_new_pad", &self.create_new_pad)
-         .field("update_src_caps", &self.update_src_caps)
-         .field("fixate_src_caps", &self.fixate_src_caps)
-         .field("negotiated_src_caps", &self.negotiated_src_caps)
-         .field("decide_allocation", &self.decide_allocation)
-         .field("propose_allocation", &self.propose_allocation)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("flush", &self.flush)
+            .field("clip", &self.clip)
+            .field("finish_buffer", &self.finish_buffer)
+            .field("sink_event", &self.sink_event)
+            .field("sink_query", &self.sink_query)
+            .field("src_event", &self.src_event)
+            .field("src_query", &self.src_query)
+            .field("src_activate", &self.src_activate)
+            .field("aggregate", &self.aggregate)
+            .field("stop", &self.stop)
+            .field("start", &self.start)
+            .field("get_next_time", &self.get_next_time)
+            .field("create_new_pad", &self.create_new_pad)
+            .field("update_src_caps", &self.update_src_caps)
+            .field("fixate_src_caps", &self.fixate_src_caps)
+            .field("negotiated_src_caps", &self.negotiated_src_caps)
+            .field("decide_allocation", &self.decide_allocation)
+            .field("propose_allocation", &self.propose_allocation)
+            .finish()
     }
 }
 
@@ -136,18 +232,26 @@ impl ::std::fmt::Debug for GstAggregatorClass {
 #[derive(Copy, Clone)]
 pub struct GstAggregatorPadClass {
     pub parent_class: gst::GstPadClass,
-    pub flush: Option<unsafe extern "C" fn(*mut GstAggregatorPad, *mut GstAggregator) -> gst::GstFlowReturn>,
-    pub skip_buffer: Option<unsafe extern "C" fn(*mut GstAggregatorPad, *mut GstAggregator, *mut gst::GstBuffer) -> gboolean>,
+    pub flush: Option<
+        unsafe extern "C" fn(*mut GstAggregatorPad, *mut GstAggregator) -> gst::GstFlowReturn,
+    >,
+    pub skip_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstAggregatorPad,
+            *mut GstAggregator,
+            *mut gst::GstBuffer,
+        ) -> gboolean,
+    >,
     pub _gst_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GstAggregatorPadClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAggregatorPadClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("flush", &self.flush)
-         .field("skip_buffer", &self.skip_buffer)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("flush", &self.flush)
+            .field("skip_buffer", &self.skip_buffer)
+            .finish()
     }
 }
 
@@ -167,14 +271,33 @@ pub struct GstBaseParseClass {
     pub parent_class: gst::GstElementClass,
     pub start: Option<unsafe extern "C" fn(*mut GstBaseParse) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstBaseParse) -> gboolean>,
-    pub set_sink_caps: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstCaps) -> gboolean>,
-    pub handle_frame: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut GstBaseParseFrame, *mut c_int) -> gst::GstFlowReturn>,
-    pub pre_push_frame: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut GstBaseParseFrame) -> gst::GstFlowReturn>,
-    pub convert: Option<unsafe extern "C" fn(*mut GstBaseParse, gst::GstFormat, i64, gst::GstFormat, *mut i64) -> gboolean>,
+    pub set_sink_caps:
+        Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstCaps) -> gboolean>,
+    pub handle_frame: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseParse,
+            *mut GstBaseParseFrame,
+            *mut c_int,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub pre_push_frame: Option<
+        unsafe extern "C" fn(*mut GstBaseParse, *mut GstBaseParseFrame) -> gst::GstFlowReturn,
+    >,
+    pub convert: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseParse,
+            gst::GstFormat,
+            i64,
+            gst::GstFormat,
+            *mut i64,
+        ) -> gboolean,
+    >,
     pub sink_event: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstEvent) -> gboolean>,
     pub src_event: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstEvent) -> gboolean>,
-    pub get_sink_caps: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstCaps) -> *mut gst::GstCaps>,
-    pub detect: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub get_sink_caps:
+        Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub detect:
+        Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
     pub sink_query: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstQuery) -> gboolean>,
     pub src_query: Option<unsafe extern "C" fn(*mut GstBaseParse, *mut gst::GstQuery) -> gboolean>,
     pub _gst_reserved: [gpointer; 18],
@@ -183,20 +306,20 @@ pub struct GstBaseParseClass {
 impl ::std::fmt::Debug for GstBaseParseClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseParseClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("set_sink_caps", &self.set_sink_caps)
-         .field("handle_frame", &self.handle_frame)
-         .field("pre_push_frame", &self.pre_push_frame)
-         .field("convert", &self.convert)
-         .field("sink_event", &self.sink_event)
-         .field("src_event", &self.src_event)
-         .field("get_sink_caps", &self.get_sink_caps)
-         .field("detect", &self.detect)
-         .field("sink_query", &self.sink_query)
-         .field("src_query", &self.src_query)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("set_sink_caps", &self.set_sink_caps)
+            .field("handle_frame", &self.handle_frame)
+            .field("pre_push_frame", &self.pre_push_frame)
+            .field("convert", &self.convert)
+            .field("sink_event", &self.sink_event)
+            .field("src_event", &self.src_event)
+            .field("get_sink_caps", &self.get_sink_caps)
+            .field("detect", &self.detect)
+            .field("sink_query", &self.sink_query)
+            .field("src_query", &self.src_query)
+            .finish()
     }
 }
 
@@ -217,12 +340,12 @@ pub struct GstBaseParseFrame {
 impl ::std::fmt::Debug for GstBaseParseFrame {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseParseFrame @ {:?}", self as *const _))
-         .field("buffer", &self.buffer)
-         .field("out_buffer", &self.out_buffer)
-         .field("flags", &self.flags)
-         .field("offset", &self.offset)
-         .field("overhead", &self.overhead)
-         .finish()
+            .field("buffer", &self.buffer)
+            .field("out_buffer", &self.out_buffer)
+            .field("flags", &self.flags)
+            .field("offset", &self.offset)
+            .field("overhead", &self.overhead)
+            .finish()
     }
 }
 
@@ -235,50 +358,68 @@ pub type GstBaseParsePrivate = *mut _GstBaseParsePrivate;
 #[derive(Copy, Clone)]
 pub struct GstBaseSinkClass {
     pub parent_class: gst::GstElementClass,
-    pub get_caps: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub get_caps:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstCaps) -> *mut gst::GstCaps>,
     pub set_caps: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstCaps) -> gboolean>,
-    pub fixate: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub fixate:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstCaps) -> *mut gst::GstCaps>,
     pub activate_pull: Option<unsafe extern "C" fn(*mut GstBaseSink, gboolean) -> gboolean>,
-    pub get_times: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer, *mut gst::GstClockTime, *mut gst::GstClockTime)>,
-    pub propose_allocation: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstQuery) -> gboolean>,
+    pub get_times: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseSink,
+            *mut gst::GstBuffer,
+            *mut gst::GstClockTime,
+            *mut gst::GstClockTime,
+        ),
+    >,
+    pub propose_allocation:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstQuery) -> gboolean>,
     pub start: Option<unsafe extern "C" fn(*mut GstBaseSink) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstBaseSink) -> gboolean>,
     pub unlock: Option<unsafe extern "C" fn(*mut GstBaseSink) -> gboolean>,
     pub unlock_stop: Option<unsafe extern "C" fn(*mut GstBaseSink) -> gboolean>,
     pub query: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstQuery) -> gboolean>,
     pub event: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstEvent) -> gboolean>,
-    pub wait_event: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstEvent) -> gst::GstFlowReturn>,
-    pub prepare: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub prepare_list: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBufferList) -> gst::GstFlowReturn>,
-    pub preroll: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub render: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub render_list: Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBufferList) -> gst::GstFlowReturn>,
+    pub wait_event:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstEvent) -> gst::GstFlowReturn>,
+    pub prepare:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub prepare_list: Option<
+        unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBufferList) -> gst::GstFlowReturn,
+    >,
+    pub preroll:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub render:
+        Option<unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub render_list: Option<
+        unsafe extern "C" fn(*mut GstBaseSink, *mut gst::GstBufferList) -> gst::GstFlowReturn,
+    >,
     pub _gst_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GstBaseSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseSinkClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("get_caps", &self.get_caps)
-         .field("set_caps", &self.set_caps)
-         .field("fixate", &self.fixate)
-         .field("activate_pull", &self.activate_pull)
-         .field("get_times", &self.get_times)
-         .field("propose_allocation", &self.propose_allocation)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("unlock", &self.unlock)
-         .field("unlock_stop", &self.unlock_stop)
-         .field("query", &self.query)
-         .field("event", &self.event)
-         .field("wait_event", &self.wait_event)
-         .field("prepare", &self.prepare)
-         .field("prepare_list", &self.prepare_list)
-         .field("preroll", &self.preroll)
-         .field("render", &self.render)
-         .field("render_list", &self.render_list)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("get_caps", &self.get_caps)
+            .field("set_caps", &self.set_caps)
+            .field("fixate", &self.fixate)
+            .field("activate_pull", &self.activate_pull)
+            .field("get_times", &self.get_times)
+            .field("propose_allocation", &self.propose_allocation)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("unlock", &self.unlock)
+            .field("unlock_stop", &self.unlock_stop)
+            .field("query", &self.query)
+            .field("event", &self.event)
+            .field("wait_event", &self.wait_event)
+            .field("prepare", &self.prepare)
+            .field("prepare_list", &self.prepare_list)
+            .field("preroll", &self.preroll)
+            .field("render", &self.render)
+            .field("render_list", &self.render_list)
+            .finish()
     }
 }
 
@@ -291,52 +432,85 @@ pub type GstBaseSinkPrivate = *mut _GstBaseSinkPrivate;
 #[derive(Copy, Clone)]
 pub struct GstBaseSrcClass {
     pub parent_class: gst::GstElementClass,
-    pub get_caps: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub get_caps:
+        Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstCaps) -> *mut gst::GstCaps>,
     pub negotiate: Option<unsafe extern "C" fn(*mut GstBaseSrc) -> gboolean>,
-    pub fixate: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstCaps) -> *mut gst::GstCaps>,
+    pub fixate:
+        Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstCaps) -> *mut gst::GstCaps>,
     pub set_caps: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstCaps) -> gboolean>,
-    pub decide_allocation: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstQuery) -> gboolean>,
+    pub decide_allocation:
+        Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstQuery) -> gboolean>,
     pub start: Option<unsafe extern "C" fn(*mut GstBaseSrc) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstBaseSrc) -> gboolean>,
-    pub get_times: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstBuffer, *mut gst::GstClockTime, *mut gst::GstClockTime)>,
+    pub get_times: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseSrc,
+            *mut gst::GstBuffer,
+            *mut gst::GstClockTime,
+            *mut gst::GstClockTime,
+        ),
+    >,
     pub get_size: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut u64) -> gboolean>,
     pub is_seekable: Option<unsafe extern "C" fn(*mut GstBaseSrc) -> gboolean>,
-    pub prepare_seek_segment: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstEvent, *mut gst::GstSegment) -> gboolean>,
+    pub prepare_seek_segment: Option<
+        unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstEvent, *mut gst::GstSegment) -> gboolean,
+    >,
     pub do_seek: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstSegment) -> gboolean>,
     pub unlock: Option<unsafe extern "C" fn(*mut GstBaseSrc) -> gboolean>,
     pub unlock_stop: Option<unsafe extern "C" fn(*mut GstBaseSrc) -> gboolean>,
     pub query: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstQuery) -> gboolean>,
     pub event: Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstEvent) -> gboolean>,
-    pub create: Option<unsafe extern "C" fn(*mut GstBaseSrc, u64, c_uint, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub alloc: Option<unsafe extern "C" fn(*mut GstBaseSrc, u64, c_uint, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub fill: Option<unsafe extern "C" fn(*mut GstBaseSrc, u64, c_uint, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub create: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseSrc,
+            u64,
+            c_uint,
+            *mut gst::GstBuffer,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub alloc: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseSrc,
+            u64,
+            c_uint,
+            *mut gst::GstBuffer,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub fill: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseSrc,
+            u64,
+            c_uint,
+            *mut gst::GstBuffer,
+        ) -> gst::GstFlowReturn,
+    >,
     pub _gst_reserved: [gpointer; 20],
 }
 
 impl ::std::fmt::Debug for GstBaseSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseSrcClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("get_caps", &self.get_caps)
-         .field("negotiate", &self.negotiate)
-         .field("fixate", &self.fixate)
-         .field("set_caps", &self.set_caps)
-         .field("decide_allocation", &self.decide_allocation)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("get_times", &self.get_times)
-         .field("get_size", &self.get_size)
-         .field("is_seekable", &self.is_seekable)
-         .field("prepare_seek_segment", &self.prepare_seek_segment)
-         .field("do_seek", &self.do_seek)
-         .field("unlock", &self.unlock)
-         .field("unlock_stop", &self.unlock_stop)
-         .field("query", &self.query)
-         .field("event", &self.event)
-         .field("create", &self.create)
-         .field("alloc", &self.alloc)
-         .field("fill", &self.fill)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("get_caps", &self.get_caps)
+            .field("negotiate", &self.negotiate)
+            .field("fixate", &self.fixate)
+            .field("set_caps", &self.set_caps)
+            .field("decide_allocation", &self.decide_allocation)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("get_times", &self.get_times)
+            .field("get_size", &self.get_size)
+            .field("is_seekable", &self.is_seekable)
+            .field("prepare_seek_segment", &self.prepare_seek_segment)
+            .field("do_seek", &self.do_seek)
+            .field("unlock", &self.unlock)
+            .field("unlock_stop", &self.unlock_stop)
+            .field("query", &self.query)
+            .field("event", &self.event)
+            .field("create", &self.create)
+            .field("alloc", &self.alloc)
+            .field("fill", &self.fill)
+            .finish()
     }
 }
 
@@ -351,60 +525,157 @@ pub struct GstBaseTransformClass {
     pub parent_class: gst::GstElementClass,
     pub passthrough_on_same_caps: gboolean,
     pub transform_ip_on_passthrough: gboolean,
-    pub transform_caps: Option<unsafe extern "C" fn(*mut GstBaseTransform, gst::GstPadDirection, *mut gst::GstCaps, *mut gst::GstCaps) -> *mut gst::GstCaps>,
-    pub fixate_caps: Option<unsafe extern "C" fn(*mut GstBaseTransform, gst::GstPadDirection, *mut gst::GstCaps, *mut gst::GstCaps) -> *mut gst::GstCaps>,
-    pub accept_caps: Option<unsafe extern "C" fn(*mut GstBaseTransform, gst::GstPadDirection, *mut gst::GstCaps) -> gboolean>,
-    pub set_caps: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstCaps, *mut gst::GstCaps) -> gboolean>,
-    pub query: Option<unsafe extern "C" fn(*mut GstBaseTransform, gst::GstPadDirection, *mut gst::GstQuery) -> gboolean>,
-    pub decide_allocation: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstQuery) -> gboolean>,
-    pub filter_meta: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstQuery, GType, *const gst::GstStructure) -> gboolean>,
-    pub propose_allocation: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstQuery, *mut gst::GstQuery) -> gboolean>,
-    pub transform_size: Option<unsafe extern "C" fn(*mut GstBaseTransform, gst::GstPadDirection, *mut gst::GstCaps, size_t, *mut gst::GstCaps, *mut size_t) -> gboolean>,
-    pub get_unit_size: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstCaps, *mut size_t) -> gboolean>,
+    pub transform_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            gst::GstPadDirection,
+            *mut gst::GstCaps,
+            *mut gst::GstCaps,
+        ) -> *mut gst::GstCaps,
+    >,
+    pub fixate_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            gst::GstPadDirection,
+            *mut gst::GstCaps,
+            *mut gst::GstCaps,
+        ) -> *mut gst::GstCaps,
+    >,
+    pub accept_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            gst::GstPadDirection,
+            *mut gst::GstCaps,
+        ) -> gboolean,
+    >,
+    pub set_caps: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstCaps,
+            *mut gst::GstCaps,
+        ) -> gboolean,
+    >,
+    pub query: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            gst::GstPadDirection,
+            *mut gst::GstQuery,
+        ) -> gboolean,
+    >,
+    pub decide_allocation:
+        Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstQuery) -> gboolean>,
+    pub filter_meta: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstQuery,
+            GType,
+            *const gst::GstStructure,
+        ) -> gboolean,
+    >,
+    pub propose_allocation: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstQuery,
+            *mut gst::GstQuery,
+        ) -> gboolean,
+    >,
+    pub transform_size: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            gst::GstPadDirection,
+            *mut gst::GstCaps,
+            size_t,
+            *mut gst::GstCaps,
+            *mut size_t,
+        ) -> gboolean,
+    >,
+    pub get_unit_size: Option<
+        unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstCaps, *mut size_t) -> gboolean,
+    >,
     pub start: Option<unsafe extern "C" fn(*mut GstBaseTransform) -> gboolean>,
     pub stop: Option<unsafe extern "C" fn(*mut GstBaseTransform) -> gboolean>,
-    pub sink_event: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstEvent) -> gboolean>,
-    pub src_event: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstEvent) -> gboolean>,
-    pub prepare_output_buffer: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstBuffer, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub copy_metadata: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstBuffer, *mut gst::GstBuffer) -> gboolean>,
-    pub transform_meta: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstBuffer, *mut gst::GstMeta, *mut gst::GstBuffer) -> gboolean>,
+    pub sink_event:
+        Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstEvent) -> gboolean>,
+    pub src_event:
+        Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstEvent) -> gboolean>,
+    pub prepare_output_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstBuffer,
+            *mut gst::GstBuffer,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub copy_metadata: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstBuffer,
+            *mut gst::GstBuffer,
+        ) -> gboolean,
+    >,
+    pub transform_meta: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstBuffer,
+            *mut gst::GstMeta,
+            *mut gst::GstBuffer,
+        ) -> gboolean,
+    >,
     pub before_transform: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstBuffer)>,
-    pub transform: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstBuffer, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub transform_ip: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub submit_input_buffer: Option<unsafe extern "C" fn(*mut GstBaseTransform, gboolean, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub generate_output: Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub transform: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            *mut gst::GstBuffer,
+            *mut gst::GstBuffer,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub transform_ip: Option<
+        unsafe extern "C" fn(*mut GstBaseTransform, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
+    >,
+    pub submit_input_buffer: Option<
+        unsafe extern "C" fn(
+            *mut GstBaseTransform,
+            gboolean,
+            *mut gst::GstBuffer,
+        ) -> gst::GstFlowReturn,
+    >,
+    pub generate_output: Option<
+        unsafe extern "C" fn(*mut GstBaseTransform, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
+    >,
     pub _gst_reserved: [gpointer; 18],
 }
 
 impl ::std::fmt::Debug for GstBaseTransformClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseTransformClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("passthrough_on_same_caps", &self.passthrough_on_same_caps)
-         .field("transform_ip_on_passthrough", &self.transform_ip_on_passthrough)
-         .field("transform_caps", &self.transform_caps)
-         .field("fixate_caps", &self.fixate_caps)
-         .field("accept_caps", &self.accept_caps)
-         .field("set_caps", &self.set_caps)
-         .field("query", &self.query)
-         .field("decide_allocation", &self.decide_allocation)
-         .field("filter_meta", &self.filter_meta)
-         .field("propose_allocation", &self.propose_allocation)
-         .field("transform_size", &self.transform_size)
-         .field("get_unit_size", &self.get_unit_size)
-         .field("start", &self.start)
-         .field("stop", &self.stop)
-         .field("sink_event", &self.sink_event)
-         .field("src_event", &self.src_event)
-         .field("prepare_output_buffer", &self.prepare_output_buffer)
-         .field("copy_metadata", &self.copy_metadata)
-         .field("transform_meta", &self.transform_meta)
-         .field("before_transform", &self.before_transform)
-         .field("transform", &self.transform)
-         .field("transform_ip", &self.transform_ip)
-         .field("submit_input_buffer", &self.submit_input_buffer)
-         .field("generate_output", &self.generate_output)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("passthrough_on_same_caps", &self.passthrough_on_same_caps)
+            .field(
+                "transform_ip_on_passthrough",
+                &self.transform_ip_on_passthrough,
+            )
+            .field("transform_caps", &self.transform_caps)
+            .field("fixate_caps", &self.fixate_caps)
+            .field("accept_caps", &self.accept_caps)
+            .field("set_caps", &self.set_caps)
+            .field("query", &self.query)
+            .field("decide_allocation", &self.decide_allocation)
+            .field("filter_meta", &self.filter_meta)
+            .field("propose_allocation", &self.propose_allocation)
+            .field("transform_size", &self.transform_size)
+            .field("get_unit_size", &self.get_unit_size)
+            .field("start", &self.start)
+            .field("stop", &self.stop)
+            .field("sink_event", &self.sink_event)
+            .field("src_event", &self.src_event)
+            .field("prepare_output_buffer", &self.prepare_output_buffer)
+            .field("copy_metadata", &self.copy_metadata)
+            .field("transform_meta", &self.transform_meta)
+            .field("before_transform", &self.before_transform)
+            .field("transform", &self.transform)
+            .field("transform_ip", &self.transform_ip)
+            .field("submit_input_buffer", &self.submit_input_buffer)
+            .field("generate_output", &self.generate_output)
+            .finish()
     }
 }
 
@@ -426,11 +697,11 @@ pub struct GstBitReader {
 impl ::std::fmt::Debug for GstBitReader {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBitReader @ {:?}", self as *const _))
-         .field("data", &self.data)
-         .field("size", &self.size)
-         .field("byte", &self.byte)
-         .field("bit", &self.bit)
-         .finish()
+            .field("data", &self.data)
+            .field("size", &self.size)
+            .field("byte", &self.byte)
+            .field("bit", &self.bit)
+            .finish()
     }
 }
 
@@ -448,9 +719,9 @@ pub struct GstBitWriter {
 impl ::std::fmt::Debug for GstBitWriter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBitWriter @ {:?}", self as *const _))
-         .field("data", &self.data)
-         .field("bit_size", &self.bit_size)
-         .finish()
+            .field("data", &self.data)
+            .field("bit_size", &self.bit_size)
+            .finish()
     }
 }
 
@@ -466,10 +737,10 @@ pub struct GstByteReader {
 impl ::std::fmt::Debug for GstByteReader {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstByteReader @ {:?}", self as *const _))
-         .field("data", &self.data)
-         .field("size", &self.size)
-         .field("byte", &self.byte)
-         .finish()
+            .field("data", &self.data)
+            .field("size", &self.size)
+            .field("byte", &self.byte)
+            .finish()
     }
 }
 
@@ -486,11 +757,11 @@ pub struct GstByteWriter {
 impl ::std::fmt::Debug for GstByteWriter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstByteWriter @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("alloc_size", &self.alloc_size)
-         .field("fixed", &self.fixed)
-         .field("owned", &self.owned)
-         .finish()
+            .field("parent", &self.parent)
+            .field("alloc_size", &self.alloc_size)
+            .field("fixed", &self.fixed)
+            .field("owned", &self.owned)
+            .finish()
     }
 }
 
@@ -510,13 +781,13 @@ pub struct GstCollectData {
 impl ::std::fmt::Debug for GstCollectData {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCollectData @ {:?}", self as *const _))
-         .field("collect", &self.collect)
-         .field("pad", &self.pad)
-         .field("buffer", &self.buffer)
-         .field("pos", &self.pos)
-         .field("segment", &self.segment)
-         .field("ABI", &self.ABI)
-         .finish()
+            .field("collect", &self.collect)
+            .field("pad", &self.pad)
+            .field("buffer", &self.buffer)
+            .field("pos", &self.pos)
+            .field("segment", &self.segment)
+            .field("ABI", &self.ABI)
+            .finish()
     }
 }
 
@@ -534,8 +805,8 @@ pub struct GstCollectData_ABI_abi {
 impl ::std::fmt::Debug for GstCollectData_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCollectData_ABI_abi @ {:?}", self as *const _))
-         .field("dts", &self.dts)
-         .finish()
+            .field("dts", &self.dts)
+            .finish()
     }
 }
 
@@ -549,8 +820,8 @@ pub struct GstCollectPadsClass {
 impl ::std::fmt::Debug for GstCollectPadsClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCollectPadsClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
@@ -571,11 +842,11 @@ pub struct GstDataQueueClass {
 impl ::std::fmt::Debug for GstDataQueueClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDataQueueClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("empty", &self.empty)
-         .field("full", &self.full)
-         .field("_gst_reserved", &self._gst_reserved)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("empty", &self.empty)
+            .field("full", &self.full)
+            .field("_gst_reserved", &self._gst_reserved)
+            .finish()
     }
 }
 
@@ -593,12 +864,12 @@ pub struct GstDataQueueItem {
 impl ::std::fmt::Debug for GstDataQueueItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDataQueueItem @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("size", &self.size)
-         .field("duration", &self.duration)
-         .field("visible", &self.visible)
-         .field("destroy", &self.destroy)
-         .finish()
+            .field("object", &self.object)
+            .field("size", &self.size)
+            .field("duration", &self.duration)
+            .field("visible", &self.visible)
+            .field("destroy", &self.destroy)
+            .finish()
     }
 }
 
@@ -618,10 +889,10 @@ pub struct GstDataQueueSize {
 impl ::std::fmt::Debug for GstDataQueueSize {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDataQueueSize @ {:?}", self as *const _))
-         .field("visible", &self.visible)
-         .field("bytes", &self.bytes)
-         .field("time", &self.time)
-         .finish()
+            .field("visible", &self.visible)
+            .field("bytes", &self.bytes)
+            .field("time", &self.time)
+            .finish()
     }
 }
 
@@ -631,7 +902,7 @@ pub struct GstFlowCombiner(c_void);
 impl ::std::fmt::Debug for GstFlowCombiner {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstFlowCombiner @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -639,20 +910,23 @@ impl ::std::fmt::Debug for GstFlowCombiner {
 #[derive(Copy, Clone)]
 pub struct GstPushSrcClass {
     pub parent_class: GstBaseSrcClass,
-    pub create: Option<unsafe extern "C" fn(*mut GstPushSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub alloc: Option<unsafe extern "C" fn(*mut GstPushSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
-    pub fill: Option<unsafe extern "C" fn(*mut GstPushSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub create:
+        Option<unsafe extern "C" fn(*mut GstPushSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub alloc:
+        Option<unsafe extern "C" fn(*mut GstPushSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub fill:
+        Option<unsafe extern "C" fn(*mut GstPushSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
     pub _gst_reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstPushSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPushSrcClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("create", &self.create)
-         .field("alloc", &self.alloc)
-         .field("fill", &self.fill)
-         .finish()
+            .field("parent_class", &self.parent_class)
+            .field("create", &self.create)
+            .field("alloc", &self.alloc)
+            .field("fill", &self.fill)
+            .finish()
     }
 }
 
@@ -668,7 +942,7 @@ pub struct GstAdapter(c_void);
 impl ::std::fmt::Debug for GstAdapter {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAdapter @ {:?}", self as *const _))
-         .finish()
+            .finish()
     }
 }
 
@@ -684,9 +958,9 @@ pub struct GstAggregator {
 impl ::std::fmt::Debug for GstAggregator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAggregator @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("srcpad", &self.srcpad)
-         .finish()
+            .field("parent", &self.parent)
+            .field("srcpad", &self.srcpad)
+            .finish()
     }
 }
 
@@ -702,9 +976,9 @@ pub struct GstAggregatorPad {
 impl ::std::fmt::Debug for GstAggregatorPad {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAggregatorPad @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .field("segment", &self.segment)
-         .finish()
+            .field("parent", &self.parent)
+            .field("segment", &self.segment)
+            .finish()
     }
 }
 
@@ -723,12 +997,12 @@ pub struct GstBaseParse {
 impl ::std::fmt::Debug for GstBaseParse {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseParse @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("sinkpad", &self.sinkpad)
-         .field("srcpad", &self.srcpad)
-         .field("flags", &self.flags)
-         .field("segment", &self.segment)
-         .finish()
+            .field("element", &self.element)
+            .field("sinkpad", &self.sinkpad)
+            .field("srcpad", &self.srcpad)
+            .field("flags", &self.flags)
+            .field("segment", &self.segment)
+            .finish()
     }
 }
 
@@ -761,21 +1035,21 @@ pub struct GstBaseSink {
 impl ::std::fmt::Debug for GstBaseSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseSink @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("sinkpad", &self.sinkpad)
-         .field("pad_mode", &self.pad_mode)
-         .field("offset", &self.offset)
-         .field("can_activate_pull", &self.can_activate_pull)
-         .field("can_activate_push", &self.can_activate_push)
-         .field("preroll_lock", &self.preroll_lock)
-         .field("preroll_cond", &self.preroll_cond)
-         .field("eos", &self.eos)
-         .field("need_preroll", &self.need_preroll)
-         .field("have_preroll", &self.have_preroll)
-         .field("playing_async", &self.playing_async)
-         .field("have_newsegment", &self.have_newsegment)
-         .field("segment", &self.segment)
-         .finish()
+            .field("element", &self.element)
+            .field("sinkpad", &self.sinkpad)
+            .field("pad_mode", &self.pad_mode)
+            .field("offset", &self.offset)
+            .field("can_activate_pull", &self.can_activate_pull)
+            .field("can_activate_push", &self.can_activate_push)
+            .field("preroll_lock", &self.preroll_lock)
+            .field("preroll_cond", &self.preroll_cond)
+            .field("eos", &self.eos)
+            .field("need_preroll", &self.need_preroll)
+            .field("have_preroll", &self.have_preroll)
+            .field("playing_async", &self.playing_async)
+            .field("have_newsegment", &self.have_newsegment)
+            .field("segment", &self.segment)
+            .finish()
     }
 }
 
@@ -806,25 +1080,25 @@ pub struct GstBaseSrc {
 impl ::std::fmt::Debug for GstBaseSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseSrc @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("srcpad", &self.srcpad)
-         .field("live_lock", &self.live_lock)
-         .field("live_cond", &self.live_cond)
-         .field("is_live", &self.is_live)
-         .field("live_running", &self.live_running)
-         .field("blocksize", &self.blocksize)
-         .field("can_activate_push", &self.can_activate_push)
-         .field("random_access", &self.random_access)
-         .field("clock_id", &self.clock_id)
-         .field("segment", &self.segment)
-         .field("need_newsegment", &self.need_newsegment)
-         .field("num_buffers", &self.num_buffers)
-         .field("num_buffers_left", &self.num_buffers_left)
-         .field("typefind", &self.typefind)
-         .field("running", &self.running)
-         .field("pending_seek", &self.pending_seek)
-         .field("priv_", &self.priv_)
-         .finish()
+            .field("element", &self.element)
+            .field("srcpad", &self.srcpad)
+            .field("live_lock", &self.live_lock)
+            .field("live_cond", &self.live_cond)
+            .field("is_live", &self.is_live)
+            .field("live_running", &self.live_running)
+            .field("blocksize", &self.blocksize)
+            .field("can_activate_push", &self.can_activate_push)
+            .field("random_access", &self.random_access)
+            .field("clock_id", &self.clock_id)
+            .field("segment", &self.segment)
+            .field("need_newsegment", &self.need_newsegment)
+            .field("num_buffers", &self.num_buffers)
+            .field("num_buffers_left", &self.num_buffers_left)
+            .field("typefind", &self.typefind)
+            .field("running", &self.running)
+            .field("pending_seek", &self.pending_seek)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
@@ -844,13 +1118,13 @@ pub struct GstBaseTransform {
 impl ::std::fmt::Debug for GstBaseTransform {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstBaseTransform @ {:?}", self as *const _))
-         .field("element", &self.element)
-         .field("sinkpad", &self.sinkpad)
-         .field("srcpad", &self.srcpad)
-         .field("have_segment", &self.have_segment)
-         .field("segment", &self.segment)
-         .field("queued_buf", &self.queued_buf)
-         .finish()
+            .field("element", &self.element)
+            .field("sinkpad", &self.sinkpad)
+            .field("srcpad", &self.srcpad)
+            .field("have_segment", &self.have_segment)
+            .field("segment", &self.segment)
+            .field("queued_buf", &self.queued_buf)
+            .finish()
     }
 }
 
@@ -867,9 +1141,9 @@ pub struct GstCollectPads {
 impl ::std::fmt::Debug for GstCollectPads {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCollectPads @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .field("data", &self.data)
-         .finish()
+            .field("object", &self.object)
+            .field("data", &self.data)
+            .finish()
     }
 }
 
@@ -884,8 +1158,8 @@ pub struct GstDataQueue {
 impl ::std::fmt::Debug for GstDataQueue {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstDataQueue @ {:?}", self as *const _))
-         .field("object", &self.object)
-         .finish()
+            .field("object", &self.object)
+            .finish()
     }
 }
 
@@ -899,8 +1173,8 @@ pub struct GstPushSrc {
 impl ::std::fmt::Debug for GstPushSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstPushSrc @ {:?}", self as *const _))
-         .field("parent", &self.parent)
-         .finish()
+            .field("parent", &self.parent)
+            .finish()
     }
 }
 
@@ -910,7 +1184,11 @@ extern "C" {
     // GstBaseParseFrame
     //=========================================================================
     pub fn gst_base_parse_frame_get_type() -> GType;
-    pub fn gst_base_parse_frame_new(buffer: *mut gst::GstBuffer, flags: GstBaseParseFrameFlags, overhead: c_int) -> *mut GstBaseParseFrame;
+    pub fn gst_base_parse_frame_new(
+        buffer: *mut gst::GstBuffer,
+        flags: GstBaseParseFrameFlags,
+        overhead: c_int,
+    ) -> *mut GstBaseParseFrame;
     pub fn gst_base_parse_frame_copy(frame: *mut GstBaseParseFrame) -> *mut GstBaseParseFrame;
     pub fn gst_base_parse_frame_free(frame: *mut GstBaseParseFrame);
     pub fn gst_base_parse_frame_init(frame: *mut GstBaseParseFrame);
@@ -919,18 +1197,50 @@ extern "C" {
     // GstBitReader
     //=========================================================================
     pub fn gst_bit_reader_free(reader: *mut GstBitReader);
-    pub fn gst_bit_reader_get_bits_uint16(reader: *mut GstBitReader, val: *mut u16, nbits: c_uint) -> gboolean;
-    pub fn gst_bit_reader_get_bits_uint32(reader: *mut GstBitReader, val: *mut u32, nbits: c_uint) -> gboolean;
-    pub fn gst_bit_reader_get_bits_uint64(reader: *mut GstBitReader, val: *mut u64, nbits: c_uint) -> gboolean;
-    pub fn gst_bit_reader_get_bits_uint8(reader: *mut GstBitReader, val: *mut u8, nbits: c_uint) -> gboolean;
+    pub fn gst_bit_reader_get_bits_uint16(
+        reader: *mut GstBitReader,
+        val: *mut u16,
+        nbits: c_uint,
+    ) -> gboolean;
+    pub fn gst_bit_reader_get_bits_uint32(
+        reader: *mut GstBitReader,
+        val: *mut u32,
+        nbits: c_uint,
+    ) -> gboolean;
+    pub fn gst_bit_reader_get_bits_uint64(
+        reader: *mut GstBitReader,
+        val: *mut u64,
+        nbits: c_uint,
+    ) -> gboolean;
+    pub fn gst_bit_reader_get_bits_uint8(
+        reader: *mut GstBitReader,
+        val: *mut u8,
+        nbits: c_uint,
+    ) -> gboolean;
     pub fn gst_bit_reader_get_pos(reader: *const GstBitReader) -> c_uint;
     pub fn gst_bit_reader_get_remaining(reader: *const GstBitReader) -> c_uint;
     pub fn gst_bit_reader_get_size(reader: *const GstBitReader) -> c_uint;
     pub fn gst_bit_reader_init(reader: *mut GstBitReader, data: *const u8, size: c_uint);
-    pub fn gst_bit_reader_peek_bits_uint16(reader: *const GstBitReader, val: *mut u16, nbits: c_uint) -> gboolean;
-    pub fn gst_bit_reader_peek_bits_uint32(reader: *const GstBitReader, val: *mut u32, nbits: c_uint) -> gboolean;
-    pub fn gst_bit_reader_peek_bits_uint64(reader: *const GstBitReader, val: *mut u64, nbits: c_uint) -> gboolean;
-    pub fn gst_bit_reader_peek_bits_uint8(reader: *const GstBitReader, val: *mut u8, nbits: c_uint) -> gboolean;
+    pub fn gst_bit_reader_peek_bits_uint16(
+        reader: *const GstBitReader,
+        val: *mut u16,
+        nbits: c_uint,
+    ) -> gboolean;
+    pub fn gst_bit_reader_peek_bits_uint32(
+        reader: *const GstBitReader,
+        val: *mut u32,
+        nbits: c_uint,
+    ) -> gboolean;
+    pub fn gst_bit_reader_peek_bits_uint64(
+        reader: *const GstBitReader,
+        val: *mut u64,
+        nbits: c_uint,
+    ) -> gboolean;
+    pub fn gst_bit_reader_peek_bits_uint8(
+        reader: *const GstBitReader,
+        val: *mut u8,
+        nbits: c_uint,
+    ) -> gboolean;
     pub fn gst_bit_reader_set_pos(reader: *mut GstBitReader, pos: c_uint) -> gboolean;
     pub fn gst_bit_reader_skip(reader: *mut GstBitReader, nbits: c_uint) -> gboolean;
     pub fn gst_bit_reader_skip_to_byte(reader: *mut GstBitReader) -> gboolean;
@@ -956,23 +1266,49 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_bit_writer_init(bitwriter: *mut GstBitWriter);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_init_with_data(bitwriter: *mut GstBitWriter, data: *mut u8, size: c_uint, initialized: gboolean);
+    pub fn gst_bit_writer_init_with_data(
+        bitwriter: *mut GstBitWriter,
+        data: *mut u8,
+        size: c_uint,
+        initialized: gboolean,
+    );
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_bit_writer_init_with_size(bitwriter: *mut GstBitWriter, size: u32, fixed: gboolean);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_put_bits_uint16(bitwriter: *mut GstBitWriter, value: u16, nbits: c_uint) -> gboolean;
+    pub fn gst_bit_writer_put_bits_uint16(
+        bitwriter: *mut GstBitWriter,
+        value: u16,
+        nbits: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_put_bits_uint32(bitwriter: *mut GstBitWriter, value: u32, nbits: c_uint) -> gboolean;
+    pub fn gst_bit_writer_put_bits_uint32(
+        bitwriter: *mut GstBitWriter,
+        value: u32,
+        nbits: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_put_bits_uint64(bitwriter: *mut GstBitWriter, value: u64, nbits: c_uint) -> gboolean;
+    pub fn gst_bit_writer_put_bits_uint64(
+        bitwriter: *mut GstBitWriter,
+        value: u64,
+        nbits: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_put_bits_uint8(bitwriter: *mut GstBitWriter, value: u8, nbits: c_uint) -> gboolean;
+    pub fn gst_bit_writer_put_bits_uint8(
+        bitwriter: *mut GstBitWriter,
+        value: u8,
+        nbits: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_put_bytes(bitwriter: *mut GstBitWriter, data: *const u8, nbytes: c_uint) -> gboolean;
+    pub fn gst_bit_writer_put_bytes(
+        bitwriter: *mut GstBitWriter,
+        data: *const u8,
+        nbytes: c_uint,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_bit_writer_reset(bitwriter: *mut GstBitWriter);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_reset_and_get_buffer(bitwriter: *mut GstBitWriter) -> *mut gst::GstBuffer;
+    pub fn gst_bit_writer_reset_and_get_buffer(bitwriter: *mut GstBitWriter)
+        -> *mut gst::GstBuffer;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_bit_writer_reset_and_get_data(bitwriter: *mut GstBitWriter) -> *mut u8;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -980,23 +1316,56 @@ extern "C" {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_bit_writer_new() -> *mut GstBitWriter;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_bit_writer_new_with_data(data: *mut u8, size: c_uint, initialized: gboolean) -> *mut GstBitWriter;
+    pub fn gst_bit_writer_new_with_data(
+        data: *mut u8,
+        size: c_uint,
+        initialized: gboolean,
+    ) -> *mut GstBitWriter;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn gst_bit_writer_new_with_size(size: u32, fixed: gboolean) -> *mut GstBitWriter;
 
     //=========================================================================
     // GstByteReader
     //=========================================================================
-    pub fn gst_byte_reader_dup_data(reader: *mut GstByteReader, size: c_uint, val: *mut *mut u8) -> gboolean;
-    pub fn gst_byte_reader_dup_string_utf16(reader: *mut GstByteReader, str: *mut *mut u16) -> gboolean;
-    pub fn gst_byte_reader_dup_string_utf32(reader: *mut GstByteReader, str: *mut *mut u32) -> gboolean;
-    pub fn gst_byte_reader_dup_string_utf8(reader: *mut GstByteReader, str: *mut *mut c_char) -> gboolean;
+    pub fn gst_byte_reader_dup_data(
+        reader: *mut GstByteReader,
+        size: c_uint,
+        val: *mut *mut u8,
+    ) -> gboolean;
+    pub fn gst_byte_reader_dup_string_utf16(
+        reader: *mut GstByteReader,
+        str: *mut *mut u16,
+    ) -> gboolean;
+    pub fn gst_byte_reader_dup_string_utf32(
+        reader: *mut GstByteReader,
+        str: *mut *mut u32,
+    ) -> gboolean;
+    pub fn gst_byte_reader_dup_string_utf8(
+        reader: *mut GstByteReader,
+        str: *mut *mut c_char,
+    ) -> gboolean;
     pub fn gst_byte_reader_free(reader: *mut GstByteReader);
-    pub fn gst_byte_reader_get_data(reader: *mut GstByteReader, size: c_uint, val: *mut *const u8) -> gboolean;
-    pub fn gst_byte_reader_get_float32_be(reader: *mut GstByteReader, val: *mut c_float) -> gboolean;
-    pub fn gst_byte_reader_get_float32_le(reader: *mut GstByteReader, val: *mut c_float) -> gboolean;
-    pub fn gst_byte_reader_get_float64_be(reader: *mut GstByteReader, val: *mut c_double) -> gboolean;
-    pub fn gst_byte_reader_get_float64_le(reader: *mut GstByteReader, val: *mut c_double) -> gboolean;
+    pub fn gst_byte_reader_get_data(
+        reader: *mut GstByteReader,
+        size: c_uint,
+        val: *mut *const u8,
+    ) -> gboolean;
+    pub fn gst_byte_reader_get_float32_be(
+        reader: *mut GstByteReader,
+        val: *mut c_float,
+    ) -> gboolean;
+    pub fn gst_byte_reader_get_float32_le(
+        reader: *mut GstByteReader,
+        val: *mut c_float,
+    ) -> gboolean;
+    pub fn gst_byte_reader_get_float64_be(
+        reader: *mut GstByteReader,
+        val: *mut c_double,
+    ) -> gboolean;
+    pub fn gst_byte_reader_get_float64_le(
+        reader: *mut GstByteReader,
+        val: *mut c_double,
+    ) -> gboolean;
     pub fn gst_byte_reader_get_int16_be(reader: *mut GstByteReader, val: *mut i16) -> gboolean;
     pub fn gst_byte_reader_get_int16_le(reader: *mut GstByteReader, val: *mut i16) -> gboolean;
     pub fn gst_byte_reader_get_int24_be(reader: *mut GstByteReader, val: *mut i32) -> gboolean;
@@ -1009,9 +1378,16 @@ extern "C" {
     pub fn gst_byte_reader_get_pos(reader: *const GstByteReader) -> c_uint;
     pub fn gst_byte_reader_get_remaining(reader: *const GstByteReader) -> c_uint;
     pub fn gst_byte_reader_get_size(reader: *const GstByteReader) -> c_uint;
-    pub fn gst_byte_reader_get_string_utf8(reader: *mut GstByteReader, str: *mut *const c_char) -> gboolean;
+    pub fn gst_byte_reader_get_string_utf8(
+        reader: *mut GstByteReader,
+        str: *mut *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_byte_reader_get_sub_reader(reader: *mut GstByteReader, sub_reader: *mut GstByteReader, size: c_uint) -> gboolean;
+    pub fn gst_byte_reader_get_sub_reader(
+        reader: *mut GstByteReader,
+        sub_reader: *mut GstByteReader,
+        size: c_uint,
+    ) -> gboolean;
     pub fn gst_byte_reader_get_uint16_be(reader: *mut GstByteReader, val: *mut u16) -> gboolean;
     pub fn gst_byte_reader_get_uint16_le(reader: *mut GstByteReader, val: *mut u16) -> gboolean;
     pub fn gst_byte_reader_get_uint24_be(reader: *mut GstByteReader, val: *mut u32) -> gboolean;
@@ -1022,14 +1398,43 @@ extern "C" {
     pub fn gst_byte_reader_get_uint64_le(reader: *mut GstByteReader, val: *mut u64) -> gboolean;
     pub fn gst_byte_reader_get_uint8(reader: *mut GstByteReader, val: *mut u8) -> gboolean;
     pub fn gst_byte_reader_init(reader: *mut GstByteReader, data: *const u8, size: c_uint);
-    pub fn gst_byte_reader_masked_scan_uint32(reader: *const GstByteReader, mask: u32, pattern: u32, offset: c_uint, size: c_uint) -> c_uint;
+    pub fn gst_byte_reader_masked_scan_uint32(
+        reader: *const GstByteReader,
+        mask: u32,
+        pattern: u32,
+        offset: c_uint,
+        size: c_uint,
+    ) -> c_uint;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_byte_reader_masked_scan_uint32_peek(reader: *const GstByteReader, mask: u32, pattern: u32, offset: c_uint, size: c_uint, value: *mut u32) -> c_uint;
-    pub fn gst_byte_reader_peek_data(reader: *const GstByteReader, size: c_uint, val: *mut *const u8) -> gboolean;
-    pub fn gst_byte_reader_peek_float32_be(reader: *const GstByteReader, val: *mut c_float) -> gboolean;
-    pub fn gst_byte_reader_peek_float32_le(reader: *const GstByteReader, val: *mut c_float) -> gboolean;
-    pub fn gst_byte_reader_peek_float64_be(reader: *const GstByteReader, val: *mut c_double) -> gboolean;
-    pub fn gst_byte_reader_peek_float64_le(reader: *const GstByteReader, val: *mut c_double) -> gboolean;
+    pub fn gst_byte_reader_masked_scan_uint32_peek(
+        reader: *const GstByteReader,
+        mask: u32,
+        pattern: u32,
+        offset: c_uint,
+        size: c_uint,
+        value: *mut u32,
+    ) -> c_uint;
+    pub fn gst_byte_reader_peek_data(
+        reader: *const GstByteReader,
+        size: c_uint,
+        val: *mut *const u8,
+    ) -> gboolean;
+    pub fn gst_byte_reader_peek_float32_be(
+        reader: *const GstByteReader,
+        val: *mut c_float,
+    ) -> gboolean;
+    pub fn gst_byte_reader_peek_float32_le(
+        reader: *const GstByteReader,
+        val: *mut c_float,
+    ) -> gboolean;
+    pub fn gst_byte_reader_peek_float64_be(
+        reader: *const GstByteReader,
+        val: *mut c_double,
+    ) -> gboolean;
+    pub fn gst_byte_reader_peek_float64_le(
+        reader: *const GstByteReader,
+        val: *mut c_double,
+    ) -> gboolean;
     pub fn gst_byte_reader_peek_int16_be(reader: *const GstByteReader, val: *mut i16) -> gboolean;
     pub fn gst_byte_reader_peek_int16_le(reader: *const GstByteReader, val: *mut i16) -> gboolean;
     pub fn gst_byte_reader_peek_int24_be(reader: *const GstByteReader, val: *mut i32) -> gboolean;
@@ -1039,9 +1444,16 @@ extern "C" {
     pub fn gst_byte_reader_peek_int64_be(reader: *const GstByteReader, val: *mut i64) -> gboolean;
     pub fn gst_byte_reader_peek_int64_le(reader: *const GstByteReader, val: *mut i64) -> gboolean;
     pub fn gst_byte_reader_peek_int8(reader: *const GstByteReader, val: *mut i8) -> gboolean;
-    pub fn gst_byte_reader_peek_string_utf8(reader: *const GstByteReader, str: *mut *const c_char) -> gboolean;
+    pub fn gst_byte_reader_peek_string_utf8(
+        reader: *const GstByteReader,
+        str: *mut *const c_char,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_byte_reader_peek_sub_reader(reader: *mut GstByteReader, sub_reader: *mut GstByteReader, size: c_uint) -> gboolean;
+    pub fn gst_byte_reader_peek_sub_reader(
+        reader: *mut GstByteReader,
+        sub_reader: *mut GstByteReader,
+        size: c_uint,
+    ) -> gboolean;
     pub fn gst_byte_reader_peek_uint16_be(reader: *const GstByteReader, val: *mut u16) -> gboolean;
     pub fn gst_byte_reader_peek_uint16_le(reader: *const GstByteReader, val: *mut u16) -> gboolean;
     pub fn gst_byte_reader_peek_uint24_be(reader: *const GstByteReader, val: *mut u32) -> gboolean;
@@ -1068,10 +1480,28 @@ extern "C" {
     pub fn gst_byte_writer_free_and_get_data(writer: *mut GstByteWriter) -> *mut u8;
     pub fn gst_byte_writer_get_remaining(writer: *const GstByteWriter) -> c_uint;
     pub fn gst_byte_writer_init(writer: *mut GstByteWriter);
-    pub fn gst_byte_writer_init_with_data(writer: *mut GstByteWriter, data: *mut u8, size: c_uint, initialized: gboolean);
-    pub fn gst_byte_writer_init_with_size(writer: *mut GstByteWriter, size: c_uint, fixed: gboolean);
-    pub fn gst_byte_writer_put_buffer(writer: *mut GstByteWriter, buffer: *mut gst::GstBuffer, offset: size_t, size: ssize_t) -> gboolean;
-    pub fn gst_byte_writer_put_data(writer: *mut GstByteWriter, data: *const u8, size: c_uint) -> gboolean;
+    pub fn gst_byte_writer_init_with_data(
+        writer: *mut GstByteWriter,
+        data: *mut u8,
+        size: c_uint,
+        initialized: gboolean,
+    );
+    pub fn gst_byte_writer_init_with_size(
+        writer: *mut GstByteWriter,
+        size: c_uint,
+        fixed: gboolean,
+    );
+    pub fn gst_byte_writer_put_buffer(
+        writer: *mut GstByteWriter,
+        buffer: *mut gst::GstBuffer,
+        offset: size_t,
+        size: ssize_t,
+    ) -> gboolean;
+    pub fn gst_byte_writer_put_data(
+        writer: *mut GstByteWriter,
+        data: *const u8,
+        size: c_uint,
+    ) -> gboolean;
     pub fn gst_byte_writer_put_float32_be(writer: *mut GstByteWriter, val: c_float) -> gboolean;
     pub fn gst_byte_writer_put_float32_le(writer: *mut GstByteWriter, val: c_float) -> gboolean;
     pub fn gst_byte_writer_put_float64_be(writer: *mut GstByteWriter, val: c_double) -> gboolean;
@@ -1085,9 +1515,18 @@ extern "C" {
     pub fn gst_byte_writer_put_int64_be(writer: *mut GstByteWriter, val: i64) -> gboolean;
     pub fn gst_byte_writer_put_int64_le(writer: *mut GstByteWriter, val: i64) -> gboolean;
     pub fn gst_byte_writer_put_int8(writer: *mut GstByteWriter, val: i8) -> gboolean;
-    pub fn gst_byte_writer_put_string_utf16(writer: *mut GstByteWriter, data: *const u16) -> gboolean;
-    pub fn gst_byte_writer_put_string_utf32(writer: *mut GstByteWriter, data: *const u32) -> gboolean;
-    pub fn gst_byte_writer_put_string_utf8(writer: *mut GstByteWriter, data: *const c_char) -> gboolean;
+    pub fn gst_byte_writer_put_string_utf16(
+        writer: *mut GstByteWriter,
+        data: *const u16,
+    ) -> gboolean;
+    pub fn gst_byte_writer_put_string_utf32(
+        writer: *mut GstByteWriter,
+        data: *const u32,
+    ) -> gboolean;
+    pub fn gst_byte_writer_put_string_utf8(
+        writer: *mut GstByteWriter,
+        data: *const c_char,
+    ) -> gboolean;
     pub fn gst_byte_writer_put_uint16_be(writer: *mut GstByteWriter, val: u16) -> gboolean;
     pub fn gst_byte_writer_put_uint16_le(writer: *mut GstByteWriter, val: u16) -> gboolean;
     pub fn gst_byte_writer_put_uint24_be(writer: *mut GstByteWriter, val: u32) -> gboolean;
@@ -1101,7 +1540,11 @@ extern "C" {
     pub fn gst_byte_writer_reset_and_get_buffer(writer: *mut GstByteWriter) -> *mut gst::GstBuffer;
     pub fn gst_byte_writer_reset_and_get_data(writer: *mut GstByteWriter) -> *mut u8;
     pub fn gst_byte_writer_new() -> *mut GstByteWriter;
-    pub fn gst_byte_writer_new_with_data(data: *mut u8, size: c_uint, initialized: gboolean) -> *mut GstByteWriter;
+    pub fn gst_byte_writer_new_with_data(
+        data: *mut u8,
+        size: c_uint,
+        initialized: gboolean,
+    ) -> *mut GstByteWriter;
     pub fn gst_byte_writer_new_with_size(size: c_uint, fixed: gboolean) -> *mut GstByteWriter;
 
     //=========================================================================
@@ -1125,9 +1568,16 @@ extern "C" {
     #[cfg(any(feature = "v1_12_1", feature = "dox"))]
     pub fn gst_flow_combiner_unref(combiner: *mut GstFlowCombiner);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_flow_combiner_update_flow(combiner: *mut GstFlowCombiner, fret: gst::GstFlowReturn) -> gst::GstFlowReturn;
+    pub fn gst_flow_combiner_update_flow(
+        combiner: *mut GstFlowCombiner,
+        fret: gst::GstFlowReturn,
+    ) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_flow_combiner_update_pad_flow(combiner: *mut GstFlowCombiner, pad: *mut gst::GstPad, fret: gst::GstFlowReturn) -> gst::GstFlowReturn;
+    pub fn gst_flow_combiner_update_pad_flow(
+        combiner: *mut GstFlowCombiner,
+        pad: *mut gst::GstPad,
+        fret: gst::GstFlowReturn,
+    ) -> gst::GstFlowReturn;
 
     //=========================================================================
     // GstQueueArray
@@ -1137,9 +1587,17 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_queue_array_drop_element(array: *mut GstQueueArray, idx: c_uint) -> gpointer;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_queue_array_drop_struct(array: *mut GstQueueArray, idx: c_uint, p_struct: gpointer) -> gboolean;
+    pub fn gst_queue_array_drop_struct(
+        array: *mut GstQueueArray,
+        idx: c_uint,
+        p_struct: gpointer,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_queue_array_find(array: *mut GstQueueArray, func: glib::GCompareFunc, data: gpointer) -> c_uint;
+    pub fn gst_queue_array_find(
+        array: *mut GstQueueArray,
+        func: glib::GCompareFunc,
+        data: gpointer,
+    ) -> c_uint;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_queue_array_free(array: *mut GstQueueArray);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -1170,11 +1628,17 @@ extern "C" {
     pub fn gst_queue_array_push_tail(array: *mut GstQueueArray, data: gpointer);
     pub fn gst_queue_array_push_tail_struct(array: *mut GstQueueArray, p_struct: gpointer);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_queue_array_set_clear_func(array: *mut GstQueueArray, clear_func: glib::GDestroyNotify);
+    pub fn gst_queue_array_set_clear_func(
+        array: *mut GstQueueArray,
+        clear_func: glib::GDestroyNotify,
+    );
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_queue_array_new(initial_size: c_uint) -> *mut GstQueueArray;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_queue_array_new_for_struct(struct_size: size_t, initial_size: c_uint) -> *mut GstQueueArray;
+    pub fn gst_queue_array_new_for_struct(
+        struct_size: size_t,
+        initial_size: c_uint,
+    ) -> *mut GstQueueArray;
 
     //=========================================================================
     // GstAdapter
@@ -1186,7 +1650,11 @@ extern "C" {
     pub fn gst_adapter_clear(adapter: *mut GstAdapter);
     pub fn gst_adapter_copy(adapter: *mut GstAdapter, dest: gpointer, offset: size_t, size: size_t);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_adapter_copy_bytes(adapter: *mut GstAdapter, offset: size_t, size: size_t) -> *mut glib::GBytes;
+    pub fn gst_adapter_copy_bytes(
+        adapter: *mut GstAdapter,
+        offset: size_t,
+        size: size_t,
+    ) -> *mut glib::GBytes;
     pub fn gst_adapter_distance_from_discont(adapter: *mut GstAdapter) -> u64;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_adapter_dts_at_discont(adapter: *mut GstAdapter) -> gst::GstClockTime;
@@ -1194,33 +1662,67 @@ extern "C" {
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_adapter_get_buffer(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBuffer;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_adapter_get_buffer_fast(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBuffer;
+    pub fn gst_adapter_get_buffer_fast(
+        adapter: *mut GstAdapter,
+        nbytes: size_t,
+    ) -> *mut gst::GstBuffer;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_adapter_get_buffer_list(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBufferList;
+    pub fn gst_adapter_get_buffer_list(
+        adapter: *mut GstAdapter,
+        nbytes: size_t,
+    ) -> *mut gst::GstBufferList;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
     pub fn gst_adapter_get_list(adapter: *mut GstAdapter, nbytes: size_t) -> *mut glib::GList;
     pub fn gst_adapter_map(adapter: *mut GstAdapter, size: size_t) -> gconstpointer;
-    pub fn gst_adapter_masked_scan_uint32(adapter: *mut GstAdapter, mask: u32, pattern: u32, offset: size_t, size: size_t) -> ssize_t;
-    pub fn gst_adapter_masked_scan_uint32_peek(adapter: *mut GstAdapter, mask: u32, pattern: u32, offset: size_t, size: size_t, value: *mut u32) -> ssize_t;
+    pub fn gst_adapter_masked_scan_uint32(
+        adapter: *mut GstAdapter,
+        mask: u32,
+        pattern: u32,
+        offset: size_t,
+        size: size_t,
+    ) -> ssize_t;
+    pub fn gst_adapter_masked_scan_uint32_peek(
+        adapter: *mut GstAdapter,
+        mask: u32,
+        pattern: u32,
+        offset: size_t,
+        size: size_t,
+        value: *mut u32,
+    ) -> ssize_t;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_adapter_offset_at_discont(adapter: *mut GstAdapter) -> u64;
     pub fn gst_adapter_prev_dts(adapter: *mut GstAdapter, distance: *mut u64) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_adapter_prev_dts_at_offset(adapter: *mut GstAdapter, offset: size_t, distance: *mut u64) -> gst::GstClockTime;
+    pub fn gst_adapter_prev_dts_at_offset(
+        adapter: *mut GstAdapter,
+        offset: size_t,
+        distance: *mut u64,
+    ) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_adapter_prev_offset(adapter: *mut GstAdapter, distance: *mut u64) -> u64;
     pub fn gst_adapter_prev_pts(adapter: *mut GstAdapter, distance: *mut u64) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_adapter_prev_pts_at_offset(adapter: *mut GstAdapter, offset: size_t, distance: *mut u64) -> gst::GstClockTime;
+    pub fn gst_adapter_prev_pts_at_offset(
+        adapter: *mut GstAdapter,
+        offset: size_t,
+        distance: *mut u64,
+    ) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_adapter_pts_at_discont(adapter: *mut GstAdapter) -> gst::GstClockTime;
     pub fn gst_adapter_push(adapter: *mut GstAdapter, buf: *mut gst::GstBuffer);
     pub fn gst_adapter_take(adapter: *mut GstAdapter, nbytes: size_t) -> gpointer;
-    pub fn gst_adapter_take_buffer(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBuffer;
+    pub fn gst_adapter_take_buffer(adapter: *mut GstAdapter, nbytes: size_t)
+        -> *mut gst::GstBuffer;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_adapter_take_buffer_fast(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBuffer;
+    pub fn gst_adapter_take_buffer_fast(
+        adapter: *mut GstAdapter,
+        nbytes: size_t,
+    ) -> *mut gst::GstBuffer;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_adapter_take_buffer_list(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBufferList;
+    pub fn gst_adapter_take_buffer_list(
+        adapter: *mut GstAdapter,
+        nbytes: size_t,
+    ) -> *mut gst::GstBufferList;
     pub fn gst_adapter_take_list(adapter: *mut GstAdapter, nbytes: size_t) -> *mut glib::GList;
     pub fn gst_adapter_unmap(adapter: *mut GstAdapter);
 
@@ -1229,15 +1731,26 @@ extern "C" {
     //=========================================================================
     pub fn gst_aggregator_get_type() -> GType;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_aggregator_finish_buffer(aggregator: *mut GstAggregator, buffer: *mut gst::GstBuffer) -> gst::GstFlowReturn;
+    pub fn gst_aggregator_finish_buffer(
+        aggregator: *mut GstAggregator,
+        buffer: *mut gst::GstBuffer,
+    ) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_aggregator_get_allocator(self_: *mut GstAggregator, allocator: *mut *mut gst::GstAllocator, params: *mut gst::GstAllocationParams);
+    pub fn gst_aggregator_get_allocator(
+        self_: *mut GstAggregator,
+        allocator: *mut *mut gst::GstAllocator,
+        params: *mut gst::GstAllocationParams,
+    );
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_aggregator_get_buffer_pool(self_: *mut GstAggregator) -> *mut gst::GstBufferPool;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_aggregator_get_latency(self_: *mut GstAggregator) -> gst::GstClockTime;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_aggregator_set_latency(self_: *mut GstAggregator, min_latency: gst::GstClockTime, max_latency: gst::GstClockTime);
+    pub fn gst_aggregator_set_latency(
+        self_: *mut GstAggregator,
+        min_latency: gst::GstClockTime,
+        max_latency: gst::GstClockTime,
+    );
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn gst_aggregator_set_src_caps(self_: *mut GstAggregator, caps: *mut gst::GstCaps);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -1262,23 +1775,64 @@ extern "C" {
     // GstBaseParse
     //=========================================================================
     pub fn gst_base_parse_get_type() -> GType;
-    pub fn gst_base_parse_add_index_entry(parse: *mut GstBaseParse, offset: u64, ts: gst::GstClockTime, key: gboolean, force: gboolean) -> gboolean;
-    pub fn gst_base_parse_convert_default(parse: *mut GstBaseParse, src_format: gst::GstFormat, src_value: i64, dest_format: gst::GstFormat, dest_value: *mut i64) -> gboolean;
+    pub fn gst_base_parse_add_index_entry(
+        parse: *mut GstBaseParse,
+        offset: u64,
+        ts: gst::GstClockTime,
+        key: gboolean,
+        force: gboolean,
+    ) -> gboolean;
+    pub fn gst_base_parse_convert_default(
+        parse: *mut GstBaseParse,
+        src_format: gst::GstFormat,
+        src_value: i64,
+        dest_format: gst::GstFormat,
+        dest_value: *mut i64,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_base_parse_drain(parse: *mut GstBaseParse);
-    pub fn gst_base_parse_finish_frame(parse: *mut GstBaseParse, frame: *mut GstBaseParseFrame, size: c_int) -> gst::GstFlowReturn;
+    pub fn gst_base_parse_finish_frame(
+        parse: *mut GstBaseParse,
+        frame: *mut GstBaseParseFrame,
+        size: c_int,
+    ) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_base_parse_merge_tags(parse: *mut GstBaseParse, tags: *mut gst::GstTagList, mode: gst::GstTagMergeMode);
-    pub fn gst_base_parse_push_frame(parse: *mut GstBaseParse, frame: *mut GstBaseParseFrame) -> gst::GstFlowReturn;
+    pub fn gst_base_parse_merge_tags(
+        parse: *mut GstBaseParse,
+        tags: *mut gst::GstTagList,
+        mode: gst::GstTagMergeMode,
+    );
+    pub fn gst_base_parse_push_frame(
+        parse: *mut GstBaseParse,
+        frame: *mut GstBaseParseFrame,
+    ) -> gst::GstFlowReturn;
     pub fn gst_base_parse_set_average_bitrate(parse: *mut GstBaseParse, bitrate: c_uint);
-    pub fn gst_base_parse_set_duration(parse: *mut GstBaseParse, fmt: gst::GstFormat, duration: i64, interval: c_int);
-    pub fn gst_base_parse_set_frame_rate(parse: *mut GstBaseParse, fps_num: c_uint, fps_den: c_uint, lead_in: c_uint, lead_out: c_uint);
+    pub fn gst_base_parse_set_duration(
+        parse: *mut GstBaseParse,
+        fmt: gst::GstFormat,
+        duration: i64,
+        interval: c_int,
+    );
+    pub fn gst_base_parse_set_frame_rate(
+        parse: *mut GstBaseParse,
+        fps_num: c_uint,
+        fps_den: c_uint,
+        lead_in: c_uint,
+        lead_out: c_uint,
+    );
     pub fn gst_base_parse_set_has_timing_info(parse: *mut GstBaseParse, has_timing: gboolean);
     pub fn gst_base_parse_set_infer_ts(parse: *mut GstBaseParse, infer_ts: gboolean);
-    pub fn gst_base_parse_set_latency(parse: *mut GstBaseParse, min_latency: gst::GstClockTime, max_latency: gst::GstClockTime);
+    pub fn gst_base_parse_set_latency(
+        parse: *mut GstBaseParse,
+        min_latency: gst::GstClockTime,
+        max_latency: gst::GstClockTime,
+    );
     pub fn gst_base_parse_set_min_frame_size(parse: *mut GstBaseParse, min_size: c_uint);
     pub fn gst_base_parse_set_passthrough(parse: *mut GstBaseParse, passthrough: gboolean);
-    pub fn gst_base_parse_set_pts_interpolation(parse: *mut GstBaseParse, pts_interpolate: gboolean);
+    pub fn gst_base_parse_set_pts_interpolation(
+        parse: *mut GstBaseParse,
+        pts_interpolate: gboolean,
+    );
     pub fn gst_base_parse_set_syncable(parse: *mut GstBaseParse, syncable: gboolean);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_base_parse_set_ts_at_offset(parse: *mut GstBaseParse, offset: size_t);
@@ -1287,7 +1841,10 @@ extern "C" {
     // GstBaseSink
     //=========================================================================
     pub fn gst_base_sink_get_type() -> GType;
-    pub fn gst_base_sink_do_preroll(sink: *mut GstBaseSink, obj: *mut gst::GstMiniObject) -> gst::GstFlowReturn;
+    pub fn gst_base_sink_do_preroll(
+        sink: *mut GstBaseSink,
+        obj: *mut gst::GstMiniObject,
+    ) -> gst::GstFlowReturn;
     pub fn gst_base_sink_get_blocksize(sink: *mut GstBaseSink) -> c_uint;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_base_sink_get_drop_out_of_segment(sink: *mut GstBaseSink) -> gboolean;
@@ -1305,38 +1862,72 @@ extern "C" {
     pub fn gst_base_sink_is_async_enabled(sink: *mut GstBaseSink) -> gboolean;
     pub fn gst_base_sink_is_last_sample_enabled(sink: *mut GstBaseSink) -> gboolean;
     pub fn gst_base_sink_is_qos_enabled(sink: *mut GstBaseSink) -> gboolean;
-    pub fn gst_base_sink_query_latency(sink: *mut GstBaseSink, live: *mut gboolean, upstream_live: *mut gboolean, min_latency: *mut gst::GstClockTime, max_latency: *mut gst::GstClockTime) -> gboolean;
+    pub fn gst_base_sink_query_latency(
+        sink: *mut GstBaseSink,
+        live: *mut gboolean,
+        upstream_live: *mut gboolean,
+        min_latency: *mut gst::GstClockTime,
+        max_latency: *mut gst::GstClockTime,
+    ) -> gboolean;
     pub fn gst_base_sink_set_async_enabled(sink: *mut GstBaseSink, enabled: gboolean);
     pub fn gst_base_sink_set_blocksize(sink: *mut GstBaseSink, blocksize: c_uint);
     #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn gst_base_sink_set_drop_out_of_segment(sink: *mut GstBaseSink, drop_out_of_segment: gboolean);
+    pub fn gst_base_sink_set_drop_out_of_segment(
+        sink: *mut GstBaseSink,
+        drop_out_of_segment: gboolean,
+    );
     pub fn gst_base_sink_set_last_sample_enabled(sink: *mut GstBaseSink, enabled: gboolean);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_base_sink_set_max_bitrate(sink: *mut GstBaseSink, max_bitrate: u64);
     pub fn gst_base_sink_set_max_lateness(sink: *mut GstBaseSink, max_lateness: i64);
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_base_sink_set_processing_deadline(sink: *mut GstBaseSink, processing_deadline: gst::GstClockTime);
+    pub fn gst_base_sink_set_processing_deadline(
+        sink: *mut GstBaseSink,
+        processing_deadline: gst::GstClockTime,
+    );
     pub fn gst_base_sink_set_qos_enabled(sink: *mut GstBaseSink, enabled: gboolean);
     pub fn gst_base_sink_set_render_delay(sink: *mut GstBaseSink, delay: gst::GstClockTime);
     pub fn gst_base_sink_set_sync(sink: *mut GstBaseSink, sync: gboolean);
     pub fn gst_base_sink_set_throttle_time(sink: *mut GstBaseSink, throttle: u64);
     pub fn gst_base_sink_set_ts_offset(sink: *mut GstBaseSink, offset: gst::GstClockTimeDiff);
-    pub fn gst_base_sink_wait(sink: *mut GstBaseSink, time: gst::GstClockTime, jitter: *mut gst::GstClockTimeDiff) -> gst::GstFlowReturn;
-    pub fn gst_base_sink_wait_clock(sink: *mut GstBaseSink, time: gst::GstClockTime, jitter: *mut gst::GstClockTimeDiff) -> gst::GstClockReturn;
+    pub fn gst_base_sink_wait(
+        sink: *mut GstBaseSink,
+        time: gst::GstClockTime,
+        jitter: *mut gst::GstClockTimeDiff,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_base_sink_wait_clock(
+        sink: *mut GstBaseSink,
+        time: gst::GstClockTime,
+        jitter: *mut gst::GstClockTimeDiff,
+    ) -> gst::GstClockReturn;
     pub fn gst_base_sink_wait_preroll(sink: *mut GstBaseSink) -> gst::GstFlowReturn;
 
     //=========================================================================
     // GstBaseSrc
     //=========================================================================
     pub fn gst_base_src_get_type() -> GType;
-    pub fn gst_base_src_get_allocator(src: *mut GstBaseSrc, allocator: *mut *mut gst::GstAllocator, params: *mut gst::GstAllocationParams);
+    pub fn gst_base_src_get_allocator(
+        src: *mut GstBaseSrc,
+        allocator: *mut *mut gst::GstAllocator,
+        params: *mut gst::GstAllocationParams,
+    );
     pub fn gst_base_src_get_blocksize(src: *mut GstBaseSrc) -> c_uint;
     pub fn gst_base_src_get_buffer_pool(src: *mut GstBaseSrc) -> *mut gst::GstBufferPool;
     pub fn gst_base_src_get_do_timestamp(src: *mut GstBaseSrc) -> gboolean;
     pub fn gst_base_src_is_async(src: *mut GstBaseSrc) -> gboolean;
     pub fn gst_base_src_is_live(src: *mut GstBaseSrc) -> gboolean;
-    pub fn gst_base_src_new_seamless_segment(src: *mut GstBaseSrc, start: i64, stop: i64, time: i64) -> gboolean;
-    pub fn gst_base_src_query_latency(src: *mut GstBaseSrc, live: *mut gboolean, min_latency: *mut gst::GstClockTime, max_latency: *mut gst::GstClockTime) -> gboolean;
+    pub fn gst_base_src_new_seamless_segment(
+        src: *mut GstBaseSrc,
+        start: i64,
+        stop: i64,
+        time: i64,
+    ) -> gboolean;
+    pub fn gst_base_src_query_latency(
+        src: *mut GstBaseSrc,
+        live: *mut gboolean,
+        min_latency: *mut gst::GstClockTime,
+        max_latency: *mut gst::GstClockTime,
+    ) -> gboolean;
     pub fn gst_base_src_set_async(src: *mut GstBaseSrc, async: gboolean);
     #[cfg(any(feature = "v1_4", feature = "dox"))]
     pub fn gst_base_src_set_automatic_eos(src: *mut GstBaseSrc, automatic_eos: gboolean);
@@ -1349,15 +1940,24 @@ extern "C" {
     pub fn gst_base_src_start_complete(basesrc: *mut GstBaseSrc, ret: gst::GstFlowReturn);
     pub fn gst_base_src_start_wait(basesrc: *mut GstBaseSrc) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_base_src_submit_buffer_list(src: *mut GstBaseSrc, buffer_list: *mut gst::GstBufferList);
+    pub fn gst_base_src_submit_buffer_list(
+        src: *mut GstBaseSrc,
+        buffer_list: *mut gst::GstBufferList,
+    );
     pub fn gst_base_src_wait_playing(src: *mut GstBaseSrc) -> gst::GstFlowReturn;
 
     //=========================================================================
     // GstBaseTransform
     //=========================================================================
     pub fn gst_base_transform_get_type() -> GType;
-    pub fn gst_base_transform_get_allocator(trans: *mut GstBaseTransform, allocator: *mut *mut gst::GstAllocator, params: *mut gst::GstAllocationParams);
-    pub fn gst_base_transform_get_buffer_pool(trans: *mut GstBaseTransform) -> *mut gst::GstBufferPool;
+    pub fn gst_base_transform_get_allocator(
+        trans: *mut GstBaseTransform,
+        allocator: *mut *mut gst::GstAllocator,
+        params: *mut gst::GstAllocationParams,
+    );
+    pub fn gst_base_transform_get_buffer_pool(
+        trans: *mut GstBaseTransform,
+    ) -> *mut gst::GstBufferPool;
     pub fn gst_base_transform_is_in_place(trans: *mut GstBaseTransform) -> gboolean;
     pub fn gst_base_transform_is_passthrough(trans: *mut GstBaseTransform) -> gboolean;
     pub fn gst_base_transform_is_qos_enabled(trans: *mut GstBaseTransform) -> gboolean;
@@ -1367,49 +1967,144 @@ extern "C" {
     pub fn gst_base_transform_set_in_place(trans: *mut GstBaseTransform, in_place: gboolean);
     pub fn gst_base_transform_set_passthrough(trans: *mut GstBaseTransform, passthrough: gboolean);
     #[cfg(any(feature = "v1_0_1", feature = "dox"))]
-    pub fn gst_base_transform_set_prefer_passthrough(trans: *mut GstBaseTransform, prefer_passthrough: gboolean);
+    pub fn gst_base_transform_set_prefer_passthrough(
+        trans: *mut GstBaseTransform,
+        prefer_passthrough: gboolean,
+    );
     pub fn gst_base_transform_set_qos_enabled(trans: *mut GstBaseTransform, enabled: gboolean);
-    pub fn gst_base_transform_update_qos(trans: *mut GstBaseTransform, proportion: c_double, diff: gst::GstClockTimeDiff, timestamp: gst::GstClockTime);
+    pub fn gst_base_transform_update_qos(
+        trans: *mut GstBaseTransform,
+        proportion: c_double,
+        diff: gst::GstClockTimeDiff,
+        timestamp: gst::GstClockTime,
+    );
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_base_transform_update_src_caps(trans: *mut GstBaseTransform, updated_caps: *mut gst::GstCaps) -> gboolean;
+    pub fn gst_base_transform_update_src_caps(
+        trans: *mut GstBaseTransform,
+        updated_caps: *mut gst::GstCaps,
+    ) -> gboolean;
 
     //=========================================================================
     // GstCollectPads
     //=========================================================================
     pub fn gst_collect_pads_get_type() -> GType;
     pub fn gst_collect_pads_new() -> *mut GstCollectPads;
-    pub fn gst_collect_pads_add_pad(pads: *mut GstCollectPads, pad: *mut gst::GstPad, size: c_uint, destroy_notify: GstCollectDataDestroyNotify, lock: gboolean) -> *mut GstCollectData;
+    pub fn gst_collect_pads_add_pad(
+        pads: *mut GstCollectPads,
+        pad: *mut gst::GstPad,
+        size: c_uint,
+        destroy_notify: GstCollectDataDestroyNotify,
+        lock: gboolean,
+    ) -> *mut GstCollectData;
     pub fn gst_collect_pads_available(pads: *mut GstCollectPads) -> c_uint;
-    pub fn gst_collect_pads_clip_running_time(pads: *mut GstCollectPads, cdata: *mut GstCollectData, buf: *mut gst::GstBuffer, outbuf: *mut *mut gst::GstBuffer, user_data: gpointer) -> gst::GstFlowReturn;
-    pub fn gst_collect_pads_event_default(pads: *mut GstCollectPads, data: *mut GstCollectData, event: *mut gst::GstEvent, discard: gboolean) -> gboolean;
-    pub fn gst_collect_pads_flush(pads: *mut GstCollectPads, data: *mut GstCollectData, size: c_uint) -> c_uint;
-    pub fn gst_collect_pads_peek(pads: *mut GstCollectPads, data: *mut GstCollectData) -> *mut gst::GstBuffer;
-    pub fn gst_collect_pads_pop(pads: *mut GstCollectPads, data: *mut GstCollectData) -> *mut gst::GstBuffer;
-    pub fn gst_collect_pads_query_default(pads: *mut GstCollectPads, data: *mut GstCollectData, query: *mut gst::GstQuery, discard: gboolean) -> gboolean;
-    pub fn gst_collect_pads_read_buffer(pads: *mut GstCollectPads, data: *mut GstCollectData, size: c_uint) -> *mut gst::GstBuffer;
-    pub fn gst_collect_pads_remove_pad(pads: *mut GstCollectPads, pad: *mut gst::GstPad) -> gboolean;
-    pub fn gst_collect_pads_set_buffer_function(pads: *mut GstCollectPads, func: GstCollectPadsBufferFunction, user_data: gpointer);
-    pub fn gst_collect_pads_set_clip_function(pads: *mut GstCollectPads, clipfunc: GstCollectPadsClipFunction, user_data: gpointer);
-    pub fn gst_collect_pads_set_compare_function(pads: *mut GstCollectPads, func: GstCollectPadsCompareFunction, user_data: gpointer);
-    pub fn gst_collect_pads_set_event_function(pads: *mut GstCollectPads, func: GstCollectPadsEventFunction, user_data: gpointer);
+    pub fn gst_collect_pads_clip_running_time(
+        pads: *mut GstCollectPads,
+        cdata: *mut GstCollectData,
+        buf: *mut gst::GstBuffer,
+        outbuf: *mut *mut gst::GstBuffer,
+        user_data: gpointer,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_collect_pads_event_default(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+        event: *mut gst::GstEvent,
+        discard: gboolean,
+    ) -> gboolean;
+    pub fn gst_collect_pads_flush(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+        size: c_uint,
+    ) -> c_uint;
+    pub fn gst_collect_pads_peek(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_collect_pads_pop(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_collect_pads_query_default(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+        query: *mut gst::GstQuery,
+        discard: gboolean,
+    ) -> gboolean;
+    pub fn gst_collect_pads_read_buffer(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+        size: c_uint,
+    ) -> *mut gst::GstBuffer;
+    pub fn gst_collect_pads_remove_pad(
+        pads: *mut GstCollectPads,
+        pad: *mut gst::GstPad,
+    ) -> gboolean;
+    pub fn gst_collect_pads_set_buffer_function(
+        pads: *mut GstCollectPads,
+        func: GstCollectPadsBufferFunction,
+        user_data: gpointer,
+    );
+    pub fn gst_collect_pads_set_clip_function(
+        pads: *mut GstCollectPads,
+        clipfunc: GstCollectPadsClipFunction,
+        user_data: gpointer,
+    );
+    pub fn gst_collect_pads_set_compare_function(
+        pads: *mut GstCollectPads,
+        func: GstCollectPadsCompareFunction,
+        user_data: gpointer,
+    );
+    pub fn gst_collect_pads_set_event_function(
+        pads: *mut GstCollectPads,
+        func: GstCollectPadsEventFunction,
+        user_data: gpointer,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_collect_pads_set_flush_function(pads: *mut GstCollectPads, func: GstCollectPadsFlushFunction, user_data: gpointer);
+    pub fn gst_collect_pads_set_flush_function(
+        pads: *mut GstCollectPads,
+        func: GstCollectPadsFlushFunction,
+        user_data: gpointer,
+    );
     pub fn gst_collect_pads_set_flushing(pads: *mut GstCollectPads, flushing: gboolean);
-    pub fn gst_collect_pads_set_function(pads: *mut GstCollectPads, func: GstCollectPadsFunction, user_data: gpointer);
-    pub fn gst_collect_pads_set_query_function(pads: *mut GstCollectPads, func: GstCollectPadsQueryFunction, user_data: gpointer);
-    pub fn gst_collect_pads_set_waiting(pads: *mut GstCollectPads, data: *mut GstCollectData, waiting: gboolean);
+    pub fn gst_collect_pads_set_function(
+        pads: *mut GstCollectPads,
+        func: GstCollectPadsFunction,
+        user_data: gpointer,
+    );
+    pub fn gst_collect_pads_set_query_function(
+        pads: *mut GstCollectPads,
+        func: GstCollectPadsQueryFunction,
+        user_data: gpointer,
+    );
+    pub fn gst_collect_pads_set_waiting(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+        waiting: gboolean,
+    );
     #[cfg(any(feature = "v1_4", feature = "dox"))]
-    pub fn gst_collect_pads_src_event_default(pads: *mut GstCollectPads, pad: *mut gst::GstPad, event: *mut gst::GstEvent) -> gboolean;
+    pub fn gst_collect_pads_src_event_default(
+        pads: *mut GstCollectPads,
+        pad: *mut gst::GstPad,
+        event: *mut gst::GstEvent,
+    ) -> gboolean;
     pub fn gst_collect_pads_start(pads: *mut GstCollectPads);
     pub fn gst_collect_pads_stop(pads: *mut GstCollectPads);
-    pub fn gst_collect_pads_take_buffer(pads: *mut GstCollectPads, data: *mut GstCollectData, size: c_uint) -> *mut gst::GstBuffer;
+    pub fn gst_collect_pads_take_buffer(
+        pads: *mut GstCollectPads,
+        data: *mut GstCollectData,
+        size: c_uint,
+    ) -> *mut gst::GstBuffer;
 
     //=========================================================================
     // GstDataQueue
     //=========================================================================
     pub fn gst_data_queue_get_type() -> GType;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_data_queue_new(checkfull: GstDataQueueCheckFullFunction, fullcallback: GstDataQueueFullCallback, emptycallback: GstDataQueueEmptyCallback, checkdata: gpointer) -> *mut GstDataQueue;
+    pub fn gst_data_queue_new(
+        checkfull: GstDataQueueCheckFullFunction,
+        fullcallback: GstDataQueueFullCallback,
+        emptycallback: GstDataQueueEmptyCallback,
+        checkdata: gpointer,
+    ) -> *mut GstDataQueue;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_data_queue_drop_head(queue: *mut GstDataQueue, type_: GType) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
@@ -1423,13 +2118,22 @@ extern "C" {
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_data_queue_limits_changed(queue: *mut GstDataQueue);
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_data_queue_peek(queue: *mut GstDataQueue, item: *mut *mut GstDataQueueItem) -> gboolean;
+    pub fn gst_data_queue_peek(
+        queue: *mut GstDataQueue,
+        item: *mut *mut GstDataQueueItem,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_data_queue_pop(queue: *mut GstDataQueue, item: *mut *mut GstDataQueueItem) -> gboolean;
+    pub fn gst_data_queue_pop(
+        queue: *mut GstDataQueue,
+        item: *mut *mut GstDataQueueItem,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_data_queue_push(queue: *mut GstDataQueue, item: *mut GstDataQueueItem) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
-    pub fn gst_data_queue_push_force(queue: *mut GstDataQueue, item: *mut GstDataQueueItem) -> gboolean;
+    pub fn gst_data_queue_push_force(
+        queue: *mut GstDataQueue,
+        item: *mut GstDataQueueItem,
+    ) -> gboolean;
     #[cfg(any(feature = "v1_2", feature = "dox"))]
     pub fn gst_data_queue_set_flushing(queue: *mut GstDataQueue, flushing: gboolean);
 
@@ -1442,15 +2146,53 @@ extern "C" {
     // Other functions
     //=========================================================================
     pub fn gst_type_find_helper(src: *mut gst::GstPad, size: u64) -> *mut gst::GstCaps;
-    pub fn gst_type_find_helper_for_buffer(obj: *mut gst::GstObject, buf: *mut gst::GstBuffer, prob: *mut gst::GstTypeFindProbability) -> *mut gst::GstCaps;
+    pub fn gst_type_find_helper_for_buffer(
+        obj: *mut gst::GstObject,
+        buf: *mut gst::GstBuffer,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_type_find_helper_for_buffer_with_extension(obj: *mut gst::GstObject, buf: *mut gst::GstBuffer, extension: *const c_char, prob: *mut gst::GstTypeFindProbability) -> *mut gst::GstCaps;
-    pub fn gst_type_find_helper_for_data(obj: *mut gst::GstObject, data: *const u8, size: size_t, prob: *mut gst::GstTypeFindProbability) -> *mut gst::GstCaps;
+    pub fn gst_type_find_helper_for_buffer_with_extension(
+        obj: *mut gst::GstObject,
+        buf: *mut gst::GstBuffer,
+        extension: *const c_char,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_type_find_helper_for_data(
+        obj: *mut gst::GstObject,
+        data: *const u8,
+        size: size_t,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn gst_type_find_helper_for_data_with_extension(obj: *mut gst::GstObject, data: *const u8, size: size_t, extension: *const c_char, prob: *mut gst::GstTypeFindProbability) -> *mut gst::GstCaps;
-    pub fn gst_type_find_helper_for_extension(obj: *mut gst::GstObject, extension: *const c_char) -> *mut gst::GstCaps;
-    pub fn gst_type_find_helper_get_range(obj: *mut gst::GstObject, parent: *mut gst::GstObject, func: GstTypeFindHelperGetRangeFunction, size: u64, extension: *const c_char, prob: *mut gst::GstTypeFindProbability) -> *mut gst::GstCaps;
+    pub fn gst_type_find_helper_for_data_with_extension(
+        obj: *mut gst::GstObject,
+        data: *const u8,
+        size: size_t,
+        extension: *const c_char,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_type_find_helper_for_extension(
+        obj: *mut gst::GstObject,
+        extension: *const c_char,
+    ) -> *mut gst::GstCaps;
+    pub fn gst_type_find_helper_get_range(
+        obj: *mut gst::GstObject,
+        parent: *mut gst::GstObject,
+        func: GstTypeFindHelperGetRangeFunction,
+        size: u64,
+        extension: *const c_char,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> *mut gst::GstCaps;
     #[cfg(any(feature = "v1_14_3", feature = "dox"))]
-    pub fn gst_type_find_helper_get_range_full(obj: *mut gst::GstObject, parent: *mut gst::GstObject, func: GstTypeFindHelperGetRangeFunction, size: u64, extension: *const c_char, caps: *mut *mut gst::GstCaps, prob: *mut gst::GstTypeFindProbability) -> gst::GstFlowReturn;
+    pub fn gst_type_find_helper_get_range_full(
+        obj: *mut gst::GstObject,
+        parent: *mut gst::GstObject,
+        func: GstTypeFindHelperGetRangeFunction,
+        size: u64,
+        extension: *const c_char,
+        caps: *mut *mut gst::GstCaps,
+        prob: *mut gst::GstTypeFindProbability,
+    ) -> gst::GstFlowReturn;
 
 }

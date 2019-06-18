@@ -3,17 +3,22 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal
+)]
 
-extern crate libc;
 extern crate glib_sys as glib;
-extern crate gstreamer_sys as gst;
 extern crate gstreamer_base_sys as gst_base;
+extern crate gstreamer_sys as gst;
+extern crate libc;
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, time_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -37,10 +42,10 @@ pub struct GstAppSinkCallbacks {
 impl ::std::fmt::Debug for GstAppSinkCallbacks {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAppSinkCallbacks @ {:?}", self as *const _))
-         .field("eos", &self.eos)
-         .field("new_preroll", &self.new_preroll)
-         .field("new_sample", &self.new_sample)
-         .finish()
+            .field("eos", &self.eos)
+            .field("new_preroll", &self.new_preroll)
+            .field("new_sample", &self.new_sample)
+            .finish()
     }
 }
 
@@ -53,23 +58,25 @@ pub struct GstAppSinkClass {
     pub new_sample: Option<unsafe extern "C" fn(*mut GstAppSink) -> gst::GstFlowReturn>,
     pub pull_preroll: Option<unsafe extern "C" fn(*mut GstAppSink) -> *mut gst::GstSample>,
     pub pull_sample: Option<unsafe extern "C" fn(*mut GstAppSink) -> *mut gst::GstSample>,
-    pub try_pull_preroll: Option<unsafe extern "C" fn(*mut GstAppSink, gst::GstClockTime) -> *mut gst::GstSample>,
-    pub try_pull_sample: Option<unsafe extern "C" fn(*mut GstAppSink, gst::GstClockTime) -> *mut gst::GstSample>,
+    pub try_pull_preroll:
+        Option<unsafe extern "C" fn(*mut GstAppSink, gst::GstClockTime) -> *mut gst::GstSample>,
+    pub try_pull_sample:
+        Option<unsafe extern "C" fn(*mut GstAppSink, gst::GstClockTime) -> *mut gst::GstSample>,
     pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstAppSinkClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAppSinkClass @ {:?}", self as *const _))
-         .field("basesink_class", &self.basesink_class)
-         .field("eos", &self.eos)
-         .field("new_preroll", &self.new_preroll)
-         .field("new_sample", &self.new_sample)
-         .field("pull_preroll", &self.pull_preroll)
-         .field("pull_sample", &self.pull_sample)
-         .field("try_pull_preroll", &self.try_pull_preroll)
-         .field("try_pull_sample", &self.try_pull_sample)
-         .finish()
+            .field("basesink_class", &self.basesink_class)
+            .field("eos", &self.eos)
+            .field("new_preroll", &self.new_preroll)
+            .field("new_sample", &self.new_sample)
+            .field("pull_preroll", &self.pull_preroll)
+            .field("pull_sample", &self.pull_sample)
+            .field("try_pull_preroll", &self.try_pull_preroll)
+            .field("try_pull_sample", &self.try_pull_sample)
+            .finish()
     }
 }
 
@@ -90,10 +97,10 @@ pub struct GstAppSrcCallbacks {
 impl ::std::fmt::Debug for GstAppSrcCallbacks {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAppSrcCallbacks @ {:?}", self as *const _))
-         .field("need_data", &self.need_data)
-         .field("enough_data", &self.enough_data)
-         .field("seek_data", &self.seek_data)
-         .finish()
+            .field("need_data", &self.need_data)
+            .field("enough_data", &self.enough_data)
+            .field("seek_data", &self.seek_data)
+            .finish()
     }
 }
 
@@ -104,25 +111,28 @@ pub struct GstAppSrcClass {
     pub need_data: Option<unsafe extern "C" fn(*mut GstAppSrc, c_uint)>,
     pub enough_data: Option<unsafe extern "C" fn(*mut GstAppSrc)>,
     pub seek_data: Option<unsafe extern "C" fn(*mut GstAppSrc, u64) -> gboolean>,
-    pub push_buffer: Option<unsafe extern "C" fn(*mut GstAppSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
+    pub push_buffer:
+        Option<unsafe extern "C" fn(*mut GstAppSrc, *mut gst::GstBuffer) -> gst::GstFlowReturn>,
     pub end_of_stream: Option<unsafe extern "C" fn(*mut GstAppSrc) -> gst::GstFlowReturn>,
-    pub push_sample: Option<unsafe extern "C" fn(*mut GstAppSrc, *mut gst::GstSample) -> gst::GstFlowReturn>,
-    pub push_buffer_list: Option<unsafe extern "C" fn(*mut GstAppSrc, *mut gst::GstBufferList) -> gst::GstFlowReturn>,
+    pub push_sample:
+        Option<unsafe extern "C" fn(*mut GstAppSrc, *mut gst::GstSample) -> gst::GstFlowReturn>,
+    pub push_buffer_list:
+        Option<unsafe extern "C" fn(*mut GstAppSrc, *mut gst::GstBufferList) -> gst::GstFlowReturn>,
     pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstAppSrcClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAppSrcClass @ {:?}", self as *const _))
-         .field("basesrc_class", &self.basesrc_class)
-         .field("need_data", &self.need_data)
-         .field("enough_data", &self.enough_data)
-         .field("seek_data", &self.seek_data)
-         .field("push_buffer", &self.push_buffer)
-         .field("end_of_stream", &self.end_of_stream)
-         .field("push_sample", &self.push_sample)
-         .field("push_buffer_list", &self.push_buffer_list)
-         .finish()
+            .field("basesrc_class", &self.basesrc_class)
+            .field("need_data", &self.need_data)
+            .field("enough_data", &self.enough_data)
+            .field("seek_data", &self.seek_data)
+            .field("push_buffer", &self.push_buffer)
+            .field("end_of_stream", &self.end_of_stream)
+            .field("push_sample", &self.push_sample)
+            .field("push_buffer_list", &self.push_buffer_list)
+            .finish()
     }
 }
 
@@ -143,8 +153,8 @@ pub struct GstAppSink {
 impl ::std::fmt::Debug for GstAppSink {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAppSink @ {:?}", self as *const _))
-         .field("basesink", &self.basesink)
-         .finish()
+            .field("basesink", &self.basesink)
+            .finish()
     }
 }
 
@@ -159,8 +169,8 @@ pub struct GstAppSrc {
 impl ::std::fmt::Debug for GstAppSrc {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAppSrc @ {:?}", self as *const _))
-         .field("basesrc", &self.basesrc)
-         .finish()
+            .field("basesrc", &self.basesrc)
+            .finish()
     }
 }
 
@@ -187,16 +197,27 @@ extern "C" {
     pub fn gst_app_sink_pull_sample(appsink: *mut GstAppSink) -> *mut gst::GstSample;
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn gst_app_sink_set_buffer_list_support(appsink: *mut GstAppSink, enable_lists: gboolean);
-    pub fn gst_app_sink_set_callbacks(appsink: *mut GstAppSink, callbacks: *mut GstAppSinkCallbacks, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_app_sink_set_callbacks(
+        appsink: *mut GstAppSink,
+        callbacks: *mut GstAppSinkCallbacks,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_app_sink_set_caps(appsink: *mut GstAppSink, caps: *const gst::GstCaps);
     pub fn gst_app_sink_set_drop(appsink: *mut GstAppSink, drop: gboolean);
     pub fn gst_app_sink_set_emit_signals(appsink: *mut GstAppSink, emit: gboolean);
     pub fn gst_app_sink_set_max_buffers(appsink: *mut GstAppSink, max: c_uint);
     pub fn gst_app_sink_set_wait_on_eos(appsink: *mut GstAppSink, wait: gboolean);
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_app_sink_try_pull_preroll(appsink: *mut GstAppSink, timeout: gst::GstClockTime) -> *mut gst::GstSample;
+    pub fn gst_app_sink_try_pull_preroll(
+        appsink: *mut GstAppSink,
+        timeout: gst::GstClockTime,
+    ) -> *mut gst::GstSample;
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn gst_app_sink_try_pull_sample(appsink: *mut GstAppSink, timeout: gst::GstClockTime) -> *mut gst::GstSample;
+    pub fn gst_app_sink_try_pull_sample(
+        appsink: *mut GstAppSink,
+        timeout: gst::GstClockTime,
+    ) -> *mut gst::GstSample;
 
     //=========================================================================
     // GstAppSrc
@@ -213,12 +234,26 @@ extern "C" {
     pub fn gst_app_src_get_max_bytes(appsrc: *mut GstAppSrc) -> u64;
     pub fn gst_app_src_get_size(appsrc: *mut GstAppSrc) -> i64;
     pub fn gst_app_src_get_stream_type(appsrc: *mut GstAppSrc) -> GstAppStreamType;
-    pub fn gst_app_src_push_buffer(appsrc: *mut GstAppSrc, buffer: *mut gst::GstBuffer) -> gst::GstFlowReturn;
+    pub fn gst_app_src_push_buffer(
+        appsrc: *mut GstAppSrc,
+        buffer: *mut gst::GstBuffer,
+    ) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_14", feature = "dox"))]
-    pub fn gst_app_src_push_buffer_list(appsrc: *mut GstAppSrc, buffer_list: *mut gst::GstBufferList) -> gst::GstFlowReturn;
+    pub fn gst_app_src_push_buffer_list(
+        appsrc: *mut GstAppSrc,
+        buffer_list: *mut gst::GstBufferList,
+    ) -> gst::GstFlowReturn;
     #[cfg(any(feature = "v1_6", feature = "dox"))]
-    pub fn gst_app_src_push_sample(appsrc: *mut GstAppSrc, sample: *mut gst::GstSample) -> gst::GstFlowReturn;
-    pub fn gst_app_src_set_callbacks(appsrc: *mut GstAppSrc, callbacks: *mut GstAppSrcCallbacks, user_data: gpointer, notify: glib::GDestroyNotify);
+    pub fn gst_app_src_push_sample(
+        appsrc: *mut GstAppSrc,
+        sample: *mut gst::GstSample,
+    ) -> gst::GstFlowReturn;
+    pub fn gst_app_src_set_callbacks(
+        appsrc: *mut GstAppSrc,
+        callbacks: *mut GstAppSrcCallbacks,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    );
     pub fn gst_app_src_set_caps(appsrc: *mut GstAppSrc, caps: *const gst::GstCaps);
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn gst_app_src_set_duration(appsrc: *mut GstAppSrc, duration: gst::GstClockTime);

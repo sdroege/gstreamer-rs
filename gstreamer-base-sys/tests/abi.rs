@@ -5,13 +5,13 @@
 extern crate gstreamer_base_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_base_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_base_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-base-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,50 +229,225 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstAggregator", Layout {size: size_of::<GstAggregator>(), alignment: align_of::<GstAggregator>()}),
-    ("GstAggregatorClass", Layout {size: size_of::<GstAggregatorClass>(), alignment: align_of::<GstAggregatorClass>()}),
-    ("GstAggregatorPad", Layout {size: size_of::<GstAggregatorPad>(), alignment: align_of::<GstAggregatorPad>()}),
-    ("GstAggregatorPadClass", Layout {size: size_of::<GstAggregatorPadClass>(), alignment: align_of::<GstAggregatorPadClass>()}),
-    ("GstBaseParse", Layout {size: size_of::<GstBaseParse>(), alignment: align_of::<GstBaseParse>()}),
-    ("GstBaseParseClass", Layout {size: size_of::<GstBaseParseClass>(), alignment: align_of::<GstBaseParseClass>()}),
-    ("GstBaseParseFrame", Layout {size: size_of::<GstBaseParseFrame>(), alignment: align_of::<GstBaseParseFrame>()}),
-    ("GstBaseParseFrameFlags", Layout {size: size_of::<GstBaseParseFrameFlags>(), alignment: align_of::<GstBaseParseFrameFlags>()}),
-    ("GstBaseSink", Layout {size: size_of::<GstBaseSink>(), alignment: align_of::<GstBaseSink>()}),
-    ("GstBaseSinkClass", Layout {size: size_of::<GstBaseSinkClass>(), alignment: align_of::<GstBaseSinkClass>()}),
-    ("GstBaseSrc", Layout {size: size_of::<GstBaseSrc>(), alignment: align_of::<GstBaseSrc>()}),
-    ("GstBaseSrcClass", Layout {size: size_of::<GstBaseSrcClass>(), alignment: align_of::<GstBaseSrcClass>()}),
-    ("GstBaseSrcFlags", Layout {size: size_of::<GstBaseSrcFlags>(), alignment: align_of::<GstBaseSrcFlags>()}),
-    ("GstBaseTransform", Layout {size: size_of::<GstBaseTransform>(), alignment: align_of::<GstBaseTransform>()}),
-    ("GstBaseTransformClass", Layout {size: size_of::<GstBaseTransformClass>(), alignment: align_of::<GstBaseTransformClass>()}),
-    ("GstBitReader", Layout {size: size_of::<GstBitReader>(), alignment: align_of::<GstBitReader>()}),
-    ("GstBitWriter", Layout {size: size_of::<GstBitWriter>(), alignment: align_of::<GstBitWriter>()}),
-    ("GstByteReader", Layout {size: size_of::<GstByteReader>(), alignment: align_of::<GstByteReader>()}),
-    ("GstByteWriter", Layout {size: size_of::<GstByteWriter>(), alignment: align_of::<GstByteWriter>()}),
-    ("GstCollectData", Layout {size: size_of::<GstCollectData>(), alignment: align_of::<GstCollectData>()}),
-    ("GstCollectPads", Layout {size: size_of::<GstCollectPads>(), alignment: align_of::<GstCollectPads>()}),
-    ("GstCollectPadsClass", Layout {size: size_of::<GstCollectPadsClass>(), alignment: align_of::<GstCollectPadsClass>()}),
-    ("GstCollectPadsStateFlags", Layout {size: size_of::<GstCollectPadsStateFlags>(), alignment: align_of::<GstCollectPadsStateFlags>()}),
-    ("GstDataQueue", Layout {size: size_of::<GstDataQueue>(), alignment: align_of::<GstDataQueue>()}),
-    ("GstDataQueueClass", Layout {size: size_of::<GstDataQueueClass>(), alignment: align_of::<GstDataQueueClass>()}),
-    ("GstDataQueueItem", Layout {size: size_of::<GstDataQueueItem>(), alignment: align_of::<GstDataQueueItem>()}),
-    ("GstDataQueueSize", Layout {size: size_of::<GstDataQueueSize>(), alignment: align_of::<GstDataQueueSize>()}),
-    ("GstPushSrc", Layout {size: size_of::<GstPushSrc>(), alignment: align_of::<GstPushSrc>()}),
-    ("GstPushSrcClass", Layout {size: size_of::<GstPushSrcClass>(), alignment: align_of::<GstPushSrcClass>()}),
+    (
+        "GstAggregator",
+        Layout {
+            size: size_of::<GstAggregator>(),
+            alignment: align_of::<GstAggregator>(),
+        },
+    ),
+    (
+        "GstAggregatorClass",
+        Layout {
+            size: size_of::<GstAggregatorClass>(),
+            alignment: align_of::<GstAggregatorClass>(),
+        },
+    ),
+    (
+        "GstAggregatorPad",
+        Layout {
+            size: size_of::<GstAggregatorPad>(),
+            alignment: align_of::<GstAggregatorPad>(),
+        },
+    ),
+    (
+        "GstAggregatorPadClass",
+        Layout {
+            size: size_of::<GstAggregatorPadClass>(),
+            alignment: align_of::<GstAggregatorPadClass>(),
+        },
+    ),
+    (
+        "GstBaseParse",
+        Layout {
+            size: size_of::<GstBaseParse>(),
+            alignment: align_of::<GstBaseParse>(),
+        },
+    ),
+    (
+        "GstBaseParseClass",
+        Layout {
+            size: size_of::<GstBaseParseClass>(),
+            alignment: align_of::<GstBaseParseClass>(),
+        },
+    ),
+    (
+        "GstBaseParseFrame",
+        Layout {
+            size: size_of::<GstBaseParseFrame>(),
+            alignment: align_of::<GstBaseParseFrame>(),
+        },
+    ),
+    (
+        "GstBaseParseFrameFlags",
+        Layout {
+            size: size_of::<GstBaseParseFrameFlags>(),
+            alignment: align_of::<GstBaseParseFrameFlags>(),
+        },
+    ),
+    (
+        "GstBaseSink",
+        Layout {
+            size: size_of::<GstBaseSink>(),
+            alignment: align_of::<GstBaseSink>(),
+        },
+    ),
+    (
+        "GstBaseSinkClass",
+        Layout {
+            size: size_of::<GstBaseSinkClass>(),
+            alignment: align_of::<GstBaseSinkClass>(),
+        },
+    ),
+    (
+        "GstBaseSrc",
+        Layout {
+            size: size_of::<GstBaseSrc>(),
+            alignment: align_of::<GstBaseSrc>(),
+        },
+    ),
+    (
+        "GstBaseSrcClass",
+        Layout {
+            size: size_of::<GstBaseSrcClass>(),
+            alignment: align_of::<GstBaseSrcClass>(),
+        },
+    ),
+    (
+        "GstBaseSrcFlags",
+        Layout {
+            size: size_of::<GstBaseSrcFlags>(),
+            alignment: align_of::<GstBaseSrcFlags>(),
+        },
+    ),
+    (
+        "GstBaseTransform",
+        Layout {
+            size: size_of::<GstBaseTransform>(),
+            alignment: align_of::<GstBaseTransform>(),
+        },
+    ),
+    (
+        "GstBaseTransformClass",
+        Layout {
+            size: size_of::<GstBaseTransformClass>(),
+            alignment: align_of::<GstBaseTransformClass>(),
+        },
+    ),
+    (
+        "GstBitReader",
+        Layout {
+            size: size_of::<GstBitReader>(),
+            alignment: align_of::<GstBitReader>(),
+        },
+    ),
+    (
+        "GstBitWriter",
+        Layout {
+            size: size_of::<GstBitWriter>(),
+            alignment: align_of::<GstBitWriter>(),
+        },
+    ),
+    (
+        "GstByteReader",
+        Layout {
+            size: size_of::<GstByteReader>(),
+            alignment: align_of::<GstByteReader>(),
+        },
+    ),
+    (
+        "GstByteWriter",
+        Layout {
+            size: size_of::<GstByteWriter>(),
+            alignment: align_of::<GstByteWriter>(),
+        },
+    ),
+    (
+        "GstCollectData",
+        Layout {
+            size: size_of::<GstCollectData>(),
+            alignment: align_of::<GstCollectData>(),
+        },
+    ),
+    (
+        "GstCollectPads",
+        Layout {
+            size: size_of::<GstCollectPads>(),
+            alignment: align_of::<GstCollectPads>(),
+        },
+    ),
+    (
+        "GstCollectPadsClass",
+        Layout {
+            size: size_of::<GstCollectPadsClass>(),
+            alignment: align_of::<GstCollectPadsClass>(),
+        },
+    ),
+    (
+        "GstCollectPadsStateFlags",
+        Layout {
+            size: size_of::<GstCollectPadsStateFlags>(),
+            alignment: align_of::<GstCollectPadsStateFlags>(),
+        },
+    ),
+    (
+        "GstDataQueue",
+        Layout {
+            size: size_of::<GstDataQueue>(),
+            alignment: align_of::<GstDataQueue>(),
+        },
+    ),
+    (
+        "GstDataQueueClass",
+        Layout {
+            size: size_of::<GstDataQueueClass>(),
+            alignment: align_of::<GstDataQueueClass>(),
+        },
+    ),
+    (
+        "GstDataQueueItem",
+        Layout {
+            size: size_of::<GstDataQueueItem>(),
+            alignment: align_of::<GstDataQueueItem>(),
+        },
+    ),
+    (
+        "GstDataQueueSize",
+        Layout {
+            size: size_of::<GstDataQueueSize>(),
+            alignment: align_of::<GstDataQueueSize>(),
+        },
+    ),
+    (
+        "GstPushSrc",
+        Layout {
+            size: size_of::<GstPushSrc>(),
+            alignment: align_of::<GstPushSrc>(),
+        },
+    ),
+    (
+        "GstPushSrcClass",
+        Layout {
+            size: size_of::<GstPushSrcClass>(),
+            alignment: align_of::<GstPushSrcClass>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -289,5 +470,3 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_COLLECT_PADS_STATE_NEW_SEGMENT", "4"),
     ("(guint) GST_COLLECT_PADS_STATE_WAITING", "8"),
 ];
-
-

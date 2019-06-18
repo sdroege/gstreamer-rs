@@ -5,13 +5,13 @@
 extern crate gstreamer_tag_sys;
 extern crate shell_words;
 extern crate tempdir;
+use gstreamer_tag_sys::*;
 use std::env;
 use std::error::Error;
-use std::path::Path;
 use std::mem::{align_of, size_of};
+use std::path::Path;
 use std::process::Command;
 use std::str;
-use gstreamer_tag_sys::*;
 
 static PACKAGES: &[&str] = &["gstreamer-tag-1.0"];
 
@@ -47,8 +47,7 @@ impl Compiler {
         cmd.arg(out);
         let status = cmd.spawn()?.wait()?;
         if !status.success() {
-            return Err(format!("compilation command {:?} failed, {}",
-                               &cmd, status).into());
+            return Err(format!("compilation command {:?} failed, {}", &cmd, status).into());
         }
         Ok(())
     }
@@ -77,13 +76,11 @@ fn pkg_config_cflags(packages: &[&str]) -> Result<Vec<String>, Box<Error>> {
     cmd.args(packages);
     let out = cmd.output()?;
     if !out.status.success() {
-        return Err(format!("command {:?} returned {}",
-                           &cmd, out.status).into());
+        return Err(format!("command {:?} returned {}", &cmd, out.status).into());
     }
     let stdout = str::from_utf8(&out.stdout)?;
     Ok(shell_words::split(stdout.trim())?)
 }
-
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 struct Layout {
@@ -115,9 +112,8 @@ impl Results {
     fn summary(&self) -> String {
         format!(
             "{} passed; {} failed (compilation errors: {})",
-            self.passed,
-            self.failed,
-            self.failed_to_compile)
+            self.passed, self.failed, self.failed_to_compile
+        )
     }
     fn expect_total_success(&self) {
         if self.failed == 0 {
@@ -133,24 +129,28 @@ fn cross_validate_constants_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!("1",
-               get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
-               "failed to obtain correct constant value for 1");
+    assert_eq!(
+        "1",
+        get_c_value(tmpdir.path(), &cc, "1").expect("C constant"),
+        "failed to obtain correct constant value for 1"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_value)) in RUST_CONSTANTS.iter().enumerate() {
         match get_c_value(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(ref c_value) => {
                 if rust_value == c_value {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_value, c_value);
+                    eprintln!(
+                        "Constant value mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_value, c_value
+                    );
                 }
             }
         };
@@ -166,24 +166,31 @@ fn cross_validate_layout_with_c() {
     let tmpdir = tempdir::TempDir::new("abi").expect("temporary directory");
     let cc = Compiler::new().expect("configured compiler");
 
-    assert_eq!(Layout {size: 1, alignment: 1},
-               get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
-               "failed to obtain correct layout for char type");
+    assert_eq!(
+        Layout {
+            size: 1,
+            alignment: 1
+        },
+        get_c_layout(tmpdir.path(), &cc, "char").expect("C layout"),
+        "failed to obtain correct layout for char type"
+    );
 
-    let mut results : Results = Default::default();
+    let mut results: Results = Default::default();
     for (i, &(name, rust_layout)) in RUST_LAYOUTS.iter().enumerate() {
         match get_c_layout(tmpdir.path(), &cc, name) {
             Err(e) => {
                 results.record_failed_to_compile();
                 eprintln!("{}", e);
-            },
+            }
             Ok(c_layout) => {
                 if rust_layout == c_layout {
                     results.record_passed();
                 } else {
                     results.record_failed();
-                    eprintln!("Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
-                              name, rust_layout, &c_layout);
+                    eprintln!(
+                        "Layout mismatch for {}\nRust: {:?}\nC:    {:?}",
+                        name, rust_layout, &c_layout
+                    );
                 }
             }
         };
@@ -203,15 +210,14 @@ fn get_c_layout(dir: &Path, cc: &Compiler, name: &str) -> Result<Layout, Box<Err
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let stdout = str::from_utf8(&output.stdout)?;
     let mut words = stdout.trim().split_whitespace();
     let size = words.next().unwrap().parse().unwrap();
     let alignment = words.next().unwrap().parse().unwrap();
-    Ok(Layout {size, alignment})
+    Ok(Layout { size, alignment })
 }
 
 fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Error>> {
@@ -223,47 +229,114 @@ fn get_c_value(dir: &Path, cc: &Compiler, name: &str) -> Result<String, Box<Erro
     let mut abi_cmd = Command::new(exe);
     let output = abi_cmd.output()?;
     if !output.status.success() {
-        return Err(format!("command {:?} failed, {:?}",
-                           &abi_cmd, &output).into());
+        return Err(format!("command {:?} failed, {:?}", &abi_cmd, &output).into());
     }
 
     let output = str::from_utf8(&output.stdout)?.trim();
-    if !output.starts_with("###gir test###") ||
-       !output.ends_with("###gir test###") {
-        return Err(format!("command {:?} return invalid output, {:?}",
-                           &abi_cmd, &output).into());
+    if !output.starts_with("###gir test###") || !output.ends_with("###gir test###") {
+        return Err(format!(
+            "command {:?} return invalid output, {:?}",
+            &abi_cmd, &output
+        )
+        .into());
     }
 
     Ok(String::from(&output[14..(output.len() - 14)]))
 }
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
-    ("GstTagDemux", Layout {size: size_of::<GstTagDemux>(), alignment: align_of::<GstTagDemux>()}),
-    ("GstTagDemuxClass", Layout {size: size_of::<GstTagDemuxClass>(), alignment: align_of::<GstTagDemuxClass>()}),
-    ("GstTagDemuxResult", Layout {size: size_of::<GstTagDemuxResult>(), alignment: align_of::<GstTagDemuxResult>()}),
-    ("GstTagImageType", Layout {size: size_of::<GstTagImageType>(), alignment: align_of::<GstTagImageType>()}),
-    ("GstTagLicenseFlags", Layout {size: size_of::<GstTagLicenseFlags>(), alignment: align_of::<GstTagLicenseFlags>()}),
-    ("GstTagMux", Layout {size: size_of::<GstTagMux>(), alignment: align_of::<GstTagMux>()}),
-    ("GstTagMuxClass", Layout {size: size_of::<GstTagMuxClass>(), alignment: align_of::<GstTagMuxClass>()}),
-    ("GstTagXmpWriterInterface", Layout {size: size_of::<GstTagXmpWriterInterface>(), alignment: align_of::<GstTagXmpWriterInterface>()}),
+    (
+        "GstTagDemux",
+        Layout {
+            size: size_of::<GstTagDemux>(),
+            alignment: align_of::<GstTagDemux>(),
+        },
+    ),
+    (
+        "GstTagDemuxClass",
+        Layout {
+            size: size_of::<GstTagDemuxClass>(),
+            alignment: align_of::<GstTagDemuxClass>(),
+        },
+    ),
+    (
+        "GstTagDemuxResult",
+        Layout {
+            size: size_of::<GstTagDemuxResult>(),
+            alignment: align_of::<GstTagDemuxResult>(),
+        },
+    ),
+    (
+        "GstTagImageType",
+        Layout {
+            size: size_of::<GstTagImageType>(),
+            alignment: align_of::<GstTagImageType>(),
+        },
+    ),
+    (
+        "GstTagLicenseFlags",
+        Layout {
+            size: size_of::<GstTagLicenseFlags>(),
+            alignment: align_of::<GstTagLicenseFlags>(),
+        },
+    ),
+    (
+        "GstTagMux",
+        Layout {
+            size: size_of::<GstTagMux>(),
+            alignment: align_of::<GstTagMux>(),
+        },
+    ),
+    (
+        "GstTagMuxClass",
+        Layout {
+            size: size_of::<GstTagMuxClass>(),
+            alignment: align_of::<GstTagMuxClass>(),
+        },
+    ),
+    (
+        "GstTagXmpWriterInterface",
+        Layout {
+            size: size_of::<GstTagXmpWriterInterface>(),
+            alignment: align_of::<GstTagXmpWriterInterface>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_TAG_CAPTURING_CONTRAST", "capturing-contrast"),
-    ("GST_TAG_CAPTURING_DIGITAL_ZOOM_RATIO", "capturing-digital-zoom-ratio"),
-    ("GST_TAG_CAPTURING_EXPOSURE_COMPENSATION", "capturing-exposure-compensation"),
+    (
+        "GST_TAG_CAPTURING_DIGITAL_ZOOM_RATIO",
+        "capturing-digital-zoom-ratio",
+    ),
+    (
+        "GST_TAG_CAPTURING_EXPOSURE_COMPENSATION",
+        "capturing-exposure-compensation",
+    ),
     ("GST_TAG_CAPTURING_EXPOSURE_MODE", "capturing-exposure-mode"),
-    ("GST_TAG_CAPTURING_EXPOSURE_PROGRAM", "capturing-exposure-program"),
+    (
+        "GST_TAG_CAPTURING_EXPOSURE_PROGRAM",
+        "capturing-exposure-program",
+    ),
     ("GST_TAG_CAPTURING_FLASH_FIRED", "capturing-flash-fired"),
     ("GST_TAG_CAPTURING_FLASH_MODE", "capturing-flash-mode"),
     ("GST_TAG_CAPTURING_FOCAL_LENGTH", "capturing-focal-length"),
-    ("GST_TAG_CAPTURING_FOCAL_LENGTH_35_MM", "capturing-focal-length-35mm"),
+    (
+        "GST_TAG_CAPTURING_FOCAL_LENGTH_35_MM",
+        "capturing-focal-length-35mm",
+    ),
     ("GST_TAG_CAPTURING_FOCAL_RATIO", "capturing-focal-ratio"),
-    ("GST_TAG_CAPTURING_GAIN_ADJUSTMENT", "capturing-gain-adjustment"),
+    (
+        "GST_TAG_CAPTURING_GAIN_ADJUSTMENT",
+        "capturing-gain-adjustment",
+    ),
     ("GST_TAG_CAPTURING_ISO_SPEED", "capturing-iso-speed"),
     ("GST_TAG_CAPTURING_METERING_MODE", "capturing-metering-mode"),
     ("GST_TAG_CAPTURING_SATURATION", "capturing-saturation"),
-    ("GST_TAG_CAPTURING_SCENE_CAPTURE_TYPE", "capturing-scene-capture-type"),
+    (
+        "GST_TAG_CAPTURING_SCENE_CAPTURE_TYPE",
+        "capturing-scene-capture-type",
+    ),
     ("GST_TAG_CAPTURING_SHARPNESS", "capturing-sharpness"),
     ("GST_TAG_CAPTURING_SHUTTER_SPEED", "capturing-shutter-speed"),
     ("GST_TAG_CAPTURING_SOURCE", "capturing-source"),
@@ -271,7 +344,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_TAG_CDDA_CDDB_DISCID", "discid"),
     ("GST_TAG_CDDA_CDDB_DISCID_FULL", "discid-full"),
     ("GST_TAG_CDDA_MUSICBRAINZ_DISCID", "musicbrainz-discid"),
-    ("GST_TAG_CDDA_MUSICBRAINZ_DISCID_FULL", "musicbrainz-discid-full"),
+    (
+        "GST_TAG_CDDA_MUSICBRAINZ_DISCID_FULL",
+        "musicbrainz-discid-full",
+    ),
     ("GST_TAG_CMML_CLIP", "cmml-clip"),
     ("GST_TAG_CMML_HEAD", "cmml-head"),
     ("GST_TAG_CMML_STREAM", "cmml-stream"),
@@ -301,14 +377,23 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_TAG_IMAGE_TYPE_UNDEFINED", "0"),
     ("(gint) GST_TAG_IMAGE_TYPE_VIDEO_CAPTURE", "14"),
     ("GST_TAG_IMAGE_VERTICAL_PPI", "image-vertical-ppi"),
-    ("(guint) GST_TAG_LICENSE_CREATIVE_COMMONS_LICENSE", "16777216"),
-    ("(guint) GST_TAG_LICENSE_FREE_SOFTWARE_FOUNDATION_LICENSE", "33554432"),
+    (
+        "(guint) GST_TAG_LICENSE_CREATIVE_COMMONS_LICENSE",
+        "16777216",
+    ),
+    (
+        "(guint) GST_TAG_LICENSE_FREE_SOFTWARE_FOUNDATION_LICENSE",
+        "33554432",
+    ),
     ("(guint) GST_TAG_LICENSE_PERMITS_DERIVATIVE_WORKS", "4"),
     ("(guint) GST_TAG_LICENSE_PERMITS_DISTRIBUTION", "2"),
     ("(guint) GST_TAG_LICENSE_PERMITS_REPRODUCTION", "1"),
     ("(guint) GST_TAG_LICENSE_PERMITS_SHARING", "8"),
     ("(guint) GST_TAG_LICENSE_PROHIBITS_COMMERCIAL_USE", "65536"),
-    ("(guint) GST_TAG_LICENSE_PROHIBITS_HIGH_INCOME_NATION_USE", "131072"),
+    (
+        "(guint) GST_TAG_LICENSE_PROHIBITS_HIGH_INCOME_NATION_USE",
+        "131072",
+    ),
     ("(guint) GST_TAG_LICENSE_REQUIRES_ATTRIBUTION", "512"),
     ("(guint) GST_TAG_LICENSE_REQUIRES_COPYLEFT", "4096"),
     ("(guint) GST_TAG_LICENSE_REQUIRES_LESSER_COPYLEFT", "8192"),
@@ -316,11 +401,12 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_TAG_LICENSE_REQUIRES_SHARE_ALIKE", "1024"),
     ("(guint) GST_TAG_LICENSE_REQUIRES_SOURCE_CODE", "2048"),
     ("GST_TAG_MUSICAL_KEY", "musical-key"),
-    ("GST_TAG_MUSICBRAINZ_ALBUMARTISTID", "musicbrainz-albumartistid"),
+    (
+        "GST_TAG_MUSICBRAINZ_ALBUMARTISTID",
+        "musicbrainz-albumartistid",
+    ),
     ("GST_TAG_MUSICBRAINZ_ALBUMID", "musicbrainz-albumid"),
     ("GST_TAG_MUSICBRAINZ_ARTISTID", "musicbrainz-artistid"),
     ("GST_TAG_MUSICBRAINZ_TRACKID", "musicbrainz-trackid"),
     ("GST_TAG_MUSICBRAINZ_TRMID", "musicbrainz-trmid"),
 ];
-
-
