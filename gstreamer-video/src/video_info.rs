@@ -188,7 +188,7 @@ impl fmt::Debug for ::VideoColorimetry {
 
 impl fmt::Display for ::VideoColorimetry {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&self.to_string())
+        f.write_str(&::VideoColorimetry::to_string(self))
     }
 }
 
@@ -787,7 +787,7 @@ impl glib::translate::FromGlibPtrFull<*mut gst_video_sys::GstVideoInfo> for Vide
 impl ::VideoFieldOrder {
     pub fn to_string(self) -> String {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_field_order_to_string(
+            from_glib_none(gst_video_sys::gst_video_field_order_to_string(
                 self.to_glib(),
             ))
         }
@@ -817,14 +817,14 @@ impl str::FromStr for ::VideoFieldOrder {
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl fmt::Display for ::VideoFieldOrder {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&self.to_string())
+        f.write_str(&::VideoFieldOrder::to_string(*self))
     }
 }
 
 impl ::VideoInterlaceMode {
     pub fn to_string(self) -> String {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_interlace_mode_to_string(
+            from_glib_none(gst_video_sys::gst_video_interlace_mode_to_string(
                 self.to_glib(),
             ))
         }
@@ -852,7 +852,7 @@ impl str::FromStr for ::VideoInterlaceMode {
 
 impl fmt::Display for ::VideoInterlaceMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&self.to_string())
+        f.write_str(&::VideoInterlaceMode::to_string(*self))
     }
 }
 
@@ -950,5 +950,15 @@ mod tests {
 
         assert_eq!(info.stride(), [1928, 1928]);
         assert_eq!(info.offset(), [0, 2082240]);
+    }
+
+    #[cfg(any(feature = "v1_12", feature = "dox"))]
+    #[test]
+    fn test_display() {
+        gst::init().unwrap();
+
+        format!("{}", ::VideoColorimetry::from_string("sRGB").unwrap());
+        format!("{}", ::VideoFieldOrder::TopFieldFirst);
+        format!("{}", ::VideoInterlaceMode::Progressive);
     }
 }
