@@ -22,7 +22,7 @@ def update_workspace():
     with open('Cargo.toml', 'w') as f:
         f.write(''.join(old_lines))
     return success
-    
+
 
 if not isfile('./gir/src'):
     need_rebuild = True
@@ -36,7 +36,7 @@ if sys.version_info[0] < 3:
 else:
     line = input(question)
 line = line.strip()
-if line.lower() == 'n' or len(line) == 0:
+if line.lower() == 'y':
     need_rebuild = True
     print('=> Updating gir submodule...')
     call(['bash', '-c', 'cd gir && git reset --hard HEAD && git pull -f origin master'])
