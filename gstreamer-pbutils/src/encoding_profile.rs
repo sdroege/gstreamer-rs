@@ -484,7 +484,6 @@ impl<'a> EncodingContainerProfileBuilder<'a> {
 mod tests {
     use super::*;
     use auto::EncodingContainerProfile;
-    use auto::EncodingContainerProfileExt;
     use auto::EncodingProfileExt;
     use auto::EncodingVideoProfile;
     use gst;
