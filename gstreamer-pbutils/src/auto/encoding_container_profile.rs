@@ -15,27 +15,19 @@ glib_wrapper! {
     }
 }
 
+impl EncodingContainerProfile {
+    pub fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool {
+        unsafe {
+            from_glib(gst_pbutils_sys::gst_encoding_container_profile_contains_profile(self.to_glib_none().0, profile.as_ref().to_glib_none().0))
+        }
+    }
+
+    pub fn get_profiles(&self) -> Vec<EncodingProfile> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_none(gst_pbutils_sys::gst_encoding_container_profile_get_profiles(self.to_glib_none().0))
+        }
+    }
+}
+
 unsafe impl Send for EncodingContainerProfile {}
 unsafe impl Sync for EncodingContainerProfile {}
-
-pub const NONE_ENCODING_CONTAINER_PROFILE: Option<&EncodingContainerProfile> = None;
-
-pub trait EncodingContainerProfileExt: 'static {
-    fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool;
-
-    fn get_profiles(&self) -> Vec<EncodingProfile>;
-}
-
-impl<O: IsA<EncodingContainerProfile>> EncodingContainerProfileExt for O {
-    fn contains_profile<P: IsA<EncodingProfile>>(&self, profile: &P) -> bool {
-        unsafe {
-            from_glib(gst_pbutils_sys::gst_encoding_container_profile_contains_profile(self.as_ref().to_glib_none().0, profile.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_profiles(&self) -> Vec<EncodingProfile> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_none(gst_pbutils_sys::gst_encoding_container_profile_get_profiles(self.as_ref().to_glib_none().0))
-        }
-    }
-}

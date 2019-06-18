@@ -5,7 +5,7 @@
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -131,6 +131,10 @@ impl TestClock {
     //}
 
     pub fn connect_property_clock_type_notify<F: Fn(&TestClock) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_clock_type_trampoline<F: Fn(&TestClock) + Send + Sync + 'static>(this: *mut gst_check_sys::GstTestClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::clock-type\0".as_ptr() as *const _,
@@ -147,8 +151,3 @@ impl Default for TestClock {
 
 unsafe impl Send for TestClock {}
 unsafe impl Sync for TestClock {}
-
-unsafe extern "C" fn notify_clock_type_trampoline<F: Fn(&TestClock) + Send + Sync + 'static>(this: *mut gst_check_sys::GstTestClock, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

@@ -166,6 +166,12 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
     }
 
     fn connect_key_event<F: Fn(&Self, &str, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn key_event_trampoline<P, F: Fn(&P, &str, &str) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLWindow, id: *mut libc::c_char, key: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<GLWindow>
+        {
+            let f: &F = &*(f as *const F);
+            f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), &GString::from_glib_borrow(key))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"key-event\0".as_ptr() as *const _,
@@ -174,22 +180,16 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
     }
 
     fn connect_mouse_event<F: Fn(&Self, &str, i32, f64, f64) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn mouse_event_trampoline<P, F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLWindow, id: *mut libc::c_char, button: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer)
+            where P: IsA<GLWindow>
+        {
+            let f: &F = &*(f as *const F);
+            f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), button, x, y)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"mouse-event\0".as_ptr() as *const _,
                 Some(transmute(mouse_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn key_event_trampoline<P, F: Fn(&P, &str, &str) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLWindow, id: *mut libc::c_char, key: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<GLWindow> {
-    let f: &F = &*(f as *const F);
-    f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), &GString::from_glib_borrow(key))
-}
-
-unsafe extern "C" fn mouse_event_trampoline<P, F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLWindow, id: *mut libc::c_char, button: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<GLWindow> {
-    let f: &F = &*(f as *const F);
-    f(&GLWindow::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(id), button, x, y)
 }

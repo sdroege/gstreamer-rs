@@ -13,7 +13,7 @@ use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -93,6 +93,10 @@ impl PadTemplate {
     }
 
     pub fn connect_pad_created<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn pad_created_trampoline<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstPadTemplate, pad: *mut gst_sys::GstPad, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(pad))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pad-created\0".as_ptr() as *const _,
@@ -103,8 +107,3 @@ impl PadTemplate {
 
 unsafe impl Send for PadTemplate {}
 unsafe impl Sync for PadTemplate {}
-
-unsafe extern "C" fn pad_created_trampoline<F: Fn(&PadTemplate, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstPadTemplate, pad: *mut gst_sys::GstPad, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(pad))
-}

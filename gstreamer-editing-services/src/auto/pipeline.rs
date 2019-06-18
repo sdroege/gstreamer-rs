@@ -235,6 +235,12 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn connect_property_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_audio_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Pipeline>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Pipeline::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::audio-filter\0".as_ptr() as *const _,
@@ -243,6 +249,12 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn connect_property_audio_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_audio_sink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Pipeline>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Pipeline::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::audio-sink\0".as_ptr() as *const _,
@@ -251,6 +263,12 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Pipeline>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Pipeline::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
@@ -259,6 +277,12 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn connect_property_timeline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Pipeline>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Pipeline::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::timeline\0".as_ptr() as *const _,
@@ -267,6 +291,12 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn connect_property_video_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_video_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Pipeline>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Pipeline::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::video-filter\0".as_ptr() as *const _,
@@ -275,46 +305,16 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
     }
 
     fn connect_property_video_sink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_video_sink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Pipeline>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Pipeline::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::video-sink\0".as_ptr() as *const _,
                 Some(transmute(notify_video_sink_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_audio_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Pipeline> {
-    let f: &F = &*(f as *const F);
-    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_audio_sink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Pipeline> {
-    let f: &F = &*(f as *const F);
-    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Pipeline> {
-    let f: &F = &*(f as *const F);
-    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_timeline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Pipeline> {
-    let f: &F = &*(f as *const F);
-    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_video_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Pipeline> {
-    let f: &F = &*(f as *const F);
-    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_video_sink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESPipeline, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Pipeline> {
-    let f: &F = &*(f as *const F);
-    f(&Pipeline::from_glib_borrow(this).unsafe_cast())
 }

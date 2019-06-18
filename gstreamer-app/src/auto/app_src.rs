@@ -5,7 +5,7 @@
 use AppStreamType;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -210,6 +210,10 @@ impl AppSrc {
     }
 
     pub fn connect_enough_data<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn enough_data_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"enough-data\0".as_ptr() as *const _,
@@ -218,6 +222,10 @@ impl AppSrc {
     }
 
     pub fn connect_need_data<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn need_data_trampoline<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, length: libc::c_uint, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), length)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"need-data\0".as_ptr() as *const _,
@@ -226,6 +234,10 @@ impl AppSrc {
     }
 
     pub fn connect_seek_data<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn seek_data_trampoline<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, offset: u64, f: glib_sys::gpointer) -> glib_sys::gboolean {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), offset).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"seek-data\0".as_ptr() as *const _,
@@ -234,6 +246,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_block_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_block_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::block\0".as_ptr() as *const _,
@@ -242,6 +258,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_caps_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_caps_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::caps\0".as_ptr() as *const _,
@@ -250,6 +270,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_current_level_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_level_bytes_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::current-level-bytes\0".as_ptr() as *const _,
@@ -258,6 +282,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_duration_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_duration_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::duration\0".as_ptr() as *const _,
@@ -266,6 +294,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_emit_signals_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_emit_signals_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::emit-signals\0".as_ptr() as *const _,
@@ -274,6 +306,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_format_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_format_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::format\0".as_ptr() as *const _,
@@ -282,6 +318,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_is_live_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_is_live_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::is-live\0".as_ptr() as *const _,
@@ -290,6 +330,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_max_bytes_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_bytes_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-bytes\0".as_ptr() as *const _,
@@ -298,6 +342,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_max_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_latency_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-latency\0".as_ptr() as *const _,
@@ -306,6 +354,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_min_latency_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_min_latency_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-latency\0".as_ptr() as *const _,
@@ -314,6 +366,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_min_percent_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_min_percent_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-percent\0".as_ptr() as *const _,
@@ -322,6 +378,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_size_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_size_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::size\0".as_ptr() as *const _,
@@ -330,6 +390,10 @@ impl AppSrc {
     }
 
     pub fn connect_property_stream_type_notify<F: Fn(&AppSrc) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stream-type\0".as_ptr() as *const _,
@@ -340,83 +404,3 @@ impl AppSrc {
 
 unsafe impl Send for AppSrc {}
 unsafe impl Sync for AppSrc {}
-
-unsafe extern "C" fn enough_data_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn need_data_trampoline<F: Fn(&AppSrc, u32) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, length: libc::c_uint, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), length)
-}
-
-unsafe extern "C" fn seek_data_trampoline<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, offset: u64, f: glib_sys::gpointer) -> glib_sys::gboolean {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), offset).to_glib()
-}
-
-unsafe extern "C" fn notify_block_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_caps_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_current_level_bytes_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_duration_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_emit_signals_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_format_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_is_live_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_max_bytes_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_max_latency_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_min_latency_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_min_percent_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_size_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

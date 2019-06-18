@@ -9,7 +9,7 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
@@ -79,6 +79,10 @@ impl GLOverlayCompositor {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn connect_property_yinvert_notify<F: Fn(&GLOverlayCompositor) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_yinvert_trampoline<F: Fn(&GLOverlayCompositor) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLOverlayCompositor, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::yinvert\0".as_ptr() as *const _,
@@ -89,9 +93,3 @@ impl GLOverlayCompositor {
 
 unsafe impl Send for GLOverlayCompositor {}
 unsafe impl Sync for GLOverlayCompositor {}
-
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-unsafe extern "C" fn notify_yinvert_trampoline<F: Fn(&GLOverlayCompositor) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLOverlayCompositor, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

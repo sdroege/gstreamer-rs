@@ -157,6 +157,12 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
+            where P: IsA<Project>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"asset-added\0".as_ptr() as *const _,
@@ -165,6 +171,12 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     fn connect_asset_loading<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
+            where P: IsA<Project>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"asset-loading\0".as_ptr() as *const _,
@@ -173,6 +185,12 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
+            where P: IsA<Project>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"asset-removed\0".as_ptr() as *const _,
@@ -181,6 +199,12 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     fn connect_error_loading_asset<F: Fn(&Self, &Error, &str, glib::types::Type) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn error_loading_asset_trampoline<P, F: Fn(&P, &Error, &str, glib::types::Type) + 'static>(this: *mut ges_sys::GESProject, error: *mut glib_sys::GError, id: *mut libc::c_char, extractable_type: glib_sys::GType, f: glib_sys::gpointer)
+            where P: IsA<Project>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &GString::from_glib_borrow(id), from_glib(extractable_type))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"error-loading-asset\0".as_ptr() as *const _,
@@ -189,6 +213,12 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(this: *mut ges_sys::GESProject, timeline: *mut ges_sys::GESTimeline, f: glib_sys::gpointer)
+            where P: IsA<Project>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(timeline))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"loaded\0".as_ptr() as *const _,
@@ -197,46 +227,16 @@ impl<O: IsA<Project>> ProjectExt for O {
     }
 
     fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<GString> + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn missing_uri_trampoline<P, F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static>(this: *mut ges_sys::GESProject, error: *mut glib_sys::GError, wrong_asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer) -> *mut libc::c_char
+            where P: IsA<Project>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &from_glib_borrow(wrong_asset)).to_glib_full()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"missing-uri\0".as_ptr() as *const _,
                 Some(transmute(missing_uri_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn asset_added_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
-where P: IsA<Project> {
-    let f: &F = &*(f as *const F);
-    f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
-}
-
-unsafe extern "C" fn asset_loading_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
-where P: IsA<Project> {
-    let f: &F = &*(f as *const F);
-    f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
-}
-
-unsafe extern "C" fn asset_removed_trampoline<P, F: Fn(&P, &Asset) + 'static>(this: *mut ges_sys::GESProject, asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer)
-where P: IsA<Project> {
-    let f: &F = &*(f as *const F);
-    f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(asset))
-}
-
-unsafe extern "C" fn error_loading_asset_trampoline<P, F: Fn(&P, &Error, &str, glib::types::Type) + 'static>(this: *mut ges_sys::GESProject, error: *mut glib_sys::GError, id: *mut libc::c_char, extractable_type: glib_sys::GType, f: glib_sys::gpointer)
-where P: IsA<Project> {
-    let f: &F = &*(f as *const F);
-    f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &GString::from_glib_borrow(id), from_glib(extractable_type))
-}
-
-unsafe extern "C" fn loaded_trampoline<P, F: Fn(&P, &Timeline) + 'static>(this: *mut ges_sys::GESProject, timeline: *mut ges_sys::GESTimeline, f: glib_sys::gpointer)
-where P: IsA<Project> {
-    let f: &F = &*(f as *const F);
-    f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(timeline))
-}
-
-unsafe extern "C" fn missing_uri_trampoline<P, F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static>(this: *mut ges_sys::GESProject, error: *mut glib_sys::GError, wrong_asset: *mut ges_sys::GESAsset, f: glib_sys::gpointer) -> *mut libc::c_char
-where P: IsA<Project> {
-    let f: &F = &*(f as *const F);
-    f(&Project::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(error), &from_glib_borrow(wrong_asset)).to_glib_full()
 }

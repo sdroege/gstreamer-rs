@@ -4,7 +4,7 @@
 
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -158,6 +158,10 @@ impl AppSink {
     }
 
     pub fn connect_eos<F: Fn(&AppSink) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(this: *mut gst_app_sys::GstAppSink, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"eos\0".as_ptr() as *const _,
@@ -166,6 +170,10 @@ impl AppSink {
     }
 
     pub fn connect_property_buffer_list_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_buffer_list_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::buffer-list\0".as_ptr() as *const _,
@@ -174,6 +182,10 @@ impl AppSink {
     }
 
     pub fn connect_property_caps_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_caps_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::caps\0".as_ptr() as *const _,
@@ -182,6 +194,10 @@ impl AppSink {
     }
 
     pub fn connect_property_drop_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_drop_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::drop\0".as_ptr() as *const _,
@@ -190,6 +206,10 @@ impl AppSink {
     }
 
     pub fn connect_property_emit_signals_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_emit_signals_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::emit-signals\0".as_ptr() as *const _,
@@ -198,6 +218,10 @@ impl AppSink {
     }
 
     pub fn connect_property_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::eos\0".as_ptr() as *const _,
@@ -206,6 +230,10 @@ impl AppSink {
     }
 
     pub fn connect_property_max_buffers_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_buffers_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-buffers\0".as_ptr() as *const _,
@@ -214,6 +242,10 @@ impl AppSink {
     }
 
     pub fn connect_property_wait_on_eos_notify<F: Fn(&AppSink) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wait_on_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::wait-on-eos\0".as_ptr() as *const _,
@@ -224,43 +256,3 @@ impl AppSink {
 
 unsafe impl Send for AppSink {}
 unsafe impl Sync for AppSink {}
-
-unsafe extern "C" fn eos_trampoline<F: Fn(&AppSink) + Send + 'static>(this: *mut gst_app_sys::GstAppSink, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_buffer_list_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_caps_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_drop_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_emit_signals_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_max_buffers_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_wait_on_eos_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(this: *mut gst_app_sys::GstAppSink, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

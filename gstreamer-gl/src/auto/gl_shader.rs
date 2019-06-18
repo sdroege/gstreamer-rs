@@ -15,7 +15,7 @@ use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -285,6 +285,10 @@ impl GLShader {
     }
 
     pub fn connect_property_linked_notify<F: Fn(&GLShader) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_linked_trampoline<F: Fn(&GLShader) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLShader, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::linked\0".as_ptr() as *const _,
@@ -295,8 +299,3 @@ impl GLShader {
 
 unsafe impl Send for GLShader {}
 unsafe impl Sync for GLShader {}
-
-unsafe extern "C" fn notify_linked_trampoline<F: Fn(&GLShader) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLShader, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

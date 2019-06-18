@@ -129,6 +129,12 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
     }
 
     fn connect_session_removed<F: Fn(&Self, &RTSPSession) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn session_removed_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPSessionPool, object: *mut gst_rtsp_server_sys::GstRTSPSession, f: glib_sys::gpointer)
+            where P: IsA<RTSPSessionPool>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"session-removed\0".as_ptr() as *const _,
@@ -137,22 +143,16 @@ impl<O: IsA<RTSPSessionPool>> RTSPSessionPoolExt for O {
     }
 
     fn connect_property_max_sessions_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPSessionPool, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPSessionPool>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-sessions\0".as_ptr() as *const _,
                 Some(transmute(notify_max_sessions_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn session_removed_trampoline<P, F: Fn(&P, &RTSPSession) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPSessionPool, object: *mut gst_rtsp_server_sys::GstRTSPSession, f: glib_sys::gpointer)
-where P: IsA<RTSPSessionPool> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn notify_max_sessions_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPSessionPool, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPSessionPool> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPSessionPool::from_glib_borrow(this).unsafe_cast())
 }

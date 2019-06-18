@@ -164,16 +164,16 @@ impl<O: IsA<BaseTransform>> BaseTransformExt for O {
     }
 
     fn connect_property_qos_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseTransform, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<BaseTransform>
+        {
+            let f: &F = &*(f as *const F);
+            f(&BaseTransform::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::qos\0".as_ptr() as *const _,
                 Some(transmute(notify_qos_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_qos_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseTransform, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<BaseTransform> {
-    let f: &F = &*(f as *const F);
-    f(&BaseTransform::from_glib_borrow(this).unsafe_cast())
 }

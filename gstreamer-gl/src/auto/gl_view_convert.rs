@@ -8,7 +8,7 @@ use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -137,6 +137,10 @@ impl GLViewConvert {
     }
 
     pub fn connect_property_downmix_mode_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_downmix_mode_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::downmix-mode\0".as_ptr() as *const _,
@@ -145,6 +149,10 @@ impl GLViewConvert {
     }
 
     pub fn connect_property_input_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-flags-override\0".as_ptr() as *const _,
@@ -153,6 +161,10 @@ impl GLViewConvert {
     }
 
     pub fn connect_property_input_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-mode-override\0".as_ptr() as *const _,
@@ -161,6 +173,10 @@ impl GLViewConvert {
     }
 
     pub fn connect_property_output_flags_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_output_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::output-flags-override\0".as_ptr() as *const _,
@@ -169,6 +185,10 @@ impl GLViewConvert {
     }
 
     pub fn connect_property_output_mode_override_notify<F: Fn(&GLViewConvert) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_output_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::output-mode-override\0".as_ptr() as *const _,
@@ -185,28 +205,3 @@ impl Default for GLViewConvert {
 
 unsafe impl Send for GLViewConvert {}
 unsafe impl Sync for GLViewConvert {}
-
-unsafe extern "C" fn notify_downmix_mode_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_input_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_input_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_output_flags_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_output_mode_override_trampoline<F: Fn(&GLViewConvert) + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLViewConvert, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

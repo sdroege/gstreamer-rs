@@ -7,7 +7,7 @@ use Plugin;
 use PluginFeature;
 use glib;
 use glib::object::IsA;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -148,6 +148,10 @@ impl Registry {
     }
 
     pub fn connect_feature_added<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn feature_added_trampoline<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(this: *mut gst_sys::GstRegistry, feature: *mut gst_sys::GstPluginFeature, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(feature))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"feature-added\0".as_ptr() as *const _,
@@ -156,6 +160,10 @@ impl Registry {
     }
 
     pub fn connect_plugin_added<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn plugin_added_trampoline<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(this: *mut gst_sys::GstRegistry, plugin: *mut gst_sys::GstPlugin, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(plugin))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"plugin-added\0".as_ptr() as *const _,
@@ -166,13 +174,3 @@ impl Registry {
 
 unsafe impl Send for Registry {}
 unsafe impl Sync for Registry {}
-
-unsafe extern "C" fn feature_added_trampoline<F: Fn(&Registry, &PluginFeature) + Send + Sync + 'static>(this: *mut gst_sys::GstRegistry, feature: *mut gst_sys::GstPluginFeature, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(feature))
-}
-
-unsafe extern "C" fn plugin_added_trampoline<F: Fn(&Registry, &Plugin) + Send + Sync + 'static>(this: *mut gst_sys::GstRegistry, plugin: *mut gst_sys::GstPlugin, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(plugin))
-}

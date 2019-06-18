@@ -119,6 +119,12 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     //}
 
     fn connect_child_added<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn child_added_trampoline<P, F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static>(this: *mut gst_sys::GstChildProxy, object: *mut gobject_sys::GObject, name: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<ChildProxy>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ChildProxy::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"child-added\0".as_ptr() as *const _,
@@ -127,22 +133,16 @@ impl<O: IsA<ChildProxy>> ChildProxyExt for O {
     }
 
     fn connect_child_removed<F: Fn(&Self, &glib::Object, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn child_removed_trampoline<P, F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static>(this: *mut gst_sys::GstChildProxy, object: *mut gobject_sys::GObject, name: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<ChildProxy>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ChildProxy::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"child-removed\0".as_ptr() as *const _,
                 Some(transmute(child_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn child_added_trampoline<P, F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static>(this: *mut gst_sys::GstChildProxy, object: *mut gobject_sys::GObject, name: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<ChildProxy> {
-    let f: &F = &*(f as *const F);
-    f(&ChildProxy::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
-}
-
-unsafe extern "C" fn child_removed_trampoline<P, F: Fn(&P, &glib::Object, &str) + Send + Sync + 'static>(this: *mut gst_sys::GstChildProxy, object: *mut gobject_sys::GObject, name: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<ChildProxy> {
-    let f: &F = &*(f as *const F);
-    f(&ChildProxy::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object), &GString::from_glib_borrow(name))
 }

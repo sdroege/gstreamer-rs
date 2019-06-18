@@ -114,6 +114,12 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
     }
 
     fn connect_buffer_consumed<F: Fn(&Self, &gst::Buffer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn buffer_consumed_trampoline<P, F: Fn(&P, &gst::Buffer) + Send + Sync + 'static>(this: *mut gst_base_sys::GstAggregatorPad, object: *mut gst_sys::GstBuffer, f: glib_sys::gpointer)
+            where P: IsA<AggregatorPad>
+        {
+            let f: &F = &*(f as *const F);
+            f(&AggregatorPad::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"buffer-consumed\0".as_ptr() as *const _,
@@ -123,23 +129,16 @@ impl<O: IsA<AggregatorPad>> AggregatorPadExt for O {
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn connect_property_emit_signals_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_emit_signals_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstAggregatorPad, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<AggregatorPad>
+        {
+            let f: &F = &*(f as *const F);
+            f(&AggregatorPad::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::emit-signals\0".as_ptr() as *const _,
                 Some(transmute(notify_emit_signals_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn buffer_consumed_trampoline<P, F: Fn(&P, &gst::Buffer) + Send + Sync + 'static>(this: *mut gst_base_sys::GstAggregatorPad, object: *mut gst_sys::GstBuffer, f: glib_sys::gpointer)
-where P: IsA<AggregatorPad> {
-    let f: &F = &*(f as *const F);
-    f(&AggregatorPad::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-unsafe extern "C" fn notify_emit_signals_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstAggregatorPad, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<AggregatorPad> {
-    let f: &F = &*(f as *const F);
-    f(&AggregatorPad::from_glib_borrow(this).unsafe_cast())
 }

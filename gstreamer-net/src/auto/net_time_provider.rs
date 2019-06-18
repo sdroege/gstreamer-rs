@@ -5,7 +5,7 @@
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -78,6 +78,10 @@ impl NetTimeProvider {
     }
 
     pub fn connect_property_active_notify<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_active_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetTimeProvider, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
@@ -86,6 +90,10 @@ impl NetTimeProvider {
     }
 
     pub fn connect_property_qos_dscp_notify<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetTimeProvider, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::qos-dscp\0".as_ptr() as *const _,
@@ -96,13 +104,3 @@ impl NetTimeProvider {
 
 unsafe impl Send for NetTimeProvider {}
 unsafe impl Sync for NetTimeProvider {}
-
-unsafe extern "C" fn notify_active_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetTimeProvider, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_qos_dscp_trampoline<F: Fn(&NetTimeProvider) + Send + Sync + 'static>(this: *mut gst_net_sys::GstNetTimeProvider, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

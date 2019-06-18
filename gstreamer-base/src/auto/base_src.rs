@@ -209,6 +209,12 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn connect_property_blocksize_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<BaseSrc>
+        {
+            let f: &F = &*(f as *const F);
+            f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::blocksize\0".as_ptr() as *const _,
@@ -217,6 +223,12 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn connect_property_do_timestamp_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_do_timestamp_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<BaseSrc>
+        {
+            let f: &F = &*(f as *const F);
+            f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::do-timestamp\0".as_ptr() as *const _,
@@ -225,6 +237,12 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn connect_property_num_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_num_buffers_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<BaseSrc>
+        {
+            let f: &F = &*(f as *const F);
+            f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::num-buffers\0".as_ptr() as *const _,
@@ -233,34 +251,16 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
     }
 
     fn connect_property_typefind_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_typefind_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<BaseSrc>
+        {
+            let f: &F = &*(f as *const F);
+            f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::typefind\0".as_ptr() as *const _,
                 Some(transmute(notify_typefind_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_blocksize_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<BaseSrc> {
-    let f: &F = &*(f as *const F);
-    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_do_timestamp_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<BaseSrc> {
-    let f: &F = &*(f as *const F);
-    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_num_buffers_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<BaseSrc> {
-    let f: &F = &*(f as *const F);
-    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_typefind_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_base_sys::GstBaseSrc, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<BaseSrc> {
-    let f: &F = &*(f as *const F);
-    f(&BaseSrc::from_glib_borrow(this).unsafe_cast())
 }

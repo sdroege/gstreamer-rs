@@ -121,16 +121,16 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
     }
 
     fn connect_create_context<F: Fn(&Self, &GLContext) -> GLContext + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn create_context_trampoline<P, F: Fn(&P, &GLContext) -> GLContext + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLDisplay, context: *mut gst_gl_sys::GstGLContext, f: glib_sys::gpointer) -> *mut gst_gl_sys::GstGLContext
+            where P: IsA<GLDisplay>
+        {
+            let f: &F = &*(f as *const F);
+            f(&GLDisplay::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib_full()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"create-context\0".as_ptr() as *const _,
                 Some(transmute(create_context_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn create_context_trampoline<P, F: Fn(&P, &GLContext) -> GLContext + Send + Sync + 'static>(this: *mut gst_gl_sys::GstGLDisplay, context: *mut gst_gl_sys::GstGLContext, f: glib_sys::gpointer) -> *mut gst_gl_sys::GstGLContext
-where P: IsA<GLDisplay> {
-    let f: &F = &*(f as *const F);
-    f(&GLDisplay::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib_full()
 }

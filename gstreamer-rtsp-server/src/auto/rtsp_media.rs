@@ -676,6 +676,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_new_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn new_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: libc::c_int, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-state\0".as_ptr() as *const _,
@@ -684,6 +690,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_new_stream<F: Fn(&Self, &RTSPStream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn new_stream_trampoline<P, F: Fn(&P, &RTSPStream) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: *mut gst_rtsp_server_sys::GstRTSPStream, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-stream\0".as_ptr() as *const _,
@@ -692,6 +704,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_prepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn prepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"prepared\0".as_ptr() as *const _,
@@ -700,6 +718,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_removed_stream<F: Fn(&Self, &RTSPStream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn removed_stream_trampoline<P, F: Fn(&P, &RTSPStream) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: *mut gst_rtsp_server_sys::GstRTSPStream, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"removed-stream\0".as_ptr() as *const _,
@@ -708,6 +732,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_target_state<F: Fn(&Self, i32) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn target_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: libc::c_int, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"target-state\0".as_ptr() as *const _,
@@ -716,6 +746,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_unprepared<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn unprepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unprepared\0".as_ptr() as *const _,
@@ -724,6 +760,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_bind_mcast_address_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_bind_mcast_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::bind-mcast-address\0".as_ptr() as *const _,
@@ -732,6 +774,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_buffer_size_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_buffer_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::buffer-size\0".as_ptr() as *const _,
@@ -740,6 +788,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_clock_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::clock\0".as_ptr() as *const _,
@@ -748,6 +802,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_eos_shutdown_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_eos_shutdown_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::eos-shutdown\0".as_ptr() as *const _,
@@ -756,6 +816,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_latency_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::latency\0".as_ptr() as *const _,
@@ -764,6 +830,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_max_mcast_ttl_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_mcast_ttl_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-mcast-ttl\0".as_ptr() as *const _,
@@ -772,6 +844,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::profiles\0".as_ptr() as *const _,
@@ -780,6 +858,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::protocols\0".as_ptr() as *const _,
@@ -788,6 +872,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_reusable_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_reusable_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::reusable\0".as_ptr() as *const _,
@@ -796,6 +886,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_shared_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_shared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::shared\0".as_ptr() as *const _,
@@ -804,6 +900,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_stop_on_disconnect_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stop_on_disconnect_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stop-on-disconnect\0".as_ptr() as *const _,
@@ -812,6 +914,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_suspend_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_suspend_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::suspend-mode\0".as_ptr() as *const _,
@@ -820,6 +928,12 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_time_provider_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_time_provider_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::time-provider\0".as_ptr() as *const _,
@@ -828,130 +942,16 @@ impl<O: IsA<RTSPMedia>> RTSPMediaExt for O {
     }
 
     fn connect_property_transport_mode_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_transport_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPMedia>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transport-mode\0".as_ptr() as *const _,
                 Some(transmute(notify_transport_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn new_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: libc::c_int, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
-}
-
-unsafe extern "C" fn new_stream_trampoline<P, F: Fn(&P, &RTSPStream) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: *mut gst_rtsp_server_sys::GstRTSPStream, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn prepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn removed_stream_trampoline<P, F: Fn(&P, &RTSPStream) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: *mut gst_rtsp_server_sys::GstRTSPStream, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn target_state_trampoline<P, F: Fn(&P, i32) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, object: libc::c_int, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast(), object)
-}
-
-unsafe extern "C" fn unprepared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_bind_mcast_address_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_buffer_size_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_clock_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_eos_shutdown_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_latency_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_max_mcast_ttl_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_reusable_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_shared_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_stop_on_disconnect_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_suspend_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_time_provider_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_transport_mode_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPMedia, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPMedia> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPMedia::from_glib_borrow(this).unsafe_cast())
 }

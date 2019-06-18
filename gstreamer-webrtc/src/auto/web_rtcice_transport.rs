@@ -8,7 +8,7 @@ use WebRTCICEGatheringState;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -77,6 +77,10 @@ impl WebRTCICETransport {
     }
 
     pub fn connect_on_new_candidate<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn on_new_candidate_trampoline<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, object: *mut libc::c_char, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"on-new-candidate\0".as_ptr() as *const _,
@@ -85,6 +89,10 @@ impl WebRTCICETransport {
     }
 
     pub fn connect_on_selected_candidate_pair_change<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn on_selected_candidate_pair_change_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"on-selected-candidate-pair-change\0".as_ptr() as *const _,
@@ -93,6 +101,10 @@ impl WebRTCICETransport {
     }
 
     pub fn connect_property_gathering_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_gathering_state_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gathering-state\0".as_ptr() as *const _,
@@ -101,6 +113,10 @@ impl WebRTCICETransport {
     }
 
     pub fn connect_property_state_notify<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::state\0".as_ptr() as *const _,
@@ -111,23 +127,3 @@ impl WebRTCICETransport {
 
 unsafe impl Send for WebRTCICETransport {}
 unsafe impl Sync for WebRTCICETransport {}
-
-unsafe extern "C" fn on_new_candidate_trampoline<F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, object: *mut libc::c_char, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &GString::from_glib_borrow(object))
-}
-
-unsafe extern "C" fn on_selected_candidate_pair_change_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_gathering_state_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCICETransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCICETransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

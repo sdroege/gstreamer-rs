@@ -5,7 +5,7 @@
 use Error;
 use Extractable;
 #[cfg(feature = "futures")]
-use futures_core;
+use futures::future;
 use ges_sys;
 use gio;
 use gio_sys;
@@ -65,7 +65,7 @@ impl Asset {
     }
 
     #[cfg(feature = "futures")]
-    pub fn request_async_future(extractable_type: glib::types::Type, id: &str) -> Box_<futures_core::Future<Item = Asset, Error = Error>> {
+    pub fn request_async_future(extractable_type: glib::types::Type, id: &str) -> Box_<dyn future::Future<Output = Result<Asset, Error>> + std::marker::Unpin> {
         use gio::GioFuture;
         use fragile::Fragile;
 
@@ -179,6 +179,12 @@ impl<O: IsA<Asset>> AssetExt for O {
     }
 
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_proxy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESAsset, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Asset>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Asset::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::proxy\0".as_ptr() as *const _,
@@ -187,22 +193,16 @@ impl<O: IsA<Asset>> AssetExt for O {
     }
 
     fn connect_property_proxy_target_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_proxy_target_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESAsset, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Asset>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Asset::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::proxy-target\0".as_ptr() as *const _,
                 Some(transmute(notify_proxy_target_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_proxy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESAsset, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Asset> {
-    let f: &F = &*(f as *const F);
-    f(&Asset::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_proxy_target_trampoline<P, F: Fn(&P) + 'static>(this: *mut ges_sys::GESAsset, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Asset> {
-    let f: &F = &*(f as *const F);
-    f(&Asset::from_glib_borrow(this).unsafe_cast())
 }

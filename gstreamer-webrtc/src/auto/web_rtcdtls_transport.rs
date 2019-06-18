@@ -7,7 +7,7 @@ use WebRTCICETransport;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -108,6 +108,10 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn connect_property_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::certificate\0".as_ptr() as *const _,
@@ -116,6 +120,10 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn connect_property_client_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_client_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::client\0".as_ptr() as *const _,
@@ -124,6 +132,10 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn connect_property_remote_certificate_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_remote_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::remote-certificate\0".as_ptr() as *const _,
@@ -132,6 +144,10 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn connect_property_state_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::state\0".as_ptr() as *const _,
@@ -140,6 +156,10 @@ impl WebRTCDTLSTransport {
     }
 
     pub fn connect_property_transport_notify<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_transport_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transport\0".as_ptr() as *const _,
@@ -150,28 +170,3 @@ impl WebRTCDTLSTransport {
 
 unsafe impl Send for WebRTCDTLSTransport {}
 unsafe impl Sync for WebRTCDTLSTransport {}
-
-unsafe extern "C" fn notify_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_client_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_remote_certificate_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_state_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_transport_trampoline<F: Fn(&WebRTCDTLSTransport) + Send + Sync + 'static>(this: *mut gst_web_rtc_sys::GstWebRTCDTLSTransport, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

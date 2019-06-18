@@ -75,6 +75,12 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
     }
 
     fn connect_property_mute_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_audio_sys::GstStreamVolume, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<StreamVolume>
+        {
+            let f: &F = &*(f as *const F);
+            f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mute\0".as_ptr() as *const _,
@@ -83,22 +89,16 @@ impl<O: IsA<StreamVolume>> StreamVolumeExt for O {
     }
 
     fn connect_property_volume_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_audio_sys::GstStreamVolume, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<StreamVolume>
+        {
+            let f: &F = &*(f as *const F);
+            f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::volume\0".as_ptr() as *const _,
                 Some(transmute(notify_volume_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_mute_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_audio_sys::GstStreamVolume, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<StreamVolume> {
-    let f: &F = &*(f as *const F);
-    f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_volume_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_audio_sys::GstStreamVolume, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<StreamVolume> {
-    let f: &F = &*(f as *const F);
-    f(&StreamVolume::from_glib_borrow(this).unsafe_cast())
 }

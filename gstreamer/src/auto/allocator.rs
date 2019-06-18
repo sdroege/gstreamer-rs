@@ -37,7 +37,7 @@ unsafe impl Sync for Allocator {}
 pub const NONE_ALLOCATOR: Option<&Allocator> = None;
 
 pub trait AllocatorExt: 'static {
-    //fn alloc(&self, size: usize, params: Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory>;
+    //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory>;
 
     //fn free(&self, memory: /*Ignored*/&mut Memory);
 
@@ -45,7 +45,7 @@ pub trait AllocatorExt: 'static {
 }
 
 impl<O: IsA<Allocator>> AllocatorExt for O {
-    //fn alloc(&self, size: usize, params: Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory> {
+    //fn alloc(&self, size: usize, params: /*Ignored*/Option<&mut AllocationParams>) -> /*Ignored*/Option<Memory> {
     //    unsafe { TODO: call gst_sys:gst_allocator_alloc() }
     //}
 

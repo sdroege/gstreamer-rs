@@ -5,7 +5,7 @@
 use PlayerVideoRenderer;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -80,6 +80,10 @@ impl PlayerVideoOverlayVideoRenderer {
     //}
 
     pub fn connect_property_video_sink_notify<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_video_sink_trampoline<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(this: *mut gst_player_sys::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::video-sink\0".as_ptr() as *const _,
@@ -88,6 +92,10 @@ impl PlayerVideoOverlayVideoRenderer {
     }
 
     pub fn connect_property_window_handle_notify<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_window_handle_trampoline<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(this: *mut gst_player_sys::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window-handle\0".as_ptr() as *const _,
@@ -98,13 +106,3 @@ impl PlayerVideoOverlayVideoRenderer {
 
 unsafe impl Send for PlayerVideoOverlayVideoRenderer {}
 unsafe impl Sync for PlayerVideoOverlayVideoRenderer {}
-
-unsafe extern "C" fn notify_video_sink_trampoline<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(this: *mut gst_player_sys::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_window_handle_trampoline<F: Fn(&PlayerVideoOverlayVideoRenderer) + Send + Sync + 'static>(this: *mut gst_player_sys::GstPlayerVideoOverlayVideoRenderer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

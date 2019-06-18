@@ -741,6 +741,12 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     fn connect_new_rtcp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn new_rtcp_encoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, object: *mut gst_sys::GstElement, f: glib_sys::gpointer)
+            where P: IsA<RTSPStream>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-rtcp-encoder\0".as_ptr() as *const _,
@@ -749,6 +755,12 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     fn connect_new_rtp_encoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn new_rtp_encoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, object: *mut gst_sys::GstElement, f: glib_sys::gpointer)
+            where P: IsA<RTSPStream>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-rtp-encoder\0".as_ptr() as *const _,
@@ -757,6 +769,12 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     fn connect_new_rtp_rtcp_decoder<F: Fn(&Self, &gst::Element) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn new_rtp_rtcp_decoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, object: *mut gst_sys::GstElement, f: glib_sys::gpointer)
+            where P: IsA<RTSPStream>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"new-rtp-rtcp-decoder\0".as_ptr() as *const _,
@@ -765,6 +783,12 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     fn connect_property_control_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_control_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPStream>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::control\0".as_ptr() as *const _,
@@ -773,6 +797,12 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     fn connect_property_profiles_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPStream>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::profiles\0".as_ptr() as *const _,
@@ -781,46 +811,16 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
     }
 
     fn connect_property_protocols_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RTSPStream>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::protocols\0".as_ptr() as *const _,
                 Some(transmute(notify_protocols_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn new_rtcp_encoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, object: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-where P: IsA<RTSPStream> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn new_rtp_encoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, object: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-where P: IsA<RTSPStream> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn new_rtp_rtcp_decoder_trampoline<P, F: Fn(&P, &gst::Element) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, object: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-where P: IsA<RTSPStream> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPStream::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn notify_control_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPStream> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_profiles_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPStream> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_protocols_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_rtsp_server_sys::GstRTSPStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RTSPStream> {
-    let f: &F = &*(f as *const F);
-    f(&RTSPStream::from_glib_borrow(this).unsafe_cast())
 }

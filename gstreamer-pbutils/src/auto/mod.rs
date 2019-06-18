@@ -28,8 +28,7 @@ mod encoding_audio_profile;
 pub use self::encoding_audio_profile::{EncodingAudioProfile, EncodingAudioProfileClass};
 
 mod encoding_container_profile;
-pub use self::encoding_container_profile::{EncodingContainerProfile, EncodingContainerProfileClass, NONE_ENCODING_CONTAINER_PROFILE};
-pub use self::encoding_container_profile::EncodingContainerProfileExt;
+pub use self::encoding_container_profile::{EncodingContainerProfile, EncodingContainerProfileClass};
 
 mod encoding_profile;
 pub use self::encoding_profile::{EncodingProfile, EncodingProfileClass, NONE_ENCODING_PROFILE};
@@ -52,6 +51,5 @@ pub mod functions;
 #[doc(hidden)]
 pub mod traits {
     pub use super::DiscovererStreamInfoExt;
-    pub use super::EncodingContainerProfileExt;
     pub use super::EncodingProfileExt;
 }

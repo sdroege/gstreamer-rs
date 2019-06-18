@@ -6,7 +6,7 @@ use ClockTime;
 use Message;
 use Object;
 use glib;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -111,6 +111,10 @@ impl Bus {
     }
 
     pub fn connect_message<F: Fn(&Bus, &Message) + Send + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(message))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"message\0".as_ptr() as *const _,
@@ -119,6 +123,10 @@ impl Bus {
     }
 
     pub fn connect_sync_message<F: Fn(&Bus, &Message) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn sync_message_trampoline<F: Fn(&Bus, &Message) + Send + Sync + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(message))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"sync-message\0".as_ptr() as *const _,
@@ -135,13 +143,3 @@ impl Default for Bus {
 
 unsafe impl Send for Bus {}
 unsafe impl Sync for Bus {}
-
-unsafe extern "C" fn message_trampoline<F: Fn(&Bus, &Message) + Send + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(message))
-}
-
-unsafe extern "C" fn sync_message_trampoline<F: Fn(&Bus, &Message) + Send + Sync + 'static>(this: *mut gst_sys::GstBus, message: *mut gst_sys::GstMessage, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(message))
-}

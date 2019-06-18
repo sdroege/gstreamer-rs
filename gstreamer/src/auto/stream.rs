@@ -10,7 +10,7 @@ use TagList;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -157,6 +157,10 @@ impl Stream {
     }
 
     pub fn connect_property_caps_notify<F: Fn(&Stream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_caps_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::caps\0".as_ptr() as *const _,
@@ -165,6 +169,10 @@ impl Stream {
     }
 
     pub fn connect_property_stream_flags_notify<F: Fn(&Stream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stream_flags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stream-flags\0".as_ptr() as *const _,
@@ -173,6 +181,10 @@ impl Stream {
     }
 
     pub fn connect_property_stream_type_notify<F: Fn(&Stream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stream-type\0".as_ptr() as *const _,
@@ -181,6 +193,10 @@ impl Stream {
     }
 
     pub fn connect_property_tags_notify<F: Fn(&Stream) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_tags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tags\0".as_ptr() as *const _,
@@ -191,23 +207,3 @@ impl Stream {
 
 unsafe impl Send for Stream {}
 unsafe impl Sync for Stream {}
-
-unsafe extern "C" fn notify_caps_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_stream_flags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_stream_type_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_tags_trampoline<F: Fn(&Stream) + Send + Sync + 'static>(this: *mut gst_sys::GstStream, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}

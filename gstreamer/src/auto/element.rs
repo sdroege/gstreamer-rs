@@ -453,6 +453,12 @@ impl<O: IsA<Element>> ElementExt for O {
     }
 
     fn connect_no_more_pads<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstElement, f: glib_sys::gpointer)
+            where P: IsA<Element>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Element::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"no-more-pads\0".as_ptr() as *const _,
@@ -461,6 +467,12 @@ impl<O: IsA<Element>> ElementExt for O {
     }
 
     fn connect_pad_added<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn pad_added_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstElement, new_pad: *mut gst_sys::GstPad, f: glib_sys::gpointer)
+            where P: IsA<Element>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(new_pad))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pad-added\0".as_ptr() as *const _,
@@ -469,28 +481,16 @@ impl<O: IsA<Element>> ElementExt for O {
     }
 
     fn connect_pad_removed<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn pad_removed_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstElement, old_pad: *mut gst_sys::GstPad, f: glib_sys::gpointer)
+            where P: IsA<Element>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_pad))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pad-removed\0".as_ptr() as *const _,
                 Some(transmute(pad_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn no_more_pads_trampoline<P, F: Fn(&P) + Send + Sync + 'static>(this: *mut gst_sys::GstElement, f: glib_sys::gpointer)
-where P: IsA<Element> {
-    let f: &F = &*(f as *const F);
-    f(&Element::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn pad_added_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstElement, new_pad: *mut gst_sys::GstPad, f: glib_sys::gpointer)
-where P: IsA<Element> {
-    let f: &F = &*(f as *const F);
-    f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(new_pad))
-}
-
-unsafe extern "C" fn pad_removed_trampoline<P, F: Fn(&P, &Pad) + Send + Sync + 'static>(this: *mut gst_sys::GstElement, old_pad: *mut gst_sys::GstPad, f: glib_sys::gpointer)
-where P: IsA<Element> {
-    let f: &F = &*(f as *const F);
-    f(&Element::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_pad))
 }
