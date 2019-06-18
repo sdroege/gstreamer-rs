@@ -56,5 +56,6 @@ for entry in [f for f in listdir('.') if isfile(join('.', f))]:
         print('==> Regenerating "{}"...'.format(entry))
         call(['./target/release/gir', '-c', entry])
         print('<== Done!')
+call(['cargo', 'fmt'])
 print('<= Done!')
 print("Don't forget to check if everything has been correctly generated!")
