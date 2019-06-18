@@ -520,7 +520,7 @@ impl fmt::Debug for TagListRef {
 
 impl fmt::Display for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        f.write_str(&TagListRef::to_string(self))
     }
 }
 
@@ -1097,5 +1097,12 @@ mod tests {
             tags.get::<MyCustomTag>().unwrap().get(),
             Some("first one, second one")
         );
+    }
+
+    #[test]
+    fn test_display() {
+        ::init().unwrap();
+
+        format!("{}", TagList::new());
     }
 }
