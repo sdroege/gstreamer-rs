@@ -509,7 +509,7 @@ impl fmt::Debug for CapsRef {
 
 impl fmt::Display for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        f.write_str(&CapsRef::to_string(self))
     }
 }
 
@@ -651,5 +651,13 @@ mod tests {
             .features(&["foo:bla", "foo:baz"])
             .build();
         assert_eq!(caps.to_string(), "foo/bar(foo:bla, foo:baz), int=(int)12");
+    }
+
+    #[test]
+    fn test_display() {
+        ::init().unwrap();
+
+        let caps = Caps::new_simple("foo/bar", &[]);
+        format!("{}", caps);
     }
 }
