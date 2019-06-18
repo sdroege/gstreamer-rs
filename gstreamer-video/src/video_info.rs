@@ -23,7 +23,7 @@ use std::mem;
 use std::ptr;
 use std::str;
 
-pub const VIDEO_MAX_PLANES: u32 = gst_video_sys::GST_VIDEO_MAX_PLANES as u32;
+pub const VIDEO_MAX_PLANES: usize = gst_video_sys::GST_VIDEO_MAX_PLANES as usize;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum VideoColorRange {
@@ -945,7 +945,7 @@ mod tests {
         assert_eq!(info.stride(), [1920, 1920]);
         assert_eq!(info.offset(), [0, 2073600]);
 
-        let mut align = ::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES as usize]);
+        let mut align = ::VideoAlignment::new(0, 0, 0, 8, &[0; VIDEO_MAX_PLANES]);
         assert!(info.align(&mut align));
 
         assert_eq!(info.stride(), [1928, 1928]);
