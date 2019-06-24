@@ -278,7 +278,7 @@ Feature: `v1_14`
 <!-- impl AudioStreamAlign::fn new -->
 Allocate a new `AudioStreamAlign` with the given configuration. All
 processing happens according to sample rate `rate`, until
-`gst_audio_discont_wait_set_rate` is called with a new `rate`.
+`AudioStreamAlign::set_rate` is called with a new `rate`.
 A negative rate can be used for reverse playback.
 
 `alignment_threshold` gives the tolerance in nanoseconds after which a
@@ -315,6 +315,33 @@ or `AudioStreamAlign::copy`.
 
 Feature: `v1_14`
 
+<!-- impl AudioStreamAlign::fn get_alignment_threshold -->
+Gets the currently configured alignment threshold.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The currently configured alignment threshold
+<!-- impl AudioStreamAlign::fn get_discont_wait -->
+Gets the currently configured discont wait.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The currently configured discont wait
+<!-- impl AudioStreamAlign::fn get_rate -->
+Gets the currently configured sample rate.
+
+Feature: `v1_14`
+
+
+# Returns
+
+The currently configured sample rate
 <!-- impl AudioStreamAlign::fn get_samples_since_discont -->
 Returns the number of samples that were processed since the last
 discontinuity was detected.
@@ -376,6 +403,28 @@ output sample position of the start of the data
 # Returns
 
 `true` if a discontinuity was detected, `false` otherwise.
+<!-- impl AudioStreamAlign::fn set_alignment_threshold -->
+Sets `alignment_treshold` as new alignment threshold for the following processing.
+
+Feature: `v1_14`
+
+## `alignment_threshold`
+a new alignment threshold
+<!-- impl AudioStreamAlign::fn set_discont_wait -->
+Sets `alignment_treshold` as new discont wait for the following processing.
+
+Feature: `v1_14`
+
+## `discont_wait`
+a new discont wait
+<!-- impl AudioStreamAlign::fn set_rate -->
+Sets `rate` as new sample rate for the following processing. If the sample
+rate differs this implicitely marks the next data as discontinuous.
+
+Feature: `v1_14`
+
+## `rate`
+a new sample rate
 <!-- struct StreamVolume -->
 This interface is implemented by elements that provide a stream volume. Examples for
 such elements are `volume` and `playbin`.

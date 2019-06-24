@@ -522,13 +522,7 @@ Encoding profiles for containers. Keeps track of a list of `EncodingProfile`
 
 # Implements
 
-[`EncodingContainerProfileExt`](trait.EncodingContainerProfileExt.html), [`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
-<!-- trait EncodingContainerProfileExt -->
-Trait containing all `EncodingContainerProfile` methods.
-
-# Implementors
-
-[`EncodingContainerProfile`](struct.EncodingContainerProfile.html)
+[`EncodingProfileExt`](trait.EncodingProfileExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- impl EncodingContainerProfile::fn new -->
 Creates a new `EncodingContainerProfile`.
 ## `name`
@@ -544,7 +538,7 @@ The preset to use for this profile.
 # Returns
 
 The newly created `EncodingContainerProfile`.
-<!-- trait EncodingContainerProfileExt::fn add_profile -->
+<!-- impl EncodingContainerProfile::fn add_profile -->
 Add a `EncodingProfile` to the list of profiles handled by `self`.
 
 No copy of `profile` will be made, if you wish to use it elsewhere after this
@@ -555,7 +549,7 @@ the `EncodingProfile` to add.
 # Returns
 
 `true` if the `stream` was properly added, else `false`.
-<!-- trait EncodingContainerProfileExt::fn contains_profile -->
+<!-- impl EncodingContainerProfile::fn contains_profile -->
 Checks if `self` contains a `EncodingProfile` identical to
 `profile`.
 ## `profile`
@@ -565,7 +559,7 @@ a `EncodingProfile`
 
 `true` if `self` contains a `EncodingProfile` identical
 to `profile`, else `false`.
-<!-- trait EncodingContainerProfileExt::fn get_profiles -->
+<!-- impl EncodingContainerProfile::fn get_profiles -->
 
 # Returns
 
@@ -610,11 +604,12 @@ The new `EncodingProfile` or `None`.
 <!-- trait EncodingProfileExt::fn copy -->
 Makes a deep copy of `self`
 
+Feature: `v1_12`
+
+
 # Returns
 
 The copy of `self`
-
-Since 1.12
 <!-- trait EncodingProfileExt::fn get_allow_dynamic_output -->
 Get whether the format that has been negotiated in at some point can be renegotiated
 later during the encoding.
@@ -699,8 +694,6 @@ Set `description` as the given description for the `self`. A copy of
 the description to set on the profile
 <!-- trait EncodingProfileExt::fn set_enabled -->
 Set whether the profile should be used or not.
-
-Since 1.6
 ## `enabled`
 `false` to disable `profile`, `true` to enable it
 <!-- trait EncodingProfileExt::fn set_format -->

@@ -532,6 +532,9 @@ buffers that the appsrc element will push to its source pad. Any
 previous caps that were set on appsrc will be replaced by the caps
 associated with the sample if not equal.
 
+This function does not take ownership of the
+sample so the sample needs to be unreffed after calling this function.
+
 When the block property is TRUE, this function can block until free
 space becomes available in the queue.
 ## `sample`

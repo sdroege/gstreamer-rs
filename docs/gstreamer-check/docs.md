@@ -876,7 +876,7 @@ a `guint` describing how many seconds to wait for `waits` to be true
 # Returns
 
 a `gboolean` `true` if the waits have been registered, `false` if not.
-(Could be that it timed out waiting or that more waits then waits was found)
+(Could be that it timed out waiting or that more waits than waits was found)
 <!-- impl Harness::fn new -->
 Creates a new harness. Works like `Harness::new_with_padnames`, except it
 assumes the `gst::Element` sinkpad is named "sink" and srcpad is named "src"
@@ -1266,6 +1266,27 @@ which is earlier or equal to the time of the clock as given by
 MT safe.
 ## `new_time`
 a `gst::ClockTime` later than that returned by `gst::ClockExt::get_time`
+<!-- impl TestClock::fn timed_wait_for_multiple_pending_ids -->
+Blocks until at least `count` clock notifications have been requested from
+`self`, or the timeout expires.
+
+MT safe.
+
+Feature: `v1_16`
+
+## `count`
+the number of pending clock notifications to wait for
+## `timeout_ms`
+the timeout in milliseconds
+## `pending_list`
+Address
+ of a `glib::List` pointer variable to store the list of pending `GstClockIDs`
+ that expired, or `None`
+
+# Returns
+
+a `gboolean` `true` if the waits have been registered, `false` if not.
+(Could be that it timed out waiting or that more waits than waits was found)
 <!-- impl TestClock::fn wait_for_multiple_pending_ids -->
 Blocks until at least `count` clock notifications have been requested from
 `self`. There is no timeout for this wait, see the main description of

@@ -8,6 +8,7 @@ basic authentication
 <!-- enum RTSPAuthMethod::variant Digest -->
 digest authentication
 <!-- struct RTSPAuthParam -->
+RTSP Authentication parameter
 <!-- enum RTSPFamily -->
 The possible network families.
 <!-- enum RTSPFamily::variant None -->

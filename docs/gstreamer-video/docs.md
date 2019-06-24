@@ -1,4 +1,97 @@
 <!-- file * -->
+<!-- struct VideoBufferPool -->
+
+
+# Implements
+
+[`gst::BufferPoolExt`](../gst/trait.BufferPoolExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl VideoBufferPool::fn new -->
+Create a new bufferpool that can allocate video frames. This bufferpool
+supports all the video bufferpool options.
+
+# Returns
+
+a new `gst::BufferPool` to allocate video frames
+<!-- enum VideoCaptionType -->
+The various known types of Closed Caption (CC).
+<!-- enum VideoCaptionType::variant Unknown -->
+Unknown type of CC
+<!-- enum VideoCaptionType::variant Cea608Raw -->
+CEA-608 as byte pairs. Note that
+ this format is not recommended since is does not specify to
+ which field the caption comes from and therefore assumes
+ it comes from the first field (and that there is no information
+ on the second field). Use `VideoCaptionType::Cea708Raw`
+ if you wish to store CEA-608 from two fields and prefix each byte pair
+ with 0xFC for the first field and 0xFD for the second field.
+<!-- enum VideoCaptionType::variant Cea608S3341a -->
+CEA-608 as byte triplets as defined
+ in SMPTE S334-1 Annex A. The second and third byte of the byte triplet
+ is the raw CEA608 data, the first byte is a bitfield: The top/7th bit is
+ 0 for the second field, 1 for the first field, bit 6 and 5 are 0 and
+ bits 4 to 0 are a 5 bit unsigned integer that represents the line
+ offset relative to the base-line of the original image format (line 9
+ for 525-line field 1, line 272 for 525-line field 2, line 5 for
+ 625-line field 1 and line 318 for 625-line field 2).
+<!-- enum VideoCaptionType::variant Cea708Raw -->
+CEA-708 as cc_data byte triplets. They
+ can also contain 608-in-708 and the first byte of each triplet has to
+ be inspected for detecting the type.
+<!-- enum VideoCaptionType::variant Cea708Cdp -->
+CEA-708 (and optionally CEA-608) in
+ a CDP (Caption Distribution Packet) defined by SMPTE S-334-2.
+ Contains the whole CDP (starting with 0x9669).
+
+Feature: `v1_16`
+
+<!-- struct VideoCodecFrame -->
+A `VideoCodecFrame` represents a video frame both in raw and
+encoded form.
+<!-- impl VideoCodecFrame::fn get_user_data -->
+Gets private data set on the frame by the subclass via
+`VideoCodecFrame::set_user_data` previously.
+
+# Returns
+
+The previously set user_data
+<!-- impl VideoCodecFrame::fn ref -->
+Increases the refcount of the given frame by one.
+
+# Returns
+
+`buf`
+<!-- impl VideoCodecFrame::fn set_user_data -->
+Sets `user_data` on the frame and the `GDestroyNotify` that will be called when
+the frame is freed. Allows to attach private data by the subclass to frames.
+
+If a `user_data` was previously set, then the previous set `notify` will be called
+before the `user_data` is replaced.
+## `user_data`
+private data
+## `notify`
+a `GDestroyNotify`
+<!-- impl VideoCodecFrame::fn unref -->
+Decreases the refcount of the frame. If the refcount reaches 0, the frame
+will be freed.
+<!-- struct VideoCodecState -->
+Structure representing the state of an incoming or outgoing video
+stream for encoders and decoders.
+
+Decoders and encoders will receive such a state through their
+respective `set_format` vmethods.
+
+Decoders and encoders can set the downstream state, by using the
+`VideoDecoder::set_output_state`() or
+`VideoEncoder::set_output_state`() methods.
+<!-- impl VideoCodecState::fn ref -->
+Increases the refcount of the given state by one.
+
+# Returns
+
+`buf`
+<!-- impl VideoCodecState::fn unref -->
+Decreases the refcount of the state. If the refcount reaches 0, the state
+will be freed.
 <!-- enum VideoColorMatrix -->
 The color matrix is used to convert between Y'PbPr and
 non-linear RGB (R'G'B')
@@ -37,6 +130,14 @@ Generic film
 BT2020 primaries. Since: 1.6
 <!-- enum VideoColorPrimaries::variant Adobergb -->
 Adobe RGB primaries. Since: 1.8
+<!-- enum VideoColorPrimaries::variant Smptest428 -->
+SMPTE ST 428 primaries. Since: 1.16
+<!-- enum VideoColorPrimaries::variant Smpterp431 -->
+SMPTE RP 431 primaries. Since: 1.16
+<!-- enum VideoColorPrimaries::variant Smpteeg432 -->
+SMPTE EG 432 primaries. Since: 1.16
+<!-- enum VideoColorPrimaries::variant Ebu3213 -->
+EBU 3213 primaries. Since: 1.16
 <!-- enum VideoColorRange -->
 Possible color range values. These constants are defined for 8 bit color
 values and can be scaled for other bit depths.
@@ -82,6 +183,690 @@ Make a string representation of `self`.
 # Returns
 
 a string representation of `self`.
+<!-- struct VideoDecoder -->
+This base class is for video decoders turning encoded data into raw video
+frames.
+
+The GstVideoDecoder base class and derived subclasses should cooperate as
+follows:
+
+## Configuration
+
+ * Initially, GstVideoDecoder calls `start` when the decoder element
+ is activated, which allows the subclass to perform any global setup.
+
+ * GstVideoDecoder calls `set_format` to inform the subclass of caps
+ describing input video data that it is about to receive, including
+ possibly configuration data.
+ While unlikely, it might be called more than once, if changing input
+ parameters require reconfiguration.
+
+ * Incoming data buffers are processed as needed, described in Data
+ Processing below.
+
+ * GstVideoDecoder calls `stop` at end of all processing.
+
+## Data processing
+
+ * The base class gathers input data, and optionally allows subclass
+ to parse this into subsequently manageable chunks, typically
+ corresponding to and referred to as 'frames'.
+
+ * Each input frame is provided in turn to the subclass' `handle_frame`
+ callback.
+ The ownership of the frame is given to the `handle_frame` callback.
+
+ * If codec processing results in decoded data, the subclass should call
+ `VideoDecoder::finish_frame` to have decoded data pushed.
+ downstream. Otherwise, the subclass must call
+ `VideoDecoder::drop_frame`, to allow the base class to do timestamp
+ and offset tracking, and possibly to requeue the frame for a later
+ attempt in the case of reverse playback.
+
+## Shutdown phase
+
+ * The GstVideoDecoder class calls `stop` to inform the subclass that data
+ parsing will be stopped.
+
+## Additional Notes
+
+ * Seeking/Flushing
+
+ * When the pipeline is seeked or otherwise flushed, the subclass is
+ informed via a call to its `reset` callback, with the hard parameter
+ set to true. This indicates the subclass should drop any internal data
+ queues and timestamps and prepare for a fresh set of buffers to arrive
+ for parsing and decoding.
+
+ * End Of Stream
+
+ * At end-of-stream, the subclass `parse` function may be called some final
+ times with the at_eos parameter set to true, indicating that the element
+ should not expect any more data to be arriving, and it should parse and
+ remaining frames and call `VideoDecoder::have_frame` if possible.
+
+The subclass is responsible for providing pad template caps for
+source and sink pads. The pads need to be named "sink" and "src". It also
+needs to provide information about the ouptput caps, when they are known.
+This may be when the base class calls the subclass' `set_format` function,
+though it might be during decoding, before calling
+`VideoDecoder::finish_frame`. This is done via
+`VideoDecoder::set_output_state`
+
+The subclass is also responsible for providing (presentation) timestamps
+(likely based on corresponding input ones). If that is not applicable
+or possible, the base class provides limited framerate based interpolation.
+
+Similarly, the base class provides some limited (legacy) seeking support
+if specifically requested by the subclass, as full-fledged support
+should rather be left to upstream demuxer, parser or alike. This simple
+approach caters for seeking and duration reporting using estimated input
+bitrates. To enable it, a subclass should call
+`VideoDecoderExt::set_estimate_rate` to enable handling of incoming
+byte-streams.
+
+The base class provides some support for reverse playback, in particular
+in case incoming data is not packetized or upstream does not provide
+fragments on keyframe boundaries. However, the subclass should then be
+prepared for the parsing and frame processing stage to occur separately
+(in normal forward processing, the latter immediately follows the former),
+The subclass also needs to ensure the parsing stage properly marks
+keyframes, unless it knows the upstream elements will do so properly for
+incoming data.
+
+The bare minimum that a functional subclass needs to implement is:
+
+ * Provide pad templates
+ * Inform the base class of output caps via
+ `VideoDecoder::set_output_state`
+
+ * Parse input data, if it is not considered packetized from upstream
+ Data will be provided to `parse` which should invoke
+ `VideoDecoderExt::add_to_frame` and `VideoDecoder::have_frame` to
+ separate the data belonging to each video frame.
+
+ * Accept data in `handle_frame` and provide decoded results to
+ `VideoDecoder::finish_frame`, or call `VideoDecoder::drop_frame`.
+
+# Implements
+
+[`VideoDecoderExt`](trait.VideoDecoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait VideoDecoderExt -->
+Trait containing all `VideoDecoder` methods.
+
+# Implementors
+
+[`VideoDecoder`](struct.VideoDecoder.html)
+<!-- trait VideoDecoderExt::fn add_to_frame -->
+Removes next `n_bytes` of input data and adds it to currently parsed frame.
+## `n_bytes`
+the number of bytes to add
+<!-- trait VideoDecoderExt::fn allocate_output_buffer -->
+Helper function that allocates a buffer to hold a video frame for `self`'s
+current `VideoCodecState`.
+
+You should use `VideoDecoder::allocate_output_frame` instead of this
+function, if possible at all.
+
+# Returns
+
+allocated buffer, or NULL if no buffer could be
+ allocated (e.g. when downstream is flushing or shutting down)
+<!-- trait VideoDecoderExt::fn allocate_output_frame -->
+Helper function that allocates a buffer to hold a video frame for `self`'s
+current `VideoCodecState`. Subclass should already have configured video
+state and set src pad caps.
+
+The buffer allocated here is owned by the frame and you should only
+keep references to the frame, not the buffer.
+## `frame`
+a `VideoCodecFrame`
+
+# Returns
+
+`gst::FlowReturn::Ok` if an output buffer could be allocated
+<!-- trait VideoDecoderExt::fn allocate_output_frame_with_params -->
+Same as `VideoDecoder::allocate_output_frame` except it allows passing
+`gst::BufferPoolAcquireParams` to the sub call gst_buffer_pool_acquire_buffer.
+
+Feature: `v1_12`
+
+## `frame`
+a `VideoCodecFrame`
+## `params`
+a `gst::BufferPoolAcquireParams`
+
+# Returns
+
+`gst::FlowReturn::Ok` if an output buffer could be allocated
+<!-- trait VideoDecoderExt::fn drop_frame -->
+Similar to `VideoDecoder::finish_frame`, but drops `frame` in any
+case and posts a QoS message with the frame's details on the bus.
+In any case, the frame is considered finished and released.
+## `frame`
+the `VideoCodecFrame` to drop
+
+# Returns
+
+a `gst::FlowReturn`, usually GST_FLOW_OK.
+<!-- trait VideoDecoderExt::fn finish_frame -->
+`frame` should have a valid decoded data buffer, whose metadata fields
+are then appropriately set according to frame data and pushed downstream.
+If no output data is provided, `frame` is considered skipped.
+In any case, the frame is considered finished and released.
+
+After calling this function the output buffer of the frame is to be
+considered read-only. This function will also change the metadata
+of the buffer.
+## `frame`
+a decoded `VideoCodecFrame`
+
+# Returns
+
+a `gst::FlowReturn` resulting from sending data downstream
+<!-- trait VideoDecoderExt::fn get_allocator -->
+Lets `VideoDecoder` sub-classes to know the memory `allocator`
+used by the base class and its `params`.
+
+Unref the `allocator` after use it.
+## `allocator`
+the `gst::Allocator`
+used
+## `params`
+the
+`gst::AllocationParams` of `allocator`
+<!-- trait VideoDecoderExt::fn get_buffer_pool -->
+
+# Returns
+
+the instance of the `gst::BufferPool` used
+by the decoder; free it after use it
+<!-- trait VideoDecoderExt::fn get_estimate_rate -->
+
+# Returns
+
+currently configured byte to time conversion setting
+<!-- trait VideoDecoderExt::fn get_frame -->
+Get a pending unfinished `VideoCodecFrame`
+## `frame_number`
+system_frame_number of a frame
+
+# Returns
+
+pending unfinished `VideoCodecFrame` identified by `frame_number`.
+<!-- trait VideoDecoderExt::fn get_frames -->
+Get all pending unfinished `VideoCodecFrame`
+
+# Returns
+
+pending unfinished `VideoCodecFrame`.
+<!-- trait VideoDecoderExt::fn get_latency -->
+Query the configured decoder latency. Results will be returned via
+`min_latency` and `max_latency`.
+## `min_latency`
+address of variable in which to store the
+ configured minimum latency, or `None`
+## `max_latency`
+address of variable in which to store the
+ configured mximum latency, or `None`
+<!-- trait VideoDecoderExt::fn get_max_decode_time -->
+Determines maximum possible decoding time for `frame` that will
+allow it to decode and arrive in time (as determined by QoS events).
+In particular, a negative result means decoding in time is no longer possible
+and should therefore occur as soon/skippy as possible.
+## `frame`
+a `VideoCodecFrame`
+
+# Returns
+
+max decoding time.
+<!-- trait VideoDecoderExt::fn get_max_errors -->
+
+# Returns
+
+currently configured decoder tolerated error count.
+<!-- trait VideoDecoderExt::fn get_needs_format -->
+Queries decoder required format handling.
+
+# Returns
+
+`true` if required format handling is enabled.
+<!-- trait VideoDecoderExt::fn get_oldest_frame -->
+Get the oldest pending unfinished `VideoCodecFrame`
+
+# Returns
+
+oldest pending unfinished `VideoCodecFrame`.
+<!-- trait VideoDecoderExt::fn get_output_state -->
+Get the `VideoCodecState` currently describing the output stream.
+
+# Returns
+
+`VideoCodecState` describing format of video data.
+<!-- trait VideoDecoderExt::fn get_packetized -->
+Queries whether input data is considered packetized or not by the
+base class.
+
+# Returns
+
+TRUE if input data is considered packetized.
+<!-- trait VideoDecoderExt::fn get_pending_frame_size -->
+Returns the number of bytes previously added to the current frame
+by calling `VideoDecoderExt::add_to_frame`.
+
+# Returns
+
+The number of bytes pending for the current frame
+<!-- trait VideoDecoderExt::fn get_qos_proportion -->
+
+# Returns
+
+The current QoS proportion.
+<!-- trait VideoDecoderExt::fn have_frame -->
+Gathers all data collected for currently parsed frame, gathers corresponding
+metadata and passes it along for further processing, i.e. `handle_frame`.
+
+# Returns
+
+a `gst::FlowReturn`
+<!-- trait VideoDecoderExt::fn merge_tags -->
+Sets the audio decoder tags and how they should be merged with any
+upstream stream tags. This will override any tags previously-set
+with `gst_audio_decoder_merge_tags`.
+
+Note that this is provided for convenience, and the subclass is
+not required to use this and can still do tag handling on its own.
+
+MT safe.
+## `tags`
+a `gst::TagList` to merge, or NULL to unset
+ previously-set tags
+## `mode`
+the `gst::TagMergeMode` to use, usually `gst::TagMergeMode::Replace`
+<!-- trait VideoDecoderExt::fn negotiate -->
+Negotiate with downstream elements to currently configured `VideoCodecState`.
+Unmark GST_PAD_FLAG_NEED_RECONFIGURE in any case. But mark it again if
+negotiate fails.
+
+# Returns
+
+`true` if the negotiation succeeded, else `false`.
+<!-- trait VideoDecoderExt::fn proxy_getcaps -->
+Returns caps that express `caps` (or sink template caps if `caps` == NULL)
+restricted to resolution/format/... combinations supported by downstream
+elements.
+## `caps`
+initial caps
+## `filter`
+filter caps
+
+# Returns
+
+a `gst::Caps` owned by caller
+<!-- trait VideoDecoderExt::fn release_frame -->
+Similar to `VideoDecoder::drop_frame`, but simply releases `frame`
+without any processing other than removing it from list of pending frames,
+after which it is considered finished and released.
+## `frame`
+the `VideoCodecFrame` to release
+<!-- trait VideoDecoderExt::fn set_estimate_rate -->
+Allows baseclass to perform byte to time estimated conversion.
+## `enabled`
+whether to enable byte to time conversion
+<!-- trait VideoDecoderExt::fn set_interlaced_output_state -->
+Same as `VideoDecoder::set_output_state`() but also allows you to also set
+the interlacing mode.
+
+Feature: `v1_16`
+
+## `fmt`
+a `VideoFormat`
+## `mode`
+A `VideoInterlaceMode`
+## `width`
+The width in pixels
+## `height`
+The height in pixels
+## `reference`
+An optional reference `VideoCodecState`
+
+# Returns
+
+the newly configured output state.
+<!-- trait VideoDecoderExt::fn set_latency -->
+Lets `VideoDecoder` sub-classes tell the baseclass what the decoder
+latency is. Will also post a LATENCY message on the bus so the pipeline
+can reconfigure its global latency.
+## `min_latency`
+minimum latency
+## `max_latency`
+maximum latency
+<!-- trait VideoDecoderExt::fn set_max_errors -->
+Sets numbers of tolerated decoder errors, where a tolerated one is then only
+warned about, but more than tolerated will lead to fatal error. You can set
+-1 for never returning fatal errors. Default is set to
+GST_VIDEO_DECODER_MAX_ERRORS.
+
+The '-1' option was added in 1.4
+## `num`
+max tolerated errors
+<!-- trait VideoDecoderExt::fn set_needs_format -->
+Configures decoder format needs. If enabled, subclass needs to be
+negotiated with format caps before it can process any data. It will then
+never be handed any data before it has been configured.
+Otherwise, it might be handed data without having been configured and
+is then expected being able to do so either by default
+or based on the input data.
+## `enabled`
+new state
+<!-- trait VideoDecoderExt::fn set_output_state -->
+Creates a new `VideoCodecState` with the specified `fmt`, `width` and `height`
+as the output state for the decoder.
+Any previously set output state on `self` will be replaced by the newly
+created one.
+
+If the subclass wishes to copy over existing fields (like pixel aspec ratio,
+or framerate) from an existing `VideoCodecState`, it can be provided as a
+`reference`.
+
+If the subclass wishes to override some fields from the output state (like
+pixel-aspect-ratio or framerate) it can do so on the returned `VideoCodecState`.
+
+The new output state will only take effect (set on pads and buffers) starting
+from the next call to `VideoDecoder::finish_frame`().
+## `fmt`
+a `VideoFormat`
+## `width`
+The width in pixels
+## `height`
+The height in pixels
+## `reference`
+An optional reference `VideoCodecState`
+
+# Returns
+
+the newly configured output state.
+<!-- trait VideoDecoderExt::fn set_packetized -->
+Allows baseclass to consider input data as packetized or not. If the
+input is packetized, then the `parse` method will not be called.
+## `packetized`
+whether the input data should be considered as packetized.
+<!-- trait VideoDecoderExt::fn set_use_default_pad_acceptcaps -->
+Lets `VideoDecoder` sub-classes decide if they want the sink pad
+to use the default pad query handler to reply to accept-caps queries.
+
+By setting this to true it is possible to further customize the default
+handler with `GST_PAD_SET_ACCEPT_INTERSECT` and
+`GST_PAD_SET_ACCEPT_TEMPLATE`
+## `use_`
+if the default pad accept-caps query handling should be used
+<!-- struct VideoEncoder -->
+This base class is for video encoders turning raw video into
+encoded video data.
+
+GstVideoEncoder and subclass should cooperate as follows.
+
+## Configuration
+
+ * Initially, GstVideoEncoder calls `start` when the encoder element
+ is activated, which allows subclass to perform any global setup.
+ * GstVideoEncoder calls `set_format` to inform subclass of the format
+ of input video data that it is about to receive. Subclass should
+ setup for encoding and configure base class as appropriate
+ (e.g. latency). While unlikely, it might be called more than once,
+ if changing input parameters require reconfiguration. Baseclass
+ will ensure that processing of current configuration is finished.
+ * GstVideoEncoder calls `stop` at end of all processing.
+
+## Data processing
+
+ * Base class collects input data and metadata into a frame and hands
+ this to subclass' `handle_frame`.
+
+ * If codec processing results in encoded data, subclass should call
+ `VideoEncoder::finish_frame` to have encoded data pushed
+ downstream.
+
+ * If implemented, baseclass calls subclass `pre_push` just prior to
+ pushing to allow subclasses to modify some metadata on the buffer.
+ If it returns GST_FLOW_OK, the buffer is pushed downstream.
+
+ * GstVideoEncoderClass will handle both srcpad and sinkpad events.
+ Sink events will be passed to subclass if `event` callback has been
+ provided.
+
+## Shutdown phase
+
+ * GstVideoEncoder class calls `stop` to inform the subclass that data
+ parsing will be stopped.
+
+Subclass is responsible for providing pad template caps for
+source and sink pads. The pads need to be named "sink" and "src". It should
+also be able to provide fixed src pad caps in `getcaps` by the time it calls
+`VideoEncoder::finish_frame`.
+
+Things that subclass need to take care of:
+
+ * Provide pad templates
+ * Provide source pad caps before pushing the first buffer
+ * Accept data in `handle_frame` and provide encoded results to
+ `VideoEncoder::finish_frame`.
+
+
+The `VideoEncoder:qos` property will enable the Quality-of-Service
+features of the encoder which gather statistics about the real-time
+performance of the downstream elements. If enabled, subclasses can
+use `VideoEncoderExt::get_max_encode_time` to check if input frames
+are already late and drop them right away to give a chance to the
+pipeline to catch up.
+
+# Implements
+
+[`VideoEncoderExt`](trait.VideoEncoderExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait VideoEncoderExt -->
+Trait containing all `VideoEncoder` methods.
+
+# Implementors
+
+[`VideoEncoder`](struct.VideoEncoder.html)
+<!-- trait VideoEncoderExt::fn allocate_output_buffer -->
+Helper function that allocates a buffer to hold an encoded video frame
+for `self`'s current `VideoCodecState`.
+## `size`
+size of the buffer
+
+# Returns
+
+allocated buffer
+<!-- trait VideoEncoderExt::fn allocate_output_frame -->
+Helper function that allocates a buffer to hold an encoded video frame for `self`'s
+current `VideoCodecState`. Subclass should already have configured video
+state and set src pad caps.
+
+The buffer allocated here is owned by the frame and you should only
+keep references to the frame, not the buffer.
+## `frame`
+a `VideoCodecFrame`
+## `size`
+size of the buffer
+
+# Returns
+
+`gst::FlowReturn::Ok` if an output buffer could be allocated
+<!-- trait VideoEncoderExt::fn finish_frame -->
+`frame` must have a valid encoded data buffer, whose metadata fields
+are then appropriately set according to frame data or no buffer at
+all if the frame should be dropped.
+It is subsequently pushed downstream or provided to `pre_push`.
+In any case, the frame is considered finished and released.
+
+After calling this function the output buffer of the frame is to be
+considered read-only. This function will also change the metadata
+of the buffer.
+## `frame`
+an encoded `VideoCodecFrame`
+
+# Returns
+
+a `gst::FlowReturn` resulting from sending data downstream
+<!-- trait VideoEncoderExt::fn get_allocator -->
+Lets `VideoEncoder` sub-classes to know the memory `allocator`
+used by the base class and its `params`.
+
+Unref the `allocator` after use it.
+## `allocator`
+the `gst::Allocator`
+used
+## `params`
+the
+`gst::AllocationParams` of `allocator`
+<!-- trait VideoEncoderExt::fn get_frame -->
+Get a pending unfinished `VideoCodecFrame`
+## `frame_number`
+system_frame_number of a frame
+
+# Returns
+
+pending unfinished `VideoCodecFrame` identified by `frame_number`.
+<!-- trait VideoEncoderExt::fn get_frames -->
+Get all pending unfinished `VideoCodecFrame`
+
+# Returns
+
+pending unfinished `VideoCodecFrame`.
+<!-- trait VideoEncoderExt::fn get_latency -->
+Query the configured encoding latency. Results will be returned via
+`min_latency` and `max_latency`.
+## `min_latency`
+address of variable in which to store the
+ configured minimum latency, or `None`
+## `max_latency`
+address of variable in which to store the
+ configured maximum latency, or `None`
+<!-- trait VideoEncoderExt::fn get_max_encode_time -->
+Determines maximum possible encoding time for `frame` that will
+allow it to encode and arrive in time (as determined by QoS events).
+In particular, a negative result means encoding in time is no longer possible
+and should therefore occur as soon/skippy as possible.
+
+If no QoS events have been received from downstream, or if
+`VideoEncoder:qos` is disabled this function returns `G_MAXINT64`.
+
+Feature: `v1_14`
+
+## `frame`
+a `VideoCodecFrame`
+
+# Returns
+
+max decoding time.
+<!-- trait VideoEncoderExt::fn get_oldest_frame -->
+Get the oldest unfinished pending `VideoCodecFrame`
+
+# Returns
+
+oldest unfinished pending `VideoCodecFrame`
+<!-- trait VideoEncoderExt::fn get_output_state -->
+Get the current `VideoCodecState`
+
+# Returns
+
+`VideoCodecState` describing format of video data.
+<!-- trait VideoEncoderExt::fn is_qos_enabled -->
+Checks if `self` is currently configured to handle Quality-of-Service
+events from downstream.
+
+Feature: `v1_14`
+
+
+# Returns
+
+`true` if the encoder is configured to perform Quality-of-Service.
+<!-- trait VideoEncoderExt::fn merge_tags -->
+Sets the video encoder tags and how they should be merged with any
+upstream stream tags. This will override any tags previously-set
+with `VideoEncoderExt::merge_tags`.
+
+Note that this is provided for convenience, and the subclass is
+not required to use this and can still do tag handling on its own.
+
+MT safe.
+## `tags`
+a `gst::TagList` to merge, or NULL to unset
+ previously-set tags
+## `mode`
+the `gst::TagMergeMode` to use, usually `gst::TagMergeMode::Replace`
+<!-- trait VideoEncoderExt::fn negotiate -->
+Negotiate with downstream elements to currently configured `VideoCodecState`.
+Unmark GST_PAD_FLAG_NEED_RECONFIGURE in any case. But mark it again if
+negotiate fails.
+
+# Returns
+
+`true` if the negotiation succeeded, else `false`.
+<!-- trait VideoEncoderExt::fn proxy_getcaps -->
+Returns caps that express `caps` (or sink template caps if `caps` == NULL)
+restricted to resolution/format/... combinations supported by downstream
+elements (e.g. muxers).
+## `caps`
+initial caps
+## `filter`
+filter caps
+
+# Returns
+
+a `gst::Caps` owned by caller
+<!-- trait VideoEncoderExt::fn set_headers -->
+Set the codec headers to be sent downstream whenever requested.
+## `headers`
+a list of `gst::Buffer` containing the codec header
+<!-- trait VideoEncoderExt::fn set_latency -->
+Informs baseclass of encoding latency.
+## `min_latency`
+minimum latency
+## `max_latency`
+maximum latency
+<!-- trait VideoEncoderExt::fn set_min_pts -->
+Request minimal value for PTS passed to handle_frame.
+
+For streams with reordered frames this can be used to ensure that there
+is enough time to accomodate first DTS, which may be less than first PTS
+## `min_pts`
+minimal PTS that will be passed to handle_frame
+<!-- trait VideoEncoderExt::fn set_output_state -->
+Creates a new `VideoCodecState` with the specified caps as the output state
+for the encoder.
+Any previously set output state on `self` will be replaced by the newly
+created one.
+
+The specified `caps` should not contain any resolution, pixel-aspect-ratio,
+framerate, codec-data, .... Those should be specified instead in the returned
+`VideoCodecState`.
+
+If the subclass wishes to copy over existing fields (like pixel aspect ratio,
+or framerate) from an existing `VideoCodecState`, it can be provided as a
+`reference`.
+
+If the subclass wishes to override some fields from the output state (like
+pixel-aspect-ratio or framerate) it can do so on the returned `VideoCodecState`.
+
+The new output state will only take effect (set on pads and buffers) starting
+from the next call to `VideoEncoder::finish_frame`().
+## `caps`
+the `gst::Caps` to use for the output
+## `reference`
+An optional reference `VideoCodecState`
+
+# Returns
+
+the newly configured output state.
+<!-- trait VideoEncoderExt::fn set_qos_enabled -->
+Configures `self` to handle Quality-of-Service events from downstream.
+
+Feature: `v1_14`
+
+## `enabled`
+the new qos value.
 <!-- enum VideoFieldOrder -->
 Field order of interlaced content. This is only valid for
 interlace-mode=interleaved and not interlace-mode=mixed. In the case of
@@ -108,6 +893,9 @@ to implement frame dropping.
 [`gst_base::BaseTransformExt`](../gst_base/trait.BaseTransformExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- enum VideoFormat -->
 Enum value describing the most common video formats.
+
+See the [GStreamer raw video format design document](https://gstreamer.freedesktop.org/documentation/design/mediatype-video-raw.html`formats`)
+for details about the layout and packing of these formats in memory.
 <!-- enum VideoFormat::variant Unknown -->
 Unknown or unset video format id
 <!-- enum VideoFormat::variant Encoded -->
@@ -142,9 +930,9 @@ rgb with alpha channel first
 <!-- enum VideoFormat::variant Abgr -->
 reverse rgb with alpha channel first
 <!-- enum VideoFormat::variant Rgb -->
-rgb
+RGB packed into 24 bits without padding (`R-G-B-R-G-B`)
 <!-- enum VideoFormat::variant Bgr -->
-reverse rgb
+reverse RGB packed into 24 bits without padding (`B-G-R-B-G-R`)
 <!-- enum VideoFormat::variant Y41b -->
 planar 4:1:1 YUV
 <!-- enum VideoFormat::variant Y42b -->
@@ -238,7 +1026,7 @@ planar 4:2:0 YUV with interleaved UV plane, 10 bits per channel (Since: 1.10)
 <!-- enum VideoFormat::variant P01010le -->
 planar 4:2:0 YUV with interleaved UV plane, 10 bits per channel (Since: 1.10)
 <!-- enum VideoFormat::variant Iyu2 -->
-packed 4:4:4 YUV (U-Y-V ...) (Since 1.10)
+packed 4:4:4 YUV (U-Y-V ...) (Since: 1.10)
 <!-- enum VideoFormat::variant Vyuy -->
 packed 4:2:2 YUV (V0-Y0-U0-Y1 V2-Y2-U2-Y3 V4 ...)
 <!-- enum VideoFormat::variant Gbra -->
@@ -273,6 +1061,16 @@ planar 4:4:4 YUV, 12 bits per channel (Since: 1.12)
 10-bit variant of `VideoFormat::Nv12`, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
 <!-- enum VideoFormat::variant Nv1610le32 -->
 10-bit variant of `VideoFormat::Nv16`, packed into 32bit words (MSB 2 bits padding) (Since: 1.14)
+<!-- enum VideoFormat::variant Nv1210le40 -->
+Fully packed variant of NV12_10LE32 (Since: 1.16)
+<!-- enum VideoFormat::variant Y210 -->
+packed 4:2:2 YUV, 10 bits per channel (Since: 1.16)
+<!-- enum VideoFormat::variant Y410 -->
+packed 4:4:4 YUV, 10 bits per channel(A-V-Y-U...) (Since: 1.16)
+<!-- enum VideoFormat::variant Vuya -->
+packed 4:4:4 YUV with alpha channel (V0-U0-Y0-A0...) (Since: 1.16)
+<!-- enum VideoFormat::variant Bgr10a2Le -->
+packed 4:4:4 RGB with alpha channel(B-G-R-A), 10 bits for R/G/B channel and MSB 2 bits for alpha channel (Since: 1.16)
 <!-- struct VideoFormatInfo -->
 Information for a video format.
 <!-- struct VideoFrame -->
@@ -461,6 +1259,25 @@ a height
 
 `false` if the returned video info is invalid, e.g. because the
  size of a frame can't be represented as a 32 bit integer (Since: 1.12)
+<!-- impl VideoInfo::fn set_interlaced_format -->
+Same as `VideoInfo::set_format` but also allowing to set the interlaced
+mode.
+
+Feature: `v1_16`
+
+## `format`
+the format
+## `mode`
+a `VideoInterlaceMode`
+## `width`
+a width
+## `height`
+a height
+
+# Returns
+
+`false` if the returned video info is invalid, e.g. because the
+ size of a frame can't be represented as a 32 bit integer.
 <!-- impl VideoInfo::fn to_caps -->
 Convert the values of `self` into a `gst::Caps`.
 
@@ -486,6 +1303,12 @@ frames contains both interlaced and
  Each field has only half the amount of lines as noted in the
  height property. This mode requires multiple GstVideoMeta metadata
  to describe the fields.
+<!-- enum VideoInterlaceMode::variant Alternate -->
+1 field is stored in one buffer,
+ `GST_VIDEO_BUFFER_FLAG_TF` or `GST_VIDEO_BUFFER_FLAG_BF` indicates if
+ the buffer is carrying the top or bottom field, respectively. The top and
+ bottom buffers are expected to alternate in the pipeline, with this mode
+ (Since: 1.16).
 <!-- enum VideoMultiviewFramePacking -->
 `VideoMultiviewFramePacking` represents the subset of `VideoMultiviewMode`
 values that can be applied to any video frame without needing extra metadata.
@@ -854,7 +1677,8 @@ interface that want the render rectangle to be controllable using
 properties. This helper will install "render-rectangle" property into the
 class.
 
-Since 1.14
+Feature: `v1_14`
+
 ## `oclass`
 The class on which the properties will be installed
 ## `last_prop_id`
@@ -864,6 +1688,9 @@ This helper shall be used by classes implementing the `VideoOverlay`
 interface that want the render rectangle to be controllable using
 properties. This helper will parse and set the render rectangle calling
 `VideoOverlay::set_render_rectangle`.
+
+Feature: `v1_14`
+
 ## `object`
 The instance on which the property is set
 ## `last_prop_id`
@@ -876,8 +1703,6 @@ The `gobject::Value` to be set
 # Returns
 
 `true` if the `property_id` matches the GstVideoOverlay property
-
-Since 1.14
 <!-- trait VideoOverlayExt::fn expose -->
 Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.
@@ -989,10 +1814,14 @@ Feature: `v1_10`
 
 # Returns
 
-a new empty `VideoTimeCode`
+a new empty, invalid `VideoTimeCode`
 <!-- impl VideoTimeCode::fn new_from_date_time -->
 The resulting config->latest_daily_jam is set to
 midnight, and timecode is set to the given time.
+
+This might return a completely invalid timecode, use
+`VideoTimeCode::new_from_date_time_full` to ensure
+that you would get `None` instead in that case.
 
 Feature: `v1_12`
 
@@ -1009,7 +1838,28 @@ Interlaced video field count
 
 # Returns
 
-the `GVideoTimeCode` representation of `dt`.
+the `VideoTimeCode` representation of `dt`.
+<!-- impl VideoTimeCode::fn new_from_date_time_full -->
+The resulting config->latest_daily_jam is set to
+midnight, and timecode is set to the given time.
+
+Feature: `v1_16`
+
+## `fps_n`
+Numerator of the frame rate
+## `fps_d`
+Denominator of the frame rate
+## `dt`
+`glib::DateTime` to convert
+## `flags`
+`VideoTimeCodeFlags`
+## `field_count`
+Interlaced video field count
+
+# Returns
+
+the `VideoTimeCode` representation of `dt`, or `None` if
+ no valid timecode could be created.
 <!-- impl VideoTimeCode::fn new_from_string -->
 
 Feature: `v1_12`
@@ -1019,7 +1869,8 @@ The string that represents the `VideoTimeCode`
 
 # Returns
 
-a new `VideoTimeCode` from the given string
+a new `VideoTimeCode` from the given string or `None`
+ if the string could not be passed.
 <!-- impl VideoTimeCode::fn add_frames -->
 Adds or subtracts `frames` amount of frames to `self`. tc needs to
 contain valid data, as verified by `VideoTimeCode::is_valid`.
@@ -1047,21 +1898,23 @@ be dropped. These are then corrected to the next reasonable timecode.
 
 # Returns
 
-A new `VideoTimeCode` with `tc_inter` added.
+A new `VideoTimeCode` with `tc_inter` added or `None`
+ if the interval can't be added.
 <!-- impl VideoTimeCode::fn clear -->
-Initializes `self` with empty/zero/NULL values.
+Initializes `self` with empty/zero/NULL values and frees any memory
+it might currently use.
 
 Feature: `v1_10`
 
 <!-- impl VideoTimeCode::fn compare -->
-Compares `self` and `tc2` . If both have latest daily jam information, it is
+Compares `self` and `tc2`. If both have latest daily jam information, it is
 taken into account. Otherwise, it is assumed that the daily jam of both
 `self` and `tc2` was at the same time. Both time codes must be valid.
 
 Feature: `v1_10`
 
 ## `tc2`
-another `VideoTimeCode`
+another valid `VideoTimeCode`
 
 # Returns
 
@@ -1073,7 +1926,7 @@ Feature: `v1_10`
 
 # Returns
 
-a new `VideoTimeCode` with the same values as `self` .
+a new `VideoTimeCode` with the same values as `self`.
 <!-- impl VideoTimeCode::fn frames_since_daily_jam -->
 
 Feature: `v1_10`
@@ -1081,14 +1934,14 @@ Feature: `v1_10`
 
 # Returns
 
-how many frames have passed since the daily jam of `self` .
+how many frames have passed since the daily jam of `self`.
 <!-- impl VideoTimeCode::fn free -->
-Frees `self` .
+Frees `self`.
 
 Feature: `v1_10`
 
 <!-- impl VideoTimeCode::fn increment_frame -->
-Adds one frame to `self` .
+Adds one frame to `self`.
 
 Feature: `v1_10`
 
@@ -1121,8 +1974,11 @@ the frames field of `VideoTimeCode`
 ## `field_count`
 Interlaced video field count
 <!-- impl VideoTimeCode::fn init_from_date_time -->
-The resulting config->latest_daily_jam is set to
-midnight, and timecode is set to the given time.
+The resulting config->latest_daily_jam is set to midnight, and timecode is
+set to the given time.
+
+Will assert on invalid parameters, use `VideoTimeCode::init_from_date_time_full`
+for being able to handle invalid parameters.
 
 Feature: `v1_12`
 
@@ -1136,6 +1992,26 @@ Denominator of the frame rate
 `VideoTimeCodeFlags`
 ## `field_count`
 Interlaced video field count
+<!-- impl VideoTimeCode::fn init_from_date_time_full -->
+The resulting config->latest_daily_jam is set to
+midnight, and timecode is set to the given time.
+
+Feature: `v1_16`
+
+## `fps_n`
+Numerator of the frame rate
+## `fps_d`
+Denominator of the frame rate
+## `dt`
+`glib::DateTime` to convert
+## `flags`
+`VideoTimeCodeFlags`
+## `field_count`
+Interlaced video field count
+
+# Returns
+
+`true` if `self` could be correctly initialized to a valid timecode
 <!-- impl VideoTimeCode::fn is_valid -->
 
 Feature: `v1_10`
@@ -1152,7 +2028,7 @@ Feature: `v1_10`
 
 # Returns
 
-how many nsec have passed since the daily jam of `self` .
+how many nsec have passed since the daily jam of `self`.
 <!-- impl VideoTimeCode::fn to_date_time -->
 The `self.config`->latest_daily_jam is required to be non-NULL.
 
@@ -1161,7 +2037,8 @@ Feature: `v1_10`
 
 # Returns
 
-the `glib::DateTime` representation of `self`.
+the `glib::DateTime` representation of `self` or `None` if `self`
+ has no daily jam.
 <!-- impl VideoTimeCode::fn to_string -->
 
 Feature: `v1_10`
@@ -1170,7 +2047,7 @@ Feature: `v1_10`
 # Returns
 
 the SMPTE ST 2059-1:2015 string representation of `self`. That will
-take the form hh:mm:ss:ff . The last separator (between seconds and frames)
+take the form hh:mm:ss:ff. The last separator (between seconds and frames)
 may vary:
 
 ';' for drop-frame, non-interlaced content and for drop-frame interlaced
@@ -1211,6 +2088,7 @@ The string that represents the `VideoTimeCodeInterval`
 # Returns
 
 a new `VideoTimeCodeInterval` from the given string
+ or `None` if the string could not be passed.
 <!-- impl VideoTimeCodeInterval::fn clear -->
 Initializes `self` with empty/zero/NULL values.
 
@@ -1223,9 +2101,9 @@ Feature: `v1_12`
 
 # Returns
 
-a new `VideoTimeCodeInterval` with the same values as `self` .
+a new `VideoTimeCodeInterval` with the same values as `self`.
 <!-- impl VideoTimeCodeInterval::fn free -->
-Frees `self` .
+Frees `self`.
 
 Feature: `v1_12`
 

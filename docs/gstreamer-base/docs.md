@@ -664,6 +664,38 @@ Feature: `v1_14`
 
 ## `caps`
 The `gst::Caps` to set on the src pad.
+<!-- trait AggregatorExt::fn simple_get_next_time -->
+This is a simple `Aggregator::get_next_time` implementation that
+just looks at the `gst::Segment` on the srcpad of the aggregator and bases
+the next time on the running time there.
+
+This is the desired behaviour in most cases where you have a live source
+and you have a dead line based aggregator subclass.
+
+Feature: `v1_16`
+
+
+# Returns
+
+The running time based on the position
+<!-- trait AggregatorExt::fn get_property_min-upstream-latency -->
+Force minimum upstream latency (in nanoseconds). When sources with a
+higher latency are expected to be plugged in dynamically after the
+aggregator has started playing, this allows overriding the minimum
+latency reported by the initial source(s). This is only taken into
+account when larger than the actually reported minimum latency.
+
+Feature: `v1_16`
+
+<!-- trait AggregatorExt::fn set_property_min-upstream-latency -->
+Force minimum upstream latency (in nanoseconds). When sources with a
+higher latency are expected to be plugged in dynamically after the
+aggregator has started playing, this allows overriding the minimum
+latency reported by the initial source(s). This is only taken into
+account when larger than the actually reported minimum latency.
+
+Feature: `v1_16`
+
 <!-- struct AggregatorPad -->
 Pads managed by a `GstAggregor` subclass.
 
@@ -692,6 +724,9 @@ Feature: `v1_14`
 
 TRUE if there was a buffer queued in `self`, or FALSE if not.
 <!-- trait AggregatorPadExt::fn has_buffer -->
+This checks if a pad has a buffer available that will be returned by
+a call to `AggregatorPadExt::peek_buffer` or
+`AggregatorPadExt::pop_buffer`.
 
 Feature: `v1_14_1`
 
@@ -727,6 +762,394 @@ Feature: `v1_14`
 
 The buffer in `self` or NULL if no buffer was
  queued. You should unref the buffer after usage.
+<!-- trait AggregatorPadExt::fn get_property_emit-signals -->
+Enables the emission of signals such as `AggregatorPad::buffer-consumed`
+
+Feature: `v1_16`
+
+<!-- trait AggregatorPadExt::fn set_property_emit-signals -->
+Enables the emission of signals such as `AggregatorPad::buffer-consumed`
+
+Feature: `v1_16`
+
+<!-- struct BaseParse -->
+This base class is for parser elements that process data and splits it
+into separate audio/video/whatever frames.
+
+It provides for:
+
+ * provides one sink pad and one source pad
+ * handles state changes
+ * can operate in pull mode or push mode
+ * handles seeking in both modes
+ * handles events (SEGMENT/EOS/FLUSH)
+ * handles queries (POSITION/DURATION/SEEKING/FORMAT/CONVERT)
+ * handles flushing
+
+The purpose of this base class is to provide the basic functionality of
+a parser and share a lot of rather complex code.
+
+# Description of the parsing mechanism:
+
+## Set-up phase
+
+ * `BaseParse` calls `BaseParseClass.start`() to inform subclass
+ that data processing is about to start now.
+
+ * `BaseParse` class calls `BaseParseClass.set_sink_caps`() to
+ inform the subclass about incoming sinkpad caps. Subclass could
+ already set the srcpad caps accordingly, but this might be delayed
+ until calling `BaseParse::finish_frame` with a non-queued frame.
+
+ * At least at this point subclass needs to tell the `BaseParse` class
+ how big data chunks it wants to receive (minimum frame size ). It can
+ do this with `BaseParseExt::set_min_frame_size`.
+
+ * `BaseParse` class sets up appropriate data passing mode (pull/push)
+ and starts to process the data.
+
+## Parsing phase
+
+ * `BaseParse` gathers at least min_frame_size bytes of data either
+ by pulling it from upstream or collecting buffers in an internal
+ `Adapter`.
+
+ * A buffer of (at least) min_frame_size bytes is passed to subclass
+ with `BaseParseClass.handle_frame`(). Subclass checks the contents
+ and can optionally return `gst::FlowReturn::Ok` along with an amount of data
+ to be skipped to find a valid frame (which will result in a
+ subsequent DISCONT). If, otherwise, the buffer does not hold a
+ complete frame, `BaseParseClass.handle_frame`() can merely return
+ and will be called again when additional data is available. In push
+ mode this amounts to an additional input buffer (thus minimal
+ additional latency), in pull mode this amounts to some arbitrary
+ reasonable buffer size increase.
+
+ Of course, `BaseParseExt::set_min_frame_size` could also be used if
+ a very specific known amount of additional data is required. If,
+ however, the buffer holds a complete valid frame, it can pass the
+ size of this frame to `BaseParse::finish_frame`.
+
+ If acting as a converter, it can also merely indicate consumed input
+ data while simultaneously providing custom output data. Note that
+ baseclass performs some processing (such as tracking overall consumed
+ data rate versus duration) for each finished frame, but other state
+ is only updated upon each call to `BaseParseClass.handle_frame`()
+ (such as tracking upstream input timestamp).
+
+ Subclass is also responsible for setting the buffer metadata
+ (e.g. buffer timestamp and duration, or keyframe if applicable).
+ (although the latter can also be done by `BaseParse` if it is
+ appropriately configured, see below). Frame is provided with
+ timestamp derived from upstream (as much as generally possible),
+ duration obtained from configuration (see below), and offset
+ if meaningful (in pull mode).
+
+ Note that `BaseParseClass.handle_frame`() might receive any small
+ amount of input data when leftover data is being drained (e.g. at
+ EOS).
+
+ * As part of finish frame processing, just prior to actually pushing
+ the buffer in question, it is passed to
+ `BaseParseClass.pre_push_frame`() which gives subclass yet one last
+ chance to examine buffer metadata, or to send some custom (tag)
+ events, or to perform custom (segment) filtering.
+
+ * During the parsing process `BaseParseClass` will handle both srcpad
+ and sinkpad events. They will be passed to subclass if
+ `BaseParseClass.event`() or `BaseParseClass.src_event`()
+ implementations have been provided.
+
+## Shutdown phase
+
+* `BaseParse` class calls `BaseParseClass.stop`() to inform the
+ subclass that data parsing will be stopped.
+
+Subclass is responsible for providing pad template caps for source and
+sink pads. The pads need to be named "sink" and "src". It also needs to
+set the fixed caps on srcpad, when the format is ensured (e.g. when
+base class calls subclass' `BaseParseClass.set_sink_caps`() function).
+
+This base class uses `gst::Format::Default` as a meaning of frames. So,
+subclass conversion routine needs to know that conversion from
+`gst::Format::Time` to `gst::Format::Default` must return the
+frame number that can be found from the given byte position.
+
+`BaseParse` uses subclasses conversion methods also for seeking (or
+otherwise uses its own default one, see also below).
+
+Subclass `start` and `stop` functions will be called to inform the beginning
+and end of data processing.
+
+Things that subclass need to take care of:
+
+* Provide pad templates
+* Fixate the source pad caps when appropriate
+* Inform base class how big data chunks should be retrieved. This is
+ done with `BaseParseExt::set_min_frame_size` function.
+* Examine data chunks passed to subclass with
+ `BaseParseClass.handle_frame`() and pass proper frame(s) to
+ `BaseParse::finish_frame`, and setting src pad caps and timestamps
+ on frame.
+* Provide conversion functions
+* Update the duration information with `BaseParse::set_duration`
+* Optionally passthrough using `BaseParseExt::set_passthrough`
+* Configure various baseparse parameters using
+ `BaseParseExt::set_average_bitrate`, `BaseParseExt::set_syncable`
+ and `BaseParse::set_frame_rate`.
+
+* In particular, if subclass is unable to determine a duration, but
+ parsing (or specs) yields a frames per seconds rate, then this can be
+ provided to `BaseParse` to enable it to cater for buffer time
+ metadata (which will be taken from upstream as much as
+ possible). Internally keeping track of frame durations and respective
+ sizes that have been pushed provides `BaseParse` with an estimated
+ bitrate. A default `BaseParseClass.convert`() (used if not
+ overridden) will then use these rates to perform obvious conversions.
+ These rates are also used to update (estimated) duration at regular
+ frame intervals.
+
+# Implements
+
+[`BaseParseExt`](trait.BaseParseExt.html), [`gst::ElementExt`](../gst/trait.ElementExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait BaseParseExt -->
+Trait containing all `BaseParse` methods.
+
+# Implementors
+
+[`BaseParse`](struct.BaseParse.html)
+<!-- trait BaseParseExt::fn add_index_entry -->
+Adds an entry to the index associating `offset` to `ts`. It is recommended
+to only add keyframe entries. `force` allows to bypass checks, such as
+whether the stream is (upstream) seekable, another entry is already "close"
+to the new entry, etc.
+## `offset`
+offset of entry
+## `ts`
+timestamp associated with offset
+## `key`
+whether entry refers to keyframe
+## `force`
+add entry disregarding sanity checks
+
+# Returns
+
+`gboolean` indicating whether entry was added
+<!-- trait BaseParseExt::fn convert_default -->
+Default implementation of `BaseParseClass.convert`().
+## `src_format`
+`gst::Format` describing the source format.
+## `src_value`
+Source value to be converted.
+## `dest_format`
+`gst::Format` defining the converted format.
+## `dest_value`
+Pointer where the conversion result will be put.
+
+# Returns
+
+`true` if conversion was successful.
+<!-- trait BaseParseExt::fn drain -->
+Drains the adapter until it is empty. It decreases the min_frame_size to
+match the current adapter size and calls chain method until the adapter
+is emptied or chain returns with error.
+
+Feature: `v1_12`
+
+<!-- trait BaseParseExt::fn finish_frame -->
+Collects parsed data and pushes this downstream.
+Source pad caps must be set when this is called.
+
+If `frame`'s out_buffer is set, that will be used as subsequent frame data.
+Otherwise, `size` samples will be taken from the input and used for output,
+and the output's metadata (timestamps etc) will be taken as (optionally)
+set by the subclass on `frame`'s (input) buffer (which is otherwise
+ignored for any but the above purpose/information).
+
+Note that the latter buffer is invalidated by this call, whereas the
+caller retains ownership of `frame`.
+## `frame`
+a `BaseParseFrame`
+## `size`
+consumed input data represented by frame
+
+# Returns
+
+a `gst::FlowReturn` that should be escalated to caller (of caller)
+<!-- trait BaseParseExt::fn merge_tags -->
+Sets the parser subclass's tags and how they should be merged with any
+upstream stream tags. This will override any tags previously-set
+with `BaseParseExt::merge_tags`.
+
+Note that this is provided for convenience, and the subclass is
+not required to use this and can still do tag handling on its own.
+## `tags`
+a `gst::TagList` to merge, or NULL to unset
+ previously-set tags
+## `mode`
+the `gst::TagMergeMode` to use, usually `gst::TagMergeMode::Replace`
+<!-- trait BaseParseExt::fn push_frame -->
+Pushes the frame's buffer downstream, sends any pending events and
+does some timestamp and segment handling. Takes ownership of
+frame's buffer, though caller retains ownership of `frame`.
+
+This must be called with sinkpad STREAM_LOCK held.
+## `frame`
+a `BaseParseFrame`
+
+# Returns
+
+`gst::FlowReturn`
+<!-- trait BaseParseExt::fn set_average_bitrate -->
+Optionally sets the average bitrate detected in media (if non-zero),
+e.g. based on metadata, as it will be posted to the application.
+
+By default, announced average bitrate is estimated. The average bitrate
+is used to estimate the total duration of the stream and to estimate
+a seek position, if there's no index and the format is syncable
+(see `BaseParseExt::set_syncable`).
+## `bitrate`
+average bitrate in bits/second
+<!-- trait BaseParseExt::fn set_duration -->
+Sets the duration of the currently playing media. Subclass can use this
+when it is able to determine duration and/or notices a change in the media
+duration. Alternatively, if `interval` is non-zero (default), then stream
+duration is determined based on estimated bitrate, and updated every `interval`
+frames.
+## `fmt`
+`gst::Format`.
+## `duration`
+duration value.
+## `interval`
+how often to update the duration estimate based on bitrate, or 0.
+<!-- trait BaseParseExt::fn set_frame_rate -->
+If frames per second is configured, parser can take care of buffer duration
+and timestamping. When performing segment clipping, or seeking to a specific
+location, a corresponding decoder might need an initial `lead_in` and a
+following `lead_out` number of frames to ensure the desired segment is
+entirely filled upon decoding.
+## `fps_num`
+frames per second (numerator).
+## `fps_den`
+frames per second (denominator).
+## `lead_in`
+frames needed before a segment for subsequent decode
+## `lead_out`
+frames needed after a segment
+<!-- trait BaseParseExt::fn set_has_timing_info -->
+Set if frames carry timing information which the subclass can (generally)
+parse and provide. In particular, intrinsic (rather than estimated) time
+can be obtained following a seek.
+## `has_timing`
+whether frames carry timing information
+<!-- trait BaseParseExt::fn set_infer_ts -->
+By default, the base class might try to infer PTS from DTS and vice
+versa. While this is generally correct for audio data, it may not
+be otherwise. Sub-classes implementing such formats should disable
+timestamp inferring.
+## `infer_ts`
+`true` if parser should infer DTS/PTS from each other
+<!-- trait BaseParseExt::fn set_latency -->
+Sets the minimum and maximum (which may likely be equal) latency introduced
+by the parsing process. If there is such a latency, which depends on the
+particular parsing of the format, it typically corresponds to 1 frame duration.
+## `min_latency`
+minimum parse latency
+## `max_latency`
+maximum parse latency
+<!-- trait BaseParseExt::fn set_min_frame_size -->
+Subclass can use this function to tell the base class that it needs to
+be given buffers of at least `min_size` bytes.
+## `min_size`
+Minimum size in bytes of the data that this base class should
+ give to subclass.
+<!-- trait BaseParseExt::fn set_passthrough -->
+Set if the nature of the format or configuration does not allow (much)
+parsing, and the parser should operate in passthrough mode (which only
+applies when operating in push mode). That is, incoming buffers are
+pushed through unmodified, i.e. no `BaseParseClass.handle_frame`()
+will be invoked, but `BaseParseClass.pre_push_frame`() will still be
+invoked, so subclass can perform as much or as little is appropriate for
+passthrough semantics in `BaseParseClass.pre_push_frame`().
+## `passthrough`
+`true` if parser should run in passthrough mode
+<!-- trait BaseParseExt::fn set_pts_interpolation -->
+By default, the base class will guess PTS timestamps using a simple
+interpolation (previous timestamp + duration), which is incorrect for
+data streams with reordering, where PTS can go backward. Sub-classes
+implementing such formats should disable PTS interpolation.
+## `pts_interpolate`
+`true` if parser should interpolate PTS timestamps
+<!-- trait BaseParseExt::fn set_syncable -->
+Set if frame starts can be identified. This is set by default and
+determines whether seeking based on bitrate averages
+is possible for a format/stream.
+## `syncable`
+set if frame starts can be identified
+<!-- trait BaseParseExt::fn set_ts_at_offset -->
+This function should only be called from a `handle_frame` implementation.
+
+`BaseParse` creates initial timestamps for frames by using the last
+timestamp seen in the stream before the frame starts. In certain
+cases, the correct timestamps will occur in the stream after the
+start of the frame, but before the start of the actual picture data.
+This function can be used to set the timestamps based on the offset
+into the frame data that the picture starts.
+## `offset`
+offset into current buffer
+<!-- trait BaseParseExt::fn get_property_disable-passthrough -->
+If set to `true`, baseparse will unconditionally force parsing of the
+incoming data. This can be required in the rare cases where the incoming
+side-data (caps, pts, dts, ...) is not trusted by the user and wants to
+force validation and parsing of the incoming data.
+If set to `false`, decision of whether to parse the data or not is up to
+the implementation (standard behaviour).
+<!-- trait BaseParseExt::fn set_property_disable-passthrough -->
+If set to `true`, baseparse will unconditionally force parsing of the
+incoming data. This can be required in the rare cases where the incoming
+side-data (caps, pts, dts, ...) is not trusted by the user and wants to
+force validation and parsing of the incoming data.
+If set to `false`, decision of whether to parse the data or not is up to
+the implementation (standard behaviour).
+<!-- struct BaseParseFrame -->
+Frame (context) data passed to each frame parsing virtual methods. In
+addition to providing the data to be checked for a valid frame or an already
+identified frame, it conveys additional metadata or control information
+from and to the subclass w.r.t. the particular frame in question (rather
+than global parameters). Some of these may apply to each parsing stage, others
+only to some a particular one. These parameters are effectively zeroed at start
+of each frame's processing, i.e. parsing virtual method invocation sequence.
+<!-- impl BaseParseFrame::fn new -->
+Allocates a new `BaseParseFrame`. This function is mainly for bindings,
+elements written in C should usually allocate the frame on the stack and
+then use `BaseParseFrame::init` to initialise it.
+## `buffer`
+a `gst::Buffer`
+## `flags`
+the flags
+## `overhead`
+number of bytes in this frame which should be counted as
+ metadata overhead, ie. not used to calculate the average bitrate.
+ Set to -1 to mark the entire frame as metadata. If in doubt, set to 0.
+
+# Returns
+
+a newly-allocated `BaseParseFrame`. Free with
+ `BaseParseFrame::free` when no longer needed.
+<!-- impl BaseParseFrame::fn copy -->
+Copies a `BaseParseFrame`.
+
+# Returns
+
+A copy of `self`
+<!-- impl BaseParseFrame::fn free -->
+Frees the provided `self`.
+<!-- impl BaseParseFrame::fn init -->
+Sets a `BaseParseFrame` to initial state. Currently this means
+all public fields are zero-ed and a private flag is set to make
+sure `BaseParseFrame::free` only frees the contents but not
+the actual frame. Use this function to initialise a `BaseParseFrame`
+allocated on the stack.
 <!-- struct BaseSink -->
 `BaseSink` is the base class for sink elements in GStreamer, such as
 xvimagesink or filesink. It is a layer on top of `gst::Element` that provides a
@@ -918,6 +1341,17 @@ more details.
 The maximum time in nanoseconds that a buffer can be late
 before it is dropped and not rendered. A value of -1 means an
 unlimited time.
+<!-- trait BaseSinkExt::fn get_processing_deadline -->
+Get the processing deadline of `self`. see
+`BaseSinkExt::set_processing_deadline` for more information about
+the processing deadline.
+
+Feature: `v1_16`
+
+
+# Returns
+
+the processing deadline
 <!-- trait BaseSinkExt::fn get_render_delay -->
 Get the render delay of `self`. see `BaseSinkExt::set_render_delay` for more
 information about the render delay.
@@ -1025,6 +1459,17 @@ buffer timestamp and the current clock time. A value of -1 means
 an unlimited time.
 ## `max_lateness`
 the new max lateness value.
+<!-- trait BaseSinkExt::fn set_processing_deadline -->
+Maximum amount of time (in nanoseconds) that the pipeline can take
+for processing the buffer. This is added to the latency of live
+pipelines.
+
+This function is usually called by subclasses.
+
+Feature: `v1_16`
+
+## `processing_deadline`
+the new processing deadline in nanoseconds.
 <!-- trait BaseSinkExt::fn set_qos_enabled -->
 Configures `self` to send Quality-of-Service events upstream.
 ## `enabled`
@@ -1166,6 +1611,20 @@ rendering of the buffers when it would exceed to max-bitrate.
 Control the maximum amount of bits that will be rendered per second.
 Setting this property to a value bigger than 0 will make the sink delay
 rendering of the buffers when it would exceed to max-bitrate.
+<!-- trait BaseSinkExt::fn get_property_processing-deadline -->
+Maximum amount of time (in nanoseconds) that the pipeline can take
+for processing the buffer. This is added to the latency of live
+pipelines.
+
+Feature: `v1_16`
+
+<!-- trait BaseSinkExt::fn set_property_processing-deadline -->
+Maximum amount of time (in nanoseconds) that the pipeline can take
+for processing the buffer. This is added to the latency of live
+pipelines.
+
+Feature: `v1_16`
+
 <!-- trait BaseSinkExt::fn get_property_render-delay -->
 The additional delay between synchronisation and actual rendering of the
 media. This property will add additional latency to the device in order to
@@ -1401,6 +1860,12 @@ If `automatic_eos` is `true`, `self` will automatically go EOS if a buffer
 after the total size is returned. By default this is `true` but sources
 that can't return an authoritative size and only know that they're EOS
 when trying to read more should set this to `false`.
+
+When `self` operates in `gst::Format::Time`, `BaseSrc` will send an EOS
+when a buffer outside of the currently configured segment is pushed if
+`automatic_eos` is `true`. Since 1.16, if `automatic_eos` is `false` an
+EOS will be pushed only when the `BaseSrc.create` implementation
+returns `gst::FlowReturn::Eos`.
 ## `automatic_eos`
 automatic eos
 <!-- trait BaseSrcExt::fn set_blocksize -->
@@ -1730,8 +2195,8 @@ running_time.
 <!-- trait BaseTransformExt::fn update_src_caps -->
 Updates the srcpad caps and send the caps downstream. This function
 can be used by subclasses when they have already negotiated their caps
-but found a change in them (or computed new informations). This way,
-they can notify downstream about that change without loosing any
+but found a change in them (or computed new information). This way,
+they can notify downstream about that change without losing any
 buffer.
 ## `updated_caps`
 An updated version of the srcpad caps to be pushed
@@ -1771,7 +2236,7 @@ These rules are:
 * `gst::FlowReturn::Ok`: otherwise
 
 `gst::FlowReturn::Error` or below, GST_FLOW_NOT_NEGOTIATED and GST_FLOW_FLUSHING are
-returned immediatelly from the `FlowCombiner::update_flow` function.
+returned immediately from the `FlowCombiner::update_flow` function.
 <!-- impl FlowCombiner::fn new -->
 Creates a new `FlowCombiner`, use `FlowCombiner::free` to free it.
 

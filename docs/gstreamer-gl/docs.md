@@ -5,15 +5,27 @@ context. It also provided some wrappers around `gst_base::BaseTransform`'s
 `start`, `stop` and `set_caps` virtual methods that ensure an OpenGL context
 is available and current in the calling thread.
 
+Feature: `v1_16`
+
 # Implements
 
 [`GLBaseFilterExt`](trait.GLBaseFilterExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
 <!-- trait GLBaseFilterExt -->
 Trait containing all `GLBaseFilter` methods.
 
+Feature: `v1_16`
+
 # Implementors
 
 [`GLBaseFilter`](struct.GLBaseFilter.html)
+<!-- trait GLBaseFilterExt::fn find_gl_context -->
+
+Feature: `v1_16`
+
+
+# Returns
+
+Whether an OpenGL context could be retrieved or created successfully
 <!-- struct GLBuffer -->
 GstGLBuffer is a `gst::Memory` subclass providing support for the mapping of
 GL buffers.
@@ -44,7 +56,7 @@ a `GLContext`
 
 a new `GLColorConvert` object
 <!-- impl GLColorConvert::fn fixate_caps -->
-Provides an implementation of `gst_base::BaseTransformClass::fixate_caps`()
+Provides an implementation of `gst_base::BaseTransformClass.fixate_caps`()
 ## `context`
 a `GLContext` to use for transforming `caps`
 ## `direction`
@@ -58,7 +70,7 @@ the `gst::Caps` to fixate
 
 the fixated `gst::Caps`
 <!-- impl GLColorConvert::fn transform_caps -->
-Provides an implementation of `gst_base::BaseTransformClass::transform_caps`()
+Provides an implementation of `gst_base::BaseTransformClass.transform_caps`()
 ## `context`
 a `GLContext` to use for transforming `caps`
 ## `direction`
@@ -72,7 +84,7 @@ a set of filter `gst::Caps`
 
 the converted `gst::Caps`
 <!-- impl GLColorConvert::fn decide_allocation -->
-Provides an implementation of `GstBaseTransfromClass::decide_allocation`()
+Provides an implementation of `gst_base::BaseTransformClass.decide_allocation`()
 ## `query`
 a completed ALLOCATION `gst::Query`
 
@@ -299,7 +311,7 @@ Gets the OpenGL platform that used by `self`.
 The platform specific backing OpenGL context
 <!-- trait GLContextExt::fn get_gl_platform_version -->
 Get the version of the OpenGL platform (GLX, EGL, etc) used. Only valid
-after a call to `gst_gl_context_create_context`.
+after a call to `GLContextExt::create`.
 ## `major`
 return for the major version
 ## `minor`
@@ -377,6 +389,30 @@ a `GLSLProfile`
 # Returns
 
 Whether `self` supports the combination of `version` with `profile`
+<!-- trait GLContextExt::fn supports_precision -->
+
+Feature: `v1_16`
+
+## `version`
+a `GLSLVersion`
+## `profile`
+a `GLSLProfile`
+
+# Returns
+
+whether `self` supports the 'precision' specifier in GLSL shaders
+<!-- trait GLContextExt::fn supports_precision_highp -->
+
+Feature: `v1_16`
+
+## `version`
+a `GLSLVersion`
+## `profile`
+a `GLSLProfile`
+
+# Returns
+
+whether `self` supports the 'precision highp' specifier in GLSL shaders
 <!-- trait GLContextExt::fn swap_buffers -->
 Swap the front and back buffers on the window attached to `self`.
 This will display the frame on the next refresh cycle.
@@ -432,7 +468,7 @@ Trait containing all `GLDisplay` methods.
 
 # Implementors
 
-[`GLDisplayEGL`](struct.GLDisplayEGL.html), [`GLDisplay`](struct.GLDisplay.html)
+[`GLDisplayEGL`](struct.GLDisplayEGL.html), [`GLDisplayWayland`](struct.GLDisplayWayland.html), [`GLDisplayX11`](struct.GLDisplayX11.html), [`GLDisplay`](struct.GLDisplay.html)
 <!-- impl GLDisplay::fn new -->
 
 # Returns
@@ -551,6 +587,54 @@ pointer to a display (or 0)
 # Returns
 
 A `EGLDisplay` or `EGL_NO_DISPLAY`
+<!-- struct GLDisplayWayland -->
+the contents of a `GLDisplayWayland` are private and should only be accessed
+through the provided API
+
+# Implements
+
+[`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl GLDisplayWayland::fn new -->
+Create a new `GLDisplayWayland` from the wayland display name. See `wl_display_connect`
+for details on what is a valid name.
+## `name`
+a display name
+
+# Returns
+
+a new `GLDisplayWayland` or `None`
+<!-- impl GLDisplayWayland::fn new_with_display -->
+Creates a new display connection from a wl_display Display.
+## `display`
+an existing, wayland display
+
+# Returns
+
+a new `GLDisplayWayland`
+<!-- struct GLDisplayX11 -->
+the contents of a `GLDisplayX11` are private and should only be accessed
+through the provided API
+
+# Implements
+
+[`GLDisplayExt`](trait.GLDisplayExt.html), [`gst::ObjectExt`](../gst/trait.ObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- impl GLDisplayX11::fn new -->
+Create a new `GLDisplayX11` from the x11 display name. See XOpenDisplay()
+for details on what is a valid name.
+## `name`
+a display name
+
+# Returns
+
+a new `GLDisplayX11` or `None`
+<!-- impl GLDisplayX11::fn new_with_display -->
+Creates a new display connection from a X11 Display.
+## `display`
+an existing, x11 display
+
+# Returns
+
+a new `GLDisplayX11`
 <!-- enum GLFormat -->
 <!-- enum GLFormat::variant Luminance -->
 Single component replicated across R, G, and B textures
@@ -575,11 +659,17 @@ Three 8-bit components stored in the R, G, and B
 <!-- enum GLFormat::variant Rgb565 -->
 Three components of bit depth 5, 6 and 5 stored in the R, G,
  and B texture components respectively.
+<!-- enum GLFormat::variant Rgb16 -->
+Three 16-bit components stored in the R, G, and B
+ texture components
 <!-- enum GLFormat::variant Rgba -->
 Four components stored in the R, G, B, and A texture
  components respectively.
 <!-- enum GLFormat::variant Rgba8 -->
 Four 8-bit components stored in the R, G, B, and A texture
+ components respectively.
+<!-- enum GLFormat::variant Rgba16 -->
+Four 16-bit components stored in the R, G, B, and A texture
  components respectively.
 <!-- enum GLFormat::variant DepthComponent16 -->
 A single 16-bit component for depth information.
@@ -895,6 +985,58 @@ a `glib::Error`
 # Returns
 
 a new `shader` with the specified stages.
+<!-- impl GLShader::fn string_fragment_external_oes_get_default -->
+
+Feature: `v1_16`
+
+## `context`
+a `GLContext`
+## `version`
+a `GLSLVersion`
+## `profile`
+a `GLSLProfile`
+
+# Returns
+
+a passthrough shader string for copying an input external-oes
+ texture to the output
+<!-- impl GLShader::fn string_fragment_get_default -->
+
+Feature: `v1_16`
+
+## `context`
+a `GLContext`
+## `version`
+a `GLSLVersion`
+## `profile`
+a `GLSLProfile`
+
+# Returns
+
+a passthrough shader string for copying an input texture to
+ the output
+<!-- impl GLShader::fn string_get_highest_precision -->
+Generates a shader string that defines the precision of float types in
+GLSL shaders. This is particularly needed for fragment shaders in a
+GLSL ES context where there is no default precision specified.
+
+Practically, this will return the string 'precision mediump float'
+or 'precision highp float' depending on if high precision floats are
+determined to be supported.
+
+Feature: `v1_16`
+
+## `context`
+a `GLContext`
+## `version`
+a `GLSLVersion`
+## `profile`
+a `GLSLProfile`
+
+# Returns
+
+a shader string defining the precision of float types based on
+ `context`, `version` and `profile`
 <!-- impl GLShader::fn attach -->
 Attaches `stage` to `self`. `stage` must have been successfully compiled
 with `GLSLStage::compile`.
@@ -1221,6 +1363,12 @@ Mark's `self` as being used for the next GL draw command.
 Note: must be called in the GL thread and `self` must have been linked.
 <!-- enum GLStereoDownmix -->
 Output anaglyph type to generate when downmixing to mono
+<!-- enum GLStereoDownmix::variant GreenMagentaDubois -->
+Dubois optimised Green-Magenta anaglyph
+<!-- enum GLStereoDownmix::variant RedCyanDubois -->
+Dubois optimised Red-Cyan anaglyph
+<!-- enum GLStereoDownmix::variant AmberBlueDubois -->
+Dubois optimised Amber-Blue anaglyph
 <!-- enum GLTextureTarget -->
 <!-- enum GLTextureTarget::variant None -->
 no texture target
@@ -1298,7 +1446,7 @@ Convert stereoscopic/multiview video using fragment shaders.
 
 a new `GLViewConvert`
 <!-- impl GLViewConvert::fn fixate_caps -->
-Provides an implementation of `gst_base::BaseTransformClass::fixate_caps`()
+Provides an implementation of `gst_base::BaseTransformClass.fixate_caps`()
 ## `direction`
 a `gst::PadDirection`
 ## `caps`
@@ -1350,7 +1498,7 @@ a `gst::Buffer`
 
 a `gst::FlowReturn`
 <!-- impl GLViewConvert::fn transform_caps -->
-Provides an implementation of `gst_base::BaseTransformClass::transform_caps`()
+Provides an implementation of `gst_base::BaseTransformClass.transform_caps`()
 ## `direction`
 a `gst::PadDirection`
 ## `caps`
@@ -1381,6 +1529,15 @@ a `GLDisplay`
 # Returns
 
 a new `GLWindow` using `display`'s connection
+<!-- trait GLWindowExt::fn controls_viewport -->
+Checks if `self` controls the GL viewport.
+
+Feature: `v1_16`
+
+
+# Returns
+
+`true` if `self` controls the GL viewport, otherwise `false`
 <!-- trait GLWindowExt::fn draw -->
 Redraw the window contents. Implementations should invoke the draw callback.
 <!-- trait GLWindowExt::fn get_context -->
@@ -1411,8 +1568,16 @@ for them. This method allows you to disable events handling completely
 from the `self`.
 ## `handle_events`
 a `gboolean` indicating if events should be handled or not.
+<!-- trait GLWindowExt::fn queue_resize -->
+Queue resizing of `self`.
 <!-- trait GLWindowExt::fn quit -->
 Quit the runloop's execution.
+<!-- trait GLWindowExt::fn resize -->
+Resize `self` to the given `width` and `height`.
+## `width`
+new width
+## `height`
+new height
 <!-- trait GLWindowExt::fn run -->
 Start the execution of the runloop.
 <!-- trait GLWindowExt::fn send_message -->
