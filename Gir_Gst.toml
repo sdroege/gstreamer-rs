@@ -91,7 +91,6 @@ conversion_type = "scalar"
 
 [[object]]
 name = "Gst.Bin"
-subclassing = true
 status = "generate"
 trait_name = "GstBinExt"
     [[object.signal]]
@@ -319,7 +318,6 @@ ref_mode = "ref"
 
 [[object]]
 name = "Gst.Pipeline"
-subclassing = true
 status = "generate"
 
 [[object]]
@@ -360,7 +358,6 @@ status = "generate"
 
 [[object]]
 name = "Gst.Element"
-subclassing = true
 status = "generate"
     [[object.function]]
     name = "make_from_uri"
@@ -658,7 +655,6 @@ trait_name = "GstObjectExt"
 
 [[object]]
 name = "Gst.Pad"
-subclassing = true
 status = "generate"
     [[object.function]]
     name = "link_maybe_ghosting"
@@ -861,7 +857,6 @@ final_type = true
 
 [[object]]
 name = "Gst.GhostPad"
-subclassing = true
 status = "generate"
     [[object.function]]
     name = "set_target"

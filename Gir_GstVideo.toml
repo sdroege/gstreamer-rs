@@ -86,7 +86,6 @@ status = "generate"
 
 [[object]]
 name = "GstVideo.VideoDecoder"
-subclassing = true
 status = "generate"
 
     [[object.function]]
@@ -151,7 +150,6 @@ status = "generate"
 
 [[object]]
 name = "GstVideo.VideoEncoder"
-subclassing = true
 status = "generate"
 
     [[object.function]]
