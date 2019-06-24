@@ -18,15 +18,15 @@ bitflags = "1.0"
 byteorder = "1"
 libc = "0.2"
 lazy_static = "1.0"
-glib-sys = { git = "https://github.com/gtk-rs/sys" }
-gobject-sys = { git = "https://github.com/gtk-rs/sys" }
-gstreamer-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
-gstreamer-video-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_14"] }
-gstreamer-gl-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys" }
-glib = { git = "https://github.com/gtk-rs/glib" }
-gstreamer = { path = "../gstreamer", features = ["v1_14"] }
-gstreamer-base = { path = "../gstreamer-base", features = ["v1_14"] }
-gstreamer-video = { path = "../gstreamer-video", features = ["v1_14"] }
+glib-sys = { version = "0.9" }
+gobject-sys = { version = "0.9" }
+gstreamer-sys = { version = "0.8" }
+gstreamer-video-sys = { version = "0.8", features = ["v1_14"] }
+gstreamer-gl-sys = { version = "0.8" }
+glib = { version = "0.8" }
+gstreamer = { version = "0.14", path = "../gstreamer", features = ["v1_14"] }
+gstreamer-base = { version = "0.14", path = "../gstreamer-base", features = ["v1_14"] }
+gstreamer-video = { version = "0.14", path = "../gstreamer-video", features = ["v1_14"] }
 
 [build-dependencies.rustdoc-stripper]
 version = "0.1"

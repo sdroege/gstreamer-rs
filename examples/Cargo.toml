@@ -4,28 +4,28 @@ version = "0.14.0"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
-glib = { git = "https://github.com/gtk-rs/glib", features = ["subclassing"] }
-gstreamer = { path = "../gstreamer" }
-gstreamer-gl = { path = "../gstreamer-gl", optional = true }
-gstreamer-app = { path = "../gstreamer-app" }
-gstreamer-audio = { path = "../gstreamer-audio" }
-gstreamer-video = { path = "../gstreamer-video" }
-gstreamer-pbutils = { path = "../gstreamer-pbutils" }
-gstreamer-player = { path = "../gstreamer-player", optional = true }
-gstreamer-editing-services = { path = "../gstreamer-editing-services", optional = true }
-gstreamer-rtsp = { path = "../gstreamer-rtsp", optional = true }
-gstreamer-rtsp-server = { path = "../gstreamer-rtsp-server", optional = true }
-gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys", features = ["v1_8"], optional = true }
-gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
-gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
-gio = { git = "https://github.com/gtk-rs/gio", optional = true }
+glib = { version = "0.8", features = ["subclassing"] }
+gstreamer = { version = "0.14", path = "../gstreamer" }
+gstreamer-gl = { version = "0.14", path = "../gstreamer-gl", optional = true }
+gstreamer-app = { version = "0.14", path = "../gstreamer-app" }
+gstreamer-audio = { version = "0.14", path = "../gstreamer-audio" }
+gstreamer-video = { version = "0.14", path = "../gstreamer-video" }
+gstreamer-pbutils = { version = "0.14", path = "../gstreamer-pbutils" }
+gstreamer-player = { version = "0.14", path = "../gstreamer-player", optional = true }
+gstreamer-editing-services = { version = "0.14", path = "../gstreamer-editing-services", optional = true }
+gstreamer-rtsp = { version = "0.14", path = "../gstreamer-rtsp", optional = true }
+gstreamer-rtsp-server = { version = "0.14", path = "../gstreamer-rtsp-server", optional = true }
+gstreamer-rtsp-server-sys = { version = "0.8", features = ["v1_8"], optional = true }
+gtk = { version = "0.7", optional = true }
+gdk = { version = "0.11", optional = true }
+gio = { version = "0.7", optional = true }
 futures-preview = { version = "0.3.0-alpha", optional = true }
 byte-slice-cast = "0.3"
 failure = "0.1"
 failure_derive = "0.1"
-cairo-rs = { git = "https://github.com/gtk-rs/cairo", features=["use_glib"], optional = true }
-pango = { git = "https://github.com/gtk-rs/pango", optional = true }
-pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
+cairo-rs = { version = "0.7", features=["use_glib"], optional = true }
+pango = { version = "0.7", optional = true }
+pangocairo = { version = "0.8", optional = true }
 glutin = { version = "0.21", optional = true }
 winit = { version = "0.19", optional = true }
 
