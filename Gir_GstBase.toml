@@ -77,7 +77,6 @@ concurrency = "none"
 
 [[object]]
 name = "GstBase.BaseSink"
-subclassing = true
 status = "generate"
 
     [[object.function]]
@@ -92,7 +91,6 @@ status = "generate"
 
 [[object]]
 name = "GstBase.BaseSrc"
-subclassing = true
 status = "generate"
 
     [[object.function]]
@@ -122,7 +120,6 @@ status = "generate"
 
 [[object]]
 name = "GstBase.BaseTransform"
-subclassing = true
 status = "generate"
 
     [[object.function]]
@@ -134,7 +131,6 @@ status = "generate"
 [[object]]
 name = "GstBase.Aggregator"
 status = "generate"
-subclassing = true
 version = "1.14"
 
     [[object.function]]
@@ -154,7 +150,6 @@ version = "1.14"
 [[object]]
 name = "GstBase.AggregatorPad"
 status = "generate"
-subclassing = true
 version = "1.14"
 
 [[object]]
@@ -207,7 +202,6 @@ ref_mode = "ref"
 
 [[object]]
 name = "GstBase.BaseParse"
-subclassing = true
 status = "generate"
     [[object.function]]
     name = "finish_frame"
