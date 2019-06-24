@@ -1,4 +1,74 @@
 <!-- file * -->
+<!-- struct Allocator -->
+Memory is usually created by allocators with a `AllocatorExt::alloc`
+method call. When `None` is used as the allocator, the default allocator will
+be used.
+
+New allocators can be registered with `Allocator::register`.
+Allocators are identified by name and can be retrieved with
+`Allocator::find`. `AllocatorExt::set_default` can be used to change the
+default allocator.
+
+New memory can be created with `Memory::new_wrapped` that wraps the memory
+allocated elsewhere.
+
+# Implements
+
+[`AllocatorExt`](trait.AllocatorExt.html), [`GstObjectExt`](trait.GstObjectExt.html), [`glib::object::ObjectExt`](../glib/object/trait.ObjectExt.html)
+<!-- trait AllocatorExt -->
+Trait containing all `Allocator` methods.
+
+# Implementors
+
+[`Allocator`](struct.Allocator.html)
+<!-- impl Allocator::fn find -->
+Find a previously registered allocator with `name`. When `name` is `None`, the
+default allocator will be returned.
+## `name`
+the name of the allocator
+
+# Returns
+
+a `Allocator` or `None` when
+the allocator with `name` was not registered. Use `GstObjectExt::unref`
+to release the allocator after usage.
+<!-- impl Allocator::fn register -->
+Registers the memory `allocator` with `name`. This function takes ownership of
+`allocator`.
+## `name`
+the name of the allocator
+## `allocator`
+`Allocator`
+<!-- trait AllocatorExt::fn alloc -->
+Use `self` to allocate a new memory block with memory that is at least
+`size` big.
+
+The optional `params` can specify the prefix and padding for the memory. If
+`None` is passed, no flags, no extra prefix/padding and a default alignment is
+used.
+
+The prefix/padding will be filled with 0 if flags contains
+`MemoryFlags::ZeroPrefixed` and `MemoryFlags::ZeroPadded` respectively.
+
+When `self` is `None`, the default allocator will be used.
+
+The alignment in `params` is given as a bitmask so that `align` + 1 equals
+the amount of bytes to align to. For example, to align to 8 bytes,
+use an alignment of 7.
+## `size`
+size of the visible memory area
+## `params`
+optional parameters
+
+# Returns
+
+a new `Memory`.
+<!-- trait AllocatorExt::fn free -->
+Free `memory` that was previously allocated with `AllocatorExt::alloc`.
+## `memory`
+the memory to free
+<!-- trait AllocatorExt::fn set_default -->
+Set the default allocator. This function takes ownership of `self`.
 <!-- struct Bin -->
 `Bin` is an element that can contain other `Element`, allowing them to be
 managed as a group.
@@ -487,7 +557,7 @@ to hold a reference to another buffer that is only released when the child
 Typically, `ParentBufferMeta` is used when the child buffer is directly
 using the `Memory` of the parent buffer, and wants to prevent the parent
 buffer from being returned to a buffer pool until the `Memory` is available
-for re-use. (Since 1.6)
+for re-use. (Since: 1.6)
 <!-- impl Buffer::fn new -->
 Creates a newly allocated buffer without any data.
 
@@ -531,6 +601,20 @@ allocated size of `data`
 # Returns
 
 a new `Buffer`
+<!-- impl Buffer::fn new_wrapped_bytes -->
+Creates a new `Buffer` that wraps the given `bytes`. The data inside
+`bytes` cannot be `None` and the resulting buffer will be marked as read only.
+
+MT safe.
+
+Feature: `v1_16`
+
+## `bytes`
+a `glib::Bytes` to wrap
+
+# Returns
+
+a new `Buffer` wrapping `bytes`
 <!-- impl Buffer::fn new_wrapped_full -->
 Allocate a new buffer that wraps the given memory. `data` must point to
 `maxsize` of memory, the wrapped buffer will have the region from `offset` and
@@ -2111,9 +2195,25 @@ a `Caps` to intersect
 # Returns
 
 `true` if intersection would be not empty
+<!-- impl Caps::fn copy -->
+Creates a new `Caps` as a copy of the old `self`. The new caps will have a
+refcount of 1, owned by the caller. The structures are copied as well.
+
+Note that this function is the semantic equivalent of a `gst_caps_ref`
+followed by a `gst_caps_make_writable`. If you only want to hold on to a
+reference to the data, you should use `gst_caps_ref`.
+
+When you are finished with the caps, call `gst_caps_unref` on it.
+
+# Returns
+
+the new `Caps`
 <!-- impl Caps::fn copy_nth -->
 Creates a new `Caps` and appends a copy of the nth structure
 contained in `self`.
+
+Feature: `v1_16`
+
 ## `nth`
 the nth structure to copy
 
@@ -2373,6 +2473,13 @@ Index of the structure to remove
 Sets the `CapsFeatures` `features` for the structure at `index`.
 ## `index`
 the index of the structure
+## `features`
+the `CapsFeatures` to set
+<!-- impl Caps::fn set_features_simple -->
+Sets the `CapsFeatures` `features` for all the structures of `self`.
+
+Feature: `v1_16`
+
 ## `features`
 the `CapsFeatures` to set
 <!-- impl Caps::fn set_simple -->
@@ -2723,6 +2830,20 @@ A `ClockID` to compare with
 negative value if a < b; zero if a = b; positive value if a > b
 
 MT safe.
+<!-- impl Clock::fn id_get_clock -->
+This function returns the underlying clock.
+
+Feature: `v1_16`
+
+## `id`
+a `ClockID`
+
+# Returns
+
+a `Clock` or `None` when the
+ underlying clock has been freed. Unref after usage.
+
+MT safe.
 <!-- impl Clock::fn id_get_time -->
 Get the time of the clock ID
 ## `id`
@@ -2759,6 +2880,24 @@ async notifications, you need to create a new `ClockID`.
 MT safe.
 ## `id`
 The id to unschedule
+<!-- impl Clock::fn id_uses_clock -->
+This function returns whether `id` uses `clock` as the underlying clock.
+`clock` can be NULL, in which case the return value indicates whether
+the underlying clock has been freed. If this is the case, the `id` is
+no longer usable and should be freed.
+
+Feature: `v1_16`
+
+## `id`
+a `ClockID` to check
+## `clock`
+a `Clock` to compare against
+
+# Returns
+
+whether the clock `id` uses the same underlying `Clock` `clock`.
+
+MT safe.
 <!-- impl Clock::fn id_wait -->
 Perform a blocking wait on `id`.
 `id` should have been created with `ClockExt::new_single_shot_id`
@@ -3186,7 +3325,7 @@ time since Epoch
 monotonic time since some unspecified starting
  point
 <!-- enum ClockType::variant Other -->
-some other time source is used (Since 1.0.5)
+some other time source is used (Since: 1.0.5)
 <!-- struct Context -->
 `Context` is a container object used to store contexts like a device
 context, a display server connection and similar concepts that should
@@ -3501,7 +3640,7 @@ the day of the gregorian month
 the newly created `DateTime`
 <!-- impl DateTime::fn get_day -->
 Returns the day of the month of this `DateTime`.
-Call gst_date_time_has_day before, to avoid warnings.
+Call `DateTime::has_day` before, to avoid warnings.
 
 # Returns
 
@@ -3509,7 +3648,7 @@ The day of this `DateTime`
 <!-- impl DateTime::fn get_hour -->
 Retrieves the hour of the day represented by `self` in the gregorian
 calendar. The return is in the range of 0 to 23.
-Call gst_date_time_has_haur before, to avoid warnings.
+Call `DateTime::has_time` before, to avoid warnings.
 
 # Returns
 
@@ -3524,14 +3663,14 @@ the microsecond of the second
 <!-- impl DateTime::fn get_minute -->
 Retrieves the minute of the hour represented by `self` in the gregorian
 calendar.
-Call gst_date_time_has_minute before, to avoid warnings.
+Call `DateTime::has_time` before, to avoid warnings.
 
 # Returns
 
 the minute of the hour
 <!-- impl DateTime::fn get_month -->
 Returns the month of this `DateTime`. January is 1, February is 2, etc..
-Call gst_date_time_has_month before, to avoid warnings.
+Call `DateTime::has_month` before, to avoid warnings.
 
 # Returns
 
@@ -3539,7 +3678,7 @@ The month of this `DateTime`
 <!-- impl DateTime::fn get_second -->
 Retrieves the second of the minute represented by `self` in the gregorian
 calendar.
-Call gst_date_time_has_second before, to avoid warnings.
+Call `DateTime::has_time` before, to avoid warnings.
 
 # Returns
 
@@ -3555,7 +3694,7 @@ If `self` represents UTC time, then the offset is zero.
 the offset from UTC in hours
 <!-- impl DateTime::fn get_year -->
 Returns the year of this `DateTime`
-Call gst_date_time_has_year before, to avoid warnings.
+Call `DateTime::has_year` before, to avoid warnings.
 
 # Returns
 
@@ -3911,7 +4050,7 @@ will be emitted on the bus when the list of devices changes.
 Stops monitoring the devices.
 <!-- struct DeviceProvider -->
 A `DeviceProvider` subclass is provided by a plugin that handles devices
-if there is a way to programatically list connected devices. It can also
+if there is a way to programmatically list connected devices. It can also
 optionally provide updates to the list of connected devices.
 
 Each `DeviceProvider` subclass is a singleton, a plugin should
@@ -3955,6 +4094,19 @@ This is for use by subclasses.
 will be removed (see `Object::ref_sink`).
 ## `device`
 a `Device` that has been added
+<!-- trait DeviceProviderExt::fn device_changed -->
+This function is used when `changed_device` was modified into its new form
+`device`. This will post a `DEVICE_CHANGED` message on the bus to let
+the application know that the device was modified. `Device` is immutable
+for MT. safety purposes so this is an "atomic" way of letting the application
+know when a device was modified.
+
+Feature: `v1_16`
+
+## `device`
+the new version of `changed_device`
+## `changed_device`
+the old version of the device that has been udpated
 <!-- trait DeviceProviderExt::fn device_remove -->
 Posts a message on the provider's `Bus` to inform applications that
 a device has been removed.
@@ -4250,9 +4402,8 @@ MT safe.
 Adds a pad (link point) to `self`. `pad`'s parent will be set to `self`;
 see `GstObjectExt::set_parent` for refcounting information.
 
-Pads are not automatically activated so elements should perform the needed
-steps to activate the pad in case this pad is added in the PAUSED or PLAYING
-state. See `PadExt::set_active` for more information about activating pads.
+Pads are automatically activated when added in the PAUSED or PLAYING
+state.
 
 The pad and the element should be unlocked when calling this function.
 
@@ -4503,7 +4654,7 @@ Retrieves the factory that was used to create this element.
 # Returns
 
 the `ElementFactory` used for creating this
- element. no refcounting is needed.
+ element or `None` if element has not been registered (static element). no refcounting is needed.
 <!-- trait ElementExt::fn get_metadata -->
 Get metadata with `key` in `klass`.
 
@@ -5112,6 +5263,10 @@ the `Context` to set.
 <!-- trait ElementExt::fn set_locked_state -->
 Locks the state of an element, so state changes of the parent don't affect
 this element anymore.
+
+Note that this is racy if the state lock of the parent bin is not taken.
+The parent bin might've just checked the flag in another thread and as the
+next step proceed to change the child element's state.
 
 MT safe.
 ## `locked_state`
@@ -6106,6 +6261,12 @@ result location for the start position expressed in `format`
 result location for the `SeekType` of the stop position
 ## `stop`
 result location for the stop position expressed in `format`
+<!-- impl Event::fn parse_seek_trickmode_interval -->
+Retrieve the trickmode interval that may have been set on a
+seek event with `Event::set_seek_trickmode_interval`.
+
+Feature: `v1_16`
+
 <!-- impl Event::fn parse_segment -->
 Parses a segment `self` and stores the result in the given `segment` location.
 `segment` remains valid only until the `self` is freed. Don't modify the segment
@@ -6148,7 +6309,7 @@ Parse a stream-start `self` and extract the `Stream` from it.
 Feature: `v1_10`
 
 ## `stream`
-adress of variable to store the stream
+address of variable to store the stream
 <!-- impl Event::fn parse_stream_collection -->
 Retrieve new `StreamCollection` from STREAM_COLLECTION event `self`.
 
@@ -6208,6 +6369,13 @@ Set the running time offset of a event. See
 MT safe.
 ## `offset`
 A the new running time offset
+<!-- impl Event::fn set_seek_trickmode_interval -->
+Sets a trickmode interval on a (writable) seek event. Elements
+that support TRICKMODE_KEY_UNITS seeks SHOULD use this as the minimal
+interval between each frame they may output.
+
+Feature: `v1_16`
+
 <!-- impl Event::fn set_seqnum -->
 Set the sequence number of a event.
 
@@ -6268,7 +6436,7 @@ A new media segment follows in the dataflow. The
  converting buffer timestamps to running-time and
  stream-time.
 <!-- enum EventType::variant StreamCollection -->
-A new `StreamCollection` is available (Since 1.10)
+A new `StreamCollection` is available (Since: 1.10)
 <!-- enum EventType::variant Tag -->
 A new set of metadata tags has been found in the stream.
 <!-- enum EventType::variant Buffersize -->
@@ -6281,7 +6449,7 @@ An event that sinks turn into a message. Used to
 <!-- enum EventType::variant StreamGroupDone -->
 Indicates that there is no more data for
  the stream group ID in the message. Sent before EOS
- in some instances and should be handled mostly the same. (Since 1.10)
+ in some instances and should be handled mostly the same. (Since: 1.10)
 <!-- enum EventType::variant Eos -->
 End-Of-Stream. No more data is to be expected to follow
  without either a STREAM_START event, or a FLUSH_STOP and a SEGMENT
@@ -6318,7 +6486,7 @@ A request for upstream renegotiating caps and reconfiguring.
 A request for a new playback position based on TOC
  entry's UID.
 <!-- enum EventType::variant SelectStreams -->
-A request to select one or more streams (Since 1.10)
+A request to select one or more streams (Since: 1.10)
 <!-- enum EventType::variant CustomUpstream -->
 Upstream custom event
 <!-- enum EventType::variant CustomDownstream -->
@@ -6694,6 +6862,22 @@ The new `Device`
 # Returns
 
 a newly allocated `Message`
+<!-- impl Message::fn new_device_changed -->
+Creates a new device-changed message. The device-changed message is produced
+by `DeviceProvider` or a `DeviceMonitor`. They announce that a device
+properties has changed and `device` represent the new modified version of `changed_device`.
+
+Feature: `v1_16`
+
+## `src`
+The `Object` that created the message
+## `device`
+The newly created device representing `replaced_device`
+ with its new configuration.
+
+# Returns
+
+a newly allocated `Message`
 <!-- impl Message::fn new_device_removed -->
 Creates a new device-removed message. The device-removed message is produced
 by `DeviceProvider` or a `DeviceMonitor`. They announce the
@@ -6779,7 +6963,7 @@ The GError for this message.
 ## `debug`
 A debugging string.
 ## `details`
-(allow-none): A GstStructure with details
+A GstStructure with details
 
 # Returns
 
@@ -6824,7 +7008,7 @@ The GError for this message.
 ## `debug`
 A debugging string.
 ## `details`
-(allow-none): A GstStructure with details
+A GstStructure with details
 
 # Returns
 
@@ -7258,7 +7442,7 @@ The GError for this message.
 ## `debug`
 A debugging string.
 ## `details`
-(allow-none): A GstStructure with details
+A GstStructure with details
 
 # Returns
 
@@ -7388,6 +7572,20 @@ of monitored devices.
 ## `device`
 A location where to store a
  pointer to the new `Device`, or `None`
+<!-- impl Message::fn parse_device_changed -->
+Parses a device-changed message. The device-changed message is produced by
+`DeviceProvider` or a `DeviceMonitor`. It announces the
+disappearance of monitored devices. * It announce that a device properties has
+changed and `device` represents the new modified version of `changed_device`.
+
+Feature: `v1_16`
+
+## `device`
+A location where to store a
+ pointer to the updated version of the `Device`, or `None`
+## `changed_device`
+A location where to store a
+ pointer to the old version of the `Device`, or `None`
 <!-- impl Message::fn parse_device_removed -->
 Parses a device-removed message. The device-removed message is produced by
 `DeviceProvider` or a `DeviceMonitor`. It announces the
@@ -7931,7 +8129,7 @@ Trait containing all `Object` methods.
 
 # Implementors
 
-[`BufferPool`](struct.BufferPool.html), [`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
+[`Allocator`](struct.Allocator.html), [`BufferPool`](struct.BufferPool.html), [`Bus`](struct.Bus.html), [`Clock`](struct.Clock.html), [`DeviceMonitor`](struct.DeviceMonitor.html), [`DeviceProvider`](struct.DeviceProvider.html), [`Device`](struct.Device.html), [`Element`](struct.Element.html), [`Object`](struct.Object.html), [`PadTemplate`](struct.PadTemplate.html), [`Pad`](struct.Pad.html), [`PluginFeature`](struct.PluginFeature.html), [`Plugin`](struct.Plugin.html), [`Registry`](struct.Registry.html), [`StreamCollection`](struct.StreamCollection.html), [`Stream`](struct.Stream.html)
 <!-- impl Object::fn check_uniqueness -->
 Checks to see if there is any object named `name` in `list`. This function
 does not do any locking of any kind. You might want to protect the
@@ -8012,7 +8210,7 @@ the `ControlBinding` that should be used
 has been setup for a non suitable property, `true` otherwise.
 <!-- trait GstObjectExt::fn default_error -->
 A default error function that uses `g_printerr` to display the error message
-and the optional debug sting..
+and the optional debug string..
 
 The default handler will simply print the error string using g_print.
 ## `error`
@@ -8032,7 +8230,7 @@ the `ControlBinding` for
 <!-- trait GstObjectExt::fn get_control_rate -->
 Obtain the control-rate for this `self`. Audio processing `Element`
 objects will use this rate to sub-divide their processing loop and call
-`GstObjectExt::sync_values` inbetween. The length of the processing segment
+`GstObjectExt::sync_values` in between. The length of the processing segment
 should be up to `control`-rate nanoseconds.
 
 If the `self` is not under property control, this will return
@@ -8221,7 +8419,7 @@ or not.
 <!-- trait GstObjectExt::fn set_control_rate -->
 Change the control-rate for this `self`. Audio processing `Element`
 objects will use this rate to sub-divide their processing loop and call
-`GstObjectExt::sync_values` inbetween. The length of the processing segment
+`GstObjectExt::sync_values` in between. The length of the processing segment
 should be up to `control`-rate nanoseconds.
 
 The control-rate should not change if the element is in `State::Paused` or
@@ -9430,6 +9628,10 @@ notify called when `query` will not be used anymore.
 <!-- trait PadExt::fn set_unlink_function_full -->
 Sets the given unlink function for the pad. It will be called
 when the pad is unlinked.
+
+Note that the pad's lock is already held when the unlink
+function is called, so most pad functions cannot be called
+from within the callback.
 ## `unlink`
 the `GstPadUnlinkFunction` to set.
 ## `user_data`
@@ -10417,7 +10619,7 @@ a list of presets individual presets are read and overlaid in 1) system,
 2) application and 3) user order. Whenever an earlier entry is newer, the
 later entries will be updated. Since 1.8 you can also provide extra paths
 where to find presets through the GST_PRESET_PATH environment variable.
-Presets found in those paths will be concidered as "app presets".
+Presets found in those paths will be considered as "app presets".
 
 # Implements
 
@@ -10825,6 +11027,17 @@ return a pool
 # Returns
 
 a new `Query`
+<!-- impl Query::fn new_bitrate -->
+Constructs a new query object for querying the bitrate.
+
+Free-function: `gst_query_unref`
+
+Feature: `v1_16`
+
+
+# Returns
+
+a new `Query`
 <!-- impl Query::fn new_buffering -->
 Constructs a new query object for querying the buffering status of
 a stream.
@@ -11138,6 +11351,13 @@ Pool details can be retrieved using `Query::get_n_allocation_pools` and
 The `Caps`
 ## `need_pool`
 Whether a `BufferPool` is needed
+<!-- impl Query::fn parse_bitrate -->
+Get the results of a bitrate query. See also `Query::set_bitrate`.
+
+Feature: `v1_16`
+
+## `nominal_bitrate`
+The resulting bitrate in bits per second
 <!-- impl Query::fn parse_buffering_percent -->
 Get the percentage of buffered data. This is a value between 0 and 100.
 The `busy` indicator is `true` when the buffering is in progress.
@@ -11374,6 +11594,15 @@ position in the allocation pool array to remove
 Set `result` as the result for the `self`.
 ## `result`
 the result to set
+<!-- impl Query::fn set_bitrate -->
+Set the results of a bitrate query. The nominal bitrate is the average
+bitrate expected over the length of the stream as advertised in file
+headers (or similar).
+
+Feature: `v1_16`
+
+## `nominal_bitrate`
+the nominal bitrate in bits per second
 <!-- impl Query::fn set_buffering_percent -->
 Set the percentage of buffered data. This is a value between 0 and 100.
 The `busy` indicator is `true` when the buffering is in progress.
@@ -11875,7 +12104,7 @@ used when the resource has no space left.
 <!-- enum ResourceError::variant NotAuthorized -->
 used when the resource can't be opened
  due to missing authorization.
- (Since 1.2.4)
+ (Since: 1.2.4)
 <!-- enum ResourceError::variant NumErrors -->
 the number of resource error types.
 <!-- struct Sample -->
@@ -11939,10 +12168,39 @@ Get the segment associated with `self`
 
 the segment of `self`.
  The segment remains valid as long as `self` is valid.
+<!-- impl Sample::fn set_buffer -->
+Set the buffer associated with `self`. `self` must be writable.
+
+Feature: `v1_16`
+
+## `buffer`
+A `Buffer`
 <!-- impl Sample::fn set_buffer_list -->
-Set the buffer list associated with `self`
+Set the buffer list associated with `self`. `self` must be writable.
 ## `buffer_list`
 a `BufferList`
+<!-- impl Sample::fn set_caps -->
+Set the caps associated with `self`. `self` must be writable.
+
+Feature: `v1_16`
+
+## `caps`
+A `Caps`
+<!-- impl Sample::fn set_info -->
+Set the info structure associated with `self`. `self` must be writable,
+and `info` must not have a parent set already.
+
+Feature: `v1_16`
+
+## `info`
+A `Structure`
+<!-- impl Sample::fn set_segment -->
+Set the segment associated with `self`. `self` must be writable.
+
+Feature: `v1_16`
+
+## `segment`
+A `Segment`
 <!-- enum SeekType -->
 The different types of seek events. When constructing a seek event with
 `Event::new_seek` or when doing gst_segment_do_seek ().
@@ -12259,7 +12517,7 @@ segment. Compared to `Segment::to_running_time` this function can return
 negative running-time.
 
 This function is typically used by elements that need to synchronize buffers
-against the clock or eachother.
+against the clock or each other.
 
 `position` can be any value and the result of this function for values outside
 of the segment is extrapolated.
@@ -12305,7 +12563,7 @@ segment. Compared to `Segment::to_stream_time` this function can return
 negative stream-time.
 
 This function is typically used by elements that need to synchronize buffers
-against the clock or eachother.
+against the clock or each other.
 
 `position` can be any value and the result of this function for values outside
 of the segment is extrapolated.
@@ -12406,17 +12664,17 @@ state change from READY to NULL.
  * Elements close devices
  * Elements reset any internal state.
 <!-- enum StateChange::variant NullToNull -->
-state change from NULL to NULL. (Since 1.14)
+state change from NULL to NULL. (Since: 1.14)
 <!-- enum StateChange::variant ReadyToReady -->
 state change from READY to READY,
 This might happen when going to PAUSED asynchronously failed, in that case
-elements should make sure they are in a proper, coherent READY state. (Since 1.14)
+elements should make sure they are in a proper, coherent READY state. (Since: 1.14)
 <!-- enum StateChange::variant PausedToPaused -->
 state change from PAUSED to PAUSED.
 This might happen when elements were in PLAYING state and 'lost state',
-they should make sure to go back to real 'PAUSED' state (prerolling for example). (Since 1.14)
+they should make sure to go back to real 'PAUSED' state (prerolling for example). (Since: 1.14)
 <!-- enum StateChange::variant PlayingToPlaying -->
-state change from PLAYING to PLAYING. (Since 1.14)
+state change from PLAYING to PLAYING. (Since: 1.14)
 <!-- enum StateChangeReturn -->
 The possible return values from a state change function such as
 `Element::set_state`. Only `StateChangeReturn::Failure` is a real failure.
@@ -12982,9 +13240,9 @@ the name of the first field to read
  than the type specified), otherwise `true`.
 <!-- impl Structure::fn get_array -->
 This is useful in language bindings where unknown `gobject::Value` types are not
-supported. This function will convert the `GST_TYPE_ARRAY` and
-`GST_TYPE_LIST` into a newly allocated `gobject::ValueArray` and return it through
-`array`. Be aware that this is slower then getting the `gobject::Value` directly.
+supported. This function will convert the `GST_TYPE_ARRAY` into a newly
+allocated `gobject::ValueArray` and return it through `array`. Be aware that this is
+slower then getting the `gobject::Value` directly.
 ## `fieldname`
 the name of a field
 ## `array`
@@ -12993,8 +13251,8 @@ a pointer to a `gobject::ValueArray`
 # Returns
 
 `true` if the value could be set correctly. If there was no field
-with `fieldname` or the existing field did not contain an int, this function
-returns `false`.
+with `fieldname` or the existing field did not contain a `GST_TYPE_ARRAY`,
+this function returns `false`.
 <!-- impl Structure::fn get_boolean -->
 Sets the boolean pointed to by `value` corresponding to the value of the
 given field. Caller is responsible for making sure the field exists
@@ -13162,9 +13420,12 @@ with `fieldname` or the existing field did not contain a `gint64`, this function
 returns `false`.
 <!-- impl Structure::fn get_list -->
 This is useful in language bindings where unknown `gobject::Value` types are not
-supported. This function will convert the `GST_TYPE_ARRAY` and
-`GST_TYPE_LIST` into a newly allocated GValueArray and return it through
-`array`. Be aware that this is slower then getting the `gobject::Value` directly.
+supported. This function will convert the `GST_TYPE_LIST` into a newly
+allocated GValueArray and return it through `array`. Be aware that this is
+slower then getting the `gobject::Value` directly.
+
+Feature: `v1_12`
+
 ## `fieldname`
 the name of a field
 ## `array`
@@ -13173,10 +13434,8 @@ a pointer to a `gobject::ValueArray`
 # Returns
 
 `true` if the value could be set correctly. If there was no field
-with `fieldname` or the existing field did not contain an int, this function
-returns `false`.
-
-Since 1.12
+with `fieldname` or the existing field did not contain a `GST_TYPE_LIST`, this
+function returns `false`.
 <!-- impl Structure::fn get_name -->
 Get the name of `self` as a string.
 
@@ -13455,18 +13714,20 @@ supported. This function will convert a `array` to `GST_TYPE_ARRAY` and set
 the field specified by `fieldname`. Be aware that this is slower then using
 `GST_TYPE_ARRAY` in a `gobject::Value` directly.
 
-Since 1.12
+Feature: `v1_12`
+
 ## `fieldname`
 the name of a field
 ## `array`
 a pointer to a `gobject::ValueArray`
 <!-- impl Structure::fn set_list -->
 This is useful in language bindings where unknown GValue types are not
-supported. This function will convert a `array` to `GST_TYPE_ARRAY` and set
+supported. This function will convert a `array` to `GST_TYPE_LIST` and set
 the field specified by `fieldname`. Be aware that this is slower then using
-`GST_TYPE_ARRAY` in a `gobject::Value` directly.
+`GST_TYPE_LIST` in a `gobject::Value` directly.
 
-Since 1.12
+Feature: `v1_12`
+
 ## `fieldname`
 the name of a field
 ## `array`
@@ -14263,6 +14524,13 @@ keep existing tags
 keep all existing tags
 <!-- enum TagMergeMode::variant Count -->
 the number of merge modes
+<!-- enum TagScope -->
+GstTagScope specifies if a taglist applies to the complete
+medium or only to one single stream.
+<!-- enum TagScope::variant Stream -->
+tags specific to this single stream
+<!-- enum TagScope::variant Global -->
+global tags for the complete medium
 <!-- struct TagSetter -->
 Element interface that allows setting of media metadata.
 
@@ -14685,7 +14953,7 @@ unreffed before setting a new one.
 ## `toc`
 a `Toc` to set.
 <!-- struct TypeFindFactory -->
-These functions allow querying informations about registered typefind
+These functions allow querying information about registered typefind
 functions. How to create and register these functions is described in
 the section <link linkend="gstreamer-Writing-typefind-functions">
 "Writing typefind functions"`</link>`.

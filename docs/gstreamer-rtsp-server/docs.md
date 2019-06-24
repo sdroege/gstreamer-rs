@@ -177,6 +177,14 @@ users.
 
 the `RTSPToken` of `self`. `gst_rtsp_token_unref` after
 usage.
+<!-- trait RTSPAuthExt::fn get_realm -->
+
+Feature: `v1_16`
+
+
+# Returns
+
+the `realm` of `self`
 <!-- trait RTSPAuthExt::fn get_supported_methods -->
 Gets the supported authentication methods of `self`.
 
@@ -206,6 +214,24 @@ Get the `gio::TlsDatabase` used for verifying client certificate.
 
 the `gio::TlsDatabase` of `self`. `gobject::ObjectExt::unref` after
 usage.
+<!-- trait RTSPAuthExt::fn parse_htdigest -->
+Parse the contents of the file at `path` and enable the privileges
+listed in `token` for the users it describes.
+
+The format of the file is expected to match the format described by
+<https://en.wikipedia.org/wiki/Digest_access_authentication`The_.htdigest_file`>,
+as output by the `htdigest` command.
+
+Feature: `v1_16`
+
+## `path`
+Path to the htdigest file
+## `token`
+authorisation token
+
+# Returns
+
+`true` if the file was successfully parsed, `false` otherwise.
 <!-- trait RTSPAuthExt::fn remove_basic -->
 Removes `basic` authentication token.
 ## `basic`
@@ -222,6 +248,11 @@ Set the default `RTSPToken` to `token` in `self`. The default token will
 be used for unauthenticated users.
 ## `token`
 a `RTSPToken`
+<!-- trait RTSPAuthExt::fn set_realm -->
+Set the `realm` of `self`
+
+Feature: `v1_16`
+
 <!-- trait RTSPAuthExt::fn set_supported_methods -->
 Sets the supported authentication `methods` for `self`.
 
@@ -244,8 +275,6 @@ a `gio::TlsCertificate`
 Sets the certificate database that is used to verify peer certificates.
 If set to `None` (the default), then peer certificate validation will always
 set the `gio::TlsCertificateFlags::UnknownCa` error.
-
-Since 1.6
 ## `database`
 a `gio::TlsDatabase`
 <!-- trait RTSPAuthExt::fn connect_accept_certificate -->
@@ -397,8 +426,30 @@ sent to the client. `user_data` is passed to `func` and `notify` is called when
 
 By default, the client will send the messages on the `gst_rtsp::RTSPConnection` that
 was configured with `RTSPClient::attach` was called.
+
+It is only allowed to set either a `send_func` or a `send_messages_func`
+but not both at the same time.
 ## `func`
 a `GstRTSPClientSendFunc`
+## `user_data`
+user data passed to `func`
+## `notify`
+called when `user_data` is no longer in use
+<!-- trait RTSPClientExt::fn set_send_messages_func -->
+Set `func` as the callback that will be called when new messages needs to be
+sent to the client. `user_data` is passed to `func` and `notify` is called when
+`user_data` is no longer in use.
+
+By default, the client will send the messages on the `gst_rtsp::RTSPConnection` that
+was configured with `RTSPClient::attach` was called.
+
+It is only allowed to set either a `send_func` or a `send_messages_func`
+but not both at the same time.
+
+Feature: `v1_16`
+
+## `func`
+a `GstRTSPClientSendMessagesFunc`
 ## `user_data`
 user data passed to `func`
 ## `notify`
@@ -587,6 +638,14 @@ current thread that is handling the request for a client.
 # Returns
 
 a `RTSPContext`
+<!-- enum RTSPFilterResult -->
+Possible return values for `RTSPSessionPoolExt::filter`.
+<!-- enum RTSPFilterResult::variant Remove -->
+Remove session
+<!-- enum RTSPFilterResult::variant Keep -->
+Keep session in the pool
+<!-- enum RTSPFilterResult::variant Ref -->
+Ref session in the result list
 <!-- struct RTSPMedia -->
 A class that contains the GStreamer element along with a list of
 `RTSPStream` objects that can produce data.
@@ -627,6 +686,9 @@ element of `self`, and create `GstRTSPStreams` for them.
 <!-- trait RTSPMediaExt::fn complete_pipeline -->
 Add a receiver and sender parts to the pipeline based on the transport from
 SETUP.
+
+Feature: `v1_14`
+
 ## `transports`
 a list of `gst_rtsp::RTSPTransport`
 
@@ -684,6 +746,14 @@ Get the clock that is used by the pipeline in `self`.
 # Returns
 
 the `gst::Clock` used by `self`. unref after usage.
+<!-- trait RTSPMediaExt::fn get_do_retransmission -->
+
+Feature: `v1_16`
+
+
+# Returns
+
+Whether retransmission requests will be sent
 <!-- trait RTSPMediaExt::fn get_element -->
 Get the element that was used when constructing `self`.
 
@@ -696,6 +766,15 @@ Get the latency that is used for receiving media.
 # Returns
 
 latency in milliseconds
+<!-- trait RTSPMediaExt::fn get_max_mcast_ttl -->
+Get the the maximum time-to-live value of outgoing multicast packets.
+
+Feature: `v1_16`
+
+
+# Returns
+
+the maximum time-to-live value of outgoing multicast packets.
 <!-- trait RTSPMediaExt::fn get_multicast_iface -->
 Get the multicast interface used for `self`.
 
@@ -791,6 +870,15 @@ a `gst_sdp::SDPMessage`
 # Returns
 
 TRUE on success.
+<!-- trait RTSPMediaExt::fn is_bind_mcast_address -->
+Check if multicast sockets are configured to be bound to multicast addresses.
+
+Feature: `v1_16`
+
+
+# Returns
+
+`true` if multicast sockets are configured to be bound to multicast addresses.
 <!-- trait RTSPMediaExt::fn is_eos_shutdown -->
 Check if the pipeline for `self` will send an EOS down the pipeline before
 unpreparing.
@@ -857,7 +945,11 @@ a `gst_rtsp::RTSPTimeRange`
 `true` on success.
 <!-- trait RTSPMediaExt::fn seek_full -->
 Seek the pipeline of `self` to `range`. `self` must be prepared with
-`RTSPMediaExt::prepare`.
+`RTSPMediaExt::prepare`. In order to perform the seek operation,
+the pipeline must contain all needed transport parts (transport sinks).
+
+Feature: `v1_14`
+
 ## `range`
 a `gst_rtsp::RTSPTimeRange`
 ## `flags`
@@ -866,10 +958,30 @@ The minimal set of `gst::SeekFlags` to use
 # Returns
 
 `true` on success.
+<!-- trait RTSPMediaExt::fn seekable -->
+Check if the pipeline for `self` seek and up to what point in time,
+it can seek.
+
+Feature: `v1_14`
+
+
+# Returns
+
+-1 if the stream is not seekable, 0 if seekable only to the beginning
+and > 0 to indicate the longest duration between any two random access points.
+`G_MAXINT64` means any value is possible.
 <!-- trait RTSPMediaExt::fn set_address_pool -->
 configure `pool` to be used as the address pool of `self`.
 ## `pool`
 a `RTSPAddressPool`
+<!-- trait RTSPMediaExt::fn set_bind_mcast_address -->
+Decide whether the multicast socket should be bound to a multicast address or
+INADDR_ANY.
+
+Feature: `v1_16`
+
+## `bind_mcast_addr`
+the new value
 <!-- trait RTSPMediaExt::fn set_buffer_size -->
 Set the kernel UDP buffer size.
 ## `size`
@@ -878,6 +990,11 @@ the new value
 Configure the clock used for the media.
 ## `clock`
 `gst::Clock` to be used
+<!-- trait RTSPMediaExt::fn set_do_retransmission -->
+Set whether retransmission requests will be sent
+
+Feature: `v1_16`
+
 <!-- trait RTSPMediaExt::fn set_eos_shutdown -->
 Set or unset if an EOS event will be sent to the pipeline for `self` before
 it is unprepared.
@@ -887,6 +1004,17 @@ the new value
 Configure the latency used for receiving media.
 ## `latency`
 latency in milliseconds
+<!-- trait RTSPMediaExt::fn set_max_mcast_ttl -->
+Set the maximum time-to-live value of outgoing multicast packets.
+
+Feature: `v1_16`
+
+## `ttl`
+the new multicast ttl value
+
+# Returns
+
+`true` if the requested ttl has been set successfully.
 <!-- trait RTSPMediaExt::fn set_multicast_iface -->
 configure `multicast_iface` to be used for `self`.
 ## `multicast_iface`
@@ -1083,6 +1211,14 @@ of all medias created from this factory.
 # Returns
 
 The GstClock
+<!-- trait RTSPMediaFactoryExt::fn get_do_retransmission -->
+
+Feature: `v1_16`
+
+
+# Returns
+
+Whether retransmission requests will be sent for receiving media
 <!-- trait RTSPMediaFactoryExt::fn get_latency -->
 Get the latency that is used for receiving media
 
@@ -1097,6 +1233,15 @@ default prepare vmethod.
 
 the configured launch description. `g_free` after
 usage.
+<!-- trait RTSPMediaFactoryExt::fn get_max_mcast_ttl -->
+Get the the maximum time-to-live value of outgoing multicast packets.
+
+Feature: `v1_16`
+
+
+# Returns
+
+the maximum time-to-live value of outgoing multicast packets.
 <!-- trait RTSPMediaFactoryExt::fn get_media_gtype -->
 Return the GType of the GstRTSPMedia subclass this
 factory will create.
@@ -1150,6 +1295,15 @@ methods.
 # Returns
 
 The transport mode.
+<!-- trait RTSPMediaFactoryExt::fn is_bind_mcast_address -->
+Check if multicast sockets are configured to be bound to multicast addresses.
+
+Feature: `v1_16`
+
+
+# Returns
+
+`true` if multicast sockets are configured to be bound to multicast addresses.
 <!-- trait RTSPMediaFactoryExt::fn is_eos_shutdown -->
 Get if media created from this factory will have an EOS event sent to the
 pipeline before shutdown.
@@ -1167,6 +1321,14 @@ Get if media created from this factory can be shared between clients.
 configure `pool` to be used as the address pool of `self`.
 ## `pool`
 a `RTSPAddressPool`
+<!-- trait RTSPMediaFactoryExt::fn set_bind_mcast_address -->
+Decide whether the multicast socket should be bound to a multicast address or
+INADDR_ANY.
+
+Feature: `v1_16`
+
+## `bind_mcast_addr`
+the new value
 <!-- trait RTSPMediaFactoryExt::fn set_buffer_size -->
 Set the kernel UDP buffer size.
 ## `size`
@@ -1176,6 +1338,12 @@ Configures a specific clock to be used by the pipelines
 of all medias created from this factory.
 ## `clock`
 the clock to be used by the media factory
+<!-- trait RTSPMediaFactoryExt::fn set_do_retransmission -->
+Set whether retransmission requests will be sent for
+receiving media
+
+Feature: `v1_16`
+
 <!-- trait RTSPMediaFactoryExt::fn set_eos_shutdown -->
 Configure if media created from this factory will have an EOS sent to the
 pipeline before shutdown.
@@ -1197,6 +1365,17 @@ The description should return a pipeline with payloaders named pay0, pay1,
 etc.. Each of the payloaders will result in a stream.
 ## `launch`
 the launch description
+<!-- trait RTSPMediaFactoryExt::fn set_max_mcast_ttl -->
+Set the maximum time-to-live value of outgoing multicast packets.
+
+Feature: `v1_16`
+
+## `ttl`
+the new multicast ttl value
+
+# Returns
+
+`true` if the requested ttl has been set successfully.
 <!-- trait RTSPMediaFactoryExt::fn set_media_gtype -->
 Configure the GType of the GstRTSPMedia subclass to
 create (by default, overridden construct vmethods
@@ -1787,6 +1966,9 @@ valid until the session of `self` is unreffed.
 <!-- trait RTSPSessionMediaExt::fn get_transports -->
 Get a list of all available `RTSPStreamTransport` in this session.
 
+Feature: `v1_14`
+
+
 # Returns
 
 a
@@ -1952,6 +2134,25 @@ a `gst::Pad`
 # Returns
 
 a new `RTSPStream`
+<!-- trait RTSPStreamExt::fn add_multicast_client_address -->
+Add multicast client address to stream. At this point, the sockets that
+will stream RTP and RTCP data to `destination` are supposed to be
+allocated.
+
+Feature: `v1_16`
+
+## `destination`
+a multicast address to add
+## `rtp_port`
+RTP port
+## `rtcp_port`
+RTCP port
+## `family`
+socket family
+
+# Returns
+
+`true` if `destination` can be addedd and handled by `self`.
 <!-- trait RTSPStreamExt::fn add_transport -->
 Add the transport in `trans` to `self`. The media of `self` will
 then also be send to the values configured in `trans`.
@@ -1980,6 +2181,9 @@ Whether to use client settings or not
 <!-- trait RTSPStreamExt::fn complete_stream -->
 Add a receiver and sender part to the pipeline based on the transport from
 SETUP.
+
+Feature: `v1_14`
+
 ## `transport`
 a `gst_rtsp::RTSPTransport`
 
@@ -2030,6 +2234,15 @@ Get the previous joined bin with `RTSPStreamExt::join_bin` or NULL.
 # Returns
 
 the joined bin or NULL.
+<!-- trait RTSPStreamExt::fn get_max_mcast_ttl -->
+Get the the maximum time-to-live value of outgoing multicast packets.
+
+Feature: `v1_16`
+
+
+# Returns
+
+the maximum time-to-live value of outgoing multicast packets.
 <!-- trait RTSPStreamExt::fn get_mtu -->
 Get the configured MTU in the payloader of `self`.
 
@@ -2048,6 +2261,15 @@ the `gio::SocketFamily`
 the `RTSPAddress` of `self`
 or `None` when no address could be allocated. `RTSPAddress::free`
 after usage.
+<!-- trait RTSPStreamExt::fn get_multicast_client_addresses -->
+Get all multicast client addresses that RTP data will be sent to
+
+Feature: `v1_16`
+
+
+# Returns
+
+A comma separated list of host:port pairs with destinations
 <!-- trait RTSPStreamExt::fn get_multicast_iface -->
 Get the multicast interface used for `self`.
 
@@ -2093,6 +2315,9 @@ Get the amount of time to store retransmission data.
 the amount of time to store retransmission data.
 <!-- trait RTSPStreamExt::fn get_rtcp_multicast_socket -->
 Get the multicast RTCP socket from `self` for a `family`.
+
+Feature: `v1_14`
+
 ## `family`
 the socket family
 
@@ -2119,6 +2344,7 @@ the socket family
 # Returns
 
 the multicast RTP socket or `None` if no
+
 socket could be allocated for `family`. Unref after usage
 <!-- trait RTSPStreamExt::fn get_rtp_socket -->
 Get the RTP socket from `self` for a `family`.
@@ -2182,6 +2408,30 @@ Get the SSRC used by the RTP session of this stream. This function can only
 be called when `self` has been joined.
 ## `ssrc`
 result ssrc
+<!-- trait RTSPStreamExt::fn get_ulpfec_percentage -->
+
+Feature: `v1_16`
+
+
+# Returns
+
+the amount of redundancy applied when creating ULPFEC
+protection packets.
+<!-- trait RTSPStreamExt::fn get_ulpfec_pt -->
+
+Feature: `v1_16`
+
+
+# Returns
+
+the payload type used for ULPFEC protection packets
+<!-- trait RTSPStreamExt::fn handle_keymgmt -->
+Parse and handle a KeyMgmt header.
+
+Feature: `v1_16`
+
+## `keymgmt`
+a keymgmt header
 <!-- trait RTSPStreamExt::fn has_control -->
 Check if `self` has the control string `control`.
 ## `control`
@@ -2190,6 +2440,15 @@ a control string
 # Returns
 
 `true` is `self` has `control` as the control string
+<!-- trait RTSPStreamExt::fn is_bind_mcast_address -->
+Check if multicast sockets are configured to be bound to multicast addresses.
+
+Feature: `v1_16`
+
+
+# Returns
+
+`true` if multicast sockets are configured to be bound to multicast addresses.
 <!-- trait RTSPStreamExt::fn is_blocking -->
 Check if `self` is blocking on a `gst::Buffer`.
 
@@ -2207,17 +2466,26 @@ Checks whether the stream is complete, contains the receiver and the sender
 parts. As the stream contains sink(s) element(s), it's possible to perform
 seek operations on it.
 
+Feature: `v1_14`
+
+
 # Returns
 
 `true` if the stream contains at least one sink element.
 <!-- trait RTSPStreamExt::fn is_receiver -->
 Checks whether the stream is a receiver.
 
+Feature: `v1_14`
+
+
 # Returns
 
 `true` if the stream is a receiver and `false` otherwise.
 <!-- trait RTSPStreamExt::fn is_sender -->
 Checks whether the stream is a sender.
+
+Feature: `v1_14`
+
 
 # Returns
 
@@ -2308,10 +2576,39 @@ a `RTSPStreamTransport`
 # Returns
 
 `true` if `trans` was removed
+<!-- trait RTSPStreamExt::fn request_aux_receiver -->
+Creating a rtxreceive bin
+
+Feature: `v1_16`
+
+## `sessid`
+the session id
+
+# Returns
+
+a `gst::Element`.
 <!-- trait RTSPStreamExt::fn request_aux_sender -->
 Creating a rtxsend bin
 ## `sessid`
 the session id
+
+# Returns
+
+a `gst::Element`.
+<!-- trait RTSPStreamExt::fn request_ulpfec_decoder -->
+Creating a rtpulpfecdec element
+
+Feature: `v1_16`
+
+
+# Returns
+
+a `gst::Element`.
+<!-- trait RTSPStreamExt::fn request_ulpfec_encoder -->
+Creating a rtpulpfecenc element
+
+Feature: `v1_16`
+
 
 # Returns
 
@@ -2332,9 +2629,13 @@ a TTL
 # Returns
 
 the `RTSPAddress` of `self` or `None` when
-the address could be reserved. `RTSPAddress::free` after usage.
+the address could not be reserved. `RTSPAddress::free` after
+usage.
 <!-- trait RTSPStreamExt::fn seekable -->
 Checks whether the individual `self` is seekable.
+
+Feature: `v1_14`
+
 
 # Returns
 
@@ -2343,6 +2644,14 @@ Checks whether the individual `self` is seekable.
 configure `pool` to be used as the address pool of `self`.
 ## `pool`
 a `RTSPAddressPool`
+<!-- trait RTSPStreamExt::fn set_bind_mcast_address -->
+Decide whether the multicast socket should be bound to a multicast address or
+INADDR_ANY.
+
+Feature: `v1_16`
+
+## `bind_mcast_addr`
+the new value
 <!-- trait RTSPStreamExt::fn set_blocked -->
 Blocks or unblocks the dataflow on `self`.
 ## `blocked`
@@ -2373,6 +2682,17 @@ a control string
 Configure the dscp qos of the outgoing sockets to `dscp_qos`.
 ## `dscp_qos`
 a new dscp qos value (0-63, or -1 to disable)
+<!-- trait RTSPStreamExt::fn set_max_mcast_ttl -->
+Set the maximum time-to-live value of outgoing multicast packets.
+
+Feature: `v1_16`
+
+## `ttl`
+the new multicast ttl value
+
+# Returns
+
+`true` if the requested ttl has been set successfully.
 <!-- trait RTSPStreamExt::fn set_mtu -->
 Configure the mtu in the payloader of `self` to `mtu`.
 ## `mtu`
@@ -2407,6 +2727,17 @@ a `guint`
 Set the amount of time to store retransmission packets.
 ## `time`
 a `gst::ClockTime`
+<!-- trait RTSPStreamExt::fn set_ulpfec_percentage -->
+Sets the amount of redundancy to apply when creating ULPFEC
+protection packets.
+
+Feature: `v1_16`
+
+<!-- trait RTSPStreamExt::fn set_ulpfec_pt -->
+Set the payload type to be used for ULPFEC protection packets
+
+Feature: `v1_16`
+
 <!-- trait RTSPStreamExt::fn transport_filter -->
 Call `func` for each transport managed by `self`. The result value of `func`
 determines what happens to the transport. `func` will be called with `self`
@@ -2445,6 +2776,17 @@ a `gst::Caps` with crypto info
 # Returns
 
 `true` if `crypto` could be updated
+<!-- trait RTSPStreamExt::fn verify_mcast_ttl -->
+Check if the requested multicast ttl value is allowed.
+
+Feature: `v1_16`
+
+## `ttl`
+a requested multicast ttl
+
+# Returns
+
+TRUE if the requested ttl value is allowed.
 <!-- struct RTSPStreamTransport -->
 A Transport description for a stream
 
@@ -2506,6 +2848,11 @@ Check if `self` is timed out.
 `true` if `self` timed out.
 <!-- trait RTSPStreamTransportExt::fn keep_alive -->
 Signal the installed keep_alive callback for `self`.
+<!-- trait RTSPStreamTransportExt::fn message_sent -->
+Signal the installed message_sent callback for `self`.
+
+Feature: `v1_16`
+
 <!-- trait RTSPStreamTransportExt::fn recv_data -->
 Receive `buffer` on `channel` `self`.
 ## `channel`
@@ -2525,10 +2872,32 @@ a `gst::Buffer`
 # Returns
 
 `true` on success
+<!-- trait RTSPStreamTransportExt::fn send_rtcp_list -->
+Send `buffer_list` to the installed RTCP callback for `self`.
+
+Feature: `v1_16`
+
+## `buffer_list`
+a `gst::Buffer`
+
+# Returns
+
+`true` on success
 <!-- trait RTSPStreamTransportExt::fn send_rtp -->
 Send `buffer` to the installed RTP callback for `self`.
 ## `buffer`
 a `gst::Buffer`
+
+# Returns
+
+`true` on success
+<!-- trait RTSPStreamTransportExt::fn send_rtp_list -->
+Send `buffer_list` to the installed RTP callback for `self`.
+
+Feature: `v1_16`
+
+## `buffer_list`
+a `gst::BufferList`
 
 # Returns
 
@@ -2561,6 +2930,28 @@ a callback called when the receiver is active
 user data passed to callback
 ## `notify`
 called with the user_data when no longer needed.
+<!-- trait RTSPStreamTransportExt::fn set_list_callbacks -->
+Install callbacks that will be called when data for a stream should be sent
+to a client. This is usually used when sending RTP/RTCP over TCP.
+
+Feature: `v1_16`
+
+## `send_rtp_list`
+a callback called when RTP should be sent
+## `send_rtcp_list`
+a callback called when RTCP should be sent
+## `user_data`
+user data passed to callbacks
+## `notify`
+called with the user_data when no longer needed.
+<!-- trait RTSPStreamTransportExt::fn set_message_sent -->
+Install a callback that will be called when a message has been sent on `self`.
+## `message_sent`
+a callback called when a message has been sent
+## `user_data`
+user data passed to callback
+## `notify`
+called with the user_data when no longer needed
 <!-- trait RTSPStreamTransportExt::fn set_timed_out -->
 Set the timed out state of `self` to `timedout`
 ## `timedout`

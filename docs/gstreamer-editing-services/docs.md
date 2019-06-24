@@ -105,6 +105,14 @@ The Identifier or `None`
 
 A reference to the wanted `Asset` or `None`
 <!-- impl Asset::fn request_async -->
+The `callback` will be called from a running `glib::MainLoop` which is iterating a `glib::MainContext`.
+Note that, users should ensure the `glib::MainContext`, since this method will notify
+`callback` from the thread which was associated with a thread default
+`glib::MainContext` at calling `ges_init`.
+For example, if a user wants non-default `glib::MainContext` to be associated
+with `callback`, `ges_init` must be called after g_main_context_push_thread_default ()
+with custom `glib::MainContext`.
+
 Request a new `Asset` asyncronously, `callback` will be called when the materail is
 ready to be used or if an error occured.
 
@@ -1163,7 +1171,7 @@ Informs you that a `Asset` could not be created. In case of
 missing GStreamer plugins, the error will be set to `GST_CORE_ERROR`
 `gst::CoreError::MissingPlugin`
 ## `error`
-The `glib::Error` defining the error that accured, might be `None`
+The `glib::Error` defining the error that occured, might be `None`
 ## `id`
 The `id` of the asset that failed loading
 ## `extractable_type`
@@ -1515,6 +1523,22 @@ The `TrackElement` for which to choose the tracks it should land into
 # Returns
 
 a `glib::PtrArray` of `Track`-s where that object should be added
+<!-- trait TimelineExt::fn connect_snapping_ended -->
+Will be emitted when the 2 `TrackElement` ended to snap
+## `obj1`
+the first `TrackElement` that was snapping.
+## `obj2`
+the second `TrackElement` that was snapping.
+## `position`
+the position where the two objects finally snapping.
+<!-- trait TimelineExt::fn connect_snapping_started -->
+Will be emitted when the 2 `TrackElement` first snapped
+## `obj1`
+the first `TrackElement` that was snapping.
+## `obj2`
+the second `TrackElement` that was snapping.
+## `position`
+the position where the two objects finally snapping.
 <!-- trait TimelineExt::fn connect_track_added -->
 Will be emitted after the track was added to the timeline.
 ## `track`
@@ -1606,6 +1630,13 @@ The `duration` of `self`
 # Returns
 
 The `inpoint` of `self`
+<!-- trait TimelineElementExt::fn get_layer_priority -->
+
+# Returns
+
+The priority of the first layer the element is in (note that only
+groups can span over several layers). `GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY`
+means that the element is not in a layer.
 <!-- trait TimelineElementExt::fn get_max_duration -->
 
 # Returns
@@ -1787,15 +1818,27 @@ Note that if the timeline snap-distance property of the timeline containing
 `self` is set, `self` will properly snap to its neighboors.
 ## `duration`
 the duration in `gst::ClockTime`
+
+# Returns
+
+`true` if `duration` could be set.
 <!-- trait TimelineElementExt::fn set_inpoint -->
 Set the in-point, that is the moment at which the `self` will start
 outputting data from its contents.
 ## `inpoint`
 the in-point in `gst::ClockTime`
+
+# Returns
+
+`true` if `inpoint` could be set.
 <!-- trait TimelineElementExt::fn set_max_duration -->
 Set the maximun duration of the object
 ## `maxduration`
 the maximum duration in `gst::ClockTime`
+
+# Returns
+
+`true` if `maxduration` could be set.
 <!-- trait TimelineElementExt::fn set_name -->
 Sets the name of object, or gives `self` a guaranteed unique name (if name is NULL).
 This function makes a copy of the provided name, so the caller retains ownership
@@ -1822,6 +1865,10 @@ To set `Effect` priorities `ClipExt::set_top_effect_index` should
 be used.
 ## `priority`
 the priority
+
+# Returns
+
+`true` if `priority` could be set.
 <!-- trait TimelineElementExt::fn set_start -->
 Set the position of the object in its containing layer.
 
@@ -1829,6 +1876,10 @@ Note that if the snapping-distance property of the timeline containing
 `self` is set, `self` will properly snap to the edges around `start`.
 ## `start`
 the position in `gst::ClockTime`
+
+# Returns
+
+`true` if `start` could be set.
 <!-- trait TimelineElementExt::fn set_timeline -->
 Sets the timeline of `self` to `timeline`.
 ## `timeline`
@@ -2358,7 +2409,9 @@ the `gst::ControlSource` to set on the binding.
 ## `property_name`
 The name of the property to control.
 ## `binding_type`
-The type of binding to create. Only "direct" is available for now.
+The type of binding to create. Currently the following values are valid:
+ - "direct": See `gst_direct_control_binding_new`
+ - "direct-absolute": See `gst_direct_control_binding_new_absolute`
 
 # Returns
 
@@ -2446,7 +2499,7 @@ The location of the file/resource to use.
 The `UriClipAsset` is a special `Asset` that lets you handle
 the media file to use inside the GStreamer Editing Services. It has APIs that
 let you get information about the medias. Also, the tags found in the media file are
-set as Metadatas of the Asser.
+set as Metadata of the Asset.
 
 # Implements
 
@@ -2457,6 +2510,14 @@ Trait containing all `UriClipAsset` methods.
 # Implementors
 
 [`UriClipAsset`](struct.UriClipAsset.html)
+<!-- impl UriClipAsset::fn finish -->
+Finalize the request of an async `UriClipAsset`
+## `res`
+The `gio::AsyncResult` from which to get the newly created `UriClipAsset`
+
+# Returns
+
+The `UriClipAsset` previously requested
 <!-- impl UriClipAsset::fn new -->
 Creates a `UriClipAsset` for `uri`
 
@@ -2470,7 +2531,7 @@ filesource_asset_loaded_cb (GESAsset * source, GAsyncResult * res, gpointer user
   GError *error = NULL;
   GESUriClipAsset *filesource_asset;
 
-  filesource_asset = GES_URI_CLIP_ASSET (ges_asset_request_finish (res, &error));
+  filesource_asset = ges_uri_clip_asset_finish (res, &error);
   if (filesource_asset) {
    g_print ("The file: %s is usable as a FileSource, it is%s an image and lasts %" GST_TIME_FORMAT,
        ges_asset_get_id (GES_ASSET (filesource_asset))
@@ -2504,8 +2565,8 @@ You can also use multi file uris for `MultiFileSource`.
 
 # Returns
 
-A reference to the requested asset or
-`None` if an error happened
+A reference to the requested asset or `None` if
+an error happened
 <!-- trait UriClipAssetExt::fn get_duration -->
 Gets duration of the file represented by `self`
 

@@ -28,8 +28,6 @@ a `Player` configuration
 # Returns
 
 current position update interval in milliseconds
-
-Since 1.10
 <!-- impl Player::fn config_get_seek_accurate -->
 ## `config`
 a `Player` configuration
@@ -37,8 +35,6 @@ a `Player` configuration
 # Returns
 
 `true` if accurate seeking is enabled
-
-Since 1.12
 <!-- impl Player::fn config_get_user_agent -->
 Return the user agent which has been configured using
 `Player::config_set_user_agent` if any.
@@ -48,11 +44,9 @@ a `Player` configuration
 # Returns
 
 the configured agent, or `None`
-Since 1.10
 <!-- impl Player::fn config_set_position_update_interval -->
 set interval in milliseconds between two position-updated signals.
 pass 0 to stop updating the position.
-Since 1.10
 ## `config`
 a `Player` configuration
 ## `interval`
@@ -75,8 +69,6 @@ accurate seek or not
 Set the user agent to pass to the server if `player` needs to connect
 to a server during playback. This is typically used when playing HTTP
 or RTSP streams.
-
-Since 1.10
 ## `config`
 a `Player` configuration
 ## `agent`
@@ -123,8 +115,6 @@ Retrieve the current value of audio-video-offset property
 # Returns
 
 The current value of audio-video-offset in nanoseconds
-
-Since 1.10
 <!-- impl Player::fn get_color_balance -->
 Retrieve the current value of the indicated `type_`.
 ## `type_`
@@ -143,8 +133,6 @@ or it must be freed after usage.
 
 a copy of the current configuration of `self`. Use
 `gst::Structure::free` after usage or `Player::set_config`.
-
-Since 1.10
 <!-- impl Player::fn get_current_audio_track -->
 A Function to get current audio `PlayerAudioInfo` instance.
 
@@ -230,6 +218,15 @@ current subtitle URI
 
 URI of the current external subtitle.
  `g_free` after usage.
+<!-- impl Player::fn get_subtitle_video_offset -->
+Retrieve the current value of subtitle-video-offset property
+
+Feature: `v1_16`
+
+
+# Returns
+
+The current value of subtitle-video-offset in nanoseconds
 <!-- impl Player::fn get_uri -->
 Gets the URI of the currently-playing stream.
 
@@ -252,8 +249,6 @@ Additional configuration
 # Returns
 
 Current video snapshot sample or `None` on failure
-
-Since 1.12
 <!-- impl Player::fn get_volume -->
 Returns the current volume level, as a percentage between 0 and 1.
 
@@ -291,8 +286,6 @@ Enable or disable the current audio track.
 TRUE or FALSE
 <!-- impl Player::fn set_audio_video_offset -->
 Sets audio-video-offset property by value of `offset`
-
-Since 1.10
 ## `offset`
 `gint64` in nanoseconds
 <!-- impl Player::fn set_color_balance -->
@@ -318,7 +311,6 @@ a `gst::Structure`
 # Returns
 
 `true` when the configuration could be set.
-Since 1.10
 <!-- impl Player::fn set_multiview_flags -->
 Sets the current value of the indicated mode `type_` to the passed
 value.
@@ -356,6 +348,13 @@ gst_player_set_subtitle_track_enabled(`self`, TRUE) so the subtitles are actuall
 rendered.
 ## `uri`
 subtitle URI
+<!-- impl Player::fn set_subtitle_video_offset -->
+Sets subtitle-video-offset property by value of `offset`
+
+Feature: `v1_16`
+
+## `offset`
+`gint64` in nanoseconds
 <!-- impl Player::fn set_uri -->
 Sets the next URI to play.
 ## `uri`
@@ -672,12 +671,6 @@ Window handle to use or `None`
 Window handle to use or `None`
 ## `video_sink`
 the custom video_sink element to be set for the video renderer
-
-# Returns
-
-
-
-Since 1.12
 <!-- impl PlayerVideoOverlayVideoRenderer::fn expose -->
 Tell an overlay that it has been exposed. This will redraw the current frame
 in the drawable even if the pipeline is PAUSED.
