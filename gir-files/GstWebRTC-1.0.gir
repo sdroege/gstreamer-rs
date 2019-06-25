@@ -16,6 +16,7 @@ and/or use gtk-doc annotations.  -->
              c:identifier-prefixes="Gst"
              c:symbol-prefixes="gst">
     <enumeration name="WebRTCBundlePolicy"
+                 version="1.16"
                  glib:type-name="GstWebRTCBundlePolicy"
                  glib:get-type="gst_webrtc_bundle_policy_get_type"
                  c:type="GstWebRTCBundlePolicy">
@@ -215,6 +216,7 @@ GST_WEBRTC_DTLS_TRANSPORT_STATE_CONNECTED: connected</doc>
       </member>
     </enumeration>
     <enumeration name="WebRTCDataChannelState"
+                 version="1.16"
                  glib:type-name="GstWebRTCDataChannelState"
                  glib:get-type="gst_webrtc_data_channel_state_get_type"
                  c:type="GstWebRTCDataChannelState">
@@ -251,6 +253,7 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate"&gt;h
       </member>
     </enumeration>
     <enumeration name="WebRTCFECType"
+                 version="1.14.1"
                  glib:type-name="GstWebRTCFECType"
                  glib:get-type="gst_webrtc_fec_type_get_type"
                  c:type="GstWebRTCFECType">
@@ -533,6 +536,7 @@ GST_WEBRTC_ICE_ROLE_CONTROLLING: controlling</doc>
       </field>
     </record>
     <enumeration name="WebRTCICETransportPolicy"
+                 version="1.16"
                  glib:type-name="GstWebRTCICETransportPolicy"
                  glib:get-type="gst_webrtc_ice_transport_policy_get_type"
                  c:type="GstWebRTCICETransportPolicy">
@@ -594,6 +598,7 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcpeerconnectionstate"&g
       </member>
     </enumeration>
     <enumeration name="WebRTCPriorityType"
+                 version="1.16"
                  glib:type-name="GstWebRTCPriorityType"
                  glib:get-type="gst_webrtc_priority_type_get_type"
                  c:type="GstWebRTCPriorityType">
@@ -866,6 +871,7 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcprioritytype"&gt;http:
       </member>
     </enumeration>
     <enumeration name="WebRTCSCTPTransportState"
+                 version="1.16"
                  glib:type-name="GstWebRTCSCTPTransportState"
                  glib:get-type="gst_webrtc_sctp_transport_state_get_type"
                  c:type="GstWebRTCSCTPTransportState">
