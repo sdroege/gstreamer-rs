@@ -29,6 +29,12 @@ generate = [
     "GstWebRTC.WebRTCRTPTransceiverDirection",
     "GstWebRTC.WebRTCSignalingState",
     "GstWebRTC.WebRTCStatsType",
+    "GstWebRTC.WebRTCBundlePolicy",
+    "GstWebRTC.WebRTCDataChannelState",
+    "GstWebRTC.WebRTCICETransportPolicy",
+    "GstWebRTC.WebRTCPriorityType",
+    "GstWebRTC.WebRTCSCTPTransportState",
+    "GstWebRTC.WebRTCFECType",
 ]
 
 manual = [

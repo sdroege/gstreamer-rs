@@ -21,14 +21,26 @@ mod web_rtc_session_description;
 pub use self::web_rtc_session_description::WebRTCSessionDescription;
 
 mod enums;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use self::enums::WebRTCBundlePolicy;
 pub use self::enums::WebRTCDTLSSetup;
 pub use self::enums::WebRTCDTLSTransportState;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use self::enums::WebRTCDataChannelState;
+#[cfg(any(feature = "v1_14_1", feature = "dox"))]
+pub use self::enums::WebRTCFECType;
 pub use self::enums::WebRTCICEComponent;
 pub use self::enums::WebRTCICEConnectionState;
 pub use self::enums::WebRTCICEGatheringState;
 pub use self::enums::WebRTCICERole;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use self::enums::WebRTCICETransportPolicy;
 pub use self::enums::WebRTCPeerConnectionState;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use self::enums::WebRTCPriorityType;
 pub use self::enums::WebRTCRTPTransceiverDirection;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
+pub use self::enums::WebRTCSCTPTransportState;
 pub use self::enums::WebRTCSDPType;
 pub use self::enums::WebRTCSignalingState;
 pub use self::enums::WebRTCStatsType;
