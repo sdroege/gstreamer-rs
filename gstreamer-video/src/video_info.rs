@@ -271,19 +271,41 @@ impl<'a> VideoInfoBuilder<'a> {
         unsafe {
             let mut info = mem::uninitialized();
 
-            gst_video_sys::gst_video_info_set_format(
-                &mut info,
-                self.format.to_glib(),
-                self.width,
-                self.height,
-            );
+            #[cfg(not(feature = "v1_16"))]
+            {
+                gst_video_sys::gst_video_info_set_format(
+                    &mut info,
+                    self.format.to_glib(),
+                    self.width,
+                    self.height,
+                );
+
+                if let Some(interlace_mode) = self.interlace_mode {
+                    info.interlace_mode = interlace_mode.to_glib();
+                }
+            }
+            #[cfg(feature = "v1_16")]
+            {
+                if let Some(interlace_mode) = self.interlace_mode {
+                    gst_video_sys::gst_video_info_set_interlaced_format(
+                        &mut info,
+                        self.format.to_glib(),
+                        interlace_mode.to_glib(),
+                        self.width,
+                        self.height,
+                    );
+                } else {
+                    gst_video_sys::gst_video_info_set_format(
+                        &mut info,
+                        self.format.to_glib(),
+                        self.width,
+                        self.height,
+                    );
+                }
+            }
 
             if info.finfo.is_null() || info.width <= 0 || info.height <= 0 {
                 return None;
-            }
-
-            if let Some(interlace_mode) = self.interlace_mode {
-                info.interlace_mode = interlace_mode.to_glib();
             }
 
             if let Some(flags) = self.flags {
