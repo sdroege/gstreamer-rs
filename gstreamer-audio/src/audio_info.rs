@@ -28,6 +28,7 @@ pub struct AudioInfo(gst_audio_sys::GstAudioInfo, [::AudioChannelPosition; 64]);
 impl fmt::Debug for AudioInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.debug_struct("AudioInfo")
+            .field("format-info", &self.format_info())
             .field("rate", &self.rate())
             .field("channels", &self.channels())
             .field("positions", &self.positions())
