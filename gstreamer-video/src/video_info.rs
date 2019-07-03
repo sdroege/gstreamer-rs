@@ -221,6 +221,7 @@ impl fmt::Debug for VideoInfo {
         let mut b = f.debug_struct("VideoInfo");
 
         b.field("format", &self.format())
+            .field("format-info", &self.format_info())
             .field("width", &self.width())
             .field("height", &self.height())
             .field("interlace_mode", &self.interlace_mode())
