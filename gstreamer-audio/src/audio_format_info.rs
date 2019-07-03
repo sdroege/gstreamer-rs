@@ -220,7 +220,16 @@ impl Eq for AudioFormatInfo {}
 
 impl fmt::Debug for AudioFormatInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(self.name())
+        f.debug_struct("AudioFormatInfo")
+            .field("format", &self.format())
+            .field("name", &self.name())
+            .field("description", &self.description())
+            .field("flags", &self.flags())
+            .field("endianness", &self.endianness())
+            .field("width", &self.width())
+            .field("depth", &self.depth())
+            .field("silence", &self.silence())
+            .finish()
     }
 }
 
