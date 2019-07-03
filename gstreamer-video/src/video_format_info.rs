@@ -311,7 +311,27 @@ impl Eq for VideoFormatInfo {}
 
 impl fmt::Debug for VideoFormatInfo {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(self.name())
+        f.debug_struct("VideoFormatInfo")
+            .field("format", &self.format())
+            .field("name", &self.name())
+            .field("description", &self.description())
+            .field("flags", &self.flags())
+            .field("bits", &self.bits())
+            .field("n-components", &self.n_components())
+            .field("shift", &self.shift())
+            .field("depth", &self.depth())
+            .field("pixel-stride", &self.pixel_stride())
+            .field("n-planes", &self.n_planes())
+            .field("plane", &self.plane())
+            .field("poffset", &self.poffset())
+            .field("w-sub", &self.w_sub())
+            .field("h-sub", &self.h_sub())
+            .field("unpack-format", &self.unpack_format())
+            .field("pack-lines", &self.pack_lines())
+            .field("tile-mode", &self.tile_mode())
+            .field("tile-ws", &self.tile_ws())
+            .field("tile-hs", &self.tile_hs())
+            .finish()
     }
 }
 
