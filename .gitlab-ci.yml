@@ -49,7 +49,7 @@ stages:
     - G_DEBUG=fatal_warnings cargo test --color=always --all
 
     - |
-      if [ -n "$NIGHTLY" ]; then
+      if [ -n "$ALL_FEATURES" ]; then
         cargo build --color=always --all --all-features
         G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
       fi
@@ -64,6 +64,8 @@ test stable:
   # Stable img
   # https://hub.docker.com/_/rust/
   image: "rust:slim"
+  variables:
+    ALL_FEATURES: 'yes'
   extends: '.cargo test'
 
 test nightly:
@@ -72,7 +74,7 @@ test nightly:
   image: "rustlang/rust:nightly-slim"
   allow_failure: true
   variables:
-    NIGHTLY: 'yes'
+    ALL_FEATURES: 'yes'
   extends: '.cargo test'
 
 rustfmt:
@@ -85,7 +87,7 @@ rustfmt:
 
 clippy:
   extends: '.tarball_setup'
-  image: "rustlang/rust:nightly-slim"
+  image: "rust:slim"
   stage: 'extras'
   allow_failure: true
   script:
