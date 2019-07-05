@@ -43,6 +43,75 @@ use std::cell::RefCell;
 
 use std::process;
 
+#[cfg(all(target_os = "linux", feature = "gtkvideooverlay-x11"))]
+fn create_video_sink() -> gst::Element {
+    // When we are on linux with the Xorg display server, we use the
+    // X11 protocol's XV extension, which allows to overlay regions
+    // with video streams. For this, we use the xvimagesink element.
+    gst::ElementFactory::make("xvimagesink", None).unwrap()
+}
+#[cfg(all(target_os = "linux", feature = "gtkvideooverlay-x11"))]
+fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::Window) {
+    let display_type_name = gdk_window.get_display().get_type().name();
+
+    // Check if we're using X11 or ...
+    if display_type_name == "GdkX11Display" {
+        extern "C" {
+            pub fn gdk_x11_window_get_xid(window: *mut glib::object::GObject) -> *mut c_void;
+        }
+
+        // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
+        // If a wrong value were to be passed here (and you can pass any integer), then the window
+        // system will most likely cause the application to crash.
+        #[allow(clippy::cast_ptr_alignment)]
+        unsafe {
+            // Here we ask gdk what native window handle we got assigned for
+            // our video region from the window system, and then we will
+            // pass this unique identifier to the overlay provided by our
+            // sink - so the sink can then arrange the overlay.
+            let xid = gdk_x11_window_get_xid(gdk_window.as_ptr() as *mut _);
+            video_overlay.set_window_handle(xid as usize);
+        }
+    } else {
+        println!("Add support for display type '{}'", display_type_name);
+        process::exit(-1);
+    }
+}
+
+#[cfg(all(target_os = "macos", feature = "gtkvideooverlay-quartz"))]
+fn create_video_sink() -> gst::Element {
+    // On Mac, this is done by overlaying a window region with an
+    // OpenGL-texture, using the glimagesink element.
+    gst::ElementFactory::make("glimagesink", None).unwrap()
+}
+
+#[cfg(all(target_os = "macos", feature = "gtkvideooverlay-quartz"))]
+fn set_window_handle(video_overlay: &gst_video::VideoOverlay, gdk_window: &gdk::Window) {
+    let display_type_name = gdk_window.get_display().get_type().name();
+
+    if display_type_name == "GdkQuartzDisplay" {
+        extern "C" {
+            pub fn gdk_quartz_window_get_nsview(window: *mut glib::object::GObject) -> *mut c_void;
+        }
+
+        // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
+        // If a wrong value were to be passed here (and you can pass any integer), then the window
+        // system will most likely cause the application to crash.
+        #[allow(clippy::cast_ptr_alignment)]
+        unsafe {
+            // Here we ask gdk what native window handle we got assigned for
+            // our video region from the windowing system, and then we will
+            // pass this unique identifier to the overlay provided by our
+            // sink - so the sink can then arrange the overlay.
+            let window = gdk_quartz_window_get_nsview(gdk_window.as_ptr() as *mut _);
+            video_overlay.set_window_handle(window as usize);
+        }
+    } else {
+        println!("Unsupported display type '{}", display_type_name);
+        process::exit(-1);
+    }
+}
+
 fn create_ui(app: &gtk::Application) {
     let pipeline = gst::Pipeline::new(None);
     let src = gst::ElementFactory::make("videotestsrc", None).unwrap();
@@ -50,18 +119,7 @@ fn create_ui(app: &gtk::Application) {
     // Since using the window system to overlay our gui window is making
     // direct contact with the windowing system, this is highly platform-
     // specific. This example supports Linux and Mac (using X11 and Quartz).
-    let sink = if cfg!(feature = "gtkvideooverlay-x11") {
-        // When we are on linux with the Xorg display server, we use the
-        // X11 protocol's XV extension, which allows to overlay regions
-        // with video streams. For this, we use the xvimagesink element.
-        gst::ElementFactory::make("xvimagesink", None).unwrap()
-    } else if cfg!(feature = "gtkvideooverlay-quartz") {
-        // On Mac, this is done by overlaying a window region with an
-        // OpenGL-texture, using the glimagesink element.
-        gst::ElementFactory::make("glimagesink", None).unwrap()
-    } else {
-        unreachable!()
-    };
+    let sink = create_video_sink();
 
     pipeline.add_many(&[&src, &sink]).unwrap();
     src.link(&sink).unwrap();
@@ -114,58 +172,7 @@ fn create_ui(app: &gtk::Application) {
             process::exit(-1);
         }
 
-        let display_type_name = gdk_window.get_display().get_type().name();
-
-        if cfg!(feature = "gtkvideooverlay-x11") {
-            // Check if we're using X11 or ...
-            if display_type_name == "GdkX11Display" {
-                extern "C" {
-                    pub fn gdk_x11_window_get_xid(
-                        window: *mut glib::object::GObject,
-                    ) -> *mut c_void;
-                }
-
-                // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
-                // If a wrong value were to be passed here (and you can pass any integer), then the window
-                // system will most likely cause the application to crash.
-                #[allow(clippy::cast_ptr_alignment)]
-                unsafe {
-                    // Here we ask gdk what native window handle we got assigned for
-                    // our video region from the window system, and then we will
-                    // pass this unique identifier to the overlay provided by our
-                    // sink - so the sink can then arrange the overlay.
-                    let xid = gdk_x11_window_get_xid(gdk_window.as_ptr() as *mut _);
-                    video_overlay.set_window_handle(xid as usize);
-                }
-            } else {
-                println!("Add support for display type '{}'", display_type_name);
-                process::exit(-1);
-            }
-        } else if cfg!(feature = "gtkvideooverlay-quartz") {
-            if display_type_name == "GdkQuartzDisplay" {
-                extern "C" {
-                    pub fn gdk_quartz_window_get_nsview(
-                        window: *mut glib::object::GObject,
-                    ) -> *mut c_void;
-                }
-
-                // This is unsafe because the "window handle" we pass here is basically like a raw pointer.
-                // If a wrong value were to be passed here (and you can pass any integer), then the window
-                // system will most likely cause the application to crash.
-                #[allow(clippy::cast_ptr_alignment)]
-                unsafe {
-                    // Here we ask gdk what native window handle we got assigned for
-                    // our video region from the windowing system, and then we will
-                    // pass this unique identifier to the overlay provided by our
-                    // sink - so the sink can then arrange the overlay.
-                    let window = gdk_quartz_window_get_nsview(gdk_window.as_ptr() as *mut _);
-                    video_overlay.set_window_handle(window as usize);
-                }
-            } else {
-                println!("Unsupported display type '{}", display_type_name);
-                process::exit(-1);
-            }
-        }
+        set_window_handle(&video_overlay, &gdk_window);
     });
 
     vbox.pack_start(&video_window, true, true, 0);
