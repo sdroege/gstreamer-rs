@@ -215,7 +215,8 @@ mod tutorial5 {
             }
 
             let display_type_name = gdk_window.get_display().get_type().name();
-            if cfg!(feature = "tutorial5-x11") {
+            #[cfg(all(target_os = "linux", feature = "tutorial5-x11"))]
+            {
                 // Check if we're using X11 or ...
                 if display_type_name == "GdkX11Display" {
                     extern "C" {
@@ -233,7 +234,9 @@ mod tutorial5 {
                     println!("Add support for display type '{}'", display_type_name);
                     process::exit(-1);
                 }
-            } else if cfg!(feature = "tutorial5-quartz") {
+            }
+            #[cfg(all(target_os = "macos", feature = "tutorial5-quartz"))]
+            {
                 if display_type_name == "GdkQuartzDisplay" {
                     extern "C" {
                         pub fn gdk_quartz_window_get_nsview(
