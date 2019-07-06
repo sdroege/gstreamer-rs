@@ -37,7 +37,8 @@ fn example_main() {
     // We use an AbortHandle for having a Future that runs forever
     // until we call handle.abort() to quit our event loop
     let (quit_handle, quit_registration) = future::AbortHandle::new_pair();
-    let quit_future = future::Abortable::new(future::empty::<()>(), quit_registration).map(|_| ());
+    let quit_future =
+        future::Abortable::new(future::pending::<()>(), quit_registration).map(|_| ());
 
     // BusStream implements the Stream trait. Stream::for_each is calling a closure for each item
     // and returns a Future that resolves when the stream is done
