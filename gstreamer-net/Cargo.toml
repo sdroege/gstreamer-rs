@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-net"
-version = "0.14.0"
+version = "0.14.1"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Net library"
