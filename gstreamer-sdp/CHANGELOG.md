@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.14.1] - 2019-07-06
+### Added
+- Various new WebRTC enum types from 1.14.1/1.16.0
+
+### Fixed
+- Correctly generate interlaced `VideoInfo` by using
+  `gst_video_info_set_interlaced_format()` instead of the generic function.
+- serde serialization unit tests for `gst::format` succeed again now.
+
+### Changed
+- `Debug` impls for `VideoFormatInfo` and `AudioFormatInfo` now print all the
+  details of the format instead of only the name, and the `Debug` impls for
+  `VideoInfo` and `AudioInfo` also print the format now.
+
 ## [0.14.0] - 2019-06-24
 ### Added
 - Bindings for `GLSyncMeta`.
@@ -502,7 +516,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.1...HEAD
+[0.14.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.14.0...0.14.1
 [0.14.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.13.0...0.14.0
 [0.13.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.2...0.13.0
 [0.12.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.12.1...0.12.2
