@@ -154,12 +154,13 @@ impl<O: IsA<RTSPSession>> RTSPSessionExt for O {
 
     fn get_media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {
         unsafe {
-            let mut matched = mem::uninitialized();
+            let mut matched = mem::MaybeUninit::uninit();
             let ret = from_glib_none(gst_rtsp_server_sys::gst_rtsp_session_get_media(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
-                &mut matched,
+                matched.as_mut_ptr(),
             ));
+            let matched = matched.assume_init();
             (ret, matched)
         }
     }

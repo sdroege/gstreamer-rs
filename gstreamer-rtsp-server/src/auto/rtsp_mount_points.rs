@@ -68,12 +68,13 @@ impl<O: IsA<RTSPMountPoints>> RTSPMountPointsExt for O {
 
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32) {
         unsafe {
-            let mut matched = mem::uninitialized();
+            let mut matched = mem::MaybeUninit::uninit();
             let ret = from_glib_full(gst_rtsp_server_sys::gst_rtsp_mount_points_match(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
-                &mut matched,
+                matched.as_mut_ptr(),
             ));
+            let matched = matched.assume_init();
             (ret, matched)
         }
     }

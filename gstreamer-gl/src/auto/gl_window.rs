@@ -116,13 +116,15 @@ impl<O: IsA<GLWindow>> GLWindowExt for O {
 
     fn get_surface_dimensions(&self) -> (u32, u32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gst_gl_sys::gst_gl_window_get_surface_dimensions(
                 self.as_ref().to_glib_none().0,
-                &mut width,
-                &mut height,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }

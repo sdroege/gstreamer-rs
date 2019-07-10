@@ -527,17 +527,21 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     fn get_rtpinfo(&self) -> Option<(u32, u32, u32, gst::ClockTime)> {
         unsafe {
-            let mut rtptime = mem::uninitialized();
-            let mut seq = mem::uninitialized();
-            let mut clock_rate = mem::uninitialized();
-            let mut running_time = mem::uninitialized();
+            let mut rtptime = mem::MaybeUninit::uninit();
+            let mut seq = mem::MaybeUninit::uninit();
+            let mut clock_rate = mem::MaybeUninit::uninit();
+            let mut running_time = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_stream_get_rtpinfo(
                 self.as_ref().to_glib_none().0,
-                &mut rtptime,
-                &mut seq,
-                &mut clock_rate,
-                &mut running_time,
+                rtptime.as_mut_ptr(),
+                seq.as_mut_ptr(),
+                clock_rate.as_mut_ptr(),
+                running_time.as_mut_ptr(),
             ));
+            let rtptime = rtptime.assume_init();
+            let seq = seq.assume_init();
+            let clock_rate = clock_rate.assume_init();
+            let running_time = running_time.assume_init();
             if ret {
                 Some((rtptime, seq, clock_rate, from_glib(running_time)))
             } else {
@@ -584,11 +588,12 @@ impl<O: IsA<RTSPStream>> RTSPStreamExt for O {
 
     fn get_ssrc(&self) -> u32 {
         unsafe {
-            let mut ssrc = mem::uninitialized();
+            let mut ssrc = mem::MaybeUninit::uninit();
             gst_rtsp_server_sys::gst_rtsp_stream_get_ssrc(
                 self.as_ref().to_glib_none().0,
-                &mut ssrc,
+                ssrc.as_mut_ptr(),
             );
+            let ssrc = ssrc.assume_init();
             ssrc
         }
     }

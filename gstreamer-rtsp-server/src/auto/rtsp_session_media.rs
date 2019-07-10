@@ -111,12 +111,13 @@ impl<O: IsA<RTSPSessionMedia>> RTSPSessionMediaExt for O {
 
     fn matches(&self, path: &str) -> Option<i32> {
         unsafe {
-            let mut matched = mem::uninitialized();
+            let mut matched = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_rtsp_server_sys::gst_rtsp_session_media_matches(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
-                &mut matched,
+                matched.as_mut_ptr(),
             ));
+            let matched = matched.assume_init();
             if ret {
                 Some(matched)
             } else {

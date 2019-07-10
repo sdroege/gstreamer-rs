@@ -223,11 +223,20 @@ pub fn util_get_timestamp() -> ClockTime {
 pub fn version() -> (u32, u32, u32, u32) {
     assert_initialized_main_thread!();
     unsafe {
-        let mut major = mem::uninitialized();
-        let mut minor = mem::uninitialized();
-        let mut micro = mem::uninitialized();
-        let mut nano = mem::uninitialized();
-        gst_sys::gst_version(&mut major, &mut minor, &mut micro, &mut nano);
+        let mut major = mem::MaybeUninit::uninit();
+        let mut minor = mem::MaybeUninit::uninit();
+        let mut micro = mem::MaybeUninit::uninit();
+        let mut nano = mem::MaybeUninit::uninit();
+        gst_sys::gst_version(
+            major.as_mut_ptr(),
+            minor.as_mut_ptr(),
+            micro.as_mut_ptr(),
+            nano.as_mut_ptr(),
+        );
+        let major = major.assume_init();
+        let minor = minor.assume_init();
+        let micro = micro.assume_init();
+        let nano = nano.assume_init();
         (major, minor, micro, nano)
     }
 }

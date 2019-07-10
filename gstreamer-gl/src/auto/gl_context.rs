@@ -43,13 +43,15 @@ impl GLContext {
     pub fn get_current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut major = mem::uninitialized();
-            let mut minor = mem::uninitialized();
+            let mut major = mem::MaybeUninit::uninit();
+            let mut minor = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_gl_sys::gst_gl_context_get_current_gl_api(
                 platform.to_glib(),
-                &mut major,
-                &mut minor,
+                major.as_mut_ptr(),
+                minor.as_mut_ptr(),
             ));
+            let major = major.assume_init();
+            let minor = minor.assume_init();
             (ret, major, minor)
         }
     }
@@ -234,26 +236,30 @@ impl<O: IsA<GLContext>> GLContextExt for O {
 
     fn get_gl_platform_version(&self) -> (i32, i32) {
         unsafe {
-            let mut major = mem::uninitialized();
-            let mut minor = mem::uninitialized();
+            let mut major = mem::MaybeUninit::uninit();
+            let mut minor = mem::MaybeUninit::uninit();
             gst_gl_sys::gst_gl_context_get_gl_platform_version(
                 self.as_ref().to_glib_none().0,
-                &mut major,
-                &mut minor,
+                major.as_mut_ptr(),
+                minor.as_mut_ptr(),
             );
+            let major = major.assume_init();
+            let minor = minor.assume_init();
             (major, minor)
         }
     }
 
     fn get_gl_version(&self) -> (i32, i32) {
         unsafe {
-            let mut maj = mem::uninitialized();
-            let mut min = mem::uninitialized();
+            let mut maj = mem::MaybeUninit::uninit();
+            let mut min = mem::MaybeUninit::uninit();
             gst_gl_sys::gst_gl_context_get_gl_version(
                 self.as_ref().to_glib_none().0,
-                &mut maj,
-                &mut min,
+                maj.as_mut_ptr(),
+                min.as_mut_ptr(),
             );
+            let maj = maj.assume_init();
+            let min = min.assume_init();
             (maj, min)
         }
     }

@@ -154,13 +154,14 @@ pub trait ClockExt: 'static {
 impl<O: IsA<Clock>> ClockExt for O {
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {
-            let mut r_squared = mem::uninitialized();
+            let mut r_squared = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_clock_add_observation(
                 self.as_ref().to_glib_none().0,
                 slave.to_glib(),
                 master.to_glib(),
-                &mut r_squared,
+                r_squared.as_mut_ptr(),
             ));
+            let r_squared = r_squared.assume_init();
             if ret {
                 Some(r_squared)
             } else {
@@ -175,21 +176,26 @@ impl<O: IsA<Clock>> ClockExt for O {
         master: ClockTime,
     ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)> {
         unsafe {
-            let mut r_squared = mem::uninitialized();
-            let mut internal = mem::uninitialized();
-            let mut external = mem::uninitialized();
-            let mut rate_num = mem::uninitialized();
-            let mut rate_denom = mem::uninitialized();
+            let mut r_squared = mem::MaybeUninit::uninit();
+            let mut internal = mem::MaybeUninit::uninit();
+            let mut external = mem::MaybeUninit::uninit();
+            let mut rate_num = mem::MaybeUninit::uninit();
+            let mut rate_denom = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_clock_add_observation_unapplied(
                 self.as_ref().to_glib_none().0,
                 slave.to_glib(),
                 master.to_glib(),
-                &mut r_squared,
-                &mut internal,
-                &mut external,
-                &mut rate_num,
-                &mut rate_denom,
+                r_squared.as_mut_ptr(),
+                internal.as_mut_ptr(),
+                external.as_mut_ptr(),
+                rate_num.as_mut_ptr(),
+                rate_denom.as_mut_ptr(),
             ));
+            let r_squared = r_squared.assume_init();
+            let internal = internal.assume_init();
+            let external = external.assume_init();
+            let rate_num = rate_num.assume_init();
+            let rate_denom = rate_denom.assume_init();
             if ret {
                 Some((
                     r_squared,
@@ -215,17 +221,21 @@ impl<O: IsA<Clock>> ClockExt for O {
 
     fn get_calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime) {
         unsafe {
-            let mut internal = mem::uninitialized();
-            let mut external = mem::uninitialized();
-            let mut rate_num = mem::uninitialized();
-            let mut rate_denom = mem::uninitialized();
+            let mut internal = mem::MaybeUninit::uninit();
+            let mut external = mem::MaybeUninit::uninit();
+            let mut rate_num = mem::MaybeUninit::uninit();
+            let mut rate_denom = mem::MaybeUninit::uninit();
             gst_sys::gst_clock_get_calibration(
                 self.as_ref().to_glib_none().0,
-                &mut internal,
-                &mut external,
-                &mut rate_num,
-                &mut rate_denom,
+                internal.as_mut_ptr(),
+                external.as_mut_ptr(),
+                rate_num.as_mut_ptr(),
+                rate_denom.as_mut_ptr(),
             );
+            let internal = internal.assume_init();
+            let external = external.assume_init();
+            let rate_num = rate_num.assume_init();
+            let rate_denom = rate_denom.assume_init();
             (
                 from_glib(internal),
                 from_glib(external),

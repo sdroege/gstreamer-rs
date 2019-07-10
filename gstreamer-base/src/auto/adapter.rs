@@ -122,15 +122,16 @@ impl Adapter {
         size: usize,
     ) -> (isize, u32) {
         unsafe {
-            let mut value = mem::uninitialized();
+            let mut value = mem::MaybeUninit::uninit();
             let ret = gst_base_sys::gst_adapter_masked_scan_uint32_peek(
                 self.to_glib_none().0,
                 mask,
                 pattern,
                 offset,
                 size,
-                &mut value,
+                value.as_mut_ptr(),
             );
+            let value = value.assume_init();
             (ret, value)
         }
     }
@@ -142,23 +143,25 @@ impl Adapter {
 
     pub fn prev_dts(&self) -> (gst::ClockTime, u64) {
         unsafe {
-            let mut distance = mem::uninitialized();
+            let mut distance = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_base_sys::gst_adapter_prev_dts(
                 self.to_glib_none().0,
-                &mut distance,
+                distance.as_mut_ptr(),
             ));
+            let distance = distance.assume_init();
             (ret, distance)
         }
     }
 
     pub fn prev_dts_at_offset(&self, offset: usize) -> (gst::ClockTime, u64) {
         unsafe {
-            let mut distance = mem::uninitialized();
+            let mut distance = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_base_sys::gst_adapter_prev_dts_at_offset(
                 self.to_glib_none().0,
                 offset,
-                &mut distance,
+                distance.as_mut_ptr(),
             ));
+            let distance = distance.assume_init();
             (ret, distance)
         }
     }
@@ -166,31 +169,35 @@ impl Adapter {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn prev_offset(&self) -> (u64, u64) {
         unsafe {
-            let mut distance = mem::uninitialized();
-            let ret = gst_base_sys::gst_adapter_prev_offset(self.to_glib_none().0, &mut distance);
+            let mut distance = mem::MaybeUninit::uninit();
+            let ret =
+                gst_base_sys::gst_adapter_prev_offset(self.to_glib_none().0, distance.as_mut_ptr());
+            let distance = distance.assume_init();
             (ret, distance)
         }
     }
 
     pub fn prev_pts(&self) -> (gst::ClockTime, u64) {
         unsafe {
-            let mut distance = mem::uninitialized();
+            let mut distance = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_base_sys::gst_adapter_prev_pts(
                 self.to_glib_none().0,
-                &mut distance,
+                distance.as_mut_ptr(),
             ));
+            let distance = distance.assume_init();
             (ret, distance)
         }
     }
 
     pub fn prev_pts_at_offset(&self, offset: usize) -> (gst::ClockTime, u64) {
         unsafe {
-            let mut distance = mem::uninitialized();
+            let mut distance = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_base_sys::gst_adapter_prev_pts_at_offset(
                 self.to_glib_none().0,
                 offset,
-                &mut distance,
+                distance.as_mut_ptr(),
             ));
+            let distance = distance.assume_init();
             (ret, distance)
         }
     }

@@ -34,17 +34,21 @@ impl PlayerVideoOverlayVideoRenderer {
 
     pub fn get_render_rectangle(&self) -> (i32, i32, i32, i32) {
         unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gst_player_sys::gst_player_video_overlay_video_renderer_get_render_rectangle(
                 self.to_glib_none().0,
-                &mut x,
-                &mut y,
-                &mut width,
-                &mut height,
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let x = x.assume_init();
+            let y = y.assume_init();
+            let width = width.assume_init();
+            let height = height.assume_init();
             (x, y, width, height)
         }
     }
