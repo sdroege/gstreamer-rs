@@ -10,7 +10,7 @@
 extern crate bitflags;
 extern crate libc;
 
-use std::sync::{Once, ONCE_INIT};
+use std::sync::Once;
 
 #[macro_use]
 extern crate glib;
@@ -20,7 +20,7 @@ extern crate gstreamer as gst;
 extern crate gstreamer_pbutils_sys as gst_pbutils_sys;
 extern crate gstreamer_sys as gst_sys;
 
-static PBUTILS_INIT: Once = ONCE_INIT;
+static PBUTILS_INIT: Once = Once::new();
 
 macro_rules! assert_initialized_main_thread {
     () => {

@@ -363,10 +363,10 @@ unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
 }
 
 unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_sys::GType {
-    use std::sync::{Once, ONCE_INIT};
+    use std::sync::Once;
 
     static mut TYPE: glib_sys::GType = gobject_sys::G_TYPE_INVALID;
-    static ONCE: Once = ONCE_INIT;
+    static ONCE: Once = Once::new();
 
     ONCE.call_once(|| {
         let type_name = {

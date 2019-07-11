@@ -8,7 +8,7 @@
 
 extern crate libc;
 
-use std::sync::{Once, ONCE_INIT};
+use std::sync::Once;
 
 extern crate gio_sys;
 extern crate glib_sys;
@@ -27,7 +27,7 @@ use glib::translate::from_glib;
 extern crate glib;
 extern crate gio;
 
-static GES_INIT: Once = ONCE_INIT;
+static GES_INIT: Once = Once::new();
 
 pub use glib::{
     BoolError, Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value,
