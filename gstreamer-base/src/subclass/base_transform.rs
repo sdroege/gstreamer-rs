@@ -17,6 +17,8 @@ use glib::subclass::prelude::*;
 use gst;
 use gst::subclass::prelude::*;
 
+use std::mem;
+
 use BaseTransform;
 use BaseTransformClass;
 
@@ -372,17 +374,17 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
             (*parent_class)
                 .transform_size
                 .map(|f| {
-                    let mut othersize = 0;
+                    let mut othersize = mem::MaybeUninit::uninit();
                     let res: bool = from_glib(f(
                         element.to_glib_none().0,
                         direction.to_glib(),
                         caps.to_glib_none().0,
                         size,
                         othercaps.to_glib_none().0,
-                        &mut othersize,
+                        othersize.as_mut_ptr(),
                     ));
                     if res {
-                        Some(othersize)
+                        Some(othersize.assume_init())
                     } else {
                         None
                     }
@@ -410,13 +412,13 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
                 }
             });
 
-            let mut size = 0;
+            let mut size = mem::MaybeUninit::uninit();
             if from_glib(f(
                 element.to_glib_none().0,
                 caps.to_glib_none().0,
-                &mut size,
+                size.as_mut_ptr(),
             )) {
-                Some(size)
+                Some(size.assume_init())
             } else {
                 None
             }

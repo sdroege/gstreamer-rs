@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::fmt;
+use std::mem;
 
 use gst;
 use gst::miniobject::*;
@@ -81,20 +82,25 @@ impl VideoOverlayRectangleRef {
 
     pub fn get_render_rectangle(&self) -> (i32, i32, u32, u32) {
         unsafe {
-            let mut render_x = 0;
-            let mut render_y = 0;
-            let mut render_width = 0;
-            let mut render_height = 0;
+            let mut render_x = mem::MaybeUninit::uninit();
+            let mut render_y = mem::MaybeUninit::uninit();
+            let mut render_width = mem::MaybeUninit::uninit();
+            let mut render_height = mem::MaybeUninit::uninit();
 
             gst_video_sys::gst_video_overlay_rectangle_get_render_rectangle(
                 self.as_mut_ptr(),
-                &mut render_x,
-                &mut render_y,
-                &mut render_width,
-                &mut render_height,
+                render_x.as_mut_ptr(),
+                render_y.as_mut_ptr(),
+                render_width.as_mut_ptr(),
+                render_height.as_mut_ptr(),
             );
 
-            (render_x, render_y, render_width, render_height)
+            (
+                render_x.assume_init(),
+                render_y.assume_init(),
+                render_width.assume_init(),
+                render_height.assume_init(),
+            )
         }
     }
 

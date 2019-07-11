@@ -297,19 +297,18 @@ impl BufferRef {
     }
 
     pub fn get_maxsize(&self) -> usize {
-        let mut maxsize: usize = 0;
-
         unsafe {
+            let mut maxsize = mem::MaybeUninit::uninit();
             gst_sys::gst_buffer_get_sizes_range(
                 self.as_mut_ptr(),
                 0,
                 -1,
                 ptr::null_mut(),
-                &mut maxsize,
+                maxsize.as_mut_ptr(),
             );
-        };
 
-        maxsize
+            maxsize.assume_init()
+        }
     }
 
     pub fn set_size(&mut self, size: usize) {
@@ -412,24 +411,25 @@ impl BufferRef {
     }
 
     pub fn find_memory(&self, offset: usize, size: Option<usize>) -> Option<(u32, u32, usize)> {
-        let mut idx = 0;
-        let mut length = 0;
-        let mut skip = 0;
-        let res;
         unsafe {
-            res = from_glib(gst_sys::gst_buffer_find_memory(
+            let mut idx = mem::MaybeUninit::uninit();
+            let mut length = mem::MaybeUninit::uninit();
+            let mut skip = mem::MaybeUninit::uninit();
+
+            let res = from_glib(gst_sys::gst_buffer_find_memory(
                 self.as_mut_ptr(),
                 offset,
                 size.unwrap_or(usize::MAX),
-                &mut idx,
-                &mut length,
-                &mut skip,
-            ))
-        }
-        if res {
-            Some((idx, length, skip))
-        } else {
-            None
+                idx.as_mut_ptr(),
+                length.as_mut_ptr(),
+                skip.as_mut_ptr(),
+            ));
+
+            if res {
+                Some((idx.assume_init(), length.assume_init(), skip.assume_init()))
+            } else {
+                None
+            }
         }
     }
 

@@ -104,7 +104,7 @@ struct Gl {
     program: gl::types::GLuint,
     attr_position: gl::types::GLint,
     attr_texture: gl::types::GLint,
-    vao: gl::types::GLuint,
+    vao: Option<gl::types::GLuint>,
     vertex_buffer: gl::types::GLuint,
     vbo_indices: gl::types::GLuint,
 }
@@ -133,7 +133,7 @@ impl Gl {
             self.gl.UseProgram(self.program);
 
             if self.gl.BindVertexArray.is_loaded() {
-                self.gl.BindVertexArray(self.vao);
+                self.gl.BindVertexArray(self.vao.unwrap());
             }
 
             {
@@ -242,14 +242,19 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
         let attr_position = gl.GetAttribLocation(program, b"a_position\0".as_ptr() as *const _);
         let attr_texture = gl.GetAttribLocation(program, b"a_texcoord\0".as_ptr() as *const _);
 
-        let mut vao = mem::uninitialized();
-        if gl.BindVertexArray.is_loaded() {
-            gl.GenVertexArrays(1, &mut vao);
+        let vao = if gl.BindVertexArray.is_loaded() {
+            let mut vao = mem::MaybeUninit::uninit();
+            gl.GenVertexArrays(1, vao.as_mut_ptr());
+            let vao = vao.assume_init();
             gl.BindVertexArray(vao);
-        }
+            Some(vao)
+        } else {
+            None
+        };
 
-        let mut vertex_buffer = mem::uninitialized();
-        gl.GenBuffers(1, &mut vertex_buffer);
+        let mut vertex_buffer = mem::MaybeUninit::uninit();
+        gl.GenBuffers(1, vertex_buffer.as_mut_ptr());
+        let vertex_buffer = vertex_buffer.assume_init();
         gl.BindBuffer(gl::ARRAY_BUFFER, vertex_buffer);
         gl.BufferData(
             gl::ARRAY_BUFFER,
@@ -258,8 +263,9 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
             gl::STATIC_DRAW,
         );
 
-        let mut vbo_indices = mem::uninitialized();
-        gl.GenBuffers(1, &mut vbo_indices);
+        let mut vbo_indices = mem::MaybeUninit::uninit();
+        gl.GenBuffers(1, vbo_indices.as_mut_ptr());
+        let vbo_indices = vbo_indices.assume_init();
         gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, vbo_indices);
         gl.BufferData(
             gl::ELEMENT_ARRAY_BUFFER,

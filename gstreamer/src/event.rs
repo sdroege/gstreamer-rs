@@ -520,11 +520,11 @@ declare_concrete_event!(FlushStop);
 impl<'a> FlushStop<'a> {
     pub fn get_reset_time(&self) -> bool {
         unsafe {
-            let mut reset_time = mem::uninitialized();
+            let mut reset_time = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_flush_stop(self.as_mut_ptr(), &mut reset_time);
+            gst_sys::gst_event_parse_flush_stop(self.as_mut_ptr(), reset_time.as_mut_ptr());
 
-            from_glib(reset_time)
+            from_glib(reset_time.assume_init())
         }
     }
 }
@@ -542,21 +542,21 @@ impl<'a> StreamStart<'a> {
 
     pub fn get_stream_flags(&self) -> ::StreamFlags {
         unsafe {
-            let mut stream_flags = mem::uninitialized();
+            let mut stream_flags = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_stream_flags(self.as_mut_ptr(), &mut stream_flags);
+            gst_sys::gst_event_parse_stream_flags(self.as_mut_ptr(), stream_flags.as_mut_ptr());
 
-            from_glib(stream_flags)
+            from_glib(stream_flags.assume_init())
         }
     }
 
     pub fn get_group_id(&self) -> GroupId {
         unsafe {
-            let mut group_id = mem::uninitialized();
+            let mut group_id = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_group_id(self.as_mut_ptr(), &mut group_id);
+            gst_sys::gst_event_parse_group_id(self.as_mut_ptr(), group_id.as_mut_ptr());
 
-            from_glib(group_id)
+            from_glib(group_id.assume_init())
         }
     }
 }
@@ -622,22 +622,22 @@ declare_concrete_event!(BufferSize);
 impl<'a> BufferSize<'a> {
     pub fn get(&self) -> (GenericFormattedValue, GenericFormattedValue, bool) {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut minsize = mem::uninitialized();
-            let mut maxsize = mem::uninitialized();
-            let mut async = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut minsize = mem::MaybeUninit::uninit();
+            let mut maxsize = mem::MaybeUninit::uninit();
+            let mut async_ = mem::MaybeUninit::uninit();
 
             gst_sys::gst_event_parse_buffer_size(
                 self.as_mut_ptr(),
-                &mut fmt,
-                &mut minsize,
-                &mut maxsize,
-                &mut async,
+                fmt.as_mut_ptr(),
+                minsize.as_mut_ptr(),
+                maxsize.as_mut_ptr(),
+                async_.as_mut_ptr(),
             );
             (
-                GenericFormattedValue::new(from_glib(fmt), minsize),
-                GenericFormattedValue::new(from_glib(fmt), maxsize),
-                from_glib(async),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), minsize.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), maxsize.assume_init()),
+                from_glib(async_.assume_init()),
             )
         }
     }
@@ -660,11 +660,11 @@ impl<'a> StreamGroupDone<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     pub fn get_group_id(&self) -> GroupId {
         unsafe {
-            let mut group_id = mem::uninitialized();
+            let mut group_id = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_stream_group_done(self.as_mut_ptr(), &mut group_id);
+            gst_sys::gst_event_parse_stream_group_done(self.as_mut_ptr(), group_id.as_mut_ptr());
 
-            from_glib(group_id)
+            from_glib(group_id.assume_init())
         }
     }
 }
@@ -676,10 +676,10 @@ impl<'a> Toc<'a> {
     pub fn get_toc(&self) -> (&'a ::TocRef, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
-            let mut updated = mem::uninitialized();
+            let mut updated = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
-            (::TocRef::from_ptr(toc), from_glib(updated))
+            gst_sys::gst_event_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
+            (::TocRef::from_ptr(toc), from_glib(updated.assume_init()))
         }
     }
 
@@ -730,12 +730,16 @@ declare_concrete_event!(SegmentDone);
 impl<'a> SegmentDone<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut position = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut position = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_segment_done(self.as_mut_ptr(), &mut fmt, &mut position);
+            gst_sys::gst_event_parse_segment_done(
+                self.as_mut_ptr(),
+                fmt.as_mut_ptr(),
+                position.as_mut_ptr(),
+            );
 
-            GenericFormattedValue::new(from_glib(fmt), position)
+            GenericFormattedValue::new(from_glib(fmt.assume_init()), position.assume_init())
         }
     }
 }
@@ -744,12 +748,19 @@ declare_concrete_event!(Gap);
 impl<'a> Gap<'a> {
     pub fn get(&self) -> (::ClockTime, ::ClockTime) {
         unsafe {
-            let mut timestamp = mem::uninitialized();
-            let mut duration = mem::uninitialized();
+            let mut timestamp = mem::MaybeUninit::uninit();
+            let mut duration = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_gap(self.as_mut_ptr(), &mut timestamp, &mut duration);
+            gst_sys::gst_event_parse_gap(
+                self.as_mut_ptr(),
+                timestamp.as_mut_ptr(),
+                duration.as_mut_ptr(),
+            );
 
-            (from_glib(timestamp), from_glib(duration))
+            (
+                from_glib(timestamp.assume_init()),
+                from_glib(duration.assume_init()),
+            )
         }
     }
 }
@@ -758,20 +769,25 @@ declare_concrete_event!(Qos);
 impl<'a> Qos<'a> {
     pub fn get(&self) -> (::QOSType, f64, i64, ::ClockTime) {
         unsafe {
-            let mut type_ = mem::uninitialized();
-            let mut proportion = mem::uninitialized();
-            let mut diff = mem::uninitialized();
-            let mut timestamp = mem::uninitialized();
+            let mut type_ = mem::MaybeUninit::uninit();
+            let mut proportion = mem::MaybeUninit::uninit();
+            let mut diff = mem::MaybeUninit::uninit();
+            let mut timestamp = mem::MaybeUninit::uninit();
 
             gst_sys::gst_event_parse_qos(
                 self.as_mut_ptr(),
-                &mut type_,
-                &mut proportion,
-                &mut diff,
-                &mut timestamp,
+                type_.as_mut_ptr(),
+                proportion.as_mut_ptr(),
+                diff.as_mut_ptr(),
+                timestamp.as_mut_ptr(),
             );
 
-            (from_glib(type_), proportion, diff, from_glib(timestamp))
+            (
+                from_glib(type_.assume_init()),
+                proportion.assume_init(),
+                diff.assume_init(),
+                from_glib(timestamp.assume_init()),
+            )
         }
     }
 }
@@ -789,32 +805,32 @@ impl<'a> Seek<'a> {
         GenericFormattedValue,
     ) {
         unsafe {
-            let mut rate = mem::uninitialized();
-            let mut fmt = mem::uninitialized();
-            let mut flags = mem::uninitialized();
-            let mut start_type = mem::uninitialized();
-            let mut start = mem::uninitialized();
-            let mut stop_type = mem::uninitialized();
-            let mut stop = mem::uninitialized();
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut flags = mem::MaybeUninit::uninit();
+            let mut start_type = mem::MaybeUninit::uninit();
+            let mut start = mem::MaybeUninit::uninit();
+            let mut stop_type = mem::MaybeUninit::uninit();
+            let mut stop = mem::MaybeUninit::uninit();
 
             gst_sys::gst_event_parse_seek(
                 self.as_mut_ptr(),
-                &mut rate,
-                &mut fmt,
-                &mut flags,
-                &mut start_type,
-                &mut start,
-                &mut stop_type,
-                &mut stop,
+                rate.as_mut_ptr(),
+                fmt.as_mut_ptr(),
+                flags.as_mut_ptr(),
+                start_type.as_mut_ptr(),
+                start.as_mut_ptr(),
+                stop_type.as_mut_ptr(),
+                stop.as_mut_ptr(),
             );
 
             (
-                rate,
-                from_glib(flags),
-                from_glib(start_type),
-                GenericFormattedValue::new(from_glib(fmt), start),
-                from_glib(stop_type),
-                GenericFormattedValue::new(from_glib(fmt), stop),
+                rate.assume_init(),
+                from_glib(flags.assume_init()),
+                from_glib(start_type.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), start.assume_init()),
+                from_glib(stop_type.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), stop.assume_init()),
             )
         }
     }
@@ -822,14 +838,14 @@ impl<'a> Seek<'a> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn get_trickmode_interval(&self) -> ::ClockTime {
         unsafe {
-            let mut trickmode_interval = mem::uninitialized();
+            let mut trickmode_interval = mem::MaybeUninit::uninit();
 
             gst_sys::gst_event_parse_seek_trickmode_interval(
                 self.as_mut_ptr(),
-                &mut trickmode_interval,
+                trickmode_interval.as_mut_ptr(),
             );
 
-            from_glib(trickmode_interval)
+            from_glib(trickmode_interval.assume_init())
         }
     }
 }
@@ -840,11 +856,11 @@ declare_concrete_event!(Latency);
 impl<'a> Latency<'a> {
     pub fn get_latency(&self) -> ::ClockTime {
         unsafe {
-            let mut latency = mem::uninitialized();
+            let mut latency = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_event_parse_latency(self.as_mut_ptr(), &mut latency);
+            gst_sys::gst_event_parse_latency(self.as_mut_ptr(), latency.as_mut_ptr());
 
-            from_glib(latency)
+            from_glib(latency.assume_init())
         }
     }
 }
@@ -853,26 +869,29 @@ declare_concrete_event!(Step);
 impl<'a> Step<'a> {
     pub fn get(&self) -> (GenericFormattedValue, f64, bool, bool) {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut amount = mem::uninitialized();
-            let mut rate = mem::uninitialized();
-            let mut flush = mem::uninitialized();
-            let mut intermediate = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut amount = mem::MaybeUninit::uninit();
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut flush = mem::MaybeUninit::uninit();
+            let mut intermediate = mem::MaybeUninit::uninit();
 
             gst_sys::gst_event_parse_step(
                 self.as_mut_ptr(),
-                &mut fmt,
-                &mut amount,
-                &mut rate,
-                &mut flush,
-                &mut intermediate,
+                fmt.as_mut_ptr(),
+                amount.as_mut_ptr(),
+                rate.as_mut_ptr(),
+                flush.as_mut_ptr(),
+                intermediate.as_mut_ptr(),
             );
 
             (
-                GenericFormattedValue::new(from_glib(fmt), amount as i64),
-                rate,
-                from_glib(flush),
-                from_glib(intermediate),
+                GenericFormattedValue::new(
+                    from_glib(fmt.assume_init()),
+                    amount.assume_init() as i64,
+                ),
+                rate.assume_init(),
+                from_glib(flush.assume_init()),
+                from_glib(intermediate.assume_init()),
             )
         }
     }

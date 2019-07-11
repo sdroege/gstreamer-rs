@@ -160,29 +160,29 @@ pub fn parse_downstream_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Option<DownstreamForceKeyUnitEvent> {
     unsafe {
-        let mut timestamp = mem::uninitialized();
-        let mut stream_time = mem::uninitialized();
-        let mut running_time = mem::uninitialized();
-        let mut all_headers = mem::uninitialized();
-        let mut count = mem::uninitialized();
+        let mut timestamp = mem::MaybeUninit::uninit();
+        let mut stream_time = mem::MaybeUninit::uninit();
+        let mut running_time = mem::MaybeUninit::uninit();
+        let mut all_headers = mem::MaybeUninit::uninit();
+        let mut count = mem::MaybeUninit::uninit();
 
         let res: bool = from_glib(
             gst_video_sys::gst_video_event_parse_downstream_force_key_unit(
                 event.as_mut_ptr(),
-                &mut timestamp,
-                &mut stream_time,
-                &mut running_time,
-                &mut all_headers,
-                &mut count,
+                timestamp.as_mut_ptr(),
+                stream_time.as_mut_ptr(),
+                running_time.as_mut_ptr(),
+                all_headers.as_mut_ptr(),
+                count.as_mut_ptr(),
             ),
         );
         if res {
             Some(DownstreamForceKeyUnitEvent {
-                timestamp: from_glib(timestamp),
-                stream_time: from_glib(stream_time),
-                running_time: from_glib(running_time),
-                all_headers: from_glib(all_headers),
-                count,
+                timestamp: from_glib(timestamp.assume_init()),
+                stream_time: from_glib(stream_time.assume_init()),
+                running_time: from_glib(running_time.assume_init()),
+                all_headers: from_glib(all_headers.assume_init()),
+                count: count.assume_init(),
             })
         } else {
             None
@@ -254,23 +254,23 @@ pub fn parse_upstream_force_key_unit_event(
     event: &gst::EventRef,
 ) -> Option<UpstreamForceKeyUnitEvent> {
     unsafe {
-        let mut running_time = mem::uninitialized();
-        let mut all_headers = mem::uninitialized();
-        let mut count = mem::uninitialized();
+        let mut running_time = mem::MaybeUninit::uninit();
+        let mut all_headers = mem::MaybeUninit::uninit();
+        let mut count = mem::MaybeUninit::uninit();
 
         let res: bool = from_glib(
             gst_video_sys::gst_video_event_parse_upstream_force_key_unit(
                 event.as_mut_ptr(),
-                &mut running_time,
-                &mut all_headers,
-                &mut count,
+                running_time.as_mut_ptr(),
+                all_headers.as_mut_ptr(),
+                count.as_mut_ptr(),
             ),
         );
         if res {
             Some(UpstreamForceKeyUnitEvent {
-                running_time: from_glib(running_time),
-                all_headers: from_glib(all_headers),
-                count,
+                running_time: from_glib(running_time.assume_init()),
+                all_headers: from_glib(all_headers.assume_init()),
+                count: count.assume_init(),
             })
         } else {
             None
@@ -326,15 +326,15 @@ pub struct StillFrameEvent {
 
 pub fn parse_still_frame_event(event: &gst::EventRef) -> Option<StillFrameEvent> {
     unsafe {
-        let mut in_still = mem::uninitialized();
+        let mut in_still = mem::MaybeUninit::uninit();
 
         let res: bool = from_glib(gst_video_sys::gst_video_event_parse_still_frame(
             event.as_mut_ptr(),
-            &mut in_still,
+            in_still.as_mut_ptr(),
         ));
         if res {
             Some(StillFrameEvent {
-                in_still: from_glib(in_still),
+                in_still: from_glib(in_still.assume_init()),
             })
         } else {
             None

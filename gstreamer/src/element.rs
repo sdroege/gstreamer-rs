@@ -285,15 +285,19 @@ impl<O: IsA<Element>> ElementExtManual for O {
         timeout: ClockTime,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State) {
         unsafe {
-            let mut state = mem::uninitialized();
-            let mut pending = mem::uninitialized();
+            let mut state = mem::MaybeUninit::uninit();
+            let mut pending = mem::MaybeUninit::uninit();
             let ret: StateChangeReturn = from_glib(gst_sys::gst_element_get_state(
                 self.as_ref().to_glib_none().0,
-                &mut state,
-                &mut pending,
+                state.as_mut_ptr(),
+                pending.as_mut_ptr(),
                 timeout.to_glib(),
             ));
-            (ret.into_result(), from_glib(state), from_glib(pending))
+            (
+                ret.into_result(),
+                from_glib(state.assume_init()),
+                from_glib(pending.assume_init()),
+            )
         }
     }
 
@@ -548,16 +552,16 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) -> Option<U> {
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(U::from_raw(U::get_default_format(), dest_val))
+                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -571,16 +575,19 @@ impl<O: IsA<Element>> ElementExtManual for O {
     ) -> Option<GenericFormattedValue> {
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_element_query_convert(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.get_value(),
                 dest_format.to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(GenericFormattedValue::new(dest_format, dest_val))
+                Some(GenericFormattedValue::new(
+                    dest_format,
+                    dest_val.assume_init(),
+                ))
             } else {
                 None
             }
@@ -589,14 +596,14 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn query_duration<T: SpecificFormattedValue>(&self) -> Option<T> {
         unsafe {
-            let mut duration = mem::uninitialized();
+            let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
-                &mut duration,
+                duration.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), duration))
+                Some(T::from_raw(T::get_default_format(), duration.assume_init()))
             } else {
                 None
             }
@@ -605,14 +612,14 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn query_duration_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
-            let mut duration = mem::uninitialized();
+            let mut duration = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_element_query_duration(
                 self.as_ref().to_glib_none().0,
                 format.to_glib(),
-                &mut duration,
+                duration.as_mut_ptr(),
             ));
             if ret {
-                Some(GenericFormattedValue::new(format, duration))
+                Some(GenericFormattedValue::new(format, duration.assume_init()))
             } else {
                 None
             }
@@ -621,14 +628,14 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn query_position<T: SpecificFormattedValue>(&self) -> Option<T> {
         unsafe {
-            let mut cur = mem::uninitialized();
+            let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
                 T::get_default_format().to_glib(),
-                &mut cur,
+                cur.as_mut_ptr(),
             ));
             if ret {
-                Some(T::from_raw(T::get_default_format(), cur))
+                Some(T::from_raw(T::get_default_format(), cur.assume_init()))
             } else {
                 None
             }
@@ -637,14 +644,14 @@ impl<O: IsA<Element>> ElementExtManual for O {
 
     fn query_position_generic(&self, format: Format) -> Option<GenericFormattedValue> {
         unsafe {
-            let mut cur = mem::uninitialized();
+            let mut cur = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_element_query_position(
                 self.as_ref().to_glib_none().0,
                 format.to_glib(),
-                &mut cur,
+                cur.as_mut_ptr(),
             ));
             if ret {
-                Some(GenericFormattedValue::new(format, cur))
+                Some(GenericFormattedValue::new(format, cur.assume_init()))
             } else {
                 None
             }

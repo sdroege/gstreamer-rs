@@ -365,22 +365,22 @@ declare_concrete_query!(Position, T);
 impl<T: AsPtr> Position<T> {
     pub fn get_result(&self) -> GenericFormattedValue {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut pos = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut pos = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_position(self.0.as_ptr(), &mut fmt, &mut pos);
+            gst_sys::gst_query_parse_position(self.0.as_ptr(), fmt.as_mut_ptr(), pos.as_mut_ptr());
 
-            GenericFormattedValue::new(from_glib(fmt), pos)
+            GenericFormattedValue::new(from_glib(fmt.assume_init()), pos.assume_init())
         }
     }
 
     pub fn get_format(&self) -> ::Format {
         unsafe {
-            let mut fmt = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_position(self.0.as_ptr(), &mut fmt, ptr::null_mut());
+            gst_sys::gst_query_parse_position(self.0.as_ptr(), fmt.as_mut_ptr(), ptr::null_mut());
 
-            from_glib(fmt)
+            from_glib(fmt.assume_init())
         }
     }
 }
@@ -403,22 +403,22 @@ declare_concrete_query!(Duration, T);
 impl<T: AsPtr> Duration<T> {
     pub fn get_result(&self) -> GenericFormattedValue {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut pos = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut pos = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_duration(self.0.as_ptr(), &mut fmt, &mut pos);
+            gst_sys::gst_query_parse_duration(self.0.as_ptr(), fmt.as_mut_ptr(), pos.as_mut_ptr());
 
-            GenericFormattedValue::new(from_glib(fmt), pos)
+            GenericFormattedValue::new(from_glib(fmt.assume_init()), pos.assume_init())
         }
     }
 
     pub fn get_format(&self) -> ::Format {
         unsafe {
-            let mut fmt = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_duration(self.0.as_ptr(), &mut fmt, ptr::null_mut());
+            gst_sys::gst_query_parse_duration(self.0.as_ptr(), fmt.as_mut_ptr(), ptr::null_mut());
 
-            from_glib(fmt)
+            from_glib(fmt.assume_init())
         }
     }
 }
@@ -441,13 +441,22 @@ declare_concrete_query!(Latency, T);
 impl<T: AsPtr> Latency<T> {
     pub fn get_result(&self) -> (bool, ::ClockTime, ::ClockTime) {
         unsafe {
-            let mut live = mem::uninitialized();
-            let mut min = mem::uninitialized();
-            let mut max = mem::uninitialized();
+            let mut live = mem::MaybeUninit::uninit();
+            let mut min = mem::MaybeUninit::uninit();
+            let mut max = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_latency(self.0.as_ptr(), &mut live, &mut min, &mut max);
+            gst_sys::gst_query_parse_latency(
+                self.0.as_ptr(),
+                live.as_mut_ptr(),
+                min.as_mut_ptr(),
+                max.as_mut_ptr(),
+            );
 
-            (from_glib(live), from_glib(min), from_glib(max))
+            (
+                from_glib(live.assume_init()),
+                from_glib(min.assume_init()),
+                from_glib(max.assume_init()),
+            )
         }
     }
 }
@@ -472,38 +481,38 @@ declare_concrete_query!(Seeking, T);
 impl<T: AsPtr> Seeking<T> {
     pub fn get_result(&self) -> (bool, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut seekable = mem::uninitialized();
-            let mut start = mem::uninitialized();
-            let mut end = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut seekable = mem::MaybeUninit::uninit();
+            let mut start = mem::MaybeUninit::uninit();
+            let mut end = mem::MaybeUninit::uninit();
             gst_sys::gst_query_parse_seeking(
                 self.0.as_ptr(),
-                &mut fmt,
-                &mut seekable,
-                &mut start,
-                &mut end,
+                fmt.as_mut_ptr(),
+                seekable.as_mut_ptr(),
+                start.as_mut_ptr(),
+                end.as_mut_ptr(),
             );
 
             (
-                from_glib(seekable),
-                GenericFormattedValue::new(from_glib(fmt), start),
-                GenericFormattedValue::new(from_glib(fmt), end),
+                from_glib(seekable.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), start.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), end.assume_init()),
             )
         }
     }
 
     pub fn get_format(&self) -> ::Format {
         unsafe {
-            let mut fmt = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
             gst_sys::gst_query_parse_seeking(
                 self.0.as_ptr(),
-                &mut fmt,
+                fmt.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
                 ptr::null_mut(),
             );
 
-            from_glib(fmt)
+            from_glib(fmt.assume_init())
         }
     }
 }
@@ -532,38 +541,38 @@ declare_concrete_query!(Segment, T);
 impl<T: AsPtr> Segment<T> {
     pub fn get_result(&self) -> (f64, GenericFormattedValue, GenericFormattedValue) {
         unsafe {
-            let mut rate = mem::uninitialized();
-            let mut fmt = mem::uninitialized();
-            let mut start = mem::uninitialized();
-            let mut stop = mem::uninitialized();
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut start = mem::MaybeUninit::uninit();
+            let mut stop = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_segment(
                 self.0.as_ptr(),
-                &mut rate,
-                &mut fmt,
-                &mut start,
-                &mut stop,
+                rate.as_mut_ptr(),
+                fmt.as_mut_ptr(),
+                start.as_mut_ptr(),
+                stop.as_mut_ptr(),
             );
             (
-                rate,
-                GenericFormattedValue::new(from_glib(fmt), start),
-                GenericFormattedValue::new(from_glib(fmt), stop),
+                rate.assume_init(),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), start.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), stop.assume_init()),
             )
         }
     }
 
     pub fn get_format(&self) -> ::Format {
         unsafe {
-            let mut fmt = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_segment(
                 self.0.as_ptr(),
                 ptr::null_mut(),
-                &mut fmt,
+                fmt.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
             );
-            from_glib(fmt)
+            from_glib(fmt.assume_init())
         }
     }
 }
@@ -591,41 +600,41 @@ declare_concrete_query!(Convert, T);
 impl<T: AsPtr> Convert<T> {
     pub fn get_result(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
-            let mut src_fmt = mem::uninitialized();
-            let mut src = mem::uninitialized();
-            let mut dest_fmt = mem::uninitialized();
-            let mut dest = mem::uninitialized();
+            let mut src_fmt = mem::MaybeUninit::uninit();
+            let mut src = mem::MaybeUninit::uninit();
+            let mut dest_fmt = mem::MaybeUninit::uninit();
+            let mut dest = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_convert(
                 self.0.as_ptr(),
-                &mut src_fmt,
-                &mut src,
-                &mut dest_fmt,
-                &mut dest,
+                src_fmt.as_mut_ptr(),
+                src.as_mut_ptr(),
+                dest_fmt.as_mut_ptr(),
+                dest.as_mut_ptr(),
             );
             (
-                GenericFormattedValue::new(from_glib(src_fmt), src),
-                GenericFormattedValue::new(from_glib(dest_fmt), dest),
+                GenericFormattedValue::new(from_glib(src_fmt.assume_init()), src.assume_init()),
+                GenericFormattedValue::new(from_glib(dest_fmt.assume_init()), dest.assume_init()),
             )
         }
     }
 
     pub fn get(&self) -> (GenericFormattedValue, ::Format) {
         unsafe {
-            let mut src_fmt = mem::uninitialized();
-            let mut src = mem::uninitialized();
-            let mut dest_fmt = mem::uninitialized();
+            let mut src_fmt = mem::MaybeUninit::uninit();
+            let mut src = mem::MaybeUninit::uninit();
+            let mut dest_fmt = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_convert(
                 self.0.as_ptr(),
-                &mut src_fmt,
-                &mut src,
-                &mut dest_fmt,
+                src_fmt.as_mut_ptr(),
+                src.as_mut_ptr(),
+                dest_fmt.as_mut_ptr(),
                 ptr::null_mut(),
             );
             (
-                GenericFormattedValue::new(from_glib(src_fmt), src),
-                from_glib(dest_fmt),
+                GenericFormattedValue::new(from_glib(src_fmt.assume_init()), src.assume_init()),
+                from_glib(dest_fmt.assume_init()),
             )
         }
     }
@@ -652,14 +661,15 @@ declare_concrete_query!(Formats, T);
 impl<T: AsPtr> Formats<T> {
     pub fn get_result(&self) -> Vec<::Format> {
         unsafe {
-            let mut n = mem::uninitialized();
-            gst_sys::gst_query_parse_n_formats(self.0.as_ptr(), &mut n);
+            let mut n = mem::MaybeUninit::uninit();
+            gst_sys::gst_query_parse_n_formats(self.0.as_ptr(), n.as_mut_ptr());
+            let n = n.assume_init();
             let mut res = Vec::with_capacity(n as usize);
 
             for i in 0..n {
-                let mut fmt = mem::uninitialized();
-                gst_sys::gst_query_parse_nth_format(self.0.as_ptr(), i, &mut fmt);
-                res.push(from_glib(fmt));
+                let mut fmt = mem::MaybeUninit::uninit();
+                gst_sys::gst_query_parse_nth_format(self.0.as_ptr(), i, fmt.as_mut_ptr());
+                res.push(from_glib(fmt.assume_init()));
             }
 
             res
@@ -684,99 +694,108 @@ declare_concrete_query!(Buffering, T);
 impl<T: AsPtr> Buffering<T> {
     pub fn get_format(&self) -> ::Format {
         unsafe {
-            let mut fmt = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_buffering_range(
                 self.0.as_ptr(),
-                &mut fmt,
+                fmt.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
                 ptr::null_mut(),
             );
 
-            from_glib(fmt)
+            from_glib(fmt.assume_init())
         }
     }
 
     pub fn get_percent(&self) -> (bool, i32) {
         unsafe {
-            let mut busy = mem::uninitialized();
-            let mut percent = mem::uninitialized();
+            let mut busy = mem::MaybeUninit::uninit();
+            let mut percent = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_buffering_percent(self.0.as_ptr(), &mut busy, &mut percent);
+            gst_sys::gst_query_parse_buffering_percent(
+                self.0.as_ptr(),
+                busy.as_mut_ptr(),
+                percent.as_mut_ptr(),
+            );
 
-            (from_glib(busy), percent)
+            (from_glib(busy.assume_init()), percent.assume_init())
         }
     }
 
     pub fn get_range(&self) -> (GenericFormattedValue, GenericFormattedValue, i64) {
         unsafe {
-            let mut fmt = mem::uninitialized();
-            let mut start = mem::uninitialized();
-            let mut stop = mem::uninitialized();
-            let mut estimated_total = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
+            let mut start = mem::MaybeUninit::uninit();
+            let mut stop = mem::MaybeUninit::uninit();
+            let mut estimated_total = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_buffering_range(
                 self.0.as_ptr(),
-                &mut fmt,
-                &mut start,
-                &mut stop,
-                &mut estimated_total,
+                fmt.as_mut_ptr(),
+                start.as_mut_ptr(),
+                stop.as_mut_ptr(),
+                estimated_total.as_mut_ptr(),
             );
             (
-                GenericFormattedValue::new(from_glib(fmt), start),
-                GenericFormattedValue::new(from_glib(fmt), stop),
-                estimated_total,
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), start.assume_init()),
+                GenericFormattedValue::new(from_glib(fmt.assume_init()), stop.assume_init()),
+                estimated_total.assume_init(),
             )
         }
     }
 
     pub fn get_stats(&self) -> (::BufferingMode, i32, i32, i64) {
         unsafe {
-            let mut mode = mem::uninitialized();
-            let mut avg_in = mem::uninitialized();
-            let mut avg_out = mem::uninitialized();
-            let mut buffering_left = mem::uninitialized();
+            let mut mode = mem::MaybeUninit::uninit();
+            let mut avg_in = mem::MaybeUninit::uninit();
+            let mut avg_out = mem::MaybeUninit::uninit();
+            let mut buffering_left = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_buffering_stats(
                 self.0.as_ptr(),
-                &mut mode,
-                &mut avg_in,
-                &mut avg_out,
-                &mut buffering_left,
+                mode.as_mut_ptr(),
+                avg_in.as_mut_ptr(),
+                avg_out.as_mut_ptr(),
+                buffering_left.as_mut_ptr(),
             );
 
-            (from_glib(mode), avg_in, avg_out, buffering_left)
+            (
+                from_glib(mode.assume_init()),
+                avg_in.assume_init(),
+                avg_out.assume_init(),
+                buffering_left.assume_init(),
+            )
         }
     }
 
     pub fn get_ranges(&self) -> Vec<(GenericFormattedValue, GenericFormattedValue)> {
         unsafe {
-            let mut fmt = mem::uninitialized();
+            let mut fmt = mem::MaybeUninit::uninit();
             gst_sys::gst_query_parse_buffering_range(
                 self.0.as_ptr(),
-                &mut fmt,
+                fmt.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
                 ptr::null_mut(),
             );
-            let fmt = from_glib(fmt);
+            let fmt = from_glib(fmt.assume_init());
 
             let n = gst_sys::gst_query_get_n_buffering_ranges(self.0.as_ptr());
             let mut res = Vec::with_capacity(n as usize);
             for i in 0..n {
-                let mut start = mem::uninitialized();
-                let mut stop = mem::uninitialized();
+                let mut start = mem::MaybeUninit::uninit();
+                let mut stop = mem::MaybeUninit::uninit();
                 let s: bool = from_glib(gst_sys::gst_query_parse_nth_buffering_range(
                     self.0.as_ptr(),
                     i,
-                    &mut start,
-                    &mut stop,
+                    start.as_mut_ptr(),
+                    stop.as_mut_ptr(),
                 ));
                 if s {
                     res.push((
-                        GenericFormattedValue::new(fmt, start),
-                        GenericFormattedValue::new(fmt, stop),
+                        GenericFormattedValue::new(fmt, start.assume_init()),
+                        GenericFormattedValue::new(fmt, stop.assume_init()),
                     ));
                 }
             }
@@ -873,10 +892,13 @@ impl<T: AsPtr> Uri<T> {
         unsafe {
             let mut uri = ptr::null_mut();
             gst_sys::gst_query_parse_uri_redirection(self.0.as_ptr(), &mut uri);
-            let mut permanent = mem::uninitialized();
-            gst_sys::gst_query_parse_uri_redirection_permanent(self.0.as_ptr(), &mut permanent);
+            let mut permanent = mem::MaybeUninit::uninit();
+            gst_sys::gst_query_parse_uri_redirection_permanent(
+                self.0.as_ptr(),
+                permanent.as_mut_ptr(),
+            );
 
-            (from_glib_full(uri), from_glib(permanent))
+            (from_glib_full(uri), from_glib(permanent.assume_init()))
         }
     }
 }
@@ -906,10 +928,13 @@ impl<T: AsPtr> Allocation<T> {
     pub fn get(&self) -> (&::CapsRef, bool) {
         unsafe {
             let mut caps = ptr::null_mut();
-            let mut need_pool = 0;
+            let mut need_pool = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_query_parse_allocation(self.0.as_ptr(), &mut caps, &mut need_pool);
-            (::CapsRef::from_ptr(caps), from_glib(need_pool))
+            gst_sys::gst_query_parse_allocation(self.0.as_ptr(), &mut caps, need_pool.as_mut_ptr());
+            (
+                ::CapsRef::from_ptr(caps),
+                from_glib(need_pool.assume_init()),
+            )
         }
     }
 
@@ -926,19 +951,24 @@ impl<T: AsPtr> Allocation<T> {
             let mut pools = Vec::with_capacity(n as usize);
             for i in 0..n {
                 let mut pool = ptr::null_mut();
-                let mut size = 0;
-                let mut min_buffers = 0;
-                let mut max_buffers = 0;
+                let mut size = mem::MaybeUninit::uninit();
+                let mut min_buffers = mem::MaybeUninit::uninit();
+                let mut max_buffers = mem::MaybeUninit::uninit();
 
                 gst_sys::gst_query_parse_nth_allocation_pool(
                     self.0.as_ptr(),
                     i,
                     &mut pool,
-                    &mut size,
-                    &mut min_buffers,
-                    &mut max_buffers,
+                    size.as_mut_ptr(),
+                    min_buffers.as_mut_ptr(),
+                    max_buffers.as_mut_ptr(),
                 );
-                pools.push((from_glib_full(pool), size, min_buffers, max_buffers));
+                pools.push((
+                    from_glib_full(pool),
+                    size.assume_init(),
+                    min_buffers.assume_init(),
+                    max_buffers.assume_init(),
+                ));
             }
 
             pools
@@ -973,14 +1003,14 @@ impl<T: AsPtr> Allocation<T> {
 
     pub fn find_allocation_meta<U: ::MetaAPI>(&self) -> Option<u32> {
         unsafe {
-            let mut idx = 0;
+            let mut idx = mem::MaybeUninit::uninit();
             if gst_sys::gst_query_find_allocation_meta(
                 self.0.as_ptr(),
                 U::get_meta_api().to_glib(),
-                &mut idx,
+                idx.as_mut_ptr(),
             ) != glib_sys::GFALSE
             {
-                Some(idx)
+                Some(idx.assume_init())
             } else {
                 None
             }
@@ -1097,20 +1127,25 @@ impl<T: AsPtr> Scheduling<T> {
 
     pub fn get_result(&self) -> (::SchedulingFlags, i32, i32, i32) {
         unsafe {
-            let mut flags = mem::uninitialized();
-            let mut minsize = mem::uninitialized();
-            let mut maxsize = mem::uninitialized();
-            let mut align = mem::uninitialized();
+            let mut flags = mem::MaybeUninit::uninit();
+            let mut minsize = mem::MaybeUninit::uninit();
+            let mut maxsize = mem::MaybeUninit::uninit();
+            let mut align = mem::MaybeUninit::uninit();
 
             gst_sys::gst_query_parse_scheduling(
                 self.0.as_ptr(),
-                &mut flags,
-                &mut minsize,
-                &mut maxsize,
-                &mut align,
+                flags.as_mut_ptr(),
+                minsize.as_mut_ptr(),
+                maxsize.as_mut_ptr(),
+                align.as_mut_ptr(),
             );
 
-            (from_glib(flags), minsize, maxsize, align)
+            (
+                from_glib(flags.assume_init()),
+                minsize.assume_init(),
+                maxsize.assume_init(),
+                align.assume_init(),
+            )
         }
     }
 }
@@ -1153,9 +1188,9 @@ impl<T: AsPtr> AcceptCaps<T> {
 
     pub fn get_result(&self) -> bool {
         unsafe {
-            let mut accepted = mem::uninitialized();
-            gst_sys::gst_query_parse_accept_caps_result(self.0.as_ptr(), &mut accepted);
-            from_glib(accepted)
+            let mut accepted = mem::MaybeUninit::uninit();
+            gst_sys::gst_query_parse_accept_caps_result(self.0.as_ptr(), accepted.as_mut_ptr());
+            from_glib(accepted.assume_init())
         }
     }
 }
@@ -1256,9 +1291,9 @@ impl<T: AsPtr> Bitrate<T> {
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn get_bitrate(&self) -> u32 {
         unsafe {
-            let mut bitrate = 0;
-            gst_sys::gst_query_parse_bitrate(self.0.as_ptr(), &mut bitrate);
-            bitrate
+            let mut bitrate = mem::MaybeUninit::uninit();
+            gst_sys::gst_query_parse_bitrate(self.0.as_ptr(), bitrate.as_mut_ptr());
+            bitrate.assume_init()
         }
     }
 }

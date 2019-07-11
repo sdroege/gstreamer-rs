@@ -89,6 +89,11 @@ status = "generate"
     # Use Result<FlowSuccess, FlowError>
     ignore = true
 
+    [[object.function]]
+    name = "wait_clock"
+    # Use Result<ClockSuccess, ClockError>
+    ignore = true
+
 [[object]]
 name = "GstBase.BaseSrc"
 status = "generate"
@@ -162,7 +167,22 @@ status = "generate"
 
     [[object.function]]
     name = "type_find_helper_for_data"
-    # broken data type
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_data_with_extension"
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_buffer"
+    # broken return value
+    ignore = true
+
+    [[object.function]]
+    name = "type_find_helper_for_buffer_with_extension"
+    # broken return value
     ignore = true
 
 [[object]]

@@ -15,7 +15,6 @@ use glib_sys::{gboolean, gpointer};
 use gst_sys;
 use libc::c_void;
 use std::cmp;
-use std::mem;
 use std::ptr;
 use Clock;
 use ClockError;
@@ -74,7 +73,7 @@ impl ClockId {
 
     pub fn wait(&self) -> (Result<ClockSuccess, ClockError>, ClockTimeDiff) {
         unsafe {
-            let mut jitter = mem::uninitialized();
+            let mut jitter = 0;
             let res: ClockReturn = from_glib(gst_sys::gst_clock_id_wait(
                 self.to_glib_none().0,
                 &mut jitter,

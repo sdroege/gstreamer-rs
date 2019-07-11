@@ -54,7 +54,7 @@ pub fn audio_buffer_clip(
     buffer: gst::Buffer,
     segment: &gst::Segment,
     rate: u32,
-    channels: u32,
+    bpf: u32,
 ) -> Option<gst::Buffer> {
     skip_assert_initialized!();
 
@@ -63,7 +63,7 @@ pub fn audio_buffer_clip(
             buffer.into_ptr(),
             segment.to_glib_none().0,
             rate as i32,
-            channels as i32,
+            bpf as i32,
         ))
     }
 }

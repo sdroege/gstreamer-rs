@@ -17,6 +17,7 @@ use glib::subclass::prelude::*;
 use gst;
 use gst::subclass::prelude::*;
 
+use std::mem;
 use std::ptr;
 
 use BaseSrc;
@@ -205,9 +206,9 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
             (*parent_class)
                 .get_size
                 .map(|f| {
-                    let mut size = 0;
-                    if from_glib(f(element.to_glib_none().0, &mut size)) {
-                        Some(size)
+                    let mut size = mem::MaybeUninit::uninit();
+                    if from_glib(f(element.to_glib_none().0, size.as_mut_ptr())) {
+                        Some(size.assume_init())
                     } else {
                         None
                     }

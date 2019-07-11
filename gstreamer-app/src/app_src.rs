@@ -217,10 +217,14 @@ impl AppSrc {
 
     pub fn get_latency(&self) -> (gst::ClockTime, gst::ClockTime) {
         unsafe {
-            let mut min = mem::uninitialized();
-            let mut max = mem::uninitialized();
-            gst_app_sys::gst_app_src_get_latency(self.to_glib_none().0, &mut min, &mut max);
-            (from_glib(min), from_glib(max))
+            let mut min = mem::MaybeUninit::uninit();
+            let mut max = mem::MaybeUninit::uninit();
+            gst_app_sys::gst_app_src_get_latency(
+                self.to_glib_none().0,
+                min.as_mut_ptr(),
+                max.as_mut_ptr(),
+            );
+            (from_glib(min.assume_init()), from_glib(max.assume_init()))
         }
     }
 }

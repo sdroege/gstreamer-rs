@@ -223,14 +223,14 @@ impl MemoryRef {
 
     pub fn is_span(&self, mem2: &MemoryRef) -> Option<usize> {
         unsafe {
-            let mut offset = 0;
+            let mut offset = mem::MaybeUninit::uninit();
             let res = from_glib(gst_sys::gst_memory_is_span(
                 self.as_mut_ptr(),
                 mem2.as_mut_ptr(),
-                &mut offset,
+                offset.as_mut_ptr(),
             ));
             if res {
-                Some(offset)
+                Some(offset.assume_init())
             } else {
                 None
             }

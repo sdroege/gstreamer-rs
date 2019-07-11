@@ -51,7 +51,7 @@ pub struct AudioInfoBuilder<'a> {
 impl<'a> AudioInfoBuilder<'a> {
     pub fn build(self) -> Option<AudioInfo> {
         unsafe {
-            let mut info = mem::uninitialized();
+            let mut info = mem::MaybeUninit::uninit();
 
             let positions = if let Some(p) = self.positions {
                 if p.len() != self.channels as usize || p.len() > 64 {
@@ -88,12 +88,14 @@ impl<'a> AudioInfoBuilder<'a> {
                 .unwrap_or(ptr::null());
 
             gst_audio_sys::gst_audio_info_set_format(
-                &mut info,
+                info.as_mut_ptr(),
                 self.format.to_glib(),
                 self.rate as i32,
                 self.channels as i32,
                 positions_ptr as *mut _,
             );
+
+            let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.rate <= 0 || info.channels <= 0 {
                 return None;
@@ -153,11 +155,12 @@ impl AudioInfo {
         skip_assert_initialized!();
 
         unsafe {
-            let mut info = mem::uninitialized();
+            let mut info = mem::MaybeUninit::uninit();
             if from_glib(gst_audio_sys::gst_audio_info_from_caps(
-                &mut info,
+                info.as_mut_ptr(),
                 caps.as_ptr(),
             )) {
+                let info = info.assume_init();
                 let positions = array_init::array_init_copy(|i| from_glib(info.position[i]));
                 Some(AudioInfo(info, positions))
             } else {
@@ -178,15 +181,15 @@ impl AudioInfo {
 
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(gst_audio_sys::gst_audio_info_convert(
                 &self.0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             )) {
-                Some(U::from_raw(U::get_default_format(), dest_val))
+                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -202,15 +205,18 @@ impl AudioInfo {
 
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(gst_audio_sys::gst_audio_info_convert(
                 &self.0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 dest_fmt.to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             )) {
-                Some(gst::GenericFormattedValue::new(dest_fmt, dest_val))
+                Some(gst::GenericFormattedValue::new(
+                    dest_fmt,
+                    dest_val.assume_init(),
+                ))
             } else {
                 None
             }

@@ -106,22 +106,27 @@ impl BufferPoolConfig {
     pub fn get_params(&self) -> Option<(Option<::Caps>, u32, u32, u32)> {
         unsafe {
             let mut caps = ptr::null_mut();
-            let mut size = mem::uninitialized();
-            let mut min_buffers = mem::uninitialized();
-            let mut max_buffers = mem::uninitialized();
+            let mut size = mem::MaybeUninit::uninit();
+            let mut min_buffers = mem::MaybeUninit::uninit();
+            let mut max_buffers = mem::MaybeUninit::uninit();
 
             let ret: bool = from_glib(gst_sys::gst_buffer_pool_config_get_params(
                 self.0.to_glib_none().0,
                 &mut caps,
-                &mut size,
-                &mut min_buffers,
-                &mut max_buffers,
+                size.as_mut_ptr(),
+                min_buffers.as_mut_ptr(),
+                max_buffers.as_mut_ptr(),
             ));
             if !ret {
                 return None;
             }
 
-            Some((from_glib_none(caps), size, min_buffers, max_buffers))
+            Some((
+                from_glib_none(caps),
+                size.assume_init(),
+                min_buffers.assume_init(),
+                max_buffers.assume_init(),
+            ))
         }
     }
 

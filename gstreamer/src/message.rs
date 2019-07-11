@@ -562,28 +562,33 @@ declare_concrete_message!(Buffering);
 impl<'a> Buffering<'a> {
     pub fn get_percent(&self) -> i32 {
         unsafe {
-            let mut p = mem::uninitialized();
-            gst_sys::gst_message_parse_buffering(self.as_mut_ptr(), &mut p);
-            p
+            let mut p = mem::MaybeUninit::uninit();
+            gst_sys::gst_message_parse_buffering(self.as_mut_ptr(), p.as_mut_ptr());
+            p.assume_init()
         }
     }
 
     pub fn get_buffering_stats(&self) -> (::BufferingMode, i32, i32, i64) {
         unsafe {
-            let mut mode = mem::uninitialized();
-            let mut avg_in = mem::uninitialized();
-            let mut avg_out = mem::uninitialized();
-            let mut buffering_left = mem::uninitialized();
+            let mut mode = mem::MaybeUninit::uninit();
+            let mut avg_in = mem::MaybeUninit::uninit();
+            let mut avg_out = mem::MaybeUninit::uninit();
+            let mut buffering_left = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_buffering_stats(
                 self.as_mut_ptr(),
-                &mut mode,
-                &mut avg_in,
-                &mut avg_out,
-                &mut buffering_left,
+                mode.as_mut_ptr(),
+                avg_in.as_mut_ptr(),
+                avg_out.as_mut_ptr(),
+                buffering_left.as_mut_ptr(),
             );
 
-            (from_glib(mode), avg_in, avg_out, buffering_left)
+            (
+                from_glib(mode.assume_init()),
+                avg_in.assume_init(),
+                avg_out.assume_init(),
+                buffering_left.assume_init(),
+            )
         }
     }
 }
@@ -592,46 +597,46 @@ declare_concrete_message!(StateChanged);
 impl<'a> StateChanged<'a> {
     pub fn get_old(&self) -> ::State {
         unsafe {
-            let mut state = mem::uninitialized();
+            let mut state = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_state_changed(
                 self.as_mut_ptr(),
-                &mut state,
+                state.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
             );
 
-            from_glib(state)
+            from_glib(state.assume_init())
         }
     }
 
     pub fn get_current(&self) -> ::State {
         unsafe {
-            let mut state = mem::uninitialized();
+            let mut state = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_state_changed(
                 self.as_mut_ptr(),
                 ptr::null_mut(),
-                &mut state,
+                state.as_mut_ptr(),
                 ptr::null_mut(),
             );
 
-            from_glib(state)
+            from_glib(state.assume_init())
         }
     }
 
     pub fn get_pending(&self) -> ::State {
         unsafe {
-            let mut state = mem::uninitialized();
+            let mut state = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_state_changed(
                 self.as_mut_ptr(),
                 ptr::null_mut(),
                 ptr::null_mut(),
-                &mut state,
+                state.as_mut_ptr(),
             );
 
-            from_glib(state)
+            from_glib(state.assume_init())
         }
     }
 }
@@ -651,32 +656,38 @@ impl<'a> StepDone<'a> {
         bool,
     ) {
         unsafe {
-            let mut format = mem::uninitialized();
-            let mut amount = mem::uninitialized();
-            let mut rate = mem::uninitialized();
-            let mut flush = mem::uninitialized();
-            let mut intermediate = mem::uninitialized();
-            let mut duration = mem::uninitialized();
-            let mut eos = mem::uninitialized();
+            let mut format = mem::MaybeUninit::uninit();
+            let mut amount = mem::MaybeUninit::uninit();
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut flush = mem::MaybeUninit::uninit();
+            let mut intermediate = mem::MaybeUninit::uninit();
+            let mut duration = mem::MaybeUninit::uninit();
+            let mut eos = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_step_done(
                 self.as_mut_ptr(),
-                &mut format,
-                &mut amount,
-                &mut rate,
-                &mut flush,
-                &mut intermediate,
-                &mut duration,
-                &mut eos,
+                format.as_mut_ptr(),
+                amount.as_mut_ptr(),
+                rate.as_mut_ptr(),
+                flush.as_mut_ptr(),
+                intermediate.as_mut_ptr(),
+                duration.as_mut_ptr(),
+                eos.as_mut_ptr(),
             );
 
             (
-                GenericFormattedValue::new(from_glib(format), amount as i64),
-                rate,
-                from_glib(flush),
-                from_glib(intermediate),
-                GenericFormattedValue::new(from_glib(format), duration as i64),
-                from_glib(eos),
+                GenericFormattedValue::new(
+                    from_glib(format.assume_init()),
+                    amount.assume_init() as i64,
+                ),
+                rate.assume_init(),
+                from_glib(flush.assume_init()),
+                from_glib(intermediate.assume_init()),
+                GenericFormattedValue::new(
+                    from_glib(format.assume_init()),
+                    duration.assume_init() as i64,
+                ),
+                from_glib(eos.assume_init()),
             )
         }
     }
@@ -700,15 +711,15 @@ impl<'a> ClockProvide<'a> {
 
     pub fn get_ready(&self) -> bool {
         unsafe {
-            let mut ready = mem::uninitialized();
+            let mut ready = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_clock_provide(
                 self.as_mut_ptr(),
                 ptr::null_mut(),
-                &mut ready,
+                ready.as_mut_ptr(),
             );
 
-            from_glib(ready)
+            from_glib(ready.assume_init())
         }
     }
 }
@@ -743,18 +754,22 @@ declare_concrete_message!(StructureChange);
 impl<'a> StructureChange<'a> {
     pub fn get(&self) -> (::StructureChangeType, ::Element, bool) {
         unsafe {
-            let mut type_ = mem::uninitialized();
+            let mut type_ = mem::MaybeUninit::uninit();
             let mut owner = ptr::null_mut();
-            let mut busy = mem::uninitialized();
+            let mut busy = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_structure_change(
                 self.as_mut_ptr(),
-                &mut type_,
+                type_.as_mut_ptr(),
                 &mut owner,
-                &mut busy,
+                busy.as_mut_ptr(),
             );
 
-            (from_glib(type_), from_glib_none(owner), from_glib(busy))
+            (
+                from_glib(type_.assume_init()),
+                from_glib_none(owner),
+                from_glib(busy.assume_init()),
+            )
         }
     }
 }
@@ -763,12 +778,16 @@ declare_concrete_message!(StreamStatus);
 impl<'a> StreamStatus<'a> {
     pub fn get(&self) -> (::StreamStatusType, ::Element) {
         unsafe {
-            let mut type_ = mem::uninitialized();
+            let mut type_ = mem::MaybeUninit::uninit();
             let mut owner = ptr::null_mut();
 
-            gst_sys::gst_message_parse_stream_status(self.as_mut_ptr(), &mut type_, &mut owner);
+            gst_sys::gst_message_parse_stream_status(
+                self.as_mut_ptr(),
+                type_.as_mut_ptr(),
+                &mut owner,
+            );
 
-            (from_glib(type_), from_glib_none(owner))
+            (from_glib(type_.assume_init()), from_glib_none(owner))
         }
     }
 
@@ -789,12 +808,16 @@ declare_concrete_message!(SegmentStart);
 impl<'a> SegmentStart<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
-            let mut format = mem::uninitialized();
-            let mut position = mem::uninitialized();
+            let mut format = mem::MaybeUninit::uninit();
+            let mut position = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_segment_start(self.as_mut_ptr(), &mut format, &mut position);
+            gst_sys::gst_message_parse_segment_start(
+                self.as_mut_ptr(),
+                format.as_mut_ptr(),
+                position.as_mut_ptr(),
+            );
 
-            GenericFormattedValue::new(from_glib(format), position)
+            GenericFormattedValue::new(from_glib(format.assume_init()), position.assume_init())
         }
     }
 }
@@ -803,12 +826,16 @@ declare_concrete_message!(SegmentDone);
 impl<'a> SegmentDone<'a> {
     pub fn get(&self) -> GenericFormattedValue {
         unsafe {
-            let mut format = mem::uninitialized();
-            let mut position = mem::uninitialized();
+            let mut format = mem::MaybeUninit::uninit();
+            let mut position = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_segment_done(self.as_mut_ptr(), &mut format, &mut position);
+            gst_sys::gst_message_parse_segment_done(
+                self.as_mut_ptr(),
+                format.as_mut_ptr(),
+                position.as_mut_ptr(),
+            );
 
-            GenericFormattedValue::new(from_glib(format), position)
+            GenericFormattedValue::new(from_glib(format.assume_init()), position.assume_init())
         }
     }
 }
@@ -821,11 +848,11 @@ declare_concrete_message!(AsyncDone);
 impl<'a> AsyncDone<'a> {
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
-            let mut running_time = mem::uninitialized();
+            let mut running_time = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_async_done(self.as_mut_ptr(), &mut running_time);
+            gst_sys::gst_message_parse_async_done(self.as_mut_ptr(), running_time.as_mut_ptr());
 
-            from_glib(running_time)
+            from_glib(running_time.assume_init())
         }
     }
 }
@@ -834,11 +861,11 @@ declare_concrete_message!(RequestState);
 impl<'a> RequestState<'a> {
     pub fn get_requested_state(&self) -> ::State {
         unsafe {
-            let mut state = mem::uninitialized();
+            let mut state = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_request_state(self.as_mut_ptr(), &mut state);
+            gst_sys::gst_message_parse_request_state(self.as_mut_ptr(), state.as_mut_ptr());
 
-            from_glib(state)
+            from_glib(state.assume_init())
         }
     }
 }
@@ -847,29 +874,32 @@ declare_concrete_message!(StepStart);
 impl<'a> StepStart<'a> {
     pub fn get(&self) -> (bool, GenericFormattedValue, f64, bool, bool) {
         unsafe {
-            let mut active = mem::uninitialized();
-            let mut format = mem::uninitialized();
-            let mut amount = mem::uninitialized();
-            let mut rate = mem::uninitialized();
-            let mut flush = mem::uninitialized();
-            let mut intermediate = mem::uninitialized();
+            let mut active = mem::MaybeUninit::uninit();
+            let mut format = mem::MaybeUninit::uninit();
+            let mut amount = mem::MaybeUninit::uninit();
+            let mut rate = mem::MaybeUninit::uninit();
+            let mut flush = mem::MaybeUninit::uninit();
+            let mut intermediate = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_step_start(
                 self.as_mut_ptr(),
-                &mut active,
-                &mut format,
-                &mut amount,
-                &mut rate,
-                &mut flush,
-                &mut intermediate,
+                active.as_mut_ptr(),
+                format.as_mut_ptr(),
+                amount.as_mut_ptr(),
+                rate.as_mut_ptr(),
+                flush.as_mut_ptr(),
+                intermediate.as_mut_ptr(),
             );
 
             (
-                from_glib(active),
-                GenericFormattedValue::new(from_glib(format), amount as i64),
-                rate,
-                from_glib(flush),
-                from_glib(intermediate),
+                from_glib(active.assume_init()),
+                GenericFormattedValue::new(
+                    from_glib(format.assume_init()),
+                    amount.assume_init() as i64,
+                ),
+                rate.assume_init(),
+                from_glib(flush.assume_init()),
+                from_glib(intermediate.assume_init()),
             )
         }
     }
@@ -879,64 +909,74 @@ declare_concrete_message!(Qos);
 impl<'a> Qos<'a> {
     pub fn get(&self) -> (bool, ::ClockTime, ::ClockTime, ::ClockTime, ::ClockTime) {
         unsafe {
-            let mut live = mem::uninitialized();
-            let mut running_time = mem::uninitialized();
-            let mut stream_time = mem::uninitialized();
-            let mut timestamp = mem::uninitialized();
-            let mut duration = mem::uninitialized();
+            let mut live = mem::MaybeUninit::uninit();
+            let mut running_time = mem::MaybeUninit::uninit();
+            let mut stream_time = mem::MaybeUninit::uninit();
+            let mut timestamp = mem::MaybeUninit::uninit();
+            let mut duration = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_qos(
                 self.as_mut_ptr(),
-                &mut live,
-                &mut running_time,
-                &mut stream_time,
-                &mut timestamp,
-                &mut duration,
+                live.as_mut_ptr(),
+                running_time.as_mut_ptr(),
+                stream_time.as_mut_ptr(),
+                timestamp.as_mut_ptr(),
+                duration.as_mut_ptr(),
             );
 
             (
-                from_glib(live),
-                from_glib(running_time),
-                from_glib(stream_time),
-                from_glib(timestamp),
-                from_glib(duration),
+                from_glib(live.assume_init()),
+                from_glib(running_time.assume_init()),
+                from_glib(stream_time.assume_init()),
+                from_glib(timestamp.assume_init()),
+                from_glib(duration.assume_init()),
             )
         }
     }
 
     pub fn get_values(&self) -> (i64, f64, i32) {
         unsafe {
-            let mut jitter = mem::uninitialized();
-            let mut proportion = mem::uninitialized();
-            let mut quality = mem::uninitialized();
+            let mut jitter = mem::MaybeUninit::uninit();
+            let mut proportion = mem::MaybeUninit::uninit();
+            let mut quality = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_qos_values(
                 self.as_mut_ptr(),
-                &mut jitter,
-                &mut proportion,
-                &mut quality,
+                jitter.as_mut_ptr(),
+                proportion.as_mut_ptr(),
+                quality.as_mut_ptr(),
             );
 
-            (jitter, proportion, quality)
+            (
+                jitter.assume_init(),
+                proportion.assume_init(),
+                quality.assume_init(),
+            )
         }
     }
 
     pub fn get_stats(&self) -> (GenericFormattedValue, GenericFormattedValue) {
         unsafe {
-            let mut format = mem::uninitialized();
-            let mut processed = mem::uninitialized();
-            let mut dropped = mem::uninitialized();
+            let mut format = mem::MaybeUninit::uninit();
+            let mut processed = mem::MaybeUninit::uninit();
+            let mut dropped = mem::MaybeUninit::uninit();
 
             gst_sys::gst_message_parse_qos_stats(
                 self.as_mut_ptr(),
-                &mut format,
-                &mut processed,
-                &mut dropped,
+                format.as_mut_ptr(),
+                processed.as_mut_ptr(),
+                dropped.as_mut_ptr(),
             );
 
             (
-                GenericFormattedValue::new(from_glib(format), processed as i64),
-                GenericFormattedValue::new(from_glib(format), dropped as i64),
+                GenericFormattedValue::new(
+                    from_glib(format.assume_init()),
+                    processed.assume_init() as i64,
+                ),
+                GenericFormattedValue::new(
+                    from_glib(format.assume_init()),
+                    dropped.assume_init() as i64,
+                ),
             )
         }
     }
@@ -946,13 +986,13 @@ declare_concrete_message!(Progress);
 impl<'a> Progress<'a> {
     pub fn get(&self) -> (::ProgressType, &'a str, &'a str) {
         unsafe {
-            let mut type_ = mem::uninitialized();
+            let mut type_ = mem::MaybeUninit::uninit();
             let mut code = ptr::null_mut();
             let mut text = ptr::null_mut();
 
             gst_sys::gst_message_parse_progress(
                 self.as_mut_ptr(),
-                &mut type_,
+                type_.as_mut_ptr(),
                 &mut code,
                 &mut text,
             );
@@ -960,7 +1000,7 @@ impl<'a> Progress<'a> {
             let code = CStr::from_ptr(code).to_str().unwrap();
             let text = CStr::from_ptr(text).to_str().unwrap();
 
-            (from_glib(type_), code, text)
+            (from_glib(type_.assume_init()), code, text)
         }
     }
 }
@@ -970,9 +1010,9 @@ impl<'a> Toc<'a> {
     pub fn get_toc(&self) -> (::Toc, bool) {
         unsafe {
             let mut toc = ptr::null_mut();
-            let mut updated = mem::uninitialized();
-            gst_sys::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, &mut updated);
-            (from_glib_full(toc), from_glib(updated))
+            let mut updated = mem::MaybeUninit::uninit();
+            gst_sys::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
+            (from_glib_full(toc), from_glib(updated.assume_init()))
         }
     }
 }
@@ -981,11 +1021,11 @@ declare_concrete_message!(ResetTime);
 impl<'a> ResetTime<'a> {
     pub fn get_running_time(&self) -> ::ClockTime {
         unsafe {
-            let mut running_time = mem::uninitialized();
+            let mut running_time = mem::MaybeUninit::uninit();
 
-            gst_sys::gst_message_parse_reset_time(self.as_mut_ptr(), &mut running_time);
+            gst_sys::gst_message_parse_reset_time(self.as_mut_ptr(), running_time.as_mut_ptr());
 
-            from_glib(running_time)
+            from_glib(running_time.assume_init())
         }
     }
 }
@@ -994,13 +1034,13 @@ declare_concrete_message!(StreamStart);
 impl<'a> StreamStart<'a> {
     pub fn get_group_id(&self) -> Option<GroupId> {
         unsafe {
-            let mut group_id = mem::uninitialized();
+            let mut group_id = mem::MaybeUninit::uninit();
 
             if from_glib(gst_sys::gst_message_parse_group_id(
                 self.as_mut_ptr(),
-                &mut group_id,
+                group_id.as_mut_ptr(),
             )) {
-                Some(from_glib(group_id))
+                Some(from_glib(group_id.assume_init()))
             } else {
                 None
             }

@@ -110,20 +110,20 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            let mut clip_start = mem::uninitialized();
-            let mut clip_stop = mem::uninitialized();
+            let mut clip_start = mem::MaybeUninit::uninit();
+            let mut clip_stop = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_segment_clip(
                 &self.0,
                 start.get_format().to_glib(),
                 start.to_raw_value() as u64,
                 stop.to_raw_value() as u64,
-                &mut clip_start,
-                &mut clip_stop,
+                clip_start.as_mut_ptr(),
+                clip_stop.as_mut_ptr(),
             ));
             if ret {
                 Some((
-                    T::from_raw(self.get_format(), clip_start as i64),
-                    T::from_raw(self.get_format(), clip_stop as i64),
+                    T::from_raw(self.get_format(), clip_start.assume_init() as i64),
+                    T::from_raw(self.get_format(), clip_stop.assume_init() as i64),
                 ))
             } else {
                 None
@@ -151,7 +151,7 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            let mut update = mem::uninitialized();
+            let mut update = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_sys::gst_segment_do_seek(
                 &mut self.0,
                 rate,
@@ -161,10 +161,10 @@ impl<T: FormattedValue> FormattedSegment<T> {
                 start.to_raw_value() as u64,
                 stop_type.to_glib(),
                 stop.to_raw_value() as u64,
-                &mut update,
+                update.as_mut_ptr(),
             ));
             if ret {
-                Some(from_glib(update))
+                Some(from_glib(update.assume_init()))
             } else {
                 None
             }
@@ -211,14 +211,17 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            let mut position = mem::uninitialized();
+            let mut position = mem::MaybeUninit::uninit();
             let ret = gst_sys::gst_segment_position_from_running_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 running_time.to_raw_value() as u64,
-                &mut position,
+                position.as_mut_ptr(),
             );
-            (ret, T::from_raw(self.get_format(), position as i64))
+            (
+                ret,
+                T::from_raw(self.get_format(), position.assume_init() as i64),
+            )
         }
     }
 
@@ -249,14 +252,17 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            let mut position = mem::uninitialized();
+            let mut position = mem::MaybeUninit::uninit();
             let ret = gst_sys::gst_segment_position_from_stream_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 stream_time.to_raw_value() as u64,
-                &mut position,
+                position.as_mut_ptr(),
             );
-            (ret, T::from_raw(self.get_format(), position as i64))
+            (
+                ret,
+                T::from_raw(self.get_format(), position.assume_init() as i64),
+            )
         }
     }
 
@@ -306,14 +312,17 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            let mut running_time = mem::uninitialized();
+            let mut running_time = mem::MaybeUninit::uninit();
             let ret = gst_sys::gst_segment_to_running_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 position.to_raw_value() as u64,
-                &mut running_time,
+                running_time.as_mut_ptr(),
             );
-            (ret, T::from_raw(self.get_format(), running_time as i64))
+            (
+                ret,
+                T::from_raw(self.get_format(), running_time.assume_init() as i64),
+            )
         }
     }
 
@@ -344,14 +353,17 @@ impl<T: FormattedValue> FormattedSegment<T> {
         }
 
         unsafe {
-            let mut stream_time = mem::uninitialized();
+            let mut stream_time = mem::MaybeUninit::uninit();
             let ret = gst_sys::gst_segment_to_stream_time_full(
                 &self.0,
                 self.get_format().to_glib(),
                 position.to_raw_value() as u64,
-                &mut stream_time,
+                stream_time.as_mut_ptr(),
             );
-            (ret, T::from_raw(self.get_format(), stream_time as i64))
+            (
+                ret,
+                T::from_raw(self.get_format(), stream_time.assume_init() as i64),
+            )
         }
     }
 

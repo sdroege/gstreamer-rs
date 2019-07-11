@@ -48,15 +48,15 @@ impl AudioChannelPosition {
             });
 
         unsafe {
-            let mut mask = mem::uninitialized();
+            let mut mask = mem::MaybeUninit::uninit();
             let valid: bool = from_glib(gst_audio_sys::gst_audio_channel_positions_to_mask(
                 positions_raw.as_ptr() as *mut _,
                 len as i32,
                 force_order.to_glib(),
-                &mut mask,
+                mask.as_mut_ptr(),
             ));
             if valid {
-                Some(mask)
+                Some(mask.assume_init())
             } else {
                 None
             }

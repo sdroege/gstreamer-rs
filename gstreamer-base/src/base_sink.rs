@@ -10,7 +10,6 @@ use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_base_sys;
-use std::mem;
 use BaseSink;
 
 pub trait BaseSinkExtManual: 'static {
@@ -22,6 +21,13 @@ pub trait BaseSinkExtManual: 'static {
     ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff);
 
     fn wait_preroll(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
+    fn wait_clock(
+        &self,
+        time: gst::ClockTime,
+    ) -> (
+        Result<gst::ClockSuccess, gst::ClockError>,
+        gst::ClockTimeDiff,
+    );
 }
 
 impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
@@ -38,7 +44,7 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
         time: gst::ClockTime,
     ) -> (Result<gst::FlowSuccess, gst::FlowError>, gst::ClockTimeDiff) {
         unsafe {
-            let mut jitter = mem::uninitialized();
+            let mut jitter = 0;
             let ret: gst::FlowReturn = from_glib(gst_base_sys::gst_base_sink_wait(
                 self.as_ref().to_glib_none().0,
                 time.to_glib(),
@@ -55,5 +61,23 @@ impl<O: IsA<BaseSink>> BaseSinkExtManual for O {
             ))
         };
         ret.into_result()
+    }
+
+    fn wait_clock(
+        &self,
+        time: gst::ClockTime,
+    ) -> (
+        Result<gst::ClockSuccess, gst::ClockError>,
+        gst::ClockTimeDiff,
+    ) {
+        unsafe {
+            let mut jitter = 0;
+            let ret: gst::ClockReturn = from_glib(gst_base_sys::gst_base_sink_wait_clock(
+                self.as_ref().to_glib_none().0,
+                time.to_glib(),
+                &mut jitter,
+            ));
+            (ret.into_result(), jitter)
+        }
     }
 }

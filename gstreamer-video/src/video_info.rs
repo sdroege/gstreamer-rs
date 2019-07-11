@@ -270,40 +270,51 @@ pub struct VideoInfoBuilder<'a> {
 impl<'a> VideoInfoBuilder<'a> {
     pub fn build(self) -> Option<VideoInfo> {
         unsafe {
-            let mut info = mem::uninitialized();
+            let mut info = mem::MaybeUninit::uninit();
 
             #[cfg(not(feature = "v1_16"))]
-            {
-                gst_video_sys::gst_video_info_set_format(
-                    &mut info,
+            let res: bool = {
+                let res = from_glib(gst_video_sys::gst_video_info_set_format(
+                    info.as_mut_ptr(),
                     self.format.to_glib(),
                     self.width,
                     self.height,
-                );
+                ));
 
-                if let Some(interlace_mode) = self.interlace_mode {
-                    info.interlace_mode = interlace_mode.to_glib();
+                if res {
+                    if let Some(interlace_mode) = self.interlace_mode {
+                        let info = info.as_mut_ptr();
+                        (*info).interlace_mode = interlace_mode.to_glib();
+                    }
                 }
-            }
+
+                res
+            };
             #[cfg(feature = "v1_16")]
-            {
-                if let Some(interlace_mode) = self.interlace_mode {
+            let res: bool = {
+                from_glib(if let Some(interlace_mode) = self.interlace_mode {
                     gst_video_sys::gst_video_info_set_interlaced_format(
-                        &mut info,
+                        info.as_mut_ptr(),
                         self.format.to_glib(),
                         interlace_mode.to_glib(),
                         self.width,
                         self.height,
-                    );
+                    )
                 } else {
                     gst_video_sys::gst_video_info_set_format(
-                        &mut info,
+                        info.as_mut_ptr(),
                         self.format.to_glib(),
                         self.width,
                         self.height,
-                    );
-                }
+                    )
+                })
+            };
+
+            if !res {
+                return None;
             }
+
+            let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.width <= 0 || info.height <= 0 {
                 return None;
@@ -524,12 +535,12 @@ impl VideoInfo {
         skip_assert_initialized!();
 
         unsafe {
-            let mut info = mem::uninitialized();
+            let mut info = mem::MaybeUninit::uninit();
             if from_glib(gst_video_sys::gst_video_info_from_caps(
-                &mut info,
+                info.as_mut_ptr(),
                 caps.as_ptr(),
             )) {
-                Some(VideoInfo(info))
+                Some(VideoInfo(info.assume_init()))
             } else {
                 None
             }
@@ -658,15 +669,15 @@ impl VideoInfo {
 
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(gst_video_sys::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             )) {
-                Some(U::from_raw(U::get_default_format(), dest_val))
+                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -682,15 +693,18 @@ impl VideoInfo {
 
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(gst_video_sys::gst_video_info_convert(
                 &self.0 as *const _ as *mut _,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 dest_fmt.to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             )) {
-                Some(gst::GenericFormattedValue::new(dest_fmt, dest_val))
+                Some(gst::GenericFormattedValue::new(
+                    dest_fmt,
+                    dest_val.assume_init(),
+                ))
             } else {
                 None
             }

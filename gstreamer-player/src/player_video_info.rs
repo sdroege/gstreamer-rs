@@ -15,27 +15,27 @@ use PlayerVideoInfo;
 impl PlayerVideoInfo {
     pub fn get_framerate(&self) -> gst::Fraction {
         unsafe {
-            let mut fps_n = mem::uninitialized();
-            let mut fps_d = mem::uninitialized();
+            let mut fps_n = mem::MaybeUninit::uninit();
+            let mut fps_d = mem::MaybeUninit::uninit();
             gst_player_sys::gst_player_video_info_get_framerate(
                 self.to_glib_none().0,
-                &mut fps_n,
-                &mut fps_d,
+                fps_n.as_mut_ptr(),
+                fps_d.as_mut_ptr(),
             );
-            (fps_n as i32, fps_d as i32).into()
+            (fps_n.assume_init() as i32, fps_d.as_mut_ptr() as i32).into()
         }
     }
 
     pub fn get_pixel_aspect_ratio(&self) -> gst::Fraction {
         unsafe {
-            let mut par_n = mem::uninitialized();
-            let mut par_d = mem::uninitialized();
+            let mut par_n = mem::MaybeUninit::uninit();
+            let mut par_d = mem::MaybeUninit::uninit();
             gst_player_sys::gst_player_video_info_get_pixel_aspect_ratio(
                 self.to_glib_none().0,
-                &mut par_n,
-                &mut par_d,
+                par_n.as_mut_ptr(),
+                par_d.as_mut_ptr(),
             );
-            (par_n as i32, par_d as i32).into()
+            (par_n.assume_init() as i32, par_d.assume_init() as i32).into()
         }
     }
 }

@@ -86,16 +86,16 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
     ) -> Option<U> {
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_base_sys::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 U::get_default_format().to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(U::from_raw(U::get_default_format(), dest_val))
+                Some(U::from_raw(U::get_default_format(), dest_val.assume_init()))
             } else {
                 None
             }
@@ -109,16 +109,19 @@ impl<O: IsA<BaseParse>> BaseParseExtManual for O {
     ) -> Option<gst::GenericFormattedValue> {
         let src_val = src_val.into();
         unsafe {
-            let mut dest_val = mem::uninitialized();
+            let mut dest_val = mem::MaybeUninit::uninit();
             let ret = from_glib(gst_base_sys::gst_base_parse_convert_default(
                 self.as_ref().to_glib_none().0,
                 src_val.get_format().to_glib(),
                 src_val.to_raw_value(),
                 dest_format.to_glib(),
-                &mut dest_val,
+                dest_val.as_mut_ptr(),
             ));
             if ret {
-                Some(gst::GenericFormattedValue::new(dest_format, dest_val))
+                Some(gst::GenericFormattedValue::new(
+                    dest_format,
+                    dest_val.assume_init(),
+                ))
             } else {
                 None
             }

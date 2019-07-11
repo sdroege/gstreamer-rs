@@ -145,15 +145,15 @@ impl TocEntryRef {
 
     pub fn get_start_stop_times(&self) -> Option<(i64, i64)> {
         unsafe {
-            let mut start = mem::uninitialized();
-            let mut stop = mem::uninitialized();
+            let mut start = mem::MaybeUninit::uninit();
+            let mut stop = mem::MaybeUninit::uninit();
 
             if from_glib(gst_sys::gst_toc_entry_get_start_stop_times(
                 self.as_ptr(),
-                &mut start,
-                &mut stop,
+                start.as_mut_ptr(),
+                stop.as_mut_ptr(),
             )) {
-                Some((start, stop))
+                Some((start.assume_init(), stop.assume_init()))
             } else {
                 None
             }
@@ -196,14 +196,17 @@ impl TocEntryRef {
 
     pub fn get_loop(&self) -> Option<(TocLoopType, i32)> {
         unsafe {
-            let mut loop_type = mem::uninitialized();
-            let mut repeat_count = mem::uninitialized();
+            let mut loop_type = mem::MaybeUninit::uninit();
+            let mut repeat_count = mem::MaybeUninit::uninit();
             if from_glib(gst_sys::gst_toc_entry_get_loop(
                 self.as_ptr(),
-                &mut loop_type,
-                &mut repeat_count,
+                loop_type.as_mut_ptr(),
+                repeat_count.as_mut_ptr(),
             )) {
-                Some((from_glib(loop_type), repeat_count))
+                Some((
+                    from_glib(loop_type.assume_init()),
+                    repeat_count.assume_init(),
+                ))
             } else {
                 None
             }

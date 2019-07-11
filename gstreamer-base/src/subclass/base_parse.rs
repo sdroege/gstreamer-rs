@@ -162,22 +162,23 @@ impl<T: BaseParseImpl + ObjectImpl> BaseParseImplExt for T {
                 data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseParseClass;
             let src_val = src_val.into();
             let res = (*parent_class).convert.map(|f| {
-                let mut dest_val = mem::uninitialized();
+                let mut dest_val = mem::MaybeUninit::uninit();
 
                 let res = from_glib(f(
                     element.to_glib_none().0,
                     src_val.get_format().to_glib(),
                     src_val.to_raw_value(),
                     dest_format.to_glib(),
-                    &mut dest_val,
+                    dest_val.as_mut_ptr(),
                 ));
                 (res, dest_val)
             });
 
             match res {
-                Some((true, dest_val)) => {
-                    Some(gst::GenericFormattedValue::new(dest_format, dest_val))
-                }
+                Some((true, dest_val)) => Some(gst::GenericFormattedValue::new(
+                    dest_format,
+                    dest_val.assume_init(),
+                )),
                 _ => None,
             }
         }

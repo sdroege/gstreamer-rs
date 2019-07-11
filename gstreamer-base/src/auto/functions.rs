@@ -6,7 +6,6 @@ use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_base_sys;
-use std::mem;
 
 pub fn type_find_helper<P: IsA<gst::Pad>>(src: &P, size: u64) -> Option<gst::Caps> {
     assert_initialized_main_thread!();
@@ -15,67 +14,6 @@ pub fn type_find_helper<P: IsA<gst::Pad>>(src: &P, size: u64) -> Option<gst::Cap
             src.as_ref().to_glib_none().0,
             size,
         ))
-    }
-}
-
-pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
-    obj: Option<&P>,
-    buf: &gst::Buffer,
-) -> (Option<gst::Caps>, gst::TypeFindProbability) {
-    assert_initialized_main_thread!();
-    unsafe {
-        let mut prob = mem::MaybeUninit::uninit();
-        let ret = from_glib_full(gst_base_sys::gst_type_find_helper_for_buffer(
-            obj.map(|p| p.as_ref()).to_glib_none().0,
-            buf.to_glib_none().0,
-            prob.as_mut_ptr(),
-        ));
-        let prob = prob.assume_init();
-        (ret, from_glib(prob))
-    }
-}
-
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
-    obj: Option<&P>,
-    buf: &gst::Buffer,
-    extension: Option<&str>,
-) -> (Option<gst::Caps>, gst::TypeFindProbability) {
-    assert_initialized_main_thread!();
-    unsafe {
-        let mut prob = mem::MaybeUninit::uninit();
-        let ret = from_glib_full(
-            gst_base_sys::gst_type_find_helper_for_buffer_with_extension(
-                obj.map(|p| p.as_ref()).to_glib_none().0,
-                buf.to_glib_none().0,
-                extension.to_glib_none().0,
-                prob.as_mut_ptr(),
-            ),
-        );
-        let prob = prob.assume_init();
-        (ret, from_glib(prob))
-    }
-}
-
-#[cfg(any(feature = "v1_16", feature = "dox"))]
-pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>>(
-    obj: Option<&P>,
-    data: &[u8],
-    extension: Option<&str>,
-) -> (Option<gst::Caps>, gst::TypeFindProbability) {
-    assert_initialized_main_thread!();
-    let size = data.len() as usize;
-    unsafe {
-        let mut prob = mem::MaybeUninit::uninit();
-        let ret = from_glib_full(gst_base_sys::gst_type_find_helper_for_data_with_extension(
-            obj.map(|p| p.as_ref()).to_glib_none().0,
-            data.to_glib_none().0,
-            size,
-            extension.to_glib_none().0,
-            prob.as_mut_ptr(),
-        ));
-        let prob = prob.assume_init();
-        (ret, from_glib(prob))
     }
 }
 
