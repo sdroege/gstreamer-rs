@@ -608,6 +608,7 @@ impl ToGlib for MessageType {
 
 #[doc(hidden)]
 impl FromGlib<gst_sys::GstMessageType> for MessageType {
+    #[allow(clippy::unreadable_literal)]
     fn from_glib(value: gst_sys::GstMessageType) -> Self {
         skip_assert_initialized!();
         match value {

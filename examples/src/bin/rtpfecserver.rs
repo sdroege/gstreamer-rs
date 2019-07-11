@@ -46,7 +46,7 @@ fn make_element(
     factory_name: &'static str,
     element_name: Option<&str>,
 ) -> Result<gst::Element, Error> {
-    match gst::ElementFactory::make(factory_name, element_name.into()) {
+    match gst::ElementFactory::make(factory_name, element_name) {
         Some(elem) => Ok(elem),
         None => Err(Error::from(MissingElement(factory_name))),
     }

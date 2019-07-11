@@ -12,7 +12,6 @@ use gst_sys;
 
 use glib::translate::*;
 use gst;
-use gst::prelude::*;
 
 use glib::subclass::prelude::*;
 use gst::subclass::prelude::*;

@@ -470,10 +470,10 @@ where
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
     gst_video_sys::gst_video_codec_state_ref(state);
-    let mut wrap_state = VideoCodecState::<Readable>::new(state);
+    let wrap_state = VideoCodecState::<Readable>::new(state);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_format(&wrap, &mut wrap_state) {
+        match imp.set_format(&wrap, &wrap_state) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);

@@ -1016,7 +1016,7 @@ macro_rules! define_iter_mut(
             // example removes the message that was returned here at an earlier time. The compiler
             // would be correct to complain in that case, but we don't provide such a function.
             let message = unsafe {
-                mem::transmute::<(&mut SDPMessageRef), (&'a mut SDPMessageRef)>(&mut self.message)
+                &mut *(&mut self.message as *mut &'a mut SDPMessageRef as *mut SDPMessageRef)
             };
             if self.idx >= self.len {
                 return None;
@@ -1041,7 +1041,7 @@ macro_rules! define_iter_mut(
     impl<'a> DoubleEndedIterator for $name<'a> {
         fn next_back(&mut self) -> Option<Self::Item> {
             let message = unsafe {
-                mem::transmute::<(&mut SDPMessageRef), (&'a mut SDPMessageRef)>(&mut self.message)
+                &mut *(&mut self.message as *mut &'a mut SDPMessageRef as *mut SDPMessageRef)
             };
             if self.idx == self.len {
                 return None;

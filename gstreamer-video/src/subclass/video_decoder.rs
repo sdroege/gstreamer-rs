@@ -516,10 +516,10 @@ where
     let imp = instance.get_impl();
     let wrap: VideoDecoder = from_glib_borrow(ptr);
     gst_video_sys::gst_video_codec_state_ref(state);
-    let mut wrap_state = VideoCodecState::<Readable>::new(state);
+    let wrap_state = VideoCodecState::<Readable>::new(state);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.set_format(&wrap, &mut wrap_state) {
+        match imp.set_format(&wrap, &wrap_state) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);
@@ -545,13 +545,12 @@ where
     let imp = instance.get_impl();
     let wrap: VideoDecoder = from_glib_borrow(ptr);
     gst_video_sys::gst_video_codec_frame_ref(frame);
-    let mut wrap_frame = VideoCodecFrame::new(frame, &wrap);
-    let mut wrap_adapter: gst_base::Adapter = from_glib_borrow(adapter);
+    let wrap_frame = VideoCodecFrame::new(frame, &wrap);
+    let wrap_adapter: gst_base::Adapter = from_glib_borrow(adapter);
     let at_eos: bool = from_glib(at_eos);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), gst::FlowReturn::Error, {
-        imp.parse(&wrap, &mut wrap_frame, &mut wrap_adapter, at_eos)
-            .into()
+        imp.parse(&wrap, &wrap_frame, &wrap_adapter, at_eos).into()
     })
     .to_glib()
 }

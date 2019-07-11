@@ -468,8 +468,8 @@ impl App {
             appsink,
             glupload,
             bus,
-            events_loop: events_loop,
-            windowed_context: windowed_context,
+            events_loop,
+            windowed_context,
             shared_context,
         })
     }
