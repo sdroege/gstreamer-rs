@@ -21,14 +21,14 @@ impl SDPTime {
     pub fn new(start: &str, stop: &str, repeat: &[&str]) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut time = mem::zeroed();
+            let mut time = mem::MaybeUninit::zeroed();
             gst_sdp_sys::gst_sdp_time_set(
-                &mut time,
+                time.as_mut_ptr(),
                 start.to_glib_none().0,
                 stop.to_glib_none().0,
                 repeat.to_glib_none().0,
             );
-            SDPTime(time)
+            SDPTime(time.assume_init())
         }
     }
 

@@ -189,9 +189,9 @@ impl VideoFrame<Readable> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
@@ -200,6 +200,7 @@ impl VideoFrame<Readable> {
             if !res {
                 Err(buffer)
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
             }
@@ -214,9 +215,9 @@ impl VideoFrame<Readable> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
@@ -226,6 +227,7 @@ impl VideoFrame<Readable> {
             if !res {
                 Err(buffer)
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
             }
@@ -251,9 +253,9 @@ impl VideoFrame<Writable> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
@@ -264,6 +266,7 @@ impl VideoFrame<Writable> {
             if !res {
                 Err(buffer)
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
             }
@@ -278,9 +281,9 @@ impl VideoFrame<Writable> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
@@ -292,6 +295,7 @@ impl VideoFrame<Writable> {
             if !res {
                 Err(buffer)
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Ok(VideoFrame(frame, Some(buffer), info, PhantomData))
             }
@@ -367,9 +371,9 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst_sys::GST_MAP_READ,
@@ -378,6 +382,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             if !res {
                 None
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Some(VideoFrameRef(frame, Some(buffer), info, false))
             }
@@ -392,9 +397,9 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
@@ -404,6 +409,7 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
             if !res {
                 None
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Some(VideoFrameRef(frame, Some(buffer), info, false))
             }
@@ -558,9 +564,9 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
@@ -571,6 +577,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             if !res {
                 None
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Some(VideoFrameRef(frame, Some(buffer), info, false))
             }
@@ -585,9 +592,9 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
         skip_assert_initialized!();
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map_id(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 id,
@@ -599,6 +606,7 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
             if !res {
                 None
             } else {
+                let frame = frame.assume_init();
                 let info = ::VideoInfo(ptr::read(&frame.info));
                 Some(VideoFrameRef(frame, Some(buffer), info, false))
             }

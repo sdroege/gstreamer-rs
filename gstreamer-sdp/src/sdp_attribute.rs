@@ -20,13 +20,13 @@ impl SDPAttribute {
     pub fn new(key: &str, value: Option<&str>) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut attr = mem::zeroed();
+            let mut attr = mem::MaybeUninit::zeroed();
             gst_sdp_sys::gst_sdp_attribute_set(
-                &mut attr,
+                attr.as_mut_ptr(),
                 key.to_glib_none().0,
                 value.to_glib_none().0,
             );
-            SDPAttribute(attr)
+            SDPAttribute(attr.assume_init())
         }
     }
 

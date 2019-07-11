@@ -20,13 +20,13 @@ impl SDPZone {
     pub fn new(time: &str, typed_time: &str) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut zone = mem::zeroed();
+            let mut zone = mem::MaybeUninit::zeroed();
             gst_sdp_sys::gst_sdp_zone_set(
-                &mut zone,
+                zone.as_mut_ptr(),
                 time.to_glib_none().0,
                 typed_time.to_glib_none().0,
             );
-            SDPZone(zone)
+            SDPZone(zone.assume_init())
         }
     }
 

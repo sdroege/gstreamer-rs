@@ -36,9 +36,9 @@ impl WindowsBusExtManual for Bus {
     fn get_pollfd(&self) -> windows::io::RawHandle {
         #[cfg(windows)]
         unsafe {
-            let mut pollfd: glib_sys::GPollFD = mem::zeroed();
-            gst_sys::gst_bus_get_pollfd(self.to_glib_none().0, &mut pollfd);
-
+            let mut pollfd = mem::MaybeUninit::zeroed();
+            gst_sys::gst_bus_get_pollfd(self.to_glib_none().0, pollfd.assume_init());
+            let pollfd = pollfd.assume_init();
             pollfd.fd as *mut _
         }
 

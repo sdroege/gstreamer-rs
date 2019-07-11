@@ -89,13 +89,13 @@ pub trait VideoBufferPoolConfig {
 impl VideoBufferPoolConfig for gst::BufferPoolConfig {
     fn get_video_alignment(&self) -> Option<VideoAlignment> {
         unsafe {
-            let mut alignment: VideoAlignment = mem::zeroed();
+            let mut alignment = mem::MaybeUninit::zeroed();
             let ret = from_glib(gst_video_sys::gst_buffer_pool_config_get_video_alignment(
                 self.as_ref().as_mut_ptr(),
-                &mut alignment.0,
+                alignment.as_mut_ptr(),
             ));
             if ret {
-                Some(alignment)
+                Some(VideoAlignment(alignment.assume_init()))
             } else {
                 None
             }

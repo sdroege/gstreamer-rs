@@ -20,9 +20,9 @@ impl SDPBandwidth {
     pub fn new(bwtype: &str, bandwidth: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut bw = mem::zeroed();
-            gst_sdp_sys::gst_sdp_bandwidth_set(&mut bw, bwtype.to_glib_none().0, bandwidth);
-            SDPBandwidth(bw)
+            let mut bw = mem::MaybeUninit::zeroed();
+            gst_sdp_sys::gst_sdp_bandwidth_set(bw.as_mut_ptr(), bwtype.to_glib_none().0, bandwidth);
+            SDPBandwidth(bw.assume_init())
         }
     }
 

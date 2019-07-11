@@ -118,13 +118,13 @@ impl VideoColorimetry {
         assert_initialized_main_thread!();
 
         unsafe {
-            let mut colorimetry = mem::zeroed();
+            let mut colorimetry = mem::MaybeUninit::zeroed();
             let valid: bool = from_glib(gst_video_sys::gst_video_colorimetry_from_string(
-                &mut colorimetry,
+                colorimetry.as_mut_ptr(),
                 s.to_glib_none().0,
             ));
             if valid {
-                Some(VideoColorimetry(colorimetry))
+                Some(VideoColorimetry(colorimetry.assume_init()))
             } else {
                 None
             }

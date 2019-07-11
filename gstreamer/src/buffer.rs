@@ -119,42 +119,42 @@ impl Buffer {
     }
 
     pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
-        let mut map_info: gst_sys::GstMapInfo = unsafe { mem::zeroed() };
-        let res: bool = unsafe {
-            from_glib(gst_sys::gst_buffer_map(
+        unsafe {
+            let mut map_info = mem::MaybeUninit::zeroed();
+            let res: bool = from_glib(gst_sys::gst_buffer_map(
                 self.as_mut_ptr(),
-                &mut map_info,
+                map_info.as_mut_ptr(),
                 gst_sys::GST_MAP_READ,
-            ))
-        };
-        if res {
-            Ok(MappedBuffer {
-                buffer: Some(self),
-                map_info,
-                phantom: PhantomData,
-            })
-        } else {
-            Err(self)
+            ));
+            if res {
+                Ok(MappedBuffer {
+                    buffer: Some(self),
+                    map_info: map_info.assume_init(),
+                    phantom: PhantomData,
+                })
+            } else {
+                Err(self)
+            }
         }
     }
 
     pub fn into_mapped_buffer_writable(self) -> Result<MappedBuffer<Writable>, Self> {
-        let mut map_info: gst_sys::GstMapInfo = unsafe { mem::zeroed() };
-        let res: bool = unsafe {
-            from_glib(gst_sys::gst_buffer_map(
+        unsafe {
+            let mut map_info = mem::MaybeUninit::zeroed();
+            let res: bool = from_glib(gst_sys::gst_buffer_map(
                 self.as_mut_ptr(),
-                &mut map_info,
+                map_info.as_mut_ptr(),
                 gst_sys::GST_MAP_READWRITE,
-            ))
-        };
-        if res {
-            Ok(MappedBuffer {
-                buffer: Some(self),
-                map_info,
-                phantom: PhantomData,
-            })
-        } else {
-            Err(self)
+            ));
+            if res {
+                Ok(MappedBuffer {
+                    buffer: Some(self),
+                    map_info: map_info.assume_init(),
+                    phantom: PhantomData,
+                })
+            } else {
+                Err(self)
+            }
         }
     }
 
@@ -177,34 +177,42 @@ impl Default for Buffer {
 
 impl BufferRef {
     pub fn map_readable(&self) -> Option<BufferMap<Readable>> {
-        let mut map_info: gst_sys::GstMapInfo = unsafe { mem::zeroed() };
-        let res = unsafe {
-            gst_sys::gst_buffer_map(self.as_mut_ptr(), &mut map_info, gst_sys::GST_MAP_READ)
-        };
-        if res == glib_sys::GTRUE {
-            Some(BufferMap {
-                buffer: self,
-                map_info,
-                phantom: PhantomData,
-            })
-        } else {
-            None
+        unsafe {
+            let mut map_info = mem::MaybeUninit::zeroed();
+            let res = gst_sys::gst_buffer_map(
+                self.as_mut_ptr(),
+                map_info.as_mut_ptr(),
+                gst_sys::GST_MAP_READ,
+            );
+            if res == glib_sys::GTRUE {
+                Some(BufferMap {
+                    buffer: self,
+                    map_info: map_info.assume_init(),
+                    phantom: PhantomData,
+                })
+            } else {
+                None
+            }
         }
     }
 
     pub fn map_writable(&mut self) -> Option<BufferMap<Writable>> {
-        let mut map_info: gst_sys::GstMapInfo = unsafe { mem::zeroed() };
-        let res = unsafe {
-            gst_sys::gst_buffer_map(self.as_mut_ptr(), &mut map_info, gst_sys::GST_MAP_READWRITE)
-        };
-        if res == glib_sys::GTRUE {
-            Some(BufferMap {
-                buffer: self,
-                map_info,
-                phantom: PhantomData,
-            })
-        } else {
-            None
+        unsafe {
+            let mut map_info = mem::MaybeUninit::zeroed();
+            let res = gst_sys::gst_buffer_map(
+                self.as_mut_ptr(),
+                map_info.as_mut_ptr(),
+                gst_sys::GST_MAP_READWRITE,
+            );
+            if res == glib_sys::GTRUE {
+                Some(BufferMap {
+                    buffer: self,
+                    map_info: map_info.assume_init(),
+                    phantom: PhantomData,
+                })
+            } else {
+                None
+            }
         }
     }
 

@@ -20,16 +20,16 @@ impl SDPConnection {
     pub fn new(nettype: &str, addrtype: &str, address: &str, ttl: u32, addr_number: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut conn = mem::zeroed();
+            let mut conn = mem::MaybeUninit::zeroed();
             gst_sdp_sys::gst_sdp_connection_set(
-                &mut conn,
+                conn.as_mut_ptr(),
                 nettype.to_glib_none().0,
                 addrtype.to_glib_none().0,
                 address.to_glib_none().0,
                 ttl,
                 addr_number,
             );
-            SDPConnection(conn)
+            SDPConnection(conn.assume_init())
         }
     }
 

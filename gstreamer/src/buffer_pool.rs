@@ -154,14 +154,14 @@ impl BufferPoolConfig {
     pub fn get_allocator(&self) -> Option<(Option<Allocator>, AllocationParams)> {
         unsafe {
             let mut allocator = ptr::null_mut();
-            let mut params = mem::zeroed();
+            let mut params = mem::MaybeUninit::zeroed();
             let ret = from_glib(gst_sys::gst_buffer_pool_config_get_allocator(
                 self.0.to_glib_none().0,
                 &mut allocator,
-                &mut params,
+                params.as_mut_ptr(),
             ));
             if ret {
-                Some((from_glib_none(allocator), params.into()))
+                Some((from_glib_none(allocator), params.assume_init().into()))
             } else {
                 None
             }

@@ -34,11 +34,15 @@ impl VideoTimeCodeInterval {
     pub fn new(hours: u32, minutes: u32, seconds: u32, frames: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut v = mem::zeroed();
+            let mut v = mem::MaybeUninit::zeroed();
             gst_video_sys::gst_video_time_code_interval_init(
-                &mut v, hours, minutes, seconds, frames,
+                v.as_mut_ptr(),
+                hours,
+                minutes,
+                seconds,
+                frames,
             );
-            VideoTimeCodeInterval(v)
+            VideoTimeCodeInterval(v.assume_init())
         }
     }
 

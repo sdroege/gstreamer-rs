@@ -412,10 +412,10 @@ impl TagListRef {
 
     pub fn get_generic(&self, tag_name: &str) -> Option<SendValue> {
         unsafe {
-            let mut value: SendValue = mem::zeroed();
+            let mut value: mem::MaybeUninit<SendValue> = mem::MaybeUninit::zeroed();
 
             let found: bool = from_glib(gst_sys::gst_tag_list_copy_value(
-                value.to_glib_none_mut().0,
+                (*value.as_mut_ptr()).to_glib_none_mut().0,
                 self.as_ptr(),
                 tag_name.to_glib_none().0,
             ));
@@ -424,7 +424,7 @@ impl TagListRef {
                 return None;
             }
 
-            Some(value)
+            Some(value.assume_init())
         }
     }
 

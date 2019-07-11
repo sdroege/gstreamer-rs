@@ -34,9 +34,9 @@ impl VideoTimeCode {
     pub fn new_empty() -> VideoTimeCode {
         assert_initialized_main_thread!();
         unsafe {
-            let mut v = mem::zeroed();
-            gst_video_sys::gst_video_time_code_clear(&mut v);
-            VideoTimeCode(v)
+            let mut v = mem::MaybeUninit::zeroed();
+            gst_video_sys::gst_video_time_code_clear(v.as_mut_ptr());
+            VideoTimeCode(v.assume_init())
         }
     }
 
@@ -53,9 +53,9 @@ impl VideoTimeCode {
     ) -> Self {
         assert_initialized_main_thread!();
         unsafe {
-            let mut v = mem::zeroed();
+            let mut v = mem::MaybeUninit::zeroed();
             gst_video_sys::gst_video_time_code_init(
-                &mut v,
+                v.as_mut_ptr(),
                 *fps.numer() as u32,
                 *fps.denom() as u32,
                 latest_daily_jam.to_glib_none().0,
@@ -67,37 +67,37 @@ impl VideoTimeCode {
                 field_count,
             );
 
-            VideoTimeCode(v)
+            VideoTimeCode(v.assume_init())
         }
     }
 
-    //    #[cfg(any(feature = "v1_16", feature = "dox"))]
-    //    pub fn new_from_date_time(
-    //        fps: gst::Fraction,
-    //        dt: &glib::DateTime,
-    //        flags: VideoTimeCodeFlags,
-    //        field_count: u32,
-    //    ) -> Option<VideoTimeCode> {
-    //        assert_initialized_main_thread!();
-    //        assert!(fps_d > 0);
-    //        unsafe {
-    //            let mut v = mem::zeroed();
-    //            let res = gst_video_sys::gst_video_time_code_init_from_date_time_full(
-    //                &mut v,
-    //                *fps.numer() as u32,
-    //                *fps.denom() as u32,
-    //                dt.to_glib_none().0,
-    //                flags.to_glib(),
-    //                field_count,
-    //            );
-    //
-    //            if res == glib_sys::GFALSE {
-    //                None
-    //            } else {
-    //                Some(VideoTimeCode(v))
-    //            }
-    //        }
-    //    }
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
+    pub fn new_from_date_time(
+        fps: gst::Fraction,
+        dt: &glib::DateTime,
+        flags: VideoTimeCodeFlags,
+        field_count: u32,
+    ) -> Option<VideoTimeCode> {
+        assert_initialized_main_thread!();
+        assert!(*fps.denom() > 0);
+        unsafe {
+            let mut v = mem::MaybeUninit::zeroed();
+            let res = gst_video_sys::gst_video_time_code_init_from_date_time_full(
+                v.as_mut_ptr(),
+                *fps.numer() as u32,
+                *fps.denom() as u32,
+                dt.to_glib_none().0,
+                flags.to_glib(),
+                field_count,
+            );
+
+            if res == glib_sys::GFALSE {
+                None
+            } else {
+                Some(VideoTimeCode(v.assume_init()))
+            }
+        }
+    }
 
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     pub fn from_string(tc_str: &str) -> Option<VideoTimeCode> {

@@ -74,9 +74,9 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
         }
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
@@ -87,7 +87,7 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
             if !res {
                 Err(buffer)
             } else {
-                Ok(VideoFrame::from_glib_full(frame))
+                Ok(VideoFrame::from_glib_full(frame.assume_init()))
             }
         }
     }
@@ -111,9 +111,9 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
         }
 
         unsafe {
-            let mut frame = mem::zeroed();
+            let mut frame = mem::MaybeUninit::zeroed();
             let res: bool = from_glib(gst_video_sys::gst_video_frame_map(
-                &mut frame,
+                frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.as_mut_ptr(),
                 gst_video_sys::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
@@ -124,7 +124,7 @@ impl<'a> VideoFrameGLExt for VideoFrameRef<&'a gst::BufferRef> {
             if !res {
                 None
             } else {
-                Some(VideoFrameRef::from_glib_borrow(&frame))
+                Some(VideoFrameRef::from_glib_borrow(&frame.assume_init()))
             }
         }
     }

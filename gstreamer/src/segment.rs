@@ -77,9 +77,9 @@ impl<T: FormattedValue> FormattedSegment<T> {
     pub fn new() -> Self {
         assert_initialized_main_thread!();
         let segment = unsafe {
-            let mut segment = mem::zeroed();
-            gst_sys::gst_segment_init(&mut segment, T::get_default_format().to_glib());
-            segment
+            let mut segment = mem::MaybeUninit::zeroed();
+            gst_sys::gst_segment_init(segment.as_mut_ptr(), T::get_default_format().to_glib());
+            segment.assume_init()
         };
         FormattedSegment(segment, PhantomData)
     }

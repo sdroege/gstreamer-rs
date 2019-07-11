@@ -79,7 +79,7 @@ impl SDPMessage {
     pub fn new() -> SDPMessage {
         assert_initialized_main_thread!();
         unsafe {
-            let mut msg = mem::zeroed();
+            let mut msg = ptr::null_mut();
             gst_sdp_sys::gst_sdp_message_new(&mut msg);
             from_glib_full(msg)
         }
@@ -89,7 +89,7 @@ impl SDPMessage {
         assert_initialized_main_thread!();
         unsafe {
             let size = data.len() as u32;
-            let mut msg = mem::zeroed();
+            let mut msg = ptr::null_mut();
             gst_sdp_sys::gst_sdp_message_new(&mut msg);
             let result =
                 gst_sdp_sys::gst_sdp_message_parse_buffer(data.to_glib_none().0, size, msg);
@@ -106,7 +106,7 @@ impl SDPMessage {
     pub fn parse_uri(uri: &str) -> Result<Self, ()> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut msg = mem::zeroed();
+            let mut msg = ptr::null_mut();
             gst_sdp_sys::gst_sdp_message_new(&mut msg);
             let result = gst_sdp_sys::gst_sdp_message_parse_uri(uri.to_glib_none().0, msg);
             match result {
