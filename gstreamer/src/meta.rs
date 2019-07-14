@@ -13,8 +13,16 @@ use std::ops;
 use miniobject::MiniObject;
 use Buffer;
 use BufferRef;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use Caps;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use CapsRef;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use ClockTime;
 
 use glib;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+use glib::translate::ToGlib;
 use glib::translate::{from_glib, from_glib_none, FromGlib, ToGlibPtr};
 use glib_sys;
 use gst_sys;
@@ -260,6 +268,67 @@ impl fmt::Debug for ParentBufferMeta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("ParentBufferMeta")
             .field("parent", &self.get_parent())
+            .finish()
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+#[repr(C)]
+pub struct ReferenceTimestampMeta(gst_sys::GstReferenceTimestampMeta);
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+impl ReferenceTimestampMeta {
+    pub fn add<'a>(
+        buffer: &'a mut BufferRef,
+        reference: &Caps,
+        timestamp: ClockTime,
+        duration: ClockTime,
+    ) -> MetaRefMut<'a, Self, Standalone> {
+        unsafe {
+            let meta = gst_sys::gst_buffer_add_reference_timestamp_meta(
+                buffer.as_mut_ptr(),
+                reference.to_glib_none().0,
+                timestamp.to_glib(),
+                duration.to_glib(),
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    pub fn get_reference(&self) -> &CapsRef {
+        unsafe { CapsRef::from_ptr(self.0.reference) }
+    }
+
+    pub fn get_parent_owned(&self) -> Caps {
+        unsafe { from_glib_none(self.0.reference) }
+    }
+
+    pub fn get_timestamp(&self) -> ClockTime {
+        from_glib(self.0.timestamp)
+    }
+
+    pub fn get_duration(&self) -> ClockTime {
+        from_glib(self.0.duration)
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+unsafe impl MetaAPI for ReferenceTimestampMeta {
+    type GstType = gst_sys::GstReferenceTimestampMeta;
+
+    fn get_meta_api() -> glib::Type {
+        unsafe { from_glib(gst_sys::gst_reference_timestamp_meta_api_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+impl fmt::Debug for ReferenceTimestampMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("ReferenceTimestampMeta")
+            .field("reference", &self.get_reference())
+            .field("timestamp", &self.get_timestamp())
+            .field("duration", &self.get_duration())
             .finish()
     }
 }

@@ -116,6 +116,8 @@ pub use tags::{
 mod tags_serde;
 
 pub mod meta;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+pub use meta::ReferenceTimestampMeta;
 pub use meta::{Meta, MetaAPI, MetaRef, MetaRefMut, ParentBufferMeta};
 pub mod buffer;
 pub use buffer::{
