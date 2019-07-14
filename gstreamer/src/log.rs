@@ -6,6 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use DebugLevel;
+
 use libc::c_char;
 use std::ffi::CStr;
 use std::fmt;
@@ -14,8 +16,32 @@ use std::ptr;
 use gobject_sys;
 use gst_sys;
 
-use glib::translate::{from_glib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_borrow, ToGlib, ToGlibPtr};
 use glib::IsA;
+use glib_sys::gpointer;
+
+#[derive(PartialEq, Eq)]
+pub struct DebugMessage(ptr::NonNull<gst_sys::GstDebugMessage>);
+
+impl fmt::Debug for DebugMessage {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_tuple("DebugMessage").field(&self.get()).finish()
+    }
+}
+
+impl DebugMessage {
+    pub fn get(&self) -> Option<&str> {
+        unsafe {
+            let message = gst_sys::gst_debug_message_get(self.0.as_ptr());
+
+            if message.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(message).to_str().unwrap())
+            }
+        }
+    }
+}
 
 #[derive(PartialEq, Eq, Clone, Copy)]
 pub struct DebugCategory(ptr::NonNull<gst_sys::GstDebugCategory>);
@@ -282,9 +308,91 @@ macro_rules! gst_log_with_level(
     }};
 );
 
+unsafe extern "C" fn log_handler<T>(
+    category: *mut gst_sys::GstDebugCategory,
+    level: gst_sys::GstDebugLevel,
+    file: *const c_char,
+    function: *const c_char,
+    line: i32,
+    object: *mut gobject_sys::GObject,
+    message: *mut gst_sys::GstDebugMessage,
+    user_data: gpointer,
+) where
+    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&glib::Object>, &DebugMessage)
+        + Send
+        + Sync
+        + 'static,
+{
+    let category = DebugCategory(ptr::NonNull::new_unchecked(category));
+    let level = from_glib(level);
+    let file = CStr::from_ptr(file).to_str().unwrap();
+    let function = CStr::from_ptr(function).to_str().unwrap();
+    let line = line as u32;
+    let object: Option<glib::Object> = from_glib_borrow(object);
+    let message = DebugMessage(ptr::NonNull::new_unchecked(message));
+    let handler = &*(user_data as *mut T);
+    (handler)(
+        category,
+        level,
+        file,
+        function,
+        line,
+        object.as_ref(),
+        &message,
+    );
+}
+
+unsafe extern "C" fn log_handler_data_free<T>(data: gpointer) {
+    let data = Box::from_raw(data as *mut T);
+    drop(data);
+}
+
+#[derive(Debug)]
+pub struct DebugLogFunction(ptr::NonNull<std::os::raw::c_void>);
+
+// The contained pointer is never dereferenced and has no thread affinity.
+// It may be convenient to send it or share it between threads to allow cleaning
+// up log functions from other threads than the one that created it.
+unsafe impl Send for DebugLogFunction {}
+unsafe impl Sync for DebugLogFunction {}
+
+pub fn debug_add_log_function<T>(function: T) -> DebugLogFunction
+where
+    T: Fn(DebugCategory, DebugLevel, &str, &str, u32, Option<&glib::Object>, &DebugMessage)
+        + Send
+        + Sync
+        + 'static,
+{
+    unsafe {
+        let user_data = Box::new(function);
+        let user_data_ptr = Box::into_raw(user_data) as gpointer;
+        gst_sys::gst_debug_add_log_function(
+            Some(log_handler::<T>),
+            user_data_ptr,
+            Some(log_handler_data_free::<T>),
+        );
+        DebugLogFunction(ptr::NonNull::new_unchecked(user_data_ptr))
+    }
+}
+
+pub fn debug_remove_default_log_function() {
+    unsafe {
+        gst_sys::gst_debug_remove_log_function(Some(gst_sys::gst_debug_log_default));
+    }
+}
+
+pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
+    unsafe {
+        let removed = gst_sys::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
+        assert_eq!(removed, 1);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::sync::mpsc;
+    use std::sync::{Arc, Mutex};
 
     #[test]
     fn get_existing() {
@@ -323,5 +431,47 @@ mod tests {
         gst_log!(cat, obj: &obj, "meh");
         gst_trace!(cat, obj: &obj, "meh");
         gst_memdump!(cat, obj: &obj, "meh");
+    }
+
+    #[test]
+    fn log_handler() {
+        ::init().unwrap();
+
+        let cat = DebugCategory::new(
+            "test-cat-log",
+            ::DebugColorFlags::empty(),
+            Some("some debug category"),
+        );
+        cat.set_threshold(DebugLevel::Info);
+        let obj = ::Bin::new(Some("meh"));
+
+        let (sender, receiver) = mpsc::channel();
+
+        let sender = Arc::new(Mutex::new(sender));
+
+        let handler = move |category: DebugCategory,
+                            level: DebugLevel,
+                            _file: &str,
+                            _function: &str,
+                            _line: u32,
+                            _object: Option<&glib::Object>,
+                            message: &DebugMessage| {
+            let cat = DebugCategory::get("test-cat-log").unwrap();
+            assert_eq!(category, cat);
+            assert_eq!(level, DebugLevel::Info);
+            assert_eq!(message.get(), Some("meh"));
+            let _ = sender.lock().unwrap().send(());
+        };
+
+        debug_remove_default_log_function();
+        let log_fn = debug_add_log_function(handler);
+        gst_info!(cat, obj: &obj, "meh");
+
+        let _ = receiver.recv().unwrap();
+
+        debug_remove_log_function(log_fn);
+
+        gst_info!(cat, obj: &obj, "meh2");
+        assert!(receiver.recv().is_err());
     }
 }
