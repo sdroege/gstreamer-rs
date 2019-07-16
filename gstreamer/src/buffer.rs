@@ -381,7 +381,11 @@ impl BufferRef {
     }
 
     pub fn set_flags(&mut self, flags: BufferFlags) {
-        self.0.mini_object.flags = flags.bits();
+        self.0.mini_object.flags |= flags.bits();
+    }
+
+    pub fn unset_flags(&mut self, flags: BufferFlags) {
+        self.0.mini_object.flags &= !flags.bits();
     }
 
     pub fn get_meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
