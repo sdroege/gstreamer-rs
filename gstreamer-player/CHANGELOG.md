@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.14.3] - 2019-07-16
+### Added
+- `Buffer::unset_flags()` for unsetting specific buffer flags
+- `VideoBufferFlags` flags type and `VideoBufferExt::set_video_flags()`,
+  `unset_video_flags()` and `get_video_flags()` for working with video buffer
+  flags from safe code.
+
+### Fixed
+- Setting buffer flags does not override arbitrary other flags anymore but
+  only sets the flags in question. This is necessary to not override extension
+  buffer flags like `gst_video::VideoBufferFlags`.
+
 ## [0.14.2] - 2019-07-15
 ### Added
 - Support for `ReferenceTimestampMeta`
