@@ -8,6 +8,7 @@
 
 use glib::translate::*;
 use gst_sys;
+use std::mem;
 use std::ptr;
 
 use Element;
@@ -102,5 +103,60 @@ pub fn util_seqnum_next() -> ::Seqnum {
             return from_glib(gst_sys::gst_util_seqnum_next());
         }
         v
+    }
+}
+
+#[cfg(any(feature = "v1_12", feature = "dox"))]
+pub fn calculate_linear_regression(
+    xy: &[(u64, u64)],
+    temp: Option<&mut [(u64, u64)]>,
+) -> Option<(u64, u64, u64, u64, f64)> {
+    unsafe {
+        assert_eq!(mem::size_of::<u64>() * 2, mem::size_of::<(u64, u64)>());
+        assert_eq!(mem::align_of::<u64>(), mem::align_of::<(u64, u64)>());
+        assert!(temp.as_ref().map(|temp| temp.len()).unwrap_or(xy.len()) >= xy.len());
+
+        let mut m_num = mem::uninitialized();
+        let mut m_denom = mem::uninitialized();
+        let mut b = mem::uninitialized();
+        let mut xbase = mem::uninitialized();
+        let mut r_squared = mem::uninitialized();
+
+        let res = from_glib(gst_sys::gst_calculate_linear_regression(
+            xy.as_ptr() as *const u64,
+            temp.map(|temp| temp.as_mut_ptr() as *mut u64)
+                .unwrap_or(ptr::null_mut()),
+            xy.len() as u32,
+            &mut m_num,
+            &mut m_denom,
+            &mut b,
+            &mut xbase,
+            &mut r_squared,
+        ));
+        if res {
+            Some((m_num, m_denom, b, xbase, r_squared))
+        } else {
+            None
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_calculate_linear_regression() {
+        ::init().unwrap();
+
+        let values = [(0, 0), (1, 1), (2, 2), (3, 3)];
+
+        let (m_num, m_denom, b, xbase, _) = calculate_linear_regression(&values, None).unwrap();
+        assert_eq!((m_num, m_denom, b, xbase), (10, 10, 3, 3));
+
+        let mut temp = [(0, 0); 4];
+        let (m_num, m_denom, b, xbase, _) =
+            calculate_linear_regression(&values, Some(&mut temp)).unwrap();
+        assert_eq!((m_num, m_denom, b, xbase), (10, 10, 3, 3));
     }
 }
