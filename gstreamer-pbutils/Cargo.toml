@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-pbutils"
-version = "0.14.2"
+version = "0.14.3"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Base Utils library"
