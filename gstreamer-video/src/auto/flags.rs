@@ -13,6 +13,61 @@ use gobject_sys;
 use gst_video_sys;
 
 bitflags! {
+    pub struct VideoBufferFlags: u32 {
+        const INTERLACED = 1048576;
+        const TFF = 2097152;
+        const RFF = 4194304;
+        const ONEFIELD = 8388608;
+        const MULTIPLE_VIEW = 16777216;
+        const FIRST_IN_BUNDLE = 33554432;
+        const TOP_FIELD = 10485760;
+        const BOTTOM_FIELD = 8388608;
+        const LAST = 268435456;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for VideoBufferFlags {
+    type GlibType = gst_video_sys::GstVideoBufferFlags;
+
+    fn to_glib(&self) -> gst_video_sys::GstVideoBufferFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_video_sys::GstVideoBufferFlags> for VideoBufferFlags {
+    fn from_glib(value: gst_video_sys::GstVideoBufferFlags) -> VideoBufferFlags {
+        skip_assert_initialized!();
+        VideoBufferFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for VideoBufferFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_video_sys::gst_video_buffer_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for VideoBufferFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for VideoBufferFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for VideoBufferFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct VideoChromaSite: u32 {
         const UNKNOWN = 0;
         const NONE = 1;
