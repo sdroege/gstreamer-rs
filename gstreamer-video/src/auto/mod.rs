@@ -35,6 +35,7 @@ pub use self::enums::VideoTileMode;
 pub use self::enums::VideoTransferFunction;
 
 mod flags;
+pub use self::flags::VideoBufferFlags;
 pub use self::flags::VideoChromaSite;
 pub use self::flags::VideoCodecFrameFlags;
 pub use self::flags::VideoFlags;

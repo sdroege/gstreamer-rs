@@ -50,7 +50,7 @@ pub use video_format_info::*;
 mod video_info;
 pub use video_info::*;
 pub mod video_frame;
-pub use video_frame::{VideoFrame, VideoFrameRef};
+pub use video_frame::{VideoBufferExt, VideoFrame, VideoFrameRef};
 mod video_overlay;
 pub use video_overlay::*;
 mod video_event;
@@ -96,6 +96,7 @@ pub mod prelude {
     pub use video_buffer_pool::VideoBufferPoolConfig;
     pub use video_decoder::VideoDecoderExtManual;
     pub use video_encoder::VideoEncoderExtManual;
+    pub use video_frame::VideoBufferExt;
     pub use video_overlay::VideoOverlayExtManual;
 }
 

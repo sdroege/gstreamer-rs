@@ -39,6 +39,7 @@ generate = [
     "GstVideo.VideoCaptionType",
     "GstVideo.VideoBufferPool",
     "GstVideo.VideoPackFlags",
+    "GstVideo.VideoBufferFlags",
 ]
 
 manual = [

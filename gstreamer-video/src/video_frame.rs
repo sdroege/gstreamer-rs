@@ -673,6 +673,35 @@ impl<T> Drop for VideoFrameRef<T> {
     }
 }
 
+pub trait VideoBufferExt {
+    fn get_video_flags(&self) -> ::VideoBufferFlags;
+    fn set_video_flags(&mut self, flags: ::VideoBufferFlags);
+    fn unset_video_flags(&mut self, flags: ::VideoBufferFlags);
+}
+
+impl VideoBufferExt for gst::BufferRef {
+    fn get_video_flags(&self) -> ::VideoBufferFlags {
+        unsafe {
+            let ptr = self.as_mut_ptr();
+            ::VideoBufferFlags::from_bits_truncate((*ptr).mini_object.flags)
+        }
+    }
+
+    fn set_video_flags(&mut self, flags: ::VideoBufferFlags) {
+        unsafe {
+            let ptr = self.as_mut_ptr();
+            (*ptr).mini_object.flags |= flags.bits();
+        }
+    }
+
+    fn unset_video_flags(&mut self, flags: ::VideoBufferFlags) {
+        unsafe {
+            let ptr = self.as_mut_ptr();
+            (*ptr).mini_object.flags &= !flags.bits();
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
