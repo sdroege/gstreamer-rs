@@ -59,7 +59,7 @@ impl<'a> AudioInfoBuilder<'a> {
                 }
 
                 let positions: [gst_audio_sys::GstAudioChannelPosition; 64] =
-                    array_init::array_init_copy(|i| {
+                    array_init::array_init(|i| {
                         if i >= self.channels as usize {
                             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
                         } else {
@@ -109,7 +109,7 @@ impl<'a> AudioInfoBuilder<'a> {
                 info.layout = layout.to_glib();
             }
 
-            let positions = array_init::array_init_copy(|i| from_glib(info.position[i]));
+            let positions = array_init::array_init(|i| from_glib(info.position[i]));
             Some(AudioInfo(info, positions))
         }
     }
@@ -161,7 +161,7 @@ impl AudioInfo {
                 caps.as_ptr(),
             )) {
                 let info = info.assume_init();
-                let positions = array_init::array_init_copy(|i| from_glib(info.position[i]));
+                let positions = array_init::array_init(|i| from_glib(info.position[i]));
                 Some(AudioInfo(info, positions))
             } else {
                 None
@@ -386,7 +386,7 @@ impl glib::translate::FromGlibPtrNone<*mut gst_audio_sys::GstAudioInfo> for Audi
     unsafe fn from_glib_none(ptr: *mut gst_audio_sys::GstAudioInfo) -> Self {
         AudioInfo(
             ptr::read(ptr),
-            array_init::array_init_copy(|i| from_glib((*ptr).position[i])),
+            array_init::array_init(|i| from_glib((*ptr).position[i])),
         )
     }
 }

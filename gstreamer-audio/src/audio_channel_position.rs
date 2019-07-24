@@ -39,7 +39,7 @@ impl AudioChannelPosition {
         }
 
         let positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
-            array_init::array_init_copy(|i| {
+            array_init::array_init(|i| {
                 if i >= len as usize {
                     gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
                 } else {
@@ -107,7 +107,7 @@ impl AudioChannelPosition {
 
         let len = positions.len();
         let mut positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
-            array_init::array_init_copy(|i| {
+            array_init::array_init(|i| {
                 if i >= len as usize {
                     gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
                 } else {
@@ -152,7 +152,7 @@ impl AudioChannelPosition {
 
         let len = positions.len();
         let positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
-            array_init::array_init_copy(|i| {
+            array_init::array_init(|i| {
                 if i >= len as usize {
                     gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
                 } else {
@@ -186,7 +186,7 @@ pub fn buffer_reorder_channels(
     let from_len = from.len();
     let to_len = to.len();
 
-    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
         if i >= from_len as usize {
             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
@@ -194,7 +194,7 @@ pub fn buffer_reorder_channels(
         }
     });
 
-    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
         if i >= to_len as usize {
             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
@@ -235,7 +235,7 @@ pub fn reorder_channels(
     let from_len = from.len();
     let to_len = to.len();
 
-    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
         if i >= from_len as usize {
             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
@@ -243,7 +243,7 @@ pub fn reorder_channels(
         }
     });
 
-    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
         if i >= to_len as usize {
             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
@@ -283,7 +283,7 @@ pub fn get_channel_reorder_map(
     let from_len = from.len();
     let to_len = to.len();
 
-    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let from_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
         if i >= from_len as usize {
             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
@@ -291,7 +291,7 @@ pub fn get_channel_reorder_map(
         }
     });
 
-    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init_copy(|i| {
+    let to_raw: [gst_audio_sys::GstAudioChannelPosition; 64] = array_init::array_init(|i| {
         if i >= to_len as usize {
             gst_audio_sys::GST_AUDIO_CHANNEL_POSITION_INVALID
         } else {
