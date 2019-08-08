@@ -8,7 +8,6 @@
 
 use glib::translate::*;
 use gst_sys;
-use std::mem;
 use std::ptr;
 
 use Element;
@@ -111,6 +110,8 @@ pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
     temp: Option<&mut [(u64, u64)]>,
 ) -> Option<(u64, u64, u64, u64, f64)> {
+    use std::mem;
+
     unsafe {
         assert_eq!(mem::size_of::<u64>() * 2, mem::size_of::<(u64, u64)>());
         assert_eq!(mem::align_of::<u64>(), mem::align_of::<(u64, u64)>());
@@ -143,10 +144,14 @@ pub fn calculate_linear_regression(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
+    #[cfg(feature = "v1_12")]
     #[test]
     fn test_calculate_linear_regression() {
+        // Moved the module `use` inside test function because this is the only test for now
+        // and it is feature-gated, so it generates a warning when the feature is not selected.
+        // Can be moved out of the function when other tests are added.
+        use super::*;
+
         ::init().unwrap();
 
         let values = [(0, 0), (1, 1), (2, 2), (3, 3)];
