@@ -242,7 +242,10 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
                 b"num-buffers\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `num-buffers` getter")
+                .unwrap()
         }
     }
 
@@ -264,7 +267,10 @@ impl<O: IsA<BaseSrc>> BaseSrcExt for O {
                 b"typefind\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `typefind` getter")
+                .unwrap()
         }
     }
 

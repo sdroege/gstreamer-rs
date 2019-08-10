@@ -90,7 +90,10 @@ impl PadTemplate {
                 b"direction\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `direction` getter")
+                .unwrap()
         }
     }
 
@@ -103,7 +106,10 @@ impl PadTemplate {
                 b"gtype\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtype` getter")
+                .unwrap()
         }
     }
 
@@ -115,7 +121,9 @@ impl PadTemplate {
                 b"name-template\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `name-template` getter")
         }
     }
 
@@ -127,7 +135,10 @@ impl PadTemplate {
                 b"presence\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `presence` getter")
+                .unwrap()
         }
     }
 

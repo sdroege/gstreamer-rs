@@ -28,7 +28,10 @@ impl WebRTCRTPTransceiver {
                 b"mlineindex\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `mlineindex` getter")
+                .unwrap()
         }
     }
 
@@ -40,7 +43,9 @@ impl WebRTCRTPTransceiver {
                 b"receiver\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `receiver` getter")
         }
     }
 
@@ -52,7 +57,9 @@ impl WebRTCRTPTransceiver {
                 b"sender\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `sender` getter")
         }
     }
 }

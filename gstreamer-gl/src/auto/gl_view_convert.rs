@@ -99,7 +99,10 @@ impl GLViewConvert {
                 b"downmix-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `downmix-mode` getter")
+                .unwrap()
         }
     }
 
@@ -122,7 +125,10 @@ impl GLViewConvert {
                 b"input-flags-override\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `input-flags-override` getter")
+                .unwrap()
         }
     }
 
@@ -148,7 +154,10 @@ impl GLViewConvert {
                 b"input-mode-override\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `input-mode-override` getter")
+                .unwrap()
         }
     }
 
@@ -174,7 +183,10 @@ impl GLViewConvert {
                 b"output-flags-override\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `output-flags-override` getter")
+                .unwrap()
         }
     }
 
@@ -200,7 +212,10 @@ impl GLViewConvert {
                 b"output-mode-override\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `output-mode-override` getter")
+                .unwrap()
         }
     }
 

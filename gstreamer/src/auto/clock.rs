@@ -378,7 +378,10 @@ impl<O: IsA<Clock>> ClockExt for O {
                 b"window-size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `window-size` getter")
+                .unwrap()
         }
     }
 
@@ -400,7 +403,10 @@ impl<O: IsA<Clock>> ClockExt for O {
                 b"window-threshold\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `window-threshold` getter")
+                .unwrap()
         }
     }
 

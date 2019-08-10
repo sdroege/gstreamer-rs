@@ -619,7 +619,10 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"bind-mcast-address\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `bind-mcast-address` getter")
+                .unwrap()
         }
     }
 
@@ -641,7 +644,10 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"eos-shutdown\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `eos-shutdown` getter")
+                .unwrap()
         }
     }
 
@@ -653,7 +659,10 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"max-mcast-ttl\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `max-mcast-ttl` getter")
+                .unwrap()
         }
     }
 
@@ -675,7 +684,10 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"shared\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `shared` getter")
+                .unwrap()
         }
     }
 
@@ -687,7 +699,10 @@ impl<O: IsA<RTSPMediaFactory>> RTSPMediaFactoryExt for O {
                 b"stop-on-disconnect\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stop-on-disconnect` getter")
+                .unwrap()
         }
     }
 

@@ -90,7 +90,9 @@ impl Stream {
                 b"caps\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `caps` getter")
         }
     }
 
@@ -112,7 +114,10 @@ impl Stream {
                 b"stream-flags\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stream-flags` getter")
+                .unwrap()
         }
     }
 
@@ -134,7 +139,9 @@ impl Stream {
                 b"stream-id\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `stream-id` getter")
         }
     }
 
@@ -146,7 +153,10 @@ impl Stream {
                 b"stream-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stream-type` getter")
+                .unwrap()
         }
     }
 
@@ -168,7 +178,9 @@ impl Stream {
                 b"tags\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `tags` getter")
         }
     }
 

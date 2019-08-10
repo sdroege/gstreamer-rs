@@ -150,7 +150,10 @@ impl AppSink {
                 b"buffer-list\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `buffer-list` getter")
+                .unwrap()
         }
     }
 
@@ -172,7 +175,10 @@ impl AppSink {
                 b"eos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `eos` getter")
+                .unwrap()
         }
     }
 

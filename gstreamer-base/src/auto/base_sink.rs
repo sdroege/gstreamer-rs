@@ -400,7 +400,10 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 b"async\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `async` getter")
+                .unwrap()
         }
     }
 
@@ -422,7 +425,10 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 b"enable-last-sample\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `enable-last-sample` getter")
+                .unwrap()
         }
     }
 
@@ -444,7 +450,10 @@ impl<O: IsA<BaseSink>> BaseSinkExt for O {
                 b"qos\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `qos` getter")
+                .unwrap()
         }
     }
 

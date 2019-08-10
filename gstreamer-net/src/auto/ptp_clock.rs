@@ -32,7 +32,10 @@ impl PtpClock {
                 b"domain\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `domain` getter")
+                .unwrap()
         }
     }
 
@@ -44,7 +47,10 @@ impl PtpClock {
                 b"grandmaster-clock-id\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `grandmaster-clock-id` getter")
+                .unwrap()
         }
     }
 
@@ -56,7 +62,9 @@ impl PtpClock {
                 b"internal-clock\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `internal-clock` getter")
         }
     }
 
@@ -68,7 +76,10 @@ impl PtpClock {
                 b"master-clock-id\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `master-clock-id` getter")
+                .unwrap()
         }
     }
 

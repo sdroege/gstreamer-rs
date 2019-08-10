@@ -107,7 +107,10 @@ impl<O: IsA<UriClip>> UriClipExt for O {
                 b"is-image\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-image` getter")
+                .unwrap()
         }
     }
 
@@ -119,7 +122,10 @@ impl<O: IsA<UriClip>> UriClipExt for O {
                 b"mute\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `mute` getter")
+                .unwrap()
         }
     }
 

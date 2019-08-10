@@ -123,7 +123,10 @@ impl<O: IsA<DeviceMonitor>> DeviceMonitorExt for O {
                 b"show-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-all` getter")
+                .unwrap()
         }
     }
 

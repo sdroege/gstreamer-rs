@@ -33,7 +33,10 @@ impl NetTimeProvider {
                 b"active\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `active` getter")
+                .unwrap()
         }
     }
 
@@ -55,7 +58,9 @@ impl NetTimeProvider {
                 b"address\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `address` getter")
         }
     }
 
@@ -67,7 +72,9 @@ impl NetTimeProvider {
                 b"clock\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `clock` getter")
         }
     }
 
@@ -79,7 +86,10 @@ impl NetTimeProvider {
                 b"port\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `port` getter")
+                .unwrap()
         }
     }
 
@@ -91,7 +101,10 @@ impl NetTimeProvider {
                 b"qos-dscp\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `qos-dscp` getter")
+                .unwrap()
         }
     }
 

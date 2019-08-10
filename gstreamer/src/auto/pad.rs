@@ -533,7 +533,9 @@ impl<O: IsA<Pad>> PadExt for O {
                 b"caps\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `caps` getter")
         }
     }
 
@@ -545,7 +547,9 @@ impl<O: IsA<Pad>> PadExt for O {
                 b"template\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `template` getter")
         }
     }
 

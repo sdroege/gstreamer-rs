@@ -435,7 +435,10 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 b"in-point\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `in-point` getter")
+                .unwrap()
         }
     }
 
@@ -457,7 +460,10 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
                 b"serialize\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `serialize` getter")
+                .unwrap()
         }
     }
 

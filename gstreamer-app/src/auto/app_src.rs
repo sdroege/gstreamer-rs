@@ -113,7 +113,10 @@ impl AppSrc {
                 b"block\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `block` getter")
+                .unwrap()
         }
     }
 
@@ -135,7 +138,10 @@ impl AppSrc {
                 b"duration\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `duration` getter")
+                .unwrap()
         }
     }
 
@@ -157,7 +163,10 @@ impl AppSrc {
                 b"format\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `format` getter")
+                .unwrap()
         }
     }
 
@@ -179,7 +188,10 @@ impl AppSrc {
                 b"is-live\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-live` getter")
+                .unwrap()
         }
     }
 
@@ -201,7 +213,10 @@ impl AppSrc {
                 b"max-latency\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `max-latency` getter")
+                .unwrap()
         }
     }
 
@@ -223,7 +238,10 @@ impl AppSrc {
                 b"min-latency\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `min-latency` getter")
+                .unwrap()
         }
     }
 
@@ -245,7 +263,10 @@ impl AppSrc {
                 b"min-percent\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `min-percent` getter")
+                .unwrap()
         }
     }
 

@@ -71,7 +71,10 @@ impl WebRTCICETransport {
                 b"component\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `component` getter")
+                .unwrap()
         }
     }
 
@@ -84,7 +87,10 @@ impl WebRTCICETransport {
                 b"gathering-state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gathering-state` getter")
+                .unwrap()
         }
     }
 
@@ -97,7 +103,10 @@ impl WebRTCICETransport {
                 b"state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `state` getter")
+                .unwrap()
         }
     }
 

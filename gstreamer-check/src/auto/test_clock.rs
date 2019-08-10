@@ -111,7 +111,10 @@ impl TestClock {
                 b"clock-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `clock-type` getter")
+                .unwrap()
         }
     }
 
@@ -133,7 +136,10 @@ impl TestClock {
                 b"start-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `start-time` getter")
+                .unwrap()
         }
     }
 

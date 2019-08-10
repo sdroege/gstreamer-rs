@@ -244,7 +244,9 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 b"audio-filter\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `audio-filter` getter")
         }
     }
 
@@ -266,7 +268,9 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 b"audio-sink\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `audio-sink` getter")
         }
     }
 
@@ -288,7 +292,9 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 b"timeline\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `timeline` getter")
         }
     }
 
@@ -300,7 +306,9 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 b"video-filter\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `video-filter` getter")
         }
     }
 
@@ -322,7 +330,9 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
                 b"video-sink\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `video-sink` getter")
         }
     }
 

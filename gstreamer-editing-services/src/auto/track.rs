@@ -198,7 +198,10 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 b"duration\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `duration` getter")
+                .unwrap()
         }
     }
 
@@ -210,7 +213,9 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 b"restriction-caps\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `restriction-caps` getter")
         }
     }
 
@@ -222,7 +227,10 @@ impl<O: IsA<Track>> GESTrackExt for O {
                 b"track-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `track-type` getter")
+                .unwrap()
         }
     }
 

@@ -260,7 +260,10 @@ impl<O: IsA<Bin>> GstBinExt for O {
                 b"async-handling\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `async-handling` getter")
+                .unwrap()
         }
     }
 
@@ -282,7 +285,10 @@ impl<O: IsA<Bin>> GstBinExt for O {
                 b"message-forward\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `message-forward` getter")
+                .unwrap()
         }
     }
 

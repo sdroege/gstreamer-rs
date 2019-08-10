@@ -33,7 +33,9 @@ impl NetClientClock {
                 b"address\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `address` getter")
         }
     }
 
@@ -55,7 +57,10 @@ impl NetClientClock {
                 b"base-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `base-time` getter")
+                .unwrap()
         }
     }
 
@@ -67,7 +72,7 @@ impl NetClientClock {
                 b"bus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value.get().expect("Return Value for property `bus` getter")
         }
     }
 
@@ -89,7 +94,9 @@ impl NetClientClock {
                 b"internal-clock\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `internal-clock` getter")
         }
     }
 
@@ -101,7 +108,10 @@ impl NetClientClock {
                 b"minimum-update-interval\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `minimum-update-interval` getter")
+                .unwrap()
         }
     }
 
@@ -123,7 +133,10 @@ impl NetClientClock {
                 b"port\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `port` getter")
+                .unwrap()
         }
     }
 
@@ -145,7 +158,10 @@ impl NetClientClock {
                 b"qos-dscp\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `qos-dscp` getter")
+                .unwrap()
         }
     }
 
@@ -167,7 +183,10 @@ impl NetClientClock {
                 b"round-trip-limit\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `round-trip-limit` getter")
+                .unwrap()
         }
     }
 

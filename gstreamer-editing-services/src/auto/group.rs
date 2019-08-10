@@ -83,7 +83,10 @@ impl<O: IsA<Group>> GroupExt for O {
                 b"duration\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `duration` getter")
+                .unwrap()
         }
     }
 
@@ -105,7 +108,10 @@ impl<O: IsA<Group>> GroupExt for O {
                 b"in-point\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `in-point` getter")
+                .unwrap()
         }
     }
 
@@ -127,7 +133,10 @@ impl<O: IsA<Group>> GroupExt for O {
                 b"max-duration\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `max-duration` getter")
+                .unwrap()
         }
     }
 
@@ -149,7 +158,10 @@ impl<O: IsA<Group>> GroupExt for O {
                 b"priority\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `priority` getter")
+                .unwrap()
         }
     }
 
@@ -171,7 +183,10 @@ impl<O: IsA<Group>> GroupExt for O {
                 b"start\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `start` getter")
+                .unwrap()
         }
     }
 

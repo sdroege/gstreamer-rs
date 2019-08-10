@@ -53,7 +53,9 @@ impl WebRTCDTLSTransport {
                 b"certificate\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `certificate` getter")
         }
     }
 
@@ -75,7 +77,10 @@ impl WebRTCDTLSTransport {
                 b"client\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `client` getter")
+                .unwrap()
         }
     }
 
@@ -97,7 +102,9 @@ impl WebRTCDTLSTransport {
                 b"remote-certificate\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `remote-certificate` getter")
         }
     }
 
@@ -109,7 +116,10 @@ impl WebRTCDTLSTransport {
                 b"rtcp\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `rtcp` getter")
+                .unwrap()
         }
     }
 
@@ -121,7 +131,10 @@ impl WebRTCDTLSTransport {
                 b"session-id\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `session-id` getter")
+                .unwrap()
         }
     }
 
@@ -134,7 +147,10 @@ impl WebRTCDTLSTransport {
                 b"state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `state` getter")
+                .unwrap()
         }
     }
 
@@ -146,7 +162,9 @@ impl WebRTCDTLSTransport {
                 b"transport\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `transport` getter")
         }
     }
 
