@@ -60,10 +60,15 @@ fn example_main() {
             // The metadata of any of the contained audio streams changed
             // In the case of a live-stream from an internet radio, this could for example
             // mark the beginning of a new track, or a new DJ.
-            let playbin = values[0].get::<glib::Object>().unwrap();
+            let playbin = values[0]
+                .get::<glib::Object>()
+                .expect("playbin \"audio-tags-changed\" signal values[1]")
+                .unwrap();
             // This gets the index of the stream that changed. This is neccessary, since
             // there could e.g. be multiple audio streams (english, spanish, ...).
-            let idx = values[1].get::<i32>().unwrap();
+            let idx = values[1]
+                .get_some::<i32>()
+                .expect("playbin \"audio-tags-changed\" signal values[1]");
 
             println!("audio tags of audio stream {} changed:", idx);
 
@@ -81,7 +86,7 @@ fn example_main() {
                 .emit("get-audio-tags", &[&idx.to_value()])
                 .unwrap()
                 .unwrap();
-            let tags = tags.get::<gst::TagList>().unwrap();
+            let tags = tags.get::<gst::TagList>().expect("tags").unwrap();
 
             if let Some(artist) = tags.get::<gst::tags::Artist>() {
                 println!("  Artist: {}", artist.get().unwrap());

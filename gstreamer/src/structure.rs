@@ -7,6 +7,7 @@
 // except according to those terms.
 
 use std::borrow::{Borrow, BorrowMut, ToOwned};
+use std::error;
 use std::ffi::CStr;
 use std::fmt;
 use std::marker::PhantomData;
@@ -22,10 +23,61 @@ use glib::translate::{
     from_glib, from_glib_full, from_glib_none, FromGlibPtrFull, FromGlibPtrNone, GlibPtrDefault,
     Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut,
 };
-use glib::value::{FromValueOptional, SendValue, ToSendValue};
+use glib::value::{FromValue, FromValueOptional, SendValue, ToSendValue};
 use glib_sys::gpointer;
 use gobject_sys;
 use gst_sys;
+
+/// An error returned from the [`get`](struct.StructureRef.html#method.get)
+/// or [`get_some`](struct.StructureRef.html#method.get_some) functions
+/// on a [`StructureRef`](struct.StructureRef.html)
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GetError<'name> {
+    FieldNotFound {
+        name: &'name str,
+    },
+    ValueGetError {
+        name: &'name str,
+        value_get_error: glib::value::GetError,
+    },
+}
+
+impl<'name> GetError<'name> {
+    fn new_field_not_found(name: &'name str) -> GetError {
+        GetError::FieldNotFound { name }
+    }
+
+    fn from_value_get_error(name: &'name str, value_get_error: glib::value::GetError) -> GetError {
+        GetError::ValueGetError {
+            name,
+            value_get_error,
+        }
+    }
+}
+
+impl<'name> fmt::Display for GetError<'name> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            GetError::FieldNotFound { name } => {
+                write!(f, "GetError: Structure field with name {} not found", name)
+            }
+            GetError::ValueGetError {
+                name,
+                value_get_error,
+            } => write!(
+                f,
+                "GetError: Structure field with name {} value: {}",
+                name, value_get_error,
+            ),
+        }
+    }
+}
+
+impl<'name> error::Error for GetError<'name> {
+    fn description(&self) -> &str {
+        "GetError: Structure field value"
+    }
+}
 
 pub struct Structure(ptr::NonNull<StructureRef>, PhantomData<StructureRef>);
 unsafe impl Send for Structure {}
@@ -326,19 +378,36 @@ impl StructureRef {
         unsafe { from_glib_full(gst_sys::gst_structure_to_string(&self.0)) }
     }
 
-    pub fn get<'a, T: FromValueOptional<'a>>(&'a self, name: &str) -> Option<T> {
-        self.get_value(name).and_then(|v| v.get())
+    pub fn get<'structure, 'name, T: FromValueOptional<'structure>>(
+        &'structure self,
+        name: &'name str,
+    ) -> Result<Option<T>, GetError<'name>> {
+        self.get_value(name)?
+            .get()
+            .map_err(|err| GetError::from_value_get_error(name, err))
     }
 
-    pub fn get_value<'a>(&'a self, name: &str) -> Option<&SendValue> {
+    pub fn get_some<'structure, 'name, T: FromValue<'structure>>(
+        &'structure self,
+        name: &'name str,
+    ) -> Result<T, GetError<'name>> {
+        self.get_value(name)?
+            .get_some()
+            .map_err(|err| GetError::from_value_get_error(name, err))
+    }
+
+    pub fn get_value<'structure, 'name>(
+        &'structure self,
+        name: &'name str,
+    ) -> Result<&SendValue, GetError<'name>> {
         unsafe {
             let value = gst_sys::gst_structure_get_value(&self.0, name.to_glib_none().0);
 
             if value.is_null() {
-                return None;
+                return Err(GetError::new_field_not_found(name));
             }
 
-            Some(&*(value as *const SendValue))
+            Ok(&*(value as *const SendValue))
         }
     }
 
@@ -679,20 +748,52 @@ mod tests {
         s.set("f2", &String::from("bcd"));
         s.set("f3", &123i32);
 
-        assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
-        assert_eq!(s.get::<&str>("f2").unwrap(), "bcd");
-        assert_eq!(s.get::<i32>("f3").unwrap(), 123i32);
+        assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
+        assert_eq!(s.get::<&str>("f2"), Ok(Some("bcd")));
+        assert_eq!(s.get_some::<i32>("f3"), Ok(123i32));
+
+        // FIXME: use a proper `assert_eq!`, but that requires
+        // `glib::value::GetError fields to be public
+        // See https://github.com/gtk-rs/glib/issues/515
+        match s.get::<i32>("f2") {
+            Err(GetError::ValueGetError { name, .. }) if name == "f2" => (),
+            res => panic!(
+                "Expected GetError::ValueGetError{{ \"f2\", .. }} found {:?}",
+                res
+            ),
+        }
+        match s.get_some::<bool>("f3") {
+            Err(GetError::ValueGetError { name, .. }) if name == "f3" => (),
+            res => panic!(
+                "Expected GetError::ValueGetError{{ \"f3\", .. }} found {:?}",
+                res
+            ),
+        }
+        match s.get::<&str>("f4") {
+            Err(GetError::FieldNotFound { name }) if name == "f4" => (),
+            res => panic!(
+                "Expected GetError::FieldNotFound{{ \"f4\" }} found {:?}",
+                res
+            ),
+        }
+        match s.get_some::<i32>("f4") {
+            Err(GetError::FieldNotFound { name }) if name == "f4" => (),
+            res => panic!(
+                "Expected GetError::FieldNotFound{{ \"f4\" }} found {:?}",
+                res
+            ),
+        }
 
         assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3"]);
 
         let v = s.iter().map(|(f, v)| (f, v.clone())).collect::<Vec<_>>();
         assert_eq!(v.len(), 3);
         assert_eq!(v[0].0, "f1");
-        assert_eq!(v[0].1.get::<&str>().unwrap(), "abc");
+        assert_eq!(v[0].1.get::<&str>(), Ok(Some("abc")));
         assert_eq!(v[1].0, "f2");
-        assert_eq!(v[1].1.get::<&str>().unwrap(), "bcd");
+        assert_eq!(v[1].1.get::<&str>(), Ok(Some("bcd")));
         assert_eq!(v[2].0, "f3");
-        assert_eq!(v[2].1.get::<i32>().unwrap(), 123i32);
+        assert_eq!(v[2].1.get_some::<i32>(), Ok(123i32));
 
         let s2 = Structure::new("test", &[("f1", &"abc"), ("f2", &"bcd"), ("f3", &123i32)]);
         assert_eq!(s, s2);
@@ -709,9 +810,9 @@ mod tests {
             .build();
 
         assert_eq!(s.get_name(), "test");
-        assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
-        assert_eq!(s.get::<&str>("f2").unwrap(), "bcd");
-        assert_eq!(s.get::<i32>("f3").unwrap(), 123i32);
+        assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
+        assert_eq!(s.get::<&str>("f2"), Ok(Some("bcd")));
+        assert_eq!(s.get_some::<i32>("f3"), Ok(123i32));
     }
 
     #[test]
@@ -721,8 +822,8 @@ mod tests {
         let a = "Test, f1=(string)abc, f2=(uint)123;";
 
         let s = Structure::from_string(&a).unwrap();
-        assert_eq!(s.get::<&str>("f1").unwrap(), "abc");
-        assert_eq!(s.get::<u32>("f2").unwrap(), 123);
+        assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
+        assert_eq!(s.get_some::<u32>("f2"), Ok(123));
 
         assert_eq!(a, s.to_string());
     }

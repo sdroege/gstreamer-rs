@@ -15,7 +15,7 @@ use std::env;
 mod tutorials_common;
 
 fn send_value_as_str(v: &glib::SendValue) -> Option<String> {
-    if let Some(s) = v.get::<&str>() {
+    if let Ok(Some(s)) = v.get::<&str>() {
         Some(s.to_string())
     } else if let Some(serialized) = v.serialize() {
         Some(serialized)

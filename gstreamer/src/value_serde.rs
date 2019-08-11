@@ -61,7 +61,9 @@ impl<'de> Deserialize<'de> for Fraction {
 macro_rules! ser_value (
     ($value:expr, $t:ty, $ser_closure:expr) => (
         {
-            let value = $value.get::<$t>().unwrap();
+            // FIXME: This should serialize to an `Option` when the `Type` allows it
+            // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/215
+            let value = $value.get::<$t>().expect("Value serialization macro").unwrap();
             $ser_closure(stringify!($t), value)
         }
     );
@@ -493,30 +495,36 @@ mod tests {
         let slice = array.as_slice();
         assert_eq!(3, slice.len());
 
-        let fraction = slice[0].get::<Fraction>().unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &3);
 
-        let fraction = slice[1].get::<Fraction>().unwrap();
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
-        assert_eq!("test str".to_owned(), slice[2].get::<String>().unwrap());
+        assert_eq!(
+            "test str".to_owned(),
+            slice[2].get::<String>().expect("slice[2]").unwrap()
+        );
 
         let array_json = r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"]]"#;
         let array: Array = serde_json::from_str(array_json).unwrap();
         let slice = array.as_slice();
         assert_eq!(3, slice.len());
 
-        let fraction = slice[0].get::<Fraction>().unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &3);
 
-        let fraction = slice[1].get::<Fraction>().unwrap();
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
-        assert_eq!("test str".to_owned(), slice[2].get::<String>().unwrap());
+        assert_eq!(
+            "test str".to_owned(),
+            slice[2].get::<String>().expect("slice[2]").unwrap()
+        );
 
         // List
         let list_ron = r#"[
@@ -527,11 +535,14 @@ mod tests {
         let slice = list.as_slice();
         assert_eq!(2, slice.len());
 
-        let fraction = slice[0].get::<Fraction>().unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
         assert_eq!(fraction.0.denom(), &2);
 
-        assert_eq!("test str".to_owned(), slice[1].get::<String>().unwrap());
+        assert_eq!(
+            "test str".to_owned(),
+            slice[1].get::<String>().expect("slice[1]").unwrap()
+        );
     }
 
     #[cfg(feature = "ser_de")]
@@ -556,19 +567,19 @@ mod tests {
         let slice = array.as_slice();
         assert_eq!(slice_de.len(), slice.len());
 
-        let fraction_de = slice_de[0].get::<Fraction>().unwrap();
-        let fraction = slice[0].get::<Fraction>().unwrap();
+        let fraction_de = slice_de[0].get::<Fraction>().expect("slice_de[0]").unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction_de.0.denom(), fraction.0.denom());
 
-        let fraction_de = slice_de[1].get::<Fraction>().unwrap();
-        let fraction = slice[1].get::<Fraction>().unwrap();
+        let fraction_de = slice_de[1].get::<Fraction>().expect("slice_de[1]").unwrap();
+        let fraction = slice[1].get::<Fraction>().expect("slice[1]").unwrap();
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction.0.denom(), fraction.0.denom());
 
         assert_eq!(
-            slice_de[2].get::<String>().unwrap(),
-            slice[2].get::<String>().unwrap()
+            slice_de[2].get::<String>().expect("slice_de[2]").unwrap(),
+            slice[2].get::<String>().expect("slice[2]").unwrap()
         );
 
         // List
@@ -584,14 +595,14 @@ mod tests {
         let slice = list.as_slice();
         assert_eq!(slice_de.len(), slice.len());
 
-        let fraction_de = slice_de[0].get::<Fraction>().unwrap();
-        let fraction = slice[0].get::<Fraction>().unwrap();
+        let fraction_de = slice_de[0].get::<Fraction>().expect("slice_de[0]").unwrap();
+        let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction_de.0.numer(), fraction.0.numer());
         assert_eq!(fraction_de.0.denom(), fraction.0.denom());
 
         assert_eq!(
-            slice_de[1].get::<String>().unwrap(),
-            slice[1].get::<String>().unwrap()
+            slice_de[1].get::<String>().expect("slice_de[1]").unwrap(),
+            slice[1].get::<String>().expect("slice[1]").unwrap()
         );
     }
 }

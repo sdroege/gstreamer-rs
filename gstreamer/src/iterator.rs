@@ -66,7 +66,7 @@ where
             let res =
                 gst_sys::gst_iterator_next(self.to_glib_none_mut().0, value.to_glib_none_mut().0);
             match res {
-                gst_sys::GST_ITERATOR_OK => match value.get::<T>() {
+                gst_sys::GST_ITERATOR_OK => match value.get::<T>().expect("Iterator::next") {
                     Some(value) => Ok(Some(value)),
                     None => Err(IteratorError::Error),
                 },
@@ -123,7 +123,7 @@ where
                 func_ptr,
             ));
             if res {
-                Some(elem.get::<T>().unwrap())
+                elem.get::<T>().expect("Iterator::find")
             } else {
                 None
             }
@@ -339,7 +339,10 @@ where
     let func: &&(dyn Fn(T) -> bool + Send + Sync + 'static) = mem::transmute(func);
 
     let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().unwrap();
+    let value = value
+        .get::<T>()
+        .expect("Iterator filter_trampoline")
+        .unwrap();
 
     if func(value) {
         0
@@ -408,7 +411,7 @@ where
 
     let func = func as *mut F;
     let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().unwrap();
+    let value = value.get::<T>().expect("Iterator find_trampoline").unwrap();
 
     if (*func)(value) {
         0
@@ -425,7 +428,10 @@ unsafe extern "C" fn foreach_trampoline<T, F: FnMut(T)>(
 {
     let func = func as *mut F;
     let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().unwrap();
+    let value = value
+        .get::<T>()
+        .expect("Iterator foreach_trampoline")
+        .unwrap();
 
     (*func)(value);
 }
@@ -440,7 +446,7 @@ where
 {
     let func = func as *mut F;
     let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().unwrap();
+    let value = value.get::<T>().expect("Iterator fold_trampoline").unwrap();
 
     let accum = &mut *(gobject_sys::g_value_get_pointer(ret) as *mut Option<U>);
 

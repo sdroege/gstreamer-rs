@@ -406,8 +406,11 @@ impl TagListRef {
     }
 
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TypedValue<T::TagType>> {
-        self.get_generic(T::tag_name())
-            .and_then(|value| value.downcast().ok())
+        self.get_generic(T::tag_name()).map(|value| {
+            value.downcast().unwrap_or_else(|_| {
+                panic!("TagListRef::get type mismatch for tag {}", T::tag_name())
+            })
+        })
     }
 
     pub fn get_generic(&self, tag_name: &str) -> Option<SendValue> {
@@ -966,24 +969,24 @@ mod tests {
 
         assert_eq!(
             tags.get_index_generic(&TAG_TITLE, 0).unwrap().get(),
-            Some("some title")
+            Ok(Some("some title"))
         );
         assert_eq!(
             tags.get_index_generic(&TAG_TITLE, 1).unwrap().get(),
-            Some("second title")
+            Ok(Some("second title"))
         );
         assert_eq!(
             tags.get_index_generic(&TAG_DURATION, 0).unwrap().get(),
-            Some(::SECOND * 120)
+            Ok(Some(::SECOND * 120))
         );
         assert_eq!(
             tags.get_index_generic(&TAG_TITLE, 2).unwrap().get(),
-            Some("third title")
+            Ok(Some("third title"))
         );
 
         assert_eq!(
             tags.get_generic(&TAG_TITLE).unwrap().get(),
-            Some("some title, second title, third title"),
+            Ok(Some("some title, second title, third title"))
         );
 
         assert_eq!(tags.n_tags(), 2);
@@ -996,11 +999,11 @@ mod tests {
         let mut title_iter = tags.iter_tag_generic(&TAG_TITLE);
         assert_eq!(title_iter.size_hint(), (3, Some(3)));
         let first_title = title_iter.next().unwrap();
-        assert_eq!(first_title.get(), Some("some title"));
+        assert_eq!(first_title.get(), Ok(Some("some title")));
         let second_title = title_iter.next().unwrap();
-        assert_eq!(second_title.get(), Some("second title"));
+        assert_eq!(second_title.get(), Ok(Some("second title")));
         let third_title = title_iter.next().unwrap();
-        assert_eq!(third_title.get(), Some("third title"));
+        assert_eq!(third_title.get(), Ok(Some("third title")));
         assert!(title_iter.next().is_none());
 
         // GenericIter
@@ -1010,17 +1013,17 @@ mod tests {
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_TITLE);
         let first_title = tag_iter.next().unwrap();
-        assert_eq!(first_title.get(), Some("some title"));
+        assert_eq!(first_title.get(), Ok(Some("some title")));
         let second_title = tag_iter.next().unwrap();
-        assert_eq!(second_title.get(), Some("second title"));
+        assert_eq!(second_title.get(), Ok(Some("second title")));
         let third_title = tag_iter.next().unwrap();
-        assert_eq!(third_title.get(), Some("third title"));
+        assert_eq!(third_title.get(), Ok(Some("third title")));
         assert!(tag_iter.next().is_none());
 
         let (tag_name, mut tag_iter) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
         let first_duration = tag_iter.next().unwrap();
-        assert_eq!(first_duration.get(), Some(::SECOND * 120));
+        assert_eq!(first_duration.get_some(), Ok(::SECOND * 120));
         assert!(tag_iter.next().is_none());
 
         // Iter
@@ -1031,12 +1034,12 @@ mod tests {
         assert_eq!(tag_name, *TAG_TITLE);
         assert_eq!(
             tag_value.get(),
-            Some("some title, second title, third title")
+            Ok(Some("some title, second title, third title"))
         );
 
         let (tag_name, tag_value) = tag_list_iter.next().unwrap();
         assert_eq!(tag_name, *TAG_DURATION);
-        assert_eq!(tag_value.get(), Some(::SECOND * 120));
+        assert_eq!(tag_value.get_some(), Ok(::SECOND * 120));
         assert!(tag_iter.next().is_none());
     }
 

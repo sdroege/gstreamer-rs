@@ -50,11 +50,11 @@ mod tutorial5 {
         let signame: &str = &format!("get-{}-tags", stype);
 
         match playbin.get_property(propname).unwrap().get() {
-            Some(x) => {
+            Ok(Some(x)) => {
                 for i in 0..x {
                     let tags = playbin.emit(signame, &[&i]).unwrap().unwrap();
 
-                    if let Some(tags) = tags.get::<gst::TagList>() {
+                    if let Ok(Some(tags)) = tags.get::<gst::TagList>() {
                         textbuf.insert_at_cursor(&format!("{} stream {}:\n ", stype, i));
 
                         if let Some(codec) = tags.get::<gst::tags::VideoCodec>() {
@@ -87,7 +87,7 @@ mod tutorial5 {
                     }
                 }
             }
-            None => {
+            _ => {
                 eprintln!("Could not get {}!", propname);
             }
         }
@@ -345,7 +345,10 @@ mod tutorial5 {
 
         playbin
             .connect("video-tags-changed", false, |args| {
-                let pipeline = args[0].get::<gst::Element>().unwrap();
+                let pipeline = args[0]
+                    .get::<gst::Element>()
+                    .expect("playbin \"video-tags-changed\" args[0]")
+                    .unwrap();
                 post_app_message(&pipeline);
                 None
             })
@@ -353,7 +356,10 @@ mod tutorial5 {
 
         playbin
             .connect("audio-tags-changed", false, |args| {
-                let pipeline = args[0].get::<gst::Element>().unwrap();
+                let pipeline = args[0]
+                    .get::<gst::Element>()
+                    .expect("playbin \"audio-tags-changed\" args[0]")
+                    .unwrap();
                 post_app_message(&pipeline);
                 None
             })
@@ -361,7 +367,10 @@ mod tutorial5 {
 
         playbin
             .connect("text-tags-changed", false, move |args| {
-                let pipeline = args[0].get::<gst::Element>().unwrap();
+                let pipeline = args[0]
+                    .get::<gst::Element>()
+                    .expect("playbin \"text-tags-changed\" args[0]")
+                    .unwrap();
                 post_app_message(&pipeline);
                 None
             })

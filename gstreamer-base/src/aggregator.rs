@@ -57,7 +57,10 @@ impl<O: IsA<Aggregator>> AggregatorExtManual for O {
                 b"min-upstream-latency\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("AggregatorExtManual::get_property_min_upstream_latency")
+                .unwrap()
         }
     }
 

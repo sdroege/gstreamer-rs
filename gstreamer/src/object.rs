@@ -46,8 +46,22 @@ impl<O: IsA<::Object>> GstObjectExtManual for O {
             unsafe { from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject) };
 
         obj.connect(signal_name.as_str(), false, move |values| {
-            let obj: O = unsafe { values[0].get::<::Object>().unwrap().unsafe_cast() };
-            let prop_obj: ::Object = values[1].get().unwrap();
+            // It would be nice to display the actual signal name in the panic messages below,
+            // but that would require to copy `signal_name` so as to move it into the closure
+            // which seems too much for the messages of development errors
+            let obj: O = unsafe {
+                values[0]
+                    .get::<::Object>()
+                    .unwrap_or_else(|err| {
+                        panic!("Object signal \"deep-notify\": values[0]: {}", err)
+                    })
+                    .expect("Object signal \"deep-notify\": values[0] not defined")
+                    .unsafe_cast()
+            };
+            let prop_obj: ::Object = values[1]
+                .get()
+                .unwrap_or_else(|err| panic!("Object signal \"deep-notify\": values[1]: {}", err))
+                .expect("Object signal \"deep-notify\": values[1] not defined");
 
             let pspec = unsafe {
                 let pspec = gobject_sys::g_value_get_param(values[2].to_glib_none().0);
