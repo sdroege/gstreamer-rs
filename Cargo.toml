@@ -16,6 +16,7 @@ members = [
   "gstreamer-check",
   "gstreamer-editing-services",
   "gstreamer-gl",
+  "gstreamer-rtp",
   "examples",
   "tutorials",
 ]

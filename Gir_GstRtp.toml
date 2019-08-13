@@ -1,0 +1,52 @@
+[options]
+girs_dir = "gir-files"
+library = "GstRtp"
+version = "1.0"
+min_cfg_version = "1.8"
+target_path = "gstreamer-rtp"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+doc_target_path = "docs/gstreamer-rtp/docs.md"
+generate_display_trait = false
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+  "GstRtp.RTCPFBType",
+  "GstRtp.RTCPSDESType",
+  "GstRtp.RTCPType",
+  "GstRtp.RTCPXRType",
+  "GstRtp.RTPPayload",
+  "GstRtp.RTPProfile",
+  "GstRtp.RTPBufferFlags",
+  "GstRtp.RTPBufferMapFlags",
+]
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstRtp.*"
+status = "generate"
+  # expected enum `std::ffi::c_void`, found u8
+  [[object.function]]
+  name = "rtp_hdrext_get_ntp_56"
+  ignore = true
+
+  # expected enum `std::ffi::c_void`, found u8
+  [[object.function]]
+  name = "rtp_hdrext_get_ntp_64"
+  ignore = true
+
+  # manual bindings are needed for GstMeta
+  [[object.function]]
+  name = "rtp_source_meta_api_get_type"
+  ignore = true
