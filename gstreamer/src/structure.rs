@@ -387,6 +387,20 @@ impl StructureRef {
             .map_err(|err| GetError::from_value_get_error(name, err))
     }
 
+    pub fn get_optional<'structure, 'name, T: FromValueOptional<'structure>>(
+        &'structure self,
+        name: &'name str,
+    ) -> Result<Option<T>, GetError<'name>> {
+        let value = self.get_value(name);
+        if let Ok(value) = value {
+            value
+                .get()
+                .map_err(|err| GetError::from_value_get_error(name, err))
+        } else {
+            Ok(None)
+        }
+    }
+
     pub fn get_some<'structure, 'name, T: FromValue<'structure>>(
         &'structure self,
         name: &'name str,
@@ -751,6 +765,10 @@ mod tests {
         assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
         assert_eq!(s.get::<&str>("f2"), Ok(Some("bcd")));
         assert_eq!(s.get_some::<i32>("f3"), Ok(123i32));
+        assert_eq!(s.get_optional::<&str>("f1"), Ok(Some("abc")));
+        assert_eq!(s.get_optional::<&str>("f4"), Ok(None));
+        assert_eq!(s.get_optional::<i32>("f3"), Ok(Some(123i32)));
+        assert_eq!(s.get_optional::<i32>("f4"), Ok(None));
 
         // FIXME: use a proper `assert_eq!`, but that requires
         // `glib::value::GetError fields to be public
