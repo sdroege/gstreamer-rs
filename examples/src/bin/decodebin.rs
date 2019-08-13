@@ -271,6 +271,7 @@ fn example_main() -> Result<(), Error> {
                         // application's execution.
                         Some(details) if details.get_name() == "error-details" => details
                             .get::<&ErrorValue>("error")
+                            .unwrap()
                             .and_then(|v| v.0.lock().unwrap().take())
                             .map(Result::Err)
                             .expect("error-details message without actual error"),

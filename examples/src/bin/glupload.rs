@@ -659,7 +659,8 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
                         .glupload
                         .get_property("context")
                         .unwrap()
-                        .get::<gst_gl::GLContext>();
+                        .get::<gst_gl::GLContext>()
+                        .unwrap();
                 }
 
                 let sync_meta = buffer.get_meta::<gst_gl::GLSyncMeta>().unwrap();

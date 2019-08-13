@@ -299,6 +299,7 @@ fn example_main() -> Result<(), Error> {
                     match err.get_details() {
                         Some(details) if details.get_name() == "error-details" => details
                             .get::<&ErrorValue>("error")
+                            .unwrap()
                             .cloned()
                             .and_then(|v| v.0.lock().unwrap().take())
                             .map(Result::Err)

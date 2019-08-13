@@ -148,12 +148,12 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
             let drawer = drawer.lock().unwrap();
 
             // Get the signal's arguments
-            let _overlay = args[0].get::<gst::Element>().unwrap();
+            let _overlay = args[0].get::<gst::Element>().unwrap().unwrap();
             // This is the cairo context. This is the root of all of cairo's
             // drawing functionality.
-            let cr = args[1].get::<cairo::Context>().unwrap();
-            let timestamp = args[2].get::<gst::ClockTime>().unwrap();
-            let _duration = args[3].get::<gst::ClockTime>().unwrap();
+            let cr = args[1].get::<cairo::Context>().unwrap().unwrap();
+            let timestamp = args[2].get_some::<gst::ClockTime>().unwrap();
+            let _duration = args[3].get_some::<gst::ClockTime>().unwrap();
 
             let info = drawer.info.as_ref().unwrap();
             let layout = drawer.layout.borrow();
@@ -223,8 +223,8 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     // stream that dynamically changes resolution when enough bandwith is available.
     overlay
         .connect("caps-changed", false, move |args| {
-            let _overlay = args[0].get::<gst::Element>().unwrap();
-            let caps = args[1].get::<gst::Caps>().unwrap();
+            let _overlay = args[0].get::<gst::Element>().unwrap().unwrap();
+            let caps = args[1].get::<gst::Caps>().unwrap().unwrap();
 
             let drawer = &drawer_clone;
             let mut drawer = drawer.lock().unwrap();
