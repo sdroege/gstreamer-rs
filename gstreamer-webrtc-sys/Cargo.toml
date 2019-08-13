@@ -12,9 +12,11 @@ git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gstreamer-sdp-sys]
 path = "../gstreamer-sdp-sys"
+features = ["v1_14"]
 
 [dependencies.gstreamer-sys]
 path = "../gstreamer-sys"
+features = ["v1_14"]
 
 [dev-dependencies]
 shell-words = "0.1.0"
@@ -22,7 +24,7 @@ tempdir = "0.3"
 
 [features]
 dox = []
-v1_16 = []
+v1_16 = ["gstreamer-sys/v1_16", "gstreamer-sdp-sys/v1_16"]
 
 [lib]
 name = "gstreamer_webrtc_sys"

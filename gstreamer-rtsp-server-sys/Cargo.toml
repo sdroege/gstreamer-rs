@@ -31,13 +31,14 @@ tempdir = "0.3"
 
 [features]
 dox = []
-v1_4 = []
-v1_6 = ["v1_4"]
-v1_8 = ["v1_6"]
-v1_10 = ["v1_8"]
-v1_12 = ["v1_10"]
-v1_14 = ["v1_12"]
-v1_16 = ["v1_14"]
+v1_2 = ["gstreamer-sys/v1_2", "gstreamer-net-sys/v1_2", "gstreamer-rtsp-sys/v1_2", "gstreamer-sdp-sys/v1_2"]
+v1_4 = ["v1_2", "gstreamer-sys/v1_4", "gstreamer-net-sys/v1_4", "gstreamer-rtsp-sys/v1_4", "gstreamer-sdp-sys/v1_4"]
+v1_6 = ["v1_4", "gstreamer-sys/v1_6", "gstreamer-net-sys/v1_6", "gstreamer-rtsp-sys/v1_6", "gstreamer-sdp-sys/v1_6"]
+v1_8 = ["v1_6", "gstreamer-sys/v1_8", "gstreamer-net-sys/v1_8", "gstreamer-rtsp-sys/v1_8", "gstreamer-sdp-sys/v1_8"]
+v1_10 = ["v1_8", "gstreamer-sys/v1_10", "gstreamer-net-sys/v1_10", "gstreamer-rtsp-sys/v1_10", "gstreamer-sdp-sys/v1_10"]
+v1_12 = ["v1_10", "gstreamer-sys/v1_12", "gstreamer-net-sys/v1_12", "gstreamer-rtsp-sys/v1_12", "gstreamer-sdp-sys/v1_12"]
+v1_14 = ["v1_12", "gstreamer-sys/v1_14", "gstreamer-net-sys/v1_14", "gstreamer-rtsp-sys/v1_14", "gstreamer-sdp-sys/v1_14"]
+v1_16 = ["v1_14", "gstreamer-sys/v1_16", "gstreamer-net-sys/v1_16", "gstreamer-rtsp-sys/v1_16", "gstreamer-sdp-sys/v1_16"]
 
 [lib]
 name = "gstreamer_rtsp_server_sys"
