@@ -45,13 +45,35 @@ stages:
   stage: "test"
   script:
     - rustc --version
-    - cargo build --color=always --all
-    - G_DEBUG=fatal_warnings cargo test --color=always --all
+      # First build and test all the crates with their relevant features
+      # Keep features in sync with below
+    - |
+      for crate in gstreamer*; do
+        if [ -n "$ALL_FEATURES" ]; then
+          if [ $crate = "gstreamer" ]; then
+            FEATURES=subclassing,futures,ser_de,v1_16
+          elif [ $crate = "gstreamer-base" -o $crate = "gstreamer-video" ]; then
+            FEATURES=subclassing,v1_16
+          elif [ $crate = "gstreamer-gl" ]; then
+            FEATURES=egl,x11,wayland,v1_16
+          else
+            FEATURES=v1_16
+          fi
 
+          cargo build --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+          G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+        else
+          cargo build --color=always --manifest-path $crate/Cargo.toml
+          G_DEBUG=fatal_warnings cargo test --color=always --manifest-path $crate/Cargo.toml
+        fi
+      done
+
+      # If we do a build with all features then also build the
+      # tutorials/examples with all features
     - |
       if [ -n "$ALL_FEATURES" ]; then
-        cargo build --color=always --all --all-features
-        G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
+        cargo build --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features
+        cargo build --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
 
 test 1.36:
@@ -64,11 +86,24 @@ test stable:
   # Stable img
   # https://hub.docker.com/_/rust/
   image: "rust:slim"
+  extends: '.cargo test'
+
+test stable all-features:
+  # Stable img
+  # https://hub.docker.com/_/rust/
+  image: "rust:slim"
   variables:
     ALL_FEATURES: 'yes'
   extends: '.cargo test'
 
 test nightly:
+  # Nightly
+  # https://hub.docker.com/r/rustlang/rust/
+  image: "rustlang/rust:nightly-slim"
+  allow_failure: true
+  extends: '.cargo test'
+
+test nightly all-features:
   # Nightly
   # https://hub.docker.com/r/rustlang/rust/
   image: "rustlang/rust:nightly-slim"
@@ -93,4 +128,18 @@ clippy:
   script:
     - rustup component add clippy-preview
     - cargo clippy --version
-    - cargo clippy --color=always --all --all-features
+      # Keep features in sync with above
+    - |
+      for crate in gstreamer*; do
+        if [ $crate = "gstreamer" ]; then
+          FEATURES=subclassing,futures,ser_de,v1_16
+        elif [ $crate = "gstreamer-base" -o $crate = "gstreamer-video" ]; then
+          FEATURES=subclassing,v1_16
+        elif [ $crate = "gstreamer-gl" ]; then
+          FEATURES=egl,x11,wayland,v1_16
+        else
+          FEATURES=v1_16
+        fi
+
+        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+      done
