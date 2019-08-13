@@ -81,7 +81,6 @@ impl<'de> Deserialize<'de> for Buffer {
 mod tests {
     extern crate ron;
     extern crate serde_json;
-    extern crate serde_pickle;
 
     use Buffer;
     use BufferFlags;
@@ -138,19 +137,6 @@ mod tests {
             .to_owned(),
             res
         );
-
-        let res = serde_pickle::to_vec(&buffer, true).unwrap();
-        assert_eq!(
-            vec![
-                128, 3, 125, 40, 88, 3, 0, 0, 0, 112, 116, 115, 74, 1, 0, 0, 0, 88, 3, 0, 0, 0,
-                100, 116, 115, 78, 88, 8, 0, 0, 0, 100, 117, 114, 97, 116, 105, 111, 110, 74, 5, 0,
-                0, 0, 88, 6, 0, 0, 0, 111, 102, 102, 115, 101, 116, 74, 3, 0, 0, 0, 88, 10, 0, 0,
-                0, 111, 102, 102, 115, 101, 116, 95, 101, 110, 100, 74, 4, 0, 0, 0, 88, 5, 0, 0, 0,
-                102, 108, 97, 103, 115, 125, 40, 88, 4, 0, 0, 0, 98, 105, 116, 115, 74, 16, 0, 16,
-                0, 117, 88, 6, 0, 0, 0, 98, 117, 102, 102, 101, 114, 67, 4, 1, 2, 3, 4, 117, 46,
-            ],
-            res
-        );
     }
 
     #[test]
@@ -204,26 +190,6 @@ mod tests {
             let data = buffer.map_readable().unwrap();
             assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
         }
-
-        let buffer_pickle: &[u8] = &[
-            128, 3, 125, 40, 88, 3, 0, 0, 0, 112, 116, 115, 74, 1, 0, 0, 0, 88, 3, 0, 0, 0, 100,
-            116, 115, 78, 88, 8, 0, 0, 0, 100, 117, 114, 97, 116, 105, 111, 110, 74, 5, 0, 0, 0,
-            88, 6, 0, 0, 0, 111, 102, 102, 115, 101, 116, 74, 3, 0, 0, 0, 88, 10, 0, 0, 0, 111,
-            102, 102, 115, 101, 116, 95, 101, 110, 100, 74, 4, 0, 0, 0, 88, 5, 0, 0, 0, 102, 108,
-            97, 103, 115, 125, 40, 88, 4, 0, 0, 0, 98, 105, 116, 115, 74, 16, 0, 16, 0, 117, 88, 6,
-            0, 0, 0, 98, 117, 102, 102, 101, 114, 67, 4, 1, 2, 3, 4, 117, 46,
-        ];
-        let buffer: Buffer = serde_pickle::from_slice(buffer_pickle).unwrap();
-        assert_eq!(buffer.get_pts(), 1.into());
-        assert_eq!(buffer.get_dts(), None.into());
-        assert_eq!(buffer.get_offset(), 3);
-        assert_eq!(buffer.get_offset_end(), 4);
-        assert_eq!(buffer.get_duration(), 5.into());
-        assert_eq!(buffer.get_flags(), BufferFlags::LIVE | BufferFlags::LAST);
-        {
-            let data = buffer.map_readable().unwrap();
-            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
-        }
     }
 
     #[test]
@@ -243,20 +209,6 @@ mod tests {
         // Ron
         let buffer_ser = ron::ser::to_string(&buffer).unwrap();
         let buffer_de: Buffer = ron::de::from_str(buffer_ser.as_str()).unwrap();
-        assert_eq!(buffer_de.get_pts(), buffer.get_pts());
-        assert_eq!(buffer_de.get_dts(), buffer.get_dts());
-        assert_eq!(buffer_de.get_offset(), buffer.get_offset());
-        assert_eq!(buffer_de.get_offset_end(), buffer.get_offset_end());
-        assert_eq!(buffer_de.get_duration(), buffer.get_duration());
-        assert_eq!(buffer_de.get_flags(), buffer.get_flags());
-        {
-            let data = buffer_de.map_readable().unwrap();
-            assert_eq!(data.as_slice(), vec![1, 2, 3, 4].as_slice());
-        }
-
-        // Pickle
-        let buffer_ser = serde_pickle::to_vec(&buffer, true).unwrap();
-        let buffer_de: Buffer = serde_pickle::from_slice(buffer_ser.as_slice()).unwrap();
         assert_eq!(buffer_de.get_pts(), buffer.get_pts());
         assert_eq!(buffer_de.get_dts(), buffer.get_dts());
         assert_eq!(buffer_de.get_offset(), buffer.get_offset());

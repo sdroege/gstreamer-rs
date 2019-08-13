@@ -29,14 +29,12 @@ serde_bytes = { version = "0.11", optional = true }
 serde_derive = { version = "1.0", optional = true }
 paste = { version = "0.1", optional = true }
 
-[build-dependencies.rustdoc-stripper]
-version = "0.1"
-optional = true
+[build-dependencies]
+rustdoc-stripper = { version = "0.1", optional = true }
 
 [dev-dependencies]
 ron = "0.5"
 serde_json = "1.0"
-serde-pickle = "0.5"
 
 [features]
 default = []
@@ -50,3 +48,6 @@ dox = ["gstreamer-sys/dox", "glib/dox", "futures", "ser_de"]
 futures = ["futures-core-preview"]
 ser_de = ["num-rational/serde", "serde", "serde_bytes", "serde_derive"]
 subclassing = ["glib/subclassing", "paste"]
+
+["package.metadata.docs.rs"]
+features = ["dox", "embed-lgpl-docs", "v1_16"]

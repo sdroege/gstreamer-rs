@@ -15,10 +15,8 @@ extern crate glib_sys;
 extern crate gobject_sys;
 extern crate gstreamer as gst;
 extern crate gstreamer_base as gst_base;
-extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_editing_services_sys as ges_sys;
 extern crate gstreamer_pbutils as gst_pbutils;
-extern crate gstreamer_pbutils_sys as gst_pbutils_sys;
 extern crate gstreamer_sys as gst_sys;
 
 use glib::translate::from_glib;
