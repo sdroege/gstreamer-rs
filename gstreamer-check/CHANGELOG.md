@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.14.4] - 2019-08-14
+### Added
+- Bindings for adding/removing custom log functions
+- Bindings for `calculate_linear_regression()`
+- Constants for base class custom flow returns
+
+### Fixed
+- Ownership of pad in `Element::release_pad()` virtual method implementations
+
 ## [0.14.3] - 2019-07-16
 ### Added
 - `Buffer::unset_flags()` for unsetting specific buffer flags
