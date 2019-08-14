@@ -41,6 +41,9 @@ pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue
 mod auto;
 pub use auto::*;
 
+pub mod rtp_buffer;
+pub use rtp_buffer::{compare_seqnum, RTPBuffer, RTPBufferExt};
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts
 pub mod prelude {
@@ -48,4 +51,6 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use auto::traits::*;
+
+    pub use rtp_buffer::RTPBufferExt;
 }
