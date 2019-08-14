@@ -373,7 +373,7 @@ unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
     let wrap: Element = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
-        imp.release_pad(&wrap, &from_glib_borrow(pad))
+        imp.release_pad(&wrap, &from_glib_none(pad))
     })
 }
 
