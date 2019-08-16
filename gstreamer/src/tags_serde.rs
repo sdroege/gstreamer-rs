@@ -27,13 +27,26 @@ use Sample;
 use TagMergeMode;
 use TagScope;
 
-macro_rules! ser_tag (
+macro_rules! ser_some_tag (
     ($value:ident, $seq:ident, $t:ty) => (
-        ser_value!($value, $t, |_, value| {
+        ser_some_value!($value, $t, |_, value| {
             $seq.serialize_element(&value)
         })
     );
 );
+macro_rules! ser_opt_tag (
+    ($value:ident, $seq:ident, $t:ty) => (
+        ser_opt_value!($value, $t, |_, value| {
+            $seq.serialize_element(&value)
+        })
+    );
+);
+
+// Note: unlike `Value`s, `Tag`s with  optional `Type` `String` & `Date` values are guarenteed
+// to be Non-null and non-empty in the C API. See:
+// https://gitlab.freedesktop.org/gstreamer/gstreamer/blob/d90d771a9a512381315f7694c3a50b152035f3cb/gst/gststructure.c#L810-853
+
+// FIXME: implement serde for type `Date`
 
 // serialize trait is only available for `&self`, but we need to mutate the iterator
 struct TagValuesSer<'a>(Rc<RefCell<GenericTagIter<'a>>>);
@@ -51,15 +64,20 @@ impl<'a> Serialize for TagValuesSer<'a> {
         let mut seq = serializer.serialize_seq(tag_iter.size_hint().1)?;
         for value in tag_iter.deref_mut() {
             match value.type_() {
-                glib::Type::F64 => ser_tag!(value, seq, f64),
-                glib::Type::String => ser_tag!(value, seq, String),
-                glib::Type::U32 => ser_tag!(value, seq, u32),
-                glib::Type::U64 => ser_tag!(value, seq, u64),
+                glib::Type::F64 => ser_some_tag!(value, seq, f64),
+                glib::Type::String => {
+                    // See above comment about `Tag`s with `String` values
+                    ser_opt_value!(value, String, |_, value: Option<String>| {
+                        seq.serialize_element(&value.expect("string tag ser"))
+                    })
+                }
+                glib::Type::U32 => ser_some_tag!(value, seq, u32),
+                glib::Type::U64 => ser_some_tag!(value, seq, u64),
                 glib::Type::Other(type_id) => {
                     if *DATE_TIME_OTHER_TYPE_ID == type_id {
-                        ser_tag!(value, seq, DateTime)
+                        ser_opt_tag!(value, seq, DateTime)
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                        ser_tag!(value, seq, Sample)
+                        ser_opt_tag!(value, seq, Sample)
                     } else {
                         Err(ser::Error::custom(format!(
                             "unimplemented `Tag` serialization for type {}",
@@ -128,9 +146,14 @@ impl Serialize for TagList {
     }
 }
 
-macro_rules! de_tag_value(
+macro_rules! de_some_tag(
     ($tag_name:expr, $seq:expr, $t:ty) => (
-        de_send_value!("Tag", $tag_name, $seq, $t)
+        de_some_send_value!("Tag", $tag_name, $seq, $t)
+    );
+);
+macro_rules! de_opt_tag(
+    ($tag_name:expr, $seq:expr, $t:ty) => (
+        de_opt_send_value!("Tag", $tag_name, $seq, $t)
     );
 );
 
@@ -152,15 +175,18 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
 
         loop {
             let tag_value = match tag_type {
-                glib::Type::F64 => de_tag_value!(self.0, seq, f64),
-                glib::Type::String => de_tag_value!(self.0, seq, String),
-                glib::Type::U32 => de_tag_value!(self.0, seq, u32),
-                glib::Type::U64 => de_tag_value!(self.0, seq, u64),
+                glib::Type::F64 => de_some_tag!(self.0, seq, f64),
+                glib::Type::String => {
+                    // See comment above `TagValuesSer` definition about `Tag`s with `String` values
+                    de_some_tag!(self.0, seq, String)
+                }
+                glib::Type::U32 => de_some_tag!(self.0, seq, u32),
+                glib::Type::U64 => de_some_tag!(self.0, seq, u64),
                 glib::Type::Other(type_id) => {
                     if *DATE_TIME_OTHER_TYPE_ID == type_id {
-                        de_tag_value!(self.0, seq, DateTime)
+                        de_opt_tag!(self.0, seq, DateTime)
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                        de_tag_value!(self.0, seq, Sample)
+                        de_opt_tag!(self.0, seq, Sample)
                     } else {
                         return Err(de::Error::custom(format!(
                             "unimplemented deserialization for `Tag` {} with type `{}`",
@@ -339,10 +365,10 @@ mod tests {
                 "            1,",
                 "        ]),",
                 "        (\"datetime\", [",
-                "            YMD(2018, 5, 28),",
+                "            Some(YMD(2018, 5, 28)),",
                 "        ]),",
                 "        (\"image\", [",
-                "            (",
+                "            Some((",
                 "                buffer: Some((",
                 "                    pts: None,",
                 "                    dts: None,",
@@ -372,7 +398,7 @@ mod tests {
                 "                    duration: -1,",
                 "                )),",
                 "                info: None,",
-                "            ),",
+                "            )),",
                 "        ]),",
                 "    ],",
                 ")",
@@ -400,10 +426,10 @@ mod tests {
                     ("bitrate", [96000]),
                     ("replaygain-track-gain", [1]),
                     ("datetime", [
-                        YMD(2018, 5, 28),
+                        Some(YMD(2018, 5, 28)),
                     ]),
                     ("image", [
-                        (
+                        Some((
                             buffer: Some((
                                 pts: None,
                                 dts: None,
@@ -419,7 +445,7 @@ mod tests {
                             caps: None,
                             segment: None,
                             info: None,
-                        ),
+                        )),
                     ])
                 ],
             )
@@ -433,11 +459,11 @@ mod tests {
             Some("another title")
         );
         assert_eq!(
-            tags.get_index::<Duration>(0).unwrap().get(),
-            Some(::SECOND * 120)
+            tags.get_index::<Duration>(0).unwrap().get_some(),
+            ::SECOND * 120
         );
-        assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get(), Some(96_000));
-        assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get(), Some(1f64));
+        assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
+        assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get_some(), 1f64);
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);
         assert_eq!(datetime.get_month(), 5);
@@ -470,8 +496,8 @@ mod tests {
             tags.get_index::<Title>(1).unwrap().get(),
             Some("another title")
         );
-        assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get(), Some(96_000));
-        assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get(), Some(1f64));
+        assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
+        assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get_some(), 1f64);
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);
         assert_eq!(datetime.get_month(), 5);
@@ -525,16 +551,16 @@ mod tests {
             tags.get_index::<Title>(1).unwrap().get(),
         );
         assert_eq!(
-            tags_de.get_index::<Duration>(0).unwrap().get(),
-            tags.get_index::<Duration>(0).unwrap().get(),
+            tags_de.get_index::<Duration>(0).unwrap().get_some(),
+            tags.get_index::<Duration>(0).unwrap().get_some(),
         );
         assert_eq!(
-            tags_de.get_index::<Bitrate>(0).unwrap().get(),
-            tags.get_index::<Bitrate>(0).unwrap().get(),
+            tags_de.get_index::<Bitrate>(0).unwrap().get_some(),
+            tags.get_index::<Bitrate>(0).unwrap().get_some(),
         );
         assert_eq!(
-            tags_de.get_index::<TrackGain>(0).unwrap().get(),
-            tags.get_index::<TrackGain>(0).unwrap().get(),
+            tags_de.get_index::<TrackGain>(0).unwrap().get_some(),
+            tags.get_index::<TrackGain>(0).unwrap().get_some(),
         );
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);

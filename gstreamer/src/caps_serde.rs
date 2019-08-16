@@ -254,7 +254,7 @@ mod tests {
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",
-                "        (\"string\", \"String\", \"bla\"),",
+                "        (\"string\", \"String\", Some(\"bla\")),",
                 "        (\"fraction\", \"Fraction\", (1, 2)),",
                 "        (\"array\", \"Array\", [",
                 "            (\"i32\", 1),",
@@ -286,7 +286,7 @@ mod tests {
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",
-                "        (\"string\", \"String\", \"bla\"),",
+                "        (\"string\", \"String\", Some(\"bla\")),",
                 "        (\"fraction\", \"Fraction\", (1, 2)),",
                 "        (\"array\", \"Array\", [",
                 "            (\"i32\", 1),",
@@ -321,7 +321,7 @@ mod tests {
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",
-                "        (\"string\", \"String\", \"bla\"),",
+                "        (\"string\", \"String\", Some(\"bla\")),",
                 "        (\"fraction\", \"Fraction\", (1, 2)),",
                 "        (\"array\", \"Array\", [",
                 "            (\"i32\", 1),",
@@ -363,7 +363,7 @@ mod tests {
                     ("foo/bar", [
                         ("int", "i32", 12),
                         ("bool", "bool", true),
-                        ("string", "String", "bla"),
+                        ("string", "String", Some("bla")),
                         ("fraction", "Fraction", (1, 2)),
                         ("array", "Array", [
                             ("i32", 1),
@@ -396,7 +396,7 @@ mod tests {
                     ("foo/bar", [
                         ("int", "i32", 12),
                         ("bool", "bool", true),
-                        ("string", "String", "bla"),
+                        ("string", "String", None),
                         ("fraction", "Fraction", (1, 2)),
                         ("array", "Array", [
                             ("i32", 1),
@@ -408,6 +408,7 @@ mod tests {
             ])"#;
         let caps: Caps = ron::de::from_str(caps_ron).unwrap();
         let s = caps.get_structure(0).unwrap();
+        let str_none: Option<&str> = None;
         assert_eq!(
             s,
             Structure::new(
@@ -415,7 +416,7 @@ mod tests {
                 &[
                     ("int", &12),
                     ("bool", &true),
-                    ("string", &"bla"),
+                    ("string", &str_none),
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
                 ],
@@ -431,7 +432,7 @@ mod tests {
                     ("foo/bar", [
                         ("int", "i32", 12),
                         ("bool", "bool", true),
-                        ("string", "String", "bla"),
+                        ("string", "String", Some("bla")),
                         ("fraction", "Fraction", (1, 2)),
                         ("array", "Array", [
                             ("i32", 1),

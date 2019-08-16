@@ -31,6 +31,8 @@ fn get_other_type_id<T: StaticType>() -> usize {
     }
 }
 
+// FIXME: implement serde for type `Date`
+
 lazy_static! {
     pub(crate) static ref ARRAY_OTHER_TYPE_ID: usize = get_other_type_id::<Array>();
     pub(crate) static ref BITMASK_OTHER_TYPE_ID: usize = get_other_type_id::<Bitmask>();
@@ -58,48 +60,56 @@ impl<'de> Deserialize<'de> for Fraction {
     }
 }
 
-macro_rules! ser_value (
+macro_rules! ser_some_value (
     ($value:expr, $t:ty, $ser_closure:expr) => (
         {
-            // FIXME: This should serialize to an `Option` when the `Type` allows it
-            // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/215
-            let value = $value.get::<$t>().expect("Value serialization macro").unwrap();
+            let value = $value.get_some::<$t>().expect("ser_some_value macro");
             $ser_closure(stringify!($t), value)
         }
     );
+);
+macro_rules! ser_opt_value (
+    ($value:expr, $t:ty, $ser_closure:expr) => (
+        {
+            let value = $value.get::<$t>().expect("ser_opt_value macro");
+            $ser_closure(stringify!($t), value)
+        }
+    );
+);
+macro_rules! ser_value (
     ($value:expr, $ser_closure:expr) => (
         match $value.type_() {
-            glib::Type::I8 => ser_value!($value, i8, $ser_closure),
-            glib::Type::U8 => ser_value!($value, u8, $ser_closure),
-            glib::Type::Bool => ser_value!($value, bool, $ser_closure),
-            glib::Type::I32 => ser_value!($value, i32, $ser_closure),
-            glib::Type::U32 => ser_value!($value, u32, $ser_closure),
-            glib::Type::I64 => ser_value!($value, i64, $ser_closure),
-            glib::Type::U64 => ser_value!($value, u64, $ser_closure),
-            glib::Type::F32 => ser_value!($value, f32, $ser_closure),
-            glib::Type::F64 => ser_value!($value, f64, $ser_closure),
-            glib::Type::String => ser_value!($value, String, $ser_closure),
+            glib::Type::I8 => ser_some_value!($value, i8, $ser_closure),
+            glib::Type::U8 => ser_some_value!($value, u8, $ser_closure),
+            glib::Type::Bool => ser_some_value!($value, bool, $ser_closure),
+            glib::Type::I32 => ser_some_value!($value, i32, $ser_closure),
+            glib::Type::U32 => ser_some_value!($value, u32, $ser_closure),
+            glib::Type::I64 => ser_some_value!($value, i64, $ser_closure),
+            glib::Type::U64 => ser_some_value!($value, u64, $ser_closure),
+            glib::Type::F32 => ser_some_value!($value, f32, $ser_closure),
+            glib::Type::F64 => ser_some_value!($value, f64, $ser_closure),
+            glib::Type::String => ser_opt_value!($value, String, $ser_closure),
             glib::Type::Other(type_id) => {
                 if *ARRAY_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, Array, $ser_closure)
+                    ser_some_value!($value, Array, $ser_closure)
                 } else if *BITMASK_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, Bitmask, $ser_closure)
+                    ser_some_value!($value, Bitmask, $ser_closure)
                 } else if *DATE_TIME_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, DateTime, $ser_closure)
+                    ser_opt_value!($value, DateTime, $ser_closure)
                 } else if *FRACTION_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, Fraction, $ser_closure)
+                    ser_some_value!($value, Fraction, $ser_closure)
                 } else if *FRACTION_RANGE_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, FractionRange, $ser_closure)
+                    ser_some_value!($value, FractionRange, $ser_closure)
                 } else if *INT_RANGE_I32_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, IntRange<i32>, $ser_closure)
+                    ser_some_value!($value, IntRange<i32>, $ser_closure)
                 } else if *INT_RANGE_I64_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, IntRange<i64>, $ser_closure)
+                    ser_some_value!($value, IntRange<i64>, $ser_closure)
                 } else if *LIST_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, List, $ser_closure)
+                    ser_some_value!($value, List, $ser_closure)
                 } else if *SAMPLE_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, Sample, $ser_closure)
+                    ser_opt_value!($value, Sample, $ser_closure)
                 } else if *BUFFER_OTHER_TYPE_ID == type_id {
-                    ser_value!($value, Buffer, $ser_closure)
+                    ser_opt_value!($value, Buffer, $ser_closure)
                 } else {
                     Err(
                         ser::Error::custom(
@@ -162,25 +172,28 @@ macro_rules! impl_ser_send_value_collection (
 impl_ser_send_value_collection!(Array);
 impl_ser_send_value_collection!(List);
 
-macro_rules! de_value(
-    ($seq:expr, $t:ty) => (
-        {
-            let value = $seq
-                .next_element::<$t>()?
-                .map(|base_value| base_value.to_value());
-            Ok(value)
-        }
-    );
-);
-
-macro_rules! de_send_value(
+macro_rules! de_some_send_value(
     ($type_name:expr, $seq:expr, $t:ty) => (
-        de_send_value!("Value", $type_name, $seq, $t)
+        de_some_send_value!("Value", $type_name, $seq, $t)
     );
     ($outer_type:expr, $type_name:expr, $seq:expr, $t:ty) => (
-        match de_value!($seq, $t)? {
-            Some(value) => {
-                let glib_send_value = value
+        de_send_value!($outer_type, $type_name, $seq, $t, $t)
+    );
+);
+macro_rules! de_opt_send_value(
+    ($type_name:expr, $seq:expr, $t:ty) => (
+        de_opt_send_value!("Value", $type_name, $seq, $t)
+    );
+    ($outer_type:expr, $type_name:expr, $seq:expr, $t:ty) => (
+        de_send_value!($outer_type, $type_name, $seq, Option<$t>, $t)
+    );
+);
+macro_rules! de_send_value(
+    ($outer_type:expr, $type_name:expr, $seq:expr, $elem_t:ty, $t:ty) => (
+        Ok(match $seq.next_element::<$elem_t>()? {
+            Some(base_value) => {
+                Some(SendValue::from(base_value
+                    .to_value()
                     .try_into_send_value::<$t>()
                     .map_err(|_|
                         de::Error::custom(format!(
@@ -188,33 +201,33 @@ macro_rules! de_send_value(
                             $outer_type,
                             $type_name,
                         ))
-                    )?;
-                Ok(Some(SendValue::from(glib_send_value)))
+                    )?
+                ))
             }
-            None => Ok(None)
-        }
+            None => None
+        })
     );
     ($type_name:expr, $seq:expr) => (
         match $type_name.as_str() {
-            "i8" => de_send_value!($type_name, $seq, i8),
-            "u8" => de_send_value!($type_name, $seq, u8),
-            "bool" => de_send_value!($type_name, $seq, bool),
-            "i32" => de_send_value!($type_name, $seq, i32),
-            "u32" => de_send_value!($type_name, $seq, u32),
-            "i64" => de_send_value!($type_name, $seq, i64),
-            "u64" => de_send_value!($type_name, $seq, u64),
-            "f32" => de_send_value!($type_name, $seq, f32),
-            "f64" => de_send_value!($type_name, $seq, f64),
-            "String" => de_send_value!($type_name, $seq, String),
-            "Array" => de_send_value!($type_name, $seq, Array),
-            "Bitmask" => de_send_value!($type_name, $seq, Bitmask),
-            "DateTime" => de_send_value!($type_name, $seq, DateTime),
-            "Fraction" => de_send_value!($type_name, $seq, Fraction),
-            "FractionRange" => de_send_value!($type_name, $seq, FractionRange),
-            "IntRange<i32>" => de_send_value!($type_name, $seq, IntRange<i32>),
-            "IntRange<i64>" => de_send_value!($type_name, $seq, IntRange<i64>),
-            "Sample" => de_send_value!($type_name, $seq, Sample),
-            "Buffer" => de_send_value!($type_name, $seq, Buffer),
+            "i8" => de_some_send_value!($type_name, $seq, i8),
+            "u8" => de_some_send_value!($type_name, $seq, u8),
+            "bool" => de_some_send_value!($type_name, $seq, bool),
+            "i32" => de_some_send_value!($type_name, $seq, i32),
+            "u32" => de_some_send_value!($type_name, $seq, u32),
+            "i64" => de_some_send_value!($type_name, $seq, i64),
+            "u64" => de_some_send_value!($type_name, $seq, u64),
+            "f32" => de_some_send_value!($type_name, $seq, f32),
+            "f64" => de_some_send_value!($type_name, $seq, f64),
+            "String" => de_opt_send_value!($type_name, $seq, String),
+            "Array" => de_some_send_value!($type_name, $seq, Array),
+            "Bitmask" => de_some_send_value!($type_name, $seq, Bitmask),
+            "DateTime" => de_opt_send_value!($type_name, $seq, DateTime),
+            "Fraction" => de_some_send_value!($type_name, $seq, Fraction),
+            "FractionRange" => de_some_send_value!($type_name, $seq, FractionRange),
+            "IntRange<i32>" => de_some_send_value!($type_name, $seq, IntRange<i32>),
+            "IntRange<i64>" => de_some_send_value!($type_name, $seq, IntRange<i64>),
+            "Sample" => de_opt_send_value!($type_name, $seq, Sample),
+            "Buffer" => de_opt_send_value!($type_name, $seq, Buffer),
             _ => return Err(
                 de::Error::custom(
                     format!(
@@ -344,7 +357,16 @@ mod tests {
         let value_str = "test str".to_value();
         let send_value_str = value_str.try_into_send_value::<String>().unwrap();
 
-        let array = Array::new(&[&send_value_13, &send_value_12, &send_value_str]);
+        let str_none: Option<&str> = None;
+        let value_str_none = str_none.to_value();
+        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
+
+        let array = Array::new(&[
+            &send_value_13,
+            &send_value_12,
+            &send_value_str,
+            &send_value_str_none,
+        ]);
 
         let res = ron::ser::to_string_pretty(&array, pretty_config.clone());
         assert_eq!(
@@ -352,7 +374,8 @@ mod tests {
                 "[",
                 "    (\"Fraction\", (1, 3)),",
                 "    (\"Fraction\", (1, 2)),",
-                "    (\"String\", \"test str\"),",
+                "    (\"String\", Some(\"test str\")),",
+                "    (\"String\", None),",
                 "]"
             )
             .to_owned()),
@@ -361,7 +384,8 @@ mod tests {
 
         let res = serde_json::to_string(&array).unwrap();
         assert_eq!(
-            "[[\"Fraction\",[1,3]],[\"Fraction\",[1,2]],[\"String\",\"test str\"]]".to_owned(),
+            "[[\"Fraction\",[1,3]],[\"Fraction\",[1,2]],[\"String\",\"test str\"],[\"String\",null]]"
+                .to_owned(),
             res
         );
 
@@ -372,14 +396,19 @@ mod tests {
         let value_str = "test str".to_value();
         let send_value_str = value_str.try_into_send_value::<String>().unwrap();
 
-        let list = List::new(&[&send_value_12, &send_value_str]);
+        let str_none: Option<&str> = None;
+        let value_str_none = str_none.to_value();
+        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
+
+        let list = List::new(&[&send_value_12, &send_value_str, &send_value_str_none]);
 
         let res = ron::ser::to_string_pretty(&list, pretty_config.clone());
         assert_eq!(
             Ok(concat!(
                 "[",
                 "    (\"Fraction\", (1, 2)),",
-                "    (\"String\", \"test str\"),",
+                "    (\"String\", Some(\"test str\")),",
+                "    (\"String\", None),",
                 "]"
             )
             .to_owned()),
@@ -387,7 +416,6 @@ mod tests {
         );
     }
 
-    #[cfg(feature = "ser_de")]
     #[test]
     fn test_deserialize_simple() {
         ::init().unwrap();
@@ -439,7 +467,6 @@ mod tests {
         assert_eq!(bitmask_ref, bitmask);
     }
 
-    #[cfg(feature = "ser_de")]
     #[test]
     fn test_serde_roundtrip_simple() {
         ::init().unwrap();
@@ -480,7 +507,6 @@ mod tests {
         assert_eq!(bitmask_de, bitmask);
     }
 
-    #[cfg(feature = "ser_de")]
     #[test]
     fn test_deserialize_collections() {
         ::init().unwrap();
@@ -489,11 +515,12 @@ mod tests {
         let array_ron = r#"[
                 ("Fraction", (1, 3)),
                 ("Fraction", (1, 2)),
-                ("String", "test str"),
+                ("String", Some("test str")),
+                ("String", None),
             ]"#;
         let array: Array = ron::de::from_str(array_ron).unwrap();
         let slice = array.as_slice();
-        assert_eq!(3, slice.len());
+        assert_eq!(4, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
@@ -508,10 +535,13 @@ mod tests {
             slice[2].get::<String>().expect("slice[2]").unwrap()
         );
 
-        let array_json = r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"]]"#;
+        assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+
+        let array_json =
+            r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null]]"#;
         let array: Array = serde_json::from_str(array_json).unwrap();
         let slice = array.as_slice();
-        assert_eq!(3, slice.len());
+        assert_eq!(4, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
@@ -525,15 +555,18 @@ mod tests {
             "test str".to_owned(),
             slice[2].get::<String>().expect("slice[2]").unwrap()
         );
+
+        assert!(slice[3].get::<String>().expect("slice[3]").is_none());
 
         // List
         let list_ron = r#"[
                 ("Fraction", (1, 2)),
-                ("String", "test str"),
+                ("String", Some("test str")),
+                ("String", None),
             ]"#;
         let list: List = ron::de::from_str(list_ron).unwrap();
         let slice = list.as_slice();
-        assert_eq!(2, slice.len());
+        assert_eq!(3, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
@@ -543,9 +576,10 @@ mod tests {
             "test str".to_owned(),
             slice[1].get::<String>().expect("slice[1]").unwrap()
         );
+
+        assert!(slice[2].get::<String>().expect("slice[2]").is_none());
     }
 
-    #[cfg(feature = "ser_de")]
     #[test]
     fn test_serde_roundtrip_collection() {
         use glib::value::ToValue;
@@ -559,7 +593,15 @@ mod tests {
         let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
         let value_str = "test str".to_value();
         let send_value_str = value_str.try_into_send_value::<String>().unwrap();
-        let array = Array::new(&[&send_value_13, &send_value_12, &send_value_str]);
+        let str_none: Option<&str> = None;
+        let value_str_none = str_none.to_value();
+        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
+        let array = Array::new(&[
+            &send_value_13,
+            &send_value_12,
+            &send_value_str,
+            &send_value_str_none,
+        ]);
         let array_ser = ron::ser::to_string(&array).unwrap();
 
         let array_de: Array = ron::de::from_str(array_ser.as_str()).unwrap();
@@ -582,12 +624,17 @@ mod tests {
             slice[2].get::<String>().expect("slice[2]").unwrap()
         );
 
+        assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+
         // List
         let value_12 = Fraction::new(1, 2).to_value();
         let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
         let value_str = "test str".to_value();
         let send_value_str = value_str.try_into_send_value::<String>().unwrap();
-        let list = List::new(&[&send_value_12, &send_value_str]);
+        let str_none: Option<&str> = None;
+        let value_str_none = str_none.to_value();
+        let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
+        let list = List::new(&[&send_value_12, &send_value_str, &send_value_str_none]);
         let list_ser = ron::ser::to_string(&list).unwrap();
 
         let list_de: List = ron::de::from_str(list_ser.as_str()).unwrap();
@@ -604,5 +651,7 @@ mod tests {
             slice_de[1].get::<String>().expect("slice_de[1]").unwrap(),
             slice[1].get::<String>().expect("slice[1]").unwrap()
         );
+
+        assert!(slice[2].get::<String>().expect("slice[2]").is_none());
     }
 }

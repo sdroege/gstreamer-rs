@@ -189,8 +189,8 @@ mod tests {
         assert_eq!(
             Ok(concat!(
                 "(\"test\", [",
-                "    (\"f1\", \"String\", \"abc\"),",
-                "    (\"f2\", \"String\", \"bcd\"),",
+                "    (\"f1\", \"String\", Some(\"abc\")),",
+                "    (\"f2\", \"String\", Some(\"bcd\")),",
                 "    (\"f3\", \"i32\", 123),",
                 "    (\"fraction\", \"Fraction\", (1, 2)),",
                 "    (\"array\", \"Array\", [",
@@ -210,8 +210,8 @@ mod tests {
 
         let s_ron = r#"
             ("test", [
-                ("f1", "String", "abc"),
-                ("f2", "String", "bcd"),
+                ("f1", "String", Some("abc")),
+                ("f2", "String", Some("bcd")),
                 ("f3", "i32", 123),
                 ("fraction", "Fraction", (1, 2)),
                 ("array", "Array", [
@@ -242,7 +242,7 @@ mod tests {
 
         let s = Structure::builder("test")
             .field("f1", &"abc")
-            .field("f2", &String::from("bcd"))
+            .field("f2", &"bcd".to_owned())
             .field("f3", &123i32)
             .field("fraction", &Fraction::new(1, 2))
             .field("array", &Array::new(&[&1, &2]))
