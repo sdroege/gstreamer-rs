@@ -753,6 +753,8 @@ mod tests {
 
     #[test]
     fn new_set_get() {
+        use glib::{value, Type};
+
         ::init().unwrap();
 
         let mut s = Structure::new_empty("test");
@@ -770,37 +772,28 @@ mod tests {
         assert_eq!(s.get_optional::<i32>("f3"), Ok(Some(123i32)));
         assert_eq!(s.get_optional::<i32>("f4"), Ok(None));
 
-        // FIXME: use a proper `assert_eq!`, but that requires
-        // `glib::value::GetError fields to be public
-        // See https://github.com/gtk-rs/glib/issues/515
-        match s.get::<i32>("f2") {
-            Err(GetError::ValueGetError { name, .. }) if name == "f2" => (),
-            res => panic!(
-                "Expected GetError::ValueGetError{{ \"f2\", .. }} found {:?}",
-                res
-            ),
-        }
-        match s.get_some::<bool>("f3") {
-            Err(GetError::ValueGetError { name, .. }) if name == "f3" => (),
-            res => panic!(
-                "Expected GetError::ValueGetError{{ \"f3\", .. }} found {:?}",
-                res
-            ),
-        }
-        match s.get::<&str>("f4") {
-            Err(GetError::FieldNotFound { name }) if name == "f4" => (),
-            res => panic!(
-                "Expected GetError::FieldNotFound{{ \"f4\" }} found {:?}",
-                res
-            ),
-        }
-        match s.get_some::<i32>("f4") {
-            Err(GetError::FieldNotFound { name }) if name == "f4" => (),
-            res => panic!(
-                "Expected GetError::FieldNotFound{{ \"f4\" }} found {:?}",
-                res
-            ),
-        }
+        assert_eq!(
+            s.get::<i32>("f2"),
+            Err(GetError::from_value_get_error(
+                "f2",
+                value::GetError::new_type_mismatch(Type::String, Type::I32),
+            ))
+        );
+        assert_eq!(
+            s.get_some::<bool>("f3"),
+            Err(GetError::from_value_get_error(
+                "f3",
+                value::GetError::new_type_mismatch(Type::I32, Type::Bool),
+            ))
+        );
+        assert_eq!(
+            s.get::<&str>("f4"),
+            Err(GetError::new_field_not_found("f4"))
+        );
+        assert_eq!(
+            s.get_some::<i32>("f4"),
+            Err(GetError::new_field_not_found("f4"))
+        );
 
         assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3"]);
 
