@@ -20,3 +20,5 @@ members = [
   "examples",
   "tutorials",
 ]
+
+exclude = ["gir"]
