@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use glib;
-use glib::ToValue;
+use glib::{Date, ToValue};
 
 use serde::de;
 use serde::de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor};
@@ -20,6 +20,7 @@ use Buffer;
 use DateTime;
 use Sample;
 
+use date_time_serde;
 use value::*;
 use value_serde::*;
 
@@ -166,7 +167,10 @@ impl<'de> Deserialize<'de> for Structure {
 mod tests {
     extern crate ron;
 
+    use glib::{Date, DateMonth};
+
     use Array;
+    use DateTime;
     use Fraction;
     use Structure;
 
@@ -179,6 +183,11 @@ mod tests {
             .field("f2", &String::from("bcd"))
             .field("f3", &123i32)
             .field("fraction", &Fraction::new(1, 2))
+            .field("date", &Date::new_dmy(19, DateMonth::August, 2019))
+            .field(
+                "date_time",
+                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64),
+            )
             .field("array", &Array::new(&[&1, &2]))
             .build();
 
@@ -188,16 +197,18 @@ mod tests {
         let res = ron::ser::to_string_pretty(&s, pretty_config);
         assert_eq!(
             Ok(concat!(
-                "(\"test\", [",
-                "    (\"f1\", \"String\", Some(\"abc\")),",
-                "    (\"f2\", \"String\", Some(\"bcd\")),",
-                "    (\"f3\", \"i32\", 123),",
-                "    (\"fraction\", \"Fraction\", (1, 2)),",
-                "    (\"array\", \"Array\", [",
-                "        (\"i32\", 1),",
-                "        (\"i32\", 2),",
-                "    ]),",
-                "])"
+                r#"("test", ["#,
+                r#"    ("f1", "String", Some("abc")),"#,
+                r#"    ("f2", "String", Some("bcd")),"#,
+                r#"    ("f3", "i32", 123),"#,
+                r#"    ("fraction", "Fraction", (1, 2)),"#,
+                r#"    ("date", "Date", Some(YMD(2019, 8, 19))),"#,
+                r#"    ("date_time", "DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),"#,
+                r#"    ("array", "Array", ["#,
+                r#"        ("i32", 1),"#,
+                r#"        ("i32", 2),"#,
+                r#"    ]),"#,
+                r#"])"#,
             )
             .to_owned()),
             res,
@@ -214,6 +225,8 @@ mod tests {
                 ("f2", "String", Some("bcd")),
                 ("f3", "i32", 123),
                 ("fraction", "Fraction", (1, 2)),
+                ("date", "Date", Some(YMD(2019, 8, 19))),
+                ("date_time", "DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),
                 ("array", "Array", [
                     ("i32", 1),
                     ("i32", 2),
@@ -228,6 +241,11 @@ mod tests {
                     ("f1", &"abc"),
                     ("f2", &"bcd"),
                     ("f3", &123),
+                    ("date", &Date::new_dmy(19, DateMonth::August, 2019)),
+                    (
+                        "date_time",
+                        &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64)
+                    ),
                     ("fraction", &Fraction::new(1, 2)),
                     ("array", &Array::new(&[&1, &2])),
                 ],
@@ -245,6 +263,11 @@ mod tests {
             .field("f2", &"bcd".to_owned())
             .field("f3", &123i32)
             .field("fraction", &Fraction::new(1, 2))
+            .field("date", &Date::new_dmy(19, DateMonth::August, 2019))
+            .field(
+                "date_time",
+                &DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64),
+            )
             .field("array", &Array::new(&[&1, &2]))
             .build();
         let s_ser = ron::ser::to_string(&s).unwrap();

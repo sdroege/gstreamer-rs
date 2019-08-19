@@ -6,7 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use serde::de::{Deserialize, Deserializer};
+use std::convert::{TryFrom, TryInto};
+
+use glib::translate::{FromGlib, ToGlib};
+use glib::value::{SetValue, SetValueOptional};
+use glib::StaticType;
+
+use serde::de::{Deserialize, Deserializer, Error};
 use serde::ser;
 use serde::ser::{Serialize, Serializer};
 use DateTime;
@@ -18,6 +24,47 @@ enum DateTimeVariants {
     YMD(i32, i32, i32),
     YMDhmTz(i32, i32, i32, i32, i32, f32),
     YMDhmsTz(i32, i32, i32, i32, i32, f64, f32),
+}
+
+// Note: ser / de for `glib::Date` should be implemented in the `glib` crate
+// However, there is no `ser_de` feature in `glib` right now. The limitation is that
+// `Date` fields can only be ser / de when they are used in `Value`s (which implies
+// `Array`s, `List`s, `Structure` fields and `Tag`s)
+pub(crate) struct Date(glib::Date);
+
+impl From<glib::Date> for Date {
+    fn from(glib_date: glib::Date) -> Self {
+        Date(glib_date)
+    }
+}
+
+impl SetValue for Date {
+    unsafe fn set_value(value: &mut glib::Value, this: &Self) {
+        glib::value::SetValue::set_value(value, &this.0);
+    }
+}
+
+impl SetValueOptional for Date {
+    unsafe fn set_value_optional(value: &mut glib::Value, this: Option<&Self>) {
+        glib::value::SetValueOptional::set_value_optional(value, this.map(|this| &this.0));
+    }
+}
+
+impl StaticType for Date {
+    fn static_type() -> glib::Type {
+        glib::Date::static_type()
+    }
+}
+
+impl<'a> Serialize for Date {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        DateTimeVariants::YMD(
+            self.0.get_year() as i32,
+            self.0.get_month().to_glib() as i32,
+            self.0.get_day() as i32,
+        )
+        .serialize(serializer)
+    }
 }
 
 impl<'a> Serialize for DateTime {
@@ -55,6 +102,35 @@ impl<'a> Serialize for DateTime {
         };
 
         variant.serialize(serializer)
+    }
+}
+
+impl TryFrom<DateTimeVariants> for Date {
+    type Error = &'static str;
+
+    fn try_from(dt_variant: DateTimeVariants) -> Result<Self, Self::Error> {
+        match dt_variant {
+            DateTimeVariants::YMD(y, m, d) => {
+                let month = glib::DateMonth::from_glib(m);
+                if let glib::DateMonth::__Unknown(_) = month {
+                    return Err("Out of range `month` for `Date`");
+                }
+
+                Ok(Date(glib::Date::new_dmy(
+                    d.try_into().map_err(|_| "Out of range `day` for `Date`")?,
+                    month,
+                    y.try_into().map_err(|_| "Out of range `year` for `Date`")?,
+                )))
+            }
+            _ => Err("Incompatible variant for `Date` (expecting \"YMD\")"),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for Date {
+    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        DateTimeVariants::deserialize(deserializer)
+            .and_then(|dt_variant| dt_variant.try_into().map_err(|err| D::Error::custom(err)))
     }
 }
 
@@ -104,7 +180,7 @@ mod tests {
 
         let res = serde_json::to_string(&datetime).unwrap();
         assert_eq!(
-            "{\"YMDhmsTz\":[2018,5,28,16,6,42.123456,2.0]}".to_owned(),
+            r#"{"YMDhmsTz":[2018,5,28,16,6,42.123456,2.0]}"#.to_owned(),
             res
         );
 
@@ -129,6 +205,9 @@ mod tests {
     fn test_deserialize() {
         ::init().unwrap();
 
+        // FIXME: compare `DateTime`s instances
+        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
+
         let datetime_ron = "YMDhmsTz(2018, 5, 28, 16, 6, 42.123456, 2)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
         assert_eq!(datetime_de.get_time_zone_offset(), 2f32);
@@ -140,7 +219,7 @@ mod tests {
         assert_eq!(datetime_de.get_second(), 42);
         assert_eq!(datetime_de.get_microsecond(), 123_456);
 
-        let datetime_json = "{\"YMDhmsTz\":[2018,5,28,16,6,42.123456,2.0]}";
+        let datetime_json = r#"{"YMDhmsTz":[2018,5,28,16,6,42.123456,2.0]}"#;
         let datetime_de: DateTime = serde_json::from_str(datetime_json).unwrap();
         assert_eq!(datetime_de.get_time_zone_offset(), 2f32);
         assert_eq!(datetime_de.get_year(), 2018);

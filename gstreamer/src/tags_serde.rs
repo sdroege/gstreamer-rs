@@ -8,7 +8,7 @@
 
 use glib;
 use glib::translate::{from_glib, ToGlibPtr};
-use glib::{SendValue, ToValue};
+use glib::{Date, SendValue, ToValue};
 use gst_sys;
 
 use serde::de;
@@ -20,8 +20,9 @@ use std::cell::RefCell;
 use std::fmt;
 use std::rc::Rc;
 
-use tags::*;
-use value_serde::{DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
+use date_time_serde;
+use tags::{GenericTagIter, TagList, TagListRef};
+use value_serde::{DATE_OTHER_TYPE_ID, DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID};
 use DateTime;
 use Sample;
 use TagMergeMode;
@@ -46,8 +47,6 @@ macro_rules! ser_opt_tag (
 // to be Non-null and non-empty in the C API. See:
 // https://gitlab.freedesktop.org/gstreamer/gstreamer/blob/d90d771a9a512381315f7694c3a50b152035f3cb/gst/gststructure.c#L810-853
 
-// FIXME: implement serde for type `Date`
-
 // serialize trait is only available for `&self`, but we need to mutate the iterator
 struct TagValuesSer<'a>(Rc<RefCell<GenericTagIter<'a>>>);
 impl<'a> TagValuesSer<'a> {
@@ -68,13 +67,22 @@ impl<'a> Serialize for TagValuesSer<'a> {
                 glib::Type::String => {
                     // See above comment about `Tag`s with `String` values
                     ser_opt_value!(value, String, |_, value: Option<String>| {
-                        seq.serialize_element(&value.expect("string tag ser"))
+                        seq.serialize_element(&value.expect("String tag ser"))
                     })
                 }
                 glib::Type::U32 => ser_some_tag!(value, seq, u32),
                 glib::Type::U64 => ser_some_tag!(value, seq, u64),
                 glib::Type::Other(type_id) => {
-                    if *DATE_TIME_OTHER_TYPE_ID == type_id {
+                    if *DATE_OTHER_TYPE_ID == type_id {
+                        // See above comment about `Tag`s with `Date` values
+                        ser_opt_value!(value, Date, |_, value: Option<Date>| {
+                            // Need to wrap the `glib::Date` in new type `date_time_serde::Date` first
+                            // See comment in `date_time_serde.rs`
+                            seq.serialize_element(&date_time_serde::Date::from(
+                                value.expect("Date tag ser"),
+                            ))
+                        })
+                    } else if *DATE_TIME_OTHER_TYPE_ID == type_id {
                         ser_opt_tag!(value, seq, DateTime)
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
                         ser_opt_tag!(value, seq, Sample)
@@ -183,7 +191,12 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
                 glib::Type::U32 => de_some_tag!(self.0, seq, u32),
                 glib::Type::U64 => de_some_tag!(self.0, seq, u64),
                 glib::Type::Other(type_id) => {
-                    if *DATE_TIME_OTHER_TYPE_ID == type_id {
+                    if *DATE_OTHER_TYPE_ID == type_id {
+                        // See comment above `TagValuesSer` definition about `Tag`s with `Date` values
+                        // Need to deserialize as `date_time_serde::Date` new type
+                        // See comment in `date_time_serde.rs`
+                        de_send_value!("Tag", self.0, seq, date_time_serde::Date, Date)
+                    } else if *DATE_TIME_OTHER_TYPE_ID == type_id {
                         de_opt_tag!(self.0, seq, DateTime)
                     } else if *SAMPLE_OTHER_TYPE_ID == type_id {
                         de_opt_tag!(self.0, seq, Sample)
@@ -328,6 +341,10 @@ mod tests {
             tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
+            tags.add::<Date>(
+                &glib::Date::new_dmy(28, glib::DateMonth::May, 2018),
+                TagMergeMode::Append,
+            );
             tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
 
             let sample = {
@@ -348,60 +365,63 @@ mod tests {
         let res = ron::ser::to_string_pretty(&tags, pretty_config);
         assert_eq!(
             Ok(concat!(
-                "(",
-                "    scope: Stream,",
-                "    tags: [",
-                "        (\"title\", [",
-                "            \"a title\",",
-                "            \"another title\",",
-                "        ]),",
-                "        (\"duration\", [",
-                "            120000000000,",
-                "        ]),",
-                "        (\"bitrate\", [",
-                "            96000,",
-                "        ]),",
-                "        (\"replaygain-track-gain\", [",
-                "            1,",
-                "        ]),",
-                "        (\"datetime\", [",
-                "            Some(YMD(2018, 5, 28)),",
-                "        ]),",
-                "        (\"image\", [",
-                "            Some((",
-                "                buffer: Some((",
-                "                    pts: None,",
-                "                    dts: None,",
-                "                    duration: None,",
-                "                    offset: 0,",
-                "                    offset_end: 0,",
-                "                    flags: (",
-                "                        bits: 0,",
-                "                    ),",
-                "                    buffer: \"AQIDBA==\",",
-                "                )),",
-                "                buffer_list: None,",
-                "                caps: None,",
-                "                segment: Some((",
-                "                    flags: (",
-                "                        bits: 0,",
-                "                    ),",
-                "                    rate: 1,",
-                "                    applied_rate: 1,",
-                "                    format: Time,",
-                "                    base: 0,",
-                "                    offset: 0,",
-                "                    start: 0,",
-                "                    stop: -1,",
-                "                    time: 0,",
-                "                    position: 0,",
-                "                    duration: -1,",
-                "                )),",
-                "                info: None,",
-                "            )),",
-                "        ]),",
-                "    ],",
-                ")",
+                r#"("#,
+                r#"    scope: Stream,"#,
+                r#"    tags: ["#,
+                r#"        ("title", ["#,
+                r#"            "a title","#,
+                r#"            "another title","#,
+                r#"        ]),"#,
+                r#"        ("duration", ["#,
+                r#"            120000000000,"#,
+                r#"        ]),"#,
+                r#"        ("bitrate", ["#,
+                r#"            96000,"#,
+                r#"        ]),"#,
+                r#"        ("replaygain-track-gain", ["#,
+                r#"            1,"#,
+                r#"        ]),"#,
+                r#"        ("date", ["#,
+                r#"            YMD(2018, 5, 28),"#,
+                r#"        ]),"#,
+                r#"        ("datetime", ["#,
+                r#"            Some(YMD(2018, 5, 28)),"#,
+                r#"        ]),"#,
+                r#"        ("image", ["#,
+                r#"            Some(("#,
+                r#"                buffer: Some(("#,
+                r#"                    pts: None,"#,
+                r#"                    dts: None,"#,
+                r#"                    duration: None,"#,
+                r#"                    offset: 0,"#,
+                r#"                    offset_end: 0,"#,
+                r#"                    flags: ("#,
+                r#"                        bits: 0,"#,
+                r#"                    ),"#,
+                r#"                    buffer: "AQIDBA==","#,
+                r#"                )),"#,
+                r#"                buffer_list: None,"#,
+                r#"                caps: None,"#,
+                r#"                segment: Some(("#,
+                r#"                    flags: ("#,
+                r#"                        bits: 0,"#,
+                r#"                    ),"#,
+                r#"                    rate: 1,"#,
+                r#"                    applied_rate: 1,"#,
+                r#"                    format: Time,"#,
+                r#"                    base: 0,"#,
+                r#"                    offset: 0,"#,
+                r#"                    start: 0,"#,
+                r#"                    stop: -1,"#,
+                r#"                    time: 0,"#,
+                r#"                    position: 0,"#,
+                r#"                    duration: -1,"#,
+                r#"                )),"#,
+                r#"                info: None,"#,
+                r#"            )),"#,
+                r#"        ]),"#,
+                r#"    ],"#,
+                r#")"#,
             )
             .to_owned()),
             res,
@@ -425,6 +445,9 @@ mod tests {
                     ("duration", [120000000000]),
                     ("bitrate", [96000]),
                     ("replaygain-track-gain", [1]),
+                    ("date", [
+                        YMD(2018, 5, 28),
+                    ]),
                     ("datetime", [
                         Some(YMD(2018, 5, 28)),
                     ]),
@@ -464,6 +487,12 @@ mod tests {
         );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
         assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get_some(), 1f64);
+        assert_eq!(
+            tags.get_index::<Date>(0).unwrap().get().unwrap(),
+            glib::Date::new_dmy(28, glib::DateMonth::May, 2018)
+        );
+        // FIXME: compare `DateTime` instances
+        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);
         assert_eq!(datetime.get_month(), 5);
@@ -483,6 +512,7 @@ mod tests {
                     ["duration", [120000000000]],
                     ["bitrate", [96000]],
                     ["replaygain-track-gain", [1.0]],
+                    ["date",[{"YMD":[2018,5,28]}]],
                     ["datetime",[{"YMD":[2018,5,28]}]],
                     ["image",[{"buffer":{"pts":null,"dts":null,"duration":null,"offset":0,"offset_end":0,"flags":{"bits":0},"buffer":[1,2,3,4]},"buffer_list":null,"caps":null,"segment":null,"info":null}]]
                 ]
@@ -498,6 +528,12 @@ mod tests {
         );
         assert_eq!(tags.get_index::<Bitrate>(0).unwrap().get_some(), 96_000);
         assert_eq!(tags.get_index::<TrackGain>(0).unwrap().get_some(), 1f64);
+        assert_eq!(
+            tags.get_index::<Date>(0).unwrap().get().unwrap(),
+            glib::Date::new_dmy(28, glib::DateMonth::May, 2018)
+        );
+        // FIXME: compare `DateTime` instances
+        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);
         assert_eq!(datetime.get_month(), 5);
@@ -524,6 +560,10 @@ mod tests {
             tags.add::<Duration>(&(::SECOND * 120).into(), TagMergeMode::Append); // u64
             tags.add::<Bitrate>(&96_000, TagMergeMode::Append); // u32
             tags.add::<TrackGain>(&1f64, TagMergeMode::Append); // f64
+            tags.add::<Date>(
+                &glib::Date::new_dmy(28, glib::DateMonth::May, 2018),
+                TagMergeMode::Append,
+            );
             tags.add::<DateTime>(&::DateTime::new_ymd(2018, 5, 28), TagMergeMode::Append);
 
             let sample = {
@@ -561,6 +601,10 @@ mod tests {
         assert_eq!(
             tags_de.get_index::<TrackGain>(0).unwrap().get_some(),
             tags.get_index::<TrackGain>(0).unwrap().get_some(),
+        );
+        assert_eq!(
+            tags_de.get_index::<Date>(0).unwrap().get(),
+            tags.get_index::<Date>(0).unwrap().get(),
         );
         let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
         assert_eq!(datetime.get_year(), 2018);

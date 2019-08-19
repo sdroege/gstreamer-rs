@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use glib;
-use glib::{StaticType, ToValue};
+use glib::{Date, StaticType, ToValue};
 
 use num_rational::Rational32;
 
@@ -22,6 +22,7 @@ use Buffer;
 use DateTime;
 use Sample;
 
+use date_time_serde;
 use value::*;
 
 fn get_other_type_id<T: StaticType>() -> usize {
@@ -31,11 +32,10 @@ fn get_other_type_id<T: StaticType>() -> usize {
     }
 }
 
-// FIXME: implement serde for type `Date`
-
 lazy_static! {
     pub(crate) static ref ARRAY_OTHER_TYPE_ID: usize = get_other_type_id::<Array>();
     pub(crate) static ref BITMASK_OTHER_TYPE_ID: usize = get_other_type_id::<Bitmask>();
+    pub(crate) static ref DATE_OTHER_TYPE_ID: usize = get_other_type_id::<Date>();
     pub(crate) static ref DATE_TIME_OTHER_TYPE_ID: usize = get_other_type_id::<DateTime>();
     pub(crate) static ref FRACTION_OTHER_TYPE_ID: usize = get_other_type_id::<Fraction>();
     pub(crate) static ref FRACTION_RANGE_OTHER_TYPE_ID: usize =
@@ -94,6 +94,12 @@ macro_rules! ser_value (
                     ser_some_value!($value, Array, $ser_closure)
                 } else if *BITMASK_OTHER_TYPE_ID == type_id {
                     ser_some_value!($value, Bitmask, $ser_closure)
+                } else if *DATE_OTHER_TYPE_ID == type_id {
+                    ser_opt_value!($value, Date, |type_, value: Option<Date>| {
+                        // Need to wrap the `glib::Date` in new type `date_time_serde::Date` first
+                        // See comment in `date_time_serde.rs`
+                        $ser_closure(type_, value.map(date_time_serde::Date::from))
+                    })
                 } else if *DATE_TIME_OTHER_TYPE_ID == type_id {
                     ser_opt_value!($value, DateTime, $ser_closure)
                 } else if *FRACTION_OTHER_TYPE_ID == type_id {
@@ -221,6 +227,17 @@ macro_rules! de_send_value(
             "String" => de_opt_send_value!($type_name, $seq, String),
             "Array" => de_some_send_value!($type_name, $seq, Array),
             "Bitmask" => de_some_send_value!($type_name, $seq, Bitmask),
+            "Date" => {
+                // Need to deserialize as `date_time_serde::Date` new type
+                // See comment in `date_time_serde.rs`
+                de_send_value!(
+                    "Value",
+                    $type_name,
+                    $seq,
+                    Option<date_time_serde::Date>,
+                    Date
+                )
+            }
             "DateTime" => de_opt_send_value!($type_name, $seq, DateTime),
             "Fraction" => de_some_send_value!($type_name, $seq, Fraction),
             "FractionRange" => de_some_send_value!($type_name, $seq, FractionRange),
@@ -287,10 +304,13 @@ mod tests {
 
     use Array;
     use Bitmask;
+    use DateTime;
     use Fraction;
     use FractionRange;
     use IntRange;
     use List;
+
+    use glib::{Date, DateMonth};
 
     #[test]
     fn test_serialize_simple() {
@@ -315,7 +335,7 @@ mod tests {
         assert_eq!(Ok("(    min: (1, 3),    max: (1, 2),)".to_owned()), res);
 
         let res = serde_json::to_string(&fraction_range).unwrap();
-        assert_eq!("{\"min\":[1,3],\"max\":[1,2]}".to_owned(), res);
+        assert_eq!(r#"{"min":[1,3],"max":[1,2]}"#.to_owned(), res);
 
         // IntRange
         let int_range = IntRange::<i32>::new_with_step(0, 42, 21);
@@ -323,7 +343,7 @@ mod tests {
         assert_eq!(Ok("(    min: 0,    max: 42,    step: 21,)".to_owned()), res,);
 
         let res = serde_json::to_string(&int_range).unwrap();
-        assert_eq!("{\"min\":0,\"max\":42,\"step\":21}".to_owned(), res);
+        assert_eq!(r#"{"min":0,"max":42,"step":21}"#.to_owned(), res);
 
         // Bitmask
         let bitmask = Bitmask::new(1024 + 128 + 32);
@@ -361,22 +381,33 @@ mod tests {
         let value_str_none = str_none.to_value();
         let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
 
+        let value_date = Date::new_dmy(19, DateMonth::August, 2019).to_value();
+        let send_value_date = value_date.try_into_send_value::<Date>().unwrap();
+
+        let date_none: Option<Date> = None;
+        let value_date_none = date_none.to_value();
+        let send_value_date_none = value_date_none.try_into_send_value::<Date>().unwrap();
+
         let array = Array::new(&[
             &send_value_13,
             &send_value_12,
             &send_value_str,
             &send_value_str_none,
+            &send_value_date,
+            &send_value_date_none,
         ]);
 
         let res = ron::ser::to_string_pretty(&array, pretty_config.clone());
         assert_eq!(
             Ok(concat!(
-                "[",
-                "    (\"Fraction\", (1, 3)),",
-                "    (\"Fraction\", (1, 2)),",
-                "    (\"String\", Some(\"test str\")),",
-                "    (\"String\", None),",
-                "]"
+                r#"["#,
+                r#"    ("Fraction", (1, 3)),"#,
+                r#"    ("Fraction", (1, 2)),"#,
+                r#"    ("String", Some("test str")),"#,
+                r#"    ("String", None),"#,
+                r#"    ("Date", Some(YMD(2019, 8, 19))),"#,
+                r#"    ("Date", None),"#,
+                r#"]"#
             )
             .to_owned()),
             res,
@@ -384,7 +415,7 @@ mod tests {
 
         let res = serde_json::to_string(&array).unwrap();
         assert_eq!(
-            "[[\"Fraction\",[1,3]],[\"Fraction\",[1,2]],[\"String\",\"test str\"],[\"String\",null]]"
+            r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#
                 .to_owned(),
             res
         );
@@ -400,16 +431,33 @@ mod tests {
         let value_str_none = str_none.to_value();
         let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
 
-        let list = List::new(&[&send_value_12, &send_value_str, &send_value_str_none]);
+        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).to_value();
+        let send_value_date_time = value_date_time.try_into_send_value::<DateTime>().unwrap();
+
+        let date_time_none: Option<DateTime> = None;
+        let value_date_time_none = date_time_none.to_value();
+        let send_value_date_time_none = value_date_time_none
+            .try_into_send_value::<DateTime>()
+            .unwrap();
+
+        let list = List::new(&[
+            &send_value_12,
+            &send_value_str,
+            &send_value_str_none,
+            &send_value_date_time,
+            &send_value_date_time_none,
+        ]);
 
         let res = ron::ser::to_string_pretty(&list, pretty_config.clone());
         assert_eq!(
             Ok(concat!(
-                "[",
-                "    (\"Fraction\", (1, 2)),",
-                "    (\"String\", Some(\"test str\")),",
-                "    (\"String\", None),",
-                "]"
+                r#"["#,
+                r#"    ("Fraction", (1, 2)),"#,
+                r#"    ("String", Some("test str")),"#,
+                r#"    ("String", None),"#,
+                r#"    ("DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),"#,
+                r#"    ("DateTime", None),"#,
+                r#"]"#
             )
             .to_owned()),
             res,
@@ -437,7 +485,7 @@ mod tests {
         assert_eq!(fraction_range.min().0.denom(), &3);
         assert_eq!(fraction_range.max().0.denom(), &2);
 
-        let fraction_range_json = "{\"min\":[1,3],\"max\":[1,2]}";
+        let fraction_range_json = r#"{"min":[1,3],"max":[1,2]}"#;
         let fraction_range: FractionRange = serde_json::from_str(fraction_range_json).unwrap();
         assert_eq!(fraction_range.min().0.denom(), &3);
         assert_eq!(fraction_range.max().0.denom(), &2);
@@ -449,7 +497,7 @@ mod tests {
         assert_eq!(int_range.max(), 42);
         assert_eq!(int_range.step(), 21);
 
-        let int_range_json = "{\"min\":0,\"max\":42,\"step\":21}";
+        let int_range_json = r#"{"min":0,"max":42,"step":21}"#;
         let int_range: IntRange<i32> = serde_json::from_str(int_range_json).unwrap();
         assert_eq!(int_range.min(), 0);
         assert_eq!(int_range.max(), 42);
@@ -517,10 +565,12 @@ mod tests {
                 ("Fraction", (1, 2)),
                 ("String", Some("test str")),
                 ("String", None),
+                ("Date", Some(YMD(2019, 8, 19))),
+                ("Date", None),
             ]"#;
         let array: Array = ron::de::from_str(array_ron).unwrap();
         let slice = array.as_slice();
-        assert_eq!(4, slice.len());
+        assert_eq!(6, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
@@ -536,12 +586,19 @@ mod tests {
         );
 
         assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+
+        assert_eq!(
+            Date::new_dmy(19, DateMonth::August, 2019),
+            slice[4].get::<Date>().expect("slice[4]").unwrap()
+        );
+
+        assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
 
         let array_json =
-            r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null]]"#;
+            r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
         let array: Array = serde_json::from_str(array_json).unwrap();
         let slice = array.as_slice();
-        assert_eq!(4, slice.len());
+        assert_eq!(6, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
@@ -557,16 +614,25 @@ mod tests {
         );
 
         assert!(slice[3].get::<String>().expect("slice[3]").is_none());
+
+        assert_eq!(
+            Date::new_dmy(19, DateMonth::August, 2019),
+            slice[4].get::<Date>().expect("slice[4]").unwrap()
+        );
+
+        assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
 
         // List
         let list_ron = r#"[
                 ("Fraction", (1, 2)),
                 ("String", Some("test str")),
                 ("String", None),
+                ("DateTime", Some(YMDhmsTz(2019, 8, 19, 13, 34, 42, 2))),
+                ("DateTime", None),
             ]"#;
         let list: List = ron::de::from_str(list_ron).unwrap();
         let slice = list.as_slice();
-        assert_eq!(3, slice.len());
+        assert_eq!(5, slice.len());
 
         let fraction = slice[0].get::<Fraction>().expect("slice[0]").unwrap();
         assert_eq!(fraction.0.numer(), &1);
@@ -578,6 +644,12 @@ mod tests {
         );
 
         assert!(slice[2].get::<String>().expect("slice[2]").is_none());
+
+        // FIXME: compare `DateTime` instances
+        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
+        assert!(slice[3].get::<DateTime>().expect("slice[3]").is_some());
+
+        assert!(slice[4].get::<DateTime>().expect("slice[4]").is_none());
     }
 
     #[test]
@@ -596,11 +668,18 @@ mod tests {
         let str_none: Option<&str> = None;
         let value_str_none = str_none.to_value();
         let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
+        let value_date = Date::new_dmy(19, DateMonth::August, 2019).to_value();
+        let send_value_date = value_date.try_into_send_value::<Date>().unwrap();
+        let date_none: Option<Date> = None;
+        let value_date_none = date_none.to_value();
+        let send_value_date_none = value_date_none.try_into_send_value::<Date>().unwrap();
         let array = Array::new(&[
             &send_value_13,
             &send_value_12,
             &send_value_str,
             &send_value_str_none,
+            &send_value_date,
+            &send_value_date_none,
         ]);
         let array_ser = ron::ser::to_string(&array).unwrap();
 
@@ -626,6 +705,13 @@ mod tests {
 
         assert!(slice[3].get::<String>().expect("slice[3]").is_none());
 
+        assert_eq!(
+            slice_de[4].get::<Date>().expect("slice_de[4]").unwrap(),
+            slice[4].get::<Date>().expect("slice[4]").unwrap()
+        );
+
+        assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
+
         // List
         let value_12 = Fraction::new(1, 2).to_value();
         let send_value_12 = value_12.try_into_send_value::<Fraction>().unwrap();
@@ -634,7 +720,20 @@ mod tests {
         let str_none: Option<&str> = None;
         let value_str_none = str_none.to_value();
         let send_value_str_none = value_str_none.try_into_send_value::<String>().unwrap();
-        let list = List::new(&[&send_value_12, &send_value_str, &send_value_str_none]);
+        let value_date_time = DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64).to_value();
+        let send_value_date_time = value_date_time.try_into_send_value::<DateTime>().unwrap();
+        let date_time_none: Option<DateTime> = None;
+        let value_date_time_none = date_time_none.to_value();
+        let send_value_date_time_none = value_date_time_none
+            .try_into_send_value::<DateTime>()
+            .unwrap();
+        let list = List::new(&[
+            &send_value_12,
+            &send_value_str,
+            &send_value_str_none,
+            &send_value_date_time,
+            &send_value_date_time_none,
+        ]);
         let list_ser = ron::ser::to_string(&list).unwrap();
 
         let list_de: List = ron::de::from_str(list_ser.as_str()).unwrap();
@@ -653,5 +752,14 @@ mod tests {
         );
 
         assert!(slice[2].get::<String>().expect("slice[2]").is_none());
+
+        // FIXME: compare `DateTime` instances
+        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
+        assert!(slice_de[3]
+            .get::<DateTime>()
+            .expect("slice_de[3]")
+            .is_some());
+
+        assert!(slice[4].get::<DateTime>().expect("slice[4]").is_none());
     }
 }
