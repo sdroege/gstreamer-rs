@@ -69,7 +69,6 @@ generate = [
     "Gst.ParseFlags",
     "Gst.TaskState",
     "Gst.PluginDependencyFlags",
-    "Gst.DateTime",
     "Gst.BufferPoolAcquireFlags",
     "Gst.PromiseResult",
 ]
@@ -1356,3 +1355,10 @@ must_use = true
 name = "Gst.ClockReturn"
 status = "generate"
 must_use = true
+
+[[object]]
+name = "Gst.DateTime"
+status = "generate"
+    [[object.derive]]
+    # Don't auto-implement traits
+    name = ""

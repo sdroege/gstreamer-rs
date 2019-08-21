@@ -205,62 +205,35 @@ mod tests {
     fn test_deserialize() {
         ::init().unwrap();
 
-        // FIXME: compare `DateTime`s instances
-        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
-
         let datetime_ron = "YMDhmsTz(2018, 5, 28, 16, 6, 42.123456, 2)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert_eq!(datetime_de.get_time_zone_offset(), 2f32);
-        assert_eq!(datetime_de.get_year(), 2018);
-        assert_eq!(datetime_de.get_month(), 5);
-        assert_eq!(datetime_de.get_day(), 28);
-        assert_eq!(datetime_de.get_hour(), 16);
-        assert_eq!(datetime_de.get_minute(), 6);
-        assert_eq!(datetime_de.get_second(), 42);
-        assert_eq!(datetime_de.get_microsecond(), 123_456);
+        assert_eq!(
+            datetime_de,
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64)
+        );
 
         let datetime_json = r#"{"YMDhmsTz":[2018,5,28,16,6,42.123456,2.0]}"#;
         let datetime_de: DateTime = serde_json::from_str(datetime_json).unwrap();
-        assert_eq!(datetime_de.get_time_zone_offset(), 2f32);
-        assert_eq!(datetime_de.get_year(), 2018);
-        assert_eq!(datetime_de.get_month(), 5);
-        assert_eq!(datetime_de.get_day(), 28);
-        assert_eq!(datetime_de.get_hour(), 16);
-        assert_eq!(datetime_de.get_minute(), 6);
-        assert_eq!(datetime_de.get_second(), 42);
-        assert_eq!(datetime_de.get_microsecond(), 123_456);
+        assert_eq!(
+            datetime_de,
+            DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64)
+        );
 
         let datetime_ron = "YMDhmTz(2018, 5, 28, 16, 6, 2)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert!(datetime_de.has_time());
-        assert!(!datetime_de.has_second());
-        assert_eq!(datetime_de.get_time_zone_offset(), 2f32);
-        assert_eq!(datetime_de.get_year(), 2018);
-        assert_eq!(datetime_de.get_month(), 5);
-        assert_eq!(datetime_de.get_day(), 28);
-        assert_eq!(datetime_de.get_hour(), 16);
-        assert_eq!(datetime_de.get_minute(), 6);
+        assert_eq!(datetime_de, DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64));
 
         let datetime_ron = "YMD(2018, 5, 28)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert!(datetime_de.has_day());
-        assert!(!datetime_de.has_time());
-        assert_eq!(datetime_de.get_year(), 2018);
-        assert_eq!(datetime_de.get_month(), 5);
-        assert_eq!(datetime_de.get_day(), 28);
+        assert_eq!(datetime_de, DateTime::new_ymd(2018, 5, 28));
 
         let datetime_ron = "YM(2018, 5)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert!(datetime_de.has_month());
-        assert!(!datetime_de.has_day());
-        assert_eq!(datetime_de.get_year(), 2018);
-        assert_eq!(datetime_de.get_month(), 5);
+        assert_eq!(datetime_de, DateTime::new_ym(2018, 5));
 
         let datetime_ron = "Y(2018)";
         let datetime_de: DateTime = ron::de::from_str(datetime_ron).unwrap();
-        assert!(datetime_de.has_year());
-        assert!(!datetime_de.has_month());
-        assert_eq!(datetime_de.get_year(), 2018);
+        assert_eq!(datetime_de, DateTime::new_y(2018));
     }
 
     #[test]
@@ -270,55 +243,26 @@ mod tests {
         let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, 42.123_456f64);
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
-        assert_eq!(
-            datetime_de.get_time_zone_offset(),
-            datetime.get_time_zone_offset()
-        );
-        assert_eq!(datetime_de.get_year(), datetime.get_year());
-        assert_eq!(datetime_de.get_month(), datetime.get_month());
-        assert_eq!(datetime_de.get_day(), datetime.get_day());
-        assert_eq!(datetime_de.get_hour(), datetime.get_hour());
-        assert_eq!(datetime_de.get_minute(), datetime.get_minute());
-        assert_eq!(datetime_de.get_second(), datetime.get_second());
-        assert_eq!(datetime_de.get_microsecond(), datetime.get_microsecond());
+        assert_eq!(datetime_de, datetime);
 
         let datetime = DateTime::new(2f32, 2018, 5, 28, 16, 6, -1f64);
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
-        assert!(datetime_de.has_time());
-        assert!(!datetime_de.has_second());
-        assert_eq!(
-            datetime_de.get_time_zone_offset(),
-            datetime.get_time_zone_offset()
-        );
-        assert_eq!(datetime_de.get_year(), datetime.get_year());
-        assert_eq!(datetime_de.get_month(), datetime.get_month());
-        assert_eq!(datetime_de.get_day(), datetime.get_day());
-        assert_eq!(datetime_de.get_hour(), datetime.get_hour());
-        assert_eq!(datetime_de.get_minute(), datetime.get_minute());
+        assert_eq!(datetime_de, datetime);
 
         let datetime = DateTime::new_ymd(2018, 5, 28);
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
-        assert!(datetime_de.has_day());
-        assert!(!datetime_de.has_time());
-        assert_eq!(datetime_de.get_year(), datetime.get_year());
-        assert_eq!(datetime_de.get_month(), datetime.get_month());
-        assert_eq!(datetime_de.get_day(), datetime.get_day());
+        assert_eq!(datetime_de, datetime);
 
         let datetime = DateTime::new_ym(2018, 5);
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
-        assert!(datetime_de.has_month());
-        assert!(!datetime_de.has_day());
-        assert_eq!(datetime_de.get_year(), datetime.get_year());
-        assert_eq!(datetime_de.get_month(), datetime.get_month());
+        assert_eq!(datetime_de, datetime);
 
         let datetime = DateTime::new_y(2018);
         let datetime_ser = ron::ser::to_string(&datetime).unwrap();
         let datetime_de: DateTime = ron::de::from_str(datetime_ser.as_str()).unwrap();
-        assert!(datetime_de.has_year());
-        assert!(!datetime_de.has_month());
-        assert_eq!(datetime_de.get_year(), datetime.get_year());
+        assert_eq!(datetime_de, datetime);
     }
 }

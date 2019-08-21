@@ -491,12 +491,10 @@ mod tests {
             tags.get_index::<Date>(0).unwrap().get().unwrap(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018)
         );
-        // FIXME: compare `DateTime` instances
-        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
-        let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
-        assert_eq!(datetime.get_year(), 2018);
-        assert_eq!(datetime.get_month(), 5);
-        assert_eq!(datetime.get_day(), 28);
+        assert_eq!(
+            tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
+            ::DateTime::new_ymd(2018, 5, 28)
+        );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {
@@ -532,12 +530,10 @@ mod tests {
             tags.get_index::<Date>(0).unwrap().get().unwrap(),
             glib::Date::new_dmy(28, glib::DateMonth::May, 2018)
         );
-        // FIXME: compare `DateTime` instances
-        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
-        let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
-        assert_eq!(datetime.get_year(), 2018);
-        assert_eq!(datetime.get_month(), 5);
-        assert_eq!(datetime.get_day(), 28);
+        assert_eq!(
+            tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
+            ::DateTime::new_ymd(2018, 5, 28)
+        );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {
@@ -606,10 +602,10 @@ mod tests {
             tags_de.get_index::<Date>(0).unwrap().get(),
             tags.get_index::<Date>(0).unwrap().get(),
         );
-        let datetime = tags.get_index::<DateTime>(0).unwrap().get().unwrap();
-        assert_eq!(datetime.get_year(), 2018);
-        assert_eq!(datetime.get_month(), 5);
-        assert_eq!(datetime.get_day(), 28);
+        assert_eq!(
+            tags.get_index::<DateTime>(0).unwrap().get().unwrap(),
+            ::DateTime::new_ymd(2018, 5, 28)
+        );
         let sample = tags.get_index::<Image>(0).unwrap().get().unwrap();
         let buffer = sample.get_buffer().unwrap();
         {

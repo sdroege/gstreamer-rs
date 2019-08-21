@@ -8,7 +8,7 @@ use glib::GString;
 use gst_sys;
 
 glib_wrapper! {
-    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    #[derive()]
     pub struct DateTime(Shared<gst_sys::GstDateTime>);
 
     match fn {

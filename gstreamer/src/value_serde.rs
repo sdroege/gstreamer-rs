@@ -645,9 +645,10 @@ mod tests {
 
         assert!(slice[2].get::<String>().expect("slice[2]").is_none());
 
-        // FIXME: compare `DateTime` instances
-        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
-        assert!(slice[3].get::<DateTime>().expect("slice[3]").is_some());
+        assert_eq!(
+            DateTime::new(2f32, 2019, 8, 19, 13, 34, 42f64),
+            slice[3].get::<DateTime>().expect("slice[3]").unwrap()
+        );
 
         assert!(slice[4].get::<DateTime>().expect("slice[4]").is_none());
     }
@@ -753,12 +754,10 @@ mod tests {
 
         assert!(slice[2].get::<String>().expect("slice[2]").is_none());
 
-        // FIXME: compare `DateTime` instances
-        // See https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/issues/217
-        assert!(slice_de[3]
-            .get::<DateTime>()
-            .expect("slice_de[3]")
-            .is_some());
+        assert_eq!(
+            slice_de[3].get::<DateTime>().expect("slice_de[3]").unwrap(),
+            slice[3].get::<DateTime>().expect("slice[3]").unwrap()
+        );
 
         assert!(slice[4].get::<DateTime>().expect("slice[4]").is_none());
     }
