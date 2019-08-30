@@ -42,7 +42,7 @@ macro_rules! gst_plugin_define(
 
             pub fn plugin_register_static() -> Result<(), glib::BoolError> {
                 unsafe {
-                    glib_result_from_gboolean!(
+                    $crate::glib::glib_result_from_gboolean!(
                         $crate::gst_sys::gst_plugin_register_static(
                             $crate::subclass::plugin::MAJOR_VERSION,
                             $crate::subclass::plugin::MINOR_VERSION,
@@ -81,18 +81,18 @@ macro_rules! gst_plugin_define(
                         Ok(_) => $crate::glib_sys::GTRUE,
                         Err(err) => {
                             let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
-                            gst_error!(cat, "Failed to register plugin: {}", err);
+                            $crate::gst_error!(cat, "Failed to register plugin: {}", err);
                             $crate::glib_sys::GFALSE
                         }
                     }
                     Err(err) => {
                         let cat = $crate::DebugCategory::get("GST_PLUGIN_LOADING").unwrap();
                         if let Some(cause) = err.downcast_ref::<&str>() {
-                            gst_error!(cat, "Failed to initialize plugin due to panic: {}", cause);
+                            $crate::gst_error!(cat, "Failed to initialize plugin due to panic: {}", cause);
                         } else if let Some(cause) = err.downcast_ref::<String>() {
-                            gst_error!(cat, "Failed to initialize plugin due to panic: {}", cause);
+                            $crate::gst_error!(cat, "Failed to initialize plugin due to panic: {}", cause);
                         } else {
-                            gst_error!(cat, "Failed to initialize plugin due to panic");
+                            $crate::gst_error!(cat, "Failed to initialize plugin due to panic");
                         }
 
                         $crate::glib_sys::GFALSE

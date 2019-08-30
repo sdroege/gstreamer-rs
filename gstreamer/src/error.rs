@@ -118,13 +118,13 @@ macro_rules! gst_loggable_error(
 macro_rules! gst_result_from_gboolean(
 // Plain strings
     ($gst_sys_bool:expr, $cat:expr, $msg:expr) =>  {
-        glib_result_from_gboolean!($gst_sys_bool, $msg)
+        $crate::glib::glib_result_from_gboolean!($gst_sys_bool, $msg)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     };
 
 // Format strings
     ($gst_sys_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
-        glib_result_from_gboolean!($gst_sys_bool, $($msg)*)
+        $crate::glib::glib_result_from_gboolean!($gst_sys_bool, $($msg)*)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     }};
 );
