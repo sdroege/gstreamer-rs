@@ -62,6 +62,14 @@ pub trait ElementImpl: ElementImplExt + ObjectImpl + Send + Sync + 'static {
     fn set_context(&self, element: &::Element, context: &::Context) {
         self.parent_set_context(element, context)
     }
+
+    fn set_clock(&self, element: &::Element, clock: Option<&::Clock>) -> bool {
+        self.parent_set_clock(element, clock)
+    }
+
+    fn provide_clock(&self, element: &::Element) -> Option<::Clock> {
+        self.parent_provide_clock(element)
+    }
 }
 
 pub trait ElementImplExt {
@@ -86,6 +94,10 @@ pub trait ElementImplExt {
     fn parent_query(&self, element: &::Element, query: &mut QueryRef) -> bool;
 
     fn parent_set_context(&self, element: &::Element, context: &::Context);
+
+    fn parent_set_clock(&self, element: &::Element, clock: Option<&::Clock>) -> bool;
+
+    fn parent_provide_clock(&self, element: &::Element) -> Option<::Clock>;
 
     fn catch_panic<
         R,
@@ -200,6 +212,30 @@ where
         }
     }
 
+    fn parent_set_clock(&self, element: &::Element, clock: Option<&::Clock>) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
+
+            (*parent_class)
+                .set_clock
+                .map(|f| from_glib(f(element.to_glib_none().0, clock.to_glib_none().0)))
+                .unwrap_or(false)
+        }
+    }
+
+    fn parent_provide_clock(&self, element: &::Element) -> Option<::Clock> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstElementClass;
+
+            (*parent_class)
+                .provide_clock
+                .map(|f| from_glib_none(f(element.to_glib_none().0)))
+                .unwrap_or(None)
+        }
+    }
+
     fn catch_panic<
         R,
         F: FnOnce(&Self) -> R,
@@ -288,6 +324,8 @@ where
             klass.send_event = Some(element_send_event::<T>);
             klass.query = Some(element_query::<T>);
             klass.set_context = Some(element_set_context::<T>);
+            klass.set_clock = Some(element_set_clock::<T>);
+            klass.provide_clock = Some(element_provide_clock::<T>);
         }
     }
 }
@@ -431,6 +469,45 @@ unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.set_context(&wrap, &from_glib_borrow(context))
     })
+}
+
+unsafe extern "C" fn element_set_clock<T: ObjectSubclass>(
+    ptr: *mut gst_sys::GstElement,
+    clock: *mut gst_sys::GstClock,
+) -> glib_sys::gboolean
+where
+    T: ElementImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Element = from_glib_borrow(ptr);
+
+    let clock = Option::<::Clock>::from_glib_borrow(clock);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.set_clock(&wrap, clock.as_ref())
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn element_provide_clock<T: ObjectSubclass>(
+    ptr: *mut gst_sys::GstElement,
+) -> *mut gst_sys::GstClock
+where
+    T: ElementImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Element = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+        imp.provide_clock(&wrap)
+    })
+    .to_glib_full()
 }
 
 #[cfg(test)]
