@@ -191,6 +191,10 @@ pub trait ElementExtManual: 'static {
     fn get_sink_pads(&self) -> Vec<Pad>;
     fn get_src_pads(&self) -> Vec<Pad>;
 
+    fn num_pads(&self) -> u16;
+    fn num_sink_pads(&self) -> u16;
+    fn num_src_pads(&self) -> u16;
+
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn add_property_deep_notify_watch(
         &self,
@@ -497,6 +501,30 @@ impl<O: IsA<Element>> ElementExtManual for O {
             let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
             ::utils::MutexGuard::lock(&elt.object.lock);
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
+        }
+    }
+
+    fn num_pads(&self) -> u16 {
+        unsafe {
+            let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
+            ::utils::MutexGuard::lock(&elt.object.lock);
+            elt.numpads
+        }
+    }
+
+    fn num_sink_pads(&self) -> u16 {
+        unsafe {
+            let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
+            ::utils::MutexGuard::lock(&elt.object.lock);
+            elt.numsinkpads
+        }
+    }
+
+    fn num_src_pads(&self) -> u16 {
+        unsafe {
+            let elt: &gst_sys::GstElement = &*(self.as_ptr() as *const _);
+            ::utils::MutexGuard::lock(&elt.object.lock);
+            elt.numsrcpads
         }
     }
 
