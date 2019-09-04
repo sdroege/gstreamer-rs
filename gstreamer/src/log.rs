@@ -457,7 +457,13 @@ mod tests {
                             _object: Option<&glib::Object>,
                             message: &DebugMessage| {
             let cat = DebugCategory::get("test-cat-log").unwrap();
-            assert_eq!(category, cat);
+
+            if category != cat {
+                // This test can run in parallel with other tests, including new_and_log above.
+                // We cannot be certain we only see our own messages.
+                return;
+            }
+
             assert_eq!(level, DebugLevel::Info);
             assert_eq!(message.get(), Some("meh"));
             let _ = sender.lock().unwrap().send(());
