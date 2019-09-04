@@ -18,6 +18,7 @@ use gst_sys;
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
+use std::iter;
 use std::marker::PhantomData;
 use std::mem;
 use std::ptr;
@@ -179,6 +180,10 @@ where
                 gst_sys::GST_ITERATOR_ERROR | _ => Err(IteratorError::Error),
             }
         }
+    }
+
+    pub fn iter(self) -> StdIterator<T> {
+        StdIterator::new(self)
     }
 }
 
@@ -611,6 +616,65 @@ impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut gst_sys::GstIterator> 
     }
 }
 
+pub struct StdIterator<T> {
+    inner: Iterator<T>,
+    error: Option<IteratorError>,
+}
+
+impl<T> StdIterator<T> {
+    fn new(inner: Iterator<T>) -> Self {
+        Self { inner, error: None }
+    }
+}
+
+impl<T: StaticType + 'static> Clone for StdIterator<T> {
+    fn clone(&self) -> Self {
+        Self {
+            inner: self.inner.clone(),
+            error: self.error,
+        }
+    }
+}
+
+impl<T> fmt::Debug for StdIterator<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("StdIterator")
+            .field("inner", &self.inner)
+            .field("error", &self.error)
+            .finish()
+    }
+}
+
+impl<T> iter::Iterator for StdIterator<T>
+where
+    for<'a> T: FromValueOptional<'a> + 'static,
+{
+    type Item = Result<T, IteratorError>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.error {
+            // Fuse the iterator after returning IteratorError::Error
+            Some(IteratorError::Error) => return None,
+
+            // The iterator needs a resync
+            Some(IteratorError::Resync) => {
+                self.inner.resync();
+                self.error = None;
+            }
+
+            None => {}
+        }
+
+        let res = self.inner.next();
+
+        if let Err(err) = &res {
+            self.error = Some(*err);
+        }
+
+        res.transpose()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -684,5 +748,67 @@ mod tests {
             Ok(sum)
         });
         assert_eq!(res.unwrap(), 6);
+    }
+
+    #[test]
+    fn test_std() {
+        let mut it = Iterator::from_vec(vec![1i32, 2, 3]).iter();
+        assert_eq!(it.next(), Some(Ok(1)));
+        assert_eq!(it.next(), Some(Ok(2)));
+        assert_eq!(it.next(), Some(Ok(3)));
+        assert_eq!(it.next(), None);
+    }
+
+    #[test]
+    fn test_std_resync_collect() {
+        use prelude::*;
+        use std::collections::BTreeSet;
+
+        ::init().unwrap();
+
+        let bin = ::Bin::new(None);
+        let id1 = ::ElementFactory::make("identity", None).unwrap();
+        let id2 = ::ElementFactory::make("identity", None).unwrap();
+
+        bin.add(&id1).unwrap();
+
+        let mut it = bin.iterate_elements().iter();
+        assert_eq!(it.next().unwrap().unwrap(), id1);
+
+        bin.add(&id2).unwrap();
+
+        let res = it.by_ref().collect::<Result<Vec<_>, _>>().unwrap_err();
+        assert_eq!(res, IteratorError::Resync);
+
+        let mut elems = BTreeSet::new();
+        elems.insert(id1);
+        elems.insert(id2);
+
+        let res = it.by_ref().collect::<Result<BTreeSet<_>, _>>().unwrap();
+        assert_eq!(res, elems);
+
+        let res = it.collect::<Result<Vec<_>, _>>().unwrap();
+        assert!(res.is_empty());
+    }
+
+    #[test]
+    fn test_std_resync_find() {
+        use prelude::*;
+
+        ::init().unwrap();
+
+        let bin = ::Bin::new(None);
+        let id1 = ::ElementFactory::make("identity", None).unwrap();
+        let id2 = ::ElementFactory::make("identity", None).unwrap();
+
+        bin.add(&id1).unwrap();
+
+        let mut it = bin.iterate_elements().iter();
+        assert_eq!(it.next().unwrap().unwrap(), id1);
+
+        bin.add(&id2).unwrap();
+
+        let res = it.find(|x| x.as_ref() == Ok(&id1));
+        assert_eq!(res.unwrap().unwrap(), id1);
     }
 }

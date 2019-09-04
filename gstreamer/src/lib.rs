@@ -221,7 +221,7 @@ cfg_if! {
     }
 }
 
-pub use self::iterator::{Iterator, IteratorError, IteratorImpl};
+pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
 #[cfg(any(feature = "futures", feature = "dox"))]
 pub use bus::BusStream;
 pub use child_proxy::ChildProxyExtManual;
