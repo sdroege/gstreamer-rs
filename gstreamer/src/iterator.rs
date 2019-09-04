@@ -48,7 +48,6 @@ impl Error for IteratorError {
 }
 
 // Implemented manually so that we can use generics for the item
-#[derive(Debug)]
 pub struct Iterator<T> {
     iter: ptr::NonNull<gst_sys::GstIterator>,
     borrowed: bool,
@@ -459,6 +458,15 @@ where
 impl<T: StaticType + 'static> Clone for Iterator<T> {
     fn clone(&self) -> Self {
         unsafe { from_glib_full(gst_sys::gst_iterator_copy(self.to_glib_none().0)) }
+    }
+}
+
+impl<T> fmt::Debug for Iterator<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("Iterator")
+            .field("iter", &self.iter)
+            .field("borrowed", &self.borrowed)
+            .finish()
     }
 }
 
