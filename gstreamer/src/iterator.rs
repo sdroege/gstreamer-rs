@@ -181,10 +181,6 @@ where
             }
         }
     }
-
-    pub fn iter(self) -> StdIterator<T> {
-        StdIterator::new(self)
-    }
 }
 
 impl<T> Iterator<T>
@@ -485,6 +481,18 @@ impl<T> Drop for Iterator<T> {
     }
 }
 
+impl<T> iter::IntoIterator for Iterator<T>
+where
+    for<'a> T: FromValueOptional<'a> + 'static,
+{
+    type Item = Result<T, IteratorError>;
+    type IntoIter = StdIterator<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        Self::IntoIter::new(self)
+    }
+}
+
 impl<T> glib::types::StaticType for Iterator<T> {
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(gst_sys::gst_iterator_get_type()) }
@@ -746,7 +754,7 @@ mod tests {
 
     #[test]
     fn test_std() {
-        let mut it = Iterator::from_vec(vec![1i32, 2, 3]).iter();
+        let mut it = Iterator::from_vec(vec![1i32, 2, 3]).into_iter();
         assert_eq!(it.next(), Some(Ok(1)));
         assert_eq!(it.next(), Some(Ok(2)));
         assert_eq!(it.next(), Some(Ok(3)));
@@ -766,7 +774,7 @@ mod tests {
 
         bin.add(&id1).unwrap();
 
-        let mut it = bin.iterate_elements().iter();
+        let mut it = bin.iterate_elements().into_iter();
         assert_eq!(it.next().unwrap().unwrap(), id1);
 
         bin.add(&id2).unwrap();
@@ -797,7 +805,7 @@ mod tests {
 
         bin.add(&id1).unwrap();
 
-        let mut it = bin.iterate_elements().iter();
+        let mut it = bin.iterate_elements().into_iter();
         assert_eq!(it.next().unwrap().unwrap(), id1);
 
         bin.add(&id2).unwrap();
