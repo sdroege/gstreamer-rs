@@ -762,6 +762,15 @@ mod tests {
     }
 
     #[test]
+    fn test_into_iter() {
+        let mut v = vec![1i32, 2, 3].into_iter();
+        for x in Iterator::from_vec(vec![1i32, 2, 3]) {
+            assert_eq!(x.unwrap(), v.next().unwrap());
+        }
+        assert_eq!(v.next(), None);
+    }
+
+    #[test]
     fn test_std_resync_collect() {
         use prelude::*;
         use std::collections::BTreeSet;
