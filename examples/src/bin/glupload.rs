@@ -408,6 +408,7 @@ impl App {
                         gst_gl::GLPlatform::GLX,
                     )
                 }
+                #[allow(unreachable_patterns)]
                 handler => panic!("Unsupported platform: {:?}.", handler),
             };
 

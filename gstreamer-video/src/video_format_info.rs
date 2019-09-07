@@ -145,6 +145,7 @@ impl VideoFormatInfo {
         (-((-(i64::from(height))) >> self.h_sub()[component as usize])) as u32
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn unpack(
         &self,
         flags: ::VideoPackFlags,
@@ -220,6 +221,7 @@ impl VideoFormatInfo {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn pack(
         &self,
         flags: ::VideoPackFlags,

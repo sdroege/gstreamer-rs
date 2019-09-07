@@ -115,7 +115,12 @@ pub fn calculate_linear_regression(
     unsafe {
         assert_eq!(mem::size_of::<u64>() * 2, mem::size_of::<(u64, u64)>());
         assert_eq!(mem::align_of::<u64>(), mem::align_of::<(u64, u64)>());
-        assert!(temp.as_ref().map(|temp| temp.len()).unwrap_or(xy.len()) >= xy.len());
+        assert!(
+            temp.as_ref()
+                .map(|temp| temp.len())
+                .unwrap_or_else(|| xy.len())
+                >= xy.len()
+        );
 
         let mut m_num = mem::MaybeUninit::uninit();
         let mut m_denom = mem::MaybeUninit::uninit();

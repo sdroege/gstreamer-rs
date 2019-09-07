@@ -130,7 +130,7 @@ impl TryFrom<DateTimeVariants> for Date {
 impl<'de> Deserialize<'de> for Date {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         DateTimeVariants::deserialize(deserializer)
-            .and_then(|dt_variant| dt_variant.try_into().map_err(|err| D::Error::custom(err)))
+            .and_then(|dt_variant| dt_variant.try_into().map_err(D::Error::custom))
     }
 }
 

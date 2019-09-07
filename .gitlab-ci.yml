@@ -124,7 +124,6 @@ clippy:
   extends: '.tarball_setup'
   image: "rust:slim"
   stage: 'extras'
-  allow_failure: true
   script:
     - rustup component add clippy-preview
     - cargo clippy --version
@@ -141,5 +140,9 @@ clippy:
           FEATURES=v1_16
         fi
 
-        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES
+        cargo clippy --color=always --manifest-path $crate/Cargo.toml --features=$FEATURES -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
       done
+    # And also run over all the examples/tutorials
+    - |
+      cargo clippy --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
+      cargo clippy --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless

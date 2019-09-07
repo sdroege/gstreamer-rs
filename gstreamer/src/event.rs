@@ -1410,24 +1410,30 @@ impl<'a> SeekBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        let ev = gst_sys::gst_event_new_seek(
-            s.rate,
-            s.start.get_format().to_glib(),
-            s.flags.to_glib(),
-            s.start_type.to_glib(),
-            s.start.get_value(),
-            s.stop_type.to_glib(),
-            s.stop.get_value(),
-        );
-
-        #[cfg(any(feature = "v1_16", feature = "dox"))]
+        #[allow(clippy::let_and_return)]
         {
-            if let Some(trickmode_interval) = s.trickmode_interval {
-                gst_sys::gst_event_set_seek_trickmode_interval(ev, trickmode_interval.to_glib());
-            }
-        }
+            let ev = gst_sys::gst_event_new_seek(
+                s.rate,
+                s.start.get_format().to_glib(),
+                s.flags.to_glib(),
+                s.start_type.to_glib(),
+                s.start.get_value(),
+                s.stop_type.to_glib(),
+                s.stop.get_value(),
+            );
 
-        ev
+            #[cfg(any(feature = "v1_16", feature = "dox"))]
+            {
+                if let Some(trickmode_interval) = s.trickmode_interval {
+                    gst_sys::gst_event_set_seek_trickmode_interval(
+                        ev,
+                        trickmode_interval.to_glib(),
+                    );
+                }
+            }
+
+            ev
+        }
     });
 }
 
