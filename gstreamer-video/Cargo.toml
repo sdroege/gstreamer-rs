@@ -37,7 +37,6 @@ v1_16 = ["gstreamer/v1_16", "gstreamer-base/v1_16", "gstreamer-video-sys/v1_16",
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-video-sys/dox", "glib/dox", "gstreamer/dox"]
-subclassing = ["gstreamer/subclassing"]
 
 ["package.metadata.docs.rs"]
 features = ["dox", "embed-lgpl-docs", "v1_16"]

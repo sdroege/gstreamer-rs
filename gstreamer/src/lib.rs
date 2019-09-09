@@ -24,7 +24,6 @@ pub extern crate gobject_sys;
 #[doc(hidden)]
 pub extern crate gstreamer_sys as gst_sys;
 #[doc(hidden)]
-#[cfg(feature = "subclassing")]
 pub extern crate paste;
 
 #[macro_use]
@@ -365,5 +364,4 @@ pub mod prelude {
 mod utils;
 
 #[macro_use]
-#[cfg(feature = "subclassing")]
 pub mod subclass;

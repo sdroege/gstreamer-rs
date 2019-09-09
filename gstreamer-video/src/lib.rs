@@ -103,5 +103,4 @@ pub mod prelude {
     pub use video_overlay::VideoOverlayExtManual;
 }
 
-#[cfg(feature = "subclassing")]
 pub mod subclass;

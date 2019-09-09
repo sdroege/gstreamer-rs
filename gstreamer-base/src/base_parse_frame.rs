@@ -87,7 +87,6 @@ impl<'a> fmt::Debug for BaseParseFrame<'a> {
 }
 
 impl<'a> BaseParseFrame<'a> {
-    #[cfg(feature = "subclassing")]
     pub(crate) unsafe fn new(
         frame: *mut gst_base_sys::GstBaseParseFrame,
         _parse: &'a BaseParse,

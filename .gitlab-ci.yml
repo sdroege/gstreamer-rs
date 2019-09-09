@@ -51,9 +51,9 @@ stages:
       for crate in gstreamer*; do
         if [ -n "$ALL_FEATURES" ]; then
           if [ $crate = "gstreamer" ]; then
-            FEATURES=subclassing,futures,ser_de,v1_16
+            FEATURES=futures,ser_de,v1_16
           elif [ $crate = "gstreamer-base" -o $crate = "gstreamer-video" ]; then
-            FEATURES=subclassing,v1_16
+            FEATURES=v1_16
           elif [ $crate = "gstreamer-gl" ]; then
             FEATURES=egl,x11,wayland,v1_16
           else
@@ -131,9 +131,9 @@ clippy:
     - |
       for crate in gstreamer*; do
         if [ $crate = "gstreamer" ]; then
-          FEATURES=subclassing,futures,ser_de,v1_16
+          FEATURES=futures,ser_de,v1_16
         elif [ $crate = "gstreamer-base" -o $crate = "gstreamer-video" ]; then
-          FEATURES=subclassing,v1_16
+          FEATURES=v1_16
         elif [ $crate = "gstreamer-gl" ]; then
           FEATURES=egl,x11,wayland,v1_16
         else

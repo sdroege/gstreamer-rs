@@ -8,7 +8,7 @@
 
 extern crate glib_sys;
 extern crate gobject_sys;
-#[cfg_attr(feature = "subclassing", macro_use)]
+#[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_sys as gst_sys;
@@ -85,5 +85,4 @@ pub mod prelude {
 
 mod utils;
 
-#[cfg(feature = "subclassing")]
 pub mod subclass;
