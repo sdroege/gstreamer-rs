@@ -305,6 +305,16 @@ pub unsafe trait ElementClassSubclassExt: Sized + 'static {
             );
         }
     }
+
+    fn add_metadata(&mut self, key: &str, value: &str) {
+        unsafe {
+            gst_sys::gst_element_class_add_metadata(
+                self as *mut Self as *mut gst_sys::GstElementClass,
+                key.to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
 }
 
 unsafe impl ElementClassSubclassExt for ElementClass {}
