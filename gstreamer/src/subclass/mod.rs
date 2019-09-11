@@ -27,11 +27,15 @@ pub mod element;
 pub mod ghost_pad;
 pub mod pad;
 pub mod pipeline;
+
+pub mod device;
+
 pub mod uri_handler;
 
 pub mod prelude {
     pub use super::bin::{BinImpl, BinImplExt};
     pub use super::child_proxy::ChildProxyImpl;
+    pub use super::device::{DeviceImpl, DeviceImplExt};
     pub use super::element::{ElementClassSubclassExt, ElementImpl, ElementImplExt};
     pub use super::ghost_pad::GhostPadImpl;
     pub use super::pad::{PadImpl, PadImplExt};
