@@ -57,7 +57,7 @@ pub trait DeviceExt: 'static {
 impl<O: IsA<Device>> DeviceExt for O {
     fn create_element(&self, name: Option<&str>) -> Option<Element> {
         unsafe {
-            from_glib_full(gst_sys::gst_device_create_element(
+            from_glib_none(gst_sys::gst_device_create_element(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
             ))
