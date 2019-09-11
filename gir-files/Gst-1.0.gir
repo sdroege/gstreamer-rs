@@ -10836,7 +10836,7 @@ aggregated by #GstDeviceMonitor objects.</doc>
                       version="1.4">
         <doc xml:space="preserve">Creates the element with all of the required parameters set to use
 this device.</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstElement configured to use
 this device</doc>
           <type name="Element" c:type="GstElement*"/>
