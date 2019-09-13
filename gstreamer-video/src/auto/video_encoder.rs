@@ -34,8 +34,6 @@ pub const NONE_VIDEO_ENCODER: Option<&VideoEncoder> = None;
 pub trait VideoEncoderExt: 'static {
     fn allocate_output_buffer(&self, size: usize) -> Option<gst::Buffer>;
 
-    //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
-
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff;
 
@@ -76,10 +74,6 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
             ))
         }
     }
-
-    //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams) {
-    //    unsafe { TODO: call gst_video_sys:gst_video_encoder_get_allocator() }
-    //}
 
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     fn get_max_encode_time(&self, frame: &VideoCodecFrame) -> gst::ClockTimeDiff {

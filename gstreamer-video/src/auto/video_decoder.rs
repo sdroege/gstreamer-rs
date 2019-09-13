@@ -26,8 +26,6 @@ pub trait VideoDecoderExt: 'static {
 
     fn allocate_output_buffer(&self) -> Option<gst::Buffer>;
 
-    //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams);
-
     fn get_buffer_pool(&self) -> Option<gst::BufferPool>;
 
     fn get_estimate_rate(&self) -> i32;
@@ -77,10 +75,6 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
             ))
         }
     }
-
-    //fn get_allocator(&self, allocator: /*Ignored*/gst::Allocator, params: /*Ignored*/gst::AllocationParams) {
-    //    unsafe { TODO: call gst_video_sys:gst_video_decoder_get_allocator() }
-    //}
 
     fn get_buffer_pool(&self) -> Option<gst::BufferPool> {
         unsafe {
