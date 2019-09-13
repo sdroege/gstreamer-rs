@@ -50,6 +50,8 @@ manual = [
     "Gst.Buffer",
     "Gst.BufferPool",
     "Gst.BufferPoolAcquireParams",
+    "Gst.Allocator",
+    "Gst.AllocationParams",
     "Gst.ClockTimeDiff",
     "Gst.FlowReturn",
     "Gst.TagList",
@@ -149,6 +151,10 @@ status = "generate"
     name = "negotiate"
     ignore = true
 
+    [[object.function]]
+    name = "get_allocator"
+    ignore = true
+
 [[object]]
 name = "GstVideo.VideoEncoder"
 status = "generate"
@@ -195,4 +201,8 @@ status = "generate"
 
     [[object.function]]
     name = "negotiate"
+    ignore = true
+
+    [[object.function]]
+    name = "get_allocator"
     ignore = true

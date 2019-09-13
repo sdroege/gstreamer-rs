@@ -11,6 +11,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use gst;
 use gst_video_sys;
+use std::mem;
 use std::ptr;
 use utils::HasStreamLock;
 use video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext};
@@ -31,6 +32,8 @@ pub trait VideoDecoderExtManual: 'static {
     fn get_frame(&self, frame_number: i32) -> Option<VideoCodecFrame>;
     fn get_frames(&self) -> Vec<VideoCodecFrame>;
     fn get_oldest_frame(&self) -> Option<VideoCodecFrame>;
+
+    fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams);
 
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError>;
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError>;
@@ -82,6 +85,19 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             )
         };
         ret.into_result()
+    }
+
+    fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams) {
+        unsafe {
+            let mut allocator = ptr::null_mut();
+            let mut params = mem::zeroed();
+            gst_video_sys::gst_video_decoder_get_allocator(
+                self.as_ref().to_glib_none().0,
+                &mut allocator,
+                &mut params,
+            );
+            (from_glib_full(allocator), params.into())
+        }
     }
 
     fn have_frame(&self) -> Result<gst::FlowSuccess, gst::FlowError> {
