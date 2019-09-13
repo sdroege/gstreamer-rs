@@ -29,12 +29,22 @@ generate = [
 manual = [
     "GObject.Object",
     "Gst.Object",
+    "Gst.Element",
+    "Gst.Allocator",
+    "Gst.AllocationParams",
+    "Gst.TagList",
+    "Gst.TagMergeMode",
     "GstAudio.AudioInfo",
     "GstAudio.AudioFormatInfo",
 ]
 
 [[object]]
 name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Buffer"
 status = "manual"
 ref_mode = "ref"
 
@@ -124,4 +134,55 @@ status = "generate"
     [[object.function]]
     name = "process"
     # bool does not signal error
+    ignore = true
+
+[[object]]
+name = "GstAudio.AudioDecoder"
+status = "generate"
+    [[object.function]]
+    name = "finish_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "finish_subframe"
+    ignore = true
+
+    [[object.function]]
+    name = "negotiate"
+    ignore = true
+
+    [[object.function]]
+    name = "set_output_caps"
+    ignore = true
+
+    [[object.function]]
+    name = "set_output_format"
+    ignore = true
+
+    [[object.function]]
+    name = "get_allocator"
+    ignore = true
+
+[[object]]
+name = "GstAudio.AudioEncoder"
+status = "generate"
+
+    [[object.function]]
+    name = "finish_frame"
+    ignore = true
+
+    [[object.function]]
+    name = "negotiate"
+    ignore = true
+
+    [[object.function]]
+    name = "set_output_format"
+    ignore = true
+
+    [[object.function]]
+    name = "get_allocator"
+    ignore = true
+
+    [[object.function]]
+    name = "get_latency"
     ignore = true

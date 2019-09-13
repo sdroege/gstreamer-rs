@@ -17,9 +17,11 @@ bitflags = "1.0"
 glib-sys = { version = "0.9" }
 gobject-sys = { version = "0.9" }
 gstreamer-sys = { version = "0.8", features = ["v1_8"] }
+gstreamer-base-sys = { version = "0.8", features = ["v1_8"] }
 gstreamer-audio-sys = { version = "0.8", features = ["v1_8"] }
 glib = { version = "0.8" }
 gstreamer = { version = "0.14", path = "../gstreamer" }
+gstreamer-base = { version = "0.14", path = "../gstreamer-base" }
 array-init = "0.0"
 
 [build-dependencies.rustdoc-stripper]
@@ -35,3 +37,4 @@ v1_16 = ["gstreamer-sys/v1_16", "gstreamer-audio-sys/v1_16", "v1_14"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 dox = ["gstreamer-audio-sys/dox", "glib/dox", "gstreamer/dox"]
+subclassing = ["gstreamer/subclassing"]

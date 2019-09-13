@@ -14,8 +14,11 @@ extern crate bitflags;
 extern crate glib;
 extern crate glib_sys;
 extern crate gobject_sys;
+#[macro_use]
 extern crate gstreamer as gst;
 extern crate gstreamer_audio_sys as gst_audio_sys;
+extern crate gstreamer_base as gst_base;
+extern crate gstreamer_base_sys as gst_base_sys;
 extern crate gstreamer_sys as gst_sys;
 
 macro_rules! assert_initialized_main_thread {
@@ -49,6 +52,11 @@ pub use audio_channel_position::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod audio_stream_align;
 
+mod audio_decoder;
+pub use audio_decoder::*;
+mod audio_encoder;
+pub use audio_encoder::*;
+
 use glib::translate::{from_glib_full, ToGlibPtr};
 pub fn audio_buffer_clip(
     buffer: gst::Buffer,
@@ -74,5 +82,10 @@ pub mod prelude {
     pub use glib::prelude::*;
     pub use gst::prelude::*;
 
+    pub use super::audio_decoder::AudioDecoderExtManual;
+    pub use super::audio_encoder::AudioEncoderExtManual;
     pub use auto::traits::*;
 }
+
+#[cfg(feature = "subclassing")]
+pub mod subclass;
