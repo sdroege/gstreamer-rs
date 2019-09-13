@@ -75,6 +75,30 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl + Send + Sync + 's
         self.parent_flush(element)
     }
 
+    fn negotiate(&self, element: &VideoDecoder) -> Result<(), gst::LoggableError> {
+        self.parent_negotiate(element)
+    }
+
+    fn get_caps(&self, element: &VideoDecoder, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+        self.parent_get_caps(element, filter)
+    }
+
+    fn sink_event(&self, element: &VideoDecoder, event: gst::Event) -> bool {
+        self.parent_sink_event(element, event)
+    }
+
+    fn sink_query(&self, element: &VideoDecoder, query: &mut gst::QueryRef) -> bool {
+        self.parent_sink_query(element, query)
+    }
+
+    fn src_event(&self, element: &VideoDecoder, event: gst::Event) -> bool {
+        self.parent_src_event(element, event)
+    }
+
+    fn src_query(&self, element: &VideoDecoder, query: &mut gst::QueryRef) -> bool {
+        self.parent_src_query(element, query)
+    }
+
     fn propose_allocation(
         &self,
         element: &VideoDecoder,
@@ -124,6 +148,22 @@ pub trait VideoDecoderImplExt {
     ) -> Result<gst::FlowSuccess, gst::FlowError>;
 
     fn parent_flush(&self, element: &VideoDecoder) -> bool;
+
+    fn parent_negotiate(&self, element: &VideoDecoder) -> Result<(), gst::LoggableError>;
+
+    fn parent_get_caps(
+        &self,
+        element: &VideoDecoder,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps>;
+
+    fn parent_sink_event(&self, element: &VideoDecoder, event: gst::Event) -> bool;
+
+    fn parent_sink_query(&self, element: &VideoDecoder, query: &mut gst::QueryRef) -> bool;
+
+    fn parent_src_event(&self, element: &VideoDecoder, event: gst::Event) -> bool;
+
+    fn parent_src_query(&self, element: &VideoDecoder, query: &mut gst::QueryRef) -> bool;
 
     fn parent_propose_allocation(
         &self,
@@ -315,6 +355,88 @@ impl<T: VideoDecoderImpl + ObjectImpl> VideoDecoderImplExt for T {
         }
     }
 
+    fn parent_negotiate(&self, element: &VideoDecoder) -> Result<(), gst::LoggableError> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoDecoderClass;
+            (*parent_class)
+                .negotiate
+                .map(|f| {
+                    gst_result_from_gboolean!(
+                        f(element.to_glib_none().0),
+                        gst::CAT_RUST,
+                        "Parent function `negotiate` failed"
+                    )
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_get_caps(
+        &self,
+        element: &VideoDecoder,
+        filter: Option<&gst::Caps>,
+    ) -> Option<gst::Caps> {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoDecoderClass;
+            (*parent_class)
+                .getcaps
+                .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
+                .unwrap_or(None)
+        }
+    }
+
+    fn parent_sink_event(&self, element: &VideoDecoder, event: gst::Event) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoDecoderClass;
+            let f = (*parent_class)
+                .sink_event
+                .expect("Missing parent function `sink_event`");
+            from_glib(f(element.to_glib_none().0, event.into_ptr()))
+        }
+    }
+
+    fn parent_sink_query(&self, element: &VideoDecoder, query: &mut gst::QueryRef) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoDecoderClass;
+            let f = (*parent_class)
+                .sink_query
+                .expect("Missing parent function `sink_query`");
+            from_glib(f(element.to_glib_none().0, query.as_mut_ptr()))
+        }
+    }
+
+    fn parent_src_event(&self, element: &VideoDecoder, event: gst::Event) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoDecoderClass;
+            let f = (*parent_class)
+                .src_event
+                .expect("Missing parent function `src_event`");
+            from_glib(f(element.to_glib_none().0, event.into_ptr()))
+        }
+    }
+
+    fn parent_src_query(&self, element: &VideoDecoder, query: &mut gst::QueryRef) -> bool {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_video_sys::GstVideoDecoderClass;
+            let f = (*parent_class)
+                .src_query
+                .expect("Missing parent function `src_query`");
+            from_glib(f(element.to_glib_none().0, query.as_mut_ptr()))
+        }
+    }
+
     fn parent_propose_allocation(
         &self,
         element: &VideoDecoder,
@@ -383,6 +505,12 @@ where
             klass.parse = Some(video_decoder_parse::<T>);
             klass.handle_frame = Some(video_decoder_handle_frame::<T>);
             klass.flush = Some(video_decoder_flush::<T>);
+            klass.negotiate = Some(video_decoder_negotiate::<T>);
+            klass.getcaps = Some(video_decoder_getcaps::<T>);
+            klass.sink_event = Some(video_decoder_sink_event::<T>);
+            klass.src_event = Some(video_decoder_src_event::<T>);
+            klass.sink_query = Some(video_decoder_sink_query::<T>);
+            klass.src_query = Some(video_decoder_src_query::<T>);
             klass.propose_allocation = Some(video_decoder_propose_allocation::<T>);
             klass.decide_allocation = Some(video_decoder_decide_allocation::<T>);
         }
@@ -589,6 +717,129 @@ where
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
         VideoDecoderImpl::flush(imp, &wrap)
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn video_decoder_negotiate<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoDecoder,
+) -> glib_sys::gboolean
+where
+    T: VideoDecoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoDecoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        match imp.negotiate(&wrap) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn video_decoder_getcaps<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoDecoder,
+    filter: *mut gst_sys::GstCaps,
+) -> *mut gst_sys::GstCaps
+where
+    T: VideoDecoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoDecoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+        VideoDecoderImpl::get_caps(
+            imp,
+            &wrap,
+            Option::<gst::Caps>::from_glib_borrow(filter).as_ref(),
+        )
+    })
+    .to_glib_full()
+}
+
+unsafe extern "C" fn video_decoder_sink_event<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoDecoder,
+    event: *mut gst_sys::GstEvent,
+) -> glib_sys::gboolean
+where
+    T: VideoDecoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoDecoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.sink_event(&wrap, from_glib_full(event))
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn video_decoder_sink_query<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoDecoder,
+    query: *mut gst_sys::GstQuery,
+) -> glib_sys::gboolean
+where
+    T: VideoDecoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoDecoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.sink_query(&wrap, gst::QueryRef::from_mut_ptr(query))
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn video_decoder_src_event<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoDecoder,
+    event: *mut gst_sys::GstEvent,
+) -> glib_sys::gboolean
+where
+    T: VideoDecoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoDecoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.src_event(&wrap, from_glib_full(event))
+    })
+    .to_glib()
+}
+
+unsafe extern "C" fn video_decoder_src_query<T: ObjectSubclass>(
+    ptr: *mut gst_video_sys::GstVideoDecoder,
+    query: *mut gst_sys::GstQuery,
+) -> glib_sys::gboolean
+where
+    T: VideoDecoderImpl,
+    T::Instance: PanicPoison,
+{
+    glib_floating_reference_guard!(ptr);
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: VideoDecoder = from_glib_borrow(ptr);
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), false, {
+        imp.src_query(&wrap, gst::QueryRef::from_mut_ptr(query))
     })
     .to_glib()
 }
