@@ -196,7 +196,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExtManual for O {
         };
 
         if state.is_null() {
-            Err(gst::FlowError::Error)
+            Err(gst::FlowError::NotNegotiated)
         } else {
             unsafe { Ok(VideoCodecState::<InNegotiation>::new(state, self.as_ref())) }
         }
