@@ -44,11 +44,7 @@ pub trait VideoDecoderExt: 'static {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
-    fn proxy_getcaps(
-        &self,
-        caps: Option<&gst::Caps>,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
     fn set_estimate_rate(&self, enabled: bool);
 
@@ -141,11 +137,7 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExt for O {
         }
     }
 
-    fn proxy_getcaps(
-        &self,
-        caps: Option<&gst::Caps>,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             from_glib_full(gst_video_sys::gst_video_decoder_proxy_getcaps(
                 self.as_ref().to_glib_none().0,

@@ -42,11 +42,7 @@ pub trait VideoEncoderExt: 'static {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
-    fn proxy_getcaps(
-        &self,
-        caps: Option<&gst::Caps>,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
     fn set_headers(&self, headers: &[&gst::Buffer]);
 
@@ -104,11 +100,7 @@ impl<O: IsA<VideoEncoder>> VideoEncoderExt for O {
         }
     }
 
-    fn proxy_getcaps(
-        &self,
-        caps: Option<&gst::Caps>,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             from_glib_full(gst_video_sys::gst_video_encoder_proxy_getcaps(
                 self.as_ref().to_glib_none().0,
