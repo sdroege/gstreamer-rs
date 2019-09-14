@@ -163,6 +163,11 @@ status = "generate"
     name = "get_allocator"
     ignore = true
 
+    [[object.function]]
+    name = "proxy_getcaps"
+        [object.function.return]
+        nullable = false
+
 [[object]]
 name = "GstAudio.AudioEncoder"
 status = "generate"
@@ -186,3 +191,8 @@ status = "generate"
     [[object.function]]
     name = "get_latency"
     ignore = true
+
+    [[object.function]]
+    name = "proxy_getcaps"
+        [object.function.return]
+        nullable = false

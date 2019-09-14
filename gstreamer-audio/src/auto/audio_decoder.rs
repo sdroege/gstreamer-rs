@@ -57,11 +57,7 @@ pub trait AudioDecoderExt: 'static {
 
     fn merge_tags(&self, tags: Option<&gst::TagList>, mode: gst::TagMergeMode);
 
-    fn proxy_getcaps(
-        &self,
-        caps: Option<&gst::Caps>,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps;
 
     #[cfg(any(feature = "v1_10", feature = "dox"))]
     fn set_allocation_caps(&self, allocation_caps: Option<&gst::Caps>);
@@ -214,11 +210,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExt for O {
         }
     }
 
-    fn proxy_getcaps(
-        &self,
-        caps: Option<&gst::Caps>,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn proxy_getcaps(&self, caps: Option<&gst::Caps>, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             from_glib_full(gst_audio_sys::gst_audio_decoder_proxy_getcaps(
                 self.as_ref().to_glib_none().0,

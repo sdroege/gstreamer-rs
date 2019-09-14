@@ -84,7 +84,7 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl + Send + Sync + 's
         self.parent_negotiate(element)
     }
 
-    fn get_caps(&self, element: &VideoDecoder, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+    fn get_caps(&self, element: &VideoDecoder, filter: Option<&gst::Caps>) -> gst::Caps {
         self.parent_get_caps(element, filter)
     }
 
@@ -158,11 +158,7 @@ pub trait VideoDecoderImplExt {
 
     fn parent_negotiate(&self, element: &VideoDecoder) -> Result<(), gst::LoggableError>;
 
-    fn parent_get_caps(
-        &self,
-        element: &VideoDecoder,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn parent_get_caps(&self, element: &VideoDecoder, filter: Option<&gst::Caps>) -> gst::Caps;
 
     fn parent_sink_event(&self, element: &VideoDecoder, event: gst::Event) -> bool;
 
@@ -393,11 +389,7 @@ impl<T: VideoDecoderImpl + ObjectImpl> VideoDecoderImplExt for T {
         }
     }
 
-    fn parent_get_caps(
-        &self,
-        element: &VideoDecoder,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn parent_get_caps(&self, element: &VideoDecoder, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -405,7 +397,7 @@ impl<T: VideoDecoderImpl + ObjectImpl> VideoDecoderImplExt for T {
             (*parent_class)
                 .getcaps
                 .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
-                .unwrap_or(element.proxy_getcaps(None, filter))
+                .unwrap_or(element.proxy_getcaps(None, filter).unwrap())
         }
     }
 
@@ -798,7 +790,7 @@ where
     let imp = instance.get_impl();
     let wrap: VideoDecoder = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         VideoDecoderImpl::get_caps(
             imp,
             &wrap,

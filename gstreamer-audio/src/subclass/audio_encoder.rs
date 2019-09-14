@@ -74,7 +74,7 @@ pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl + Send + Sync + 's
         self.parent_negotiate(element)
     }
 
-    fn get_caps(&self, element: &AudioEncoder, filter: Option<&gst::Caps>) -> Option<gst::Caps> {
+    fn get_caps(&self, element: &AudioEncoder, filter: Option<&gst::Caps>) -> gst::Caps {
         self.parent_get_caps(element, filter)
     }
 
@@ -142,11 +142,7 @@ pub trait AudioEncoderImplExt {
 
     fn parent_negotiate(&self, element: &AudioEncoder) -> Result<(), gst::LoggableError>;
 
-    fn parent_get_caps(
-        &self,
-        element: &AudioEncoder,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps>;
+    fn parent_get_caps(&self, element: &AudioEncoder, filter: Option<&gst::Caps>) -> gst::Caps;
 
     fn parent_sink_event(&self, element: &AudioEncoder, event: gst::Event) -> bool;
 
@@ -353,11 +349,7 @@ impl<T: AudioEncoderImpl + ObjectImpl> AudioEncoderImplExt for T {
         }
     }
 
-    fn parent_get_caps(
-        &self,
-        element: &AudioEncoder,
-        filter: Option<&gst::Caps>,
-    ) -> Option<gst::Caps> {
+    fn parent_get_caps(&self, element: &AudioEncoder, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -725,7 +717,7 @@ where
     let imp = instance.get_impl();
     let wrap: AudioEncoder = from_glib_borrow(ptr);
 
-    gst_panic_to_error!(&wrap, &instance.panicked(), None, {
+    gst_panic_to_error!(&wrap, &instance.panicked(), gst::Caps::new_empty(), {
         AudioEncoderImpl::get_caps(
             imp,
             &wrap,
