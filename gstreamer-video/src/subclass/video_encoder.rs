@@ -18,6 +18,7 @@ use gst;
 use gst::subclass::prelude::*;
 use gst::MiniObject;
 
+use crate::prelude::*;
 use video_codec_state::{Readable, VideoCodecState};
 use VideoCodecFrame;
 use VideoEncoder;
@@ -340,7 +341,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .getcaps
                 .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
-                .unwrap_or(None)
+                .unwrap_or(element.proxy_getcaps(None, filter))
         }
     }
 
