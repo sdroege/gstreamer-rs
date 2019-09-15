@@ -13,6 +13,7 @@ keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
 
 [dependencies]
+libc = "0.2"
 bitflags = "1.0"
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }

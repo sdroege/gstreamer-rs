@@ -15,6 +15,20 @@ use std::ptr;
 use AudioDecoder;
 use AudioInfo;
 
+extern "C" {
+    fn _gst_audio_decoder_error(
+        dec: *mut gst_audio_sys::GstAudioDecoder,
+        weight: i32,
+        domain: glib_sys::GQuark,
+        code: i32,
+        txt: *mut libc::c_char,
+        debug: *mut libc::c_char,
+        file: *const libc::c_char,
+        function: *const libc::c_char,
+        line: i32,
+    ) -> gst_sys::GstFlowReturn;
+}
+
 pub trait AudioDecoderExtManual: 'static {
     fn finish_frame(
         &self,
@@ -36,6 +50,18 @@ pub trait AudioDecoderExtManual: 'static {
     fn set_output_format(&self, info: &AudioInfo) -> Result<(), gst::FlowError>;
 
     fn get_allocator(&self) -> (gst::Allocator, gst::AllocationParams);
+
+    #[allow(clippy::too_many_arguments)]
+    fn error<T: gst::MessageErrorDomain>(
+        &self,
+        weight: i32,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: u32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
 impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
@@ -122,4 +148,106 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {
             (from_glib_full(allocator), params.into())
         }
     }
+
+    fn error<T: gst::MessageErrorDomain>(
+        &self,
+        weight: i32,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: u32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(_gst_audio_decoder_error(
+                self.as_ref().to_glib_none().0,
+                weight,
+                T::domain().to_glib(),
+                code.code(),
+                message.to_glib_full(),
+                debug.to_glib_full(),
+                file.to_glib_none().0,
+                function.to_glib_none().0,
+                line as i32,
+            ))
+        };
+        ret.into_result()
+    }
 }
+
+#[macro_export]
+macro_rules! gst_audio_decoder_error(
+    ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
+        use $crate::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some($msg),
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($msg:expr)) => { {
+        use $crate::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some($msg),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, [$debug:expr]) => { {
+        use $crate::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            None,
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+        use $crate::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some(&format!($($msg)*)),
+            Some(&format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
+        use $crate::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some(&format!($($msg)*)),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
+        use $crate::AudioDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            None,
+            Some(&format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+);
