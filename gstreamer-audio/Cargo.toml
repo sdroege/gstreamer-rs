@@ -13,6 +13,7 @@ keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
 build = "build.rs"
 
 [dependencies]
+libc = "0.2"
 bitflags = "1.0"
 glib-sys = { version = "0.9" }
 gobject-sys = { version = "0.9" }

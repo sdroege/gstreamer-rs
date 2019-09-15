@@ -21,6 +21,20 @@ use VideoFormat;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use VideoInterlaceMode;
 
+extern "C" {
+    fn _gst_video_decoder_error(
+        dec: *mut gst_video_sys::GstVideoDecoder,
+        weight: i32,
+        domain: glib_sys::GQuark,
+        code: i32,
+        txt: *mut libc::c_char,
+        debug: *mut libc::c_char,
+        file: *const libc::c_char,
+        function: *const libc::c_char,
+        line: i32,
+    ) -> gst_sys::GstFlowReturn;
+}
+
 pub trait VideoDecoderExtManual: 'static {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     fn allocate_output_frame(
@@ -65,6 +79,18 @@ pub trait VideoDecoderExtManual: 'static {
         &'a self,
         output_state: VideoCodecState<'a, InNegotiation<'a>>,
     ) -> Result<(), gst::FlowError>;
+
+    #[allow(clippy::too_many_arguments)]
+    fn error<T: gst::MessageErrorDomain>(
+        &self,
+        weight: i32,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: u32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError>;
 }
 
 impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
@@ -297,6 +323,31 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {
             Err(gst::FlowError::NotNegotiated)
         }
     }
+    fn error<T: gst::MessageErrorDomain>(
+        &self,
+        weight: i32,
+        code: T,
+        message: Option<&str>,
+        debug: Option<&str>,
+        file: &str,
+        function: &str,
+        line: u32,
+    ) -> Result<gst::FlowSuccess, gst::FlowError> {
+        let ret: gst::FlowReturn = unsafe {
+            from_glib(_gst_video_decoder_error(
+                self.as_ref().to_glib_none().0,
+                weight,
+                T::domain().to_glib(),
+                code.code(),
+                message.to_glib_full(),
+                debug.to_glib_full(),
+                file.to_glib_none().0,
+                function.to_glib_none().0,
+                line as i32,
+            ))
+        };
+        ret.into_result()
+    }
 }
 
 impl HasStreamLock for VideoDecoder {
@@ -310,3 +361,79 @@ impl HasStreamLock for VideoDecoder {
         decoder_sys as *const gst_sys::GstElement
     }
 }
+
+#[macro_export]
+macro_rules! gst_video_decoder_error(
+    ($obj:expr, $weight:expr, $err:expr, ($msg:expr), [$debug:expr]) => { {
+        use $crate::VideoDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some($msg),
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($msg:expr)) => { {
+        use $crate::VideoDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some($msg),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, [$debug:expr]) => { {
+        use $crate::VideoDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            None,
+            Some($debug),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+        use $crate::VideoDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some(&format!($($msg)*)),
+            Some(&format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
+        use $crate::VideoDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            Some(&format!($($msg)*)),
+            None,
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+    ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
+        use $crate::VideoDecoderExtManual;
+        $obj.error(
+            $weight,
+            $err,
+            None,
+            Some(&format!($($debug)*)),
+            file!(),
+            module_path!(),
+            line!(),
+        )
+    }};
+);
