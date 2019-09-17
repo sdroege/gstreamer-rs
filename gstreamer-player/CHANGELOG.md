@@ -5,6 +5,31 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.14.5] - 2019-09-17
+### Added
+- Support subclassing of `gst::Device`, `gst::DeviceProvider`,
+  `gst_audio::AudioDecoder` and `::AudioEncoder`
+- Support for `Element::set_clock` and `::provide_clock` virtual methods
+- `ElementClass::add_metadata` was added
+- `gst_video::VideoDecoder` and `::VideoEncoder` got support for `get_caps`,
+  `negotiate`, `src/sink_query/event` and the `drain` virtual methods
+- `Element::num_pads`, `::num_src_pads` and `::num_sink_pads` functions
+- `gst_video::VideoDecoder` and `::VideoEncoder` got `get_allocator` bindings
+- `gst::Iterator` implements `IntoIterator` now for providing
+  `std::iter::Iterator<Item=<Result<T, IteratorError>>` adapter
+- Error macros for audio/video decoder subclasses to handle decoding errors
+  more gracefully and only actually error out after many consecutive errors
+
+### Fixed
+- Macros now also work in Rust 2018 edition without `#[macro_use]` but
+  explicit imports
+- The log handler unit test runs reliable in parallel with other tests
+- Manually implement `Debug` for `gst::Iterator` to allow it for any `T`
+  instead of `T: Debug`
+- `Device::create_element` has correct reference count handling now
+- Return `NotNegotiated` in the video codec base classes if setting the output
+  state fails instead of `Error`
+
 ## [0.14.4] - 2019-08-14
 ### Added
 - Bindings for adding/removing custom log functions
