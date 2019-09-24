@@ -333,7 +333,7 @@ impl<T: VideoEncoderImpl + ObjectImpl> VideoEncoderImplExt for T {
             (*parent_class)
                 .getcaps
                 .map(|f| from_glib_full(f(element.to_glib_none().0, filter.to_glib_none().0)))
-                .unwrap_or(element.proxy_getcaps(None, filter))
+                .unwrap_or_else(|| element.proxy_getcaps(None, filter))
         }
     }
 
