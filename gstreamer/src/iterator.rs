@@ -665,20 +665,13 @@ where
             Some(IteratorError::Error) => return None,
 
             // The iterator needs a resync
-            Some(IteratorError::Resync) => {
-                self.inner.resync();
-                self.error = None;
-            }
+            Some(IteratorError::Resync) => self.inner.resync(),
 
             None => {}
         }
 
         let res = self.inner.next();
-
-        if let Err(err) = &res {
-            self.error = Some(*err);
-        }
-
+        self.error = res.as_ref().err().copied();
         res.transpose()
     }
 }
