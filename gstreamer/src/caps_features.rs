@@ -250,7 +250,6 @@ impl FromGlibPtrFull<*mut gst_sys::GstCapsFeatures> for CapsFeatures {
 impl<'a> glib::value::FromValueOptional<'a> for CapsFeatures {
     unsafe fn from_value_optional(v: &'a glib::Value) -> Option<Self> {
         let ptr = gobject_sys::g_value_get_boxed(v.to_glib_none().0);
-        assert!(!ptr.is_null());
         from_glib_none(ptr as *const gst_sys::GstCapsFeatures)
     }
 }
