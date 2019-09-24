@@ -474,3 +474,18 @@ lazy_static! {
     pub static ref CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: CapsFeatures =
         CapsFeatures::new(&[*CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_from_value_optional() {
+        ::init().unwrap();
+
+        let a = glib::value::Value::from(None::<&CapsFeatures>);
+        assert!(a.get::<CapsFeatures>().unwrap().is_none());
+        let b = glib::value::Value::from(&CapsFeatures::new_empty());
+        assert!(b.get::<CapsFeatures>().unwrap().is_some());
+    }
+}

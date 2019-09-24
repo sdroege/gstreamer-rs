@@ -837,4 +837,14 @@ mod tests {
 
         assert_eq!(a, s.to_string());
     }
+
+    #[test]
+    fn test_from_value_optional() {
+        ::init().unwrap();
+
+        let a = glib::value::Value::from(None::<&Structure>);
+        assert!(a.get::<Structure>().unwrap().is_none());
+        let b = glib::value::Value::from(&Structure::from_string(&"foo").unwrap());
+        assert!(b.get::<Structure>().unwrap().is_some());
+    }
 }
