@@ -31,6 +31,8 @@ pub mod pipeline;
 pub mod device;
 pub mod device_provider;
 
+pub mod clock;
+
 pub mod preset;
 pub mod tag_setter;
 pub mod uri_handler;
@@ -38,6 +40,7 @@ pub mod uri_handler;
 pub mod prelude {
     pub use super::bin::{BinImpl, BinImplExt};
     pub use super::child_proxy::ChildProxyImpl;
+    pub use super::clock::{ClockImpl, ClockImplExt};
     pub use super::device::{DeviceImpl, DeviceImplExt};
     pub use super::device_provider::{
         DeviceProviderClassSubclassExt, DeviceProviderImpl, DeviceProviderImplExt,
