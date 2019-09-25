@@ -71,6 +71,8 @@ generate = [
     "Gst.PluginDependencyFlags",
     "Gst.BufferPoolAcquireFlags",
     "Gst.PromiseResult",
+    "Gst.ClockEntryType",
+    "Gst.ClockFlags",
 ]
 
 manual = [

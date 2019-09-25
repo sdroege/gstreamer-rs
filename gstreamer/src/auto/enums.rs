@@ -194,6 +194,63 @@ impl SetValue for CapsIntersectMode {
     }
 }
 
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum ClockEntryType {
+    Single,
+    Periodic,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for ClockEntryType {
+    type GlibType = gst_sys::GstClockEntryType;
+
+    fn to_glib(&self) -> gst_sys::GstClockEntryType {
+        match *self {
+            ClockEntryType::Single => gst_sys::GST_CLOCK_ENTRY_SINGLE,
+            ClockEntryType::Periodic => gst_sys::GST_CLOCK_ENTRY_PERIODIC,
+            ClockEntryType::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstClockEntryType> for ClockEntryType {
+    fn from_glib(value: gst_sys::GstClockEntryType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => ClockEntryType::Single,
+            1 => ClockEntryType::Periodic,
+            value => ClockEntryType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for ClockEntryType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_clock_entry_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for ClockEntryType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for ClockEntryType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for ClockEntryType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[must_use]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum ClockReturn {

@@ -227,6 +227,60 @@ impl SetValue for BufferPoolAcquireFlags {
 }
 
 bitflags! {
+    pub struct ClockFlags: u32 {
+        const CAN_DO_SINGLE_SYNC = 16;
+        const CAN_DO_SINGLE_ASYNC = 32;
+        const CAN_DO_PERIODIC_SYNC = 64;
+        const CAN_DO_PERIODIC_ASYNC = 128;
+        const CAN_SET_RESOLUTION = 256;
+        const CAN_SET_MASTER = 512;
+        const NEEDS_STARTUP_SYNC = 1024;
+        const LAST = 4096;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for ClockFlags {
+    type GlibType = gst_sys::GstClockFlags;
+
+    fn to_glib(&self) -> gst_sys::GstClockFlags {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_sys::GstClockFlags> for ClockFlags {
+    fn from_glib(value: gst_sys::GstClockFlags) -> ClockFlags {
+        skip_assert_initialized!();
+        ClockFlags::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for ClockFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_sys::gst_clock_flags_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for ClockFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for ClockFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for ClockFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct DebugColorFlags: u32 {
         const FG_BLACK = 0;
         const FG_RED = 1;
