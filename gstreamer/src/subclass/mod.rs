@@ -32,6 +32,7 @@ pub mod device;
 pub mod device_provider;
 
 pub mod preset;
+pub mod tag_setter;
 pub mod uri_handler;
 
 pub mod prelude {
@@ -46,6 +47,7 @@ pub mod prelude {
     pub use super::pad::{PadImpl, PadImplExt};
     pub use super::pipeline::PipelineImpl;
     pub use super::preset::PresetImpl;
+    pub use super::tag_setter::TagSetterImpl;
     pub use super::uri_handler::URIHandlerImpl;
     pub use super::PanicPoison;
     pub use glib::subclass::prelude::*;
