@@ -31,6 +31,7 @@ pub mod pipeline;
 pub mod device;
 pub mod device_provider;
 
+pub mod preset;
 pub mod uri_handler;
 
 pub mod prelude {
@@ -44,6 +45,7 @@ pub mod prelude {
     pub use super::ghost_pad::GhostPadImpl;
     pub use super::pad::{PadImpl, PadImplExt};
     pub use super::pipeline::PipelineImpl;
+    pub use super::preset::PresetImpl;
     pub use super::uri_handler::URIHandlerImpl;
     pub use super::PanicPoison;
     pub use glib::subclass::prelude::*;
