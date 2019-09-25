@@ -18,6 +18,7 @@ use std::cmp;
 use std::ptr;
 use Clock;
 use ClockError;
+use ClockFlags;
 use ClockReturn;
 use ClockSuccess;
 use ClockTime;
@@ -183,6 +184,12 @@ pub trait ClockExtManual: 'static {
     fn new_single_shot_id(&self, time: ClockTime) -> Option<ClockId>;
 
     fn single_shot_id_reinit(&self, id: &ClockId, time: ClockTime) -> Result<(), glib::BoolError>;
+
+    fn set_clock_flags(&self, flags: ClockFlags);
+
+    fn unset_clock_flags(&self, flags: ClockFlags);
+
+    fn get_clock_flags(&self) -> ClockFlags;
 }
 
 impl<O: IsA<Clock>> ClockExtManual for O {
@@ -239,6 +246,30 @@ impl<O: IsA<Clock>> ClockExtManual for O {
             } else {
                 Err(glib_bool_error!("Failed to reinit single shot clock id"))
             }
+        }
+    }
+
+    fn set_clock_flags(&self, flags: ClockFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags |= flags.to_glib();
+        }
+    }
+
+    fn unset_clock_flags(&self, flags: ClockFlags) {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            (*ptr).flags &= !flags.to_glib();
+        }
+    }
+
+    fn get_clock_flags(&self) -> ClockFlags {
+        unsafe {
+            let ptr: *mut gst_sys::GstObject = self.as_ptr() as *mut _;
+            let _guard = ::utils::MutexGuard::lock(&(*ptr).lock);
+            from_glib((*ptr).flags)
         }
     }
 }
