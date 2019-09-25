@@ -17,12 +17,16 @@ use libc::c_void;
 use std::cmp;
 use std::ptr;
 use Clock;
+use ClockEntryType;
 use ClockError;
 use ClockFlags;
 use ClockReturn;
 use ClockSuccess;
 use ClockTime;
 use ClockTimeDiff;
+
+use std::sync::atomic;
+use std::sync::atomic::AtomicI32;
 
 glib_wrapper! {
     #[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Hash)]
@@ -118,13 +122,93 @@ impl ClockId {
     }
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
-    pub fn id_uses_clock<P: IsA<Clock>>(&self, clock: &P) -> bool {
+    pub fn uses_clock<P: IsA<Clock>>(&self, clock: &P) -> bool {
         unsafe {
             from_glib(gst_sys::gst_clock_id_uses_clock(
                 self.to_glib_none().0,
                 clock.as_ref().as_ptr(),
             ))
         }
+    }
+
+    pub fn get_type(&self) -> ClockEntryType {
+        unsafe {
+            let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
+            from_glib((*ptr).type_)
+        }
+    }
+
+    pub fn get_interval(&self) -> Option<ClockTime> {
+        if self.get_type() != ClockEntryType::Periodic {
+            return None;
+        }
+
+        unsafe {
+            let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
+            Some(from_glib((*ptr).interval))
+        }
+    }
+
+    pub fn get_status(&self) -> &AtomicClockReturn {
+        unsafe {
+            let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
+            &*((&(*ptr).status) as *const i32 as *const AtomicClockReturn)
+        }
+    }
+
+    pub fn wake_up(&self, clock: &Clock) {
+        #[cfg(feature = "v1_16")]
+        {
+            assert!(self.uses_clock(clock));
+        }
+        #[cfg(not(feature = "v1_16"))]
+        {
+            unsafe {
+                let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
+                assert_eq!((*ptr).clock, clock.to_glib_none().0);
+            }
+        }
+
+        unsafe {
+            let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
+            if let Some(func) = (*ptr).func {
+                func(
+                    clock.to_glib_none().0,
+                    (*ptr).time,
+                    ptr as gst_sys::GstClockID,
+                    (*ptr).user_data,
+                );
+            }
+            if (*ptr).type_ == gst_sys::GST_CLOCK_ENTRY_PERIODIC {
+                (*ptr).time += (*ptr).interval;
+            }
+        }
+    }
+}
+
+#[repr(C)]
+#[derive(Debug)]
+pub struct AtomicClockReturn(AtomicI32);
+
+impl AtomicClockReturn {
+    pub fn load(&self) -> ClockReturn {
+        from_glib(self.0.load(atomic::Ordering::SeqCst))
+    }
+
+    pub fn store(&self, val: ClockReturn) {
+        self.0.store(val.to_glib(), atomic::Ordering::SeqCst)
+    }
+
+    pub fn swap(&self, val: ClockReturn) -> ClockReturn {
+        from_glib(self.0.swap(val.to_glib(), atomic::Ordering::SeqCst))
+    }
+
+    pub fn compare_and_swap(&self, current: ClockReturn, new: ClockReturn) -> ClockReturn {
+        from_glib(self.0.compare_and_swap(
+            current.to_glib(),
+            new.to_glib(),
+            atomic::Ordering::SeqCst,
+        ))
     }
 }
 
