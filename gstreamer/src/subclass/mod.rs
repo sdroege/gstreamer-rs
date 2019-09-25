@@ -32,6 +32,7 @@ pub mod device;
 pub mod device_provider;
 
 pub mod clock;
+pub mod system_clock;
 
 pub mod preset;
 pub mod tag_setter;
@@ -50,6 +51,7 @@ pub mod prelude {
     pub use super::pad::{PadImpl, PadImplExt};
     pub use super::pipeline::PipelineImpl;
     pub use super::preset::PresetImpl;
+    pub use super::system_clock::SystemClockImpl;
     pub use super::tag_setter::TagSetterImpl;
     pub use super::uri_handler::URIHandlerImpl;
     pub use super::PanicPoison;
