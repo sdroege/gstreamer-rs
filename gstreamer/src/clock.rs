@@ -155,35 +155,6 @@ impl ClockId {
             &*((&(*ptr).status) as *const i32 as *const AtomicClockReturn)
         }
     }
-
-    pub fn wake_up(&self, clock: &Clock) {
-        #[cfg(feature = "v1_16")]
-        {
-            assert!(self.uses_clock(clock));
-        }
-        #[cfg(not(feature = "v1_16"))]
-        {
-            unsafe {
-                let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
-                assert_eq!((*ptr).clock, clock.to_glib_none().0);
-            }
-        }
-
-        unsafe {
-            let ptr: *mut gst_sys::GstClockEntry = self.to_glib_none().0 as *mut _;
-            if let Some(func) = (*ptr).func {
-                func(
-                    clock.to_glib_none().0,
-                    (*ptr).time,
-                    ptr as gst_sys::GstClockID,
-                    (*ptr).user_data,
-                );
-            }
-            if (*ptr).type_ == gst_sys::GST_CLOCK_ENTRY_PERIODIC {
-                (*ptr).time += (*ptr).interval;
-            }
-        }
-    }
 }
 
 #[repr(C)]

@@ -9,9 +9,9 @@
 use gst_sys;
 
 use glib;
-use glib::translate::*;
-
+use glib::prelude::*;
 use glib::subclass::prelude::*;
+use glib::translate::*;
 
 use Clock;
 use ClockClass;
@@ -78,6 +78,11 @@ pub trait ClockImplExt {
     fn parent_wait_async(&self, clock: &Clock, id: &ClockId) -> Result<ClockSuccess, ClockError>;
 
     fn parent_unschedule(&self, clock: &Clock, id: &ClockId);
+
+    fn wake_id(&self, id: &ClockId)
+    where
+        Self: ObjectSubclass,
+        <Self as ObjectSubclass>::ParentType: IsA<Clock>;
 }
 
 impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
@@ -188,6 +193,41 @@ impl<T: ClockImpl + ObjectImpl> ClockImplExt for T {
                     clock.to_glib_none().0,
                     id.to_glib_none().0 as *mut gst_sys::GstClockEntry,
                 );
+            }
+        }
+    }
+
+    fn wake_id(&self, id: &ClockId)
+    where
+        Self: ObjectSubclass,
+        <Self as ObjectSubclass>::ParentType: IsA<Clock>,
+    {
+        let clock = self.get_instance();
+
+        #[cfg(feature = "v1_16")]
+        {
+            assert!(id.uses_clock(&clock));
+        }
+        #[cfg(not(feature = "v1_16"))]
+        {
+            unsafe {
+                let ptr: *mut gst_sys::GstClockEntry = id.to_glib_none().0 as *mut _;
+                assert_eq!((*ptr).clock, clock.as_ref().to_glib_none().0);
+            }
+        }
+
+        unsafe {
+            let ptr: *mut gst_sys::GstClockEntry = id.to_glib_none().0 as *mut _;
+            if let Some(func) = (*ptr).func {
+                func(
+                    clock.as_ref().to_glib_none().0,
+                    (*ptr).time,
+                    ptr as gst_sys::GstClockID,
+                    (*ptr).user_data,
+                );
+            }
+            if (*ptr).type_ == gst_sys::GST_CLOCK_ENTRY_PERIODIC {
+                (*ptr).time += (*ptr).interval;
             }
         }
     }
