@@ -9,6 +9,7 @@
 use DebugLevel;
 
 use libc::c_char;
+use std::borrow::Cow;
 use std::ffi::CStr;
 use std::fmt;
 use std::ptr;
@@ -30,14 +31,14 @@ impl fmt::Debug for DebugMessage {
 }
 
 impl DebugMessage {
-    pub fn get(&self) -> Option<&str> {
+    pub fn get(&self) -> Option<Cow<str>> {
         unsafe {
             let message = gst_sys::gst_debug_message_get(self.0.as_ptr());
 
             if message.is_null() {
                 None
             } else {
-                Some(CStr::from_ptr(message).to_str().unwrap())
+                Some(CStr::from_ptr(message).to_string_lossy())
             }
         }
     }
@@ -325,8 +326,8 @@ unsafe extern "C" fn log_handler<T>(
 {
     let category = DebugCategory(ptr::NonNull::new_unchecked(category));
     let level = from_glib(level);
-    let file = CStr::from_ptr(file).to_str().unwrap();
-    let function = CStr::from_ptr(function).to_str().unwrap();
+    let file = CStr::from_ptr(file).to_string_lossy();
+    let function = CStr::from_ptr(function).to_string_lossy();
     let line = line as u32;
     let object: Option<glib::Object> = from_glib_borrow(object);
     let message = DebugMessage(ptr::NonNull::new_unchecked(message));
@@ -334,8 +335,8 @@ unsafe extern "C" fn log_handler<T>(
     (handler)(
         category,
         level,
-        file,
-        function,
+        &file,
+        &function,
         line,
         object.as_ref(),
         &message,
@@ -465,7 +466,7 @@ mod tests {
             }
 
             assert_eq!(level, DebugLevel::Info);
-            assert_eq!(message.get(), Some("meh"));
+            assert_eq!(&message.get().unwrap(), "meh");
             let _ = sender.lock().unwrap().send(());
         };
 
