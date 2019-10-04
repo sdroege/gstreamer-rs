@@ -99,16 +99,6 @@ impl VideoTimeCode {
         }
     }
 
-    #[cfg(any(feature = "v1_12", feature = "dox"))]
-    pub fn from_string(tc_str: &str) -> Option<VideoTimeCode> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_video_sys::gst_video_time_code_new_from_string(
-                tc_str.to_glib_none().0,
-            ))
-        }
-    }
-
     pub fn is_valid(&self) -> bool {
         unsafe {
             from_glib(gst_video_sys::gst_video_time_code_is_valid(
@@ -246,14 +236,6 @@ impl ValidVideoTimeCode {
 macro_rules! generic_impl {
     ($name:ident) => {
         impl $name {
-            pub fn to_string(&self) -> String {
-                unsafe {
-                    from_glib_full(gst_video_sys::gst_video_time_code_to_string(
-                        self.to_glib_none().0,
-                    ))
-                }
-            }
-
             pub fn get_hours(&self) -> u32 {
                 self.0.hours
             }
@@ -338,7 +320,12 @@ macro_rules! generic_impl {
         impl fmt::Display for $name {
             #[inline]
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                write!(f, "{}", self.to_string())
+                let s = unsafe {
+                    glib::GString::from_glib_full(gst_video_sys::gst_video_time_code_to_string(
+                        self.to_glib_none().0,
+                    ))
+                };
+                f.write_str(&s)
             }
         }
 
@@ -482,8 +469,13 @@ impl str::FromStr for VideoTimeCode {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        Self::from_string(s).ok_or(())
+        assert_initialized_main_thread!();
+        unsafe {
+            Option::<VideoTimeCode>::from_glib_full(
+                gst_video_sys::gst_video_time_code_new_from_string(s.to_glib_none().0),
+            )
+            .ok_or(())
+        }
     }
 }
 

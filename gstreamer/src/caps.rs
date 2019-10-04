@@ -16,7 +16,7 @@ use structure::*;
 use CapsIntersectMode;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr};
 use glib::value::ToSendValue;
 use gst_sys;
 
@@ -52,11 +52,6 @@ impl Caps {
         caps.get_mut().unwrap().append_structure(structure);
 
         caps
-    }
-
-    pub fn from_string(value: &str) -> Option<Self> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_full(gst_sys::gst_caps_from_string(value.to_glib_none().0)) }
     }
 
     pub fn fixate(caps: Self) -> Self {
@@ -114,8 +109,11 @@ impl str::FromStr for Caps {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        Caps::from_string(s).ok_or(())
+        assert_initialized_main_thread!();
+        unsafe {
+            Option::<Caps>::from_glib_full(gst_sys::gst_caps_from_string(s.to_glib_none().0))
+                .ok_or(())
+        }
     }
 }
 
@@ -138,10 +136,6 @@ impl CapsRef {
                 );
             }
         }
-    }
-
-    pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(gst_sys::gst_caps_to_string(self.as_ptr())) }
     }
 
     pub fn get_structure(&self, idx: u32) -> Option<&StructureRef> {
@@ -509,7 +503,9 @@ impl fmt::Debug for CapsRef {
 
 impl fmt::Display for CapsRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&CapsRef::to_string(self))
+        let s =
+            unsafe { glib::GString::from_glib_full(gst_sys::gst_caps_to_string(self.as_ptr())) };
+        f.write_str(&s)
     }
 }
 

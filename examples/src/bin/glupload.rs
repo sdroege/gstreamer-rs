@@ -559,7 +559,7 @@ impl App {
 
         let caps = gst::Caps::builder("video/x-raw")
             .features(&[&gst_gl::CAPS_FEATURE_MEMORY_GL_MEMORY])
-            .field("format", &gst_video::VideoFormat::Rgba.to_string())
+            .field("format", &gst_video::VideoFormat::Rgba.to_str())
             .field("texture-target", &"2D")
             .build();
         appsink.set_caps(Some(&caps));

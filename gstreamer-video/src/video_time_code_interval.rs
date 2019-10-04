@@ -17,20 +17,12 @@ use std::cmp;
 use std::fmt;
 use std::mem;
 use std::ptr;
+use std::str;
 
 #[derive(Clone)]
 pub struct VideoTimeCodeInterval(gst_video_sys::GstVideoTimeCodeInterval);
 
 impl VideoTimeCodeInterval {
-    pub fn from_string(tc_inter_str: &str) -> Option<Self> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(gst_video_sys::gst_video_time_code_interval_new_from_string(
-                tc_inter_str.to_glib_none().0,
-            ))
-        }
-    }
-
     pub fn new(hours: u32, minutes: u32, seconds: u32, frames: u32) -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -132,6 +124,20 @@ impl fmt::Display for VideoTimeCodeInterval {
             "{:02}:{:02}:{:02}:{:02}",
             self.0.hours, self.0.minutes, self.0.seconds, self.0.frames
         )
+    }
+}
+
+impl str::FromStr for VideoTimeCodeInterval {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, ()> {
+        assert_initialized_main_thread!();
+        unsafe {
+            Option::<VideoTimeCodeInterval>::from_glib_full(
+                gst_video_sys::gst_video_time_code_interval_new_from_string(s.to_glib_none().0),
+            )
+            .ok_or(())
+        }
     }
 }
 

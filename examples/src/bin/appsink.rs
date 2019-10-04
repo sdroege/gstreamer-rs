@@ -73,7 +73,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     appsink.set_caps(Some(&gst::Caps::new_simple(
         "audio/x-raw",
         &[
-            ("format", &gst_audio::AUDIO_FORMAT_S16.to_string()),
+            ("format", &gst_audio::AUDIO_FORMAT_S16.to_str()),
             ("layout", &"interleaved"),
             ("channels", &(1i32)),
             ("rate", &gst::IntRange::<i32>::new(1, i32::MAX)),

@@ -12,7 +12,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::str;
 
-use glib::translate::{from_glib, ToGlib, ToGlibPtr};
+use glib::translate::{from_glib, FromGlib, ToGlib, ToGlibPtr};
 
 impl ::AudioFormat {
     pub fn build_integer(
@@ -33,17 +33,7 @@ impl ::AudioFormat {
         }
     }
 
-    pub fn from_string(s: &str) -> ::AudioFormat {
-        assert_initialized_main_thread!();
-
-        unsafe {
-            from_glib(gst_audio_sys::gst_audio_format_from_string(
-                s.to_glib_none().0,
-            ))
-        }
-    }
-
-    pub fn to_string<'a>(self) -> &'a str {
+    pub fn to_str<'a>(self) -> &'a str {
         if self == ::AudioFormat::Unknown {
             return "UNKNOWN";
         }
@@ -60,20 +50,24 @@ impl str::FromStr for ::AudioFormat {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
+        assert_initialized_main_thread!();
 
-        let format = Self::from_string(s);
-        if format == ::AudioFormat::Unknown {
-            Err(())
-        } else {
-            Ok(format)
+        unsafe {
+            let fmt = ::AudioFormat::from_glib(gst_audio_sys::gst_audio_format_from_string(
+                s.to_glib_none().0,
+            ));
+            if fmt == ::AudioFormat::Unknown {
+                Err(())
+            } else {
+                Ok(fmt)
+            }
         }
     }
 }
 
 impl fmt::Display for ::AudioFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(::AudioFormat::to_string(*self))
+        f.write_str((*self).to_str())
     }
 }
 

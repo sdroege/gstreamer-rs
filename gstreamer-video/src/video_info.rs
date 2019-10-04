@@ -12,12 +12,13 @@ use gst_video_sys;
 
 use glib;
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrNone, ToGlib, ToGlibPtr,
-    ToGlibPtrMut,
+    from_glib, from_glib_full, from_glib_none, FromGlib, FromGlibPtrFull, FromGlibPtrNone, ToGlib,
+    ToGlibPtr, ToGlibPtrMut,
 };
 use gst;
 use gst::prelude::*;
 
+use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 use std::ptr;
@@ -110,27 +111,6 @@ impl VideoColorimetry {
         VideoColorimetry(colorimetry)
     }
 
-    pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(gst_video_sys::gst_video_colorimetry_to_string(&self.0)) }
-    }
-
-    pub fn from_string(s: &str) -> Option<Self> {
-        assert_initialized_main_thread!();
-
-        unsafe {
-            let mut colorimetry = mem::MaybeUninit::zeroed();
-            let valid: bool = from_glib(gst_video_sys::gst_video_colorimetry_from_string(
-                colorimetry.as_mut_ptr(),
-                s.to_glib_none().0,
-            ));
-            if valid {
-                Some(VideoColorimetry(colorimetry.assume_init()))
-            } else {
-                None
-            }
-        }
-    }
-
     pub fn range(&self) -> ::VideoColorRange {
         from_glib(self.0.range)
     }
@@ -170,8 +150,20 @@ impl str::FromStr for ::VideoColorimetry {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        Self::from_string(s).ok_or(())
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let mut colorimetry = mem::MaybeUninit::zeroed();
+            let valid: bool = from_glib(gst_video_sys::gst_video_colorimetry_from_string(
+                colorimetry.as_mut_ptr(),
+                s.to_glib_none().0,
+            ));
+            if valid {
+                Ok(VideoColorimetry(colorimetry.assume_init()))
+            } else {
+                Err(())
+            }
+        }
     }
 }
 
@@ -188,7 +180,10 @@ impl fmt::Debug for ::VideoColorimetry {
 
 impl fmt::Display for ::VideoColorimetry {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&::VideoColorimetry::to_string(self))
+        let s = unsafe {
+            glib::GString::from_glib_full(gst_video_sys::gst_video_colorimetry_to_string(&self.0))
+        };
+        f.write_str(&s)
     }
 }
 
@@ -822,21 +817,13 @@ impl glib::translate::FromGlibPtrFull<*mut gst_video_sys::GstVideoInfo> for Vide
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl ::VideoFieldOrder {
-    pub fn to_string(self) -> String {
+    pub fn to_str<'a>(self) -> &'a str {
         unsafe {
-            from_glib_none(gst_video_sys::gst_video_field_order_to_string(
+            CStr::from_ptr(gst_video_sys::gst_video_field_order_to_string(
                 self.to_glib(),
             ))
-        }
-    }
-
-    pub fn from_string(s: &str) -> Self {
-        assert_initialized_main_thread!();
-
-        unsafe {
-            from_glib(gst_video_sys::gst_video_field_order_from_string(
-                s.to_glib_none().0,
-            ))
+            .to_str()
+            .unwrap()
         }
     }
 }
@@ -846,34 +833,31 @@ impl str::FromStr for ::VideoFieldOrder {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        Ok(Self::from_string(s))
+        assert_initialized_main_thread!();
+
+        unsafe {
+            Ok(from_glib(gst_video_sys::gst_video_field_order_from_string(
+                s.to_glib_none().0,
+            )))
+        }
     }
 }
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl fmt::Display for ::VideoFieldOrder {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&::VideoFieldOrder::to_string(*self))
+        f.write_str((*self).to_str())
     }
 }
 
 impl ::VideoInterlaceMode {
-    pub fn to_string(self) -> String {
+    pub fn to_str<'a>(self) -> &'a str {
         unsafe {
-            from_glib_none(gst_video_sys::gst_video_interlace_mode_to_string(
+            CStr::from_ptr(gst_video_sys::gst_video_interlace_mode_to_string(
                 self.to_glib(),
             ))
-        }
-    }
-
-    pub fn from_string(s: &str) -> Self {
-        assert_initialized_main_thread!();
-
-        unsafe {
-            from_glib(gst_video_sys::gst_video_interlace_mode_from_string(
-                s.to_glib_none().0,
-            ))
+            .to_str()
+            .unwrap()
         }
     }
 }
@@ -882,14 +866,19 @@ impl str::FromStr for ::VideoInterlaceMode {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        Ok(Self::from_string(s))
+        assert_initialized_main_thread!();
+
+        unsafe {
+            Ok(from_glib(
+                gst_video_sys::gst_video_interlace_mode_from_string(s.to_glib_none().0),
+            ))
+        }
     }
 }
 
 impl fmt::Display for ::VideoInterlaceMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(&::VideoInterlaceMode::to_string(*self))
+        f.write_str((*self).to_str())
     }
 }
 
@@ -992,9 +981,11 @@ mod tests {
     #[cfg(any(feature = "v1_12", feature = "dox"))]
     #[test]
     fn test_display() {
+        use std::str::FromStr;
+
         gst::init().unwrap();
 
-        format!("{}", ::VideoColorimetry::from_string("sRGB").unwrap());
+        format!("{}", ::VideoColorimetry::from_str("sRGB").unwrap());
         format!("{}", ::VideoFieldOrder::TopFieldFirst);
         format!("{}", ::VideoInterlaceMode::Progressive);
     }

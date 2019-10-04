@@ -12,7 +12,9 @@ use std::marker::PhantomData;
 use std::mem;
 
 use glib;
-use glib::translate::{from_glib, from_glib_full, ToGlib, ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{
+    from_glib, from_glib_full, FromGlibPtrFull, ToGlib, ToGlibPtr, ToGlibPtrMut,
+};
 use glib::value::{FromValueOptional, SendValue, SetValue, ToSendValue, TypedValue, Value};
 use glib::StaticType;
 use gobject_sys;
@@ -488,10 +490,6 @@ impl TagListRef {
         Iter::new(self)
     }
 
-    pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(gst_sys::gst_tag_list_to_string(self.as_ptr())) }
-    }
-
     pub fn insert(&mut self, other: &TagListRef, mode: TagMergeMode) {
         unsafe { gst_sys::gst_tag_list_insert(self.as_mut_ptr(), other.as_ptr(), mode.to_glib()) }
     }
@@ -523,7 +521,10 @@ impl fmt::Debug for TagListRef {
 
 impl fmt::Display for TagListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&TagListRef::to_string(self))
+        let s = unsafe {
+            glib::GString::from_glib_full(gst_sys::gst_tag_list_to_string(self.as_ptr()))
+        };
+        f.write_str(&s)
     }
 }
 

@@ -63,21 +63,6 @@ impl CapsFeatures {
         }
     }
 
-    pub fn from_string(value: &str) -> Option<Self> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let ptr = gst_sys::gst_caps_features_from_string(value.to_glib_none().0);
-            if ptr.is_null() {
-                return None;
-            }
-
-            Some(CapsFeatures(
-                ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
-                PhantomData,
-            ))
-        }
-    }
-
     pub unsafe fn into_ptr(self) -> *mut gst_sys::GstCapsFeatures {
         let ptr = self.0.as_ptr() as *mut CapsFeaturesRef as *mut gst_sys::GstCapsFeatures;
         mem::forget(self);
@@ -148,8 +133,18 @@ impl str::FromStr for CapsFeatures {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        CapsFeatures::from_string(s).ok_or(())
+        assert_initialized_main_thread!();
+        unsafe {
+            let ptr = gst_sys::gst_caps_features_from_string(s.to_glib_none().0);
+            if ptr.is_null() {
+                return Err(());
+            }
+
+            Ok(CapsFeatures(
+                ptr::NonNull::new_unchecked(ptr as *mut CapsFeaturesRef),
+                PhantomData,
+            ))
+        }
     }
 }
 
@@ -302,10 +297,6 @@ impl CapsFeaturesRef {
         self as *const Self as *mut gst_sys::GstCapsFeatures
     }
 
-    pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(gst_sys::gst_caps_features_to_string(self.as_ptr())) }
-    }
-
     pub fn is_empty(&self) -> bool {
         self.get_size() == 0 && !self.is_any()
     }
@@ -448,7 +439,10 @@ impl fmt::Debug for CapsFeaturesRef {
 
 impl fmt::Display for CapsFeaturesRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        let s = unsafe {
+            glib::GString::from_glib_full(gst_sys::gst_caps_features_to_string(self.as_ptr()))
+        };
+        f.write_str(&s)
     }
 }
 

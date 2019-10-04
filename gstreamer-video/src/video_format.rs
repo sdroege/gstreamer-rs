@@ -46,16 +46,6 @@ impl ToGlib for VideoEndianness {
 }
 
 impl ::VideoFormat {
-    pub fn from_string(s: &str) -> ::VideoFormat {
-        assert_initialized_main_thread!();
-
-        unsafe {
-            from_glib(gst_video_sys::gst_video_format_from_string(
-                s.to_glib_none().0,
-            ))
-        }
-    }
-
     pub fn from_fourcc(fourcc: u32) -> ::VideoFormat {
         assert_initialized_main_thread!();
 
@@ -86,7 +76,7 @@ impl ::VideoFormat {
         }
     }
 
-    pub fn to_string<'a>(self) -> &'a str {
+    pub fn to_str<'a>(self) -> &'a str {
         if self == ::VideoFormat::Unknown {
             return "UNKNOWN";
         }
@@ -103,20 +93,25 @@ impl str::FromStr for ::VideoFormat {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
+        assert_initialized_main_thread!();
 
-        let format = Self::from_string(s);
-        if format == ::VideoFormat::Unknown {
-            Err(())
-        } else {
-            Ok(format)
+        unsafe {
+            let fmt = ::VideoFormat::from_glib(gst_video_sys::gst_video_format_from_string(
+                s.to_glib_none().0,
+            ));
+
+            if fmt == ::VideoFormat::Unknown {
+                Err(())
+            } else {
+                Ok(fmt)
+            }
         }
     }
 }
 
 impl fmt::Display for ::VideoFormat {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-        f.write_str(::VideoFormat::to_string(*self))
+        f.write_str((*self).to_str())
     }
 }
 

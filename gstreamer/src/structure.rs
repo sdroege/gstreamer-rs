@@ -109,21 +109,6 @@ impl Structure {
         structure
     }
 
-    pub fn from_string(s: &str) -> Option<Structure> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let structure = gst_sys::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
-            if structure.is_null() {
-                None
-            } else {
-                Some(Structure(
-                    ptr::NonNull::new_unchecked(structure as *mut StructureRef),
-                    PhantomData,
-                ))
-            }
-        }
-    }
-
     pub unsafe fn into_ptr(self) -> *mut gst_sys::GstStructure {
         let ptr = self.0.as_ptr() as *mut StructureRef as *mut gst_sys::GstStructure;
         mem::forget(self);
@@ -206,8 +191,18 @@ impl str::FromStr for Structure {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, ()> {
-        skip_assert_initialized!();
-        Structure::from_string(s).ok_or(())
+        assert_initialized_main_thread!();
+        unsafe {
+            let structure = gst_sys::gst_structure_from_string(s.to_glib_none().0, ptr::null_mut());
+            if structure.is_null() {
+                Err(())
+            } else {
+                Ok(Structure(
+                    ptr::NonNull::new_unchecked(structure as *mut StructureRef),
+                    PhantomData,
+                ))
+            }
+        }
     }
 }
 
@@ -371,10 +366,6 @@ impl StructureRef {
 
     pub unsafe fn as_mut_ptr(&self) -> *mut gst_sys::GstStructure {
         self as *const Self as *mut gst_sys::GstStructure
-    }
-
-    pub fn to_string(&self) -> String {
-        unsafe { from_glib_full(gst_sys::gst_structure_to_string(&self.0)) }
     }
 
     pub fn get<'structure, 'name, T: FromValueOptional<'structure>>(
@@ -598,7 +589,8 @@ impl StructureRef {
 
 impl fmt::Display for StructureRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str(&self.to_string())
+        let s = unsafe { glib::GString::from_glib_full(gst_sys::gst_structure_to_string(&self.0)) };
+        f.write_str(&s)
     }
 }
 
@@ -749,6 +741,7 @@ impl Builder {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[test]
     fn new_set_get() {
@@ -831,7 +824,7 @@ mod tests {
 
         let a = "Test, f1=(string)abc, f2=(uint)123;";
 
-        let s = Structure::from_string(&a).unwrap();
+        let s = Structure::from_str(&a).unwrap();
         assert_eq!(s.get::<&str>("f1"), Ok(Some("abc")));
         assert_eq!(s.get_some::<u32>("f2"), Ok(123));
 
@@ -844,7 +837,7 @@ mod tests {
 
         let a = glib::value::Value::from(None::<&Structure>);
         assert!(a.get::<Structure>().unwrap().is_none());
-        let b = glib::value::Value::from(&Structure::from_string(&"foo").unwrap());
+        let b = glib::value::Value::from(&Structure::from_str(&"foo").unwrap());
         assert!(b.get::<Structure>().unwrap().is_some());
     }
 }
