@@ -29,6 +29,7 @@ glib_wrapper! {
 }
 
 impl UriClipAsset {
+    //#[cfg(any(feature = "v1_16", feature = "dox"))]
     //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, Error> {
     //    unsafe { TODO: call ges_sys:ges_uri_clip_asset_finish() }
     //}

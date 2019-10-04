@@ -48,6 +48,7 @@ pub trait TimelineElementExt: 'static {
 
     fn get_inpoint(&self) -> gst::ClockTime;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn get_layer_priority(&self) -> u32;
 
     fn get_max_duration(&self) -> gst::ClockTime;
@@ -185,6 +186,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn get_layer_priority(&self) -> u32 {
         unsafe { ges_sys::ges_timeline_element_get_layer_priority(self.as_ref().to_glib_none().0) }
     }
@@ -259,7 +261,7 @@ impl<O: IsA<TimelineElement>> TimelineElementExt for O {
 
     fn paste(&self, paste_position: gst::ClockTime) -> Option<TimelineElement> {
         unsafe {
-            from_glib_none(ges_sys::ges_timeline_element_paste(
+            from_glib_full(ges_sys::ges_timeline_element_paste(
                 self.as_ref().to_glib_none().0,
                 paste_position.to_glib(),
             ))

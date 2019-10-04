@@ -99,6 +99,7 @@ pub trait TimelineExt: 'static {
 
     fn load_from_uri(&self, uri: &str) -> Result<(), Error>;
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn move_layer<P: IsA<Layer>>(
         &self,
         layer: &P,
@@ -319,6 +320,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn move_layer<P: IsA<Layer>>(
         &self,
         layer: &P,
