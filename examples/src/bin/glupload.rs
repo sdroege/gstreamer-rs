@@ -588,7 +588,7 @@ impl App {
             match msg.view() {
                 MessageView::Eos(..) => break,
                 MessageView::Error(err) => {
-                    Err(ErrorMessage {
+                    return Err(ErrorMessage {
                         src: msg
                             .get_src()
                             .map(|s| String::from(s.get_path_string()))
@@ -596,7 +596,8 @@ impl App {
                         error: err.get_error().description().into(),
                         debug: Some(err.get_debug().unwrap().to_string()),
                         cause: err.get_error(),
-                    })?;
+                    }
+                    .into());
                 }
                 _ => (),
             }

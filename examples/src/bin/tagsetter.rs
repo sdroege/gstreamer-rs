@@ -102,7 +102,7 @@ fn example_main() -> Result<(), Error> {
         match msg.view() {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
-                Err(ErrorMessage {
+                return Err(ErrorMessage {
                     src: err
                         .get_src()
                         .map(|s| s.get_path_string())
@@ -111,8 +111,8 @@ fn example_main() -> Result<(), Error> {
                     error: err.get_error().description().into(),
                     debug: Some(err.get_debug().unwrap().to_string()),
                     cause: err.get_error(),
-                })?;
-                break;
+                }
+                .into());
             }
             _ => (),
         }

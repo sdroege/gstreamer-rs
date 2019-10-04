@@ -251,7 +251,7 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
             MessageView::Eos(..) => break,
             MessageView::Error(err) => {
                 pipeline.set_state(gst::State::Null)?;
-                Err(ErrorMessage {
+                return Err(ErrorMessage {
                     src: msg
                         .get_src()
                         .map(|s| String::from(s.get_path_string()))
@@ -259,7 +259,8 @@ fn main_loop(pipeline: gst::Pipeline) -> Result<(), Error> {
                     error: err.get_error().description().into(),
                     debug: Some(err.get_debug().unwrap().to_string()),
                     cause: err.get_error(),
-                })?;
+                }
+                .into());
             }
             _ => (),
         }

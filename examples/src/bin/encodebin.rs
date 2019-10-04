@@ -318,7 +318,7 @@ fn example_main() -> Result<(), Error> {
                 }
                 #[cfg(not(feature = "v1_10"))]
                 {
-                    Err(ErrorMessage {
+                    return Err(ErrorMessage {
                         src: msg
                             .get_src()
                             .map(|s| String::from(s.get_path_string()))
@@ -326,9 +326,9 @@ fn example_main() -> Result<(), Error> {
                         error: err.get_error().description().into(),
                         debug: Some(err.get_debug().unwrap().to_string()),
                         cause: err.get_error(),
-                    })?;
+                    }
+                    .into());
                 }
-                break;
             }
             MessageView::StateChanged(s) => {
                 println!(
