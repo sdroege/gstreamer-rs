@@ -23,7 +23,7 @@ shell-words = "0.1.0"
 tempdir = "0.3"
 
 [features]
-dox = []
+dox = ["v1_16"]
 v1_16 = ["gstreamer-sys/v1_16", "gstreamer-sdp-sys/v1_16"]
 
 [lib]
@@ -44,4 +44,4 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys"
 version = "0.9.0"
 
 [package.metadata.docs.rs]
-features = ["dox", "v1_16"]
+features = ["dox"]

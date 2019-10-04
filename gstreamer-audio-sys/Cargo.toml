@@ -29,7 +29,7 @@ v1_10 = ["v1_8", "gstreamer-sys/v1_10", "gstreamer-base-sys/v1_10"]
 v1_12 = ["v1_10", "gstreamer-sys/v1_12", "gstreamer-base-sys/v1_12"]
 v1_14 = ["v1_12", "gstreamer-sys/v1_14", "gstreamer-base-sys/v1_14"]
 v1_16 = ["v1_14", "gstreamer-sys/v1_16", "gstreamer-base-sys/v1_16"]
-dox = []
+dox = ["v1_16"]
 
 [lib]
 name = "gstreamer_audio_sys"
@@ -49,4 +49,4 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys"
 version = "0.9.0"
 
 [package.metadata.docs.rs]
-features = ["dox", "v1_16"]
+features = ["dox"]

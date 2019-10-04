@@ -31,7 +31,7 @@ v1_6 = ["v1_2"]
 v1_6_1 = ["v1_6"]
 v1_10 = ["v1_6_1"]
 v1_16 = ["v1_10"]
-dox = []
+dox = ["v1_16"]
 
 [lib]
 name = "gstreamer_rtp_sys"
@@ -51,4 +51,4 @@ repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys"
 version = "0.9.0"
 
 [package.metadata.docs.rs]
-features = ["dox", "v1_16"]
+features = ["dox"]
