@@ -2,10 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -76,7 +78,7 @@ impl NetClientClock {
         }
     }
 
-    pub fn set_property_bus(&self, bus: Option<&gst::Bus>) {
+    pub fn set_property_bus<P: IsA<gst::Bus> + SetValueOptional>(&self, bus: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.as_ptr() as *mut gobject_sys::GObject,

@@ -2,10 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::Value;
 use glib_sys;
@@ -87,7 +89,10 @@ impl PlayerVideoOverlayVideoRenderer {
         }
     }
 
-    pub fn set_property_video_sink(&self, video_sink: Option<&gst::Element>) {
+    pub fn set_property_video_sink<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        video_sink: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.as_ptr() as *mut gobject_sys::GObject,

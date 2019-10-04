@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::Value;
 use glib_sys;
@@ -80,21 +81,33 @@ pub trait GESPipelineExt: 'static {
 
     fn get_property_audio_filter(&self) -> Option<gst::Element>;
 
-    fn set_property_audio_filter(&self, audio_filter: Option<&gst::Element>);
+    fn set_property_audio_filter<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        audio_filter: Option<&P>,
+    );
 
     fn get_property_audio_sink(&self) -> Option<gst::Element>;
 
-    fn set_property_audio_sink(&self, audio_sink: Option<&gst::Element>);
+    fn set_property_audio_sink<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        audio_sink: Option<&P>,
+    );
 
     fn get_property_timeline(&self) -> Option<Timeline>;
 
     fn get_property_video_filter(&self) -> Option<gst::Element>;
 
-    fn set_property_video_filter(&self, video_filter: Option<&gst::Element>);
+    fn set_property_video_filter<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        video_filter: Option<&P>,
+    );
 
     fn get_property_video_sink(&self) -> Option<gst::Element>;
 
-    fn set_property_video_sink(&self, video_sink: Option<&gst::Element>);
+    fn set_property_video_sink<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        video_sink: Option<&P>,
+    );
 
     fn connect_property_audio_filter_notify<F: Fn(&Self) + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -250,7 +263,10 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_audio_filter(&self, audio_filter: Option<&gst::Element>) {
+    fn set_property_audio_filter<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        audio_filter: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -274,7 +290,10 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_audio_sink(&self, audio_sink: Option<&gst::Element>) {
+    fn set_property_audio_sink<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        audio_sink: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -312,7 +331,10 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_video_filter(&self, video_filter: Option<&gst::Element>) {
+    fn set_property_video_filter<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        video_filter: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -336,7 +358,10 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         }
     }
 
-    fn set_property_video_sink(&self, video_sink: Option<&gst::Element>) {
+    fn set_property_video_sink<P: IsA<gst::Element> + SetValueOptional>(
+        &self,
+        video_sink: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,

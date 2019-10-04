@@ -178,7 +178,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     //}
 
     fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P) {
-        let keep_alive_data: Box_<P> = Box::new(keep_alive);
+        let keep_alive_data: Box_<P> = Box_::new(keep_alive);
         unsafe extern "C" fn keep_alive_func<P: Fn() + 'static>(user_data: glib_sys::gpointer) {
             let callback: &P = &*(user_data as *mut _);
             (*callback)();
@@ -193,7 +193,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
             gst_rtsp_server_sys::gst_rtsp_stream_transport_set_keepalive(
                 self.as_ref().to_glib_none().0,
                 keep_alive,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -205,7 +205,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
     //}
 
     fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P) {
-        let message_sent_data: Box_<P> = Box::new(message_sent);
+        let message_sent_data: Box_<P> = Box_::new(message_sent);
         unsafe extern "C" fn message_sent_func<P: Fn() + 'static>(user_data: glib_sys::gpointer) {
             let callback: &P = &*(user_data as *mut _);
             (*callback)();
@@ -220,7 +220,7 @@ impl<O: IsA<RTSPStreamTransport>> RTSPStreamTransportExt for O {
             gst_rtsp_server_sys::gst_rtsp_stream_transport_set_message_sent(
                 self.as_ref().to_glib_none().0,
                 message_sent,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }

@@ -15,6 +15,7 @@ use glib_sys;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use gst_rtsp;
 use gst_rtsp_server_sys;
+#[cfg(any(feature = "v1_16", feature = "dox"))]
 use std;
 use std::boxed::Box as Box_;
 use std::mem::transmute;

@@ -2,7 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(feature = "futures")]
+#[cfg(any(feature = "futures", feature = "dox"))]
 use futures::future;
 use ges_sys;
 use gio;
@@ -13,6 +13,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::GString;
 use glib::Value;
 use glib_sys;
@@ -72,7 +73,7 @@ impl Asset {
         callback: Q,
     ) {
         assert_initialized_main_thread!();
-        let user_data: Box<Q> = Box::new(callback);
+        let user_data: Box_<Q> = Box_::new(callback);
         unsafe extern "C" fn request_async_trampoline<
             Q: FnOnce(Result<Asset, Error>) + Send + 'static,
         >(
@@ -87,7 +88,7 @@ impl Asset {
             } else {
                 Err(from_glib_full(error))
             };
-            let callback: Box<Q> = Box::from_raw(user_data as *mut _);
+            let callback: Box_<Q> = Box_::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = request_async_trampoline::<Q>;
@@ -97,12 +98,12 @@ impl Asset {
                 id.to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
                 Some(callback),
-                Box::into_raw(user_data) as *mut _,
+                Box_::into_raw(user_data) as *mut _,
             );
         }
     }
 
-    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "futures", feature = "dox"))]
     pub fn request_async_future(
         extractable_type: glib::types::Type,
         id: &str,
@@ -144,7 +145,7 @@ pub trait AssetExt: 'static {
 
     fn unproxy<P: IsA<Asset>>(&self, proxy: &P) -> Result<(), glib::error::BoolError>;
 
-    fn set_property_proxy_target(&self, proxy_target: Option<&Asset>);
+    fn set_property_proxy_target<P: IsA<Asset> + SetValueOptional>(&self, proxy_target: Option<&P>);
 
     fn connect_property_proxy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -225,7 +226,10 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn set_property_proxy_target(&self, proxy_target: Option<&Asset>) {
+    fn set_property_proxy_target<P: IsA<Asset> + SetValueOptional>(
+        &self,
+        proxy_target: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
