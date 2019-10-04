@@ -29,8 +29,8 @@ rustdoc-stripper = { version = "0.1", optional = true }
 default = []
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
-dox = ["gstreamer-webrtc-sys/dox", "glib/dox", "gstreamer/dox"]
+dox = ["v1_16", "gstreamer-webrtc-sys/dox", "glib/dox", "gstreamer/dox"]
 v1_16 = ["gstreamer/v1_16", "gstreamer-sdp/v1_16", "gstreamer-webrtc-sys/v1_16"]
 
-["package.metadata.docs.rs"]
-features = ["dox", "embed-lgpl-docs", "v1_16"]
+[package.metadata.docs.rs]
+features = ["dox", "embed-lgpl-docs"]

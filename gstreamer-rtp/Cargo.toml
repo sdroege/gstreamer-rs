@@ -35,5 +35,5 @@ v1_16 = ["gstreamer/v1_16", "gstreamer-rtp-sys/v1_16", "v1_14"]
 embed-lgpl-docs = ["rustdoc-stripper"]
 purge-lgpl-docs = ["rustdoc-stripper"]
 
-["package.metadata.docs.rs"]
-dox = ["gstreamer-rtp-sys/dox", "glib/dox", "gstreamer/dox"]
+[package.metadata.docs.rs]
+dox = ["v1_16", "gstreamer-rtp-sys/dox", "glib/dox", "gstreamer/dox"]
