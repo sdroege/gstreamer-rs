@@ -257,17 +257,17 @@ See &lt;ulink url="http://w3c.github.io/webrtc-pc/#dom-rtcdatachannelstate"&gt;h
                  glib:type-name="GstWebRTCFECType"
                  glib:get-type="gst_webrtc_fec_type_get_type"
                  c:type="GstWebRTCFECType">
-      <doc xml:space="preserve">GST_WEBRTC_FEC_TYPE_NONE: none
-GST_WEBRTC_FEC_TYPE_ULP_RED: ulpfec + red</doc>
       <member name="none"
               value="0"
               c:identifier="GST_WEBRTC_FEC_TYPE_NONE"
               glib:nick="none">
+        <doc xml:space="preserve">none</doc>
       </member>
       <member name="ulp_red"
               value="1"
               c:identifier="GST_WEBRTC_FEC_TYPE_ULP_RED"
               glib:nick="ulp-red">
+        <doc xml:space="preserve">ulpfec + red</doc>
       </member>
     </enumeration>
     <enumeration name="WebRTCICEComponent"

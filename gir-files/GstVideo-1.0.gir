@@ -1498,7 +1498,9 @@ Performs the multiplication, meta-&gt;matrix X matrix.</doc>
           </instance-parameter>
           <parameter name="matrix" transfer-ownership="none">
             <doc xml:space="preserve">a 4x4 transformation matrix to be applied</doc>
-            <type name="gfloat" c:type="const gfloat*"/>
+            <array zero-terminated="0" c:type="const gfloat*" fixed-size="16">
+              <type name="gfloat" c:type="gfloat"/>
+            </array>
           </parameter>
         </parameters>
       </method>
@@ -2069,11 +2071,14 @@ the parity check bits).</doc>
     </enumeration>
     <enumeration name="VideoAncillaryDID16" version="1.16" glib:type-name="GstVideoAncillaryDID16" glib:get-type="gst_video_ancillary_di_d16_get_type" c:type="GstVideoAncillaryDID16">
       <doc xml:space="preserve">Some know types of Ancillary Data identifiers.</doc>
-      <member name="708" value="24833" c:identifier="GST_VIDEO_ANCILLARY_DID16_S334_EIA_708" glib:nick="708">
+      <member name="s334_eia_708" value="24833" c:identifier="GST_VIDEO_ANCILLARY_DID16_S334_EIA_708" glib:nick="s334-eia-708">
         <doc xml:space="preserve">CEA 708 Ancillary data according to SMPTE 334</doc>
       </member>
-      <member name="608" value="24834" c:identifier="GST_VIDEO_ANCILLARY_DID16_S334_EIA_608" glib:nick="608">
+      <member name="s334_eia_608" value="24834" c:identifier="GST_VIDEO_ANCILLARY_DID16_S334_EIA_608" glib:nick="s334-eia-608">
         <doc xml:space="preserve">CEA 608 Ancillary data according to SMPTE 334</doc>
+      </member>
+      <member name="s2016_3_afd_bar" value="16645" c:identifier="GST_VIDEO_ANCILLARY_DID16_S2016_3_AFD_BAR" glib:nick="s2016-3-afd-bar">
+        <doc xml:space="preserve">AFD/Bar Ancillary data according to SMPTE 2016-3 (Since: 1.18)</doc>
       </member>
     </enumeration>
     <bitfield name="VideoBufferFlags" glib:type-name="GstVideoBufferFlags" glib:get-type="gst_video_buffer_flags_get_type" c:type="GstVideoBufferFlags">

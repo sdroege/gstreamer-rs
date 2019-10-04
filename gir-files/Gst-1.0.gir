@@ -10886,7 +10886,7 @@ device in the PLAYING state.</doc>
               version="1.4">
         <doc xml:space="preserve">Creates the element with all of the required parameters set to use
 this device.</doc>
-        <return-value transfer-ownership="full" nullable="1">
+        <return-value transfer-ownership="none" nullable="1">
           <doc xml:space="preserve">a new #GstElement configured to use
 this device</doc>
           <type name="Element" c:type="GstElement*"/>
@@ -11088,7 +11088,7 @@ device in the PLAYING state.</doc>
       </field>
       <field name="create_element">
         <callback name="create_element">
-          <return-value transfer-ownership="full" nullable="1">
+          <return-value transfer-ownership="none" nullable="1">
             <doc xml:space="preserve">a new #GstElement configured to use
 this device</doc>
             <type name="Element" c:type="GstElement*"/>
@@ -23403,7 +23403,7 @@ was updated.</doc>
     response is received with a non-HTTP URL inside. (Since: 1.10)</doc>
       </member>
       <member name="device_changed"
-              value="2147483654"
+              value="2147483655"
               c:identifier="GST_MESSAGE_DEVICE_CHANGED"
               glib:nick="device-changed">
         <doc xml:space="preserve">Message indicating a #GstDevice was changed
@@ -45276,7 +45276,7 @@ determine a order for the two provided values.</doc>
       <doc xml:space="preserve">The major version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="0" c:type="GST_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="1" c:type="GST_VERSION_MICRO">
       <doc xml:space="preserve">The micro version of GStreamer at compile time:</doc>
       <type name="gint" c:type="gint"/>
     </constant>

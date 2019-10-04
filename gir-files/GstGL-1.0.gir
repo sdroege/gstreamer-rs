@@ -2776,7 +2776,7 @@ for details on what is a valid name.</doc>
       <field name="subcompositor">
         <type name="gpointer" c:type="gpointer"/>
       </field>
-      <field name="wl_shell">
+      <field name="shell">
         <type name="gpointer" c:type="gpointer"/>
       </field>
       <field name="foreign_display" readable="0" private="1">
