@@ -183,7 +183,7 @@ pub const GES_PADDING: c_int = 4;
 pub const GES_PADDING_LARGE: c_int = 20;
 pub const GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY: u32 = 4294967295;
 pub const GES_VERSION_MAJOR: c_int = 1;
-pub const GES_VERSION_MICRO: c_int = 0;
+pub const GES_VERSION_MICRO: c_int = 1;
 pub const GES_VERSION_MINOR: c_int = 16;
 pub const GES_VERSION_NANO: c_int = 0;
 
@@ -2998,6 +2998,7 @@ extern "C" {
         uri: *const c_char,
         error: *mut *mut glib::GError,
     ) -> gboolean;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn ges_timeline_move_layer(
         timeline: *mut GESTimeline,
         layer: *mut GESLayer,
@@ -3055,6 +3056,7 @@ extern "C" {
     //pub fn ges_timeline_element_get_child_property_valist(self_: *mut GESTimelineElement, first_property_name: *const c_char, var_args: /*Unimplemented*/va_list);
     pub fn ges_timeline_element_get_duration(self_: *mut GESTimelineElement) -> gst::GstClockTime;
     pub fn ges_timeline_element_get_inpoint(self_: *mut GESTimelineElement) -> gst::GstClockTime;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn ges_timeline_element_get_layer_priority(self_: *mut GESTimelineElement) -> u32;
     pub fn ges_timeline_element_get_max_duration(
         self_: *mut GESTimelineElement,
@@ -3351,6 +3353,7 @@ extern "C" {
     // GESUriClipAsset
     //=========================================================================
     pub fn ges_uri_clip_asset_get_type() -> GType;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn ges_uri_clip_asset_finish(
         res: *mut gio::GAsyncResult,
         error: *mut *mut glib::GError,
@@ -3649,6 +3652,7 @@ extern "C" {
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn ges_init_get_option_group() -> *mut glib::GOptionGroup;
+    #[cfg(any(feature = "v1_16", feature = "dox"))]
     pub fn ges_is_initialized() -> gboolean;
     pub fn ges_list_assets(filter: GType) -> *mut glib::GList;
     pub fn ges_play_sink_convert_frame(

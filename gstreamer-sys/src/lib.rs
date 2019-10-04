@@ -810,7 +810,7 @@ pub const GST_MESSAGE_PROPERTY_NOTIFY: GstMessageType = 2147483651;
 pub const GST_MESSAGE_STREAM_COLLECTION: GstMessageType = 2147483652;
 pub const GST_MESSAGE_STREAMS_SELECTED: GstMessageType = 2147483653;
 pub const GST_MESSAGE_REDIRECT: GstMessageType = 2147483654;
-pub const GST_MESSAGE_DEVICE_CHANGED: GstMessageType = 2147483654;
+pub const GST_MESSAGE_DEVICE_CHANGED: GstMessageType = 2147483655;
 pub const GST_MESSAGE_ANY: GstMessageType = 4294967295;
 
 pub type GstMetaFlags = c_uint;

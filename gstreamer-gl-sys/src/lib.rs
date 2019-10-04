@@ -1251,7 +1251,7 @@ pub struct GstGLDisplayWayland {
     pub registry: gpointer,
     pub compositor: gpointer,
     pub subcompositor: gpointer,
-    pub wl_shell: gpointer,
+    pub shell: gpointer,
     pub foreign_display: gboolean,
     pub _padding: [gpointer; 4],
 }
@@ -1265,7 +1265,7 @@ impl ::std::fmt::Debug for GstGLDisplayWayland {
             .field("registry", &self.registry)
             .field("compositor", &self.compositor)
             .field("subcompositor", &self.subcompositor)
-            .field("wl_shell", &self.wl_shell)
+            .field("shell", &self.shell)
             .finish()
     }
 }

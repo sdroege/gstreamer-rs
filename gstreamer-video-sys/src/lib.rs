@@ -89,6 +89,7 @@ pub const GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_LAST: GstVideoAncillary
 pub type GstVideoAncillaryDID16 = c_int;
 pub const GST_VIDEO_ANCILLARY_DID16_S334_EIA_708: GstVideoAncillaryDID16 = 24833;
 pub const GST_VIDEO_ANCILLARY_DID16_S334_EIA_608: GstVideoAncillaryDID16 = 24834;
+pub const GST_VIDEO_ANCILLARY_DID16_S2016_3_AFD_BAR: GstVideoAncillaryDID16 = 16645;
 
 pub type GstVideoCaptionType = c_int;
 pub const GST_VIDEO_CAPTION_TYPE_UNKNOWN: GstVideoCaptionType = 0;
@@ -2352,7 +2353,7 @@ extern "C" {
     #[cfg(any(feature = "v1_8", feature = "dox"))]
     pub fn gst_video_affine_transformation_meta_apply_matrix(
         meta: *mut GstVideoAffineTransformationMeta,
-        matrix: *const c_float,
+        matrix: *const [c_float; 16],
     );
     pub fn gst_video_affine_transformation_meta_get_info() -> *const gst::GstMetaInfo;
 
