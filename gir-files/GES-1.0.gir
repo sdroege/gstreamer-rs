@@ -7249,7 +7249,9 @@ could not be loaded.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="move_layer" c:identifier="ges_timeline_move_layer">
+      <method name="move_layer"
+              c:identifier="ges_timeline_move_layer"
+              version="1.16">
         <doc xml:space="preserve">Moves @layer at @new_layer_priority meaning that @layer
 we land at that position in the stack of layers inside
 the timeline. If @new_layer_priority is superior than the number
@@ -7726,7 +7728,9 @@ responsible for controlling its timing properties.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="get_layer_priority" invoker="get_layer_priority">
+      <virtual-method name="get_layer_priority"
+                      invoker="get_layer_priority"
+                      version="1.16">
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The priority of the first layer the element is in (note that only
 groups can span over several layers). %GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY
@@ -8240,7 +8244,8 @@ name/return location pairs, followed by NULL</doc>
         </parameters>
       </method>
       <method name="get_layer_priority"
-              c:identifier="ges_timeline_element_get_layer_priority">
+              c:identifier="ges_timeline_element_get_layer_priority"
+              version="1.16">
         <return-value transfer-ownership="none">
           <doc xml:space="preserve">The priority of the first layer the element is in (note that only
 groups can span over several layers). %GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY
@@ -8442,8 +8447,9 @@ usage.</doc>
         <doc xml:space="preserve">Paste @self inside the timeline. @self must have been created
 using ges_timeline_element_copy with recurse=TRUE set,
 otherwise it will fail.</doc>
-        <return-value transfer-ownership="none">
-          <doc xml:space="preserve">Paste @self copying the element</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">New element resulting of pasting @self
+or %NULL</doc>
           <type name="TimelineElement" c:type="GESTimelineElement*"/>
         </return-value>
         <parameters>
@@ -11791,6 +11797,7 @@ set as Metadata of the Asset.</doc>
       <implements name="Gio.Initable"/>
       <function name="finish"
                 c:identifier="ges_uri_clip_asset_finish"
+                version="1.16"
                 throws="1">
         <doc xml:space="preserve">Finalize the request of an async #GESUriClipAsset</doc>
         <return-value transfer-ownership="full">
@@ -12121,7 +12128,7 @@ by #GESUriClipAsset-s.</doc>
     <constant name="VERSION_MAJOR" value="1" c:type="GES_VERSION_MAJOR">
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="VERSION_MICRO" value="0" c:type="GES_VERSION_MICRO">
+    <constant name="VERSION_MICRO" value="1" c:type="GES_VERSION_MICRO">
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="VERSION_MINOR" value="16" c:type="GES_VERSION_MINOR">
@@ -13259,7 +13266,9 @@ using the ges_init_get_option_group() result.</doc>
         <type name="GLib.OptionGroup" c:type="GOptionGroup*"/>
       </return-value>
     </function>
-    <function name="is_initialized" c:identifier="ges_is_initialized">
+    <function name="is_initialized"
+              c:identifier="ges_is_initialized"
+              version="1.16">
       <doc xml:space="preserve">Use this function to check if GES has been initialized with ges_init()
 or ges_init_check().</doc>
       <return-value transfer-ownership="none">
