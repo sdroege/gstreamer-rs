@@ -20,6 +20,7 @@ stages:
       libgl1-mesa-glx
       libwayland-egl1-mesa
       xz-utils
+      libssl-dev
   before_script:
     - apt-get update -yqq
     - apt-get install -yqq --no-install-recommends $DEPENDENCIES
@@ -142,3 +143,13 @@ clippy:
     - |
       cargo clippy --color=always --manifest-path examples/Cargo.toml --bins --examples --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
       cargo clippy --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features -- -A clippy::redundant_pattern_matching -A clippy::single_match -A clippy::cast_lossless
+
+audit:
+  extends: '.tarball_setup'
+  image: "rust:slim-buster"
+  stage: 'extras'
+  only:
+    - schedules
+  script:
+    - cargo install cargo-audit
+    - cargo audit --deny-warnings
