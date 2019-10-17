@@ -21,6 +21,7 @@ use gst::subclass::prelude::*;
 
 use BaseParse;
 use BaseParseClass;
+use BaseParseFrame;
 
 pub trait BaseParseImpl: BaseParseImplExt + ElementImpl + Send + Sync + 'static {
     fn start(&self, element: &BaseParse) -> Result<(), gst::ErrorMessage> {

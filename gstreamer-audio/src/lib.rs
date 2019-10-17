@@ -53,9 +53,9 @@ pub use audio_channel_position::*;
 mod audio_stream_align;
 
 mod audio_decoder;
-pub use audio_decoder::*;
+pub use audio_decoder::AudioDecoderExtManual;
 mod audio_encoder;
-pub use audio_encoder::*;
+pub use audio_encoder::AudioEncoderExtManual;
 
 use glib::translate::{from_glib_full, ToGlibPtr};
 pub fn audio_buffer_clip(

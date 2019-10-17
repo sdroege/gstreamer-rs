@@ -159,7 +159,9 @@ mod element;
 mod bin;
 
 mod allocator;
+pub use allocator::AllocatorExtManual;
 mod pipeline;
+pub use pipeline::GstPipelineExtManual;
 
 mod allocation_params;
 pub use self::allocation_params::AllocationParams;
@@ -239,6 +241,7 @@ pub use plugin_feature::PluginFeatureExtManual;
 pub use tag_setter::TagSetterExtManual;
 
 mod plugin;
+pub use plugin::GstPluginExtManual;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
 mod stream;
 #[cfg(any(feature = "v1_10", feature = "dox"))]
@@ -322,6 +325,7 @@ pub mod prelude {
 
     pub use meta::MetaAPI;
 
+    pub use allocator::AllocatorExtManual;
     pub use bin::GstBinExtManual;
     pub use element::ElementExtManual;
 
@@ -345,12 +349,16 @@ pub mod prelude {
     pub use device_monitor::DeviceMonitorExtManual;
     pub use device_provider::DeviceProviderExtManual;
     pub use gobject::GObjectExtManualGst;
+    pub use message::MessageErrorDomain;
     pub use object::GstObjectExtManual;
     pub use pad::PadExtManual;
     pub use param_spec::GstParamSpecExt;
+    pub use pipeline::GstPipelineExtManual;
+    pub use plugin::GstPluginExtManual;
     pub use plugin_feature::PluginFeatureExtManual;
     pub use proxy_pad::ProxyPadExtManual;
     pub use tag_setter::TagSetterExtManual;
+    pub use typefind::TypeFindImpl;
     pub use value::GstValueExt;
 
     pub use miniobject::MiniObject;

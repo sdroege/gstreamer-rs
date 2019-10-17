@@ -52,7 +52,7 @@ pub use video_info::*;
 pub mod video_frame;
 pub use video_frame::{VideoBufferExt, VideoFrame, VideoFrameRef};
 mod video_overlay;
-pub use video_overlay::*;
+pub use video_overlay::VideoOverlayExtManual;
 mod video_event;
 pub use video_event::*;
 mod functions;
@@ -73,17 +73,19 @@ mod video_time_code_interval;
 pub use video_time_code_interval::VideoTimeCodeInterval;
 mod video_buffer_pool;
 pub use video_buffer_pool::{
-    VideoAlignment, BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META,
+    VideoAlignment, VideoBufferPoolConfig, BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META,
     BUFFER_POOL_OPTION_VIDEO_ALIGNMENT, BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META,
     BUFFER_POOL_OPTION_VIDEO_META,
 };
 
 mod video_codec_frame;
 mod video_decoder;
+pub use video_decoder::VideoDecoderExtManual;
 mod video_encoder;
 pub use video_codec_frame::VideoCodecFrame;
+pub use video_encoder::VideoEncoderExtManual;
 pub mod video_codec_state;
-pub use video_codec_state::VideoCodecState;
+pub use video_codec_state::{VideoCodecState, VideoCodecStateContext};
 mod utils;
 
 pub const VIDEO_ENCODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;

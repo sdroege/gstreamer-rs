@@ -67,6 +67,8 @@ pub use rtsp_client::RTSPClientExtManual;
 pub use rtsp_media_factory::RTSPMediaFactoryExtManual;
 pub use rtsp_server::RTSPServerExtManual;
 pub use rtsp_session_pool::RTSPSessionPoolExtManual;
+pub use rtsp_stream::RTSPStreamExtManual;
+pub use rtsp_stream_transport::RTSPStreamTransportExtManual;
 
 pub use rtsp_context::*;
 pub use rtsp_token::*;

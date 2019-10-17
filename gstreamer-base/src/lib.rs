@@ -52,11 +52,19 @@ pub use flow_combiner::*;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator;
 #[cfg(any(feature = "v1_14", feature = "dox"))]
+pub use aggregator::AggregatorExtManual;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
 mod aggregator_pad;
+#[cfg(any(feature = "v1_14", feature = "dox"))]
+pub use aggregator_pad::AggregatorPadExtManual;
 mod base_parse;
+pub use base_parse::BaseParseExtManual;
 mod base_sink;
+pub use base_sink::BaseSinkExtManual;
 mod base_src;
+pub use base_src::BaseSrcExtManual;
 mod base_transform;
+pub use base_transform::BaseTransformExtManual;
 
 pub mod base_parse_frame;
 pub use base_parse_frame::BaseParseFrame;
@@ -77,7 +85,6 @@ pub mod prelude {
     pub use aggregator_pad::AggregatorPadExtManual;
     pub use auto::traits::*;
     pub use base_parse::BaseParseExtManual;
-    pub use base_parse_frame::BaseParseFrame;
     pub use base_sink::BaseSinkExtManual;
     pub use base_src::BaseSrcExtManual;
     pub use base_transform::BaseTransformExtManual;
