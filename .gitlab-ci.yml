@@ -151,5 +151,5 @@ audit:
   only:
     - schedules
   script:
-    - cargo install cargo-audit
+    - cargo install --force cargo-audit
     - cargo audit --deny-warnings
