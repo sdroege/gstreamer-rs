@@ -137,12 +137,7 @@ mod tests {
             .unwrap()
             .to_caps()
             .unwrap();
-        let sample = gst::Sample::new(
-            Some(&in_buffer),
-            Some(&in_caps),
-            None::<&gst::Segment>,
-            None,
-        );
+        let sample = gst::Sample::new().buffer(&in_buffer).caps(&in_caps).build();
 
         let out_caps = ::VideoInfo::new(::VideoFormat::Abgr, 320, 240)
             .build()

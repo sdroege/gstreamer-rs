@@ -12,7 +12,6 @@ use serde::ser::{Serialize, SerializeStruct, Serializer};
 use Buffer;
 use BufferList;
 use Caps;
-use GenericFormattedValue;
 use Sample;
 use SampleRef;
 use Segment;
@@ -47,21 +46,29 @@ struct SampleDe {
 
 impl From<SampleDe> for Sample {
     fn from(mut buf_de: SampleDe) -> Self {
-        if buf_de.buffer.is_some() {
-            Sample::new::<GenericFormattedValue>(
-                buf_de.buffer.as_ref(),
-                buf_de.caps.as_ref(),
-                buf_de.segment.as_ref(),
-                buf_de.info.take(),
-            )
-        } else {
-            Sample::with_buffer_list::<GenericFormattedValue>(
-                buf_de.buffer_list.as_ref(),
-                buf_de.caps.as_ref(),
-                buf_de.segment.as_ref(),
-                buf_de.info.take(),
-            )
+        let mut builder = Sample::new();
+
+        if let Some(buffer) = buf_de.buffer.as_ref() {
+            builder = builder.buffer(buffer);
         }
+
+        if let Some(buffer_list) = buf_de.buffer_list.as_ref() {
+            builder = builder.buffer_list(buffer_list);
+        }
+
+        if let Some(caps) = buf_de.caps.as_ref() {
+            builder = builder.caps(caps);
+        }
+
+        if let Some(segment) = buf_de.segment.as_ref() {
+            builder = builder.segment(segment);
+        }
+
+        if let Some(info) = buf_de.info {
+            builder = builder.info(info);
+        }
+
+        builder.build()
     }
 }
 
@@ -124,12 +131,12 @@ mod tests {
                 .field("f3", &123i32)
                 .build();
 
-            Sample::new::<GenericFormattedValue>(
-                Some(&buffer),
-                Some(&caps),
-                Some(&segment),
-                Some(info),
-            )
+            Sample::new()
+                .buffer(&buffer)
+                .caps(&caps)
+                .segment(&segment)
+                .info(info)
+                .build()
         };
 
         let res = ron::ser::to_string_pretty(&sample, pretty_config.clone());
@@ -187,7 +194,7 @@ mod tests {
                 buffer.set_offset_end(4);
                 buffer.set_duration(4.into());
             }
-            Sample::new::<GenericFormattedValue>(Some(&buffer), None, None, None)
+            Sample::new().buffer(&buffer).build()
         };
 
         // `Sample`'s `Segment` is allocated in GStreamer 1.x, should be fixed in version 2.0
@@ -354,12 +361,12 @@ mod tests {
                 .field("f3", &123i32)
                 .build();
 
-            Sample::new::<GenericFormattedValue>(
-                Some(&buffer),
-                Some(&caps),
-                Some(&segment),
-                Some(info),
-            )
+            Sample::new()
+                .buffer(&buffer)
+                .caps(&caps)
+                .segment(&segment)
+                .info(info)
+                .build()
         };
         let sample_ser = ron::ser::to_string(&sample).unwrap();
         let sample_de: Sample = ron::de::from_str(sample_ser.as_str()).unwrap();

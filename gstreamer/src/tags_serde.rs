@@ -323,7 +323,6 @@ mod tests {
 
     use tags::*;
     use Buffer;
-    use GenericFormattedValue;
     use Sample;
     use TagMergeMode;
     use TagScope;
@@ -354,7 +353,7 @@ mod tests {
                     buffer.set_offset(0);
                     buffer.set_offset_end(0);
                 }
-                Sample::new::<GenericFormattedValue>(Some(&buffer), None, None, None)
+                Sample::new().buffer(&buffer).build()
             };
             tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
         }
@@ -569,7 +568,7 @@ mod tests {
                     buffer.set_offset(0);
                     buffer.set_offset_end(0);
                 }
-                Sample::new::<GenericFormattedValue>(Some(&buffer), None, None, None)
+                Sample::new().buffer(&buffer).build()
             };
             tags.add::<Image>(&sample, TagMergeMode::Append); // Sample
         }

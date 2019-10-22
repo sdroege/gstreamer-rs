@@ -31,41 +31,87 @@ gst_define_mini_object_wrapper!(Sample, SampleRef, gst_sys::GstSample, [Debug,],
     gst_sys::gst_sample_get_type()
 });
 
-impl Sample {
-    pub fn new<F: FormattedValue>(
-        buffer: Option<&Buffer>,
-        caps: Option<&Caps>,
-        segment: Option<&FormattedSegment<F>>,
-        info: Option<Structure>,
-    ) -> Self {
-        assert_initialized_main_thread!();
-        unsafe {
-            let info = info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut());
+#[derive(Debug, Clone)]
+pub struct SampleBuilder<'a> {
+    buffer: Option<&'a Buffer>,
+    buffer_list: Option<&'a BufferList>,
+    caps: Option<&'a Caps>,
+    segment: Option<&'a Segment>,
+    info: Option<Structure>,
+}
 
-            from_glib_full(gst_sys::gst_sample_new(
-                buffer.to_glib_none().0,
-                caps.to_glib_none().0,
-                segment.to_glib_none().0,
-                mut_override(info),
-            ))
+impl<'a> SampleBuilder<'a> {
+    pub fn buffer(self, buffer: &'a Buffer) -> Self {
+        Self {
+            buffer: Some(buffer),
+            buffer_list: None,
+            ..self
         }
     }
 
-    pub fn with_buffer_list<F: FormattedValue>(
-        buffer_list: Option<&BufferList>,
-        caps: Option<&Caps>,
-        segment: Option<&FormattedSegment<F>>,
-        info: Option<Structure>,
-    ) -> Self {
-        assert_initialized_main_thread!();
-        let sample = Self::new(None, caps, segment, info);
-        unsafe {
-            gst_sys::gst_sample_set_buffer_list(
-                sample.to_glib_none().0,
-                buffer_list.to_glib_none().0,
-            );
+    pub fn buffer_list(self, buffer_list: &'a BufferList) -> Self {
+        Self {
+            buffer: None,
+            buffer_list: Some(buffer_list),
+            ..self
         }
-        sample
+    }
+
+    pub fn caps(self, caps: &'a Caps) -> Self {
+        Self {
+            caps: Some(caps),
+            ..self
+        }
+    }
+
+    pub fn segment<F: FormattedValue>(self, segment: &'a FormattedSegment<F>) -> Self {
+        Self {
+            segment: Some(segment.upcast_ref()),
+            ..self
+        }
+    }
+
+    pub fn info(self, info: Structure) -> Self {
+        Self {
+            info: Some(info),
+            ..self
+        }
+    }
+
+    pub fn build(self) -> Sample {
+        assert_initialized_main_thread!();
+
+        unsafe {
+            let info = self.info.map(|i| i.into_ptr()).unwrap_or(ptr::null_mut());
+
+            let sample: Sample = from_glib_full(gst_sys::gst_sample_new(
+                self.buffer.to_glib_none().0,
+                self.caps.to_glib_none().0,
+                self.segment.to_glib_none().0,
+                mut_override(info),
+            ));
+
+            if let Some(buffer_list) = self.buffer_list {
+                gst_sys::gst_sample_set_buffer_list(
+                    sample.to_glib_none().0,
+                    buffer_list.to_glib_none().0,
+                );
+            }
+
+            sample
+        }
+    }
+}
+
+impl Sample {
+    pub fn new<'a>() -> SampleBuilder<'a> {
+        SampleBuilder {
+            buffer: None,
+            buffer_list: None,
+            caps: None,
+            segment: None,
+            info: None,
+        }
     }
 }
 
@@ -182,10 +228,8 @@ impl fmt::Debug for SampleRef {
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn test_sample_new_with_info() {
-        use GenericFormattedValue;
         use Sample;
         use Structure;
 
@@ -194,7 +238,7 @@ mod tests {
         let info = Structure::builder("sample.info")
             .field("f3", &123i32)
             .build();
-        let sample = Sample::new::<GenericFormattedValue>(None, None, None, Some(info));
+        let sample = Sample::new().info(info).build();
 
         assert!(sample.get_info().is_some());
     }
