@@ -1,6 +1,7 @@
 [package]
 name = "tutorials"
 version = "0.15.0"
+license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 
 [dependencies]
