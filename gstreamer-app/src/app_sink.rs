@@ -67,7 +67,7 @@ pub struct AppSinkCallbacksBuilder {
 }
 
 impl AppSinkCallbacksBuilder {
-    pub fn eos<F: Fn(&AppSink) + Send + 'static>(self, eos: F) -> Self {
+    pub fn eos<F: FnMut(&AppSink) + Send + 'static>(self, eos: F) -> Self {
         Self {
             eos: Some(RefCell::new(Box::new(eos))),
             ..self
@@ -75,7 +75,7 @@ impl AppSinkCallbacksBuilder {
     }
 
     pub fn new_preroll<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+        F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         self,
         new_preroll: F,
@@ -87,7 +87,7 @@ impl AppSinkCallbacksBuilder {
     }
 
     pub fn new_sample<
-        F: Fn(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+        F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
         self,
         new_sample: F,
