@@ -52,7 +52,7 @@ pub use video_info::*;
 pub mod video_frame;
 pub use video_frame::{VideoBufferExt, VideoFrame, VideoFrameRef};
 mod video_overlay;
-pub use video_overlay::VideoOverlayExtManual;
+pub use video_overlay::{is_video_overlay_prepare_window_handle_message, VideoOverlayExtManual};
 mod video_event;
 pub use video_event::*;
 mod functions;
