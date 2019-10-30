@@ -10,6 +10,7 @@ gstreamer = { path = "../gstreamer" }
 gstreamer-gl = { path = "../gstreamer-gl", optional = true }
 gstreamer-app = { path = "../gstreamer-app" }
 gstreamer-audio = { path = "../gstreamer-audio" }
+gstreamer-base = { path = "../gstreamer-base" }
 gstreamer-video = { path = "../gstreamer-video" }
 gstreamer-pbutils = { path = "../gstreamer-pbutils" }
 gstreamer-player = { path = "../gstreamer-player", optional = true }
@@ -29,6 +30,7 @@ pango = { git = "https://github.com/gtk-rs/pango", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/pangocairo", optional = true }
 glutin = { version = "0.21", optional = true }
 winit = { version = "0.19", optional = true }
+lazy_static = "1.0"
 
 [build-dependencies]
 gl_generator = { version = "0.14", optional = true }
@@ -143,4 +145,8 @@ required-features = ["ges"]
 name = "glupload"
 required-features = ["gl"]
 features = ["gl-egl", "gl-x11", "gl-wayland"]
+edition = "2018"
+
+[[bin]]
+name = "subclass"
 edition = "2018"
