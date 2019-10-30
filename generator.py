@@ -8,20 +8,11 @@ import sys
 need_rebuild = False
 
 def update_workspace():
-    with open('Cargo.toml', 'r') as f:
-        old_lines = f.readlines()
-    lines = old_lines[:]
-    with open('Cargo.toml', 'w') as f:
-        lines.insert(len(lines) - 2, '"gir",')
-        f.write(''.join(lines))
-    success = True
     try:
         call(['bash', '-c', 'cd gir && cargo build --release'])
     except:
-        success = False
-    with open('Cargo.toml', 'w') as f:
-        f.write(''.join(old_lines))
-    return success
+        return False
+    return True
 
 
 if not isfile('./gir/src'):
@@ -30,7 +21,7 @@ if not isfile('./gir/src'):
     call(['bash', '-c', 'git submodule update --init'])
     print('<= Done!')
 
-question = 'Do you want to update gir submodule? [y/N]'
+question = 'Do you want to update gir submodule? [y/N] '
 if sys.version_info[0] < 3:
     line = raw_input(question)
 else:
@@ -54,7 +45,13 @@ print('=> Regenerating crates...')
 for entry in [f for f in listdir('.') if isfile(join('.', f))]:
     if entry.startswith('Gir_Gst') and entry.endswith('.toml'):
         print('==> Regenerating "{}"...'.format(entry))
-        call(['./target/release/gir', '-c', entry])
+        try:
+            call(['./gir/target/release/gir', '-c', entry])
+        except Exception as err:
+            print('The following error occurred: {}'.format(err))
+            line = input('Do you want to continue? [y/N] ').strip().lower()
+            if line != 'y':
+                sys.exit(1)
         print('<== Done!')
 call(['cargo', 'fmt'])
 print('<= Done!')
