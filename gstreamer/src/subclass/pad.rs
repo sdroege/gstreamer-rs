@@ -165,5 +165,4 @@ mod tests {
         assert!(*imp.linked.lock().unwrap());
         assert!(*imp.unlinked.lock().unwrap());
     }
-
 }
