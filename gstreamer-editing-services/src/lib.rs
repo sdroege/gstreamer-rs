@@ -27,11 +27,7 @@ extern crate gio;
 
 static GES_INIT: Once = Once::new();
 
-pub use glib::{
-    Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value,
-};
-
-pub fn init() -> Result<(), glib::Error> {
+pub fn init() -> Result<(), glib::BoolError> {
     if gst::init().is_err() {
         return Err(glib_bool_error!("Could not initialize GStreamer."));
     }

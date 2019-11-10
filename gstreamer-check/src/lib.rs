@@ -23,8 +23,6 @@ macro_rules! assert_initialized_main_thread {
     };
 }
 
-pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
-
 #[allow(clippy::unreadable_literal)]
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]

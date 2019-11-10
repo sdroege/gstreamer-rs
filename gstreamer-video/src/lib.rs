@@ -35,8 +35,6 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
-pub use glib::{Cast, Continue, Error, IsA, StaticType, ToValue, Type, TypedValue, Value};
-
 #[allow(clippy::unreadable_literal)]
 #[allow(clippy::too_many_arguments)]
 #[allow(clippy::match_same_arms)]
