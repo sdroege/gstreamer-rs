@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::translate::*;
 use glib::GString;
 use gst_pbutils_sys;
 use std;
 use std::ptr;
 use EncodingProfile;
-use Error;
 
 glib_wrapper! {
     pub struct EncodingTarget(Object<gst_pbutils_sys::GstEncodingTarget, EncodingTargetClass>);
@@ -77,7 +77,7 @@ impl EncodingTarget {
         }
     }
 
-    pub fn save(&self) -> Result<(), Error> {
+    pub fn save(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_pbutils_sys::gst_encoding_target_save(self.to_glib_none().0, &mut error);
@@ -89,7 +89,7 @@ impl EncodingTarget {
         }
     }
 
-    pub fn save_to_file<P: AsRef<std::path::Path>>(&self, filepath: P) -> Result<(), Error> {
+    pub fn save_to_file<P: AsRef<std::path::Path>>(&self, filepath: P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_pbutils_sys::gst_encoding_target_save_to_file(
@@ -105,7 +105,7 @@ impl EncodingTarget {
         }
     }
 
-    pub fn load(name: &str, category: Option<&str>) -> Result<EncodingTarget, Error> {
+    pub fn load(name: &str, category: Option<&str>) -> Result<EncodingTarget, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -122,7 +122,9 @@ impl EncodingTarget {
         }
     }
 
-    pub fn load_from_file<P: AsRef<std::path::Path>>(filepath: P) -> Result<EncodingTarget, Error> {
+    pub fn load_from_file<P: AsRef<std::path::Path>>(
+        filepath: P,
+    ) -> Result<EncodingTarget, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();

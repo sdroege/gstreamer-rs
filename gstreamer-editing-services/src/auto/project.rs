@@ -17,7 +17,6 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 use Asset;
-use Error;
 use Timeline;
 
 glib_wrapper! {
@@ -51,7 +50,7 @@ pub trait ProjectExt: 'static {
         &self,
         id: Option<&str>,
         extractable_type: glib::types::Type,
-    ) -> Result<Option<Asset>, Error>;
+    ) -> Result<Option<Asset>, glib::Error>;
 
     fn get_asset(&self, id: &str, extractable_type: glib::types::Type) -> Option<Asset>;
 
@@ -63,7 +62,7 @@ pub trait ProjectExt: 'static {
 
     fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile>;
 
-    fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), Error>;
+    fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::Error>;
 
     fn remove_asset<P: IsA<Asset>>(&self, asset: &P) -> Result<(), glib::error::BoolError>;
 
@@ -73,7 +72,7 @@ pub trait ProjectExt: 'static {
         uri: &str,
         formatter_asset: Option<&Q>,
         overwrite: bool,
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
     fn connect_asset_added<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -81,14 +80,14 @@ pub trait ProjectExt: 'static {
 
     fn connect_asset_removed<F: Fn(&Self, &Asset) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_error_loading_asset<F: Fn(&Self, &Error, &str, glib::types::Type) + 'static>(
+    fn connect_error_loading_asset<F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     fn connect_loaded<F: Fn(&Self, &Timeline) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<GString> + 'static>(
+    fn connect_missing_uri<F: Fn(&Self, &glib::Error, &Asset) -> Option<GString> + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -133,7 +132,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         &self,
         id: Option<&str>,
         extractable_type: glib::types::Type,
-    ) -> Result<Option<Asset>, Error> {
+    ) -> Result<Option<Asset>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ges_sys::ges_project_create_asset_sync(
@@ -189,7 +188,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), Error> {
+    fn load<P: IsA<Timeline>>(&self, timeline: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ges_sys::ges_project_load(
@@ -223,7 +222,7 @@ impl<O: IsA<Project>> ProjectExt for O {
         uri: &str,
         formatter_asset: Option<&Q>,
         overwrite: bool,
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ges_sys::ges_project_save(
@@ -317,13 +316,15 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn connect_error_loading_asset<F: Fn(&Self, &Error, &str, glib::types::Type) + 'static>(
+    fn connect_error_loading_asset<
+        F: Fn(&Self, &glib::Error, &str, glib::types::Type) + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn error_loading_asset_trampoline<
             P,
-            F: Fn(&P, &Error, &str, glib::types::Type) + 'static,
+            F: Fn(&P, &glib::Error, &str, glib::types::Type) + 'static,
         >(
             this: *mut ges_sys::GESProject,
             error: *mut glib_sys::GError,
@@ -379,13 +380,13 @@ impl<O: IsA<Project>> ProjectExt for O {
         }
     }
 
-    fn connect_missing_uri<F: Fn(&Self, &Error, &Asset) -> Option<GString> + 'static>(
+    fn connect_missing_uri<F: Fn(&Self, &glib::Error, &Asset) -> Option<GString> + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn missing_uri_trampoline<
             P,
-            F: Fn(&P, &Error, &Asset) -> Option<GString> + 'static,
+            F: Fn(&P, &glib::Error, &Asset) -> Option<GString> + 'static,
         >(
             this: *mut ges_sys::GESProject,
             error: *mut glib_sys::GError,

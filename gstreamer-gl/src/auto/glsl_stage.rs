@@ -5,11 +5,9 @@
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::GString;
 use gst;
 use gst_gl_sys;
 use std::ptr;
-use Error;
 use GLContext;
 use GLSLProfile;
 use GLSLVersion;
@@ -91,7 +89,7 @@ impl GLSLStage {
         }
     }
 
-    pub fn compile(&self) -> Result<(), Error> {
+    pub fn compile(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_gl_sys::gst_glsl_stage_compile(self.to_glib_none().0, &mut error);

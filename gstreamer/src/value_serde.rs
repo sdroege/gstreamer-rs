@@ -594,8 +594,7 @@ mod tests {
 
         assert!(slice[5].get::<Date>().expect("slice[5]").is_none());
 
-        let array_json =
-            r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
+        let array_json = r#"[["Fraction",[1,3]],["Fraction",[1,2]],["String","test str"],["String",null],["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
         let array: Array = serde_json::from_str(array_json).unwrap();
         let slice = array.as_slice();
         assert_eq!(6, slice.len());

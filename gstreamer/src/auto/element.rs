@@ -19,7 +19,6 @@ use Clock;
 use ClockTime;
 use Context;
 use ElementFactory;
-use Error;
 use Message;
 use Object;
 use Pad;
@@ -40,7 +39,7 @@ impl Element {
         type_: URIType,
         uri: &str,
         elementname: Option<&str>,
-    ) -> Result<Element, Error> {
+    ) -> Result<Element, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();

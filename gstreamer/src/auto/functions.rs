@@ -15,7 +15,6 @@ use ClockTime;
 use DebugGraphDetails;
 use DebugLevel;
 use Element;
-use Error;
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 use StackTraceFlags;
 
@@ -162,7 +161,7 @@ pub fn get_main_executable_path() -> Option<GString> {
 pub fn parse_bin_from_description(
     bin_description: &str,
     ghost_unlinked_pads: bool,
-) -> Result<Bin, Error> {
+) -> Result<Bin, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
@@ -179,7 +178,7 @@ pub fn parse_bin_from_description(
     }
 }
 
-pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
+pub fn parse_launch(pipeline_description: &str) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
@@ -192,7 +191,7 @@ pub fn parse_launch(pipeline_description: &str) -> Result<Element, Error> {
     }
 }
 
-pub fn parse_launchv(argv: &[&str]) -> Result<Element, Error> {
+pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();

@@ -15,7 +15,6 @@ use gst_rtsp_server_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use RTSPAuth;
 use RTSPClient;
 use RTSPFilterResult;
@@ -76,12 +75,12 @@ pub trait RTSPServerExt: 'static {
     fn create_socket<P: IsA<gio::Cancellable>>(
         &self,
         cancellable: Option<&P>,
-    ) -> Result<gio::Socket, Error>;
+    ) -> Result<gio::Socket, glib::Error>;
 
     fn create_source<P: IsA<gio::Cancellable>>(
         &self,
         cancellable: Option<&P>,
-    ) -> Result<glib::Source, Error>;
+    ) -> Result<glib::Source, glib::Error>;
 
     fn get_address(&self) -> Option<GString>;
 
@@ -204,7 +203,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     fn create_socket<P: IsA<gio::Cancellable>>(
         &self,
         cancellable: Option<&P>,
-    ) -> Result<gio::Socket, Error> {
+    ) -> Result<gio::Socket, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gst_rtsp_server_sys::gst_rtsp_server_create_socket(
@@ -223,7 +222,7 @@ impl<O: IsA<RTSPServer>> RTSPServerExt for O {
     fn create_source<P: IsA<gio::Cancellable>>(
         &self,
         cancellable: Option<&P>,
-    ) -> Result<glib::Source, Error> {
+    ) -> Result<glib::Source, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gst_rtsp_server_sys::gst_rtsp_server_create_source(

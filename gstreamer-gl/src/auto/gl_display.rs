@@ -14,7 +14,6 @@ use gst_gl_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use GLContext;
 use GLDisplayType;
 use GLWindow;
@@ -49,7 +48,10 @@ pub const NONE_GL_DISPLAY: Option<&GLDisplay> = None;
 pub trait GLDisplayExt: 'static {
     fn add_context<P: IsA<GLContext>>(&self, context: &P) -> Result<(), glib::error::BoolError>;
 
-    fn create_context<P: IsA<GLContext>>(&self, other_context: &P) -> Result<GLContext, Error>;
+    fn create_context<P: IsA<GLContext>>(
+        &self,
+        other_context: &P,
+    ) -> Result<GLContext, glib::Error>;
 
     fn create_window(&self) -> Option<GLWindow>;
 
@@ -82,7 +84,10 @@ impl<O: IsA<GLDisplay>> GLDisplayExt for O {
         }
     }
 
-    fn create_context<P: IsA<GLContext>>(&self, other_context: &P) -> Result<GLContext, Error> {
+    fn create_context<P: IsA<GLContext>>(
+        &self,
+        other_context: &P,
+    ) -> Result<GLContext, glib::Error> {
         unsafe {
             let mut p_context = ptr::null_mut();
             let mut error = ptr::null_mut();

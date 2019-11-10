@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::translate::*;
 use glib::GString;
 use gst_sys;
 use std;
 use std::ptr;
-use Error;
 use Object;
 use PluginDependencyFlags;
 
@@ -105,7 +105,7 @@ impl Plugin {
         unsafe { from_glib_full(gst_sys::gst_plugin_load_by_name(name.to_glib_none().0)) }
     }
 
-    pub fn load_file<P: AsRef<std::path::Path>>(filename: P) -> Result<Plugin, Error> {
+    pub fn load_file<P: AsRef<std::path::Path>>(filename: P) -> Result<Plugin, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();

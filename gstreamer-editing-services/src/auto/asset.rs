@@ -2,8 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "futures", feature = "dox"))]
-use futures::future;
 use ges_sys;
 use gio;
 use gio_sys;
@@ -20,8 +18,8 @@ use glib_sys;
 use gobject_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
+use std::pin::Pin;
 use std::ptr;
-use Error;
 use Extractable;
 
 glib_wrapper! {
@@ -46,7 +44,7 @@ impl Asset {
     pub fn request(
         extractable_type: glib::types::Type,
         id: Option<&str>,
-    ) -> Result<Option<Asset>, Error> {
+    ) -> Result<Option<Asset>, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -65,7 +63,7 @@ impl Asset {
 
     pub fn request_async<
         P: IsA<gio::Cancellable>,
-        Q: FnOnce(Result<Asset, Error>) + Send + 'static,
+        Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
     >(
         extractable_type: glib::types::Type,
         id: &str,
@@ -75,7 +73,7 @@ impl Asset {
         assert_initialized_main_thread!();
         let user_data: Box_<Q> = Box_::new(callback);
         unsafe extern "C" fn request_async_trampoline<
-            Q: FnOnce(Result<Asset, Error>) + Send + 'static,
+            Q: FnOnce(Result<Asset, glib::Error>) + Send + 'static,
         >(
             _source_object: *mut gobject_sys::GObject,
             res: *mut gio_sys::GAsyncResult,
@@ -103,11 +101,10 @@ impl Asset {
         }
     }
 
-    #[cfg(any(feature = "futures", feature = "dox"))]
     pub fn request_async_future(
         extractable_type: glib::types::Type,
         id: &str,
-    ) -> Box_<dyn future::Future<Output = Result<Asset, Error>> + std::marker::Unpin> {
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
         use fragile::Fragile;
         use gio::GioFuture;
 
@@ -127,9 +124,9 @@ impl Asset {
 pub const NONE_ASSET: Option<&Asset> = None;
 
 pub trait AssetExt: 'static {
-    fn extract(&self) -> Result<Option<Extractable>, Error>;
+    fn extract(&self) -> Result<Option<Extractable>, glib::Error>;
 
-    fn get_error(&self) -> Option<Error>;
+    fn get_error(&self) -> Option<glib::Error>;
 
     fn get_extractable_type(&self) -> glib::types::Type;
 
@@ -154,7 +151,7 @@ pub trait AssetExt: 'static {
 }
 
 impl<O: IsA<Asset>> AssetExt for O {
-    fn extract(&self) -> Result<Option<Extractable>, Error> {
+    fn extract(&self) -> Result<Option<Extractable>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ges_sys::ges_asset_extract(self.as_ref().to_glib_none().0, &mut error);
@@ -166,7 +163,7 @@ impl<O: IsA<Asset>> AssetExt for O {
         }
     }
 
-    fn get_error(&self) -> Option<Error> {
+    fn get_error(&self) -> Option<glib::Error> {
         unsafe { from_glib_none(ges_sys::ges_asset_get_error(self.as_ref().to_glib_none().0)) }
     }
 

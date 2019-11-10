@@ -14,7 +14,6 @@ use gst_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use ClockTime;
-use Error;
 
 glib_wrapper! {
     pub struct Object(Object<gst_sys::GstObject, gst_sys::GstObjectClass, ObjectClass>);
@@ -56,7 +55,7 @@ pub const NONE_OBJECT: Option<&Object> = None;
 pub trait GstObjectExt: 'static {
     //fn add_control_binding(&self, binding: /*Ignored*/&ControlBinding) -> bool;
 
-    fn default_error(&self, error: &Error, debug: Option<&str>);
+    fn default_error(&self, error: &glib::Error, debug: Option<&str>);
 
     //fn get_control_binding(&self, property_name: &str) -> /*Ignored*/Option<ControlBinding>;
 
@@ -118,7 +117,7 @@ impl<O: IsA<Object>> GstObjectExt for O {
     //    unsafe { TODO: call gst_sys:gst_object_add_control_binding() }
     //}
 
-    fn default_error(&self, error: &Error, debug: Option<&str>) {
+    fn default_error(&self, error: &glib::Error, debug: Option<&str>) {
         unsafe {
             gst_sys::gst_object_default_error(
                 self.as_ref().to_glib_none().0,

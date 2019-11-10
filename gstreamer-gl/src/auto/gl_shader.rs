@@ -19,7 +19,6 @@ use gst_gl_sys;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use GLContext;
 #[cfg(any(feature = "v1_16", feature = "dox"))]
 use GLSLProfile;
@@ -45,7 +44,7 @@ impl GLShader {
         }
     }
 
-    pub fn new_default<P: IsA<GLContext>>(context: &P) -> Result<GLShader, Error> {
+    pub fn new_default<P: IsA<GLContext>>(context: &P) -> Result<GLShader, glib::Error> {
         skip_assert_initialized!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -61,11 +60,11 @@ impl GLShader {
         }
     }
 
-    //pub fn new_link_with_stages<P: IsA<GLContext>>(context: &P, error: &mut Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn new_link_with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_shader_new_link_with_stages() }
     //}
 
-    //pub fn new_with_stages<P: IsA<GLContext>>(context: &P, error: &mut Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
+    //pub fn new_with_stages<P: IsA<GLContext>>(context: &P, error: &mut glib::Error, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> GLShader {
     //    unsafe { TODO: call gst_gl_sys:gst_gl_shader_new_with_stages() }
     //}
 
@@ -110,7 +109,7 @@ impl GLShader {
         }
     }
 
-    pub fn compile_attach_stage(&self, stage: &GLSLStage) -> Result<(), Error> {
+    pub fn compile_attach_stage(&self, stage: &GLSLStage) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_gl_sys::gst_gl_shader_compile_attach_stage(
@@ -158,7 +157,7 @@ impl GLShader {
         unsafe { from_glib(gst_gl_sys::gst_gl_shader_is_linked(self.to_glib_none().0)) }
     }
 
-    pub fn link(&self) -> Result<(), Error> {
+    pub fn link(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_gl_sys::gst_gl_shader_link(self.to_glib_none().0, &mut error);

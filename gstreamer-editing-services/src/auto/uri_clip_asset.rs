@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ges_sys;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -17,7 +18,6 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 use Asset;
-use Error;
 use UriSourceAsset;
 
 glib_wrapper! {
@@ -30,15 +30,15 @@ glib_wrapper! {
 
 impl UriClipAsset {
     //#[cfg(any(feature = "v1_16", feature = "dox"))]
-    //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, Error> {
+    //pub fn finish(res: /*Ignored*/&gio::AsyncResult) -> Result<UriClipAsset, glib::Error> {
     //    unsafe { TODO: call ges_sys:ges_uri_clip_asset_finish() }
     //}
 
-    //pub fn new<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), Error>) + 'static>(uri: &str, cancellable: Option<&P>, callback: Q) {
+    //pub fn new<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(), glib::Error>) + 'static>(uri: &str, cancellable: Option<&P>, callback: Q) {
     //    unsafe { TODO: call ges_sys:ges_uri_clip_asset_new() }
     //}
 
-    pub fn request_sync(uri: &str) -> Result<UriClipAsset, Error> {
+    pub fn request_sync(uri: &str) -> Result<UriClipAsset, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();

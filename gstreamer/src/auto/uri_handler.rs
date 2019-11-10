@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib::GString;
 use gst_sys;
 use std::ptr;
-use Error;
 use URIType;
 
 glib_wrapper! {
@@ -30,7 +30,7 @@ pub trait URIHandlerExt: 'static {
 
     fn get_uri_type(&self) -> URIType;
 
-    fn set_uri(&self, uri: &str) -> Result<(), Error>;
+    fn set_uri(&self, uri: &str) -> Result<(), glib::Error>;
 }
 
 impl<O: IsA<URIHandler>> URIHandlerExt for O {
@@ -58,7 +58,7 @@ impl<O: IsA<URIHandler>> URIHandlerExt for O {
         }
     }
 
-    fn set_uri(&self, uri: &str) -> Result<(), Error> {
+    fn set_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_sys::gst_uri_handler_set_uri(

@@ -18,7 +18,6 @@ use gst_video;
 use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
-use Error;
 use PlayerAudioInfo;
 use PlayerColorBalanceType;
 use PlayerMediaInfo;
@@ -501,8 +500,11 @@ impl Player {
         }
     }
 
-    pub fn connect_error<F: Fn(&Player, &Error) + Send + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn error_trampoline<F: Fn(&Player, &Error) + Send + 'static>(
+    pub fn connect_error<F: Fn(&Player, &glib::Error) + Send + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn error_trampoline<F: Fn(&Player, &glib::Error) + Send + 'static>(
             this: *mut gst_player_sys::GstPlayer,
             object: *mut glib_sys::GError,
             f: glib_sys::gpointer,
@@ -658,11 +660,11 @@ impl Player {
         }
     }
 
-    pub fn connect_warning<F: Fn(&Player, &Error) + Send + 'static>(
+    pub fn connect_warning<F: Fn(&Player, &glib::Error) + Send + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn warning_trampoline<F: Fn(&Player, &Error) + Send + 'static>(
+        unsafe extern "C" fn warning_trampoline<F: Fn(&Player, &glib::Error) + Send + 'static>(
             this: *mut gst_player_sys::GstPlayer,
             object: *mut glib_sys::GError,
             f: glib_sys::gpointer,

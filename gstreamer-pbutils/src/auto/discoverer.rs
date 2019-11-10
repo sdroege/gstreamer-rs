@@ -21,7 +21,6 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 use DiscovererInfo;
-use Error;
 
 glib_wrapper! {
     pub struct Discoverer(Object<gst_pbutils_sys::GstDiscoverer, gst_pbutils_sys::GstDiscovererClass, DiscovererClass>);
@@ -32,7 +31,7 @@ glib_wrapper! {
 }
 
 impl Discoverer {
-    pub fn new(timeout: gst::ClockTime) -> Result<Discoverer, Error> {
+    pub fn new(timeout: gst::ClockTime) -> Result<Discoverer, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -45,7 +44,7 @@ impl Discoverer {
         }
     }
 
-    pub fn discover_uri(&self, uri: &str) -> Result<DiscovererInfo, Error> {
+    pub fn discover_uri(&self, uri: &str) -> Result<DiscovererInfo, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gst_pbutils_sys::gst_discoverer_discover_uri(
@@ -113,13 +112,13 @@ impl Discoverer {
     }
 
     pub fn connect_discovered<
-        F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static,
+        F: Fn(&Discoverer, &DiscovererInfo, Option<&glib::Error>) + Send + Sync + 'static,
     >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn discovered_trampoline<
-            F: Fn(&Discoverer, &DiscovererInfo, Option<&Error>) + Send + Sync + 'static,
+            F: Fn(&Discoverer, &DiscovererInfo, Option<&glib::Error>) + Send + Sync + 'static,
         >(
             this: *mut gst_pbutils_sys::GstDiscoverer,
             info: *mut gst_pbutils_sys::GstDiscovererInfo,
@@ -130,7 +129,7 @@ impl Discoverer {
             f(
                 &from_glib_borrow(this),
                 &from_glib_borrow(info),
-                Option::<Error>::from_glib_borrow(error).as_ref(),
+                Option::<glib::Error>::from_glib_borrow(error).as_ref(),
             )
         }
         unsafe {

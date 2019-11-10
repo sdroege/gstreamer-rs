@@ -19,7 +19,6 @@ use gst_pbutils;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use PipelineFlags;
 use Timeline;
 
@@ -67,7 +66,7 @@ pub trait GESPipelineExt: 'static {
         height: i32,
         format: &str,
         location: &str,
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError>;
 
@@ -192,7 +191,7 @@ impl<O: IsA<Pipeline>> GESPipelineExt for O {
         height: i32,
         format: &str,
         location: &str,
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ges_sys::ges_pipeline_save_thumbnail(

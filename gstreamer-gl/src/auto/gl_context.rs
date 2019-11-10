@@ -9,7 +9,6 @@ use gst;
 use gst_gl_sys;
 use std::mem;
 use std::ptr;
-use Error;
 use GLDisplay;
 use GLPlatform;
 use GLSLProfile;
@@ -77,11 +76,11 @@ pub trait GLContextExt: 'static {
 
     fn clear_shader(&self);
 
-    fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), Error>;
+    fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), glib::Error>;
 
     fn destroy(&self);
 
-    fn fill_info(&self) -> Result<(), Error>;
+    fn fill_info(&self) -> Result<(), glib::Error>;
 
     fn get_display(&self) -> GLDisplay;
 
@@ -175,7 +174,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), Error> {
+    fn create<P: IsA<GLContext>>(&self, other_context: Option<&P>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gst_gl_sys::gst_gl_context_create(
@@ -197,7 +196,7 @@ impl<O: IsA<GLContext>> GLContextExt for O {
         }
     }
 
-    fn fill_info(&self) -> Result<(), Error> {
+    fn fill_info(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ =

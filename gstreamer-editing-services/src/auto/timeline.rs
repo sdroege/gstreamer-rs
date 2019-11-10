@@ -15,7 +15,6 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::ptr;
 use Asset;
-use Error;
 use Extractable;
 use Group;
 use Layer;
@@ -42,7 +41,7 @@ impl Timeline {
         unsafe { from_glib_none(ges_sys::ges_timeline_new_audio_video()) }
     }
 
-    pub fn new_from_uri(uri: &str) -> Result<Option<Timeline>, Error> {
+    pub fn new_from_uri(uri: &str) -> Result<Option<Timeline>, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -97,7 +96,7 @@ pub trait TimelineExt: 'static {
 
     fn is_empty(&self) -> bool;
 
-    fn load_from_uri(&self, uri: &str) -> Result<(), Error>;
+    fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
     #[cfg(any(feature = "v1_16", feature = "dox"))]
     fn move_layer<P: IsA<Layer>>(
@@ -122,7 +121,7 @@ pub trait TimelineExt: 'static {
         uri: &str,
         formatter_asset: Option<&P>,
         overwrite: bool,
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
     fn set_auto_transition(&self, auto_transition: bool);
 
@@ -304,7 +303,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         }
     }
 
-    fn load_from_uri(&self, uri: &str) -> Result<(), Error> {
+    fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ges_sys::ges_timeline_load_from_uri(
@@ -383,7 +382,7 @@ impl<O: IsA<Timeline>> TimelineExt for O {
         uri: &str,
         formatter_asset: Option<&P>,
         overwrite: bool,
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ges_sys::ges_timeline_save_to_uri(
