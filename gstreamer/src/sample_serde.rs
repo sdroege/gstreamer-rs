@@ -45,7 +45,7 @@ struct SampleDe {
 }
 
 impl From<SampleDe> for Sample {
-    fn from(mut buf_de: SampleDe) -> Self {
+    fn from(buf_de: SampleDe) -> Self {
         let mut builder = Sample::new();
 
         if let Some(buffer) = buf_de.buffer.as_ref() {

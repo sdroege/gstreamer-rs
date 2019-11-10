@@ -1101,7 +1101,7 @@ impl<'a> DeviceRemoved<'a> {
 declare_concrete_message!(PropertyNotify);
 impl<'a> PropertyNotify<'a> {
     #[cfg(any(feature = "v1_10", feature = "dox"))]
-    pub fn get(&self) -> (Object, &str, Option<&'a ::Value>) {
+    pub fn get(&self) -> (Object, &str, Option<&'a glib::Value>) {
         unsafe {
             let mut object = ptr::null_mut();
             let mut property_name = ptr::null();

@@ -6,12 +6,12 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use glib;
 use glib::translate::*;
 use gst_sys;
 use std::ptr;
 
 use Element;
-use Error;
 use ParseContext;
 use ParseFlags;
 
@@ -20,7 +20,7 @@ pub fn parse_bin_from_description_full(
     ghost_unlinked_pads: bool,
     mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
-) -> Result<Element, Error> {
+) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
@@ -43,7 +43,7 @@ pub fn parse_launch_full(
     pipeline_description: &str,
     mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
-) -> Result<Element, Error> {
+) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
@@ -65,7 +65,7 @@ pub fn parse_launchv_full(
     argv: &[&str],
     mut context: Option<&mut ParseContext>,
     flags: ParseFlags,
-) -> Result<Element, Error> {
+) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
