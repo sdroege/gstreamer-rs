@@ -6,6 +6,8 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use futures_core::stream::Stream;
+use futures_core::task::{Context, Poll, Waker};
 use glib;
 use glib::source::{Continue, Priority, SourceId};
 use glib::translate::*;
@@ -14,7 +16,9 @@ use glib_sys::{gboolean, gpointer};
 use gst_sys;
 use std::cell::RefCell;
 use std::mem::transmute;
+use std::pin::Pin;
 use std::ptr;
+use std::sync::{Arc, Mutex};
 
 use Bus;
 use BusSyncReply;
@@ -229,65 +233,52 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
-#[cfg(any(feature = "futures", feature = "dox"))]
-mod futures {
-    use super::*;
-    use futures_core::stream::Stream;
-    use futures_core::task::{Context, Waker};
-    use futures_core::Poll;
-    use std::pin::Pin;
-    use std::sync::{Arc, Mutex};
+#[derive(Debug)]
+pub struct BusStream(Bus, Arc<Mutex<Option<Waker>>>);
 
-    #[derive(Debug)]
-    pub struct BusStream(Bus, Arc<Mutex<Option<Waker>>>);
+impl BusStream {
+    pub fn new(bus: &Bus) -> Self {
+        skip_assert_initialized!();
+        let waker = Arc::new(Mutex::new(None));
+        let waker_clone = Arc::clone(&waker);
 
-    impl BusStream {
-        pub fn new(bus: &Bus) -> Self {
-            skip_assert_initialized!();
-            let waker = Arc::new(Mutex::new(None));
-            let waker_clone = Arc::clone(&waker);
-
-            bus.set_sync_handler(move |_, _| {
-                let mut waker = waker_clone.lock().unwrap();
-                if let Some(waker) = waker.take() {
-                    // FIXME: Force type...
-                    let waker: Waker = waker;
-                    waker.wake();
-                }
-
-                BusSyncReply::Pass
-            });
-
-            BusStream(bus.clone(), waker)
-        }
-    }
-
-    impl Drop for BusStream {
-        fn drop(&mut self) {
-            self.0.unset_sync_handler();
-        }
-    }
-
-    impl Stream for BusStream {
-        type Item = Message;
-
-        fn poll_next(self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Option<Self::Item>> {
-            let BusStream(ref bus, ref waker) = *self;
-
-            let msg = bus.pop();
-            if let Some(msg) = msg {
-                Poll::Ready(Some(msg))
-            } else {
-                let mut waker = waker.lock().unwrap();
-                *waker = Some(ctx.waker().clone());
-                Poll::Pending
+        bus.set_sync_handler(move |_, _| {
+            let mut waker = waker_clone.lock().unwrap();
+            if let Some(waker) = waker.take() {
+                // FIXME: Force type...
+                let waker: Waker = waker;
+                waker.wake();
             }
-        }
+
+            BusSyncReply::Pass
+        });
+
+        BusStream(bus.clone(), waker)
     }
 }
 
-#[cfg(any(feature = "futures", feature = "dox"))]
-pub use bus::futures::BusStream;
+impl Drop for BusStream {
+    fn drop(&mut self) {
+        self.0.unset_sync_handler();
+    }
+}
+
+impl Stream for BusStream {
+    type Item = Message;
+
+    fn poll_next(self: Pin<&mut Self>, ctx: &mut Context) -> Poll<Option<Self::Item>> {
+        let BusStream(ref bus, ref waker) = *self;
+
+        let msg = bus.pop();
+        if let Some(msg) = msg {
+            Poll::Ready(Some(msg))
+        } else {
+            let mut waker = waker.lock().unwrap();
+            *waker = Some(ctx.waker().clone());
+            Poll::Pending
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {

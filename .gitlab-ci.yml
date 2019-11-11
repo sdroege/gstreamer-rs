@@ -52,7 +52,7 @@ stages:
       for crate in gstreamer*; do
         if [ -n "$ALL_FEATURES" ]; then
           if [ $crate = "gstreamer" ]; then
-            FEATURES=futures,ser_de,v1_16
+            FEATURES=ser_de,v1_16
           elif [ $crate = "gstreamer-gl" ]; then
             FEATURES=egl,x11,wayland,v1_16
           else
@@ -75,10 +75,10 @@ stages:
         cargo build --color=always --manifest-path tutorials/Cargo.toml --bins --examples --all-features
       fi
 
-test 1.36:
-  # 1.36 img
+test 1.39:
+  # 1.39 img
   # https://hub.docker.com/_/rust/
-  image: "rust:1.36-slim-buster"
+  image: "rust:1.39-slim-buster"
   extends: '.cargo test'
 
 test stable:
@@ -130,7 +130,7 @@ clippy:
     - |
       for crate in gstreamer*; do
         if [ $crate = "gstreamer" ]; then
-          FEATURES=futures,ser_de,v1_16
+          FEATURES=ser_de,v1_16
         elif [ $crate = "gstreamer-gl" ]; then
           FEATURES=egl,x11,wayland,v1_16
         else

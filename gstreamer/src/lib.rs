@@ -32,7 +32,6 @@ pub extern crate glib;
 
 extern crate num_rational;
 
-#[cfg(any(feature = "futures", feature = "dox"))]
 extern crate futures_core;
 
 extern crate muldiv;
@@ -221,7 +220,6 @@ cfg_if! {
 }
 
 pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
-#[cfg(any(feature = "futures", feature = "dox"))]
 pub use bus::BusStream;
 pub use child_proxy::ChildProxyExtManual;
 pub use clock_time::ClockTime;

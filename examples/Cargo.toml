@@ -21,7 +21,7 @@ gstreamer-rtsp-server-sys = { git = "https://gitlab.freedesktop.org/gstreamer/gs
 gtk = { git = "https://github.com/gtk-rs/gtk", optional = true }
 gdk = { git = "https://github.com/gtk-rs/gdk", optional = true }
 gio = { git = "https://github.com/gtk-rs/gio", optional = true }
-futures-preview = { version = "0.3.0-alpha", optional = true }
+futures = "0.3"
 byte-slice-cast = "0.3"
 failure = "0.1"
 failure_derive = "0.1"
@@ -43,8 +43,6 @@ gtksink = ["gtk", "gio"]
 gtkvideooverlay = ["gtk", "gdk", "gio"]
 gtkvideooverlay-x11 = ["gtkvideooverlay"]
 gtkvideooverlay-quartz = ["gtkvideooverlay"]
-generic-futures = ["gstreamer/futures", "futures-preview"]
-glib-futures = ["generic-futures", "glib/futures"]
 gst-rtsp-server = ["gstreamer-rtsp-server"]
 gst-rtsp-server-record = ["gstreamer-rtsp-server-sys", "gstreamer-rtsp-server", "gstreamer-rtsp", "gio"]
 v1_10 = ["gstreamer/v1_10"]
@@ -120,11 +118,11 @@ name = "toc"
 
 [[bin]]
 name = "futures"
-required-features = ["generic-futures"]
+edition = "2018"
 
 [[bin]]
 name = "glib-futures"
-required-features = ["glib-futures"]
+edition = "2018"
 
 [[bin]]
 name = "rtsp-server-record"
