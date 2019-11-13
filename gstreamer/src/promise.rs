@@ -128,3 +128,28 @@ impl Default for Promise {
 
 unsafe impl Send for Promise {}
 unsafe impl Sync for Promise {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::mpsc::channel;
+    use std::thread;
+
+    #[test]
+    fn test_change_func() {
+        ::init().unwrap();
+
+        let (sender, receiver) = channel();
+        let promise = Promise::new_with_change_func(move |res| {
+            sender.send(res.map(|s| s.to_owned())).unwrap();
+        });
+
+        thread::spawn(move || {
+            promise.reply(crate::Structure::new("foo/bar", &[]));
+        });
+
+        let res = receiver.recv().unwrap();
+        let res = res.expect("promise failed");
+        assert_eq!(res.get_name(), "foo/bar");
+    }
+}
