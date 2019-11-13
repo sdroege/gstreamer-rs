@@ -93,7 +93,7 @@ where
 
             let func_box: Box<dyn Fn(T) -> bool + Send + Sync + 'static> = Box::new(func);
             let mut closure_value = glib::Value::from_type(from_glib(filter_boxed_get_type::<T>()));
-            gobject_sys::g_value_set_boxed(
+            gobject_sys::g_value_take_boxed(
                 closure_value.to_glib_none_mut().0,
                 Arc::into_raw(Arc::new(func_box)) as gpointer,
             );
