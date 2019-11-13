@@ -32,13 +32,11 @@ pub enum PromiseError {
 }
 
 impl Promise {
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn new() -> Promise {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(gst_sys::gst_promise_new()) }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn new_with_change_func<F>(func: F) -> Promise
     where
         F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
@@ -88,14 +86,12 @@ impl Promise {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn expire(&self) {
         unsafe {
             gst_sys::gst_promise_expire(self.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn get_reply(&self) -> Option<&StructureRef> {
         unsafe {
             let s = gst_sys::gst_promise_get_reply(self.to_glib_none().0);
@@ -107,27 +103,23 @@ impl Promise {
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn interrupt(&self) {
         unsafe {
             gst_sys::gst_promise_interrupt(self.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn reply(&self, s: Structure) {
         unsafe {
             gst_sys::gst_promise_reply(self.to_glib_none().0, s.into_ptr());
         }
     }
 
-    #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn wait(&self) -> PromiseResult {
         unsafe { from_glib(gst_sys::gst_promise_wait(self.to_glib_none().0)) }
     }
 }
 
-#[cfg(any(feature = "v1_14", feature = "dox"))]
 impl Default for Promise {
     fn default() -> Self {
         Self::new()
