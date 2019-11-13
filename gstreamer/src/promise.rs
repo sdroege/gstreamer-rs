@@ -24,6 +24,13 @@ glib_wrapper! {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum PromiseError {
+    Interrupted,
+    Expired,
+    Other(PromiseResult),
+}
+
 impl Promise {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn new() -> Promise {
@@ -34,21 +41,39 @@ impl Promise {
     #[cfg(any(feature = "v1_14", feature = "dox"))]
     pub fn new_with_change_func<F>(func: F) -> Promise
     where
-        F: FnOnce(&Promise) + Send + 'static,
+        F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
     {
         let user_data: Box<Option<F>> = Box::new(Some(func));
 
-        unsafe extern "C" fn trampoline<F: FnOnce(&Promise) + Send + 'static>(
+        unsafe extern "C" fn trampoline<
+            F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
+        >(
             promise: *mut gst_sys::GstPromise,
             user_data: glib_sys::gpointer,
         ) {
             let user_data: &mut Option<F> = &mut *(user_data as *mut _);
             let callback = user_data.take().unwrap();
 
-            callback(&from_glib_borrow(promise));
+            let promise: Promise = from_glib_borrow(promise);
+
+            let res = match promise.wait() {
+                PromiseResult::Replied => {
+                    Ok(promise.get_reply().expect("Promise resolved but no reply"))
+                }
+                PromiseResult::Interrupted => Err(PromiseError::Interrupted),
+                PromiseResult::Expired => Err(PromiseError::Expired),
+                PromiseResult::Pending => {
+                    panic!("Promise resolved but returned Pending");
+                }
+                err => Err(PromiseError::Other(err)),
+            };
+
+            callback(res);
         }
 
-        unsafe extern "C" fn free_user_data<F: FnOnce(&Promise) + Send + 'static>(
+        unsafe extern "C" fn free_user_data<
+            F: FnOnce(Result<&StructureRef, PromiseError>) + Send + 'static,
+        >(
             user_data: glib_sys::gpointer,
         ) {
             let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
