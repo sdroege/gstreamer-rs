@@ -104,6 +104,7 @@ impl<'a> SampleBuilder<'a> {
 }
 
 impl Sample {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new<'a>() -> SampleBuilder<'a> {
         SampleBuilder {
             buffer: None,
