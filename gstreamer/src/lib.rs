@@ -292,6 +292,12 @@ pub fn init() -> Result<(), glib::Error> {
     }
 }
 
+/// Deinitialize GStreamer
+///
+/// # Safety
+///
+/// This must only be called once during the lifetime of the process, once no GStreamer threads
+/// are running anymore and all GStreamer resources are released.
 pub unsafe fn deinit() {
     gst_sys::gst_deinit();
 }
