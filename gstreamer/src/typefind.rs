@@ -83,6 +83,17 @@ impl<'a> TypeFind<'a> {
             );
         }
     }
+
+    pub fn get_length(&mut self) -> Option<u64> {
+        unsafe {
+            let len = gst_sys::gst_type_find_get_length(&mut self.0);
+            if len == 0 {
+                None
+            } else {
+                Some(len)
+            }
+        }
+    }
 }
 
 unsafe impl<'a> Send for TypeFind<'a> {}
@@ -270,6 +281,7 @@ mod tests {
             None,
             Some(&Caps::new_simple("test/test", &[])),
             |typefind| {
+                assert_eq!(typefind.get_length(), Some(8));
                 let mut found = false;
                 if let Some(data) = typefind.peek(0, 8) {
                     if data == b"abcdefgh" {
