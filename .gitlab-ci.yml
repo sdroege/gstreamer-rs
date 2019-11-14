@@ -54,10 +54,10 @@ stages:
         G_DEBUG=fatal_warnings cargo test --color=always --all --all-features
       fi
 
-test 1.34:
-  # 1.34 img
+test 1.36:
+  # 1.36 img
   # https://hub.docker.com/_/rust/
-  image: "rust:1.34-slim"
+  image: "rust:1.36-slim"
   extends: '.cargo test'
 
 test stable:
