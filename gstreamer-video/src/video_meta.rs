@@ -42,22 +42,21 @@ impl VideoMeta {
         }
     }
 
-    #[allow(clippy::too_many_arguments)]
     pub fn add_full<'a>(
         buffer: &'a mut gst::BufferRef,
         flags: ::VideoFrameFlags,
         format: ::VideoFormat,
         width: u32,
         height: u32,
-        n_planes: u32,
-        offset: &[usize; 4],
-        stride: &[i32; 4],
+        offset: &[usize],
+        stride: &[i32],
     ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        let n_planes = offset.len() as u32;
         let info = ::VideoInfo::new(format, width, height)
             .offset(offset)
             .stride(stride)
             .build()
-            .unwrap();
+            .expect("Unable to build VideoInfo for given format, offsets and strides");
         assert!(buffer.get_size() >= info.size());
 
         unsafe {
@@ -254,6 +253,44 @@ mod tests {
                 ::VideoFormat::Argb,
                 320,
                 240,
+            );
+            assert_eq!(meta.get_id(), 0);
+            assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
+            assert_eq!(meta.get_format(), ::VideoFormat::Argb);
+            assert_eq!(meta.get_width(), 320);
+            assert_eq!(meta.get_height(), 240);
+            assert_eq!(meta.get_n_planes(), 1);
+            assert_eq!(meta.get_offset(), &[0]);
+            assert_eq!(meta.get_stride(), &[320 * 4]);
+        }
+
+        {
+            let meta = buffer.get_meta::<VideoMeta>().unwrap();
+            assert_eq!(meta.get_id(), 0);
+            assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
+            assert_eq!(meta.get_format(), ::VideoFormat::Argb);
+            assert_eq!(meta.get_width(), 320);
+            assert_eq!(meta.get_height(), 240);
+            assert_eq!(meta.get_n_planes(), 1);
+            assert_eq!(meta.get_offset(), &[0]);
+            assert_eq!(meta.get_stride(), &[320 * 4]);
+        }
+    }
+
+    #[test]
+    fn test_add_full_get_meta() {
+        gst::init().unwrap();
+
+        let mut buffer = gst::Buffer::with_size(320 * 240 * 4).unwrap();
+        {
+            let meta = VideoMeta::add_full(
+                buffer.get_mut().unwrap(),
+                ::VideoFrameFlags::NONE,
+                ::VideoFormat::Argb,
+                320,
+                240,
+                &[0],
+                &[320 * 4],
             );
             assert_eq!(meta.get_id(), 0);
             assert_eq!(meta.get_flags(), ::VideoFrameFlags::NONE);
