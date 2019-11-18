@@ -352,7 +352,7 @@ where
 }
 
 unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
-    let boxed = Arc::from_raw(boxed as *const (Box<dyn Fn(T) -> bool + Send + Sync + 'static>));
+    let boxed = Arc::from_raw(boxed as *const Box<dyn Fn(T) -> bool + Send + Sync + 'static>);
     let copy = Arc::clone(&boxed);
 
     // Forget it and keep it alive, we will still need it later
@@ -362,7 +362,7 @@ unsafe extern "C" fn filter_boxed_ref<T: 'static>(boxed: gpointer) -> gpointer {
 }
 
 unsafe extern "C" fn filter_boxed_unref<T: 'static>(boxed: gpointer) {
-    let _ = Arc::from_raw(boxed as *const (Box<dyn Fn(T) -> bool + Send + Sync + 'static>));
+    let _ = Arc::from_raw(boxed as *const Box<dyn Fn(T) -> bool + Send + Sync + 'static>);
 }
 
 unsafe extern "C" fn filter_boxed_get_type<T: StaticType + 'static>() -> glib_sys::GType {

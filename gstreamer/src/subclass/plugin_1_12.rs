@@ -64,6 +64,7 @@ macro_rules! gst_plugin_define(
                 }
             }
 
+            #[allow(clippy::missing_safety_doc)]
             unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::gst_sys::GstPlugin) -> $crate::glib_sys::gboolean {
                 use std::panic::{self, AssertUnwindSafe};
 

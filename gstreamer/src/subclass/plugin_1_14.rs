@@ -62,16 +62,19 @@ macro_rules! gst_plugin_define(
 
             $crate::paste::item! {
                 #[no_mangle]
+                #[allow(clippy::missing_safety_doc)]
                 pub unsafe extern "C" fn [<gst_plugin_ $name _register>] () {
                     let _ = plugin_register_static();
                 }
 
                 #[no_mangle]
+                #[allow(clippy::missing_safety_doc)]
                 pub unsafe extern "C" fn [<gst_plugin_ $name _get_desc>] () -> *const $crate::gst_sys::GstPluginDesc {
                     &GST_PLUGIN_DESC.0
                 }
             }
 
+            #[allow(clippy::missing_safety_doc)]
             unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::gst_sys::GstPlugin) -> $crate::glib_sys::gboolean {
                 use std::panic::{self, AssertUnwindSafe};
 
