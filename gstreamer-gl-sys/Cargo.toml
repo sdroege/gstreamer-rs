@@ -24,7 +24,7 @@ features = ["v1_14"]
 
 [dev-dependencies]
 shell-words = "0.1.0"
-tempdir = "0.3"
+tempfile = "3"
 
 [features]
 dox = ["v1_16"]

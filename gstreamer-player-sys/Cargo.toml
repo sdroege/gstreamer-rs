@@ -20,7 +20,7 @@ features = ["v1_12"]
 
 [dev-dependencies]
 shell-words = "0.1.0"
-tempdir = "0.3"
+tempfile = "3"
 
 [features]
 v1_14 = ["gstreamer-sys/v1_14", "gstreamer-video-sys/v1_14"]
