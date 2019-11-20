@@ -30,18 +30,35 @@ impl SDPZone {
         }
     }
 
-    pub fn time(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.time).to_str().unwrap() }
+    pub fn time(&self) -> Option<&str> {
+        unsafe {
+            if self.0.time.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.time).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn typed_time(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.typed_time).to_str().unwrap() }
+    pub fn typed_time(&self) -> Option<&str> {
+        unsafe {
+            if self.0.typed_time.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.typed_time).to_str().unwrap())
+            }
+        }
     }
 }
 
 impl Clone for SDPZone {
     fn clone(&self) -> Self {
-        SDPZone::new(self.time(), self.typed_time())
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut zone = mem::MaybeUninit::zeroed();
+            gst_sdp_sys::gst_sdp_zone_set(zone.as_mut_ptr(), self.0.time, self.0.typed_time);
+            SDPZone(zone.assume_init())
+        }
     }
 }
 

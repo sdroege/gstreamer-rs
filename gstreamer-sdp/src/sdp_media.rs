@@ -708,3 +708,20 @@ define_iter!(
     |media: &'a SDPMediaRef, idx| media.get_attribute(idx),
     |media: &SDPMediaRef| media.attributes_len()
 );
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn init() {
+        gst::init().unwrap();
+    }
+
+    #[test]
+    fn debug_impl() {
+        init();
+
+        let sdp = SDPMedia::new();
+        assert!(!format!("{:?}", sdp).is_empty());
+    }
+}

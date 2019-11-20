@@ -33,16 +33,34 @@ impl SDPConnection {
         }
     }
 
-    pub fn nettype(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.nettype).to_str().unwrap() }
+    pub fn nettype(&self) -> Option<&str> {
+        unsafe {
+            if self.0.nettype.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.nettype).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn addrtype(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.addrtype).to_str().unwrap() }
+    pub fn addrtype(&self) -> Option<&str> {
+        unsafe {
+            if self.0.addrtype.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.addrtype).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn address(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.address).to_str().unwrap() }
+    pub fn address(&self) -> Option<&str> {
+        unsafe {
+            if self.0.address.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.address).to_str().unwrap())
+            }
+        }
     }
 
     pub fn ttl(&self) -> u32 {
@@ -56,13 +74,19 @@ impl SDPConnection {
 
 impl Clone for SDPConnection {
     fn clone(&self) -> Self {
-        SDPConnection::new(
-            self.nettype(),
-            self.addrtype(),
-            self.address(),
-            self.ttl(),
-            self.addr_number(),
-        )
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut conn = mem::MaybeUninit::zeroed();
+            gst_sdp_sys::gst_sdp_connection_set(
+                conn.as_mut_ptr(),
+                self.0.nettype,
+                self.0.addrtype,
+                self.0.address,
+                self.0.ttl,
+                self.0.addr_number,
+            );
+            SDPConnection(conn.assume_init())
+        }
     }
 }
 

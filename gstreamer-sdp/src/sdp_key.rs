@@ -15,12 +15,24 @@ use gst_sdp_sys;
 pub struct SDPKey(gst_sdp_sys::GstSDPKey);
 
 impl SDPKey {
-    pub fn type_(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.type_).to_str().unwrap() }
+    pub fn type_(&self) -> Option<&str> {
+        unsafe {
+            if self.0.type_.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.type_).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn data(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.data).to_str().unwrap() }
+    pub fn data(&self) -> Option<&str> {
+        unsafe {
+            if self.0.data.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.data).to_str().unwrap())
+            }
+        }
     }
 }
 

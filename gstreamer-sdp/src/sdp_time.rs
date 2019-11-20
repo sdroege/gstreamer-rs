@@ -10,6 +10,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 use std::os::raw::c_char;
+use std::ptr;
 
 use glib::translate::*;
 use gst_sdp_sys;
@@ -32,17 +33,33 @@ impl SDPTime {
         }
     }
 
-    pub fn start(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.start).to_str().unwrap() }
+    pub fn start(&self) -> Option<&str> {
+        unsafe {
+            if self.0.start.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.start).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn stop(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.stop).to_str().unwrap() }
+    pub fn stop(&self) -> Option<&str> {
+        unsafe {
+            if self.0.stop.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.stop).to_str().unwrap())
+            }
+        }
     }
 
     pub fn repeat(&self) -> Vec<&str> {
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {
+            if self.0.repeat.is_null() || (*self.0.repeat).data.is_null() {
+                return vec![];
+            }
+
             let arr = (*self.0.repeat).data as *const *const c_char;
             let len = (*self.0.repeat).len as usize;
             let mut vec = Vec::with_capacity(len);
@@ -56,7 +73,22 @@ impl SDPTime {
 
 impl Clone for SDPTime {
     fn clone(&self) -> Self {
-        SDPTime::new(self.start(), self.stop(), self.repeat().as_slice())
+        assert_initialized_main_thread!();
+        #[allow(clippy::cast_ptr_alignment)]
+        unsafe {
+            let mut time = mem::MaybeUninit::zeroed();
+            gst_sdp_sys::gst_sdp_time_set(
+                time.as_mut_ptr(),
+                self.0.start,
+                self.0.stop,
+                if self.0.repeat.is_null() {
+                    ptr::null_mut()
+                } else {
+                    (*self.0.repeat).data as *mut *const c_char
+                },
+            );
+            SDPTime(time.assume_init())
+        }
     }
 }
 

@@ -1124,4 +1124,12 @@ mod tests {
         let media = sdp.get_media(0).unwrap();
         assert_eq!(media.formats_len(), 1);
     }
+
+    #[test]
+    fn debug_impl() {
+        init();
+
+        let sdp = SDPMessage::new();
+        assert!(!format!("{:?}", sdp).is_empty());
+    }
 }

@@ -15,28 +15,64 @@ use gst_sdp_sys;
 pub struct SDPOrigin(pub(crate) gst_sdp_sys::GstSDPOrigin);
 
 impl SDPOrigin {
-    pub fn username(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.username).to_str().unwrap() }
+    pub fn username(&self) -> Option<&str> {
+        unsafe {
+            if self.0.username.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.username).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn sess_id(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.sess_id).to_str().unwrap() }
+    pub fn sess_id(&self) -> Option<&str> {
+        unsafe {
+            if self.0.sess_id.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.sess_id).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn sess_version(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.sess_version).to_str().unwrap() }
+    pub fn sess_version(&self) -> Option<&str> {
+        unsafe {
+            if self.0.sess_version.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.sess_version).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn nettype(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.nettype).to_str().unwrap() }
+    pub fn nettype(&self) -> Option<&str> {
+        unsafe {
+            if self.0.nettype.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.nettype).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn addrtype(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.addrtype).to_str().unwrap() }
+    pub fn addrtype(&self) -> Option<&str> {
+        unsafe {
+            if self.0.addrtype.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.addrtype).to_str().unwrap())
+            }
+        }
     }
 
-    pub fn addr(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.addr).to_str().unwrap() }
+    pub fn addr(&self) -> Option<&str> {
+        unsafe {
+            if self.0.addr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.addr).to_str().unwrap())
+            }
+        }
     }
 }
 

@@ -26,8 +26,14 @@ impl SDPBandwidth {
         }
     }
 
-    pub fn bwtype(&self) -> &str {
-        unsafe { CStr::from_ptr(self.0.bwtype).to_str().unwrap() }
+    pub fn bwtype(&self) -> Option<&str> {
+        unsafe {
+            if self.0.bwtype.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(self.0.bwtype).to_str().unwrap())
+            }
+        }
     }
 
     pub fn value(&self) -> u32 {
@@ -37,7 +43,12 @@ impl SDPBandwidth {
 
 impl Clone for SDPBandwidth {
     fn clone(&self) -> Self {
-        SDPBandwidth::new(self.bwtype(), self.value())
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut bw = mem::MaybeUninit::zeroed();
+            gst_sdp_sys::gst_sdp_bandwidth_set(bw.as_mut_ptr(), self.0.bwtype, self.0.bandwidth);
+            SDPBandwidth(bw.assume_init())
+        }
     }
 }
 
