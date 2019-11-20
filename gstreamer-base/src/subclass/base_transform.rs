@@ -51,7 +51,12 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl + Send + Sync + 
         self.parent_fixate_caps(element, direction, caps, othercaps)
     }
 
-    fn set_caps(&self, element: &BaseTransform, incaps: &gst::Caps, outcaps: &gst::Caps) -> bool {
+    fn set_caps(
+        &self,
+        element: &BaseTransform,
+        incaps: &gst::Caps,
+        outcaps: &gst::Caps,
+    ) -> Result<(), gst::LoggableError> {
         self.parent_set_caps(element, incaps, outcaps)
     }
 
@@ -148,7 +153,7 @@ pub trait BaseTransformImplExt {
         element: &BaseTransform,
         incaps: &gst::Caps,
         outcaps: &gst::Caps,
-    ) -> bool;
+    ) -> Result<(), gst::LoggableError>;
 
     fn parent_accept_caps(
         &self,
@@ -295,7 +300,7 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
         element: &BaseTransform,
         incaps: &gst::Caps,
         outcaps: &gst::Caps,
-    ) -> bool {
+    ) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = self.get_type_data();
             let parent_class =
@@ -303,13 +308,17 @@ impl<T: BaseTransformImpl + ObjectImpl> BaseTransformImplExt for T {
             (*parent_class)
                 .set_caps
                 .map(|f| {
-                    from_glib(f(
-                        element.to_glib_none().0,
-                        incaps.to_glib_none().0,
-                        outcaps.to_glib_none().0,
-                    ))
+                    gst_result_from_gboolean!(
+                        f(
+                            element.to_glib_none().0,
+                            incaps.to_glib_none().0,
+                            outcaps.to_glib_none().0,
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `set_caps` failed"
+                    )
                 })
-                .unwrap_or(true)
+                .unwrap_or(Ok(()))
         }
     }
 
@@ -731,7 +740,13 @@ where
     let wrap: BaseTransform = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        imp.set_caps(&wrap, &from_glib_borrow(incaps), &from_glib_borrow(outcaps))
+        match imp.set_caps(&wrap, &from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&wrap);
+                false
+            }
+        }
     })
     .to_glib()
 }
