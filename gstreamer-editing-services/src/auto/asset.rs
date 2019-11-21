@@ -105,19 +105,15 @@ impl Asset {
         extractable_type: glib::types::Type,
         id: &str,
     ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
-        use fragile::Fragile;
-        use gio::GioFuture;
-
         let id = String::from(id);
-        GioFuture::new(&(), move |_obj, send| {
+        Box_::pin(gio::GioFuture::new(&(), move |_obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = Fragile::new(send);
             Self::request_async(extractable_type, &id, Some(&cancellable), move |res| {
-                let _ = send.into_inner().send(res);
+                send.resolve(res);
             });
 
             cancellable
-        })
+        }))
     }
 }
 
