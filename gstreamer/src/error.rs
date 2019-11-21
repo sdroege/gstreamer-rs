@@ -105,12 +105,12 @@ impl Error for ErrorMessage {
 macro_rules! gst_loggable_error(
 // Plain strings
     ($cat:expr, $msg:expr) => {
-        $crate::LoggableError::new($cat.clone(), glib_bool_error!($msg))
+        $crate::LoggableError::new($cat.clone(), $crate::glib::glib_bool_error!($msg))
     };
 
 // Format strings
     ($cat:expr, $($msg:tt)*) =>  { {
-        $crate::LoggableError::new($cat.clone(), glib_bool_error!($($msg)*))
+        $crate::LoggableError::new($cat.clone(), $crate::glib::glib_bool_error!($($msg)*))
     }};
 );
 
