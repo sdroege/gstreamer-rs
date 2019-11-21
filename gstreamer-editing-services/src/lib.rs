@@ -25,8 +25,6 @@ use glib::translate::from_glib;
 extern crate glib;
 extern crate gio;
 
-extern crate fragile;
-
 static GES_INIT: Once = Once::new();
 
 pub fn init() -> Result<(), glib::BoolError> {

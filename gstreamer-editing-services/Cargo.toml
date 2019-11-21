@@ -25,7 +25,6 @@ gio = { git = "https://github.com/gtk-rs/gio" }
 gstreamer = { path = "../gstreamer" }
 gstreamer-base = { path = "../gstreamer-base" }
 gstreamer-pbutils = { path = "../gstreamer-pbutils" }
-fragile = "0.3"
 
 [build-dependencies]
 rustdoc-stripper = { version = "0.1", optional = true }
