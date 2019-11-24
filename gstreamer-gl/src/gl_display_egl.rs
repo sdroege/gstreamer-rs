@@ -14,10 +14,16 @@ use GLDisplayEGL;
 use GLDisplayType;
 
 impl GLDisplayEGL {
-    pub unsafe fn new_with_egl_display(display: uintptr_t) -> Option<GLDisplayEGL> {
-        from_glib_full(gst_gl_sys::gst_gl_display_egl_new_with_egl_display(
+    pub unsafe fn new_with_egl_display(
+        display: uintptr_t,
+    ) -> Result<GLDisplayEGL, glib::error::BoolError> {
+        let result = from_glib_full(gst_gl_sys::gst_gl_display_egl_new_with_egl_display(
             display as gpointer,
-        ))
+        ));
+        match result {
+            Some(d) => Ok(d),
+            None => Err(glib_bool_error!("Failed to create new EGL GL display")),
+        }
     }
 
     pub unsafe fn get_from_native(display_type: GLDisplayType, display: uintptr_t) -> gpointer {

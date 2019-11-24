@@ -13,9 +13,15 @@ use libc::uintptr_t;
 use GLDisplayX11;
 
 impl GLDisplayX11 {
-    pub unsafe fn new_with_display(display: uintptr_t) -> Option<GLDisplayX11> {
-        from_glib_full(gst_gl_sys::gst_gl_display_x11_new_with_display(
+    pub unsafe fn new_with_display(
+        display: uintptr_t,
+    ) -> Result<GLDisplayX11, glib::error::BoolError> {
+        let result = from_glib_full(gst_gl_sys::gst_gl_display_x11_new_with_display(
             display as gpointer,
-        ))
+        ));
+        match result {
+            Some(d) => Ok(d),
+            None => Err(glib_bool_error!("Failed to create new X11 GL display")),
+        }
     }
 }
