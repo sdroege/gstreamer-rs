@@ -30,12 +30,15 @@ impl AudioChannelPosition {
         }
     }
 
-    pub fn positions_to_mask(positions: &[AudioChannelPosition], force_order: bool) -> Option<u64> {
+    pub fn positions_to_mask(
+        positions: &[AudioChannelPosition],
+        force_order: bool,
+    ) -> Result<u64, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         let len = positions.len();
         if len > 64 {
-            return None;
+            return Err(glib_bool_error!("Invalid number of channels"));
         }
 
         let positions_raw: [gst_audio_sys::GstAudioChannelPosition; 64] =
@@ -56,9 +59,11 @@ impl AudioChannelPosition {
                 mask.as_mut_ptr(),
             ));
             if valid {
-                Some(mask.assume_init())
+                Ok(mask.assume_init())
             } else {
-                None
+                Err(glib_bool_error!(
+                    "Couldn't convert channel positions to mask"
+                ))
             }
         }
     }
