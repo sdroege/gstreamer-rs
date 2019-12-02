@@ -71,6 +71,11 @@ impl fmt::Display for ::AudioFormat {
     }
 }
 
+pub const AUDIO_FORMAT_UNKNOWN: ::AudioFormat = ::AudioFormat::Unknown;
+pub const AUDIO_FORMAT_ENCODED: ::AudioFormat = ::AudioFormat::Encoded;
+pub const AUDIO_FORMAT_S8: ::AudioFormat = ::AudioFormat::S8;
+pub const AUDIO_FORMAT_U8: ::AudioFormat = ::AudioFormat::U8;
+
 #[cfg(target_endian = "big")]
 pub const AUDIO_FORMAT_S16: ::AudioFormat = ::AudioFormat::S16be;
 #[cfg(target_endian = "big")]
