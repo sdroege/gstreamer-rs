@@ -116,7 +116,7 @@ where
     let wrap: Bin = from_glib_borrow(ptr);
 
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.add_element(&wrap, &from_glib_borrow(element)) {
+        match imp.add_element(&wrap, &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);
