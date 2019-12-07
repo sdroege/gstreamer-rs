@@ -420,6 +420,12 @@ unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
 
+    // If we get a floating reference passed simply return here. It can't be stored inside this
+    // element, and if we continued to use it we would take ownership of this floating reference.
+    if gobject_sys::g_object_is_floating(pad as *mut gobject_sys::GObject) != glib_sys::GFALSE {
+        return;
+    }
+
     gst_panic_to_error!(&wrap, &instance.panicked(), (), {
         imp.release_pad(&wrap, &from_glib_none(pad))
     })
