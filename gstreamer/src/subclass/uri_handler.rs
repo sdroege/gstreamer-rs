@@ -78,7 +78,6 @@ unsafe extern "C" fn uri_handler_get_uri<T: ObjectSubclass>(
 where
     T: URIHandlerImpl,
 {
-    glib_floating_reference_guard!(uri_handler);
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -93,7 +92,6 @@ unsafe extern "C" fn uri_handler_set_uri<T: ObjectSubclass>(
 where
     T: URIHandlerImpl,
 {
-    glib_floating_reference_guard!(uri_handler);
     let instance = &*(uri_handler as *mut T::Instance);
     let imp = instance.get_impl();
 

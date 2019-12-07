@@ -257,7 +257,6 @@ unsafe extern "C" fn clock_change_resolution<T: ObjectSubclass>(
 where
     T: ClockImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Clock = from_glib_borrow(ptr);
@@ -272,7 +271,6 @@ unsafe extern "C" fn clock_get_resolution<T: ObjectSubclass>(
 where
     T: ClockImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Clock = from_glib_borrow(ptr);
@@ -286,7 +284,6 @@ unsafe extern "C" fn clock_get_internal_time<T: ObjectSubclass>(
 where
     T: ClockImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Clock = from_glib_borrow(ptr);
@@ -302,7 +299,6 @@ unsafe extern "C" fn clock_wait<T: ObjectSubclass>(
 where
     T: ClockImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Clock = from_glib_borrow(ptr);
@@ -322,7 +318,6 @@ unsafe extern "C" fn clock_wait_async<T: ObjectSubclass>(
 where
     T: ClockImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Clock = from_glib_borrow(ptr);
@@ -336,7 +331,6 @@ unsafe extern "C" fn clock_unschedule<T: ObjectSubclass>(
 ) where
     T: ClockImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Clock = from_glib_borrow(ptr);

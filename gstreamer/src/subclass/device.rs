@@ -97,7 +97,6 @@ unsafe extern "C" fn device_create_element<T: ObjectSubclass>(
 where
     T: DeviceImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Device = from_glib_borrow(ptr);
@@ -128,7 +127,6 @@ unsafe extern "C" fn device_reconfigure_element<T: ObjectSubclass>(
 where
     T: DeviceImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Device = from_glib_borrow(ptr);

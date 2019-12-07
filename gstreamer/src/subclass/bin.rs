@@ -110,7 +110,6 @@ where
     T: BinImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Bin = from_glib_borrow(ptr);
@@ -135,7 +134,6 @@ where
     T: BinImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Bin = from_glib_borrow(ptr);
@@ -166,7 +164,6 @@ unsafe extern "C" fn bin_handle_message<T: ObjectSubclass>(
     T: BinImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Bin = from_glib_borrow(ptr);

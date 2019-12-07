@@ -132,7 +132,6 @@ unsafe extern "C" fn device_provider_probe<T: ObjectSubclass>(
 where
     T: DeviceProviderImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: DeviceProvider = from_glib_borrow(ptr);
@@ -146,7 +145,6 @@ unsafe extern "C" fn device_provider_start<T: ObjectSubclass>(
 where
     T: DeviceProviderImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: DeviceProvider = from_glib_borrow(ptr);
@@ -165,7 +163,6 @@ unsafe extern "C" fn device_provider_stop<T: ObjectSubclass>(ptr: *mut gst_sys::
 where
     T: DeviceProviderImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: DeviceProvider = from_glib_borrow(ptr);

@@ -66,7 +66,6 @@ unsafe extern "C" fn child_proxy_get_child_by_name<T: ObjectSubclass>(
 where
     T: ChildProxyImpl,
 {
-    glib_floating_reference_guard!(child_proxy);
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -84,7 +83,6 @@ unsafe extern "C" fn child_proxy_get_child_by_index<T: ObjectSubclass>(
 where
     T: ChildProxyImpl,
 {
-    glib_floating_reference_guard!(child_proxy);
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -98,7 +96,6 @@ unsafe extern "C" fn child_proxy_get_children_count<T: ObjectSubclass>(
 where
     T: ChildProxyImpl,
 {
-    glib_floating_reference_guard!(child_proxy);
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -112,7 +109,6 @@ unsafe extern "C" fn child_proxy_child_added<T: ObjectSubclass>(
 ) where
     T: ChildProxyImpl,
 {
-    glib_floating_reference_guard!(child_proxy);
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 
@@ -130,7 +126,6 @@ unsafe extern "C" fn child_proxy_child_removed<T: ObjectSubclass>(
 ) where
     T: ChildProxyImpl,
 {
-    glib_floating_reference_guard!(child_proxy);
     let instance = &*(child_proxy as *mut T::Instance);
     let imp = instance.get_impl();
 

@@ -471,7 +471,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -495,7 +494,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -519,7 +517,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -543,7 +540,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -567,7 +563,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -586,7 +581,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -613,7 +607,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -632,7 +625,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -650,7 +642,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -675,7 +666,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -698,7 +688,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -717,7 +706,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -736,7 +724,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -755,7 +742,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -774,7 +760,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);
@@ -800,7 +785,6 @@ where
     T: VideoEncoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: VideoEncoder = from_glib_borrow(ptr);

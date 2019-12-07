@@ -448,7 +448,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -472,7 +471,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -496,7 +494,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -515,7 +512,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -542,7 +538,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -564,7 +559,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -592,7 +586,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -611,7 +604,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -631,7 +623,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -650,7 +641,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -670,7 +660,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -695,7 +684,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -721,7 +709,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -740,7 +727,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);
@@ -764,7 +750,6 @@ where
     T: BaseSrcImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: BaseSrc = from_glib_borrow(ptr);

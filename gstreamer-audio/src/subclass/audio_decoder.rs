@@ -547,7 +547,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -571,7 +570,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -595,7 +593,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -619,7 +616,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -644,7 +640,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -671,7 +666,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -700,7 +694,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     // FIXME: Misgenerated in gstreamer-audio-sys
     let buffer = buffer as *mut gst_sys::GstBuffer;
     let instance = &*(ptr as *mut T::Instance);
@@ -725,7 +718,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -754,7 +746,6 @@ unsafe extern "C" fn audio_decoder_flush<T: ObjectSubclass>(
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -771,7 +762,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -796,7 +786,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -819,7 +808,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -838,7 +826,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -857,7 +844,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -876,7 +862,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -895,7 +880,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);
@@ -921,7 +905,6 @@ where
     T: AudioDecoderImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AudioDecoder = from_glib_borrow(ptr);

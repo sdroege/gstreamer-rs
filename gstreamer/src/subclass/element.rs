@@ -348,7 +348,6 @@ where
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -379,7 +378,6 @@ where
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -415,7 +413,6 @@ unsafe extern "C" fn element_release_pad<T: ObjectSubclass>(
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -439,7 +436,6 @@ where
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -458,7 +454,6 @@ where
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -477,7 +472,6 @@ unsafe extern "C" fn element_set_context<T: ObjectSubclass>(
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -495,7 +489,6 @@ where
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);
@@ -515,7 +508,6 @@ where
     T: ElementImpl,
     T::Instance: PanicPoison,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Element = from_glib_borrow(ptr);

@@ -76,7 +76,6 @@ unsafe extern "C" fn pad_linked<T: ObjectSubclass>(
 ) where
     T: PadImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Pad = from_glib_borrow(ptr);
@@ -90,7 +89,6 @@ unsafe extern "C" fn pad_unlinked<T: ObjectSubclass>(
 ) where
     T: PadImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Pad = from_glib_borrow(ptr);

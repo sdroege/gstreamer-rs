@@ -118,7 +118,6 @@ unsafe extern "C" fn aggregator_pad_flush<T: ObjectSubclass>(
 where
     T: AggregatorPadImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AggregatorPad = from_glib_borrow(ptr);
@@ -135,7 +134,6 @@ unsafe extern "C" fn aggregator_pad_skip_buffer<T: ObjectSubclass>(
 where
     T: AggregatorPadImpl,
 {
-    glib_floating_reference_guard!(ptr);
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: AggregatorPad = from_glib_borrow(ptr);
