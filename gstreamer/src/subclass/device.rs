@@ -46,7 +46,10 @@ impl<T: DeviceImpl + ObjectImpl> DeviceImplExt for T {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gst_sys::GstDeviceClass;
             if let Some(f) = (*parent_class).create_element {
-                from_glib_none(f(device.to_glib_none().0, name.to_glib_none().0))
+                let ptr = f(device.to_glib_none().0, name.to_glib_none().0);
+
+                // Don't steal floating reference here but pass it further to the caller
+                from_glib_full(ptr)
             } else {
                 None
             }
