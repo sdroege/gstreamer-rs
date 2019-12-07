@@ -140,8 +140,15 @@ where
     let imp = instance.get_impl();
     let wrap: Bin = from_glib_borrow(ptr);
 
+    // If we get a floating reference passed simply return FALSE here. It can't be
+    // stored inside this bin, and if we continued to use it we would take ownership
+    // of this floating reference.
+    if gobject_sys::g_object_is_floating(element as *mut gobject_sys::GObject) != glib_sys::GFALSE {
+        return glib_sys::GFALSE;
+    }
+
     gst_panic_to_error!(&wrap, &instance.panicked(), false, {
-        match imp.remove_element(&wrap, &from_glib_borrow(element)) {
+        match imp.remove_element(&wrap, &from_glib_none(element)) {
             Ok(()) => true,
             Err(err) => {
                 err.log_with_object(&wrap);
