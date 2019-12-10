@@ -40,6 +40,14 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl + Send + Sync + 'static {
         self.parent_get_size(element)
     }
 
+    fn get_times(
+        &self,
+        element: &BaseSrc,
+        buffer: &gst::BufferRef,
+    ) -> (gst::ClockTime, gst::ClockTime) {
+        self.parent_get_times(element, buffer)
+    }
+
     fn fill(
         &self,
         element: &BaseSrc,
@@ -104,6 +112,12 @@ pub trait BaseSrcImplExt {
     fn parent_is_seekable(&self, element: &BaseSrc) -> bool;
 
     fn parent_get_size(&self, element: &BaseSrc) -> Option<u64>;
+
+    fn parent_get_times(
+        &self,
+        element: &BaseSrc,
+        buffer: &gst::BufferRef,
+    ) -> (gst::ClockTime, gst::ClockTime);
 
     fn parent_fill(
         &self,
@@ -214,6 +228,35 @@ impl<T: BaseSrcImpl + ObjectImpl> BaseSrcImplExt for T {
                     }
                 })
                 .unwrap_or(None)
+        }
+    }
+
+    fn parent_get_times(
+        &self,
+        element: &BaseSrc,
+        buffer: &gst::BufferRef,
+    ) -> (gst::ClockTime, gst::ClockTime) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class =
+                data.as_ref().get_parent_class() as *mut gst_base_sys::GstBaseSrcClass;
+            (*parent_class)
+                .get_times
+                .map(|f| {
+                    let mut start = mem::MaybeUninit::uninit();
+                    let mut stop = mem::MaybeUninit::uninit();
+                    f(
+                        element.to_glib_none().0,
+                        buffer.as_mut_ptr(),
+                        start.as_mut_ptr(),
+                        stop.as_mut_ptr(),
+                    );
+                    (
+                        from_glib(start.assume_init()),
+                        from_glib(stop.assume_init()),
+                    )
+                })
+                .unwrap_or((gst::CLOCK_TIME_NONE, gst::CLOCK_TIME_NONE))
         }
     }
 
@@ -426,6 +469,7 @@ where
             klass.stop = Some(base_src_stop::<T>);
             klass.is_seekable = Some(base_src_is_seekable::<T>);
             klass.get_size = Some(base_src_get_size::<T>);
+            klass.get_times = Some(base_src_get_times::<T>);
             klass.fill = Some(base_src_fill::<T>);
             klass.create = Some(base_src_create::<T>);
             klass.do_seek = Some(base_src_do_seek::<T>);
@@ -526,6 +570,30 @@ where
         }
     })
     .to_glib()
+}
+
+unsafe extern "C" fn base_src_get_times<T: ObjectSubclass>(
+    ptr: *mut gst_base_sys::GstBaseSrc,
+    buffer: *mut gst_sys::GstBuffer,
+    start: *mut gst_sys::GstClockTime,
+    stop: *mut gst_sys::GstClockTime,
+) where
+    T: BaseSrcImpl,
+    T::Instance: PanicPoison,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: BaseSrc = from_glib_borrow(ptr);
+    let buffer = gst::BufferRef::from_ptr(buffer);
+
+    *start = gst_sys::GST_CLOCK_TIME_NONE;
+    *stop = gst_sys::GST_CLOCK_TIME_NONE;
+
+    gst_panic_to_error!(&wrap, &instance.panicked(), (), {
+        let (start_, stop_) = imp.get_times(&wrap, buffer);
+        *start = start_.to_glib();
+        *stop = stop_.to_glib();
+    });
 }
 
 unsafe extern "C" fn base_src_fill<T: ObjectSubclass>(
