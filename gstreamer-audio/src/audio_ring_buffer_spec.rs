@@ -17,12 +17,12 @@ impl AudioRingBufferSpec {
         self.0.type_ = value.to_glib();
     }
 
-    pub fn get_caps(&mut self) -> Caps {
+    pub fn get_caps(&self) -> Caps {
         unsafe { Caps::from_glib_none(self.0.caps) }
     }
 
-    pub fn get_audio_info(&mut self) -> AudioInfo {
-        unsafe { AudioInfo::from_glib_none(&mut self.0.info) }
+    pub fn get_audio_info(&self) -> AudioInfo {
+        unsafe { AudioInfo::from_glib_none(mut_override(&self.0.info)) }
     }
 
     pub fn get_latency_time(&self) -> u64 {
