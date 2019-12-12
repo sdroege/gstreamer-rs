@@ -14,6 +14,7 @@ external_libraries = [
     "GLib",
     "GObject",
     "Gst",
+    "GstBase",
 ]
 
 generate = [
@@ -24,6 +25,8 @@ generate = [
     "GstAudio.AudioChannelPosition",
     "GstAudio.StreamVolume",
     "GstAudio.StreamVolumeFormat",
+    "GstAudio.AudioSink",
+    "GstAudio.AudioBaseSink",
 ]
 
 manual = [
@@ -34,6 +37,7 @@ manual = [
     "Gst.AllocationParams",
     "Gst.TagList",
     "Gst.TagMergeMode",
+    "GstBase.BaseSink",
     "GstAudio.AudioInfo",
     "GstAudio.AudioFormatInfo",
 ]

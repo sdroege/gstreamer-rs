@@ -2,6 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+mod audio_base_sink;
+pub use self::audio_base_sink::AudioBaseSinkExt;
+pub use self::audio_base_sink::{AudioBaseSink, AudioBaseSinkClass, NONE_AUDIO_BASE_SINK};
+
 mod audio_decoder;
 pub use self::audio_decoder::AudioDecoderExt;
 pub use self::audio_decoder::{AudioDecoder, AudioDecoderClass, NONE_AUDIO_DECODER};
@@ -9,6 +13,9 @@ pub use self::audio_decoder::{AudioDecoder, AudioDecoderClass, NONE_AUDIO_DECODE
 mod audio_encoder;
 pub use self::audio_encoder::AudioEncoderExt;
 pub use self::audio_encoder::{AudioEncoder, AudioEncoderClass, NONE_AUDIO_ENCODER};
+
+mod audio_sink;
+pub use self::audio_sink::{AudioSink, AudioSinkClass, NONE_AUDIO_SINK};
 
 mod stream_volume;
 pub use self::stream_volume::StreamVolumeExt;
@@ -32,6 +39,7 @@ pub use self::flags::AudioPackFlags;
 
 #[doc(hidden)]
 pub mod traits {
+    pub use super::AudioBaseSinkExt;
     pub use super::AudioDecoderExt;
     pub use super::AudioEncoderExt;
     pub use super::StreamVolumeExt;

@@ -9,6 +9,7 @@
 
 pub mod audio_decoder;
 pub mod audio_encoder;
+pub mod audio_sink;
 
 pub mod prelude {
     pub use super::audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt};
