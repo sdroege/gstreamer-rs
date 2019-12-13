@@ -30,6 +30,7 @@ mod enums;
 pub use self::enums::AudioChannelPosition;
 pub use self::enums::AudioFormat;
 pub use self::enums::AudioLayout;
+pub use self::enums::AudioRingBufferFormatType;
 pub use self::enums::StreamVolumeFormat;
 
 mod flags;

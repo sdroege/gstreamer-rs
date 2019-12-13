@@ -397,6 +397,124 @@ impl SetValue for AudioLayout {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+pub enum AudioRingBufferFormatType {
+    Raw,
+    MuLaw,
+    ALaw,
+    ImaAdpcm,
+    Mpeg,
+    Gsm,
+    Iec958,
+    Ac3,
+    Eac3,
+    Dts,
+    Mpeg2Aac,
+    Mpeg4Aac,
+    Mpeg2AacRaw,
+    Mpeg4AacRaw,
+    Flac,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for AudioRingBufferFormatType {
+    type GlibType = gst_audio_sys::GstAudioRingBufferFormatType;
+
+    fn to_glib(&self) -> gst_audio_sys::GstAudioRingBufferFormatType {
+        match *self {
+            AudioRingBufferFormatType::Raw => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_RAW,
+            AudioRingBufferFormatType::MuLaw => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MU_LAW
+            }
+            AudioRingBufferFormatType::ALaw => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_A_LAW
+            }
+            AudioRingBufferFormatType::ImaAdpcm => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IMA_ADPCM
+            }
+            AudioRingBufferFormatType::Mpeg => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG
+            }
+            AudioRingBufferFormatType::Gsm => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_GSM,
+            AudioRingBufferFormatType::Iec958 => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_IEC958
+            }
+            AudioRingBufferFormatType::Ac3 => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_AC3,
+            AudioRingBufferFormatType::Eac3 => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_EAC3
+            }
+            AudioRingBufferFormatType::Dts => gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_DTS,
+            AudioRingBufferFormatType::Mpeg2Aac => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC
+            }
+            AudioRingBufferFormatType::Mpeg4Aac => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC
+            }
+            AudioRingBufferFormatType::Mpeg2AacRaw => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG2_AAC_RAW
+            }
+            AudioRingBufferFormatType::Mpeg4AacRaw => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_MPEG4_AAC_RAW
+            }
+            AudioRingBufferFormatType::Flac => {
+                gst_audio_sys::GST_AUDIO_RING_BUFFER_FORMAT_TYPE_FLAC
+            }
+            AudioRingBufferFormatType::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<gst_audio_sys::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
+    fn from_glib(value: gst_audio_sys::GstAudioRingBufferFormatType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => AudioRingBufferFormatType::Raw,
+            1 => AudioRingBufferFormatType::MuLaw,
+            2 => AudioRingBufferFormatType::ALaw,
+            3 => AudioRingBufferFormatType::ImaAdpcm,
+            4 => AudioRingBufferFormatType::Mpeg,
+            5 => AudioRingBufferFormatType::Gsm,
+            6 => AudioRingBufferFormatType::Iec958,
+            7 => AudioRingBufferFormatType::Ac3,
+            8 => AudioRingBufferFormatType::Eac3,
+            9 => AudioRingBufferFormatType::Dts,
+            10 => AudioRingBufferFormatType::Mpeg2Aac,
+            11 => AudioRingBufferFormatType::Mpeg4Aac,
+            12 => AudioRingBufferFormatType::Mpeg2AacRaw,
+            13 => AudioRingBufferFormatType::Mpeg4AacRaw,
+            14 => AudioRingBufferFormatType::Flac,
+            value => AudioRingBufferFormatType::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for AudioRingBufferFormatType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gst_audio_sys::gst_audio_ring_buffer_format_type_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for AudioRingBufferFormatType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for AudioRingBufferFormatType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for AudioRingBufferFormatType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub enum StreamVolumeFormat {
     Linear,
     Cubic,

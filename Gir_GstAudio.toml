@@ -27,6 +27,7 @@ generate = [
     "GstAudio.StreamVolumeFormat",
     "GstAudio.AudioSink",
     "GstAudio.AudioBaseSink",
+    "GstAudio.AudioRingBufferFormatType",
 ]
 
 manual = [
