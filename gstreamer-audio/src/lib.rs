@@ -43,6 +43,8 @@ mod audio_format;
 pub use audio_format::*;
 mod audio_format_info;
 pub use audio_format_info::*;
+mod audio_ring_buffer_spec;
+pub use audio_ring_buffer_spec::*;
 mod audio_info;
 pub use audio_info::*;
 mod audio_channel_position;
