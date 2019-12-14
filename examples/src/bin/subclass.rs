@@ -180,7 +180,8 @@ mod fir_filter {
                 _element: &gst_base::BaseTransform,
                 caps: &gst::Caps,
             ) -> Option<usize> {
-                gst_audio::AudioInfo::from_caps(caps).map(|info| info.bpf() as usize)
+                let audio_info = gst_audio::AudioInfo::from_caps(caps).ok();
+                audio_info.map(|info| info.bpf() as usize)
             }
 
             // Called when shutting down the element so we can release all stream-related state

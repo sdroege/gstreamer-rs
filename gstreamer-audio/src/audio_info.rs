@@ -49,13 +49,13 @@ pub struct AudioInfoBuilder<'a> {
 }
 
 impl<'a> AudioInfoBuilder<'a> {
-    pub fn build(self) -> Option<AudioInfo> {
+    pub fn build(self) -> Result<AudioInfo, glib::error::BoolError> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
 
             let positions = if let Some(p) = self.positions {
                 if p.len() != self.channels as usize || p.len() > 64 {
-                    return None;
+                    return Err(glib_bool_error!("Invalid positions length"));
                 }
 
                 let positions: [gst_audio_sys::GstAudioChannelPosition; 64] =
@@ -74,7 +74,7 @@ impl<'a> AudioInfoBuilder<'a> {
                         true.to_glib(),
                     ));
                 if !valid {
-                    return None;
+                    return Err(glib_bool_error!("channel positions are invalid"));
                 }
 
                 Some(positions)
@@ -98,7 +98,7 @@ impl<'a> AudioInfoBuilder<'a> {
             let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.rate <= 0 || info.channels <= 0 {
-                return None;
+                return Err(glib_bool_error!("Failed to build AudioInfo"));
             }
 
             if let Some(flags) = self.flags {
@@ -110,7 +110,7 @@ impl<'a> AudioInfoBuilder<'a> {
             }
 
             let positions = array_init::array_init(|i| from_glib(info.position[i]));
-            Some(AudioInfo(info, positions))
+            Ok(AudioInfo(info, positions))
         }
     }
 
@@ -151,7 +151,7 @@ impl AudioInfo {
         }
     }
 
-    pub fn from_caps(caps: &gst::CapsRef) -> Option<Self> {
+    pub fn from_caps(caps: &gst::CapsRef) -> Result<AudioInfo, glib::error::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -162,15 +162,21 @@ impl AudioInfo {
             )) {
                 let info = info.assume_init();
                 let positions = array_init::array_init(|i| from_glib(info.position[i]));
-                Some(AudioInfo(info, positions))
+                Ok(AudioInfo(info, positions))
             } else {
-                None
+                Err(glib_bool_error!("Failed to create AudioInfo from caps"))
             }
         }
     }
 
-    pub fn to_caps(&self) -> Option<gst::Caps> {
-        unsafe { from_glib_full(gst_audio_sys::gst_audio_info_to_caps(&self.0)) }
+    pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
+        unsafe {
+            let result = from_glib_full(gst_audio_sys::gst_audio_info_to_caps(&self.0));
+            match result {
+                Some(c) => Ok(c),
+                None => Err(glib_bool_error!("Failed to create caps from AudioInfo")),
+            }
+        }
     }
 
     pub fn convert<V: Into<gst::GenericFormattedValue>, U: gst::SpecificFormattedValue>(
