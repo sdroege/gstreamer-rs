@@ -263,7 +263,7 @@ pub struct VideoInfoBuilder<'a> {
 }
 
 impl<'a> VideoInfoBuilder<'a> {
-    pub fn build(self) -> Option<VideoInfo> {
+    pub fn build(self) -> Result<VideoInfo, glib::error::BoolError> {
         unsafe {
             let mut info = mem::MaybeUninit::uninit();
 
@@ -306,13 +306,13 @@ impl<'a> VideoInfoBuilder<'a> {
             };
 
             if !res {
-                return None;
+                return Err(glib_bool_error!("Failed to build VideoInfo"));
             }
 
             let mut info = info.assume_init();
 
             if info.finfo.is_null() || info.width <= 0 || info.height <= 0 {
-                return None;
+                return Err(glib_bool_error!("Failed to build VideoInfo"));
             }
 
             if let Some(flags) = self.flags {
@@ -347,7 +347,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(offset) = self.offset {
                 if offset.len() != ((*info.finfo).n_planes as usize) {
-                    return None;
+                    return Err(glib_bool_error!("Failed to build VideoInfo"));
                 }
 
                 let n_planes = (*info.finfo).n_planes as usize;
@@ -356,7 +356,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
             if let Some(stride) = self.stride {
                 if stride.len() != ((*info.finfo).n_planes as usize) {
-                    return None;
+                    return Err(glib_bool_error!("Failed to build VideoInfo"));
                 }
 
                 let n_planes = (*info.finfo).n_planes as usize;
@@ -381,7 +381,7 @@ impl<'a> VideoInfoBuilder<'a> {
                 }
             }
 
-            Some(VideoInfo(info))
+            Ok(VideoInfo(info))
         }
     }
 
@@ -526,7 +526,7 @@ impl VideoInfo {
         }
     }
 
-    pub fn from_caps(caps: &gst::CapsRef) -> Option<Self> {
+    pub fn from_caps(caps: &gst::CapsRef) -> Result<Self, glib::error::BoolError> {
         skip_assert_initialized!();
 
         unsafe {
@@ -535,18 +535,22 @@ impl VideoInfo {
                 info.as_mut_ptr(),
                 caps.as_ptr(),
             )) {
-                Some(VideoInfo(info.assume_init()))
+                Ok(VideoInfo(info.assume_init()))
             } else {
-                None
+                Err(glib_bool_error!("Failed to create VideoInfo from caps"))
             }
         }
     }
 
-    pub fn to_caps(&self) -> Option<gst::Caps> {
+    pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
         unsafe {
-            from_glib_full(gst_video_sys::gst_video_info_to_caps(
+            let result = from_glib_full(gst_video_sys::gst_video_info_to_caps(
                 &self.0 as *const _ as *mut _,
-            ))
+            ));
+            match result {
+                Some(c) => Ok(c),
+                None => Err(glib_bool_error!("Failed to create caps from VideoInfo")),
+            }
         }
     }
 

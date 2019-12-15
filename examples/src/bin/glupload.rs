@@ -499,7 +499,7 @@ impl App {
 
                         let _info = sample
                             .get_caps()
-                            .and_then(|caps| gst_video::VideoInfo::from_caps(caps))
+                            .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
                             .ok_or_else(|| {
                                 gst_element_error!(
                                     appsink,
@@ -652,7 +652,7 @@ fn main_loop(mut app: App) -> Result<glutin::WindowedContext<glutin::PossiblyCur
             let buffer = sample.get_buffer_owned().unwrap();
             let info = sample
                 .get_caps()
-                .and_then(|caps| gst_video::VideoInfo::from_caps(caps))
+                .and_then(|caps| gst_video::VideoInfo::from_caps(caps).ok())
                 .unwrap();
 
             {
