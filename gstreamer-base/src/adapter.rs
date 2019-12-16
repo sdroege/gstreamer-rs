@@ -183,15 +183,15 @@ impl UniqueAdapter {
         self.0.push(buf);
     }
 
-    pub fn map(&mut self, nbytes: usize) -> Option<UniqueAdapterMap> {
+    pub fn map(&mut self, nbytes: usize) -> Result<UniqueAdapterMap, glib::error::BoolError> {
         use std::slice;
 
         unsafe {
             let ptr = gst_base_sys::gst_adapter_map(self.0.to_glib_none().0, nbytes);
             if ptr.is_null() {
-                None
+                Err(glib_bool_error!("size bytes are not available"))
             } else {
-                Some(UniqueAdapterMap(
+                Ok(UniqueAdapterMap(
                     self,
                     slice::from_raw_parts(ptr as *const u8, nbytes),
                 ))

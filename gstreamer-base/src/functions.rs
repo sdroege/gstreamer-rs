@@ -15,7 +15,7 @@ use std::mem;
 pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
     obj: Option<&P>,
     data: R,
-) -> Option<(gst::Caps, gst::TypeFindProbability)> {
+) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
@@ -28,9 +28,9 @@ pub fn type_find_helper_for_data<P: IsA<gst::Object>, R: AsRef<[u8]>>(
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            None
+            Err(glib_bool_error!("No type could be found"))
         } else {
-            Some((from_glib_full(ret), from_glib(prob.assume_init())))
+            Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
     }
 }
@@ -40,7 +40,7 @@ pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u
     obj: Option<&P>,
     data: R,
     extension: Option<&str>,
-) -> Option<(gst::Caps, gst::TypeFindProbability)> {
+) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
@@ -54,9 +54,9 @@ pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            None
+            Err(glib_bool_error!("No type could be found"))
         } else {
-            Some((from_glib_full(ret), from_glib(prob.assume_init())))
+            Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
     }
 }
@@ -64,7 +64,7 @@ pub fn type_find_helper_for_data_with_extension<P: IsA<gst::Object>, R: AsRef<[u
 pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
     obj: Option<&P>,
     buf: &gst::Buffer,
-) -> Option<(gst::Caps, gst::TypeFindProbability)> {
+) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
@@ -74,9 +74,9 @@ pub fn type_find_helper_for_buffer<P: IsA<gst::Object>>(
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            None
+            Err(glib_bool_error!("No type could be found"))
         } else {
-            Some((from_glib_full(ret), from_glib(prob.assume_init())))
+            Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
     }
 }
@@ -86,7 +86,7 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
     obj: Option<&P>,
     buf: &gst::Buffer,
     extension: Option<&str>,
-) -> Option<(gst::Caps, gst::TypeFindProbability)> {
+) -> Result<(gst::Caps, gst::TypeFindProbability), glib::error::BoolError> {
     assert_initialized_main_thread!();
     unsafe {
         let mut prob = mem::MaybeUninit::uninit();
@@ -97,9 +97,9 @@ pub fn type_find_helper_for_buffer_with_extension<P: IsA<gst::Object>>(
             prob.as_mut_ptr(),
         );
         if ret.is_null() {
-            None
+            Err(glib_bool_error!("No type could be found"))
         } else {
-            Some((from_glib_full(ret), from_glib(prob.assume_init())))
+            Ok((from_glib_full(ret), from_glib(prob.assume_init())))
         }
     }
 }

@@ -147,9 +147,9 @@ impl PartialEq for VideoColorimetry {
 impl Eq for VideoColorimetry {}
 
 impl str::FromStr for ::VideoColorimetry {
-    type Err = ();
+    type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -161,7 +161,7 @@ impl str::FromStr for ::VideoColorimetry {
             if valid {
                 Ok(VideoColorimetry(colorimetry.assume_init()))
             } else {
-                Err(())
+                Err(glib_bool_error!("Invalid colorimetry info"))
             }
         }
     }
@@ -834,9 +834,9 @@ impl ::VideoFieldOrder {
 
 #[cfg(any(feature = "v1_12", feature = "dox"))]
 impl str::FromStr for ::VideoFieldOrder {
-    type Err = ();
+    type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -867,9 +867,9 @@ impl ::VideoInterlaceMode {
 }
 
 impl str::FromStr for ::VideoInterlaceMode {
-    type Err = ();
+    type Err = glib::error::BoolError;
 
-    fn from_str(s: &str) -> Result<Self, ()> {
+    fn from_str(s: &str) -> Result<Self, glib::error::BoolError> {
         assert_initialized_main_thread!();
 
         unsafe {
